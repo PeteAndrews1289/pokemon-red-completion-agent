@@ -1,5 +1,123 @@
 # Current agent handoffs
 
+## Final current — 5/5 minimal integration checks; model45
+
+Read the [final audit](audits/red-complete-evolution-learning-2026-09-07.md).
+The goal selector retains45 examples, including10 new outcomes. H trains a genuine history
+effect; K is the productive post-fit evolution, not a forced step. Best K state:16 living species,
+21 registered,18 specimens; restoration verified without input. F remains retained separately.
+
+Next is sustained play, starting with a useful next source from Route11. The current profile
+offers none, so do not call this a whole-game autonomous player. Model45 has not played yet.
+If requested, Claude audits learning/generalization claims; Antigravity audits region mechanics.
+Neither was invoked this session. All earlier headings here are historical.
+
+## Current — 41 retained examples; actual history learning remains
+
+Read the [current audit](audits/red-complete-evolution-learning-2026-09-07.md) and active state.
+Capture and complete evolution now execute; best save holds16 living species and18 specimens.
+Final evolution was a forced continuation with zero model queries; do not count it as training.
+Model41 has15 successful examples but no selected row carrying nonzero search history. Checklist3/5.
+
+Codex is running the declared H/I/J practice branch from D while preserving the progressed F save.
+This is correlated practice, not F continuation or independent evaluation. No reviewer was invoked.
+If requested, Claude should audit learning claims and Antigravity should audit region/continuation
+boundaries. Neither should turn this into new sealed gates or more source expansion this batch.
+
+## Current — history learner ready; connect a useful collection skill
+
+Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
+history while keeping all 32 old examples explicitly unknown. The separate initialized model
+`ae622e52...44cf9` reproduces all old predictions with zero history coefficients: **not a new fit**.
+No gameplay, new training row or authority promotion occurred. A routed/local source-identity
+bug was fixed so movement does not silently reset remembered effort.
+
+The saved box contains duplicate unevolved specimens. Next connect the existing boxed-evolution
+mechanics to the native player from its field endpoint, with routing, healing and specimen
+preservation, then collect a short useful-choice lesson. Do not add another learner feature or
+run an acquisition-only loop. The anti-drift alarm applies after another engineering-only session.
+The infographic remains **2/5 (40%)** because its criterion requires actual history training,
+not just compatible initialization. Earlier current headings below are historical.
+
+Codex owns implementation and publication. No external audit was invoked. If requested, Claude
+should challenge unknown-history/learning claims; Antigravity should challenge routing/PC
+integration and specimen safety. Neither is a routine development approval gate.
+
+
+## Required shared visual reference
+
+Use the [development infographic](development-roadmap.md) to locate the current task in the full
+product journey. Codex maintains its status after each completed session and substantial verified
+progress, alongside handoffs and narratives. Reviewers, when requested, should challenge actual
+milestone progress and any deviation from the stable goals; they need not approve every update.
+No reviewer was invoked for the infographic. The next coding task is unchanged: history-aware
+learning with useful collection alternatives. Do not interpret the checklist's 40% as full Red
+or cross-game completion. Follow the North Star closeout contract.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+## Current — saved-endpoint training completed, not sustained competence
+
+Read [the audit](audits/red-saved-endpoint-learning-2026-09-06.md). Codex updated the goal-value
+model 31 to 32 examples with one sampled failed search and all earlier data retained. A greedy
+follow-up still searched unsuccessfully. Final state is verified and retained; no collection gain.
+Next: semantic search history across saves and one useful collection alternative. Do not retry
+closed launches, fit the diagnostic, grind the established party or wait on external audit/CI.
+Claude (if requested): challenge learning utility. Antigravity (if requested): challenge history
+freshness and safe continuation. Neither was invoked this session. Older sections are historical.
+
+
+
+## Current — search-recovery endpoint retained
+
+Use [the recovery audit](audits/red-search-recovery-2026-09-06.md) and active state. New regression
+`red-search-recovery-20260906-a-causal` is closed: no catch, but a typed stop, fresh unchanged ledger
+and verified terminal save. Zero new fits/rows; one rejected model proposal is not executed play.
+Next is a short sampled learning contrast at this saved endpoint, using explicit profile transition
+and original lineage. Local development availability was inspected only; evolution/storage are not
+wired here. Codex owns edits/publication; no Claude/Antigravity review is claimed.
+
+## Current — continuation failed; ordinary no-find/recovery behavior is next
+
+The [continuation audit](audits/red-fit31-continuation-2026-09-06.md) closes the one attempt:
+215 actions / 8244 frames, three encounters, no catch, then a repeated-goal recovery exception.
+The resume seam worked; continued play did not. Original save/model remain intact, but the failed
+child has no terminal save or complete fresh terminal ledger. No new fit or learned choice.
+Codex should handle bounded no-find outcomes and typed recovery stopping, then expose useful
+existing mechanics as alternatives. Do not replay this identity or fit its greedy diagnostic row.
+If later requested, reviewers should focus on whether supported learned decisions occur and make
+useful progress, not propose a new provenance framework. No reviewer has been invoked this session.
+The newly agreed first transfer demonstration is a compatible Red modification, followed by Crystal;
+neither is active implementation work yet. All sections below are historical.
+
+## Current — native learning loop works; demonstrate useful continuation next
+
+Read the [audit](audits/red-native-player-learning-2026-09-06.md) and
+[result](evidence/red-native-player-learning-result-2026-09-06.json). The model now has **31**
+examples: two new sampled player outcomes plus all 29 retained rows. One four-goal episode
+completed with a durable save; the zero-input and post-input failed archives remain preserved.
+No 31-example live continuation has run. Do not retry or relabel completed/failed attempts.
+
+Codex should implement only the thin authenticated continuation consumer, then a short prospective
+run measuring collection and spending. If requested, Claude should audit useful completion credit
+versus easy maintenance; Antigravity should audit fresh state/lineage restoration and viewer truth.
+No external reviewer was invoked here. The exact future sequence is in the audit, not old gates.
+
+All handoffs below are historical.
+
 ## Current — four-goal resource chain audited; persistence and next training contrasts
 
 The [latest session](work-sessions/2026-09-06-durable-player-continuation.md) records the actual

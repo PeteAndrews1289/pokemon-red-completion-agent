@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1870" viewBox="0 0 1420 1870" role="img" aria-labelledby="title description">
+<title id="title">Pokemon development roadmap</title>
+<desc id="description">5 of 5 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game living Pokedex.</desc>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>
+<rect width="1420" height="1870" fill="#0b1221"/>
+<path d="M1120 0H1420V225Z" fill="#172947"/>
+<text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
+<text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a living Pokedex.</text>
+<text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
+<text x="50" y="215" class="small">45 goal-value examples  /  Full model-led Red win: not demonstrated</text>
+<rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
+<text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 02</text>
+<text x="80" y="349" class="heading">Useful memory-aware play</text>
+<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">100%</text>
+<text x="82" y="495" class="body">5 of 5 acceptance items verified</text>
+<text x="82" y="529" class="small muted">Not Red completion. Not a time estimate.</text>
+<text x="705" y="342" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="342" class="body">Saved-state learning loop</text>
+<text x="705" y="386" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="386" class="body">Persisted search-history contract</text>
+<text x="705" y="430" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="430" class="body">Model trained to use history</text>
+<text x="705" y="474" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="474" class="body">Two useful executable alternatives</text>
+<text x="705" y="518" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="518" class="body">Productive lesson and follow-up</text>
+<rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>
+<rect x="80" y="577" width="1260" height="8" rx="4" fill="#ffd36a"/>
+<text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
+<text x="740" y="695" class="small" style="fill:#57dfb1">VERIFIED</text>
+<text x="870" y="695" class="small" style="fill:#ffd36a">CURRENT</text>
+<text x="1000" y="695" class="small" style="fill:#9daac4">PLANNED / NOT DEMONSTRATED</text>
+<rect x="50" y="735" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="757" width="4" height="161" rx="2" fill="#57dfb1"/>
+<text x="74" y="766" class="eyebrow" style="fill:#57dfb1">01 / VERIFIED</text>
+<text x="74" y="807" class="heading">Build the learning loop</text>
+<text x="74" y="841" class="body">Observe, act, verify, save and learn from actual</text>
+<text x="74" y="865" class="body">outcomes.</text>
+<text x="74" y="898" class="small muted">Teacher and deterministic mechanics support learning; they are not</text>
+<text x="74" y="919" class="small muted">the final player.</text>
+<rect x="730" y="735" width="640" height="205" rx="14" fill="#202d3d"/>
+<rect x="730" y="757" width="4" height="161" rx="2" fill="#ffd36a"/>
+<text x="754" y="766" class="eyebrow" style="fill:#ffd36a">02 / CURRENT</text>
+<text x="754" y="807" class="heading">Make useful Red decisions</text>
+<text x="754" y="841" class="body">Remember failed searches and choose productive</text>
+<text x="754" y="865" class="body">alternatives.</text>
+<text x="754" y="898" class="small muted">Search history must inform learned choices, not a scripted rule</text>
+<text x="754" y="919" class="small muted">forcing another goal.</text>
+<rect x="50" y="960" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="982" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="74" y="991" class="eyebrow" style="fill:#9daac4">03 / PLANNED</text>
+<text x="74" y="1032" class="heading">Sustain model-directed play</text>
+<text x="74" y="1066" class="body">Combine navigation, battles, captures, resources and</text>
+<text x="74" y="1090" class="body">recovery.</text>
+<text x="74" y="1123" class="small muted">Replace brittle fixed routing with reusable skills; scale battle and</text>
+<text x="74" y="1144" class="small muted">navigation authority on evidence.</text>
+<rect x="730" y="960" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="982" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="991" class="eyebrow" style="fill:#9daac4">04 / PLANNED</text>
+<text x="754" y="1032" class="heading">Finish Red with the model</text>
+<text x="754" y="1066" class="body">Plan quests, prerequisites and puzzles through the</text>
+<text x="754" y="1090" class="body">Champion.</text>
+<text x="754" y="1123" class="small muted">Teacher completion already exists. It does not satisfy this learned-</text>
+<text x="754" y="1144" class="small muted">player milestone.</text>
+<rect x="50" y="1185" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="1207" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="74" y="1216" class="eyebrow" style="fill:#9daac4">05 / PLANNED</text>
+<text x="74" y="1257" class="heading">Build the Red-era living Dex</text>
+<text x="74" y="1291" class="body">Capture and retain specimens; evolve, store and trade as</text>
+<text x="74" y="1315" class="body">needed.</text>
+<text x="74" y="1348" class="small muted">Version exclusives and trade evolutions require partner versions;</text>
+<text x="74" y="1369" class="small muted">unavailable event inputs stay explicit blockers.</text>
+<rect x="730" y="1185" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="1207" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="1216" class="eyebrow" style="fill:#9daac4">06 / PLANNED</text>
+<text x="754" y="1257" class="heading">Adapt to an unfamiliar Red hack</text>
+<text x="754" y="1291" class="body">Test changed encounters, rules or difficulty in a</text>
+<text x="754" y="1315" class="body">compatible hack.</text>
+<text x="754" y="1348" class="small muted">Compatibility is checked separately. Red competence does not</text>
+<text x="754" y="1369" class="small muted">guarantee an immediate win.</text>
+<rect x="50" y="1410" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="1432" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="74" y="1441" class="eyebrow" style="fill:#9daac4">07 / PLANNED</text>
+<text x="74" y="1482" class="heading">Transfer and learn Crystal</text>
+<text x="74" y="1516" class="body">Reuse shared skills while learning new mechanics and</text>
+<text x="74" y="1540" class="body">progression.</text>
+<text x="74" y="1573" class="small muted">Add the title adapter, time-dependent encounters, breeding and new</text>
+<text x="74" y="1594" class="small muted">mechanics; not another fixed walkthrough.</text>
+<rect x="730" y="1410" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="1432" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="1441" class="eyebrow" style="fill:#9daac4">08 / PLANNED</text>
+<text x="754" y="1482" class="heading">Accumulate a cross-game living Dex</text>
+<text x="754" y="1516" class="body">Carry competence and specimen lineage into later mainline</text>
+<text x="754" y="1540" class="body">games.</text>
+<text x="754" y="1573" class="small muted">Legitimate trades and events, special puzzles and unsupported</text>
+<text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
+<text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
+<text x="50" y="1732" class="small muted">2026-09-07-complete-evolution-learning</text>
+<text x="50" y="1767" class="body">Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens.</text>
+<text x="50" y="1792" class="body">Minimal checklist5/5; not full Red or sustained competence.</text>
+<text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
+</svg>

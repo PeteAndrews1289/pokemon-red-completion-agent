@@ -31,6 +31,8 @@ from pokemon_red_completion.goal_manager import (
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 
 
 class GoalManagerRuntimeError(RuntimeError):
@@ -191,8 +193,16 @@ class ExecutableGoalBinding:
     estimated_risk: float
     execute: GoalExecutor
     verify: GoalVerifier
+    resource_quote: GoalResourceQuote | None = None
+    search_history: GoalSearchHistory | None = None
+    search_source_ref: str | None = None
 
     def __post_init__(self) -> None:
+        if self.search_source_ref is not None and (
+            not isinstance(self.search_source_ref, str) or not self.search_source_ref
+            or self.kind is not GoalKind.ACQUIRE_SPECIES
+        ):
+            raise GoalManagerRuntimeError("search source must bind an acquisition")
         if not isinstance(self.binding_ref, str) or not self.binding_ref:
             raise GoalManagerRuntimeError("goal binding reference must be non-empty")
         if not isinstance(self.kind, GoalKind):
@@ -203,6 +213,12 @@ class ExecutableGoalBinding:
         _ = self.opportunity
 
     @property
+    def search_memory_source(self) -> str:
+        # Routing identities authenticate the current origin; source memory must
+        # survive movement and unrelated resource changes. Never project this key.
+        return self.binding_ref if self.search_source_ref is None else self.search_source_ref
+
+    @property
     def opportunity(self) -> GoalOpportunity:
         return GoalOpportunity(
             binding_ref=self.binding_ref,
@@ -210,6 +226,8 @@ class ExecutableGoalBinding:
             availability=GoalAvailability.AVAILABLE,
             estimated_effort=self.estimated_effort,
             estimated_risk=self.estimated_risk,
+            resource_quote=self.resource_quote,
+            search_history=self.search_history,
         )
 
 

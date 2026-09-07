@@ -13,9 +13,12 @@ before/after training chart. **Focus view** reduces secondary detail for a prese
 focus, small-screen layouts and reduced-motion preferences are supported.
 
 Training data comes from a SHA-256-bound public receipt referenced by
-`configs/dashboard-learning-evidence.json`. It currently shows **18 → 29 fitted examples**, six new
-outcomes, five earlier unfitted rows, two setup censors and one completed fit. The training-error
-chart is explicitly **training only**, not unseen accuracy. Future fits update this evidence
+`configs/dashboard-learning-evidence.json`. It currently shows **29 → 31 fitted examples**, two new
+sampled player outcomes and one completed fit, retaining every prior row. Two nontraining choices
+and both failed launch archives remain disclosed in the [session audit](audits/red-native-player-learning-2026-09-06.md),
+not retrofitted as examples or hidden from the attempt denominator. The training-error
+chart compares the actual prior and updated checkpoints on the same training rows—not the
+fitter's zero initialization, and not unseen accuracy. Future fits update this evidence
 reference rather than editing counts in the page. Unknown live party or collection data is shown
 as unavailable, not zero. Never use historical counts to pretend a game is currently running.
 
@@ -29,7 +32,9 @@ For a prospectively admitted repeatable bounded-player episode, the existing com
 keeps an episode running after its first collection gain, subject to its existing budgets, safety,
 freshness and failure stops. It is not permission to reuse a consumed trial or bypass a frozen
 scenario's setup. This interface is implemented and ROM-free tested; the updated 29-example
-artifact has **not yet** completed its live three-choice episode.
+artifact has completed four bounded goals, while the newly fitted **31-example** artifact has
+**not yet** executed a live continuation. The saved gameplay recap is a separately dated historical
+29-example run; it must not be presented as a run by the newly fitted model.
 
 Live selections appear only after the durable choice record succeeds. The view distinguishes a
 model choice, deterministic safety/unsupported selection, forced singleton and deterministic

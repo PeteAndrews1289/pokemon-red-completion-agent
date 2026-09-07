@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
@@ -45,10 +45,15 @@ from pokemon_red_completion.goal_manager_runtime import (
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 
 
 class BoundedPlayerError(RuntimeError):
     """Raised when the bounded player crosses an authority or evidence boundary."""
+
+
+class _RepeatedRecoveryGoal(BoundedPlayerError):
+    """The actor proposed a prohibited retry before a new decision or input."""
 
 
 _PUBLIC_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
@@ -61,6 +66,7 @@ class BoundedPlayerStopReason(StrEnum):
     DECISION_LIMIT = "decision_limit"
     VERIFIED_FAILURE = "verified_failure"
     FAILURE_CONTEXT_UNCHANGED = "failure_context_unchanged"
+    RECOVERY_GOAL_REPEATED = "recovery_goal_repeated"
     INSUFFICIENT_AVAILABLE_GOALS = "insufficient_available_goals"
 
 
@@ -71,17 +77,22 @@ class BoundedPlayerLimits:
     ``min_available_goals`` is the minimum menu width required to invoke the
     learned or baseline authority.  After at least one genuine choice, an
     exactly-one-option menu may execute as a separately labelled forced bridge.
+    Authenticated saved continuations can explicitly allow that bridge at their
+    first step too; it still never invokes model authority or creates a fit target.
     """
 
     max_decisions: int = 2
     max_replans: int = 1
     min_available_goals: int = 2
+    allow_initial_forced_bridge: bool = False
     max_actions_per_decision: int = 6_000
     max_frames_per_decision: int = 600_000
     max_total_actions: int = 12_000
     max_total_frames: int = 1_200_000
 
     def __post_init__(self) -> None:
+        if type(self.allow_initial_forced_bridge) is not bool:
+            raise BoundedPlayerError("initial forced bridge flag must be boolean")
         for name in (
             "max_decisions",
             "min_available_goals",
@@ -228,14 +239,9 @@ def _retain_executor_failure(
             return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
         return binding.verify(report)
 
-    return ExecutableGoalBinding(
-        binding_ref=binding.binding_ref,
-        kind=binding.kind,
-        estimated_effort=binding.estimated_effort,
-        estimated_risk=binding.estimated_risk,
-        execute=execute,
-        verify=verify,
-    )
+    # Wrapping execution must preserve every declared policy fact, including
+    # economic quotes and future fields. Rebuilding the dataclass loses them.
+    return replace(binding, execute=execute, verify=verify)
 
 
 def _retaining_binding_set(
@@ -290,6 +296,7 @@ def run_bounded_player_episode(
     completion_satisfied: CompletionPredicate,
     limits: BoundedPlayerLimits | None = None,
     failure_observer: Callable[[BaseException], None] | None = None,
+    search_memory: GoalSearchMemory | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -337,7 +344,7 @@ def run_bounded_player_episode(
         forced_singleton = (
             available_count == 1
             and limits.min_available_goals > 1
-            and bool(steps)
+            and (bool(steps) or limits.allow_initial_forced_bridge)
         )
         if available_count < limits.min_available_goals and not forced_singleton:
             if not steps:
@@ -380,17 +387,35 @@ def run_bounded_player_episode(
             _ForcedSingletonAuthority() if forced_singleton else authority
         )
 
-        execution = execute_goal_manager_decision(
-            situation=current.situation,
-            binding_set=_retaining_binding_set(
-                current.binding_set, budget_meter, failure_observer
-            ),
-            authority=selected_authority,
-            trajectory=trajectory,
-            require_durable_decision=True,
-            selection_guard=_different_goal_guard(failed_kind),
-            selection_mode=selection_mode,
-        )
+        before_selection = budget_meter.checkpoint()
+        before_decision_index = trajectory.next_decision_index
+        try:
+            execution = execute_goal_manager_decision(
+                situation=current.situation,
+                binding_set=_retaining_binding_set(
+                    current.binding_set, budget_meter, failure_observer
+                ),
+                authority=selected_authority,
+                trajectory=trajectory,
+                require_durable_decision=True,
+                selection_guard=_different_goal_guard(failed_kind),
+                selection_mode=selection_mode,
+            )
+        except _RepeatedRecoveryGoal:
+            # This guard runs before recording or executing another choice. Do
+            # not hide other authority/evidence errors or replace the actor.
+            trajectory.require_settled()
+            if (
+                budget_meter.checkpoint() != before_selection
+                or trajectory.next_decision_index != before_decision_index
+            ):
+                raise BoundedPlayerError("rejected recovery selection changed state") from None
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED,
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         _require_settled_execution(execution)
         executed_budget = budget_meter.checkpoint()
         actions = executed_budget.controller_actions - last_budget.controller_actions
@@ -437,6 +462,24 @@ def run_bounded_player_episode(
             raise BoundedPlayerError(
                 "successful bounded goal did not change semantic state"
             )
+        if search_memory is not None and actions > 0 and (
+            execution.selected_kind is GoalKind.ACQUIRE_SPECIES
+            and (
+                execution.passed
+                or execution.verification.failure_reason is GoalFailureReason.SEARCH_EXHAUSTED
+            )
+        ):
+            search_memory.record(
+                current.binding_set.require(
+                    question.opportunities[execution.selected_candidate_index].binding_ref
+                ).search_memory_source,
+                current.collection.required_specimens_sha256,
+                exhausted=not execution.passed, actions=actions, frames=frames,
+            )
+            refreshed = _observe_without_actions(observe, budget_meter, executed_budget)
+            if refreshed.collection != after.collection:
+                raise BoundedPlayerError("search memory refresh changed collection")
+            after = refreshed
         steps.append(
             BoundedPlayerStep(
                 decision_ordinal=decision_index + 1,
@@ -549,7 +592,7 @@ def _different_goal_guard(
 ) -> Callable[[object], None]:
     def guard(selection: object) -> None:
         if failed_kind is not None and getattr(selection, "kind", None) is failed_kind:
-            raise BoundedPlayerError(
+            raise _RepeatedRecoveryGoal(
                 "bounded player repeated the failed goal during recovery"
             )
 

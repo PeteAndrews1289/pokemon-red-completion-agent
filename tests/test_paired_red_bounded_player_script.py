@@ -28,6 +28,65 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+@pytest.mark.parametrize("probe_during_observation", [False, True])
+def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
+    monkeypatch, probe_during_observation,
+):
+    module = runpy.run_path(str(SCRIPT))
+    observe_type = module["_LiveObserver"]
+    namespace = observe_type.__call__.__globals__
+    hard_type = module["HardCompositionActionLimiter"]
+    count_type = module["CountingExecutor"]
+    calls, skill_ports = [], []
+    outer = hard_type(
+        SimpleNamespace(execute=lambda action: calls.append(action)),
+        maximum_actions_per_decision=1, maximum_episode_actions=1,
+    )
+    meter = SimpleNamespace(
+        checkpoint=lambda: outer.attempted_actions,
+        begin_decision_window=outer.begin_decision_window,
+    )
+
+    def player(_runtime, actions, *_args, completion_dose=False, retain_quantum=None):
+        assert completion_dose is False
+        assert retain_quantum is None
+        assert isinstance(actions.delegate, hard_type)
+        skill_ports.append(actions)
+
+        class Bridge:
+            last_live_observation = None
+
+            def __call__(self):
+                if probe_during_observation:
+                    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+                        actions.execute("must-not-reach-game")
+                return _observation(storage=9)
+
+        return Bridge()
+
+    monkeypatch.setitem(namespace, "_player_observer", player)
+    observer = observe_type(
+        runtime=object(), actions=count_type(outer), meter=meter,
+        maximum_actions_per_decision=1,
+    )
+    if probe_during_observation:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
+            observer()
+        assert calls == []
+        assert outer.attempted_actions == 0
+    else:
+        observer()
+        skill_ports[-1].execute("first")
+        observer()  # a new local guard must not reset the episode total
+        from pokemon_red_completion.goal_manager_composition_qualification import (
+            CompositionActionBudgetExhausted,
+        )
+        with pytest.raises(CompositionActionBudgetExhausted):
+            skill_ports[-1].execute("over-budget")
+        assert calls == ["first"]
+        assert outer.attempted_actions == 1
+
+
 def _call_names() -> tuple[str, ...]:
     tree = ast.parse(SCRIPT.read_text(encoding="utf-8"))
     names: list[str] = []
@@ -170,6 +229,14 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         from_state_reader=lambda _reader: None,
     ))
     monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
+    monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_kwargs:
+        SimpleNamespace(adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
+            input_ready=True, raw=SimpleNamespace(battle_state=False),
+        )))
+    )
+    monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k:
+        SimpleNamespace(checkpoint=lambda: (0, 0))
+    )
 
     def capture(**kwargs):
         assert "close" not in order and kwargs["result"] is result
@@ -194,6 +261,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=enabled,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
@@ -305,6 +373,23 @@ def test_challenger_arguments_require_the_complete_calibration_bundle() -> None:
         )
 
 
+@pytest.mark.parametrize("forced,acted,queried,allowed", [
+    (1, 0, 0, True), (0, 0, 0, False), (1, 1, 0, False), (1, 0, 1, False),
+])
+def test_terminal_summary_preserves_forced_only_result_without_fake_prediction(
+    forced, acted, queried, allowed,
+):
+    module = runpy.run_path(str(SCRIPT))
+    check = module["_require_causal_decision_or_forced_bridge"]
+    authority = SimpleNamespace(last_decision=None, decisions=queried)
+    episode = SimpleNamespace(forced_singleton_steps=forced, authority_decisions=acted)
+    if allowed:
+        check(authority, episode)
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="causal_outcome"):
+            check(authority, episode)
+
+
 def test_episode_identity_distinguishes_both_learned_challengers() -> None:
     module = runpy.run_path(str(SCRIPT))
     episode_id = module["_episode_id"]
@@ -325,10 +410,13 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
     readiness = SimpleNamespace(
         challenger_arm_id=causal_id,
         model_sha256="b" * 64,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
 
     assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
     assert policy_id(readiness, baseline_id) == baseline_id
+    readiness.quote_resource_costs = True
+    assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb-economics-v1"
 
 
 def test_one_to_four_decisions_scale_episode_budgets_and_replans() -> None:
@@ -512,14 +600,30 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     factory = module["_player_observer"]
     sentinel = object()
     router = SimpleNamespace(enumerate=lambda _live: sentinel)
-    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", lambda *args: router)
+    received = []
+    def build_router(*args, **kwargs):
+        received.append(kwargs)
+        return router
+    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", build_router)
     monkeypatch.setitem(
-        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
+        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: SimpleNamespace(**kwargs),
     )
     local = factory(object(), object(), None)
-    routed = factory(object(), object(), object())
-    assert local["enumerate_bindings"] is None
-    assert routed["enumerate_bindings"](object()) is sentinel
+    routed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object())
+    assert local.enumerate_bindings is None
+    assert routed.enumerate_bindings(object()) is sentinel
+    factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
+    completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
+                        completion_dose=True)
+    assert completed.collection_projector.__name__ == "living_completion_checkpoint"
+    assert received == [
+        {"quote_resource_costs": False, "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": True, "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": False, "maximum_controller_actions": 30000,
+         "maximum_emulator_frames": 3000000},
+    ]
 
 
 def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_path):
@@ -541,7 +645,7 @@ def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_
 @pytest.mark.parametrize("origin", ("training", "development", "unspecified"))
 def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> None:
     module = runpy.run_path(str(SCRIPT))
-    scope = module["_context_scope"](SimpleNamespace(context_origin=origin))
+    scope = module["_context_scope"](SimpleNamespace(context_origin=origin, training_plan=None))
     assert scope == {
         "context_origin": origin,
         "evidence_scope": (
@@ -615,6 +719,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, save_terminal_checkpoints=False,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())

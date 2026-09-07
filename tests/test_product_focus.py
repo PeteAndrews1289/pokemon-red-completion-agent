@@ -2194,7 +2194,11 @@ def test_tracked_public_evidence_reader_is_qualified_without_protected_effects()
 
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
-    public = DASHBOARD["product_focus_dashboard_snapshot"](state).public_dict()
+    # This is the historical 29-to-31 fixture, not whichever model the live
+    # dashboard happens to reference after the next real training session.
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-native-player-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](state, evidence=evidence).public_dict()
     assert public["run_status"] == "waiting"
     assert public["actions"] == 0
     assert public["stage_progress"] == 0
@@ -2203,25 +2207,41 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["model"]["fallbacks"] == 0
     assert public["model"]["mode"] == "shadow"
     assert public["collection"]["observed"] is False
-    assert public["training"]["samples_before"] == 18
-    assert public["training"]["samples_after"] == 29
-    assert public["training"]["newly_collected"] == 6
-    assert public["training"]["previously_unfitted"] == 5
-    assert public["training"]["setup_censors"] == 2
+    assert public["training"]["samples_before"] == 29
+    assert public["training"]["samples_after"] == 31
+    assert public["training"]["newly_collected"] == 2
+    assert public["training"]["previously_unfitted"] == 0
+    assert public["training"]["setup_censors"] == 0
     assert public["training"]["held_out_claim"] is False
     assert public["experiment"]["predictions_committed"] is False
     assert public["learning_components"][0]["validation_examples"] == 0
     assert public["learning_components"][0]["model_sha256"] == (
-        "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a"
+        "95f62eaafc55a053cf65e23a8dcbf99955360040b85ef56ad8eff3e925edb472"
     )
     encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
-    assert "29-example living-Pokédex goal scorer" in encoded
+    assert "31-example living-Pokédex goal scorer" in encoded
     assert "Historical cross-family ledger" in encoded
     assert "supply validation before training" not in encoded
     assert "10 untouched" not in encoded
     assert "Brier 0.397811" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_dashboard_projects_saved_negative_search_fit_without_a_gameplay_claim() -> None:
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-saved-endpoint-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](
+        load_product_focus(), evidence=evidence,
+    ).public_dict()
+    assert public["training"]["samples_before"] == 31
+    assert public["training"]["samples_after"] == 32
+    assert public["training"]["newly_collected"] == 1
+    assert public["training"]["held_out_claim"] is False
+    assert public["model"]["decisions"] == public["actions"] == 0
+    assert public["learning_components"][0]["model_sha256"] == (
+        "5b92e48c39a7eff724d9ed0ddb32ed2460997e95cdaecdc16ac5ec603b4683bc"
+    )
 
 
 def test_develop_team_freeze_failure_is_path_free_and_closes_the_exact_lane() -> None:

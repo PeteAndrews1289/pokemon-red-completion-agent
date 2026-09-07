@@ -414,6 +414,47 @@ def test_bounded_route_one_executor_flees_catches_and_rotates_storage() -> None:
     assert executor.current_box_index == 1
 
 
+@pytest.mark.parametrize("encounters,captures,flees,box_switches,actions", [
+    ((21,), 0, 1, 0, 3), ((16,), 1, 0, 1, 4),
+])
+def test_search_exhaustion_retains_actual_partial_or_negative_outcome(
+    encounters, captures, flees, box_switches, actions,
+) -> None:
+    class ExhaustedSurvey(_RouteOneSurveySimulation):
+        def seek_encounter(self):
+            if not self.encounters:
+                raise RedAreaExecutionError(
+                    "bounded search", reason_code="survey_leg_limit_exceeded"
+                )
+            super().seek_encounter()
+
+    report = run_red_area_survey("wild:Route1:grass", ExhaustedSurvey(encounters))
+    assert report.search_exhausted is True
+    assert report.passed is False
+    assert report.encounters_seen == 1
+    assert report.captures == captures
+    assert report.flees == flees
+    assert report.box_switches == box_switches
+    assert report.actions_executed == actions
+    assert report.final_missing_species_refs == (
+        (red_species_ref(16), red_species_ref(19)) if not captures else (red_species_ref(19),)
+    )
+
+
+@pytest.mark.parametrize("reason,battle", [
+    ("control_failed", False), ("survey_leg_limit_exceeded", True),
+])
+def test_search_does_not_swallow_control_or_battle_failure(reason, battle) -> None:
+    class BrokenSurvey(_RouteOneSurveySimulation):
+        def seek_encounter(self):
+            if battle:
+                self.current_encounter = 21
+            raise RedAreaExecutionError("unsafe failure", reason_code=reason)
+
+    with pytest.raises(RedAreaExecutionError, match="unsafe failure"):
+        run_red_area_survey("wild:Route1:grass", BrokenSurvey(()))
+
+
 def test_area_executor_retries_a_bounded_failed_capture_on_a_fresh_encounter() -> None:
     class _RetryingRouteOneSurvey(_RouteOneSurveySimulation):
         failed_once = False

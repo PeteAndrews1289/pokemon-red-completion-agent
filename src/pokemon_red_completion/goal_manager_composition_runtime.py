@@ -39,9 +39,7 @@ FRESH_COMPOSITION_REQUIRED_KINDS = frozenset(
         GoalKind.RESTORE_TEAM,
     }
 )
-FROZEN_RED_GOAL_MANAGER_SHA256 = (
-    "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d"
-)
+FROZEN_RED_GOAL_MANAGER_SHA256 = "af29d7e7f72e9921e638c88664b17e6fbbf6334468609ab66bda41c9f3dad66d"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 
@@ -64,8 +62,18 @@ class LivingCollectionCheckpoint:
     specimen_ledger_sha256: str
     required_specimens_sha256: str
     specimen_counts: tuple[tuple[str, int], ...]
+    allowed_evolutions: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
+        if (
+            not isinstance(self.allowed_evolutions, tuple)
+            or tuple(sorted(set(self.allowed_evolutions))) != self.allowed_evolutions
+            or any(
+                not isinstance(a, str) or not a or not isinstance(b, str) or not b or a == b
+                for a, b in self.allowed_evolutions
+            )
+        ):
+            raise GoalManagerCompositionError("composition evolution graph differs")
         for name in (
             "registered_species",
             "living_species",
@@ -86,9 +94,7 @@ class LivingCollectionCheckpoint:
         ):
             value = getattr(self, name)
             if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-                raise GoalManagerCompositionError(
-                    f"composition collection {name} is invalid"
-                )
+                raise GoalManagerCompositionError(f"composition collection {name} is invalid")
         if (
             not isinstance(self.specimen_counts, tuple)
             or not self.specimen_counts
@@ -121,9 +127,7 @@ class LivingCollectionCheckpoint:
             "storage_headroom": self.storage_headroom,
             "required_specimens_sha256": self.required_specimens_sha256,
             "specimen_ledger_sha256": self.specimen_ledger_sha256,
-            "total_living_specimens": sum(
-                count for _species, count in self.specimen_counts
-            ),
+            "total_living_specimens": sum(count for _species, count in self.specimen_counts),
             "undeclared_specimen_losses": self.undeclared_specimen_losses,
         }
 
@@ -347,9 +351,7 @@ def run_goal_manager_composition_episode(
                     "composition model selected outside the frozen field contract"
                 )
             if selected_kind in already_selected:
-                raise GoalManagerCompositionError(
-                    "composition model repeated a selected goal kind"
-                )
+                raise GoalManagerCompositionError("composition model repeated a selected goal kind")
             if (
                 final_decision
                 and GoalKind.ADVANCE_STORY not in already_selected
@@ -444,14 +446,10 @@ def run_goal_manager_composition_episode(
         raise GoalManagerCompositionError(
             "composition did not select the three frozen field goal kinds"
         )
-    storage = next(
-        step for step in steps if step.selected_kind is GoalKind.MANAGE_STORAGE
-    )
+    storage = next(step for step in steps if step.selected_kind is GoalKind.MANAGE_STORAGE)
     if (
-        storage.collection_after.storage_headroom
-        <= storage.collection_before.storage_headroom
-        or storage.collection_after.specimen_counts
-        != storage.collection_before.specimen_counts
+        storage.collection_after.storage_headroom <= storage.collection_before.storage_headroom
+        or storage.collection_after.specimen_counts != storage.collection_before.specimen_counts
     ):
         raise GoalManagerCompositionError(
             "composition storage step did not preserve specimens and gain headroom"
@@ -463,12 +461,10 @@ def run_goal_manager_composition_episode(
     ):
         raise GoalManagerCompositionError("composition did not preserve the living collection")
     policy_changes = sum(
-        left != right
-        for left, right in zip(policy_contexts, policy_contexts[1:], strict=False)
+        left != right for left, right in zip(policy_contexts, policy_contexts[1:], strict=False)
     )
     menu_changes = sum(
-        left != right
-        for left, right in zip(available_menus, available_menus[1:], strict=False)
+        left != right for left, right in zip(available_menus, available_menus[1:], strict=False)
     )
     if policy_changes != FRESH_COMPOSITION_DECISIONS - 1 or menu_changes < 1:
         raise GoalManagerCompositionError("composition did not replan from changed policy state")
@@ -518,6 +514,25 @@ def require_living_collection_transition(
         max(0, count - after_specimens.get(species, 0))
         for species, count in before_specimens.items()
     )
+    decreases = {
+        s: n - after_specimens.get(s, 0)
+        for s, n in before_specimens.items()
+        if n > after_specimens.get(s, 0)
+    }
+    increases = {
+        s: n - before_specimens.get(s, 0)
+        for s, n in after_specimens.items()
+        if n > before_specimens.get(s, 0)
+    }
+    verified_evolution = (
+        selected_kind is GoalKind.EVOLVE_SPECIES
+        and require_selected_goal_progress
+        and before.allowed_evolutions == after.allowed_evolutions
+        and len(decreases) == len(increases) == 1
+        and tuple(decreases.values()) == tuple(increases.values()) == (1,)
+        and (next(iter(decreases)), next(iter(increases))) in before.allowed_evolutions
+        and after_specimens.get(next(iter(decreases)), 0) >= 1
+    )
     if (
         after.registered_species < before.registered_species
         or after.living_species < before.living_species
@@ -526,7 +541,8 @@ def require_living_collection_transition(
         or after.undeclared_specimen_losses != 0
         or before.undeclared_specimen_losses != 0
         or after.completion_contract_sha256 != before.completion_contract_sha256
-        or lost_specimens
+        or (lost_specimens and not verified_evolution)
+        or before.allowed_evolutions != after.allowed_evolutions
     ):
         raise GoalManagerCompositionError("composition collection state regressed")
     collection_changed = any(
@@ -544,13 +560,9 @@ def require_living_collection_transition(
         raise GoalManagerCompositionError(
             "composition specimen ledger does not match the collection transition"
         )
-    required_digest_changed = (
-        before.required_specimens_sha256 != after.required_specimens_sha256
-    )
+    required_digest_changed = before.required_specimens_sha256 != after.required_specimens_sha256
     if selected_kind in {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}:
-        if require_selected_goal_progress and (
-            not ledger_changed or not required_digest_changed
-        ):
+        if require_selected_goal_progress and (not ledger_changed or not required_digest_changed):
             raise GoalManagerCompositionError(
                 "composition collection goal did not change its authenticated ledgers"
             )

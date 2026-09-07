@@ -16,6 +16,13 @@ Run `python scripts/check_product_focus.py` before committing. It rejects multip
 learning work without measurable outputs, maintenance without a named unblock, weakened alarms,
 unsupported counters, and a stale generated active-state page.
 
+At session closeout and after substantial verified progress, refresh the
+[development infographic](docs/development-roadmap.md), its status/review log, handoffs and
+project/video narrative under the North Star's closeout rules. Regenerate with
+`python scripts/development_roadmap.py --write`; `scripts/check_docs.py` checks freshness.
+Keep stage IDs and exit criteria stable; log material deviations in `docs/roadmap-decisions.md`.
+Do not create a new CI workflow or count documentation work as model progress.
+
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 
 - Do not copy experimental claims or results from the predecessor into this repository.

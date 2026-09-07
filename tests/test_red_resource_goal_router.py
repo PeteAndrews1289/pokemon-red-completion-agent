@@ -182,6 +182,43 @@ def _supply(bindings):
     return next(item for item in bindings.opportunities if item.kind is GoalKind.RESUPPLY)
 
 
+@pytest.mark.parametrize("at_clerk", [False, True])
+def test_quotes_bind_actual_prices_funds_and_reserves_without_actions(fixture, at_clerk):
+    f = fixture
+    f.router.quote_resource_costs = True
+    if at_clerk:
+        f.reader.raw = replace(f.reader.raw, player_x=4)
+    before = f.port.frame_count
+    result = f.router.enumerate(f.adapter.observe())
+    supply = _supply(result)
+    quote = supply.resource_quote
+    assert quote.available_funds == 5_000
+    assert quote.purchase_cost == 2_000
+    assert quote.reserves[0].available == 0
+    assert quote.reserves[0].purchased == 10
+    assert quote.cost_units == pytest.approx(0.4)
+    assert result.require(supply.binding_ref).resource_quote == quote
+    assert f.actions.actions_executed == 0 and f.port.frame_count == before
+    f.reader.raw = replace(f.reader.raw, player_money=2_500)
+    refreshed = f.router.enumerate(f.adapter.observe())
+    changed_supply = _supply(refreshed)
+    changed = changed_supply.resource_quote
+    assert changed.available_funds == 2_500 and changed.cost_units == pytest.approx(0.8)
+    with pytest.raises(routing.RedResourceGoalRoutingError, match="quote changed"):
+        result.require(supply.binding_ref).execute()
+    assert f.actions.actions_executed == 0 and f.port.frame_count == before
+    report = refreshed.require(changed_supply.binding_ref).execute()
+    assert refreshed.require(changed_supply.binding_ref).verify(report).status.value == "succeeded"
+    assert f.reader.raw.player_money == 500
+    assert dict(f.reader.raw.bag_items)[int(ItemId.POKE_BALL)] == 10
+
+
+def test_legacy_router_keeps_quotes_absent(fixture):
+    supply = _supply(fixture.router.enumerate(fixture.adapter.observe()))
+    assert supply.resource_quote is None
+    assert "resource_quote" not in supply.policy_dict()
+
+
 def test_remote_supply_uses_actual_route_and_fresh_mart_then_disappears(fixture):
     f = fixture
     before = f.port.frame_count
@@ -297,6 +334,16 @@ def test_capture_route_uses_same_resources_and_verifies_retained_specimens(fixtu
     before = f.adapter.observe().collection.collection.living_count
     result = f.router.enumerate(f.adapter.observe())
     assert len(result.bindings) == 1 and result.bindings[0].kind is GoalKind.ACQUIRE_SPECIES
+    original_raw = f.reader.raw
+    f.reader.raw = replace(original_raw, player_x=2)
+    refreshed = f.router.enumerate(f.adapter.observe()).bindings[0]
+    assert refreshed.binding_ref != result.bindings[0].binding_ref
+    assert refreshed.search_memory_source == result.bindings[0].search_memory_source
+    f.reader.raw = replace(original_raw, player_x=4)
+    local = f.router.enumerate(f.adapter.observe()).bindings[0]
+    assert local.search_memory_source == refreshed.search_memory_source
+    assert local.search_memory_source == "pokemon.red:acquisition:wild:Route1:grass"
+    f.reader.raw = original_raw
     report = result.bindings[0].execute()
     assert result.bindings[0].verify(report).status.value == "succeeded"
     assert f.adapter.observe().collection.collection.living_count > before

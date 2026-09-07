@@ -14,6 +14,7 @@ from pokemon_red_completion.red_pc_storage import (
     RedPCStorageError,
     RedPCStorageTiming,
     deposit_party_member,
+    face_pc_boundary,
     open_bills_pc,
     switch_box,
     withdraw_box_member,
@@ -49,6 +50,36 @@ class _Reader:
 
     def read_menu_cursor_state(self) -> MenuCursorState:
         return self.menu
+
+
+@pytest.mark.parametrize("direction", ["up", "down", "left", "right"])
+@pytest.mark.parametrize("displaced", [False, True])
+def test_pc_orientation_verifies_facing_and_unchanged_position(direction, displaced):
+    from types import SimpleNamespace
+
+    reader = _Reader()
+    reader.facing = "right" if direction != "right" else "left"
+    reader.read_player_facing = lambda: reader.facing
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    reader.read_bottom_dialogue_box_visible = lambda: False
+    observed = []
+
+    class Port:
+        def execute(self, action):
+            observed.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                reader.facing = str(action.value)
+                if displaced:
+                    reader.raw = replace(reader.raw, player_x=12)
+
+    if displaced:
+        with pytest.raises(RedPCStorageError, match="bound position"):
+            face_pc_boundary(Port(), reader, direction)
+    else:
+        face_pc_boundary(Port(), reader, direction)
+        face_pc_boundary(Port(), reader, direction)
+    assert len(observed) == 2
+    assert observed[0] == MacroAction(MacroActionKind.MOVE, direction)
 
 
 class _DepositExecutor:

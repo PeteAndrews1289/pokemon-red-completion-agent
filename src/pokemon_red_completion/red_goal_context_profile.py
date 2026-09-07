@@ -146,6 +146,27 @@ class RedGoalContextProfile:
         }
 
 
+def build_native_boxed_evolution_profile_payload(
+    profile: RedGoalContextProfile, *, source_species: int,
+    target_species: int, evolution_level: int,
+) -> bytes:
+    """Declare useful collection evolution instead of arbitrary party grinding."""
+    from pokemon_red_completion.red_collection import red_species_ref
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers if spec.kind is not GoalKind.DEVELOP_TEAM
+    }
+    providers[GoalKind.EVOLVE_SPECIES] = (
+        GoalKind.EVOLVE_SPECIES, RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        {"source_species_ref": red_species_ref(source_species),
+         "target_species_ref": red_species_ref(target_species), "evolution_level": evolution_level},
+    )
+    return build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    )
+
+
 def load_red_goal_context_profile(path: str | Path) -> RedGoalContextProfile:
     """Read one profile without retaining its private filesystem location."""
 

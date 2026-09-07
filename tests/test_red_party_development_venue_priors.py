@@ -32,16 +32,10 @@ from pokemon_red_completion.training_venue import TrainingVenue
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PLAN_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-party-development-outcome-plan-v2-2026-08-14.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-plan-v2-2026-08-14.json"
 )
 RESULT_PATH = (
-    PROJECT_ROOT
-    / "docs"
-    / "evidence"
-    / "red-party-development-outcome-result-v2-2026-08-14.json"
+    PROJECT_ROOT / "docs" / "evidence" / "red-party-development-outcome-result-v2-2026-08-14.json"
 )
 
 
@@ -85,9 +79,7 @@ def _composition(
             else result_sha256
         ),
         registry_source_commit=compatibility.current_commit,
-        registry_source_bundle_sha256=(
-            compatibility.current_source_bundle_sha256
-        ),
+        registry_source_bundle_sha256=(compatibility.current_source_bundle_sha256),
         source_compatibility=compatibility,
     )
 
@@ -107,9 +99,7 @@ def test_route_11_receipts_compose_the_exact_observed_unit_ratios() -> None:
     assert evidence.matchup_safety == VenuePriorUnitRatio(108, 108)
     assert evidence.travel_cost == VenuePriorUnitRatio(0, 108)
     assert evidence.recovery_cost == VenuePriorUnitRatio(10, 118)
-    assert composition.registry.source_commit == (
-        composition.source_compatibility.current_commit
-    )
+    assert composition.registry.source_commit == (composition.source_compatibility.current_commit)
     assert composition.registry.source_bundle_sha256 == (
         composition.source_compatibility.current_source_bundle_sha256
     )
@@ -147,9 +137,7 @@ def test_composed_registry_round_trips_but_public_projection_hides_support() -> 
         ("mandatory_heal_only_when_health_status_or_pp_is_unsafe", False),
     ),
 )
-def test_composition_rejects_published_policy_drift(
-    field: str, replacement: object
-) -> None:
+def test_composition_rejects_published_policy_drift(field: str, replacement: object) -> None:
     plan, result = _documents()
     drifted = copy.deepcopy(plan)
     training_policy = drifted["training_policy"]
@@ -183,9 +171,7 @@ def test_composition_rejects_a_result_bound_to_another_plan() -> None:
         ("faints", 1),
     ),
 )
-def test_composition_rejects_nonqualifying_route_trial(
-    field: str, replacement: object
-) -> None:
+def test_composition_rejects_nonqualifying_route_trial(field: str, replacement: object) -> None:
     plan, result = _documents()
     drifted = copy.deepcopy(result)
     collection = drifted["outcome_collection"]
@@ -251,15 +237,13 @@ def test_composition_rejects_the_stale_sibling_as_candidate_zero() -> None:
 
 def test_operational_contract_changes_when_policy_changes() -> None:
     compatibility = _source_compatibility()
-    baseline = red_route_11_operational_contract(
-        source_compatibility=compatibility
-    )
+    baseline = red_route_11_operational_contract(source_compatibility=compatibility)
     changed = red_route_11_operational_contract(
         source_compatibility=compatibility,
         policy=replace(
             RED_PARTY_DEVELOPMENT_OUTCOME_POLICY,
             retreat_hp_ratio=0.44,
-        )
+        ),
     )
 
     assert changed.policy_sha256 != baseline.policy_sha256
@@ -299,12 +283,10 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_eleven_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_twelve_waivers() -> None:
     attestation = _source_compatibility()
 
-    assert attestation.observed_commit == (
-        "00499bc68b099ffcd0125a6777bc3b836a84ff0b"
-    )
+    assert attestation.observed_commit == ("00499bc68b099ffcd0125a6777bc3b836a84ff0b")
     assert attestation.observed_source_bundle_sha256 == (
         "969f6ae2f60282848d26d4097fcefe6e9881f3739d78b560bdf0f186482f6294"
     )
@@ -318,17 +300,18 @@ def test_source_compatibility_recomputes_exact_bundles_and_eleven_waivers() -> N
         "red.route-11-heal-and-return",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
+        "red.training-attack-pp",
         "red.training-dig-to-vermilion",
         "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "c08ea57383e25da4f17a69ff2c4ae1e8662c4a1af0a19c454250fa30b11b0774"
-        )
+        "68402ce3fa2bef6ae53bb93180bd91aa1bcfd4a89bb228ca606b815083b4be9c"
+    )
     assert attestation.current_elements_sha256 == (
-        "cef8e925e8b89db3b625a421c53627c20249a61f9546073f6ebea93d9fcaf6a4"
+        "90adc56c157b826b7d9b8f29d1f0cab310e2596bc26a2d659f819f32120f8545"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "5bcd36f2c55da63412d7a4f59dd131db0dab17af6203abee52b4c9ccbbc50c5a"
+        "7ae76efc961c4adb66a95f2e1d295c4a5bb46d27442804bf00e87cfc2513969b"
     )
 
 
@@ -370,11 +353,7 @@ def test_source_compatibility_rejects_an_uncovered_candidate_helper(
     monkeypatch.setattr(
         venue_prior_module,
         "_ROUTE_11_SOURCE_ELEMENTS",
-        tuple(
-            spec
-            for spec in existing
-            if spec.element_id != "core.eligible-venues"
-        ),
+        tuple(spec for spec in existing if spec.element_id != "core.eligible-venues"),
     )
 
     with pytest.raises(
@@ -390,9 +369,7 @@ def test_attestation_invokes_source_closure_independently(
     attestation = _source_compatibility()
 
     def reject_closure() -> None:
-        raise RedPartyDevelopmentVenuePriorError(
-            "independent attestation closure sentinel"
-        )
+        raise RedPartyDevelopmentVenuePriorError("independent attestation closure sentinel")
 
     monkeypatch.setattr(
         venue_prior_module,
@@ -407,22 +384,20 @@ def test_attestation_invokes_source_closure_independently(
         attest_red_route_11_source_compatibility(
             PROJECT_ROOT,
             current_commit=attestation.current_commit,
-            current_source_bundle_sha256=(
-                attestation.current_source_bundle_sha256
-            ),
+            current_source_bundle_sha256=(attestation.current_source_bundle_sha256),
         )
 
 
 def test_operational_ast_digest_is_stable_across_supported_python_versions() -> None:
-    node = ast.parse(
-        "def sample(value: int = 1) -> int:\n"
-        "    return value + 2\n"
-    ).body[0]
+    node = ast.parse("def sample(value: int = 1) -> int:\n    return value + 2\n").body[0]
 
-    assert venue_prior_module._ast_node_sha256(  # noqa: SLF001
-        node,
-        qualname="sample",
-    ) == "330afe6782e585ceb4d602d6654107636e260596646bf143e5ea99ee13ce931c"
+    assert (
+        venue_prior_module._ast_node_sha256(  # noqa: SLF001
+            node,
+            qualname="sample",
+        )
+        == "330afe6782e585ceb4d602d6654107636e260596646bf143e5ea99ee13ce931c"
+    )
 
 
 def test_operational_ast_distinguishes_list_and_tuple_fields() -> None:
@@ -538,9 +513,7 @@ def test_source_compatibility_rejects_loaded_runtime_drift_independently(
         attest_red_route_11_source_compatibility(
             PROJECT_ROOT,
             current_commit=attestation.current_commit,
-            current_source_bundle_sha256=(
-                attestation.current_source_bundle_sha256
-            ),
+            current_source_bundle_sha256=(attestation.current_source_bundle_sha256),
         )
 
 
@@ -592,10 +565,7 @@ def test_source_compatibility_rejects_unlisted_historical_element_drift(
             revision=revision,
             relative_path=relative_path,
         )
-        if (
-            revision == attestation.observed_commit
-            and relative_path.endswith("/team_training.py")
-        ):
+        if revision == attestation.observed_commit and relative_path.endswith("/team_training.py"):
             return payload.replace(
                 b"class TeamTrainingProgress",
                 b"class HistoricalTeamTrainingProgress",
@@ -616,9 +586,7 @@ def test_source_compatibility_rejects_unlisted_historical_element_drift(
         attest_red_route_11_source_compatibility(
             PROJECT_ROOT,
             current_commit=attestation.current_commit,
-            current_source_bundle_sha256=(
-                attestation.current_source_bundle_sha256
-            ),
+            current_source_bundle_sha256=(attestation.current_source_bundle_sha256),
         )
 
 
@@ -640,10 +608,7 @@ def test_source_compatibility_rejects_committed_module_constant_drift(
             revision=revision,
             relative_path=relative_path,
         )
-        if (
-            revision == attestation.current_commit
-            and relative_path.endswith("/team_training.py")
-        ):
+        if revision == attestation.current_commit and relative_path.endswith("/team_training.py"):
             changed = payload.replace(
                 b"MINIMUM_FIGHTABLE_SHARE = 0.25",
                 b"MINIMUM_FIGHTABLE_SHARE = 0.05",
@@ -715,9 +680,7 @@ def test_source_compatibility_rejects_a_stale_waiver(
         attest_red_route_11_source_compatibility(
             PROJECT_ROOT,
             current_commit=attestation.current_commit,
-            current_source_bundle_sha256=(
-                attestation.current_source_bundle_sha256
-            ),
+            current_source_bundle_sha256=(attestation.current_source_bundle_sha256),
         )
 
 
@@ -776,24 +739,22 @@ def test_composition_computes_and_validates_the_rejected_stale_sibling(
 
 
 def test_operational_contract_has_independent_golden_coverage() -> None:
-    contract = red_route_11_operational_contract(
-        source_compatibility=_source_compatibility()
-    )
+    contract = red_route_11_operational_contract(source_compatibility=_source_compatibility())
 
     assert contract.policy_sha256 == (
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "8da28199ad48b621dc352e60de2f3ff5db186ff0ce4ee5aa61804cf50da9b908"
+        "66166d9ee083111510f2a479df11654c62b4b7f4d619cb0275b5aaf0857dcd66"
     )
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
     assert contract.battle_timing_sha256 == (
-        "7898ee3d2d1d7e0171d781bd7337b3d76b2c02d6c8c5c5190a247e0f0ab68917"
+        "00312f279ea8db24cff83a62d60c913b73f4798777896f581bd7db8efaabe0b6"
     )
     assert contract.accounting_sha256 == (
-        "d194a08e8d6ec6e96601353dd3fff45646fde4ce3bed4f44872cca71ddb2183c"
+        "d111d88afe0e0d1eee1ee9df4ee69e7369ba55f2fbc4b33746f35016d1f5c8a5"
     )
 
 

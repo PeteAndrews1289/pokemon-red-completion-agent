@@ -17,15 +17,21 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1TraversalObserver,
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
-from pokemon_red_completion.goal_manager import GoalAvailability, GoalUnavailableReason
-from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
+from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
+    GoalExecutionReport,
+)
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
+from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedMartResupplyGoalProvider,
+    prepare_center_departure,
 )
 from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
@@ -44,7 +50,13 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 )
 
 _WALK_ACTIONS = frozenset({"up", "right", "down", "left"})
-_MECHANICS = frozenset({RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.MART_RESUPPLY})
+_MECHANICS = frozenset(
+    {
+        RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.MART_RESUPPLY,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+    }
+)
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
@@ -70,6 +82,7 @@ class RedResourceGoalRouter:
     world: StrategicScenarioRouteWorld
     maximum_controller_actions: int = 6_000
     maximum_emulator_frames: int = 600_000
+    quote_resource_costs: bool = False
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -99,7 +112,10 @@ class RedResourceGoalRouter:
             ):
                 continue
             provider = self.runtime.provider_for(spec.kind, self.actions)
-            if not isinstance(provider, (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider)):
+            if not isinstance(
+                provider,
+                (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider, _RedTeamGoalProvider),
+            ):
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
@@ -134,6 +150,9 @@ class RedResourceGoalRouter:
                 ),
                 replanner=self._replan,
                 route_limits=_ROUTE_LIMITS,
+                prepare_departure=lambda: prepare_center_departure(
+                    self.actions, self.runtime.reader
+                ),
             )
 
             def observe_fresh() -> FreshRedGoalObservation:
@@ -161,14 +180,69 @@ class RedResourceGoalRouter:
                     self.maximum_controller_actions, self.maximum_emulator_frames
                 ),
             ).binding()
+            if isinstance(provider, RedAreaSurveyGoalProvider):
+                binding = replace(
+                    binding, search_source_ref=f"pokemon.red:acquisition:{provider.source_id}"
+                )
             replacements[binding.binding_ref] = binding
             opportunities[index] = binding.opportunity
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
-        return GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        return self._with_quotes(result, observation) if self.quote_resource_costs else result
+
+    def _with_quotes(
+        self, bindings: GoalBindingSet, observation: RedGoalObservation
+    ) -> GoalBindingSet:
+        """Bind exact costs to the same opportunity and executable skill."""
+        quoted = []
+        for binding in bindings.bindings:
+            if binding.kind is GoalKind.RESUPPLY:
+                provider = self.runtime.provider_for(binding.kind, self.actions)
+                if not isinstance(provider, RedMartResupplyGoalProvider):
+                    raise RedResourceGoalRoutingError("resource-cost quote needs a Mart provider")
+                binding = self._quoted_binding(binding, provider, observation)
+            quoted.append(binding)
+        by_ref = {item.binding_ref: item.opportunity for item in quoted}
+        return GoalBindingSet(
+            tuple(by_ref.get(item.binding_ref, item) for item in bindings.opportunities),
+            tuple(quoted),
+        )
+
+    def _quoted_binding(
+        self,
+        binding: ExecutableGoalBinding,
+        provider: RedMartResupplyGoalProvider,
+        observation: RedGoalObservation,
+    ) -> ExecutableGoalBinding:
+        quote = provider.resource_quote(observation)
+
+        def execute() -> GoalExecutionReport:
+            # Reject stale economic facts before transport or menu input. The
+            # destination skill separately verifies actual inventory/money deltas.
+            current = provider.resource_quote(self.runtime.adapter.observe())
+            if current != quote:
+                raise RedResourceGoalRoutingError("resource quote changed before execution")
+            return binding.execute()
+
+        return replace(binding, resource_quote=quote, execute=execute)
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
+        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+            # Known mechanic entry boundaries, connected by the cartridge router.
+            for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
+                try:
+                    plan = self.world.plan_feasible_to_map(
+                        fresh.traversal,
+                        int(center),
+                        goal_at=(3, 3),
+                    )
+                except RoutePlanningError:
+                    continue
+                if plan.steps and _walking_plan(plan):
+                    return plan
+            return None
         target_map = parameters["map_id"]
         x, y = parameters["player_x"], parameters["player_y"]
         if any(type(value) is not int for value in (target_map, x, y)):

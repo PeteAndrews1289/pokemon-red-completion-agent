@@ -276,8 +276,7 @@ class FixedPartyTrainingDose:
         if (
             not isinstance(self.trainee_species_lineage, tuple)
             or not self.trainee_species_lineage
-            or len(self.trainee_species_lineage)
-            != len(set(self.trainee_species_lineage))
+            or len(self.trainee_species_lineage) != len(set(self.trainee_species_lineage))
             or any(
                 type(species_id) is not int or not 1 <= species_id <= 0xFF  # noqa: E721
                 for species_id in self.trainee_species_lineage
@@ -304,7 +303,7 @@ def pulse(
     actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180
 ) -> None:
     actions.execute(MacroAction(kind, value))
-    actions.execute(MacroAction(MacroActionKind.WAIT, frames))
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
@@ -331,7 +330,15 @@ def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None
 def training_attack_pp(member: PartyMemberObservation) -> int:
     damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
     if not damaging:
-        return member.total_pp
+        from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+
+        # Unknown roster species still have known move mechanics. Status PP
+        # cannot keep an exhausted attacker away from the healer.
+        damaging = {
+            move.move_id
+            for move in member.known_moves
+            if RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move.move_id)).power > 0
+        }
     return sum(move.current_pp for move in member.known_moves if move.move_id in damaging)
 
 
@@ -363,11 +370,18 @@ def red_training_matchup_acceptable(
     simply deleted.
     """
 
+    return training_type_matchup_acceptable(
+        member.species_id, enemy_species
+    ) and is_matchup_acceptable(member, enemy_level, policy)
+
+
+def training_type_matchup_acceptable(trainee_species: int, enemy_species: int | None) -> bool:
+    """Structural opponent safety, independent of recoverable current HP/PP."""
     if enemy_species == 0x88:  # Muk
         return False
     if enemy_species is not None:
         trainee_types = RED_BATTLE_CATALOG.resolve_species(
-            pokemon_red_species_ref(member.species_id)
+            pokemon_red_species_ref(trainee_species)
         ).types
         enemy_types = RED_BATTLE_CATALOG.resolve_species(
             pokemon_red_species_ref(enemy_species)
@@ -377,7 +391,7 @@ def red_training_matchup_acceptable(
             for enemy_type in enemy_types
         ):
             return False
-    return is_matchup_acceptable(member, enemy_level, policy)
+    return True
 
 
 def member_is_unsafe_for_team_training(
@@ -390,6 +404,15 @@ def member_is_unsafe_for_team_training(
         or member.status is not StatusCondition.HEALTHY
         or training_attack_pp(member) <= training_attack_pp_reserve(member, policy)
     )
+
+
+class EvolutionTrainingPaused(RuntimeError):
+    """A completed-battle quantum ended safely; retain and resume its state."""
+
+    def __init__(self, battles: int, healing_trips: int) -> None:
+        super().__init__("bounded evolution experience quantum completed without evolution")
+        self.battles = battles
+        self.healing_trips = healing_trips
 
 
 def trainee_should_fight_directly(
@@ -574,14 +597,25 @@ def swap_field_party_slots(
         pulse(actions, MacroActionKind.OPEN_MENU)
         select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
         pulse(actions, MacroActionKind.CONFIRM)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            raise RuntimeError(f"{label} did not open the party list before source selection.")
         select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
         open_party_member_submenu(actions, emulator, label=label)
         if row > emulator.read_u8(RamAddress.MAX_MENU_ITEM):
             close_menu(actions, reader)
             continue
-        _walk_cursor_to(actions, emulator, row)
+        select_cursor(actions, emulator, row, hideout_timing, "member SWITCH candidate")
         pulse(actions, MacroActionKind.CONFIRM)
-        _walk_cursor_to(actions, emulator, second_index)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            close_menu(actions, reader)
+            continue
+        select_cursor(actions, emulator, second_index, hideout_timing, "party destination slot")
         pulse(actions, MacroActionKind.CONFIRM)
         close_menu(actions, reader)
 
@@ -842,6 +876,8 @@ def run_red_team_balancing(
     execution_summary_sink: Callable[[TeamTrainingExecutionSummary], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
+    allow_direct_evolution: bool = False,
+    evolution_battle_quantum: int | None = None,
     development_target_species_id: int | None = None,
     venues: Sequence[TrainingVenue],
     report_label: str,
@@ -849,6 +885,17 @@ def run_red_team_balancing(
     fixed_dose: FixedPartyTrainingDose | None = None,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
+    if type(allow_direct_evolution) is not bool:
+        raise ValueError("direct evolution mode must be boolean")
+    if (
+        allow_direct_evolution or evolution_battle_quantum is not None
+    ) and evolution_target is None:
+        raise ValueError("evolution controls require an evolution target")
+    if evolution_battle_quantum is not None and (
+        type(evolution_battle_quantum) is not int
+        or not 1 <= evolution_battle_quantum <= policy.max_battles
+    ):
+        raise ValueError("evolution quantum exceeds its battle bound")
     if not venues:
         raise RuntimeError(
             "Team training was given no venue. There is nowhere to walk, nowhere to heal, "
@@ -861,10 +908,13 @@ def run_red_team_balancing(
         or not 1 <= development_target_species_id <= 0xFF
     ):
         raise ValueError("Targeted party development species is invalid.")
-    if sum(
-        item is not None
-        for item in (fixed_dose, evolution_target, development_target_species_id)
-    ) > 1:
+    if (
+        sum(
+            item is not None
+            for item in (fixed_dose, evolution_target, development_target_species_id)
+        )
+        > 1
+    ):
         raise RuntimeError(
             "Party training can bind only one fixed dose, evolution, or development target."
         )
@@ -1095,18 +1145,14 @@ def run_red_team_balancing(
             if member.species_id in fixed_dose.trainee_species_lineage
         )
         if len(matches) != 1:
-            raise RuntimeError(
-                "Fixed party-training dose lost its unique trainee lineage binding."
-            )
+            raise RuntimeError("Fixed party-training dose lost its unique trainee lineage binding.")
         return matches[0]
 
     def bound_development_trainee(party: PartyObservation) -> PartyMemberObservation:
         if development_target_species_id is None:
             raise AssertionError("targeted development trainee requested without a binding")
         matches = tuple(
-            member
-            for member in party.members
-            if member.species_id == development_target_species_id
+            member for member in party.members if member.species_id == development_target_species_id
         )
         if len(matches) != 1:
             raise RuntimeError(
@@ -1309,8 +1355,16 @@ def run_red_team_balancing(
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
                 break
-            if battles >= 200:
-                raise RuntimeError("Targeted evolution exceeded 200 battles.")
+            if (
+                evolution_battle_quantum is not None
+                and battles >= evolution_battle_quantum
+                and reader.read().battle_state == 0
+                and reader.read_input_readiness().ready
+            ):
+                require_zero_faints(party_reader, "evolution quantum boundary")
+                raise EvolutionTrainingPaused(battles, healing_trips)
+            if battles >= min(200, policy.max_battles) or steps >= policy.max_steps:
+                raise RuntimeError("Targeted evolution exhausted its bounded training budget.")
             trainee = next((m for m in party.members if m.species_id == precursor_species), None)
             if trainee is None:
                 raise RuntimeError("Targeted evolution lost its precursor.")
@@ -1462,7 +1516,7 @@ def run_red_team_balancing(
                     enemy_level=raw.enemy_level,
                     enemy_species=raw.enemy_species_id,
                     policy=policy,
-                    participation_only=evolution_target is not None,
+                    participation_only=evolution_target is not None and not allow_direct_evolution,
                 )
             )
 
@@ -1703,10 +1757,7 @@ def run_red_team_balancing(
         )
         steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
-    if (
-        current_venue.is_in_map(reader.read())
-        and healing_trips < policy.max_healing_trips
-    ):
+    if current_venue.is_in_map(reader.read()) and healing_trips < policy.max_healing_trips:
         prepare_for_recovery()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1

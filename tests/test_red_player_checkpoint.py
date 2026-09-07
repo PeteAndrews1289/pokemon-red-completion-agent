@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 from dataclasses import replace
@@ -14,15 +15,17 @@ from pokemon_red_completion.bounded_player_episode import (
     BoundedPlayerStopReason,
 )
 from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import CompositionBudgetCheckpoint
 from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manager_context_capture
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
 from pokemon_red_completion.private_artifacts import PrivateArtifactError, initialize_private_root
 from pokemon_red_completion.red_player_checkpoint import (
+    LEGACY_CHECKPOINT_SCHEMA,
     MAXIMUM_STATE_BYTES,
     RedPlayerCheckpointError,
     capture_red_player_terminal,
+    capture_red_skill_recovery,
     open_red_player_checkpoint,
     publish_red_player_checkpoint,
     recover_completed_red_player_checkpoint,
@@ -46,6 +49,45 @@ class _Meter:
 
     def checkpoint(self):
         return CompositionBudgetCheckpoint(self.actions, 37)
+
+
+@pytest.mark.parametrize("mode", ["safe", "held", "frames", "actions", "empty", "oversize"])
+def test_skill_recovery_is_read_only_and_not_an_admitted_checkpoint(mode):
+    emulator, meter = _Emulator(), _Meter()
+    if mode == "held":
+        emulator.pressed_buttons = frozenset({"a"})
+    elif mode == "frames":
+        emulator.mutation = lambda: setattr(emulator, "frame_count", 38)
+    elif mode == "actions":
+        emulator.mutation = lambda: setattr(meter, "actions", 3)
+    elif mode == "empty":
+        emulator.state = b""
+    elif mode == "oversize":
+        emulator.state = b"x" * (MAXIMUM_STATE_BYTES + 1)
+    if mode != "safe":
+        with pytest.raises(RedPlayerCheckpointError):
+            capture_red_skill_recovery(emulator=emulator, meter=meter)
+        return
+    record = capture_red_skill_recovery(emulator=emulator, meter=meter)
+    assert base64.urlsafe_b64decode(record["state_base64"]) == emulator.state
+    assert record["state_sha256"] == hashlib.sha256(emulator.state).hexdigest()
+    assert record["admitted_continuation"] is record["training_target"] is False
+    assert (record["actions"], record["frames"]) == (2, 37)
+
+
+def test_skill_recovery_serializes_binary_state_through_real_private_writer(case):
+    store, _, _ = case
+    emulator = _Emulator()
+    # Ordinary base64 produces '/' here. The actual private writer must accept
+    # URL-safe encoding without weakening its unrelated filesystem-path guard.
+    emulator.state = bytes(range(256))
+    record = capture_red_skill_recovery(emulator=emulator, meter=_Meter())
+    assert "/" not in record["state_base64"]
+    with store.begin_episode("skill-recovery-test") as writer:
+        writer.append("episode", {"episode_id": "skill-recovery-test"})
+        writer.append("skill_recovery", record, durable=True)
+    assert list(store.open_episode("skill-recovery-test").iter_stream("skill_recovery")) == [record]
+    assert base64.urlsafe_b64decode(record["state_base64"]) == emulator.state
 
 
 @pytest.fixture
@@ -140,6 +182,58 @@ def test_durable_state_round_trip_preserves_parent_scope_and_quest_claims(case):
     assert "state_base64" not in json.dumps(summary)
     # Recovery republishes identical durable bytes, never another emulator action.
     assert recover_completed_red_player_checkpoint(store, arguments["episode_id"]) == summary
+
+
+def test_binary_save_with_path_like_base64_round_trips_through_real_private_store(case):
+    store, arguments, _ = case
+    state = b"\xff" * 32
+    assert b"/" in base64.b64encode(state)
+    arguments["emulator"].state = state
+    document = capture_red_player_terminal(**arguments)
+    assert "/" not in document["state_base64"]
+    _complete(store, document)
+    summary = publish_red_player_checkpoint(store, document)
+    checkpoint = _open(store, arguments, summary)
+    assert checkpoint.capture.state_bytes == state
+    assert checkpoint.capture.state_sha256 == hashlib.sha256(state).hexdigest()
+
+
+def test_settled_unsuccessful_search_retains_negative_outcome_and_safe_checkpoint(case):
+    store, arguments, observation = case
+    result = arguments["result"]
+    arguments["result"] = replace(
+        result,
+        stop_reason=BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED,
+        steps=(replace(
+            result.steps[0], selected_kind=GoalKind.ACQUIRE_SPECIES,
+            status=GoalDecisionOutcome.FAILED,
+            failure_reason=GoalFailureReason.SEARCH_EXHAUSTED,
+        ),),
+    )
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document)
+    summary = recover_completed_red_player_checkpoint(store, arguments["episode_id"])
+    checkpoint = _open(store, arguments, summary)
+    checkpoint.require_restored_observation(observation)
+    assert checkpoint.capture.state_bytes == b"actual-terminal-state"
+    terminal = document["terminal_result"]
+    assert terminal["completion_satisfied"] is False
+    assert terminal["stop_reason"] == "recovery_goal_repeated"
+    assert terminal["total_actions"] == 2
+    assert terminal["total_frames"] == 37
+    assert terminal["steps"][0]["status"] == "failed"
+    assert terminal["steps"][0]["failure_reason"] == "search_exhausted"
+    assert summary["training_example"] is False
+
+
+def test_legacy_checkpoint_payload_remains_readable_at_original_address(case):
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    document["schema"] = LEGACY_CHECKPOINT_SCHEMA
+    document["state_base64"] = base64.b64encode(arguments["emulator"].state).decode("ascii")
+    _complete(store, document)
+    checkpoint = _open(store, arguments, publish_red_player_checkpoint(store, document))
+    assert checkpoint.capture.state_bytes == arguments["emulator"].state
 
 
 @pytest.mark.parametrize("field,value", [

@@ -1,0 +1,69 @@
+{
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "completed_episode": {
+    "actions": 308,
+    "admitted_examples": 2,
+    "episode_id": "red-native-evolution-20260906-b-causal",
+    "frames": 15696,
+    "sampled_choices": 2,
+    "verified_collection_gain": 0
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "fit_report": {
+      "settled_examples": 35,
+      "successful_examples": 14,
+      "total_examples": 35
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "f5c37271941ab9eaacc0fcfc1d81e9f10c23139843153853a131d8d69681aeff",
+      "file_sha256": "ed22af36245d82e3d2e0e4bdb2821149fee6f9dfb14d621d5451b35cc51f7be8",
+      "independent_evaluation": false,
+      "model_sha256": "1b26aa4453f3c041d800251784f3d35338dfc6b9eb7e070f412357eaca46adb8",
+      "prior_model_sha256": "817d77db070195f250bb2237f0904ec7f96a6e71040a54f72fe0a781f58387dd",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 35,
+      "source_bundle_sha256": "c6028bc4a95bf874d1c9b8d99f733722f5a453b2547af439a0426531f7db3ef8",
+      "source_commit": "3a33af17d8f619c849cfb8bc15c4a53acf9c971b"
+    },
+    "new_settled_examples": 2,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "weighted_mse": 0.004989389259860417
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.004663512551294951
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [
+      {
+        "prior_greedy": "acquire",
+        "updated_greedy": "explore"
+      },
+      {
+        "prior_greedy": "acquire",
+        "updated_greedy": "explore"
+      }
+    ],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "scope": "Latest B fit, 33 to 35 examples; the session also contains the preceding 32-to-33 fit.",
+  "session_evidence": "docs/evidence/red-native-boxed-evolution-result-2026-09-06.json",
+  "status": "fit_complete_bounded_only"
+}

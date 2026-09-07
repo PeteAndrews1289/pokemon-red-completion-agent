@@ -122,17 +122,11 @@ from pokemon_red_completion.training_venue import TrainingVenue
 RED_ROUTE_11_VENUE_PRIOR_COMPOSITION_SCHEMA = (
     "pokemon.red.party-development-route-11-venue-prior-composition.v1"
 )
-RED_PARTY_DEVELOPMENT_OUTCOME_SCENARIO_ID = (
-    "red-party-development-evolution-venue-v2"
-)
+RED_PARTY_DEVELOPMENT_OUTCOME_SCENARIO_ID = "red-party-development-evolution-venue-v2"
 RED_ROUTE_11_VENUE_PRIOR_EVIDENCE_ID = "red-route-11-evolution-prior-v1"
-RED_ROUTE_11_VENUE_OPERATIONAL_CONTRACT_ID = (
-    "red-route-11-bounded-evolution-runtime-v1"
-)
+RED_ROUTE_11_VENUE_OPERATIONAL_CONTRACT_ID = "red-route-11-bounded-evolution-runtime-v1"
 RED_ROUTE_11_SUPPORT_CHECKPOINT_ID = "red-goal-v1-029-evolve_species-train-02"
-RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT = (
-    "00499bc68b099ffcd0125a6777bc3b836a84ff0b"
-)
+RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT = "00499bc68b099ffcd0125a6777bc3b836a84ff0b"
 RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_BUNDLE_SHA256 = (
     "969f6ae2f60282848d26d4097fcefe6e9881f3739d78b560bdf0f186482f6294"
 )
@@ -142,9 +136,7 @@ RED_PARTY_DEVELOPMENT_OUTCOME_PLAN_SHA256 = (
 RED_PARTY_DEVELOPMENT_OUTCOME_RESULT_SHA256 = (
     "a182025184383d7e2d8d1bdaa4d1c4477dca7136b5005cc78667e5c7d0132036"
 )
-RED_ROUTE_11_SOURCE_COMPATIBILITY_ATTESTATION_ID = (
-    "red-route-11-00499bc-runtime-compatibility-v1"
-)
+RED_ROUTE_11_SOURCE_COMPATIBILITY_ATTESTATION_ID = "red-route-11-00499bc-runtime-compatibility-v1"
 RED_ROUTE_11_STATELESS_WALKER_AST_SHA256 = (
     "8ae1a58bc11bd7801ba229fae4afbcb292d9e34c484d42b97e32694116b45522"
 )
@@ -507,87 +499,65 @@ _ROUTE_11_SOURCE_ELEMENTS = (
 
 _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
+        element_id="red.training-attack-pp",
+        observed_ast_sha256="e9c2ede4bb781b84770a4ad48e28a93d9d8cab3f14b25639f99f5e0792705281",
+        current_ast_sha256="d4606575d02af77f5daf6b5c13811c074a2b2b0e23fcc645401377cb51e448c1",
+        justification_id="unknown-roster-status-pp-exclusion-preserves-declared-diglett-move-branch",
+    ),
+    _SourceCompatibilityWaiver(
         element_id="training-venue.contract",
-        observed_ast_sha256=(
-            "4fbbbd2b289fd575811b85b1d10968a9dd09c33a7abbb67547b649b9a3332747"
-        ),
-        current_ast_sha256=(
-            "748f27949b60ae4137a2b70df849a9def707b04947fc30e59ebf1061e2614c1d"
-        ),
+        observed_ast_sha256=("4fbbbd2b289fd575811b85b1d10968a9dd09c33a7abbb67547b649b9a3332747"),
+        current_ast_sha256=("748f27949b60ae4137a2b70df849a9def707b04947fc30e59ebf1061e2614c1d"),
         justification_id="run-local-walker-preserves-route-11-venue-contract",
     ),
     _SourceCompatibilityWaiver(
         element_id="core.project-trainee-candidates",
-        observed_ast_sha256=(
-            "a5a52755b578c8536ecaba3f914b2466bc43000484b6e98b9735d9e3badf854d"
-        ),
-        current_ast_sha256=(
-            "cbfae3d5858f961267b07e425216e5fb33d7fd8097ce02d55bf5388a68e8b62d"
-        ),
+        observed_ast_sha256=("a5a52755b578c8536ecaba3f914b2466bc43000484b6e98b9735d9e3badf854d"),
+        current_ast_sha256=("cbfae3d5858f961267b07e425216e5fb33d7fd8097ce02d55bf5388a68e8b62d"),
         justification_id="extract-choice-set-preserves-teacher-trainee-selection",
     ),
     _SourceCompatibilityWaiver(
         element_id="core.project-trainee-choice-set",
         observed_ast_sha256=None,
-        current_ast_sha256=(
-            "221d1a8d1a9b64f8aa052345b55b70942dc698786f38cb5226765edc85472275"
-        ),
+        current_ast_sha256=("221d1a8d1a9b64f8aa052345b55b70942dc698786f38cb5226765edc85472275"),
         justification_id="added-unlabeled-trainee-menu-preserves-teacher-selection",
     ),
     _SourceCompatibilityWaiver(
         element_id="core.project-venue-candidates",
-        observed_ast_sha256=(
-            "359da3498012160695e59fbccf3ce4b1f93b1c2dae59d350e414d93d5a205ae4"
-        ),
-        current_ast_sha256=(
-            "4b731e174dcb3ec0412111dbcb7c687f0552405f1a4bd0325ff854728b06bfe7"
-        ),
+        observed_ast_sha256=("359da3498012160695e59fbccf3ce4b1f93b1c2dae59d350e414d93d5a205ae4"),
+        current_ast_sha256=("4b731e174dcb3ec0412111dbcb7c687f0552405f1a4bd0325ff854728b06bfe7"),
         justification_id="extract-choice-set-preserves-teacher-venue-selection",
     ),
     _SourceCompatibilityWaiver(
         element_id="core.project-venue-choice-set",
         observed_ast_sha256=None,
-        current_ast_sha256=(
-            "4a4ac69e4e2675fc92e3b3c4d8507c97844d6659dcaaf4c26419d44978926dbb"
-        ),
+        current_ast_sha256=("4a4ac69e4e2675fc92e3b3c4d8507c97844d6659dcaaf4c26419d44978926dbb"),
         justification_id="added-unlabeled-venue-menu-preserves-teacher-selection",
     ),
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
-        observed_ast_sha256=(
-            "495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"
-        ),
-        current_ast_sha256=(
-            "c419c28563c8f5640e464d4c2ee4fcbc3c360e54da5d4af3e5a3bfc53d2964e6"
-        ),
+        observed_ast_sha256=("495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"),
+        current_ast_sha256=("f5bad32daa7387e871ef1e5c22b3347400d9cff12c63c34a4ab982701a81249d"),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
             "default-and-unused-live-guard-fallback-plus-ten-of-fifty-heals-"
             "preserve-measured-path-plus-opt-in-targeted-development-remains-"
-            "disabled-on-historical-route-11"
+            "disabled-on-historical-route-11-plus-evolution-only-budget-"
+            "tightening-does-not-change-historical-non-evolution-branch-"
+            "plus-direct-evolution-and-quantum-default-disabled"
         ),
     ),
     _SourceCompatibilityWaiver(
         element_id="red.route-11-heal-and-return",
-        observed_ast_sha256=(
-            "5f96285852f9ed925330be02c109b0a8f57d0c9756962df1c84963c7df586299"
-        ),
-        current_ast_sha256=(
-            "ef05d302d3d38aa43ae8949bf78ba882d130c40ae8271ea9a3fe002416e834c5"
-        ),
-        justification_id=(
-            "optional-ground-transition-is-unset-on-historical-route-11-path"
-        ),
+        observed_ast_sha256=("5f96285852f9ed925330be02c109b0a8f57d0c9756962df1c84963c7df586299"),
+        current_ast_sha256=("ef05d302d3d38aa43ae8949bf78ba882d130c40ae8271ea9a3fe002416e834c5"),
+        justification_id=("optional-ground-transition-is-unset-on-historical-route-11-path"),
     ),
     _SourceCompatibilityWaiver(
         element_id="red.training-dig-to-vermilion",
-        observed_ast_sha256=(
-            "cb1bc40d3a08fce7f511936b5d017dfe3ab244d3ecffdc9cc59f69e84c08bc47"
-        ),
-        current_ast_sha256=(
-            "cc56ace445c78eb815661afadf1fe9ac19d034d6fcb7b1a6c8cc0f95b63f4552"
-        ),
+        observed_ast_sha256=("cb1bc40d3a08fce7f511936b5d017dfe3ab244d3ecffdc9cc59f69e84c08bc47"),
+        current_ast_sha256=("cc56ace445c78eb815661afadf1fe9ac19d034d6fcb7b1a6c8cc0f95b63f4552"),
         justification_id=(
             "additional-fly-boundary-normalization-preserves-historical-route-"
             "11-and-cinnabar-nurse-paths-and-celadon-only-branch-is-unreached"
@@ -595,32 +565,20 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     ),
     _SourceCompatibilityWaiver(
         element_id="red.team-training-execution-summary",
-        observed_ast_sha256=(
-            "307da86ffe4ac2a7baa7c6ce6873c53db731a128f5c852a28368fa8d9079ca58"
-        ),
-        current_ast_sha256=(
-            "60cffd1eef84b93634b484349ee23900ff36a1a467d1cdc8a52d2034ec6c2e3c"
-        ),
+        observed_ast_sha256=("307da86ffe4ac2a7baa7c6ce6873c53db731a128f5c852a28368fa8d9079ca58"),
+        current_ast_sha256=("60cffd1eef84b93634b484349ee23900ff36a1a467d1cdc8a52d2034ec6c2e3c"),
         justification_id="default-zero-traversal-counters-preserve-historical-summary",
     ),
     _SourceCompatibilityWaiver(
         element_id="module-assignments.blaine",
-        observed_ast_sha256=(
-            "94b42d7891d670ee5a2f834c2dc77c6aa27976eba19884123c49be0206866753"
-        ),
-        current_ast_sha256=(
-            "5e40386a31d3b213abe997da1e652ed4f7b6f5ee1843b3a6eedef4ca6d7a9e32"
-        ),
+        observed_ast_sha256=("94b42d7891d670ee5a2f834c2dc77c6aa27976eba19884123c49be0206866753"),
+        current_ast_sha256=("5e40386a31d3b213abe997da1e652ed4f7b6f5ee1843b3a6eedef4ca6d7a9e32"),
         justification_id="cave-only-pacing-and-exit-constants-do-not-affect-route-11",
     ),
     _SourceCompatibilityWaiver(
         element_id="module-assignments.training-venue",
-        observed_ast_sha256=(
-            "21d3c856685f92c828a195e8963a23a991e307d9a4c5ad7ae3ffbccf70e2f399"
-        ),
-        current_ast_sha256=(
-            "cfaa9dddb67d10cb39a06c41a003216d8b378f4a1c65ba13cd5af8ed011b13d2"
-        ),
+        observed_ast_sha256=("21d3c856685f92c828a195e8963a23a991e307d9a4c5ad7ae3ffbccf70e2f399"),
+        current_ast_sha256=("cfaa9dddb67d10cb39a06c41a003216d8b378f4a1c65ba13cd5af8ed011b13d2"),
         justification_id="walker-type-and-direction-constants-preserve-route-11",
     ),
 )
@@ -718,9 +676,7 @@ class RedRoute11VenuePriorComposition:
                 self.public_result_sha256,
             ],
             "accepted_venue_evidence_count": 1,
-            "rejected_stale_sibling_venue_count": (
-                self.rejected_stale_sibling_venue_count
-            ),
+            "rejected_stale_sibling_venue_count": (self.rejected_stale_sibling_venue_count),
             "private_venue_identity_public": False,
             "support_identity_public": False,
             "rom_reads": 0,
@@ -746,9 +702,7 @@ def attest_red_route_11_source_compatibility(
     root = Path(repository_root)
     _require_route_11_source_closure()
     if _GIT_OID.fullmatch(current_commit) is None:
-        raise RedPartyDevelopmentVenuePriorError(
-            "current compatibility source commit is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError("current compatibility source commit is invalid")
     _require_digest(
         current_source_bundle_sha256,
         subject="current compatibility source bundle",
@@ -781,16 +735,9 @@ def attest_red_route_11_source_compatibility(
             "loaded Route 11 runtime differs from the attested current commit"
         )
 
-    observed_by_id = {
-        str(row["element_id"]): row["ast_sha256"] for row in observed_rows
-    }
-    current_by_id = {
-        str(row["element_id"]): row["ast_sha256"] for row in current_rows
-    }
-    waivers = {
-        waiver.element_id: waiver
-        for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS
-    }
+    observed_by_id = {str(row["element_id"]): row["ast_sha256"] for row in observed_rows}
+    current_by_id = {str(row["element_id"]): row["ast_sha256"] for row in current_rows}
+    waivers = {waiver.element_id: waiver for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS}
     if len(waivers) != len(_ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS):
         raise RedPartyDevelopmentVenuePriorError(
             "Route 11 source waiver allowlist repeats an element"
@@ -860,28 +807,19 @@ def red_route_11_operational_contract(
         raise TypeError("source compatibility is invalid")
     current_rows = _loaded_source_element_rows()
     expected_waivers = tuple(
-        sorted(
-            waiver.element_id
-            for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS
-        )
+        sorted(waiver.element_id for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS)
     )
     waived_ids = frozenset(expected_waivers)
     expected_unchanged_rows = tuple(
-        row
-        for row in current_rows
-        if str(row["element_id"]) not in waived_ids
+        row for row in current_rows if str(row["element_id"]) not in waived_ids
     )
-    waiver_by_id = {
-        waiver.element_id: waiver
-        for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS
-    }
+    waiver_by_id = {waiver.element_id: waiver for waiver in _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS}
     if len(waiver_by_id) != len(_ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS):
         raise RedPartyDevelopmentVenuePriorError(
             "Route 11 source waiver allowlist repeats an element"
         )
     if (
-        source_compatibility.observed_commit
-        != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT
+        source_compatibility.observed_commit != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT
         or source_compatibility.observed_source_bundle_sha256
         != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_BUNDLE_SHA256
         or source_compatibility.current_elements_sha256
@@ -935,9 +873,7 @@ def red_route_11_operational_contract(
                 "map_id": venue.map_id,
             }
         ),
-        "stateless_walker_ast_sha256": (
-            _require_positive_route_11_stateless_walker()
-        ),
+        "stateless_walker_ast_sha256": (_require_positive_route_11_stateless_walker()),
         "execution_source_sha256": _source_set_sha256(
             (
                 TrainingVenue.fresh_walk_to_grass,
@@ -970,9 +906,7 @@ def red_route_11_operational_contract(
                 _flee,
             )
         ),
-        "module_source_sha256": _module_set_sha256(
-            (blaine_module, celadon_module)
-        ),
+        "module_source_sha256": _module_set_sha256((blaine_module, celadon_module)),
     }
     battle_document = {
         "schema": "pokemon.red.party-development-venue-battle-timing.v1",
@@ -1021,9 +955,7 @@ def red_route_11_operational_contract(
         recovery_execution_sha256=canonical_sha256(recovery_document),
         battle_timing_sha256=canonical_sha256(battle_document),
         accounting_sha256=canonical_sha256(accounting_document),
-        source_compatibility_sha256=(
-            source_compatibility.source_compatibility_sha256
-        ),
+        source_compatibility_sha256=(source_compatibility.source_compatibility_sha256),
     )
 
 
@@ -1042,9 +974,7 @@ def compose_red_route_11_venue_prior(
     _require_digest(public_plan_sha256, subject="public plan")
     _require_digest(public_result_sha256, subject="public result")
     if _GIT_OID.fullmatch(registry_source_commit) is None:
-        raise RedPartyDevelopmentVenuePriorError(
-            "registry source commit is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError("registry source commit is invalid")
     _require_digest(registry_source_bundle_sha256, subject="registry source bundle")
     if not isinstance(
         source_compatibility,
@@ -1053,8 +983,7 @@ def compose_red_route_11_venue_prior(
         raise TypeError("source compatibility is invalid")
     if (
         registry_source_commit != source_compatibility.current_commit
-        or registry_source_bundle_sha256
-        != source_compatibility.current_source_bundle_sha256
+        or registry_source_bundle_sha256 != source_compatibility.current_source_bundle_sha256
     ):
         raise RedPartyDevelopmentVenuePriorError(
             "registry source differs from its compatibility attestation"
@@ -1079,8 +1008,7 @@ def compose_red_route_11_venue_prior(
     state_sha256 = authenticated_plan.get("state_sha256")
     if (
         state_sha256 != authenticated_result.get("state_sha256")
-        or authenticated_plan.get("checkpoint_id")
-        != RED_ROUTE_11_SUPPORT_CHECKPOINT_ID
+        or authenticated_plan.get("checkpoint_id") != RED_ROUTE_11_SUPPORT_CHECKPOINT_ID
         or authenticated_plan.get("partition") != "train"
         or authenticated_result.get("partition") != "train"
         or authenticated_plan.get("sealed_test") is not False
@@ -1100,11 +1028,13 @@ def compose_red_route_11_venue_prior(
     _require_current_route_11_venue(venue)
     if (
         construction.get("candidate_count") != 2
-        or construction.get("ordered_minimum_encounter_levels") != [
+        or construction.get("ordered_minimum_encounter_levels")
+        != [
             venue.band.minimum_encounter_level,
             15,
         ]
-        or construction.get("ordered_maximum_encounter_levels") != [
+        or construction.get("ordered_maximum_encounter_levels")
+        != [
             venue.band.maximum_encounter_level,
             21,
         ]
@@ -1175,8 +1105,7 @@ def compose_red_route_11_venue_prior(
     source_bundle = source.get("source_bundle_sha256")
     if (
         source_commit != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_COMMIT
-        or source_bundle
-        != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_BUNDLE_SHA256
+        or source_bundle != RED_PARTY_DEVELOPMENT_OUTCOME_SOURCE_BUNDLE_SHA256
         or source.get("exact_commit_ci_conclusion") != "success"
     ):
         raise RedPartyDevelopmentVenuePriorError(
@@ -1188,8 +1117,7 @@ def compose_red_route_11_venue_prior(
 
     if (
         source_commit != source_compatibility.observed_commit
-        or source_bundle
-        != source_compatibility.observed_source_bundle_sha256
+        or source_bundle != source_compatibility.observed_source_bundle_sha256
     ):
         raise RedPartyDevelopmentVenuePriorError(
             "Route 11 outcome source lacks the required compatibility proof"
@@ -1202,9 +1130,7 @@ def compose_red_route_11_venue_prior(
     observation = VenuePriorObservation(
         root_lineage_id=RED_ROUTE_11_SUPPORT_CHECKPOINT_ID,
         initial_state_sha256=state_sha256,
-        outcome_receipt_sha256=tuple(
-            sorted((public_plan_sha256, public_result_sha256))
-        ),
+        outcome_receipt_sha256=tuple(sorted((public_plan_sha256, public_result_sha256))),
         objective_completed=True,
         progress_units_gained=final_level - initial_level,
         progress_units_required=expected_level - initial_level,
@@ -1237,9 +1163,7 @@ def compose_red_route_11_venue_prior(
         measurement_contract=measurement_contract,
         operational_contract=operational_contract,
         source_compatibility=source_compatibility,
-        rejected_stale_sibling_venue_count=(
-            rejected_stale_sibling_venue_count
-        ),
+        rejected_stale_sibling_venue_count=(rejected_stale_sibling_venue_count),
         public_plan_sha256=public_plan_sha256,
         public_result_sha256=public_result_sha256,
     )
@@ -1257,12 +1181,10 @@ def _require_public_evidence_identity(
         or plan.get("schema") != "pokemon-red-party-development-outcome-plan-v2"
         or plan.get("status") != "prospective_unexecuted"
         or plan.get("experiment_id") != RED_PARTY_DEVELOPMENT_OUTCOME_SCENARIO_ID
-        or result.get("schema")
-        != "pokemon-red-party-development-outcome-evidence-v2"
+        or result.get("schema") != "pokemon-red-party-development-outcome-evidence-v2"
         or result.get("status") != "complete_learner_target_accepted"
         or result.get("experiment_id") != RED_PARTY_DEVELOPMENT_OUTCOME_SCENARIO_ID
-        or _mapping(result, "prospective_bindings").get("public_plan_sha256")
-        != public_plan_sha256
+        or _mapping(result, "prospective_bindings").get("public_plan_sha256") != public_plan_sha256
     ):
         raise RedPartyDevelopmentVenuePriorError(
             "Route 11 plan and result identity do not form one accepted experiment"
@@ -1292,10 +1214,8 @@ def _rejected_stale_sibling_count(
         sibling.get("candidate_index") != 1
         or sibling.get("candidate_kind") != "higher_encounter_band_15_21"
         or sibling.get("evolution_completed") is not True
-        or _integer(sibling, "initial_target_level")
-        != objective.get("initial_target_level")
-        or _integer(sibling, "final_target_level")
-        != objective.get("expected_evolution_level")
+        or _integer(sibling, "initial_target_level") != objective.get("initial_target_level")
+        or _integer(sibling, "final_target_level") != objective.get("expected_evolution_level")
         or _integer(sibling, "battles_completed") <= 0
         or _integer(sibling, "faints") != 0
         or transitions <= 0
@@ -1314,9 +1234,7 @@ def _require_policy_matches_plan(plan_policy: Mapping[str, object]) -> None:
     expected = {
         "retreat_hp_ratio": policy.retreat_hp_ratio,
         "reserve_total_pp": policy.reserve_total_pp,
-        "species_specific_escort_pp_reserve": TRAINING_ATTACK_PP_RESERVE[
-            BLASTOISE_SPECIES_ID
-        ],
+        "species_specific_escort_pp_reserve": TRAINING_ATTACK_PP_RESERVE[BLASTOISE_SPECIES_ID],
         "minimum_direct_level_advantage": policy.minimum_direct_level_advantage,
         "safe_escort_level": policy.safe_lead_level,
         "maximum_battles": policy.max_battles,
@@ -1438,9 +1356,7 @@ def _require_route_11_source_closure() -> None:
 
     element_ids = tuple(spec.element_id for spec in _ROUTE_11_SOURCE_ELEMENTS)
     if len(element_ids) != len(set(element_ids)):
-        raise RedPartyDevelopmentVenuePriorError(
-            "Route 11 source elements repeat an identity"
-        )
+        raise RedPartyDevelopmentVenuePriorError("Route 11 source elements repeat an identity")
     tracked = frozenset(spec.current_object for spec in _ROUTE_11_SOURCE_ELEMENTS)
     required_attribute_semantics = frozenset(_ROUTE_11_ATTRIBUTE_SEMANTICS)
     if not required_attribute_semantics.issubset(tracked):
@@ -1450,22 +1366,14 @@ def _require_route_11_source_closure() -> None:
 
     direct_dependencies = frozenset(
         dependency
-        for dependency in _resolved_project_call_dependencies(
-            run_red_team_balancing
-        )
-        if getattr(dependency, "__module__", None)
-        == training_candidate_rank_module.__name__
+        for dependency in _resolved_project_call_dependencies(run_red_team_balancing)
+        if getattr(dependency, "__module__", None) == training_candidate_rank_module.__name__
     )
-    if direct_dependencies != frozenset(
-        _ROUTE_11_CANDIDATE_DIRECT_DEPENDENCIES
-    ):
-        raise RedPartyDevelopmentVenuePriorError(
-            "Route 11 candidate entry-point closure changed"
-        )
+    if direct_dependencies != frozenset(_ROUTE_11_CANDIDATE_DIRECT_DEPENDENCIES):
+        raise RedPartyDevelopmentVenuePriorError("Route 11 candidate entry-point closure changed")
 
     pending: list[Callable[..., object]] = [
-        cast(Callable[..., object], root)
-        for root in _ROUTE_11_CANDIDATE_CLOSURE_ROOTS
+        cast(Callable[..., object], root) for root in _ROUTE_11_CANDIDATE_CLOSURE_ROOTS
     ]
     visited: set[Callable[..., object]] = set()
     while pending:
@@ -1487,9 +1395,8 @@ def _require_route_11_source_closure() -> None:
                     "Route 11 candidate closure contains untracked project "
                     f"code: {module_name}.{qualname}"
                 )
-            if (
-                module_name == training_candidate_rank_module.__name__
-                and inspect.isfunction(dependency)
+            if module_name == training_candidate_rank_module.__name__ and inspect.isfunction(
+                dependency
             ):
                 pending.append(cast(Callable[..., object], dependency))
 
@@ -1507,9 +1414,7 @@ def _resolved_project_call_dependencies(
         ) from error
     namespace = getattr(value, "__globals__", None)
     if not isinstance(namespace, dict):
-        raise RedPartyDevelopmentVenuePriorError(
-            "Route 11 closure root has no Python globals"
-        )
+        raise RedPartyDevelopmentVenuePriorError("Route 11 closure root has no Python globals")
     dependencies: set[Callable[..., object] | type[object]] = set()
     for node in ast.walk(tree):
         if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Name):
@@ -1535,10 +1440,7 @@ def _source_waiver_allowlist_sha256(
     return canonical_sha256(
         {
             "schema": "pokemon.red.route-11-source-waiver-allowlist.v1",
-            "waivers": [
-                waivers[element_id].public_dict()
-                for element_id in expected_ids
-            ],
+            "waivers": [waivers[element_id].public_dict() for element_id in expected_ids],
         }
     )
 
@@ -1564,9 +1466,7 @@ def _committed_element_ast_sha256(
     if kind == "module_assignments":
         return _module_assignments_ast_sha256(source)
     if kind != "definition":
-        raise RedPartyDevelopmentVenuePriorError(
-            "committed operational source kind is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError("committed operational source kind is invalid")
     try:
         document = source.decode("utf-8")
         tree = ast.parse(document)
@@ -1607,9 +1507,7 @@ def _loaded_element_ast_sha256(
 ) -> str:
     if kind == "module_assignments":
         if not isinstance(value, ModuleType):
-            raise RedPartyDevelopmentVenuePriorError(
-                "loaded module-assignment source is invalid"
-            )
+            raise RedPartyDevelopmentVenuePriorError("loaded module-assignment source is invalid")
         try:
             module_source = inspect.getsource(value).encode("utf-8")
         except (OSError, TypeError) as error:
@@ -1618,9 +1516,7 @@ def _loaded_element_ast_sha256(
             ) from error
         return _module_assignments_ast_sha256(module_source)
     if kind != "definition":
-        raise RedPartyDevelopmentVenuePriorError(
-            "loaded operational source kind is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError("loaded operational source kind is invalid")
     try:
         source = textwrap.dedent(inspect.getsource(value))
         tree = ast.parse(source)
@@ -1636,9 +1532,7 @@ def _loaded_element_ast_sha256(
         and item.name == leaf
     ]
     if len(matches) != 1:
-        raise RedPartyDevelopmentVenuePriorError(
-            "loaded operational source element differs"
-        )
+        raise RedPartyDevelopmentVenuePriorError("loaded operational source element differs")
     return _ast_node_sha256(matches[0], qualname=qualname)
 
 
@@ -1652,21 +1546,13 @@ def _module_assignments_ast_sha256(source: bytes) -> str:
         raise RedPartyDevelopmentVenuePriorError(
             "module-assignment source is not parseable Python"
         ) from error
-    assignments = [
-        node
-        for node in tree.body
-        if isinstance(node, (ast.Assign, ast.AnnAssign))
-    ]
+    assignments = [node for node in tree.body if isinstance(node, (ast.Assign, ast.AnnAssign))]
     if not assignments:
-        raise RedPartyDevelopmentVenuePriorError(
-            "execution-bearing module has no assignments"
-        )
+        raise RedPartyDevelopmentVenuePriorError("execution-bearing module has no assignments")
     return canonical_sha256(
         {
             "schema": "pokemon.red.semantic-python-module-assignments.v1",
-            "assignments": [
-                _canonical_ast_value(node) for node in assignments
-            ],
+            "assignments": [_canonical_ast_value(node) for node in assignments],
         }
     )
 
@@ -1741,9 +1627,7 @@ def _source_element_rows_sha256(
     scope: str,
 ) -> str:
     if not rows:
-        raise RedPartyDevelopmentVenuePriorError(
-            "Route 11 source compatibility has no elements"
-        )
+        raise RedPartyDevelopmentVenuePriorError("Route 11 source compatibility has no elements")
     return canonical_sha256(
         {
             "schema": "pokemon.red.route-11-source-elements.v1",
@@ -1816,34 +1700,26 @@ def _jsonable(value: object) -> object:
         return sorted((_jsonable(item) for item in value), key=repr)
     if value is None or isinstance(value, (str, int, float, bool)):
         return value
-    raise RedPartyDevelopmentVenuePriorError(
-        "operational contract contains a non-canonical value"
-    )
+    raise RedPartyDevelopmentVenuePriorError("operational contract contains a non-canonical value")
 
 
 def _mapping(source: Mapping[str, object], key: str) -> Mapping[str, object]:
     value = source.get(key)
     if not isinstance(value, Mapping):
-        raise RedPartyDevelopmentVenuePriorError(
-            f"published Route 11 evidence {key} is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError(f"published Route 11 evidence {key} is invalid")
     return value
 
 
 def _integer(source: Mapping[str, object], key: str) -> int:
     value = source.get(key)
     if type(value) is not int or value < 0:  # noqa: E721
-        raise RedPartyDevelopmentVenuePriorError(
-            f"published Route 11 evidence {key} is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError(f"published Route 11 evidence {key} is invalid")
     return value
 
 
 def _require_digest(value: object, *, subject: str) -> None:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
-        raise RedPartyDevelopmentVenuePriorError(
-            f"Route 11 {subject} digest is invalid"
-        )
+        raise RedPartyDevelopmentVenuePriorError(f"Route 11 {subject} digest is invalid")
 
 
 __all__ = [

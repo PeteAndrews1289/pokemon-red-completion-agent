@@ -17,6 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / "src"))
 
 from product_focus import (  # noqa: E402
+    ProductFocusError,
     ProductFocusState,
     focus_scorecard,
     load_product_focus,
@@ -173,7 +174,7 @@ def _run_recap_projection(
         raise ProgressDashboardError("saved gameplay step denominator differs")
     resources = _mapping(audited["learned"], "resources")
     return DashboardRunRecap(
-        heading="Last completed Red collecting run",
+        heading="Historical 29-example model/control run",
         scope="Saved evidence · known-training integration · not a live emulator",
         limitation=(
             "The control collected the same two specimens but failed its final search. "
@@ -198,6 +199,8 @@ def _run_recap_projection(
 def _training_projection(
     evidence: Mapping[str, object],
 ) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
+    if evidence.get("schema") == "pokemon.red.native-player-learning-session.v1":
+        return _native_training_projection(evidence)
     if (
         evidence.get("schema") != "pokemon.red.living-dex-retired-bank-train-campaign-result.v1"
         or evidence.get("status") != "retired_bank_train_campaign_terminal"
@@ -242,6 +245,72 @@ def _training_projection(
     component = DashboardLearningComponent(
         name="Living-Pokédex goal scorer",
         scope="Chooses collection objectives; deterministic skills execute game mechanics",
+        status="shadow",
+        authority="shadow_only",
+        train_examples=total,
+        validation_examples=0,
+        validation_correct=0,
+        baseline_correct=None,
+        model_sha256=_text(model, "model_sha256"),
+        independent_validation_units=0,
+    )
+    return training, component
+
+
+def _native_training_projection(
+    evidence: Mapping[str, object],
+) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
+    """Display native player fitting without laundering it into a setup campaign."""
+    fit = _mapping(evidence, "fit")
+    model = _mapping(fit, "model")
+    report = _mapping(fit, "fit_report")
+    episode = _mapping(evidence, "completed_episode")
+    boundaries = _mapping(evidence, "boundaries")
+    replay = _mapping(evidence, "in_sample_policy_replay")
+    total = _count(model, "settled_examples")
+    added = _count(fit, "new_settled_examples")
+    if (
+        evidence.get("status") != "fit_complete_bounded_only"
+        or model.get("authority") != "bounded_development_only"
+        or model.get("independent_evaluation") is not False
+        or fit.get("in_sample_only") is not True
+        or fit.get("prior_rows_retained") is not True
+        or fit.get("authority_promotions") != 0
+        or fit.get("controller_actions") != 0
+        or boundaries.get("fit_on_development") is not False
+        or boundaries.get("retroactive_sampling_labels") is not False
+        or replay.get("independent_evaluation") is not False
+        or replay.get("controller_actions") != 0
+        or total != _count(report, "total_examples")
+        or total != _count(report, "settled_examples")
+        or not 0 < added <= total
+        or added != _count(episode, "admitted_examples")
+        or added != _count(episode, "sampled_choices")
+    ):
+        raise ProgressDashboardError("dashboard native training claim boundary differs")
+    choices = replay.get("choices")
+    if not isinstance(choices, list) or not all(isinstance(row, Mapping) for row in choices):
+        raise ProgressDashboardError("dashboard native replay differs")
+    disagreements = sum(
+        _text(row, "prior_greedy") != _text(row, "updated_greedy") for row in choices
+    )
+    training = DashboardTrainingState(
+        samples_before=total - added,
+        samples_after=total,
+        newly_collected=added,
+        previously_unfitted=0,
+        successful_examples=_count(report, "successful_examples"),
+        terminal_lessons=added,
+        total_lessons=added,
+        setup_censors=0,
+        fit_count=1,
+        weighted_mse_before=cast(float, _mapping(fit, "prior_train_error")["weighted_mse"]),
+        weighted_mse_after=cast(float, _mapping(fit, "updated_train_error")["weighted_mse"]),
+        training_choice_changes=disagreements,
+    )
+    component = DashboardLearningComponent(
+        name="Living-Pokédex goal scorer",
+        scope="Native sampled outcomes; bounded development only; no independent evaluation",
         status="shadow",
         authority="shadow_only",
         train_examples=total,
@@ -452,13 +521,15 @@ def main(argv: list[str] | None = None) -> int:
                 if now - last_refresh >= 1.0:
                     last_refresh = now
                     try:
-                        focus = load_product_focus()
-                        work = load_dashboard_work_status(args.work_status_file)
+                        candidate_focus = load_product_focus()
+                        candidate_work = load_dashboard_work_status(args.work_status_file)
                         candidate_evidence = _load_learning_evidence()
                         _training_projection(candidate_evidence)
-                        evidence = candidate_evidence
-                        recap = _load_run_recap()
-                    except (DashboardWorkStatusError, ProgressDashboardError):
+                        candidate_recap = _load_run_recap()
+                        focus, work, evidence, recap = (
+                            candidate_focus, candidate_work, candidate_evidence, candidate_recap
+                        )
+                    except (ProductFocusError, DashboardWorkStatusError, ProgressDashboardError):
                         work = DashboardWorkState(
                             status="blocked",
                             headline="Dashboard refresh needs attention",

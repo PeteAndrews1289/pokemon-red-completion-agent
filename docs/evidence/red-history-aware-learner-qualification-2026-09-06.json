@@ -1,0 +1,58 @@
+{
+  "schema": "pokemon.red.history-aware-learner-qualification.v1",
+  "status": "engineering_complete_real_history_training_pending",
+  "classification": "maintenance_for_memory_aware_learning",
+  "source_commit": "413aabbbe27835f085aeeb7d5c3f2d01def2f052",
+  "source_bundle_sha256": "7d87d3bb1f2d089c3a5e02637cb92f944edb1c651a7f01bb31311b9f8a5ba240",
+  "new_training_rows": 0,
+  "model_fits": 0,
+  "current_model_examples": 32,
+  "new_controller_actions": 0,
+  "new_emulator_frames": 0,
+  "authority_promotions": 0,
+  "independent_evaluation": false,
+  "private_path_fields": 0,
+  "retained_initialization": {
+    "prior_model_sha256": "5b92e48c39a7eff724d9ed0ddb32ed2460997e95cdaecdc16ac5ec603b4683bc",
+    "model_sha256": "ae622e52e7b97fde0dec361847a929fc50918408421af76bdb6fe1e5a0f44cf9",
+    "record_sha256": "e46ad64f6311261b0860de05b28633ab6ae2eb22f8855bfaa123faf69443e86d",
+    "corpus_sha256": "5397b22d89b2a45123f2dbef82b38147be2898cf8cf747d0e0a166b5db24a15b",
+    "retained_examples": 32,
+    "unknown_history_examples": 32,
+    "maximum_prediction_delta": 0.0,
+    "history_coefficients_nonzero": 0,
+    "original_model_and_corpus_preserved": true,
+    "history_effect_learned": false
+  },
+  "qualification": {
+    "type_checked_source_files": 399,
+    "history_sensitive_fitting_demonstrated_in_controlled_tests_only": true,
+    "reversing_test_outcomes_reverses_learned_preference": true,
+    "native_episode_reader_and_retained_corpus_fit_tested": true,
+    "route_and_local_bindings_share_private_source_memory": true,
+    "old_history_backfilled": false,
+    "synthetic_examples_added_to_real_corpus": 0
+  },
+  "saved_endpoint": {
+    "checkpoint_record_sha256": "8d83a7223e81c729c3e278de2f00a38595f86529f32826f9dc5d39f45c036b8d",
+    "action_free_reopened": true,
+    "saved_bytes_unchanged": true,
+    "living_species": 14,
+    "registered_species": 19,
+    "living_specimens": 17,
+    "required_specimens_remaining": 106,
+    "undeclared_losses": 0,
+    "duplicate_unevolved_specimens_in_current_box": true,
+    "boxed_evolution_wired_to_current_player": false,
+    "useful_second_action_executed": false
+  },
+  "next_stage": {
+    "name": "memory-aware useful-goal learning loop",
+    "completed_acceptance_items": 2,
+    "total_acceptance_items": 5,
+    "checklist_percent": 40,
+    "is_time_estimate": false,
+    "is_full_project_completion": false,
+    "reason_not_advanced": "The frozen checklist requires a model trained to use history, not just a compatible initialized model."
+  }
+}

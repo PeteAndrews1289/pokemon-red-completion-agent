@@ -1,0 +1,78 @@
+{
+  "schema": "pokemon.red.evolution-completion-qualification.v1",
+  "session": "2026-09-07-evolution-completion",
+  "diagnostic_only": true,
+  "fit_admission": false,
+  "attempts": [
+    {
+      "id": "evolution-completion-pilot",
+      "terminal_sha256": "732a46b3732e26c2737aba81e358de26d625d4813f8da6012dfb4f12b47f33bb",
+      "private_result_sha256": "27a0483497549f30b633e627ef0e65a3bdde1c282029a87f7da8cb901f6de48a",
+      "private_trace_sha256": "1d16411add7ba948e35ce8b0b648f0ecd19dbb35b3b5a0d60d6e18597d8281e7",
+      "completed_battle_intervals": 74,
+      "returned_quanta": 18,
+      "returned_report_battles": 72,
+      "actions": 4277,
+      "frames": 348071,
+      "elapsed_seconds": 17.619,
+      "species_counts_preserved": true,
+      "specimens_retained": 17,
+      "living_species_retained": 14,
+      "party_and_boxes_restore_match": true,
+      "restoration_actions": 0,
+      "restoration_frames": 0,
+      "standard_dialogue_visible": true,
+      "trainee": {
+        "species_id": 163,
+        "level": 35,
+        "experience": 42882,
+        "hp": 91,
+        "max_hp": 93
+      }
+    },
+    {
+      "id": "evolution-completion-local-successor",
+      "terminal_sha256": "db557b2758fed7ab86936f53d366e37ca0b9e046226a0826a082cd0c78578b8d",
+      "private_result_sha256": "0bd1b5fb9489be83a21aa5ef4c464889b71058fa98dcb1e98bb29bfd883e1319",
+      "private_trace_sha256": "b61298832d3e5fd544e4e96c26b13541649864f317a2600740175cd3959fb68f",
+      "completed_battle_intervals": 0,
+      "returned_quanta": 0,
+      "returned_report_battles": 0,
+      "actions": 40,
+      "frames": 500,
+      "elapsed_seconds": 0.082,
+      "species_counts_preserved": true,
+      "specimens_retained": 17,
+      "living_species_retained": 14,
+      "party_and_boxes_restore_match": true,
+      "restoration_actions": 0,
+      "restoration_frames": 0,
+      "standard_dialogue_visible": false,
+      "trainee": {
+        "species_id": 163,
+        "level": 35,
+        "experience": 42882,
+        "hp": 91,
+        "max_hp": 93
+      }
+    }
+  ],
+  "summary": {
+    "experience_before": 33276,
+    "experience_after": 42882,
+    "experience_delta": 9606,
+    "level_before": 32,
+    "level_after": 35,
+    "completed_evolution": false,
+    "new_fit_count": 0,
+    "new_model_selected_outcomes": 0,
+    "model_examples": 35,
+    "official_checkpoint_replaced": false,
+    "current_venue_retention_live_qualified": false
+  },
+  "failures": [
+    "Automatic venue transition attempted unsupported field Dig; first terminal still had standard dialogue despite ready movement flags.",
+    "Successor swapped the wrong party members. Exact-order verifier stopped execution after 40 actions; species counts were preserved."
+  ],
+  "next": "Verify semantic party source and destination selection from the retained endpoint before confirming swaps; then complete a bounded evolution and model-selected lesson."
+}

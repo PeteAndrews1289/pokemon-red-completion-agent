@@ -1,5 +1,302 @@
 # Handoff
 
+## Final current — minimal learning integration complete, 45 retained examples
+
+The [final audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) closes the unchanged
+useful-play checklist5/5. Model `7cf5f570` has45 retained rows (16 successful), up from35.
+H supplied one authentic selected-history example; its learned prediction effect is measured,
+but only in-sample. I/J failures remain fitted. Post-history-fit K selected evolution under the
+exploratory model policy and completed Rapidash40 with18 specimens intact, living15→16.
+
+Latest admitted K checkpoint `6eebc7ad...d1efb` restores exactly with zero input/frame changes.
+Healthy party, Route11; no next supported source in this profile. Keep F too; these are parallel
+training histories, not additive collections. B remains failed-partial/excluded; F is forced-only,
+no fit row. All launchers and fitters through K are consumed. G/L/M/N cancelled unused.
+
+Next: give the saved region a legitimate reachable next source through existing skills, then
+test varied multi-goal play with model45. Do not replay the closed success or build new sealed gates.
+Model45 itself has not played; sustained autonomy, history advantage and transfer remain unproved.
+Earlier “Current” headings below are historical. Private OPERATOR retains exact identities.
+
+## Current — 41 examples; capture and complete evolution qualified
+
+Read the [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md).
+Model `64165737` retains41 examples (15 successful), up from35. C's model-selected capture
+succeeded. E selected evolution; F's separately labelled forced continuation completed Rapidash40.
+Best admitted save F:16 living,21 registered,18 specimens; checkpoint `9d7eef7d...779e6`.
+Its59 recovery saves verify. The final report was reconstructed read-only after a summary assertion;
+game and checkpoint were already complete. B stays failed-partial and excluded. No consumed replay.
+
+Checklist3/5: capture/evolution alternatives now execute. Selected-history training and a useful
+learned follow-up remain. Model41 has zero selected nonzero-history examples. F has no supported
+next source in the current walking-only profile; do not fabricate availability. Keep F intact.
+The declared H/I/J practice branch starts from history-bearing D with model41, not from F;
+it is correlated training, not independent evaluation. G is cancelled unused. See session plan
+and private OPERATOR. No new source/route work or external reviewer in this batch.
+
+## Current — Rapidash40 verified; connect the complete option to learning
+
+The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Ponyta35 to
+Rapidash40, +21221 XP, all17 specimens retained, living14 to15 and registered19 to20. The spare
+Ponyta30 remains boxed. Corrected real wait duration and observed swap targeting; a second
+failure exposed status PP counted as attacks, now repaired from move mechanics. Both consumed
+diagnostics are closed and reload exactly without input. Final terminal `0612b1bd...d682` remains
+private and diagnostic-only; consult OPERATOR for exact paths. No launcher may be rerun.
+
+Model `1b26aa44` /35 examples and official checkpoint `b64023f4` are unchanged. No new fit or
+model-selected outcome; useful-play checklist stays2/5. Successful private orchestration chained
+28 bounded callbacks (109 battles /29.807 seconds); the native model-facing callback still stops
+after four battles. Next integrate bounded complete evolution into the player, then a fresh
+model-selected lesson and fit. Do not count partial XP as successful evolution or admit diagnostics.
+Do not broaden the teacher or resume gameplay before the next declared session plan.
+
+## Current — level 35; party-selection verification blocks completion
+
+The [throughput audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP,
+level 32 to 35, with all 17 specimens retained. Eighteen returned quanta report 72 completed
+training battles; the terminal also retains progress from a later failed prefix. Full evolution
+is still incomplete. Model `1b26aa44` / 35 examples and official checkpoint `b64023f4` are unchanged.
+
+Two new diagnostic attempts are closed. The first failed during unnecessary venue travel;
+its saved boundary still showed dialogue. A native local-safe-venue retention fix passes tests,
+but its successor failed earlier on a wrong party swap (40 actions), so it is not live-qualified.
+Final diagnostic terminal: `db557b27...78b8d`, Ponyta slot two, level 35, XP 42,882, 91/93 HP.
+Both saves reload exactly without inputs; all counts preserved. Do not rerun consumed launchers
+or admit these diagnostics as player training data. Private OPERATOR notes retain exact paths.
+
+Next: verify actual selected party source/target before a swap, across residual menu states and
+party orders. Then complete one bounded evolution and return to a model-selected lesson.
+XP throughput is no longer the leading concern. No route rewrite or new learner feature.
+110 focused tests and 400-file types passed; see the audit for remaining evidence boundaries.
+
+## Current — resumable XP works; complete evolution is next
+
+Read [active state](ACTIVE_PRODUCT_STATE.md) and the
+[resumable evolution audit](docs/audits/red-resumable-evolution-2026-09-07.md).
+Native PC preparation now binds facing and preserves the living precursor. In-party resumption
+avoids repeated storage. Explicit direct-trainee mode keeps the original safety/escort caps;
+cartridge type/level filtering and usable damaging-move selection repaired two actual failures.
+Final component continuation: four battle intervals, +508 XP, 606 actions / 49,469 frames,
+Ponyta still level32, 17 specimens / 14 living species retained. Action-free reload matched.
+
+Model `1b26aa44` /35 examples and official checkpoint `b64023f4` are unchanged. No fit, learned
+outcome, full evolution or collection gain occurred. Checklist stays 2/5. Diagnostic terminal
+`0fc2d4df...602c` is retained privately, NOT an admitted player checkpoint. Four invocations are
+closed (including one zero-input rejection); never rerun the consumed diagnostic launchers.
+The final report writer failed on `asdict(mappingproxy)` after the executor returned. Original
+failure stays intact; a separate action-free reconstruction establishes the measured XP result.
+
+Next: measure remaining XP / safe venue throughput before a bounded multi-quantum evolution.
+Do not spend another session repeatedly collecting tiny XP doses without a feasible completion
+budget. Partial quanta currently verify as incomplete, not successful goals; settle their credit
+and terminal provenance before model lessons. No new features, teacher replay or Crystal.
+Private OPERATOR notes retain exact paths. Earlier current headings below are history.
+
+## Current — Center farewell repaired; reorient on viable evolution training
+
+Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the
+[Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md). The apparent collision
+was still-open nurse text, not bad terrain. A 4-action diagnostic reproduced it; the repaired
+qualification closed dialogue, completed 11 computed steps without replanning, and opened Bill's
+PC in 31 actions / 2304 frames with party and boxes unchanged. This is component evidence only:
+the diagnostic explicitly faced the PC, which the native engine does not yet guarantee.
+
+Model remains `1b26aa44` / 35 examples, saved checkpoint remains `b64023f4` and still contains
+the original farewell screen. No player save was replaced, no fitting or storage change occurred.
+The two new private diagnostic scripts are consumed and excluded from fitting. Private operator
+notes retain exact locations and measurements. Do not rerun old player episodes.
+
+The audit found a deeper deterministic blocker: mandatory participation-only evolution uses an
+escort capped at 55, while the saved Blastoise is 63. Native offers and execution now reject this
+impossible setup before input. Do not raise the cap to brute-force it. Next qualify safe trainee
+or eligible-support battles, PC-facing binding and resumable partial evolution. The boxed-only
+provider currently cannot resume a precursor already in the party. Stop learner feature expansion
+and acquisition-only sampling until one useful operation works end-to-end. Checklist stays 2/5.
+
+The engineering-only session triggers reorientation, not another hidden continuation. No agent
+or outside reviewer was invoked; earlier sections below are historical.
+
+Local verification: 370 focused gameplay/control tests, 112 protocol/focus/roadmap tests,
+400-file types, lint/docs/focus/public-artifact checks passed. The earlier registry selection's
+one stale current-source golden is repaired and its entire protocol file passed. No full-suite
+claim for this session. Regenerated current bundle: `3adc80a8...ba2f1e7`.
+
+## Current — 35 examples; saved Center PC access is the next blocker
+
+Final local regression: 7184 passed, 1 skipped, 1 xfailed (17m08s); 400-source-file type check,
+formatting, docs, focus, public-artifact and registry checks passed. No gameplay or fitter is active.
+
+The [native evolution audit](docs/audits/red-native-boxed-evolution-2026-09-06.md) records real
+training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
+The model chose exploration, then acquisition and evolution across two linked continuations.
+Evolution reached and healed at Cinnabar Center, but the indoor PC approach failed before any
+deposit, withdrawal or training battle. All 17 specimens and 14 living species remain.
+
+Latest model: `1b26aa44...46adb8`; latest checkpoint: `b64023f4...fc85a4`.
+Both attempts are closed; do not rerun their launchers. Their source was `3a33af17`.
+The private operator notes identify the exact model/corpus, checkpoint lineage and launch scripts.
+
+Next: inspect the advertised first PC-route edge from the **saved healed Center**, reconcile
+control/collision truth, qualify one complete surplus-precursor evolution, then resume learning.
+No Mansion replay, fixed walk string, arbitrary party grinding or new learner feature.
+Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
+Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
+
+## Current — history learner ready; connect a useful collection skill
+
+Read [the history-learner audit](docs/audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
+history while keeping all 32 old examples explicitly unknown. The separate initialized model
+`ae622e52...44cf9` reproduces all old predictions with zero history coefficients: **not a new fit**.
+No gameplay, new training row or authority promotion occurred. A routed/local source-identity
+bug was fixed so movement does not silently reset remembered effort.
+
+The saved box contains duplicate unevolved specimens. Next connect the existing boxed-evolution
+mechanics to the native player from its field endpoint, with routing, healing and specimen
+preservation, then collect a short useful-choice lesson. Do not add another learner feature or
+run an acquisition-only loop. The anti-drift alarm applies after another engineering-only session.
+The infographic remains **2/5 (40%)** because its criterion requires actual history training,
+not just compatible initialization. Earlier current headings below are historical.
+
+
+## Visual orientation and required closeout
+
+Start with the [development infographic](docs/development-roadmap.md), then the active state.
+The stable baseline covers the full Red-first-to-cross-generation journey; the current marker
+is phase 02, with two of five items verified for useful memory-aware play. The 40% is not a
+full-project estimate. No new learning is claimed by this documentation update.
+
+After a completed session or substantial verified milestone, update the roadmap status/review,
+regenerate the graphic and accessible page, and refresh this handoff plus project/YouTube
+narratives. The North Star now specifies this closeout. Explain deviations against the baseline
+in `docs/roadmap-decisions.md`; do not silently move the goals. Reuse the existing docs check.
+The actual next coding task is connecting the existing boxed-evolution skill, then collecting
+an authentic useful-choice lesson for the now-qualified history-aware learner.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+
+## Current — 32-example update complete; search memory is next
+
+Read [the saved-endpoint audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md).
+The sampled continuation added one failed-search outcome and actual costs; the fit retained all
+31 old rows and now contains 32. Its greedy follow-up still searched without a catch. Final
+state restores action-free; collection remains 14 living / 19 registered / 17 specimens.
+All three identities are closed, including the initial zero-input exclusion. No diagnostic was
+fitted. Next: persisted semantic search history and a genuinely useful alternative, not another
+acquisition-only loop, arbitrary grinding or CI gate. Private OPERATOR has exact model/save IDs.
+Codex owns implementation. No external audit occurred. Earlier handoffs are historical.
+
+
+## Current — unsuccessful-search recovery verified; return to sampled learning
+
+Read [the September 6 recovery audit](docs/audits/red-search-recovery-2026-09-06.md).
+The same unsuccessful search now ends safely with a fresh ledger and restorable endpoint:
+215 actions / 8244 frames, zero catches. Model remains 31 examples; zero new training. One
+model-ranked recovery proposal was rejected before input, not an executed learned choice.
+Local development is verified available under the existing expanded profile, read-only only.
+Next: explicit verified profile transition and a short existing-collector learning contrast;
+retain lineage/31 prior rows, negatives and costs. No arbitrary party grind or new teacher.
+Earlier handoffs below are historical.
+
+## Current — continuation ran and failed; recover ordinary no-find outcomes next
+
+The [session](docs/work-sessions/2026-09-06-fit31-continuation.md) implemented the thin continuation
+consumer and executed the exact published `e1dd3af8` attempt once. Fresh restore/lineage checks passed.
+One deterministic acquisition travelled to the Mansion, encountered three wild Pokemon and exhausted
+64 survey legs without a catch. Recovery then selected the same failed goal; the guard stopped input
+but raised a fatal exception. **215 actions / 8244 frames, no catches, no new learning, no new save.**
+The 31-example model, original parent save and failed archive are intact. The [audit](docs/audits/red-fit31-continuation-2026-09-06.md)
+and [result](docs/evidence/red-fit31-continuation-result-2026-09-06.json) give exact identities.
+
+Next: typed no-find/recovery stops and fresh ledger/safe endpoint retention, then real supported
+development/evolution/storage alternatives. Do not replay the failed identity, raise search limits
+until lucky, fit greedy diagnostics or call an unsupported-menu choice model progress. Focused
+qualification: 87 tests and clean lint/types/docs/artifact checks. Broader local suite was still
+running at launch; it finished with 7102 passed and one stale strategic-registry fingerprint
+expectation failure. Only source/derived hashes changed, not assignments or the decision contract.
+Fixed golden expectations were updated; 161 follow-up registry/continuation/focus tests passed.
+No second full-suite pass is claimed. No emulator or fitter remains active. See the audit.
+
+User-confirmed milestones: sustained Red play, model-directed Red story completion and living
+collection, then measurable adaptation to a compatible unfamiliar Red modification before Crystal.
+This does not authorize hack/Crystal execution now. Codex owns implementation; external auditors
+have not been invoked. Native R1 B and all earlier attempts remain closed, not replay candidates.
+
+Earlier completed-session details follow.
+
+## Current — native learning complete: 31 examples, bounded continuation next
+
+Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the
+[session audit](docs/audits/red-native-player-learning-2026-09-06.md), and
+[result](docs/evidence/red-native-player-learning-result-2026-09-06.json) first.
+R1 B completed four goals, retained two needed specimens (+1 living species), and saved its end
+state. Two sampled outcomes joined all 29 previous rows in an actual 31-example fit. The updated
+model is `95f62eaa...edb472`; exact identities are in the result. Reopening its game checkpoint and
+checking the fresh ledger/model used no controller input. No 31-example live episode has run yet.
+
+The first launch failed before input; R1 A played but remained entirely nontraining and failed
+end-state persistence. Both archives are preserved. Do not replay either, reinterpret their
+labels, or hide them from the attempt denominator. The native batch is now CLOSED.
+
+Post-fit in-sample replay changes the second-shopping preference to continued acquisition; that
+is promising but not a gameplay result. Actual B still spent 12,000 and ended with 649 money and
+19 capture items. Next: a thin authenticated continuation consumer and one bounded prospective
+31-example run, followed by reorientation. Avoid a new teacher/data factory or repeated CI gates.
+Native private model/corpus/checkpoint IDs are reconstructible from the public hashes; private
+operator notes preserve paths and commands outside Git. No external reviewers were invoked.
+
+The engineering notes below are earlier checkpoints, not the current model size or run status.
+
+Final local verification: **7,085 passed, four skipped, one expected failure**, plus clean lint,
+type, registry, documentation/focus and public-artifact checks. Both targeted regression mutations
+were killed. The viewer was refreshed and visually verified with 31 examples and no fake live game.
+
+A post-suite live refresh check exposed an uncaught transient evidence-digest mismatch. The
+viewer-only repair retains the last verified input set and recovers after a valid update; 157
+dashboard/focus checks pass, including the real main-loop regression. The full-suite count above
+predates this isolated observer repair; no additional gameplay or fitting occurred.
+
+## In progress — September 6 economic quotes and native player training
+
+Read [this session plan](docs/work-sessions/2026-09-06-resource-cost-learning.md) first.
+The cost/reserve treatment is implemented and under local qualification. It leaves old model
+features and all prior targets unchanged. The next output is two short, prospectively declared
+train-only player episodes and a retained-corpus fit—not another teacher or setup campaign.
+The active model still has 29 examples; no new fit yet. PR 235 merged; this work is on the next
+native-training branch. R1 A has now played four successful goals but produced zero eligible
+sampling rows and failed terminal-save persistence. Its immutable records remain diagnostic.
+
+Native sampling is explicitly distinguished from greedy ranking, safety and forced choices.
+The trajectory reader replays the sampling distribution, joins actual execution intervals and
+reconstructs observed targets. Historical diagnostics are never retrofitted into this dataset.
+Only Codex is implementing; no external review or subagent approval is claimed.
+
+First-launch finding: the initial A episode failed before goal selection/input because a binding
+wrapper dropped its quote; B never started. The failed record is preserved. A metadata-preserving
+wrapper repair and full execution-path regression test precede the prospectively renamed R1 batch.
+See the session plan for exact new identities and bounds; never reopen the old failed identity.
+
+Latest correction: an available unsupported healing option disabled V1 exploration. V2 samples
+only the supported learner menu after deterministic safety; this is not support over all goals.
+Checkpoint V2 uses URL-safe encoding without weakening the path guard. Only the never-started
+R1 B remains in scope, seed 23. Do not replay A or relabel its deterministic choices as samples.
+See the prospective amendment in the session plan; preserve every attempt in the final report.
+
+All prior sections below describe earlier checkpoints unless confirmed by a newer result.
+
 ## Current — resource-aware chain COMPLETE; durable continuation and viewer recap
 
 The run from published `8318ca11` completed. The hybrid finished four goals in 656 actions /

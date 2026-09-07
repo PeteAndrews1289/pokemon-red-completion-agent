@@ -355,6 +355,7 @@ class RedAreaExecutionReport:
     captures: int
     flees: int
     box_switches: int
+    search_exhausted: bool = False
 
     @property
     def passed(self) -> bool:
@@ -599,7 +600,30 @@ def run_red_area_survey(
         if action_count >= policy.max_actions:
             break
         if decision.directive is RedAreaDirective.SEEK_ENCOUNTER:
-            executor.seek_encounter()
+            try:
+                executor.seek_encounter()
+            except RedAreaExecutionError as error:
+                # A bounded overworld search can legitimately find nothing.
+                # Battle/control defects and other limits remain exceptions.
+                if (
+                    error.reason_code != "survey_leg_limit_exceeded"
+                    or executor.encountered_species_ref() is not None
+                ):
+                    raise
+                final = summarize_red_area_survey(
+                    source_id, executor.read_collection(), catalog
+                )
+                return RedAreaExecutionReport(
+                    source_id,
+                    initial.missing_species_refs,
+                    final.missing_species_refs,
+                    action_count + 1,
+                    encounters_seen,
+                    captures,
+                    flees,
+                    box_switches,
+                    search_exhausted=True,
+                )
             if executor.encountered_species_ref() is not None:
                 encounters_seen += 1
                 if encounters_seen > policy.max_encounters:

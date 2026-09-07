@@ -10,8 +10,9 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
+from pokemon_red_completion.bounded_player_episode import _retaining_binding_set
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
@@ -32,6 +33,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalDecisionAuthority,
 )
 from pokemon_red_completion.goal_manager_trajectory import ordered_goal_manager_question
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
@@ -55,6 +57,7 @@ class RedBoundedPlayerObserver:
     actions: CountingExecutor
     collection_projector: CollectionProjector = living_collection_checkpoint
     enumerate_bindings: Callable[[RedGoalObservation], GoalBindingSet] | None = None
+    search_memory: GoalSearchMemory | None = None
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -78,6 +81,18 @@ class RedBoundedPlayerObserver:
         collection = self.collection_projector(live)
         if not isinstance(collection, LivingCollectionCheckpoint):
             raise RedBoundedPlayerError("Red collection projector returned an invalid checkpoint")
+        if self.search_memory is not None:
+            bindings = tuple(
+                replace(binding, search_history=self.search_memory.lookup(
+                    binding.search_memory_source, collection.required_specimens_sha256,
+                )) if binding.kind is GoalKind.ACQUIRE_SPECIES else binding
+                for binding in binding_set.bindings
+            )
+            by_ref = {binding.binding_ref: binding.opportunity for binding in bindings}
+            binding_set = GoalBindingSet(tuple(
+                by_ref.get(opportunity.binding_ref, opportunity)
+                for opportunity in binding_set.opportunities
+            ), bindings)
         semantic_document = red_bounded_player_semantic_document(
             live=live,
             binding_set=binding_set,
@@ -152,11 +167,14 @@ def preflight_red_bounded_player(
     budget_meter: CompositionBudgetMeter,
     assignment_id: str,
     authorities: tuple[tuple[str, GoalDecisionAuthority], ...],
+    allow_forced_bridge: bool = False,
 ) -> RedBoundedPlayerPreflight:
     """Observe and compare authorities without executing a binding or opening an episode."""
 
     if not callable(observe):
         raise TypeError("observe must be callable")
+    if type(allow_forced_bridge) is not bool:
+        raise TypeError("allow_forced_bridge must be a bool")
     checkpoint = getattr(budget_meter, "checkpoint", None)
     if not callable(checkpoint):
         raise TypeError("budget_meter must expose checkpoint")
@@ -182,16 +200,20 @@ def preflight_red_bounded_player(
         raise RedBoundedPlayerError("preflight observer returned an invalid observation")
     if checkpoint() != initial_budget:
         raise RedBoundedPlayerError("preflight observation attempted emulator work")
+    # Exercise the same metadata-preserving wrapper as real play, without
+    # invoking a binding. This catches integration mismatches before an episode.
+    _retaining_binding_set(observation.binding_set, budget_meter)
     question = ordered_goal_manager_question(
         assignment_id=assignment_id,
         decision_index=0,
         situation=observation.situation,
         opportunities=observation.binding_set.opportunities,
     )
-    if len(question.available_indices) < 2:
+    forced_bridge = allow_forced_bridge and len(question.available_indices) == 1
+    if len(question.available_indices) < 2 and not forced_bridge:
         raise RedBoundedPlayerError("preflight snapshot lacks a genuine semantic choice")
     choices_list: list[RedBoundedPlayerPreflightChoice] = []
-    for authority_id, authority in authorities:
+    for authority_id, authority in (() if forced_bridge else authorities):
         choices_list.append(_preflight_choice(authority_id, authority, question))
         if checkpoint() != initial_budget:
             raise RedBoundedPlayerError(
@@ -257,7 +279,11 @@ def red_bounded_player_semantic_document(
         # requires at least one selectable candidate when a policy is actually
         # asked to choose.
         "candidates": [item.policy_dict() for item in binding_set.opportunities],
-        "schema": "pokemon.core.goal-manager-input.v1",
+        "schema": (
+            "pokemon.core.goal-manager-input.v2"
+            if any(item.resource_quote is not None for item in binding_set.opportunities)
+            else "pokemon.core.goal-manager-input.v1"
+        ),
         "situation": live.situation.policy_dict(),
     }
     return {

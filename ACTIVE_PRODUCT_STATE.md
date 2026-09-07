@@ -11,7 +11,7 @@ they conflict with this page.
 
 Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.
 
-**Environment role:** Red is the first curriculum and Crystal is the first transfer test; neither title is the product.
+**Environment role:** Red is the first curriculum; a compatible unfamiliar Red modification is the first planned adaptation test, followed by Crystal. No single title is the product.
 
 Success means:
 
@@ -33,20 +33,20 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Terminal checkpoint storage/reader and the truthful saved-run viewer are implemented and locally qualified. Before more supply fitting, resolve the economic representation gap: candidate costs are zero and the current observed target excludes money. Prefer explicit known-cost/reserve quotes alongside learned success and progress, then collect a small prospective train-only contrast batch without relabeling old examples.
+- Next decision: Preserve checkpoint6eebc7ad; connect useful next-source continuation from Route11, then measure varied multi-goal progress with model45. Do not repeat the closed training batch.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
+| Authority now | Model7cf5f570 retains45 examples,16 successful. One authentic selected history-bearing row influences predictions. Post-history-fit K chose and completed Rapidash40, preserving18 specimens; minimal checklist5/5, no sustained-play or transfer claim. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
-| Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
+| Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
+| Cheapest falsifier | Can the existing player select a complete bounded evolution option, preserve its precursor, and settle a useful outcome without relabeling partial XP as completed evolution? |
 | Time box | 1 session / 4 hours |
 
-### Cumulative cross-family learning outputs
+### Historical cross-family counter snapshot
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
@@ -56,25 +56,25 @@ Not the product:
 | Development Episode · development | 29 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
-These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
+This frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-durable-player-viewer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-player-checkpoint-readonly-qualification-2026-09-06.json)
+**2026-09-07-complete-evolution-learning** · status **closed** · evidence [qualification](docs/evidence/red-complete-evolution-learning-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The prior model-assisted chain retained two needed specimens. Future terminal progress can now be stored with its original lineage, and the viewer keeps real completed choices and costs visible after the live producer closes. |
-| Learning output | Maintenance only: 335 focused checks and a real serializer round trip passed, with zero controller actions, frames, predictions, fits or train rows during qualification. The actual model remains fitted on 29 examples; both earlier diagnostic chains remain terminal. |
-| Authority delta | No new learned authority. Optional end-state retention and its reader unblock a later bounded continuation, but a controller-capable continuation consumer is not implemented. Checkpoints are not new independent roots or fitting examples. |
-| Transfer result | Checkpoint round trips preserve original provenance and require fresh semantic/ledger agreement. This is recovery engineering, not cross-game or independent gameplay evidence. Crystal and sealed Red remain closed. |
-| Blocker | A source audit found candidate resource cost is encoded as zero; resource pressure uses item headroom; the causal cost target measures consumed items, not money spent. More easy shopping examples alone cannot teach economical choices. Old historical runs have no end saves. |
-| Decision | Close the persistence/viewer session. Address only the necessary prospective cost/reserve representation before new supply training, preferably with known-cost quotes rather than a new model architecture. Preserve all old rows and diagnostics; do not silently redefine their targets. |
-| Next session | Build and falsify the smallest versioned, identity-free known-cost/reserve treatment, then use existing selected-outcome collection and fitting for a tiny prospectively declared train batch. Retain negative outcomes, actual behavior probabilities and prior rows. Keep CI in the background. |
-| Next falsifier | Can the player distinguish affordable-but-wasteful restocking from a needed reserve refill using real pre-action facts, while old projections/results remain unchanged and new outcomes count only executed choices? |
-| Stop condition | One bounded session, with actual new learning evidence as the next output. Stop rather than build another broad campaign factory, recapture old ended runs, reinterpret old consumable-only cost labels, fit development diagnostics or fabricate full-support behavior. No Crystal, sealed or full replay. |
+| Product alignment | Minimal learning integration completed, not the whole product. Next close the regional action-space gap instead of replaying this successful lesson. |
+| Learning output | Model35 to45: ten new retained examples, two successful. One selected nonzero-history row fitted with measured prediction sensitivity. K productively completed model-selected evolution after history fitting. |
+| Authority delta | No production promotion. K made a genuine model-policy choice under exploration; F's forced bridge stays excluded. All prior rows retained. |
+| Transfer result | Correlated Red training only, including explicit practice reset from D. One-row in-sample history sensitivity; independent advantage, ROM-hack and Crystal transfer remain unproved. |
+| Blocker | The completed K save has no supported next goal in this Mansion-scoped walking-only profile. Sustained regional play and independently measured history advantage remain unproved. |
+| Decision | Close the minimal useful-play checklist5/5. Preserve K and F. Next bind useful next-source continuation and test varied bounded Red situations; no more work in the consumed batch. |
+| Next session | Begin sustained model-directed Red play from the retained endpoint with honest reachable goals, then varied multi-goal tests and retained-data fitting. |
+| Next falsifier | Can model45 resume from the evolved Route11 endpoint, reach a legitimate collection source through existing skills, and make another productive choice without a training-root reset? |
+| Stop condition | Session closed at productive K and its retained-data fit; L/M/N cancelled unused. No sealed access, full replay, Crystal or competence claim. |
 
 ### Stop conditions
 

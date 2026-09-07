@@ -1,22 +1,52 @@
 # Pokémon Red Completion Agent
 
+[**Development infographic: the full roadmap and our current position →**](docs/development-roadmap.md)
+
+Verified capabilities, stable exit criteria and planned work are shown separately. The displayed
+percentage belongs only to its named checklist—not overall game or project completion.
+
+## Latest development checkpoint
+
+The goal-value learner now has **35 retained examples**, including three new observed failures
+and all 32 earlier examples. The model selected evolution after an exhausted search, reached
+and healed at Cinnabar Center, then failed on the indoor PC approach before storage operations.
+All 17 specimens were preserved. No successful evolution, collection gain or improved sustained
+play is claimed. The next task starts from that saved Center—not a full replay.
+See the [current audit and next steps](docs/audits/red-native-boxed-evolution-2026-09-06.md).
+The dashboard and development infographic show the same state; useful memory-aware play remains
+2 of 5 acceptance items, not overall project completion.
+
+### Previous learning result
+
+The goal-value learner now has **32 real examples**, retaining all 31 earlier rows and learning
+from a sampled unsuccessful search and its costs. Saved-state training and a post-fit continuation
+both ran. The follow-up still searched without a catch, so improved sustained play is **not yet
+demonstrated**. Next: persistent search memory and a useful collection alternative.
+See the [audit and next steps](docs/audits/red-saved-endpoint-learning-2026-09-06.md).
+
 > **Working on this repository?** Read [MISSION.md](MISSION.md),
 > [NORTH_STAR.md](NORTH_STAR.md), the generated
 > [active product state](ACTIVE_PRODUCT_STATE.md), the
 > [Red-to-Crystal readiness roadmap](docs/red-to-crystal-readiness-roadmap.md), the
 > [model-first roadmap](docs/model-first-roadmap.md), and then [HANDOFF.md](HANDOFF.md).
 
-> **Current product focus (September 6, 2026): a fitted goal model, then bounded learned play.**
-> PRs through 231 are merged. The completed eight-lesson batch produced **six factual outcomes and
-> two setup censors**, followed by one real model update on **29 examples**. All 23 pre-run rows
-> are retained. This is a small semantic goal scorer, not an autonomous full-game player.
+> **Earlier September 6 milestone: the player began feeding its own observed outcomes to learning.**
+> A four-goal Red episode completed and saved its terminal state. Two genuinely sampled goal
+> outcomes were fitted with all 29 prior examples, producing a **31-example goal-value model**.
+> The run retained two needed specimens, including one new living species, but still overspent.
+> This is a small semantic goal scorer with deterministic skills, not an autonomous full-game player.
 >
-> The next milestone is several model-chosen Red goals with fresh observations and verified living
-> collection progress. The local spectator dashboard separates saved training evidence, live
+> The first saved-state continuation ran but failed after 215 actions: three encounters, no capture,
+> then a repeated-goal recovery exception. The original save/model remain intact; no new fit or
+> learned choice was demonstrated. Next is typed no-find recovery and useful alternative tasks;
+> see the [continuation audit](docs/audits/red-fit31-continuation-2026-09-06.md).
+> The local spectator dashboard separates saved training evidence, live
 > gameplay and current engineering; its [guide](docs/progress-dashboard.md) explains the viewer.
-> Crystal is deferred, not abandoned. See the [roadmap](docs/model-first-roadmap.md),
-> [real training result](docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json), and
-> [post-fit audit](docs/audits/red-goal-model-post-fit-2026-09-06.md).
+> A compatible unfamiliar Red modification is the first planned adaptation test before Crystal.
+> See the [roadmap](docs/model-first-roadmap.md),
+> [native training result](docs/evidence/red-native-player-learning-result-2026-09-06.json), and
+> [session audit](docs/audits/red-native-player-learning-2026-09-06.md). The fit and replay use one
+> known training lineage; improved live performance and cross-game transfer remain unproved.
 >
 > Older dated product-focus panels below are historical, regardless of their original heading.
 

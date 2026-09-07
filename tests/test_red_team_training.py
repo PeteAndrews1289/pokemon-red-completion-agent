@@ -435,6 +435,100 @@ def run(memory: FakeMemory, reader: FakeReader, **overrides: object) -> object:
     )
 
 
+@pytest.mark.parametrize("quantum", [0, -1, True, "1", 5])
+def test_evolution_quantum_rejects_invalid_or_over_budget_values(quantum):
+    memory = FakeMemory()
+    with pytest.raises(ValueError, match="quantum exceeds"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(max_battles=4),
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            evolution_battle_quantum=quantum,
+        )
+
+
+@pytest.mark.parametrize(
+    "options", [{"allow_direct_evolution": True}, {"evolution_battle_quantum": 1}]
+)
+def test_evolution_controls_cannot_change_non_evolution_training(options):
+    with pytest.raises(ValueError, match="require an evolution target"):
+        run(FakeMemory(), FakeReader([state()]), **options)
+
+
+def test_direct_evolution_completes_one_battle_and_pauses_with_capped_escort(monkeypatch):
+    from types import SimpleNamespace
+
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (DIGLETT_SPECIES_ID, 30),
+            (BLASTOISE_SPECIES_ID, 63),
+            (DUX_SPECIES_ID, 40),
+            (JOLTEON_SPECIES_ID, 40),
+            (SNORLAX_SPECIES_ID, 40),
+            (HITMONLEE_SPECIES_ID, 40),
+        ]
+    )
+
+    class Reader:
+        raw = state(battle_state=1, enemy_level=10, enemy_species_id=0x21)
+
+        def read(self):
+            return self.raw
+
+        def read_input_readiness(self):
+            return SimpleNamespace(ready=True)
+
+    reader = Reader()
+    fights = []
+
+    def battle(*args, **kwargs):
+        fights.append(PokemonRedPartyReader(memory).read().lead.species_id)
+        reader.raw = state()
+
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda member: 40)
+    monkeypatch.setattr(red_team_training, "run_adaptive_wild_battle", battle)
+    with pytest.raises(red_team_training.EvolutionTrainingPaused) as paused:
+        run(
+            memory,
+            reader,
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+            allow_direct_evolution=True,
+            evolution_battle_quantum=1,
+        )
+    assert fights == [DIGLETT_SPECIES_ID]
+    assert paused.value.battles == 1
+    assert paused.value.healing_trips == 0
+    assert not memory.swaps
+
+
+@pytest.mark.parametrize("direct", [False, True])
+def test_direct_evolution_flag_does_not_bypass_matchup_or_pp(monkeypatch, direct):
+    memory = FakeMemory()
+    memory.set_party([(DIGLETT_SPECIES_ID, 30), (BLASTOISE_SPECIES_ID, 63)])
+    trainee = PokemonRedPartyReader(memory).read().lead
+    policy = BalancedTeamPolicy(minimum_direct_level_advantage=5)
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda member: 40)
+    assert (
+        red_team_training.trainee_should_fight_directly(
+            trainee,
+            enemy_level=10,
+            enemy_species=0x21,
+            policy=policy,
+            participation_only=not direct,
+        )
+        is direct
+    )
+    assert not red_team_training.trainee_should_fight_directly(
+        trainee, enemy_level=40, enemy_species=0x21, policy=policy, participation_only=not direct
+    )
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda member: 0)
+    assert not red_team_training.trainee_should_fight_directly(
+        trainee, enemy_level=10, enemy_species=0x21, policy=policy, participation_only=not direct
+    )
+
+
 def test_a_finished_team_runs_the_loop_to_its_exit() -> None:
     """The whole point: execute the loop, so unexecuted code cannot ship."""
 
@@ -453,6 +547,30 @@ def test_a_finished_team_runs_the_loop_to_its_exit() -> None:
     assert memory.party[0].species == BLASTOISE_SPECIES_ID
     assert memory.party[1].species == DUX_SPECIES_ID
     assert memory.party[2].species == DUGTRIO_SPECIES_ID
+
+
+def test_targeted_evolution_honors_callers_smaller_step_bound(monkeypatch):
+    monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 40)
+    memory = FakeMemory()
+    memory.set_party(
+        [
+            (DIGLETT_SPECIES_ID, 30),
+            (BLASTOISE_SPECIES_ID, 50),
+            (DUX_SPECIES_ID, 40),
+            (JOLTEON_SPECIES_ID, 40),
+            (SNORLAX_SPECIES_ID, 40),
+            (HITMONLEE_SPECIES_ID, 40),
+        ]
+    )
+    with pytest.raises(RuntimeError, match="Targeted evolution exhausted its bounded training"):
+        run(
+            memory,
+            FakeReader([state()]),
+            policy=BalancedTeamPolicy(
+                minimum_level=55, maximum_level_spread=40, required_size=6, max_steps=1
+            ),
+            evolution_target=(DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID),
+        )
 
 
 def test_finished_team_emits_exact_outcome_counters_after_cleanup() -> None:
@@ -1061,9 +1179,7 @@ def test_balancing_emits_identity_free_trainee_and_venue_choices() -> None:
         range(len(candidate_decisions))
     )
     assert candidate_decisions
-    assert {
-        decision.observation.kind.value for decision in candidate_decisions
-    } == {"trainee"}
+    assert {decision.observation.kind.value for decision in candidate_decisions} == {"trainee"}
     serialized = json.dumps(
         [decision.public_dict() for decision in candidate_decisions], sort_keys=True
     )
@@ -1624,9 +1740,7 @@ def test_live_direct_failure_uses_the_escort_on_the_next_encounter(
         [(DIGLETT_SPECIES_ID, 22), (BLASTOISE_SPECIES_ID, 44)]
         + [(DUGTRIO_SPECIES_ID, 30) for _ in range(4)]
     )
-    reader = FakeReader(
-        [state(battle_state=1, enemy_level=10, enemy_species_id=0x21)]
-    )
+    reader = FakeReader([state(battle_state=1, enemy_level=10, enemy_species_id=0x21)])
     monkeypatch.setattr(red_team_training, "training_attack_pp", lambda _member: 20)
     switches: list[str] = []
 
@@ -1829,6 +1943,99 @@ def test_internal_indices_are_not_pokedex_ordinals() -> None:
 
     assert observed.species_ids() == (9,)
     assert observed.species_ids() != (BLASTOISE_SPECIES_ID,)
+
+
+@pytest.mark.parametrize("frames", [1, 120, 180])
+def test_training_pulse_advances_the_declared_wait_through_real_executor(frames):
+    from test_executor import RecordingController
+
+    from pokemon_red_completion.executor import ControllerTiming, FrameSafeExecutor
+
+    controller = RecordingController()
+    executor = FrameSafeExecutor(
+        controller, ControllerTiming(press_frames=2, release_frames=3, wait_frames=1)
+    )
+    red_team_training.pulse(executor, MacroActionKind.CONFIRM, frames=frames)
+    assert controller.frame_count == 5 + frames
+    assert controller.events[-1] == ("tick", frames)
+
+
+@pytest.mark.parametrize("attack_pp,status_pp,expected", [(0, 70, 0), (5, 70, 5), (5, 0, 5)])
+def test_unlisted_trainee_attack_capacity_excludes_status_move_pp(attack_pp, status_pp, expected):
+    from dataclasses import replace
+
+    from pokemon_red_completion.party import MoveObservation
+
+    memory = FakeMemory()
+    memory.set_party([(163, 36)])
+    member = PokemonRedPartyReader(memory).read().lead
+    member = replace(
+        member,
+        moves=(
+            MoveObservation(move_id=52, current_pp=attack_pp),
+            MoveObservation(move_id=39, current_pp=min(status_pp, 30)),
+            MoveObservation(move_id=45, current_pp=max(0, status_pp - 30)),
+        ),
+    )
+    assert red_team_training.training_attack_pp(member) == expected
+
+
+class DelayedFieldMenuMemory(FakeMemory):
+    """Menu transitions become observable only after a real wait duration."""
+
+    remaining = 0
+
+    def apply(self, action):
+        if action.kind is MacroActionKind.WAIT:
+            self.remaining = max(0, self.remaining - action.repeat)
+            return
+        if self.remaining:
+            return
+        super().apply(action)
+        if action.kind in {MacroActionKind.OPEN_MENU, MacroActionKind.CONFIRM}:
+            self.remaining = 90
+
+
+@pytest.mark.parametrize("first,second", [(0, 1), (0, 5), (3, 1), (5, 0)])
+def test_party_swap_waits_for_delayed_menu_transitions_across_roster_slots(first, second):
+    memory = DelayedFieldMenuMemory()
+    memory.set_party([(species, 50) for species in FINAL_FORM_ROSTER])
+    expected = list(FINAL_FORM_ROSTER)
+    expected[first], expected[second] = expected[second], expected[first]
+    red_team_training.swap_field_party_slots(
+        FakeExecutor(memory),
+        FakeReader([state()]),
+        memory,
+        first_index=first,
+        second_index=second,
+        label="delayed semantic swap",
+        hideout_timing=None,
+    )
+    assert tuple(m.species for m in memory.party) == tuple(expected)
+    assert memory.swaps == [(first, second)]
+
+
+class FrozenTargetCursorMemory(FakeMemory):
+    def _move(self, direction):
+        if self.stage != "party_target":
+            super()._move(direction)
+
+
+def test_party_swap_does_not_confirm_a_destination_that_was_not_reached():
+    memory = FrozenTargetCursorMemory()
+    memory.set_party([(species, 50) for species in FINAL_FORM_ROSTER])
+    with pytest.raises(RuntimeError, match="party destination slot"):
+        red_team_training.swap_field_party_slots(
+            FakeExecutor(memory),
+            FakeReader([state()]),
+            memory,
+            first_index=0,
+            second_index=5,
+            label="stuck destination",
+            hideout_timing=None,
+        )
+    assert not memory.swaps
+    assert tuple(m.species for m in memory.party) == FINAL_FORM_ROSTER
 
 
 class MisplacedSwitchMemory(FakeMemory):

@@ -4064,6 +4064,30 @@ class PokemonRedStateReader:
             return False
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
 
+    def read_player_facing(self) -> str:
+        """Decode the sprite's settled facing inside the revision adapter."""
+        value = self._memory.read_u8(RamAddress.PLAYER_FACING_DIRECTION)
+        directions = {0: "down", 4: "up", 8: "left", 12: "right"}
+        if value not in directions:
+            raise SemanticStateError("player facing is not a cardinal direction")
+        return directions[value]
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        """Recognize Red's standard text frame, not its language or contents.
+
+        Movement flags alone remain ready while PrintText waits for a button.
+        The pinned 20x18 tile map renders the standard box at rows 12..17;
+        match its full upper border and corners to avoid treating terrain or
+        a lone font tile as dialogue. Absence is not general menu readiness.
+        """
+        start = int(RamAddress.TILE_MAP) + 12 * 20
+        return (
+            tuple(self._memory.read_u8(start + x) for x in range(20))
+            == (0x79, *(0x7A for _ in range(18)), 0x7B)
+            and self._memory.read_u8(start + 5 * 20) == 0x7D
+            and self._memory.read_u8(start + 5 * 20 + 19) == 0x7E
+        )
+
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(
             joy_ignore=self._memory.read_u8(RamAddress.JOY_IGNORE),

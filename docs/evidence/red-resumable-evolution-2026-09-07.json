@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon.red.resumable-evolution-qualification.v1",
+  "session": "2026-09-07-resumable-evolution",
+  "diagnostic_only": true,
+  "fit_admission": false,
+  "parent_checkpoint_sha256": "b64023f4e479871367e1b9389cf2b54d784ada60c25b94de14f2d59752fc85a4",
+  "diagnostics": [
+    {"id": "preparation", "actions": 1496, "frames": 70970, "experience_delta": 0, "result": "Native PC preparation passed; type-incompatible venue caused eight safe escapes."},
+    {"id": "in-party-continuation", "actions": 4286, "frames": 327518, "experience_delta": 0, "result": "Venue corrected; old move-slot fallback used Tail Whip, then safety recovery stopped training."},
+    {"id": "damage-zero-input", "actions": 0, "frames": 0, "experience_delta": 0, "result": "Venue forecast incorrectly rejected recoverable HP before healing; terminal unchanged."},
+    {"id": "damage-corrected", "actions": 606, "frames": 49469, "experience_delta": 508, "result": "Executor returned after four battles; private report serialization failed afterward. Measurements reconstructed from retained state and trace."}
+  ],
+  "qualified": {
+    "native_pc_facing_and_storage": true,
+    "in_party_resume_without_storage": true,
+    "completed_battle_intervals": 4,
+    "battle_interval_frames": [[33253,35461],[36098,38102],[40467,42471],[47284,49288]],
+    "trainee_national_species": 77,
+    "trainee_level_before": 32,
+    "trainee_level_after": 32,
+    "experience_before": 32768,
+    "experience_after": 33276,
+    "experience_delta": 508,
+    "trainee_final_hp": 81,
+    "trainee_final_max_hp": 81,
+    "boxes_unchanged_during_final_continuation": true,
+    "collection_unchanged_during_final_continuation": true,
+    "specimens_retained": 17,
+    "living_species_retained": 14,
+    "terminal_battle_state": 0,
+    "terminal_held_buttons": 0,
+    "terminal_standard_dialogue_visible": false,
+    "terminal_state_sha256": "0fc2d4df037f87c7c02ca836e57ffa2fec5787a883f5296742c40b81f282602c",
+    "private_result_sha256": "926c670e9ac4992b5b41f96fe2451c136798d0ddcf0eabc16b4d03bc3076a4ea",
+    "private_action_trace_sha256": "f052e1536da96f0742a496ea6f71118b26638465c082780f7392ece83aa34658",
+    "restored_party_and_boxes_match": true,
+    "restoration_actions": 0,
+    "restoration_frames": 0,
+    "resume_available_after_restore": true,
+    "complete_evolution": false,
+    "generic_modal_readiness_claim": false
+  },
+  "learning": {
+    "examples_before": 35,
+    "examples_after": 35,
+    "new_fit_count": 0,
+    "new_model_selected_outcomes": 0,
+    "collection_gain": 0,
+    "independent_transfer_claim": false,
+    "official_player_checkpoint_replaced": false
+  }
+}

@@ -6,6 +6,7 @@ import runpy
 from dataclasses import replace
 from html.parser import HTMLParser
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -25,6 +26,13 @@ from pokemon_red_completion.progress_dashboard import (
 
 ROOT = Path(__file__).resolve().parents[1]
 OVERVIEW = runpy.run_path(str(ROOT / "scripts/run_product_focus_dashboard.py"))
+
+
+def _native_learning_fixture() -> dict:
+    # Historical numerical assertions must not follow the advancing live pointer.
+    return json.loads(
+        (ROOT / "docs/evidence/red-native-player-learning-result-2026-09-06.json").read_text()
+    )
 
 
 def _snapshot() -> DashboardSnapshot:
@@ -60,7 +68,10 @@ def test_frame_freshness_tracks_frames_not_work_updates() -> None:
 
 
 def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() -> None:
-    receipt = OVERVIEW["_load_learning_evidence"]()
+    # Keep the older receipt readable independently of the active evidence pointer.
+    receipt = json.loads((ROOT / (
+        "docs/evidence/red-retired-bank-train-and-fit-result-2026-09-06.json"
+    )).read_text())
     training, component = OVERVIEW["_training_projection"](receipt)
     assert training.samples_after == 29
     assert training.samples_before + training.previously_unfitted + training.newly_collected == 29
@@ -76,6 +87,86 @@ def test_completed_training_evidence_is_derived_and_explicitly_not_held_out() ->
     projection, candidate = OVERVIEW["_training_projection"](changed)
     assert candidate.train_examples == 31
     assert projection.samples_before == 20
+
+
+def test_native_player_fit_display_uses_retained_model_error_not_zero_initialization():
+    receipt = _native_learning_fixture()
+    assert receipt["schema"] == "pokemon.red.native-player-learning-session.v1"
+    training, component = OVERVIEW["_training_projection"](receipt)
+    assert (training.samples_before, training.samples_after) == (29, 31)
+    assert training.newly_collected == 2
+    assert training.weighted_mse_before == pytest.approx(0.0051474823941508)
+    assert training.weighted_mse_before != receipt["fit"]["fit_report"]["weighted_mse_before"]
+    assert training.weighted_mse_after == pytest.approx(0.004795542884146417)
+    assert training.training_choice_changes == 1
+    assert training.public_dict()["held_out_claim"] is False
+    assert component.train_examples == 31 and component.validation_examples == 0
+    assert component.model_sha256 == receipt["fit"]["model"]["model_sha256"]
+
+
+@pytest.mark.parametrize("field,value", [
+    ("new_settled_examples", 3), ("in_sample_only", False),
+    ("prior_rows_retained", False), ("authority_promotions", 1),
+])
+def test_native_player_fit_display_rejects_false_learning_claims(field, value):
+    receipt = _native_learning_fixture()
+    receipt["fit"][field] = value
+    with pytest.raises(ProgressDashboardError):
+        OVERVIEW["_training_projection"](receipt)
+
+
+def test_main_loop_retains_last_verified_view_during_focus_digest_refresh(monkeypatch):
+    main = OVERVIEW["main"]
+    namespace = main.__globals__
+    actual_load = namespace["load_product_focus"]
+    calls = 0
+    snapshots = []
+    seconds = [0.0]
+
+    def load():
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            raise namespace["ProductFocusError"]("reorientation evidence file digest differs")
+        return actual_load()
+
+    class Relay:
+        def __init__(self, snapshot, **kwargs):
+            snapshots.append(snapshot)
+
+        def publish(self, snapshot):
+            snapshots.append(snapshot)
+
+        def poll(self):
+            pass
+
+    class Server:
+        url = "http://127.0.0.1:8768/"
+
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            pass
+
+    monkeypatch.setitem(namespace, "load_product_focus", load)
+    monkeypatch.setitem(namespace, "_load_learning_evidence", _native_learning_fixture)
+    monkeypatch.setitem(namespace, "load_dashboard_work_status", lambda _: DashboardWorkState())
+    monkeypatch.setitem(namespace, "DashboardRelayState", Relay)
+    monkeypatch.setitem(namespace, "ProgressDashboardServer", Server)
+    monkeypatch.setitem(namespace, "time", SimpleNamespace(
+        monotonic=lambda: seconds[0],
+        sleep=lambda duration: seconds.__setitem__(0, seconds[0] + duration),
+    ))
+    assert main(["--duration-seconds", "3", "--no-browser"]) == 0
+    assert calls == 3
+    assert snapshots[1].work.status == "blocked"
+    assert snapshots[-1].work.status == "idle"
+    assert all(snapshot.training.samples_after == 31 for snapshot in snapshots)
+    assert all(snapshot.collection_observed is False for snapshot in snapshots)
 
 
 def test_saved_run_recap_uses_actual_choices_resources_and_denominator() -> None:
@@ -148,14 +239,14 @@ def test_saved_recap_loader_refuses_an_unjoined_audit(tmp_path: Path) -> None:
         {"setup_censors": 1},
         {"terminal_lessons": 7},
         {"fit_count": 0},
-        {"successful_examples": 30},
+        {"successful_examples": 500},
         {"weighted_mse_after": float("nan")},
         {"weighted_mse_before": True},
-        {"training_choice_changes": 30},
+        {"training_choice_changes": 500},
     ],
 )
 def test_training_summary_rejects_false_accounting(changes: dict) -> None:
-    training, _ = OVERVIEW["_training_projection"](OVERVIEW["_load_learning_evidence"]())
+    training, _ = OVERVIEW["_training_projection"](_native_learning_fixture())
     with pytest.raises(ProgressDashboardError):
         replace(training, **changes)
 

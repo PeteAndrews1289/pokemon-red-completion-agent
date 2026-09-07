@@ -2724,6 +2724,13 @@ def _restore_observed_arm_example(
     return example
 
 
+def restore_living_dex_observed_arm_example(
+    document: Mapping[str, object],
+) -> LivingDexObservedArmExample:
+    """Validate the typed row only; callers must independently authenticate provenance."""
+    return _restore_observed_arm_example(document)
+
+
 def _restore_observed_outcome(
     document: Mapping[str, object],
 ) -> LivingDexObservedOutcome:

@@ -15,6 +15,7 @@ from pokemon_red_completion.goal_manager_protocol import (
     GOAL_MANAGER_REGISTRY_DIGEST_RELATIVE_PATH,
     GOAL_MANAGER_REGISTRY_RELATIVE_PATH,
     GoalManagerProtocolError,
+    goal_manager_contract_document,
     load_committed_goal_manager_registry,
     load_committed_goal_manager_registry_at_revision,
     parse_goal_manager_registry,
@@ -49,6 +50,17 @@ def _slots(document: dict[str, object]) -> list[dict[str, object]]:
     assert isinstance(slots, list)
     assert all(isinstance(item, dict) for item in slots)
     return slots
+
+
+def test_legacy_contract_does_not_expand_with_development_player_outcomes() -> None:
+    document = goal_manager_contract_document()
+    assert document["failure_reasons"] == [
+        "binding_failed", "execution_budget_exhausted", "external_interruption",
+        "outcome_not_verified", "resource_lost", "world_state_diverged",
+    ]
+    assert hashlib.sha256(_canonical(document)).hexdigest() == (
+        "d1280390eda3a3f5cf12735e8988822ce00aa0f637cb812d91c124df83f32acc"
+    )
 
 
 def test_registry_prospectively_balances_all_nine_goal_families() -> None:

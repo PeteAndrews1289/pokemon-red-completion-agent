@@ -74,6 +74,7 @@ class RedGoalBoxedEvolutionExecutor:
     replanner: RouteReplanner | None = None
     resource_manager: RouteResourceManager | None = None
     route_limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS
+    pc_facing: str | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.reset_state_sha256, str) or len(self.reset_state_sha256) != 64:
@@ -135,6 +136,7 @@ class RedGoalBoxedEvolutionExecutor:
             route_to_pc=self.route_to_pc,
             route_to_training=self.route_to_training,
             training_binding_sha256=self.training_binding_sha256,
+            pc_facing=self.pc_facing,
         )
         adapter = RedBoxedLevelEvolutionAdapter(
             plan=plan,

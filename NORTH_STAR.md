@@ -11,6 +11,11 @@ living Pokédex across the versions, trades, and event inputs that completion re
 
 Pokémon Red is the first curriculum and evaluation environment. It is not the product.
 
+An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
+Collection development must be practical to complete, preserve living specimens, and ultimately
+support a measured model-selected lesson. Keep partial progress, final goal success and learned
+advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
+
 The deterministic teacher is an oracle, demonstrator, verifier, and emergency safety authority.
 It is not the final player. A fixed route completing Red does not count as learned progress unless
 the work also increases model authority or produces evidence needed to do so.
@@ -50,6 +55,40 @@ requires [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) to be its exact gene
 Inputs, preflights, CI passes, and teacher runs never advance its learning counters.
 
 ## Default development loop
+
+### Fixed visual roadmap and session closeout
+
+Use the [development infographic](docs/development-roadmap.md) and its
+[stable baseline](configs/development-roadmap-baseline-v1.json) to locate each substantial task
+within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
+Red-era living collection, an unfamiliar compatible Red modification, Crystal, then later titles.
+This baseline is subordinate to the mission and this contract; it does not authorize execution.
+
+After **every completed work session**, and during a longer session after a substantial verified
+capability, fit, gameplay result or blocker changes our position:
+
+1. Update the active state and the [roadmap status](configs/development-roadmap-state.json).
+   Preserve earlier reviews; record what changed, whether it deviated from the plan, and why.
+2. Regenerate the infographic and its accessible Markdown with
+   `python scripts/development_roadmap.py --write`. Inspect the visual after layout/content changes.
+3. Refresh the handoff, next steps and YouTube/project narrative with the same factual result.
+   Update this North Star only when requirements, operating rules or the agreed sequence change;
+   do not rewrite its goals merely to make a session look successful.
+4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
+   mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
+
+At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
+or recommendation. Do not manufacture feedback or confuse it with measured progress.
+
+Stage exit criteria stay stable. Material changes require an explicit entry in
+[roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
+the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
+a difficult milestone with an easier one or count teacher completion as learned completion.
+Any percentage must name its checklist and denominator; do not report a whole-project percentage
+or turn equal checklist weights into a remaining-time estimate. Progress without a new learning
+result must remain visibly classified as engineering or documentation.
+
+### Runtime learning loop
 
 Use authenticated development checkpoints and short randomized scenarios:
 

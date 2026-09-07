@@ -456,7 +456,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
                 f"{time_box_hours} {time_box_hour_label} |"
             ),
             "",
-            "### Cumulative cross-family learning outputs",
+            "### Historical cross-family counter snapshot",
             "",
             "| Output | Current | Minimum for the next decision |",
             "| --- | ---: | ---: |",
@@ -470,8 +470,9 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             "",
             "Each counter changes only when tracked, path-free evidence supports it.",
             (
-                "These totals aggregate several learner heads and historical scenario families; "
-                "they do not by themselves gate battle-model promotion."
+                "This frozen legacy projection aggregates older learner heads and scenario "
+                "families; it excludes newer native-player batches. Use Authority now and the "
+                "latest session evidence for the active checkpoint, not these historical totals."
             ),
             (
                 "Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not "

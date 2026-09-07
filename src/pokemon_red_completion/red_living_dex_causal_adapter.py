@@ -15,7 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import re
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Mapping
 from contextlib import AbstractContextManager, contextmanager
 from dataclasses import dataclass
 
@@ -169,8 +169,7 @@ def build_red_living_dex_causal_scenario(
         recipe.recipe_sha256 != capture.recipe_sha256
         or recipe.slot_sha256 != capture.binding.slot_sha256
         or capture.execution_identity_sha256 != setup_execution_identity.identity_sha256
-        or capture.binding.execution_identity_sha256
-        != setup_execution_identity.identity_sha256
+        or capture.binding.execution_identity_sha256 != setup_execution_identity.identity_sha256
         or recipe.available_option_kinds != capture.binding.available_option_kinds
         or tuple(item.recipe_sha256 for item in recipe.providers)
         != tuple(item.provider_recipe_sha256 for item in capture.binding.option_bindings)
@@ -192,9 +191,7 @@ def build_red_living_dex_causal_scenario(
             runtime_factory_sha256=canonical_sha256(
                 {
                     "purpose": "validated-live-factory",
-                    "setup_execution_identity_sha256": (
-                        setup_execution_identity.identity_sha256
-                    ),
+                    "setup_execution_identity_sha256": (setup_execution_identity.identity_sha256),
                 }
             ),
         )
@@ -244,23 +241,21 @@ def build_red_living_dex_causal_scenario_from_capture(
         (causal_runner_sha256, "causal runner"),
     ):
         _require_sha256(value, subject=subject)
-    if not isinstance(causal_source_commit, str) or _GIT_COMMIT.fullmatch(
-        causal_source_commit
-    ) is None:
+    if (
+        not isinstance(causal_source_commit, str)
+        or _GIT_COMMIT.fullmatch(causal_source_commit) is None
+    ):
         raise RedLivingDexCausalAdapterError("causal source commit differs")
     if (
         capture.execution_identity_sha256 != setup_execution_identity.identity_sha256
-        or capture.binding.execution_identity_sha256
-        != setup_execution_identity.identity_sha256
+        or capture.binding.execution_identity_sha256 != setup_execution_identity.identity_sha256
         or capture.binding.menu_sha256 != capture.policy_projection.menu.policy_sha256
         or len(capture.binding.option_bindings) < 2
         or len(capture.binding.option_bindings) != len(capture.fork_proofs)
     ):
         raise RedLivingDexCausalAdapterError("Red causal capture join differs")
 
-    binding_sha256s = tuple(
-        item.executable_binding_sha256 for item in capture.fork_proofs
-    )
+    binding_sha256s = tuple(item.executable_binding_sha256 for item in capture.fork_proofs)
     meter_binding_sha256 = canonical_sha256(
         {
             "causal_runner_sha256": causal_runner_sha256,
@@ -275,9 +270,7 @@ def build_red_living_dex_causal_scenario_from_capture(
             {
                 "recipe_sha256": capture.recipe_sha256,
                 "schema": "pokemon.red.private-living-dex-causal-lineage.v1",
-                "setup_execution_identity_sha256": (
-                    setup_execution_identity.identity_sha256
-                ),
+                "setup_execution_identity_sha256": (setup_execution_identity.identity_sha256),
                 "slot_sha256": capture.binding.slot_sha256,
             }
         )
@@ -434,9 +427,7 @@ def _require_resolved_runtime(
         or recipe.slot_sha256 != capture.binding.slot_sha256
         or resolved.producer_execution_identity != setup_execution_identity
         or tuple(item.recipe_sha256 for item in recipe.providers)
-        != tuple(
-            item.provider_recipe_sha256 for item in capture.binding.option_bindings
-        )
+        != tuple(item.provider_recipe_sha256 for item in capture.binding.option_bindings)
         or recipe.available_option_kinds != capture.binding.available_option_kinds
     ):
         raise RedLivingDexCausalAdapterError("Red resolved causal runtime differs")
@@ -515,9 +506,7 @@ def _execute_selected_provider(
     offer_before = meter.checkpoint()
     observed = context.offer_for(provider.goal_kind, context_observation, state.arm.actions)
     if meter.checkpoint() != offer_before:
-        raise RedLivingDexCausalAdapterError(
-            "Red causal provider offer changed protected effects"
-        )
+        raise RedLivingDexCausalAdapterError("Red causal provider offer changed protected effects")
     (
         binding,
         fresh_sha256,
@@ -587,14 +576,10 @@ def _observe_selected_runtime(
         "before_observation_sha256": state.before.observation_sha256,
         "execution_exception_type": state.execution_exception_type,
         "execution_failure_reason_code": state.execution_failure_reason_code,
-        "goal_report_sha256": (
-            None if state.report is None else _goal_report_sha256(state.report)
-        ),
+        "goal_report_sha256": (None if state.report is None else _goal_report_sha256(state.report)),
         "observer_binding_sha256": capture.binding.observer_binding_sha256,
         "schema": RED_LIVING_DEX_CAUSAL_OUTCOME_PROVENANCE_SCHEMA,
-        "verification_status": (
-            None if verification is None else verification.status.value
-        ),
+        "verification_status": (None if verification is None else verification.status.value),
     }
     return LivingDexCausalObservation(outcome, provenance)
 
@@ -614,65 +599,156 @@ def _red_outcome(
 
     if not isinstance(before_effects, RedLivingDexSetupPolicyProjection):
         raise TypeError("Red causal outcome needs its normalization projection")
-    before_public = before.public_dict()
-    after_public = after.public_dict()
-    del before_public, after_public
-    before_collection = before.evidence.living_collection
-    after_collection = after.evidence.living_collection
+    checkpoint = meter.checkpoint()
+    return observed_red_living_dex_outcome(
+        before,
+        after,
+        verification=verification,
+        actions=max(0, checkpoint.controller_actions - action_frame_before.controller_actions),
+        frames=max(0, checkpoint.emulator_frames - action_frame_before.emulator_frames),
+        maximum_actions=before_effects.maximum_controller_actions,
+        maximum_frames=before_effects.maximum_emulator_frames,
+    )
+
+
+def observed_red_living_dex_outcome(
+    before: RedGoalObservation,
+    after: RedGoalObservation,
+    *,
+    verification: GoalVerification | None,
+    actions: int,
+    frames: int,
+    maximum_actions: int,
+    maximum_frames: int,
+) -> LivingDexObservedOutcome:
+    """Share the existing nine outcome definitions with prospective player data.
+
+    This keeps the legacy consumable-only resource target unchanged. Money is
+    a separate known-cost policy input, not a silent reinterpretation of labels.
+    """
+    return red_living_dex_outcome_from_observations(
+        before.public_dict(),
+        after.public_dict(),
+        succeeded=verification is not None and verification.status is GoalDecisionOutcome.SUCCEEDED,
+        actions=actions,
+        frames=frames,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
+    )
+
+
+def red_living_dex_outcome_from_observations(
+    before: Mapping[str, object],
+    after: Mapping[str, object],
+    *,
+    succeeded: bool,
+    actions: int,
+    frames: int,
+    maximum_actions: int,
+    maximum_frames: int,
+) -> LivingDexObservedOutcome:
+    """Recompute the same target from recorded semantic facts, not a supplied label."""
+    if type(succeeded) is not bool or any(
+        item.get("schema") != "pokemon.red.goal-observation.v1" for item in (before, after)
+    ):
+        raise ValueError("outcome observation schema differs")
+    for value in (actions, frames, maximum_actions, maximum_frames):
+        if type(value) is not int or value < 0:
+            raise ValueError("outcome counters must be non-negative integers")
+    if maximum_actions == 0 or maximum_frames == 0:
+        raise ValueError("outcome budgets must be positive")
     registered_delta = _progress_delta(
-        before.evidence.registered_collection.completed,
-        after.evidence.registered_collection.completed,
-        after.evidence.registered_collection.target,
+        _observed_count(before, "collection", "registered"),
+        _observed_count(after, "collection", "registered"),
+        _observed_count(after, "collection", "registered_target"),
     )
     living_delta = _progress_delta(
-        before_collection.completed,
-        after_collection.completed,
-        after_collection.target,
+        _observed_count(before, "collection", "living"),
+        _observed_count(after, "collection", "living"),
+        _observed_count(after, "collection", "living_target"),
     )
     level_delta = _progress_delta(
-        before.evidence.level_collection.completed,
-        after.evidence.level_collection.completed,
-        after.evidence.level_collection.target,
+        _observed_count(before, "collection", "level_cap"),
+        _observed_count(after, "collection", "level_cap"),
+        _observed_count(after, "collection", "level_cap_target"),
     )
     story_delta = _progress_delta(
-        before.evidence.story.completed,
-        after.evidence.story.completed,
-        after.evidence.story.target,
+        _observed_count(before, "story", "completed"),
+        _observed_count(after, "story", "completed"),
+        _observed_count(after, "story", "target"),
     )
     dependency_pressure_delta = max(
         0.0,
-        max(before.situation.story_pressure, before.situation.evolution_pressure)
-        - max(after.situation.story_pressure, after.situation.evolution_pressure),
+        max(
+            _observed_pressure(before, "story_progress"),
+            _observed_pressure(before, "evolution_progress"),
+        )
+        - max(
+            _observed_pressure(after, "story_progress"),
+            _observed_pressure(after, "evolution_progress"),
+        ),
     )
-    checkpoint = meter.checkpoint()
-    actions = max(0, checkpoint.controller_actions - action_frame_before.controller_actions)
-    frames = max(0, checkpoint.emulator_frames - action_frame_before.emulator_frames)
-    before_resources = before.capture_item_count + before.recovery_item_count
-    after_resources = after.capture_item_count + after.recovery_item_count
-    living_loss = max(0, before_collection.completed - after_collection.completed)
-    verified = (
-        verification is not None
-        and verification.status is GoalDecisionOutcome.SUCCEEDED
-        and living_loss == 0
+    before_resources = _observed_count(before, "capture_item_count") + _observed_count(
+        before, "recovery_item_count"
     )
+    after_resources = _observed_count(after, "capture_item_count") + _observed_count(
+        after, "recovery_item_count"
+    )
+    living_loss = max(
+        0,
+        _observed_count(before, "collection", "living")
+        - _observed_count(after, "collection", "living"),
+    )
+    verified = succeeded and living_loss == 0
     return LivingDexObservedOutcome(
         LivingDexOutcomeStatus.SETTLED,
         verified_success=verified,
         completion_gain=max(registered_delta, living_delta, level_delta),
         dependency_unlock_gain=max(story_delta, dependency_pressure_delta),
-        action_cost=_ratio(actions, before_effects.maximum_controller_actions),
-        frame_cost=_ratio(frames, before_effects.maximum_emulator_frames),
+        action_cost=_ratio(actions, maximum_actions),
+        frame_cost=_ratio(frames, maximum_frames),
         resource_cost=_ratio(
             max(0, before_resources - after_resources),
             max(1, before_resources),
         ),
-        party_cost=max(0.0, after.situation.safety_pressure - before.situation.safety_pressure),
-        storage_cost=_ratio(
-            max(0, before.free_storage_slots - after.free_storage_slots),
-            max(1, before.free_storage_slots),
+        party_cost=max(
+            0.0, _observed_pressure(after, "safety") - _observed_pressure(before, "safety")
         ),
-        irreversible_loss=_ratio(living_loss, max(1, before_collection.target)),
+        storage_cost=_ratio(
+            max(
+                0,
+                _observed_count(before, "free_storage_slots")
+                - _observed_count(after, "free_storage_slots"),
+            ),
+            max(1, _observed_count(before, "free_storage_slots")),
+        ),
+        irreversible_loss=_ratio(
+            living_loss, max(1, _observed_count(before, "collection", "living_target"))
+        ),
     )
+
+
+def _observed_fact(document: Mapping[str, object], *path: str) -> object:
+    value: object = document
+    for key in path:
+        if not isinstance(value, Mapping) or key not in value:
+            raise ValueError("outcome observation fact is absent")
+        value = value[key]
+    return value
+
+
+def _observed_count(document: Mapping[str, object], *path: str) -> int:
+    value = _observed_fact(document, *path)
+    if type(value) is not int or value < 0:
+        raise ValueError("outcome observation count differs")
+    return value
+
+
+def _observed_pressure(document: Mapping[str, object], name: str) -> float:
+    value = _observed_fact(document, "situation", "need_pressures", name)
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 <= value <= 1:
+        raise ValueError("outcome observation pressure differs")
+    return float(value)
 
 
 def _action_trace(
@@ -690,9 +766,7 @@ def _action_trace(
         "emulator_frames": frames,
         "execution_exception_type": state.execution_exception_type,
         "execution_failure_reason_code": state.execution_failure_reason_code,
-        "goal_report_sha256": (
-            None if state.report is None else _goal_report_sha256(state.report)
-        ),
+        "goal_report_sha256": (None if state.report is None else _goal_report_sha256(state.report)),
         "provider_execution_recorded": meter.provider_executions > 0,
         "route_report_sha256": state.route_report_sha256,
         "schema": "pokemon.red.private-living-dex-causal-action-trace.v1",

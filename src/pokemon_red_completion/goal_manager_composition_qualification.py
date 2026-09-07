@@ -19,7 +19,7 @@ import stat
 import sys
 from collections import Counter
 from contextlib import suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, Literal, Protocol
 
@@ -192,8 +192,7 @@ class HardCompositionActionLimiter:
     def execute(self, action: Any) -> object:
         if (
             self.attempted_actions >= self._maximum_episode_actions
-            or self.attempted_actions_this_decision
-            >= self._maximum_actions_per_decision
+            or self.attempted_actions_this_decision >= self._maximum_actions_per_decision
         ):
             raise CompositionActionBudgetExhausted(
                 "composition exhausted its hard controller-action budget"
@@ -244,13 +243,10 @@ def living_collection_checkpoint(
 
     if not isinstance(observation, RedGoalObservation):
         raise TypeError("observation must be a RedGoalObservation")
-    specimens = Counter(
-        item.species_ref for item in observation.collection_observation.specimens
-    )
+    specimens = Counter(item.species_ref for item in observation.collection_observation.specimens)
     required = RED_ACQUISITION_CATALOG.required_root_acquisitions()
     retained = sum(
-        min(required_count, specimens[species])
-        for species, required_count in required.items()
+        min(required_count, specimens[species]) for species, required_count in required.items()
     )
     remaining = {
         species: max(0, required_count - specimens[species])
@@ -263,9 +259,7 @@ def living_collection_checkpoint(
             "schema": "pokemon.core.living-collection-contract.v1",
             "game_id": RED_COLLECTION_GAME_ID,
             "registered_target": sorted(RED_SOLO_COLLECTION_CONTRACT.target_species),
-            "living_target": sorted(
-                RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species
-            ),
+            "living_target": sorted(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species),
             "required_root_acquisitions": dict(sorted(required.items())),
         }
     )
@@ -290,6 +284,56 @@ def living_collection_checkpoint(
             }
         ),
         specimen_counts=tuple(sorted(specimens.items())),
+    )
+
+
+def living_completion_contract_sha256() -> str:
+    """Identity for the final living-species ledger, separate from capture demand."""
+    return canonical_sha256(
+        {
+            "schema": "pokemon.red.living-completion-contract.v2",
+            "targets": sorted(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species),
+            "level_evolutions": _level_evolution_pairs(),
+            "precursor_retention": True,
+        }
+    )
+
+
+def _level_evolution_pairs() -> tuple[tuple[str, str], ...]:
+    from pokemon_red_completion.generation_one import GENERATION_ONE_LEVEL_EVOLUTIONS
+    from pokemon_red_completion.red_collection import red_species_ref
+
+    return tuple(
+        sorted(
+            (red_species_ref(a), red_species_ref(b)) for a, b, _ in GENERATION_ONE_LEVEL_EVOLUTIONS
+        )
+    )
+
+
+def living_completion_checkpoint(observation: RedGoalObservation) -> LivingCollectionCheckpoint:
+    """Count final living targets; evolving a surplus is not a lost capture.
+
+    The legacy root-acquisition ledger remains available for old checkpoints.
+    The remaining-work digest also binds inventory, so collecting a duplicate
+    precursor is measurable preparation without claiming a new living species.
+    """
+    original = living_collection_checkpoint(observation)
+    counts = dict(original.specimen_counts)
+    targets = RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species
+    missing = sorted(species for species in targets if not counts.get(species, 0))
+    return replace(
+        original,
+        completion_contract_sha256=living_completion_contract_sha256(),
+        required_specimens_remaining=len(missing),
+        retained_captures=sum(min(1, counts.get(species, 0)) for species in targets),
+        required_specimens_sha256=canonical_sha256(
+            {
+                "schema": "pokemon.red.remaining-living-work.v2",
+                "missing_living_species": missing,
+                "inventory": original.specimen_counts,
+            }
+        ),
+        allowed_evolutions=_level_evolution_pairs(),
     )
 
 
@@ -373,9 +417,7 @@ def open_fixed_account_claim_registry(path: Path | None = None) -> Path:
         or metadata.st_uid != os.getuid()
         or stat.S_IMODE(metadata.st_mode) != 0o700
     ):
-        raise FreshCompositionQualificationError(
-            "fresh-composition claim registry is invalid"
-        )
+        raise FreshCompositionQualificationError("fresh-composition claim registry is invalid")
     return resolved
 
 
@@ -419,9 +461,7 @@ def write_root_claim(
     """Durably consume one root before a local artifact or controller can start."""
 
     if not root_claim_is_available(registry, root_consumption_sha256):
-        raise FreshCompositionQualificationError(
-            "fresh-composition root is already consumed"
-        )
+        raise FreshCompositionQualificationError("fresh-composition root is already consumed")
     marker = _root_claim_marker(registry, root_consumption_sha256)
     payload = (
         json.dumps(
@@ -444,9 +484,7 @@ def write_root_claim(
         ).encode("ascii")
         + b"\n"
     )
-    temporary = registry / (
-        f".{marker.name}.pending-{os.getpid()}-{os.urandom(8).hex()}"
-    )
+    temporary = registry / (f".{marker.name}.pending-{os.getpid()}-{os.urandom(8).hex()}")
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL
     if hasattr(os, "O_CLOEXEC"):
         flags |= os.O_CLOEXEC

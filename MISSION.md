@@ -26,6 +26,12 @@ Concretely, success is:
    forces the system to exercise the whole game rather than the shortest path through it.
 3. **Transfer.** Knowledge earned in one generation reduces the teaching required for the next.
 
+The agreed delivery sequence is useful sustained Red play, model-directed story completion and
+living collection, then a compatible unfamiliar Red ROM modification as an intermediate adaptation
+test before Crystal. Initial performance and improvement with experience must be reported separately.
+Red experience should reduce the learning required; it does not guarantee immediate success on a
+modified game. This sequencing does not replace the long-term cross-title living-collection goal.
+
 ## Why the Pokédex, and not just beating the game
 
 Beating Pokémon Red is easy and we can already do it. The current teacher finishes the game

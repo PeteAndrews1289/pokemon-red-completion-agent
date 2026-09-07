@@ -1,5 +1,180 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 closeout — the learner finally chose a complete evolution
+
+The small integration milestone is complete. The goal-selection model grew from35 to45 retained
+examples. One real selected example taught it an effect from prior search effort; removing that
+history changes predictions. A later exploratory model-policy choice completed Rapidash40 and
+preserved the living precursor. It was not a forced or teacher-selected goal.
+
+We retained the unsuccessful choices, an excluded partial episode, and the separately labelled
+forced continuation. The newest game state has16 living species and18 specimens, not the sum of
+parallel practice branches. This evidence is deliberately narrow: one history-bearing example and
+correlated Red training do not prove generalization or better play than a baseline.
+
+The next obstacle is visible and concrete: after evolution the player is on Route11, outside the
+profile's supported collection region. Next we connect useful regional continuation and test varied
+multi-goal play, rather than repeating the successful lesson. [Final audit](audits/red-complete-evolution-learning-2026-09-07.md).
+
+## September7 — from working skills to actual retained learning
+
+The model chose a capture that added a living species. We retained that success and the failures
+around it, taking the learner from35 to41 examples. A separately labelled deterministic continuation
+then completed Rapidash40, with a living precursor preserved and18 total specimens intact.
+
+The integration exposed distinct problems: evolution was mistaken for species loss; a private
+save used the wrong encoding; and continuation/reporting assumed every step involved a choice.
+Those are repaired without giving deterministic steps learning credit. The accepted final state
+holds16 living species, but its region has no supported next source in the current profile.
+
+The honest remaining question is whether memory changes learned decisions. The current corpus
+still has no selected example with nonzero search history, so that milestone stays open.
+The next bounded practice branch targets precisely that gap, without claiming sustained play.
+[Evidence and limits](audits/red-complete-evolution-learning-2026-09-07.md).
+
+## September7 — the collection finally gained Rapidash
+
+The retained Ponyta reached40 and evolved, while a second Ponyta stayed safely boxed. All17
+specimens survived; the living collection grew14 to15. The successful continuation took about
+30 seconds for109 battles. Two real interface bugs had mattered more than emulation speed:
+wait duration was passed in the wrong action field, and status-move PP masked exhausted attacks.
+Correcting those contracts let existing skills finish the evolution without another trainer.
+
+This is a component milestone, not evidence the model learned evolution or can finish Red.
+The model still has35 examples; these diagnostics are excluded. Private orchestration joined
+four-battle chunks, so the next work is exposing that bounded complete option to model choice
+and learning from a fresh outcome. [Evidence and limits](audits/red-party-selection-evolution-2026-09-07.md).
+
+## September 7 — grinding was fast; changing state was the hard part
+
+A bounded continuation gained 9,606 XP and took Ponyta from 32 to 35 in about 18 seconds. That
+falsified our concern that basic grinding would consume the next session. The problems were
+transitions: reaching a new level triggered an unnecessary journey, and resuming afterward
+exposed a wrong party selection. Exact verification stopped both attempts without losing any
+specimen. The retained states let us investigate without replaying the journey.
+
+A safe-current-venue rule is now tested; selected-member verification is next. This is still
+deterministic skill work: no new model fit or complete evolution is claimed. The engineering
+lesson is to prove who an interaction is acting on, not merely trust that a cursor moved.
+[Audit and measurements](audits/red-evolution-completion-2026-09-07.md).
+
+## September 7 — the trainee finally earns its own experience
+
+The PC now faces the machine, stores a party member and retrieves a surplus precursor through
+the native skill. Progress can resume with that precursor already in-party. Then two old
+assumptions surfaced in live testing: a venue was chosen only by level despite an unsafe type
+matchup, and a move-slot fallback repeatedly selected Tail Whip on the new team. Cartridge-aware
+eligibility and selection from actual damaging moves repaired those specific mismatches.
+
+The final bounded continuation produced four battle intervals and 508 XP while retaining every
+specimen. A report-writer error happened afterward; the saved game and trace let us reconstruct
+the result without replaying it. This was deterministic skill qualification, not a new model fit
+or completed evolution. The learner still has 35 examples. The next challenge is making evolution
+efficient enough to become a useful choice the model can learn. [Audit](audits/red-resumable-evolution-2026-09-07.md).
+
+## September 6 — a wall that was actually a conversation
+
+The saved failure let us inspect the problem without replaying the journey. The nurse had healed
+the party but was still speaking. Idle movement flags did not mean the game was accepting walking
+inputs. We added a verified end to the interaction; the same computed 11-step route then worked
+without replanning. A separate diagnostic opened the PC and preserved every stored specimen.
+
+The important audit finding came next: an older evolution trainer forced the starter to finish
+battles but also forbade it from fighting above its cap. Our starter was already beyond that cap.
+Rather than spend another run watching it flee, the skill now rejects that setup before acting.
+We still need safe trainee participation, PC-facing integration and resumable partial evolution.
+This session improved execution truth, not model competence: 35 examples remain and no new
+evolution is claimed. [Evidence and limitations](audits/red-center-pc-boundary-2026-09-06.md).
+
+## September 6 — real learning returns; a skill fails at its last connection
+
+We connected the existing boxed-evolution mechanics to the native player and resumed outcome
+learning: 32 to 35 examples, without discarding earlier data. None of the three new choices
+produced collection progress. Exploration failed; capture exhausted its search; the model then
+selected evolution and reached a Pokémon Center, where the party was healed. The indoor PC
+approach failed before storage operations began. Every specimen was preserved.
+
+This is a useful negative result, not a success story: wiring and unit tests had overstated how
+close the existing skill was to end-to-end usability. The next task is the observed PC
+control/collision mismatch from the saved Center, not another training architecture.
+The [audit](audits/red-native-boxed-evolution-2026-09-06.md) records the boundaries and evidence.
+
+## September 6 — a learner that can use memory, not yet evidence that it does
+
+The [history-learner session](audits/red-history-aware-learner-2026-09-06.md) connected saved search
+effort to the outcome learner. Missing historical context stays unknown; all 32 existing examples
+and their targets were retained. A separate initialization preserves the prior predictions and
+starts new history coefficients at zero. Controlled tests show history-dependent learning, but
+no new real gameplay data or fit occurred. That distinction matters more than another model file.
+
+An integration audit found that routing identifiers changed with the player's position and could
+hide source-specific memory. Stable private source keys now survive arrival and movement without
+leaking identities to the model. The game save is unchanged. It contains duplicate unevolved
+specimens, giving us a concrete next lesson: connect existing boxed-evolution mechanics to the
+native player, then learn from useful alternatives. The 40% milestone checklist remains unchanged;
+we did not rewrite its training criterion to count initialization as learned competence.
+
+## A stable visual reference for the whole project
+
+The [development infographic](development-roadmap.md) now separates verified foundations, the
+current learned-play gap and the entire planned cross-title journey. The baseline keeps goals
+and exit criteria stable; session reviews explain changes without presenting maintenance as
+new model competence. North Star closeout rules require the map, handoff and narratives to stay
+aligned after each completed session and substantial verified progress. Material deviations
+are recorded, not hidden. This is a communication improvement; the learner remains at 32 examples.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+## September 6 — the loop trains, but the choice did not improve
+
+Saved-state continuation now feeds actual sampled outcomes into the learner without forgetting
+its old data. A failed search added one negative example: 31 became 32. Yet the updated scorer
+still chose another unsuccessful search. This is an important distinction between a working
+training pipeline and a competent player. The next lesson needs persistent search memory and a
+useful collection alternative, not repeated local searches. [Evidence and audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
+## September 6 — not finding a Pokemon should not erase the session
+
+An unchanged search again found no needed catch, but now its negative result, fresh collection
+ledger and game state survive a clean stop. A read-only restore verified the save. The distinction
+matters: we improved recovery, not intelligence. The 31-example model proposed repeating the search;
+that proposal was blocked before input and must not be sold as executed learned play. Existing local
+development is available for the next bounded learning contrast, not an excuse for arbitrary grinding.
+[Evidence and reorientation](audits/red-search-recovery-2026-09-06.md).
+
+## Current: make learned progress persist, then test adaptation
+
+The player now has a real 31-example outcome model, including two newly sampled choices and all
+29 earlier rows. Its predecessor completed a four-goal collection sequence and saved the resulting
+game. The next demonstration used that updated model to continue the actual saved progress,
+not replay a familiar start. It reached the encounter area but found no target within its short
+search budget; recovery then raised an exception instead of preserving a normal unsuccessful
+search. We retained all 215 actions and the failure, with no catch or learning claim. The original
+save remains safe, but this failed child produced no new save. The next repair is useful recovery
+and real alternative tasks, not a longer scripted replay.
+
+Pete sharpened the delivery milestones: useful sustained Red play, model-directed story completion
+and living collection, then a compatible unfamiliar Red ROM modification before Crystal. The hack
+will test whether Red experience reduces subsequent learning, with initial performance separated
+from adaptation. It is a planned experiment, not a capability the current model has demonstrated.
+The larger objective remains living collections across games; a fixed teacher walkthrough is not
+the finished product. Older checkpoints below retain their original claims and limitations.
+
 ## September 6: collecting survives a supply trip—but efficiency is still unfinished
 
 The next chain connected the existing navigation, shop and capture skills around fresh state.

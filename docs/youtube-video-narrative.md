@@ -1,5 +1,191 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## Final chapter for this milestone — a learned-policy choice that finishes
+
+Use K's actual capture of the evolution screen and recorded goal choice if presenting this session.
+Label it “model-policy choice with exploration; deterministic mechanics execute.” The model chose
+evolution among genuine alternatives, finished Rapidash40, and retained the precursor. Do not splice
+F's forced continuation into a claim that the model chose it.
+
+The learner now retains45 examples, including successes and failures. One authentic selected-history
+row changes learned predictions; that is integration evidence, not proof of independent superiority.
+Show the5/5 checklist as this small milestone only. End on the next honest problem: the saved player
+has no supported next source in its current region, so sustained play is still ahead.
+[Final audit and boundaries](audits/red-complete-evolution-learning-2026-09-07.md).
+
+## Latest chapter — a model-selected catch, then an honest boundary
+
+Show C's real capture and the collection counter increasing. Then show the separately labelled
+forced evolution into Rapidash and the retained Ponyta. Best save:16 living species,18 specimens.
+The learner now retains41 examples, including unsuccessful choices; do not present forced F as
+a new learned decision. Its59 durable recovery saves demonstrate recoverability.
+
+Explain that a collection ledger initially counted evolution as losing the precursor species;
+the correct rule allows one verified transformation while preserving another living precursor.
+Show the next limitation honestly: the current profile offers no useful next source in that region.
+The narrow practice batch now targets learned use of actual search history, not another route demo.
+[Current audit](audits/red-complete-evolution-learning-2026-09-07.md).
+
+## Latest chapter — Rapidash, without losing Ponyta
+
+Show the actual level40 evolution and the retained boxed Ponyta30 beside the living-species
+counter moving14 to15. Label it **deterministic skill qualification**. The final continuation
+completed109 battles in about30 seconds; the learning model has not changed this session.
+
+Explain the concrete bugs: a120/180-frame wait was effectively one frame, and70 points of
+status-move PP did not mean an exhausted Pokémon could attack. The corrected skill now produces
+a real collection gain. End with the honest next step: let the model choose this complete option
+and learn from its outcome, not claim it already plays the whole game. [Audit](audits/red-party-selection-evolution-2026-09-07.md).
+
+## Latest chapter — the XP bar moved; the menu was the obstacle
+
+Show the actual progression from Ponyta 32 to 35, with +9,606 XP and retained saves. Label it
+as deterministic skill qualification, not model learning. The first attempt ran for about 18
+seconds before an unnecessary venue transition failed; the successor's party-order check caught
+a wrong swap before another battle. Every specimen survived, but evolution remains unfinished.
+
+Use the contrast to explain why fast simulation does not remove interaction-state bugs. We now
+keep a safe current venue and must verify party-member selection before confirming a swap.
+Do not imply that the model learned these repairs or that it can finish Red autonomously.
+[Evidence boundaries](audits/red-evolution-completion-2026-09-07.md).
+
+## Latest chapter — Tail Whip was not a training strategy
+
+Show the native PC preparation, then contrast the retained failed trace with the corrected
+damaging-move continuation. The old move-slot assumption belonged to a different party; on
+Ponyta it selected Tail Whip. The corrected component gained 508 XP across four battle intervals.
+Label the footage **deterministic skill diagnostic**, not autonomous learned gameplay.
+
+The ending is deliberately honest: Ponyta is still level 32, every specimen survives, and the
+saved state reloads correctly. A diagnostic report failed to serialize after gameplay; we kept
+the failure and reconstructed its evidence instead of repeating the run for a clean-looking
+result. No new model fit occurred. Next is an efficient complete evolution and a model-selected
+lesson, not a claim that the agent can already finish Red. [Audit](audits/red-resumable-evolution-2026-09-07.md).
+
+## Latest chapter — it was not a wall; the nurse was still talking
+
+Show the real failed-movement screen beside the repaired component diagnostic: the nurse's
+farewell closes, then the same planned route reaches the PC. No replacement walk string was
+needed. Clearly label this footage as an engineering diagnostic, not autonomous learning.
+
+The more important lesson: a skill can have tested parts yet still be impossible as a whole.
+The evolution trainer always used the starter for shared experience, but the starter was beyond
+the trainer's fighting cap. We now catch that contradiction before spending gameplay time.
+Next is a complete safe training operation that can resume partial progress. No new fit or
+collection gain happened here; the goal model still contains 35 examples. The PC-open diagnostic
+also explicitly faced the machine, so do not claim the native evolution pipeline is complete.
+See the [audit](audits/red-center-pc-boundary-2026-09-06.md) for exact evidence boundaries.
+
+## Latest chapter — the model chose evolution, but the executor could not reach the PC
+
+The honest on-screen sequence is search, no catch, then a model-selected switch to evolution.
+The agent reached the Center and healed, but failed on its indoor route to the PC. No Pokémon
+was withdrawn or evolved. All 17 specimens survived, and the saved endpoint means the next
+debugging session can start at the actual failure instead of replaying earlier travel.
+
+Two fits moved the dataset from 32 to 35 examples; all three new results were negative.
+Show this as debugging a hierarchical agent, not as a model completing Red or learning to evolve
+successfully. The key distinction: the model selected a useful objective, but the deterministic
+skill still failed to carry it out. [Evidence and audit](audits/red-native-boxed-evolution-2026-09-06.md).
+
+## Latest chapter — memory is wired in; competence still needs evidence
+
+Open with the [same roadmap](development-roadmap.md), still at 40% of its local checklist. Explain
+why it did not jump: we built the history-aware learning path, but have not yet trained it on new
+history-bearing gameplay. The original 32 examples survive unchanged. The new model initialization
+initially makes exactly the same predictions; it is not a secretly improved player.
+
+Show the engineering lesson: a route's identity changes as the player moves, but a search area
+must remain the same remembered place. Separating those identities closes a real integration bug.
+Then show the actual opportunity: duplicate unevolved Pokemon waiting in storage. The next chapter
+must connect their evolution to the player and produce an observed useful-choice lesson, not
+another graph of passing checks. Test-fixture learning is not footage of the game learning.
+
+Evidence and limitations: [session audit](audits/red-history-aware-learner-2026-09-06.md).
+
+## Recurring visual chapter — where are we on the map?
+
+Use the [development infographic](development-roadmap.md) as the recurring opening and closing
+shot for a substantial work session. Show the unchanged long-term route first, then zoom into
+the current milestone. Explain the observable result: what the model did, what the code merely
+enabled, what failed and what remains unproved. Keep the dated session check-in visible.
+
+The current honest frame is a 32-example goal-value learner and working search-memory plumbing,
+not a model that already completes Red. Two of five acceptance items for useful memory-aware
+play are verified; 40% is not Red completion or a forecast. This infographic update itself
+adds no training, controller authority or gameplay result.
+
+After substantial verified progress or session closeout, refresh the map and this narrative
+together. If the route changes, show the before/after decision and its reason using the
+[deviation log](roadmap-decisions.md), rather than quietly rewriting the story. Red competence
+and living collection precede an unfamiliar compatible Red hack, then Crystal and later games.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+## Latest footage context — a fit is not a victory
+
+Show the counter moving from 31 to 32 actual examples, then show the unchanged unsuccessful
+search choice. Explain that the player learned from a real negative outcome but did not yet
+make better decisions. Both runs stop safely and retain their saves. The next engineering target
+is remembered search history plus productive collection alternatives, not another scripted win.
+Do not describe this as a full-game model or cross-game transfer. [Audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
+## September 6 scene — a useful failure, not a fake success
+
+Show the unchanged 215-action / 8244-frame no-catch search beside the new typed stop and verified
+saved endpoint. Explain that negative outcomes are needed for learning too. The model is still at
+31 examples; its proposed repeated search was blocked before another input, not executed as a
+second learned task. Local development is only the inspected next contrast, not completed footage.
+[Source of claims](audits/red-search-recovery-2026-09-06.md).
+
+## Continuation attempt: the search moved, but recovery failed
+
+The 31-example player resumed the saved game and reached the Mansion. It encountered three wild
+Pokemon, found no target before its short search bound, then failed when recovery selected the
+same goal. Result: 215 actions, zero captures and zero spending; no new learned choice or fit.
+The selection was a deterministic unsupported-menu bridge, not model strategy. The original save
+is intact; a new terminal save was not produced. Use only footage that was actually retained;
+the durable action log is not itself a recorded video. Do not present the failure as improved play.
+
+The planned story arc ends the Red stage with an adaptation challenge: an unfamiliar compatible
+ROM modification, comparing prior Red learning against starting without it. Initial success is
+different from learning during the challenge. Pete proposed this intermediate milestone before
+Crystal to make transfer concrete; no hack execution or transfer result exists yet.
+
+## September 6: the player feeds its own experience back into learning
+
+**Explain:** “The player was succeeding at shopping but spending too much. We added the price
+and reserve information it was missing, without pretending the old data contained it. Then we
+let it sample real choices and learn from the outcomes. Two genuine samples joined all 29 older
+examples. We finally have the player-to-learning loop working—not just a script collecting logs.”
+
+Show **MODEL + EXPLORATION** only for sampled decisions; show **SAFETY** and **FORCED OPTION**
+separately. Training counters must change only after authenticated new examples and an actual fit.
+The completed batch reused one known training state. Never caption it as an unseen-game test,
+independent victory, learned money prediction, or an autonomous full-game player.
+
+**Result card:** “29 → 31 FITTED EXAMPLES · ALL PRIOR DATA RETAINED.” Show the four goals and
+two sampled choices separately. Keep “MONEY 12,649 → 649” visible: shopping still needs work.
+The new model changes its preference from shopping to collecting on one recorded input;
+caption that **IN-SAMPLE REPLAY — NOT NEW GAMEPLAY**. The saved endpoint is real and reloads,
+but no updated-model continuation has been executed. Include the two engineering failures:
+lost quote metadata, then sampling/encoded-save integration. Neither was hidden or replayed.
+
 ## September 6: the first complete supply-and-collect sequence
 
 **Saved-result graphic:** four cards—**SAFETY: RESUPPLY**, **SUPPORTED BRIDGE: CAPTURE**,

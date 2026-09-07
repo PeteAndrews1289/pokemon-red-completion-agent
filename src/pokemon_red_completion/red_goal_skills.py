@@ -36,6 +36,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 from pokemon_red_completion.goal_manager_state import headroom_satisfaction
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
 from pokemon_red_completion.lavender import (
     DEFAULT_LAVENDER_TIMING,
     _buy_mart_item,
@@ -642,9 +643,7 @@ class RedMartResupplyGoalProvider:
             estimated_risk=0.02,
         ).offer(observation)
 
-    def resource_availability(
-        self, observation: RedGoalObservation
-    ) -> RedGoalSkillAvailability:
+    def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check actual resources without claiming the player is at the clerk."""
 
         inventory = dict(observation.raw.bag_items or ())
@@ -666,6 +665,41 @@ class RedMartResupplyGoalProvider:
         if projected <= observation.evidence.resources:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
         return RedGoalSkillAvailability.available()
+
+    def resource_quote(self, observation: RedGoalObservation) -> GoalResourceQuote:
+        """Quote the exact fixed purchase using fresh funds and reserve counts.
+
+        This neither changes quantities nor sends input. Execution still checks
+        exact bag and money deltas independently at the actual clerk boundary.
+        """
+        funds = observation.raw.player_money
+        if funds is None or not self.resource_availability(observation).executable:
+            raise RedGoalSkillError("cannot quote an unavailable Mart purchase")
+        if any(item.item not in _CAPTURE_ITEMS | _RECOVERY_ITEMS for item in self.purchases):
+            raise RedGoalSkillError("Mart quote has an unsupported resource class")
+        reserves = []
+        for resource, items, count, target in (
+            (
+                "capture",
+                _CAPTURE_ITEMS,
+                observation.capture_item_count,
+                self.adapter.config.desired_capture_items,
+            ),
+            (
+                "recovery",
+                _RECOVERY_ITEMS,
+                observation.recovery_item_count,
+                self.adapter.config.desired_recovery_items,
+            ),
+        ):
+            purchased = sum(item.quantity for item in self.purchases if item.item in items)
+            if purchased:
+                reserves.append(GoalResourceReserve(resource, count, target, purchased))
+        return GoalResourceQuote(
+            available_funds=funds,
+            purchase_cost=sum(item.quantity * item.unit_price for item in self.purchases),
+            reserves=tuple(reserves),
+        )
 
     def _projected_resources(
         self,
@@ -693,6 +727,62 @@ class RedMartResupplyGoalProvider:
 
     def _settle(self) -> None:
         self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=self.wait_frames))
+
+
+def prepare_center_departure(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
+    """Reuse nurse farewell recovery before transport, only at its known boundary."""
+    raw = reader.read()
+    if (
+        raw.map_id in _POKEMON_CENTER_MAPS
+        and (raw.player_x, raw.player_y) == (3, 3)
+        and reader.read_bottom_dialogue_box_visible()
+    ):
+        finish_center_dialogue(actions, reader)
+
+
+def finish_center_dialogue(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    maximum_attempts: int = 16,
+    settle_frames: int = 120,
+) -> None:
+    """Leave an already-healed nurse interaction without guessing walk inputs.
+
+    Only a verified Center/nurse boundary may use this recovery. CANCEL advances
+    farewell text without starting another healing interaction after it closes.
+    A missing text frame is necessary, not sufficient: movement flags must also
+    settle and the restored party and position must remain unchanged.
+    """
+    if maximum_attempts <= 0 or settle_frames <= 0:
+        raise ValueError("Center dialogue bounds must be positive")
+    start = reader.read()
+    if (
+        start.map_id not in _POKEMON_CENTER_MAPS
+        or (start.player_x, start.player_y) != (3, 3)
+        or start.battle_state != 0
+        or not _raw_party_restored(start)
+    ):
+        raise RedGoalSkillError("Center dialogue recovery requires a healed nurse boundary")
+    for attempt in range(maximum_attempts + 1):
+        raw = reader.read()
+        if (
+            (raw.map_id, raw.player_x, raw.player_y)
+            != (start.map_id, start.player_x, start.player_y)
+            or raw.battle_state != 0
+            or raw.party_species_ids != start.party_species_ids
+            or not _raw_party_restored(raw)
+        ):
+            raise RedGoalSkillError("Center dialogue recovery changed its safe boundary")
+        visible = reader.read_bottom_dialogue_box_visible()
+        if not visible and reader.read_input_readiness().ready:
+            return
+        if attempt == maximum_attempts:
+            break
+        if visible:
+            actions.execute(MacroAction(MacroActionKind.CANCEL))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=settle_frames))
+    raise RedGoalSkillError("Center farewell did not release overworld control")
 
 
 @dataclass(frozen=True, slots=True)
@@ -763,6 +853,12 @@ class RedCenterRestoreGoalProvider:
                     break
             else:
                 raise RedGoalSkillError("Center recovery did not restore the party")
+            finish_center_dialogue(
+                self.actions,
+                self.reader,
+                maximum_attempts=self.dialogue_attempts,
+                settle_frames=self.settle_frames,
+            )
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
                 frames_executed=self.emulator.frame_count - before_frames,
@@ -999,9 +1095,7 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey source identity is absent")
         if self.boundary is not None and not callable(self.boundary):
             raise RedGoalSkillError("area-survey boundary must be callable")
-        if self.normalize_after_capture is not None and not callable(
-            self.normalize_after_capture
-        ):
+        if self.normalize_after_capture is not None and not callable(self.normalize_after_capture):
             raise RedGoalSkillError("area-survey normalizer must be callable")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
@@ -1011,9 +1105,7 @@ class RedAreaSurveyGoalProvider:
             return RedGoalBindingOffer.unavailable(self.kind, availability.unavailable_reason)
         return self._offer_at_source(observation)
 
-    def resource_availability(
-        self, observation: RedGoalObservation
-    ) -> RedGoalSkillAvailability:
+    def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check source needs and real inventory without inventing a source location."""
 
         if observation.raw.battle_state or not observation.input_ready:
@@ -1081,6 +1173,7 @@ class RedAreaSurveyGoalProvider:
                     "semantic_actions": report.actions_executed,
                     "encounters_seen": report.encounters_seen,
                     "captures": report.captures,
+                    "search_exhausted": report.search_exhausted,
                     "source_normalized": self.normalize_after_capture is not None,
                     "flees": report.flees,
                     "initial_missing": len(report.initial_missing_species_refs),
@@ -1115,6 +1208,22 @@ class RedAreaSurveyGoalProvider:
             remaining = set(after_survey.missing_species_refs)
             remaining_specimens = after_survey.missing_specimen_count
             captures = report.evidence.get("captures")
+            if (
+                report.evidence.get("search_exhausted") is True
+                and type(captures) is int  # noqa: E721
+                and captures == 0
+                and remaining == initial_missing
+                and remaining_specimens == initial_missing_specimens
+                and after.collection.collection.pokedex_owned_count == before_owned
+                and after.collection.collection.living_count == before_living
+                and report.actions_executed > 0
+                and not after.raw.battle_state
+                and after.input_ready
+                and all(member.hp > 0 for member in after.party.members)
+                and report.evidence.get("initial_missing_specimens") == initial_missing_specimens
+                and report.evidence.get("final_missing_specimens") == remaining_specimens
+            ):
+                return GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
             if (
                 not remaining <= initial_missing
                 or remaining_specimens >= initial_missing_specimens

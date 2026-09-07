@@ -1,5 +1,186 @@
 # Three-agent coordination
 
+## Final current — integration closed; sustained-play boundary next
+
+[Final audit](docs/audits/red-complete-evolution-learning-2026-09-07.md): minimal checklist5/5,
+model45, one fitted selected-history example and a productive post-fit model-policy evolution.
+No independent advantage is claimed; K was sampled with exploration, not a benchmark victory.
+
+Codex owns the next supported-source/region connection and varied multi-goal integration.
+No external reviewer/subagent was invoked this session. If requested, Claude should challenge
+one-row history evidence, adaptive stopping and correlated resets; Antigravity should challenge
+the zero-option Route11 endpoint and source/transport composition. Reviews stay read-only.
+Do not reopen the consumed A-through-K work or turn the next stage into another approval campaign.
+
+## Current — capture/evolution integration; finish measured history learning
+
+The [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) reports model41,
+accepted capture and completed forced evolution. Checklist3/5, not full Red or learned competence.
+Codex owns the declared history-practice batch and publication. No reviewer/subagent was invoked.
+If requested later, Claude should challenge selected-history evidence, correlated resets and
+exclusion of forced/failed-partial outcomes. Antigravity should challenge collection transformation,
+durable saves and the region boundary that prevents sustained play. Reviewers remain read-only;
+their approval is not a routine training gate.
+
+## Current — complete component works; learning integration is the only next lane
+
+The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40 and
+retained Ponyta30, living14 to15 with all17 specimens. Model35 and checklist2/5 remain unchanged:
+the successful orchestration is still private component qualification, not a model-selected goal.
+Codex owns bounded player integration and the next fresh measured lesson. No external reviewer
+or subagent was invoked. If requested next, Claude should challenge partial-progress labels,
+fit exclusions and success claims; Antigravity should challenge aggregate continuation bounds,
+recovery and the complete-option/player interface. Reviewers remain read-only; no new sealed gate.
+
+## Current — throughput sufficient; verify party selection next
+
+The [latest audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP and level 35,
+but no complete evolution or fit. Two diagnostic attempts stopped safely; their states and
+failures remain retained. Codex owns a narrow party-selection verification repair next.
+If reviewers are requested, Claude should challenge partial-prefix accounting and diagnostic
+fit exclusions; Antigravity should challenge selected-member/target truth and residual-menu
+recovery. No outside agent was used this session. Model 35 and checklist 2/5 are unchanged.
+
+## Current — resumable evolution component qualified; throughput and learning credit next
+
+Codex owns the [resumable evolution closeout](docs/audits/red-resumable-evolution-2026-09-07.md).
+Four battle intervals /508 XP and action-free restoration are qualified; full evolution is not.
+No new model fit: 35 examples remain. The work is deterministic skill maintenance unblocking
+the existing model's collection choice, not expanded learner authority.
+
+No outside reviewer or subagent was invoked. At the next requested review, Claude should focus
+on partial-progress credit versus completed-goal truth and exclusion of component diagnostics
+from fitting. Antigravity should focus on practical XP throughput, safe venue eligibility and
+resumption without storage replay. Neither should turn ordinary development into a new sealed
+campaign. Codex adjudicates and publishes; reviewers remain read-only. Follow active state.
+
+## Current — Center control repaired; complete operation still unqualified
+
+Codex closed the [Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md).
+The PC route works once nurse dialogue closes. Standalone PC opening passed without changing
+specimens; this is not a learned result or complete native evolution. Model stays 35 examples.
+The next decision is safe, resumable collection development without a mandatory capped escort,
+plus verified PC facing. Do not expand the model, replay the game or raise the escort cap.
+
+No external agent was invoked. If requested, Claude should challenge end-to-end experience and
+partial-progress claims; Antigravity should challenge interaction orientation, dialogue/control
+truth and specimen-preserving recovery. Both remain read-only advisers, not a routine gate.
+Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md); older current headings are history.
+
+## Current — 35 examples; saved Center PC access is the next blocker
+
+The [native evolution audit](docs/audits/red-native-boxed-evolution-2026-09-06.md) records real
+training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
+The model chose exploration, then acquisition and evolution across two linked continuations.
+Evolution reached and healed at Cinnabar Center, but the indoor PC approach failed before any
+deposit, withdrawal or training battle. All 17 specimens and 14 living species remain.
+
+Latest model: `1b26aa44...46adb8`; latest checkpoint: `b64023f4...fc85a4`.
+Both attempts are closed; do not rerun their launchers. Their source was `3a33af17`.
+The private operator notes identify the exact model/corpus, checkpoint lineage and launch scripts.
+
+Next: inspect the advertised first PC-route edge from the **saved healed Center**, reconcile
+control/collision truth, qualify one complete surplus-precursor evolution, then resume learning.
+No Mansion replay, fixed walk string, arbitrary party grinding or new learner feature.
+Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
+Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
+
+Codex owns implementation/publication. If requested, reviewers should challenge the live PC
+boundary and whether the negative outcomes are being mistaken for competence; no routine audit gate.
+
+## Current — history learner ready; connect a useful collection skill
+
+Read [the history-learner audit](docs/audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
+history while keeping all 32 old examples explicitly unknown. The separate initialized model
+`ae622e52...44cf9` reproduces all old predictions with zero history coefficients: **not a new fit**.
+No gameplay, new training row or authority promotion occurred. A routed/local source-identity
+bug was fixed so movement does not silently reset remembered effort.
+
+The saved box contains duplicate unevolved specimens. Next connect the existing boxed-evolution
+mechanics to the native player from its field endpoint, with routing, healing and specimen
+preservation, then collect a short useful-choice lesson. Do not add another learner feature or
+run an acquisition-only loop. The anti-drift alarm applies after another engineering-only session.
+The infographic remains **2/5 (40%)** because its criterion requires actual history training,
+not just compatible initialization. Earlier current headings below are historical.
+
+Codex owns implementation and publication. No external audit was invoked. If requested, Claude
+should challenge unknown-history/learning claims; Antigravity should challenge routing/PC
+integration and specimen safety. Neither is a routine development approval gate.
+
+
+## Shared roadmap reference
+
+Use the [development infographic](docs/development-roadmap.md) and its fixed stage exits when
+reviewing progress. Codex updates status/reviews and handoffs at session closeout and after
+substantial verified milestones. Reviewers should identify deviations and explain their impact
+on the end product, not turn each visual refresh into a new approval gate. No external reviewer
+was invoked for this documentation work. The active coding priority is unchanged.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+
+## Current ownership — saved-state fit closed; productive alternatives next
+
+Codex completed [the saved-endpoint learning audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md):
+31 to 32 examples, all prior rows retained, unchanged unsuccessful post-fit search choice.
+No external reviewer or subagent was invoked. If requested, Claude should challenge whether
+search-history features and actual alternatives improve decisions rather than merely grow data;
+Antigravity should challenge saved-history freshness, bounded recovery and false exclusions.
+Both are read-only advisers; neither is a prerequisite CI/campaign gate. Older sections are history.
+
+
+## Current ownership — recovery qualified; next session must return to learning
+
+Codex implemented and verified [safe search stopping](docs/audits/red-search-recovery-2026-09-06.md).
+No external reviewer was invoked. If requested, reviewers should challenge actual versus rejected
+model choices, preservation of negative outcomes, and whether the next learning contrast serves
+collection rather than arbitrary overleveling. They should not impose another campaign/CI gate.
+The single regression is closed; the saved endpoint and 31-example model remain private and intact.
+Earlier ownership sections are historical.
+
+## Current ownership — continuation failed; typed recovery and useful choices next
+
+Codex closes the [attempt and audit](docs/audits/red-fit31-continuation-2026-09-06.md): resume worked,
+but a bounded search without a catch was followed by a repeated-goal recovery exception. No new
+learning or terminal save resulted; the original save/model and failed archive remain intact.
+Next is a small no-find/recovery-state repair and useful existing alternative mechanics, not a
+new campaign framework. Claude/Antigravity were not invoked. If requested next, they should audit
+negative outcomes, safe stopping and whether the model actually has meaningful alternatives.
+All earlier ownership sections are historical.
+
+## Current ownership — native learning audited; continue with the 31-example model
+
+Codex owns implementation and publication. The [native learning audit](docs/audits/red-native-player-learning-2026-09-06.md)
+records two new sampled outcomes, all 29 prior rows retained, a loadable 31-example model and a
+freshly verified saved endpoint. The batch is closed; no launch may retry. Next is one bounded
+continuation, not another broad campaign. Keep actual spending and negative evidence visible.
+
+If requested, Claude should challenge the completion/maintenance incentive and the zero credit
+for needed duplicate precursors; Antigravity should challenge checkpoint lineage, fresh restores,
+quote freshness and live/saved evidence. Both remain read-only advisers, not mandatory gates.
+Neither reviewer nor a subagent was invoked in this session. Earlier sections are historical.
+
+## Active implementation — September 6 native player training
+
+Codex owns the [economic/native-training session](docs/work-sessions/2026-09-06-resource-cost-learning.md),
+qualification and publication. No external reviewer or subagent was invoked. If later requested,
+Claude should challenge retained-data fitting and correlated-root claims; Antigravity should
+challenge quote freshness, controller bounds, and whether live labels match the actual actor.
+Neither reviewer should revive historical campaigns or expand this session into Crystal/full play.
+
 ## Current ownership — September 6 post-fit bounded-play integration
 
 The real Red batch and single fit are complete; the living-Dex option scorer now contains 29

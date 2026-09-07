@@ -1,5 +1,246 @@
 # Model-first development roadmap
 
+## Final current — useful-play integration complete; sustained play next
+
+The [final audit](audits/red-complete-evolution-learning-2026-09-07.md) closes the five-item
+minimal integration checklist. Model35→45,10 retained new outcomes, one selected-history training
+example and a productive post-fit evolution. This is not independent learned advantage or Red completion.
+
+1. Preserve K's exact saved endpoint (16 living species,18 specimens); do not replay its success.
+2. Connect a legitimate reachable next collection source using existing cartridge routing and skills.
+   The present Mansion-scoped walking-only profile offers no next goal on Route11.
+3. Exercise model45 across varied multi-goal situations; count actual progress, costs, failures,
+   deterministic bridges and human interventions. Fit retained outcomes and test continuations.
+4. Expand battle/navigation authority only with evidence. Full Red, living collection, unfamiliar
+   compatible hack and Crystal remain later stages with unchanged exits.
+
+The closed infographic checklist remains visible as the handoff into stage3; it is not an estimate
+of full-project completion. Start a new stage3 checklist prospectively next session, preserving this one.
+
+## Current — useful mechanics connected; finish the history lesson
+
+[Current audit](audits/red-complete-evolution-learning-2026-09-07.md): model35→41, one new
+productive model-selected capture, complete forced evolution, best save16 living/18 specimens.
+Useful memory-aware play is3/5. Model41's corpus contains zero selected nonzero-history examples.
+
+1. Finish declared H/I/J practice from authenticated history-bearing D, retaining all outcomes.
+2. Measure the fitted history effect on actual selected rows; do not label unselected options.
+3. Require a productive post-fit model-controlled follow-up before closing the checklist.
+4. Preserve best save F; then connect useful region/source continuation for sustained play.
+   No new mechanics or route expansion during the current learning batch.
+
+## Current — evolution works; turn it into a model-selected lesson
+
+The [latest audit](audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40, retained
+Ponyta30 and living14 to15. The final successor completed109 battles in29.807 seconds. This is
+deterministic component qualification, not a new fit. Model35 / useful-play checklist2of5 remain.
+
+1. Expose the existing multi-quantum continuation as one bounded player option, with aggregate
+   budgets, retained intermediate state and exact collection verification; no new trainer.
+2. Test partial progress, PP recovery, interrupted continuation and no-progress stops. Incomplete
+   XP must not be mislabeled a completed evolution; the current outcome adapter has no XP term.
+3. Collect a fresh model-selected useful-choice lesson, fit eligible retained data and run a short
+   post-fit follow-up. Component diagnostics stay excluded and official checkpoint stays intact.
+4. Advance the existing checklist only on these measured results, then reorient toward sustained
+   Red play. No exit change, sealed campaign, full replay or Crystal work.
+
+## Current — XP is fast; close the party-selection boundary
+
+The [latest audit](audits/red-evolution-completion-2026-09-07.md) measures +9,606 XP, level 32 to 35,
+in about 18 seconds before a travel failure. Keeping a safe current venue is implemented and
+ROM-free-tested, but the successor stopped on a wrong party swap before live qualification.
+All 17 specimens remain. Full evolution, learned lesson and checklist advancement are unfinished.
+
+1. Verify the selected party member and swap target from actual menu state before confirmation.
+2. Test multiple roster orders and residual dialog/menu states; do not add a fixed cursor patch.
+3. Continue the retained terminal under a fresh bounded evolution attempt; no reset/retry.
+4. Verify exact evolution and precursor retention, then collect a model-selected lesson with
+   honest partial-progress accounting. No new features, full replay or Crystal.
+
+## Current — safe XP and resumption work; make evolution useful
+
+The [resumable evolution audit](audits/red-resumable-evolution-2026-09-07.md) qualifies native PC
+preparation, no-storage resumption and a four-battle / 508-XP component result. All 17 specimens
+survive; reload matches without input. Ponyta has not evolved. Model 35 and checklist 2/5 remain.
+
+1. Measure remaining XP and safe venue throughput before any new input. The current four-battle
+   dose demonstrates mechanics, not efficient completion; avoid repeated long recovery travel.
+2. Qualify one bounded multi-quantum evolution using existing skills and retained lineage.
+   Preserve the living precursor and stop on unsafe or route-specific workarounds.
+3. Keep partial XP distinct from completed evolution in verification and learning credit.
+   These private component diagnostics are excluded from fitting and do not replace player saves.
+4. Run a short model-selected collection lesson with useful executable alternatives and a measured
+   follow-up. No feature expansion, full replay, unfamiliar hack or Crystal until Red evidence.
+
+No baseline exits were changed. This is another maintenance result, so the anti-drift alarm stays
+visible: next work must turn functioning execution into a useful collection outcome and lesson.
+
+## Current — the route works; qualify viable collection development
+
+The [Center audit](audits/red-center-pc-boundary-2026-09-06.md) identifies unfinished farewell
+dialogue, not a wall, as the PC-route failure. Bounded dialogue completion and the unchanged
+11-step route passed; standalone Bill's PC opening preserved the party and boxes. No model fit
+or collection gain occurred. The 35-example model and 2/5 useful-play checklist are unchanged.
+
+1. Bind verified PC-facing interaction to native skill execution; coordinates alone are insufficient.
+2. Qualify safe trainee/support battles: mandatory participation-only evolution cannot work with
+   our escort already over its level cap. Offers now reject that impossible setup before input.
+3. Make partial evolution progress durable and resumable when the precursor is already in-party.
+   Check bounded experience feasibility before storage changes; do not increase caps until lucky.
+4. Qualify a whole useful operation, then collect and fit model-selected outcomes. No learner
+   feature expansion, acquisition-only loop, full replay, unfamiliar hack or Crystal execution.
+
+This engineering-only session triggers reorientation under the North Star. Keep the existing
+four-hour session bound, reassess after 90 minutes without a viable operation, and stop if the
+repair becomes another teacher project. See [active state](../ACTIVE_PRODUCT_STATE.md).
+
+## Current — 35 examples; saved Center PC access is the next blocker
+
+The [native evolution audit](audits/red-native-boxed-evolution-2026-09-06.md) records real
+training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
+The model chose exploration, then acquisition and evolution across two linked continuations.
+Evolution reached and healed at Cinnabar Center, but the indoor PC approach failed before any
+deposit, withdrawal or training battle. All 17 specimens and 14 living species remain.
+
+Latest model: `1b26aa44...46adb8`; latest checkpoint: `b64023f4...fc85a4`.
+Both attempts are closed; do not rerun their launchers. Their source was `3a33af17`.
+The private operator notes identify the exact model/corpus, checkpoint lineage and launch scripts.
+
+Next: inspect the advertised first PC-route edge from the **saved healed Center**, reconcile
+control/collision truth, qualify one complete surplus-precursor evolution, then resume learning.
+No Mansion replay, fixed walk string, arbitrary party grinding or new learner feature.
+Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
+Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
+
+## Current — history learner ready; connect a useful collection skill
+
+Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
+history while keeping all 32 old examples explicitly unknown. The separate initialized model
+`ae622e52...44cf9` reproduces all old predictions with zero history coefficients: **not a new fit**.
+No gameplay, new training row or authority promotion occurred. A routed/local source-identity
+bug was fixed so movement does not silently reset remembered effort.
+
+The saved box contains duplicate unevolved specimens. Next connect the existing boxed-evolution
+mechanics to the native player from its field endpoint, with routing, healing and specimen
+preservation, then collect a short useful-choice lesson. Do not add another learner feature or
+run an acquisition-only loop. The anti-drift alarm applies after another engineering-only session.
+The infographic remains **2/5 (40%)** because its criterion requires actual history training,
+not just compatible initialization. Earlier current headings below are historical.
+
+
+Start with the [full development infographic and stable exit criteria](development-roadmap.md).
+It is the compact visual reference for the sequence below, not a new authority or execution gate.
+Update its status after a completed session or substantial verified result; preserve baseline
+goals and log material deviations. The current coding task remains history-aware useful Red play.
+
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+
+## Current — 32 examples; break the unproductive search cycle
+
+The [saved-endpoint learning audit](audits/red-saved-endpoint-learning-2026-09-06.md) closes a real
+31-to-32 fit with all prior rows retained. One failed search taught actual costs; the sole post-fit
+continuation still searched without a catch. Useful gameplay improvement is not established.
+
+1. Persist title-neutral search history across saves and expose recent effort/no-progress to
+   selection. Preserve the anti-loop guard and version feature changes without relabeling history.
+2. Prove exhausted versus genuinely changed opportunities remain distinguishable in a resumed
+   ROM-free scenario; then expose an actually executable collection alternative.
+3. Prefer another eligible encounter source or required-precursor storage/evolution, not arbitrary
+   leveling. Collect a short, declared two-alternative lesson only after both are executable.
+4. Fit distinct observed evidence and test a bounded continuation. Stop an acquisition-only loop.
+
+One session / four hours; reassess after 90 minutes without a useful alternative. Red competence
+still precedes unfamiliar compatible Red-modification adaptation and Crystal. Older sections below
+are history, not permission to reopen consumed attempts.
+
+
+## Current — recovery verified; resume useful selected-outcome learning
+
+The [search-recovery session](audits/red-search-recovery-2026-09-06.md) reproduced the no-catch
+situation and now retains its typed negative outcome, fresh ledger and restorable endpoint.
+No learning gain is claimed; the model remains 31 examples. Local development is available under
+an existing expanded profile, verified read-only. Do not grind the established 63/55-level party.
+
+1. Explicitly verify the old checkpoint profile before adopting a separately declared expanded
+   profile. Preserve lineage; connect the existing sampled collector rather than create a factory.
+2. Collect a short capture/local-development contrast, including no-find outcomes and real costs;
+   retain all 31 prior rows, audit/fit settled sampled outcomes, and test a new bounded continuation.
+3. Prioritize required-precursor evolution/storage and persistent search history next. Safe stopping
+   is not yet learned search-versus-switch judgment or sustained Red competence.
+
+Another maintenance-only session should trigger reorientation. No full replay, hack or Crystal now.
+Older sections below preserve the history; this checkpoint supersedes their next-session wording.
+
+## Agreed milestones — Red competence, then measured adaptation
+
+The user-confirmed sequence is sustained Red play, repeatable model-directed story completion,
+Red living collection under explicit version/trade/event boundaries, then adaptation to a compatible
+unfamiliar Red ROM modification before Crystal. Compare initial performance and subsequent learning
+against an otherwise identical learner without Red training. A win on familiar Red is not proof of
+transfer; interface compatibility work is distinct from teaching a replacement walkthrough.
+The long-term product remains transferable play and living collections across games.
+The [completed continuation session](work-sessions/2026-09-06-fit31-continuation.md) implements only
+the first milestone; it does not start hack support, Crystal, or a new teacher.
+
+## Current — stop ordinary no-find outcomes from breaking continued play
+
+The continuation authenticated and ran from the saved parent, then failed after one unsupported-menu
+acquisition: 215 actions / 8244 frames, three encounters, zero catches. Search exhaustion was followed
+by a fatal repeated-goal recovery exception. The model remains at 31 examples; no learned decision
+or new save was earned. Read the [audit](audits/red-fit31-continuation-2026-09-06.md).
+
+1. Distinguish bounded unsuccessful search from unsafe control or a broken executor. Preserve
+   negative outcomes and actual costs; do not turn no-find into a fabricated capture success.
+2. Return a typed safe stop when no acceptable recovery alternative exists. Retain a fresh ledger
+   and checkpoint when safe; preserve anti-loop bounds rather than allowing hidden retries.
+3. Inspect and expose useful existing development/evolution/storage choices, so the model can
+   choose something meaningful besides shopping or forced capture. No new teacher/data factory.
+4. Prospectively declare a short next lesson only after the above works. Preserve the consumed
+   diagnostic and original lineage; never fit old greedy choices or increase limits until lucky.
+
+The session is closed at its declared failure/audit stop. All checkpoints below are historical.
+
+## Historical — actual native player learning complete; use the 31-example model next
+
+The [bounded session](work-sessions/2026-09-06-resource-cost-learning.md) produced a real
+**29 → 31** model update from two sampled player outcomes, preserving all previous rows. One
+four-goal episode completed and saved its state; two earlier failed launches remain disclosed.
+The [audit](audits/red-native-player-learning-2026-09-06.md) separates working learning from
+unproved gameplay improvement. These are correlated training examples, not independent tests.
+
+1. Connect the saved terminal checkpoint to the existing bounded player, retaining original
+   lineage/partition and requiring fresh semantic/ledger agreement before any controller input.
+2. Run one short, prospectively declared continuation using the actual 31-example checkpoint.
+   Measure required-specimen progress, model/safety decisions, money/items and failures. Save the
+   resulting state. Do not call greedy diagnostic choices full-support training examples.
+3. If wasteful shopping persists, cap purchase quantities to a justified reserve deficit before
+   adding more shopping lessons. Otherwise prioritize needed evolution/storage behavior.
+4. Version the learning target only where necessary: needed duplicate precursors reduce specimen
+   requirements but currently receive zero species-count completion gain. Never rewrite old labels.
+5. Build sustained bounded Red competence and a living collection before reopening Crystal.
+   Preserve title-neutral state/action interfaces, explicit version/trade/event dependencies,
+   negative outcomes and readable prior artifacts. No new setup factory or CI-only work loop.
+
+The next session is bounded to four hours and stops at a verified continuation plus reorientation.
+The long-term product remains a model that completes games and builds a living Pokédex across
+titles; neither full Red completion by this learned player nor cross-game transfer is established.
+
+All checkpoints below are historical.
+
 ## Current checkpoint — four goals compose; make the progress durable and learn from useful contrasts
 
 The unchanged 29-example scorer now participates in an actual four-goal collecting chain. The
