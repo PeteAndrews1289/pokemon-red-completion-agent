@@ -185,3 +185,20 @@ or resample this identity after its choice record exists, even after interruptio
 The parent acquisition must be deterministic, so only the source choice can yield one row.
 No parent/counterfactual duplication, full-game execution, independent-evaluation or
 cross-title claim. Stop and preserve the actual terminal on success or failure.
+
+### D result, retained fit and prospective E
+
+D chose Route24 of four options and reached its search bound without capture:
+356actions/16,836frames;18living/20specimens and four balls preserved. The full distribution
+was committed before input. Exactly one negative source example was admitted; its
+deterministic parent added zero. Fit45→46 retained all45 earlier examples,16successes,
+model`07993c5722263103e69eeceaf1cfdc1ee2453cd8c5bb089ff16bf61d829b8891`.
+This is a real bounded model update, not evidence of improved independent performance.
+
+Next E: `red-regional-source-20260907-e-causal`, seed2026090732, model46, from exact
+D checkpoint`947ffc40a7d0674dc00295bdaed0269497f4a63c921b113399f722d35611646d`.
+One acquisition,30,000action/3,000,000frame outer bounds, unchanged smaller skill/search
+bounds and25%uniform/75%softmax policy. Require two useful choices and exact action-free
+restore first. Preserve observed D failure/history; do not reset to C or rerun D.
+Same pre-input commitment, selected-outcome-only admission and terminal-preservation rules.
+The regional checklist remains2/5 until multiple actual source decisions are demonstrated.
