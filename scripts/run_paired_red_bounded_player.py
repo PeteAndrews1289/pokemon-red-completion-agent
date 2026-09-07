@@ -156,7 +156,10 @@ CALIBRATION_ARM_ID = "multi-goal-calibration-shadow"
 BASELINE_ARM_ID = "completion-first-teacher"
 _CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID, CALIBRATION_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
-_MAX_REGIONAL_TRANSITIONS = 32
+# Historical references, not controller authority. A living collection can need
+# hundreds of source/objective revisits; retain them instead of truncating history.
+# Per-episode decision/action/frame limits and ordered authentication are unchanged.
+_MAX_REGIONAL_TRANSITIONS = 512
 
 
 class PairedRedBoundedPlayerRunError(RuntimeError):

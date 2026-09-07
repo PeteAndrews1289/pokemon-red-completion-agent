@@ -50,3 +50,10 @@ Another96 collection/navigation protocol and historical source-compatibility
 checks pass, along with lint, three-module typing and documentation/public checks.
 The earlier full7581-test run covered the CI repair, not this later storage seam;
 do not describe the later feature as having a fresh full-suite result.
+
+The first prospective Metapod preflight stopped before source/ROM work at the old
+32-transition historical-input cap: the complete continuation requires33. Raise
+that finite reconstruction limit to512, with33/512 acceptance and513 rejection
+tests. This retains the complete history rather than deleting prior contexts.
+Ordered profile/ancestor authentication, partitions, one-choice execution and
+controller/frame bounds are unchanged. No live513-context scalability is claimed.

@@ -306,7 +306,7 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
 
 
 @pytest.mark.parametrize("sources,routed", [
-    ([str(i) for i in range(33)], True),
+    ([str(i) for i in range(513)], True),
     ([None], True), (["wild:Route2:grass"], False),
 ])
 def test_regional_scope_rejects_bad_declarations_before_source_or_rom(sources, routed):
@@ -319,7 +319,7 @@ def test_regional_scope_rejects_bad_declarations_before_source_or_rom(sources, r
         runner._prepare(args)
 
 
-@pytest.mark.parametrize("count", [9, 32])
+@pytest.mark.parametrize("count", [9, 32, 33, 512])
 def test_extended_regional_history_keeps_explicit_transitions_bounded(count, monkeypatch):
     args = SimpleNamespace(
         pair_id="regional-long-history", continue_from_checkpoint=[("old", "a" * 64)],
