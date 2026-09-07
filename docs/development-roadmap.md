@@ -40,7 +40,7 @@ Remember failed searches and choose productive alternatives.
 
 Search history must inform learned choices, not a scripted rule forcing another goal.
 
-[Current evidence](../docs/evidence/red-party-selection-evolution-2026-09-07.json)
+[Current evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json)
 
 ### 03. Sustain model-directed play — planned
 
@@ -94,11 +94,11 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-complete-evolution-learning
 
-In progress: complete bounded option and declared training-dose integration. No new fit or gameplay outcome yet; model35/checklist2of5 unchanged.
+In progress: model35 to36; failed acquisition fitted. Post-fit evolution reached Rapidash40 but outer ledger rejected it; B excluded, 2/5 unchanged.
 
 **Deviation:** Explicit larger dose is sized from measured evolution cost; old training plans retain original limits and normalization. No stage exit changes.
 
-**Next:** Run the prospectively declared fixed-seed model-selected lesson, admit real outcomes, fit and test a saved-state follow-up.
+**Next:** Verify corrected living-target accounting, run declared C, then fit and test a productive follow-up.
 
 ### 2026-09-07-party-selection
 

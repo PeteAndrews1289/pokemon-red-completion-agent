@@ -47,8 +47,9 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
         begin_decision_window=outer.begin_decision_window,
     )
 
-    def player(_runtime, actions, *_args, completion_dose=False):
+    def player(_runtime, actions, *_args, completion_dose=False, retain_quantum=None):
         assert completion_dose is False
+        assert retain_quantum is None
         assert isinstance(actions.delegate, hard_type)
         skill_ports.append(actions)
 
@@ -588,15 +589,16 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
         return router
     monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", build_router)
     monkeypatch.setitem(
-        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
+        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: SimpleNamespace(**kwargs),
     )
     local = factory(object(), object(), None)
     routed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object())
-    assert local["enumerate_bindings"] is None
-    assert routed["enumerate_bindings"](object()) is sentinel
+    assert local.enumerate_bindings is None
+    assert routed.enumerate_bindings(object()) is sentinel
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
-    factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
-            completion_dose=True)
+    completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
+                        completion_dose=True)
+    assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
         {"quote_resource_costs": False, "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},

@@ -42,3 +42,23 @@ zero counterfactual targets. A and its fit are closed. Prospectively run one pos
 continuation B from A's saved terminal with seed2026090702, up to2 choices, the same declared
 completion dose, and no retry. If B creates eligible outcomes, retain and fit them before any
 subsequent declared cycle. These are correlated training results, not independent evaluation.
+
+## B completed the skill; composition accounting rejected it
+
+B's selected evolution finished after14207 actions/1236691 frames. Its recorded independent
+goal outcome verifies living14→15, registered19→20 and no loss; the last snapshot shows Rapidash40.
+Then the outer composition check rejected the source-species decrement as a loss. Its older
+root-acquisition counter also mistakes a legitimately consumed precursor for new capture debt.
+B is a failed partial episode, not an accepted training result. It has no resumable terminal save;
+the existing runner only captures one after successful composition. Do not rerun or fit B.
+
+Repair with an explicit final-living-target ledger and declared level-evolution edges: one source
+becomes one target, a precursor remains, all other specimens remain, and the selected evolution
+must independently verify. Storage/release/unknown replacements still fail. Preserve the legacy
+ledger for exact old checkpoint restoration. Add live-target inventory to the remaining-work
+digest so duplicate precursor capture is preparation, not falsely a new living species.
+
+After tests, allow one fresh correlated training branch C from the last admitted terminal A,
+seed2026090703, up to4 choices with completion dose. This is a prospectively declared training
+reset under corrected composition semantics, not a replay/repair of consumed B or an independent
+root. B stays excluded; no outcome-balanced substitution. Stop and audit C before further work.

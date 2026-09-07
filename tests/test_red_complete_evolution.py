@@ -72,10 +72,12 @@ def test_complete_option_checks_every_quantum(tmp_path, monkeypatch, source, tar
         raise EvolutionTrainingPaused(4, 1)
 
     monkeypatch.setattr(native_module.context, "run_red_team_balancing", train)
+    retained = []
     native = native_module.bind_native_boxed_evolution(
         runtime,
         SimpleNamespace(rom=b"fixture"),
         maximum_quanta=3,
+        retain_quantum=lambda: retained.append(progress["calls"]),
     )
     actions = CountingExecutor(SimpleNamespace(execute=action))
     if mode in {"stalled", "lost", "fainted", "exception"}:
@@ -100,6 +102,7 @@ def test_complete_option_checks_every_quantum(tmp_path, monkeypatch, source, tar
             assert report.evidence["completed_training_battles"] == 12
             assert report.evidence["evolution_partial"] is True
     assert progress["actions"] == progress["calls"]
+    assert retained == ([1, 2, 3] if mode in {"complete", "bounded"} else [])
 
 
 @pytest.mark.parametrize("limit", [0, 129, True, 1.0])

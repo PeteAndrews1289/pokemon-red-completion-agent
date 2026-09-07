@@ -55,6 +55,38 @@ def checkpoint_record_id(episode_id: str) -> str:
     return "rpc-" + canonical_sha256({"episode_id": episode_id, "schema": LEGACY_CHECKPOINT_SCHEMA})
 
 
+def capture_red_skill_recovery(
+    *, emulator: _StateSource, meter: CompositionBudgetMeter,
+) -> dict[str, object]:
+    """Private diagnostic save, never an admitted continuation or training target.
+
+    The caller has independently checked the completed quantum's safe boundary.
+    Saving must not advance gameplay or controller state.
+    """
+    before = meter.checkpoint()
+    frame_before = emulator.frame_count
+    if emulator.pressed_buttons:
+        raise RedPlayerCheckpointError("skill recovery has held input")
+    state = emulator.save_state_bytes()
+    if (
+        meter.checkpoint() != before
+        or emulator.frame_count != frame_before
+        or emulator.pressed_buttons
+    ):
+        raise RedPlayerCheckpointError("skill recovery changed protected state")
+    if not isinstance(state, bytes) or not 0 < len(state) <= MAXIMUM_STATE_BYTES:
+        raise RedPlayerCheckpointError("skill recovery state size differs")
+    return {
+        "schema": "pokemon.red.private-skill-recovery.v1",
+        "admitted_continuation": False,
+        "training_target": False,
+        "state_sha256": hashlib.sha256(state).hexdigest(),
+        "state_base64": base64.b64encode(state).decode("ascii"),
+        "actions": before.controller_actions,
+        "frames": before.emulator_frames,
+    }
+
+
 def _sha(value: object) -> str:
     if (
         not isinstance(value, str)

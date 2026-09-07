@@ -25,6 +25,7 @@ from pokemon_red_completion.red_player_checkpoint import (
     MAXIMUM_STATE_BYTES,
     RedPlayerCheckpointError,
     capture_red_player_terminal,
+    capture_red_skill_recovery,
     open_red_player_checkpoint,
     publish_red_player_checkpoint,
     recover_completed_red_player_checkpoint,
@@ -48,6 +49,30 @@ class _Meter:
 
     def checkpoint(self):
         return CompositionBudgetCheckpoint(self.actions, 37)
+
+
+@pytest.mark.parametrize("mode", ["safe", "held", "frames", "actions", "empty", "oversize"])
+def test_skill_recovery_is_read_only_and_not_an_admitted_checkpoint(mode):
+    emulator, meter = _Emulator(), _Meter()
+    if mode == "held":
+        emulator.pressed_buttons = frozenset({"a"})
+    elif mode == "frames":
+        emulator.mutation = lambda: setattr(emulator, "frame_count", 38)
+    elif mode == "actions":
+        emulator.mutation = lambda: setattr(meter, "actions", 3)
+    elif mode == "empty":
+        emulator.state = b""
+    elif mode == "oversize":
+        emulator.state = b"x" * (MAXIMUM_STATE_BYTES + 1)
+    if mode != "safe":
+        with pytest.raises(RedPlayerCheckpointError):
+            capture_red_skill_recovery(emulator=emulator, meter=meter)
+        return
+    record = capture_red_skill_recovery(emulator=emulator, meter=meter)
+    assert base64.b64decode(record["state_base64"]) == emulator.state
+    assert record["state_sha256"] == hashlib.sha256(emulator.state).hexdigest()
+    assert record["admitted_continuation"] is record["training_target"] is False
+    assert (record["actions"], record["frames"]) == (2, 37)
 
 
 @pytest.fixture

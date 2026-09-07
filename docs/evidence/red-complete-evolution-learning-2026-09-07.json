@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon.red.complete-evolution-learning.v1",
+  "session": "2026-09-07-complete-evolution-learning",
+  "status": "active",
+  "training_a": {
+    "episode": "red-complete-evolution-20260907-a-causal",
+    "manifest_sha256": "9b754296b907228ddcc9e34d68b3e7016fac6c0391e48385cd2375027192180c",
+    "selected": "acquire_species",
+    "verified_success": false,
+    "actions": 12,
+    "frames": 288,
+    "fit_admitted": true
+  },
+  "model": {
+    "sha256": "0bddf97e610be656d4e94fb0a56f0b517e5a4be1ac64817a4021ec3515ef50ec",
+    "retained_examples": 36,
+    "successful_examples": 14,
+    "previous_examples": 35,
+    "unselected_targets": 0
+  },
+  "training_b": {
+    "episode": "red-complete-evolution-20260907-b-causal.failed.partial",
+    "selected": "evolve_species",
+    "skill_verified_success": true,
+    "episode_accepted": false,
+    "fit_admitted": false,
+    "terminal_checkpoint": false,
+    "actions": 14207,
+    "frames": 1236691,
+    "living_before": 14,
+    "living_after": 15,
+    "registered_before": 19,
+    "registered_after": 20,
+    "evolved_species": "Rapidash",
+    "evolved_level": 40,
+    "failure": "composition collection state regressed"
+  },
+  "qualification": {
+    "correlated_training_only": true,
+    "independent_generalization": false,
+    "crystal_execution": false,
+    "full_game_replay": false,
+    "checklist_completed": 2,
+    "checklist_total": 5
+  },
+  "next": "Declared fresh branch C from admitted A with corrected living-target ledger and private per-quantum diagnostic saves. B remains consumed and excluded."
+}

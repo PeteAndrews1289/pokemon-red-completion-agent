@@ -84,6 +84,7 @@ def bind_native_boxed_evolution(
     world: StrategicScenarioRouteWorld,
     *,
     maximum_quanta: int = 1,
+    retain_quantum: Callable[[], None] | None = None,
 ) -> context.RedGoalContextRuntime:
     """Return an isolated runtime; do not mutate a saved observer's old profile."""
     if type(maximum_quanta) is not int or not 1 <= maximum_quanta <= 128:
@@ -257,6 +258,8 @@ def bind_native_boxed_evolution(
             ):
                 raise context.RedGoalContextError("complete evolution changed collection or safety")
             if observed == expected:
+                if retain_quantum is not None:
+                    retain_quantum()
                 return BoundedEvolutionTrainingResult(battles, heals)
             current = next(
                 m
@@ -269,6 +272,8 @@ def bind_native_boxed_evolution(
                 or current.experience <= previous.experience
             ):
                 raise context.RedGoalContextError("complete evolution made no verified XP progress")
+            if retain_quantum is not None:
+                retain_quantum()
         raise EvolutionTrainingPaused(battles, heals)
 
     def partial_report(paused: EvolutionTrainingPaused) -> GoalExecutionReport:

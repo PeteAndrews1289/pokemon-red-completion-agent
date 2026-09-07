@@ -10,7 +10,7 @@ import os
 import re
 import stat
 import sys
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from contextlib import ExitStack, suppress
 from dataclasses import dataclass, replace
 from pathlib import Path
@@ -247,6 +247,7 @@ class _LiveObserver:
     maximum_actions_per_decision: int = 6_000
     search_memory: GoalSearchMemory | None = None
     completion_dose: bool = False
+    retain_quantum: Callable[[], None] | None = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -269,6 +270,7 @@ class _LiveObserver:
             self.route_world,
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
+            retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
         observation = bridge()
@@ -290,6 +292,7 @@ def _player_observer(
     quote_resource_costs: bool = False,
     *,
     completion_dose: bool = False,
+    retain_quantum: Callable[[], None] | None = None,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
@@ -302,6 +305,7 @@ def _player_observer(
             runtime,
             world,
             maximum_quanta=128 if completion_dose else 1,
+            retain_quantum=retain_quantum,
         )
     router = (
         None
@@ -315,11 +319,18 @@ def _player_observer(
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
     )
-    return RedBoundedPlayerObserver(
+    observer = RedBoundedPlayerObserver(
         runtime=runtime,
         actions=actions,
         enumerate_bindings=None if router is None else router.enumerate,
     )
+    if completion_dose:
+        from pokemon_red_completion.goal_manager_composition_qualification import (
+            living_completion_checkpoint,
+        )
+
+        observer.collection_projector = living_completion_checkpoint
+    return observer
 
 
 def _route_world(readiness: _Readiness) -> StrategicScenarioRouteWorld | None:
@@ -900,6 +911,16 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         _route_world(readiness),
         readiness.quote_resource_costs,
     )
+    from pokemon_red_completion.goal_manager_composition_qualification import (
+        living_completion_checkpoint,
+        living_completion_contract_sha256,
+    )
+
+    if (
+        getattr(readiness.continuation, "collection", {}).get("completion_contract_sha256")
+        == living_completion_contract_sha256()
+    ):
+        observer.collection_projector = living_completion_checkpoint
     if getattr(readiness.continuation, "search_memory", None) is not None:
         observer.search_memory = GoalSearchMemory.from_private_dict(
             readiness.continuation.search_memory
@@ -1083,7 +1104,10 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
         )
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
         result = preflight_red_bounded_player(
-            observe=_player_observer(runtime, actions, world, readiness.quote_resource_costs),
+            observe=_player_observer(
+                runtime, actions, world, readiness.quote_resource_costs,
+                completion_dose=readiness.completion_dose,
+            ),
             budget_meter=meter,
             assignment_id=readiness.pair_id,
             authorities=(
@@ -1212,6 +1236,16 @@ def _run_arm(
             if viewer is not None:
                 viewer.safely("bind_budget", meter.checkpoint)
             search_memory = _execution_search_memory(readiness)
+            def retain_quantum() -> None:
+                from pokemon_red_completion.red_player_checkpoint import capture_red_skill_recovery
+
+                _require_safe_checkpoint_boundary(runtime, meter)
+                writer.append(
+                    "skill_recovery",
+                    capture_red_skill_recovery(emulator=emulator, meter=meter),
+                    durable=True,
+                )
+
             observer = _LiveObserver(
                 runtime=runtime,
                 actions=actions,
@@ -1222,6 +1256,7 @@ def _run_arm(
                 maximum_actions_per_decision=limits.max_actions_per_decision,
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
+                retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             trajectory_class = (
                 ViewerGoalTrajectory
