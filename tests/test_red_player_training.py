@@ -19,11 +19,12 @@ from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectory
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOutcomeStatus,
+    upgrade_option_value_model_for_optional_recovery,
     upgrade_option_value_model_for_search_history,
 )
 from pokemon_red_completion.living_dex_player_exploration import (
-    EXPLORATION_POLICY_ID,
     ExploringLivingDexGoalPolicy,
+    exploration_policy_id,
 )
 from pokemon_red_completion.red_player_training import TRAINING_EVENT, RedPlayerTrainingTrajectory
 from pokemon_red_completion.red_player_training_dataset import load_red_player_training_episode
@@ -45,7 +46,7 @@ def _plan(model):
             "decision_limit": 4,
             "root_lineage_id": "goal-root-1",
             "model_sha256": model.model_sha256,
-            "behavior_policy_id": EXPLORATION_POLICY_ID,
+            "behavior_policy_id": exploration_policy_id(model.feature_version),
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": "2" * 64,
             "context_id": "3" * 64,
@@ -95,17 +96,21 @@ def _episode(
     acquire_only=False,
     plan_profile_sha=None,
     before_episode=None,
+    optional_recovery=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
     model = _supply_model()
     if history:
         model = upgrade_option_value_model_for_search_history(model)
+    if optional_recovery:
+        model = upgrade_option_value_model_for_optional_recovery(model)
     policy = ExploringLivingDexGoalPolicy(model, seed=17)
     plan = _plan(policy.model)
     if acquire_only:
-        plan = RedPlayerTrainingPlan({**plan.document, "decision_limit": 1,
-                                      "profile_sha256": plan_profile_sha})
+        plan = RedPlayerTrainingPlan(
+            {**plan.document, "decision_limit": 1, "profile_sha256": plan_profile_sha}
+        )
     elif plan_profile_sha is not None:
         plan = RedPlayerTrainingPlan({**plan.document, "profile_sha256": plan_profile_sha})
     store.publish_sealed_record(
@@ -143,9 +148,19 @@ def _episode(
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
     if acquire_only:
-        source = replace(source, opportunities=(source.opportunities[0], GoalOpportunity(
-            "restore", GoalKind.RESTORE_TEAM, GoalAvailability.AVAILABLE, 0.1, 0.0,
-        )))
+        source = replace(
+            source,
+            opportunities=(
+                source.opportunities[0],
+                GoalOpportunity(
+                    "restore",
+                    GoalKind.RESTORE_TEAM,
+                    GoalAvailability.AVAILABLE,
+                    0.1,
+                    0.0,
+                ),
+            ),
+        )
     if history:
         source = replace(
             source,
@@ -156,7 +171,7 @@ def _episode(
                 for item in source.opportunities
             ),
         )
-    if unsupported_restore:
+    if unsupported_restore or optional_recovery:
         source = replace(
             source,
             opportunities=(

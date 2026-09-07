@@ -16,6 +16,7 @@ from pokemon_red_completion.living_dex_option_value import (
     evaluate_living_dex_option_value,
     fit_living_dex_option_value,
     living_dex_option_train_dataset_sha256,
+    upgrade_option_value_model_for_optional_recovery,
     upgrade_option_value_model_for_search_history,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
@@ -124,7 +125,9 @@ def fit_red_player_update(
     feature_version = max(prior.model.feature_version, *(row.menu.feature_version for row in rows))
     fit = fit_living_dex_option_value(rows, feature_version=feature_version)
     baseline_model = (
-        upgrade_option_value_model_for_search_history(prior.model)
+        upgrade_option_value_model_for_optional_recovery(prior.model)
+        if feature_version == 3
+        else upgrade_option_value_model_for_search_history(prior.model)
         if feature_version == 2
         else prior.model
     )
@@ -177,8 +180,46 @@ def bootstrap_red_player_search_history(
     Preserve every existing example byte/target and the original corpus record.
     This enables prospective collection, not improved history-aware judgment.
     """
-    if not isinstance(prior, RedPlayerModelRecord) or prior.model.feature_version != 1:
-        raise ValueError("history bootstrap requires a legacy native player record")
+    return _bootstrap_red_player_features(
+        store,
+        prior=prior,
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        optional_recovery=False,
+    )
+
+
+def bootstrap_red_player_optional_recovery(
+    store: PrivateArtifactRoot,
+    *,
+    prior: RedPlayerModelRecord,
+    source_commit: str,
+    source_bundle_sha256: str,
+) -> dict[str, object]:
+    """Authenticate and preserve the corpus before initializing optional recovery."""
+    return _bootstrap_red_player_features(
+        store,
+        prior=prior,
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        optional_recovery=True,
+    )
+
+
+def _bootstrap_red_player_features(
+    store: PrivateArtifactRoot,
+    *,
+    prior: RedPlayerModelRecord,
+    source_commit: str,
+    source_bundle_sha256: str,
+    optional_recovery: bool,
+) -> dict[str, object]:
+    allowed_versions = (1, 2) if optional_recovery else (1,)
+    if (
+        not isinstance(prior, RedPlayerModelRecord)
+        or prior.model.feature_version not in allowed_versions
+    ):
+        raise ValueError("bootstrap requires a legacy native player record")
     if (
         re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
@@ -202,10 +243,14 @@ def bootstrap_red_player_search_history(
     if (
         hashes != tuple(sorted(prior.retained_example_sha256))
         or (living_dex_option_train_dataset_sha256(rows) != prior.model.train_dataset_sha256)
-        or any(row.menu.feature_version != 1 for row in rows)
+        or any(row.menu.feature_version > prior.model.feature_version for row in rows)
     ):
         raise ValueError("history bootstrap corpus differs from retained model")
-    model = upgrade_option_value_model_for_search_history(prior.model)
+    model = (
+        upgrade_option_value_model_for_optional_recovery(prior.model)
+        if optional_recovery
+        else upgrade_option_value_model_for_search_history(prior.model)
+    )
     document = {
         "schema": PLAYER_MODEL_SCHEMA,
         "authority": "bounded_development_only",
@@ -223,7 +268,7 @@ def bootstrap_red_player_search_history(
     loaded = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=model.model_sha256
     )
-    return {
+    report = {
         "schema": "pokemon.red.search-history-bootstrap.v1",
         "model": loaded.public_dict(),
         "initialization": "retained-head-with-zero-history-coefficients",
@@ -235,3 +280,14 @@ def bootstrap_red_player_search_history(
         "history_effect_learned": False,
         "authority_promotions": 0,
     }
+    if optional_recovery:
+        report.update(
+            {
+                "schema": "pokemon.red.optional-recovery-bootstrap.v1",
+                "initialization": "retained-head-with-zero-recovery-coefficients",
+                "recovery_effect_learned": False,
+            }
+        )
+        del report["unknown_history_examples"]
+        del report["history_effect_learned"]
+    return report

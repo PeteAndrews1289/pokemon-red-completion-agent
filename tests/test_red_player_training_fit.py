@@ -26,12 +26,13 @@ def _prior(rows):
     return LivingDexGoalModelRecord(model, "a" * 64, "b" * 40, "c" * 64, 1, 1)
 
 
-def _fit(tmp_path, monkeypatch, *, failure=False, history=False):
+def _fit(tmp_path, monkeypatch, *, failure=False, history=False, optional_recovery=False):
     store, plan, behavior, completed = _episode(
         tmp_path,
         status=GoalDecisionOutcome.FAILED if failure else GoalDecisionOutcome.SUCCEEDED,
         return_inputs=True,
         history=history,
+        optional_recovery=optional_recovery,
     )
     rows = tuple(
         _example(
@@ -63,11 +64,12 @@ def _fit(tmp_path, monkeypatch, *, failure=False, history=False):
 
 @pytest.mark.parametrize("failure", [False, True])
 @pytest.mark.parametrize("history", [False, True])
+@pytest.mark.parametrize("optional_recovery", [False, True])
 def test_fit_uses_real_episode_reader_and_retains_prior_rows_including_negative(
-    tmp_path, monkeypatch, failure, history
+    tmp_path, monkeypatch, failure, history, optional_recovery
 ):
     store, rows, prior, request, result = _fit(
-        tmp_path, monkeypatch, failure=failure, history=history
+        tmp_path, monkeypatch, failure=failure, history=history, optional_recovery=optional_recovery
     )
     assert result["new_settled_examples"] == 1
     assert result["fit_report"]["settled_examples"] == 3
@@ -79,7 +81,7 @@ def test_fit_uses_real_episode_reader_and_retains_prior_rows_including_negative(
         record.read_bytes(), expected_model_sha256=model_hash
     )
     assert isinstance(loaded, RedPlayerModelRecord)
-    assert loaded.model.feature_version == (2 if history else 1)
+    assert loaded.model.feature_version == (3 if optional_recovery else 2 if history else 1)
     assert set(canonical_sha256(row.public_dict()) for row in rows).issubset(
         loaded.retained_example_sha256
     )

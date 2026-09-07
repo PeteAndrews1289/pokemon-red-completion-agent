@@ -423,30 +423,44 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
-        "--evolution-objective", dest="regional_transitions", action="append",
+        "--evolution-objective",
+        dest="regional_transitions",
+        action="append",
         type=_evolution_objective_argument,
         help="ordered future boxed evolution SOURCE:TARGET:LEVEL; preserves earlier profiles",
     )
     parser.add_argument(
-        "--wild-source", dest="regional_transitions", action="append", default=[],
+        "--wild-source",
+        dest="regional_transitions",
+        action="append",
+        default=[],
         help="ordered cartridge-derived grass-source profile transitions for saved continuations",
     )
     parser.add_argument(
-        "--supply-profile", dest="regional_transitions", type=Path, action="append",
+        "--supply-profile",
+        dest="regional_transitions",
+        type=Path,
+        action="append",
         help="ordered private profile transition changing only the existing Mart supply skill",
     )
     parser.add_argument(
-        "--discovery-source", dest="regional_transitions", action="append",
+        "--discovery-source",
+        dest="regional_transitions",
+        action="append",
         type=lambda value: f"discovery:{value}",
         help="explicit source-local sighting coverage from the authenticated cartridge",
     )
     parser.add_argument(
-        "--capture-status-support", dest="regional_transitions", action="append_const",
+        "--capture-status-support",
+        dest="regional_transitions",
+        action="append_const",
         const="capture-status",
         help="explicit opt-in to bounded observed non-damaging capture status preparation",
     )
     parser.add_argument(
-        "--affordable-capture-supply", dest="regional_transitions", action="append_const",
+        "--affordable-capture-supply",
+        dest="regional_transitions",
+        action="append_const",
         const="affordable-capture-supply",
         help="explicit cash-only bounded ball purchases; no sale or increased batch cap",
     )
@@ -608,9 +622,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         not isinstance(wild_sources, (list, tuple))
         or len(wild_sources) > _MAX_REGIONAL_TRANSITIONS
         or any(not isinstance(source, (str, Path)) for source in wild_sources)
-        or (wild_sources and (
-            not continuation_chain or not getattr(args, "routed_resource_goals", False)
-        ))
+        or (
+            wild_sources
+            and (not continuation_chain or not getattr(args, "routed_resource_goals", False))
+        )
     ):
         raise PairedRedBoundedPlayerRunError("regional_profile_scope")
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
@@ -736,6 +751,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             args.training_catalog, subject="training_catalog", rom_path=rom_path
         )
         training_plan = declare_red_player_training(
+            feature_version=causal_record.model.feature_version if causal_record is not None else 1,
             repository_root=PROJECT_ROOT,
             catalog_path=catalog_path,
             expected_catalog_sha256=args.expected_training_catalog_sha256,
@@ -799,15 +815,19 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     )
     execution_profile = (
         _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
-        if boxed_evolution is not None else None
+        if boxed_evolution is not None
+        else None
     )
     regional_profiles = _regional_profiles(
         execution_profile or expanded_profile or profile, tuple(wild_sources), readiness
     )
-    readiness = replace(readiness, protected_paths=(
-        *readiness.protected_paths,
-        *(path.resolve() for path in wild_sources if isinstance(path, Path)),
-    ))
+    readiness = replace(
+        readiness,
+        protected_paths=(
+            *readiness.protected_paths,
+            *(path.resolve() for path in wild_sources if isinstance(path, Path)),
+        ),
+    )
     readiness = _continue_readiness(
         readiness,
         continuation_chain,
@@ -844,7 +864,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
 def _evolution_objective_argument(value: str) -> str:
     parts = value.split(":")
     if (
-        len(parts) != 3 or any(not part.isascii() or not part.isdecimal() for part in parts)
+        len(parts) != 3
+        or any(not part.isascii() or not part.isdecimal() for part in parts)
         or not all(1 <= int(part) <= 151 for part in parts[:2])
         or not 2 <= int(parts[2]) <= 100
         or int(parts[0]) == int(parts[1])
@@ -892,7 +913,8 @@ def _regional_profiles(
             _evolution_objective_argument(source.removeprefix("evolution:"))
             continue
         if (
-            isinstance(source, Path) or source.startswith("discovery:")
+            isinstance(source, Path)
+            or source.startswith("discovery:")
             or source in {"capture-status", "affordable-capture-supply"}
         ):
             continue
@@ -906,7 +928,8 @@ def _regional_profiles(
     for source in sources:
         if isinstance(source, str) and source.startswith("evolution:"):
             profile = _boxed_evolution_profile(
-                profile, tuple(int(value) for value in source.split(":")[1:]),
+                profile,
+                tuple(int(value) for value in source.split(":")[1:]),
             )
             result.append(profile)
             continue
@@ -932,7 +955,9 @@ def _regional_profiles(
             )
 
             profile = bind_red_local_discovery_profile(
-                profile, source.removeprefix("discovery:"), world.rom,
+                profile,
+                source.removeprefix("discovery:"),
+                world.rom,
             )
             result.append(profile)
             continue
@@ -949,7 +974,9 @@ def _regional_profiles(
             continue
         map_id = int(map_id_for_wild_source(source))
         corridor = derive_red_living_dex_wild_corridor(
-            RedEncounterSourceTarget(source), world.terrain[map_id], world.local_graphs[map_id],
+            RedEncounterSourceTarget(source),
+            world.terrain[map_id],
+            world.local_graphs[map_id],
             excluded=world.object_blockers[map_id],
         )
         profile = retarget_red_wild_profile(profile, corridor)
@@ -968,7 +995,8 @@ def _continue_readiness(
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
     admitted_profiles = tuple(
-        p for p in (readiness.profile, expanded_profile, execution_profile, *regional_profiles)
+        p
+        for p in (readiness.profile, expanded_profile, execution_profile, *regional_profiles)
         if p is not None
     )
     profile_index = 0
@@ -980,7 +1008,8 @@ def _continue_readiness(
         metadata = header.get("metadata")
         if isinstance(metadata, Mapping):
             matches = [
-                index for index, candidate in enumerate(admitted_profiles)
+                index
+                for index, candidate in enumerate(admitted_profiles)
                 if metadata.get("profile_sha256") == candidate.profile_sha256
             ]
             forward = [index for index in matches if index >= profile_index]
@@ -1030,8 +1059,11 @@ def _continue_readiness(
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
-            profile=(regional_profiles[-1] if regional_profiles else
-                     execution_profile or expanded_profile or readiness.profile),
+            profile=(
+                regional_profiles[-1]
+                if regional_profiles
+                else execution_profile or expanded_profile or readiness.profile
+            ),
         )
     return readiness
 
@@ -1105,7 +1137,7 @@ def _execution_search_memory(readiness: _Readiness) -> GoalSearchMemory | None:
     if saved is not None:
         return GoalSearchMemory.from_private_dict(saved)
     record = getattr(readiness, "causal_record", None)
-    if record is not None and record.model.feature_version == 2:
+    if record is not None and record.model.feature_version >= 2:
         return GoalSearchMemory()
     return None
 
@@ -1265,7 +1297,10 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
         result = preflight_red_bounded_player(
             observe=_player_observer(
-                runtime, actions, world, readiness.quote_resource_costs,
+                runtime,
+                actions,
+                world,
+                readiness.quote_resource_costs,
                 completion_dose=readiness.completion_dose,
             ),
             budget_meter=meter,
@@ -1360,11 +1395,16 @@ def _run_arm(
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
-                **({"regional_choice_record_sha256": readiness.regional_choice_record_sha256}
-                   if readiness.regional_choice_record_sha256 is not None else {}),
-                **({"regional_proposal_record_sha256": readiness.regional_proposal_record_sha256}
-                   if getattr(readiness, "regional_proposal_record_sha256", None) is not None
-                   else {}),
+                **(
+                    {"regional_choice_record_sha256": readiness.regional_choice_record_sha256}
+                    if readiness.regional_choice_record_sha256 is not None
+                    else {}
+                ),
+                **(
+                    {"regional_proposal_record_sha256": readiness.regional_proposal_record_sha256}
+                    if getattr(readiness, "regional_proposal_record_sha256", None) is not None
+                    else {}
+                ),
                 "teacher_queries": 0,
                 "teacher_fallbacks": 0,
             }
@@ -1410,6 +1450,7 @@ def _run_arm(
             if viewer is not None:
                 viewer.safely("bind_budget", meter.checkpoint)
             search_memory = _execution_search_memory(readiness)
+
             def retain_quantum() -> None:
                 from pokemon_red_completion.red_player_checkpoint import capture_red_skill_recovery
 

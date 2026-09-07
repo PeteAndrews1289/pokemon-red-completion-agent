@@ -279,6 +279,8 @@ class LivingDexGoalShadowPolicy:
         for index in question.available_indices:
             opportunity = question.opportunities[index]
             option_kind = _OPTION_BY_GOAL.get(opportunity.kind)
+            if opportunity.kind is GoalKind.RESTORE_TEAM and self.model.feature_version >= 3:
+                option_kind = LivingDexOptionKind.RESTORE
             if option_kind is None:
                 continue
             if (

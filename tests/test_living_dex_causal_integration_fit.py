@@ -54,7 +54,10 @@ def _store(tmp_path: Path) -> tuple[Path, PrivateArtifactRoot]:
 
 
 def _rows() -> tuple[LivingDexObservedArmExample, ...]:
-    kinds = tuple(LivingDexOptionKind)
+    kinds = tuple(LivingDexOptionKind(value) for value in (
+        "acquire", "evolve", "trade", "develop", "manage_storage", "resupply",
+        "unlock_access", "explore",
+    ))
     rows: list[LivingDexObservedArmExample] = []
     for ordinal in range(8):
         context = LivingDexOptionContext(

@@ -55,6 +55,7 @@ class LivingDexOptionKind(StrEnum):
     RESUPPLY = "resupply"
     UNLOCK_ACCESS = "unlock_access"
     EXPLORE = "explore"
+    RESTORE = "restore"
 
 
 class LivingDexOptionAvailability(StrEnum):
@@ -97,7 +98,19 @@ class LivingDexOptionValueError(ValueError):
     """The option-value contract, evidence, or model is invalid."""
 
 
-_KIND_FEATURE_NAMES = tuple(f"kind.{kind.value}" for kind in LivingDexOptionKind)
+# Frozen v1/v2 layout: extending the enum must never move historical coefficients.
+LIVING_DEX_LEGACY_OPTION_KINDS = (
+    LivingDexOptionKind.ACQUIRE,
+    LivingDexOptionKind.EVOLVE,
+    LivingDexOptionKind.TRADE,
+    LivingDexOptionKind.DEVELOP,
+    LivingDexOptionKind.MANAGE_STORAGE,
+    LivingDexOptionKind.RESUPPLY,
+    LivingDexOptionKind.UNLOCK_ACCESS,
+    LivingDexOptionKind.EXPLORE,
+)
+_KIND_FEATURE_NAMES = tuple(f"kind.{kind.value}" for kind in LIVING_DEX_LEGACY_OPTION_KINDS)
+LIVING_DEX_RECOVERY_FEATURE_NAMES = ("kind.restore", "party_pressure_x_restore")
 _CANDIDATE_FEATURE_NAMES = (
     "completion_gain",
     "dependency_unlock_gain",
@@ -136,10 +149,12 @@ LIVING_DEX_HISTORY_FEATURE_NAMES = (
 
 
 def option_feature_names(version: int) -> tuple[str, ...]:
-    if type(version) is not int or version not in (1, 2):
+    if type(version) is not int or version not in (1, 2, 3):
         raise LivingDexOptionValueError("living-Dex feature version differs")
-    return LIVING_DEX_OPTION_FEATURE_NAMES + (
-        LIVING_DEX_HISTORY_FEATURE_NAMES if version == 2 else ()
+    return (
+        LIVING_DEX_OPTION_FEATURE_NAMES
+        + (LIVING_DEX_HISTORY_FEATURE_NAMES if version >= 2 else ())
+        + (LIVING_DEX_RECOVERY_FEATURE_NAMES if version == 3 else ())
     )
 
 
@@ -298,10 +313,15 @@ class LivingDexOptionFeatures:
                 _unit_interval(getattr(self, name), subject=name),
             )
 
-    def vector(self, context: LivingDexOptionContext) -> tuple[float, ...]:
+    def vector(
+        self, context: LivingDexOptionContext, *, feature_version: int = 1
+    ) -> tuple[float, ...]:
+        option_feature_names(feature_version)
+        if self.kind is LivingDexOptionKind.RESTORE and feature_version < 3:
+            raise LivingDexOptionValueError("legacy scorer cannot represent recovery")
         if not isinstance(context, LivingDexOptionContext):
             raise TypeError("context must be a LivingDexOptionContext")
-        kinds = tuple(float(self.kind is kind) for kind in LivingDexOptionKind)
+        kinds = tuple(float(self.kind is kind) for kind in LIVING_DEX_LEGACY_OPTION_KINDS)
         candidates = tuple(float(getattr(self, name)) for name in _CANDIDATE_FEATURE_NAMES)
         interactions = (
             context.collection_pressure * self.completion_gain,
@@ -315,15 +335,30 @@ class LivingDexOptionFeatures:
         result = (*kinds, *candidates, *interactions)
         if len(result) != len(LIVING_DEX_OPTION_FEATURE_NAMES):
             raise LivingDexOptionValueError("living-Dex option feature width differs")
-        return result
+        return result + (
+            (
+                float(self.kind is LivingDexOptionKind.RESTORE),
+                context.party_pressure if self.kind is LivingDexOptionKind.RESTORE else 0.0,
+            )
+            if feature_version == 3
+            else ()
+        )
 
     def policy_dict(self, context: LivingDexOptionContext) -> dict[str, object]:
+        recovery = self.kind is LivingDexOptionKind.RESTORE
         return {
-            "feature_names": list(LIVING_DEX_OPTION_FEATURE_NAMES),
+            "feature_names": list(
+                LIVING_DEX_OPTION_FEATURE_NAMES
+                + (LIVING_DEX_RECOVERY_FEATURE_NAMES if recovery else ())
+            ),
             "kind": self.kind.value,
             "normalization": LIVING_DEX_OPTION_NORMALIZATION,
-            "schema": LIVING_DEX_OPTION_FEATURE_SCHEMA,
-            "values": list(self.vector(context)),
+            "schema": (
+                "pokemon.core.living-dex-option-features.v3"
+                if recovery
+                else LIVING_DEX_OPTION_FEATURE_SCHEMA
+            ),
+            "values": list(self.vector(context, feature_version=3 if recovery else 1)),
         }
 
 
@@ -454,8 +489,13 @@ class LivingDexOptionCandidate:
         option_feature_names(feature_version)
         if feature_version == 1 and self.search_history is not None:
             raise LivingDexOptionValueError("legacy scorer cannot ignore search history")
-        return self.features.vector(context) + (
-            _history_vector(self.search_history) if feature_version == 2 else ()
+        features = self.features.vector(context, feature_version=feature_version)
+        # v3 appends to the complete v2 layout, not between legacy columns.
+        base = features[:-2] if feature_version == 3 else features
+        return (
+            base
+            + (_history_vector(self.search_history) if feature_version >= 2 else ())
+            + (features[-2:] if feature_version == 3 else ())
         )
 
     def policy_dict(self, context: LivingDexOptionContext) -> dict[str, object]:
@@ -514,6 +554,8 @@ class LivingDexOptionMenu:
 
     @property
     def feature_version(self) -> int:
+        if any(row.features.kind is LivingDexOptionKind.RESTORE for row in self.candidates):
+            return 3
         return 2 if any(row.search_history is not None for row in self.candidates) else 1
 
     def policy_dict(self) -> dict[str, object]:
@@ -523,7 +565,7 @@ class LivingDexOptionMenu:
             "schema": (
                 LIVING_DEX_OPTION_MENU_SCHEMA
                 if self.feature_version == 1
-                else "pokemon.core.living-dex-option-menu.v2"
+                else f"pokemon.core.living-dex-option-menu.v{self.feature_version}"
             ),
         }
 
@@ -876,7 +918,7 @@ class LivingDexOptionValueModel:
             "normalization": (
                 LIVING_DEX_OPTION_NORMALIZATION
                 if self.feature_version == 1
-                else "pokemon.core.living-dex-option-normalization.v2"
+                else f"pokemon.core.living-dex-option-normalization.v{self.feature_version}"
             ),
             "objective": LIVING_DEX_OPTION_OBJECTIVE,
             "outcome_names": list(LIVING_DEX_OPTION_OUTCOME_NAMES),
@@ -884,7 +926,7 @@ class LivingDexOptionValueModel:
             "schema": (
                 LIVING_DEX_OPTION_MODEL_SCHEMA
                 if self.feature_version == 1
-                else "pokemon.core.living-dex-option-value-model.v2"
+                else f"pokemon.core.living-dex-option-value-model.v{self.feature_version}"
             ),
             "settled_examples": self.settled_examples,
             "train_dataset_sha256": self.train_dataset_sha256,
@@ -916,20 +958,27 @@ class LivingDexOptionValueModel:
         censored_examples = value.get("censored_examples")
         ridge = value.get("ridge")
         maximum_importance_weight = value.get("maximum_importance_weight")
-        version = 2 if value.get("schema") == "pokemon.core.living-dex-option-value-model.v2" else 1
+        version = next(
+            (
+                v
+                for v in (1, 2, 3)
+                if value.get("schema") == f"pokemon.core.living-dex-option-value-model.v{v}"
+            ),
+            1,
+        )
         if (
             value.get("schema")
             != (
                 LIVING_DEX_OPTION_MODEL_SCHEMA
                 if version == 1
-                else "pokemon.core.living-dex-option-value-model.v2"
+                else f"pokemon.core.living-dex-option-value-model.v{version}"
             )
             or value.get("objective") != LIVING_DEX_OPTION_OBJECTIVE
             or value.get("normalization")
             != (
                 LIVING_DEX_OPTION_NORMALIZATION
                 if version == 1
-                else "pokemon.core.living-dex-option-normalization.v2"
+                else f"pokemon.core.living-dex-option-normalization.v{version}"
             )
             or not isinstance(feature_names, list)
             or tuple(feature_names) != option_feature_names(version)
@@ -989,8 +1038,8 @@ class LivingDexOptionValueFitReport:
             "weighted_mse_after": self.weighted_mse_after,
             "weighted_mse_before": self.weighted_mse_before,
         }
-        if self.feature_version == 2:
-            result["feature_version"] = 2
+        if self.feature_version >= 2:
+            result["feature_version"] = self.feature_version
             result["missing_history"] = "unknown_not_unattempted"
         return result
 
@@ -1046,7 +1095,7 @@ def upgrade_option_value_model_for_search_history(
     All old predictions, training identity and counts remain unchanged. History
     effects become learned only through a subsequent observed-outcome fit.
     """
-    if model.feature_version == 2:
+    if model.feature_version >= 2:
         return model
     width = len(LIVING_DEX_HISTORY_FEATURE_NAMES)
     return replace(
@@ -1055,6 +1104,22 @@ def upgrade_option_value_model_for_search_history(
         coefficients=np.vstack((model.coefficients, np.zeros((width, len(model.intercept))))),
         feature_mean=np.concatenate((model.feature_mean, np.zeros(width))),
         feature_scale=np.concatenate((model.feature_scale, np.ones(width))),
+    )
+
+
+def upgrade_option_value_model_for_optional_recovery(
+    model: LivingDexOptionValueModel,
+) -> LivingDexOptionValueModel:
+    """Initialize recovery columns without new outcomes or claimed competence."""
+    model = upgrade_option_value_model_for_search_history(model)
+    if model.feature_version == 3:
+        return model
+    return replace(
+        model,
+        feature_version=3,
+        coefficients=np.vstack((model.coefficients, np.zeros((2, len(model.intercept))))),
+        feature_mean=np.concatenate((model.feature_mean, np.zeros(2))),
+        feature_scale=np.concatenate((model.feature_scale, np.ones(2))),
     )
 
 

@@ -17,12 +17,13 @@ from pokemon_red_completion.red_player_checkpoint import (
 case = checkpoint_case
 
 
-def test_history_tracking_starts_only_for_explicit_successor_and_preserves_parent():
+@pytest.mark.parametrize("feature_version", [2, 3])
+def test_history_tracking_starts_only_for_explicit_successor_and_preserves_parent(feature_version):
     readiness = SimpleNamespace(continuation=None, causal_record=None)
     assert runner._execution_search_memory(readiness) is None
     readiness.causal_record = SimpleNamespace(model=SimpleNamespace(feature_version=1))
     assert runner._execution_search_memory(readiness) is None
-    readiness.causal_record.model.feature_version = 2
+    readiness.causal_record.model.feature_version = feature_version
     memory = runner._execution_search_memory(readiness)
     assert memory.private_dict()["entries"] == {}
     memory.record("source", "a" * 64, exhausted=True, actions=30, frames=600)

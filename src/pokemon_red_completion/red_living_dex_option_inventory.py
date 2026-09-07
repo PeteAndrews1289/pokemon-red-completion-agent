@@ -34,6 +34,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalBindingSet,
 )
 from pokemon_red_completion.living_dex_option_value import (
+    LIVING_DEX_LEGACY_OPTION_KINDS,
     LivingDexOptionKind,
     LivingDexOptionUnavailableReason,
 )
@@ -382,7 +383,7 @@ def build_verified_red_living_dex_goal_scenario(
             bindings=bindings,
             location_ref=location_ref,
         )
-        for kind in LivingDexOptionKind
+        for kind in LIVING_DEX_LEGACY_OPTION_KINDS
     )
     ordering_seed = canonical_sha256(
         {

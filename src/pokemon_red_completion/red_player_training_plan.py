@@ -17,7 +17,11 @@ from pokemon_red_completion.goal_manager_context_catalog import (
 from pokemon_red_completion.goal_manager_protocol import (
     load_committed_goal_manager_registry_at_revision,
 )
-from pokemon_red_completion.living_dex_player_exploration import EXPLORATION_POLICY_ID
+from pokemon_red_completion.living_dex_player_exploration import (
+    EXPLORATION_POLICY_ID,
+    RECOVERY_EXPLORATION_POLICY_ID,
+    exploration_policy_id,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 
 TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
@@ -99,7 +103,8 @@ class RedPlayerTrainingPlan:
         ):
             raise ValueError("player training scope differs")
         if (
-            document["behavior_policy_id"] != EXPLORATION_POLICY_ID
+            document["behavior_policy_id"]
+            not in {EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID}
             or document["economic_contract"] != "known-spend-and-excess-reserve-v1"
         ):
             raise ValueError("player training behavior differs")
@@ -211,6 +216,7 @@ def declare_red_player_training(
     episode_id: str,
     seed: int,
     decision_limit: int,
+    feature_version: int = 1,
 ) -> RedPlayerTrainingPlan:
     """Authenticate original train assignment without opening any other capture.
 
@@ -255,7 +261,7 @@ def declare_red_player_training(
             "partition": "train",
             "seed": seed,
             "decision_limit": decision_limit,
-            "behavior_policy_id": EXPLORATION_POLICY_ID,
+            "behavior_policy_id": exploration_policy_id(feature_version),
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": catalog.catalog_sha256,
             "context_id": entry.context_id,

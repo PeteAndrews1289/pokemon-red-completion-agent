@@ -265,7 +265,7 @@ def test_goal_scenario_projects_complete_authenticated_menu_without_selecting() 
     )
 
     public = scenario.public_dict()
-    assert public["candidate_count"] == len(LivingDexOptionKind)
+    assert public["candidate_count"] == 8  # Frozen legacy inventory, not the native v3 actor.
     assert public["available_candidate_count"] == 4
     assert public["all_available_executors_authenticated"] is True
     assert public["verified_repeatable_capture"] is True

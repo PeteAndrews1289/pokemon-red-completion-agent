@@ -15,6 +15,7 @@ from dataclasses import dataclass
 
 from pokemon_red_completion.living_dex_option_value import (
     DEFAULT_MAX_IMPORTANCE_WEIGHT,
+    LIVING_DEX_LEGACY_OPTION_KINDS,
     LivingDexObservedArmExample,
     LivingDexOptionAvailability,
     LivingDexOptionKind,
@@ -377,7 +378,7 @@ def _selected_kind_counts(
     examples: Sequence[RedLivingDexCollectedExample],
 ) -> dict[str, int]:
     counts = Counter(_selected_kind(example).value for example in examples)
-    return {kind.value: counts[kind.value] for kind in LivingDexOptionKind}
+    return {kind.value: counts[kind.value] for kind in LIVING_DEX_LEGACY_OPTION_KINDS}
 
 
 def _offered_kind_counts(
@@ -390,7 +391,7 @@ def _offered_kind_counts(
             for candidate in example.adapted.menu.candidates
             if candidate.availability is LivingDexOptionAvailability.AVAILABLE
         )
-    return {kind.value: counts[kind.value] for kind in LivingDexOptionKind}
+    return {kind.value: counts[kind.value] for kind in LIVING_DEX_LEGACY_OPTION_KINDS}
 
 
 __all__ = [

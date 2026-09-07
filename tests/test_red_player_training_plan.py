@@ -16,8 +16,9 @@ import pokemon_red_completion.red_player_training_plan as plans
         ("train", "train", True),
     ],
 )
+@pytest.mark.parametrize("feature_version", [1, 2, 3])
 def test_declaration_uses_original_assignment_not_filename(
-    tmp_path, monkeypatch, partition, other_partition, state_changed
+    tmp_path, monkeypatch, partition, other_partition, state_changed, feature_version
 ):
     # Stub the separately tested catalog authentication only. The declaration's
     # partition and physical-state checks run unchanged below.
@@ -72,11 +73,16 @@ def test_declaration_uses_original_assignment_not_filename(
         episode_id="new-native-episode",
         seed=17,
         decision_limit=4,
+        feature_version=feature_version,
     )
     if partition == other_partition == "train" and not state_changed:
         plan = plans.declare_red_player_training(**kwargs)
         assert plan.document["root_lineage_id"] == "original-root"
         assert plan.document["partition"] == "train"
+        assert plan.document["behavior_policy_id"] == (
+            "living-dex-player-optional-recovery-v3" if feature_version == 3
+            else "living-dex-player-supported-menu-v2"
+        )
     else:
         with pytest.raises(ValueError, match="exclusively train"):
             plans.declare_red_player_training(**kwargs)

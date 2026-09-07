@@ -23,7 +23,14 @@ from pokemon_red_completion.living_dex_goal_policy import (
 )
 
 EXPLORATION_POLICY_ID = "living-dex-player-supported-menu-v2"
+RECOVERY_EXPLORATION_POLICY_ID = "living-dex-player-optional-recovery-v3"
 DETERMINISTIC_POLICY_ID = "living-dex-player-nontraining-v1"
+
+
+def exploration_policy_id(feature_version: int) -> str:
+    if type(feature_version) is not int or feature_version not in (1, 2, 3):
+        raise ValueError("exploration feature version differs")
+    return RECOVERY_EXPLORATION_POLICY_ID if feature_version == 3 else EXPLORATION_POLICY_ID
 
 
 @dataclass(slots=True)
@@ -93,7 +100,7 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
             probabilities[selected_index] = 1.0
         self._metadata = {
             "schema": "pokemon.core.goal-manager-behavior-policy.v1",
-            "behavior_policy_id": EXPLORATION_POLICY_ID
+            "behavior_policy_id": exploration_policy_id(self.model.feature_version)
             if self.training_eligible
             else DETERMINISTIC_POLICY_ID,
             "candidate_probabilities": probabilities,

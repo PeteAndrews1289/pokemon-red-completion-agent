@@ -19,7 +19,10 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionValueModel,
     LivingDexOutcomeStatus,
 )
-from pokemon_red_completion.living_dex_player_exploration import ExploringLivingDexGoalPolicy
+from pokemon_red_completion.living_dex_player_exploration import (
+    ExploringLivingDexGoalPolicy,
+    exploration_policy_id,
+)
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_adapter import (
@@ -61,6 +64,8 @@ def load_red_player_training_episode(
     if (
         plan.document["episode_id"] != episode_id
         or plan.document["model_sha256"] != behavior_model.model_sha256
+        or plan.document["behavior_policy_id"]
+        != exploration_policy_id(behavior_model.feature_version)
     ):
         raise ValueError("player training origin differs")
     sealed = store.find_sealed_record(

@@ -1,7 +1,23 @@
 # Current agent handoffs
 
 
-## Current — V retrieved the precursor; recovery repair qualified
+## In progress — optional recovery without losing old experience
+
+The September 7 session resumed at 18:00 UTC. Native v3 can score optional healing
+alongside productive goals; emergency recovery remains deterministic. Two new
+columns append to the frozen legacy vectors. Actual read-only validation reopened
+all 60 retained examples and replayed all 35 native episodes: 24 excluded decisions
+remain excluded, and every historical candidate prediction is exactly unchanged.
+This is compatibility evidence, not learned recovery or new gameplay.
+
+V/model60 remains the saved endpoint. Next publish the qualified initialization,
+inspect V without input, and collect one genuine model-policy outcome. Retain V's
+original zero-row support using its original behavior model in the mixed-version
+fit. Do not rerun V or relabel an unsupported choice as training.
+[Working plan](work-sessions/2026-09-07-optional-recovery-learning-plan.md). Local storage-safe varied collection stays 2/3.
+Codex owns implementation; no outside reviewer or subagent is active.
+
+## Historical — V retrieved the precursor; recovery repair qualified
 
 V ran once from U/model60:536actions38268frames, zero learned decisions or rows.
 It rotated boxes, retrieved Metapod4, and preserved all25specimens/23living species.

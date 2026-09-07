@@ -86,8 +86,8 @@ def test_builds_all_forty_five_real_provider_seeds_and_exact_family_capacity() -
     assert all(len(seed.profile.providers) == 3 for seed in seeds)
     assert all(seed.terminal_boundary.mode == "land" for seed in seeds)
     assert {
-        seed.option_kind for seed in seeds
-    } == set(LivingDexOptionKind).difference({LivingDexOptionKind.TRADE})
+        seed.option_kind.value for seed in seeds
+    } == {"acquire", "evolve", "develop", "manage_storage", "resupply", "unlock_access", "explore"}
 
 
 def test_seed_is_accepted_by_the_same_root_recipe_with_an_explicit_land_mode() -> None:
