@@ -129,3 +129,17 @@ failure. No state chosen on a new prediction or preferred outcome. Then allow at
 seeds2026090709/10, each from the immediately preceding admitted practice terminal after its
 all-rows-retained fit. Stop and audit if no genuine supported choice remains or after this batch.
 No new mechanics, source expansion, teacher choice, sealed access or full replay in this batch.
+
+## History fit verified; continue the remaining productive follow-up
+
+H selected acquisition with one prior exhausted search (334 actions/22152 frames). Its new failed
+search was retained and fitted model41→42. On that authenticated selected row, removing only
+history changes the prediction vector by up to0.1214233714. This is in-sample sensitivity on one
+row, not independent advantage. History criterion is now measured; checklist4/5.
+
+I and J both sampled bounded exploration and failed without collection change; retain and fit
+both, no deletion or state reset. Their ready terminals still offer actual alternatives. Continue
+at most K/L/M/N with fixed seeds2026090711/12/13/14, up to4 choices apiece, from each immediate
+practice terminal after its all-retained fit. Stop at the first productive post-fit model choice
+and audit; otherwise stop after N and reorient. No sampling-policy change or seed screening.
+This is training under exploration, not a baseline comparison or proof that memory improved play.
