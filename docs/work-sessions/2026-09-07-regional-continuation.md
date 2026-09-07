@@ -114,3 +114,13 @@ from B checkpointe1ef8883 using model45,seed2026090723,four decisions and unchan
 completion-dose bounds. Preserve Route11→Route24 source history, then change only supply.
 Stop and retain on failure. No forced/fallback step enters fitting; admit and fit only if
 genuine exploratory model choices actually occur. No successful-purchase claim is made yet.
+
+### C action-free budget correction, before any execution
+
+The exact restore has929currency, not the2000needed for ten balls. Reduce the declared
+purchase to four balls for800, leaving129. The action-free menu then offers resupply and
+selects it under deterministic safety. C is reduced to ONE decision, not four: qualify this
+resource recovery, preserve its terminal and stop before another wasted survey. It produces
+no fitting row if safety-selected. The source table confirms all local encounter species have
+already been seen; discovery currently checks global knowledge, so local exhaustion is the
+next narrow availability repair. C has not run when this correction is published.
