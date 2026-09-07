@@ -1,6 +1,6 @@
 # Handoff
 
-## Current — mixed-goal wiring qualified; actual feasibility next
+## Current — mixed-goal wiring qualified; stopped at actual feasibility
 
 September 7 session started 12:50 UTC; reassess by14:20, close by14:50.
 Model58 and R's22living/25specimens remain unchanged; no new gameplay or fit.
@@ -10,11 +10,12 @@ The native-goal wrapper accepts zero/one capture sources without sampling a fake
 destination. `fit_incremental_goal_results` retains actual native outcomes and
 intervening zero-row support, never source-proposal credit.136 focused tests pass.
 
-Next check is action-free at the actual R save. Current direct-evolution code does
-not qualify a low-level non-attacking Abra, and its fallback refuses the capped
-escort. Do not run a known-bad training attempt or weaken that guard. The mixed
-checklist is3/5 engineering, not learner progress; wider stage exits are unchanged.
-See [session plan](docs/work-sessions/2026-09-07-mixed-goal-continuation-plan.md).
+Actual action-free check passed historical restore and future objective separation
+under published039ca2d7. Evolution is missing-capability; only restore/capture are
+available and selection remains deterministic_unsupported. Both Abra know only
+Teleport. Zero input/frames/episodes/fits; R/model58 and25specimens preserved.
+The mixed checklist stays3/5, not learner progress. Do not run a known-bad attempt
+or globally remove the old escort cap. Next: [non-attacking-specimen development](docs/work-sessions/2026-09-07-non-attacking-evolution-plan.md).
 
 ## Final current — linked collect/fit/continue closed3/3; model58
 

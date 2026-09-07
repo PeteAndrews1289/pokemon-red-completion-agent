@@ -96,11 +96,11 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-mixed-goal-integration
 
-136 focused checks qualify ordered objectives, zero/one-source native selection and incremental native fitting. Engineering only; model58 and R remain unchanged. Mixed checklist3/5, not new learning.
+136 focused checks qualify mixed-goal wiring. Exact R restore with the ordered new objective passed, but evolution remains unavailable and selection deterministic_unsupported. Zero input/frames/new examples; model58 unchanged. Mixed checklist3/5.
 
-**Deviation:** No stage-exit change. Inspect trainer feasibility before any input: non-attacking low-level trainees and capped escorts are not covered by the prior direct-evolution success.
+**Deviation:** Stopped at the declared pre-input falsifier: low-level non-attacking specimens are not supported by the direct trainer. No stage-exit change, fake choice or consumed live attempt.
 
-**Next:** Action-free prospective objective and actual mixed-menu inspection, then a bounded learned goal only if executable.
+**Next:** Qualify bounded shared-experience development, then a real model-selected mixed goal and retained fit. Preserve R and all25specimens.
 
 ### 2026-09-07-incremental-learning-complete
 

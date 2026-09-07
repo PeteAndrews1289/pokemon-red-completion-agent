@@ -1,6 +1,6 @@
 # Mixed-goal integration — September 7
 
-## Product outcome so far
+## Final product outcome
 
 The mission is a learned player that completes stories and a living collection,
 starting with Red before a compatible unfamiliar Red modification and Crystal.
@@ -27,8 +27,14 @@ exclusion.409package modules and the three changed implementation modules/comman
 pass typing. Lint, documentation, public-artifact and focus checks pass. The
 regression run initially found stale generated source bindings; regeneration and
 the affected focused checks preserve those checks, rather than disabling them.
-Broad regression completion and actual saved-menu results are recorded below when
-available. No external reviewer or subagent was used; this is a Codex self-audit.
+Broad regression recorded7538passes,4stale-fingerprint failures,1skip and1expected
+failure in1918.40seconds. It began before the generated bindings were refreshed
+and before two late reader tests were added. All four failures subsequently passed
+an exact rerun in41.44seconds; the final136focused group includes both late tests.
+An overlapping129-case protocol/focus/roadmap set also passed. These groups must
+not be added together or described as a fresh all-green full-suite run on the final
+tree. GitHub CI34127257431 was still running when inspected; no green remote result
+is claimed. No external reviewer or subagent was used; this is a Codex self-audit.
 
 ## Pre-execution concern
 
@@ -63,3 +69,21 @@ new teacher run, reset, sealed access or Crystal execution is the next step.
 The next learner result must be an actual useful mixed-goal choice and retained
 update. This engineering checklist is not the sustained-Red stage exit and does not
 establish independent learned advantage.
+
+## Actual saved-state falsifier
+
+Published executable039ca2d7 restored R exactly under its original profile, then
+applied the prospective evolution objective. The source count remains one. Actual
+native availability is restore/capture; evolution and storage report missing-capability,
+and resupply reports missing-resource. The scorer reports `deterministic_unsupported`
+with no learned scores. The diagnostic baseline also selects capture; it did not play.
+
+The inspected current box contains Abra10 andAbra12, both with only Teleport. The
+save still contains22living species,25specimens,27registered,zero losses and one
+free current-box slot. Input count, advanced frames, created episodes and fitted
+examples are all zero. This proves the objective-order repair on the real lineage;
+it falsifies the proposed immediate mixed-learning attempt with the current trainer.
+
+[Path-free result](../evidence/red-mixed-goal-feasibility-2026-09-07.json).
+[Prepared next session](../work-sessions/2026-09-07-non-attacking-evolution-plan.md).
+The session stops at its declared boundary; no new gameplay successor is claimed.

@@ -48,3 +48,13 @@ The retained model has58examples and22successful outcomes. Exact22living/25speci
 
 Success is a useful learner-controlled mixed goal and correctly retained update—not another
 profile preflight, forced restoration or full teacher run. Existing global stage exits stand.
+
+## Session result
+
+Items1–3 are ROM-free qualified. Real R restoration and prospective objective application
+passed under published039ca2d7, but item4 falsified immediate execution: evolution remains
+missing-capability and only restore/capture are available. The selector is still
+deterministic_unsupported. Item5 was not attempted. Zero actions, advanced frames, episodes
+or new model examples; model58 and all25specimens remain preserved. The planned stop
+condition was honored. Continue with the [non-attacking-specimen plan](2026-09-07-non-attacking-evolution-plan.md),
+not another source-only cycle or a known-bad evolution attempt.

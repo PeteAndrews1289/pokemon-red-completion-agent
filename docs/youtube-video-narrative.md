@@ -8,6 +8,9 @@ the old run, and a single remaining capture source no longer blocks other native
 The wiring passed136 focused checks; it has not added a training example. The remaining
 question is practical: Abra has no attack, and the old trainer cannot simply reuse the
 capped starter. Do not present a configured evolution target as a successful evolution.
+The actual save confirmed this with zero inputs and frames: the objective changed
+correctly, but the evolution skill stayed unavailable. Show this as a useful failed
+feasibility check and a preserved save, not a new gameplay loss or model-training gain.
 
 ## September7 final scene — the learner carries its own next step
 

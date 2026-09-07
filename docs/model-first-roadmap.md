@@ -7,11 +7,13 @@ contexts reach native goal selection without invented destination samples. Nativ
 incremental fitting is ROM-free qualified, including zero-row support.136 focused
 checks passed. No new gameplay or fit: model58 and R remain the latest endpoint.
 
-The next falsifier is actual evolution feasibility. The low-level duplicate Abra
-cannot attack; the current direct trainer's fallback also excludes the capped
-escort. Verify the real menu without input, then stop/reorient if no genuine
-executable mixed choice exists. Do not replay or relabel deterministic support as
-learning. Mixed checklist3/5 is engineering only; sustained Red remains open.
+The real action-free check passed historical restore and future objective isolation,
+but falsified immediate execution: evolution is missing-capability and the scorer
+remains deterministic_unsupported. The duplicate Abra cannot attack, and the trainer
+also excludes the capped escort. No live trial was consumed. Follow the
+[bounded shared-experience plan](work-sessions/2026-09-07-non-attacking-evolution-plan.md),
+then collect an actual mixed learned outcome. Mixed checklist3/5 is engineering only;
+sustained Red remains open. No teacher replay, reset or invented alternative.
 
 ## Final current — linked learning works; move to mixed goals
 

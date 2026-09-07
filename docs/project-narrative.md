@@ -9,7 +9,11 @@ with zero/one source now address those assumptions, with retained-outcome fittin
 that keeps support separate from learned choices.136 focused tests qualify that
 wiring, not new gameplay. The next test asks whether the actual non-attacking trainee
 can be developed safely. Prior direct-attacking evolution success does not answer it.
-The model remains at58 examples and the verified collection at22living species.
+The actual saved-state check confirmed that limitation without input: history was
+preserved, the new objective applied, but evolution remained unavailable. We stopped
+before a known-bad attempt. The next reusable capability separates an experience
+recipient from the battle finisher. The model remains at58 examples and the verified
+collection at22living species; this was engineering progress, not new learning.
 
 ## September7 closeout — two productive steps without manual relaunching
 

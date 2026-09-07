@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Verify the actual mixed-goal menu and safe non-attacking-trainee development before a model-selected continuation; stop if the existing trainer cannot execute it.
+- Next decision: Qualify reusable shared-experience development for non-attacking specimens; then collect and fit an actual mixed-goal outcome from the retained save.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | Model dbfedde6 retains58 outcomes,22successful,all57 prior retained. R completed two successful linked source choices with automatic fits:22living/25specimens/27registered,1ball109currency. Model58 unplayed. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Does a prospective duplicate-Abra evolution objective expose an actually executable mixed goal at R, preserving historical profiles and the living collection? |
+| Cheapest falsifier | Can a bounded shared-experience quantum develop the non-attacking recipient without losses or a recovery loop, then expose a genuinely executable evolution alternative? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-mixed-goal-integration** · status **active** · evidence [qualification](docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json)
+**2026-09-07-mixed-goal-integration** · status **active** · evidence [falsification](docs/evidence/red-mixed-goal-feasibility-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Changing goals without rewriting history and retaining actual mixed outcomes unblocks sustained collection; no preflight or support action counts as learning. |
-| Learning output | Engineering only: zero new gameplay or fitted examples. Model58 and R's22living/25specimens remain the latest measured endpoint. |
+| Learning output | Engineering and action-free falsification only: zero input, frames, episodes or new fitted examples. Exact R/model58 restored;22living/25specimens preserved. Mixed checklist3/5 remains open. |
 | Authority delta | No new played authority yet. Ordered future objectives, zero/one-source native selection and retained native-outcome fitting are ROM-free qualified. |
-| Transfer result | ROM-free checks vary transition ordering, source cardinality and support-versus-learned outcomes; no gameplay generalization or cross-title transfer measured. |
-| Blocker | Evolution training feasibility remains unverified at R: low-level Abra has no damaging move and the current fallback refuses a capped escort. Do not equate a configured objective with an executable skill. |
-| Decision | Inspect the actual saved-state menu before any input. Stop on unsupported evolution execution rather than consuming a known-bad lesson or fabricating a second capture source. |
-| Next session | Verify the actual mixed-goal menu and safe non-attacking-trainee development before a model-selected continuation; stop if the existing trainer cannot execute it. |
-| Next falsifier | Does a prospective duplicate-Abra evolution objective expose an actually executable mixed goal at R, preserving historical profiles and the living collection? |
-| Stop condition | Reorient by14:20UTC without a useful learner choice; close by14:50UTC. Stop on historical-profile mutation, lost specimens, unsupported battle control or no genuine alternative. Never retry Q/R, reset resources or open sealed/Crystal contexts. |
+| Transfer result | ROM-free variation and exact same-save preflight only. Historical restore and prospective objective separation passed; no gameplay generalization or cross-title transfer measured. |
+| Blocker | Exact R inspection confirms evolution missing-capability, resupply missing-resource and storage missing-capability. Only restore/capture are available; the selector remains deterministic_unsupported. Both Abra know only Teleport. |
+| Decision | Stop the session at its pre-input falsifier. Next qualify bounded non-attacking-specimen development, preserving old parity-trainer behavior and all retained specimens; no known-bad evolution trial. |
+| Next session | Qualify reusable shared-experience development for non-attacking specimens; then collect and fit an actual mixed-goal outcome from the retained save. |
+| Next falsifier | Can a bounded shared-experience quantum develop the non-attacking recipient without losses or a recovery loop, then expose a genuinely executable evolution alternative? |
+| Stop condition | Reached before input: no executable evolution alternative with the current trainer. No successor claimed. Preserve R/model58; no retry, resource reset, sealed access or full replay. Reorient before the next development session. |
 
 ### Stop conditions
 

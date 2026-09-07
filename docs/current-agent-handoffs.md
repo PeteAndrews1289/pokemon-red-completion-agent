@@ -3,9 +3,10 @@
 Current September7 mixed-goal session: objective ordering and zero/one-source native
 selection are qualified; native incremental fitting retains actual outcomes and
 zero-row support.136 focused tests, no new gameplay/fit. R/model58 stays intact.
-Codex owns the action-free feasibility check and publication. No outside audit is
-pending. Challenge the low-level non-attacking trainee and capped-escort limitation
-before claiming evolution is an available mixed-goal alternative.
+The actual action-free feasibility check restored R and changed only the future
+objective, but evolution remains unavailable. No successor claimed; next qualify
+bounded shared-experience development. Codex owns implementation/publication and
+no outside audit is pending. Preserve all25specimens and every prior example.
 
 Final current is R/model58: two successful linked source choices and fits; all earlier rows
 retained.22living/25specimens/27registered,1ball109currency,one boxslot. Actual save verified.
