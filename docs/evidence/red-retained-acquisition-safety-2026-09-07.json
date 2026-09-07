@@ -137,7 +137,9 @@
     "rom_free_qualified": true,
     "live_qualified": false,
     "no_aa_replay": true,
-    "source_bundle_sha256": "733e2ec2f9d3d1fe80e7c84a2a52029368bfbcdb850e8637e3a9ed7549d57583"
+    "source_bundle_sha256": "a069d4655c7a155b45f9bb68e90adc20d1362c491bd5c74322b01491f44c2c8e",
+    "availability_projection_preserved": true,
+    "safety_enforced_at_execution": true
   },
   "boundaries": {
     "independent_evaluation": false,

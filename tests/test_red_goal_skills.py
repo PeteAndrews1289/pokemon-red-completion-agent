@@ -698,13 +698,15 @@ def test_area_survey_stops_on_faint_without_another_search_or_normalization(when
     assert report.evidence["encounters_seen"] == int(when != "before_execution")
     assert calls == ([] if when == "before_execution" else ["seek", when.removeprefix("after_")])
     assert binding.verify(report).failure_reason is GoalFailureReason.RESOURCE_LOST
-    assert not provider.resource_availability(adapter.observe()).executable
+    # Availability participates in older checkpoint fingerprints. Keep its
+    # projection stable; the execution-time safety check prevents searching.
+    assert provider.resource_availability(adapter.observe()).executable
     # A fabricated safety marker cannot invent a faint in the referee's fresh read.
     reader.raw = replace(reader.raw, party_hp=(180,))
     assert binding.verify(report).failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
 
 
-def test_area_survey_rejects_a_fainted_non_lead_before_input():
+def test_area_survey_preserves_old_offer_but_stops_for_fainted_non_lead_before_input():
     raw = replace(
         _raw(poke_balls=20), party_count=2, party_species_ids=(28, 114),
         party_levels=(55, 10), party_hp=(180, 0), party_max_hp=(180, 35),
@@ -720,7 +722,11 @@ def test_area_survey_rejects_a_fainted_non_lead_before_input():
         actions=actions, emulator=port, adapter=adapter,
     )
     assert adapter.observe().party.members[0].hp == 180
-    assert provider.offer(adapter.observe()).binding is None
+    binding = provider.offer(adapter.observe()).binding
+    assert binding is not None
+    report = binding.execute()
+    assert report.evidence["safety_stopped"] is True
+    assert binding.verify(report).failure_reason is GoalFailureReason.RESOURCE_LOST
     assert actions.actions_executed == 0
     reader.raw = replace(raw, party_hp=(180, 35))
     assert provider.offer(adapter.observe()).binding is not None

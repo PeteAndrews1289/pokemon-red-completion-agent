@@ -1263,8 +1263,7 @@ class RedAreaSurveyGoalProvider:
     def resource_availability(self, observation: RedGoalObservation) -> RedGoalSkillAvailability:
         """Check source needs and real inventory without inventing a source location."""
 
-        if (observation.raw.battle_state or not observation.input_ready
-                or any(member.hp <= 0 for member in observation.party.members)):
+        if observation.raw.battle_state or not observation.input_ready:
             return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.TEMPORARILY_BLOCKED,
             )

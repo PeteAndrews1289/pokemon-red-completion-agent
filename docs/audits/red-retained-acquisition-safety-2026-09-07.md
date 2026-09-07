@@ -41,7 +41,7 @@ that every wild encounter was a missed capture opportunity.
 
 The repair adds a fresh safety check between semantic survey actions and before
 returning capture-quota success. It retains captures/flees/encounters on safety
-stop, prevents post-capture normalization when already unsafe, masks acquisition
+stop, prevents post-capture normalization when already unsafe, stops execution
 for an already-fainted party and independently verifies resource_lost rather
 than converting fainting into ordinary search exhaustion. Fabricated safety
 markers cannot fabricate HP loss. The source choice is never replaced.
@@ -54,9 +54,14 @@ The broader local test run caught a roadmap test whose missing-evidence probe
 assumed the first live checklist item was already complete. Its fixture now
 explicitly marks an item complete before removing evidence, and separately
 permits an uncompleted item with no evidence. The product rule was not weakened.
-The final full ROM-free suite passed: **7,722 passed, one skipped, one expected
-failure**, in 16m49s. The 230-test affected-path group also passed on the final
-runtime source. Lint, documentation/focus and public-artifact checks passed.
+The broad ROM-free suite passed: **7,722 passed, one skipped, one expected
+failure**, in 16m49s. A subsequent read-only compatibility probe found that the
+new fainted-party availability mask changed the historical checkpoint's semantic
+fingerprint. That mask was removed; the execution-time stop remains. No stored
+hash was rewritten and verification was not bypassed. The final runtime change
+passed the 225-test affected gameplay/learning group; protocol checks are separate.
+The full suite result predates this compatibility adjustment, not the other way
+around. Lint, documentation/focus and public-artifact checks passed.
 
 ## Reorientation
 

@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "falsification",
           "path": "docs/evidence/red-retained-acquisition-safety-2026-09-07.json",
-          "sha256": "7a8575e2d23b31dafca5af558ed45216ce62d4a5d5483ccee4202efc69237213"
+          "sha256": "dc206dd580fe5fe204c08fbbbf937269af2f7daf03eb4d94cfc09fea2f99b4a9"
         },
         "learning_output": "62 to 63 outcomes; 25 successful, 53 distinct selected rows. One failed source choice and party cost fitted; 41 native episodes and 13 regional entries retained. Zero new specimens.",
         "next_falsifier": "Can AA's fainted party be recovered without a reset, and can a freshly prepared lead support a useful model-selected source capture without another unsafe search?",

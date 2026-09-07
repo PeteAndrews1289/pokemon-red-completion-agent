@@ -21,6 +21,9 @@ or live recovery. Next recover AA legitimately, prepare a capability-derived saf
 lead, then play one fresh model-selected source. AA is consumed; do not reset to
 Z or automatically run AB–AD. Phase 3 remains current, the previous 3/3 milestone is
 archived intact, and the new safe-chain checklist is prospective 0/3.
+Keep the old availability projection: changing it broke historical checkpoint
+fingerprints. The final repair stops unsafe survey execution instead; no saved
+hash is rewritten and no restore verification is bypassed.
 
 [Audit](docs/audits/red-retained-acquisition-safety-2026-09-07.md).
 [Next plan](docs/work-sessions/2026-09-07-safe-retained-acquisition-plan.md).

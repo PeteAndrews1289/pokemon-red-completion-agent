@@ -25,6 +25,8 @@ milestone remains closed 3/3; the next checklist is prospective 0/3, not a phase
    choices, 63 examples). AA retains 25 specimens, 30 registrations, seven balls and209
    currency at Route 5 (9,13); Beedrill level 10 has 0/35 HP. Drowzee level 13 is now in the party,
    Butterfree is boxed, active box is 1 with 20 free slots. Do not undo these changes.
+   Availability contributes to old checkpoint fingerprints: preserve that projection
+   and enforce safety at execution unless an explicit compatibility design is tested.
 2. Connect safe capture-search preparation through existing indexed party-swap
    mechanics. Choose by observed capability/health, not a species name; reject stale
    plans and preserve the complete specimen ledger, items and money. Preparation
