@@ -1,5 +1,31 @@
 # Agent review and adjudication log
 
+## Flash bounded follow-up — September 7 safe-capture integration
+
+Accepted after review: eight independent recovery route-interruption tests from
+Flash3.8High in its isolated branch. They exercise the actual wrapper around an
+injected interruption handler: changed/truncated party, newly fainted member,
+unsettled field and propagated errors. No emulator, private save or publication
+access was granted. Its initial directory-list denial was resolved with exact
+absolute file paths, not broader permissions.
+
+The unchanged Flash draft is preserved locally as commit `b8ce5d43` on
+`agent/flash-capture-guard-tests-20260907`; Codex's reviewed integration is
+published as `1a2ff13f` on the existing PR236 branch. Main was not changed.
+
+Codex corrected formatting, ran all eight, and independently added fresh-binding,
+stale-state, selected-source and real trainer-move safety tests. Final focused
+integration94passed; typecheck416sourcefiles. The real recovery then succeeded;
+the subsequent source search failed safely with no catch and was fitted honestly.
+Neither this review nor the live trial exercises every trainer interruption or
+proves a general capture advantage. Claude was not used for audit.
+
+Verdict: this narrow draft/review loop was useful. Keep Flash assignments bounded
+by interfaces and independent acceptance tests; do not infer broad architecture
+readiness or a measured token saving. AstraExtraHigh is a task choice this session,
+not a controlled comparison with Sol or a reason to default to Max.
+See [full session record](work-sessions/2026-09-07-safe-capture-integration.md).
+
 ## Flash direct-write loop — September 7
 
 Accepted: scoped isolated file editing and reuse of existing Center mechanics.

@@ -1,5 +1,26 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 7 live follow-through — recovery worked; capture is still uncertain
+
+The engineering repair now has a real in-game result. The system recovered the
+fainted retained party through a Center, selected a healthy offensive escort, and
+then played model63's sampled Route24 destination. It did not gain a Pokemon:
+ten encounters produced two Abra opportunities and two unsuccessful throws.
+Unlike AA, all six members finished healthy, with all25 specimens preserved.
+
+The failed destination outcome was fitted as example64; forced healing and party
+preparation earned no extra label. This is a useful distinction for the story:
+repairing an execution failure and improving the probability of useful collection
+are separate problems. The safe-chain checklist is2/3, not a Phase3 completion.
+Next comes bounded resource-aware continuation from the retained state, not resets
+or another teacher. Model64 has not played and no generalization claim is made.
+
+Flash's smaller follow-up task produced eight usable independent route-guard tests
+after a scoped-file permission correction. Codex reviewed them, integrated safe
+capture/PC rebinding, tested actual mechanics and ran the live trial. This is evidence
+for bounded collaboration, not proof that broad Flash rewrites are safe or cheaper.
+See [the session audit](audits/red-safe-capture-integration-2026-09-07.md).
+
 ## September 7 engineering update — faster drafts still need evidence
 
 Flash now drafts bounded components with scoped file access in an isolated worktree.

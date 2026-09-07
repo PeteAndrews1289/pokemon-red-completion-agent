@@ -1,5 +1,20 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 7 footage beat — a safe failure is different from a broken player
+
+Show AA's fainted Beedrill, then the real Center recovery and Blastoise taking the
+lead. Follow with the model's exploratory Route24 choice: ten wild encounters,
+two failed Abra throws, then a controlled stop with everyone healthy. Do not edit
+this into a successful capture montage. All25 specimens remain; five balls remain.
+
+Overlay: recovery163actions/9156frames, capture664actions/36600frames, fit63to64.
+Only the played destination outcome becomes a new training row. Healing and party
+ordering are deterministic support, not additional learned victories.
+The narrative turn is that skill composition improved while productive collection
+remained unfinished. Safe-chain2/3 does not mean Phase3 is67%done.
+The next test is finite resource-aware search continuation from the real saved
+endpoint. The long-term cross-game living-Dex goal remains unchanged.
+
 ## September 7 development beat — draft, challenge, repair
 
 Show the isolated Flash draft beside the test failures it initially missed, followed

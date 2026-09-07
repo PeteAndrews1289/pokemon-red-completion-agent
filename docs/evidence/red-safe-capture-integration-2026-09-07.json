@@ -1,0 +1,180 @@
+{
+  "schema": "pokemon.red.safe-capture-integration.v1",
+  "classification": "Legitimate retained recovery succeeded; a fresh learned destination search failed safely and was fitted",
+  "source_commit": "1a2ff13f137562dd4b04c00e241a283821dfa601",
+  "source_bundle_sha256": "bf24a117a32308ed6cd0bbc3cfe26e941e59767c12838fd40f8b3ff50eeb41b9",
+  "recovery": {
+    "episode_id": "red-safe-collection-20260907-recovery-causal",
+    "manifest_sha256": "edf847a2c0c2b9e8a32c9a76ec704159814f3ddb1df69c0687cfaaf7eaf829f8",
+    "checkpoint_sha256": "e83666773816c93949aad6f5e0499f53b34abf620f486718546cf2d84e94cbf2",
+    "status": "succeeded",
+    "actions": 163,
+    "frames": 9156,
+    "model_queries": 0,
+    "training_rows": 0,
+    "all_six_members_healed": true,
+    "specimens_preserved": 25
+  },
+  "capture": {
+    "episode_id": "red-safe-collection-20260907-capture-causal",
+    "manifest_sha256": "1b59c9b37814df3a7afb562b06ed584e56ea5f56d03b26e4dec0ba4c8b2f831e",
+    "checkpoint_sha256": "926259c30e0c915bbf764dfd69843a82fa39ea8917d17339187e6216c5e8a3ae",
+    "choice_record_sha256": "c7bfa1e3d9f7b06c1e21ca444a46ec20a7cc254b2d526741c169f7e92e7bca7a",
+    "outcome_record_sha256": "d0092bd1047cd126d505fe3f1ae9482727c0583bdd820bfd53b3a546be893a95",
+    "behavior_model_sha256": "7b29e6223c96ce0532bdeade28ad05a7cd1096357540cd50b304c26b52e6c33c",
+    "candidate_sources": [
+      "wild:Route5:grass",
+      "wild:Route24:grass"
+    ],
+    "selected_source": "wild:Route24:grass",
+    "selected_probability": 0.16370413599349853,
+    "status": "failed",
+    "failure_reason": "search_exhausted",
+    "actions": 664,
+    "frames": 36600,
+    "verified_collection_gain": 0,
+    "capture_support": {
+      "escape_setup_bypasses": 2,
+      "party_preparations": 0,
+      "status_attempts": 0,
+      "verified_status_observations": 0
+    }
+  },
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 25,
+    "registered_species": 30,
+    "required_specimens_remaining": 95,
+    "required_specimens_sha256": "8923e44470ea8ab4ec6f191286d4986bcc5a087190ee0fa45922e370d15a8c06",
+    "retained_captures": 25,
+    "specimen_ledger_sha256": "bd96c06b940b11e9f09c0f257a775e4dc7e2ce21b788d43402125708feb2b947",
+    "storage_headroom": 20,
+    "total_living_specimens": 25,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "capture_items_before": 7,
+    "capture_items_after": 5,
+    "money_before": 209,
+    "money_after": 209,
+    "party_hp_unchanged_after_recovery": true,
+    "undeclared_specimen_losses": 0
+  },
+  "diagnosis": {
+    "observed_encounters": 10,
+    "target_encounters": 2,
+    "target_species": "Abra",
+    "target_levels": [
+      8,
+      10
+    ],
+    "balls_spent": 2,
+    "all_observed_party_members_remained_living": true,
+    "controller_execution_errors": 0,
+    "trainer_interruption_exercised_in_live_capture": false,
+    "observation": "Two full-health Abra encounters each consumed a ball, neither retained a capture. The finite search exhausted with five balls and the healthy party remaining.",
+    "limitation": "The typed failure and action-linked snapshots establish safe bounded no-catch, not a capture-efficiency advantage. The full survey termination counters are not persisted in the parent step, so the exact sub-budget that ended searching is not independently reported.",
+    "policy_note": "Route24 was sampled by the exploratory policy at probability 0.163704; Route5 had the higher score. The unused source was not labeled."
+  },
+  "training": {
+    "retained_examples": 64,
+    "successful_examples": 25,
+    "distinct_selected_feature_rows": 54,
+    "new_examples": 1,
+    "model_fitted": true,
+    "model_sha256": "657e621e0b13c26c04387721899dcb3242579c3cfa89b0b62fad0e52ea794c9e",
+    "model_record_sha256": "a0aff57fd824c9c264f3a2e8ff39c453d1001173b8bbe716a6abfb795667badc",
+    "corpus_sha256": "35efbf961c337b9507c5e72cd4673777233814c04f7b0a0f7cec6d08d59be93e",
+    "corpus_record_sha256": "e32e451e349640199889a6debb893b9c61f11f513f95f324aa2c48e46837623a",
+    "prior_rows_retained": true,
+    "retained_native_episodes": 43,
+    "retained_regional_choices": 14,
+    "parent_learning_examples": 0,
+    "recovery_learning_examples": 0,
+    "unselected_action_targets": 0,
+    "updated_model_has_played": false
+  },
+  "observed_outcome": {
+    "censor_reason": null,
+    "schema": "pokemon.core.living-dex-observed-outcome.v1",
+    "status": "settled",
+    "target_names": [
+      "verified_success",
+      "completion_gain",
+      "dependency_unlock_gain",
+      "action_cost",
+      "frame_cost",
+      "resource_cost",
+      "party_cost",
+      "storage_cost",
+      "irreversible_loss"
+    ],
+    "target_values": [
+      0,
+      0,
+      0,
+      0.022133333333333335,
+      0.0122,
+      0.07692307692307693,
+      0,
+      0,
+      0
+    ]
+  },
+  "read_only_audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "input_ready": true,
+    "in_battle": false,
+    "location": [
+      35,
+      5,
+      30
+    ],
+    "active_box": 1,
+    "box_counts": [
+      19,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "prior_model_inventory_verified": true
+  },
+  "verification": {
+    "focused_integration_tests_passed": 94,
+    "flash_independent_route_tests_passed": 8,
+    "source_files_typechecked": 416,
+    "prospective_registry_tests_passed_after_regeneration": 39,
+    "full_local_suite": "7807 passed, 3 stale-registry failures, 1 skipped, 1 xfailed, 3 deselected in 1943.11s. All 39 registry tests passed after regeneration; final focused94 tests also passed. This was not a second all-green full-suite run.",
+    "source_ci_run": 34168343613,
+    "source_ci_status": "pending_at_gameplay"
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0
+  },
+  "milestone": {
+    "title": "Safe retained acquisition chain",
+    "verified_items": 2,
+    "total_items": 3,
+    "productive_source_continuation": false,
+    "phase_three_complete": false
+  }
+}

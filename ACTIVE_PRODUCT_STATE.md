@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry.
+- Next decision: Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model63 retains 63 real outcomes, 25 successful and 53 distinct selected rows. AA selected Route5 from two genuine destinations and failed with no capture; its actual party cost is fitted. All 25 specimens, seven balls and 209 currency remain; Beedrill is fainted. Model63 has not played. |
+| Authority now | Model64 retains64 real outcomes,25successful and54distinct rows. Model63 selectedRoute24 and failed safely after ten encounters/two ball spends. All25specimens, five balls209currency and six healthy members remain. Recovery was zero-row support; model64 has not played. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can AA's fainted party be recovered without a reset, and can a freshly prepared lead support a useful model-selected source capture without another unsafe search? |
+| Cheapest falsifier | Can a resource-bounded continuation of a healthy but unsuccessful search retain a useful model-selected capture without hiding prior costs? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-retained-acquisition-safety** · status **active** · evidence [falsification](docs/evidence/red-retained-acquisition-safety-2026-09-07.json)
+**2026-09-07-safe-capture-integration** · status **active** · evidence [falsification](docs/evidence/red-safe-capture-integration-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A real destination choice exposed a composition failure between evolution and capture. Keep the failed experience and fix the actual safety handoff, not a new teacher or full replay. |
-| Learning output | 62 to 63 outcomes; 25 successful, 53 distinct selected rows. One failed source choice and party cost fitted; 41 native episodes and 13 regional entries retained. Zero new specimens. |
-| Authority delta | Model62 chose Route5 versus Route24 and controlled the played destination. Forced capture, helper retrieval and box rotation earned zero extra labels. |
-| Transfer result | Exact AA terminal and prior-data retention verified without input; regression tests stop searching after a faint. Repair is not yet live-qualified; no independent advantage or transfer claim. |
-| Blocker | Beedrill remained the lead after evolving, then fainted during escape; the old survey continued. AA's retained state needs recovery and a safer lead before fresh capture play. |
-| Decision | Stop the planned chain at AA. Retain its failure/model63, add the minimal search-stop guard, and prepare a recovery-plus-acquisition session. Phase3 exit is unchanged. |
-| Next session | Recover AA's retained party through legitimate mechanics, qualify a safe capture-search lead, then let model63 choose one fresh reachable source. Preserve AA; no reset or retry. |
-| Next falsifier | Can AA's fainted party be recovered without a reset, and can a freshly prepared lead support a useful model-selected source capture without another unsafe search? |
-| Stop condition | AA and all earlier attempts consumed; AB-AD not executed. No retry/reset, hidden healing, protected-specimen sacrifice, duplicated labels or broad route rewrite. |
+| Product alignment | Working skills now compose from a fainted retained party into healthy capture search. The remaining test is useful collection with measured search and resource costs; a failed fit is not proof of stronger play. |
+| Learning output | 63 to 64 actual outcomes; 25 successful and 54 distinct selected rows. All63 earlier rows and43native/14regional entries retained. No collection gain. |
+| Authority delta | Model63 sampled Route24 versus Route5 and controlled the played destination. Deterministic recovery and forced capture parents earned zero extra rows. |
+| Transfer result | Exact historical and new-mode restores plus full model inventory verified without input. Preparation tests vary roster/HP/PP and stale source state; same-lineage gameplay is not independent or Crystal transfer. |
+| Blocker | Safe recovery and transport worked. Ten wild encounters included two Abra; two balls were spent with no catch. Productive acquisition remains unverified, not another observed navigation or fainting failure. |
+| Decision | Stop at the declared failed search, retain healthy Route24/model64 and all earlier failures. Safe-chain2/3, Phase3 unchanged. Next qualify finite resource-aware continuation instead of rebuilding working recovery. |
+| Next session | Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher. |
+| Next falsifier | Can a resource-bounded continuation of a healthy but unsuccessful search retain a useful model-selected capture without hiding prior costs? |
+| Stop condition | Recovery and capture consumed. No retry/reset, hidden healing, counterfactual labels or new teacher. A fresh future continuation must retain this endpoint/model and stop at unsafe state or reserves. |
 
 ### Stop conditions
 

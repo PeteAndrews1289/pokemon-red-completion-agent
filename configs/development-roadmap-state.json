@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-retained-acquisition-safety",
+  "as_of_session": "2026-09-07-safe-capture-integration",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-retained-acquisition-safety-2026-09-07.json"
+      "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
     },
     "red-story": {
       "status": "planned",
@@ -43,14 +43,14 @@
       {
         "id": "retained-party-recovery",
         "label": "Recover the actual retained party",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
       },
       {
         "id": "capture-ready-lead",
         "label": "Qualify safe capture-search preparation",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
       },
       {
         "id": "productive-source-continuation",
@@ -240,6 +240,12 @@
       "result": "AA selected Route 5 and failed: no capture, Beedrill fainted. All 25 specimens, seven balls and 209 currency retained; model62 to model63, all prior rows preserved. Exact save verified.",
       "deviation": "Planned2-4-step chain stopped at its first failed skill. Minimal ROM-free search-stop repair added; no retry or live repair claim. Prior3/3 milestone archived intact; new recovery checklist is prospective0/3, not a Phase3 percentage.",
       "next": "Scoped Flash recovery draft and Codex integration pass 272 targeted ROM-free tests; no live recovery or new fit. Finish capture/PC lead preparation and verify old-save/new-runtime behavior, then legitimately recover AA and let model63 choose a fresh source. Preserve AA; no reset or retry."
+    },
+    {
+      "session": "2026-09-07-safe-capture-integration",
+      "result": "Recovery succeeded163actions/9156frames. Fresh Route24 choice failed safely664actions/36600frames: ten encounters, two Abra throws, no capture. Model63to64, allpriorrows/25specimensretained. Safe-chain2/3.",
+      "deviation": "Stopped on the preregistered failed-search boundary. No reset/retry or easier replacement for productive capture. Flash contributed eight reviewed tests; engineering is now live-qualified but does not close Phase3.",
+      "next": "Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher."
     }
   ],
   "closed_milestones": [

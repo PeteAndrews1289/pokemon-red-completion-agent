@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-retained-acquisition-safety**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-07-safe-capture-integration**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Safe retained acquisition chain: 0/3 acceptance items (0%).**
+**Safe retained acquisition chain: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Recover the actual retained party
-- [ ] Qualify safe capture-search preparation
+- [x] Recover the actual retained party ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
+- [x] Qualify safe capture-search preparation ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
 - [ ] Retain and fit a useful source capture
 
-Current model: **63 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **64 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-retained-acquisition-safety-2026-09-07.json)
+[Current evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-07-safe-capture-integration
+
+Recovery succeeded163actions/9156frames. Fresh Route24 choice failed safely664actions/36600frames: ten encounters, two Abra throws, no capture. Model63to64, allpriorrows/25specimensretained. Safe-chain2/3.
+
+**Deviation:** Stopped on the preregistered failed-search boundary. No reset/retry or easier replacement for productive capture. Flash contributed eight reviewed tests; engineering is now live-qualified but does not close Phase3.
+
+**Next:** Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher.
 
 ### 2026-09-07-retained-acquisition-safety
 

@@ -58,3 +58,39 @@ Remaining broad suite is pending at this checkpoint; no live qualification claim
 Quota after Flash: Gemini 83.35% five-hour / 95.33% weekly remaining, checked September 7
 about 6:42 p.m. Eastern. Resets tonight 10:11 p.m. and September 11, 7:22 p.m. respectively.
 Account-wide snapshot, not isolated task billing. Claude was not used.
+
+## Live closeout and reorientation
+
+Published1a2ff13f, then restored AA exactly under its original observer mode.
+The new mode offered only forced recovery; it succeeded163actions/9156frames,
+all25specimens retained and all six healthy. Blastoise64 became the safe lead.
+The healthy retained endpoint reopened without input and exposed Route5/Route24.
+
+Model63 sampled Route24 at0.163704. Its new consumed attempt exhausted search
+after664actions/36600frames: ten encounters, two Abra and two unsuccessful ball
+spends. No new faint, controller execution error, trainer battle or specimen loss.
+Five balls209currency remain, exactRoute24(5,30), inputready outside battle.
+
+The actual failure fitted63to64;25successful/54distinct rows,43native/14regional
+entries, all63earlier examples and both zero-row support parents preserved.
+Model64 has not played. The same safe-chain checklist is2/3; useful capture is
+still required. Stopped at the declared failure boundary without replay or reset.
+
+The private fit wrapper's first two read-only preparations refused reused output
+and pair identity before fitting. A distinct unused preparation identity fixed
+this; the consumed game records and original training plans were not changed.
+Exactly one fit and an independent action-free endpoint/inventory audit completed.
+
+Full local suite:7,807passed, three pre-regeneration registry failures, one skip,
+one expected failure, three deselected in32m23s. All39registry checks passed after
+the fix; the final94focused integration tests passed separately. Do not describe
+this as an all-green full-suite rerun. No additional gameplay or fitting is active.
+
+Final closeout:136focused dashboard/roadmap/focus/preparation/guard tests passed;
+documentation links, generated focus, public-artifact scan, lint and whitespace
+passed. The infographic was rendered and inspected, and the live overview API
+correctly exposes model64,25specimens,five balls and the saved failed-search state.
+
+[Audit, quota and next-session plan](../audits/red-safe-capture-integration-2026-09-07.md).
+No NorthStar requirement or Phase3 exit was changed. AstraExtraHigh was used for
+integration; no measured Sol comparison or per-model quota multiplier is claimed.

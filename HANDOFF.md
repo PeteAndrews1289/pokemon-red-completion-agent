@@ -1,5 +1,43 @@
 # Handoff
 
+## Current — real recovery, safe failed search, model64 retained
+
+The actual fainted AA party recovered through a Pokemon Center: 163 actions and
+9,156 frames, all six members healthy and all25 specimens preserved. Capability-
+derived preparation put Blastoise64 first. Forced recovery earned zero labels.
+
+Model63 then sampled Route24 over Route5 with probability0.163704 (Route5 had the
+higher score). The destination controlled the played attempt: 664 actions/36,600
+frames, ten wild encounters including two Abra, two unsuccessful ball spends,
+zero captures. Search exhausted safely; all six members remain at full HP.
+No controller execution errors or trainer battles occurred in this capture trial.
+
+Model64 now retains64 outcomes,25successful and54distinct selected rows. All63
+earlier rows,43native episodes and14regional choices are retained, including the
+zero-row recovery/capture parents. The exact terminal reopened without input:
+Route24(5,30),25living species/25specimens,30registrations,five balls209currency,
+activebox1 with20slots. Model64 has not played; this fit is not an advantage test.
+
+**Safe retained acquisition is2/3; Phase3 is still current.** Productive capture
+is deliberately unfinished. Stop here at the declared failed-search boundary.
+Never retry AA or these two consumed episodes, reset to their healthy parents,
+auto-launch AB–AD, or treat the unselected source as a training target.
+
+Next: use this healthy Route24/model64 endpoint to qualify a finite resource-aware
+search continuation with the existing collector, then one or two fresh real choices.
+Preserve search costs, stop at unsafe reserves, and fit actual outcomes only.
+Do not build another teacher or repeat already-working recovery without need.
+
+Gameplay/fit source1a2ff13f, package bundlebf24a117. Published on the existingPR236
+branch, not merged main. Local94focused tests and416source-file type checks pass;
+eight independently drafted Flash guard tests were reviewed and passed. The broad
+suite and publication CI are documented separately in the session audit.
+
+[Audit and exact next step](docs/audits/red-safe-capture-integration-2026-09-07.md).
+Recommended next session: Astra High, Fast off for bounded continuation and trace
+review; Extra High for a consequential design blocker. No measured model-cost ratio.
+
+
 ## September 7 — scoped Flash drafting and Codex integration review
 
 Flash was granted file access only to its isolated worktree source, tests and docs.

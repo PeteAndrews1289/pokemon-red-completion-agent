@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 UTC",
+  "location": "Route 24 — search exhausted; all six healthy, no new capture",
+  "registered_species": 30,
+  "living_species": 25,
+  "specimens": 25,
+  "capture_items": 5,
+  "money": 209,
+  "checkpoint_sha256": "926259c30e0c915bbf764dfd69843a82fa39ea8917d17339187e6216c5e8a3ae",
+  "live": false,
+  "controller_actions": 0
+}
