@@ -94,6 +94,12 @@ class PokemonRedBattleCatalog:
         effect = _MOVE_EFFECT_BY_ID[identifier]
         return {"SLEEP_EFFECT": "sleep", "PARALYZE_EFFECT": "paralysis"}.get(effect)
 
+    def can_end_wild_encounter(self, move_ref: str, /) -> bool:
+        """Escape-effect capability, not a prediction that the move will succeed."""
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        self.resolve_move(move_ref)
+        return _MOVE_EFFECT_BY_ID[identifier] == "SWITCH_AND_TELEPORT_EFFECT"
+
     def type_effectiveness(
         self,
         attacking_type: str,

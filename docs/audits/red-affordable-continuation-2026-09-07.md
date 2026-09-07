@@ -1,5 +1,34 @@
 # Affordable continuation — September 7
 
+## O result: resources restored, not a learned choice
+
+O successfully bought five balls and restored party health:877actions54612frames total.
+The exact terminal retains20living species/22specimens/25registered,5balls109currency,
+21recovery items and a healthy Drowzee13 with17HypnosisPP. Three healing items were consumed;
+SurfPP remains0. The two decisions were safety-selected and forced, so admission excludes
+both: zero new rows, unchanged model54. The local checklist is2/3, not complete.
+[Path-free result](../evidence/red-affordable-continuation-result-2026-09-07.json).
+
+## Escape-aware preparation before the next learned source choice
+
+The two reachable remaining source alternatives require a target that can end an encounter.
+Switching to a helper before any throw can therefore waste the opportunity. The narrow repair
+observes the actual enemy move slots through the revision adapter and checks their effect,
+not a target-species list. Any escape-effect capability skips status and switching setup;
+the existing ball executor still owns the throw and verifies the actual outcome.
+
+This uses disclosed privileged emulator observations, not vision-only inference or learned
+enemy-move knowledge. No escape probability, chosen enemy action, successful status or catch
+is inferred. The diagnostic counts a skipped setup separately from status attempts/successes.
+Old zero-bypass summaries retain their previous encoding.
+
+Primary mechanics: pinned [battle structure](https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/macros/ram.asm)
+places enemy moves at species+8; the [escape effect](https://github.com/pret/pokered/blob/1e96034092686d006e863cace09e87273051a3d8/engine/battle/effects.asm)
+may end wild encounters. Move-effect fixtures use Teleport, Roar and Whirlwind across swapped
+species plus non-escape controls.200 focused checks,303 broader overlapping checks,
+411-module types, lint, docs and product-focus checks passed. No fresh capture has executed
+under this repair yet; this does not claim a complete-suite pass.
+
 ## Named unblock and limits
 
 N captured Voltorb and fitted the54-example scorer, but its actual terminal has no balls

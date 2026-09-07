@@ -63,6 +63,7 @@ class RamAddress(IntEnum):
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
     ENEMY_STATUS = 0xCFE9
+    ENEMY_MOVES = 0xCFED
     ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
@@ -3810,6 +3811,20 @@ class PokemonRedStateReader:
         if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
             return None
         return self._memory.read_u8(RamAddress.ENEMY_STATUS)
+
+    def read_enemy_capture_moves(self) -> tuple[int, ...] | None:
+        """Privileged adapter observation, not inference from species identity.
+
+        Pinned battle_struct stores four move IDs at species+8. Stale field or
+        trainer data is not a wild capture opportunity. Historical snapshots stay unchanged.
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        moves = tuple(self._memory.read_u8(int(RamAddress.ENEMY_MOVES) + i) for i in range(4))
+        if not any(moves) or any(not 0 <= move <= 165 for move in moves):
+            raise SemanticStateError("wild capture target move inventory differs")
+        return moves
 
     def read_current_box_move_members(self) -> tuple[RedBoxMoveMember, ...]:
         """Read moves/PP with the already-verified 33-byte boxed structure.

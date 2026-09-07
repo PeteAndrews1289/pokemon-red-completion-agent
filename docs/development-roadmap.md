@@ -9,11 +9,11 @@ A learned player that finishes Pokemon games and builds a living Pokedex across 
 
 ## Current milestone
 
-**Affordable sustained continuation: 1/3 acceptance items (33%).**
+**Affordable sustained continuation: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Affordable purchase and exact cost qualified ([evidence](../docs/evidence/red-affordable-supply-qualification-2026-09-07.json))
-- [ ] Real resources/helper readiness restored
+- [x] Real resources/helper readiness restored ([evidence](../docs/evidence/red-affordable-continuation-result-2026-09-07.json))
 - [ ] Fresh productive model continuation
 
 Current model: **54 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -94,7 +94,7 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-07-affordable-continuation
 
-Affordable-continuation checklist1/3: exact bounded purchase qualified with266 relevant tests. Model54 and N retained; no new gameplay yet.
+Affordable-continuation checklist2/3: O purchased five balls and restored helper health, exact save preserved. Both support steps excluded; model54 unchanged.
 
 **Deviation:** Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.
 

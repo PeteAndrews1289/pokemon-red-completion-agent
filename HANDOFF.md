@@ -1,5 +1,14 @@
 # Handoff
 
+## Current — O restored resources; escape-aware follow-up next
+
+O succeeded at purchase and healing,877actions54612frames; exact restore passed5balls,
+109currency,healthy helper,20living/22specimens/25registered. Both steps are nonexploratory
+and excluded: model54 unchanged. Checklist2/3; the productive learned follow-up is pending.
+Next qualify actual enemy escape-effect observation and avoid setup before the first ball.
+No P is launched. This is deterministic skill support, not learned capture strategy or
+vision-only play. [Audit](docs/audits/red-affordable-continuation-2026-09-07.md).
+
 ## Current — model54; productive follow-up closed, affordable continuation next
 
 N selected Route10 and caught Voltorb16:1263actions76296frames,20living species/22specimens,

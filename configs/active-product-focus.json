@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice?",
+      "cheapest_falsifier": "Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model53 selected the played destination. PC/status setup was deterministic support, not an extra row; parent remains excluded.",
-        "blocker": "No balls remain. Cash buys five ordinary balls, but the existing fixed batch requires ten. The status helper is injured; no status-efficiency advantage is established.",
-        "decision": "Preserve the successful N endpoint; implement the smallest generic affordability rule and resume bounded resource/collection choices.",
+        "authority_delta": "O used deterministic safety and forced restoration; zero learned predictions or eligible rows. N remains the latest fitted destination choice.",
+        "blocker": "Nearby remaining targets may escape during a setup turn. Five balls and109 currency remain; avoid switch-first preparation when actual enemy moves can end the encounter.",
+        "decision": "Preserve O and use observed move effects to skip risky setup before the next selected capture.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-capture-status-result-2026-09-07.json",
-          "sha256": "e052898040322c5d57779cbfa2895122a62159d4a8002e46dd60a7972835a0fb"
+          "path": "docs/evidence/red-affordable-continuation-result-2026-09-07.json",
+          "sha256": "f7353eff3a2dcd07d1318006c88c487a29be747a80b927b16e9eb2a82ded5e83"
         },
-        "learning_output": "Fit53 to54 retains all prior rows plus the successful Route10 source outcome. Resource-aware regional checklist closed3/3; affordable continuation starts0/3.",
-        "next_falsifier": "Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice?",
-        "next_session_goal": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.",
-        "product_alignment": "The model now continues collection after resource recovery, but costly captures exhaust its finite stock. Affordable legitimate resupply is the next practical dependency.",
+        "learning_output": "Model54 retains all54 rows,19successful. O's two successful support steps add zero fitting rows. Affordable continuation is2/3; productive learned follow-up remains.",
+        "next_falsifier": "Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup?",
+        "next_session_goal": "Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint.",
+        "product_alignment": "Real resource management unblocks sustained collection without resetting. Capture preparation must preserve the encounter opportunity, not simply use every available helper.",
         "session_id": "2026-09-07-affordable-continuation",
         "status": "active",
         "stop_condition": "Reassess after90 minutes without executable restoration or at10:57UTC. No injected funds, inventory loss, hidden item sales, consumed retries or unchanged resource-starved searches.",
-        "transfer_result": "Species-swapped capability tests and actual PC/capture composition in the same Red lineage. No independent advantage or transfer."
+        "transfer_result": "Actual affordable restock and retained health recovery in the same Red lineage. Escape-effect controls are adapter tests, not cross-game or independent advantage."
       },
       "learned_authority": {
-        "current": "Model30eca788 retains54 outcomes,19successful. N chose Route10 and caught Voltorb16:20living species/22specimens,25registered,zero balls1109currency. PC support and3status attempts executed;zero verified status successes. Model54 has not played.",
+        "current": "Model30eca788 retains54 outcomes,19successful. N caught Voltorb:20living/22specimens/25registered. O bought five balls and healed the helper, leaving109currency; zero losses and zero new fitting rows. Model54 has not made a played exploratory choice.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.",
+      "next_decision": "Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -30,6 +30,9 @@ class World:
     def read_enemy_capture_status(self):
         return self.status
 
+    def read_enemy_capture_moves(self):
+        return (33, 45, 0, 0)
+
     def turn(self, *_args, **kwargs):
         assert kwargs['selected_slot'] == 1
         assert kwargs['expected_battle_state'] == 1
@@ -56,10 +59,35 @@ def setup(monkeypatch):
     return world, runtime.RedCaptureStatusPreparer(object(), object(), world)
 
 
+@pytest.mark.parametrize('escape_move', [18, 46, 100])
+@pytest.mark.parametrize('species', [108, 148, 6])
+def test_escape_effect_bypasses_setup_without_species_allowlist(monkeypatch, escape_move, species):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(world.raw, active_party_index=1, enemy_species_id=species)
+    monkeypatch.setattr(world, 'read_enemy_capture_moves', lambda: (33, escape_move, 0, 0))
+    def forbidden(*_args, **_kwargs):
+        pytest.fail('escape target must get a ball before setup/switch input')
+    monkeypatch.setattr(runtime, 'switch_active_battler', forbidden)
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', forbidden)
+    assert prepare() is True
+    assert prepare.bypassed_for_escape and prepare.attempts == 0
+    assert world.turns == 0 and prepare.reports == []
+    assert world.raw.active_party_index == 1 and world.raw.bag_items == ((4, 4),)
+
+
+def test_missing_opponent_moves_do_not_imply_safe_status_setup(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    monkeypatch.setattr(world, 'read_enemy_capture_moves', lambda: None)
+    with pytest.raises(runtime.RedCaptureStatusError, match='moves are unavailable'):
+        prepare()
+    assert world.turns == 0 and not prepare.bypassed_for_escape
+
+
 def test_status_misses_are_bounded_across_balls_not_relabelled_as_success(monkeypatch):
     world, prepare = setup(monkeypatch)
     assert prepare()
     assert world.turns == 3 and prepare.attempts == 3
+    assert not prepare.bypassed_for_escape
     assert [row['status_success'] for row in prepare.reports] == [False]*3
     assert all(row['target_hp_before'] == row['target_hp_after'] == 25
                for row in prepare.reports)

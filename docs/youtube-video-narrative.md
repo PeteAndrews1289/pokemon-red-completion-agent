@@ -1,5 +1,12 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September7 follow-up — spend the money the save actually has
+
+Show the five-ball purchase and verified party recovery. Overlay:109currency remains,
+54training examples unchanged. Explain why safety/forced actions do not count as learned
+choices. Preview the next problem: a capture helper is not useful if switching gives the
+target time to escape. The effect-aware repair is under qualification, not yet a new catch.
+
 ## September7 segment — show the catch, disclose the cost
 
 Show the learned Route10 destination choice, PC helper substitution, and the new Voltorb16

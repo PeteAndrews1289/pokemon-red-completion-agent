@@ -46,6 +46,29 @@ def test_capture_diagnostics_allowlist_fields_and_preserve_observed_counts():
             **summary.public_dict(), 'private_path': 'must never be forwarded'}})
 
 
+def test_escape_bypass_does_not_count_as_a_status_attempt_or_success():
+    summary = CaptureSupportSummary(0, 0, escape_setup_bypasses=2)
+    assert summary.public_dict() == {
+        'status_attempts': 0, 'verified_status_observations': 0,
+        'party_preparations': 0, 'escape_setup_bypasses': 2,
+    }
+    assert (
+        CaptureSupportSummary.from_evidence({'capture_support': summary.public_dict()}) == summary
+    )
+    assert 'escape_setup_bypasses' not in CaptureSupportSummary(0, 0).public_dict()
+    for value in (-1, True, 1001):
+        with pytest.raises(ValueError):
+            CaptureSupportSummary(0, 0, escape_setup_bypasses=value)
+
+
+def test_escape_mechanics_are_not_all_status_moves_or_damaging_effects():
+    escape_moves = [move for move in RED_BATTLE_CATALOG.move_ids
+                    if RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))]
+    assert escape_moves == [18, 46, 100]
+    for move in (95, 86, 45, 120, 165):
+        assert not RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+
+
 def test_status_options_follow_moves_not_species_and_filter_electric_immunity():
     a = red_capture_status_options(PartyObservation((member(species=48),)))
     b = red_capture_status_options(PartyObservation((member(species=164),)))

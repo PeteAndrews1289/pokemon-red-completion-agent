@@ -1,5 +1,10 @@
 # Current agent handoffs
 
+Latest endpoint is O, not N:5balls109currency,20living/22specimens/25registered,helper healed.
+Both O steps excluded; model54 unchanged. Escape-aware first-throw support is being qualified
+before another learned source choice. Do not retry O or infer that this proves efficient play.
+See [current audit](audits/red-affordable-continuation-2026-09-07.md); older entries are history.
+
 ## Current — model54 and N are the retained endpoint
 
 N captured Voltorb16 on model-selected Route10, preserving22specimens/20living species.

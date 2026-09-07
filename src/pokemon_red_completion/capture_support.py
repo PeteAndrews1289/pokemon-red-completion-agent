@@ -21,32 +21,38 @@ class CaptureSupportSummary:
     status_attempts: int
     verified_status_observations: int
     party_preparations: int = 0
+    escape_setup_bypasses: int = 0
 
     def __post_init__(self) -> None:
         if any(type(value) is not int for value in (
             self.status_attempts, self.verified_status_observations, self.party_preparations,
+            self.escape_setup_bypasses,
         )) or not (
             0 <= self.verified_status_observations <= self.status_attempts <= 1_000
             and 0 <= self.party_preparations <= 1
+            and 0 <= self.escape_setup_bypasses <= 1_000
         ):
             raise ValueError("capture support diagnostic bounds differ")
 
     def public_dict(self) -> dict[str, int]:
         return {"status_attempts": self.status_attempts,
                 "verified_status_observations": self.verified_status_observations,
-                "party_preparations": self.party_preparations}
+                "party_preparations": self.party_preparations,
+                **({"escape_setup_bypasses": self.escape_setup_bypasses}
+                   if self.escape_setup_bypasses else {})}
 
     @classmethod
     def from_evidence(cls, evidence: Mapping[str, object]) -> CaptureSupportSummary | None:
         value = evidence.get("capture_support")
         if value is None:
             return None
-        if not isinstance(value, Mapping) or set(value) != {
-            "status_attempts", "verified_status_observations", "party_preparations",
-        } or any(type(item) is not int for item in value.values()):
+        required = {"status_attempts", "verified_status_observations", "party_preparations"}
+        if not isinstance(value, Mapping) or not (
+            required <= set(value) <= required | {"escape_setup_bypasses"}
+        ) or any(type(item) is not int for item in value.values()):
             raise ValueError("capture support diagnostics differ")
         return cls(value["status_attempts"], value["verified_status_observations"],
-                   value["party_preparations"])
+                   value["party_preparations"], value.get("escape_setup_bypasses", 0))
 
 
 @dataclass(frozen=True, slots=True)

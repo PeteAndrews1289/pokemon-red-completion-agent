@@ -1307,6 +1307,7 @@ class RedAreaSurveyGoalProvider:
                 self.catalog,
             )
             status_reports = tuple(getattr(self.area_executor, "capture_status_reports", ()))
+            escape_bypasses = getattr(self.area_executor, "capture_escape_bypasses", 0)
             return GoalExecutionReport(
                 actions_executed=self.actions.actions_executed - before_actions,
                 frames_executed=self.emulator.frame_count - before_frames,
@@ -1328,7 +1329,8 @@ class RedAreaSurveyGoalProvider:
                             row.get("status_success") is True for row in status_reports
                         ),
                         "party_preparations": 0,
-                    }} if status_reports else {}),
+                        **({"escape_setup_bypasses": escape_bypasses} if escape_bypasses else {}),
+                    }} if status_reports or escape_bypasses else {}),
                 },
             )
 

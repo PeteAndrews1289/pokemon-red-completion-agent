@@ -36,6 +36,30 @@ def test_enemy_status_uses_pinned_battle_struct_offset_without_snapshot_change(m
         assert memory.reads == []
 
 
+def test_enemy_moves_are_actual_battle_slots_not_species_assumptions(monkeypatch):
+    memory = Memory({0xCFED: 33, 0xCFEE: 100, 0xCFEF: 45, 0xCFF0: 0,
+                     0xCFEC: 166, 0xCFF1: 166})
+    reader = PokemonRedStateReader(memory)
+    raw = RawGameState(True, 35, 5, 30, 6, 1, enemy_hp=41, enemy_species_id=108)
+    monkeypatch.setattr(reader, 'read', lambda: raw)
+    assert reader.read_enemy_capture_moves() == (33, 100, 45, 0)
+    assert memory.reads == [0xCFED, 0xCFEE, 0xCFEF, 0xCFF0]
+    assert int(RamAddress.ENEMY_MOVES) == int(RamAddress.ENEMY_SPECIES) + 8
+    for state in (replace(raw, battle_state=0), replace(raw, battle_state=2),
+                  replace(raw, enemy_hp=0), replace(raw, enemy_hp=None)):
+        monkeypatch.setattr(reader, 'read', lambda state=state: state)
+        memory.reads.clear()
+        assert reader.read_enemy_capture_moves() is None
+        assert memory.reads == []
+    monkeypatch.setattr(reader, 'read', lambda: raw)
+    memory.values[0xCFED] = 166
+    with pytest.raises(SemanticStateError, match='move inventory'):
+        reader.read_enemy_capture_moves()
+    memory.values = {}
+    with pytest.raises(SemanticStateError, match='move inventory'):
+        reader.read_enemy_capture_moves()
+
+
 def box_memory():
     values = {
         int(RamAddress.CURRENT_BOX_COUNT): 2,

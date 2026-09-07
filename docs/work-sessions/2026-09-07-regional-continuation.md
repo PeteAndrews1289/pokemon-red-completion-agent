@@ -1,5 +1,23 @@
 # Regional continuation — six-hour development cycle
 
+## Session7 follow-up — protect the actual encounter opportunity
+
+O bought five balls for1000 and restored the party using three healing items. Exact restore:
+20living/22specimens/25registered,5balls109currency, healthy Drowzee13 with17HypnosisPP.
+Both support steps are excluded from training; model54 unchanged. Two reachable source
+alternatives remain. Before spending the reserve, inspect escape-aware capture preparation.
+
+1. **Capability:** avoid spending a setup turn when the observed opponent can end the encounter.
+2. **Learned authority:** maintenance preserves model54's destination authority; it adds no
+   synthetic capture success, forced learning target or second source choice.
+3. **Transfer test:** effect-based enemy-move fixtures across species, with non-escape controls;
+   opponent move observation stays in the version adapter, not a species allowlist.
+4. **Cheapest falsifier:** a live escape-effect moveset bypasses status/switch setup and gives
+   the already selected capture its first throw; no effect or catch is assumed successful.
+5. **Time box:** forty-five minutes from09:35UTC, within the existing10:45UTC session stop.
+6. **Stop condition:** missing reliable mechanics, unsafe observation, invented target knowledge,
+   or repeated unchanged failed captures. Preserve O and its finite resources.
+
 ## Session7 — affordable continuation from N/model54
 
 Session6 completed its bounded falsifier: model-selected Route10 capture, Voltorb16,

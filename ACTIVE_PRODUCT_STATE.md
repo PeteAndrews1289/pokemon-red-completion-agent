@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting.
+- Next decision: Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model30eca788 retains54 outcomes,19successful. N chose Route10 and caught Voltorb16:20living species/22specimens,25registered,zero balls1109currency. PC support and3status attempts executed;zero verified status successes. Model54 has not played. |
+| Authority now | Model30eca788 retains54 outcomes,19successful. N caught Voltorb:20living/22specimens/25registered. O bought five balls and healed the helper, leaving109currency; zero losses and zero new fitting rows. Model54 has not made a played exploratory choice. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice? |
+| Cheapest falsifier | Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-07-affordable-continuation** · status **active** · evidence [qualification](docs/evidence/red-capture-status-result-2026-09-07.json)
+**2026-09-07-affordable-continuation** · status **active** · evidence [qualification](docs/evidence/red-affordable-continuation-result-2026-09-07.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model now continues collection after resource recovery, but costly captures exhaust its finite stock. Affordable legitimate resupply is the next practical dependency. |
-| Learning output | Fit53 to54 retains all prior rows plus the successful Route10 source outcome. Resource-aware regional checklist closed3/3; affordable continuation starts0/3. |
-| Authority delta | Model53 selected the played destination. PC/status setup was deterministic support, not an extra row; parent remains excluded. |
-| Transfer result | Species-swapped capability tests and actual PC/capture composition in the same Red lineage. No independent advantage or transfer. |
-| Blocker | No balls remain. Cash buys five ordinary balls, but the existing fixed batch requires ten. The status helper is injured; no status-efficiency advantage is established. |
-| Decision | Preserve the successful N endpoint; implement the smallest generic affordability rule and resume bounded resource/collection choices. |
-| Next session | Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting. |
-| Next falsifier | Can a bounded purchase use1109 actual funds without requiring a2000-currency batch, preserve resources and reopen a real collection choice? |
+| Product alignment | Real resource management unblocks sustained collection without resetting. Capture preparation must preserve the encounter opportunity, not simply use every available helper. |
+| Learning output | Model54 retains all54 rows,19successful. O's two successful support steps add zero fitting rows. Affordable continuation is2/3; productive learned follow-up remains. |
+| Authority delta | O used deterministic safety and forced restoration; zero learned predictions or eligible rows. N remains the latest fitted destination choice. |
+| Transfer result | Actual affordable restock and retained health recovery in the same Red lineage. Escape-effect controls are adapter tests, not cross-game or independent advantage. |
+| Blocker | Nearby remaining targets may escape during a setup turn. Five balls and109 currency remain; avoid switch-first preparation when actual enemy moves can end the encounter. |
+| Decision | Preserve O and use observed move effects to skip risky setup before the next selected capture. |
+| Next session | Qualify escape-aware capture preparation, then let model54 choose a useful source from the actual O endpoint. |
+| Next falsifier | Can a fresh source choice produce retained collection progress from O's five-ball reserve without wasting an escape opportunity on setup? |
 | Stop condition | Reassess after90 minutes without executable restoration or at10:57UTC. No injected funds, inventory loss, hidden item sales, consumed retries or unchanged resource-starved searches. |
 
 ### Stop conditions

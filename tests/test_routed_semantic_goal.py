@@ -146,8 +146,13 @@ def _composer(
     return composer, composer.binding(), meter, events
 
 
-def test_capture_support_counts_survive_routing_without_forwarding_private_evidence():
+@pytest.mark.parametrize('escape_bypasses', [0, 2])
+def test_capture_support_counts_survive_routing_without_forwarding_private_evidence(
+    escape_bypasses,
+):
     counts = {'status_attempts': 3, 'verified_status_observations': 1, 'party_preparations': 0}
+    if escape_bypasses:
+        counts['escape_setup_bypasses'] = escape_bypasses
     _, binding, _, _ = _composer(capture_support=counts)
     report = binding.execute()
     assert report.evidence['capture_support'] == counts

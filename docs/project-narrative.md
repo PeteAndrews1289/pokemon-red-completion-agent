@@ -1,5 +1,14 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September7 — making the earned resources usable
+
+The next continuation bought only what its actual cash could afford: five balls, not a fixed
+ten-ball batch. It then healed the party, retaining every specimen. Neither support decision
+was exploratory, so neither inflated the54-example training set. The remaining nearby target
+can escape; capture support is being changed to recognize actual escape-move effects and skip
+setup before throwing. That uses privileged emulator observations and deterministic mechanics,
+not a claim that the model inferred the opponent's moves or mastered capture tactics.
+
 ## September7 — a real capture, and an important qualification
 
 The learner selected Route10 and captured a level16 Voltorb. Its continuing save now contains

@@ -1,5 +1,10 @@
 # Three-agent coordination
 
+Current September7 follow-up: O restored resources with zero eligible learning rows;
+model54 unchanged, checklist2/3. Escape-aware capture preparation is under qualification
+before a fresh learned source choice. Codex remains sole implementation/publication owner
+through10:57UTC; no external reviewer or parallel editor invoked this cycle.
+
 ## Current — affordable continuation from model54
 
 Codex owns implementation/publication through10:57UTC; no external reviewer/subagent was

@@ -37,6 +37,7 @@ class RedCaptureStatusPreparer:
     maximum_attempts: int = 3
     attempts: int = field(default=0, init=False)
     reports: list[dict[str, object]] = field(default_factory=list, init=False)
+    bypassed_for_escape: bool = field(default=False, init=False)
 
     def __post_init__(self) -> None:
         if type(self.maximum_attempts) is not int or not 1 <= self.maximum_attempts <= 10:
@@ -61,6 +62,22 @@ class RedCaptureStatusPreparer:
             self.reader, self.actions, expected_map=initial.map_id,
             expected_battle_state=1, label="capture status introduction",
         )
+        from pokemon_red_completion.red_battle_catalog import (
+            RED_BATTLE_CATALOG,
+            pokemon_red_move_ref,
+        )
+
+        moves = self.reader.read_enemy_capture_moves()
+        if moves is None:
+            raise RedCaptureStatusError("capture target moves are unavailable")
+        if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+               for move in moves if move):
+            # A setup/switch turn may lose the encounter before any ball. Keep
+            # the current battler and permit the ball; do not invent sleep or
+            # assume the opponent's move choice, speed or escape outcome.
+            self._require_protected(self.reader.read(), target, target_hp, party_ids, initial_bag)
+            self.bypassed_for_escape = True
+            return True
         for _ in range(self.maximum_attempts - self.attempts):
             raw = self.reader.read()
             if raw.battle_state != 1:

@@ -49,8 +49,8 @@
       {
         "id": "restored-resources",
         "label": "Real resources/helper readiness restored",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-affordable-continuation-result-2026-09-07.json"
       },
       {
         "id": "productive-affordable-followup",
@@ -153,7 +153,7 @@
     },
     {
       "session": "2026-09-07-affordable-continuation",
-      "result": "Affordable-continuation checklist1/3: exact bounded purchase qualified with266 relevant tests. Model54 and N retained; no new gameplay yet.",
+      "result": "Affordable-continuation checklist2/3: O purchased five balls and restored helper health, exact save preserved. Both support steps excluded; model54 unchanged.",
       "deviation": "Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.",
       "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
     }

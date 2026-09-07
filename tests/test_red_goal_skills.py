@@ -560,14 +560,19 @@ class _DiscoveryExecutor(_AreaExecutor):
         self.actions.execute(MacroAction(MacroActionKind.WAIT))
 
 
-def test_area_survey_provider_captures_and_independently_reloads_collection() -> None:
+@pytest.mark.parametrize('escape_bypasses', [0, 2])
+def test_area_survey_provider_captures_and_independently_reloads_collection(
+    escape_bypasses: int,
+) -> None:
     reader = _Reader(raw=_raw(poke_balls=20), ready=True)
     port = _ActionPort(reader)
     actions = CountingExecutor(port)
     adapter = _adapter(reader)
+    area = _AreaExecutor(reader, actions)
+    area.capture_escape_bypasses = escape_bypasses
     provider = RedAreaSurveyGoalProvider(
         source_id="wild:Route1:grass",
-        area_executor=_AreaExecutor(reader, actions),
+        area_executor=area,
         actions=actions,
         emulator=port,
         adapter=adapter,
@@ -585,6 +590,13 @@ def test_area_survey_provider_captures_and_independently_reloads_collection() ->
     verdict = offer.binding.verify(report)
     assert verdict.status.value == "succeeded"
     assert report.evidence["captures"] >= 2
+    if escape_bypasses:
+        assert report.evidence['capture_support'] == {
+            'status_attempts': 0, 'verified_status_observations': 0,
+            'party_preparations': 0, 'escape_setup_bypasses': 2,
+        }
+    else:
+        assert 'capture_support' not in report.evidence
     assert not summarize_red_area_survey(
         "wild:Route1:grass",
         adapter.observe().collection_observation,
