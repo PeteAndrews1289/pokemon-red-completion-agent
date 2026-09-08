@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## September8 — completed-family demand repaired; alternative acquisition next
+
+The actual model66 save now closes Mankey demand after the retained Primeape
+evolution. Its corrected menu has only Route24 capture, so no game input or
+training label was manufactured. Model66 remains unchanged. The next limitation
+is one canonical method per target, which hides eight cartridge-backed level
+evolution alternatives from owned base forms.
+
+Archive the completed safe-acquisition3/3 checklist unchanged and declare the
+next useful-alternatives checklist prospectively0/3: alternative dependency plan,
+actual reachable menu, and played/retained/fitted useful outcome. The repair is
+engineering, not an item retroactively counted as learning. Phase3, stage IDs and
+all story/living-Dex/hack/Crystal exits remain unchanged.
+[Evidence](evidence/red-remaining-acquisition-demand-2026-09-08.json).
+
 ## September7 closeout — two linked successes close the local loop
 
 Fresh R used actual Q/model56, captured Mankey, fitted57, captured a needed duplicate Abra,

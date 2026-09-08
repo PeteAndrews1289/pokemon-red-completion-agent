@@ -1,6 +1,29 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## September 8 — the spare became a living evolution
+## September 8 — knowing when to stop catching, and finding another way
+
+After successfully evolving Primeape while keeping Mankey, the source planner
+still asked for another Mankey. Its original shopping list counted specimens
+needed from an empty collection, not what remained after development. The repair
+credits retained descendants and reserves each living form. The actual saved
+game now closes that family correctly, without changing historical evidence.
+
+An independent tiny capture/evolution/trade search checked192 inventory cases;
+282 focused regression tests passed. But this was engineering, not a new model
+victory:66 examples and26 living species remain unchanged, with no gameplay.
+
+Correcting the fake need exposed a real planning limitation. The catalog assigns
+Hypno to Cerulean Cave and does not offer the alternative of catching a spare
+Drowzee locally and evolving it. Eight missing evolved forms have such retained
+precursors. The next task is to give the model these useful, verified alternatives
+using existing skills—not another grinding script or an invented training label.
+
+For the video, show the genuine before/after requirement: Mankey needed1 becomes0.
+Then show direct-capture versus spare-plus-evolution as the upcoming capability.
+Do not present that second diagram as completed gameplay. The long-term
+cross-game living-Pokedex goal remains unchanged; Phase3 is still current.
+
+## Earlier September 8 — the spare became a living evolution
 
 The previous session's duplicate capture became useful: model65 chose evolution
 over another capture, and the existing skills developed Mankey12 into Primeape28.

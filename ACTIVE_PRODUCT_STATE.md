@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice.
+- Next decision: Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model66 retains66 actual outcomes,27successful and56distinct rows. Model65 chose evolution and developed Mankey12 toPrimeape28, preserving Mankey and all26specimens.26living/31registered,fourballs209currency,sixfullHP. All65priorrows retained; model66 has not played. |
+| Authority now | Model66 remains at 66 actual outcomes, 27 successful and 56 distinct rows; 45 native/15 regional entries authenticated. The latest engineering-only session changed no game state, prediction, outcome or fit. Mankey and Primeape remain retained: 26 living/31 registered, four balls, 209 currency, six healthy. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Does holding Mankey and Primeape eliminate Mankey capture demand without letting surplus evolutions substitute for a missing base form? |
+| Cheapest falsifier | Can the retained Route11/model66 state offer a useful spare-precursor capture alongside Route24 acquisition, without artificial targets or renewed Mankey demand? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-mixed-owned-evolution** · status **active** · evidence [falsification](docs/evidence/red-mixed-owned-evolution-2026-09-08.json)
+**2026-09-08-remaining-acquisition-demand** · status **active** · evidence [falsification](docs/evidence/red-remaining-acquisition-demand-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A useful capture prerequisite became a completed model-selected evolution while preserving its base form. This composes existing skills toward a living Pokedex without a new teacher. |
-| Learning output | 65 to66 actual outcomes,27successful,56distinct rows. All65priorrows and45native/15regional entries retained. Primeape28 added while retaining Mankey12:26living/26specimens,31registered. |
-| Authority delta | Model65 selected evolution over acquisition with probability0.767470; no forced goal, capture proposal label or teacher override. |
-| Transfer result | Exact terminal and full learning inventory authenticated with zero input.145existing skill tests and156preview/continuation/registry tests passed. Same-lineage Red, not independent transfer. |
-| Blocker | Source surveys still ask for another Mankey after Mankey and Primeape are retained. Static root demand is not remaining demand; fix it before spending more balls. Preview-history omission repaired prospectively. |
-| Decision | Successful mixed lesson retained and fitted; Phase3current. Stop additional capture at the post-run demand falsifier. Next repair dependency accounting, preserve old observations, then inspect genuine alternatives. |
-| Next session | Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice. |
-| Next falsifier | Does holding Mankey and Primeape eliminate Mankey capture demand without letting surplus evolutions substitute for a missing base form? |
-| Stop condition | The sole goal is consumed and fitted. No replay, reset, synthetic labels, sealedRed or Crystal. Stop future continuation on unsafe party, missing resources or unsupported choices. |
+| Product alignment | Living completion requires recognizing both completed families and alternative ways to acquire missing forms. Reuse existing skills; no new teacher or full replay. |
+| Learning output | Zero new outcomes or fits. Model66 and all 66 rows remain; the exact saved collection is unchanged at 26 living species / 26 specimens / 31 registrations. |
+| Authority delta | None this session. Corrected deterministic demand removes an unnecessary capture; model66 has not played. |
+| Transfer result | 282 focused ROM-free tests, including 192 exhaustive inventory cases, plus exact historical restore and prospective demand inspection with zero actions/frames/queries. No independent transfer result. |
+| Blocker | Only Route24 capture remains. Eight missing level-evolution targets have retained base forms but no spare; their canonical direct-wild methods omit useful evolution alternatives. |
+| Decision | Demand repair qualified and published. Stop at the actual singleton menu; one engineering-only session triggers reorientation to alternate prerequisite capture, not another teacher or CI loop. Phase3 remains current. |
+| Next session | Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal. |
+| Next falsifier | Can the retained Route11/model66 state offer a useful spare-precursor capture alongside Route24 acquisition, without artificial targets or renewed Mankey demand? |
+| Stop condition | No gameplay launched after the singleton-menu falsifier. Continue only with prospectively qualified useful support; stop on unsafe reserves, false reachability, specimen loss or failed execution. No consumed retry. |
 
 ### Stop conditions
 

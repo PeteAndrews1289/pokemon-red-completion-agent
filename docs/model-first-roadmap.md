@@ -1,6 +1,36 @@
 # Model-first development roadmap
 
-## Current — Mankey-to-Primeape lesson completed; model66 retained
+## Current — remaining demand repaired; useful alternatives next
+
+Source d63858bf repairs capture demand without replaying the successful evolution.
+The actual model66 checkpoint restores under its historical mode; prospective
+remaining demand correctly stops requesting Mankey while Mankey and Primeape
+coexist. 282 focused tests pass, including 192 exhaustive inventory cases.
+
+The corrected live menu contains only Route24 acquisition: zero model queries,
+inputs, frames, episode claims, outcomes or fits. Model66 remains at 66 outcomes,
+27 successful and 56 distinct rows; 45 native/15 regional entries authenticated.
+26 living species/26 specimens/31 registrations, four balls, 209 currency and six
+healthy members are unchanged. Model66 still has not played after fitting.
+
+The concrete next gap is single canonical acquisition methods: eight missing
+level-evolution targets have retained base forms but no spare. For example,
+Hypno is assigned Cerulean Cave, while a spare Route11 Drowzee could evolve at26.
+These alternative plans are cartridge-backed but not yet executable/qualified.
+
+Next qualify prospective spare-precursor acquisition with existing skills, expose
+real reachable choices, then play and fit one actual useful outcome. Do not create
+another teacher, force an Abra search, reopen Mankey demand or fit an unplayed plan.
+The engineering-only session triggers reorientation. Phase3 and North Star stay
+unchanged; safe acquisition3/3 is archived, next prospective checklist is0/3.
+
+Codex owns implementation/publication. No external agent is pending or was used
+this session; reserve reviewers for a consequential independent task.
+[Audit](audits/red-remaining-acquisition-demand-2026-09-08.md).
+[Next session](work-sessions/2026-09-08-alternate-precursor-acquisition-plan.md).
+Recommended: Astra Extra High, Fast off for the dependency seam; High after qualification.
+
+## Historical — Mankey-to-Primeape lesson completed; model66 retained
 
 Model65 chose evolution over capture at probability0.767470. Mankey12 became
 Primeape28 while retaining Mankey12 and all26specimens.26living species/31registered,

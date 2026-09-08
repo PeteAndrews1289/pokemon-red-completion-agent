@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-mixed-owned-evolution**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-remaining-acquisition-demand**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Safe retained acquisition chain: 3/3 acceptance items (100%).**
+**Useful post-evolution acquisition choices: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Recover the actual retained party ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
-- [x] Qualify safe capture-search preparation ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
-- [x] Retain and fit a useful source capture ([evidence](../docs/evidence/red-bounded-search-continuation-2026-09-07.json))
+- [ ] Qualify alternative precursor plans
+- [ ] Expose genuine reachable choices
+- [ ] Play, retain and fit a useful outcome
 
 Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-mixed-owned-evolution-2026-09-08.json)
+[Current evidence](../docs/evidence/red-remaining-acquisition-demand-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-remaining-acquisition-demand
+
+Remaining-demand repair verified: Mankey+Primeape closes Route5. 282 tests and exact saved restore pass; no inputs, predictions or fits. Model66/26 living unchanged.
+
+**Deviation:** The corrected menu has only Route24 capture. Stopped as declared; single canonical acquisition methods hide eight evolution alternatives. Old safe-acquisition 3/3 archived intact; next checklist prospective 0/3. Stage exits unchanged.
+
+**Next:** Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal.
 
 ### 2026-09-08-mixed-owned-evolution
 

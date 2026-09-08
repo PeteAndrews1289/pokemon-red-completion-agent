@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-mixed-owned-evolution",
+  "as_of_session": "2026-09-08-remaining-acquisition-demand",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-mixed-owned-evolution-2026-09-08.json"
+      "evidence": "docs/evidence/red-remaining-acquisition-demand-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Safe retained acquisition chain",
+    "title": "Useful post-evolution acquisition choices",
     "items": [
       {
-        "id": "retained-party-recovery",
-        "label": "Recover the actual retained party",
-        "done": true,
-        "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        "id": "alternate-precursor-plan",
+        "label": "Qualify alternative precursor plans",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "capture-ready-lead",
-        "label": "Qualify safe capture-search preparation",
-        "done": true,
-        "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        "id": "actual-alternative-menu",
+        "label": "Expose genuine reachable choices",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "productive-source-continuation",
-        "label": "Retain and fit a useful source capture",
-        "done": true,
-        "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
+        "id": "useful-alternative-outcome",
+        "label": "Play, retain and fit a useful outcome",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -258,6 +258,12 @@
       "result": "Model65 selected evolution and retained Primeape28 plus Mankey12.26living/26specimens,31registered,no losses.65to66outcomes with all earlier rows. Existing safe acquisition3/3 remains closed; Phase3current.",
       "deviation": "Post-run audit found static source demand asks for Mankey again after the family is complete. Stop new capture and repair remaining-demand accounting first. Actual successful evolution/fit preserved; no stage exits changed.",
       "next": "Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice."
+    },
+    {
+      "session": "2026-09-08-remaining-acquisition-demand",
+      "result": "Remaining-demand repair verified: Mankey+Primeape closes Route5. 282 tests and exact saved restore pass; no inputs, predictions or fits. Model66/26 living unchanged.",
+      "deviation": "The corrected menu has only Route24 capture. Stopped as declared; single canonical acquisition methods hide eight evolution alternatives. Old safe-acquisition 3/3 archived intact; next checklist prospective 0/3. Stage exits unchanged.",
+      "next": "Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [
@@ -469,6 +475,31 @@
           "label": "Useful varied outcome played and fitted",
           "done": true,
           "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-bounded-search-continuation",
+      "stage": "sustained-red",
+      "title": "Safe retained acquisition chain",
+      "items": [
+        {
+          "id": "retained-party-recovery",
+          "label": "Recover the actual retained party",
+          "done": true,
+          "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        },
+        {
+          "id": "capture-ready-lead",
+          "label": "Qualify safe capture-search preparation",
+          "done": true,
+          "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        },
+        {
+          "id": "productive-source-continuation",
+          "label": "Retain and fit a useful source capture",
+          "done": true,
+          "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
         }
       ]
     }
