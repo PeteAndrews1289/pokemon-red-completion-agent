@@ -537,7 +537,7 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
         element_id="red.run-team-balancing",
         observed_ast_sha256=("495627fc69c0bcf27872ae53f0e9f26f599f5e1d3873215e7ec115b07fcdd3db"),
-        current_ast_sha256=("da363e070497e5898b3c62665f07e6e91131eabb6846fa14b49267be5f1d79c7"),
+        current_ast_sha256=("cf6fd430037b5fa67a3fe5c265cb1f3cba45bc7dccccdedce1013fc4f70491b4"),
         justification_id=(
             "run-local-walker-zero-telemetry-and-eligible-cardinality-menu-"
             "suppression-plus-opt-in-fixed-dose-preserve-historical-route-11-"
@@ -546,7 +546,8 @@ _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
             "disabled-on-historical-route-11-plus-evolution-only-budget-"
             "tightening-does-not-change-historical-non-evolution-branch-"
             "plus-direct-evolution-and-quantum-default-disabled-"
-            "plus-shared-experience-default-disabled-preserves-legacy-path"
+            "plus-shared-experience-default-disabled-preserves-legacy-path-"
+            "plus-opt-in-encounter-coverage-and-collection-only-escape"
         ),
     ),
     _SourceCompatibilityWaiver(

@@ -20,6 +20,7 @@ from pokemon_red_completion.blaine import MANSION_TEAM_POLICY, MANSION_TRAINING_
 from pokemon_red_completion.celadon import _flee
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
+from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
 from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
     authenticated_failure_state,
@@ -39,6 +40,7 @@ from pokemon_red_completion.red_regional_goal_proposal import (
     regional_proposal_record_id,
 )
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
+from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
 from pokemon_red_completion.red_team_training import (
     collection_escape_escort,
     escape_collection_battle,
@@ -62,10 +64,19 @@ def prepare(args):
         raise ValueError("recovery requires an authenticated training predecessor")
     # A native regional attempt may have changed profile before the failed
     # choice. Read its existing proposal; never select a destination again.
-    proposal = ready.private_root.find_sealed_record(
-        regional_proposal_record_id(args.failed_episode),
-        expected_kind=REGIONAL_PROPOSAL_KIND,
-    )
+    failed_id = args.failed_episode
+    proposal = None
+    for _ in range(8):
+        proposal = ready.private_root.find_sealed_record(
+            regional_proposal_record_id(failed_id),
+            expected_kind=REGIONAL_PROPOSAL_KIND,
+        )
+        if proposal is not None:
+            break
+        metadata = ready.private_root.open_failed_episode(failed_id).read_header()["metadata"]
+        if metadata.get("schema") != "pokemon.red.forced-recovery-header.v1":
+            break
+        failed_id = metadata["recovery"]["failure_episode_id"]
     if proposal is not None:
         document = proposal.read()
         profile = restored_proposal_profile(document)
@@ -103,8 +114,15 @@ def run(args):
             reader=reader,
         )
         before = runtime.adapter.observe()
-        if before.raw.battle_state != 1 or before.party.fainted_count:
-            raise ValueError("recovery entry is not a preserved live wild battle")
+        if before.party.fainted_count or not (
+            before.raw.battle_state == 1
+            or (
+                before.raw.battle_state == 0
+                and before.input_ready
+                and not _raw_party_restored(before.raw)
+            )
+        ):
+            raise ValueError("recovery entry is neither a preserved wild battle nor a needy field")
         recipient = before.party.lead.species_id
         escort = collection_escape_escort(
             before.party,
@@ -113,7 +131,7 @@ def run(args):
             enemy_level=before.raw.enemy_level,
             enemy_species=before.raw.enemy_species_id,
         )
-        if escort is None:
+        if escort is None and before.raw.battle_state == 1:
             raise ValueError("failed battle has no qualified defensive escape escort")
         preflight = {
             "source_commit": ready.source_commit,
@@ -124,7 +142,7 @@ def run(args):
             "failure_state_sha256": args.failed_state,
             "profile_sha256": ready.profile.profile_sha256,
             "model_sha256": ready.model_sha256,
-            "escape_escort_species": escort.species_id,
+            "escape_escort_species": escort.species_id if escort is not None else None,
             "maximum_actions": 6000,
             "maximum_frames": 600000,
             "model_queries": 0,
@@ -191,17 +209,27 @@ def run(args):
             actions = base.CountingExecutor(hard)
             meter = base.CompositionIndependentBudgetMeter(hard, frames)
             try:
-                escape_collection_battle(
-                    actions,
-                    reader,
-                    frames,
-                    recipient_species_id=recipient,
-                    policy=MANSION_TEAM_POLICY,
-                    flee_func=_flee,
-                    flee_timing=MANSION_TRAINING_FLEE_TIMING,
-                )
+                if before.raw.battle_state == 1:
+                    escape_collection_battle(
+                        actions,
+                        reader,
+                        frames,
+                        recipient_species_id=recipient,
+                        policy=MANSION_TEAM_POLICY,
+                        flee_func=_flee,
+                        flee_timing=MANSION_TRAINING_FLEE_TIMING,
+                    )
                 router = RedResourceGoalRouter(runtime, actions, world, routed_recovery=True)
-                bindings = router.enumerate(runtime.adapter.observe())
+                # An available FIELD_RESTORE spends items and does not restore
+                # PP. This support operation explicitly requires the Center
+                # mechanic, not whichever same-kind local goal is offered.
+                bindings = bind_routed_center_recovery(
+                    router,
+                    runtime.enumerator(actions).enumerate(runtime.adapter.observe()),
+                    runtime.adapter.observe(),
+                    prepare_escort=lambda: prepare_capture_escort(runtime, actions),
+                    require_pp_restore=True,
+                )
                 heals = [b for b in bindings.bindings if b.kind is GoalKind.RESTORE_TEAM]
                 if len(heals) != 1:
                     raise ValueError("recovery lacks one executable Center restore")
@@ -209,17 +237,20 @@ def run(args):
                 if heals[0].verify(report).status is not GoalDecisionOutcome.SUCCEEDED:
                     raise ValueError("recovery did not verify its healing result")
                 after = runtime.adapter.observe()
-                if (
-                    not after.input_ready
-                    or after.raw.battle_state
-                    or after.party.fainted_count
-                    or not _raw_party_restored(after.raw)
-                    or Counter(s.species_ref for s in before.collection_observation.specimens)
-                    != Counter(s.species_ref for s in after.collection_observation.specimens)
-                    or before.collection_observation.owned_species
-                    != after.collection_observation.owned_species
-                ):
-                    raise ValueError("recovery changed collection or lacks a healthy safe boundary")
+                checks = {
+                    "field_ready": after.input_ready and after.raw.battle_state == 0,
+                    "zero_faints": after.party.fainted_count == 0,
+                    "hp_status_pp_restored": _raw_party_restored(after.raw),
+                    "living_specimens_preserved": (
+                        Counter(s.species_ref for s in before.collection_observation.specimens)
+                        == Counter(s.species_ref for s in after.collection_observation.specimens)
+                    ),
+                    "pokedex_preserved": before.collection_observation.owned_species
+                    == after.collection_observation.owned_species,
+                }
+                writer.append("recovery_verification", checks, durable=True)
+                if not all(checks.values()):
+                    raise ValueError(f"recovery verification failed: {checks!r}")
                 if recorder.recording_failures:
                     raise ValueError("recovery trajectory lost evidence")
                 costs = meter.checkpoint()

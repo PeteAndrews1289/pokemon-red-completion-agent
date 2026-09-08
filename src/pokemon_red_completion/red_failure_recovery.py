@@ -32,8 +32,11 @@ def authenticated_failure_state(
     parent_envelope_sha256: str,
     profile_sha256: str,
     rom_sha256: str,
+    _depth: int = 0,
 ) -> Mapping[str, object]:
     """Read the last exact failure capture, not a preceding safe quantum."""
+    if _depth >= 8:
+        raise RedFailureRecoveryError("recovery failure ancestry exceeds its bound")
     episode = store.open_failed_episode(episode_id)
     if episode.manifest_sha256 != manifest_sha256:
         raise RedFailureRecoveryError("failed trajectory identity differs")
@@ -49,6 +52,21 @@ def authenticated_failure_state(
         metadata.get(key) != value for key, value in expected.items()
     ):
         raise RedFailureRecoveryError("failed trajectory parent or scope differs")
+    if metadata.get("schema") == "pokemon.red.forced-recovery-header.v1":
+        origin = metadata.get("recovery")
+        if not isinstance(origin, Mapping) or origin.get("episode_id") != episode_id:
+            raise RedFailureRecoveryError("failed recovery lacks its own failed predecessor")
+        authenticated_failure_state(
+            store,
+            episode_id=origin["failure_episode_id"],
+            manifest_sha256=origin["failure_manifest_sha256"],
+            state_sha256=origin["failure_state_sha256"],
+            parent_state_sha256=parent_state_sha256,
+            parent_envelope_sha256=parent_envelope_sha256,
+            profile_sha256=profile_sha256,
+            rom_sha256=rom_sha256,
+            _depth=_depth + 1,
+        )
     states = list(episode.iter_stream("failure_state", max_records=16))
     if not states:
         raise RedFailureRecoveryError("failed trajectory lacks an exact terminal state")

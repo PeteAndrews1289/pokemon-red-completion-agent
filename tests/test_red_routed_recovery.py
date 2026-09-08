@@ -305,6 +305,37 @@ def test_action_free_enumeration(monkeypatch):
     assert len(result.bindings) == 2
 
 
+def test_explicit_pp_recovery_replaces_available_field_items_with_center_only(monkeypatch):
+    router, bindings, observe, state, _, calls = make_fixture(monkeypatch)
+    state["safety"] = 1.0
+    state["raw"] = replace(
+        state["raw"], party_hp=(30, 30), party_status=(0, 0),
+        party_pp=((0, 10), (10, 10)),
+    )
+    state["party"] = make_test_party(30, 30)
+    field = ExecutableGoalBinding(
+        binding_ref="field-items", kind=GoalKind.RESTORE_TEAM,
+        estimated_effort=0.1, estimated_risk=0.1,
+        execute=lambda: pytest.fail("PP recovery must not use field items"),
+        verify=lambda report: GoalVerification.succeeded(),
+    )
+    original = GoalBindingSet(
+        (field.opportunity, bindings.opportunities[1]), (field, bindings.bindings[0]),
+    )
+    # Historical behavior/restore hashes remain unchanged by default.
+    assert bind_routed_center_recovery(
+        router, original, observe(), prepare_escort=lambda: None,
+    ) is original
+    result = bind_routed_center_recovery(
+        router, original, observe(), prepare_escort=lambda: None, require_pp_restore=True,
+    )
+    restore = next(b for b in result.bindings if b.kind is GoalKind.RESTORE_TEAM)
+    assert restore is not field
+    assert ":routed-center:" in restore.binding_ref
+    assert router.actions.actions_executed == 0
+    assert calls == []
+
+
 def test_route_blocked(monkeypatch):
     """1. Unknown/blocked routes abstain without modifying unavailable goals."""
     router, bindings, observe, state, collection_obs, calls = make_fixture(

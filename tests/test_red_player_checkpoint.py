@@ -291,6 +291,51 @@ def test_separate_recovery_authenticates_failed_prefix_and_keeps_zero_labels(cas
     assert store.open_failed_episode("failed-choice").manifest_sha256 == failed_manifest
 
 
+@pytest.mark.parametrize("tampered_ancestor", [False, True])
+def test_recovery_of_a_failed_recovery_keeps_the_earlier_failed_prefix(case, tampered_ancestor):
+    from pokemon_red_completion.red_failure_recovery import (
+        RedFailureRecoveryError,
+        authenticated_failure_state,
+    )
+
+    store, arguments, _ = case
+    state = capture_red_failure_state(emulator=_Emulator(), meter=_Meter())
+    expected = dict(
+        parent_state_sha256=arguments["parent"].state_sha256,
+        parent_envelope_sha256=arguments["parent"].envelope_sha256,
+        profile_sha256=arguments["profile_sha256"], rom_sha256=arguments["rom_sha256"],
+    )
+    metadata = {
+        "state_sha256": expected["parent_state_sha256"],
+        "envelope_sha256": expected["parent_envelope_sha256"],
+        "profile_sha256": expected["profile_sha256"],
+        "rom_sha256": expected["rom_sha256"], "context_origin": "training",
+    }
+    writer = store.begin_episode("failed-original")
+    writer.append("episode", {"episode_id": "failed-original", "metadata": metadata})
+    writer.append("failure_state", state)
+    original = writer.abort("test_failure")
+    writer = store.begin_episode("failed-support")
+    writer.append("episode", {"episode_id": "failed-support", "metadata": {
+        **metadata, "schema": "pokemon.red.forced-recovery-header.v1", "recovery": {
+            "episode_id": "failed-support", "failure_episode_id": "failed-original",
+            "failure_manifest_sha256": "f" * 64 if tampered_ancestor else original.manifest_sha256,
+            "failure_state_sha256": state["state_sha256"],
+        },
+    }})
+    writer.append("failure_state", state)
+    support = writer.abort("test_failure")
+    kwargs = dict(
+        **expected, episode_id="failed-support", manifest_sha256=support.manifest_sha256,
+        state_sha256=state["state_sha256"],
+    )
+    if tampered_ancestor:
+        with pytest.raises(RedFailureRecoveryError, match="identity differs"):
+            authenticated_failure_state(store, **kwargs)
+    else:
+        assert authenticated_failure_state(store, **kwargs) == state
+
+
 def test_safe_failed_goal_retains_exact_state_without_becoming_a_success_or_label(case):
     store, arguments, observation = case
     previous = arguments["result"]

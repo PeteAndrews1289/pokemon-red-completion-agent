@@ -207,18 +207,23 @@ def bind_routed_center_recovery(
     observation: RedGoalObservation,
     *,
     prepare_escort: Callable[[], None],
+    require_pp_restore: bool = False,
 ) -> GoalBindingSet:
     """Action-free route offer to a Pokémon Center nurse boundary.
 
     Creates or replaces an unavailable RESTORE_TEAM goal only. Never overwrites
     an existing available restore skill and leaves other goals unchanged.
     """
-    if any(b.kind is GoalKind.RESTORE_TEAM for b in bindings.bindings):
+    if type(require_pp_restore) is not bool:
+        raise ValueError("explicit PP recovery mode must be boolean")
+    if not require_pp_restore and any(b.kind is GoalKind.RESTORE_TEAM for b in bindings.bindings):
         return bindings
 
     if not observation.input_ready or bool(observation.raw.battle_state):
         return bindings
-    if not _party_needs_recovery(observation):
+    if not _party_needs_recovery(observation) and not (
+        require_pp_restore and not _raw_party_restored(observation.raw)
+    ):
         return bindings
 
     from pokemon_red_completion.red_resource_goal_router import (

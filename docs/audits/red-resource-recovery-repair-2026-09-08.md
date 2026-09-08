@@ -26,6 +26,22 @@ completion. Successful recovery must precede new model-directed gameplay.
 
 ## Checks
 
+The first live support operation on source269417ae successfully escaped the
+retained Drowzee battle with no faint. It then selected an available FIELD_RESTORE
+binding rather than the intended Center mechanic: HP/status improved using items,
+but empty PP remained. The strict final check rejected admission after128actions/
+11,076frames. Exact statebd01a806 and failed manifestc54a6a63 remain retained;
+no model label or safe checkpoint was published. The next support operation starts
+from that state, explicitly requires Center recovery and authenticates both failed
+prefixes. Default model/legacy restore behavior remains unchanged.
+
+Read-only rehearsal also caught canonical profile serialization before any input;
+the real proposal round-trip now has a regression test. Broader testing caught
+the generated source registry and historical Route11 AST attestation becoming
+stale. Regeneration updates only prospective source bindings; the exact trainer
+waiver is justified by unchanged default mode plus legacy tests that forbid calls
+to collection-only helpers. No old campaign receipt or test partition is changed.
+
 331 targeted tests passed across collection/legacy trainers, native evolution,
 Center/box access, private artifacts, checkpoint provenance, incremental fitting
 and the bounded player runner. Added cases distinguish the actual Primeape versus
