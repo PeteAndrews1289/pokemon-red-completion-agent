@@ -1,6 +1,42 @@
 # Model-first development roadmap
 
-## Current — model76; earned capture verified, reachable income next
+## Current — adjacent-map income qualified; honest story entry next
+
+The player reached Route25 from Route24 and earned525 currency through the
+existing safety policy. Actual checkpoint21445916/state34949deb retains30 specimens,
+28living species and33 registered, with619 currency,0balls and all4 protected
+FullRestores. Electrode HP89 to71; no recorded faints or specimen loss.
+
+One failed intro remains consumed:141actions/13836frames. Exact-state continuation
+finished that already-armed trainer interaction:78actions/7513frames. Total219actions/
+21349frames, including the failure. The pending latch and visible dialogue coexisted;
+the repair confirms actual dialogue, waits for a dialogue-free latch, and changes
+no retry limit. Both endpoints were reloaded with zero audit input or frames.
+
+Model76 is unchanged:76 fitted outcomes,34successful,66distinct rows. Both new
+episodes are zero-label deterministic support, not learned trainer selection.
+Pending support also includes the prior earned-followup singleton capture.
+Do not fit these alone, retry either episode or restore the old Route24 origin.
+The latest private declaration plus checkpoint21445916 is the complete continuation
+chain; retain regional funding and legacy restore settings.
+
+**Next actual story objective: defeat_lorelei.** Eight badges and Victory Road
+progress are already present in this teacher-origin lineage. This is not learned
+story progress. The existing Lorelei chapter requires a specific Indigo entrance,
+lead/moves and exact consumable counts; merely enabling it would be a false offer.
+Qualify current-state travel and resource/party readiness, then a bounded genuine
+story choice. Do not drift into another capture/heal cycle or expand a fixed teacher.
+
+276 focused tests, full lint/type/doc/artifact checks passed. Source46e43319 is
+published on PR236; hosted CI is tracked separately, not a per-step gameplay gate.
+Flash's bounded review helped identify map-qualified hazard reservations; its
+walk-only cross-map suggestion was corrected. Final Gemini quota:91.36% five-hour,
+93.68% weekly. Claude was not used and its subscription quota was not checked.
+No emulator or external agent remains running. Next setting: Astra High, Fast off.
+
+[Audit and remaining Phase4 work](audits/red-regional-income-qualification-2026-09-08.md).
+
+## Historical — model76; earned capture verified, reachable income next
 
 The finite resource-backed progression checklist is 3/3; Phase 4 is NOT complete.
 A trainer-funded purchase bought one ball for 200. The model then chose optional

@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher.
+- Next decision: From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Connect cartridge-derived trainer-event progress to legitimate resource recovery, then let the semantic goal model compose earning, collection and recovery skills from retained state. |
-| Authority now | Phase3 bounded sustained-play milestone remains complete. Model76: 76 retained fitted outcomes, 34 successful, 66 distinct selected rows. Latest learned choice was optional team restoration versus capture. Earned purchase and singleton Oddish capture are zero-label support. 30 specimens / 28 living species / 33 registered. No independent advantage, model-led Red win or cross-game transfer. |
+| Authority now | Model76 retains76 fitted outcomes,34 successful and66 distinct selected rows. Adjacent-map funding earned525 but was deterministic safety, adding0labels. Current30 specimens/28living/33registered,619currency/0balls. Lorelei is the next dependency-legal story goal, not currently executable. No full Red win or transfer. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can one already-supported ordinary trainer income opportunity be reached from the cash-poor Route24 checkpoint without fixed walk strings, protected sales or repeated healing? |
+| Cheapest falsifier | Can the existing Lorelei objective be exposed truthfully from retained state without an exact teacher-party or inventory recipe? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-earned-supply-continuation** · status **active** · evidence [qualification](docs/evidence/red-earned-resource-continuation-2026-09-08.json)
+**2026-09-08-regional-income** · status **active** · evidence [qualification](docs/evidence/red-regional-income-qualification-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Legitimate trainer income funded a ball, a real model-directed HP/PP recovery decision, and a retained Oddish precursor for future living evolution. |
-| Learning output | Model75 to76 from one actual optional-healing outcome, all prior rows retained. Purchase and post-fit singleton capture add zero labels. Three episodes:776 actions/46,380 frames; specimens29 to30, living28 unchanged. Resource-backed checklist3/3, not Phase4 completion. |
-| Authority delta | No new authority class. Existing goal learner selected restoration instead of capture; post-fit acquisition was forced singleton. Battle, travel and purchase mechanics remain deterministic. |
+| Product alignment | Replenishment can now earn funds beyond the current map without rewind or protected-stock sales. The next step must connect a genuine story goal to the learner. |
+| Learning output | Zero new fitted rows; model76 unchanged. One failed approach/intro plus exact pending-interaction continuation:219 actions/21349 frames,525 earned,all30 specimens retained. |
+| Authority delta | No authority expansion or fit. Deterministic safety selected income; trainer ranking, routing and battle remain deterministic. |
 | Transfer result | Same-lineage Red development only. No independent evaluation, sustainable economy or unfamiliar-game result. |
-| Blocker | Route24 checkpoint4a609569 has zero balls and94 currency. Action-free inventory exposes only restore_team; no executable income or collection option at this boundary. |
-| Decision | Close the finite resource-backed integration milestone. Do not repeat healing or full CI runs for progress. Next repair must make a supported income target reachable from this location and return control to a real model choice. |
-| Next session | From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher. |
-| Next falsifier | Can one already-supported ordinary trainer income opportunity be reached from the cash-poor Route24 checkpoint without fixed walk strings, protected sales or repeated healing? |
+| Blocker | Income now reaches an adjacent map:619 currency available. Next legal story target is Lorelei, but location/party/exact-stock assumptions of the old chapter prevent an honest executable offer. |
+| Decision | Close adjacent-map income qualification and move to a bounded story-entry contract. Do not repeat collection/healing loops or mistake an old teacher chapter for generic model-led play. |
+| Next session | From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs. |
+| Next falsifier | Can the existing Lorelei objective be exposed truthfully from retained state without an exact teacher-party or inventory recipe? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

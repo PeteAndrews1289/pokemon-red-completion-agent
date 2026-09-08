@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-earned-supply-continuation",
+  "as_of_session": "2026-09-08-regional-income",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Resource-backed story progression",
+    "title": "Reachable income to model-led story",
     "items": [
       {
-        "id": "trainer-funding-qualification",
-        "label": "Qualify safe trainer funding from real state",
+        "id": "regional-income",
+        "label": "Earn funds through safe adjacent-map travel",
         "done": true,
-        "evidence": "docs/evidence/red-trainer-transition-qualification-2026-09-08.json"
+        "evidence": "docs/evidence/red-regional-income-qualification-2026-09-08.json"
       },
       {
-        "id": "earned-resource-continuation",
-        "label": "Earn funds, buy supplies, continue collection",
-        "done": true,
-        "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        "id": "truthful-story-entry",
+        "label": "Qualify current-state story entry and readiness",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "model-story-choice",
-        "label": "Fit a genuine resource or story-goal choice",
-        "done": true,
-        "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        "id": "native-story-lesson",
+        "label": "Play and fit a genuine bounded story choice",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -342,6 +342,12 @@
       "result": "Finite resource-backed checklist3/3: trainer-funded ball purchase, genuine model-selected HP/PP recovery fitted75to76, singleton Oddish capture adds one specimen.30specimens/28living/33registered; all prior rows/species retained.",
       "deviation": "Healing rather than capture was the actual learned resource-management choice. The subsequent capture was forced singleton and zero-label. No phase exit or authority promotion changed. Current Route24 menu only heals, so repeated support stops.",
       "next": "From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher."
+    },
+    {
+      "session": "2026-09-08-regional-income",
+      "result": "Adjacent-map income qualified:525 earned,30 specimens retained;219actions/21349frames include the failed intro and its exact-state continuation. Model76 unchanged;0learnedrows. New story-entry checklist1/3.",
+      "deviation": "Bounded funding scope uses adjacent ordinary connections only. Pending latch plus visible dialogue required a small repair; first attempt remains consumed. Prior resource checklist3/3 archived without changing phase exits.",
+      "next": "From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs."
     }
   ],
   "closed_milestones": [
@@ -653,6 +659,31 @@
           "label": "Audit costs, recovery and phase coverage",
           "done": true,
           "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-earned-supply-continuation",
+      "stage": "red-story",
+      "title": "Resource-backed story progression",
+      "items": [
+        {
+          "id": "trainer-funding-qualification",
+          "label": "Qualify safe trainer funding from real state",
+          "done": true,
+          "evidence": "docs/evidence/red-trainer-transition-qualification-2026-09-08.json"
+        },
+        {
+          "id": "earned-resource-continuation",
+          "label": "Earn funds, buy supplies, continue collection",
+          "done": true,
+          "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        },
+        {
+          "id": "model-story-choice",
+          "label": "Fit a genuine resource or story-goal choice",
+          "done": true,
+          "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
         }
       ]
     }

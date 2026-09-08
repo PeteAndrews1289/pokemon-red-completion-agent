@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-earned-supply-continuation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-regional-income**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-backed story progression: 3/3 acceptance items (100%).**
+**Reachable income to model-led story: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Qualify safe trainer funding from real state ([evidence](../docs/evidence/red-trainer-transition-qualification-2026-09-08.json))
-- [x] Earn funds, buy supplies, continue collection ([evidence](../docs/evidence/red-earned-resource-continuation-2026-09-08.json))
-- [x] Fit a genuine resource or story-goal choice ([evidence](../docs/evidence/red-earned-resource-continuation-2026-09-08.json))
+- [x] Earn funds through safe adjacent-map travel ([evidence](../docs/evidence/red-regional-income-qualification-2026-09-08.json))
+- [ ] Qualify current-state story entry and readiness
+- [ ] Play and fit a genuine bounded story choice
 
 Current model: **76 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-regional-income
+
+Adjacent-map income qualified:525 earned,30 specimens retained;219actions/21349frames include the failed intro and its exact-state continuation. Model76 unchanged;0learnedrows. New story-entry checklist1/3.
+
+**Deviation:** Bounded funding scope uses adjacent ordinary connections only. Pending latch plus visible dialogue required a small repair; first attempt remains consumed. Prior resource checklist3/3 archived without changing phase exits.
+
+**Next:** From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs.
 
 ### 2026-09-08-earned-supply-continuation
 

@@ -1,6 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — earned resources reach the learning loop
+## Current — income is reachable beyond the current map
+
+The player ran out of balls and could only offer healing. Rather than resetting
+its resources, we connected its existing trainer-battle skill to safe routes into
+neighboring maps. It reached a trainer on Route 25 and ultimately earned 525,
+bringing its balance to 619 while preserving all 30 Pokémon.
+
+It was not a clean first attempt. The game had scheduled the correct battle but
+still needed a dialogue page dismissed. Our controller kept waiting. The saved
+failure exposed that distinction, and a bounded continuation finished the same
+interaction after the repair. We retained the failure and its cost: 219 actions
+and 21,349 frames altogether. There was no rewind or hidden successful retry.
+
+This is engineering progress, not a new training result. The safety policy chose
+funding because there were no balls; the learned goal model remains at 76 examples.
+Flash supplied a useful focused review of remote trainer hazards, while Codex
+corrected one recommendation and owned implementation and live verification.
+
+The next story target is Lorelei. The older battle chapter assumes a specific
+party and exact supplies, so simply connecting it would overstate readiness.
+The next task is an honest, current-state story option, followed by a real model
+choice. Red completion and the longer-term living Pokédex remain unfinished.
+
+[Evidence and next steps](audits/red-regional-income-qualification-2026-09-08.md).
+
+## Historical — earned resources reach the learning loop
 
 The trainer reward became a real purchase, then a real decision: the model chose
 to heal before attempting collection. That outcome was retained and fitted,
