@@ -246,6 +246,7 @@ def bind_native_boxed_evolution(
         )
         if local_venues:
             venues = local_venues
+        tables = wild_tables(world.rom)
         _, battles, heals = context.run_red_team_balancing(
             actions,
             runtime.reader,
@@ -263,6 +264,7 @@ def bind_native_boxed_evolution(
             evolution_target=(source_id, target_id),
             allow_direct_evolution=True,
             collection_shared_experience=True,
+            collection_encounters={venue.map_id: tables[venue.map_id] for venue in venues},
             evolution_battle_quantum=4,
             report_label="native bounded collection evolution",
             checkpoint_count=1,

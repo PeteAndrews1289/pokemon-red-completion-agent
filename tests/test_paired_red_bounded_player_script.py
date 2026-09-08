@@ -28,6 +28,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+@pytest.mark.parametrize("mode", [True, False, None, 1])
+def test_support_recovery_restores_explicit_observer_mode_without_a_training_plan(mode):
+    module = runpy.run_path(str(SCRIPT))
+    header = {"metadata": {
+        "schema": "pokemon.red.forced-recovery-header.v1", "completion_dose": mode,
+    }}
+    if type(mode) is bool:
+        assert module["_checkpoint_completion_dose"](header) is mode
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            module["_checkpoint_completion_dose"](header)
+
+
 @pytest.mark.parametrize("probe_during_observation", [False, True])
 @pytest.mark.parametrize("remaining_mode", [False, True])
 def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(

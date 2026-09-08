@@ -1,6 +1,21 @@
 # Current agent handoffs
 
-## Current — model67 evolution stopped; exact recovery state retained
+## Current — Phase 3 recovery repair, before live recovery
+
+The user authorizes continued bounded sessions until Phase 3 is genuinely closed.
+Use the unchanged exit and [prospective work plan](work-sessions/2026-09-08-phase3-completion-plan.md).
+Encounter-aware current-resource coverage and a separate defensive escape are
+implemented; 331 targeted tests passed. A support-only exact-failure recovery
+runner preserves the failed prefix, costs, search memory and zero training labels.
+Read the [repair audit](audits/red-resource-recovery-repair-2026-09-08.md).
+No live recovery or new fit yet; model67, collection and original failure below
+remain the actual state. Both reviewer passes are complete; speculative source
+findings are adjudicated against the implementation/tests in the audit. Codex owns publication/execution.
+Next publish qualified source, run one exact-state escape-and-heal, authenticate
+the resulting checkpoint, then return to actual model choice and outcome fitting.
+Do not stop at engineering tests or count a recovery as a model-selected goal.
+
+## Historical input to the repair — model67 evolution stopped
 
 Model67 chose evolution from capture/evolution/healing alternatives. Ekans grew
 from level6 to11, then the deterministic training skill found no safe finisher

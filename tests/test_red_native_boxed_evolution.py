@@ -540,6 +540,9 @@ def test_native_wiring_executes_existing_engine_with_same_budgets_and_observers(
     assert training[0][1]["policy"].max_steps == 2000
     assert training[0][1]["allow_direct_evolution"] is True
     assert training[0][1]["collection_shared_experience"] is True
+    assert training[0][1]["collection_encounters"] == {
+        22: [(10, 0x21)], 197: [(20, 0x3B)],
+    }
     assert training[0][1]["evolution_battle_quantum"] == 4
     assert [v.map_id for v in training[0][1]["venues"]] == [MapId.ROUTE_11, MapId.DIGLETTS_CAVE]
     assert received[0]["pc_facing"] == "up"

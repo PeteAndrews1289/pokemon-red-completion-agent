@@ -1197,6 +1197,13 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import COMPLETION_TRAINING_PLAN_SCHEMA
 
     metadata = header.get("metadata")
+    if isinstance(metadata, Mapping) and metadata.get("schema") == (
+        "pokemon.red.forced-recovery-header.v1"
+    ):
+        enabled = metadata.get("completion_dose")
+        if type(enabled) is not bool:
+            raise PairedRedBoundedPlayerRunError("continuation_recovery_observer_mode")
+        return enabled
     plan = metadata.get("player_training_plan") if isinstance(metadata, Mapping) else None
     if plan is None:
         return False

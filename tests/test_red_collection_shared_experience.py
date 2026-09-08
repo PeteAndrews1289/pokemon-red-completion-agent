@@ -13,7 +13,12 @@ from pokemon_red_completion.party import (
     PartyObservation,
     StatusCondition,
 )
-from pokemon_red_completion.red_party import EXPERIENCE_OFFSET, MOVES_OFFSET, PokemonRedPartyReader
+from pokemon_red_completion.red_party import (
+    EXPERIENCE_OFFSET,
+    MOVES_OFFSET,
+    PP_OFFSET,
+    PokemonRedPartyReader,
+)
 from pokemon_red_completion.team_training import BalancedTeamPolicy, GrindingArea
 
 
@@ -95,6 +100,149 @@ def test_structural_readiness_can_restore_pp_but_never_create_an_attack():
         )
         is None
     )
+
+
+def test_encounter_coverage_rejects_level_only_primeape_and_exhausted_backup():
+    recipient = member(0x6C, 11, 1)  # Ekans
+    fighter = member(0x75, 28, 2)  # Primeape: Psychic-weak despite spare Tackle PP
+    backup = member(0x76, 55, 3, pp=0)
+    party = PartyObservation((recipient, fighter, backup))
+    assert training.collection_finisher(party, 0x6C, POLICY, enemy_level=9) == fighter
+    assert not training.collection_encounter_coverage(party, 0x6C, POLICY, [(9, 0x30)])
+    assert training.collection_encounter_coverage(
+        party, 0x6C, POLICY, [(9, 0x30)], resources=False
+    )
+    assert not training.collection_encounter_coverage(party, 0x6C, POLICY, [])
+
+
+def test_each_opponent_may_have_a_different_qualified_helper():
+    # Water is unsafe against Electric; Ground is unsafe against Water.
+    recipient = member(0x6C, 11, 1)
+    water = member(0x1C, 55, 2)
+    ground = member(0x76, 55, 3)
+    encounters = [(10, 0x54), (10, 0xB1)]  # Pikachu and Squirtle internal IDs
+    party = PartyObservation((recipient, water, ground))
+    assert training.collection_encounter_coverage(party, 0x6C, POLICY, encounters)
+    for helper in (water, ground):
+        assert not training.collection_encounter_coverage(
+            PartyObservation((recipient, replace(helper, slot=2))), 0x6C, POLICY, encounters
+        )
+
+
+@pytest.mark.parametrize(
+    "change", [{"hp": 0}, {"hp": 1}, {"status": StatusCondition.POISON}, {"level": 10}]
+)
+def test_pp_independent_escape_does_not_waive_defensive_guards(change):
+    recipient = member(0x6C, 11, 1)
+    exhausted = member(0x76, 55, 2, pp=0)
+    assert training.collection_escape_escort(
+        PartyObservation((recipient, exhausted)), 0x6C, POLICY,
+        enemy_level=9, enemy_species=0x30,
+    ) == exhausted
+    assert training.collection_escape_escort(
+        PartyObservation((recipient, replace(exhausted, **change))), 0x6C, POLICY,
+        enemy_level=9, enemy_species=0x30,
+    ) is None
+
+
+def test_real_loop_heals_instead_of_accepting_species_blind_helper():
+    class Memory(FakeMemory):
+        def _field(self, observed, offset):
+            if observed.species == 0x76 and offset == PP_OFFSET:
+                return 0
+            return super()._field(observed, offset)
+
+    memory = Memory()
+    memory.set_party([(0x6C, 11), (0x75, 28), (0x76, 55)])
+    heals = []
+    venue = replace(
+        _venue(GrindingArea("mixed", 9, 15, measured_samples=40)),
+        heal_and_return=lambda *args: heals.append(True),
+        walk_to_grass=lambda *args: pytest.fail("Drowzee coverage failed: must not seek"),
+    )
+    reader = SimpleNamespace(
+        read=lambda: state(), read_input_readiness=lambda: SimpleNamespace(ready=True)
+    )
+    with pytest.raises(RuntimeError, match="recovery repeated"):
+        run(memory, reader, policy=POLICY, venues=[venue],
+            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
+            collection_shared_experience=True, collection_encounters={venue.map_id: [(9, 0x30)]})
+    assert heals == [True]
+    assert not memory.swaps
+
+
+def test_no_finisher_battle_uses_escape_not_structural_combat(monkeypatch):
+    class Memory(FakeMemory):
+        def _field(self, observed, offset):
+            if observed.species == 0x76 and offset == PP_OFFSET:
+                return 0
+            return super()._field(observed, offset)
+
+    memory = Memory()
+    memory.set_party([(0x6C, 11), (0x75, 28), (0x76, 55)])
+    current = [state(battle_state=1, enemy_level=9, enemy_species_id=0x30)]
+    reader = SimpleNamespace(
+        read=lambda: current[0], read_input_readiness=lambda: SimpleNamespace(ready=True)
+    )
+    switches, flees = [], []
+
+    def switch(*args, target_index, **kwargs):
+        switches.append(target_index)
+        return True
+
+    def flee(*args):
+        flees.append(True)
+        current[0] = state()
+
+    def recovered(*args):
+        raise StopIteration("recovery reached without another battle")
+
+    monkeypatch.setattr(training, "switch_active_battler", switch)
+    monkeypatch.setattr(
+        training, "run_adaptive_wild_battle", lambda *a, **kw: pytest.fail("must not attack")
+    )
+    venue = replace(_venue(GrindingArea("mixed", 9, 15, measured_samples=40)),
+                    heal_and_return=recovered)
+    with pytest.raises(StopIteration, match="recovery reached"):
+        run(memory, reader, policy=POLICY, venues=[venue], flee_func=flee,
+            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
+            collection_shared_experience=True, collection_encounters={venue.map_id: [(9, 0x30)]})
+    assert switches == [2]
+    assert flees == [True]
+
+
+@pytest.mark.parametrize("failure", ["no_escort", "faint_on_switch", "no_exit"])
+def test_escape_abstains_or_stops_without_issuing_more_inputs(monkeypatch, failure):
+    from pokemon_red_completion.actions import MacroAction, MacroActionKind
+
+    memory = FakeMemory()
+    memory.set_party([(0x6C, 11), (0x76, 55)])
+    if failure == "no_escort":
+        memory.party[1].level = 5
+    calls = []
+
+    def execute(action):
+        calls.append(action)
+        if failure == "faint_on_switch":
+            memory.party[0].hp = 0
+
+    def switch(actions, *args, **kwargs):
+        actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
+        return True
+
+    monkeypatch.setattr(training, "switch_active_battler", switch)
+    reader = SimpleNamespace(
+        read=lambda: state(battle_state=1, enemy_level=9, enemy_species_id=0x30),
+        read_input_readiness=lambda: SimpleNamespace(ready=True),
+    )
+    with pytest.raises(RuntimeError):
+        training.escape_collection_battle(
+            SimpleNamespace(execute=execute), reader, memory,
+            recipient_species_id=0x6C, policy=POLICY,
+            flee_func=lambda *args: None, flee_timing=object(),
+        )
+    assert len(calls) == {"no_escort": 0, "faint_on_switch": 1, "no_exit": 2}[failure]
 
 
 @pytest.mark.parametrize("enemy_level,enemy_species", [(None, 0x21), (100, 0x21), (15, 0x19)])

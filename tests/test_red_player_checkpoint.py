@@ -232,6 +232,65 @@ def test_durable_state_round_trip_preserves_parent_scope_and_quest_claims(case):
     assert recover_completed_red_player_checkpoint(store, arguments["episode_id"]) == summary
 
 
+@pytest.mark.parametrize("mutation", [None, "origin", "costs", "model", "type", "rewind"])
+def test_separate_recovery_authenticates_failed_prefix_and_keeps_zero_labels(case, mutation):
+    from pokemon_red_completion.provenance import canonical_sha256
+    from pokemon_red_completion.red_failure_recovery import (
+        RedFailureRecoveryError,
+        RedFailureRecoveryResult,
+    )
+
+    store, arguments, observation = case
+    failed_emulator = _Emulator()
+    failed_emulator.state = b"exact-failed-battle-not-old-quantum"
+    failed = capture_red_failure_state(emulator=failed_emulator, meter=_Meter())
+    previous = {**failed, "state_sha256": "a" * 64}
+    writer = store.begin_episode("failed-choice")
+    writer.append("episode", {"episode_id": "failed-choice", "metadata": {
+        "state_sha256": arguments["parent"].state_sha256,
+        "envelope_sha256": arguments["parent"].envelope_sha256,
+        "profile_sha256": arguments["profile_sha256"],
+        "rom_sha256": arguments["rom_sha256"], "context_origin": "training",
+    }})
+    writer.append("skill_recovery", previous)
+    writer.append("failure_state", failed)
+    writer.abort("unsafe_boundary")
+    failed_manifest = store.open_failed_episode("failed-choice").manifest_sha256
+    result = RedFailureRecoveryResult(
+        "failed-choice", failed_manifest, failed["state_sha256"], 2, 37, 2, 37,
+    )
+    arguments["result"] = result
+    document = capture_red_player_terminal(**arguments)
+    assert document["terminal_result"]["training_examples"] == 0
+    assert document["terminal_result"]["authority_decisions"] == 0
+    if mutation == "origin":
+        document["terminal_result"]["failure_origin"]["manifest_sha256"] = "f" * 64
+    elif mutation == "costs":
+        document["terminal_result"]["total_actions"] = 1
+    elif mutation == "model":
+        document["terminal_result"]["authority_decisions"] = 1
+    elif mutation == "type":
+        document["terminal_result"]["schema"] = "pokemon.core.bounded-player-episode-result.v1"
+    elif mutation == "rewind":
+        document["terminal_result"]["failure_origin"]["state_sha256"] = "a" * 64
+    document["terminal_result_sha256"] = canonical_sha256(document["terminal_result"])
+    writer = _complete(store, document, complete=False)
+    writer.append("executions", {"frames": 17})
+    writer.append("executions", {"frames": 20})
+    writer.complete()
+    if mutation:
+        with pytest.raises(RedFailureRecoveryError):
+            publish_red_player_checkpoint(store, document)
+        return
+    summary = publish_red_player_checkpoint(store, document)
+    checkpoint = _open(store, arguments, summary)
+    checkpoint.require_restored_observation(observation)
+    assert checkpoint.capture.envelope == replace(
+        arguments["parent"].envelope, state_sha256=checkpoint.capture.state_sha256,
+    )
+    assert store.open_failed_episode("failed-choice").manifest_sha256 == failed_manifest
+
+
 def test_safe_failed_goal_retains_exact_state_without_becoming_a_success_or_label(case):
     store, arguments, observation = case
     previous = arguments["result"]
