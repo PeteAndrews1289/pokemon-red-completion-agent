@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-08 UTC",
+  "location": "Route 11 — Primeape28 evolved; Mankey12 preserved",
+  "registered_species": 31,
+  "living_species": 26,
+  "specimens": 26,
+  "capture_items": 4,
+  "money": 209,
+  "checkpoint_sha256": "c25d56166a3f586118052c9f6bfd8f047a8a8f52c1b00254165e40d601b77786",
+  "live": false,
+  "controller_actions": 0
+}

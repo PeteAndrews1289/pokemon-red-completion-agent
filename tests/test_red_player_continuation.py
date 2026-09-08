@@ -34,6 +34,71 @@ def test_history_tracking_starts_only_for_explicit_successor_and_preserves_paren
     assert restored.lookup("different", "a" * 64).attempts == 0
 
 
+@pytest.mark.parametrize("history_mode", ["legacy", "new", "retained"])
+def test_preflight_observer_receives_actor_history_without_mutating_parent(
+    monkeypatch, history_mode,
+):
+    from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+
+    memory = GoalSearchMemory()
+    memory.record("grass", "a" * 64, exhausted=True, actions=17, frames=500)
+    saved = memory.private_dict()
+    readiness = SimpleNamespace(
+        rom_path=Path("unused"), capture=SimpleNamespace(state_bytes=b"state"),
+        continuation=SimpleNamespace(search_memory=saved) if history_mode == "retained" else None,
+        causal_record=SimpleNamespace(model=SimpleNamespace(
+            feature_version=1 if history_mode == "legacy" else 3,
+        )),
+        profile=None, quote_resource_costs=True, completion_dose=True,
+        routed_recovery=True, pair_id="preview", challenger_arm_id="test",
+    )
+    order = []
+
+    class Emulator:
+        frame_count = 0
+        pressed_buttons = ()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            pass
+
+        def load_state_bytes(self, state):
+            assert state == b"state"
+
+    monkeypatch.setattr(runner, "PyBoyAdapter", lambda *_args, **_kwargs: Emulator())
+    monkeypatch.setattr(runner, "rom_adjacent_artifacts", lambda _path: ())
+    monkeypatch.setattr(runner, "_challenger_authority", lambda _ready: object())
+    monkeypatch.setattr(runner, "_route_world", lambda _ready: None)
+    monkeypatch.setattr(
+        runner, "_verify_continuation_restore", lambda *_args: order.append("restore"),
+    )
+    monkeypatch.setattr(runner, "build_red_goal_context_runtime", lambda **_kwargs: None)
+    monkeypatch.setattr(runner, "PokemonRedStateReader", lambda _controller: None)
+    observer = SimpleNamespace(search_memory="not wired")
+    monkeypatch.setattr(runner, "_player_observer", lambda *_args, **_kwargs: observer)
+
+    def preflight(**kwargs):
+        assert order == ["restore"]
+        assert kwargs["observe"] is observer
+        actual = observer.search_memory
+        if history_mode == "legacy":
+            assert actual is None
+        else:
+            assert isinstance(actual, GoalSearchMemory)
+            known = actual.lookup("grass", "a" * 64)
+            assert known.attempts == (1 if history_mode == "retained" else 0)
+            if history_mode == "retained":
+                assert (known.exhausted, known.actions, known.frames) == (1, 17, 500)
+            actual.record("grass", "a" * 64, exhausted=False, actions=2, frames=10)
+        return SimpleNamespace(choices=(), public_dict=lambda: {})
+
+    monkeypatch.setattr(runner, "preflight_red_bounded_player", preflight)
+    assert runner._action_free_preflight(readiness)["status"] == "ready_for_forced_bridge"
+    assert saved == memory.private_dict()
+
+
 
 @pytest.mark.parametrize("ready,battle,acts", [
     (True, False, False), (False, False, False), (True, True, False), (True, False, True),

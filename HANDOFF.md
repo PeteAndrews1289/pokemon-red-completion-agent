@@ -1,6 +1,26 @@
 # Handoff
 
-## Current — useful duplicate captured and fitted; model65 retained
+## Current — Mankey-to-Primeape lesson completed; model66 retained
+
+Model65 chose evolution over capture at probability0.767470. Mankey12 became
+Primeape28 while retaining Mankey12 and all26specimens.26living species/31registered,
+fourballs209currency,sixfullHP. Exact Route11(0,6) terminal independently restored.
+20,425actions/1,736,776frames,zero losses or observed faints.
+
+Model66 retains all65earlierrows:66outcomes,27successful,56distinct,
+45native/15regional entries. It has not played. The source proposal earned no
+label; the single native choice did. This is same-lineage training, not independent
+advantage or full-game completion. Safe acquisition3/3stays closed; Phase3current.
+
+Post-run falsifier: source surveys request another Mankey despite retaining both
+Mankey and Primeape. Stop further capture; static root demand must become remaining
+dependency demand without changing historical restore semantics. Then inspect
+genuine options from this real model66/save. No replay/reset or synthetic choice.
+Actual gameplay/fit used da16785a; post-run preview-history repair is prospective.
+Codex owns execution and publication; no outside-agent work is pending.
+[Audit and next step](docs/audits/red-mixed-owned-evolution-2026-09-08.md). Recommend Astra Extra High, Fast off.
+
+## Historical — useful duplicate captured and fitted; model65 retained
 
 Model64 selected Route5 versus Route24 and caught a second Mankey12 with one ball.
 334actions/20,628frames, one verified status attempt. Exact saved endpoint:

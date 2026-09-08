@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-07-bounded-search-continuation",
+  "as_of_session": "2026-09-08-mixed-owned-evolution",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
+      "evidence": "docs/evidence/red-mixed-owned-evolution-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -252,6 +252,12 @@
       "result": "Model64 chose Route5, caught a second Mankey12 using one ball, and fitted65 outcomes while retaining all prior rows.26specimens/25living,all6healthy. Safe acquisition3/3closed.",
       "deviation": "Two-choice maximum ended after one success because only one capture source remained. No fake second choice or replay. Post-run routed-summary omission repaired prospectively; stage exits unchanged.",
       "next": "Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset."
+    },
+    {
+      "session": "2026-09-08-mixed-owned-evolution",
+      "result": "Model65 selected evolution and retained Primeape28 plus Mankey12.26living/26specimens,31registered,no losses.65to66outcomes with all earlier rows. Existing safe acquisition3/3 remains closed; Phase3current.",
+      "deviation": "Post-run audit found static source demand asks for Mankey again after the family is complete. Stop new capture and repair remaining-demand accounting first. Actual successful evolution/fit preserved; no stage exits changed.",
+      "next": "Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice."
     }
   ],
   "closed_milestones": [

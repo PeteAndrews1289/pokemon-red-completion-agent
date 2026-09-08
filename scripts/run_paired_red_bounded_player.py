@@ -1349,15 +1349,19 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
         )
         meter = _ReadOnlyBudgetMeter(actions, emulator, initial_frame_count)
+        observer = _player_observer(
+            runtime,
+            actions,
+            world,
+            readiness.quote_resource_costs,
+            completion_dose=readiness.completion_dose,
+            routed_recovery=readiness.routed_recovery,
+        )
+        # Preview the same prospective history as the actor. Historical restore
+        # authentication above must still use the checkpoint's original inputs.
+        observer.search_memory = _execution_search_memory(readiness)
         result = preflight_red_bounded_player(
-            observe=_player_observer(
-                runtime,
-                actions,
-                world,
-                readiness.quote_resource_costs,
-                completion_dose=readiness.completion_dose,
-                routed_recovery=readiness.routed_recovery,
-            ),
+            observe=observer,
             budget_meter=meter,
             assignment_id=readiness.pair_id,
             authorities=(

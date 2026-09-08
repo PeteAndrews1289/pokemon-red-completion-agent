@@ -1,5 +1,31 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 8 — the spare became a living evolution
+
+The previous session's duplicate capture became useful: model65 chose evolution
+over another capture, and the existing skills developed Mankey12 into Primeape28.
+One Mankey remained boxed. The living collection grew25to26distinct species while
+all26specimens survived. The real outcome updated model65to66 with all earlier
+examples retained. No teacher selected the goal and no replay reset the resources.
+
+This is the project goal in miniature: acquire a prerequisite, decide to use it,
+preserve the base form, verify the outcome and learn from experience. It is not
+a claim that the model chooses battle buttons or can complete Red autonomously.
+Deterministic mechanics still do that execution work, and independent advantage
+has not been established.
+
+The audit also found that the preview lacked search history. Actual recorded
+scores favored evolution, despite the earlier preview favoring capture. The
+preview is repaired prospectively; the played choice and fit were not rewritten.
+Next test sustained useful continuation rather than building another evolution
+script. Phase3 remains open.
+
+The final audit caught a genuine planning bug: the source survey wanted another
+Mankey after both living forms were complete. Its static root count ignored the
+retained Primeape. We stopped further capture and made remaining-demand accounting
+the next task, preserving the successful lesson rather than spending resources on
+an unnecessary duplicate. This repair is not yet completed.
+
 ## September 7 — a useful duplicate, not a new species
 
 The learned destination scorer chose Route5, and deterministic navigation/capture

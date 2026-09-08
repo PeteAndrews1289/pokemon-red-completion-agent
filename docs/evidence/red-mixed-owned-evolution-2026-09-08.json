@@ -1,0 +1,143 @@
+{
+  "schema": "pokemon.red.mixed-owned-evolution-learning.v1",
+  "classification": "One model-selected native evolution completed, preserved its base form, and fitted its actual outcome",
+  "source_commit": "da16785a9e83f8a8b3f6fe422f53ee1cd3ad1401",
+  "source_bundle_sha256": "af2eb985659d3d3dccaf52a8c0331bb4977da67de314fa2aca0f65e836793ba7",
+  "episode_id": "red-mixed-owned-20260908-causal",
+  "manifest_sha256": "0e32d10e72d622b999ee622177bb9294ef9dee64f9f842dd2a6257b57c83acac",
+  "checkpoint_sha256": "c25d56166a3f586118052c9f6bfd8f047a8a8f52c1b00254165e40d601b77786",
+  "proposal_record_sha256": "c461cbe00acbadeebc60f1b23bbf162e921cec8b259f0c229cdae068b1c44f07",
+  "decision": {
+    "behavior_model_sha256": "1eae09436364a425145c51693b2214360395cdf742343ea7f0c6d21b21b4e635",
+    "available_goals": [
+      "acquire_species",
+      "evolve_species"
+    ],
+    "selected_goal": "evolve_species",
+    "selected_probability": 0.7674701193789818,
+    "source_proposal": "wild:Route24:grass",
+    "source_proposal_mode": "unique_binding",
+    "source_proposal_fitted": false,
+    "source_acquisition_attempted": false,
+    "parent_overridden": false,
+    "forced_singleton_steps": 0,
+    "teacher_queries": 0,
+    "actual_score_preferred_evolution": true,
+    "preview_history_omission": "Preflight omitted search memory and reported a different preference. The actual recorded policy included history, selected evolution, and supplied the fitted outcome. Preview repaired prospectively; no old record rewritten."
+  },
+  "outcome": {
+    "status": "succeeded",
+    "actions": 20425,
+    "frames": 1736776,
+    "maximum_actions": 30000,
+    "maximum_frames": 3000000,
+    "source_species": "Mankey",
+    "target_species": "Primeape",
+    "source_level": 12,
+    "target_level": 28,
+    "retained_mankey": 1,
+    "retained_primeape": 1,
+    "distinct_living_species_gain": 1,
+    "registered_species_gain": 1,
+    "specimen_count_change": 0,
+    "checkpoint_boundaries_retained": 61
+  },
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 26,
+    "registered_species": 31,
+    "required_specimens_remaining": 94,
+    "required_specimens_sha256": "1bb58da1dc46b046030f86ac1766a7d3d636666a84cb45cf879fa7f528062fa5",
+    "retained_captures": 26,
+    "specimen_ledger_sha256": "ed03fb6a516857292d9cf27165a070e829f468f60853a8bb7e3c9304d71e444a",
+    "storage_headroom": 19,
+    "total_living_specimens": 26,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "capture_items_before": 4,
+    "capture_items_after": 4,
+    "money_before": 209,
+    "money_after": 209,
+    "all_six_full_hp": true,
+    "bag_unchanged": true
+  },
+  "trace": {
+    "actions": 20425,
+    "frames": 1736776,
+    "encounters": 256,
+    "ball_changes": 0,
+    "observed_any_faint": false,
+    "observed_any_trainer_battle": false,
+    "execution_errors": 0
+  },
+  "training": {
+    "retained_examples": 66,
+    "successful_examples": 27,
+    "distinct_selected_feature_rows": 56,
+    "new_examples": 1,
+    "prior_rows_retained": true,
+    "model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+    "model_record_sha256": "ce98b6890e56334ebd9de97fd233a73d95a800454c0d713937f41926ebda4741",
+    "corpus_sha256": "a412af299729cdb73093a08767641955cf33620c09a2b409bf4a2127883270cf",
+    "corpus_record_sha256": "0853bb7015c4bbcc4ff9a9c29e96f64e4c54988c4ea85a8c7692178798c287f1",
+    "retained_native_episodes": 45,
+    "retained_regional_choices": 15,
+    "source_proposal_training_rows": 0,
+    "updated_model_has_played": false,
+    "in_sample_only": true
+  },
+  "audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "map_id": 22,
+    "x": 0,
+    "y": 6,
+    "input_ready": true,
+    "battle_state": 0,
+    "next_source_candidates": [
+      "wild:Route5:grass",
+      "wild:Route24:grass"
+    ]
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "limitations": [
+    "Same-lineage train practice; no independent advantage or cross-game transfer claim.",
+    "Deterministic skills still own navigation, PC management, grinding and battle controls. Learned authority is the selected semantic goal.",
+    "256 observed encounters are not claimed as256 battle wins; no separate measured XP or healing-count claim.",
+    "Preview-history repair is post-run and ROM-free qualified only. Gameplay and fitting used published da16785a.",
+    "Phase3 sustained Red remains current; this is not whole-game completion."
+  ],
+  "next_step": "Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice.",
+  "demand_finding": {
+    "observed_requirement": {
+      "species": "Mankey",
+      "required_count": 2,
+      "retained_count": 1,
+      "missing_count": 1
+    },
+    "retained_family": [
+      "Mankey",
+      "Primeape"
+    ],
+    "individual_goal_directives": [
+      "complete",
+      "complete"
+    ],
+    "classification": "The source survey uses static root demand and fails to credit the held evolution. Another Mankey is unnecessary for this completed family.",
+    "further_capture_authorized_in_this_session": false,
+    "repair_completed": false,
+    "controller_actions": 0,
+    "emulator_frames": 0
+  }
+}

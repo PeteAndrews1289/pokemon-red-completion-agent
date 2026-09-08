@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-07-bounded-search-continuation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-mixed-owned-evolution**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify safe capture-search preparation ([evidence](../docs/evidence/red-safe-capture-integration-2026-09-07.json))
 - [x] Retain and fit a useful source capture ([evidence](../docs/evidence/red-bounded-search-continuation-2026-09-07.json))
 
-Current model: **65 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-bounded-search-continuation-2026-09-07.json)
+[Current evidence](../docs/evidence/red-mixed-owned-evolution-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-mixed-owned-evolution
+
+Model65 selected evolution and retained Primeape28 plus Mankey12.26living/26specimens,31registered,no losses.65to66outcomes with all earlier rows. Existing safe acquisition3/3 remains closed; Phase3current.
+
+**Deviation:** Post-run audit found static source demand asks for Mankey again after the family is complete. Stop new capture and repair remaining-demand accounting first. Actual successful evolution/fit preserved; no stage exits changed.
+
+**Next:** Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice.
 
 ### 2026-09-07-bounded-search-continuation
 
