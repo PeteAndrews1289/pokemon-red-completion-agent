@@ -70,3 +70,10 @@ those claims are not evidence and no file audit is claimed.
 
 Next: publish this tested seam, then one prospectively declared native continuation
 from actual chain12/model75, retaining whatever outcome occurs. No Phase3 replay.
+
+The first real preflight rejected the unquoted income binding before controller
+input or episode claim: native training requires a quote for every RESUPPLY goal.
+V3 now explicitly quotes conditional income with zero purchase/stock/spend credit;
+legacy V1/V2 purchase bytes remain unchanged. The real exploring actor and policy
+round-trip are regression-tested. This is a pre-input integration correction,
+not a retried trainer battle or a reason to remove the economic guard.

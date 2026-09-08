@@ -22,6 +22,7 @@ from .goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
+from .goal_resource_quote import GoalResourceQuote
 from .observation import event_flag_is_set
 from .provenance import canonical_sha256
 from .red_capture_lead import RedCaptureLeadError, plan_capture_lead
@@ -266,6 +267,10 @@ def bind_local_trainer_funding(
             }
         ),
         kind=GoalKind.RESUPPLY,
+        resource_quote=GoalResourceQuote(
+            before_money, 0, (),
+            expected_income=target.quote.expected_money_after(before_money) - before_money,
+        ),
         estimated_effort=min(1.0, 0.15 + len(target.approach.steps) / 256),
         estimated_risk=0.15,
         execute=execute,

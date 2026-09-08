@@ -163,7 +163,10 @@ def test_funding_binding_preserves_alternatives_and_earns_not_buys(monkeypatch):
     assert not calls and router.actions.actions_executed == 0
     assert result.bindings[0] is bindings.bindings[0]
     bound = result.bindings[1]
-    assert bound.kind is GoalKind.RESUPPLY and bound.resource_quote is None
+    assert bound.kind is GoalKind.RESUPPLY
+    assert bound.resource_quote.expected_income == 1050
+    assert bound.resource_quote.available_funds == 9
+    assert bound.resource_quote.purchase_cost == 0 and bound.resource_quote.reserves == ()
     assert result.opportunities[0].availability is GoalAvailability.AVAILABLE
     report = bound.execute()
     assert calls == ["escort", "route", "face", "battle"]

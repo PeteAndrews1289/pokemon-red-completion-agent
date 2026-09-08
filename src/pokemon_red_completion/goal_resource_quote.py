@@ -71,17 +71,27 @@ class GoalResourceQuote:
     existing resource-cost weight; no predicted outcome or prior label changes.
     An explicitly funded V2 quote keeps real cash separate from sale proceeds;
     V1 bytes and semantics remain unchanged. Proceeds are finite, not free cash.
+    V3 describes conditional income only: no purchased stock, advance credit,
+    negative cost or success label. Execution must prove the actual earnings.
     """
 
     available_funds: int
     purchase_cost: int
     reserves: tuple[GoalResourceReserve, ...]
     funding_proceeds: int = 0
+    expected_income: int = 0
 
     def __post_init__(self) -> None:
         _count(self.available_funds, "available funds")
         _count(self.purchase_cost, "purchase cost")
         _count(self.funding_proceeds, "funding proceeds")
+        _count(self.expected_income, "expected income")
+        if self.expected_income:
+            # V3 earns conditional future income; it does not purchase stock,
+            # provide spendable funds, or discount cost by an unearned reward.
+            if self.purchase_cost != 0 or self.reserves != () or self.funding_proceeds != 0:
+                raise ValueError("income quote cannot claim purchases or available proceeds")
+            return
         if not 0 < self.purchase_cost <= self.available_funds + self.funding_proceeds:
             raise ValueError("quoted purchase must be positive and affordable")
         if (
@@ -95,6 +105,8 @@ class GoalResourceQuote:
 
     @property
     def cost_units(self) -> float:
+        if self.expected_income:
+            return 0.0
         purchased = sum(item.purchased for item in self.reserves)
         excess = sum(item.excess_purchased for item in self.reserves)
         return (
@@ -102,6 +114,14 @@ class GoalResourceQuote:
         )
 
     def public_dict(self) -> dict[str, object]:
+        if self.expected_income:
+            return {
+                "schema": "pokemon.core.goal-resource-quote.v3",
+                "available_funds": self.available_funds,
+                "expected_income": self.expected_income,
+                "purchase_cost": 0,
+                "reserves": [],
+            }
         return {
             "schema": (
                 "pokemon.core.goal-resource-quote.v2"
@@ -116,6 +136,23 @@ class GoalResourceQuote:
 
     @classmethod
     def from_public_dict(cls, value: object) -> GoalResourceQuote:
+        if (isinstance(value, Mapping)
+                and value.get("schema") == "pokemon.core.goal-resource-quote.v3"):
+            if (
+                set(value) != {
+                    "schema", "available_funds", "expected_income", "purchase_cost", "reserves"
+                }
+                or type(value["purchase_cost"]) is not int or value["purchase_cost"] != 0
+                or not isinstance(value["reserves"], (list, tuple)) or value["reserves"]
+            ):
+                raise ValueError("income quote schema differs")
+            income = _count(value["expected_income"], "expected income")
+            if income <= 0:
+                raise ValueError("income quote needs positive conditional income")
+            return cls(
+                _count(value["available_funds"], "available funds"), 0, (),
+                expected_income=income,
+            )
         funded = (
             isinstance(value, Mapping)
             and value.get("schema") == "pokemon.core.goal-resource-quote.v2"

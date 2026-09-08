@@ -144,3 +144,44 @@ def test_mixed_reserves_excess_is_only_newly_purchased_excess():
     assert quote.cost_units == pytest.approx(0.4)
     assert quote.reserves[0].resource == "capture"
     assert GoalResourceQuote.from_public_dict(quote.public_dict()) == quote
+
+
+def test_conditional_income_quote_roundtrips_through_the_real_exploring_actor():
+    from pokemon_red_completion.living_dex_player_exploration import ExploringLivingDexGoalPolicy
+    quote = GoalResourceQuote(9, 0, (), expected_income=1050)
+    assert quote.public_dict() == {
+        "schema": "pokemon.core.goal-resource-quote.v3", "available_funds": 9,
+        "expected_income": 1050, "purchase_cost": 0, "reserves": [],
+    }
+    assert quote.cost_units == 0.0  # Never credit unearned income as negative cost.
+    question = _quoted_question(quote)
+    restored = GoalManagerQuestion.from_policy_input(question.policy_input)
+    assert restored.policy_input == question.policy_input
+    policy = ExploringLivingDexGoalPolicy(_supply_model(), seed=4)
+    selected = policy.select(restored)
+    assert selected.kind in {GoalKind.ACQUIRE_SPECIES, GoalKind.RESUPPLY}
+    assert policy.training_eligible
+    assert all(p > 0 for p in policy.selection_metadata()["candidate_probabilities"])
+    assert GoalResourceQuote.from_public_dict(quote.public_dict()) == quote
+
+
+@pytest.mark.parametrize("field,value", [
+    ("expected_income", 0), ("expected_income", True), ("expected_income", -1),
+    ("purchase_cost", 1), ("purchase_cost", False), ("available_funds", None),
+    ("reserves", [{"resource": "capture", "purchased": 1}]),
+    ("schema", "pokemon.core.goal-resource-quote.v1"), ("hidden_trainer", 3),
+])
+def test_income_quote_cannot_launder_stock_spend_or_identity(field, value):
+    public = GoalResourceQuote(9, 0, (), expected_income=1050).public_dict()
+    public[field] = value
+    with pytest.raises(ValueError):
+        GoalResourceQuote.from_public_dict(public)
+
+
+@pytest.mark.parametrize("changes", [
+    {"purchase_cost": 1}, {"reserves": (GoalResourceReserve("capture", 0, 1, 1),)},
+    {"funding_proceeds": 1}, {"expected_income": True},
+])
+def test_income_quote_constructor_refuses_mixed_economic_contract(changes):
+    with pytest.raises(ValueError):
+        replace(GoalResourceQuote(9, 0, (), expected_income=1050), **changes)
