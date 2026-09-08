@@ -34,6 +34,20 @@ from product_focus import (  # noqa: E402
 CHECKER = runpy.run_path(str(SCRIPTS / "check_product_focus.py"))
 CHECK_DOCS = runpy.run_path(str(SCRIPTS / "check_docs.py"))
 DASHBOARD = runpy.run_path(str(SCRIPTS / "run_product_focus_dashboard.py"))
+
+
+def test_current_dashboard_receipt_passes_the_real_native_training_boundary():
+    # Validate the published pointer too, not just a hand-built dashboard fixture.
+    # Support episodes must not replace the last fit's admitted episode binding.
+    evidence = DASHBOARD["_load_learning_evidence"]()
+    training, _ = DASHBOARD["_native_training_projection"](evidence)
+    assert training.samples_after > 0
+    if "latest_support_episode" in evidence:
+        assert evidence["latest_support_episode"]["admitted_examples"] == 0
+        assert evidence["latest_support_episode"]["sampled_choices"] == 0
+        assert evidence["completed_episode"]["admitted_examples"] > 0
+
+
 BATTLE_OUTCOME_CYCLE_RESULT = (
     PROJECT_ROOT
     / "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"

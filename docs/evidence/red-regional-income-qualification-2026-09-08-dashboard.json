@@ -1,6 +1,6 @@
 {
   "schema": "pokemon.red.native-player-learning-session.v1",
-  "status": "support_complete_no_new_fit",
+  "status": "fit_complete_bounded_only",
   "scope": "Adjacent-map income qualified:525 earned;30 specimens/28 living/33 registered retained. Model76 unchanged; income was deterministic safety, not learned trainer selection.",
   "session_evidence": "docs/evidence/red-regional-income-qualification-2026-09-08.json",
   "boundaries": {
@@ -16,12 +16,12 @@
     "counterfactual_targets": 0
   },
   "completed_episode": {
-    "actions": 78,
-    "frames": 7513,
-    "admitted_examples": 0,
-    "sampled_choices": 0,
+    "actions": 55,
+    "frames": 3072,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
     "verified_collection_gain": 0,
-    "episode_id": "red-phase4-regional-income-resume-20260908-01-causal"
+    "episode_id": "red-phase4-earned-collection-20260908-01-causal"
   },
   "final_model_post_fit_gameplay": true,
   "fit": {
@@ -143,5 +143,13 @@
     "new_fitted_examples": 0,
     "failed_prefixes_retained": 1
   },
-  "fit_scope": "Last actual fit is the preceding earned-collection session; no new fit occurred in this income qualification."
+  "fit_scope": "Last actual fit is the preceding earned-collection session; no new fit occurred in this income qualification.",
+  "latest_support_episode": {
+    "actions": 78,
+    "frames": 7513,
+    "admitted_examples": 0,
+    "sampled_choices": 0,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase4-regional-income-resume-20260908-01-causal"
+  }
 }

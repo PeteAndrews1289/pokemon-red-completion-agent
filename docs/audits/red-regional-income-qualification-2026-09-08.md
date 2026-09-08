@@ -65,13 +65,20 @@ choice—not repeat heal/capture cycles or rebuild the fixed teacher.
 
 ## Validation and agent loop
 
-**276 focused tests and110 roadmap/product/dashboard tests pass**, plus full lint, type checking, artifact and documentation
+**276 focused tests and111 roadmap/product/dashboard tests pass**, plus full lint, type checking, artifact and documentation
 checks. The registry was regenerated before executable publication. Sourcec5687c1c
 introduced adjacent-map funding; source46e43319 repaired pending dialogue. Both are
 published on PR236. At review, the older documentation run34246748329 had passed;
 the new source runs34249064006 and34249920442 were still running. No hosted full-suite
 pass for the new source is claimed, no workflow was disabled, and no manual reruns
 were requested. Development did not wait on CI.
+
+The first dashboard refresh correctly rejected a support episode placed in the
+last-fit episode field. The published projection now retains the actual fitting
+episode and lists the latest zero-label support separately. A new test loads the
+real public reference through the dashboard's native training boundary. The local
+dashboard was checked again and displays the verified income result, not a refresh
+failure. No claim guard was relaxed.
 
 Flash High's first headless attempt was blocked by command permissions and supplied
 no audit. A tool-free review of source excerpts then identified useful map-qualified
