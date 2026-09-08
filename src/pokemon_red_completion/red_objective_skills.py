@@ -36,7 +36,7 @@ from pokemon_red_completion.hideout import (
 )
 from pokemon_red_completion.koga import KogaTiming, run_koga_chapter
 from pokemon_red_completion.lance import run_lance_chapter
-from pokemon_red_completion.lorelei import run_lorelei_chapter
+from pokemon_red_completion.lorelei import lorelei_input_boundary_failures, run_lorelei_chapter
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
     ObjectiveSkillExecution,
@@ -799,9 +799,16 @@ class DefeatLoreleiObjectiveSkill:
             and "story:victory_road_cleared" in state.facts
             and "league:lorelei_defeated" not in state.facts
         )
+        if not executable:
+            return ObjectiveSkillAvailability(False, "Requires the pre-Lorelei Indigo boundary.")
+        failures = lorelei_input_boundary_failures(self.reader.read())
         return ObjectiveSkillAvailability(
-            executable,
-            "Observed the qualified Indigo terminal." if executable else "Requires Indigo.",
+            not failures,
+            (
+                "Observed the legacy Lorelei input contract; this is not generic boss readiness."
+                if not failures
+                else "Legacy Lorelei implementation blocked: " + ", ".join(failures)
+            ),
         )
 
     def execute(self) -> ObjectiveSkillExecution:

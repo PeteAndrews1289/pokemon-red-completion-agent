@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-regional-income",
+  "as_of_session": "2026-09-08-story-entry",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -348,6 +348,12 @@
       "result": "Adjacent-map income qualified:525 earned,30 specimens retained;219actions/21349frames include the failed intro and its exact-state continuation. Model76 unchanged;0learnedrows. New story-entry checklist1/3.",
       "deviation": "Bounded funding scope uses adjacent ordinary connections only. Pending latch plus visible dialogue required a small repair; first attempt remains consumed. Prior resource checklist3/3 archived without changing phase exits.",
       "next": "From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs."
+    },
+    {
+      "session": "2026-09-08-story-entry",
+      "result": "Legacy readiness mismatch repaired; stored level55 Cut/Fly holder verified with zero input. Model76/checkpoint21445916 and income-to-story1/3 unchanged.",
+      "deviation": "No-learning alarm reorientation: stop adapting the old chapter. Exact party/stock reconstruction rejected; capability-based PC/Fly preparation selected, not a new stage exit.",
+      "next": "Qualify safe capability retrieval and observed Fly destinations, then generic boss readiness and a genuine model-selected story lesson."
     }
   ],
   "closed_milestones": [

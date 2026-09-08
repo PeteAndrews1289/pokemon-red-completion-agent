@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-regional-income**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-story-entry**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-story-entry
+
+Legacy readiness mismatch repaired; stored level55 Cut/Fly holder verified with zero input. Model76/checkpoint21445916 and income-to-story1/3 unchanged.
+
+**Deviation:** No-learning alarm reorientation: stop adapting the old chapter. Exact party/stock reconstruction rejected; capability-based PC/Fly preparation selected, not a new stage exit.
+
+**Next:** Qualify safe capability retrieval and observed Fly destinations, then generic boss readiness and a genuine model-selected story lesson.
 
 ### 2026-09-08-regional-income
 

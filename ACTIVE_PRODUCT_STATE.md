@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs.
+- Next decision: From checkpoint21445916/model76, qualify safe retrieval of the observed stored Fly/Cut holder and destination-observed Fly to Indigo; do not infer destination unlock from badges. Then qualify generic boss execution before a real story-versus-preparation model choice. No exact-party teacher reconstruction or collection/heal detour.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Connect cartridge-derived trainer-event progress to legitimate resource recovery, then let the semantic goal model compose earning, collection and recovery skills from retained state. |
+| Reusable capability | Expose truthful story-skill admission and discover owned field capabilities from verified storage, enabling reusable travel preparation for a genuine model-selected story objective. |
 | Authority now | Model76 retains76 fitted outcomes,34 successful and66 distinct selected rows. Adjacent-map funding earned525 but was deterministic safety, adding0labels. Current30 specimens/28living/33registered,619currency/0balls. Lorelei is the next dependency-legal story goal, not currently executable. No full Red win or transfer. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing Lorelei objective be exposed truthfully from retained state without an exact teacher-party or inventory recipe? |
+| Cheapest falsifier | Can observed storage and Fly destinations support safe Indigo access while preserving specimens and Surf/Strength, without guessed cursor counts or a walkthrough? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-regional-income** · status **active** · evidence [qualification](docs/evidence/red-regional-income-qualification-2026-09-08.json)
+**2026-09-08-story-entry** · status **active** · evidence [qualification](docs/evidence/red-story-entry-qualification-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Replenishment can now earn funds beyond the current map without rewind or protected-stock sales. The next step must connect a genuine story goal to the learner. |
-| Learning output | Zero new fitted rows; model76 unchanged. One failed approach/intro plus exact pending-interaction continuation:219 actions/21349 frames,525 earned,all30 specimens retained. |
-| Authority delta | No authority expansion or fit. Deterministic safety selected income; trainer ranking, routing and battle remain deterministic. |
-| Transfer result | Same-lineage Red development only. No independent evaluation, sustainable economy or unfamiliar-game result. |
-| Blocker | Income now reaches an adjacent map:619 currency available. Next legal story target is Lorelei, but location/party/exact-stock assumptions of the old chapter prevent an honest executable offer. |
-| Decision | Close adjacent-map income qualification and move to a bounded story-entry contract. Do not repeat collection/healing loops or mistake an old teacher chapter for generic model-led play. |
-| Next session | From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs. |
-| Next falsifier | Can the existing Lorelei objective be exposed truthfully from retained state without an exact teacher-party or inventory recipe? |
+| Product alignment | Truthful admission prevents false story offers; storage-wide move observation finds a reusable travel capability without new capture or training. These are engineering prerequisites, not learned story progress. |
+| Learning output | Zero new fitted rows; model76 unchanged. All inspections were controller-free with unchanged state. Actual stored Cut/Fly capability verified;353 focused tests passed. |
+| Authority delta | No authority expansion or fit. Admission now reflects the legacy executor; inactive-box capability observation is read-only support. |
+| Transfer result | Varied ROM-free storage and admission fixtures pass; no independent gameplay evaluation or cross-title transfer. |
+| Blocker | The old Lorelei contract is incompatible with retained party/stock, and no bounded ground route to Indigo was found. An owned level55 Farfetch'd has Cut/Fly, but retrieval, Fly destination unlock and generic boss execution remain unqualified. |
+| Decision | The no-learning alarm triggers reorientation: stop legacy chapter adaptation here. Use a bounded capability-retrieval/Fly slice to unblock the named story-choice lesson; do not reconstruct teacher stock or extend a walkthrough. |
+| Next session | From checkpoint21445916/model76, qualify safe retrieval of the observed stored Fly/Cut holder and destination-observed Fly to Indigo; do not infer destination unlock from badges. Then qualify generic boss execution before a real story-versus-preparation model choice. No exact-party teacher reconstruction or collection/heal detour. |
+| Next falsifier | Can observed storage and Fly destinations support safe Indigo access while preserving specimens and Surf/Strength, without guessed cursor counts or a walkthrough? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

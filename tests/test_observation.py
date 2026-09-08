@@ -837,6 +837,121 @@ def test_all_box_reader_rejects_missing_port_and_corrupt_checksum() -> None:
         ).read_all_box_states()
 
 
+def _move_inventory_memory() -> BankedRecordingMemory:
+    # Independent SRAM layout literals and deliberately different slots/banks.
+    data = {}
+    for bank in (2, 3):
+        payload = bytearray(6 * 0x462)
+        if bank == 3:
+            base = 0x462  # box eight, not the first box in this bank
+            payload[base : base + 4] = bytes([2, 64, 28, 255])
+            for slot, species, level, moves, pp in (
+                (0, 64, 50, (15, 19, 31, 97), (0xCE, 15, 20, 30)),
+                (1, 28, 66, (57, 70, 58, 66), (15, 15, 10, 25)),
+            ):
+                at = base + 22 + slot * 33
+                payload[at] = species
+                payload[at + 3] = level
+                payload[at + 8 : at + 12] = bytes(moves)
+                payload[at + 29 : at + 33] = bytes(pp)
+        for offset, value in enumerate(payload):
+            data[(bank, 0xA000 + offset)] = value
+        data[(bank, 0xA000 + len(payload))] = 255 - (sum(payload) % 256)
+        for box in range(6):
+            part = payload[box * 0x462 : (box + 1) * 0x462]
+            data[(bank, 0xA000 + len(payload) + 1 + box)] = 255 - (sum(part) % 256)
+    return BankedRecordingMemory(
+        {RamAddress.CURRENT_BOX_NUMBER: 0x81, RamAddress.CURRENT_BOX_COUNT: 0}, data
+    )
+
+
+def test_inactive_box_move_inventory_decodes_actual_moves_across_banks_and_slots():
+    memory = _move_inventory_memory()
+    before = memory.cartridge_values.copy()
+    reader = PokemonRedStateReader(memory)
+    members = reader.read_box_move_members(7)
+    assert [(m.box_slot, m.species_id, m.level, m.moves, m.pp) for m in members] == [
+        (1, 64, 50, (15, 19, 31, 97), (14, 15, 20, 30)),
+        (2, 28, 66, (57, 70, 58, 66), (15, 15, 10, 25)),
+    ]
+    assert reader.read_box_move_members(0) == ()
+    assert reader.read_box_move_members(11) == ()
+    assert memory.cartridge_values == before
+
+
+def test_box_move_inventory_uses_live_box_instead_of_stale_sram():
+    memory = _move_inventory_memory()
+    memory.values[RamAddress.CURRENT_BOX_NUMBER] = 0x87
+    memory.values[RamAddress.CURRENT_BOX_COUNT] = 0
+    assert PokemonRedStateReader(memory).read_box_move_members(7) == ()
+    assert memory.cartridge_reads == []
+
+
+def test_box_move_inventory_returns_live_moves_not_saved_species():
+    memory = _move_inventory_memory()
+    memory.values.update(
+        {
+            RamAddress.CURRENT_BOX_NUMBER: 0x87,
+            RamAddress.CURRENT_BOX_COUNT: 1,
+            RamAddress.CURRENT_BOX_SPECIES: 64,
+            RamAddress.CURRENT_BOX_MONS: 64,
+            int(RamAddress.CURRENT_BOX_MONS) + 3: 55,
+            int(RamAddress.CURRENT_BOX_MONS) + 8: 19,
+            int(RamAddress.CURRENT_BOX_MONS) + 29: 15,
+        }
+    )
+    members = PokemonRedStateReader(memory).read_box_move_members(7)
+    assert [(m.species_id, m.level, m.moves, m.pp) for m in members] == [
+        (64, 55, (19, 0, 0, 0), (15, 0, 0, 0))
+    ]
+    assert memory.cartridge_reads == []
+
+
+def test_box_move_inventory_requires_read_only_banked_port():
+    with pytest.raises(SemanticStateError, match="cartridge-RAM port"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {
+                    RamAddress.CURRENT_BOX_NUMBER: 0x81,
+                    RamAddress.CURRENT_BOX_COUNT: 0,
+                }
+            )
+        ).read_box_move_members(7)
+
+
+def test_box_move_inventory_does_not_read_uninitialized_storage():
+    memory = RecordingMemory({RamAddress.CURRENT_BOX_NUMBER: 1, RamAddress.CURRENT_BOX_COUNT: 0})
+    assert PokemonRedStateReader(memory).read_box_move_members(7) == ()
+
+
+@pytest.mark.parametrize("box_index", [-1, 12, True, 1.0, "1"])
+def test_box_move_inventory_rejects_invalid_index(box_index):
+    with pytest.raises(ValueError, match="box_index"):
+        PokemonRedStateReader(RecordingMemory({})).read_box_move_members(box_index)
+
+
+@pytest.mark.parametrize("corruption", ["bank", "box"])
+def test_box_move_inventory_checks_both_checksum_levels(corruption):
+    memory = _move_inventory_memory()
+    checksum = 0xA000 + 6 * 0x462 + (2 if corruption == "box" else 0)
+    memory.cartridge_values[(3, checksum)] ^= 1
+    with pytest.raises(SemanticStateError, match="checksum"):
+        PokemonRedStateReader(memory).read_box_move_members(7)
+
+
+def test_box_move_inventory_rejects_selection_change_during_read():
+    memory = _move_inventory_memory()
+    original = memory.read_cartridge_ram_u8
+
+    def changed(bank, address):
+        memory.values[RamAddress.CURRENT_BOX_NUMBER] = 0x82
+        return original(bank, address)
+
+    memory.read_cartridge_ram_u8 = changed
+    with pytest.raises(SemanticStateError, match="selection changed"):
+        PokemonRedStateReader(memory).read_box_move_members(7)
+
+
 def test_reader_extracts_bounded_bag_and_event_state() -> None:
     champion_byte, champion_bit = divmod(int(EventFlag.BEAT_CHAMPION_RIVAL), 8)
     memory = RecordingMemory(

@@ -1,5 +1,16 @@
 # Next: an honest current-state story option
 
+## Slice outcome
+
+The cheapest falsifier failed: current state is not a valid input to the old Lorelei
+implementation even after travel. Shared admission/execution checks now expose the
+restrictions honestly. Read-only saved-box move inventory verified an already-owned
+Cut/Fly holder. No gameplay or fit ran; the no-learning alarm prompted reorientation.
+Stop legacy chapter work here and follow [field transport](2026-09-08-field-transport-plan.md),
+with generic battle readiness still required before a real story lesson.
+
+## Original mission check
+
 1. **Capability:** connect verified travel, party preparation and battle readiness
    to the next dependency-legal story objective, currently Lorelei.
 2. **Learned authority:** expose a genuine story option alongside legal alternatives;

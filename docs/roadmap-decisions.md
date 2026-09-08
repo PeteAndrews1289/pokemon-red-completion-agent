@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## September8 — reject legacy story reconstruction; retrieve an observed capability
+
+The story-entry falsifier failed: reaching Indigo alone cannot qualify the old Lorelei
+chapter with the retained flexible party and stock. Its admission is now truthful,
+but expanding its scripted recipe is rejected. A controller-free inspection identifies
+an owned Cut/Fly holder in storage. Prefer bounded PC retrieval and observed flight
+selection over long ground-route repair or exact teacher-party reconstruction.
+
+This follows another support-only session, so the no-learning alarm requires explicit
+reorientation, not another arbitrary preparation campaign. The next bounded support
+slice must unblock the named model-selected story-versus-preparation lesson. Safe
+transport and generic boss readiness remain separate gates. Model76, the1/3 current
+checklist, all baseline stage exits and the living-collection mission are unchanged.
+[Audit](audits/red-story-entry-qualification-2026-09-08.md).
+
 ## September8 — close bounded sustained Red; qualify resource-backed story work
 
 The original Phase3 exit and prospective two-chain requirement are unchanged.

@@ -1,0 +1,63 @@
+{
+  "schema": "pokemon.red.story-entry-qualification.v1",
+  "session_id": "2026-09-08-story-entry",
+  "source_bundle_sha256": "54a8482665222556d3e4011c4c682b99e39330dae10d8a7470bad4b6abbfb924",
+  "checkpoint_sha256": "21445916d23e92742784e608386c36607b63a38a7a79701821b86b77461f3d16",
+  "state_sha256": "34949deb95ffd48902b29ab3eba91e092823588d6c6361fd2d7d924368ba8736",
+  "model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+  "settled_examples": 76,
+  "new_learned_examples": 0,
+  "controller_actions": 0,
+  "emulator_frames_advanced": 0,
+  "controller_free_reload_verified": true,
+  "specimens": 30,
+  "living_species": 28,
+  "registered_species": 33,
+  "money": 619,
+  "balls": 0,
+  "legal_story_objective": "defeat_lorelei",
+  "story_execution_qualified": false,
+  "legacy_contract_failures": [
+    "legacy_entry_map", "legacy_entry_position", "legacy_party_core",
+    "legacy_lead_moves", "legacy_full_restores", "legacy_hyper_potions"
+  ],
+  "legacy_restrictions_are_generic_battle_requirements": false,
+  "observed_party_field_capabilities": ["move:surf", "move:strength"],
+  "stored_field_specialist": {
+    "species_ref": "pokemon:national:083",
+    "level": 55,
+    "known_moves": ["slash", "sand_attack", "cut", "fly"],
+    "move_pp": [20, 15, 30, 15],
+    "saved_bank_and_box_checksums_verified": true,
+    "withdrawal_executed": false,
+    "party_health_after_withdrawal_verified": false
+  },
+  "navigation": {
+    "cerulean_candidate_steps": 52,
+    "cerulean_candidate_walk_steps": 49,
+    "cerulean_candidate_connections": 2,
+    "cerulean_candidate_ledges": 1,
+    "candidate_is_live_qualification": false,
+    "bounded_ground_route_to_indigo_found": false,
+    "indigo_fly_unlock_verified": false
+  },
+  "focused_tests_passed": 353,
+  "external_review": {
+    "model": "gemini-3.8-flash-high",
+    "scope": "read-only advisory review of supplied facts; not a code audit",
+    "accepted": "Prefer capability-based PC retrieval and observed Fly selection over broadening the legacy teacher or long ground-route repair.",
+    "corrected": "The 52-step route is an unexecuted candidate, not verified travel. Do not select a deposit by level alone or assume Indigo is Fly-enabled.",
+    "five_hour_remaining_fraction": 0.9107969999313354,
+    "weekly_remaining_fraction": 0.9422171711921692,
+    "claude_subscription_usage_checked": false
+  },
+  "claims": {
+    "readiness_false_offer_repaired": true,
+    "inactive_box_move_inventory_verified": true,
+    "new_model_fit": false,
+    "whole_phase_complete": false,
+    "model_led_red_completed": false,
+    "transfer_result": false
+  },
+  "private_path_fields": 0
+}

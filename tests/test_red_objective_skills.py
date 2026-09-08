@@ -288,7 +288,9 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
     victory_road = CrossVictoryRoadObjectiveSkill(  # type: ignore[arg-type]
         emulator, reader, executor
     )
-    lorelei = DefeatLoreleiObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
+    lorelei = DefeatLoreleiObjectiveSkill(  # type: ignore[arg-type]
+        emulator, SimpleNamespace(read=lambda: funded_fuchsia_raw), executor
+    )
     bruno = DefeatBrunoObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     agatha = DefeatAgathaObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
     lance = DefeatLanceObjectiveSkill(emulator, reader, executor)  # type: ignore[arg-type]
@@ -402,7 +404,8 @@ def test_red_objective_skills_expose_semantic_starting_affordances() -> None:
         facts=post_giovanni.with_facts("story:victory_road_cleared").facts,
         location="indigo_plateau_lobby",
     )
-    assert lorelei.availability(indigo).executable
+    # Semantic location alone does not qualify the legacy execution contract.
+    assert not lorelei.availability(indigo).executable
     bruno_room = GameState(
         GameMode.OVERWORLD,
         facts=indigo.with_facts("league:lorelei_defeated").facts,

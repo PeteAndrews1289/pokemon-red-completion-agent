@@ -232,6 +232,48 @@ class LoreleiChapterReport:
         }
 
 
+def lorelei_input_boundary_failures(raw: RawGameState) -> tuple[str, ...]:
+    """Describe the legacy chapter's start contract without input or memory reads.
+
+    These are implementation restrictions, not requirements for beating Lorelei.
+    In particular, callers must not turn the exact-stock or party restrictions
+    into a generic preparation curriculum. Availability and execution share this
+    predicate so a dependency-legal objective is not advertised as executable
+    merely because the player reached Indigo.
+    """
+    failures: list[str] = []
+    if raw.battle_state != 0:
+        failures.append("overworld")
+    if raw.map_id != MapId.INDIGO_PLATEAU_LOBBY:
+        failures.append("legacy_entry_map")
+    if (raw.player_x, raw.player_y) != (2, 5):
+        failures.append("legacy_entry_position")
+    if not party_core_intact(raw.party_species_ids):
+        failures.append("legacy_party_core")
+    if raw.first_party_moves != (0x42, 0x46, 0x3A, 0x39):
+        failures.append("legacy_lead_moves")
+    if raw.bag_items is None:
+        failures.append("inventory_unobserved")
+    else:
+        bag = dict(raw.bag_items)
+        if len(bag) != len(raw.bag_items):
+            failures.append("inventory_ambiguous")
+        for item, quantity, reason in (
+            (ItemId.FULL_RESTORE, INDIGO_FULL_RESTORE_RESERVE, "legacy_full_restores"),
+            (ItemId.FULL_HEAL, INDIGO_FULL_HEAL_RESERVE, "legacy_full_heals"),
+            (ItemId.HYPER_POTION, 11, "legacy_hyper_potions"),
+            (ItemId.X_ACCURACY, 3, "legacy_x_accuracy"),
+            (ItemId.X_SPECIAL, INDIGO_X_SPECIAL_RESERVE, "legacy_x_special"),
+        ):
+            if bag.get(item, 0) != quantity:
+                failures.append(reason)
+    if raw.event_flags is None or len(raw.event_flags) <= int(EventFlag.BEAT_LORELEI) // 8:
+        failures.append("story_event_unobserved")
+    elif _event(raw, EventFlag.BEAT_LORELEI):
+        failures.append("already_completed")
+    return tuple(failures)
+
+
 def run_lorelei_chapter(
     emulator: EmulatorState,
     reader: PokemonRedStateReader,
@@ -243,19 +285,11 @@ def run_lorelei_chapter(
     actions = CountingExecutor(executor)
     records: list[LoreleiCheckpoint] = []
     initial = reader.read()
-    if (
-        initial.map_id != MapId.INDIGO_PLATEAU_LOBBY
-        or (initial.player_x, initial.player_y) != (2, 5)
-        or not party_core_intact(initial.party_species_ids)
-        or initial.first_party_moves != (0x42, 0x46, 0x3A, 0x39)
-        or _bag(emulator).get(ItemId.FULL_RESTORE, 0) != INDIGO_FULL_RESTORE_RESERVE
-        or _bag(emulator).get(ItemId.FULL_HEAL, 0) != INDIGO_FULL_HEAL_RESERVE
-        or _bag(emulator).get(ItemId.HYPER_POTION, 0) != 11
-        or _bag(emulator).get(ItemId.X_ACCURACY, 0) != 3
-        or _bag(emulator).get(ItemId.X_SPECIAL, 0) != INDIGO_X_SPECIAL_RESERVE
-        or _event(initial, EventFlag.BEAT_LORELEI)
-    ):
-        raise LoreleiChapterError("Lorelei input boundary is not qualified.")
+    failures = lorelei_input_boundary_failures(initial)
+    if failures:
+        raise LoreleiChapterError(
+            f"Lorelei input boundary is not qualified: {','.join(failures)}."
+        )
     _checkpoint(records, progress, emulator, initial, "lorelei_ready", "Lorelei supplies ready")
     actions.execute(MacroAction(MacroActionKind.WAIT, repeat=LORELEI_RNG_DELAY_FRAMES))
 

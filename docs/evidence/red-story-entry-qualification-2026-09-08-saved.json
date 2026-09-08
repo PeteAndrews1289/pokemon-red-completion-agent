@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-08 UTC",
+  "location": "Route25 — retained funding endpoint; stored Cut/Fly specialist verified",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "capture_items": 0,
+  "money": 619,
+  "checkpoint_sha256": "21445916d23e92742784e608386c36607b63a38a7a79701821b86b77461f3d16",
+  "live": false,
+  "controller_actions": 0
+}

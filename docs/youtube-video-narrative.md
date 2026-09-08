@@ -1,6 +1,28 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — income is reachable beyond the current map
+## Current — knowing a goal is next is not knowing how to execute it
+
+The story graph correctly identified Lorelei as the next opponent, but the old skill
+advertised readiness too loosely. Its battle chapter depended on a particular party
+and exact supplies. We made those restrictions visible before input, rather than
+treating them as universal rules for playing Pokémon.
+
+The next useful discovery came from the collection itself: an already-owned level55
+Farfetch'd still knows Cut and Fly. A new read-only inventory can inspect stored moves
+without changing PC boxes or advancing the game, while checking saved-data integrity.
+That opens a concrete route toward reusing an owned travel specialist instead of
+catching or grinding another Pokémon. Actual retrieval and flight are not complete.
+
+This was support engineering:353 focused tests passed, but model76 gained no examples.
+All30 specimens and the retained state are unchanged. The no-learning alarm matters:
+we stopped legacy battle adaptation and planned bounded, capability-based transport,
+followed by generic boss readiness and a genuine model-selected story lesson.
+Phase4 is unfinished. Reaching Indigo must not be confused with beating Lorelei,
+and a deterministic flight must not be confused with learned story completion.
+
+[Evidence and next steps](audits/red-story-entry-qualification-2026-09-08.md).
+
+## Historical — income is reachable beyond the current map
 
 The player ran out of balls and could only offer healing. Rather than resetting
 its resources, we connected its existing trainer-battle skill to safe routes into

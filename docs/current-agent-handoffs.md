@@ -1,6 +1,24 @@
 # Current agent handoffs
 
-## Current — model76; earned capture verified, reachable income next
+## Current — story admission and stored field capability
+
+Use checkpoint21445916/model76, not older leading sections. The shared Lorelei
+contract now rejects unsupported legacy party/stock before input. Inactive-box move
+inventory verified owned Farfetch'd55 with Cut/Fly without advancing the emulator.
+353 focused tests pass; no gameplay or fit, no change to30specimens/619currency.
+The no-learning alarm prompted reorientation, not a claim of Phase4 progress percentage.
+
+Codex owns the next bounded PC retrieval/observed Fly integration and generic boss
+readiness. Flash may draft isolated fixtures or review explicit interfaces; its latest
+no-tools advice was useful but did not qualify the52-step travel candidate or choose
+the deposit safely. Claude remains an occasional read-only consequential reviewer,
+not a routine gate. Gemini quota91.08%five-hour/94.22%weekly after the latest review;
+separate Claude quota unknown. No external task remains active.
+
+[Audit](audits/red-story-entry-qualification-2026-09-08.md) and
+[next mission-checked plan](work-sessions/2026-09-08-field-transport-plan.md).
+
+## Historical — model76; earned capture verified, reachable income next
 
 The finite resource-backed progression checklist is 3/3; Phase 4 is NOT complete.
 A trainer-funded purchase bought one ball for 200. The model then chose optional

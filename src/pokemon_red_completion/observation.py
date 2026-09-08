@@ -3896,12 +3896,70 @@ class PokemonRedStateReader:
                 storage_initialized=False,
             )
 
+        saved_boxes = [
+            _decode_saved_red_box(index, payload)
+            for index, payload in enumerate(self._read_saved_box_payloads())
+        ]
+        saved_boxes[current_box.box_index] = current_box
+        return RedBoxCollectionState(
+            boxes=tuple(saved_boxes),
+            current_box_index=current_box.box_index,
+            storage_initialized=True,
+        )
+
+    def read_box_move_members(self, box_index: int) -> tuple[RedBoxMoveMember, ...]:
+        """Inventory one box's moves without changing boxes or advancing the game.
+
+        This permits capability discovery (for example an owned Fly holder)
+        without assuming a species knows a move or opening a PC menu. Inactive
+        boxes use the same bank and box checksums as the living collection.
+        Boxed PP does not assert usable party HP or authorize withdrawal.
+        """
+        if type(box_index) is not int or not 0 <= box_index < RED_BOX_LIMIT:
+            raise ValueError("box_index must identify one of Red's twelve boxes")
+        number = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER)
+        current = self.read_current_box_state()
+        if box_index == current.box_index:
+            result = self.read_current_box_move_members()
+        elif not number & RED_BOX_CHANGED_MASK:
+            result = ()
+        else:
+            payload = self._read_saved_box_payloads()[box_index]
+            box = _decode_saved_red_box(box_index, payload)
+            structures_base = 1 + RED_BOX_CAPACITY + 1
+            result = tuple(
+                RedBoxMoveMember(
+                    box_slot=index + 1,
+                    species_id=species,
+                    level=level,
+                    moves=tuple(
+                        payload[start + PARTY_MOVES_OFFSET : start + PARTY_MOVES_OFFSET + 4]
+                    ),
+                    pp=tuple(
+                        value & 0x3F
+                        for value in payload[start + PARTY_PP_OFFSET : start + PARTY_PP_OFFSET + 4]
+                    ),
+                )
+                for index, (species, level) in enumerate(
+                    zip(box.species_ids, box.levels, strict=True)
+                )
+                for start in (structures_base + index * RED_BOX_STRUCT_STRIDE,)
+            )
+        if (
+            self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER) != number
+            or self.read_current_box_state() != current
+        ):
+            raise SemanticStateError("box selection changed during move inventory")
+        return result
+
+    def _read_saved_box_payloads(self) -> tuple[bytes, ...]:
+        """Return only checksum-verified saved payloads; callers overlay the live box."""
         if not isinstance(self._memory, ReadOnlyCartridgeRam):
             raise SemanticStateError(
                 "all-box inspection requires the bounded read-only cartridge-RAM port"
             )
 
-        saved_boxes: list[RedCurrentBoxState] = []
+        saved_boxes: list[bytes] = []
         for bank_offset, bank in enumerate(RED_BOX_SRAM_BANKS):
             bank_payload = bytes(
                 self._memory.read_cartridge_ram_u8(
@@ -3925,14 +3983,8 @@ class PokemonRedStateReader:
                 )
                 if _red_box_checksum(payload) != expected_box_checksum:
                     raise SemanticStateError(f"saved box {box_index + 1} failed its checksum")
-                saved_boxes.append(_decode_saved_red_box(box_index, payload))
-
-        saved_boxes[current_box.box_index] = current_box
-        return RedBoxCollectionState(
-            boxes=tuple(saved_boxes),
-            current_box_index=current_box.box_index,
-            storage_initialized=True,
-        )
+                saved_boxes.append(payload)
+        return tuple(saved_boxes)
 
     def read_generic_pc_session_active(self) -> bool:
         """Red's PC-session flag, independent of stale shared menu cursor bytes."""

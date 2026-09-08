@@ -15,11 +15,11 @@ dated audit does not silently reactivate an older assignment.
 
 ### Current budget-conscious implementation loop — September 8
 
-Latest continuation used no external reviewer: the narrow restore-test repair,
-earned purchase, one real healing-choice fit and singleton Oddish capture were
-verified directly. Reserve the next bounded review for the reachable-income
-composition seam, not another whole-repository audit. No fresh external quota
-reading was obtained; earlier account percentages remain historical.
+Latest story-entry slice used one Flash High no-tools advisory review. It favored
+verified PC/Fly capability retrieval over extending the old chapter. Codex rejected
+its overclaim that a static candidate was proven travel and its level-only deposit
+suggestion. This was not a code audit. Gemini quota after review:91.08%five-hour,
+94.22%weekly. Claude was not called; its separate subscription quota is unknown.
 
 Use Flash for a tightly bounded adapter or test draft while Codex does useful,
 non-overlapping integration work. Pin the real interfaces and exact editable files.

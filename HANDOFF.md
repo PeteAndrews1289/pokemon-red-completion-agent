@@ -1,6 +1,38 @@
 # Handoff
 
-## Current — adjacent-map income qualified; honest story entry next
+## Current — truthful story admission; stored travel capability verified
+
+Model76/checkpoint21445916 remain unchanged:30 specimens,28 living species,33 registered,
+619 currency,0balls. No controller input, frame advancement or fitting ran this session.
+353 focused tests passed; engineering progress is not a new learned result.
+
+The legacy Lorelei availability check now shares its actual entry predicate with execution.
+Six current-state restrictions are explicit: map, position, ordered core, lead moves,
+Full Restore stock and Hyper Potion stock. These are legacy implementation restrictions,
+not a general preparation recipe. Do not reconstruct the teacher party or exact inventory.
+
+Inactive-box move observation now reuses both bank and box checksum verification, with
+live-box override and no PC inputs. Actual stored Farfetch'd55 knows Cut/Fly, with PP30/15.
+Current party has Surf/Strength but no Cut/Fly. The static52-step Cerulean candidate includes
+a ledge and is NOT live-qualified; the bounded ground planner found no route to Indigo.
+Stored health after retrieval and Indigo's Fly destination unlock are still unverified.
+
+The no-learning alarm triggers an explicit reorientation: stop legacy chapter adaptation.
+Next bounded slice is safe capability-based PC retrieval and destination-observed Fly,
+then a generic boss executor and a real story-versus-preparation model choice. No random
+cursor-count flights, new teacher, full replay, sealed access or collection/healing detour.
+The income-to-story checklist stays1/3; Phase4 and model-led Red completion remain unfinished.
+
+Flash High gave a no-tools advisory review, not a code audit. Accept PC/Fly-first;
+reject calling the candidate route verified or choosing a deposit solely by level.
+After review Gemini quota was91.08% five-hour/94.22% weekly. Claude was not used and its
+subscription quota was not checked. No emulator or external review remains running.
+Preserve all prior pending zero-label support and consumed failure costs.
+Next setting: Astra High, Fast off for bounded observation/control integration.
+
+[Audit and next bounded plan](docs/audits/red-story-entry-qualification-2026-09-08.md).
+
+## Historical — adjacent-map income qualified; honest story entry next
 
 The player reached Route25 from Route24 and earned525 currency through the
 existing safety policy. Actual checkpoint21445916/state34949deb retains30 specimens,
