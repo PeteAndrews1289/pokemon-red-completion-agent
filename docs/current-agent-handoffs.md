@@ -1,6 +1,34 @@
 # Current agent handoffs
 
-## Current — Phase4 funding seam: static qualification, runtime next
+## Current — shared funding implementation, first live attempt retained
+
+Flash's isolated battle draft is integrated with Codex's routing, observation and
+independent verification. Native training now receives an explicit conditional-income
+quote; historical purchase records and checkpoint menus keep their old semantics.
+619 focused tests and four-file type checks pass. Source8f192b0a is published.
+
+The first safety-rule funding attempt reached the trainer but stopped before battle:
+16actions/1068frames, zero earnings and zero labels. Actual endpoint3fe01202/state
+f08d4b65 is Route11(x22,y5), with29specimens/28living/33registered,9currency,0balls,
+4protected FullRestores and no observed faint/loss. Model75 remains unchanged.
+The attempted goal is consumed; retain its pending support in the next real fit.
+
+Next: inspect the exact dialogue-to-battle failure, correct the older trainer-event
+byte-carry defect with historical-menu compatibility, then one bounded continuation
+from the actual endpoint. Do not replay oldd8151f88, expand the catalog or add a CI gate.
+The resource-backed checklist stays0/3. Reorientation freezes unrelated feature work
+after this second engineering/support-only session; the cross-title North Star stands.
+
+Flash3.8High: one draft/revision completed. ClaudeOpus4.8High: one advisory design
+review completed, not a code audit; unsupported tool claims are quarantined.
+Latest Gemini quota92.4850%five-hour/93.0084%weekly remaining (13:53:40UTC);
+separate Claude quota unavailable. No external reviewer or emulator remains running.
+Prefer bounded Flash drafting, Codex integration/tests/admission and occasional Claude
+review. Next primary recommendation: Astra High, Fast off to conserve the primary pool.
+
+[Detailed audit and next steps](audits/red-trainer-funding-runtime-2026-09-08.md).
+
+## Historical — Phase4 funding seam: static qualification, runtime next
 
 Added cartridge-derived trainer rosters/rewards and local computed approaches.
 The four retained Route11 opportunities quote255,285,315and1050currency, with

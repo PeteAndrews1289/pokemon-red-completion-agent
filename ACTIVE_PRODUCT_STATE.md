@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session.
+- Next decision: Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate.
 
 ### Mandatory mission check
 
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-trainer-funding-static-qualification** · status **active** · evidence [qualification](docs/evidence/red-trainer-funding-static-qualification-2026-09-08.json)
+**2026-09-08-trainer-funding-runtime** · status **active** · evidence [qualification](docs/evidence/red-trainer-funding-runtime-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | A finite trainer-funded supply loop connects story events to continued living collection without selling protected items. |
-| Learning output | Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows. |
-| Authority delta | None. Static inventory qualification only; no controller input, policy query or new fit row. |
-| Transfer result | ROM-free roster/route variation plus static Red inventory; no new live or transfer result. |
-| Blocker | Four cartridge-derived rosters/rewards and conservative local approaches are now qualified statically. Live party preparation, exact engagement and payout verification remain missing; model75 has not played after its final fit. |
-| Decision | Proceed directly to the bounded runtime funding seam; do not broaden cartridge inventory or repeat full CI as a substitute for execution. |
-| Next session | Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session. |
-| Next falsifier | Does one actual trainer victory set the intended defeated event and produce exactly the quoted money while preserving the living collection? |
+| Learning output | Shared implementation is published and619 focused tests pass. First safety-rule funding attempt failed after16actions/1068frames;0earnings/0labels. Reload audit preserves29specimens/28living,9currency and0balls. Model75 unchanged. |
+| Authority delta | None. Safety-rule funding attempt produced zero learned choices and zero fit rows; model75 is unchanged. |
+| Transfer result | Varied ROM-free identity/party/reward tests, not live funding success or transfer. Trainer selection and combat remain deterministic skills. |
+| Blocker | The integrated funding skill reached the trainer but stopped before battle. Exact failure state and trace are retained. An independent older full event-offset decoding defect also needs scoped repair. |
+| Decision | Second engineering/support-only session triggers reorientation: freeze feature expansion and broad audits. Diagnose the actual transition, repair only the named runtime seams and return to one measured outcome. |
+| Next session | Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate. |
+| Next falsifier | Can a bounded continuation from the actual failed endpoint establish the intended trainer battle, defeated event and exact income without a replay or lost specimen? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

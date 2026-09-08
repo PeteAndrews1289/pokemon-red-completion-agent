@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-funding-static-qualification**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-funding-runtime**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-trainer-funding-runtime
+
+Flash draft integrated;619 focused tests pass. One live safety-rule attempt failed before battle after16actions/1068frames. Exact terminal preserved;0earnings/0labels,model75 unchanged. Checklist0/3.
+
+**Deviation:** Reoriented after a second engineering/support-only session. Missing income quote repaired; actual transition and older event-bit carry now the only repair scope. No baseline or exit criteria weakened.
+
+**Next:** Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate.
 
 ### 2026-09-08-trainer-funding-static-qualification
 

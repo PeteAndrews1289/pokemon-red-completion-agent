@@ -16,6 +16,12 @@ Run `python scripts/check_product_focus.py` before committing. It rejects multip
 learning work without measurable outputs, maintenance without a named unblock, weakened alarms,
 unsupported counters, and a stale generated active-state page.
 
+Before publishing executable-source changes, regenerate the existing prospective
+collection registry with `PYTHONPATH=src python scripts/regenerate_collection_registry.py`,
+then run the same command with `--check` and include its two generated metadata files.
+This is metadata maintenance only: it does not authorize or launch a collection run.
+Do not repeatedly discover stale registry hashes through hosted CI emails.
+
 At session closeout and after substantial verified progress, refresh the
 [development infographic](docs/development-roadmap.md), its status/review log, handoffs and
 project/video narrative under the North Star's closeout rules. Regenerate with

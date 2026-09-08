@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-trainer-funding-static-qualification",
+  "as_of_session": "2026-09-08-trainer-funding-runtime",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -321,9 +321,15 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
+    },
+    {
+      "session": "2026-09-08-trainer-funding-runtime",
+      "result": "Flash draft integrated;619 focused tests pass. One live safety-rule attempt failed before battle after16actions/1068frames. Exact terminal preserved;0earnings/0labels,model75 unchanged. Checklist0/3.",
+      "deviation": "Reoriented after a second engineering/support-only session. Missing income quote repaired; actual transition and older event-bit carry now the only repair scope. No baseline or exit criteria weakened.",
+      "next": "Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate."
     }
   ],
   "closed_milestones": [

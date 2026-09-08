@@ -87,8 +87,9 @@ or recommendation. Do not manufacture feedback or confuse it with measured progr
 
 End every session report with a recommendation for the **next session's model and thinking
 effort**, plus whether Fast mode is worthwhile and a brief task-specific reason. Pete's current
-priority is verified product progress rather than minimizing usage; do not default to a cheaper
-model solely because the regular allowance is low. A recommendation is not permission to consume
+priority is verified progress while conserving the primary Codex allowance: use bounded isolated
+Flash drafts, Codex integration and occasional Claude review where they reduce duplicate work.
+Do not trade away outcome verification merely for cheaper drafting. A recommendation is not permission to consume
 a reset or change the selected model. Reassess this guidance if Pete changes the budget priority.
 
 Stage exit criteria stay stable. Material changes require an explicit entry in

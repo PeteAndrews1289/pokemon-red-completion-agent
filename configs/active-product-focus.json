@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Static inventory qualification only; no controller input, policy query or new fit row.",
-        "blocker": "Four cartridge-derived rosters/rewards and conservative local approaches are now qualified statically. Live party preparation, exact engagement and payout verification remain missing; model75 has not played after its final fit.",
-        "decision": "Proceed directly to the bounded runtime funding seam; do not broaden cartridge inventory or repeat full CI as a substitute for execution.",
+        "authority_delta": "None. Safety-rule funding attempt produced zero learned choices and zero fit rows; model75 is unchanged.",
+        "blocker": "The integrated funding skill reached the trainer but stopped before battle. Exact failure state and trace are retained. An independent older full event-offset decoding defect also needs scoped repair.",
+        "decision": "Second engineering/support-only session triggers reorientation: freeze feature expansion and broad audits. Diagnose the actual transition, repair only the named runtime seams and return to one measured outcome.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-trainer-funding-static-qualification-2026-09-08.json",
-          "sha256": "e1dd28f08f2a4f76cfd1bba739958285eb52450047ff04dfba835ead5915aee9"
+          "path": "docs/evidence/red-trainer-funding-runtime-2026-09-08.json",
+          "sha256": "67964301b04d879172b8519c14fb6ce29736190ce3321bec79cefe1ab29582d3"
         },
-        "learning_output": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
-        "next_falsifier": "Does one actual trainer victory set the intended defeated event and produce exactly the quoted money while preserving the living collection?",
-        "next_session_goal": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session.",
+        "learning_output": "Shared implementation is published and619 focused tests pass. First safety-rule funding attempt failed after16actions/1068frames;0earnings/0labels. Reload audit preserves29specimens/28living,9currency and0balls. Model75 unchanged.",
+        "next_falsifier": "Can a bounded continuation from the actual failed endpoint establish the intended trainer battle, defeated event and exact income without a replay or lost specimen?",
+        "next_session_goal": "Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate.",
         "product_alignment": "A finite trainer-funded supply loop connects story events to continued living collection without selling protected items.",
-        "session_id": "2026-09-08-trainer-funding-static-qualification",
+        "session_id": "2026-09-08-trainer-funding-runtime",
         "status": "active",
         "stop_condition": "Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning.",
-        "transfer_result": "ROM-free roster/route variation plus static Red inventory; no new live or transfer result."
+        "transfer_result": "Varied ROM-free identity/party/reward tests, not live funding success or transfer. Trainer selection and combat remain deterministic skills."
       },
       "learned_authority": {
         "current": "Phase 3 bounded milestone complete: two linked chains with 5 and 3 genuine model choices, two new living species (Arbok and Electrode), 54,971 actions / 4,913,974 frames including failures and support. Model75: 75 fitted outcomes, 33 successful, 65 distinct rows. 28 living species / 29 specimens / 33 registered; no losses or observed faints. Correlated development, not independent advantage or full Red.",
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red resource-backed story integration V1",
-      "next_decision": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session.",
+      "next_decision": "Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

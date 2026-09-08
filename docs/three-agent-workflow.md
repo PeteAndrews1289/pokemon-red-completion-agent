@@ -13,6 +13,21 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Current budget-conscious implementation loop — September 8
+
+Use Flash for a tightly bounded adapter or test draft while Codex does useful,
+non-overlapping integration work. Pin the real interfaces and exact editable files.
+Codex runs independent tests, corrects the integration and alone publishes/executes.
+Give one concrete failing-test revision before deciding whether direct correction
+is cheaper. Claude supplies one compact consequential review, not an approval gate.
+Reject fabricated tool/file claims and unsupported reasoning explicitly. Keep the
+handoff current and report actual service quota after each external session.
+
+The trainer-funding cycle demonstrates this division, but not a measured speedup:
+the first live attempt failed despite green component tests. Its
+[audit](audits/red-trainer-funding-runtime-2026-09-08.md) records the changes,
+corrections, remaining failure and reviewer adjudication. No agent is infallible.
+
 ### Authorized isolated-draft exception — September 7
 
 The user authorizes Flash to edit explicitly named source/test/doc files in its own

@@ -1,0 +1,107 @@
+{
+  "schema": "pokemon.red.trainer-funding-runtime-attempt.v1",
+  "session_id": "2026-09-08-trainer-funding-runtime",
+  "source_commit": "8f192b0af64afc5613924b62fcbf147dee0e8308",
+  "source_bundle_sha256": "fbfeb1597a8cec241baadced920c37014e0d35d1e465f1d51199b6392f72af1e",
+  "classification": "engineering_live_qualification_failed",
+  "episode_id": "red-phase4-funding-20260908-01-causal",
+  "manifest_sha256": "92c1e7a00c6c34c98085798ffacefd28bb50cd11a52feb39104e909afa825ead",
+  "checkpoint_sha256": "3fe01202678e967eeb6c80824a03b986868af983799bcc856ae8d2362ee8a984",
+  "state_sha256": "f08d4b6582f4d0781e1db27c6a1bd52f2bb10e64ed71f9f4ad3d3f395e6a06d3",
+  "prior_checkpoint_sha256": "d8151f88177fbe80f722ecc620c89a93fa3069d28333be19367a7230205ad66b",
+  "model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+  "training_rows_added": 0,
+  "model_fitted": false,
+  "authority": "deterministic_safety",
+  "learned_choices": 0,
+  "forced_support": true,
+  "controller_actions": 16,
+  "emulator_frames": 1068,
+  "status": "failed",
+  "failure_reason": "trainer dialogue closed without entering battle",
+  "failure_diagnostic": {
+    "exception_type": "TrainerFundingBattleError",
+    "frames": [
+      {
+        "function": "execute",
+        "line": 233,
+        "module_file": "bounded_player_episode.py"
+      },
+      {
+        "function": "execute",
+        "line": 204,
+        "module_file": "red_routed_trainer_funding.py"
+      },
+      {
+        "function": "run_prepared_trainer_funding",
+        "line": 285,
+        "module_file": "red_trainer_funding_battle.py"
+      }
+    ],
+    "message": "trainer dialogue closed without entering battle",
+    "message_sha256": "9b5a4e1c66942b3741bc6edf98aad57bbd89c0dc342528a22266539dade58d93"
+  },
+  "terminal": {
+    "map_id": 22,
+    "player_x": 22,
+    "player_y": 5,
+    "battle": 0,
+    "input_ready": true,
+    "bottom_dialogue_visible": false,
+    "trainer_engagement_active": false,
+    "trainer_identity": [
+      201,
+      1,
+      201,
+      10
+    ],
+    "party_species_ids": [
+      141,
+      104,
+      28,
+      118,
+      132,
+      48
+    ],
+    "party_hp": [
+      89,
+      167,
+      213,
+      118,
+      272,
+      34
+    ],
+    "living_species": 28,
+    "total_specimens": 29,
+    "registered_species": 33,
+    "money": 9,
+    "balls": 0,
+    "protected_full_restores": 4
+  },
+  "observed_faints": 0,
+  "undeclared_specimen_losses": 0,
+  "money_earned": 0,
+  "balls_purchased": 0,
+  "reload_audit": {
+    "verified_episode_manifest": true,
+    "verified_state_sha256": true,
+    "unchanged_state_bytes": true,
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "pending_support_episodes": [
+    "red-phase4-funding-20260908-01-causal"
+  ],
+  "verification": {
+    "focused_tests_passed": 619,
+    "type_checked_files": 4,
+    "lint_passed": true
+  },
+  "limitations": [
+    "Reached the computed trainer interaction boundary but did not begin a trainer battle; funding is not live-qualified.",
+    "Exact identity was latched but the reported battle state remained zero; root cause needs transition inspection, not a presumed successful battle or automatic retry.",
+    "Independent code review identified truncated event-bit offsets for trainer slots 8 and above in the older sight decoder; do not expand funding across these slots until corrected with historical-checkpoint compatibility.",
+    "Current Electrode qualified through SonicBoom (cartridge power 1), not SelfDestruct. No escort swap occurred; do not claim a Blastoise-led attempt.",
+    "Correlated retained development; no learned battle policy, independent advantage, full Red story, ROM-hack or Crystal result."
+  ]
+}

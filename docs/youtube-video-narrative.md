@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — learning needs a practical economy
+## Current — parallel coding still needs a real game test
+
+We used Flash to draft a bounded trainer-battle adapter while Codex built its
+routing and verification. Claude challenged the design; Codex accepted useful
+checks and rejected claims the actual interfaces did not support. This is
+AI-assisted engineering directed by Pete, not three independent approvals.
+
+The first live test matters more than the passing tests: Red walked eight computed
+steps to a trainer, interacted, then stopped before battle. The failure cost
+16actions/1068frames and retained all29Pokemon. No money was earned and no model
+label was added; model75 and28living species remain. The exact saved endpoint and
+failure message tell the next session where to investigate. Do not show this as a
+working income loop or hide the failure behind619 passing component tests.
+
+The next story beat should be genuine money earned, supplies purchased and a real
+learned collection choice. The current work is a reusable prerequisite for that,
+not completion of Red or transfer to another game.
+
+[Attempt, reviewer feedback and next steps](audits/red-trainer-funding-runtime-2026-09-08.md).
+
+## Historical — learning needs a practical economy
 
 The next bottleneck is ordinary: the retained player has no balls and only9currency.
 Rather than reset supplies or sell protected recovery items, Phase4 starts by
