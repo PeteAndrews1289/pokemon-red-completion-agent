@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From diagnostic terminal5c66ec39 at Indigo, preserve both transport attempts and costs in native continuation; do not replay parent21445916. Qualify flexible-party boss execution, then collect and fit a genuine story-versus-preparation choice. No legacy teacher reconstruction or repeated transport research.
+- Next decision: Connect cartridge-relative preparation to bounded generic boss control and preserve diagnostic terminal5c66ec39 plus236actions/19740frames in native continuation. Then collect and fit a real model-selected story-versus-preparation outcome. No further standalone preparation research or replay of parent21445916.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Verified owned-specialist retrieval and observed flight; now connect retained transport state to a flexible-party story option. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct selected rows. Deterministic PC/Fly transport added0labels and retained30specimens/28living/33registered,619currency/0balls. Actual diagnostic terminal5c66ec39 is Indigo; native continuation admission and generic boss execution remain pending. |
+| Reusable capability | Cartridge-relative party preparation is tested; connect it to bounded boss control and an honest retained-state story choice. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct selected rows. Diagnostic5c66ec39 remains Indigo with30specimens/28living/33registered,619currency/0balls. Party preparation is tested but adds0labels; native continuation admission and generic boss execution remain pending. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Does the retained Indigo party support a truthful bounded boss contract without the legacy teacher recipe? |
+| Cheapest falsifier | Can bounded generic trainer control and native support continuation turn the retained Indigo state into a real model-selected story outcome? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-field-transport** · status **active** · evidence [qualification](docs/evidence/red-field-transport-qualification-2026-09-08.json)
+**2026-09-08-flexible-trainer-preparation** · status **active** · evidence [qualification](docs/evidence/red-flexible-trainer-preparation-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Owned party capabilities now enable practical story access. Transport success is explicit engineering progress and does not replace the required model-selected story result. |
-| Learning output | 236actions/19740frames across stopped transport and exact-menu successor;30specimens preserved, Indigo reached.325 focused tests pass. No new model rows. |
-| Authority delta | No learned authority expansion or fit. PC retrieval and observed flight are live-qualified deterministic support. |
-| Transfer result | Varied ROM-free species/slots/boxes and interrupted storage; same-lineage live Red integration only, not independent transfer. |
-| Blocker | Actual Indigo terminal is a retained diagnostic, not a native training checkpoint. Preserve lineage/costs before native continuation; flexible-party boss execution remains unqualified. |
-| Decision | Transport maintenance is complete. Do not repeat PC/Fly or inventory work; proceed to retained-state admission and the named boss/story lesson. |
-| Next session | From diagnostic terminal5c66ec39 at Indigo, preserve both transport attempts and costs in native continuation; do not replay parent21445916. Qualify flexible-party boss execution, then collect and fit a genuine story-versus-preparation choice. No legacy teacher reconstruction or repeated transport research. |
-| Next falsifier | Does the retained Indigo party support a truthful bounded boss contract without the legacy teacher recipe? |
+| Product alignment | Observed party capabilities replace a fixed teacher roster recipe. Support-only work is explicitly not learning; the next integration must deliver the named story choice. |
+| Learning output | 177 targeted tests pass. Zero-input inspection found coverage for five Lorelei opponents and a30-step candidate approach. No gameplay, swap, battle, native admission or new model rows; model76 unchanged. |
+| Authority delta | No learned authority expansion or fit. Party preparation is tested, but neither its live swap nor a generic boss controller has executed. |
+| Transfer result | ROM-free party/opponent permutations, changed moves, health, PP, immunity and stale-plan checks pass. Same-lineage read-only Red inspection, not independent transfer. |
+| Blocker | Indigo terminal remains a diagnostic. Party coverage is not cumulative HP/PP sufficiency, battle qualification or native continuation admission. |
+| Decision | End standalone preparation work. Connect bounded generic trainer control and honest native support continuation, then collect the named model-selected story lesson. |
+| Next session | Connect cartridge-relative preparation to bounded generic boss control and preserve diagnostic terminal5c66ec39 plus236actions/19740frames in native continuation. Then collect and fit a real model-selected story-versus-preparation outcome. No further standalone preparation research or replay of parent21445916. |
+| Next falsifier | Can bounded generic trainer control and native support continuation turn the retained Indigo state into a real model-selected story outcome? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

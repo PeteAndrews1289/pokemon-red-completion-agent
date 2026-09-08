@@ -1,0 +1,105 @@
+{
+  "schema": "pokemon.red.flexible-trainer-preparation-qualification.v1",
+  "session_id": "2026-09-08-flexible-trainer-preparation",
+  "source_base_commit": "76e4394279e745bac8fb9bfa3086e6b0bb6e6a3a",
+  "source_files": {
+    "src/pokemon_red_completion/red_trainer_party.py": "53a8b63dc2a1d69f85040662a2a260271df546f23013ecf4708ff08414605b08",
+    "src/pokemon_red_completion/red_capture_preparation.py": "66f9c8fc07756707741643bb3c7d67011e9bc2d04bed9c5f5dc177c34658a14c"
+  },
+  "state_sha256": "5c66ec39e9fffea76bbd120d561ef66474303036b5e5c417925e0cbaf1c41521",
+  "parent_transport_evidence": "docs/evidence/red-field-transport-qualification-2026-09-08.json",
+  "actions": 0,
+  "frames": 0,
+  "state_unchanged": true,
+  "source_map": 9,
+  "party_species": [
+    141,
+    104,
+    28,
+    118,
+    48,
+    64
+  ],
+  "party_levels": [
+    30,
+    55,
+    66,
+    55,
+    13,
+    55
+  ],
+  "trainer_map": 245,
+  "trainer_class": 244,
+  "trainer_set": 1,
+  "trainer_event": 2273,
+  "trainer_at": [
+    2,
+    5
+  ],
+  "opponents": [
+    {
+      "species": 87,
+      "level": 54
+    },
+    {
+      "species": 91,
+      "level": 53
+    },
+    {
+      "species": 80,
+      "level": 54
+    },
+    {
+      "species": 124,
+      "level": 56
+    },
+    {
+      "species": 131,
+      "level": 56
+    }
+  ],
+  "preparation": {
+    "candidate_counts": [
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "opening_party_slot": 3,
+    "preferred_party_slots": [
+      3,
+      3,
+      2,
+      3,
+      3
+    ],
+    "requires_lead_swap": true,
+    "victory_predicted": false,
+    "battle_execution_qualified": false
+  },
+  "candidate_route_steps": 30,
+  "candidate_route_terminal": [
+    3,
+    5
+  ],
+  "route_executed": false,
+  "native_continuation_admitted": false,
+  "new_learned_examples": 0,
+  "settled_examples": 76,
+  "focused_tests_passed": 177,
+  "claims": {
+    "party_preparation_tested": true,
+    "live_lead_swap_qualified": false,
+    "live_boss_battle_qualified": false,
+    "new_model_fit": false,
+    "whole_phase_complete": false,
+    "independent_transfer": false
+  },
+  "limitations": [
+    "Coverage is not cumulative HP/PP sufficiency or a survival prediction.",
+    "The old Lorelei objective is still blocked; this component has not replaced its controller.",
+    "The support terminal still needs explicit lineage/cost-preserving native admission."
+  ],
+  "next": "Connect a bounded generic boss controller and native support continuation, then a real model-selected story-versus-preparation outcome."
+}

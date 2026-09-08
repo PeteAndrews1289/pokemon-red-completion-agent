@@ -15,7 +15,11 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
-from pokemon_red_completion.red_capture_lead import RedCaptureLeadError, plan_capture_lead
+from pokemon_red_completion.red_capture_lead import (
+    RedCaptureLeadError,
+    RedCaptureLeadPlan,
+    plan_capture_lead,
+)
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from pokemon_red_completion.red_goal_manager import RedGoalBindingOffer, RedGoalObservation
 from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
@@ -32,10 +36,31 @@ def prepare_capture_escort(runtime: RedGoalContextRuntime, actions: CountingExec
     A returned False means the existing lead qualified, not refusal. This does
     not authorize capture with fainted teammates or choose the battle policy.
     """
+    return prepare_observed_lead(
+        runtime, actions, plan_capture_lead(runtime.adapter.observe().party),
+        label="capability-derived recovery escort",
+    )
+
+
+def prepare_observed_lead(
+    runtime: RedGoalContextRuntime, actions: CountingExecutor, plan: RedCaptureLeadPlan,
+    *, label: str,
+) -> bool:
+    """Execute a full-snapshot lead plan without selecting its party member.
+
+    Shared by the established capture escort and cartridge-roster preparation.
+    The selected planner owns its policy; this executor only checks and swaps.
+    """
+    if not isinstance(plan, RedCaptureLeadPlan):
+        raise TypeError("plan must contain an observed lead permutation")
+    if not isinstance(label, str) or not label.strip():
+        raise ValueError("lead preparation needs a label")
     before = runtime.adapter.observe()
     if before.raw.battle_state or not before.input_ready:
         raise RedCaptureLeadError("escort preparation requires settled field control")
-    plan = plan_capture_lead(before.party)
+    plan.require_current(before.party)
+    if plan.target_member.is_fainted:
+        raise RedCaptureLeadError("lead preparation cannot select a fainted member")
     ledger = dependency_specimen_ledger(before.collection_observation)
     if plan.requires_swap:
         close_menu(actions, runtime.reader)
@@ -47,13 +72,15 @@ def prepare_capture_escort(runtime: RedGoalContextRuntime, actions: CountingExec
             != (before.raw.map_id, before.raw.player_x, before.raw.player_y)
             or current.raw.bag_items != before.raw.bag_items
             or current.raw.player_money != before.raw.player_money
+            or current.raw.badge_bits != before.raw.badge_bits
+            or current.raw.event_flags != before.raw.event_flags
             or dependency_specimen_ledger(current.collection_observation) != ledger
         ):
             raise RedCaptureLeadError("escort state changed before swap")
         swap_party_slots(
             runtime.emulator, actions, runtime.reader,
             source_index=plan.target_index, destination_index=0,
-            label="capability-derived recovery escort",
+            label=label,
         )
     after = runtime.adapter.observe()
     plan.require_result(after.party)
@@ -63,6 +90,8 @@ def prepare_capture_escort(runtime: RedGoalContextRuntime, actions: CountingExec
         != (before.raw.map_id, before.raw.player_x, before.raw.player_y)
         or after.raw.bag_items != before.raw.bag_items
         or after.raw.player_money != before.raw.player_money
+        or after.raw.badge_bits != before.raw.badge_bits
+        or after.raw.event_flags != before.raw.event_flags
         or dependency_specimen_ledger(after.collection_observation) != ledger
     ):
         raise RedCaptureLeadError("escort swap changed protected state or field control")

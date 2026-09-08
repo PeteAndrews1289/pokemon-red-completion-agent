@@ -1,6 +1,35 @@
 # Current agent handoffs
 
-## Current — stored specialist retrieved; observed flight reached Indigo
+## Current — party-dependent trainer preparation; no new gameplay
+
+The retained Indigo terminal5c66ec39 is unchanged. The new trainer-party component
+uses the cartridge roster and existing semantic matchup features, not the legacy
+Lorelei party/stock/slot recipe. It excludes exhausted, status-only, self-destructive,
+fixed-damage and immune offense, and checks health/level eligibility. The shared
+lead-swap executor preserves the complete party snapshot, collection, resources,
+position, badge bits and story events. Stale or forged plans refuse before swapping.
+
+177 targeted tests pass; full-source lint and typing pass. A zero-input/zero-frame
+inspection of the real save finds four candidate matchups for each of Lorelei's five
+opponents and selects party slot3 (Blastoise66) as opening lead. A30-step candidate
+route reaches her interaction square. Neither the swap, route nor fight was executed.
+Coverage is not a survival or cumulative-PP prediction; generic boss control is
+still unqualified. Model76 remains76 fitted outcomes,34successful,66distinct rows.
+
+This support-only result triggers reorientation: stop expanding preparation features.
+Next connect this component to bounded generic trainer control and admit the exact
+diagnostic support chain into native continuation, with236actions/19740frames and the
+reporting failure retained. Then collect a genuine model-selected story-versus-preparation
+outcome and fit it. Never fabricate a native episode, reset to21445916, replay travel,
+or count support as a learning label. The income-to-story checklist remains1/3.
+
+Codex owns the next integration. External reviewers were not used and their quotas
+were not queried this session. A later review should target the concrete controller/
+continuation diff, not start another general architecture audit. North Star unchanged.
+[Audit](audits/red-flexible-trainer-preparation-2026-09-08.md).
+Next setting: Astra High, Fast off (judgment, not a measured usage comparison).
+
+## Historical — stored specialist retrieved; observed flight reached Indigo
 
 Live transport is qualified. From checkpoint21445916, the player reached the Cerulean
 PC, deposited Snorlax safely, withdrew the owned Farfetch'd55, returned outside and

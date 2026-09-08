@@ -1,6 +1,24 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — the collection supplied its own travel specialist
+## Current — replacing a party recipe with observed capabilities
+
+The old Lorelei implementation expected particular Pokémon, moves and items. This
+session extracted the reusable question: what can the party we actually have do
+against the roster stored in the cartridge? Shared matchup features now prepare an
+opening lead without a species/slot recipe, using existing verified menu operations.
+
+Tests changed party order, moves, HP, PP and opponent types. One caught fixed-damage
+moves being treated as ordinary power; that was corrected, alongside explicit
+exclusion of sacrificial moves. A read-only look at the real Indigo save chose
+Blastoise66 to open and found coverage for all five opponents. The computed approach
+is30steps. No swap or fight occurred: preparation coverage is not proof of victory.
+
+The honest limitation is unchanged: model76 gained no training rows. This is useful
+support code, but another preparation-only session means we must now connect the
+boss controller and retained-state learning path rather than keep polishing helpers.
+The next product result is a model-selected story choice with a real recorded outcome.
+
+## Historical — the collection supplied its own travel specialist
 
 We finally used the owned Pokémon rather than adding another capture or grinding task.
 The player walked to the PC, stored Snorlax, retrieved Farfetch'd and reached Indigo

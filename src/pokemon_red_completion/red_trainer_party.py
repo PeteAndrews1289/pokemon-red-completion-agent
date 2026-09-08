@@ -1,0 +1,140 @@
+"""Party-dependent preparation, not a trainer victory prediction.
+
+The roster comes from the cartridge; health and moves come from the current
+party. Shared semantic matchup features choose an opening lead without an
+opponent-name, species, or party-slot recipe. This is deterministic support,
+not a learned switch policy or permission to enter a battle.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
+
+from .battle_matchups import PartyMatchupProfile, project_party_matchups
+from .gen1_trainer_parties import TrainerPartyQuote
+from .party import PartyObservation, StatusCondition
+from .red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref, pokemon_red_species_ref
+from .red_capture_lead import RedCaptureLeadPlan
+
+if TYPE_CHECKING:
+    from .executor import CountingExecutor
+    from .red_goal_context import RedGoalContextRuntime
+
+
+class RedTrainerPartyError(ValueError):
+    """The current party cannot support the declared preparation contract."""
+
+
+def trainer_matchup_candidates(
+    party: PartyObservation, *, opponent_species: int, opponent_level: int,
+) -> tuple[PartyMatchupProfile, ...]:
+    """Healthy, usable, non-immune matchups within five levels of an opponent.
+
+    The five-level tolerance and shared half-HP floor are disclosed preparation
+    heuristics, not calibrated survival bounds. Opponent moves, stats, critical
+    hits and switch damage are not predicted here. A later executor must still
+    observe every turn. Empty, fixed-damage, status-only and sacrificial moves
+    cannot qualify a candidate through this ordinary offensive interface.
+    """
+    if not isinstance(party, PartyObservation) or not party.members:
+        raise RedTrainerPartyError("trainer preparation requires an observed party")
+    members: list[dict[str, object]] = []
+    for member in party.members:
+        moves: list[dict[str, object]] = []
+        for move in member.moves:
+            if not move.is_known:
+                if move.current_pp:
+                    raise RedTrainerPartyError("empty move has nonzero PP")
+                continue
+            ref = pokemon_red_move_ref(move.move_id)
+            mechanics = RED_BATTLE_CATALOG.resolve_move(ref)
+            if move.current_pp > 63:
+                raise RedTrainerPartyError("ordinary move PP exceeds its observed range")
+            if mechanics.effect_flags & {"self_destruct", "fixed_damage", "ohko"}:
+                continue
+            moves.append({"move_ref": ref, "pp": move.current_pp})
+        members.append({
+            "species_ref": pokemon_red_species_ref(member.species_id),
+            "level": member.level, "hp": member.hp, "max_hp": member.max_hp,
+            "status": None if member.status is StatusCondition.HEALTHY else member.status.value,
+            "moves": moves,
+        })
+    profiles = project_party_matchups({"features": {
+        "party": {"members": members},
+        "battle": {"opponent_species_ref": pokemon_red_species_ref(opponent_species),
+                   "opponent_level": opponent_level},
+    }}, RED_BATTLE_CATALOG)
+    return tuple(sorted(
+        (profile for profile in profiles if profile.safe and not profile.has_status
+         and profile.level_margin >= -0.05 and profile.offensive_power > 0),
+        key=PartyMatchupProfile.switch_rank, reverse=True,
+    ))
+
+
+@dataclass(frozen=True, slots=True)
+class RedTrainerPartyPlan:
+    party: PartyObservation
+    quote: TrainerPartyQuote
+    matchups: tuple[tuple[PartyMatchupProfile, ...], ...]
+
+    @property
+    def lead(self) -> RedCaptureLeadPlan:
+        return RedCaptureLeadPlan(self.matchups[0][0].party_slot - 1, self.party)
+
+    def require_current(self, party: PartyObservation, quote: TrainerPartyQuote) -> None:
+        """Recompute, so neither a stale roster nor a forged plan may swap."""
+        if self != plan_trainer_party(party, quote):
+            raise RedTrainerPartyError("trainer party, roster or preparation plan changed")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.red.trainer-party-preparation.v1",
+            "authority": "deterministic-matchup-preparation",
+            "opponent_count": len(self.matchups),
+            "candidate_counts": [len(candidates) for candidates in self.matchups],
+            "opening_party_slot": self.lead.target_index + 1,
+            "preferred_party_slots": [candidates[0].party_slot for candidates in self.matchups],
+            "requires_lead_swap": self.lead.requires_swap,
+            "victory_predicted": False,
+            "battle_execution_qualified": False,
+            "training_examples": 0,
+        }
+
+
+def plan_trainer_party(party: PartyObservation, quote: TrainerPartyQuote) -> RedTrainerPartyPlan:
+    """Require at least one observed matchup per quoted opponent, then plan the lead.
+
+    Multiple opponents can share a candidate. This is *coverage*, not cumulative
+    HP/PP sufficiency or a promise that switching during the battle is supported.
+    """
+    if not isinstance(quote, TrainerPartyQuote) or not 1 <= len(quote.party) <= 6:
+        raise RedTrainerPartyError("trainer preparation requires a nonempty bounded roster")
+    if not isinstance(party, PartyObservation) or not party.members or party.fainted_count:
+        raise RedTrainerPartyError("trainer preparation requires a fully living party")
+    matchups = tuple(
+        trainer_matchup_candidates(
+            party, opponent_species=member.internal_species, opponent_level=member.level,
+        ) for member in quote.party
+    )
+    uncovered = tuple(index + 1 for index, candidates in enumerate(matchups) if not candidates)
+    if uncovered:
+        raise RedTrainerPartyError(
+            f"no qualified offensive matchup for roster positions {uncovered}"
+        )
+    return RedTrainerPartyPlan(party, quote, matchups)
+
+
+def prepare_trainer_lead(
+    runtime: RedGoalContextRuntime, actions: CountingExecutor, plan: RedTrainerPartyPlan,
+    *, current_quote: TrainerPartyQuote,
+) -> bool:
+    """Execute only the opening field swap; no battle, healing or route input."""
+    from .red_capture_preparation import prepare_observed_lead
+
+    if not isinstance(plan, RedTrainerPartyPlan):
+        raise TypeError("plan must be a RedTrainerPartyPlan")
+    plan.require_current(runtime.adapter.observe().party, current_quote)
+    return prepare_observed_lead(
+        runtime, actions, plan.lead, label="cartridge-roster matchup lead",
+    )

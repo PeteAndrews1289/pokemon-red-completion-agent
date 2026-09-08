@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-field-transport**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-flexible-trainer-preparation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-flexible-trainer-preparation
+
+177 targeted tests pass; actual Indigo party has five-opponent coverage and a30-step candidate approach. No gameplay, native admission or fit. Model76 and checklist1/3 unchanged.
+
+**Deviation:** Another support-only slice triggers reorientation: stop standalone preparation work and integrate the named story lesson. No stage IDs or exits changed.
+
+**Next:** Bounded generic boss control plus exact diagnostic-lineage/cost continuation, then a genuine model-selected story outcome and fit.
 
 ### 2026-09-08-field-transport
 

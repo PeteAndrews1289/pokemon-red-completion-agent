@@ -52,7 +52,8 @@ def test_living_source_swaps_with_fainted_destination_preserving_faint(monkeypat
 
 
 @pytest.mark.parametrize(
-    "damage", ["no_swap", "heal", "position", "bag", "money", "battle", "unready"],
+    "damage", ["no_swap", "heal", "position", "bag", "money", "battle", "unready",
+               "badges", "events"],
 )
 def test_post_swap_damage_is_rejected(monkeypatch, damage):
     state = runtime()
@@ -64,6 +65,7 @@ def test_post_swap_damage_is_rejected(monkeypatch, damage):
             "heal": {"party_hp": (180, 180)}, "position": {"player_x": 99},
             "bag": {"bag_items": ((4, 1),)}, "money": {"player_money": 999},
             "battle": {"battle_state": 1},
+            "badges": {"badge_bits": 255}, "events": {"event_flags": b"changed"},
         }.get(damage, {})
         state.reader.raw = replace(state.reader.raw, **updates)
         if damage == "unready":
@@ -95,3 +97,25 @@ def test_checkpoint_recovery_mode_is_explicit_and_legacy_defaults_off():
     for bad in (1, "true", None):
         with pytest.raises(runner.PairedRedBoundedPlayerRunError):
             runner._checkpoint_routed_recovery({"metadata": {"routed_recovery": bad}})
+
+
+def test_general_lead_executor_rejects_fainted_target_without_input(monkeypatch):
+    from pokemon_red_completion.red_capture_lead import RedCaptureLeadPlan
+
+    state = runtime()
+    plan = RedCaptureLeadPlan(0, state.adapter.observe().party)
+    monkeypatch.setattr(preparation, "close_menu", lambda *_: pytest.fail("unexpected input"))
+    with pytest.raises(RedCaptureLeadError, match="fainted"):
+        preparation.prepare_observed_lead(state, object(), plan, label="test lead")
+
+
+@pytest.mark.parametrize("change", [{"badge_bits": 255}, {"event_flags": b"changed"}])
+def test_story_change_before_swap_is_rejected_without_swapping(monkeypatch, change):
+    state = runtime()
+    def close(*_):
+        state.reader.raw = replace(state.reader.raw, **change)
+    monkeypatch.setattr(preparation, "close_menu", close)
+    monkeypatch.setattr(preparation, "swap_party_slots",
+                        lambda *_a, **_k: pytest.fail("stale story boundary"))
+    with pytest.raises(RedCaptureLeadError):
+        preparation.prepare_capture_escort(state, object())

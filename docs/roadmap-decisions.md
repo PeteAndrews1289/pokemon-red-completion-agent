@@ -1,5 +1,15 @@
 # Roadmap baseline and deviations
 
+## September8 — end standalone preparation work; connect the named story lesson
+
+Cartridge-relative party coverage and a verified swap component now exist; a zero-input
+inspection of the retained Indigo state supports their immediate integration. This does
+not close boss readiness or produce a learning row. Another support-only session triggers
+reorientation: no additional roster-policy expansion or generic architecture audit before
+bounded boss control and honest native support continuation are connected. Keep all stage
+IDs/exits, the1/3 current checklist and model76 unchanged. No reset/replay of completed travel.
+[Audit](audits/red-flexible-trainer-preparation-2026-09-08.md).
+
 ## September8 — reject legacy story reconstruction; retrieve an observed capability
 
 The story-entry falsifier failed: reaching Indigo alone cannot qualify the old Lorelei
