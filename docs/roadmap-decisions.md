@@ -1,5 +1,13 @@
 # Roadmap baseline and deviations
 
+## September8 — current blocker is switch-entry survival, not training supply
+
+Two native singleton rehearsals reached actual boss combat and defeated three quoted
+opponents, but a switch consumed most of Dugtrio's HP and the safety controller stopped.
+Keep exactef23 and both failures. Next work is explicit bounded battle recovery and
+switch-entry risk, not replayed entrances, grinding, catalog expansion or CI-only work.
+No stage exit or1/3 checklist is changed; forced actions have produced no new fit rows.
+
 ## September8 — singleton rehearsal is support, not a manufactured learning row
 
 The actual retained Indigo menu now offers the new cartridge-routed Lorelei skill, but

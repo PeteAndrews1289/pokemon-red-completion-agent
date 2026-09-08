@@ -97,6 +97,7 @@ def test_safety_and_forced_steps_are_not_learned_decisions(forced: bool) -> None
     public = _public(state)
     assert public["model"]["decisions"] == 0
     assert public["model"]["fallbacks"] == 1
+    assert public["experiment"]["predictions_committed"] is False
     assert ("Forced single option" if forced else "Deterministic safety") in public["stage"]
     assert not viewer.disabled
 

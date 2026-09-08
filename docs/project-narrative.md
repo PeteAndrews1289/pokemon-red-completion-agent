@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — an executable story option is not yet a learned decision
+## Current — actual combat exposed the difference between coverage and survival
+
+The first native attempt swapped the lead and entered Lorelei's room. Her automatic
+walk triggered a route-drift refusal. We kept that outcome and continued from the
+actual saved position, not from a reset of the entrance.
+
+The next attempt defeated Dewgong, Cloyster and Slowbro. Jynx exposed the preparation
+heuristic's weakness: a reserve that looked healthy before switching took most of
+its HP in the entry turn. The controller stopped with everyone alive rather than
+silently dropping the health guard. The exact battle is retained; the boss is not beaten.
+
+This is measurable skill progress, but not new learning: both menus had one executable
+choice, so model76 gained no rows. The next work is switch-entry survival and budgeted
+recovery, followed by useful competing options. More grinding or CI polling is not the
+answer to this failure. The underlying error cause will now be retained in future logs.
+
+## Historical — an executable story option is not yet a learned decision
 
 The pieces now connect: cartridge trainer data produces an approach and party preparation,
 and bounded controls can choose moves or switch to an observed stronger matchup. We kept

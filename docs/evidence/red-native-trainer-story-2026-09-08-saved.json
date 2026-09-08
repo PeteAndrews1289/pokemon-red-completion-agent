@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-08 UTC",
+  "location": "Lorelei battle paused at Jynx - retained failure, not a safe continuation",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "capture_items": 0,
+  "money": 619,
+  "checkpoint_sha256": "ef23d074ce55ab15923661058ff4574a9f07c34a98da0aef533204b1264a7799",
+  "live": false,
+  "controller_actions": 0
+}

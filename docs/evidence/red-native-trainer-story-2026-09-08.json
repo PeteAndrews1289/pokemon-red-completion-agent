@@ -1,21 +1,23 @@
 {
   "schema": "pokemon.red.native-trainer-story-integration.v1",
-  "status": "implemented_action_free_preview_passed",
+  "status": "paused_at_retained_mid_battle_failure",
   "game": "Pokemon Red",
   "tests": {
     "focused_passed": 257,
     "full_suite": false,
     "mypy_source_files": 430,
-    "ruff_passed": true
+    "ruff_passed": true,
+    "final_combined_focused_passed": 451,
+    "followup_passed": 55
   },
-  "retained_state_sha256": "5c66ec39e9fffea76bbd120d561ef66474303036b5e5c417925e0cbaf1c41521",
+  "retained_state_sha256": "ef23d074ce55ab15923661058ff4574a9f07c34a98da0aef533204b1264a7799",
   "historical_support": {
     "actions": 236,
     "frames": 19740,
     "original_first_report_missing": true
   },
-  "new_actions": 0,
-  "new_frames": 0,
+  "new_actions": 301,
+  "new_frames": 27684,
   "model_queries": 0,
   "training_examples": 0,
   "model_fitted": false,
@@ -28,7 +30,79 @@
     "prospective_profile_sha256": "428567cf25e6b739bc051277f615264413e0f2d28d361997664e7f94c230711c",
     "original_native_semantics_verified": true
   },
-  "native_support_imported": false,
-  "boss_executed": false,
-  "independent_evaluation": false
+  "native_support_imported": true,
+  "boss_executed": true,
+  "independent_evaluation": false,
+  "boss_completed": false,
+  "import_checkpoint_sha256": "671879f44d149562902843777eaac5d41dda9a6903678b3ce2709aafbf9f1b35",
+  "import_report_recovered_read_only": true,
+  "import_postpublication_error": "Operator called nonexistent verifier method after successful publication; existing record verified without another import.",
+  "executable_source_commit": "2beef485468b2ccdd064642dd3e48df21d2a9aa2",
+  "rehearsals": [
+    {
+      "episode_id": "red-phase4-native-story-20260908-01-causal",
+      "actions": 61,
+      "frames": 4260,
+      "status": "failed_scripted_arrival_drift",
+      "checkpoint_sha256": "4890baa72a15dd3cb32a61f3766039f939cf1bd3c3cfb6bbd4cad32352840268",
+      "terminal_state_sha256": "e59db6a35e694f35094e9d18e76362b840a7c30c0f1083c6c1abc12c5c4ca65e"
+    },
+    {
+      "episode_id": "red-phase4-native-story-20260908-02-causal",
+      "actions": 240,
+      "frames": 23424,
+      "status": "failed_policy_refusal_active_battle",
+      "manifest_sha256": "00857c2cb5dc02ea07269e8ffd8e6fdb493b4eb7143534fe61e08ea9aa3c86c1",
+      "terminal_state_sha256": "ef23d074ce55ab15923661058ff4574a9f07c34a98da0aef533204b1264a7799",
+      "admitted_continuation": false
+    }
+  ],
+  "current": {
+    "map": "loreleis_room",
+    "battle": "trainer_main_menu",
+    "opponent": "Jynx",
+    "opponent_level": 56,
+    "opponent_hp": 147,
+    "quoted_opponents_defeated": 3,
+    "quoted_opponents_total": 5,
+    "party_hp": [
+      76,
+      61,
+      71,
+      12,
+      34,
+      139
+    ],
+    "party_levels": [
+      66,
+      56,
+      30,
+      55,
+      13,
+      55
+    ],
+    "specimens": 30,
+    "living_species": 28,
+    "registered_species": 33,
+    "money": 619,
+    "bag_unchanged": true,
+    "no_fainted_party_members": true,
+    "held_buttons": [],
+    "gameplay_running": false
+  },
+  "refusal_audit": {
+    "input": 0,
+    "frames": 0,
+    "exact_bytes_unchanged": true,
+    "observed_switch_targets_one_based": [
+      2,
+      4
+    ],
+    "posthoc_message": "unfit active member cannot safely take another turn",
+    "scope": "Reconstructed controller state from recorded switch transitions; original wrapper omitted nested cause.",
+    "remaining_matchup_slots": [
+      6
+    ]
+  },
+  "next": "Review switch-entry damage and bounded healing; qualify explicit continuation from ef23 without reset or replay. Then genuine story/preparation alternatives and eligible fitting."
 }

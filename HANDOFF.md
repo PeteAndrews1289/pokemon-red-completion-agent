@@ -1,28 +1,39 @@
 # Handoff
 
-## Current — native story integration; first rehearsal pending
+## Current — three Lorelei opponents cleared; retained mid-battle refusal
 
-The opt-in cartridge story profile now binds a computed Lorelei approach, observed
-lead preparation and bounded party-aware battle control. Historical profiles remain
-unchanged. Fixed heuristics own moves/switches; learned battle scoring stays shadow-only.
-No item spending, sacrificed party member, unbounded switch loop or stale trainer target
-is permitted. The original trainer identity/payout/event checks remain in force.
+The cartridge-routed skill was actually exercised on published source2beef485.
+Transport history was imported administratively: checkpoint671879f4 retains the exact
+Indigo5c66 state, native ancestry/search memory,236actions/19740frames and zero labels.
+An operator report-verifier typo occurred after successful import publication; the
+existing record was reopened/read-only verified, not reimported or replayed.
 
-257 focused tests pass, plus source lint and typing (430 files). Real zero-input inspection
-verified the historical native endpoint and retained Indigo5c66 semantics/collection.
-The new menu has exactly ONE executable story goal. The route-map enum mismatch found
-by that real preview was fixed and regression-tested; no gameplay occurred.
+Native01 used61actions/4260frames: lead swap and entrance worked, but Lorelei's automatic
+walk ended six squares beyond the static route expectation. The failure is preserved
+at native checkpoint4890baa7 / statee59db6a3. A separately declared continuation started
+there, inside the room; it did not replay the entrance.
 
-A typed recorded-support import preserves both diagnostic traces, exact saves, native
-ancestry, search memory, original missing report,236actions/19740frames and zero labels.
-It is an administrative record, not retrospectively invented native gameplay.
-Publication/import and one bounded native singleton rehearsal are next. A forced action
-is not a model decision; story-versus-preparation learning needs real useful alternatives.
-Model76 and the income-to-story1/3 checklist remain unchanged until actual results.
+Native02 used240actions/23424frames and defeated the quoted Dewgong, Cloyster and Slowbro.
+It stopped at Jynx56 (147HP) after switching Dugtrio into damage:118HP became12HP.
+The move-before-another-switch/half-HP guard refused. A zero-input reconstruction
+reproduces that refusal; the original wrapper omitted the nested cause. Future errors
+now retain bounded, path-scrubbed cause chains. The dashboard no longer flags a forced
+singleton as a committed model prediction.
 
-No external agent or quota check ran. Codex owns the next native execution and outcome
-audit. Keep the North Star/phase exits fixed; no teacher reconstruction, sealed Red,
-Crystal or replay of consumed travel. Recommended setting: Astra High, Fast off.
+Current exact failure stateef23d074 is trainer MAIN, no held buttons, party HP
+76/61/71/12/34/139; Jolteon reached56. All30specimens/28living/33registered,619currency
+and bag stock are preserved. This is NOT a safe admitted continuation. Do not resume
+ordinary native play from it, rewind to4890baa7, or rerun either consumed attempt.
+
+Next: switch-entry risk and explicitly budgeted healing, then separately logged
+bounded recovery from ef23. Keep the no-learning alarm: both rehearsals were forced
+singletons, model76 remains76 outcomes/34successful/66distinct rows, no fit. Genuine
+story-versus-preparation options still need integration. Income-to-story remains1/3;
+three defeated opponents is not three-fifths of Phase4 or a boss victory.
+
+No external auditor/quota query ran. North Star and stage exits unchanged.
+See [session audit](docs/audits/red-native-trainer-story-2026-09-08.md). Next setting: Astra High, Fast off; consequential control
+reasoning warrants High, but this is not a measured usage comparison.
 
 ## Historical — party-dependent trainer preparation; no new gameplay
 

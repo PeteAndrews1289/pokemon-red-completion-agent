@@ -291,7 +291,7 @@ class BoundedPlayerDashboard:
                 self._snapshot.experiment,
                 zero_shot_completed=self._committed,
                 adaptation_completed=self._settled,
-                predictions_committed=self._committed > 0,
+                predictions_committed=self._snapshot.model.decisions > 0,
             ),
         )
         self.state.publish(self._snapshot)

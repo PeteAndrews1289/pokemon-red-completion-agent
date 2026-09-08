@@ -111,6 +111,21 @@ def completion_first_question(scenario: LivingDexCausalScenario) -> GoalManagerQ
 
 def private_failure_diagnostic(error: BaseException) -> dict[str, object]:
     """Keep cause and source location while respecting the store's path-free contract."""
+    result = _private_exception_record(error)
+    causes: list[dict[str, object]] = []
+    seen = {id(error)}
+    current = error.__cause__
+    while current is not None and id(current) not in seen and len(causes) < 6:
+        seen.add(id(current))
+        causes.append(_private_exception_record(current))
+        current = current.__cause__
+    if causes:
+        result["causes"] = causes
+        result["cause_chain_truncated"] = current is not None
+    return result
+
+
+def _private_exception_record(error: BaseException) -> dict[str, object]:
     message = str(error)
     return {
         "exception_type": type(error).__name__,

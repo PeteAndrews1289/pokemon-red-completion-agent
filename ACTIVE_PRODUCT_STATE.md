@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish tested story integration, import the retained support with zero labels, then one bounded native singleton Lorelei rehearsal. Multiple useful alternatives and a genuine fitted story choice remain required; no replay or invented model decisions.
+- Next decision: From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Profile-bound cartridge-routed trainer control is implemented; real Indigo preview exposes one executable story goal. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Indigo5c66 has30specimens/28living/33registered. One supported story binding is implemented; no boss input or new model learning yet. |
+| Reusable capability | Native trainer-story rehearsal reached Lorelei and defeated three opponents; switch-entry survival and recovery remain unqualified. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Native rehearsals add0labels; exact ef23 is paused mid-battle after three Lorelei opponents.30specimens/28living/33registered,619currency,bag unchanged. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can one bounded native singleton rehearsal preserve the party and complete the observed Lorelei event? |
+| Cheapest falsifier | Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -66,14 +66,14 @@ outputs.
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Connect existing cartridge-relative controls to story progress. Preserve the distinction between forced skill rehearsal and learned selection. |
-| Learning output | 257 focused tests pass; actual zero-input preview confirms original native semantics and one new story binding. Model76 unchanged, no new labels. |
-| Authority delta | No authority promotion or fit. Fixed party-aware battle control is opt-in and tested, not yet live-qualified. |
-| Transfer result | Varied matchups, party order, typed refusal, stale targets, preserved resources and support-chain mutations pass. Real Red preview is same-lineage, not transfer evidence. |
-| Blocker | Indigo has one executable goal, not a genuine story-versus-preparation choice. Historical support import and first native rehearsal remain pending. |
-| Decision | Qualify the real single story option without calling forced gameplay learning. |
-| Next session | Publish tested story integration, import the retained support with zero labels, then one bounded native singleton Lorelei rehearsal. Multiple useful alternatives and a genuine fitted story choice remain required; no replay or invented model decisions. |
-| Next falsifier | Can one bounded native singleton rehearsal preserve the party and complete the observed Lorelei event? |
+| Product alignment | Actual battle progress exposed the missing survival/resource policy. It is a fixed-skill rehearsal, not learned choice competence. |
+| Learning output | 301 new actions/27684frames across two retained attempts. Three quoted Lorelei opponents defeated,30specimens and all bag items preserved. Model76 unchanged. |
+| Authority delta | Zero authority promotions, model queries or new fit rows. Both native story attempts were forced singletons. |
+| Transfer result | Varied ROM-free controllers pass; real cartridge battle reached Jynx without a fainted party member. No independent transfer or boss-win claim. |
+| Blocker | Paused at trainer MAIN against Jynx; Dugtrio has12HP after switching. Entry-damage planning and declared item recovery are missing, and the story menu has no useful competing option. |
+| Decision | Stop the consumed attempts; preserve the exact unsafe battle state. Repair decision-relevant switch/recovery behavior, not the entrance walkthrough or more grinding. |
+| Next session | From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open. |
+| Next falsifier | Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions
