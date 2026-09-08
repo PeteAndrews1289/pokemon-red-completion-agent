@@ -108,6 +108,13 @@ def test_invalid_player_facing_does_not_guess():
         PokemonRedStateReader(RecordingMemory({0xC109: 3})).read_player_facing()
 
 
+@pytest.mark.parametrize("flags,active", [(0, False), (1, False), (0x20, False),
+                                         (8, True), (0x28, True), (0xF7, False)])
+def test_generic_pc_session_uses_its_own_flag_not_cursor_residue(flags, active):
+    memory = RecordingMemory({0xCD60: flags})
+    assert PokemonRedStateReader(memory).read_generic_pc_session_active() is active
+
+
 class BankedRecordingMemory(RecordingMemory):
     def __init__(
         self,

@@ -1,5 +1,22 @@
 # Current agent handoffs
 
+## Current — chain03 retained, model70; PC continuation repair
+
+Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).
+Chain03 selected acquisition but stopped before any storage transfer (73 actions /
+2,712 frames). Both actual outcomes were fitted: model70 now has 70 outcomes,
+29 successful and 60 distinct selected rows, retaining all prior rows. Ekans19,
+27 specimens and 26 living / 31 registered species remain; no Arbok yet.
+
+The generic PC menu reads its visible cursor, not the stale bag-list scroll offset.
+The repair preserves strict scrolling checks inside Bill's PC, closes a retained
+PC session using bounded cancellation, and computes indoor nurse access from the
+actual saved position. 412 focused tests and four-module type checks pass. The
+next choice starts from checkpoint9ddf5585/model70, never from an older save.
+Phase 3 remains open: three choices with only healing success are insufficient.
+See [chain evidence](evidence/red-phase3-chain-03-2026-09-08.json) and the
+unchanged [phase plan](work-sessions/2026-09-08-phase3-completion-plan.md).
+
 ## Current — chain01 retained and fitted; model68 continues from Ekans19
 
 Actual selected evolution failed after8,899actions/778,549frames. Ekans11to19,

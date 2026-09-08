@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state?",
+      "cheapest_falsifier": "Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual native evolution failure fitted67to68; no promotion or independent advantage.",
-        "blocker": "Repeated direct combat after healing erased its own retreat evidence. Actual safe terminal retains Ekans19 and a poisoned healthy-HP helper; continuation must recover legitimately.",
-        "decision": "Keep the failure and its fit. Repair only collection-mode suppression and ineffective-recovery detection, then continue from actual retained progress.",
+        "authority_delta": "Two actual native outcomes fitted68to70, healing success and acquisition failure; no authority promotion.",
+        "blocker": "Retained generic PC menu must close before movement; its root cursor does not use the stale bag-scroll offset.",
+        "decision": "Correct the observed menu check and normalize actual Center position through computed walking. Continue from the consumed attempt's retained endpoint.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-phase3-chain-01-2026-09-08.json",
-          "sha256": "ff54d1a143e73df2f8dce3cb0f562cf9f07000c8cbf7cea3454b45f9698d13f8"
+          "path": "docs/evidence/red-phase3-chain-03-2026-09-08.json",
+          "sha256": "6921dc2b0751ff3aff77478b933021cfa83e288e11f5d9ff5296dd35eb6e54fb"
         },
-        "learning_output": "One real failed outcome fitted;68total/28successful/58distinct, all67prior rows retained.8899actions/778549frames;27specimens/26living/31registered,2balls209currency. Ekans11to19, no Arbok.",
-        "next_falsifier": "Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state?",
-        "next_session_goal": "Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan.",
+        "learning_output": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
+        "next_falsifier": "Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions?",
+        "next_session_goal": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.",
         "product_alignment": "Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture.",
-        "session_id": "2026-09-08-phase3-chain-01",
+        "session_id": "2026-09-08-phase3-chain-03",
         "status": "active",
         "stop_condition": "Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning.",
-        "transfer_result": "Same-lineage Red only.188 targeted tests passed, including four new real-loop cases that fail on the original code. Total heal/action/frame limits preserved; no independent-evaluation claim."
+        "transfer_result": "Same-lineage Red only.412 focused tests pass; no independent evaluation or transfer claim."
       },
       "learned_authority": {
-        "current": "Model68 has68 fitted outcomes/28successful/58distinct; chain01 model-selected evolution failed at Ekans19 but retained a safe terminal and all27specimens. All67 earlier rows retained. Healing erased direct-fight failure evidence, causing repeated Wrap retreats; narrow collection-only repair tested. Arbok and Phase3unfinished.",
+        "current": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan.",
+      "next_decision": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

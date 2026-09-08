@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan.
+- Next decision: Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model68 has68 fitted outcomes/28successful/58distinct; chain01 model-selected evolution failed at Ekans19 but retained a safe terminal and all27specimens. All67 earlier rows retained. Healing erased direct-fight failure evidence, causing repeated Wrap retreats; narrow collection-only repair tested. Arbok and Phase3unfinished. |
+| Authority now | Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state? |
+| Cheapest falsifier | Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-phase3-chain-01** · status **active** · evidence [model fit](docs/evidence/red-phase3-chain-01-2026-09-08.json)
+**2026-09-08-phase3-chain-03** · status **active** · evidence [model fit](docs/evidence/red-phase3-chain-03-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture. |
-| Learning output | One real failed outcome fitted;68total/28successful/58distinct, all67prior rows retained.8899actions/778549frames;27specimens/26living/31registered,2balls209currency. Ekans11to19, no Arbok. |
-| Authority delta | One actual native evolution failure fitted67to68; no promotion or independent advantage. |
-| Transfer result | Same-lineage Red only.188 targeted tests passed, including four new real-loop cases that fail on the original code. Total heal/action/frame limits preserved; no independent-evaluation claim. |
-| Blocker | Repeated direct combat after healing erased its own retreat evidence. Actual safe terminal retains Ekans19 and a poisoned healthy-HP helper; continuation must recover legitimately. |
-| Decision | Keep the failure and its fit. Repair only collection-mode suppression and ineffective-recovery detection, then continue from actual retained progress. |
-| Next session | Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan. |
-| Next falsifier | Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state? |
+| Learning output | Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion. |
+| Authority delta | Two actual native outcomes fitted68to70, healing success and acquisition failure; no authority promotion. |
+| Transfer result | Same-lineage Red only.412 focused tests pass; no independent evaluation or transfer claim. |
+| Blocker | Retained generic PC menu must close before movement; its root cursor does not use the stale bag-scroll offset. |
+| Decision | Correct the observed menu check and normalize actual Center position through computed walking. Continue from the consumed attempt's retained endpoint. |
+| Next session | Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3. |
+| Next falsifier | Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

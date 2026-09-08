@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-01**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-03**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify encounter-aware recovery ([evidence](../docs/evidence/red-resource-recovery-2026-09-08.json))
 - [ ] Complete and fit a useful evolution
 
-Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **70 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-phase3-chain-01-2026-09-08.json)
+[Current evidence](../docs/evidence/red-phase3-chain-03-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-phase3-chain-03
+
+Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.
+
+**Deviation:** Two bounded executor repairs unblock actual retained state; Phase3 exit and living-collection requirement unchanged. Three linked choices alone do not establish sustained useful progress.
+
+**Next:** Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.
 
 ### 2026-09-08-phase3-chain-01
 

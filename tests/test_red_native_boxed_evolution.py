@@ -40,6 +40,56 @@ def native_encounter_tables(monkeypatch):
 
 
 @pytest.mark.parametrize(
+    "failure", [None, "unsupported_route", "transport", "position", "party", "money"]
+)
+def test_retained_center_tile_is_routed_to_nurse_before_training(tmp_path, monkeypatch, failure):
+    from pokemon_red_completion import red_native_boxed_evolution as module
+    from pokemon_red_completion import red_resource_goal_router, route_executor
+
+    runtime, reader, _ = runtime_fixture(tmp_path)
+    reader.raw = replace(reader.raw, player_x=13, player_y=4)
+    start = SimpleNamespace(map_id=reader.raw.map_id, at=(4, 13))
+    route, calls = object(), []
+    monkeypatch.setattr(module, "Gen1TraversalObserver",
+                        lambda r: SimpleNamespace(observe=lambda: start))
+    monkeypatch.setattr(red_resource_goal_router, "_walking_plan",
+                        lambda p: p is route and failure != "unsupported_route")
+
+    def plan(observed, target, *, goal_at):
+        assert observed is start and target == reader.raw.map_id and goal_at == (3, 3)
+        calls.append("plan")
+        return route
+
+    def prepare(actions, r):
+        assert r is reader
+        calls.append("settle_pc")
+
+    def execute(p, actions, observer, *, limits):
+        assert p is route and calls == ["plan", "settle_pc"]
+        calls.append("transport")
+        reader.raw = replace(reader.raw, player_x=3, player_y=3)
+        if failure == "position":
+            reader.raw = replace(reader.raw, player_x=4)
+        elif failure == "party":
+            reader.raw = replace(reader.raw, party_hp=tuple(hp - 1 for hp in reader.raw.party_hp))
+        elif failure == "money":
+            reader.raw = replace(reader.raw, player_money=(reader.raw.player_money or 0) + 1)
+        return SimpleNamespace(passed=failure != "transport")
+
+    monkeypatch.setattr(module, "prepare_center_departure", prepare)
+    monkeypatch.setattr(route_executor, "execute_route", execute)
+    world = SimpleNamespace(plan_feasible_to_map=plan)
+    if failure:
+        with pytest.raises(module.context.RedGoalContextError):
+            module.prepare_native_training_center(runtime, world, object())
+    else:
+        module.prepare_native_training_center(runtime, world, object())
+        assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+    assert calls == (["plan"] if failure == "unsupported_route"
+                     else ["plan", "settle_pc", "transport"])
+
+
+@pytest.mark.parametrize(
     "moves,pp,disabled,expected",
     [
         ((52, 39, 23, 0), (25, 30, 20, 0), 0, 3),

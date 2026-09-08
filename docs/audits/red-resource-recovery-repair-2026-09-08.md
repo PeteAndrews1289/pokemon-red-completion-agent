@@ -1,5 +1,23 @@
 # Collection resource recovery repair
 
+## PC continuation follow-up
+
+Actual chain03 preserved all specimens but stopped at the generic PC menu after
+chain02 healing left a bag scroll offset of 14. That offset is irrelevant at this
+non-scrolling root menu. The game resets it only inside Bill's PC; the repaired
+check uses the visible cursor at the root and retains strict scrolling checks in
+lists. Source: [PC menu](https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/engine/menus/pc.asm)
+and [Bill's PC](https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/engine/pokemon/bills_pc.asm).
+
+The observation adapter reads the actual generic-PC session flag. Recovery sends
+bounded CANCEL only, checks unchanged position/party/boxes/items/money, and never
+selects a transfer or release. Native training computes a walking-only route from
+the actual retained Center tile to the nurse, rather than assuming the entrance.
+412 focused tests pass, including stale offsets, cancellation budget, altered
+party/box/position and nurse-route failures. Four-module mypy passes. This repairs
+execution, not learned competence. Model70 retains the actual acquisition failure;
+Phase 3 is not complete and its next choice has not yet run.
+
 Mission: unblock sustained model-directed Red collection without replacing goal
 choice or losing earned progress after an executor failure. The Phase 3 exit and
 prospective chain requirements remain in the [work plan](../work-sessions/2026-09-08-phase3-completion-plan.md).

@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-08 UTC",
+  "location": "Vermilion Center PC — retained menu, not a live feed",
+  "registered_species": 31,
+  "living_species": 26,
+  "specimens": 27,
+  "capture_items": 2,
+  "money": 209,
+  "checkpoint_sha256": "9ddf5585ac8563df8abe68b0e53841eaf698ff9a226997a88f7c17aceeb77fe9",
+  "live": false,
+  "controller_actions": 0
+}

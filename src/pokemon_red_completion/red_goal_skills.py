@@ -872,8 +872,15 @@ class RedMartResupplyGoalProvider:
 
 
 def prepare_center_departure(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
-    """Reuse nurse farewell recovery before transport, only at its known boundary."""
+    """Settle nurse/PC interactions before transport at their known boundaries."""
     raw = reader.read()
+    if (
+        raw.map_id in _POKEMON_CENTER_MAPS
+        and (raw.player_x, raw.player_y) == (13, 4)
+    ):
+        from pokemon_red_completion.red_pc_storage import close_generic_pc_session
+
+        close_generic_pc_session(actions, reader)
     if (
         raw.map_id in _POKEMON_CENTER_MAPS
         and (raw.player_x, raw.player_y) == (3, 3)

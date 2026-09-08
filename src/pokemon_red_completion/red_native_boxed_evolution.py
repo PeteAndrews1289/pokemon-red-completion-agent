@@ -45,6 +45,7 @@ from pokemon_red_completion.red_goal_boxed_evolution import RedGoalBoxedEvolutio
 from pokemon_red_completion.red_goal_skills import (
     RedCenterRestoreGoalProvider,
     finish_center_dialogue,
+    prepare_center_departure,
 )
 from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_team_training import (
@@ -55,6 +56,45 @@ from pokemon_red_completion.red_team_training import (
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 from pokemon_red_completion.training_venue import TrainingVenue
+
+
+def prepare_native_training_center(
+    runtime: context.RedGoalContextRuntime,
+    world: StrategicScenarioRouteWorld,
+    actions: CountingExecutor,
+) -> None:
+    """Reach the existing nurse boundary from an actual retained Center tile."""
+    from pokemon_red_completion.red_goal_skills import _POKEMON_CENTER_MAPS
+    from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS, _walking_plan
+    from pokemon_red_completion.route_executor import execute_route
+
+    before = runtime.adapter.observe()
+    if (
+        before.raw.map_id not in _POKEMON_CENTER_MAPS
+        or (before.raw.player_x, before.raw.player_y) == (3, 3)
+    ):
+        return
+    if before.raw.battle_state or not before.input_ready:
+        raise context.RedGoalContextError("native Center preparation requires settled control")
+    traversal = Gen1TraversalObserver(runtime.reader)
+    start = traversal.observe()
+    route = world.plan_feasible_to_map(start, start.map_id, goal_at=(3, 3))
+    if not _walking_plan(route):
+        raise context.RedGoalContextError("native nurse access must be walking-only")
+    prepare_center_departure(actions, runtime.reader)
+    report = execute_route(route, actions, traversal, limits=_ROUTE_LIMITS)
+    after = runtime.adapter.observe()
+    if (
+        not report.passed
+        or (after.raw.map_id, after.raw.player_x, after.raw.player_y)
+        != (before.raw.map_id, 3, 3)
+        or after.raw.battle_state or not after.input_ready
+        or after.party != before.party
+        or after.collection_observation != before.collection_observation
+        or after.raw.bag_items != before.raw.bag_items
+        or after.raw.player_money != before.raw.player_money
+    ):
+        raise context.RedGoalContextError("native nurse access changed its retained boundary")
 
 
 def restore_native_center_party(
@@ -225,6 +265,7 @@ def bind_native_boxed_evolution(
         source_id: int,
         target_id: int,
     ) -> BoundedEvolutionTrainingResult:
+        prepare_native_training_center(runtime, world, actions)
         initial_heals = restore_native_center_party(runtime, actions)
         trainee = next(
             (m for m in runtime.adapter.observe().party.members if m.species_id == source_id), None
@@ -401,6 +442,7 @@ def bind_native_boxed_evolution(
             raise context.RedGoalContextError("storage preparation would remove the safe finisher")
         action_start = actions.actions_executed
         frame_start = runtime.emulator.frame_count
+        prepare_native_training_center(runtime, world, actions)
         traversal = Gen1TraversalObserver(runtime.reader)
         start = traversal.observe()
         to_pc = world.plan_feasible_to_map(start, start.map_id, goal_at=(4, 13))

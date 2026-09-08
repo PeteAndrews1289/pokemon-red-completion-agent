@@ -135,6 +135,9 @@ class _Reader:
     def read_bottom_dialogue_box_visible(self) -> bool:
         return self.dialogue
 
+    def read_generic_pc_session_active(self) -> bool:
+        return getattr(self, "pc_active", False)
+
 
 class _Observer:
     def observe_raw(self, _raw: RawGameState) -> GameState:
@@ -354,6 +357,28 @@ def test_travel_departure_reuses_farewell_only_at_its_boundary(visible, at_nurse
     prepare_center_departure(actions, reader)
     assert actions.actions_executed == (2 if visible and at_nurse else 0)
     assert reader.raw.player_x == (3 if at_nurse else 4)
+
+
+@pytest.mark.parametrize("active", [False, True])
+def test_center_departure_closes_actual_pc_session_not_merely_ready_flags(active):
+    from pokemon_red_completion.red_goal_skills import prepare_center_departure
+
+    reader = _Reader(raw=replace(_raw(), map_id=MapId.VERMILION_POKECENTER,
+                                player_x=13, player_y=4), ready=True)
+    reader.pc_active = active
+    before = reader.raw
+
+    class Port(_ActionPort):
+        def execute(self, action):
+            if action.kind is MacroActionKind.CANCEL:
+                reader.pc_active = False
+            return super().execute(action)
+
+    actions = CountingExecutor(Port(reader))
+    prepare_center_departure(actions, reader)
+    assert actions.actions_executed == (2 if active else 0)
+    assert reader.raw == before
+    assert not reader.pc_active
 
 
 def test_center_farewell_stuck_fails_without_movement():

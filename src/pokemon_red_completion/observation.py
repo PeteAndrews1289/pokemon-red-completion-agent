@@ -3919,6 +3919,10 @@ class PokemonRedStateReader:
             storage_initialized=True,
         )
 
+    def read_generic_pc_session_active(self) -> bool:
+        """Red's PC-session flag, independent of stale shared menu cursor bytes."""
+        return bool(self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x08)
+
     def read_menu_cursor_state(self) -> MenuCursorState:
         """Translate Red's current linear-menu cursor fields."""
 

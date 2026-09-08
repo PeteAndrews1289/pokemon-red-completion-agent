@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-phase3-chain-01",
+  "as_of_session": "2026-09-08-phase3-chain-03",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-phase3-chain-01-2026-09-08.json"
+      "evidence": "docs/evidence/red-phase3-chain-03-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -300,6 +300,12 @@
       "result": "Model67to68 from actual failed evolution: Ekans11to19,27specimens preserved.8899actions/778549frames. Safe terminal retained, Arbok unfinished; checklist2/3 unchanged.",
       "deviation": "Direct-combat suppression was erased by healing. Collection-only repair retains this evidence and distinguishes ineffective healing from new encounter damage; fixed total safety budgets and stage exits remain unchanged.",
       "next": "Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-03",
+      "result": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
+      "deviation": "Two bounded executor repairs unblock actual retained state; Phase3 exit and living-collection requirement unchanged. Three linked choices alone do not establish sustained useful progress.",
+      "next": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3."
     }
   ],
   "closed_milestones": [
