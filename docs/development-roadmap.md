@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-story-entry**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-observed-fly**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-observed-fly
+
+Indigo Fly unlock verified; observed-destination controller implemented,311 focused tests pass. No live flight, PC retrieval or fit; model76 and income-to-story1/3 unchanged.
+
+**Deviation:** No stage-exit change. Another support-only slice leaves the no-learning alarm visible: stop new inventory research and integrate existing operations for the named story lesson.
+
+**Next:** Safe boxed-specialist retrieval, one retained-state observed flight, flexible-party boss execution, then genuine story-versus-preparation learning.
 
 ### 2026-09-08-story-entry
 

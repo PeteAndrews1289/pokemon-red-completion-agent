@@ -1,6 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — knowing a goal is next is not knowing how to execute it
+## Current — travel by observed destination, not guessed cursor counts
+
+The saved game has already unlocked Indigo Plateau as a Fly destination. We verified
+that from the cartridge's visited-town flags without advancing the emulator. The old
+flight helper tried cursor counts and checked where it landed; the new controller
+reads the displayed town name, checks each cursor movement, and confirms only the
+requested destination. Wrong or incomplete landings stop without another flight.
+
+This is a reusable controller capability, tested across different party slots and
+visited towns. It is not yet a demonstrated flight: retrieving the stored specialist
+and the live menu/landing test are still pending. 311 focused tests pass, but the
+goal-selection learner remains at 76 outcomes and the game state is unchanged.
+
+The distinction is the project's current challenge: substantial support code exists,
+but story-learning progress needs the pieces connected. The next concrete sequence
+is safe PC retrieval, observed transport, flexible-party boss execution and a real
+model-selected story lesson. We are keeping the support-only work visible rather
+than describing it as a trained player. Phase4 and Red completion remain unfinished.
+
+## Historical — knowing a goal is next is not knowing how to execute it
 
 The story graph correctly identified Lorelei as the next opponent, but the old skill
 advertised readiness too loosely. Its battle chapter depended on a particular party

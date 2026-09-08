@@ -1,6 +1,34 @@
 # Handoff
 
-## Current — truthful story admission; stored travel capability verified
+## Current — observed Fly implemented; live transport still pending
+
+Model76 and checkpoint21445916 are unchanged: 30 specimens, 28 living species,
+33 registered, 619 currency, zero balls. No gameplay, new labels or fit this session.
+
+Read-only inspection verified all eleven Fly destinations, including Indigo.
+The new field adapter reads the actual displayed destination and acknowledges every
+cursor transition before one final flight confirmation. It preserves party/resources
+and stops on a wrong map, incomplete landing, missing menu or unacknowledged input.
+311 focused ROM-free tests pass. This does not yet qualify a live flight or PC retrieval.
+
+Next: integrate the existing PC operations to retrieve the observed boxed Cut/Fly
+holder, preserving field and capture roles rather than depositing by level alone.
+Use a fresh retained-state transport attempt, then qualify flexible-party boss execution
+before a genuine story-versus-preparation choice. Do not rebuild the legacy Lorelei
+party/stock recipe. All pending zero-label support and failed costs remain required.
+
+Reorientation: this is a second support-only slice; the no-learning alarm remains
+visible. No new catalogs or broad audits: remaining work must connect these capabilities
+to the named story lesson. Income-to-story stays 1/3; no whole-Phase4 percentage.
+Estimate to attempt the first story-focused fit: 2–4 focused sessions / 4–12 active
+engineering hours, low confidence. This is not an estimate for a fully trained player
+or Phase4 Champion completion; the generic boss executor remains the main uncertainty.
+
+No external reviewer was used or quota checked this session. Codex owns integration;
+Flash can review a bounded fixture, Claude an occasional consequential boundary.
+Next setting: Astra High, Fast off. North Star and long-term living-Dex goal unchanged.
+
+## Historical — truthful story admission; stored travel capability verified
 
 Model76/checkpoint21445916 remain unchanged:30 specimens,28 living species,33 registered,
 619 currency,0balls. No controller input, frame advancement or fitting ran this session.

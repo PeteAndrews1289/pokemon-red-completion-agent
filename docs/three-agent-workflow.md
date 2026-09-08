@@ -15,7 +15,12 @@ dated audit does not silently reactivate an older assignment.
 
 ### Current budget-conscious implementation loop — September 8
 
-Latest story-entry slice used one Flash High no-tools advisory review. It favored
+The latest observed-Fly component slice used no external reviewer and made no new
+quota check. Its311 focused tests plus153 dashboard/product/roadmap tests are local
+verification, not an independent audit. The next task is live integration rather
+than another general review.
+
+The preceding story-entry slice used one Flash High no-tools advisory review. It favored
 verified PC/Fly capability retrieval over extending the old chapter. Codex rejected
 its overclaim that a static candidate was proven travel and its level-only deposit
 suggestion. This was not a code audit. Gemini quota after review:91.08%five-hour,

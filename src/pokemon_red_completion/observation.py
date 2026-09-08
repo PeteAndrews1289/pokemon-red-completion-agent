@@ -151,6 +151,7 @@ class RamAddress(IntEnum):
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
     WALK_BIKE_SURF_STATE = 0xD700
+    TOWN_VISITED_FLAGS = 0xD70B
     LAST_BLACKOUT_MAP = 0xD719
     NPC_TRADE_FLAGS = 0xD737
     VERMILION_GYM_FIRST_LOCK = 0xD743
@@ -902,6 +903,39 @@ RED_BOXES_PER_SRAM_BANK = 6
 RED_BOX_SRAM_BASE = 0xA000
 RED_BOX_SRAM_BANKS = (2, 3)
 RED_BOX_CHANGED_MASK = 0x80
+
+
+RED_FLY_TOWN_NAMES = (
+    "PALLET TOWN",
+    "VIRIDIAN CITY",
+    "PEWTER CITY",
+    "CERULEAN CITY",
+    "LAVENDER TOWN",
+    "VERMILION CITY",
+    "CELADON CITY",
+    "FUCHSIA CITY",
+    "CINNABAR ISLAND",
+    "INDIGO PLATEAU",
+    "SAFFRON CITY",
+)
+
+
+@dataclass(frozen=True, slots=True)
+class RedFlyMenuState:
+    """Observed Fly destination, not the START/party menu's stale cursor."""
+
+    available_maps: tuple[int, ...]
+    selected_map: int
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.available_maps, tuple)
+            or any(type(m) is not int or not 0 <= m < 11 for m in self.available_maps)
+            or self.available_maps != tuple(sorted(set(self.available_maps)))
+            or type(self.selected_map) is not int
+            or self.selected_map not in self.available_maps
+        ):
+            raise ValueError("Fly menu requires distinct visited towns and an observed selection")
 
 
 @dataclass(frozen=True, slots=True)
@@ -3989,6 +4023,36 @@ class PokemonRedStateReader:
     def read_generic_pc_session_active(self) -> bool:
         """Red's PC-session flag, independent of stale shared menu cursor bytes."""
         return bool(self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x08)
+
+    def read_fly_destinations(self) -> tuple[int, ...]:
+        """Durable town unlocks; never infer them from badges or quest progress.
+
+        Pinned BuildFlyLocationsList uses the low eleven little-endian bits.
+        wTownVisitedFlag follows wWalkBikeSurfState plus ten reserved bytes.
+        """
+        flags = self._memory.read_u8(RamAddress.TOWN_VISITED_FLAGS)
+        flags |= self._memory.read_u8(int(RamAddress.TOWN_VISITED_FLAGS) + 1) << 8
+        return tuple(index for index in range(11) if flags & (1 << index))
+
+    def read_fly_menu_state(self) -> RedFlyMenuState | None:
+        """Require Fly's 'To' header/arrows and a complete displayed town name.
+
+        The pinned Fly loop keeps selection in a CPU register, not the ordinary
+        menu cursor byte. Read the rendered tile-map name instead. Other town
+        maps, partial redraws and unvisited destinations must not authorize A.
+        """
+        if self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 0:
+            return None
+        row = tuple(self._memory.read_u8(int(RamAddress.TILE_MAP) + i) for i in range(20))
+        if row[:3] != (0x93, 0xAE, 0x7F) or row[18:] != (0xED, 0xEE):
+            return None
+        for map_id, name in enumerate(RED_FLY_TOWN_NAMES):
+            tiles = tuple(0x7F if char == " " else ord(char) - ord("A") + 0x80 for char in name)
+            if row[3:18] == tiles + (0x7F,) * (15 - len(tiles)):
+                available = self.read_fly_destinations()
+                if map_id in available:
+                    return RedFlyMenuState(available, map_id)
+        return None
 
     def read_menu_cursor_state(self) -> MenuCursorState:
         """Translate Red's current linear-menu cursor fields."""

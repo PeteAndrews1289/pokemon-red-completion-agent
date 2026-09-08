@@ -1,5 +1,18 @@
 # Next bounded slice: retrieve and use an observed travel capability
 
+## Checkpoint — observed Fly component, 2026-09-08
+
+All eleven destination unlocks, including Indigo, are verified without controller input.
+The observed-destination Fly adapter is implemented; 311 focused tests pass. The full
+transport slice is not complete: PC retrieval and a live menu/flight remain pending.
+Model76/checkpoint21445916 and the 1/3 income-to-story checklist are unchanged.
+The original six-part check below remains binding; do not infer live qualification
+from ROM-free tests or repeat completed inventory research. Reuse existing PC operations,
+preserve capture/field roles, retain partial states, then address generic boss execution.
+No new teacher/curriculum factory or mandatory external/hosted-CI waiting gate.
+
+## Original mission check
+
 1. **Capability:** compose safe travel, living-collection-preserving PC retrieval and
    destination-observed Fly, independent of party species, fixed slots and route strings.
 2. **Learned authority:** this is maintenance for the named model-selected story-versus-
