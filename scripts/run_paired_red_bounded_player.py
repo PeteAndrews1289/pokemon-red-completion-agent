@@ -1685,6 +1685,15 @@ def _run_arm(
             )
             component_failures = 0
 
+            def retain_failure_state() -> None:
+                from pokemon_red_completion.red_player_checkpoint import capture_red_failure_state
+
+                writer.append(
+                    "failure_state",
+                    capture_red_failure_state(emulator=emulator, meter=meter),
+                    durable=True,
+                )
+
             def record_component_failure(error: BaseException) -> None:
                 nonlocal component_failures
                 component_failures += 1
@@ -1703,6 +1712,8 @@ def _run_arm(
                         ),
                     )
                 )
+                if readiness.save_terminal_checkpoints:
+                    retain_failure_state()
 
             result = run_bounded_player_episode(
                 observe=observer,
@@ -1718,7 +1729,11 @@ def _run_arm(
             if recorder.recording_failures:
                 raise PairedRedBoundedPlayerRunError("trajectory_durability")
             if readiness.save_terminal_checkpoints:
-                _require_safe_checkpoint_boundary(runtime, meter)
+                try:
+                    _require_safe_checkpoint_boundary(runtime, meter)
+                except PairedRedBoundedPlayerRunError:
+                    retain_failure_state()
+                    raise
                 terminal_checkpoint = capture_red_player_terminal(
                     emulator=emulator,
                     meter=meter,

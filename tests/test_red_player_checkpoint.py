@@ -24,6 +24,7 @@ from pokemon_red_completion.red_player_checkpoint import (
     LEGACY_CHECKPOINT_SCHEMA,
     MAXIMUM_STATE_BYTES,
     RedPlayerCheckpointError,
+    capture_red_failure_state,
     capture_red_player_terminal,
     capture_red_skill_recovery,
     open_red_player_checkpoint,
@@ -49,6 +50,53 @@ class _Meter:
 
     def checkpoint(self):
         return CompositionBudgetCheckpoint(self.actions, 37)
+
+
+@pytest.mark.parametrize("mode", ["safe", "held", "frames", "actions", "buttons", "empty",
+                                  "oversize"])
+def test_failure_state_preserves_unsafe_input_without_certifying_a_checkpoint(mode):
+    emulator, meter = _Emulator(), _Meter()
+    if mode == "held":
+        emulator.pressed_buttons = frozenset({"a", "left"})
+    elif mode == "frames":
+        emulator.mutation = lambda: setattr(emulator, "frame_count", 38)
+    elif mode == "actions":
+        emulator.mutation = lambda: setattr(meter, "actions", 3)
+    elif mode == "buttons":
+        emulator.mutation = lambda: setattr(emulator, "pressed_buttons", frozenset({"a"}))
+    elif mode == "empty":
+        emulator.state = b""
+    elif mode == "oversize":
+        emulator.state = b"x" * (MAXIMUM_STATE_BYTES + 1)
+    if mode not in {"safe", "held"}:
+        with pytest.raises(RedPlayerCheckpointError):
+            capture_red_failure_state(emulator=emulator, meter=meter)
+        return
+    record = capture_red_failure_state(emulator=emulator, meter=meter)
+    assert base64.urlsafe_b64decode(record["state_base64"]) == emulator.state
+    assert record["state_sha256"] == hashlib.sha256(emulator.state).hexdigest()
+    assert record["admitted_continuation"] is record["training_target"] is False
+    assert record["safe_checkpoint"] is False
+    assert record["held_buttons"] == (["a", "left"] if mode == "held" else [])
+    assert record["emulator_frame_count"] == record["frames"] == 37
+    assert record["actions"] == 2
+
+
+def test_failure_state_is_durable_in_failed_private_episode_not_an_open_checkpoint(case, tmp_path):
+    store, _, _ = case
+    emulator = _Emulator()
+    emulator.state = bytes(range(256))
+    record = capture_red_failure_state(emulator=emulator, meter=_Meter())
+    writer = store.begin_episode("failure-state-test")
+    writer.append("episode", {"episode_id": "failure-state-test"})
+    writer.append("failure_state", record, durable=True)
+    writer.abort("test_failure")
+    failed = tmp_path / "private" / "failure-state-test.failed.partial"
+    saved = json.loads((failed / "failure_state.jsonl").read_text())
+    assert base64.urlsafe_b64decode(saved["state_base64"]) == bytes(range(256))
+    assert saved["safe_checkpoint"] is saved["admitted_continuation"] is False
+    with pytest.raises(PrivateArtifactError):
+        store.open_episode("failure-state-test")
 
 
 @pytest.mark.parametrize("mode", ["safe", "held", "frames", "actions", "empty", "oversize"])
@@ -182,6 +230,26 @@ def test_durable_state_round_trip_preserves_parent_scope_and_quest_claims(case):
     assert "state_base64" not in json.dumps(summary)
     # Recovery republishes identical durable bytes, never another emulator action.
     assert recover_completed_red_player_checkpoint(store, arguments["episode_id"]) == summary
+
+
+def test_safe_failed_goal_retains_exact_state_without_becoming_a_success_or_label(case):
+    store, arguments, observation = case
+    previous = arguments["result"]
+    failed = replace(previous.steps[0], selected_kind=GoalKind.ACQUIRE_SPECIES,
+                     status=GoalDecisionOutcome.FAILED,
+                     failure_reason=GoalFailureReason.BINDING_FAILED)
+    arguments["result"] = replace(previous, steps=(failed,),
+                                  stop_reason=BoundedPlayerStopReason.VERIFIED_FAILURE)
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document)
+    summary = publish_red_player_checkpoint(store, document)
+    restored = _open(store, arguments, summary)
+    restored.require_restored_observation(observation)
+    assert restored.capture.state_bytes == b"actual-terminal-state"
+    assert document["terminal_result"]["steps"][0]["status"] == "failed"
+    assert document["terminal_result"]["steps"][0]["failure_reason"] == "binding_failed"
+    assert document["terminal_result"]["stop_reason"] == "verified_failure"
+    assert summary["training_example"] is summary["automatic_resume_authorized"] is False
 
 
 def test_binary_save_with_path_like_base64_round_trips_through_real_private_store(case):

@@ -19,6 +19,11 @@
 
 ## Work order
 
+Session started: adopt the six-part mission check above as the working plan.
+Classify this as bounded maintenance unblocking the existing useful-acquisition
+lesson, not learned progress. Codex implements directly; no external agent task.
+Keep the16-interruption limit unchanged and qualify before any new gameplay.
+
 - Inspect all three route interruption checks and their pre-action boundaries.
   Preserve configured limits and action/frame accounting. A safe stop should
   occur before creating interruption17 when the budget covers16; allow a route
@@ -50,3 +55,22 @@ Deliver a measured recovery result or a precise failure stop, update roadmap2/3
 only when its third item is actually achieved, preserve Phase3and the Red-first
 living-Pokédex/ROM-hack/Crystal sequence, and refresh handoffs and narratives.
 Recommended: Astra High, Fast off.
+
+## Implementation qualification
+
+Pre-action guards now stop before movement, retry waits, transition waits and
+readiness waits once the configured interruption count is exhausted. An already
+acknowledged terminal can complete at the exact limit; mandatory unsettled
+transitions are not waived. Typed budget exhaustion stays distinct from an
+unrecovered interruption. Failed readiness waits retain prior receipts/counters.
+
+An opt-in private failure-state stream retains exact bytes and held buttons
+without input, normalization, safe-checkpoint certification or training admission.
+Component failures are saved before recovery; unsafe terminal-boundary failures
+are saved before the emulator closes. This does not recover the already-lost
+historical Route10 state, and is not a guarantee against a power loss or disk failure.
+
+ROM-free tests cover limits1,2,8,16, initial/same-coordinate/wait/transition
+interruptions, exact-limit completion, handler failure, unsafe readiness,
+serialization and write-before-close wiring. Next verify the serializer on the
+historical authenticated save with zero input; no learned choice or replay.

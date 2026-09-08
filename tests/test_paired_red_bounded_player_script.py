@@ -176,8 +176,8 @@ def test_runner_uses_shared_player_and_frame_safe_controller_boundary() -> None:
     assert "publish_red_player_checkpoint" in calls
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, enabled):
+@pytest.mark.parametrize("enabled,unsafe", [(False, False), (True, False), (True, True)])
+def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, enabled, unsafe):
     from pokemon_red_completion.bounded_player_episode import (
         BoundedPlayerResult,
         BoundedPlayerStopReason,
@@ -204,6 +204,11 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
             order.append("restore")
 
     def append(stream, record, **kwargs):
+        if unsafe:
+            assert stream == "failure_state" and record == {"diagnostic_only": True}
+            assert kwargs == {"durable": True} and "close" not in order
+            order.append("failure_state")
+            return
         assert stream == "checkpoint" and record == {"captured": True}
         assert kwargs == {"durable": True}
         assert "close" not in order
@@ -214,7 +219,8 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         order.append("trajectory_complete")
         return SimpleNamespace(manifest_sha256="9" * 64)
 
-    writer = SimpleNamespace(append=append, complete=complete, abort=lambda _reason: None)
+    writer = SimpleNamespace(append=append, complete=complete,
+                             abort=lambda _reason: order.append("abort"))
     headers = []
     sink = SimpleNamespace(
         write_episode_header=lambda **kwargs: headers.append(kwargs),
@@ -240,7 +246,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
     monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
     monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_kwargs:
         SimpleNamespace(adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
-            input_ready=True, raw=SimpleNamespace(battle_state=False),
+            input_ready=not unsafe, raw=SimpleNamespace(battle_state=unsafe),
         )))
     )
     monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k:
@@ -259,6 +265,10 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
 
     monkeypatch.setitem(namespace, "capture_red_player_terminal", capture)
     monkeypatch.setitem(namespace, "publish_red_player_checkpoint", publish)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state",
+        lambda **kwargs: {"diagnostic_only": True},
+    )
     readiness = SimpleNamespace(
         pair_id="checkpoint-wire", decision_limit=4, context_origin="training",
         source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
@@ -275,6 +285,11 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         regional_choice_record_sha256="a" * 64 if enabled else None,
         regional_proposal_record_sha256="b" * 64 if enabled else None,
     )
+    if unsafe:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="unsafe_boundary"):
+            run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
+        assert order == ["open", "restore", "failure_state", "close", "abort"]
+        return
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
     assert headers[0]["metadata"].get("remaining_acquisition_demand", False) is enabled
@@ -682,14 +697,21 @@ def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> No
     }
 
 
-def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -> None:
+@pytest.mark.parametrize("retain", [False, True])
+def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch, retain) -> None:
     module = runpy.run_path(str(SCRIPT))
     run_arm = module["_run_arm"]
     namespace = run_arm.__globals__
     events = []
     headers = []
     aborted = []
-    writer = SimpleNamespace(abort=aborted.append)
+    saved, order = [], []
+    def append(stream, record, **kwargs):
+        assert stream == "failure_state" and kwargs == {"durable": True}
+        assert "close" not in order
+        saved.append(record)
+        order.append("saved")
+    writer = SimpleNamespace(abort=aborted.append, append=append)
     sink = SimpleNamespace(
         write_episode_header=lambda **kwargs: headers.append(kwargs),
         record_event=events.append,
@@ -701,6 +723,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
             return self
 
         def __exit__(self, *_args):
+            order.append("close")
             return False
 
         def load_state_bytes(self, state):
@@ -729,9 +752,14 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
             raise RuntimeError("provider readiness disappeared")
         except RuntimeError as error:
             kwargs["failure_observer"](error)
+        assert len(saved) == int(retain)
         raise KeyboardInterrupt
 
     monkeypatch.setitem(namespace, "run_bounded_player_episode", player)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state",
+        lambda **kwargs: {"safe_checkpoint": False, "admitted_continuation": False},
+    )
     readiness = SimpleNamespace(
         pair_id="private-failure-wire", decision_limit=4, context_origin="training",
         source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
@@ -743,7 +771,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=False,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=retain,
         remaining_acquisition_demand=False, level_evolution_acquisitions=False,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256=None,
@@ -758,3 +786,4 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
     assert events[0].step_index == 7
     assert events[1].payload["private_diagnostic"]["exception_type"] == "KeyboardInterrupt"
     assert aborted == ["paired_arm_failed"]
+    assert order == (["saved", "close"] if retain else ["close"])

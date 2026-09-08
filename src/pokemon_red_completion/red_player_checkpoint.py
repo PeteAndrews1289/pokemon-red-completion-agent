@@ -87,6 +87,39 @@ def capture_red_skill_recovery(
     }
 
 
+def capture_red_failure_state(
+    *, emulator: _StateSource, meter: CompositionBudgetMeter,
+) -> dict[str, object]:
+    """Retain an exact private failure state, even with held input or a battle.
+
+    This is diagnostic evidence only, not a safe checkpoint, continuation grant,
+    or label. Never release buttons, tick the emulator or normalize the failure.
+    The episode header supplies the original source, ROM, model and parent scope.
+    """
+    before = meter.checkpoint()
+    frame_before, buttons = emulator.frame_count, emulator.pressed_buttons
+    state = emulator.save_state_bytes()
+    if (
+        meter.checkpoint() != before or emulator.frame_count != frame_before
+        or emulator.pressed_buttons != buttons
+    ):
+        raise RedPlayerCheckpointError("failure capture changed protected state")
+    if not isinstance(state, bytes) or not 0 < len(state) <= MAXIMUM_STATE_BYTES:
+        raise RedPlayerCheckpointError("failure state size differs")
+    return {
+        "schema": "pokemon.red.private-failure-state.v1",
+        "admitted_continuation": False,
+        "safe_checkpoint": False,
+        "training_target": False,
+        "state_sha256": hashlib.sha256(state).hexdigest(),
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
+        "held_buttons": sorted(buttons),
+        "emulator_frame_count": frame_before,
+        "actions": before.controller_actions,
+        "frames": before.emulator_frames,
+    }
+
+
 def _sha(value: object) -> str:
     if (
         not isinstance(value, str)
