@@ -33,3 +33,16 @@ prefixes and the successful zero-label recovery in cost/provenance accounting.
 Next result must say what was actually bought, what the model actually chose, its
 outcome and eligible fitted rows. Resource-backed checklist begins1/3; full Phase4
 still requires model-directed story completion with Champion/Hall-of-Fame evidence.
+
+## Result and reorientation
+
+Completed: earned purchase (287 actions / 13,452 frames), genuine optional team
+restoration (55 / 3,072) fitted model75 to76, and singleton Oddish capture (434 /
+29,856). The latter added a specimen but no learning row. Resource checklist3/3,
+not Phase4 completion. All three saved states independently reload without input.
+
+Actual Route24 checkpoint4a609569 has30 specimens,28 living species,94 currency,
+zero balls and only a healing option. Do not repeat healing. The next falsifier
+is a reachable safe income target beyond the current map, then a genuine
+resource/story alternative. See the
+[closeout audit](../audits/red-earned-resource-continuation-2026-09-08.md).

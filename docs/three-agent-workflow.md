@@ -15,6 +15,12 @@ dated audit does not silently reactivate an older assignment.
 
 ### Current budget-conscious implementation loop — September 8
 
+Latest continuation used no external reviewer: the narrow restore-test repair,
+earned purchase, one real healing-choice fit and singleton Oddish capture were
+verified directly. Reserve the next bounded review for the reachable-income
+composition seam, not another whole-repository audit. No fresh external quota
+reading was obtained; earlier account percentages remain historical.
+
 Use Flash for a tightly bounded adapter or test draft while Codex does useful,
 non-overlapping integration work. Pin the real interfaces and exact editable files.
 Codex runs independent tests, corrects the integration and alone publishes/executes.

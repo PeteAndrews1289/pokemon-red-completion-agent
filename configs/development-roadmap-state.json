@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-trainer-transition-repair",
+  "as_of_session": "2026-09-08-earned-supply-continuation",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -49,14 +49,14 @@
       {
         "id": "earned-resource-continuation",
         "label": "Earn funds, buy supplies, continue collection",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
       },
       {
         "id": "model-story-choice",
         "label": "Fit a genuine resource or story-goal choice",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
       }
     ]
   },
@@ -336,6 +336,12 @@
       "result": "Trainer funding qualified:285 earned,29 specimens retained,0faints;104actions/9541frames include both failed prefixes. Safe recovery checkpoint06982228. Model75 unchanged,0newlabels. Resource-backed checklist1/3.",
       "deviation": "Armed transition, historical menu and field/battle memory lifetime required scoped repairs. Two failed prefixes remain consumed; active-menu recovery is separately metered zero-label support. No exit criterion changed.",
       "next": "From safe recovery checkpoint06982228, verify an affordable ball purchase and continue a genuine model-selected collection/evolution goal. Preserve both failed funding prefixes and the zero-label recovery; no rewind, catalog expansion or new CI gate."
+    },
+    {
+      "session": "2026-09-08-earned-supply-continuation",
+      "result": "Finite resource-backed checklist3/3: trainer-funded ball purchase, genuine model-selected HP/PP recovery fitted75to76, singleton Oddish capture adds one specimen.30specimens/28living/33registered; all prior rows/species retained.",
+      "deviation": "Healing rather than capture was the actual learned resource-management choice. The subsequent capture was forced singleton and zero-label. No phase exit or authority promotion changed. Current Route24 menu only heals, so repeated support stops.",
+      "next": "From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher."
     }
   ],
   "closed_milestones": [

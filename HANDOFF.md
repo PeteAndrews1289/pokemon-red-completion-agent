@@ -1,6 +1,41 @@
 # Handoff
 
-## Current — trainer funding qualified; earned supplies next
+## Current — model76; earned capture verified, reachable income next
+
+The finite resource-backed progression checklist is 3/3; Phase 4 is NOT complete.
+A trainer-funded purchase bought one ball for 200. The model then chose optional
+team restoration over capture, succeeded, and fitted model75 to model76. The
+post-fit capture was the only executable goal: it caught a spare Oddish but
+correctly added zero learned rows. Total: 776 actions / 46,380 frames this session.
+
+Actual endpoint checkpoint4a609569 / state77c4d264, Route24 (5,30):
+30 specimens / 28 living species / 33 registered, 94 currency, zero balls,
+four protected Full Restores. All previous species counts retained. Model76 has
+76 outcomes, 34 successful, 66 distinct selected rows. All 75 prior rows retained.
+Three exact terminal reloads passed with zero audit input or emulator frames.
+
+The no-input next-step check exposes only restore_team. Do not repeat healing
+to call it progress. Qualify a bounded reachable trainer-income option beyond the
+current map, then a genuine resource/story target choice. Reuse safe computed
+navigation and the qualified battle adapter; no fixed route, teacher expansion,
+new catalog factory, replay, sealed evaluation or Crystal execution.
+
+Latest pending zero-label support is red-phase4-earned-followup-20260908-01-causal;
+include it with the next genuine fit, not by itself. Both old funding failures
+and exact trainer recovery remain in lineage/cost accounting. Do not retry them.
+Use the private earned-endpoint inspection arguments for the complete current
+checkpoint/profile chain; change to a fresh execution identity before new input.
+
+CI's repeated latest failure was an outdated observer test signature. Explicit
+legacy/execution assertions now pass: 111 related tests. No checks were disabled.
+Repair source d9e8c6e2 is published; hosted full-suite status is separate. Batch
+implementation pushes at useful session boundaries, not every small patch.
+No external agent or emulator remains running. No new external quota reading.
+Next setting: Astra High, Fast off for bounded integration.
+
+[Detailed audit and remaining Phase 4 work](docs/audits/red-earned-resource-continuation-2026-09-08.md).
+
+## Historical — trainer funding qualified; earned supplies next
 
 One ordinary trainer was defeated for285 currency. Actual safe checkpoint06982228
 (state46defbef) is Route11(x22,y5), with294 currency,0balls,29 specimens/28 living/

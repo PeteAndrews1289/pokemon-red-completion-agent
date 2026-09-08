@@ -1,6 +1,30 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — the agent earns its next supplies
+## Current — earned resources reach the learning loop
+
+The trainer reward became a real purchase, then a real decision: the model chose
+to heal before attempting collection. That outcome was retained and fitted,
+taking the learner from 75 to 76 examples. Its post-fit continuation caught a
+spare Oddish with the purchased ball, keeping the original Oddish available for
+the living collection. We now retain 30 specimens across 28 species.
+
+The distinction matters: purchase was deterministic safety, healing was learned
+selection, and capture was forced because it was the only executable task.
+Only healing earned a training row. Nothing here proves generalization or
+learned battle control. All earlier failures and their costs remain visible.
+
+This closes the small resource-integration checklist, not model-led completion
+of Red. The next exact state has no balls, 94 currency, and only a healing option.
+We stopped instead of looping through healing. Making income reachable from
+another map is the next practical gap between a set of skills and a useful player.
+
+The CI emails came from repeated pushes hitting the same stale test interface.
+We fixed the explicit restore assertions and will batch future publication.
+Tests protect the work; their count is not model progress.
+
+[Session audit](audits/red-earned-resource-continuation-2026-09-08.md).
+
+## Historical — the agent earns its next supplies
 
 The agent earned 285 currency from an ordinary trainer while retaining all 29 Pokémon.
 That is a small but necessary piece of sustained play: collecting cannot depend on

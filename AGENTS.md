@@ -22,6 +22,11 @@ then run the same command with `--check` and include its two generated metadata 
 This is metadata maintenance only: it does not authorize or launch a collection run.
 Do not repeatedly discover stale registry hashes through hosted CI emails.
 
+Batch ordinary implementation commits into a tested publication at a useful session
+boundary; do not push every small repair or manually rerun unchanged failing CI.
+Fix relevant failures locally, preserve safety assertions, and distinguish a targeted
+pass from a full-suite pass. Development gameplay does not wait on hosted CI.
+
 At session closeout and after substantial verified progress, refresh the
 [development infographic](docs/development-roadmap.md), its status/review log, handoffs and
 project/video narrative under the North Star's closeout rules. Regenerate with

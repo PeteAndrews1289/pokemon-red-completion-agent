@@ -2,10 +2,12 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
-Latest result: trainer funding qualified,285 earned and all29 specimens preserved.
-Model75 remains unchanged; the resource-backed checklist is1/3. Next is a funded
-purchase and genuine model-selected collection, not Crystal. See the
-[current audit](audits/red-trainer-transition-qualification-2026-09-08.md).
+Latest result: the earned-resource checklist is 3/3, not Phase 4 completion.
+One learned healing choice fitted model75 to76; a singleton Oddish capture raised
+specimens29 to30, with28 living species unchanged. Actual Route24 state offers
+only healing with94 currency and zero balls. Reachable income and genuine
+resource/story choices are next, not Crystal. See the
+[current audit](audits/red-earned-resource-continuation-2026-09-08.md).
 
 Historical result: model67 chose the retained Ekans evolution but stopped at level11
 on a resource/opponent finisher mismatch. Exact failure and six quantum saves

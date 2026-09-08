@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-transition-repair**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-earned-supply-continuation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-backed story progression: 1/3 acceptance items (33%).**
+**Resource-backed story progression: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Qualify safe trainer funding from real state ([evidence](../docs/evidence/red-trainer-transition-qualification-2026-09-08.json))
-- [ ] Earn funds, buy supplies, continue collection
-- [ ] Fit a genuine resource or story-goal choice
+- [x] Earn funds, buy supplies, continue collection ([evidence](../docs/evidence/red-earned-resource-continuation-2026-09-08.json))
+- [x] Fit a genuine resource or story-goal choice ([evidence](../docs/evidence/red-earned-resource-continuation-2026-09-08.json))
 
-Current model: **75 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **76 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-earned-supply-continuation
+
+Finite resource-backed checklist3/3: trainer-funded ball purchase, genuine model-selected HP/PP recovery fitted75to76, singleton Oddish capture adds one specimen.30specimens/28living/33registered; all prior rows/species retained.
+
+**Deviation:** Healing rather than capture was the actual learned resource-management choice. The subsequent capture was forced singleton and zero-label. No phase exit or authority promotion changed. Current Route24 menu only heals, so repeated support stops.
+
+**Next:** From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher.
 
 ### 2026-09-08-trainer-transition-repair
 
