@@ -28,6 +28,7 @@ from pokemon_red_completion.observation import (
     event_flag_is_set,
 )
 from pokemon_red_completion.red_trainer_funding import TrainerFundingCandidate
+from pokemon_red_completion.red_trainer_healing import trainer_bag_within_budget
 
 
 class TrainerFundingBattleReader(BattleStateReader, Protocol):
@@ -79,6 +80,7 @@ def _check_postbattle_fatal(
     st: RawGameState,
     init: RawGameState,
     tgt: TrainerFundingCandidate,
+    maximum_full_restores: int = 0,
 ) -> None:
     if st.battle_state != 0:
         raise TrainerFundingBattleError(f"unsupported post-battle state {st.battle_state}")
@@ -102,7 +104,7 @@ def _check_postbattle_fatal(
         or any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in st.party_hp)
     ):
         raise TrainerFundingBattleError("party HP missing, truncated, or fainted during battle")
-    if st.bag_items != init.bag_items:
+    if not trainer_bag_within_budget(init, st, maximum_full_restores):
         raise TrainerFundingBattleError("bag items mutated during battle")
 
 
@@ -112,6 +114,7 @@ def _is_settled(
     init: RawGameState,
     tgt: TrainerFundingCandidate,
     exp_money: int,
+    maximum_full_restores: int = 0,
 ) -> bool:
     if st.battle_state != 0:
         return False
@@ -129,7 +132,7 @@ def _is_settled(
         or any(type(hp) is not int or isinstance(hp, bool) or hp <= 0 for hp in st.party_hp)
     ):
         return False
-    if st.bag_items != init.bag_items:
+    if not trainer_bag_within_budget(init, st, maximum_full_restores):
         return False
     if st.player_money != exp_money:
         return False
@@ -146,8 +149,9 @@ def _raise_settle_failure(
     init: RawGameState,
     tgt: TrainerFundingCandidate,
     exp_money: int,
+    maximum_full_restores: int = 0,
 ) -> None:
-    _check_postbattle_fatal(st, init, tgt)
+    _check_postbattle_fatal(st, init, tgt, maximum_full_restores)
     if not event_flag_is_set(st.event_flags, tgt.trainer.event_flag):
         raise TrainerFundingBattleError(f"defeated event flag {tgt.trainer.event_flag} was not set")
     if st.player_money != exp_money:
@@ -176,6 +180,7 @@ def run_prepared_trainer_funding(
     resume_active_battle: bool = False,
     intent: BattleIntent | None = None,
     battle_runner_override: Callable[..., RawGameState] | None = None,
+    maximum_full_restores: int = 0,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared trainer with shared identity/resource/victory checks.
 
@@ -183,6 +188,10 @@ def run_prepared_trainer_funding(
     its own bounded battle controller and intent; neither bypasses the outer
     party, bag, identity, payout, position or event verifier.
     """
+    if type(maximum_full_restores) is not int or not 0 <= maximum_full_restores <= 2:
+        raise ValueError("trainer recovery Full Restore budget must be zero through two")
+    if maximum_full_restores and (not resume_active_battle or battle_runner_override is None):
+        raise ValueError("item budget requires an explicit active-battle recovery controller")
     if intent is not None and not isinstance(intent, BattleIntent):
         raise TypeError("intent must be a BattleIntent")
     if battle_runner_override is not None and not callable(battle_runner_override):
@@ -342,6 +351,8 @@ def run_prepared_trainer_funding(
         )
 
     def _guard(current_raw: RawGameState) -> None:
+        if not trainer_bag_within_budget(initial, current_raw, maximum_full_restores):
+            raise TrainerFundingBattleError("trainer bag exceeded its explicit recovery budget")
         if current_raw.battle_state != 2:
             raise TrainerFundingBattleError(
                 f"battle state {current_raw.battle_state} must be 2 during combat"
@@ -405,19 +416,23 @@ def run_prepared_trainer_funding(
 
     expected_money = target.quote.expected_money_after(initial.player_money)
     state = battle_final
-    _check_postbattle_fatal(state, initial, target)
+    _check_postbattle_fatal(state, initial, target, maximum_full_restores)
 
     settle_count = 0
-    while not _is_settled(state, reader, initial, target, expected_money):
+    while not _is_settled(state, reader, initial, target, expected_money, maximum_full_restores):
         if settle_count >= maximum_settle_pulses:
-            _raise_settle_failure(state, reader, initial, target, expected_money)
+            _raise_settle_failure(
+                state, reader, initial, target, expected_money, maximum_full_restores,
+            )
         if not reader.read_bottom_dialogue_box_visible() and reader.read_input_readiness().ready:
-            _raise_settle_failure(state, reader, initial, target, expected_money)
+            _raise_settle_failure(
+                state, reader, initial, target, expected_money, maximum_full_restores,
+            )
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
         settle_count += 1
         state = reader.read()
-        _check_postbattle_fatal(state, initial, target)
+        _check_postbattle_fatal(state, initial, target, maximum_full_restores)
 
     final_money = state.player_money
     if final_money is None:

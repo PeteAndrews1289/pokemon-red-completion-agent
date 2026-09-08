@@ -52,6 +52,8 @@ from pokemon_red_completion.red_team_training import (
     escape_collection_battle,
 )
 from pokemon_red_completion.red_trainer_funding_battle import run_prepared_trainer_funding
+from pokemon_red_completion.red_trainer_healing import trainer_bag_within_budget
+from pokemon_red_completion.red_trainer_survival import RedTrainerSurvivalController
 
 
 def restored_proposal_profile(document):
@@ -101,8 +103,44 @@ def prepare(args):
     return ready, state
 
 
+def observed_failed_trainer_switches(store, episode_id, depth=0):
+    """Reconstruct consumed switches from recorded active-party transitions."""
+    if depth >= 8:
+        raise ValueError("trainer switch ancestry exceeds its bound")
+    episode = store.open_failed_episode(episode_id)
+    metadata = episode.read_header()["metadata"]
+    previous = ()
+    if metadata.get("schema") == "pokemon.red.forced-recovery-header.v1":
+        previous = observed_failed_trainer_switches(
+            store, metadata["recovery"]["failure_episode_id"], depth + 1,
+        )
+    snapshots = {row["snapshot_sha256"]: row["snapshot"]["features"]
+                 for row in episode.iter_stream("snapshots")}
+    observed = []
+    for execution in episode.iter_stream("executions"):
+        before = snapshots[execution["before_sha256"]]
+        after = snapshots[execution["after_sha256"]]
+        before_slot = (before.get("party") or {}).get("active_index")
+        after_slot = (after.get("party") or {}).get("active_index")
+        if (all((view.get("battle") or {}).get("kind") == "trainer" for view in (before, after))
+                and type(before_slot) is int and type(after_slot) is int
+                and before_slot != after_slot):
+            observed.append(after_slot + 1)
+    return previous + tuple(observed)
+
+
 def run(args):
+    healing_budget = getattr(args, "maximum_full_restores", 0)
+    prior_switches = tuple(getattr(args, "prior_switches", ()))
+    if (type(healing_budget) is not int or not 0 <= healing_budget <= 2
+            or (healing_budget and not getattr(args, "finish_trainer_funding", False))
+            or (prior_switches and not healing_budget)):
+        raise ValueError("healing budget requires the explicit active-trainer recovery mode")
     ready, failed = prepare(args)
+    if healing_budget and observed_failed_trainer_switches(
+        ready.private_root, args.failed_episode,
+    ) != prior_switches:
+        raise ValueError("declared prior switches differ from the retained failed execution")
     payload = base64.urlsafe_b64decode(failed["state_base64"])
     world = base._route_world(ready)
     if world is None:
@@ -129,6 +167,11 @@ def run(args):
             trainer_target = active_trainer_funding_candidate(world.rom, reader)
             if reader.read_battle_menu_state(before.raw).phase is not BattleMenuPhase.MAIN:
                 raise ValueError("trainer recovery must begin at the MAIN battle menu")
+            if healing_budget:
+                controller = RedTrainerSurvivalController(
+                    reader, base.ReadOnlyController(emulator), prior_switches, healing_budget,
+                )
+                first_survival_decision = controller.decide(before.raw)
         if before.party.fainted_count or not (
             (trainer_recovery and before.raw.battle_state == 2)
             or before.raw.battle_state == 1
@@ -165,6 +208,11 @@ def run(args):
             "training_examples": 0,
             "original_choice_retried": False,
             "finish_trainer_funding": trainer_recovery,
+            "maximum_full_restores": healing_budget,
+            "prior_switches": list(prior_switches),
+            "first_survival_action": (
+                first_survival_decision.kind if trainer_recovery and healing_budget else None
+            ),
         }
         if not args.execute:
             base._write_exclusive(args.out, {**preflight, "status": "ready_read_only"})
@@ -251,6 +299,15 @@ def run(args):
                         move_slot_policy=guard._safe_trainer_move,
                         timing=DEFAULT_BATTLE_RUNTIME_TIMING,
                         resume_active_battle=True,
+                        maximum_full_restores=healing_budget,
+                        battle_runner_override=(
+                            RedTrainerSurvivalController(
+                                reader, frames, prior_switches, healing_budget,
+                                decision_sink=lambda report: writer.append(
+                                    "trainer_recovery_decisions", report, durable=True,
+                                ),
+                            ).run if healing_budget else None
+                        ),
                     )
                     writer.append(
                         "trainer_funding",
@@ -312,7 +369,7 @@ def run(args):
                     checks["trainer_income_verified"] = (
                         trainer_receipt is not None
                         and after.raw.player_money == trainer_receipt.final_money
-                        and after.raw.bag_items == before.raw.bag_items
+                        and trainer_bag_within_budget(before.raw, after.raw, healing_budget)
                     )
                 else:
                     checks["hp_status_pp_restored"] = _raw_party_restored(after.raw)
@@ -421,4 +478,6 @@ if __name__ == "__main__":
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--finish-trainer-funding", action="store_true")
+    parser.add_argument("--maximum-full-restores", type=int, default=0)
+    parser.add_argument("--prior-switches", type=int, nargs="*", default=[])
     run(parser.parse_args())

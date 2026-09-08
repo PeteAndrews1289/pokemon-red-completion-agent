@@ -100,6 +100,15 @@ class PokemonRedBattleCatalog:
         self.resolve_move(move_ref)
         return _MOVE_EFFECT_BY_ID[identifier] == "SWITCH_AND_TELEPORT_EFFECT"
 
+    def recovery_attack_supported(self, move_ref: str, /) -> bool:
+        """One ordinary attack without recoil, delayed turns or forced repeats."""
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        move = self.resolve_move(move_ref)
+        return bool(move.power > 0 and move.category != "status" and not (
+            move.effect_flags & {"recoil", "charge", "fixed_damage", "ohko", "counter",
+                                 "self_destruct", "trapping", "recharge"}
+        ) and _MOVE_EFFECT_BY_ID[identifier] not in {"THRASH_PETAL_DANCE_EFFECT", "RAGE_EFFECT"})
+
     def switch_entry_attack_type(self, move_ref: str, /) -> str | None:
         """Type-screen ordinary damage; refuse indirect or unbounded effects.
 

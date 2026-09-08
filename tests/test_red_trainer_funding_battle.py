@@ -123,6 +123,42 @@ def make_state(
 TIMING = BattleRuntimeTiming(dialogue_wait_frames=5)
 
 
+@pytest.mark.parametrize("bag,allowed", [
+    (((16, 3), (53, 3)), True), (((16, 2), (53, 3)), True),
+    (((16, 1), (53, 3)), False), (((16, 3), (53, 2)), False),
+])
+def test_explicit_recovery_item_budget_survives_outer_victory_verification(bag, allowed):
+    env = ScriptedEnvironment(make_state(battle_state=2, bag=((16, 4), (53, 3))))
+    def finish(reader, _executor, _policy, **kwargs):
+        env.state = replace(reader.read(), bag_items=bag)
+        kwargs["move_decision_guard"](env.state)
+        env.state = replace(env.state, battle_state=0, player_money=815,
+                            event_flags=make_flag_bytes(1139))
+        return env.state
+    def execute():
+        return run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, resume_active_battle=True,
+            battle_runner_override=finish, maximum_full_restores=2,
+        )
+    if allowed:
+        assert execute().final_state.bag_items == bag
+    else:
+        with pytest.raises(TrainerFundingBattleError, match="budget"):
+            execute()
+    assert not env.actions
+
+
+def test_ordinary_battle_cannot_inherit_a_recovery_item_budget():
+    env = ScriptedEnvironment(make_state(bag=((16, 4),)))
+    with pytest.raises(ValueError, match="explicit active-battle"):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, maximum_full_restores=2,
+        )
+    assert not env.actions
+
+
 @pytest.mark.parametrize("already_pending", [False, True])
 def test_armed_intro_waits_without_reinteracting_or_confirming(monkeypatch, already_pending):
     class PendingEnvironment(ScriptedEnvironment):

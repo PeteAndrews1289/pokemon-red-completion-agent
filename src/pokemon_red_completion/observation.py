@@ -50,6 +50,9 @@ class RamAddress(IntEnum):
     PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
     ENEMY_DEFENSE_STAGE = 0xCD2F
+    ENEMY_UNMODIFIED_LEVEL = 0xCD23
+    ENEMY_UNMODIFIED_ATTACK = 0xCD26
+    ENEMY_UNMODIFIED_SPECIAL = 0xCD2C
     ENGAGED_TRAINER_CLASS = 0xCD2D
     ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
@@ -67,12 +70,15 @@ class RamAddress(IntEnum):
     ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
+    ENEMY_ATTACK = 0xCFF6
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
+    BATTLE_MON_DEFENSE = 0xD027
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
     ENEMY_BATTLE_STATUS_1 = 0xD067
+    PLAYER_BATTLE_STATUS_1 = 0xD062
     PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
@@ -3587,6 +3593,26 @@ class SurgeProgressTracker:
         return state.phase
 
 
+@dataclass(frozen=True, slots=True)
+class TrainerDamageObservation:
+    """Adapter-only inputs for a bounded ordinary incoming attack calculation.
+
+    Defense rows are (current defense, current special, base defense, base special).
+    Reserve rows use party stats; badge boosts are not credited. These are not
+    new model features or a replacement historical snapshot schema.
+    """
+
+    raw: RawGameState
+    moves: tuple[int, ...]
+    enemy_types: tuple[str, ...]
+    enemy_attack: int
+    enemy_special: int
+    enemy_base_attack: int
+    enemy_base_special: int
+    defenses: tuple[tuple[int, int, int, int], ...]
+    party_types: tuple[tuple[str, ...], ...]
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -3885,6 +3911,60 @@ class PokemonRedStateReader:
                 or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
             raise SemanticStateError("trainer entry observation changed while reading")
         return moves
+
+    def read_trainer_damage_observation(self, expected: RawGameState) -> TrainerDamageObservation:
+        """Observe real stats and types, including unmodified critical-hit stats.
+
+        Pinned wram.asm stores the enemy's unmodified stats before its stat mods;
+        party_struct stores Defense/Special at offsets38/42. Battle structs store
+        live types at5/6. Reject transformed, seeded, toxic or committed-player
+        states rather than pretending this ordinary-turn model covers them.
+        """
+        moves = self.read_trainer_entry_moves(expected)
+        if moves is None or expected.party_count is None or expected.active_party_index is None:
+            raise SemanticStateError("trainer damage requires an unchanged MAIN boundary")
+        if not 0 <= expected.active_party_index < expected.party_count <= 6:
+            raise SemanticStateError("trainer damage party indices differ")
+        player_flags = tuple(self._memory.read_u8(
+            int(RamAddress.PLAYER_BATTLE_STATUS_1) + i,
+        ) for i in range(3))
+        enemy_flags3 = self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + 2)
+        if (player_flags[0] or player_flags[1] & 0xF0
+                or player_flags[2] & 0x09 or enemy_flags3 & 0x08):
+            raise SemanticStateError("trainer damage has unsupported volatile mechanics")
+        if self._memory.read_u8(RamAddress.ENEMY_UNMODIFIED_LEVEL) != expected.enemy_level:
+            raise SemanticStateError("trainer damage unmodified opponent level differs")
+        types = {0: "normal", 1: "fighting", 2: "flying", 3: "poison", 4: "ground",
+                 5: "rock", 7: "bug", 8: "ghost", 20: "fire", 21: "water",
+                 22: "grass", 23: "electric", 24: "psychic", 25: "ice", 26: "dragon"}
+
+        def read_types(base: int) -> tuple[str, ...]:
+            try:
+                return tuple(dict.fromkeys(types[self._memory.read_u8(base + i)] for i in (5, 6)))
+            except KeyError as error:
+                raise SemanticStateError("trainer damage has unsupported type bytes") from error
+
+        defenses = []
+        party_types = []
+        for index in range(expected.party_count):
+            base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+            defense, special = self._read_u16_be(base + 38), self._read_u16_be(base + 42)
+            current_defense, current_special = defense, special
+            if index == expected.active_party_index:
+                current_defense = min(defense, self._read_u16_be(RamAddress.BATTLE_MON_DEFENSE))
+                current_special = min(special, self._read_u16_be(RamAddress.BATTLE_MON_SPECIAL))
+            defenses.append((current_defense, current_special, defense, special))
+            party_types.append(read_types(base))
+        result = TrainerDamageObservation(
+            expected, moves, read_types(int(RamAddress.ENEMY_SPECIES)),
+            self._read_u16_be(RamAddress.ENEMY_ATTACK), self._read_u16_be(RamAddress.ENEMY_SPECIAL),
+            self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_ATTACK),
+            self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL),
+            tuple(defenses), tuple(party_types),
+        )
+        if self.read_trainer_entry_moves(expected) != moves:
+            raise SemanticStateError("trainer damage boundary changed while reading")
+        return result
 
     def read_current_box_move_members(self) -> tuple[RedBoxMoveMember, ...]:
         """Read moves/PP with the already-verified 33-byte boxed structure.

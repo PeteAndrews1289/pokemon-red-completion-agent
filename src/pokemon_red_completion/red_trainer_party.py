@@ -57,6 +57,7 @@ def trainer_entry_candidates(
 
 def trainer_matchup_candidates(
     party: PartyObservation, *, opponent_species: int, opponent_level: int,
+    minimum_hp_ratio: float = 0.5,
 ) -> tuple[PartyMatchupProfile, ...]:
     """Healthy, usable, non-immune matchups within five levels of an opponent.
 
@@ -68,6 +69,8 @@ def trainer_matchup_candidates(
     """
     if not isinstance(party, PartyObservation) or not party.members:
         raise RedTrainerPartyError("trainer preparation requires an observed party")
+    if minimum_hp_ratio not in (0.0, 0.5):
+        raise RedTrainerPartyError("unsupported trainer HP screening mode")
     members: list[dict[str, object]] = []
     for member in party.members:
         moves: list[dict[str, object]] = []
@@ -95,7 +98,8 @@ def trainer_matchup_candidates(
                    "opponent_level": opponent_level},
     }}, RED_BATTLE_CATALOG)
     return tuple(sorted(
-        (profile for profile in profiles if profile.safe and not profile.has_status
+        (profile for profile in profiles if profile.hp_ratio >= minimum_hp_ratio
+         and not profile.has_status
          and profile.level_margin >= -0.05 and profile.offensive_power > 0),
         key=PartyMatchupProfile.switch_rank, reverse=True,
     ))
