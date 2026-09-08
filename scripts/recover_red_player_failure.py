@@ -24,7 +24,10 @@ from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
     authenticated_failure_state,
 )
-from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
+from pokemon_red_completion.red_goal_context_profile import (
+    _canonical_line,
+    parse_red_goal_context_profile,
+)
 from pokemon_red_completion.red_goal_skills import _raw_party_restored
 from pokemon_red_completion.red_player_checkpoint import (
     capture_red_failure_state,
@@ -40,6 +43,13 @@ from pokemon_red_completion.red_team_training import (
     collection_escape_escort,
     escape_collection_battle,
 )
+
+
+def restored_proposal_profile(document):
+    profile = parse_red_goal_context_profile(_canonical_line(document["profile"]))
+    if profile.profile_sha256 != document["profile_sha256"]:
+        raise ValueError("failed proposal profile identity differs")
+    return profile
 
 
 def prepare(args):
@@ -58,7 +68,7 @@ def prepare(args):
     )
     if proposal is not None:
         document = proposal.read()
-        profile = parse_red_goal_context_profile(json.dumps(document["profile"]).encode())
+        profile = restored_proposal_profile(document)
         ready = replace(ready, profile=profile)
     state = authenticated_failure_state(
         ready.private_root,
