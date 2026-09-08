@@ -1,6 +1,22 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — the collection loop earns two evolutions
+## Current — learning needs a practical economy
+
+The next bottleneck is ordinary: the retained player has no balls and only9currency.
+Rather than reset supplies or sell protected recovery items, Phase4 starts by
+connecting trainer victories to a funded purchase and further collection.
+The cartridge now supplies four local opponent rosters and expected rewards;
+computed approaches avoid other trainer sight lines. The biggest quote is1050.
+
+Be precise when showing this: these are static inventory/route checks, not a
+battle demonstration. There was no new gameplay, earned money or model fitting
+this session. Model75 and28living species remain the actual state. The next
+demonstration should show an intended trainer defeated, money received, supplies
+bought and a real subsequent choice—not another dashboard counter.
+
+[Evidence](evidence/red-trainer-funding-static-qualification-2026-09-08.json).
+
+## Historical — the collection loop earns two evolutions
 
 The story beat: this is no longer just a teacher following a completed route.
 A small learned goal selector chose what to attempt, and deterministic game skills

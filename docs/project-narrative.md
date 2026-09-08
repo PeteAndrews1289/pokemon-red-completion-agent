@@ -1,6 +1,22 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — two useful collection chains, not a complete game player
+## Current — learning needs a practical economy
+
+The next bottleneck is ordinary: the retained player has no balls and only9currency.
+Rather than reset supplies or sell protected recovery items, Phase4 starts by
+connecting trainer victories to a funded purchase and further collection.
+The cartridge now supplies four local opponent rosters and expected rewards;
+computed approaches avoid other trainer sight lines. The biggest quote is1050.
+
+Be precise when showing this: these are static inventory/route checks, not a
+battle demonstration. There was no new gameplay, earned money or model fitting
+this session. Model75 and28living species remain the actual state. The next
+demonstration should show an intended trainer defeated, money received, supplies
+bought and a real subsequent choice—not another dashboard counter.
+
+[Evidence](evidence/red-trainer-funding-static-qualification-2026-09-08.json).
+
+## Historical — two useful collection chains, not a complete game player
 
 The project now has a bounded example of learned decisions producing repeated
 living-collection progress. Across two linked Red chains, the goal model made

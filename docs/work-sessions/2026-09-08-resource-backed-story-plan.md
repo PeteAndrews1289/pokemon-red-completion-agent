@@ -27,6 +27,20 @@ never an older resource-rich save. All12 phase episodes are consumed.
    exact failure and its costs. No consumed retry, reset, protected-floor sale,
    automatic League replay or silent budget increase.
 
+## First session progress — static qualification only
+
+The cartridge party/reward decoder and local approach adapter now qualify four
+retained opportunities, with8–28steps and255–1050expected currency.133focused
+tests pass. This was zero-input work from the retained inventory, not a freshly
+observed or executed battle. Model75 and the actual terminal are unchanged.
+
+Next session begins at the runtime seam below: prepare the lead, verify trainer
+identity, execute one bounded battle and verify the actual defeated event/money
+delta. Do not repeat inventory qualification or expand to the full trainer catalog.
+The original checklist remains0/3 until execution supports it.
+
+[First-session audit](../audits/red-trainer-funding-static-qualification-2026-09-08.md).
+
 ## Work sequence and named reuse
 
 1. Review the exact terminal and the read-only local inventory in the

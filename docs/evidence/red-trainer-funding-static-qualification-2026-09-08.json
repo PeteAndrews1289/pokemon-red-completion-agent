@@ -1,0 +1,143 @@
+{
+  "schema": "pokemon.red.trainer-funding-static-qualification.v1",
+  "source_base_commit": "84d1e2c32ba46a77738a5d799dd4b35eac2123c2",
+  "source_status": "uncommitted implementation over source_base_commit",
+  "implementation_files": {
+    "src/pokemon_red_completion/gen1_trainer_parties.py": "cfaf34dea197b7b98a810e6888af9b1439dd1da7ab73ca9aedf61817c97aa862",
+    "src/pokemon_red_completion/red_trainer_funding.py": "b8c4aca1c3558f45f550eb457c469559a42d7b1af063c7e3e2c579f29d7573f2"
+  },
+  "checkpoint_sha256": "d8151f88177fbe80f722ecc620c89a93fa3069d28333be19367a7230205ad66b",
+  "inventory_model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+  "retained_origin": {
+    "map_id": 22,
+    "player_x": 18,
+    "player_y": 9
+  },
+  "fresh_emulator_observation": false,
+  "money_before": 9,
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "model_queries": 0,
+  "money_earned": 0,
+  "training_rows_added": 0,
+  "income_skill_executable": false,
+  "candidates": [
+    {
+      "sprite_index": 3,
+      "event_flag": 1139,
+      "quote": {
+        "opponent_id": 201,
+        "trainer_set": 9,
+        "party": [
+          {
+            "internal_species": 108,
+            "species": 23,
+            "level": 21
+          }
+        ],
+        "base_money": 15,
+        "expected_victory_money": 315
+      },
+      "approach_steps": 8,
+      "approach_at": [
+        6,
+        13
+      ],
+      "interaction_facing": "up",
+      "expected_money_after": 324
+    },
+    {
+      "sprite_index": 4,
+      "event_flag": 1140,
+      "quote": {
+        "opponent_id": 212,
+        "trainer_set": 2,
+        "party": [
+          {
+            "internal_species": 173,
+            "species": 81,
+            "level": 21
+          }
+        ],
+        "base_money": 50,
+        "expected_victory_money": 1050
+      },
+      "approach_steps": 19,
+      "approach_at": [
+        10,
+        36
+      ],
+      "interaction_facing": "down",
+      "expected_money_after": 1059
+    },
+    {
+      "sprite_index": 5,
+      "event_flag": 1141,
+      "quote": {
+        "opponent_id": 201,
+        "trainer_set": 10,
+        "party": [
+          {
+            "internal_species": 96,
+            "species": 27,
+            "level": 19
+          },
+          {
+            "internal_species": 107,
+            "species": 41,
+            "level": 19
+          }
+        ],
+        "base_money": 15,
+        "expected_victory_money": 285
+      },
+      "approach_steps": 8,
+      "approach_at": [
+        5,
+        22
+      ],
+      "interaction_facing": "up",
+      "expected_money_after": 294
+    },
+    {
+      "sprite_index": 8,
+      "event_flag": 1136,
+      "quote": {
+        "opponent_id": 201,
+        "trainer_set": 11,
+        "party": [
+          {
+            "internal_species": 165,
+            "species": 19,
+            "level": 17
+          },
+          {
+            "internal_species": 165,
+            "species": 19,
+            "level": 17
+          },
+          {
+            "internal_species": 166,
+            "species": 20,
+            "level": 17
+          }
+        ],
+        "base_money": 15,
+        "expected_victory_money": 255
+      },
+      "approach_steps": 28,
+      "approach_at": [
+        6,
+        43
+      ],
+      "interaction_facing": "up",
+      "expected_money_after": 264
+    }
+  ],
+  "limitations": [
+    "Static retained-inventory routes, not fresh live qualification or execution.",
+    "Party preparation, move safety, target identity, defeated event and actual money delta still require runtime verification.",
+    "Finite trainer rewards are not repeatable income; no learned goal binding or fit was added.",
+    "Mixed-level roster decoder does not describe special move overrides; final unbounded class is unsupported."
+  ]
+}

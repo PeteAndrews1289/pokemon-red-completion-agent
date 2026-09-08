@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-sustained-closeout**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-funding-static-qualification**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-trainer-funding-static-qualification
+
+Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.
+
+**Deviation:** No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.
+
+**Next:** Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session.
 
 ### 2026-09-08-phase3-sustained-closeout
 

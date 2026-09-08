@@ -1,6 +1,23 @@
 # Three-agent coordination
 
-## Current — Phase 3 closed; model75 and resource-backed story work next
+## Current — Phase4 funding seam: static qualification, runtime next
+
+Added cartridge-derived trainer rosters/rewards and local computed approaches.
+The four retained Route11 opportunities quote255,285,315and1050currency, with
+8–28step approaches reserving every unbeaten trainer sight lane. No controller
+input, money earned, model query or new training row. Model75 and actual
+d8151f88 remain unchanged:28living/29specimens,zero balls and9currency.
+
+133focused ROM-free tests and both new modules' type/lint checks pass.
+This is NOT a live safe-battle result or executable income goal. The next
+session must implement prepared-lead engagement, exact trainer identity, defeated
+event and actual money settlement, then a funded purchase/real continuation.
+Do not add another inventory layer, full replay, protected-stock sale or new CI gate.
+The resource-backed milestone remains0/3; the original cross-game North Star stands.
+
+[Static evidence](docs/evidence/red-trainer-funding-static-qualification-2026-09-08.json). [Session audit and reviewer handoff](docs/audits/red-trainer-funding-static-qualification-2026-09-08.md).
+
+## Historical — Phase 3 closed; model75 and resource-backed story work next
 
 Two linked chains met the unchanged bounded sustained-Red exit: five and three
 actual model-selected choices, with Arbok and Electrode added while their base

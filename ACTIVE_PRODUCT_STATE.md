@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion.
+- Next decision: Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session.
 
 ### Mandatory mission check
 
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-phase3-sustained-closeout** · status **active** · evidence [model fit](docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
+**2026-09-08-trainer-funding-static-qualification** · status **active** · evidence [qualification](docs/evidence/red-trainer-funding-static-qualification-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Two retained-base evolutions and a spare Drowzee support living collection. The next constraint is legitimate funding and executable story/event choices, not another teacher replay. |
-| Learning output | Phase 3 bounded milestone complete: two linked chains with 5 and 3 genuine model choices, two new living species (Arbok and Electrode), 54,971 actions / 4,913,974 frames including failures and support. Model75: 75 fitted outcomes, 33 successful, 65 distinct rows. 28 living species / 29 specimens / 33 registered; no losses or observed faints. Correlated development, not independent advantage or full Red. |
-| Authority delta | Eight admitted selected outcomes fitted67to75; six native goal choices and two regional destination choices. Four support-only episodes add zero labels. No authority promotion or independent advantage. |
-| Transfer result | Two correlated linked Red chains across multiple regions; five and three actual choices. No independent evaluation, full-game completion or cross-game result. |
-| Blocker | Phase3 bounded exit is met, but zero balls and9currency prevent further captures. Four unbeaten local trainers are observed; income execution is unqualified. A spare Drowzee offers a possible further evolution. Model75 has not played after its final fit. |
-| Decision | Close the unchanged sustained-Red development stage; begin resource-backed story capability qualification without a full replay or robustness claim. |
-| Next session | From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion. |
-| Next falsifier | Can an ordinary unbeaten trainer be reached and completed under existing safety bounds, producing verified money without losing a living specimen or invoking a fixed teacher route? |
+| Product alignment | A finite trainer-funded supply loop connects story events to continued living collection without selling protected items. |
+| Learning output | Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows. |
+| Authority delta | None. Static inventory qualification only; no controller input, policy query or new fit row. |
+| Transfer result | ROM-free roster/route variation plus static Red inventory; no new live or transfer result. |
+| Blocker | Four cartridge-derived rosters/rewards and conservative local approaches are now qualified statically. Live party preparation, exact engagement and payout verification remain missing; model75 has not played after its final fit. |
+| Decision | Proceed directly to the bounded runtime funding seam; do not broaden cartridge inventory or repeat full CI as a substitute for execution. |
+| Next session | Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session. |
+| Next falsifier | Does one actual trainer victory set the intended defeated event and produce exactly the quoted money while preserving the living collection? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions
