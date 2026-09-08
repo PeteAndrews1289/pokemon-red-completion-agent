@@ -1,5 +1,19 @@
 # Roadmap baseline and deviations
 
+## September8 — authorized practice restart closes useful acquisition
+
+The user approved one clearly labeled historical-save practice restart after
+the lost Route10 endpoint. Seed2026090804 was declared before prediction; model66
+selectedRoute4. The earlier consumed failure and853actions/52,068frames remain
+separate and unfitted, not erased or replaced. Both branches share lineage.
+
+One spare Ekans6 was captured and one actual regional choice fitted into model67.
+The terminal restores exactly and offers Arbok22 while retaining an Ekans.
+Useful-acquisition3/3 is now closed; Phase3 and all baseline stage exits remain
+unchanged. No independent evidence or exact-cap live-stop claim. The next lesson
+uses the actual Route4 terminal, not the historical save. Keep explicit
+dependency-credit limitations visible; no synthetic reward is retrofitted.
+
 ## September8 — safe travel stopping qualified; execution origin must be explicit
 
 Source400f3d81 repairs pre-input interruption capacity and exact private failure

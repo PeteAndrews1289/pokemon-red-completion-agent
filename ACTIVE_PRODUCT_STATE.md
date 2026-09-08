@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal.
+- Next decision: Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model66 remains66fitted outcomes/27successful/56distinct and45native/15regional entries. This session changed only safe travel stopping and diagnostic state retention; no new gameplay or fit. Its prior Route10 attempt remains failed and consumed; historical safe Route11 save is preserved. |
+| Authority now | Model67 has67 fitted outcomes/28 successful/57 distinct selected feature rows;46 native/16 regional entries. Model66 selected Route4 from four genuine sources and captured a spare Ekans6. All66 prior rows retained; model67 has not played. This was an explicitly authorized same-lineage practice restart. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | From an explicitly declared new training origin, can one model-selected useful acquisition retain its true terminal and admissible outcome without losing the failure boundary? |
+| Cheapest falsifier | From the actual Route4 save, can model67 choose a useful next goal while preserving one Ekans and retaining the real outcome? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-safe-travel-stop** · status **active** · evidence [falsification](docs/evidence/red-safe-travel-stop-2026-09-08.json)
+**2026-09-08-useful-precursor-practice** · status **active** · evidence [causal train example](docs/evidence/red-useful-precursor-practice-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Sustained collection requires travel to stop before unsupported control and preserve exact failure state. This repair unblocks the existing model-directed acquisition lesson. |
-| Learning output | Zero new inputs, model queries, captures or fits. Model66 remains66rows/27successful/56distinct; all prior evidence unchanged. |
-| Authority delta | None. Route-budget stopping and private failure-state retention qualified; no new gameplay, outcome label or fitted weight. |
-| Transfer result | 311focused/adjacent and39protocol tests at interruption limits1,2,8,16; real167,677-byte save round-trips with zero input. No new live-route or independent-transfer result. |
-| Blocker | The previous Route10 terminal was lost. Next execution needs an explicit training-origin decision; the old Route11 save is not uninterrupted continuation. |
-| Decision | Bounded maintenance completed; stop infrastructure expansion.350focused/adjacent/protocol tests and exact real-emulator serialization pass. Useful acquisition remains2/3 and Phase3current. |
-| Next session | Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal. |
-| Next falsifier | From an explicitly declared new training origin, can one model-selected useful acquisition retain its true terminal and admissible outcome without losing the failure boundary? |
-| Stop condition | No new input-bearing episode until the recovery origin is explicitly settled. The original consumed trial stays closed; unsafe diagnostic saves are not admitted checkpoints or training labels. |
+| Product alignment | The model selected where to acquire a spare needed for a retained-base evolution. Current inventory now supports Ekans-to-Arbok without sacrificing the living Ekans. |
+| Learning output | Model66 to67: one actual successful source choice,67 retained rows/28 successful/57 distinct;46 native/16 regional entries. Spare Ekans retained:27 specimens,26 living species,31 registered.748 actions/45,276 frames; two balls remain. |
+| Authority delta | One actual regional destination choice fitted; the forced capture parent contributes zero additional rows. No authority promotion or independent advantage. |
+| Transfer result | Exact terminal restored read-only; the actual next-source menu removes fulfilled Route4 demand and exposes one owned-surplus Arbok prerequisite. Same-lineage training, not independent Red/hack/Crystal evaluation. |
+| Blocker | No blocker to the next bounded lesson. Arbok remains uncollected; the new spare enables its retained-base evolution. Model67 has not played, and explicit dependency-unlock reward remains zero for this spare capture. |
+| Decision | Useful-acquisition checklist3/3 closed on played, retained and fitted evidence. Phase3 sustained Red remains current. Continue from the new true Route4 checkpoint, not the historical restart origin. |
+| Next session | Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal. |
+| Next falsifier | From the actual Route4 save, can model67 choose a useful next goal while preserving one Ekans and retaining the real outcome? |
+| Stop condition | One bounded next goal and fit, or stop at a retained unsafe/unsupported failure. Do not retry consumed choices, silently reset, force a desired goal, or admit diagnostic failure state as a safe checkpoint. |
 
 ### Stop conditions
 

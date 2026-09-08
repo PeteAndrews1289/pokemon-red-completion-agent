@@ -1,5 +1,32 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 8 — a useful duplicate, not another species tick
+
+After explicit approval to restart practice from the last safe Route11 save,
+model66 chose Route4 from four genuine destinations. The old Route10 failure
+remains recorded with its853actions and52,068frames; this is not an uninterrupted
+recovery or an independent test. We did not pick the destination or reroll it.
+
+The catch was another Ekans. That sounds unremarkable until the objective is a
+living collection: two Ekans let one become Arbok while the other stays Ekans.
+The actual save confirms both level6 copies, and the cartridge-derived planner
+now exposes that evolution prerequisite. It also removes Route4 from acquisition
+demand, so the system does not keep collecting the same fulfilled spare.
+
+The real destination choice succeeded in748actions/45,276frames,spent two balls,
+and became one fitted row: model66 to67,retaining every earlier example.
+27specimens are stored, but only26 distinct living species; Arbok is still future
+work. The outcome credits successful capture but currently no explicit dependency
+unlock gain. We must show the model using this prerequisite, not merely collecting
+it. Navigation/capture controls remain deterministic skills, not a learned battle
+controller. The new model has not yet played.
+
+This closes the three-item useful-acquisition submilestone, not sustained Red,
+the story, the Pokédex or cross-game transfer. Next: continue from the actual
+Route4 save, let the updated model choose among useful evolution and acquisition
+options, and audit whether it preserves the living Ekans while developing Arbok.
+[Evidence](evidence/red-useful-precursor-practice-2026-09-08.json).
+
 ## September 8 — preserving the point of failure
 
 The previous attempt revealed a costly boundary error: the route waited until

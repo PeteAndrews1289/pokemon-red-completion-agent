@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-safe-travel-stop",
+  "as_of_session": "2026-09-08-useful-precursor-practice",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-safe-travel-stop-2026-09-08.json"
+      "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "useful-alternative-outcome",
         "label": "Play, retain and fit a useful outcome",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
       }
     ]
   },
@@ -276,6 +276,12 @@
       "result": "Travel now checks interruption budget before new inputs; exact failure state retained as diagnostic only.350tests pass and167,677actual emulator bytes round-trip with0input. Model66/checklist2/3unchanged.",
       "deviation": "Engineering-only session honored the maintenance time box; no consumed replay, invented label, automatic unsafe recovery or baseline change.",
       "next": "Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-useful-precursor-practice",
+      "result": "Useful acquisition3/3 closed: model66 chose Route4, retained a spare Ekans6 and fitted67 outcomes.27specimens/26living/31registered; two balls209currency. No Arbok yet.",
+      "deviation": "User explicitly authorized one historical Route11 practice restart after lost Route10 terminal. Prior failure853actions/52,068frames preserved separately; same lineage, no independent or uninterrupted-play claim. Stage exits unchanged.",
+      "next": "Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

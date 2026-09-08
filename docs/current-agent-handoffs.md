@@ -1,6 +1,37 @@
 # Current agent handoffs
 
-## Current — safe travel-stop repair qualified; next execution origin unresolved
+## Current — useful precursor acquisition completed and fitted
+
+Model66 selected Route4 from four actual sources and retained a spare Ekans6:
+748 actions,45,276 frames,8 observed wild entries,2 balls spent. No specimen loss
+or observed faint. Collection now27 specimens/26 living species/31 registered;
+two balls209 currency remain. Capture helper Drowzee has34/39HP.
+
+One real regional choice fitted model67:67 outcomes/28 successful/57 distinct
+selected feature rows,46 native/16 regional entries. All66 prior rows retained;
+the forced capture parent adds zero rows. Model67 has not played after fitting.
+Source06371c4b, bundle38d4b408; terminalf4c4b577 and model75408d6f retained.
+
+The user explicitly approved one fresh practice restart from the historical
+Route11 save. The earlier Route10 failure853actions/52,068frames remains separate,
+consumed and unfitted. This is same-lineage training, not uninterrupted play or
+independent evaluation. It does not show the repaired exact interruption cap
+being reached in live play; this successful route stayed below that boundary.
+
+Read-only audit restores the exact terminal at Route4(73,11),field,input-ready.
+Two Ekans6 are retained; cartridge rules expose one owned-surplus Arbok22 objective.
+Route4 correctly disappears from useful capture sources. Arbok is NOT obtained;
+explicit completion/dependency-gain targets remain zero for the spare-capture fit.
+
+Useful-acquisition checklist3/3 closed, not Phase3 completion. Next bind the
+Ekans-to-Arbok objective from this actual save, preserve one Ekans, expose real
+evolution/acquisition/resource alternatives, and run one bounded model67 goal.
+No reset, forced preferred choice, teacher replay, sealed Red or Crystal.
+Codex owns implementation; no Flash/Claude task is needed or pending, no fresh
+external quota was queried. Recommend Astra High, Fast off for bounded play/review.
+[Audit and next step](audits/red-useful-precursor-practice-2026-09-08.md).
+
+## Historical — safe travel-stop repair qualified; next execution origin unresolved
 
 Published source400f3d81 stops before route movement/waits when the interruption
 budget is exhausted. Limit16 unchanged; exact acknowledged completion is allowed.

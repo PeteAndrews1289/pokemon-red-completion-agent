@@ -2,12 +2,18 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
-Latest repair: safe travel stopping and private failure-state retention qualified
+Latest result: one authorized same-lineage practice restart captured a spare
+Ekans6 from model-selectedRoute4 and fitted66to67.27specimens/26living; useful
+acquisition3/3closed,Phase3current. Actual Route4 terminal enables Arbok22 while
+retaining Ekans; that evolution and model67 post-fit play are still next. No
+Crystal or independent transfer. [Audit](audits/red-useful-precursor-practice-2026-09-08.md).
+
+Historical repair: safe travel stopping and private failure-state retention qualified
 under400f3d81,350tests and exact zero-input emulator serialization. Model66still
 has66examples. Next settle the new training origin, then a useful acquisition
 lesson; no Crystal execution or new teacher. [Audit](audits/red-safe-travel-stop-2026-09-08.md).
 
-Latest September8 session: four useful source candidates admitted; the sole
+Historical September8 session: four useful source candidates admitted; the sole
 Route10 attempt stopped in Rock Tunnel after16resolved wild encounters and a17th
 entry. No capture, fit or terminal save; model66unchanged. Next is safe bounded
 travel termination/recovery, not Crystal or another teacher.

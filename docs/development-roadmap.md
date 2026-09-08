@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-safe-travel-stop**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-useful-precursor-practice**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Useful post-evolution acquisition choices: 2/3 acceptance items (67%).**
+**Useful post-evolution acquisition choices: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Qualify alternative precursor plans ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
 - [x] Expose genuine reachable choices ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
-- [ ] Play, retain and fit a useful outcome
+- [x] Play, retain and fit a useful outcome ([evidence](../docs/evidence/red-useful-precursor-practice-2026-09-08.json))
 
-Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-safe-travel-stop-2026-09-08.json)
+[Current evidence](../docs/evidence/red-useful-precursor-practice-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-useful-precursor-practice
+
+Useful acquisition3/3 closed: model66 chose Route4, retained a spare Ekans6 and fitted67 outcomes.27specimens/26living/31registered; two balls209currency. No Arbok yet.
+
+**Deviation:** User explicitly authorized one historical Route11 practice restart after lost Route10 terminal. Prior failure853actions/52,068frames preserved separately; same lineage, no independent or uninterrupted-play claim. Stage exits unchanged.
+
+**Next:** Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal.
 
 ### 2026-09-08-safe-travel-stop
 
