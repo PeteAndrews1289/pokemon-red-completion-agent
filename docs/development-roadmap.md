@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-observed-fly**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-field-transport**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-field-transport
+
+Owned specialist retrieved and observed Fly reached Indigo.236actions/19740frames including first stop;30specimens and619currency retained. Model76 unchanged.
+
+**Deviation:** One prospective exact-menu successor followed a retained header failure; report serialization loss is disclosed. No baseline exits changed and diagnostics are not training checkpoints.
+
+**Next:** Preserve diagnostic lineage/costs in native continuation, qualify flexible-party boss execution, then a genuine story-learning choice. Income-to-story remains1/3.
 
 ### 2026-09-08-observed-fly
 

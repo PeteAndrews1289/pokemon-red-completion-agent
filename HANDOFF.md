@@ -1,6 +1,31 @@
 # Handoff
 
-## Current — observed Fly implemented; live transport still pending
+## Current — stored specialist retrieved; observed flight reached Indigo
+
+Live transport is qualified. From checkpoint21445916, the player reached the Cerulean
+PC, deposited Snorlax safely, withdrew the owned Farfetch'd55, returned outside and
+flew to Indigo Plateau. All30 specimens,28 living species,33 registered,619 currency
+and0balls are retained. Field capabilities and capture-status support remain in party.
+
+The first attempt stopped at the open Fly menu: column2 after "To" was map background,
+not an assumed space. Its route report also failed serialization, but the terminal
+was saved first and audited without input. A separately declared successor resumed
+that exact menu, observed Pallet/Saffron/Indigo, and confirmed one flight. No rewind.
+Combined236 actions/19740frames; terminal5c66ec39 at Indigo(map9,x9,y6), ready/battle0.
+Both costs and the report limitation remain visible;325 focused tests pass.
+
+Model76 gained no rows. This is a diagnostic terminal, NOT an admitted native-training
+checkpoint. Parent21445916 is historical origin, not permission to replay transport.
+Next: preserve the exact diagnostic lineage/costs in native continuation, qualify
+flexible-party boss execution, then expose and fit a real story-versus-preparation choice.
+Do not rebuild the old Lorelei party/stock recipe or repeat inventory/transport research.
+Income-to-story remains1/3 because story readiness still needs the boss skill.
+
+No external reviewer or quota check this session. Codex owns integration; use Flash
+only for a bounded non-overlapping draft and Claude for a consequential review.
+North Star is unchanged. Next setting: Astra High, Fast off.
+
+## Historical — observed Fly implemented; live transport still pending
 
 Model76 and checkpoint21445916 are unchanged: 30 specimens, 28 living species,
 33 registered, 619 currency, zero balls. No gameplay, new labels or fit this session.

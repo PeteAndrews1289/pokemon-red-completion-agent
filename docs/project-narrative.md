@@ -1,6 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — travel by observed destination, not guessed cursor counts
+## Current — the collection supplied its own travel specialist
+
+We finally used the owned Pokémon rather than adding another capture or grinding task.
+The player walked to the PC, stored Snorlax, retrieved Farfetch'd and reached Indigo
+Plateau by Fly. All30 specimens and619 currency survived the operation.
+
+The live test exposed a bad visual assumption: a tile after the word "To" belongs to
+the map background, not the menu label. The controller stopped before confirming a
+flight. We corrected that observation and continued from the exact saved menu,
+watching the selected towns change to Indigo before a single confirmation.
+
+The diagnostic report writer also failed on a route data structure. The saved game
+survived; a controller-free audit recovered the supported result. We retained both
+attempts and their236 actions/19740frames rather than presenting a flawless run.
+This is verified transport, not a new model fit. The learner remains at76 outcomes.
+The next meaningful result must connect this retained state to flexible-party boss
+execution and a model-selected story lesson. Red completion is still unfinished.
+
+## Historical — travel by observed destination, not guessed cursor counts
 
 The saved game has already unlocked Indigo Plateau as a Fly destination. We verified
 that from the cartridge's visited-town flags without advancing the emulator. The old

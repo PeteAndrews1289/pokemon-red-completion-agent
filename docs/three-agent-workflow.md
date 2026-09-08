@@ -15,7 +15,12 @@ dated audit does not silently reactivate an older assignment.
 
 ### Current budget-conscious implementation loop — September 8
 
-The latest observed-Fly component slice used no external reviewer and made no new
+The live retrieval/Indigo-flight slice also used no external reviewer or quota check.
+Its325 focused tests and retained game results are Codex-owned verification; the report
+serialization failure is disclosed in the session audit. Next consequential review
+should examine flexible-party boss authority, not repeat completed storage/Fly research.
+
+The preceding observed-Fly component slice used no external reviewer and made no new
 quota check. Its311 focused tests plus153 dashboard/product/roadmap tests are local
 verification, not an independent audit. The next task is live integration rather
 than another general review.

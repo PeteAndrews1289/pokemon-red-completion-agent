@@ -1,5 +1,15 @@
 # Stored specialist retrieval and observed transport
 
+## Result
+
+Retrieval and flight completed across one stopped attempt and one exact-menu successor.
+Terminal5c66ec39 is Indigo(map9,x9,y6),30 specimens/619currency retained.236actions/
+19740frames total;325 focused tests pass. No fit or native checkpoint admission.
+The next slice is diagnostic-lineage/cost-preserving continuation and flexible-party boss
+execution, then a genuine story choice. Do not repeat this completed transport.
+
+## Mission check
+
 1. **Capability:** retrieve an owned move capability through existing verified PC operations,
    preserving the living collection, unique field moves and capture-status support.
 2. **Learned authority:** deterministic support for the named story-versus-preparation lesson;

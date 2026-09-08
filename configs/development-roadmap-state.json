@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-observed-fly",
+  "as_of_session": "2026-09-08-field-transport",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -360,6 +360,12 @@
       "result": "Indigo Fly unlock verified; observed-destination controller implemented,311 focused tests pass. No live flight, PC retrieval or fit; model76 and income-to-story1/3 unchanged.",
       "deviation": "No stage-exit change. Another support-only slice leaves the no-learning alarm visible: stop new inventory research and integrate existing operations for the named story lesson.",
       "next": "Safe boxed-specialist retrieval, one retained-state observed flight, flexible-party boss execution, then genuine story-versus-preparation learning."
+    },
+    {
+      "session": "2026-09-08-field-transport",
+      "result": "Owned specialist retrieved and observed Fly reached Indigo.236actions/19740frames including first stop;30specimens and619currency retained. Model76 unchanged.",
+      "deviation": "One prospective exact-menu successor followed a retained header failure; report serialization loss is disclosed. No baseline exits changed and diagnostics are not training checkpoints.",
+      "next": "Preserve diagnostic lineage/costs in native continuation, qualify flexible-party boss execution, then a genuine story-learning choice. Income-to-story remains1/3."
     }
   ],
   "closed_milestones": [

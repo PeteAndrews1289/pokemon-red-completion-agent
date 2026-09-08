@@ -1,0 +1,75 @@
+{
+  "schema": "pokemon.red.field-transport-qualification.v1",
+  "session_id": "2026-09-08-field-transport",
+  "source_commit": "5cc6b29c71d2b52b04d07ce2a08a6729f067defe",
+  "parent_checkpoint_sha256": "21445916d23e92742784e608386c36607b63a38a7a79701821b86b77461f3d16",
+  "first_terminal_state_sha256": "8294a1ab5359ef9582c76abefe9b8191dffdcc89d023e68347a18bf97add7ea7",
+  "terminal_state_sha256": "5c66ec39e9fffea76bbd120d561ef66474303036b5e5c417925e0cbaf1c41521",
+  "model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+  "settled_examples": 76,
+  "new_learned_examples": 0,
+  "diagnostic_only": true,
+  "native_training_checkpoint": false,
+  "specimens": 30,
+  "living_species": 28,
+  "registered_species": 33,
+  "money": 619,
+  "balls": 0,
+  "location": "Indigo Plateau",
+  "map_id": 9,
+  "position": {
+    "x": 9,
+    "y": 6
+  },
+  "battle_state": 0,
+  "input_ready": true,
+  "actions": 236,
+  "frames": 19740,
+  "attempts": [
+    {
+      "role": "PC approach, substitution and flight-menu opening",
+      "actions": 229,
+      "frames": 18948,
+      "live_flight_completed": false,
+      "error": "Visible Fly header had map background after To, not an assumed blank tile.",
+      "reporting_failure": "Full route report serialization failed on frozenset; terminal was saved first. Read-only terminal audit reconstructed supported facts; original exception text unavailable."
+    },
+    {
+      "role": "Prospective exact-terminal flight continuation",
+      "actions": 7,
+      "frames": 792,
+      "passed": true,
+      "flight_confirmations": 1,
+      "observed_destinations": [
+        0,
+        10,
+        9
+      ]
+    }
+  ],
+  "storage": {
+    "retrieved_species": "pokemon:national:083",
+    "retrieved_level": 55,
+    "retrieved_hp": 139,
+    "deposited_species": "pokemon:national:143",
+    "all_specimen_species_counts_preserved": true,
+    "unique_field_and_capture_status_support_retained": true
+  },
+  "terminal_audit": {
+    "controller_actions": 0,
+    "frames_advanced": 0,
+    "passed": true,
+    "held_buttons": 0
+  },
+  "focused_tests_passed": 325,
+  "claims": {
+    "live_pc_retrieval_qualified": true,
+    "live_observed_flight_qualified": true,
+    "new_model_fit": false,
+    "story_execution_qualified": false,
+    "whole_phase_complete": false,
+    "transfer_result": false
+  },
+  "next": "Preserve this diagnostic terminal and both costs in a native continuation, qualify a flexible-party boss option, then collect and fit a genuine story-versus-preparation choice.",
+  "private_path_fields": 0
+}

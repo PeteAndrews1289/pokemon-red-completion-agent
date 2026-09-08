@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From checkpoint21445916/model76, integrate safe retrieval of the observed boxed Fly/Cut holder using existing PC operations, preserving field and capture roles. Then one retained-state observed-flight attempt to Indigo. Generic flexible-party boss execution must qualify before a genuine story-versus-preparation choice. No further inventory research, exact-party teacher reconstruction or collection/heal detour.
+- Next decision: From diagnostic terminal5c66ec39 at Indigo, preserve both transport attempts and costs in native continuation; do not replay parent21445916. Qualify flexible-party boss execution, then collect and fit a genuine story-versus-preparation choice. No legacy teacher reconstruction or repeated transport research.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Destination-observed field transport with preserved party/resources, unblocking the named model-selected story-versus-preparation lesson. |
-| Authority now | Model76 retains76 fitted outcomes,34 successful and66 distinct selected rows. Adjacent-map funding earned525 but was deterministic safety, adding0labels. Current30 specimens/28living/33registered,619currency/0balls. Lorelei is the next dependency-legal story goal, not currently executable. No full Red win or transfer. |
+| Reusable capability | Verified owned-specialist retrieval and observed flight; now connect retained transport state to a flexible-party story option. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct selected rows. Deterministic PC/Fly transport added0labels and retained30specimens/28living/33registered,619currency/0balls. Actual diagnostic terminal5c66ec39 is Indigo; native continuation admission and generic boss execution remain pending. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the stored specialist be retrieved safely, then the actual Fly screen and Indigo landing satisfy the tested observation contract? |
+| Cheapest falsifier | Does the retained Indigo party support a truthful bounded boss contract without the legacy teacher recipe? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-observed-fly** · status **active** · evidence [qualification](docs/evidence/red-observed-fly-qualification-2026-09-08.json)
+**2026-09-08-field-transport** · status **active** · evidence [qualification](docs/evidence/red-field-transport-qualification-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Reusable observed travel supports a named story-learning option. No claim that deterministic transport or unit tests establish model authority or story completion. |
-| Learning output | Zero gameplay, frame advancement, new fitted rows or checkpoint change; model76 unchanged. Indigo unlock verified and observed Fly component implemented;311 focused tests passed. |
-| Authority delta | No authority expansion or fit. Observed Fly is implemented deterministic support, not yet live-qualified. |
-| Transfer result | ROM-free varied holders, visit sets, town labels and interruption states; no independent gameplay evaluation or cross-title transfer. |
-| Blocker | PC retrieval and live flight remain unqualified. All eleven Fly unlocks including Indigo are verified; generic boss execution for the retained flexible party/stock is still absent. |
-| Decision | The support-only no-learning alarm remains visible: stop inventory/controller expansion and connect existing PC operations plus the new Fly component to one bounded retained-state attempt, then the named story lesson. |
-| Next session | From checkpoint21445916/model76, integrate safe retrieval of the observed boxed Fly/Cut holder using existing PC operations, preserving field and capture roles. Then one retained-state observed-flight attempt to Indigo. Generic flexible-party boss execution must qualify before a genuine story-versus-preparation choice. No further inventory research, exact-party teacher reconstruction or collection/heal detour. |
-| Next falsifier | Can the stored specialist be retrieved safely, then the actual Fly screen and Indigo landing satisfy the tested observation contract? |
+| Product alignment | Owned party capabilities now enable practical story access. Transport success is explicit engineering progress and does not replace the required model-selected story result. |
+| Learning output | 236actions/19740frames across stopped transport and exact-menu successor;30specimens preserved, Indigo reached.325 focused tests pass. No new model rows. |
+| Authority delta | No learned authority expansion or fit. PC retrieval and observed flight are live-qualified deterministic support. |
+| Transfer result | Varied ROM-free species/slots/boxes and interrupted storage; same-lineage live Red integration only, not independent transfer. |
+| Blocker | Actual Indigo terminal is a retained diagnostic, not a native training checkpoint. Preserve lineage/costs before native continuation; flexible-party boss execution remains unqualified. |
+| Decision | Transport maintenance is complete. Do not repeat PC/Fly or inventory work; proceed to retained-state admission and the named boss/story lesson. |
+| Next session | From diagnostic terminal5c66ec39 at Indigo, preserve both transport attempts and costs in native continuation; do not replay parent21445916. Qualify flexible-party boss execution, then collect and fit a genuine story-versus-preparation choice. No legacy teacher reconstruction or repeated transport research. |
+| Next falsifier | Does the retained Indigo party support a truthful bounded boss contract without the legacy teacher recipe? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions
