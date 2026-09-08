@@ -169,6 +169,51 @@ def test_armed_intro_waits_without_reinteracting_or_confirming(monkeypatch, alre
     )
 
 
+@pytest.mark.parametrize("already_pending", [False, True])
+def test_armed_transition_with_visible_dialogue_requires_confirmation(monkeypatch, already_pending):
+    class PendingDialogueEnvironment(ScriptedEnvironment):
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.INTERACT:
+                assert self.pending_identity is None
+                self.pending_identity = (201, 9)
+                self.dialogue = True
+            elif action.kind is MacroActionKind.CONFIRM:
+                assert self.pending_identity == (201, 9) and self.dialogue
+                self.dialogue = False
+            elif (
+                action.kind is MacroActionKind.WAIT and self.pending_identity and not self.dialogue
+            ):
+                self.state = replace(self.state, battle_state=2)
+                self.pending_identity = None
+
+    env = PendingDialogueEnvironment(make_state(), dialogue=already_pending,
+                                    pending_identity=(201, 9) if already_pending else None)
+
+    def finish(reader, *_args, **kwargs):
+        assert reader.read().battle_state == 2
+        kwargs["move_decision_guard"](reader.read())
+        env.state = replace(env.state, battle_state=0, player_money=815,
+                            event_flags=make_flag_bytes(1139))
+        return env.state
+
+    monkeypatch.setattr(funding_battle, "battle_runner", finish)
+    result = run_prepared_trainer_funding(env, env, target=make_candidate(),
+        validate_target=lambda: None, move_slot_policy=lambda _: 1, timing=TIMING)
+    assert result.payout == 315
+    buttons = [a.kind for a in env.actions if a.kind is not MacroActionKind.WAIT]
+    assert buttons == ([MacroActionKind.CONFIRM] if already_pending else
+                       [MacroActionKind.INTERACT, MacroActionKind.CONFIRM])
+
+
+def test_wrong_pending_dialogue_identity_cannot_be_confirmed():
+    env = ScriptedEnvironment(make_state(), dialogue=True, pending_identity=(201, 10))
+    with pytest.raises(TrainerFundingBattleError, match="pending trainer identity"):
+        run_prepared_trainer_funding(env, env, target=make_candidate(),
+            validate_target=lambda: None, move_slot_policy=lambda _: 1, timing=TIMING)
+    assert env.actions == []
+
+
 def test_stuck_pending_transition_consumes_only_exact_bounded_waits():
     env = ScriptedEnvironment(make_state(), pending_identity=(201, 9))
     with pytest.raises(TrainerFundingBattleError, match="exhausted intro"):

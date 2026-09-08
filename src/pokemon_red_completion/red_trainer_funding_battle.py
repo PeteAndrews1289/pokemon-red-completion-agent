@@ -239,8 +239,6 @@ def run_prepared_trainer_funding(
         raise TrainerFundingBattleError("active trainer recovery requires the MAIN battle menu")
     if not resume_active_battle and not reader.read_input_readiness().ready:
         raise TrainerFundingBattleError("initial input readiness is not ready")
-    if not resume_active_battle and reader.read_bottom_dialogue_box_visible():
-        raise TrainerFundingBattleError("dialogue box is visible before interaction")
     if initial.event_flags is None or event_flag_is_set(
         initial.event_flags, target.trainer.event_flag
     ):
@@ -278,6 +276,9 @@ def run_prepared_trainer_funding(
         return pending is not None
 
     resuming_pending = pending_start()
+    if (not resume_active_battle and reader.read_bottom_dialogue_box_visible()
+            and not resuming_pending):
+        raise TrainerFundingBattleError("dialogue box is visible before interaction")
     if not resuming_pending and not resume_active_battle:
         executor.execute(MacroAction(MacroActionKind.INTERACT))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
@@ -299,9 +300,10 @@ def run_prepared_trainer_funding(
             raise TrainerFundingBattleError("trainer dialogue closed without entering battle")
         if intro_count >= maximum_intro_pulses:
             raise TrainerFundingBattleError("exhausted intro pulses before entering trainer battle")
-        # The cartridge owns an armed transition. Wait without another button;
-        # only an observed dialogue or the legacy not-ready preamble gets CONFIRM.
-        if not pending:
+        # The start latch can coexist with a text page still awaiting dismissal.
+        # Confirm that observed dialogue; a dialogue-free armed transition gets
+        # waits only. Never re-interact with a trainer whose start is already armed.
+        if dialogue or not pending:
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
         intro_count += 1

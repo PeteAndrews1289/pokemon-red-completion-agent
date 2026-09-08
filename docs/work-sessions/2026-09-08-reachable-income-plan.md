@@ -42,6 +42,22 @@ After use, Gemini quota showed91.36% five-hour and93.68% weekly remaining, with
 resets at17:59:32UTC September8 and23:22:45UTC September11. Claude was not called;
 the Antigravity third-party pool is not evidence of Claude's subscription quota.
 
+## First live result and bounded continuation
+
+Sourcec5687c1c passed273 focused checks and full lint/type/doc/artifact checks.
+The attempt reached the intended Route25 trainer but stopped after141 actions /
+13836frames: `exhausted intro pulses before entering trainer battle`. The exact
+checkpoint1c1b89ad/state73e15d0c retains all30 specimens, unchanged party HP,94 money
+and zero balls. No learned row was added; the existing safety policy chose funding.
+
+Zero-input reload proved the correct pending trainer identity209/2 and visible
+dialogue coexist. The old loop waited for every pending latch, never dismissing
+that text page. The bounded repair confirms visible dialogue while retaining
+wait-only behavior for a dialogue-free latch. New tests cover fresh and retained
+pending dialogue and reject an unrelated pending identity before input. No pulse
+limit increases. Next execute only a separately identified continuation of this
+already-armed interaction; do not restart the failed attempt or reroute to it.
+
 ## Phase 4 horizon
 
 Reachable income is the immediate prerequisite, not the whole phase. After this,
