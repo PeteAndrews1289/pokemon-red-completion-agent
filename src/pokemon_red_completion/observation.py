@@ -4153,6 +4153,19 @@ class PokemonRedStateReader:
             return False
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
 
+    def read_trainer_battle_identity(self) -> tuple[int, int, int, int]:
+        """Read trainer identity; callers must separately establish active battle.
+
+        Order: current opponent, normalized trainer class, engaged opponent
+        class, engaged set. These fields may remain stale outside battle.
+        """
+        return (
+            self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+        )
+
     def read_player_facing(self) -> str:
         """Decode the sprite's settled facing inside the revision adapter."""
         value = self._memory.read_u8(RamAddress.PLAYER_FACING_DIRECTION)

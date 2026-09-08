@@ -198,8 +198,10 @@ class _Readiness:
     restore_profile: RedGoalContextProfile | None = None
     restore_completion_dose: bool = False
     restore_routed_recovery: bool = False
+    restore_trainer_funding: bool = False
     completion_dose: bool = False
     routed_recovery: bool = False
+    trainer_funding: bool = False
     regional_choice_record_sha256: str | None = None
     regional_proposal_record_sha256: str | None = None
     remaining_acquisition_demand: bool = False
@@ -261,6 +263,7 @@ class _LiveObserver:
     search_memory: GoalSearchMemory | None = None
     completion_dose: bool = False
     routed_recovery: bool = False
+    trainer_funding: bool = False
     retain_quantum: Callable[[], None] | None = None
     remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
@@ -287,6 +290,7 @@ class _LiveObserver:
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
             routed_recovery=self.routed_recovery,
+            trainer_funding=self.trainer_funding,
             remaining_acquisition_demand=self.remaining_acquisition_demand,
             level_evolution_acquisitions=self.level_evolution_acquisitions,
             retain_quantum=self.retain_quantum,
@@ -312,6 +316,7 @@ def _player_observer(
     *,
     completion_dose: bool = False,
     routed_recovery: bool = False,
+    trainer_funding: bool = False,
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
     retain_quantum: Callable[[], None] | None = None,
@@ -359,6 +364,7 @@ def _player_observer(
             quote_resource_costs=quote_resource_costs,
             prepare_capture_storage=completion_dose,
             routed_recovery=routed_recovery,
+            trainer_funding=trainer_funding,
             maximum_controller_actions=30_000 if completion_dose else 6_000,
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
@@ -456,6 +462,10 @@ def _parser() -> argparse.ArgumentParser:
         "--routed-recovery",
         action="store_true",
         help="enable guarded walking-to-Center recovery after verified continuation restore",
+    )
+    parser.add_argument(
+        "--trainer-funding", action="store_true",
+        help="offer finite ordinary trainer income after authenticated training continuation",
     )
     parser.add_argument(
         "--completion-dose",
@@ -699,6 +709,14 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         )
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
+    trainer_funding = getattr(args, "trainer_funding", False)
+    if type(trainer_funding) is not bool or (
+        trainer_funding and (
+            not getattr(args, "routed_resource_goals", False) or not continuation_chain
+            or not getattr(args, "train_player", False)
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("trainer_funding_scope")
     completion_dose = getattr(args, "completion_dose", False)
     if type(completion_dose) is not bool or (
         completion_dose and (boxed_evolution is None or not continuation_chain)
@@ -849,6 +867,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         training_plan=training_plan,
         completion_dose=completion_dose,
         routed_recovery=routed_recovery,
+        trainer_funding=trainer_funding,
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
         save_terminal_checkpoints=save_terminal_checkpoints,
@@ -1125,6 +1144,7 @@ def _continue_readiness(
             continuation=checkpoint,
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
+            restore_trainer_funding=_checkpoint_trainer_funding(header),
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
             continuation_root_lineage_id=lineage,
@@ -1184,6 +1204,17 @@ def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
     enabled = metadata.get("routed_recovery", False)
     if type(enabled) is not bool:
         raise PairedRedBoundedPlayerRunError("continuation_parent_routed_recovery")
+    return enabled
+
+
+def _checkpoint_trainer_funding(header: Mapping[str, object]) -> bool:
+    """Keep historical opportunity menus unchanged on exact-state restore."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("trainer_funding", False)
+    if type(enabled) is not bool:
+        raise PairedRedBoundedPlayerRunError("continuation_parent_trainer_funding")
     return enabled
 
 
@@ -1249,6 +1280,7 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         readiness.quote_resource_costs,
         completion_dose=getattr(readiness, "restore_completion_dose", False),
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
+        trainer_funding=getattr(readiness, "restore_trainer_funding", False),
         remaining_acquisition_demand=getattr(
             readiness, "restore_remaining_acquisition_demand", False,
         ),
@@ -1455,6 +1487,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             readiness.quote_resource_costs,
             completion_dose=readiness.completion_dose,
             routed_recovery=readiness.routed_recovery,
+            trainer_funding=getattr(readiness, "trainer_funding", False),
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
         )
@@ -1554,6 +1587,7 @@ def _run_arm(
                 "continue_after_progress": readiness.continue_after_progress,
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
+                "trainer_funding": getattr(readiness, "trainer_funding", False),
                 **({"remaining_acquisition_demand": True}
                    if readiness.remaining_acquisition_demand else {}),
                 **({"level_evolution_acquisitions": True}
@@ -1637,6 +1671,7 @@ def _run_arm(
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
                 routed_recovery=readiness.routed_recovery,
+                trainer_funding=getattr(readiness, "trainer_funding", False),
                 remaining_acquisition_demand=readiness.remaining_acquisition_demand,
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,

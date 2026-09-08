@@ -90,6 +90,7 @@ class RedResourceGoalRouter:
     prepare_capture_party: bool = True
     prepare_capture_storage: bool = False
     routed_recovery: bool = False
+    trainer_funding: bool = False
     prepare_capture_escort: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
@@ -251,7 +252,16 @@ class RedResourceGoalRouter:
                 result = bind_capture_escort(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("recovery enumeration changed the game")
-        return self._with_quotes(result, observation) if self.quote_resource_costs else result
+        if self.quote_resource_costs:
+            result = self._with_quotes(result, observation)
+        # Income is not a Mart purchase and must never inherit a spend quote.
+        if self.trainer_funding:
+            from pokemon_red_completion.red_routed_trainer_funding import bind_local_trainer_funding
+
+            result = bind_local_trainer_funding(self, result, observation)
+        if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
+            raise RedResourceGoalRoutingError("trainer funding enumeration changed the game")
+        return result
 
     def _with_quotes(
         self, bindings: GoalBindingSet, observation: RedGoalObservation

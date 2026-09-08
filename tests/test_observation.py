@@ -81,6 +81,15 @@ class RecordingMemory:
         return self.values.get(int(address), 0)
 
 
+def test_trainer_identity_preserves_independent_opponent_class_and_set_bytes():
+    memory = RecordingMemory({0xD059: 212, 0xD031: 12, 0xCD2D: 201, 0xCD2E: 9})
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_trainer_battle_identity() == (212, 12, 201, 9)
+    assert memory.reads == [0xD059, 0xD031, 0xCD2D, 0xCD2E]
+    memory.values[0xCD2E] = 10
+    assert reader.read_trainer_battle_identity() == (212, 12, 201, 10)
+
+
 @pytest.mark.parametrize("corrupt", [None, 0, 8, 19, 100, 119])
 def test_bottom_dialogue_requires_frame_not_ready_movement_flags(corrupt):
     # Literal independently specified screenshot-frame tiles, not constants
