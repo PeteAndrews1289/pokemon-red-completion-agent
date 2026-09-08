@@ -50,11 +50,12 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
 
     def player(
         _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
-        retain_quantum=None, remaining_acquisition_demand=False,
+        retain_quantum=None, remaining_acquisition_demand=False, level_evolution_acquisitions=False,
     ):
         assert completion_dose is False
         assert routed_recovery is False
         assert remaining_acquisition_demand is remaining_mode
+        assert level_evolution_acquisitions is remaining_mode
         assert retain_quantum is None
         assert isinstance(actions.delegate, hard_type)
         skill_ports.append(actions)
@@ -74,6 +75,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
     observer = observe_type(
         runtime=object(), actions=count_type(outer), meter=meter,
         maximum_actions_per_decision=1, remaining_acquisition_demand=remaining_mode,
+        level_evolution_acquisitions=remaining_mode,
     )
     if probe_during_observation:
         with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
@@ -268,7 +270,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=enabled,
-        remaining_acquisition_demand=enabled,
+        remaining_acquisition_demand=enabled, level_evolution_acquisitions=enabled,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256="a" * 64 if enabled else None,
         regional_proposal_record_sha256="b" * 64 if enabled else None,
@@ -276,6 +278,7 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
     assert headers[0]["metadata"].get("remaining_acquisition_demand", False) is enabled
+    assert headers[0]["metadata"].get("level_evolution_acquisitions", False) is enabled
     assert headers[0]["metadata"].get("regional_choice_record_sha256") == (
         "a" * 64 if enabled else None
     )
@@ -741,7 +744,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
         routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=False,
-        remaining_acquisition_demand=False,
+        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
         quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
         regional_choice_record_sha256=None,
     )

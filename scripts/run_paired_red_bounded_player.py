@@ -204,6 +204,8 @@ class _Readiness:
     regional_proposal_record_sha256: str | None = None
     remaining_acquisition_demand: bool = False
     restore_remaining_acquisition_demand: bool = False
+    level_evolution_acquisitions: bool = False
+    restore_level_evolution_acquisitions: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -261,6 +263,7 @@ class _LiveObserver:
     routed_recovery: bool = False
     retain_quantum: Callable[[], None] | None = None
     remaining_acquisition_demand: bool = False
+    level_evolution_acquisitions: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -285,6 +288,7 @@ class _LiveObserver:
             completion_dose=self.completion_dose,
             routed_recovery=self.routed_recovery,
             remaining_acquisition_demand=self.remaining_acquisition_demand,
+            level_evolution_acquisitions=self.level_evolution_acquisitions,
             retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
@@ -309,6 +313,7 @@ def _player_observer(
     completion_dose: bool = False,
     routed_recovery: bool = False,
     remaining_acquisition_demand: bool = False,
+    level_evolution_acquisitions: bool = False,
     retain_quantum: Callable[[], None] | None = None,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
@@ -317,6 +322,21 @@ def _player_observer(
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_type")
     if remaining_acquisition_demand or getattr(runtime, "remaining_acquisition_demand", False):
         runtime = replace(runtime, remaining_acquisition_demand=remaining_acquisition_demand)
+    if type(level_evolution_acquisitions) is not bool or (
+        level_evolution_acquisitions and (not remaining_acquisition_demand or world is None)
+    ):
+        raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_scope")
+    if level_evolution_acquisitions:
+        from pokemon_red_completion.red_acquisition_alternatives import (
+            cartridge_level_acquisition_edges,
+        )
+
+        assert world is not None
+        runtime = replace(
+            runtime, level_evolution_acquisition_edges=cartridge_level_acquisition_edges(world.rom),
+        )
+    elif getattr(runtime, "level_evolution_acquisition_edges", ()):
+        runtime = replace(runtime, level_evolution_acquisition_edges=())
     if world is not None and any(
         s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
     ):
@@ -427,6 +447,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--remaining-acquisition-demand", action="store_true",
         help="credit retained evolved/traded forms after historical continuation restore",
+    )
+    parser.add_argument(
+        "--level-evolution-acquisitions", action="store_true",
+        help="offer spare-precursor captures using cartridge level rules and actual living stock",
     )
     parser.add_argument(
         "--routed-recovery",
@@ -661,6 +685,13 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         remaining_acquisition_demand and not continuation_chain
     ):
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_scope")
+    level_evolution_acquisitions = getattr(args, "level_evolution_acquisitions", False)
+    if type(level_evolution_acquisitions) is not bool or (
+        level_evolution_acquisitions and (
+            not remaining_acquisition_demand or not getattr(args, "routed_resource_goals", False)
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_scope")
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
         routed_recovery and (
@@ -819,6 +850,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         completion_dose=completion_dose,
         routed_recovery=routed_recovery,
         remaining_acquisition_demand=remaining_acquisition_demand,
+        level_evolution_acquisitions=level_evolution_acquisitions,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1094,10 +1126,16 @@ def _continue_readiness(
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
+            restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
+        if (
+            readiness.restore_level_evolution_acquisitions
+            and not readiness.level_evolution_acquisitions
+        ):
+            raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_rollback")
         if (
             readiness.restore_remaining_acquisition_demand
             and not readiness.remaining_acquisition_demand
@@ -1113,6 +1151,18 @@ def _continue_readiness(
             ),
         )
     return readiness
+
+
+def _checkpoint_level_evolution_acquisitions(header: Mapping[str, object]) -> bool:
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("level_evolution_acquisitions", False)
+    if type(enabled) is not bool or (
+        enabled and not _checkpoint_remaining_acquisition_demand(header)
+    ):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_level_evolution_acquisitions")
+    return enabled
 
 
 def _checkpoint_remaining_acquisition_demand(header: Mapping[str, object]) -> bool:
@@ -1194,6 +1244,9 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
         remaining_acquisition_demand=getattr(
             readiness, "restore_remaining_acquisition_demand", False,
+        ),
+        level_evolution_acquisitions=getattr(
+            readiness, "restore_level_evolution_acquisitions", False,
         ),
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
@@ -1396,6 +1449,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             completion_dose=readiness.completion_dose,
             routed_recovery=readiness.routed_recovery,
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
+            level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
         )
         # Preview the same prospective history as the actor. Historical restore
         # authentication above must still use the checkpoint's original inputs.
@@ -1495,6 +1549,8 @@ def _run_arm(
                 "routed_recovery": readiness.routed_recovery,
                 **({"remaining_acquisition_demand": True}
                    if readiness.remaining_acquisition_demand else {}),
+                **({"level_evolution_acquisitions": True}
+                   if readiness.level_evolution_acquisitions else {}),
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -1575,6 +1631,7 @@ def _run_arm(
                 completion_dose=readiness.completion_dose,
                 routed_recovery=readiness.routed_recovery,
                 remaining_acquisition_demand=readiness.remaining_acquisition_demand,
+                level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             trajectory_class = (

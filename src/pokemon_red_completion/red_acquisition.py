@@ -120,10 +120,19 @@ class RedAcquisitionCatalog:
     methods: tuple[RedAcquisitionMethod, ...]
     source_commit: str = PRET_POKERED_ACQUISITION_COMMIT
     remaining_demand: bool = False
+    level_evolution_edges: tuple[tuple[str, str], ...] = ()
 
     def __post_init__(self) -> None:
         if type(self.remaining_demand) is not bool:
             raise TypeError("remaining_demand must be a bool")
+        if self.level_evolution_edges and not self.remaining_demand:
+            raise ValueError("level alternatives require remaining acquisition demand")
+        if not isinstance(self.level_evolution_edges, tuple) or any(
+            not isinstance(edge, tuple) or len(edge) != 2
+            or any(s not in RED_SOLO_COLLECTION_CONTRACT.target_species for s in edge)
+            for edge in self.level_evolution_edges
+        ):
+            raise ValueError("level alternative edges must belong to the Red catalog")
         if self.source_commit != PRET_POKERED_ACQUISITION_COMMIT:
             raise ValueError("acquisition catalog source commit is not the pinned revision")
         species = tuple(method.species_ref for method in self.methods)
@@ -224,6 +233,22 @@ class RedAcquisitionCatalog:
                     reachable.add(method.species_ref)
                     changed = True
         return frozenset(reachable)
+
+    def alternative_capture_holdings(self, observation: CollectionObservation) -> dict[str, int]:
+        """Marginal capture options, recomputed after each actual acquisition."""
+        from .collection_acquisition_demand import useful_capture_counts
+
+        counts = Counter(specimen.species_ref for specimen in observation.specimens)
+        canonical_edges = tuple(
+            (method.consumes_species_ref, method.species_ref) for method in self.methods
+            if method.consumes_species_ref is not None
+        )
+        useful = useful_capture_counts(
+            frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
+            tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
+            tuple(method.species_ref for method in self.methods if not method.transforms_precursor),
+        )
+        return {species: counts[species] + quantity for species, quantity in useful.items()}
 
     def required_transformation_counts(self) -> dict[str, int]:
         """Count every evolution/trade execution required by the living plan."""
@@ -442,6 +467,8 @@ def summarize_red_area_survey(
         catalog.required_root_holdings(observation)
         if catalog.remaining_demand else catalog.required_root_acquisitions()
     )
+    if catalog.level_evolution_edges:
+        root_counts = catalog.alternative_capture_holdings(observation)
     requirements = tuple(
         RedAreaRequirement(
             method.species_ref,

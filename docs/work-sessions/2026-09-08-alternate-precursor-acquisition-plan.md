@@ -50,3 +50,37 @@ draft is optional only if it saves time on a genuinely separate test task;
 reserve Claude for consequential learning-design/claim review.
 
 Recommended: Astra Extra High, Fast off; High for routine execution after qualification.
+
+## Session start — allocation design
+
+Adopt this mission check for the implementation session. Use a directed
+one-specimen transformation graph and reserve one of every held required form.
+Maximum matching allocates spare specimens to missing reachable targets. Candidate
+capture counts measure marginal additional coverage after reassignment; they are
+alternative options, never a simultaneous shopping list. Recompute after every
+actual capture. Keep canonical sources and historical modes intact; enable the
+cartridge-derived level edges only in a prospectively recorded continuation mode.
+
+Flash receives a tool-free, self-contained challenge of this pure allocation
+contract and eight hand-computed cases. It has no active-tree, private-state,
+gameplay or publication assignment. Codex owns implementation and qualification.
+
+## Implementation gate, before saved-state inspection
+
+The directed stock allocator and cartridge-level adapter are implemented behind
+`--level-evolution-acquisitions` plus remaining-demand mode. Historical restoration
+uses the parent header; prospective runtime and newly written headers use the new
+mode. Canonical methods remain intact. One-copy capture quanta recompute demand.
+
+172 focused tests and 162 adjacent acquisition/player/fit tests pass. The focused
+set includes eight independently drafted literal cases and 192 exhaustively
+enumerated small inventories, checked by concrete consume/produce transitions.
+39 protocol tests, six changed-source type checks, documentation/public checks
+also pass. This is engineering evidence, not a new model outcome.
+
+Flash's tool-free review accepted the one-to-one graph contract. Accepted its
+warning against additive shopping lists and future split/breeding mechanics.
+Corrected its suggestion that every alternative count necessarily falls after
+one spare capture: stock can be reassigned across branches. The explicit test
+retains both branch alternatives while preventing double use of one specimen.
+No broad architecture work or further Flash request is needed for this session.

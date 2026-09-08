@@ -183,6 +183,7 @@ class RedGoalContextRuntime:
     ) = None
     boxed_level_evolution_cross_box: bool = False
     remaining_acquisition_demand: bool = False
+    level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -441,6 +442,7 @@ def _wild_provider(
             normalize_after_capture=area.finish_at_starting_endpoint,
             catalog=replace(
                 RED_ACQUISITION_CATALOG, remaining_demand=runtime.remaining_acquisition_demand,
+                level_evolution_edges=runtime.level_evolution_acquisition_edges,
             ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),

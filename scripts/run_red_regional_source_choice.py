@@ -146,6 +146,15 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
         runtime = replace(
             runtime, remaining_acquisition_demand=ready.remaining_acquisition_demand,
         )
+        if ready.level_evolution_acquisitions:
+            from pokemon_red_completion.red_acquisition_alternatives import (
+                cartridge_level_acquisition_edges,
+            )
+
+            runtime = replace(
+                runtime,
+                level_evolution_acquisition_edges=cartridge_level_acquisition_edges(world.rom),
+            )
         actions = base.CountingExecutor(
             base.FrameSafeExecutor(
                 controller,
@@ -291,6 +300,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         restore_routed_recovery=ready.routed_recovery,
         restore_completion_dose=ready.completion_dose,
         restore_remaining_acquisition_demand=ready.remaining_acquisition_demand,
+        restore_level_evolution_acquisitions=ready.level_evolution_acquisitions,
     )
     with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(checkpoint.capture.state_bytes)
