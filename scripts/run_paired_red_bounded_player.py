@@ -202,6 +202,8 @@ class _Readiness:
     routed_recovery: bool = False
     regional_choice_record_sha256: str | None = None
     regional_proposal_record_sha256: str | None = None
+    remaining_acquisition_demand: bool = False
+    restore_remaining_acquisition_demand: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -258,6 +260,7 @@ class _LiveObserver:
     completion_dose: bool = False
     routed_recovery: bool = False
     retain_quantum: Callable[[], None] | None = None
+    remaining_acquisition_demand: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -281,6 +284,7 @@ class _LiveObserver:
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
             routed_recovery=self.routed_recovery,
+            remaining_acquisition_demand=self.remaining_acquisition_demand,
             retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
@@ -304,10 +308,15 @@ def _player_observer(
     *,
     completion_dose: bool = False,
     routed_recovery: bool = False,
+    remaining_acquisition_demand: bool = False,
     retain_quantum: Callable[[], None] | None = None,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
+    if type(remaining_acquisition_demand) is not bool:
+        raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_type")
+    if remaining_acquisition_demand or getattr(runtime, "remaining_acquisition_demand", False):
+        runtime = replace(runtime, remaining_acquisition_demand=remaining_acquisition_demand)
     if world is not None and any(
         s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
     ):
@@ -415,6 +424,10 @@ def _parser() -> argparse.ArgumentParser:
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument(
+        "--remaining-acquisition-demand", action="store_true",
+        help="credit retained evolved/traded forms after historical continuation restore",
+    )
     parser.add_argument(
         "--routed-recovery",
         action="store_true",
@@ -643,6 +656,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     if type(expand_local) is not bool or (expand_local and not continuation_chain):
         raise PairedRedBoundedPlayerRunError("profile_transition_scope")
     boxed_evolution = getattr(args, "boxed_evolution", None)
+    remaining_acquisition_demand = getattr(args, "remaining_acquisition_demand", False)
+    if type(remaining_acquisition_demand) is not bool or (
+        remaining_acquisition_demand and not continuation_chain
+    ):
+        raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_scope")
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
         routed_recovery and (
@@ -800,6 +818,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         training_plan=training_plan,
         completion_dose=completion_dose,
         routed_recovery=routed_recovery,
+        remaining_acquisition_demand=remaining_acquisition_demand,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1074,10 +1093,16 @@ def _continue_readiness(
             continuation=checkpoint,
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
+            restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
+        if (
+            readiness.restore_remaining_acquisition_demand
+            and not readiness.remaining_acquisition_demand
+        ):
+            raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_rollback")
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
@@ -1088,6 +1113,17 @@ def _continue_readiness(
             ),
         )
     return readiness
+
+
+def _checkpoint_remaining_acquisition_demand(header: Mapping[str, object]) -> bool:
+    """Absent metadata preserves the original static-demand observation exactly."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("remaining_acquisition_demand", False)
+    if type(enabled) is not bool:
+        raise PairedRedBoundedPlayerRunError("continuation_parent_remaining_acquisition_demand")
+    return enabled
 
 
 def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
@@ -1156,6 +1192,9 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         readiness.quote_resource_costs,
         completion_dose=getattr(readiness, "restore_completion_dose", False),
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
+        remaining_acquisition_demand=getattr(
+            readiness, "restore_remaining_acquisition_demand", False,
+        ),
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
         living_completion_checkpoint,
@@ -1356,6 +1395,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             readiness.quote_resource_costs,
             completion_dose=readiness.completion_dose,
             routed_recovery=readiness.routed_recovery,
+            remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
         )
         # Preview the same prospective history as the actor. Historical restore
         # authentication above must still use the checkpoint's original inputs.
@@ -1453,6 +1493,8 @@ def _run_arm(
                 "continue_after_progress": readiness.continue_after_progress,
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
+                **({"remaining_acquisition_demand": True}
+                   if readiness.remaining_acquisition_demand else {}),
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -1532,6 +1574,7 @@ def _run_arm(
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
                 routed_recovery=readiness.routed_recovery,
+                remaining_acquisition_demand=readiness.remaining_acquisition_demand,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             trajectory_class = (

@@ -385,8 +385,9 @@ def test_team_development_is_one_level_quantum_not_a_full_duplicate_grind() -> N
     assert evolution.required_size == party.size
 
 
+@pytest.mark.parametrize("remaining_demand", [False, True])
 def test_wild_goal_context_binds_one_capture_quantum(
-    monkeypatch: pytest.MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch, remaining_demand: bool,
 ) -> None:
     captured: dict[str, object] = {}
 
@@ -419,7 +420,8 @@ def test_wild_goal_context_binds_one_capture_quantum(
     }
 
     _wild_provider(
-        SimpleNamespace(emulator=object(), reader=object(), adapter=object()),
+        SimpleNamespace(emulator=object(), reader=object(), adapter=object(),
+                        remaining_acquisition_demand=remaining_demand),
         SimpleNamespace(
             parameters=parameters,
             mechanic=RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
@@ -427,6 +429,7 @@ def test_wild_goal_context_binds_one_capture_quantum(
         CountingExecutor(_ActionDelegate()),
     )
 
+    assert captured["catalog"].remaining_demand is remaining_demand
     policy = captured["policy"]
     assert isinstance(policy, RedAreaExecutionPolicy)
     assert policy.capture_quota == 1

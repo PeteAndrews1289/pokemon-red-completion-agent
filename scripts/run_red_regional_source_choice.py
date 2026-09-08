@@ -143,6 +143,9 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
             emulator=controller,
             reader=reader,
         )
+        runtime = replace(
+            runtime, remaining_acquisition_demand=ready.remaining_acquisition_demand,
+        )
         actions = base.CountingExecutor(
             base.FrameSafeExecutor(
                 controller,
@@ -286,6 +289,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     terminal_ready = replace(
         ready, capture=checkpoint.capture, continuation=checkpoint, restore_profile=ready.profile,
         restore_routed_recovery=ready.routed_recovery,
+        restore_completion_dose=ready.completion_dose,
+        restore_remaining_acquisition_demand=ready.remaining_acquisition_demand,
     )
     with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(checkpoint.capture.state_bytes)

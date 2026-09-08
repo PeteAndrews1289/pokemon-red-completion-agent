@@ -51,6 +51,7 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
         )),
         profile=None, quote_resource_costs=True, completion_dose=True,
         routed_recovery=True, pair_id="preview", challenger_arm_id="test",
+        remaining_acquisition_demand=True,
     )
     order = []
 
@@ -77,7 +78,10 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", lambda **_kwargs: None)
     monkeypatch.setattr(runner, "PokemonRedStateReader", lambda _controller: None)
     observer = SimpleNamespace(search_memory="not wired")
-    monkeypatch.setattr(runner, "_player_observer", lambda *_args, **_kwargs: observer)
+    def preview_observer(*_args, **kwargs):
+        assert kwargs["remaining_acquisition_demand"] is True
+        return observer
+    monkeypatch.setattr(runner, "_player_observer", preview_observer)
 
     def preflight(**kwargs):
         assert order == ["restore"]
@@ -181,6 +185,33 @@ def test_continuation_never_relabels_other_partitions(case, partition):
     readiness, ancestor = _completed(case, {"partition": partition, "root_lineage_id": "foreign"})
     with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="training_lineage"):
         runner._continue_readiness(readiness, (ancestor,))
+
+
+@pytest.mark.parametrize("parent_mode", [False, True])
+def test_remaining_demand_restores_parent_mode_and_forbids_rollback(case, parent_mode):
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document, alter_header={
+        "split": {"partition": "train", "root_lineage_id": "original-training-root"},
+        **({"remaining_acquisition_demand": True} if parent_mode else {}),
+    })
+    record = publish_red_player_checkpoint(store, document)
+    ready = replace(_readiness(store, arguments), remaining_acquisition_demand=True)
+    chain = ((arguments["episode_id"], record["record_sha256"]),)
+    resumed = runner._continue_readiness(ready, chain)
+    assert resumed.restore_remaining_acquisition_demand is parent_mode
+    assert resumed.remaining_acquisition_demand is True
+    if parent_mode:
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="demand_rollback"):
+            runner._continue_readiness(replace(ready, remaining_acquisition_demand=False), chain)
+
+
+@pytest.mark.parametrize("value", [None, 0, "true", []])
+def test_invalid_checkpoint_demand_mode_cannot_change_observation(value):
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="parent_remaining"):
+        runner._checkpoint_remaining_acquisition_demand({
+            "metadata": {"remaining_acquisition_demand": value},
+        })
 
 
 def test_continuation_rejects_changed_hash_duplicate_and_wrong_parent(case):
@@ -326,6 +357,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     original_profile = readiness.profile
     readiness = replace(
         readiness, profile=SimpleNamespace(profile_sha256="e" * 64), routed_recovery=True,
+        remaining_acquisition_demand=True,
     )
     emulator = SimpleNamespace(frame_count=12, pressed_buttons=frozenset())
     seen = []
@@ -349,9 +381,11 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
 
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", runtime)
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
-    def player_observer(*_args, completion_dose=False, routed_recovery=False):
+    def player_observer(*_args, completion_dose=False, routed_recovery=False,
+                        remaining_acquisition_demand=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
+        assert remaining_acquisition_demand is False  # Never use successor mode for old restore.
         return observe
 
     monkeypatch.setattr(runner, "_player_observer", player_observer)

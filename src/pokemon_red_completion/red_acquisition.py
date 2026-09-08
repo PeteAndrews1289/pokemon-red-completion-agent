@@ -119,8 +119,11 @@ class RedAcquisitionCatalog:
 
     methods: tuple[RedAcquisitionMethod, ...]
     source_commit: str = PRET_POKERED_ACQUISITION_COMMIT
+    remaining_demand: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.remaining_demand) is not bool:
+            raise TypeError("remaining_demand must be a bool")
         if self.source_commit != PRET_POKERED_ACQUISITION_COMMIT:
             raise ValueError("acquisition catalog source commit is not the pinned revision")
         species = tuple(method.species_ref for method in self.methods)
@@ -169,6 +172,40 @@ class RedAcquisitionCatalog:
                 pending[method.consumes_species_ref] += quantity
             else:
                 roots[species_ref] += quantity
+        return dict(sorted(roots.items(), key=lambda item: red_species_number(item[0])))
+
+    def required_root_holdings(self, observation: CollectionObservation) -> dict[str, int]:
+        """Root holdings still needed after crediting actual intermediate forms.
+
+        Process descendants before precursors, combining all branch demand before
+        spending any retained specimen. Each living target contributes one reserved
+        copy; only a node's deficit propagates to its consumed precursor. Surplus
+        descendants cannot satisfy a missing ancestor or a sibling branch. Trade
+        edges consume exactly one specimen, just like evolution edges.
+
+        Root holdings are gross requirements: callers subtract actual root copies.
+        This leaves the historical, from-empty ``required_root_acquisitions`` intact.
+        Registration flags alone never satisfy a living requirement.
+        """
+        counts = Counter(specimen.species_ref for specimen in observation.specimens)
+        pending = Counter(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species)
+        by_species = {method.species_ref: method for method in self.methods}
+        depths: dict[str, int] = {}
+
+        def depth(species_ref: str) -> int:
+            if species_ref not in depths:
+                precursor = by_species[species_ref].consumes_species_ref
+                depths[species_ref] = 0 if precursor is None else depth(precursor) + 1
+            return depths[species_ref]
+
+        roots: dict[str, int] = {}
+        for method in sorted(self.methods, key=lambda item: depth(item.species_ref), reverse=True):
+            demand = pending[method.species_ref]
+            precursor = method.consumes_species_ref
+            if precursor is None:
+                roots[method.species_ref] = demand
+            else:
+                pending[precursor] += max(0, demand - counts[method.species_ref])
         return dict(sorted(roots.items(), key=lambda item: red_species_number(item[0])))
 
     def reachable_registration_species(self) -> frozenset[str]:
@@ -401,7 +438,10 @@ def summarize_red_area_survey(
     if not methods:
         raise ValueError("source_id is not present in the Red acquisition catalog")
     living = Counter(specimen.species_ref for specimen in observation.specimens)
-    root_counts = catalog.required_root_acquisitions()
+    root_counts = (
+        catalog.required_root_holdings(observation)
+        if catalog.remaining_demand else catalog.required_root_acquisitions()
+    )
     requirements = tuple(
         RedAreaRequirement(
             method.species_ref,

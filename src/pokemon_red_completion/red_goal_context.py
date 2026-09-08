@@ -43,7 +43,7 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
 )
 from pokemon_red_completion.party import PartyObservation
-from pokemon_red_completion.red_acquisition import RedAreaExecutionPolicy
+from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAreaExecutionPolicy
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_internal_species_number,
@@ -182,6 +182,7 @@ class RedGoalContextRuntime:
         Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
     ) = None
     boxed_level_evolution_cross_box: bool = False
+    remaining_acquisition_demand: bool = False
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -438,6 +439,9 @@ def _wild_provider(
             adapter=runtime.adapter,
             boundary=boundary,
             normalize_after_capture=area.finish_at_starting_endpoint,
+            catalog=replace(
+                RED_ACQUISITION_CATALOG, remaining_demand=runtime.remaining_acquisition_demand,
+            ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
                 max_encounters=_integer(parameters, "maximum_encounters"),
