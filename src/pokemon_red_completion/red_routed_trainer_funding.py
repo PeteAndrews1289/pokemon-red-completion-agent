@@ -13,8 +13,14 @@ from typing import TYPE_CHECKING
 from .battle_runtime import DEFAULT_BATTLE_RUNTIME_TIMING
 from .gen1_route_runtime import Gen1TraversalObserver, Gen1WildFleeHandler
 from .gen1_trainer_parties import trainer_party_quote
-from .gen1_trainer_sight import Gen1TrainerSightProjector, trainer_headers, trainer_sight_zones
+from .gen1_trainer_sight import (
+    Gen1TrainerSightProjector,
+    TrainerFacing,
+    trainer_headers,
+    trainer_sight_zones,
+)
 from .gen1_traversal import map_object_events
+from .global_router import MacroPath
 from .goal_manager import GoalFailureReason, GoalKind
 from .goal_manager_runtime import (
     ExecutableGoalBinding,
@@ -34,6 +40,7 @@ from .red_pc_storage import face_pc_boundary
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_funding import TrainerFundingCandidate, local_trainer_funding_candidates
 from .route_executor import execute_route
+from .route_plan import RoutePlan
 
 if TYPE_CHECKING:
     from .red_resource_goal_router import RedResourceGoalRouter
@@ -54,6 +61,34 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
         raw,
         reader.read_current_map_objects(),
     )
+    pending = reader.read_pending_trainer_battle_identity()
+    if pending is not None:
+        # Talking turns the trainer toward the player, so the retained square
+        # is now inside its sight lane. Do not route out/re-enter or clear that
+        # hazard: recover only the exact already-armed adjacent interaction.
+        if raw.player_y is None or raw.player_x is None:
+            return ()
+        at = (raw.player_y, raw.player_x)
+        facing = TrainerFacing(reader.read_player_facing())
+        dy, dx = facing.delta
+        matches = tuple(
+            zone
+            for zone in zones
+            if (zone.trainer_class, zone.trainer_set) == pending
+            and zone.visible
+            and not zone.defeated
+            and zone.at == (at[0] + dy, at[1] + dx)
+        )
+        if len(matches) != 1:
+            return ()
+        return (
+            TrainerFundingCandidate(
+                matches[0],
+                trainer_party_quote(rom, *pending),
+                RoutePlan(MacroPath((raw.map_id,), ()), at, None, (), None, at, None),
+                facing,
+            ),
+        )
     start = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(rom, reader)).observe()
     return local_trainer_funding_candidates(rom, router.world, start, zones)
 

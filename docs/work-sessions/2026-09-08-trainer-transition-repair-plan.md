@@ -47,3 +47,12 @@ Codex supplied actual independently pinned D747/D886 boundary fixtures. No Flash
 test execution is claimed. Latest service quota at14:34 UTC: 91.9998% five-hour,
 93.1392% weekly remaining; account readings do not measure this job's isolated cost.
 Claude was not called for this routine repair; its last quota remains unavailable.
+
+The first zero-input native preflight exposed a second integration seam: talking
+turns the NPC toward the player, putting the saved square inside its sight lane.
+Normal approach planning correctly refuses that origin, but must not be invoked
+to resume an already-armed adjacent battle. Candidate recovery now requires the
+unique visible, undefeated, matching class/set immediately in the player's facing
+direction and creates a zero-step continuation. Six additional regression cases
+check this real candidate-builder path. No movement hazard is removed, no route
+is replayed, and a preflight offering only healing is prohibited from execution.

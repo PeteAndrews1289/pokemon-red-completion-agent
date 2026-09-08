@@ -109,6 +109,7 @@ def fixture(monkeypatch):
     )
     monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
     monkeypatch.setattr(funding, "dependency_specimen_ledger", lambda c: tuple(sorted(c)))
+
     def checked_headers(*_args, **kwargs):
         assert kwargs == {"full_event_offsets": True}
         return ()
@@ -197,6 +198,43 @@ def test_pending_funding_resumes_without_party_menu_route_or_second_interaction(
     report = bound.execute()
     assert calls == ["battle"]
     assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
+@pytest.mark.parametrize(
+    "mismatch", [None, "facing", "identity", "hidden", "defeated", "ambiguous"]
+)
+def test_pending_candidate_does_not_route_out_of_armed_trainers_sight_lane(monkeypatch, mismatch):
+    # Real candidate-builder path, not the fixture's mocked _candidates seam.
+    from pokemon_red_completion.red_routed_trainer_funding import _candidates
+
+    router, state, target, _bindings, _calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, player_y=10, player_x=36)
+    router.runtime.reader.read_pending_trainer_battle_identity = lambda: (212, 2)
+    zone = target.trainer
+    if mismatch == "facing":
+        router.runtime.reader.read_player_facing = lambda: "up"
+    elif mismatch == "identity":
+        zone = replace(zone, trainer_set=3)
+    elif mismatch == "hidden":
+        zone = replace(zone, visible=False)
+    elif mismatch == "defeated":
+        zone = replace(zone, defeated=True)
+    zones = (zone, replace(zone, sprite_index=5)) if mismatch == "ambiguous" else (zone,)
+    assert (10, 36) in zone.lane or mismatch == "defeated"
+    monkeypatch.setattr(funding, "trainer_headers", lambda *_args, **_kwargs: ())
+    monkeypatch.setattr(funding, "trainer_sight_zones", lambda *_: zones)
+
+    def no_route(*_):
+        raise AssertionError("pending battle must not invoke travel planning")
+
+    monkeypatch.setattr(funding, "Gen1TraversalObserver", no_route)
+    candidates = _candidates(router)
+    if mismatch is None:
+        assert len(candidates) == 1
+        assert candidates[0].approach.steps == ()
+        assert candidates[0].approach.terminal_at == (10, 36)
+    else:
+        assert candidates == ()
 
 
 @pytest.mark.parametrize("mismatch", ["identity", "position", "facing", "pending_changed"])
