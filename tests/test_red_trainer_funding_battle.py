@@ -26,6 +26,7 @@ class ScriptedEnvironment:
     ready: bool = True
     facing: str = "up"
     battle_identity: tuple[int, int, int, int] = (201, 1, 201, 9)
+    pending_identity: tuple[int, int] | None = None
 
     def __post_init__(self) -> None:
         self.actions: list[MacroAction] = []
@@ -53,6 +54,9 @@ class ScriptedEnvironment:
 
     def read_trainer_battle_identity(self) -> tuple[int, int, int, int]:
         return self.battle_identity
+
+    def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
+        return self.pending_identity if self.state.battle_state == 0 else None
 
 
 def make_flag_bytes(bit: int) -> bytes:
@@ -113,6 +117,81 @@ def make_state(
 
 
 TIMING = BattleRuntimeTiming(dialogue_wait_frames=5)
+
+
+@pytest.mark.parametrize("already_pending", [False, True])
+def test_armed_intro_waits_without_reinteracting_or_confirming(monkeypatch, already_pending):
+    class PendingEnvironment(ScriptedEnvironment):
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.INTERACT:
+                assert self.pending_identity is None
+                self.dialogue = True
+            elif action.kind is MacroActionKind.CONFIRM:
+                assert self.pending_identity is None and self.dialogue
+                self.dialogue = False
+                self.pending_identity = (201, 9)
+                self.pending_waits = 0
+            elif action.kind is MacroActionKind.WAIT and self.pending_identity:
+                self.pending_waits += 1
+                if self.pending_waits == 2:
+                    self.state = replace(self.state, battle_state=2)
+                    self.pending_identity = None
+
+    env = PendingEnvironment(make_state(), pending_identity=(201, 9) if already_pending else None)
+    env.pending_waits = 0
+
+    def finish(reader, *_args, **kwargs):
+        assert reader.read().battle_state == 2
+        kwargs["move_decision_guard"](reader.read())
+        env.state = replace(
+            env.state, battle_state=0, player_money=815, event_flags=make_flag_bytes(1139)
+        )
+        return env.state
+
+    monkeypatch.setattr(funding_battle, "battle_runner", finish)
+    receipt = run_prepared_trainer_funding(
+        env,
+        env,
+        target=make_candidate(),
+        validate_target=lambda: None,
+        move_slot_policy=lambda _: 1,
+        timing=TIMING,
+    )
+    assert receipt.payout == 315
+    buttons = [a.kind for a in env.actions if a.kind is not MacroActionKind.WAIT]
+    assert buttons == (
+        [] if already_pending else [MacroActionKind.INTERACT, MacroActionKind.CONFIRM]
+    )
+
+
+def test_stuck_pending_transition_consumes_only_exact_bounded_waits():
+    env = ScriptedEnvironment(make_state(), pending_identity=(201, 9))
+    with pytest.raises(TrainerFundingBattleError, match="exhausted intro"):
+        run_prepared_trainer_funding(
+            env,
+            env,
+            target=make_candidate(),
+            validate_target=lambda: None,
+            move_slot_policy=lambda _: 1,
+            timing=TIMING,
+            maximum_intro_pulses=3,
+        )
+    assert env.actions == [MacroAction(MacroActionKind.WAIT, repeat=5)] * 3
+
+
+def test_wrong_pending_identity_rejects_before_any_input():
+    env = ScriptedEnvironment(make_state(), pending_identity=(201, 10))
+    with pytest.raises(TrainerFundingBattleError, match="pending trainer identity"):
+        run_prepared_trainer_funding(
+            env,
+            env,
+            target=make_candidate(),
+            validate_target=lambda: None,
+            move_slot_policy=lambda _: 1,
+            timing=TIMING,
+        )
+    assert not env.actions
 
 
 def test_prepared_trainer_funding_success(monkeypatch: pytest.MonkeyPatch) -> None:

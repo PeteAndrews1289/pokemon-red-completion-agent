@@ -77,6 +77,8 @@ def fixture(monkeypatch):
         read=lambda: state.raw,
         read_current_map_objects=lambda: (),
         read_bottom_dialogue_box_visible=lambda: False,
+        read_pending_trainer_battle_identity=lambda: None,
+        read_player_facing=lambda: "down",
     )
     actions = SimpleNamespace(actions_executed=0)
     emulator = SimpleNamespace(frame_count=0)
@@ -107,7 +109,11 @@ def fixture(monkeypatch):
     )
     monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
     monkeypatch.setattr(funding, "dependency_specimen_ledger", lambda c: tuple(sorted(c)))
-    monkeypatch.setattr(funding, "trainer_headers", lambda *_: ())
+    def checked_headers(*_args, **kwargs):
+        assert kwargs == {"full_event_offsets": True}
+        return ()
+
+    monkeypatch.setattr(funding, "trainer_headers", checked_headers)
     monkeypatch.setattr(funding, "map_object_events", lambda *_: ())
     monkeypatch.setattr(funding, "trainer_sight_zones", lambda *_: (trainer,))
     monkeypatch.setattr(funding, "trainer_party_quote", lambda *_: quote)
@@ -178,6 +184,42 @@ def test_funding_binding_preserves_alternatives_and_earns_not_buys(monkeypatch):
     with pytest.raises(funding.RedTrainerFundingError, match="consumed"):
         bound.execute()
     assert calls == ["escort", "route", "face", "battle"]
+
+
+def test_pending_funding_resumes_without_party_menu_route_or_second_interaction(monkeypatch):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, player_y=10, player_x=36)
+    target = replace(target, approach=SimpleNamespace(steps=(), terminal_at=(10, 36)))
+    monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
+    router.runtime.reader.read_pending_trainer_battle_identity = lambda: (212, 2)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    assert bound.kind is GoalKind.RESUPPLY
+    report = bound.execute()
+    assert calls == ["battle"]
+    assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
+@pytest.mark.parametrize("mismatch", ["identity", "position", "facing", "pending_changed"])
+def test_pending_funding_never_dispatches_unrelated_or_stale_work(monkeypatch, mismatch):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, player_y=10, player_x=36)
+    target = replace(target, approach=SimpleNamespace(steps=(), terminal_at=(10, 36)))
+    monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
+    router.runtime.reader.read_pending_trainer_battle_identity = lambda: (212, 2)
+    if mismatch == "identity":
+        router.runtime.reader.read_pending_trainer_battle_identity = lambda: (212, 3)
+    elif mismatch == "position":
+        state.raw = replace(state.raw, player_x=35)
+    elif mismatch == "facing":
+        router.runtime.reader.read_player_facing = lambda: "up"
+    result = funding.bind_local_trainer_funding(router, bindings, state)
+    if mismatch == "pending_changed":
+        router.runtime.reader.read_pending_trainer_battle_identity = lambda: None
+        with pytest.raises(funding.RedTrainerFundingError, match="transition changed"):
+            result.bindings[-1].execute()
+    else:
+        assert result is bindings
+    assert not calls
 
 
 @pytest.mark.parametrize("money", [200, 1059, None, -1])

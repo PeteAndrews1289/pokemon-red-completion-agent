@@ -85,6 +85,38 @@ def test_object_and_header_reads_join_independent_cartridge_structures() -> None
     )
 
 
+@pytest.mark.parametrize("slot,legacy,accurate", [(7, 15, 15), (8, 8, 16), (15, 15, 23)])
+def test_full_trainer_bit_offset_carries_without_changing_legacy_default(
+    monkeypatch, slot, legacy, accurate
+):
+    import pokemon_red_completion.gen1_trainer_sight as sight
+
+    rom = trainer_cartridge()
+    # A literal adjusted event pointer D748 and full bit offset from the header.
+    rom[TRAINERS : TRAINERS + 13] = bytes(
+        (slot, 0x20, 0x48, 0xD7, 0x10, 0x40, 0x20, 0x40, 0x30, 0x40, 0x40, 0x40, 0xFF)
+    )
+    event = MapObjectEvent(0, 6, 5, 7, 0xFF, 0xD3, 0x41, slot, 201, 9)
+    monkeypatch.setattr(sight, "map_object_events", lambda *_: (event,))
+    assert trainer_headers(bytes(rom), {0})[0].event_flag == legacy
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=False)[0].event_flag == legacy
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=True)[0].event_flag == accurate
+
+
+def test_full_event_offset_rejects_carry_beyond_event_region(monkeypatch):
+    import pokemon_red_completion.gen1_trainer_sight as sight
+
+    rom = trainer_cartridge()
+    rom[TRAINERS : TRAINERS + 13] = bytes(
+        (8, 0x20, 0x85, 0xD8, 0x10, 0x40, 0x20, 0x40, 0x30, 0x40, 0x40, 0x40, 0xFF)
+    )
+    event = MapObjectEvent(0, 6, 5, 7, 0xFF, 0xD3, 0x41, 8, 201, 9)
+    monkeypatch.setattr(sight, "map_object_events", lambda *_: (event,))
+    assert trainer_headers(bytes(rom), {0})[0].event_flag == 2544
+    with pytest.raises(CartridgeReadError, match="0 validated"):
+        trainer_headers(bytes(rom), {0}, full_event_offsets=True)
+
+
 def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
     rom = trainer_cartridge()
     for direction_offset in (8, 16, 24):
@@ -96,7 +128,7 @@ def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
 def test_ordinary_facing_interaction_trainer_without_a_header_table_has_no_lane() -> None:
     rom = trainer_cartridge()
     rom[SCRIPT + 4 : SCRIPT + 6] = (0x4500).to_bytes(2, "little")
-    rom[0x4500 : 0x4508] = bytes((0x18, 0x4C, 0x19, 0x4C, 0x69, 0x4C, 0xC9, 0xFA))
+    rom[0x4500:0x4508] = bytes((0x18, 0x4C, 0x19, 0x4C, 0x69, 0x4C, 0xC9, 0xFA))
 
     assert trainer_headers(bytes(rom), {0}) == ()
 

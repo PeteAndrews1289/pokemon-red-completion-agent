@@ -145,6 +145,8 @@ class RamAddress(IntEnum):
     SS_ANNE_2F_SCRIPT = 0xD665
     STATUS_FLAGS_1 = 0xD728
     BEAT_GYM_FLAGS = 0xD72A
+    STATUS_FLAGS_3 = 0xD72D
+    STATUS_FLAGS_4 = 0xD72E
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
@@ -960,8 +962,10 @@ class RedBoxMoveMember:
         if type(self.level) is not int or not 1 <= self.level <= 100:
             raise ValueError("boxed move inventory level differs")
         if (
-            not isinstance(self.moves, tuple) or not isinstance(self.pp, tuple)
-            or len(self.moves) != 4 or len(self.pp) != 4
+            not isinstance(self.moves, tuple)
+            or not isinstance(self.pp, tuple)
+            or len(self.moves) != 4
+            or len(self.pp) != 4
             or any(type(move) is not int or not 0 <= move <= 165 for move in self.moves)
             or any(type(pp) is not int or not 0 <= pp <= 63 for pp in self.pp)
             or any(move == 0 and pp != 0 for move, pp in zip(self.moves, self.pp, strict=True))
@@ -3839,18 +3843,29 @@ class PokemonRedStateReader:
                 box_slot=index + 1,
                 species_id=species,
                 level=level,
-                moves=tuple(self._memory.read_u8(
-                    int(RamAddress.CURRENT_BOX_MONS) + index * RED_BOX_STRUCT_STRIDE
-                    + PARTY_MOVES_OFFSET + slot
-                ) for slot in range(4)),
-                pp=tuple(self._memory.read_u8(
-                    int(RamAddress.CURRENT_BOX_MONS) + index * RED_BOX_STRUCT_STRIDE
-                    + PARTY_PP_OFFSET + slot
-                ) & 0x3F for slot in range(4)),
+                moves=tuple(
+                    self._memory.read_u8(
+                        int(RamAddress.CURRENT_BOX_MONS)
+                        + index * RED_BOX_STRUCT_STRIDE
+                        + PARTY_MOVES_OFFSET
+                        + slot
+                    )
+                    for slot in range(4)
+                ),
+                pp=tuple(
+                    self._memory.read_u8(
+                        int(RamAddress.CURRENT_BOX_MONS)
+                        + index * RED_BOX_STRUCT_STRIDE
+                        + PARTY_PP_OFFSET
+                        + slot
+                    )
+                    & 0x3F
+                    for slot in range(4)
+                ),
             )
-            for index, (species, level) in enumerate(zip(
-                before.species_ids, before.levels, strict=True
-            ))
+            for index, (species, level) in enumerate(
+                zip(before.species_ids, before.levels, strict=True)
+            )
         )
         if self.read_current_box_state() != before:
             raise SemanticStateError("current-box move inventory changed during observation")
@@ -4165,6 +4180,27 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
         )
+
+    def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
+        """Recognize the ordinary trainer-start latch before battle mode appears.
+
+        StartTrainerBattle sets wStatusFlags3 bit 6 and initializes wCurOpponent
+        before InitBattle switches wIsInBattle. Movement readiness and text-box
+        absence do not prove settled overworld during that interval. Stale trainer
+        identity alone is never evidence of a pending battle.
+        """
+        if (
+            self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 0
+            or not self._memory.read_u8(RamAddress.STATUS_FLAGS_3) & 0x40
+            or self._memory.read_u8(RamAddress.STATUS_FLAGS_4) & 0x10
+        ):
+            return None
+        opponent = self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
+        engaged = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS)
+        trainer_set = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET)
+        if opponent < 201 or engaged != opponent or trainer_set == 0:
+            return None
+        return opponent, trainer_set
 
     def read_player_facing(self) -> str:
         """Decode the sprite's settled facing inside the revision adapter."""

@@ -91,11 +91,22 @@ def bind_local_trainer_funding(
     except RedCaptureLeadError:
         return bindings
     level = observation.party.members[escort.target_index].level
+    pending_identity = router.runtime.reader.read_pending_trainer_battle_identity()
     candidates = tuple(
         c
         for c in _candidates(router)
         if level >= max(m.level for m in c.quote.party) + 10
         and c.quote.expected_money_after(raw.player_money) >= provider.purchases[0].unit_price
+        and (
+            pending_identity is None
+            or (
+                pending_identity == (c.trainer.trainer_class, c.trainer.trainer_set)
+                and not c.approach.steps
+                and c.approach.terminal_at == (raw.player_y, raw.player_x)
+                and escort.target_index == 0
+                and router.runtime.reader.read_player_facing() == c.interaction_facing.value
+            )
+        )
     )
     if not candidates:
         return bindings
@@ -125,7 +136,10 @@ def bind_local_trainer_funding(
         ):
             raise RedTrainerFundingError("trainer map or defeated event changed before interaction")
         zones = trainer_sight_zones(
-            trainer_headers(router.world.rom, {t.map_id}),
+            # Fresh execution must check the real defeated bit even while old
+            # checkpoint menus retain their historical decode. An aliased old
+            # quote is rejected before input, never silently reinterpreted.
+            trainer_headers(router.world.rom, {t.map_id}, full_event_offsets=True),
             map_object_events(router.world.rom, {t.map_id}),
             current,
             runtime.reader.read_current_map_objects(),
@@ -165,7 +179,10 @@ def bind_local_trainer_funding(
             raise RedTrainerFundingError("trainer funding origin changed before input")
         require_target()
         action_start, frame_start = actions.actions_executed, runtime.emulator.frame_count
-        prepare_capture_escort(runtime, actions)
+        if runtime.reader.read_pending_trainer_battle_identity() != pending_identity:
+            raise RedTrainerFundingError("pending trainer transition changed before input")
+        if pending_identity is None:
+            prepare_capture_escort(runtime, actions)
         prepared_raw = runtime.reader.read()
         final_party_species = tuple(prepared_raw.party_species_ids or ())
         guard = RecoveryRouteInterruptionHandler(
@@ -198,7 +215,8 @@ def bind_local_trainer_funding(
                 raise RedTrainerFundingError("trainer funding approach failed")
         guard._require_preserved_living_slots(runtime.reader.read())
         require_target()
-        face_pc_boundary(actions, runtime.reader, target.interaction_facing.value)
+        if pending_identity is None:
+            face_pc_boundary(actions, runtime.reader, target.interaction_facing.value)
         from .red_trainer_funding_battle import run_prepared_trainer_funding
 
         receipt = run_prepared_trainer_funding(
@@ -268,7 +286,9 @@ def bind_local_trainer_funding(
         ),
         kind=GoalKind.RESUPPLY,
         resource_quote=GoalResourceQuote(
-            before_money, 0, (),
+            before_money,
+            0,
+            (),
             expected_income=target.quote.expected_money_after(before_money) - before_money,
         ),
         estimated_effort=min(1.0, 0.15 + len(target.approach.steps) / 256),

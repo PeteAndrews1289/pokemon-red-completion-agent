@@ -38,6 +38,8 @@ class TrainerFundingBattleReader(BattleStateReader, Protocol):
 
     def read_trainer_battle_identity(self) -> tuple[int, int, int, int]: ...
 
+    def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None: ...
+
 
 class TrainerFundingBattleError(BattleRuntimeError):
     """Raised when prepared trainer funding fails preconditions or execution."""
@@ -257,43 +259,43 @@ def run_prepared_trainer_funding(
     ):
         raise TrainerFundingBattleError("initial player_money is missing or invalid")
 
-    executor.execute(MacroAction(MacroActionKind.INTERACT))
-    executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+    expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
+
+    def pending_start() -> bool:
+        pending = reader.read_pending_trainer_battle_identity()
+        if pending is not None and pending != expected_pending:
+            raise TrainerFundingBattleError("pending trainer identity does not match target")
+        return pending is not None
+
+    resuming_pending = pending_start()
+    if not resuming_pending:
+        executor.execute(MacroAction(MacroActionKind.INTERACT))
+        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
 
     state = reader.read()
-    entered_battle = False
-    if state.battle_state == 2:
-        entered_battle = True
-    elif state.battle_state == 1:
-        raise TrainerFundingBattleError("trainer interaction entered wild battle")
-    elif state.battle_state != 0:
-        raise TrainerFundingBattleError(f"unsupported battle state {state.battle_state}")
-    elif not reader.read_bottom_dialogue_box_visible() and reader.read_input_readiness().ready:
-        raise TrainerFundingBattleError("trainer interaction produced no dialogue or battle")
-
-    if not entered_battle:
-        intro_count = 0
-        while not entered_battle:
-            if intro_count >= maximum_intro_pulses:
+    intro_count = 0
+    while state.battle_state != 2:
+        if state.battle_state == 1:
+            raise TrainerFundingBattleError("trainer interaction entered wild battle")
+        if state.battle_state != 0:
+            raise TrainerFundingBattleError(f"unsupported battle state {state.battle_state}")
+        pending = pending_start()
+        dialogue = reader.read_bottom_dialogue_box_visible()
+        if not pending and not dialogue and reader.read_input_readiness().ready:
+            if intro_count == 0 and not resuming_pending:
                 raise TrainerFundingBattleError(
-                    "exhausted intro pulses before entering trainer battle"
+                    "trainer interaction produced no dialogue or battle"
                 )
-            if (
-                not reader.read_bottom_dialogue_box_visible()
-                and reader.read_input_readiness().ready
-            ):
-                raise TrainerFundingBattleError("trainer dialogue closed without entering battle")
+            raise TrainerFundingBattleError("trainer dialogue closed without entering battle")
+        if intro_count >= maximum_intro_pulses:
+            raise TrainerFundingBattleError("exhausted intro pulses before entering trainer battle")
+        # The cartridge owns an armed transition. Wait without another button;
+        # only an observed dialogue or the legacy not-ready preamble gets CONFIRM.
+        if not pending:
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
-            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
-            intro_count += 1
-            state = reader.read()
-            if state.battle_state == 2:
-                entered_battle = True
-                break
-            if state.battle_state == 1:
-                raise TrainerFundingBattleError("trainer interaction entered wild battle")
-            if state.battle_state != 0:
-                raise TrainerFundingBattleError(f"unsupported battle state {state.battle_state}")
+        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+        intro_count += 1
+        state = reader.read()
 
     expected_identity = (
         target.trainer.trainer_class,

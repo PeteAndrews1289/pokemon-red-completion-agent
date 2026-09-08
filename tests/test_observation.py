@@ -90,6 +90,31 @@ def test_trainer_identity_preserves_independent_opponent_class_and_set_bytes():
     assert reader.read_trainer_battle_identity() == (212, 12, 201, 10)
 
 
+@pytest.mark.parametrize(
+    "change,expected",
+    [
+        ({}, (201, 10)),
+        ({0xD72D: 0}, None),
+        ({0xD72D: 0x80}, None),
+        ({0xD72E: 0x10}, None),
+        ({0xD057: 2}, None),
+        ({0xD057: 1}, None),
+        ({0xD059: 200, 0xCD2D: 200}, None),
+        ({0xCD2D: 202}, None),
+        ({0xCD2E: 0}, None),
+        ({0xD031: 44}, (201, 10)),
+    ],
+)
+def test_pending_trainer_start_requires_live_latch_not_stale_identity(change, expected):
+    memory = RecordingMemory(
+        {0xD72D: 0xC0, 0xD72E: 0x0A, 0xD057: 0, 0xD059: 201, 0xCD2D: 201, 0xCD2E: 10, **change}
+    )
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_input_readiness().ready
+    assert not reader.read_bottom_dialogue_box_visible()
+    assert reader.read_pending_trainer_battle_identity() == expected
+
+
 @pytest.mark.parametrize("corrupt", [None, 0, 8, 19, 100, 119])
 def test_bottom_dialogue_requires_frame_not_ready_movement_flags(corrupt):
     # Literal independently specified screenshot-frame tiles, not constants
@@ -117,8 +142,9 @@ def test_invalid_player_facing_does_not_guess():
         PokemonRedStateReader(RecordingMemory({0xC109: 3})).read_player_facing()
 
 
-@pytest.mark.parametrize("flags,active", [(0, False), (1, False), (0x20, False),
-                                         (8, True), (0x28, True), (0xF7, False)])
+@pytest.mark.parametrize(
+    "flags,active", [(0, False), (1, False), (0x20, False), (8, True), (0x28, True), (0xF7, False)]
+)
 def test_generic_pc_session_uses_its_own_flag_not_cursor_residue(flags, active):
     memory = RecordingMemory({0xCD60: flags})
     assert PokemonRedStateReader(memory).read_generic_pc_session_active() is active

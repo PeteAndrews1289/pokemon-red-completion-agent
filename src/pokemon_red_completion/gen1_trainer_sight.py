@@ -113,8 +113,17 @@ class TrainerSightZone:
         )
 
 
-def trainer_headers(rom: bytes, map_ids: Collection[int]) -> tuple[TrainerHeader, ...]:
-    """Decode map trainer headers through each map script's loaded pointer."""
+def trainer_headers(
+    rom: bytes, map_ids: Collection[int], *, full_event_offsets: bool = False
+) -> tuple[TrainerHeader, ...]:
+    """Decode map trainer headers through each map script's loaded pointer.
+
+    Historical route/menu reconstruction retains the legacy truncated bit offset
+    by default. New callers must opt into cartridge-accurate full offsets; do not
+    silently switch previously recorded capability menus to the corrected mode.
+    """
+    if type(full_event_offsets) is not bool:
+        raise TypeError("full_event_offsets must be boolean")
 
     found: list[TrainerHeader] = []
     for map_id in sorted(set(map_ids)):
@@ -130,7 +139,7 @@ def trainer_headers(rom: bytes, map_ids: Collection[int]) -> tuple[TrainerHeader
         )
         if not events:
             continue
-        found.extend(_trainer_headers_for_map(rom, map_id, events))
+        found.extend(_trainer_headers_for_map(rom, map_id, events, full_event_offsets))
     return tuple(found)
 
 
@@ -138,6 +147,7 @@ def _trainer_headers_for_map(
     rom: bytes,
     map_id: int,
     trainer_events: tuple[MapObjectEvent, ...],
+    full_event_offsets: bool = False,
 ) -> tuple[TrainerHeader, ...]:
     if not 0 <= map_id < MAP_ID_LIMIT:
         raise CartridgeReadError(f"map id {map_id} is outside the header table")
@@ -167,8 +177,7 @@ def _trainer_headers_for_map(
         referenced = bank_offset(bank, address)
         event_address = int.from_bytes(rom[referenced + 2 : referenced + 4], "little")
         if rom[referenced] in trainer_slots or (
-            rom[referenced + 1] & 0x0F == 0
-            and EVENT_FLAGS_START <= event_address < EVENT_FLAGS_END
+            rom[referenced + 1] & 0x0F == 0 and EVENT_FLAGS_START <= event_address < EVENT_FLAGS_END
         ):
             plausible_references += 1
         candidate = _decode_header_candidate(
@@ -177,6 +186,7 @@ def _trainer_headers_for_map(
             map_id,
             address,
             trainer_events,
+            full_event_offsets,
         )
         if candidate is not None and candidate not in candidates:
             candidates.append(candidate)
@@ -202,6 +212,7 @@ def _decode_header_candidate(
     map_id: int,
     address: int,
     trainer_events: tuple[MapObjectEvent, ...],
+    full_event_offsets: bool = False,
 ) -> tuple[TrainerHeader, ...] | None:
     start = bank_offset(bank, address)
     event_by_slot = {event.object_index: event for event in trainer_events}
@@ -230,7 +241,11 @@ def _decode_header_candidate(
             or any(not 0x4000 <= pointer <= 0x7FFF for pointer in text_pointers)
         ):
             return None
-        event_flag = (event_address - EVENT_FLAGS_START) * 8 + sprite_index % 8
+        event_flag = (event_address - EVENT_FLAGS_START) * 8 + (
+            sprite_index if full_event_offsets else sprite_index % 8
+        )
+        if full_event_offsets and event_flag >= (EVENT_FLAGS_END - EVENT_FLAGS_START) * 8:
+            return None
         decoded.append(
             TrainerHeader(
                 map_id=map_id,
@@ -324,7 +339,5 @@ class Gen1TrainerSightProjector:
             self.reader.read_current_map_objects(),
         )
         return tuple(
-            TraversalHazard(at=at, kind="trainer_sight")
-            for zone in zones
-            for at in zone.lane
+            TraversalHazard(at=at, kind="trainer_sight") for zone in zones for at in zone.lane
         )
