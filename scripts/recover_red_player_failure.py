@@ -112,34 +112,85 @@ def observed_failed_trainer_switches(store, episode_id, depth=0):
     previous = ()
     if metadata.get("schema") == "pokemon.red.forced-recovery-header.v1":
         previous = observed_failed_trainer_switches(
-            store, metadata["recovery"]["failure_episode_id"], depth + 1,
+            store,
+            metadata["recovery"]["failure_episode_id"],
+            depth + 1,
         )
-    snapshots = {row["snapshot_sha256"]: row["snapshot"]["features"]
-                 for row in episode.iter_stream("snapshots")}
+    snapshots = {
+        row["snapshot_sha256"]: row["snapshot"]["features"]
+        for row in episode.iter_stream("snapshots")
+    }
     observed = []
     for execution in episode.iter_stream("executions"):
         before = snapshots[execution["before_sha256"]]
         after = snapshots[execution["after_sha256"]]
         before_slot = (before.get("party") or {}).get("active_index")
         after_slot = (after.get("party") or {}).get("active_index")
-        if (all((view.get("battle") or {}).get("kind") == "trainer" for view in (before, after))
-                and type(before_slot) is int and type(after_slot) is int
-                and before_slot != after_slot):
+        if (
+            all((view.get("battle") or {}).get("kind") == "trainer" for view in (before, after))
+            and type(before_slot) is int
+            and type(after_slot) is int
+            and before_slot != after_slot
+        ):
             observed.append(after_slot + 1)
     return previous + tuple(observed)
+
+
+def observed_failed_trainer_heal_claims(store, episode_id, depth=0):
+    """Carry durable item claims across failed recoveries; never refund ambiguity."""
+    if depth >= 8:
+        raise ValueError("trainer healing ancestry exceeds its bound")
+    episode = store.open_failed_episode(episode_id)
+    metadata = episode.read_header()["metadata"]
+    count = 0
+    if metadata.get("schema") == "pokemon.red.forced-recovery-header.v1":
+        count = observed_failed_trainer_heal_claims(
+            store,
+            metadata["recovery"]["failure_episode_id"],
+            depth + 1,
+        )
+    if "trainer_recovery_decisions" in episode.stream_names:
+        count += sum(
+            row.get("kind") == "heal" for row in episode.iter_stream("trainer_recovery_decisions")
+        )
+    return count
+
+
+def remaining_trainer_heal_budget(store, episode_id, requested):
+    claimed = observed_failed_trainer_heal_claims(store, episode_id)
+    if type(requested) is not int or not 0 <= requested <= max(0, 2 - claimed):
+        raise ValueError("recovery would refresh already claimed Full Restores")
+    return claimed
 
 
 def run(args):
     healing_budget = getattr(args, "maximum_full_restores", 0)
     prior_switches = tuple(getattr(args, "prior_switches", ()))
-    if (type(healing_budget) is not int or not 0 <= healing_budget <= 2
-            or (healing_budget and not getattr(args, "finish_trainer_funding", False))
-            or (prior_switches and not healing_budget)):
+    if (
+        type(healing_budget) is not int
+        or not 0 <= healing_budget <= 2
+        or (healing_budget and not getattr(args, "finish_trainer_funding", False))
+        or (prior_switches and not healing_budget)
+    ):
         raise ValueError("healing budget requires the explicit active-trainer recovery mode")
     ready, failed = prepare(args)
-    if healing_budget and observed_failed_trainer_switches(
-        ready.private_root, args.failed_episode,
-    ) != prior_switches:
+    prior_heal_claims = (
+        remaining_trainer_heal_budget(
+            ready.private_root,
+            args.failed_episode,
+            healing_budget,
+        )
+        if getattr(args, "finish_trainer_funding", False)
+        else 0
+    )
+    if (
+        healing_budget
+        and observed_failed_trainer_switches(
+            ready.private_root,
+            args.failed_episode,
+        )
+        != prior_switches
+    ):
         raise ValueError("declared prior switches differ from the retained failed execution")
     payload = base64.urlsafe_b64decode(failed["state_base64"])
     world = base._route_world(ready)
@@ -169,7 +220,10 @@ def run(args):
                 raise ValueError("trainer recovery must begin at the MAIN battle menu")
             if healing_budget:
                 controller = RedTrainerSurvivalController(
-                    reader, base.ReadOnlyController(emulator), prior_switches, healing_budget,
+                    reader,
+                    base.ReadOnlyController(emulator),
+                    prior_switches,
+                    healing_budget,
                 )
                 first_survival_decision = controller.decide(before.raw)
         if before.party.fainted_count or not (
@@ -209,6 +263,7 @@ def run(args):
             "original_choice_retried": False,
             "finish_trainer_funding": trainer_recovery,
             "maximum_full_restores": healing_budget,
+            "prior_full_restore_claims": prior_heal_claims,
             "prior_switches": list(prior_switches),
             "first_survival_action": (
                 first_survival_decision.kind if trainer_recovery and healing_budget else None
@@ -302,11 +357,18 @@ def run(args):
                         maximum_full_restores=healing_budget,
                         battle_runner_override=(
                             RedTrainerSurvivalController(
-                                reader, frames, prior_switches, healing_budget,
+                                reader,
+                                frames,
+                                prior_switches,
+                                healing_budget,
                                 decision_sink=lambda report: writer.append(
-                                    "trainer_recovery_decisions", report, durable=True,
+                                    "trainer_recovery_decisions",
+                                    report,
+                                    durable=True,
                                 ),
-                            ).run if healing_budget else None
+                            ).run
+                            if healing_budget
+                            else None
                         ),
                     )
                     writer.append(

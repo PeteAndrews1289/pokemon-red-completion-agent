@@ -59,7 +59,10 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
     status adds a full ceil(maxHP/16) residual allowance even for paralysis/freeze.
     Existing poison/burn also receive residual allowance; toxic/seeded/transformed
     states must already have been rejected by the observation adapter.
-    Pure status and indirect damage effects abstain in this first recovery scope.
+    Pure confusion is supported; other pure status and indirect effects abstain.
+    The active member also receives a conservative self-hit allowance whenever
+    already confused or the opponent can induce confusion. Reserves do not
+    self-hit on the switch turn; their real live stats are reread before attacking.
     """
     raw = observation.raw
     if (
@@ -77,14 +80,24 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
     if len(observation.moves) != 4 or not any(observation.moves):
         raise TrainerDamageError("incoming damage move inventory is incomplete")
     result = [0] * raw.party_count
+    confusion_possible = observation.player_confused
     for move_id in observation.moves:
         if not move_id:
             continue
         ref = pokemon_red_move_ref(move_id)
         move = RED_BATTLE_CATALOG.resolve_move(ref)
+        if "confusion" in move.effect_flags:
+            confusion_possible = True
+            if move.power == 0:
+                if move.effect_flags != frozenset({"confusion"}):
+                    raise TrainerDamageError("unsupported compound confusion effect")
+                for index, status in enumerate(raw.party_status):
+                    if status & 0x18:
+                        result[index] = max(result[index], ceil(raw.party_max_hp[index] / 16))
+                continue
         attack_type = RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
-        if attack_type is None or "confusion" in move.effect_flags:
-            raise TrainerDamageError("status/confusion incoming turns are not yet qualified")
+        if attack_type is None:
+            raise TrainerDamageError("status incoming turns are not yet qualified")
         special = move.category == "special"
         attack = observation.enemy_special if special else observation.enemy_attack
         base_attack = observation.enemy_base_special if special else observation.enemy_base_attack
@@ -111,4 +124,24 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
             if "status" in move.effect_flags or raw.party_status[index] & 0x18:
                 worst += ceil(raw.party_max_hp[index] / 16)
             result[index] = max(result[index], worst)
+    if confusion_possible:
+        active = raw.active_party_index
+        if (
+            type(active) is not int
+            or not 0 <= active < raw.party_count
+            or raw.party_levels is None
+            or len(raw.party_levels) != raw.party_count
+            or observation.active_self_hit_stats is None
+        ):
+            raise TrainerDamageError("confusion requires observed active stats and level")
+        attack, defense = observation.active_self_hit_stats
+        result[active] += ordinary_damage_upper(
+            level=raw.party_levels[active],
+            power=40,
+            attack=attack,
+            defense=defense,
+            critical=False,
+            stab=False,
+            effectiveness=1.0,
+        )
     return tuple(result)

@@ -96,7 +96,7 @@ def test_all_five_multi_hits_count_and_existing_burn_adds_residual():
     )
 
 
-@pytest.mark.parametrize("move", [49, 90, 68, 120, 35, 117, 118, 119, 144, 109, 93])
+@pytest.mark.parametrize("move", [49, 90, 68, 120, 35, 117, 118, 119, 144])
 def test_unsupported_damage_and_confusion_abstain(move):
     with pytest.raises((TrainerDamageError, RedBattleCatalogError)):
         incoming_damage_bounds(observation((move, 0, 0, 0)))
@@ -123,6 +123,7 @@ class Memory:
             0xD1BD: 80,
             0xD1C1: 89,
             0xD027: 99,
+            0xD025: 137,
             0xD02B: 88,
         }.items():
             self.values[address], self.values[address + 1] = divmod(value, 256)
@@ -151,6 +152,73 @@ def test_literal_memory_offsets_distinguish_live_base_stats_and_party_stride(mon
     assert result.defenses == ((99, 88, 173, 167), (80, 89, 80, 89))
     assert result.party_types == (("normal",), ("water",))
     assert result.enemy_types == ("ice", "psychic")
+    assert result.active_self_hit_stats == (137, 99)
+    assert result.player_confused is False
+
+
+def confused_observation(moves=(109, 0, 0, 0), **changes):
+    base = observation(moves)
+    return replace(
+        base,
+        raw=replace(base.raw, active_party_index=0, party_levels=(50, 40)),
+        active_self_hit_stats=(100, 100),
+        **changes,
+    )
+
+
+def test_confusion_adds_typeless_noncritical_self_hit_only_to_active():
+    # floor(22*40*100/100/50)+2 =19, not38 critical and noSTAB/type.
+    assert incoming_damage_bounds(confused_observation()) == (19, 0)
+    assert incoming_damage_bounds(confused_observation((34, 109, 0, 0))) == (105, 47)
+    # Confusion has50power: critical44*1.5=66, plus19 self-hit.
+    assert incoming_damage_bounds(confused_observation((93, 0, 0, 0))) == (85, 129)
+    # Already-confused remains risky even if the new opponent cannot induce it.
+    assert incoming_damage_bounds(confused_observation((34, 0, 0, 0), player_confused=True)) == (
+        105,
+        47,
+    )
+
+
+def test_confusion_uses_live_self_stats_and_rejects_unknown_or_overflowed_stats():
+    base = confused_observation()
+    assert incoming_damage_bounds(replace(base, active_self_hit_stats=(200, 100))) == (37, 0)
+    assert incoming_damage_bounds(replace(base, active_self_hit_stats=(100, 200))) == (10, 0)
+    for stats in (None, (0, 100), (100, 1024), (300, 3)):
+        with pytest.raises(TrainerDamageError):
+            incoming_damage_bounds(replace(base, active_self_hit_stats=stats))
+
+
+def test_confusion_observation_requires_active_level():
+    with pytest.raises(TrainerDamageError, match="active stats"):
+        incoming_damage_bounds(observation((109, 0, 0, 0)))
+
+
+def test_confusion_and_enemy_reflect_are_observed_not_treated_as_a_cure(monkeypatch):
+    subject, memory, raw = reader(monkeypatch)
+    memory.values[0xD062] = 0x80
+    memory.values[0xD069] = 0x04
+    result = subject.read_trainer_damage_observation(raw)
+    assert result.player_confused is True
+    assert result.active_self_hit_stats == (137, 198)
+    memory.values[0xD062] = 0x81
+    with pytest.raises(SemanticStateError, match="volatile"):
+        subject.read_trainer_damage_observation(raw)
+
+
+def test_changed_confusion_flag_during_read_rejects_stale_bound(monkeypatch):
+    subject, memory, raw = reader(monkeypatch)
+    calls = 0
+
+    def moves(_):
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            memory.values[0xD062] = 0x80
+        return (109, 0, 0, 0)
+
+    monkeypatch.setattr(subject, "read_trainer_entry_moves", moves)
+    with pytest.raises(SemanticStateError, match="changed"):
+        subject.read_trainer_damage_observation(raw)
 
 
 @pytest.mark.parametrize(

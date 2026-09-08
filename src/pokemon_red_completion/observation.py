@@ -74,6 +74,7 @@ class RamAddress(IntEnum):
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
     BATTLE_MON_DEFENSE = 0xD027
+    BATTLE_MON_ATTACK = 0xD025
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
@@ -3611,6 +3612,8 @@ class TrainerDamageObservation:
     enemy_base_special: int
     defenses: tuple[tuple[int, int, int, int], ...]
     party_types: tuple[tuple[str, ...], ...]
+    player_confused: bool = False
+    active_self_hit_stats: tuple[int, int] | None = None
 
 
 class PokemonRedStateReader:
@@ -3899,7 +3902,8 @@ class PokemonRedStateReader:
         """
         before = self.read()
         if (
-            before != expected or before.battle_state != 2
+            before != expected
+            or before.battle_state != 2
             or (before.enemy_hp or 0) <= 0
             or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
         ):
@@ -3907,8 +3911,10 @@ class PokemonRedStateReader:
         moves = tuple(self._memory.read_u8(int(RamAddress.ENEMY_MOVES) + i) for i in range(4))
         if not any(moves) or any(not 0 <= move <= 165 for move in moves):
             raise SemanticStateError("trainer entry move inventory differs")
-        if (self.read() != before
-                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+        if (
+            self.read() != before
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
             raise SemanticStateError("trainer entry observation changed while reading")
         return moves
 
@@ -3925,18 +3931,39 @@ class PokemonRedStateReader:
             raise SemanticStateError("trainer damage requires an unchanged MAIN boundary")
         if not 0 <= expected.active_party_index < expected.party_count <= 6:
             raise SemanticStateError("trainer damage party indices differ")
-        player_flags = tuple(self._memory.read_u8(
-            int(RamAddress.PLAYER_BATTLE_STATUS_1) + i,
-        ) for i in range(3))
+        player_flags = tuple(
+            self._memory.read_u8(
+                int(RamAddress.PLAYER_BATTLE_STATUS_1) + i,
+            )
+            for i in range(3)
+        )
         enemy_flags3 = self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + 2)
-        if (player_flags[0] or player_flags[1] & 0xF0
-                or player_flags[2] & 0x09 or enemy_flags3 & 0x08):
+        if (
+            player_flags[0] & 0x7F
+            or player_flags[1] & 0xF0
+            or player_flags[2] & 0x09
+            or enemy_flags3 & 0x08
+        ):
             raise SemanticStateError("trainer damage has unsupported volatile mechanics")
         if self._memory.read_u8(RamAddress.ENEMY_UNMODIFIED_LEVEL) != expected.enemy_level:
             raise SemanticStateError("trainer damage unmodified opponent level differs")
-        types = {0: "normal", 1: "fighting", 2: "flying", 3: "poison", 4: "ground",
-                 5: "rock", 7: "bug", 8: "ghost", 20: "fire", 21: "water",
-                 22: "grass", 23: "electric", 24: "psychic", 25: "ice", 26: "dragon"}
+        types = {
+            0: "normal",
+            1: "fighting",
+            2: "flying",
+            3: "poison",
+            4: "ground",
+            5: "rock",
+            7: "bug",
+            8: "ghost",
+            20: "fire",
+            21: "water",
+            22: "grass",
+            23: "electric",
+            24: "psychic",
+            25: "ice",
+            26: "dragon",
+        }
 
         def read_types(base: int) -> tuple[str, ...]:
             try:
@@ -3956,13 +3983,30 @@ class PokemonRedStateReader:
             defenses.append((current_defense, current_special, defense, special))
             party_types.append(read_types(base))
         result = TrainerDamageObservation(
-            expected, moves, read_types(int(RamAddress.ENEMY_SPECIES)),
-            self._read_u16_be(RamAddress.ENEMY_ATTACK), self._read_u16_be(RamAddress.ENEMY_SPECIAL),
+            expected,
+            moves,
+            read_types(int(RamAddress.ENEMY_SPECIES)),
+            self._read_u16_be(RamAddress.ENEMY_ATTACK),
+            self._read_u16_be(RamAddress.ENEMY_SPECIAL),
             self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_ATTACK),
             self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL),
-            tuple(defenses), tuple(party_types),
+            tuple(defenses),
+            tuple(party_types),
+            bool(player_flags[0] & 0x80),
+            (
+                self._read_u16_be(RamAddress.BATTLE_MON_ATTACK),
+                self._read_u16_be(RamAddress.BATTLE_MON_DEFENSE)
+                * (2 if enemy_flags3 & 0x04 else 1),
+            ),
         )
-        if self.read_trainer_entry_moves(expected) != moves:
+        if (
+            self.read_trainer_entry_moves(expected) != moves
+            or tuple(
+                self._memory.read_u8(int(RamAddress.PLAYER_BATTLE_STATUS_1) + i) for i in range(3)
+            )
+            != player_flags
+            or self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + 2) != enemy_flags3
+        ):
             raise SemanticStateError("trainer damage boundary changed while reading")
         return result
 
