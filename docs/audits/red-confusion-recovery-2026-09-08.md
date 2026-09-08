@@ -1,4 +1,35 @@
-# Confusion-aware recovery — working plan
+# Confusion-aware recovery — Lorelei complete
+
+## Verified outcome
+
+Published source8d9dcc064e7397f3cf93de43c4eface1dab65be0 completed the single
+declared recovery in57actions/5413frames. Three slot2 attacks spent three PP;
+Lapras defeated, Lorelei event2273 and5544 payout verified. Zero extra item uses
+or switches, all six unfainted,30specimens/28living/33registered preserved.
+Money619to6163; story ledger30to31 of36. These are deterministic support results,
+not learned victories, new fit rows or a completed Red/Phase4 claim.
+
+Complete checkpoint record8e45b7de retains state93c7fef8, trajectory37af589d.
+Zero-input readback verifies field readiness, unchanged save bytes, actual bag,
+party HP/PP and boxes. No retry of historical2e9 or ef23 is permitted.
+No live self-hit was observed; ROM-free branch qualification remains distinct.
+
+Closeout:176 dashboard/product/roadmap tests also pass. Documentation, public-artifact
+and generated-roadmap checks pass; the infographic was rendered and inspected.
+The local dashboard reports recovery complete and saved checkpoint93c7, not a live
+running emulator. The last actual training panel remains model76. No full-suite or
+hosted-CI pass is claimed.
+
+Flash3.8 High supplied a7second CLI advisory. Accepted its warning to stop when
+alternatives are forced. Rejected a first-input probe as complete option proof,
+and the assertion that three attacks imply three confusion RNG checks: confusion
+flags were not recorded in that result. No source audit or implementation delegated.
+Claude was not used. CLI help exposes no quota command; the bounded app fallback
+did not open Models. Fresh five-hour/weekly quota is unavailable, not zero/unlimited.
+
+Next: connect genuine executable story/restoration choices from93c7 to the native
+learner and fit actual selections. Stop growing battle mechanics now the named
+recovery is complete. See [public result](../evidence/red-confusion-recovery-2026-09-08.json).
 
 ## Mission check before implementation
 

@@ -1,6 +1,28 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — survival is a turn budget, not a health percentage
+## Current — Lorelei is finished, but the model has not learned this victory
+
+The saved Lapras continuation finished in57controller actions and5413frames.
+Three attacks defeated the final opponent; no additional healing item was needed.
+Lorelei's victory flag,5544 payout and a usable field checkpoint were verified.
+All30specimens and six unfainted party members remain; currency is now6163.
+
+An important correction saved unnecessary work: the existing turn controller already
+handled confirmed attacks that returned without spending PP. The missing part was
+conservative confusion damage and carrying consumed healing claims into successors.
+We added and tested those pieces instead of building another battle engine.
+
+This is a completed deterministic support recovery, not new model training. The
+learner still has76 outcomes. No live confusion self-hit was recorded, so three
+successful attacks do not prove that specific branch. Flash's CLI review helped
+challenge the next step, but we rejected its claim that opening an item menu proves
+an entire option executable and its unsupported inference about confusion RNG.
+
+The next useful result must come from actual model-selected story/restoration
+alternatives at the retained checkpoint. No fake branching, no Lorelei replay, and
+no declaration that Phase4 or Red is complete because one supporting skill worked.
+
+## Historical — survival is a turn budget, not a health percentage
 
 The next recovery actually moved the game forward: Blastoise took over, used one
 Full Restore and defeated Jynx. All six party members remained unfainted. The run

@@ -1,5 +1,16 @@
 # Roadmap baseline and deviations
 
+## September8 — Lorelei recovery closes; stop maintenance expansion
+
+Exact-state continuation93c7 is now a completed support checkpoint: Lorelei event
+and5544 payout verified, all30specimens retained, no new model rows. The code already
+supported confirmed no-PP turns, so tests and narrow confusion bounds replaced the
+proposed runtime rewrite. This corrects the prior handoff, not historical evidence.
+
+Return to genuine native story/restoration alternatives before another boss attempt.
+No change to stage exits or the1/3 native-integration checklist. Story31/36 does not
+mean31 learned victories; self-hit remains ROM-free qualified, not live demonstrated.
+
 ## September8 — budgeted recovery advanced; confusion is the next boundary
 
 One separately scoped deterministic recovery replaced the flat half-HP and forced

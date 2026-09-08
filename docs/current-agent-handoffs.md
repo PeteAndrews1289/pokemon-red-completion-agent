@@ -1,6 +1,46 @@
 # Current agent handoffs
 
-## Current — Jynx defeated; retained recovery paused at Lapras
+## Current — Lorelei recovered; return to genuine model choices
+
+Source8d9dcc06 completed one continuation from retained Lapras2e9:57actions/
+5413frames, three slot2 attacks, no additional healing or switching. Lorelei's
+victory event2273 and5544 payout are verified. Field input is ready, all six
+members remain unfainted, and30specimens/28living/33registered are preserved.
+Money is6163; three Full Restores remain. Prior switches[2,4,1] and one earlier
+healing claim remain costs, not a reset. Both previous failed attempts stay consumed.
+
+Current completed episode:`red-phase4-confusion-recovery-20260908-01`.
+Checkpoint record`8e45b7de`, state`93c7fef8`, trajectory`37af589d`.
+This is a completed support checkpoint, not a new independent root or fit label.
+Do not continue from historical mid-battle2e9 or replay Lorelei. No automatic
+resume was granted by the checkpoint; the next native step needs its usual scope.
+
+630 focused tests and lint/type/registry checks pass. Actual live attacks each
+spent PP: no self-hit or lost-turn live validation is claimed. Existing runtime
+already supported confirmed MOVE-to-MAIN without PP; this session qualified that
+behavior, added narrow self-hit bounds and prevented healing budgets resetting
+across failed recoveries. Full Restore does not cure Red confusion.
+
+Model76 is unchanged: zero queries, new examples or authority promotions.
+The story ledger moved30to31 of36, NOT31 model-learned objectives. Income-to-story
+stays1/3 until current-state native story/readiness and a genuine learned choice
+are qualified. Recovery is finished; stop expanding battle mechanics.
+
+Next: inspect genuinely executable story-versus-restoration alternatives from93c7
+in the existing player, then run/fit actual model-selected outcomes. A first menu
+action proves only that action, not the whole option. If the available choice is
+forced, report support rather than inventing alternatives or training labels.
+
+Flash3.8 High completed a short CLI advisory in7seconds. Accepted the forced-choice
+warning. Rejected first-action-as-complete-option proof and its unsupported claim
+that three PP-spending attacks imply three confusion RNG checks. Claude not used.
+No fresh quota measurement: CLI exposes no usage command and the app usage panel
+did not respond during the bounded fallback. Last session's quota is historical.
+Next recommendation: Astra High, Fast off, for the native learning integration.
+
+See [confusion recovery audit](audits/red-confusion-recovery-2026-09-08.md).
+
+## Historical — Jynx defeated; retained recovery paused at Lapras
 
 Published executable9cdecde2 ran exactly one budgeted deterministic recovery.
 It switched to Blastoise, used one Full Restore and defeated Jynx in108actions/

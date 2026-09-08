@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-budgeted-trainer-recovery**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-confusion-recovery**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-confusion-recovery
+
+Lorelei defeated;57actions/5413frames,5544earned, no additional heal or faint. Collection30/28/33 preserved. Model76 unchanged; income-to-story1/3 pending native choice integration.
+
+**Deviation:** Existing no-PP suppressed-turn behavior was already present; qualified it and added narrow confusion bounds instead of another turn engine. No stage exit changed. Live self-hit remains unobserved.
+
+**Next:** From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion.
 
 ### 2026-09-08-budgeted-trainer-recovery
 

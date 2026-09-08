@@ -13,6 +13,19 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Latest CLI review — completed Lorelei recovery
+
+Flash3.8 High provided one7second no-tools advisory, not a source audit. Codex
+accepted the warning against fictitious restoration choices. It rejected a
+single menu input as proof of the complete alternative, and rejected inferred
+confusion RNG outcomes: this run recorded PP-spending attacks, not confusion flags
+or self-hits. Next agents should challenge the actual native option boundary, not
+reopen battle simulation. Claude was not used in this slice.
+
+No fresh service quota was available: the CLI exposes no usage command and the
+bounded app fallback did not open Models. Previously recorded percentages remain
+historical, not evidence of this session's consumption. No permissions changed.
+
 ### Latest bounded reviews — September8 recovery
 
 Claude Opus4.8 High gave no-tools survival advice; Flash3.8 High gave a short

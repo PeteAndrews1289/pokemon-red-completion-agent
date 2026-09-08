@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-budgeted-trainer-recovery",
+  "as_of_session": "2026-09-08-confusion-recovery",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -390,6 +390,12 @@
       "result": "Jynx defeated with one Full Restore in108actions/9456frames; all six unfainted. Paused at Lapras/Confuse Ray. Collection30/28/33 and model76 unchanged; checklist1/3.",
       "deviation": "Explicit separate recovery allows survival-budgeted healing and an emergency switch without a forced attack. All prior failures and costs retained; no stage exit weakened and no support labels.",
       "next": "Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting."
+    },
+    {
+      "session": "2026-09-08-confusion-recovery",
+      "result": "Lorelei defeated;57actions/5413frames,5544earned, no additional heal or faint. Collection30/28/33 preserved. Model76 unchanged; income-to-story1/3 pending native choice integration.",
+      "deviation": "Existing no-PP suppressed-turn behavior was already present; qualified it and added narrow confusion bounds instead of another turn engine. No stage exit changed. Live self-hit remains unobserved.",
+      "next": "From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion."
     }
   ],
   "closed_milestones": [

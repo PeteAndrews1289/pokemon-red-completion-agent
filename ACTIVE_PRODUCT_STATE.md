@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting.
+- Next decision: From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Budgeted deterministic recovery defeated Jynx with one Full Restore; all six party members remain unfainted. Paused at Lapras because confusion turns are unsupported. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Recovery adds0labels/queries. Retained state2e9d70ff faces Lapras after Jynx;30specimens/28living/33registered,619currency,three Full Restores remain. |
+| Reusable capability | Lorelei recovery completed and verified: Lapras defeated,5544 income, all specimens and party preserved. Native model-facing story/restoration choices remain to qualify. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Lorelei recovery adds0labels/queries. Completed checkpoint93c7fef8:30specimens/28living/33registered,6163currency,three Full Restores. Story ledger31/36 is not model-led Red completion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state? |
+| Cheapest falsifier | Does retained post-Lorelei93c7 expose two genuinely executable useful alternatives, rather than a forced boss sequence or an item-menu opening mislabeled as a complete option? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-budgeted-trainer-recovery** · status **active** · evidence [qualification](docs/evidence/red-budgeted-trainer-recovery-2026-09-08.json)
+**2026-09-08-confusion-recovery** · status **active** · evidence [qualification](docs/evidence/red-confusion-recovery-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Maintenance unblocks the named genuine story-versus-preparation lesson. Battle support is not a model authority increase; the no-learning alarm remains active. |
-| Learning output | 108actions/9456frames; Jynx defeated; one Full Restore spent.506 focused tests. Zero model queries/fit rows; collection reverified without input. |
-| Authority delta | Zero authority promotions, model queries or new fit rows. Model76 is unchanged. |
-| Transfer result | Varied ROM-free damage, item-budget, stale-input and switch-history tests pass. No cross-game or independent gameplay evaluation. |
-| Blocker | Lapras has Confuse Ray. Status/confusion damage and non-PP-consuming turn completion remain unsupported. |
-| Decision | Close the consumed Jynx recovery with its actual partial progress. Qualify only the confusion/turn boundary needed for the named story lesson, not a full battle simulator. |
-| Next session | Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting. |
-| Next falsifier | Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state? |
-| Stop condition | Stop unsupported or unsafe turns, preserve exact failure and all cumulative costs. Do not rewind consumed attempts, refresh spent budgets or count support as training. |
+| Product alignment | A completed deterministic battle skill and legitimate resources unblock a genuine story-choice lesson; neither is a learned story victory. |
+| Learning output | 57actions/5413frames; Lorelei victory/payout verified,5544 earned,zero new items or faints.630 focused tests. Zero new training rows. |
+| Authority delta | No model queries, new fit rows or authority promotions. Model76 unchanged. |
+| Transfer result | ROM-free confusion/self-hit/stat/menu cases pass. Live continuation used three PP-spending attacks, not a demonstrated self-hit. No independent transfer. |
+| Blocker | Recovery is complete; the remaining gap is genuinely executable native story/restoration choice and measured learning, not more boss replay. |
+| Decision | Stop battle-mechanics expansion after the completed recovery. Return to the named model-selected story-versus-preparation lesson. |
+| Next session | From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion. |
+| Next falsifier | Does retained post-Lorelei93c7 expose two genuinely executable useful alternatives, rather than a forced boss sequence or an item-menu opening mislabeled as a complete option? |
+| Stop condition | No consumed replay, fictitious alternative, unexecuted labels or further generic simulator. Preserve current checkpoint and costs; if options are forced, do not claim a learned choice. |
 
 ### Stop conditions
 
