@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-useful-precursor-practice**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-retained-ekans-failure**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Useful post-evolution acquisition choices: 3/3 acceptance items (100%).**
+**Safe acquired-precursor evolution: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Qualify alternative precursor plans ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
-- [x] Expose genuine reachable choices ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
-- [x] Play, retain and fit a useful outcome ([evidence](../docs/evidence/red-useful-precursor-practice-2026-09-08.json))
+- [x] Retain and explain the exact failure ([evidence](../docs/evidence/red-retained-ekans-failure-2026-09-08.json))
+- [ ] Qualify encounter-aware recovery
+- [ ] Complete and fit a useful evolution
 
 Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-useful-precursor-practice-2026-09-08.json)
+[Current evidence](../docs/evidence/red-retained-ekans-failure-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-retained-ekans-failure
+
+Model67 chose evolution; Ekans6 to11, no Arbok or fit. Exact failure and six quantum saves retained;27specimens intact. Field/actual-opponent finisher mismatch diagnosed.
+
+**Deviation:** The learned goal was useful but its deterministic execution failed. Archive the prior3/3 acquisition checklist; new safe-evolution checklist1/3 is engineering diagnosis, not learned progress. No reset or stage-exit change.
+
+**Next:** Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode.
 
 ### 2026-09-08-useful-precursor-practice
 

@@ -1,5 +1,16 @@
 # Roadmap baseline and deviations
 
+## September8 — retain partial evolution; qualify recovery without replay
+
+Model67 selected evolution and grew Ekans6 to11 before a deterministic finisher
+selection failure. The consumed attempt remains failed/unfitted; exact state
+and six intermediate saves are retained, not promoted to safe checkpoints.
+Archive the completed useful-acquisition3/3 checklist and begin safe-evolution
+1/3: exact diagnosis done, guarded recovery and completed learned evolution open.
+This is not a Phase3 percentage or a weakened stage exit. No reset or retry ran.
+Next maintenance targets encounter/resource readiness and safe retreat; no new
+teacher, broad architecture change, safety-threshold reduction or Crystal.
+
 ## September8 — authorized practice restart closes useful acquisition
 
 The user approved one clearly labeled historical-save practice restart after

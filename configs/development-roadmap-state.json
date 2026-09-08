@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-useful-precursor-practice",
+  "as_of_session": "2026-09-08-retained-ekans-failure",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
+      "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Useful post-evolution acquisition choices",
+    "title": "Safe acquired-precursor evolution",
     "items": [
       {
-        "id": "alternate-precursor-plan",
-        "label": "Qualify alternative precursor plans",
+        "id": "exact-finisher-failure",
+        "label": "Retain and explain the exact failure",
         "done": true,
-        "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
       },
       {
-        "id": "actual-alternative-menu",
-        "label": "Expose genuine reachable choices",
-        "done": true,
-        "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        "id": "guarded-evolution-recovery",
+        "label": "Qualify encounter-aware recovery",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "useful-alternative-outcome",
-        "label": "Play, retain and fit a useful outcome",
-        "done": true,
-        "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
+        "id": "retained-precursor-evolution",
+        "label": "Complete and fit a useful evolution",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -282,6 +282,12 @@
       "result": "Useful acquisition3/3 closed: model66 chose Route4, retained a spare Ekans6 and fitted67 outcomes.27specimens/26living/31registered; two balls209currency. No Arbok yet.",
       "deviation": "User explicitly authorized one historical Route11 practice restart after lost Route10 terminal. Prior failure853actions/52,068frames preserved separately; same lineage, no independent or uninterrupted-play claim. Stage exits unchanged.",
       "next": "Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-retained-ekans-failure",
+      "result": "Model67 chose evolution; Ekans6 to11, no Arbok or fit. Exact failure and six quantum saves retained;27specimens intact. Field/actual-opponent finisher mismatch diagnosed.",
+      "deviation": "The learned goal was useful but its deterministic execution failed. Archive the prior3/3 acquisition checklist; new safe-evolution checklist1/3 is engineering diagnosis, not learned progress. No reset or stage-exit change.",
+      "next": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode."
     }
   ],
   "closed_milestones": [
@@ -518,6 +524,31 @@
           "label": "Retain and fit a useful source capture",
           "done": true,
           "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-useful-precursor-practice",
+      "stage": "sustained-red",
+      "title": "Useful post-evolution acquisition choices",
+      "items": [
+        {
+          "id": "alternate-precursor-plan",
+          "label": "Qualify alternative precursor plans",
+          "done": true,
+          "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        },
+        {
+          "id": "actual-alternative-menu",
+          "label": "Expose genuine reachable choices",
+          "done": true,
+          "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        },
+        {
+          "id": "useful-alternative-outcome",
+          "label": "Play, retain and fit a useful outcome",
+          "done": true,
+          "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
         }
       ]
     }

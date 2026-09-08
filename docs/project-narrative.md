@@ -1,5 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 8 — choosing the useful goal exposed a recovery gap
+
+The model did choose the next useful evolution. From the actual saved state,
+it selected evolution over capture or healing and trained Ekans6 to11, preserving
+the second Ekans. But it did not finish Arbok: helper resources degraded until
+none passed the actual Drowzee matchup, even though Primeape still passed the
+field's level-only check. The skill then threw before handling escape or recovery.
+
+This is an execution-layer failure, not a completed learning milestone. Model67
+is unchanged; no new row was fitted. All27Pokémon are still retained, and the
+2,751actions/217,562frames remain part of the failed attempt's cost.
+
+There is one concrete improvement over the earlier failure: exact state retention
+worked. We restored and inventoried both the failure and the last of six safe
+quantum records without input. Ekans11 is not lost, but those diagnostic saves
+are not automatically authorized safe continuations. We have a precise recovery
+problem to solve, not a reason to replay the whole lesson or rebuild the model.
+
+Next make resource readiness consistent with actual encounters and qualify a
+bounded safe escape. The prior useful-acquisition checklist stays complete;
+sustained Red and Arbok remain unfinished. Existing252focused tests pass, which
+also tells us the missing real-loop scenario must become a regression test.
+[Audit](audits/red-retained-ekans-failure-2026-09-08.md).
+
 ## September 8 — a useful duplicate, not another species tick
 
 After explicit approval to restart practice from the last safe Route11 save,

@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal.
+- Next decision: Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model67 has67 fitted outcomes/28 successful/57 distinct selected feature rows;46 native/16 regional entries. Model66 selected Route4 from four genuine sources and captured a spare Ekans6. All66 prior rows retained; model67 has not played. This was an explicitly authorized same-lineage practice restart. |
+| Authority now | Model67 chose evolution from capture/evolution/healing alternatives and raised Ekans6 to11 before a deterministic finisher-selection failure. No admitted terminal or fit;67 outcomes/28 successful/57 distinct remain,46 native/16 regional entries. Exact failed state and six quantum saves retained. The model has played; Arbok has not been obtained. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | From the actual Route4 save, can model67 choose a useful next goal while preserving one Ekans and retaining the real outcome? |
+| Cheapest falsifier | Can an adversarial collection-training loop stop before seeking an encounter when the only resource-ready helper fails that encounter's type check, and retreat safely if already in battle? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-useful-precursor-practice** · status **active** · evidence [causal train example](docs/evidence/red-useful-precursor-practice-2026-09-08.json)
+**2026-09-08-retained-ekans-failure** · status **active** · evidence [falsification](docs/evidence/red-retained-ekans-failure-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model selected where to acquire a spare needed for a retained-base evolution. Current inventory now supports Ekans-to-Arbok without sacrificing the living Ekans. |
-| Learning output | Model66 to67: one actual successful source choice,67 retained rows/28 successful/57 distinct;46 native/16 regional entries. Spare Ekans retained:27 specimens,26 living species,31 registered.748 actions/45,276 frames; two balls remain. |
-| Authority delta | One actual regional destination choice fitted; the forced capture parent contributes zero additional rows. No authority promotion or independent advantage. |
-| Transfer result | Exact terminal restored read-only; the actual next-source menu removes fulfilled Route4 demand and exposes one owned-surplus Arbok prerequisite. Same-lineage training, not independent Red/hack/Crystal evaluation. |
-| Blocker | No blocker to the next bounded lesson. Arbok remains uncollected; the new spare enables its retained-base evolution. Model67 has not played, and explicit dependency-unlock reward remains zero for this spare capture. |
-| Decision | Useful-acquisition checklist3/3 closed on played, retained and fitted evidence. Phase3 sustained Red remains current. Continue from the new true Route4 checkpoint, not the historical restart origin. |
-| Next session | Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal. |
-| Next falsifier | From the actual Route4 save, can model67 choose a useful next goal while preserving one Ekans and retaining the real outcome? |
-| Stop condition | One bounded next goal and fit, or stop at a retained unsafe/unsupported failure. Do not retry consumed choices, silently reset, force a desired goal, or admit diagnostic failure state as a safe checkpoint. |
+| Product alignment | Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture. |
+| Learning output | Zero new admitted examples or fits. Model67 chose evolution; Ekans6 to11,27specimens/26living/31registered retained.2751actions/217,562frames; two balls209currency unchanged. |
+| Authority delta | One actual native evolution choice executed, but the unsafe partial is not admitted or fitted. Model67 and its67 earlier outcomes remain unchanged. |
+| Transfer result | Seven manifest streams verified. Exact failure and last quantum both restored without inputs; both retain27specimens.252focused tests pass but do not cover this runtime readiness gap. Same-lineage Red only. |
+| Blocker | Field finisher readiness ignores the actual opponent. After helper resource/status depletion, Primeape passes field checks but fails Drowzee's type matchup; no battle finisher remains. Component throws before recovery, leaving an unsafe terminal. |
+| Decision | Stop the consumed evolution attempt. Audit and preserve exact failure plus six intermediate saves. Keep completed useful-acquisition3/3 archived; declare a focused safe-evolution checklist without changing Phase3 or stage exits. |
+| Next session | Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode. |
+| Next falsifier | Can an adversarial collection-training loop stop before seeking an encounter when the only resource-ready helper fails that encounter's type check, and retreat safely if already in battle? |
+| Stop condition | No replay or additional input in this consumed attempt. Next maintenance is bounded to recovery qualification; diagnostic states do not automatically become safe checkpoints or training labels. Stop on lost-state, collection-loss or unsupported retreat. |
 
 ### Stop conditions
 

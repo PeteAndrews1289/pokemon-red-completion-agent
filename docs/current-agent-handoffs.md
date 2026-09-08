@@ -1,6 +1,35 @@
 # Current agent handoffs
 
-## Current — useful precursor acquisition completed and fitted
+## Current — model67 evolution stopped; exact recovery state retained
+
+Model67 chose evolution from capture/evolution/healing alternatives. Ekans grew
+from level6 to11, then the deterministic training skill found no safe finisher
+against Drowzee9. No Arbok, admitted terminal or fit. Model67 remains67outcomes,
+28successful/57distinct,46native/16regional entries; it HAS played after fitting.
+The episode consumed2,751actions/217,562frames.27specimens/26living/31registered
+remain, including Ekans11 and spare Ekans6; two balls209currency, no observed faint.
+
+The field check can use healthy Primeape, while the actual Psychic matchup rejects
+it. Other helpers fail16-PP,90%-HP or status checks. Structural venue coverage
+ignores current resources; the loop throws before recovery/escape handling.
+252focused tests pass but do not cover this mismatch. No code fix is claimed.
+
+Seven failed-manifest streams verify. Exact167,677-byte failure statead5ab1f2
+round-trips with zero input; six safe-quantum records retained, last63aaa2e3.
+Both states inventoried with27specimens. These are diagnostics, not automatic
+safe checkpoints or training labels. No replay or silent quantum rewind.
+The old Route4 admitted checkpoint is historical, NOT the actual failure location.
+
+Next qualify encounter-aware resource recovery before another battle and a
+separately guarded escape if already in one. Test the real loop across opponent,
+HP/PP/status changes; do not weaken safety margins or add a teacher. Qualify a
+bounded recovery from the exact retained state before another learned continuation.
+Completed acquisition3/3 archived; next safe-evolution1/3 is diagnosis only,
+Phase3unchanged. Codex owns this narrow repair; no outsideagent task is pending.
+No fresh externalquota reading. Recommend Astra High, Fast off.
+[Failure audit and next work](audits/red-retained-ekans-failure-2026-09-08.md).
+
+## Historical — useful precursor acquisition completed and fitted
 
 Model66 selected Route4 from four actual sources and retained a spare Ekans6:
 748 actions,45,276 frames,8 observed wild entries,2 balls spent. No specimen loss

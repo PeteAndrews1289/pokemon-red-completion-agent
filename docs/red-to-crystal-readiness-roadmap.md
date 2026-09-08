@@ -2,7 +2,12 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
-Latest result: one authorized same-lineage practice restart captured a spare
+Latest result: model67 chose the retained Ekans evolution but stopped at level11
+on a resource/opponent finisher mismatch. Exact failure and six quantum saves
+retained; no new fit or Arbok. Next is narrow recovery qualification, not Crystal.
+[Audit](audits/red-retained-ekans-failure-2026-09-08.md).
+
+Historical result: one authorized same-lineage practice restart captured a spare
 Ekans6 from model-selectedRoute4 and fitted66to67.27specimens/26living; useful
 acquisition3/3closed,Phase3current. Actual Route4 terminal enables Arbok22 while
 retaining Ekans; that evolution and model67 post-fit play are still next. No

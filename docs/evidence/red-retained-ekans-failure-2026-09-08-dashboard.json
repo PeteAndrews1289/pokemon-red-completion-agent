@@ -1,0 +1,150 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Model66 chose Route4 from four sources and captured a spare Ekans6. One regional outcome fitted into model67; future Arbok evolution is enabled, not completed.",
+  "session_evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "practice_restarts": 1
+  },
+  "completed_episode": {
+    "actions": 748,
+    "frames": 45276,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-fresh-practice-20260908-causal"
+  },
+  "final_model_post_fit_gameplay": true,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "de09defa4eeffd8f02eba5c4a468ee3a84510912a494a4eb0934bd43ec71f3f1",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 57,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 67,
+      "successful_examples": 28,
+      "total_examples": 67,
+      "train_dataset_sha256": "c7af42c91c1085574dd2024dba85e73b85d134d63a84fed3732f09560abe92e0",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012203328820678356,
+      "weighted_mse_before": 0.026594388002138522
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "6a60ef85ebb00fd230ccc27f640a9b57d61fc41ce7c913f8bb0c974a9d289fe3",
+      "file_sha256": "75f047871fd46c331a11e4068c0a1144683f4f9bdf4d28f9ad9ea267a0272c64",
+      "independent_evaluation": false,
+      "model_sha256": "75408d6f80c8dc3b39c3089ec075bd34b256de65bdd1efbf531099bb8cca8ec3",
+      "prior_model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 67,
+      "source_bundle_sha256": "38d4b4081ad89df99ced9bc4e8f65c6e815c34481ea4b2e3724eb482aa928771",
+      "source_commit": "06371c4b40f14dad5e24a3e09e4052f088733c56"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10604492963393923,
+        0.0000058610245648414095,
+        0.0000567012566296936,
+        0.00622480514504361,
+        0.004608529255317093,
+        0.00129211671435778,
+        0.0006301491568912044,
+        0.0000014244023551581009,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 67,
+      "total_examples": 67,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.013207168509899845
+    },
+    "regional_source_examples": 16,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09702372266129151,
+        0.00000583310570092103,
+        0.00005665933662304112,
+        0.006224370764507852,
+        0.004607929047306891,
+        0.0012840356050086476,
+        0.0006261107976401111,
+        0.0000012980680262102458,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 67,
+      "total_examples": 67,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012203328820678355
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Model67 subsequently chose evolution, raised Ekans6 to11, then failed mid-battle because no resource-safe finisher passed the actual matchup check. No Arbok or new fit. Exact failure and six quantum saves retained; the displayed Route4 checkpoint is historical.",
+    "One correlated training lesson, not generalization or demonstrated model advantage.",
+    "Learned authority selects a destination; navigation, capture preparation and controller decisions remain deterministic skills.",
+    "The spare enables a future retained-base evolution; Arbok is not yet obtained. Explicit completion/dependency gain targets remain zero in this fit.",
+    "Safe travel-budget repair did not reach its interruption limit in this run; exact-cap live behavior remains untested.",
+    "The previous Route10 failure remains excluded from fitting because its true terminal was not retained; its cost is preserved, not erased."
+  ],
+  "next_session": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode.",
+  "current_limitation": "Model67 subsequently chose evolution, raised Ekans6 to11, then failed mid-battle because no resource-safe finisher passed the actual matchup check. No Arbok or new fit. Exact failure and six quantum saves retained; the displayed Route4 checkpoint is historical.",
+  "latest_followup_evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
+}
