@@ -101,8 +101,12 @@ def fixture(monkeypatch):
         provider_for=lambda *_: provider,
         profile=SimpleNamespace(providers=(SimpleNamespace(kind=GoalKind.RESUPPLY),)),
     )
-    router = SimpleNamespace(runtime=runtime, actions=actions, world=SimpleNamespace(rom=b"test"),
-                             trainer_pending_recovery=True)
+    router = SimpleNamespace(
+        runtime=runtime,
+        actions=actions,
+        world=SimpleNamespace(rom=b"test"),
+        trainer_pending_recovery=True,
+    )
     trainer = TrainerSightZone(22, 4, 212, 2, (11, 36), TrainerFacing.UP, 3, 1130, False, True)
     quote = TrainerPartyQuote(212, 2, (TrainerPartyMember(173, 81, 21),), 50, 1050)
     target = TrainerFundingCandidate(
@@ -186,6 +190,37 @@ def test_funding_binding_preserves_alternatives_and_earns_not_buys(monkeypatch):
     with pytest.raises(funding.RedTrainerFundingError, match="consumed"):
         bound.execute()
     assert calls == ["escort", "route", "face", "battle"]
+
+
+@pytest.mark.parametrize("mismatch", [None, "battle", "class", "facing", "defeated", "ambiguous"])
+def test_active_recovery_identifies_only_exact_adjacent_cartridge_trainer(monkeypatch, mismatch):
+    router, state, target, _bindings, calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, battle_state=2, player_y=10, player_x=36)
+    reader = router.runtime.reader
+    reader.read_active_trainer_identity = lambda: (212, 12, 2)
+    if mismatch == "battle":
+        state.raw = replace(state.raw, battle_state=1)
+    elif mismatch == "class":
+        reader.read_active_trainer_identity = lambda: (212, 11, 2)
+    elif mismatch == "facing":
+        reader.read_player_facing = lambda: "up"
+    elif mismatch == "defeated":
+        monkeypatch.setattr(
+            funding, "trainer_sight_zones", lambda *_: (replace(target.trainer, defeated=True),)
+        )
+    elif mismatch == "ambiguous":
+        monkeypatch.setattr(
+            funding,
+            "trainer_sight_zones",
+            lambda *_: (target.trainer, replace(target.trainer, sprite_index=5)),
+        )
+    if mismatch is None:
+        result = funding.active_trainer_funding_candidate(b"test", reader)
+        assert result.trainer == target.trainer and not result.approach.steps
+    else:
+        with pytest.raises(funding.RedTrainerFundingError):
+            funding.active_trainer_funding_candidate(b"test", reader)
+    assert not calls
 
 
 def test_pending_funding_resumes_without_party_menu_route_or_second_interaction(monkeypatch):

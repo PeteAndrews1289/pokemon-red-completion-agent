@@ -23,6 +23,7 @@ from pokemon_red_completion.battle_runtime import (
     run_adaptive_trainer_battle,
 )
 from pokemon_red_completion.observation import (
+    BattleMenuPhase,
     RawGameState,
     event_flag_is_set,
 )
@@ -36,7 +37,7 @@ class TrainerFundingBattleReader(BattleStateReader, Protocol):
 
     def read_bottom_dialogue_box_visible(self) -> bool: ...
 
-    def read_trainer_battle_identity(self) -> tuple[int, int, int, int]: ...
+    def read_active_trainer_identity(self) -> tuple[int, int, int]: ...
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None: ...
 
@@ -172,8 +173,11 @@ def run_prepared_trainer_funding(
     timing: BattleRuntimeTiming,
     maximum_intro_pulses: int = 32,
     maximum_settle_pulses: int = 32,
+    resume_active_battle: bool = False,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared ordinary trainer battle to claim verified funding."""
+    if type(resume_active_battle) is not bool:
+        raise TypeError("resume_active_battle must be boolean")
     if (
         type(maximum_intro_pulses) is not int
         or isinstance(maximum_intro_pulses, bool)
@@ -208,9 +212,10 @@ def run_prepared_trainer_funding(
     validate_target()
 
     initial = reader.read()
-    if initial.battle_state != 0:
+    expected_initial_mode = 2 if resume_active_battle else 0
+    if initial.battle_state != expected_initial_mode:
         raise TrainerFundingBattleError(
-            f"initial battle state {initial.battle_state} must be 0 (overworld)"
+            f"initial battle state {initial.battle_state} must be {expected_initial_mode}"
         )
     if initial.map_id != target.trainer.map_id:
         raise TrainerFundingBattleError(
@@ -227,9 +232,14 @@ def run_prepared_trainer_funding(
             f"player facing {facing!r} does not match "
             f"interaction facing {target.interaction_facing.value!r}"
         )
-    if not reader.read_input_readiness().ready:
+    if (
+        resume_active_battle
+        and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
+    ):
+        raise TrainerFundingBattleError("active trainer recovery requires the MAIN battle menu")
+    if not resume_active_battle and not reader.read_input_readiness().ready:
         raise TrainerFundingBattleError("initial input readiness is not ready")
-    if reader.read_bottom_dialogue_box_visible():
+    if not resume_active_battle and reader.read_bottom_dialogue_box_visible():
         raise TrainerFundingBattleError("dialogue box is visible before interaction")
     if initial.event_flags is None or event_flag_is_set(
         initial.event_flags, target.trainer.event_flag
@@ -268,7 +278,7 @@ def run_prepared_trainer_funding(
         return pending is not None
 
     resuming_pending = pending_start()
-    if not resuming_pending:
+    if not resuming_pending and not resume_active_battle:
         executor.execute(MacroAction(MacroActionKind.INTERACT))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
 
@@ -300,10 +310,9 @@ def run_prepared_trainer_funding(
     expected_identity = (
         target.trainer.trainer_class,
         target.trainer.trainer_class - 200,
-        target.trainer.trainer_class,
         target.trainer.trainer_set,
     )
-    active_identity = reader.read_trainer_battle_identity()
+    active_identity = reader.read_active_trainer_identity()
     if active_identity != expected_identity:
         raise TrainerFundingBattleError(
             f"active battle identity {active_identity} does not match expected {expected_identity}"
@@ -324,7 +333,7 @@ def run_prepared_trainer_funding(
             raise TrainerFundingBattleError(
                 f"battle state {current_raw.battle_state} must be 2 during combat"
             )
-        identity = reader.read_trainer_battle_identity()
+        identity = reader.read_active_trainer_identity()
         if identity != expected_identity:
             raise TrainerFundingBattleError(
                 f"active battle identity {identity} does not match expected {expected_identity}"

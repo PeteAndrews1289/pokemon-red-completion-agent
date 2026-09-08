@@ -29,7 +29,7 @@ from .goal_manager_runtime import (
     GoalVerification,
 )
 from .goal_resource_quote import GoalResourceQuote
-from .observation import event_flag_is_set
+from .observation import PokemonRedStateReader, event_flag_is_set
 from .provenance import canonical_sha256
 from .red_capture_lead import RedCaptureLeadError, plan_capture_lead
 from .red_capture_preparation import prepare_capture_escort
@@ -48,6 +48,47 @@ if TYPE_CHECKING:
 
 class RedTrainerFundingError(RuntimeError):
     """A trainer income opportunity or its retained state is no longer valid."""
+
+
+def active_trainer_funding_candidate(
+    rom: bytes, reader: PokemonRedStateReader
+) -> TrainerFundingCandidate:
+    """Identify an already-active ordinary battle for zero-label failure recovery.
+
+    This does not advertise a new player goal or move out of a trainer sight lane.
+    Only a unique adjacent cartridge trainer matching stable combat identity fits.
+    """
+    raw = reader.read()
+    if raw.battle_state != 2 or raw.map_id is None or raw.player_y is None or raw.player_x is None:
+        raise RedTrainerFundingError("funding recovery requires an active trainer battle")
+    opponent, trainer_class, trainer_set = reader.read_active_trainer_identity()
+    if opponent != trainer_class + 200 or trainer_set <= 0:
+        raise RedTrainerFundingError("active trainer identity is inconsistent")
+    facing = TrainerFacing(reader.read_player_facing())
+    dy, dx = facing.delta
+    at = (raw.player_y, raw.player_x)
+    zones = trainer_sight_zones(
+        trainer_headers(rom, {raw.map_id}, full_event_offsets=True),
+        map_object_events(rom, {raw.map_id}),
+        raw,
+        reader.read_current_map_objects(),
+    )
+    matches = tuple(
+        z
+        for z in zones
+        if z.visible
+        and not z.defeated
+        and (z.trainer_class, z.trainer_set) == (opponent, trainer_set)
+        and z.at == (at[0] + dy, at[1] + dx)
+    )
+    if len(matches) != 1:
+        raise RedTrainerFundingError("active trainer has no unique adjacent cartridge binding")
+    return TrainerFundingCandidate(
+        matches[0],
+        trainer_party_quote(rom, opponent, trainer_set),
+        RoutePlan(MacroPath((raw.map_id,), ()), at, None, (), None, at, None),
+        facing,
+    )
 
 
 def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate, ...]:
@@ -128,7 +169,8 @@ def bind_local_trainer_funding(
     level = observation.party.members[escort.target_index].level
     pending_identity = (
         router.runtime.reader.read_pending_trainer_battle_identity()
-        if router.trainer_pending_recovery else None
+        if router.trainer_pending_recovery
+        else None
     )
     candidates = tuple(
         c

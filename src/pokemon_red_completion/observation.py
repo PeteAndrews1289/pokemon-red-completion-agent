@@ -4169,16 +4169,29 @@ class PokemonRedStateReader:
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
 
     def read_trainer_battle_identity(self) -> tuple[int, int, int, int]:
-        """Read trainer identity; callers must separately establish active battle.
+        """Read diagnostic identity fields, not a stable in-battle identity.
 
         Order: current opponent, normalized trainer class, engaged opponent
-        class, engaged set. These fields may remain stale outside battle.
+        class, engaged set. Engaged fields alias enemy battle stats and are valid
+        only in the field preamble. Use read_active_trainer_identity in battle.
         """
         return (
             self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             self._memory.read_u8(RamAddress.TRAINER_CLASS),
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
             self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+        )
+
+    def read_active_trainer_identity(self) -> tuple[int, int, int]:
+        """Stable opponent, normalized class and trainer number; require battle2.
+
+        The field engagement pair aliases enemy Special/stat-modifier storage
+        once combat initializes. wTrainerNo retains the selected party instead.
+        """
+        return (
+            self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.TRAINER_NUMBER),
         )
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:

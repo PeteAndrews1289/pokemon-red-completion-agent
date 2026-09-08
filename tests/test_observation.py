@@ -90,6 +90,17 @@ def test_trainer_identity_preserves_independent_opponent_class_and_set_bytes():
     assert reader.read_trainer_battle_identity() == (212, 12, 201, 10)
 
 
+def test_active_trainer_identity_ignores_overwritten_engagement_union():
+    memory = RecordingMemory({0xD059: 201, 0xD031: 1, 0xD05D: 10, 0xCD2D: 19, 0xCD2E: 7})
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_active_trainer_identity() == (201, 1, 10)
+    assert memory.reads == [0xD059, 0xD031, 0xD05D]
+    memory.values.update({0xCD2D: 42, 0xCD2E: 6})
+    assert reader.read_active_trainer_identity() == (201, 1, 10)
+    memory.values[0xD05D] = 11
+    assert reader.read_active_trainer_identity() == (201, 1, 11)
+
+
 @pytest.mark.parametrize(
     "change,expected",
     [

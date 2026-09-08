@@ -27,6 +27,7 @@ class ScriptedEnvironment:
     facing: str = "up"
     battle_identity: tuple[int, int, int, int] = (201, 1, 201, 9)
     pending_identity: tuple[int, int] | None = None
+    trainer_number: int = 9
 
     def __post_init__(self) -> None:
         self.actions: list[MacroAction] = []
@@ -41,7 +42,7 @@ class ScriptedEnvironment:
         return self.state
 
     def read_battle_menu_state(self, raw: RawGameState):
-        raise NotImplementedError
+        return SimpleNamespace(phase=funding_battle.BattleMenuPhase.MAIN)
 
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(0 if self.ready else 1, 0, 0, 0, 0)
@@ -54,6 +55,9 @@ class ScriptedEnvironment:
 
     def read_trainer_battle_identity(self) -> tuple[int, int, int, int]:
         return self.battle_identity
+
+    def read_active_trainer_identity(self) -> tuple[int, int, int]:
+        return (*self.battle_identity[:2], self.trainer_number)
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
         return self.pending_identity if self.state.battle_state == 0 else None
@@ -191,6 +195,47 @@ def test_wrong_pending_identity_rejects_before_any_input():
             move_slot_policy=lambda _: 1,
             timing=TIMING,
         )
+    assert not env.actions
+
+
+@pytest.mark.parametrize("wrong_number", [False, True])
+def test_active_battle_recovery_checks_stable_number_not_enemy_stat_union(
+    monkeypatch, wrong_number
+):
+    env = ScriptedEnvironment(
+        make_state(battle_state=2),
+        battle_identity=(201, 1, 19, 7),
+        trainer_number=10 if wrong_number else 9,
+    )
+
+    def finish(reader, executor, policy, **kwargs):
+        kwargs["move_decision_guard"](reader.read())
+        assert policy(reader.read()) == 1
+        env.battle_identity = (201, 1, 40, 6)
+        kwargs["move_decision_guard"](reader.read())
+        env.state = replace(
+            env.state, battle_state=0, player_money=815, event_flags=make_flag_bytes(1139)
+        )
+        return env.state
+
+    monkeypatch.setattr(funding_battle, "battle_runner", finish)
+
+    def run():
+        return run_prepared_trainer_funding(
+            env,
+            env,
+            target=make_candidate(),
+            validate_target=lambda: None,
+            move_slot_policy=lambda _: 1,
+            timing=TIMING,
+            resume_active_battle=True,
+        )
+
+    if wrong_number:
+        with pytest.raises(TrainerFundingBattleError, match="active battle identity"):
+            run()
+    else:
+        assert run().payout == 315
     assert not env.actions
 
 

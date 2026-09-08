@@ -63,3 +63,24 @@ terminal's semantic hash. `--trainer-pending-recovery` therefore explicitly
 separates historical restore (old header defaults false) from new execution;
 new headers retain the mode and reject rollback. The checkpoint comparison stays
 intact. Both rejected preflights sent zero controller input and claimed no episode.
+
+## Actual continuation and second diagnosis
+
+Funding02 consumed 9 actions / 996 frames. Its first action was WAIT; it entered
+the intended battle and stopped at the first MAIN menu, before any move or HP/PP
+loss. Exact failure `1fdce0fc` and failed manifest `5a015dfa` are retained; this is
+not an admitted safe checkpoint or a fit row. Both funding01 and02 stay consumed.
+
+Read-only reload and cartridge WRAM definitions establish that the field
+engagement pair aliases enemy Special/stat-modifier storage in battle: `(201,10)`
+became `(19,7)`. Stable opponent/class/trainer-number reads remain `(201,1,10)`.
+The prior assertion that all four fields remain stable was wrong. Claude's older
+specific explanation was inaccurate, but dismissing the entire lifetime concern
+was too strong; this measured result supersedes that adjudication.
+
+The battle guard now uses stable combat identity. An explicit active-MAIN-menu
+recovery option reuses the existing failed-state support recorder, not a new
+native model choice. It may finish only the unique adjacent cartridge trainer,
+verify exact payout, preserve the collection and publish a zero-label recovery
+checkpoint. No replay of either consumed funding attempt, party preparation,
+healing detour, protected-item use or new model fitting is part of this recovery.

@@ -16,10 +16,12 @@ from pathlib import Path
 
 import run_paired_red_bounded_player as base
 
+from pokemon_red_completion.battle_runtime import DEFAULT_BATTLE_RUNTIME_TIMING
 from pokemon_red_completion.blaine import MANSION_TEAM_POLICY, MANSION_TRAINING_FLEE_TIMING
 from pokemon_red_completion.celadon import _flee
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
+from pokemon_red_completion.observation import BattleMenuPhase
 from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
 from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
@@ -40,11 +42,16 @@ from pokemon_red_completion.red_regional_goal_proposal import (
     regional_proposal_record_id,
 )
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
-from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
+from pokemon_red_completion.red_routed_recovery import (
+    RecoveryRouteInterruptionHandler,
+    bind_routed_center_recovery,
+)
+from pokemon_red_completion.red_routed_trainer_funding import active_trainer_funding_candidate
 from pokemon_red_completion.red_team_training import (
     collection_escape_escort,
     escape_collection_battle,
 )
+from pokemon_red_completion.red_trainer_funding_battle import run_prepared_trainer_funding
 
 
 def restored_proposal_profile(document):
@@ -114,8 +121,17 @@ def run(args):
             reader=reader,
         )
         before = runtime.adapter.observe()
+        trainer_recovery = getattr(args, "finish_trainer_funding", False)
+        trainer_target = None
+        if trainer_recovery:
+            if not ready.trainer_funding or before.party.fainted_count:
+                raise ValueError("trainer recovery requires the funding mode and preserved party")
+            trainer_target = active_trainer_funding_candidate(world.rom, reader)
+            if reader.read_battle_menu_state(before.raw).phase is not BattleMenuPhase.MAIN:
+                raise ValueError("trainer recovery must begin at the MAIN battle menu")
         if before.party.fainted_count or not (
-            before.raw.battle_state == 1
+            (trainer_recovery and before.raw.battle_state == 2)
+            or before.raw.battle_state == 1
             or (
                 before.raw.battle_state == 0
                 and before.input_ready
@@ -148,6 +164,7 @@ def run(args):
             "model_queries": 0,
             "training_examples": 0,
             "original_choice_retried": False,
+            "finish_trainer_funding": trainer_recovery,
         }
         if not args.execute:
             base._write_exclusive(args.out, {**preflight, "status": "ready_read_only"})
@@ -176,6 +193,8 @@ def run(args):
                     "training_eligible": False,
                     "completion_dose": ready.completion_dose,
                     "routed_recovery": ready.routed_recovery,
+                    "trainer_funding": ready.trainer_funding,
+                    "trainer_pending_recovery": ready.trainer_pending_recovery,
                     "remaining_acquisition_demand": ready.remaining_acquisition_demand,
                     "level_evolution_acquisitions": ready.level_evolution_acquisitions,
                     "recovery": preflight,
@@ -209,7 +228,43 @@ def run(args):
             actions = base.CountingExecutor(hard)
             meter = base.CompositionIndependentBudgetMeter(hard, frames)
             try:
-                if before.raw.battle_state == 1:
+                trainer_receipt = None
+                if trainer_target is not None:
+
+                    def validate_trainer():
+                        if active_trainer_funding_candidate(world.rom, reader) != trainer_target:
+                            raise ValueError("active trainer recovery target changed before input")
+
+                    guard = RecoveryRouteInterruptionHandler(
+                        actions,
+                        reader,
+                        tuple(before.raw.party_species_ids or ()),
+                        tuple(range(before.party.size)),
+                        maximum_trainer_battles=0,
+                    )
+                    trainer_receipt = run_prepared_trainer_funding(
+                        reader,
+                        actions,
+                        target=trainer_target,
+                        validate_target=validate_trainer,
+                        move_slot_policy=guard._safe_trainer_move,
+                        timing=DEFAULT_BATTLE_RUNTIME_TIMING,
+                        resume_active_battle=True,
+                    )
+                    writer.append(
+                        "trainer_funding",
+                        {
+                            "event_flag": trainer_target.trainer.event_flag,
+                            "opponent": trainer_target.trainer.trainer_class,
+                            "trainer_set": trainer_target.trainer.trainer_set,
+                            "initial_money": trainer_receipt.initial_money,
+                            "final_money": trainer_receipt.final_money,
+                            "payout": trainer_receipt.payout,
+                            "training_examples": 0,
+                        },
+                        durable=True,
+                    )
+                elif before.raw.battle_state == 1:
                     escape_collection_battle(
                         actions,
                         reader,
@@ -223,24 +278,28 @@ def run(args):
                 # An available FIELD_RESTORE spends items and does not restore
                 # PP. This support operation explicitly requires the Center
                 # mechanic, not whichever same-kind local goal is offered.
-                bindings = bind_routed_center_recovery(
-                    router,
-                    runtime.enumerator(actions).enumerate(runtime.adapter.observe()),
-                    runtime.adapter.observe(),
-                    prepare_escort=lambda: prepare_capture_escort(runtime, actions),
-                    require_pp_restore=True,
+                bindings = (
+                    None
+                    if trainer_recovery
+                    else bind_routed_center_recovery(
+                        router,
+                        runtime.enumerator(actions).enumerate(runtime.adapter.observe()),
+                        runtime.adapter.observe(),
+                        prepare_escort=lambda: prepare_capture_escort(runtime, actions),
+                        require_pp_restore=True,
+                    )
                 )
-                heals = [b for b in bindings.bindings if b.kind is GoalKind.RESTORE_TEAM]
-                if len(heals) != 1:
-                    raise ValueError("recovery lacks one executable Center restore")
-                report = heals[0].execute()
-                if heals[0].verify(report).status is not GoalDecisionOutcome.SUCCEEDED:
-                    raise ValueError("recovery did not verify its healing result")
+                if bindings is not None:
+                    heals = [b for b in bindings.bindings if b.kind is GoalKind.RESTORE_TEAM]
+                    if len(heals) != 1:
+                        raise ValueError("recovery lacks one executable Center restore")
+                    report = heals[0].execute()
+                    if heals[0].verify(report).status is not GoalDecisionOutcome.SUCCEEDED:
+                        raise ValueError("recovery did not verify its healing result")
                 after = runtime.adapter.observe()
                 checks = {
                     "field_ready": after.input_ready and after.raw.battle_state == 0,
                     "zero_faints": after.party.fainted_count == 0,
-                    "hp_status_pp_restored": _raw_party_restored(after.raw),
                     "living_specimens_preserved": (
                         Counter(s.species_ref for s in before.collection_observation.specimens)
                         == Counter(s.species_ref for s in after.collection_observation.specimens)
@@ -248,6 +307,14 @@ def run(args):
                     "pokedex_preserved": before.collection_observation.owned_species
                     == after.collection_observation.owned_species,
                 }
+                if trainer_recovery:
+                    checks["trainer_income_verified"] = (
+                        trainer_receipt is not None
+                        and after.raw.player_money == trainer_receipt.final_money
+                        and after.raw.bag_items == before.raw.bag_items
+                    )
+                else:
+                    checks["hp_status_pp_restored"] = _raw_party_restored(after.raw)
                 writer.append("recovery_verification", checks, durable=True)
                 if not all(checks.values()):
                     raise ValueError(f"recovery verification failed: {checks!r}")
@@ -270,6 +337,8 @@ def run(args):
                     ready.quote_resource_costs,
                     completion_dose=ready.completion_dose,
                     routed_recovery=ready.routed_recovery,
+                    trainer_funding=ready.trainer_funding,
+                    trainer_pending_recovery=ready.trainer_pending_recovery,
                     remaining_acquisition_demand=ready.remaining_acquisition_demand,
                     level_evolution_acquisitions=ready.level_evolution_acquisitions,
                 )
@@ -349,4 +418,5 @@ if __name__ == "__main__":
     parser.add_argument("--failed-state", required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--finish-trainer-funding", action="store_true")
     run(parser.parse_args())
