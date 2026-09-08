@@ -1,5 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 8 — more useful choices, then a travel limit exposed
+
+The stock planner learned no new weights today; its deterministic support became
+more useful. It now recognizes that a spare base Pokémon can become a missing
+evolved form, while preserving the living base and avoiding double-counted
+branches. Four destinations became available from the actual retained save.
+
+The existing model chose Route10. Capture preparation worked, but the journey
+through Rock Tunnel hit16resolved wild-battle interruptions and entered a17th.
+Travel stopped mid-battle, and the checkpoint guard refused to call that a safe
+endpoint. The trace retained853actions and52,068frames, but no exact terminal save.
+There was no capture or fit: model66 still has66training examples.
+
+This is the honest demonstration: useful choice support improved; sustained play
+still depends on safe failure boundaries. We must stop travel while control is
+recoverable and preserve its true endpoint, not silently reload the old save and
+call that progress. The long-term living-Pokédex goal remains unchanged.
+
+Flash contributed eight independent test shapes and a narrow contract review.
+Its suggestion that every branch count must fall after a spare capture was
+corrected: reassignment can keep alternatives useful without cloning a specimen.
+Focused assistance helped; another broad architecture draft would not solve this
+live travel boundary. Codex owns the next repair.
+[Session audit](audits/red-alternative-acquisition-2026-09-08.md).
+
 ## September 8 — knowing when to stop catching, and finding another way
 
 After successfully evolving Primeape while keeping Mankey, the source planner

@@ -3,17 +3,17 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-remaining-acquisition-demand**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-alternative-acquisition**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Useful post-evolution acquisition choices: 0/3 acceptance items (0%).**
+**Useful post-evolution acquisition choices: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Qualify alternative precursor plans
-- [ ] Expose genuine reachable choices
+- [x] Qualify alternative precursor plans ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
+- [x] Expose genuine reachable choices ([evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json))
 - [ ] Play, retain and fit a useful outcome
 
 Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-remaining-acquisition-demand-2026-09-08.json)
+[Current evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-alternative-acquisition
+
+Four sources admitted instead of one; model66 selectedRoute10. Travel failed on wild battle17 after16resolved interruptions.853actions/52,068frames, no capture, terminal save or fit; checklist2/3.
+
+**Deviation:** Failed-skill stop honored. Historical Route11 checkpoint is not this attempt's terminal state. No silent rewind, consumed retry or baseline exit change.
+
+**Next:** Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal.
 
 ### 2026-09-08-remaining-acquisition-demand
 

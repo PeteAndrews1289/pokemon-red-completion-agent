@@ -53,6 +53,12 @@ Recommended: Astra Extra High, Fast off; High for routine execution after qualif
 
 ## Session start — allocation design
 
+Session closed: support qualified2/3, the actual Route10 attempt failed in travel;
+no capture, terminal save or new fit. The declared failed-skill stop was honored.
+See [the audit](../audits/red-alternative-acquisition-2026-09-08.md) and
+[next session](2026-09-08-safe-travel-stop-plan.md). The design below records what
+was implemented; it is not permission to replay the consumed attempt.
+
 Adopt this mission check for the implementation session. Use a directed
 one-specimen transformation graph and reserve one of every held required form.
 Maximum matching allocates spare specimens to missing reachable targets. Candidate

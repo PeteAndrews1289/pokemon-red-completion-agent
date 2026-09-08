@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal.
+- Next decision: Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model66 remains at 66 actual outcomes, 27 successful and 56 distinct rows; 45 native/15 regional entries authenticated. The latest engineering-only session changed no game state, prediction, outcome or fit. Mankey and Primeape remain retained: 26 living/31 registered, four balls, 209 currency, six healthy. |
+| Authority now | Model66 has now selected Route10 from four real source candidates, but travel failed before capture and no terminal checkpoint or fit was produced.66fitted outcomes/27successful/56distinct and45native/15regional entries remain. Historical safe save:26living/31registered; failed trace ended mid-battle with fourballs209currency and six healthy. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the retained Route11/model66 state offer a useful spare-precursor capture alongside Route24 acquisition, without artificial targets or renewed Mankey demand? |
+| Cheapest falsifier | At the configured travel interruption limit, can the next attempt stop with field control and retain an exact resumable endpoint before another movement triggers battle? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-remaining-acquisition-demand** · status **active** · evidence [falsification](docs/evidence/red-remaining-acquisition-demand-2026-09-08.json)
+**2026-09-08-alternative-acquisition** · status **active** · evidence [falsification](docs/evidence/red-alternative-acquisition-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Living completion requires recognizing both completed families and alternative ways to acquire missing forms. Reuse existing skills; no new teacher or full replay. |
-| Learning output | Zero new outcomes or fits. Model66 and all 66 rows remain; the exact saved collection is unchanged at 26 living species / 26 specimens / 31 registrations. |
-| Authority delta | None this session. Corrected deterministic demand removes an unnecessary capture; model66 has not played. |
-| Transfer result | 282 focused ROM-free tests, including 192 exhaustive inventory cases, plus exact historical restore and prospective demand inspection with zero actions/frames/queries. No independent transfer result. |
-| Blocker | Only Route24 capture remains. Eight missing level-evolution targets have retained base forms but no spare; their canonical direct-wild methods omit useful evolution alternatives. |
-| Decision | Demand repair qualified and published. Stop at the actual singleton menu; one engineering-only session triggers reorientation to alternate prerequisite capture, not another teacher or CI loop. Phase3 remains current. |
-| Next session | Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal. |
-| Next falsifier | Can the retained Route11/model66 state offer a useful spare-precursor capture alongside Route24 acquisition, without artificial targets or renewed Mankey demand? |
-| Stop condition | No gameplay launched after the singleton-menu falsifier. Continue only with prospectively qualified useful support; stop on unsafe reserves, false reachability, specimen loss or failed execution. No consumed retry. |
+| Product alignment | Useful precursor choices support living completion, but sustained play also requires bounded travel to leave recoverable state. Reuse existing skills, not another teacher. |
+| Learning output | Zero new fits or admitted outcomes. Model66 remains at66rows/27successful/56distinct. Failed trace retains853actions/52,068frames; no new capture. |
+| Authority delta | Model66 chose Route10 from four admitted sources; failed travel produced no completed capture, new fitted row or authority promotion. |
+| Transfer result | 172focused,162adjacent,39protocol tests;192exhaustive inventories. Four action-free source candidates, then one failed actual route. No independent transfer or whole-route success claim. |
+| Blocker | The 17th wild battle exceeded the 16-interruption route limit. Mid-battle terminal save was refused; exact failed emulator state was not retained. |
+| Decision | Stop at the declared failed-skill boundary. Alternative allocation and actual support are qualified (2/3), but useful played-and-fitted acquisition remains unfinished. Repair safe travel termination next; Phase3 and long-term exits unchanged. |
+| Next session | Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal. |
+| Next falsifier | At the configured travel interruption limit, can the next attempt stop with field control and retain an exact resumable endpoint before another movement triggers battle? |
+| Stop condition | This attempt is consumed. No further gameplay this session; do not waive checkpoint safety, silently restore the old Route11 save as continuous play, or fit incomplete infrastructure diagnostics. |
 
 ### Stop conditions
 

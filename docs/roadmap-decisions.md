@@ -1,5 +1,16 @@
 # Roadmap baseline and deviations
 
+## September8 — useful choices exposed; safe travel termination is next
+
+Four candidate sources qualified with cartridge-derived alternative stock.
+The single Route10 model choice failed at battle17 after the route's16-interruption
+budget.853actions/52,068frames are retained; no capture, terminal save or fit.
+Checklist2/3is engineering/support progress, not a Phase3completion percentage.
+Honor the failed-skill stop and repair safe budget termination next. The older
+Route11 save must not be represented as the failed attempt's final endpoint.
+No baseline IDs, full-run gates, learning counters or Crystal prerequisites changed.
+No further gameplay or implementation patches in this closed session.
+
 ## September8 — completed-family demand repaired; alternative acquisition next
 
 The actual model66 save now closes Mankey demand after the retained Primeape

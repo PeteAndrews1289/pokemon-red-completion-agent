@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-remaining-acquisition-demand",
+  "as_of_session": "2026-09-08-alternative-acquisition",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-remaining-acquisition-demand-2026-09-08.json"
+      "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -43,14 +43,14 @@
       {
         "id": "alternate-precursor-plan",
         "label": "Qualify alternative precursor plans",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
       },
       {
         "id": "actual-alternative-menu",
         "label": "Expose genuine reachable choices",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
       },
       {
         "id": "useful-alternative-outcome",
@@ -264,6 +264,12 @@
       "result": "Remaining-demand repair verified: Mankey+Primeape closes Route5. 282 tests and exact saved restore pass; no inputs, predictions or fits. Model66/26 living unchanged.",
       "deviation": "The corrected menu has only Route24 capture. Stopped as declared; single canonical acquisition methods hide eight evolution alternatives. Old safe-acquisition 3/3 archived intact; next checklist prospective 0/3. Stage exits unchanged.",
       "next": "Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-alternative-acquisition",
+      "result": "Four sources admitted instead of one; model66 selectedRoute10. Travel failed on wild battle17 after16resolved interruptions.853actions/52,068frames, no capture, terminal save or fit; checklist2/3.",
+      "deviation": "Failed-skill stop honored. Historical Route11 checkpoint is not this attempt's terminal state. No silent rewind, consumed retry or baseline exit change.",
+      "next": "Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

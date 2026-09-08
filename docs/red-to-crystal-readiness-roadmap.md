@@ -2,6 +2,12 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
+Latest September8 session: four useful source candidates admitted; the sole
+Route10 attempt stopped in Rock Tunnel after16resolved wild encounters and a17th
+entry. No capture, fit or terminal save; model66unchanged. Next is safe bounded
+travel termination/recovery, not Crystal or another teacher.
+See [the audit](audits/red-alternative-acquisition-2026-09-08.md).
+
 Use the [development infographic](development-roadmap.md), [North Star](../NORTH_STAR.md) and
 [active state](../ACTIVE_PRODUCT_STATE.md). The agreed order is useful and sustained Red play,
 model-led Red story completion, a declared Red-era living collection, an unfamiliar compatible

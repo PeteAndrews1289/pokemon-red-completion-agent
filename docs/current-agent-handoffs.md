@@ -1,6 +1,39 @@
 # Current agent handoffs
 
-## Current — remaining demand repaired; useful alternatives next
+## Current — alternative choices qualified; travel failure stopped the attempt
+
+Published implementation54c96ce0 qualifies four actual source candidates from
+model66's historical Route11 endpoint (previously one): Routes11,4,24,10.
+44cartridge level edges supply spare-precursor alternatives; one living copy is
+reserved, surplus cannot satisfy two branches, and completed Mankey stays closed.
+Parent checkpoint restores with both new modes False; new runtime/header uses
+remaining-demand and level-evolution-acquisitions True. Historical hashes intact.
+
+The consumed red-alternate-precursor-20260908-causal attempt selectedRoute10 with
+probability0.230403. It failed in Rock Tunnel on battle17 after16resolved
+interruptions:853actions/52,068frames. Terminal save refused the mid-battle state.
+No capture, fit or resumable terminal checkpoint. Model66 remains66rows,
+27successful,56distinct;45native/15regional entries. Final recorded party healthy,
+fourballs209currency; terminal boxes were not independently inventoried.
+
+The older Route11 checkpoint is historical, NOT this attempt's endpoint. No
+silent rewind or consumed retry. Stop gameplay at this session's declared failure
+boundary. Next qualify safe travel-budget stopping and durable recovery state,
+then explicitly declare the next execution origin. Do not simply raise the cap.
+Phase3current; this checklist2/3, with useful played-and-fitted outcome unfinished.
+
+Flash3.8High provided a tool-free allocation review and eight literal cases,
+not a source audit. Accepted its allocation/mechanic warnings; corrected its
+branch-count overclaim with an explicit regression. No further Flash task needed.
+After review:79.22%five-hour/95.10%weekly Gemini quota; Claude unused.
+Codex owns the recovery seam and publication. No external work is pending.
+373focused/adjacent/protocol tests pass, including192exhaustive inventories;
+six changed-source type checks and lint pass. No full-suite claim.
+[Audit](audits/red-alternative-acquisition-2026-09-08.md).
+[Next session](work-sessions/2026-09-08-safe-travel-stop-plan.md).
+Recommended: Astra High, Fast off; reserve Extra High for a difficult review.
+
+## Historical — remaining demand repaired; useful alternatives next
 
 Source d63858bf repairs capture demand without replaying the successful evolution.
 The actual model66 checkpoint restores under its historical mode; prospective
