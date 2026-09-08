@@ -1,0 +1,139 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.",
+  "session_evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 5420,
+    "frames": 475256,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-phase3-chain-20260908-05-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "76a9b8c4127022538a181e032567715035f6c29e3263d99d2ff71f7a6d31ebb8",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 62,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 72,
+      "successful_examples": 30,
+      "total_examples": 72,
+      "train_dataset_sha256": "110d615946bfc973538132638e4531c26b6fb6de6250dd2bcd16a576bf836460",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012625411507485152,
+      "weighted_mse_before": 0.026598082742829536
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "27521cfd2288b1ce2b8388bdc673aeff393004b164feba4acb214eb2b984c564",
+      "file_sha256": "296ea83df030f3963e16e28edda713066fdb381a810927be2c9cccec03b2f917",
+      "independent_evaluation": false,
+      "model_sha256": "919bdcaddd8895b89d798de1af9e2686e8758caece160d44a5f2c380ba130b37",
+      "prior_model_sha256": "e7ba612d134fa1e73629644acdd1a2fca42dbe508994ed99333ae84dfbcd2237",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 72,
+      "source_bundle_sha256": "8701b4d7ad83739525db9c30752c8756def2ff5ee635b9703262e070637157d7",
+      "source_commit": "f707fca3044ae0eb15786b9ffeff8ae37af9b775"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10143619539691738,
+        0.0000057734660392117735,
+        0.00005816190015583722,
+        0.006004711921949546,
+        0.004452499263162036,
+        0.001349461935547509,
+        0.00082077458142698,
+        0.0000012631696390207332,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 72,
+      "total_examples": 72,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012680982403870836
+    },
+    "regional_source_examples": 16,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10094332388252276,
+        0.0000057042898748979744,
+        0.00005832588741557384,
+        0.0060016222784625714,
+        0.0044486251371245065,
+        0.0013489940150287869,
+        0.0008208449372713129,
+        0.0000012631396659492338,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 72,
+      "total_examples": 72,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01262541150748515
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "Model72 has not played after fitting; only one useful linked chain demonstrated, not sustained full-game competence.",
+  "next_session": "Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals."
+}

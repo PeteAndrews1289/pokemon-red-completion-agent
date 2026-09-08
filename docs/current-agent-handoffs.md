@@ -1,5 +1,26 @@
 # Current agent handoffs
 
+## Current — Arbok obtained, model72; repeat sustained collection next
+
+The first linked chain now includes a real collection gain. Model71 selected
+EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
+Ekans19, and completed Arbok22 in 5,420 actions / 475,256 frames. Saved-state audit
+confirms a retained base Ekans, all 27 specimens, 27 living / 32 registered species,
+and no observed faint. Model72 retains all 71 previous outcomes plus this success:
+72 fitted outcomes, 30 successful and 62 distinct selected rows.
+
+Across chain01–05: five actual model-selected goals, two successes, three failures,
+15,327 actions / 1,314,789 frames. Travel, storage, healing and evolution occurred
+across multiple regions. This is one correlated development chain, not independent
+evaluation. The safe precursor-evolution milestone is complete (3/3); Phase 3 is
+NOT complete. Next: another useful linked collection chain from actual checkpoint
+a82bd3b6/model72, with two balls and209currency, unchanged budgets and no reset.
+
+[Verified result](evidence/red-phase3-chain-05-2026-09-08.json).
+Claude's latest tools-disabled response invented file inspection and is quarantined,
+not audit evidence. Flash accepted fresh-choice continuation with retained costs;
+its arbitrary ball threshold was rejected. No pending external reviewer.
+
 ## Current — chain03 retained, model70; PC continuation repair
 
 Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).

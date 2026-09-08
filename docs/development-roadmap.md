@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-03**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-05**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Safe acquired-precursor evolution: 2/3 acceptance items (67%).**
+**Repeated sustained collection chains: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Retain and explain the exact failure ([evidence](../docs/evidence/red-retained-ekans-failure-2026-09-08.json))
-- [x] Qualify encounter-aware recovery ([evidence](../docs/evidence/red-resource-recovery-2026-09-08.json))
-- [ ] Complete and fit a useful evolution
+- [x] Retain one varied chain with living gain ([evidence](../docs/evidence/red-phase3-chain-05-2026-09-08.json))
+- [ ] Repeat useful linked collection progress
+- [ ] Audit costs, recovery and phase coverage
 
-Current model: **70 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **72 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-phase3-chain-03-2026-09-08.json)
+[Current evidence](../docs/evidence/red-phase3-chain-05-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-phase3-chain-05
+
+Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.
+
+**Deviation:** Safe precursor-evolution milestone closes 3/3. Broad sustained-Red stage is unchanged and open. Route10 interruption-cap failure remains part of the first chain; no cap increase or automatic target retry.
+
+**Next:** Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals.
 
 ### 2026-09-08-phase3-chain-03
 

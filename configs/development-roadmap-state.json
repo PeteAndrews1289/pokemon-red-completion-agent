@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-phase3-chain-03",
+  "as_of_session": "2026-09-08-phase3-chain-05",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-phase3-chain-03-2026-09-08.json"
+      "evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Safe acquired-precursor evolution",
+    "title": "Repeated sustained collection chains",
     "items": [
       {
-        "id": "exact-finisher-failure",
-        "label": "Retain and explain the exact failure",
+        "id": "first-useful-chain",
+        "label": "Retain one varied chain with living gain",
         "done": true,
-        "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
+        "evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json"
       },
       {
-        "id": "guarded-evolution-recovery",
-        "label": "Qualify encounter-aware recovery",
-        "done": true,
-        "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
+        "id": "repeat-useful-chain",
+        "label": "Repeat useful linked collection progress",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "retained-precursor-evolution",
-        "label": "Complete and fit a useful evolution",
+        "id": "phase3-exit-audit",
+        "label": "Audit costs, recovery and phase coverage",
         "done": false,
         "evidence": null
       }
@@ -306,6 +306,12 @@
       "result": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
       "deviation": "Two bounded executor repairs unblock actual retained state; Phase3 exit and living-collection requirement unchanged. Three linked choices alone do not establish sustained useful progress.",
       "next": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-05",
+      "result": "Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.",
+      "deviation": "Safe precursor-evolution milestone closes 3/3. Broad sustained-Red stage is unchanged and open. Route10 interruption-cap failure remains part of the first chain; no cap increase or automatic target retry.",
+      "next": "Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals."
     }
   ],
   "closed_milestones": [
@@ -567,6 +573,31 @@
           "label": "Play, retain and fit a useful outcome",
           "done": true,
           "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-phase3-chain-05",
+      "stage": "sustained-red",
+      "title": "Safe acquired-precursor evolution",
+      "items": [
+        {
+          "id": "exact-finisher-failure",
+          "label": "Retain and explain the exact failure",
+          "done": true,
+          "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
+        },
+        {
+          "id": "guarded-evolution-recovery",
+          "label": "Qualify encounter-aware recovery",
+          "done": true,
+          "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
+        },
+        {
+          "id": "retained-precursor-evolution",
+          "label": "Complete and fit a useful evolution",
+          "done": true,
+          "evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json"
         }
       ]
     }

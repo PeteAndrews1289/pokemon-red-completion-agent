@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions?",
+      "cheapest_falsifier": "Can the updated model repeat useful collection progress from its actual post-Arbok state under the remaining ball, money and party constraints?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Two actual native outcomes fitted68to70, healing success and acquisition failure; no authority promotion.",
-        "blocker": "Retained generic PC menu must close before movement; its root cursor does not use the stale bag-scroll offset.",
-        "decision": "Correct the observed menu check and normalize actual Center position through computed walking. Continue from the consumed attempt's retained endpoint.",
+        "authority_delta": "Five actual goal outcomes fitted67to72; one new living species, no authority promotion or independent advantage.",
+        "blocker": "One useful chain now demonstrated, but repeated sustained collection progress is still needed. Two balls and209currency constrain the next goals.",
+        "decision": "Close only the safe precursor-evolution milestone. Continue fresh model-directed choices from the earned terminal; preserve all failures.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-phase3-chain-03-2026-09-08.json",
-          "sha256": "6921dc2b0751ff3aff77478b933021cfa83e288e11f5d9ff5296dd35eb6e54fb"
+          "path": "docs/evidence/red-phase3-chain-05-2026-09-08.json",
+          "sha256": "76fcec2eadc13b0bc5f59f6fa5a0c798d32431b23251489a86eb782854494a0d"
         },
-        "learning_output": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
-        "next_falsifier": "Can the learner advance the living collection from the actual healed Ekans19/PC state, then continue choosing useful goals across regions?",
-        "next_session_goal": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.",
+        "learning_output": "Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.",
+        "next_falsifier": "Can the updated model repeat useful collection progress from its actual post-Arbok state under the remaining ball, money and party constraints?",
+        "next_session_goal": "Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals.",
         "product_alignment": "Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture.",
-        "session_id": "2026-09-08-phase3-chain-03",
+        "session_id": "2026-09-08-phase3-chain-05",
         "status": "active",
         "stop_condition": "Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning.",
-        "transfer_result": "Same-lineage Red only.412 focused tests pass; no independent evaluation or transfer claim."
+        "transfer_result": "Correlated Red development across multiple regions and three goal kinds. No independent evaluation. Arbok22 verified by saved-state reload; no observed faint or specimen loss."
       },
       "learned_authority": {
-        "current": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
+        "current": "Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3.",
+      "next_decision": "Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
