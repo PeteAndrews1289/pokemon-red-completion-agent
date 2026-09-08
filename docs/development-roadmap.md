@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-05**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-sustained-closeout**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Repeated sustained collection chains: 1/3 acceptance items (33%).**
+**Resource-backed story progression: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Retain one varied chain with living gain ([evidence](../docs/evidence/red-phase3-chain-05-2026-09-08.json))
-- [ ] Repeat useful linked collection progress
-- [ ] Audit costs, recovery and phase coverage
+- [ ] Qualify safe trainer funding from real state
+- [ ] Earn funds, buy supplies, continue collection
+- [ ] Fit a genuine resource or story-goal choice
 
-Current model: **72 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **75 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -40,7 +40,7 @@ Search history must inform learned choices, not a scripted rule forcing another 
 
 [Current evidence](../docs/evidence/red-complete-evolution-learning-2026-09-07.json)
 
-### 03. Sustain model-directed play — current
+### 03. Sustain model-directed play — verified
 
 Combine navigation, battles, captures, resources and recovery.
 
@@ -48,15 +48,17 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-phase3-chain-05-2026-09-08.json)
+[Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — planned
+### 04. Finish Red with the model — current
 
 Plan quests, prerequisites and puzzles through the Champion.
 
 **Exit criterion:** Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
+
+[Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -91,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-phase3-sustained-closeout
+
+Phase3 bounded milestone complete: two linked chains with5and3 genuine model choices, two new living species (Arbok andElectrode),54,971actions/4,913,974frames including all failures/support. Model75:75 fitted outcomes,33successful,65distinct rows.28living/29specimens/33registered; zero losses or observed faints. Same-lineage development, not independent advantage or full Red.
+
+**Deviation:** No baseline or exit change. Regional choices count at their actual hierarchy; support and safety-rule steps stay zero-label. Private prospective unique-evolution and cash-only profile exposure is disclosed operator orchestration, not autonomous multi-target planning. Stage4 begins with a bounded funding/event skill, not a full replay.
+
+**Next:** From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion.
 
 ### 2026-09-08-phase3-chain-05
 

@@ -1,6 +1,40 @@
 # Handoff
 
-## Current — Arbok obtained, model72; repeat sustained collection next
+## Current — Phase 3 closed; model75 and resource-backed story work next
+
+Two linked chains met the unchanged bounded sustained-Red exit: five and three
+actual model-selected choices, with Arbok and Electrode added while their base
+forms remained. All failures/support costs are retained: 54,971 actions and
+4,913,974 frames across12episodes. Eight actual outcomes fitted model67 to75;
+four support-only episodes add zero labels. This is correlated development,
+not independent advantage, broad autonomy or learned Red completion.
+
+The final Route11(18,9) checkpoint d8151f88 reloads with29specimens,28living species
+and33registered. Ekans6/Arbok22 and Voltorb16/Electrode30 coexist; two Drowzee13
+offer a possible Hypno continuation. No observed faint or specimen loss. Model75
+has75outcomes,33successful,65distinct rows;58native and18regional inventory records.
+All prior rows are retained. Model74 played after fitting; model75 has not yet.
+
+Zero balls and9currency remain. A zero-input cartridge/event inventory found four
+unbeaten local trainers, but their route, battle, payout and income capability
+are NOT qualified. That is the next practical story/resource seam—not a new full
+teacher replay or a reason to sell protected recovery stock. Trainer rewards are
+finite, not renewable income. The original North Star and full-run gate are unchanged.
+
+Codex owns implementation and publication. Claude Opus4.8 High and Flash3.8 High
+reviewed supplied facts; both accepted the bounded criteria and warned about thin
+model authority and finite resources. A prior fabricated Claude tool/file review
+remains quarantined. No external reviewer or emulator run is pending.
+Full pinned ROM-free suite:8,037passed; private composition checks:16passed.
+Latest Gemini remaining:98.72%five-hour/95.79%weekly at05:24:43UTC; Claude quota
+unavailable, not inferred from token charges.
+
+[Closeout audit](docs/audits/red-phase3-sustained-closeout-2026-09-08.md).
+[Actual evidence](docs/evidence/red-phase3-sustained-closeout-2026-09-08.json).
+[Next work plan](docs/work-sessions/2026-09-08-resource-backed-story-plan.md).
+Recommended next session: Astra High, Fast off for bounded skill qualification.
+
+## Historical — Arbok obtained, model72; repeat sustained collection next
 
 The first linked chain now includes a real collection gain. Model71 selected
 EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
@@ -21,7 +55,7 @@ Claude's latest tools-disabled response invented file inspection and is quaranti
 not audit evidence. Flash accepted fresh-choice continuation with retained costs;
 its arbitrary ball threshold was rejected. No pending external reviewer.
 
-## Current — chain03 retained, model70; PC continuation repair
+## Historical — chain03 retained, model70; PC continuation repair
 
 Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).
 Chain03 selected acquisition but stopped before any storage transfer (73 actions /
@@ -38,7 +72,7 @@ Phase 3 remains open: three choices with only healing success are insufficient.
 See [chain evidence](docs/evidence/red-phase3-chain-03-2026-09-08.json) and the
 unchanged [phase plan](docs/work-sessions/2026-09-08-phase3-completion-plan.md).
 
-## Current — chain01 retained and fitted; model68 continues from Ekans19
+## Historical — chain01 retained and fitted; model68 continues from Ekans19
 
 Actual selected evolution failed after8,899actions/778,549frames. Ekans11to19,
 27specimens intact, no Arbok. Safe terminal5b9cd135 retained; model68 now68outcomes,
@@ -49,7 +83,7 @@ and a readiness-based ineffective-heal sentinel, with total safety budgets uncha
 Next authenticate chain01/model68 and run a new real model choice; no reset/retry.
 Helper poison remains an explicit recovery need. Phase3stillopen; checklist2/3.
 
-## Current — exact failure recovered; return to model-directed progress
+## Historical — exact failure recovered; return to model-directed progress
 
 Source41368404 admits the actual healed Center endpoint215d7b49, preserving
 all27specimens and Ekans11. Three support operations cost213actions/14,868frames;
@@ -256,7 +290,7 @@ Details and quotas: [bounded-search audit](docs/audits/red-bounded-search-contin
 Recommended next session: Astra Extra High, Fast off; review the mixed-goal boundary,
 then return to High for routine execution. No measured speed or token-cost ratio.
 
-## Current — real recovery, safe failed search, model64 retained
+## Historical — real recovery, safe failed search, model64 retained
 
 The actual fainted AA party recovered through a Pokemon Center: 163 actions and
 9,156 frames, all six members healthy and all25 specimens preserved. Capability-
@@ -336,7 +370,7 @@ not an attribution of all consumption to this task.
 [Detailed review](docs/work-sessions/2026-09-07-flash-safe-capture-prototype.md).
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -497,7 +531,7 @@ newly withdrawn Pokemon is healthy. The system must verify changed state, not
 assume that reaching a location means its intended interaction succeeded.
 Older current-labelled entries below are historical.
 
-## Current — U/model60; resource recovery is next
+## Historical — U/model60; resource recovery is next
 
 The fresh acquisition failed after607actions42384frames and two spent balls.
 Storage preparation worked: active headroom1→20, all25specimens/23living species
@@ -531,7 +565,7 @@ still running; latest GitHub recheck is pending. Neither is claimed green. See
 the private operator note for the already-running process; do not duplicate it.
 Prior headings below are historical checkpoints, not instructions to resume S.
 
-## Current — mixed-goal learning complete; S/model59 retained
+## Historical — mixed-goal learning complete; S/model59 retained
 
 S's exploratory native goal selected evolution, developed Abra12 into Kadabra16
 with Confusion, and retained Abra10/all25specimens.23living/28registered,zero losses.
@@ -565,7 +599,7 @@ model58/R and all25specimens remain unchanged. Next exact-save feasibility and a
 bounded productive lesson, not another source-only capture or full replay.
 [Qualification](docs/evidence/red-shared-experience-qualification-2026-09-07.json).
 
-## Current — mixed-goal wiring qualified; stopped at actual feasibility
+## Historical — mixed-goal wiring qualified; stopped at actual feasibility
 
 September 7 session started 12:50 UTC; reassess by14:20, close by14:50.
 Model58 and R's22living/25specimens remain unchanged; no new gameplay or fit.
@@ -611,7 +645,7 @@ additions separately. No outside agents invoked. The six-hour cycle grew45→58e
 16→22living species (18→25specimens). Six of13new eligible outcomes succeeded; this is not
 a measured generalization win rate. Full Red story/living-dex completion and transfer remain open.
 
-## Current — model56; automatic failure fit verified, two-step milestone unfinished
+## Historical — model56; automatic failure fit verified, two-step milestone unfinished
 
 Q's first source choice selected Route24 and exhausted its finite search after212actions/
 10236frames. The cycle automatically fitted the actual failure, retaining all55 earlier
@@ -633,7 +667,7 @@ Current model f902d53722bdeebfc5f8d90761da513192a1c49ea58ee96c8275e822eccf5efd;
 checkpoint8d8eb81df8c665b1d3a0b4007ba01a679c41bfbc68016bec3108f1d6a97e046a.
 Private OPERATOR and inspect_incremental_after_q.py identify exact paths; never publish them.
 
-## Current — model55; affordable capture closed, incremental cycle next
+## Historical — model55; affordable capture closed, incremental cycle next
 
 P captured Abra10 on model-selected Route24 with one ball:21living/23specimens/26registered,
 4balls109currency; exact restore passed, no losses. Fit55 retains all54 earlier rows,
@@ -641,7 +675,7 @@ P captured Abra10 on model-selected Route24 with one ball:21living/23specimens/2
 next1/3 checklist is bounded collect/fit/continue. No real cycle has launched yet.
 [Audit](docs/audits/red-incremental-learning-cycle-2026-09-07.md). Codex owns work through10:57UTC.
 
-## Current — O restored resources; escape-aware follow-up next
+## Historical — O restored resources; escape-aware follow-up next
 
 O succeeded at purchase and healing,877actions54612frames; exact restore passed5balls,
 109currency,healthy helper,20living/22specimens/25registered. Both steps are nonexploratory
@@ -650,7 +684,7 @@ Next qualify actual enemy escape-effect observation and avoid setup before the f
 No P is launched. This is deterministic skill support, not learned capture strategy or
 vision-only play. [Audit](docs/audits/red-affordable-continuation-2026-09-07.md).
 
-## Current — model54; productive follow-up closed, affordable continuation next
+## Historical — model54; productive follow-up closed, affordable continuation next
 
 N selected Route10 and caught Voltorb16:1263actions76296frames,20living species/22specimens,
 25registered and zero losses. Exact restore passed. Fit53→54 retains all53 prior rows,
@@ -663,7 +697,7 @@ The next checklist is1/3: affordable purchasing is qualified locally; actual res
 and a productive fresh model continuation. No hidden item sale, cash injection or reset.
 [Evidence](docs/evidence/red-capture-status-result-2026-09-07.json).
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -735,7 +769,7 @@ test varied multi-goal play with model45. Do not replay the closed success or bu
 Model45 itself has not played; sustained autonomy, history advantage and transfer remain unproved.
 Earlier “Current” headings below are historical. Private OPERATOR retains exact identities.
 
-## Current — 41 examples; capture and complete evolution qualified
+## Historical — 41 examples; capture and complete evolution qualified
 
 Read the [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md).
 Model `64165737` retains41 examples (15 successful), up from35. C's model-selected capture
@@ -751,7 +785,7 @@ The declared H/I/J practice branch starts from history-bearing D with model41, n
 it is correlated training, not independent evaluation. G is cancelled unused. See session plan
 and private OPERATOR. No new source/route work or external reviewer in this batch.
 
-## Current — Rapidash40 verified; connect the complete option to learning
+## Historical — Rapidash40 verified; connect the complete option to learning
 
 The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Ponyta35 to
 Rapidash40, +21221 XP, all17 specimens retained, living14 to15 and registered19 to20. The spare
@@ -767,7 +801,7 @@ after four battles. Next integrate bounded complete evolution into the player, t
 model-selected lesson and fit. Do not count partial XP as successful evolution or admit diagnostics.
 Do not broaden the teacher or resume gameplay before the next declared session plan.
 
-## Current — level 35; party-selection verification blocks completion
+## Historical — level 35; party-selection verification blocks completion
 
 The [throughput audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP,
 level 32 to 35, with all 17 specimens retained. Eighteen returned quanta report 72 completed
@@ -786,7 +820,7 @@ party orders. Then complete one bounded evolution and return to a model-selected
 XP throughput is no longer the leading concern. No route rewrite or new learner feature.
 110 focused tests and 400-file types passed; see the audit for remaining evidence boundaries.
 
-## Current — resumable XP works; complete evolution is next
+## Historical — resumable XP works; complete evolution is next
 
 Read [active state](ACTIVE_PRODUCT_STATE.md) and the
 [resumable evolution audit](docs/audits/red-resumable-evolution-2026-09-07.md).
@@ -809,7 +843,7 @@ budget. Partial quanta currently verify as incomplete, not successful goals; set
 and terminal provenance before model lessons. No new features, teacher replay or Crystal.
 Private OPERATOR notes retain exact paths. Earlier current headings below are history.
 
-## Current — Center farewell repaired; reorient on viable evolution training
+## Historical — Center farewell repaired; reorient on viable evolution training
 
 Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and the
 [Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md). The apparent collision
@@ -838,7 +872,7 @@ Local verification: 370 focused gameplay/control tests, 112 protocol/focus/roadm
 one stale current-source golden is repaired and its entire protocol file passed. No full-suite
 claim for this session. Regenerated current bundle: `3adc80a8...ba2f1e7`.
 
-## Current — 35 examples; saved Center PC access is the next blocker
+## Historical — 35 examples; saved Center PC access is the next blocker
 
 Final local regression: 7184 passed, 1 skipped, 1 xfailed (17m08s); 400-source-file type check,
 formatting, docs, focus, public-artifact and registry checks passed. No gameplay or fitter is active.
@@ -859,7 +893,7 @@ No Mansion replay, fixed walk string, arbitrary party grinding or new learner fe
 Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
 Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
 
-## Current — history learner ready; connect a useful collection skill
+## Historical — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](docs/audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
 history while keeping all 32 old examples explicitly unknown. The separate initialized model
@@ -889,7 +923,7 @@ in `docs/roadmap-decisions.md`; do not silently move the goals. Reuse the existi
 The actual next coding task is connecting the existing boxed-evolution skill, then collecting
 an authentic useful-choice lesson for the now-qualified history-aware learner.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The
@@ -905,7 +939,7 @@ revive a teacher/CI campaign. Earlier sections below are historical.
 
 
 
-## Current — 32-example update complete; search memory is next
+## Historical — 32-example update complete; search memory is next
 
 Read [the saved-endpoint audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md).
 The sampled continuation added one failed-search outcome and actual costs; the fit retained all
@@ -917,7 +951,7 @@ acquisition-only loop, arbitrary grinding or CI gate. Private OPERATOR has exact
 Codex owns implementation. No external audit occurred. Earlier handoffs are historical.
 
 
-## Current — unsuccessful-search recovery verified; return to sampled learning
+## Historical — unsuccessful-search recovery verified; return to sampled learning
 
 Read [the September 6 recovery audit](docs/audits/red-search-recovery-2026-09-06.md).
 The same unsuccessful search now ends safely with a fresh ledger and restorable endpoint:
@@ -928,7 +962,7 @@ Next: explicit verified profile transition and a short existing-collector learni
 retain lineage/31 prior rows, negatives and costs. No arbitrary party grind or new teacher.
 Earlier handoffs below are historical.
 
-## Current — continuation ran and failed; recover ordinary no-find outcomes next
+## Historical — continuation ran and failed; recover ordinary no-find outcomes next
 
 The [session](docs/work-sessions/2026-09-06-fit31-continuation.md) implemented the thin continuation
 consumer and executed the exact published `e1dd3af8` attempt once. Fresh restore/lineage checks passed.
@@ -954,7 +988,7 @@ have not been invoked. Native R1 B and all earlier attempts remain closed, not r
 
 Earlier completed-session details follow.
 
-## Current — native learning complete: 31 examples, bounded continuation next
+## Historical — native learning complete: 31 examples, bounded continuation next
 
 Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the
 [session audit](docs/audits/red-native-player-learning-2026-09-06.md), and
@@ -1014,7 +1048,7 @@ See the prospective amendment in the session plan; preserve every attempt in the
 
 All prior sections below describe earlier checkpoints unless confirmed by a newer result.
 
-## Current — resource-aware chain COMPLETE; durable continuation and viewer recap
+## Historical — resource-aware chain COMPLETE; durable continuation and viewer recap
 
 The run from published `8318ca11` completed. The hybrid finished four goals in 656 actions /
 40,368 frames: safety supply, single-supported acquisition, model-ranked acquisition and
@@ -1689,7 +1723,7 @@ preflight mode. Only a zero-effect success permits the real production-resolver 
 bounded model-selected development outcomes. Do not repeat the census/freeze, substitute another
 root, fit on development, open Crystal or run a full replay.
 
-## Current checkpoint: census and three-root freeze succeeded; wire the supplement consumer
+## Historical checkpoint: census and three-root freeze succeeded; wire the supplement consumer
 
 PR 212 merged at `7d654cdf8419a116ab8716b6b1b03a91069ae292`. PR CI `33913706704/1`
 and main CI `33915908264/1` each passed **6,691 tests**, with four skips and one expected failure.
@@ -1740,7 +1774,7 @@ The [coding-model comparison log](docs/coding-model-comparison.md) records the i
 GPT-6 implementation, corrections, both CI timings, successful production results and unknown usage.
 No learner counter or global authority changed this session. No campaign or emulator remains active.
 
-## Current checkpoint: stop repeated validation before resuming the development gate
+## Historical checkpoint: stop repeated validation before resuming the development gate
 
 PR 211 is merged at `32dcb064a58ee426099bcf21ea341f9678b30325`; CI `33904380404/1`
 passed. The subsequent census authenticated 81 contexts but spent more than 65 minutes inside
@@ -1768,7 +1802,7 @@ Keep the owner's [coding-model comparison log](docs/coding-model-comparison.md) 
 Distinguish inherited diagnosis, model corrections, infrastructure time and verified outcomes;
 leave token/quota usage unknown when it is not observable.
 
-## Current checkpoint: the Red adapter mixed train roots into a development-only join
+## Historical checkpoint: the Red adapter mixed train roots into a development-only join
 
 PR 210 merged as exact main `c1fb1bca00ab113d67b362609102ff5464616049`; exact-main CI
 `33896140351/1` passed all 6,687 selected hosted tests. Its protected binding census then failed
@@ -1793,7 +1827,7 @@ retry the terminal original freeze. No model prediction, teacher query, claim, o
 action, emulator frame, authority promotion, Crystal task, or full replay occurred here. See the
 [failure and diagnosis evidence](docs/evidence/red-living-dex-development-supplement-binding-diagnostic-failure-v1-2026-09-04.json).
 
-## Current checkpoint: the exact three-root supplement freezer is locally qualified
+## Historical checkpoint: the exact three-root supplement freezer is locally qualified
 
 The action-free supplement freezer now derives private exclusion sets from the complete train
 corpus and historical schedules, removes every overlapping lineage, physical root, and state, and
@@ -1858,7 +1892,7 @@ exactly three new independent roots with `manage_storage` coverage. Only then ma
 make one development choice per admitted root. Do not refit on development, replace a failed setup,
 open Crystal or sealed Red, or run a full game.
 
-## Current checkpoint: two held exam roots survived; generate only the measured gap
+## Historical checkpoint: two held exam roots survived; generate only the measured gap
 
 The eighteen-example title-neutral causal model is fitted and remains shadow-only. A local
 action-free audit reopened its authenticated train corpus, exact private model record, the original
@@ -1876,7 +1910,7 @@ model-led outcome gate and compare the existing model without refitting. Do not 
 10+5 classroom build, consume the clean roots during engineering, retry consumed identities, open
 Crystal or sealed Red, or run a full replay.
 
-## Current checkpoint: the complete causal classroom is fitted; fresh roots are next
+## Historical checkpoint: the complete causal classroom is fitted; fresh roots are next
 
 PR 205 merged as exact main `4414215e0910c69657371d871ae92e16d8078419` and passed push CI
 `33856641047/1`. The action-free updater then fitted one immutable model from all **18 authenticated
@@ -1895,7 +1929,7 @@ and four lineage-disjoint untouched development roots across the required semant
 not rebuild the shared contract, replay pairs 004–006, select roots from outcomes, open Crystal, or
 grant authority. Fit only the new train outcomes and compare once on untouched development.
 
-## Current checkpoint: bounded multi-decision acquisition works; new roots are next
+## Historical checkpoint: bounded multi-decision acquisition works; new roots are next
 
 The binding-retention repair merged as main `7133d171654ecf7b0686509678803b3059b6cf7b`
 under green exact-main CI `33848221585`. Pair 006 then used the first action-free eligible unused
@@ -10332,7 +10366,7 @@ permission to create private local checkpoints.
 intent constraints, deterministic target baseline, and authored menu/route executor are separate
 authorities. A win counts only for the authority actually exercised.
 
-## Current checkpoint — 2026-08-08
+## Historical checkpoint — 2026-08-08
 
 This section supersedes the older starting-point and test-count notes below.
 

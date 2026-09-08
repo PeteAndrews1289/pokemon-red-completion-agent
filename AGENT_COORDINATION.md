@@ -1,6 +1,40 @@
 # Three-agent coordination
 
-## Current — Arbok obtained, model72; repeat sustained collection next
+## Current — Phase 3 closed; model75 and resource-backed story work next
+
+Two linked chains met the unchanged bounded sustained-Red exit: five and three
+actual model-selected choices, with Arbok and Electrode added while their base
+forms remained. All failures/support costs are retained: 54,971 actions and
+4,913,974 frames across12episodes. Eight actual outcomes fitted model67 to75;
+four support-only episodes add zero labels. This is correlated development,
+not independent advantage, broad autonomy or learned Red completion.
+
+The final Route11(18,9) checkpoint d8151f88 reloads with29specimens,28living species
+and33registered. Ekans6/Arbok22 and Voltorb16/Electrode30 coexist; two Drowzee13
+offer a possible Hypno continuation. No observed faint or specimen loss. Model75
+has75outcomes,33successful,65distinct rows;58native and18regional inventory records.
+All prior rows are retained. Model74 played after fitting; model75 has not yet.
+
+Zero balls and9currency remain. A zero-input cartridge/event inventory found four
+unbeaten local trainers, but their route, battle, payout and income capability
+are NOT qualified. That is the next practical story/resource seam—not a new full
+teacher replay or a reason to sell protected recovery stock. Trainer rewards are
+finite, not renewable income. The original North Star and full-run gate are unchanged.
+
+Codex owns implementation and publication. Claude Opus4.8 High and Flash3.8 High
+reviewed supplied facts; both accepted the bounded criteria and warned about thin
+model authority and finite resources. A prior fabricated Claude tool/file review
+remains quarantined. No external reviewer or emulator run is pending.
+Full pinned ROM-free suite:8,037passed; private composition checks:16passed.
+Latest Gemini remaining:98.72%five-hour/95.79%weekly at05:24:43UTC; Claude quota
+unavailable, not inferred from token charges.
+
+[Closeout audit](docs/audits/red-phase3-sustained-closeout-2026-09-08.md).
+[Actual evidence](docs/evidence/red-phase3-sustained-closeout-2026-09-08.json).
+[Next work plan](docs/work-sessions/2026-09-08-resource-backed-story-plan.md).
+Recommended next session: Astra High, Fast off for bounded skill qualification.
+
+## Historical — Arbok obtained, model72; repeat sustained collection next
 
 The first linked chain now includes a real collection gain. Model71 selected
 EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
@@ -21,7 +55,7 @@ Claude's latest tools-disabled response invented file inspection and is quaranti
 not audit evidence. Flash accepted fresh-choice continuation with retained costs;
 its arbitrary ball threshold was rejected. No pending external reviewer.
 
-## Current — model67 evolution stopped; exact recovery state retained
+## Historical — model67 evolution stopped; exact recovery state retained
 
 Model67 chose evolution from capture/evolution/healing alternatives. Ekans grew
 from level6 to11, then the deterministic training skill found no safe finisher
@@ -215,7 +249,7 @@ Details and quotas: [bounded-search audit](docs/audits/red-bounded-search-contin
 Recommended next session: Astra Extra High, Fast off; review the mixed-goal boundary,
 then return to High for routine execution. No measured speed or token-cost ratio.
 
-## Current — real recovery, safe failed search, model64 retained
+## Historical — real recovery, safe failed search, model64 retained
 
 The actual fainted AA party recovered through a Pokemon Center: 163 actions and
 9,156 frames, all six members healthy and all25 specimens preserved. Capability-
@@ -295,7 +329,7 @@ not an attribution of all consumption to this task.
 [Detailed review](docs/work-sessions/2026-09-07-flash-safe-capture-prototype.md).
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -456,7 +490,7 @@ newly withdrawn Pokemon is healthy. The system must verify changed state, not
 assume that reaching a location means its intended interaction succeeded.
 Older current-labelled entries below are historical.
 
-## Current — U/model60; resource recovery is next
+## Historical — U/model60; resource recovery is next
 
 The fresh acquisition failed after607actions42384frames and two spent balls.
 Storage preparation worked: active headroom1→20, all25specimens/23living species
@@ -517,7 +551,7 @@ model54 unchanged, checklist2/3. Escape-aware capture preparation is under quali
 before a fresh learned source choice. Codex remains sole implementation/publication owner
 through10:57UTC; no external reviewer or parallel editor invoked this cycle.
 
-## Current — affordable continuation from model54
+## Historical — affordable continuation from model54
 
 Codex owns implementation/publication through10:57UTC; no external reviewer/subagent was
 invoked. N's model-selected Route10 capture succeeded;54retained outcomes,20living/22specimens.
@@ -525,7 +559,7 @@ Three status attempts produced zero verified status successes. Reviewers, if req
 should challenge actual affordability quotes, stale-resource checks, deterministic support
 credit and unsupported catch-efficiency claims. Reviews remain read-only.
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -580,7 +614,7 @@ one-row history evidence, adaptive stopping and correlated resets; Antigravity s
 the zero-option Route11 endpoint and source/transport composition. Reviews stay read-only.
 Do not reopen the consumed A-through-K work or turn the next stage into another approval campaign.
 
-## Current — capture/evolution integration; finish measured history learning
+## Historical — capture/evolution integration; finish measured history learning
 
 The [current audit](docs/audits/red-complete-evolution-learning-2026-09-07.md) reports model41,
 accepted capture and completed forced evolution. Checklist3/5, not full Red or learned competence.
@@ -590,7 +624,7 @@ exclusion of forced/failed-partial outcomes. Antigravity should challenge collec
 durable saves and the region boundary that prevents sustained play. Reviewers remain read-only;
 their approval is not a routine training gate.
 
-## Current — complete component works; learning integration is the only next lane
+## Historical — complete component works; learning integration is the only next lane
 
 The [latest audit](docs/audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40 and
 retained Ponyta30, living14 to15 with all17 specimens. Model35 and checklist2/5 remain unchanged:
@@ -600,7 +634,7 @@ or subagent was invoked. If requested next, Claude should challenge partial-prog
 fit exclusions and success claims; Antigravity should challenge aggregate continuation bounds,
 recovery and the complete-option/player interface. Reviewers remain read-only; no new sealed gate.
 
-## Current — throughput sufficient; verify party selection next
+## Historical — throughput sufficient; verify party selection next
 
 The [latest audit](docs/audits/red-evolution-completion-2026-09-07.md) records +9,606 XP and level 35,
 but no complete evolution or fit. Two diagnostic attempts stopped safely; their states and
@@ -609,7 +643,7 @@ If reviewers are requested, Claude should challenge partial-prefix accounting an
 fit exclusions; Antigravity should challenge selected-member/target truth and residual-menu
 recovery. No outside agent was used this session. Model 35 and checklist 2/5 are unchanged.
 
-## Current — resumable evolution component qualified; throughput and learning credit next
+## Historical — resumable evolution component qualified; throughput and learning credit next
 
 Codex owns the [resumable evolution closeout](docs/audits/red-resumable-evolution-2026-09-07.md).
 Four battle intervals /508 XP and action-free restoration are qualified; full evolution is not.
@@ -622,7 +656,7 @@ from fitting. Antigravity should focus on practical XP throughput, safe venue el
 resumption without storage replay. Neither should turn ordinary development into a new sealed
 campaign. Codex adjudicates and publishes; reviewers remain read-only. Follow active state.
 
-## Current — Center control repaired; complete operation still unqualified
+## Historical — Center control repaired; complete operation still unqualified
 
 Codex closed the [Center boundary audit](docs/audits/red-center-pc-boundary-2026-09-06.md).
 The PC route works once nurse dialogue closes. Standalone PC opening passed without changing
@@ -635,7 +669,7 @@ partial-progress claims; Antigravity should challenge interaction orientation, d
 truth and specimen-preserving recovery. Both remain read-only advisers, not a routine gate.
 Follow [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md); older current headings are history.
 
-## Current — 35 examples; saved Center PC access is the next blocker
+## Historical — 35 examples; saved Center PC access is the next blocker
 
 The [native evolution audit](docs/audits/red-native-boxed-evolution-2026-09-06.md) records real
 training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
@@ -656,7 +690,7 @@ Red play still precedes Red-hack adaptation and Crystal. No external reviewer wa
 Codex owns implementation/publication. If requested, reviewers should challenge the live PC
 boundary and whether the negative outcomes are being mistaken for competence; no routine audit gate.
 
-## Current — history learner ready; connect a useful collection skill
+## Historical — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](docs/audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
 history while keeping all 32 old examples explicitly unknown. The separate initialized model
@@ -684,7 +718,7 @@ substantial verified milestones. Reviewers should identify deviations and explai
 on the end product, not turn each visual refresh into a new approval gate. No external reviewer
 was invoked for this documentation work. The active coding priority is unchanged.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](docs/audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The
@@ -700,7 +734,7 @@ revive a teacher/CI campaign. Earlier sections below are historical.
 
 
 
-## Current ownership — saved-state fit closed; productive alternatives next
+## Historical ownership — saved-state fit closed; productive alternatives next
 
 Codex completed [the saved-endpoint learning audit](docs/audits/red-saved-endpoint-learning-2026-09-06.md):
 31 to 32 examples, all prior rows retained, unchanged unsuccessful post-fit search choice.
@@ -710,7 +744,7 @@ Antigravity should challenge saved-history freshness, bounded recovery and false
 Both are read-only advisers; neither is a prerequisite CI/campaign gate. Older sections are history.
 
 
-## Current ownership — recovery qualified; next session must return to learning
+## Historical ownership — recovery qualified; next session must return to learning
 
 Codex implemented and verified [safe search stopping](docs/audits/red-search-recovery-2026-09-06.md).
 No external reviewer was invoked. If requested, reviewers should challenge actual versus rejected
@@ -719,7 +753,7 @@ collection rather than arbitrary overleveling. They should not impose another ca
 The single regression is closed; the saved endpoint and 31-example model remain private and intact.
 Earlier ownership sections are historical.
 
-## Current ownership — continuation failed; typed recovery and useful choices next
+## Historical ownership — continuation failed; typed recovery and useful choices next
 
 Codex closes the [attempt and audit](docs/audits/red-fit31-continuation-2026-09-06.md): resume worked,
 but a bounded search without a catch was followed by a repeated-goal recovery exception. No new
@@ -729,7 +763,7 @@ new campaign framework. Claude/Antigravity were not invoked. If requested next, 
 negative outcomes, safe stopping and whether the model actually has meaningful alternatives.
 All earlier ownership sections are historical.
 
-## Current ownership — native learning audited; continue with the 31-example model
+## Historical ownership — native learning audited; continue with the 31-example model
 
 Codex owns implementation and publication. The [native learning audit](docs/audits/red-native-player-learning-2026-09-06.md)
 records two new sampled outcomes, all 29 prior rows retained, a loadable 31-example model and a
@@ -749,7 +783,7 @@ Claude should challenge retained-data fitting and correlated-root claims; Antigr
 challenge quote freshness, controller bounds, and whether live labels match the actual actor.
 Neither reviewer should revive historical campaigns or expand this session into Crystal/full play.
 
-## Current ownership — September 6 post-fit bounded-play integration
+## Historical ownership — September 6 post-fit bounded-play integration
 
 The real Red batch and single fit are complete; the living-Dex option scorer now contains 29
 examples. Read [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md), the

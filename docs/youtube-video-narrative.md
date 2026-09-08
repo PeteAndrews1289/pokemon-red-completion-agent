@@ -1,6 +1,35 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — Arbok obtained, model72; repeat sustained collection next
+## Current — the collection loop earns two evolutions
+
+The story beat: this is no longer just a teacher following a completed route.
+A small learned goal selector chose what to attempt, and deterministic game skills
+carried out those choices. One chain produced Arbok while keeping an Ekans. A second
+captured a spare Voltorb, developed it, stopped at its real budget, and later
+completed Electrode after a new model choice. The original Voltorb remained.
+
+Show the collection evidence:28living species,29specimens,33registered, with both
+base/evolved pairs visible in the verified inventory. The last capture was a spare
+Drowzee. Show the roadblock too: zero balls and9currency. The next useful capability
+is earning legitimate trainer money and turning it back into collection progress.
+A read-only inventory found four unbeaten local trainers; do not depict their
+funding skill as already working.
+
+Use the actual denominator on screen: two linked chains, eight genuine model
+choices, four zero-label support episodes,54,971actions and4,913,974frames.
+Three of the learned choices failed and stayed in the fitted history. Model75 has
+75actual outcomes—not75independent tests, and not a neural model playing every
+button. This closes the bounded sustained-Red stage, not the full Red story or a
+general Pokémon player.
+
+The engineering lesson is preservation: failed searches, spent supplies and earned
+levels survive the next step. The scientific caveat is equally important: one
+correlated lineage and a handful of alternatives do not prove generalization.
+The long-term destination remains a transferable player and living Pokédex across
+games; Crystal and unfamiliar-ROM adaptation are still ahead.
+[Verified closeout](audits/red-phase3-sustained-closeout-2026-09-08.md).
+
+## Historical — Arbok obtained, model72; repeat sustained collection next
 
 The first linked chain now includes a real collection gain. Model71 selected
 EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
@@ -21,7 +50,7 @@ Claude's latest tools-disabled response invented file inspection and is quaranti
 not audit evidence. Flash accepted fresh-choice continuation with retained costs;
 its arbitrary ball threshold was rejected. No pending external reviewer.
 
-## Current — chain03 retained, model70; PC continuation repair
+## Historical — chain03 retained, model70; PC continuation repair
 
 Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).
 Chain03 selected acquisition but stopped before any storage transfer (73 actions /
@@ -260,7 +289,7 @@ recovery test as footage of a real recovery. AA/model63 is unchanged; the next r
 demonstration remains healing that retained party and playing a fresh learned source.
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -515,7 +544,7 @@ used our last four balls. The system completed the sequence; we have not proved 
 made it more efficient.” Next visual:zero balls,1109cash, a fixed ten-ball purchase rejected;
 explain the affordable-resupply dependency without pretending it is a completed learned skill.
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -688,7 +717,7 @@ together. If the route changes, show the before/after decision and its reason us
 [deviation log](roadmap-decisions.md), rather than quietly rewriting the story. Red competence
 and living collection precede an unfamiliar compatible Red hack, then Crystal and later games.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The

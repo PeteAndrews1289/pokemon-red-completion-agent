@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Red bounded player integration V1** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red resource-backed story integration V1** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals.
+- Next decision: From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open. |
+| Reusable capability | Connect cartridge-derived trainer-event progress to legitimate resource recovery, then let the semantic goal model compose earning, collection and recovery skills from retained state. |
+| Authority now | Phase 3 bounded milestone complete: two linked chains with 5 and 3 genuine model choices, two new living species (Arbok and Electrode), 54,971 actions / 4,913,974 frames including failures and support. Model75: 75 fitted outcomes, 33 successful, 65 distinct rows. 28 living species / 29 specimens / 33 registered; no losses or observed faints. Correlated development, not independent advantage or full Red. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the updated model repeat useful collection progress from its actual post-Arbok state under the remaining ball, money and party constraints? |
+| Cheapest falsifier | Can an ordinary unbeaten trainer be reached and completed under existing safety bounds, producing verified money without losing a living specimen or invoking a fixed teacher route? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-phase3-chain-05** · status **active** · evidence [model fit](docs/evidence/red-phase3-chain-05-2026-09-08.json)
+**2026-09-08-phase3-sustained-closeout** · status **active** · evidence [model fit](docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture. |
-| Learning output | Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open. |
-| Authority delta | Five actual goal outcomes fitted67to72; one new living species, no authority promotion or independent advantage. |
-| Transfer result | Correlated Red development across multiple regions and three goal kinds. No independent evaluation. Arbok22 verified by saved-state reload; no observed faint or specimen loss. |
-| Blocker | One useful chain now demonstrated, but repeated sustained collection progress is still needed. Two balls and209currency constrain the next goals. |
-| Decision | Close only the safe precursor-evolution milestone. Continue fresh model-directed choices from the earned terminal; preserve all failures. |
-| Next session | Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals. |
-| Next falsifier | Can the updated model repeat useful collection progress from its actual post-Arbok state under the remaining ball, money and party constraints? |
+| Product alignment | Two retained-base evolutions and a spare Drowzee support living collection. The next constraint is legitimate funding and executable story/event choices, not another teacher replay. |
+| Learning output | Phase 3 bounded milestone complete: two linked chains with 5 and 3 genuine model choices, two new living species (Arbok and Electrode), 54,971 actions / 4,913,974 frames including failures and support. Model75: 75 fitted outcomes, 33 successful, 65 distinct rows. 28 living species / 29 specimens / 33 registered; no losses or observed faints. Correlated development, not independent advantage or full Red. |
+| Authority delta | Eight admitted selected outcomes fitted67to75; six native goal choices and two regional destination choices. Four support-only episodes add zero labels. No authority promotion or independent advantage. |
+| Transfer result | Two correlated linked Red chains across multiple regions; five and three actual choices. No independent evaluation, full-game completion or cross-game result. |
+| Blocker | Phase3 bounded exit is met, but zero balls and9currency prevent further captures. Four unbeaten local trainers are observed; income execution is unqualified. A spare Drowzee offers a possible further evolution. Model75 has not played after its final fit. |
+| Decision | Close the unchanged sustained-Red development stage; begin resource-backed story capability qualification without a full replay or robustness claim. |
+| Next session | From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion. |
+| Next falsifier | Can an ordinary unbeaten trainer be reached and completed under existing safety bounds, producing verified money without losing a living specimen or invoking a fixed teacher route? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

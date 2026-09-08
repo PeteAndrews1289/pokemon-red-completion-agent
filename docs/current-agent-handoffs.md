@@ -1,6 +1,40 @@
 # Current agent handoffs
 
-## Current — Arbok obtained, model72; repeat sustained collection next
+## Current — Phase 3 closed; model75 and resource-backed story work next
+
+Two linked chains met the unchanged bounded sustained-Red exit: five and three
+actual model-selected choices, with Arbok and Electrode added while their base
+forms remained. All failures/support costs are retained: 54,971 actions and
+4,913,974 frames across12episodes. Eight actual outcomes fitted model67 to75;
+four support-only episodes add zero labels. This is correlated development,
+not independent advantage, broad autonomy or learned Red completion.
+
+The final Route11(18,9) checkpoint d8151f88 reloads with29specimens,28living species
+and33registered. Ekans6/Arbok22 and Voltorb16/Electrode30 coexist; two Drowzee13
+offer a possible Hypno continuation. No observed faint or specimen loss. Model75
+has75outcomes,33successful,65distinct rows;58native and18regional inventory records.
+All prior rows are retained. Model74 played after fitting; model75 has not yet.
+
+Zero balls and9currency remain. A zero-input cartridge/event inventory found four
+unbeaten local trainers, but their route, battle, payout and income capability
+are NOT qualified. That is the next practical story/resource seam—not a new full
+teacher replay or a reason to sell protected recovery stock. Trainer rewards are
+finite, not renewable income. The original North Star and full-run gate are unchanged.
+
+Codex owns implementation and publication. Claude Opus4.8 High and Flash3.8 High
+reviewed supplied facts; both accepted the bounded criteria and warned about thin
+model authority and finite resources. A prior fabricated Claude tool/file review
+remains quarantined. No external reviewer or emulator run is pending.
+Full pinned ROM-free suite:8,037passed; private composition checks:16passed.
+Latest Gemini remaining:98.72%five-hour/95.79%weekly at05:24:43UTC; Claude quota
+unavailable, not inferred from token charges.
+
+[Closeout audit](audits/red-phase3-sustained-closeout-2026-09-08.md).
+[Actual evidence](evidence/red-phase3-sustained-closeout-2026-09-08.json).
+[Next work plan](work-sessions/2026-09-08-resource-backed-story-plan.md).
+Recommended next session: Astra High, Fast off for bounded skill qualification.
+
+## Historical — Arbok obtained, model72; repeat sustained collection next
 
 The first linked chain now includes a real collection gain. Model71 selected
 EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
@@ -21,7 +55,7 @@ Claude's latest tools-disabled response invented file inspection and is quaranti
 not audit evidence. Flash accepted fresh-choice continuation with retained costs;
 its arbitrary ball threshold was rejected. No pending external reviewer.
 
-## Current — chain03 retained, model70; PC continuation repair
+## Historical — chain03 retained, model70; PC continuation repair
 
 Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).
 Chain03 selected acquisition but stopped before any storage transfer (73 actions /
@@ -38,7 +72,7 @@ Phase 3 remains open: three choices with only healing success are insufficient.
 See [chain evidence](evidence/red-phase3-chain-03-2026-09-08.json) and the
 unchanged [phase plan](work-sessions/2026-09-08-phase3-completion-plan.md).
 
-## Current — chain01 retained and fitted; model68 continues from Ekans19
+## Historical — chain01 retained and fitted; model68 continues from Ekans19
 
 Actual selected evolution failed after8,899actions/778,549frames. Ekans11to19,
 27specimens intact, no Arbok. Safe terminal5b9cd135 retained; model68 now68outcomes,
@@ -49,7 +83,7 @@ and a readiness-based ineffective-heal sentinel, with total safety budgets uncha
 Next authenticate chain01/model68 and run a new real model choice; no reset/retry.
 Helper poison remains an explicit recovery need. Phase3stillopen; checklist2/3.
 
-## Current — exact-failure recovery complete; model continuation next
+## Historical — exact-failure recovery complete; model continuation next
 
 The user authorizes continued bounded sessions until Phase 3 is genuinely closed.
 Use the unchanged exit and [prospective work plan](work-sessions/2026-09-08-phase3-completion-plan.md).
@@ -262,7 +296,7 @@ Details and quotas: [bounded-search audit](audits/red-bounded-search-continuatio
 Recommended next session: Astra Extra High, Fast off; review the mixed-goal boundary,
 then return to High for routine execution. No measured speed or token-cost ratio.
 
-## Current — real recovery, safe failed search, model64 retained
+## Historical — real recovery, safe failed search, model64 retained
 
 The actual fainted AA party recovered through a Pokemon Center: 163 actions and
 9,156 frames, all six members healthy and all25 specimens preserved. Capability-
@@ -381,7 +415,7 @@ five-hour and 96.8% of weekly allowance remained; Claude 83% and 92% respectivel
 Account-level snapshot only; future sessions must query fresh figures and reset times.
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -542,7 +576,7 @@ newly withdrawn Pokemon is healthy. The system must verify changed state, not
 assume that reaching a location means its intended interaction succeeded.
 Older current-labelled entries below are historical.
 
-## Current — U/model60; resource recovery is next
+## Historical — U/model60; resource recovery is next
 
 The fresh acquisition failed after607actions42384frames and two spent balls.
 Storage preparation worked: active headroom1→20, all25specimens/23living species
@@ -603,7 +637,7 @@ Both O steps excluded; model54 unchanged. Escape-aware first-throw support is be
 before another learned source choice. Do not retry O or infer that this proves efficient play.
 See [current audit](audits/red-affordable-continuation-2026-09-07.md); older entries are history.
 
-## Current — model54 and N are the retained endpoint
+## Historical — model54 and N are the retained endpoint
 
 N captured Voltorb16 on model-selected Route10, preserving22specimens/20living species.
 Fit54 retains all53 earlier rows,19successful. Exact restore passed;zero balls1109currency,
@@ -612,7 +646,7 @@ claim. Resource-aware checklist3/3 closed; affordable continuation0/3 starts pro
 Codex owns work through10:57UTC. No external agents invoked; future audits should challenge
 quotes, resource sustainability, actual status observations and support-versus-learning credit.
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -667,7 +701,7 @@ offers none, so do not call this a whole-game autonomous player. Model45 has not
 If requested, Claude audits learning/generalization claims; Antigravity audits region mechanics.
 Neither was invoked this session. All earlier headings here are historical.
 
-## Current — 41 retained examples; actual history learning remains
+## Historical — 41 retained examples; actual history learning remains
 
 Read the [current audit](audits/red-complete-evolution-learning-2026-09-07.md) and active state.
 Capture and complete evolution now execute; best save holds16 living species and18 specimens.
@@ -679,7 +713,7 @@ This is correlated practice, not F continuation or independent evaluation. No re
 If requested, Claude should audit learning claims and Antigravity should audit region/continuation
 boundaries. Neither should turn this into new sealed gates or more source expansion this batch.
 
-## Current — history learner ready; connect a useful collection skill
+## Historical — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
 history while keeping all 32 old examples explicitly unknown. The separate initialized model
@@ -709,7 +743,7 @@ No reviewer was invoked for the infographic. The next coding task is unchanged: 
 learning with useful collection alternatives. Do not interpret the checklist's 40% as full Red
 or cross-game completion. Follow the North Star closeout contract.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The
@@ -724,7 +758,7 @@ reviewers should challenge history missingness, source aliasing and actual usefu
 revive a teacher/CI campaign. Earlier sections below are historical.
 
 
-## Current — saved-endpoint training completed, not sustained competence
+## Historical — saved-endpoint training completed, not sustained competence
 
 Read [the audit](audits/red-saved-endpoint-learning-2026-09-06.md). Codex updated the goal-value
 model 31 to 32 examples with one sampled failed search and all earlier data retained. A greedy
@@ -736,7 +770,7 @@ freshness and safe continuation. Neither was invoked this session. Older section
 
 
 
-## Current — search-recovery endpoint retained
+## Historical — search-recovery endpoint retained
 
 Use [the recovery audit](audits/red-search-recovery-2026-09-06.md) and active state. New regression
 `red-search-recovery-20260906-a-causal` is closed: no catch, but a typed stop, fresh unchanged ledger
@@ -745,7 +779,7 @@ Next is a short sampled learning contrast at this saved endpoint, using explicit
 and original lineage. Local development availability was inspected only; evolution/storage are not
 wired here. Codex owns edits/publication; no Claude/Antigravity review is claimed.
 
-## Current — continuation failed; ordinary no-find/recovery behavior is next
+## Historical — continuation failed; ordinary no-find/recovery behavior is next
 
 The [continuation audit](audits/red-fit31-continuation-2026-09-06.md) closes the one attempt:
 215 actions / 8244 frames, three encounters, no catch, then a repeated-goal recovery exception.
@@ -758,7 +792,7 @@ useful progress, not propose a new provenance framework. No reviewer has been in
 The newly agreed first transfer demonstration is a compatible Red modification, followed by Crystal;
 neither is active implementation work yet. All sections below are historical.
 
-## Current — native learning loop works; demonstrate useful continuation next
+## Historical — native learning loop works; demonstrate useful continuation next
 
 Read the [audit](audits/red-native-player-learning-2026-09-06.md) and
 [result](evidence/red-native-player-learning-result-2026-09-06.json). The model now has **31**
@@ -773,7 +807,7 @@ No external reviewer was invoked here. The exact future sequence is in the audit
 
 All handoffs below are historical.
 
-## Current — four-goal resource chain audited; persistence and next training contrasts
+## Historical — four-goal resource chain audited; persistence and next training contrasts
 
 The [latest session](work-sessions/2026-09-06-durable-player-continuation.md) records the actual
 four-step hybrid success: two retained specimens, one new living species, two model-ranked choices,
@@ -801,7 +835,7 @@ Claude should challenge train/evaluation claims and maintenance-reward incentive
 should challenge stale origins, destination rechecks, hard budgets and portability. Reviewers
 remain advisory/read-only. Neither was invoked here; routine development does not wait for them.
 
-## Current — audit the completed choices; connect fresh-state play
+## Historical — audit the completed choices; connect fresh-state play
 
 The [four-root result audit](audits/red-routed-model-play-2026-09-06.md) is complete. The model's
 three attempted goals succeeded, but none added a species; one setup and one control skill failed.
@@ -994,7 +1028,7 @@ See the [adapter checkpoint](development-supplement-adapter-checkpoint.md) for e
 and the remaining execution sequence. In particular, the shared plan digest and complete Red
 plan digest are different identities. Do not repeat the completed census or freeze.
 
-## Current override: supply is frozen; Codex owns the missing development-only consumer
+## Historical override: supply is frozen; Codex owns the missing development-only consumer
 
 PR 212 is merged and both CI runs passed 6,691 tests. The census proved 429/429 bindings in under
 14 minutes; the following freeze stored and reopened three new roots in 788.71 seconds. Together
@@ -1009,7 +1043,7 @@ next useful review is leakage and claim scope; Antigravity's is interface reuse 
 at the adapter design boundary. They remain read-only and advisory. No external audit was run
 for the completed performance-only repair. Keep the [model log](coding-model-comparison.md) current.
 
-## Current override: bounded performance repair, then measure the existing model
+## Historical override: bounded performance repair, then measure the existing model
 
 PR 211 and exact-main CI `33904380404/1` are green. The next census was interrupted after more
 than 65 minutes in binding diagnosis with zero effects. Codex is factoring a per-call validated
@@ -1023,7 +1057,7 @@ reassess before another diagnostic expansion. Claude's next role is leakage/stat
 Antigravity's is architecture/transfer review at a design or promotion boundary. Both remain
 read-only and ordinary maintenance does not wait for them. See [handoff](../HANDOFF.md).
 
-## Current override: Codex owns the narrow Red partition-binding repair
+## Historical override: Codex owns the narrow Red partition-binding repair
 
 Exact main `c1fb1bca` passed CI `33896140351/1`, then the protected binding census failed closed at
 `binding_capacity_diagnosis` with zero effects. The shared capacity result remains 13 eligible
@@ -1037,7 +1071,7 @@ binding, freeze a new supplement identity and independently preflight it before 
 use. Do not retry the terminal freeze, weaken the portable policy, rebuild training supply, expose
 private identities, open Crystal or sealed Red, or run a full replay.
 
-## Current override: Codex owns the Red binding discrepancy
+## Historical override: Codex owns the Red binding discrepancy
 
 PR 209 is exact main `61b5cc4b` under green CI `33887050869/1`. Its protected aggregate census
 authenticated 81 contexts and found 13 eligible roots, 25 capabilities, four families, four
@@ -1068,7 +1102,7 @@ commitments are durable. Do not rebuild train supply, refit on development, retr
 open Crystal or sealed Red, or run a full replay. External reviewers are not required at this
 ordinary development gate.
 
-## Current override: Codex owns updated-model shadow binding and prospective supply
+## Historical override: Codex owns updated-model shadow binding and prospective supply
 
 The complete-corpus update is finished. Exact main `4414215e` passed CI `33856641047/1`, then one
 action-free fit consumed all 18 authenticated Red train outcomes and produced immutable model
@@ -1085,7 +1119,7 @@ selection precedes outcomes and predictions. Fit only train and compare once on 
 development. Claude and Antigravity remain optional read-only reviewers at the next promotion or
 transfer boundary; neither blocks ordinary implementation.
 
-## Current override: Codex owns the prospective Red curriculum boundary
+## Historical override: Codex owns the prospective Red curriculum boundary
 
 Exact main `7133d171` passed CI `33848221585`. Pair 006 then completed both arms: two verified
 acquisitions followed by a typed `binding_failed` and clean unchanged-context stop, at 508 actions /
@@ -1146,7 +1180,7 @@ Status: active operating assignment as of 2026-09-04. This document applies the 
 [active product state](../ACTIVE_PRODUCT_STATE.md), or the
 [model-first roadmap](model-first-roadmap.md).
 
-## Current override: Codex owns calibration training plus independent-root follow-through
+## Historical override: Codex owns calibration training plus independent-root follow-through
 
 The index repair merged as main `06d602bb` under green CI `33821766312`. Trial-1 zero-effect
 preflight passed, and `develop_team` completed in 2,009 actions / 162,918 frames with semantic
@@ -1199,7 +1233,7 @@ that honest Red gate passes. External reviewers are optional and do not block im
 The freezer implementation and the one action-free freeze are complete. Historical instructions to
 publish or rerun that freeze are superseded by the assignment above.
 
-## Current override: Codex owns the multi-goal curriculum after the first strategic win
+## Historical override: Codex owns the multi-goal curriculum after the first strategic win
 
 PR 188 is merged as exact main `b8c2999d` under green CI `33784679568/1`. The causal arm of pair
 001 selected `develop_team` without a teacher and the deterministic skill achieved its requested
@@ -1220,7 +1254,7 @@ disjoint train/development roots. Pairs 001–003 may never retry. Claude and An
 read-only reviewers at the next design milestone; neither is an implementation dependency or
 receives private paths, saves, or model records.
 
-## Current override: Codex connects the causal living-Dex model to the player in shadow
+## Historical override: Codex connects the causal living-Dex model to the player in shadow
 
 The first live pair is merged and exactly equivalent. The immediate lane is no longer another
 broad context inventory: an already-fitted teacher-free causal option-value model was found in the
@@ -1238,7 +1272,7 @@ improvement over the completion-first manager. Crystal, sealed Red, and full rep
 Claude and Antigravity remain optional read-only reviewers at the next measured milestone; neither
 is an implementation dependency and neither receives private records or paths.
 
-## Current override: Codex owns the Red bounded-player bridge
+## Historical override: Codex owns the Red bounded-player bridge
 
 The game-neutral bounded player seam, thin Red observation bridge, authenticated action-free
 preflight and same-state paired launcher are implemented and pass thirty-seven focused ROM-free
@@ -1267,7 +1301,7 @@ The learned arm advances the board once to 2/2 composition attempts, 2/2 verifie
 multi-goal train/development curriculum; no more gameplay is justified until that inventory proves
 several goal kinds and learnable outcome variation.
 
-## Current override: Codex owns the Red-first trustworthy learning loop
+## Historical override: Codex owns the Red-first trustworthy learning loop
 
 The September 2 Ultra audit found that the repeatable mechanism is real but the battle candidate is
 not promotable. On seven independent development roots the authentic challenger improves over the
@@ -1287,7 +1321,7 @@ ROM-free compatibility checks; do not execute Crystal, replay the Red route, ope
 turn switch/item/capture abstentions into hidden teacher choices. Claude and Antigravity remain
 read-only milestone reviewers rather than implementation blockers.
 
-## Current override: Codex owns clustered battle integration admission
+## Historical override: Codex owns clustered battle integration admission
 
 The exact-main two-root relocation successor ended **0/2** with identical `planner_no_route`
 diagnostics and is permanently closed. The historical seven-fresh-context V2 experiment remains
@@ -1301,7 +1335,7 @@ diversity, independence, claim availability, hidden rank, or numerical clearance
 Antigravity remain read-only milestone reviewers. Sealed Red, Crystal, full replay, teacher choice,
 development fitting, and authority promotion remain closed.
 
-## Current override: Codex closes train capture diagnostics and successor history
+## Historical override: Codex closes train capture diagnostics and successor history
 
 Development input supply is complete at eight captures across two authenticated producers. Train
 supply remains five of seven after two new relocation failures; both attempted roots are terminal.
@@ -1314,7 +1348,7 @@ hardening a selected Celadon teacher route. Claude and Antigravity remain option
 milestone reviewers; neither review is needed for ordinary implementation. Sealed Red, Crystal,
 full replay, teacher choice, denominator shrinkage and authority promotion remain closed.
 
-## Current override: Codex owns the broader existing-capture census
+## Historical override: Codex owns the broader existing-capture census
 
 The published metadata-only census proves that the terminal V2 roster has **0/7 fresh train and
 0/8 development** roots available, with every gameplay and learning effect zero. It does not claim
@@ -1423,7 +1457,7 @@ save, selected-root, private plan or lineage identity.
 
 The partition-aware census was published and passed as recorded above.
 
-## Current override: Codex owns fresh partition-aware development supply
+## Historical override: Codex owns fresh partition-aware development supply
 
 Producer-aware 7+8 admission is implemented and hostile-tested. The metadata-only preflight found
 that the eight historical development manifests are authentic for their old producer catalogs but
@@ -1437,7 +1471,7 @@ generalization boundary after publication, but neither should rerun old captures
 saves, private paths, lineage identities or outcomes. Outcome collection, fitting, sealed Red,
 Crystal and authority remain closed.
 
-## Current override: Codex owns catalog-aware 7+8 batch admission
+## Historical override: Codex owns catalog-aware 7+8 batch admission
 
 The canonical train catalog is terminal and authenticated: seven captures from two immutable
 producer commits, seven unique roots and capture IDs, **4 Cave + 3 Route 11**, with both historical
@@ -1454,7 +1488,7 @@ The mission is still reusable story and living-Pokedex completion across titles,
 elaborate Red route. Counters remain **train 19 · fits 6 · verified development 6 · unseen 4 ·
 authority 0 · transfer 0**.
 
-## Current override: Codex owns publication and the one action-free catalog build
+## Historical override: Codex owns publication and the one action-free catalog build
 
 The mixed-producer implementation is locally qualified. It reopens exactly five predecessor
 successes and two completion successes under their separate producer identities, preserves both
@@ -1466,7 +1500,7 @@ sealed Red, Crystal execution, full replay and authority remain closed. Claude a
 no blocking role in this ordinary gate; a read-only review is useful at the next model-design
 decision rather than before this zero-effect catalog build.
 
-## Current override: Codex owns the mixed-producer seven-capture catalog
+## Historical override: Codex owns the mixed-producer seven-capture catalog
 
 The additive terminal is **2/2 succeeded**, so five predecessor captures plus two completion
 captures now supply seven authenticated battle inputs across two producers. Historical failures
@@ -1477,7 +1511,7 @@ The catalog must independently reopen every output with its own producer provena
 unique roots and capture IDs, and exclude failed journal entries. Stop and reorient before outcome
 collection or fitting. Reviewers need only tracked code and path-free aggregate evidence.
 
-## Current override: Codex owns the frozen two-assignment terminal
+## Historical override: Codex owns the frozen two-assignment terminal
 
 Exact main `c9547d27` passed CI `33528613229/1`. The additive freeze retained five predecessor
 successes, retained two predecessor failures, excluded fourteen attempted roots, and froze two
@@ -1489,7 +1523,7 @@ execution of the two frozen assignments. Every assignment is started durably bef
 never retry after leaving pending. Stop after the terminal journal. Outcome collection, fitting,
 sealed Red, Crystal and replay remain closed; a mixed-producer catalog is a separate successor.
 
-## Current override: Codex owns publication and the zero-effect additive freeze
+## Historical override: Codex owns publication and the zero-effect additive freeze
 
 The candidate-cardinality repair is published as exact main `2db2fbf1`. The additive completion
 design is locally qualified. It preserves five independently authenticated predecessor captures,
@@ -1507,7 +1541,7 @@ useful after the zero-effect freeze exists, but reviewers receive only tracked c
 evidence—never ROM, save, private plan, capture, or selected-root identity. Counters remain **train
 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
 
-## Current override: Codex owns variable-cardinality repair and additive capture completion
+## Historical override: Codex owns variable-cardinality repair and additive capture completion
 
 The exact-main CI repair passed and the one successor denominator is terminal at **5 succeeded / 2
 failed**. Both failures remain in the seven-item journal forever. Independent zero-frame forensics
@@ -1525,7 +1559,7 @@ useful only after the additive zero-effect design exists. Reviewers remain read-
 ROM, save, private plan, root, or capture identity. Counters remain **train 19 · fits 6 · verified
 development 6 · unseen 4 · authority 0 · transfer 0**.
 
-## Current override: allocation passed; Codex owns the V2 freeze/materializer gate
+## Historical override: allocation passed; Codex owns the V2 freeze/materializer gate
 
 Exact source `ca9cab88` passed CI `33481838000/1`. The single V6 census found 18 unused roots but
 only one resource-conditioning-eligible root at one venue. PP-only conditioning therefore cannot
@@ -1559,7 +1593,7 @@ venues pass after the six-per-venue cap, retire the design before input. If it p
 bind a new conditioning-aware freezer/materializer; do not modify or retry an old plan. Counters
 remain **train 19 · fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
 
-## Current override: current-bank battle supply is falsified; Codex owns the next supply design
+## Historical override: current-bank battle supply is falsified; Codex owns the next supply design
 
 PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census then
 authenticated the exhausted plan and journal, excluded all seven attempted roots, and inspected 47
@@ -1638,7 +1672,7 @@ non-retry of every started or failed assignment, pending-only resume, exact sour
 reauthentication, and aggregate path-free receipts. No capture materialization is open until that
 runner is published and green.
 
-## Current override: Celadon failed; Codex owns aggregate relocation readiness
+## Historical override: Celadon failed; Codex owns aggregate relocation readiness
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. Its reusable Celadon source adapter
 admits a root only when the same predicate used by the live executor proves the exact Center
@@ -1675,7 +1709,7 @@ machinery. Only a reusable source-class adapter may proceed; no private-root pat
 After publication, repeat the complete capacity decision. No encounter materialization, root
 claim, outcome, fit, sealed Red, Crystal execution, authority, or full replay is open.
 
-## Current override: Codex owns the local V2 contract and inventory/freezer gate
+## Historical override: Codex owns the local V2 contract and inventory/freezer gate
 
 Codex has implemented the outcome-blind V2 batch contract locally. The full V1 plan, exact artifact
 manifest, retained train record, original prior, and consumed V1 development binding are joined
@@ -1697,7 +1731,7 @@ authority promotion, or full-game replay is open. If an action-free census canno
 fresh train plus eight development contexts under the declared pressure gates, stop and redesign
 capture supply or the representation; do not shrink, substitute, or rerun the denominator.
 
-## Current override: Codex owns the V1 result and V2 batch gate
+## Historical override: Codex owns the V1 result and V2 batch gate
 
 Battle pair V1 completed from exact main `1d955492` / CI `33424040364/1`. All six supported move
 branches were claimed and measured; one train-only fit reduced loss, but the prior and candidate
@@ -1791,7 +1825,7 @@ collect powered outcomes, fit, grant authority, open sealed Red,
 execute Crystal, or replay the game. The learning board remains **18/60 · integration fit 1/1 ·
 powered fit 0 · authority 0 · transfer 0**.
 
-## Current override: capacity failed; Codex owns V2 lineage-supply engineering
+## Historical override: capacity failed; Codex owns V2 lineage-supply engineering
 
 PR `#119` merged as exact main `f1fc3812`; push CI `33355147814/1` passed. The sole action-free
 census found 43 unused Red lineages but only **14/36 train, 28/72 train attempts, 22/100
@@ -1815,7 +1849,7 @@ independent, collect powered outcomes, open development, refit R0, promote autho
 Red, execute Crystal, or replay a full game as evaluation. The board remains **causal train 18/60
 · integration fit 1/1 · powered fit 0 · authority 0 · transfer 0**.
 
-## Current override: bounded R1 complete; Codex owns publication and clustered V2 design
+## Historical override: bounded R1 complete; Codex owns publication and clustered V2 design
 
 Exact source `a358014f` passed CI `33329384186/1`. Codex then attempted untouched successor
 ordinals 8–15 once each in frozen order. Six settled authentic selected-arm causal examples and
@@ -1981,7 +2015,7 @@ exactly-once/portability challenge before transfer. Neither review blocks this o
 engineering gate, and neither reviewer sees private identities, edits, executes gameplay, or
 grants authority.
 
-## Current override: Codex owns the fixed 16+4 successor freeze and exact binding
+## Historical override: Codex owns the fixed 16+4 successor freeze and exact binding
 
 The action-free recensus is complete: 59 unused qualified roots remain, split 36 train and 23
 development, and 55 expose at least one genuine Red menu. Codex owns the generalized sealed-plan
@@ -2000,7 +2034,7 @@ does not block ordinary engineering or the zero-effect freeze. Codex adjudicates
 against the mission and evidence. No development outcome, fit, sealed Red, Crystal, or full replay
 opens in this gate.
 
-## Current override: publish five clustered examples; audit unused train capacity next
+## Historical override: publish five clustered examples; audit unused train capacity next
 
 Codex owns the path-free batch receipt, mission reorientation, publication, exact-main CI, and the
 next action-free successor-capacity audit. The frozen eight train assignments are all consumed:
@@ -2016,7 +2050,7 @@ disagreement. Do not ask either reviewer to bless a five-row fit: the eight-exam
 gate failed and fitting is closed. Next find genuinely unused, development-disjoint train capacity
 with enough margin to add at least three settled examples after observed setup attrition.
 
-## Current override: publish the train consumer; preflight only before reorientation
+## Historical override: publish the train consumer; preflight only before reorientation
 
 Codex owns the locally qualified consumer for private plan `2a0462b8…`, its publication, exact-main
 CI, one ROM-free selected-train preflight, the path-free receipt, and the next reorientation. The
@@ -2032,7 +2066,7 @@ authority. The immediate gate is publication plus one zero-effect preflight; gam
 closed until the following reorientation. **Causal train 1/60 · powered fit 0 · authority 0 ·
 transfer 0.**
 
-## Current override: exact private plan frozen; claim-first runner engineering next
+## Historical override: exact private plan frozen; claim-first runner engineering next
 
 Codex owns the train-only consumer for private plan `2a0462b8…`, the logical-plus-physical atomic
 claim, durable pre-input selected-arm commitment, crash-cutpoint matrix, documentation,
@@ -2081,7 +2115,7 @@ store the exact private 8+4 assignments, and independently reopen them with no o
 Reviewers do not edit, execute gameplay, publish, or grant authority. **Causal train 1/60 · powered
 fit 0 · authority 0 · transfer 0.**
 
-## Current override: V2 yield failed; publish no repair until review and full qualification
+## Historical override: V2 yield failed; publish no repair until review and full qualification
 
 Codex owns working source bundle `c44d14a8`, the public V2 terminal, full qualification,
 publication, exact-main CI, and only then a possible action-free V3 freeze. Exact main `624325cf`
@@ -2102,7 +2136,7 @@ this remains bounded classroom-generator maintenance rather than another Red wal
 Both are read-only. Neither may execute a ROM, open private identities, edit, publish, freeze V3,
 or grant model authority. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current override: publish the world-variance repair; training is still gated
+## Historical override: publish the world-variance repair; training is still gated
 
 Codex owns the exact working bundle `7c2974ab`, publication, exact-main CI verification, and the
 later action-free freeze of a new prospective yield plan. Published main `05ae3cce` passed CI
@@ -2133,7 +2167,7 @@ forced-switch test to exercise the real live-cursor predicate. Codex rejected th
 that reusable switch/move primitives lack direct tests; their direct mutation-sensitive suites are
 separate from Erika/Silph orchestration tests. See [the adjudication log](agent-review-log.md).
 
-## Current override: publish the post-yield repair; no old assignment may be reused
+## Historical override: publish the post-yield repair; no old assignment may be reused
 
 Codex owns the exact working bundle `a3b18f34`, its publication, exact-main CI verification, and
 the later action-free freeze of a new prospective yield plan. Three new one-use development seeds
@@ -2158,7 +2192,7 @@ fresh one-use assignments. Require at least 10/12 late-Cinnabar successes and no
 leak. Only a pass opens a train-only root plan and recensus. **Causal train 1/60 · powered fit 0 ·
 authority 0 · transfer 0.**
 
-## Current override: qualify and publish the measured teacher repair; future yield remains closed
+## Historical override: qualify and publish the measured teacher repair; future yield remains closed
 
 Published exact source `eac8e745` passed CI `33167842692/1` but failed its fixed fresh-world gate
 at 1/12. Seeds 9900037–9900048 are consumed and may never retry, the old plan remains forbidden,
@@ -2186,7 +2220,7 @@ the old plan, promote diagnostics, materialize development, fit, open sealed Red
 count teacher actions as model learning. **Causal train 1/60 · powered fit 0 · authority 0 ·
 transfer 0.**
 
-## Current override: fresh train episode lineages; recensus before outcome collection
+## Historical override: fresh train episode lineages; recensus before outcome collection
 
 Codex owns the fresh-root generator, qualification, publication, train-first generation, and the
 follow-up action-free census. The exact
@@ -2208,7 +2242,7 @@ teacher-completed episode as evaluation. The immediate falsifier is whether at l
 compatible train roots increase the exact train matching above 54 while every follow-up census
 effect remains zero. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current override: powered Red capacity first; no fitting until the gate passes
+## Historical override: powered Red capacity first; no fitting until the gate passes
 
 Codex owns implementation, qualification, publication, the later action-free capacity census, and
 adjudication. The powered curriculum requires 90 train contexts with at least 60 settled outcomes
@@ -2242,7 +2276,7 @@ Do not fit, use development targets, execute sealed Red or Crystal, replay the f
 promote authority. A clone, state copy, local RNG perturbation, or rehash inherits the parent
 lineage. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current override: one frozen Red train invocation, then immediate reorientation
+## Historical override: one frozen Red train invocation, then immediate reorientation
 
 The direct consumer shipped through PR 90 and exact-main CI `33118840112/1` on executable commit
 `6fd2286f3f92145884e1a92c46fcbbd1eb140ebd`. The
@@ -2259,7 +2293,7 @@ No refreeze, retry, new wrapper or preflight, one-row fit, sealed Red, Crystal r
 full replay is open. A settled row completes the **causal train 0/1** gate; a target-free terminal
 permanently closes this campaign without pretending it produced data.
 
-## Current override: publish the direct frozen-campaign consumer, then reorient
+## Historical override: publish the direct frozen-campaign consumer, then reorient
 
 The one train campaign is frozen and remains unconsumed. Codex has locally qualified the direct
 consumer that can reopen it without refreezing the menu or returning to a retired wrapper. The
@@ -2284,7 +2318,7 @@ before consuming the frozen campaign exactly once. No reviewer executes. No priv
 refreeze, retry, one-row fit, sealed Red, Crystal run, promotion, or replay is open at this
 checkpoint. **Causal train remains 0/1.**
 
-## Current override: publish the freeze-first campaign gate, then freeze once
+## Historical override: publish the freeze-first campaign gate, then freeze once
 
 The shared causal journal and Red live adapter are published on exact main
 `74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2`; exact-main CI `33098041804/1` passed. The locally
@@ -2331,7 +2365,7 @@ output is one authentic settled Red causal train example. Synthetic fixtures, CI
 inputs do not increment it. No preflight successor, model fit, sealed Red, Crystal execution,
 promotion, or replay is authorized.
 
-## Current override: one minimal V2 after V1 failed before private access
+## Historical override: one minimal V2 after V1 failed before private access
 
 PR 86 and exact-main CI passed. The sole V1 preflight failed closed at public bootstrap before it
 read a producer record or selected capture. The
@@ -2430,7 +2464,7 @@ execution identity, claim both logical and physical root identities, authenticat
 power-loss recovery, and deep-freeze or reauthenticate nested plan bytes before a claim-first
 runtime factory may exist.
 
-## Current override: Codex owns the exact-plan setup bridge, not setup execution
+## Historical override: Codex owns the exact-plan setup bridge, not setup execution
 
 The provider curriculum is now a canonical artifact rather than a rehearsal. PR 80 published the
 production freezer and path-free execution identity as main `69a0c707006c78ae8473544f40e2bdd0a0b23f91`.
@@ -3502,7 +3536,7 @@ three goal kinds including collection, then allow one fit and one comparison. A 
 opens a separately frozen two-decision composition pilot. It grants no completion, promotion,
 Crystal, transfer, or living-Pokédex claim.
 
-## Current override: Codex owns one acquisition-successor fit
+## Historical override: Codex owns one acquisition-successor fit
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`,
 then its one action-free acquisition-campaign freeze failed at sanitized stage
@@ -3521,7 +3555,7 @@ data, or Crystal. Counters stay **30/15/4/3/0/0**, **14/4/0/1/1**; scorecard
 **30/30 · 4/5 · 3/3**. A pass moves directly to the resettable 8-train/4-development curriculum,
 not a new qualification carousel.
 
-## Current override: Codex owns execution/admission, freeze, and zero-action preflight
+## Historical override: Codex owns execution/admission, freeze, and zero-action preflight
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
 [context-plan build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
@@ -3535,7 +3569,7 @@ the strict execution/admission boundary, require green exact-head CI, then freez
 No prediction, controller action, frame, teacher query, episode, fit, promotion, sealed Red, or
 Crystal is authorized. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
 
-## Current override: Codex owns the acquisition-replanning campaign preflight
+## Historical override: Codex owns the acquisition-replanning campaign preflight
 
 The [qualified Red executor](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
 at source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. It
@@ -3550,7 +3584,7 @@ on the executor candidate. Antigravity's unsafe-party finding is fixed; its rema
 not supported by the source. No agent owns episode execution, fitting, promotion, sealed Red, or
 Crystal until the preflight is published and the project reorients again.
 
-## Current override: Codex owns bounded Red encounter-development integration
+## Historical override: Codex owns bounded Red encounter-development integration
 
 The [qualified capability](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
 at source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`.
@@ -3565,7 +3599,7 @@ routes/coordinates to policy, manufacture menu choices, run gameplay, collect ou
 promote, open sealed Red, or run Crystal. If this cannot be done locally, close the mechanic rather
 than rescue a root.
 
-## Current override: Codex owns the title-neutral encounter-source capability
+## Historical override: Codex owns the title-neutral encounter-source capability
 
 The [frozen design](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json) at source
 `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. It defines 16
@@ -3580,7 +3614,7 @@ resolved. Antigravity's partial review shaped the conditional-replan wording, pr
 and ban on artificial choices/Red routes, but produced no formal final verdict. No agent owns
 gameplay, training collection, fitting, root rescue, sealed Red, or Crystal in this lane.
 
-## Current override: Codex owns action-free acquisition-replanning curriculum design
+## Historical override: Codex owns action-free acquisition-replanning curriculum design
 
 The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
 records a tie: base and candidate each safely retained one acquisition in one decision, with
@@ -3593,7 +3627,7 @@ unused, nonsealed Red contexts action-free to freeze a genuine acquisition-then-
 question. Claude and Antigravity are read-only reviewers if consulted. No gameplay, root rescue,
 route/skill patch, model fit, promotion, sealed Red, or Crystal.
 
-## Current override: Codex owns one exact paired gameplay screen
+## Historical override: Codex owns one exact paired gameplay screen
 
 Source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed green CI run
 `32126183561`; the [zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
@@ -3607,7 +3641,7 @@ reviewers if consulted. Safe retained acquisition is primary; secondary metrics 
 Stop after one result or retained failure. No retry, replacement, adaptation, fit, promotion,
 sealed Red, Crystal, route/skill patch, or full replay.
 
-## Current override: Codex owns paired execution qualification without gameplay
+## Historical override: Codex owns paired execution qualification without gameplay
 
 Source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run `32122694671`.
 One model-blind, development-outcome-unused acquisition train root was formally selected with three
@@ -4107,7 +4141,7 @@ Sealed Red, Crystal execution, full-game replay, teacher-route hardening, and re
 trials are prohibited. The view-only focus dashboard runs at port 8768. The canonical contract and
 all role details are [generated here](../ACTIVE_PRODUCT_STATE.md).
 
-## Current override: publish and attack the implemented 14/55 collector
+## Historical override: publish and attack the implemented 14/55 collector
 
 Codex has completed the implementation lane for the first completion-aware outcome campaign. The
 collector expands fourteen frozen menus into fifty-five independently cloned candidate trials,
@@ -4139,7 +4173,7 @@ implementation lane.
 Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · trial contract 55 · trials 0/55
 · complete examples 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
 
-## Current override: input audit passed; implement the exact outcome campaign
+## Historical override: input audit passed; implement the exact outcome campaign
 
 Codex's separate verifier is published at `e849e43` and passed exact CI run `31973374921` attempt
 1. The official read-only audit reconstructed all fourteen frozen reservation, capture, profile,
@@ -4172,7 +4206,7 @@ choose an answer, rerun a failure, tune the model or grant authority.
 Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · verified inputs 14/14 · trials
 0/55 · complete examples 0/14 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
 
-## Current override: audit the official input catalog; do not open answers
+## Historical override: audit the official input catalog; do not open answers
 
 Codex published the catalog freezer at `065c68a`, passed exact CI run `31969641298` attempt 1, and
 froze the official 14-question input catalog. It is exact 8 train / 6 untouched development, covers
@@ -4192,7 +4226,7 @@ Current state: **priors 2 · roots 14 · PP states 2/2 · menus 14 · outcomes 0
 authority 0 · sealed Red 0 · Crystal 0 · replay 0**. After independent review, new owner authority
 is required before collecting the 8+6 outcomes or fitting once.
 
-## Current override: publish and freeze the 8+6 input catalog
+## Historical override: publish and freeze the 8+6 input catalog
 
 Codex completed the separately authorized development preparation once. Together with the earlier
 train result, both natural middle-PP states now authenticate and both identities are consumed.
@@ -4212,7 +4246,7 @@ Current state: **priors 2 · roots 14 · PP states 2/2 · official menus 0 · ou
 authority 0 · sealed Red 0 · Crystal 0 · replay 0**. Outcome collection, teacher access and the
 first fit remain a separate owner gate after catalog review.
 
-## Current override: train preparation passed; development remains a separate owner gate
+## Historical override: train preparation passed; development remains a separate owner gate
 
 Codex executed the one owner-authorized train identity from exact source `27e966b`, CI run
 `31962598106` attempt 1 and v4 plan file SHA `b9d1eeef…`. It completed once after 27 battles and
@@ -4227,7 +4261,7 @@ transfer challenger and receives a public-safe catalog slice with at most three 
 reviewer authorizes controller input. Current state: PP states 1/2; menus 0; outcomes 0/14; fits 0;
 authority 0; sealed Red 0; Crystal 0; replay 0.
 
-## Current override: v4 approved to ask; authorize train and development separately
+## Historical override: v4 approved to ask; authorize train and development separately
 
 Published execution source `27e966b9230f254619d735cb3721eff202314089` passed exact CI run
 `31962598106`, attempt 1. Codex generated private v4 (file `b9d1eeef…`, semantic `2ae07f3a…`) and
@@ -4241,7 +4275,7 @@ and plan-file SHA. After any controller input, that identity cannot retry. Devel
 untouched and requires a separate owner message. Claude reviews the resulting path-free terminal
 receipt; Antigravity remains idle until the concrete 8+6 menus exist.
 
-## Current override: v3 retired; publish and attack the v4 semantic boundary
+## Historical override: v3 retired; publish and attack the v4 semantic boundary
 
 Codex accepted the useful parts of Claude's v3 audit and retired v3 without controller input. The
 v4 candidate separately binds the package bundle and exact runner bytes, names the exact GitHub CI
@@ -4264,7 +4298,7 @@ natural PP states 0/2; menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0
 0. After Claude's audit, Codex must still ask the owner for one exact partition, source head, CI run
 and CI attempt at a time.
 
-## Current override: rebuild PP authorization evidence at a published successor
+## Historical override: rebuild PP authorization evidence at a published successor
 
 Codex found that the v2 PP runner recorded a user-supplied positive CI run number without
 authenticating it as the successful exact-head `CI` pull-request run. This is stop-ship but was
@@ -4283,7 +4317,7 @@ No handoff authorizes controller input. After a clean v3 audit, Codex must ask t
 exact partition at a time. Current state: priors 2; roots 8 train / 6 development; natural PP states
 0/2; menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; replay 0.
 
-## Current override: PP preparation source is ready; controller authority is not
+## Historical override: PP preparation source is ready; controller authority is not
 
 Codex owns the new source-qualified bridge. It refreshes exactly one unsafe development
 reservation without changing the other thirteen, freezes one train and one development natural-PP
@@ -4302,7 +4336,7 @@ described below.
 Current honest state: priors 2; reserved roots 8 train / 6 development; natural PP states 0/2;
 frozen menus 0; outcomes 0/14; fits 0; authority 0; sealed Red 0; Crystal 0; full replay 0.
 
-## Current override: two-prior composition complete; PP preparation is the next live boundary
+## Historical override: two-prior composition complete; PP preparation is the next live boundary
 
 Codex published exact head `107e0343d128a9cd0c1a1aea6b33a5b1ee9be5c3`; GitHub CI run
 `31947146884` passed that head. The source-only bridge then proved the 21 execution-bearing Cave
@@ -4323,7 +4357,7 @@ Current honest state: priors 2; reserved roots 8 train / 6 development; accepted
 1; consumed failed Cave measurements 1; frozen menus 0; outcomes 0/14; fits 0; authority 0; sealed
 Red 0; Crystal 0; full replay 0.
 
-## Current override: V2 succeeded once; source-only composition is next
+## Historical override: V2 succeeded once; source-only composition is next
 
 The owner authorized one Red Cave V2 execution from exact published head `755fe53` under green CI
 run `31926299036`. The read-only preflight passed first. The single live run then completed 4/4
@@ -4350,7 +4384,7 @@ Current honest state: priors 1 pending composition; reserved roots 8 train / 6 d
 accepted Cave measurements 1; consumed failed Cave measurements 1; frozen menus 0; outcomes 0/14;
 fits 0; model authority 0; sealed Red 0; Crystal 0; full replay 0.
 
-## Current override: reviewer gates passed; fresh user authorization required
+## Historical override: reviewer gates passed; fresh user authorization required
 
 Claude's immutable audit of `346b2e5` / CI `31922419713` approved readiness only conditionally.
 Codex accepted its live findings. Executable source `ff2ccfb` now counts projected eligible
@@ -4663,7 +4697,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - describe a source-qualified prior as a trained model;
 - promote authority from teacher agreement, lower training loss, one root or one successful run.
 
-## Current review assignments — 2026-08-28
+## Historical review assignments — 2026-08-28
 
 ### Codex workhorse lane
 
@@ -4705,7 +4739,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
   verdict authorizes roots, fitting, sealed Red, Crystal execution, a full-game replay, authority,
   or transfer.
 
-## Current assignments — clustered causal collection (2026-08-29)
+## Historical assignments — clustered causal collection (2026-08-29)
 
 ### Codex workhorse lane
 
@@ -4729,7 +4763,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
   advance living-Pokédex completion rather than Red-route imitation. Do not block ordinary outcome
   collection while no milestone review is pending.
 
-## Current assignments — Red battle V2 multi-venue gate (2026-09-01)
+## Historical assignments — Red battle V2 multi-venue gate (2026-09-01)
 
 ### Codex workhorse lane
 
@@ -4755,7 +4789,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Their verdicts inform Codex but do not authorize execution, fitting, sealed Red, Crystal,
   authority, or replay.
 
-## Current assignments — post-audit Red batch gate (2026-09-01)
+## Historical assignments — post-audit Red batch gate (2026-09-01)
 
 ### Codex workhorse lane
 
@@ -4778,7 +4812,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Do not describe this gate as a game-playing model, Red authority, Crystal transfer or living-
   Pokédex completion. Those remain downstream mission gates.
 
-## Current assignments — development terminal and legacy-prefix join (2026-09-01)
+## Historical assignments — development terminal and legacy-prefix join (2026-09-01)
 
 ### Codex workhorse lane
 
@@ -4801,7 +4835,7 @@ Unless a newer, higher-authority protocol explicitly opens the gate, no agent ma
 - Reviewers receive only tracked source and path-free aggregate evidence. ROMs, saves, root
   identities, private journals and outcomes remain private.
 
-## Current assignments — post-gate curriculum redesign (2026-09-02)
+## Historical assignments — post-gate curriculum redesign (2026-09-02)
 
 ### Codex workhorse lane
 
@@ -4829,7 +4863,7 @@ rows plus full available hidden rank. The next Codex task is full verification, 
 exact-main CI. The one action-free V2 qualification remains a later separate step; outcomes remain
 closed.
 
-## Current assignments — Red-first repeatable battle factory (2026-09-03)
+## Historical assignments — Red-first repeatable battle factory (2026-09-03)
 
 ### Codex workhorse lane
 
@@ -4867,7 +4901,7 @@ development accuracy versus 0.704 fixed heuristic). The next offline adapter mus
 `fit_repeatable_battle_train_only.py`: equal examples per train lineage, no development/test records,
 no authority. Commit development choices only after that model exists.
 
-## Current assignments — causal living-Dex bounded outcome (2026-09-03)
+## Historical assignments — causal living-Dex bounded outcome (2026-09-03)
 
 ### Codex workhorse lane
 

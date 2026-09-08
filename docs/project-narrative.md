@@ -1,6 +1,43 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — Arbok obtained, model72; repeat sustained collection next
+## Current — two useful collection chains, not a complete game player
+
+The project now has a bounded example of learned decisions producing repeated
+living-collection progress. Across two linked Red chains, the goal model made
+eight genuine choices. Those chains added Arbok while retaining Ekans, then
+Electrode while retaining Voltorb. The final capture added a spare Drowzee, leaving
+28living species across29specimens and33registered species.
+
+The useful part is composition: the system navigated between regions, used storage,
+handled encounters, recovered resources, developed spare Pokémon and continued from
+earned state after fitting. The difficult parts were not hidden. Three learned
+failures remain in training; four forced or safety-rule support episodes remain
+zero-label history. The twelve episodes consumed54,971actions/4,913,974frames.
+The complete current ROM-free suite passed8,037tests.
+
+The small semantic goal-value ridge model now has75fitted outcomes,33successful
+and65distinct selected feature rows. Those counts are not validation accuracy.
+The model chooses among exposed goals/destinations; deterministic skills execute
+the game mechanics. This is one correlated development lineage, not evidence of
+independent advantage, end-to-end learned play or transfer to another game.
+The linked episodes were operator-launched with verification and fitting between
+them, not an unattended autonomous scheduler.
+
+Phase3's original bounded exit is complete. The next limitation is tangible:
+zero balls and9currency. Four unbeaten Route11 trainers exist in the saved state,
+but making one a safe, model-selectable income/story objective is unfinished.
+Their one-time rewards could reconnect money, supplies and collection without a
+reset. Autonomous multi-target planning, broader story/puzzle execution, learned
+battle authority, independent evaluation and cross-title living completion remain
+future work. Red is still the first curriculum, not the final product.
+
+Both outside reviewers challenged the claim boundary and finite economy. Their
+valid reviews were reasoning over supplied evidence, not independent source audits.
+A previous response that fabricated tool use was rejected rather than incorporated.
+The North Star and stage exits were preserved.
+[Evidence and detailed caveats](audits/red-phase3-sustained-closeout-2026-09-08.md).
+
+## Historical — Arbok obtained, model72; repeat sustained collection next
 
 The first linked chain now includes a real collection gain. Model71 selected
 EVOLVE_SPECIES from genuine acquisition/evolution alternatives, retrieved the earned
@@ -21,7 +58,7 @@ Claude's latest tools-disabled response invented file inspection and is quaranti
 not audit evidence. Flash accepted fresh-choice continuation with retained costs;
 its arbitrary ball threshold was rejected. No pending external reviewer.
 
-## Current — chain03 retained, model70; PC continuation repair
+## Historical — chain03 retained, model70; PC continuation repair
 
 Chain02 genuinely selected healing and succeeded (80 actions / 6,960 frames).
 Chain03 selected acquisition but stopped before any storage transfer (73 actions /
@@ -269,7 +306,7 @@ Safe escort preparation, legitimate Center recovery and capture must still be qu
 as a connected live sequence. No new model example is credited for this maintenance.
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -540,7 +577,7 @@ all four remaining balls. What worked was the connected model-choice→PC→capt
 loop. Affordable resupply and better capture efficiency are the next practical work, not a
 reason to claim autonomous full-game competence or cross-title transfer.
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -723,7 +760,7 @@ new model competence. North Star closeout rules require the map, handoff and nar
 aligned after each completed session and substantial verified progress. Material deviations
 are recorded, not hidden. This is a communication improvement; the learner remains at 32 examples.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The
@@ -757,7 +794,7 @@ that proposal was blocked before input and must not be sold as executed learned 
 development is available for the next bounded learning contrast, not an excuse for arbitrary grinding.
 [Evidence and reorientation](audits/red-search-recovery-2026-09-06.md).
 
-## Current: make learned progress persist, then test adaptation
+## Historical: make learned progress persist, then test adaptation
 
 The player now has a real 31-example outcome model, including two newly sampled choices and all
 29 earlier rows. Its predecessor completed a four-goal collection sequence and saved the resulting
@@ -8786,7 +8823,7 @@ magically contains Silver’s story.
 - Spending setup turns without checking the remaining attacking PP failed at the Champion.
 - Using recoil moves to solve a PP shortage merely moved the shortage into the healing budget.
 
-## Current status and honest limitations
+## Historical status and honest limitations
 
 The active lineage now combines the complete story route, a six-member balanced curriculum,
 checksum-verified storage, the Red-only perfect-save contract, and two live ordinary-wild

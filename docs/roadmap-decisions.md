@@ -1,5 +1,22 @@
 # Roadmap baseline and deviations
 
+## September8 — close bounded sustained Red; qualify resource-backed story work
+
+The original Phase3 exit and prospective two-chain requirement are unchanged.
+Chains01–05 and06–12 provide5and3actual model choices, two retained-base evolutions,
+and full failed/support costs. Only the bounded correlated development stage closes;
+there is no independent advantage, full-player authority or completed Red claim.
+The next stage retains its original model-directed Champion/Hall-of-Fame exit.
+
+Regional destination choices count only at their actual hierarchy. Four support
+episodes add zero labels. Private prospective unique-evolution and cash-only
+profile exposure is disclosed operator composition, not learned target planning.
+The current zero-ball/9currency state motivates trainer funding before broader
+story composition: four uncompleted local trainer events are observed, but no
+income execution is claimed. Do not hide this deficit with protected-stock sales,
+resets or a League replay. Old handoff sections are explicitly historical now.
+[Audit](audits/red-phase3-sustained-closeout-2026-09-08.md).
+
 ## September8 — retain partial evolution; qualify recovery without replay
 
 Model67 selected evolution and grew Ekans6 to11 before a deterministic finisher

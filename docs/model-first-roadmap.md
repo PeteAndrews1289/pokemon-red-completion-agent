@@ -1,6 +1,40 @@
 # Model-first development roadmap
 
-## Current — model67 evolution stopped; exact recovery state retained
+## Current — Phase 3 closed; model75 and resource-backed story work next
+
+Two linked chains met the unchanged bounded sustained-Red exit: five and three
+actual model-selected choices, with Arbok and Electrode added while their base
+forms remained. All failures/support costs are retained: 54,971 actions and
+4,913,974 frames across12episodes. Eight actual outcomes fitted model67 to75;
+four support-only episodes add zero labels. This is correlated development,
+not independent advantage, broad autonomy or learned Red completion.
+
+The final Route11(18,9) checkpoint d8151f88 reloads with29specimens,28living species
+and33registered. Ekans6/Arbok22 and Voltorb16/Electrode30 coexist; two Drowzee13
+offer a possible Hypno continuation. No observed faint or specimen loss. Model75
+has75outcomes,33successful,65distinct rows;58native and18regional inventory records.
+All prior rows are retained. Model74 played after fitting; model75 has not yet.
+
+Zero balls and9currency remain. A zero-input cartridge/event inventory found four
+unbeaten local trainers, but their route, battle, payout and income capability
+are NOT qualified. That is the next practical story/resource seam—not a new full
+teacher replay or a reason to sell protected recovery stock. Trainer rewards are
+finite, not renewable income. The original North Star and full-run gate are unchanged.
+
+Codex owns implementation and publication. Claude Opus4.8 High and Flash3.8 High
+reviewed supplied facts; both accepted the bounded criteria and warned about thin
+model authority and finite resources. A prior fabricated Claude tool/file review
+remains quarantined. No external reviewer or emulator run is pending.
+Full pinned ROM-free suite:8,037passed; private composition checks:16passed.
+Latest Gemini remaining:98.72%five-hour/95.79%weekly at05:24:43UTC; Claude quota
+unavailable, not inferred from token charges.
+
+[Closeout audit](audits/red-phase3-sustained-closeout-2026-09-08.md).
+[Actual evidence](evidence/red-phase3-sustained-closeout-2026-09-08.json).
+[Next work plan](work-sessions/2026-09-08-resource-backed-story-plan.md).
+Recommended next session: Astra High, Fast off for bounded skill qualification.
+
+## Historical — model67 evolution stopped; exact recovery state retained
 
 Model67 chose evolution from capture/evolution/healing alternatives. Ekans grew
 from level6 to11, then the deterministic training skill found no safe finisher
@@ -194,7 +228,7 @@ Details and quotas: [bounded-search audit](audits/red-bounded-search-continuatio
 Recommended next session: Astra Extra High, Fast off; review the mixed-goal boundary,
 then return to High for routine execution. No measured speed or token-cost ratio.
 
-## Current — real recovery, safe failed search, model64 retained
+## Historical — real recovery, safe failed search, model64 retained
 
 The actual fainted AA party recovered through a Pokemon Center: 163 actions and
 9,156 frames, all six members healthy and all25 specimens preserved. Capability-
@@ -233,7 +267,7 @@ review; Extra High for a consequential design blocker. No measured model-cost ra
 
 
 
-## Current — failed source choice retained; model63 fitted
+## Historical — failed source choice retained; model63 fitted
 
 AA selected Route 5 over Route 24 under model62's exploratory source policy,
 probability 0.500251. It failed after 678 actions / 46,596 frames with no capture.
@@ -391,7 +425,7 @@ newly withdrawn Pokemon is healthy. The system must verify changed state, not
 assume that reaching a location means its intended interaction succeeded.
 Older current-labelled entries below are historical.
 
-## Current — U/model60; resource recovery is next
+## Historical — U/model60; resource recovery is next
 
 The fresh acquisition failed after607actions42384frames and two spent balls.
 Storage preparation worked: active headroom1→20, all25specimens/23living species
@@ -412,7 +446,7 @@ close the current milestone. Stage exits and long-term sequence remain unchanged
 [Session audit](audits/red-varied-collection-2026-09-07.md).
 Earlier current-labeled entries below are historical.
 
-## Current — a useful mixed choice learned; broaden collection next
+## Historical — a useful mixed choice learned; broaden collection next
 
 S's actual exploratory policy chose evolution over capture. Shared XP developed
 Abra12 into Kadabra16, preserved Abra10 and all25specimens, and fitted58→59 with every
@@ -427,7 +461,7 @@ before consuming the final boxslot. Model59 has not played; its current resupply
 deterministic safety support and must not become a fabricated training example.
 No full replay, teacher factory, sealed test or Crystal execution is needed here.
 
-## Current — mixed-goal wiring; verify the real next action
+## Historical — mixed-goal wiring; verify the real next action
 
 Ordered future evolution targets now preserve historical profiles; zero/one-source
 contexts reach native goal selection without invented destination samples. Native
@@ -467,7 +501,7 @@ Next session:
 The sustained-Red stage itself remains open; model-led story, living collection, compatible
 unfamiliar Red hack and Crystal retain their unchanged downstream exit criteria.
 
-## Current — automatic fitting works; sustained continuation remains the target
+## Historical — automatic fitting works; sustained continuation remains the target
 
 Model56 retains56 outcomes,20successful. Q's first search failed and was automatically
 fitted; second step unclaimed. Exact21living/23specimens/26registered,4balls109currency,
@@ -483,7 +517,7 @@ Bounded collect/fit/continue is2/3, not full sustained-play completion.
 Long-term model-led Red story/living collection, compatible unfamiliar Red modification,
 Crystal and later games remain unchanged. No full replay or new teacher is the next step.
 
-## Current — affordable continuation after model54
+## Historical — affordable continuation after model54
 
 The resource-aware regional checklist is closed3/3: N selected Route10, caught Voltorb16
 and fitted53→54, preserving every earlier row and22specimens.20living species,25registered.
@@ -497,7 +531,7 @@ New local checklist0/3. N used all four balls and recorded no successful sleep d
 attempts. Catch efficiency and renewable income remain unresolved; do not call the economy
 sustainable. Long-term Red→compatible hack→Crystal goals and stage exits are unchanged.
 
-## Current — model53; capture efficiency blocks the productive follow-up
+## Historical — model53; capture efficiency blocks the productive follow-up
 
 K's model-selected resupply succeeded and fitted50→51. L/M then selected Route10/Route24;
 both searches failed and were fitted51→53. All earlier rows and21 specimens survive;
@@ -572,7 +606,7 @@ example and a productive post-fit evolution. This is not independent learned adv
 The closed infographic checklist remains visible as the handoff into stage3; it is not an estimate
 of full-project completion. Start a new stage3 checklist prospectively next session, preserving this one.
 
-## Current — useful mechanics connected; finish the history lesson
+## Historical — useful mechanics connected; finish the history lesson
 
 [Current audit](audits/red-complete-evolution-learning-2026-09-07.md): model35→41, one new
 productive model-selected capture, complete forced evolution, best save16 living/18 specimens.
@@ -584,7 +618,7 @@ Useful memory-aware play is3/5. Model41's corpus contains zero selected nonzero-
 4. Preserve best save F; then connect useful region/source continuation for sustained play.
    No new mechanics or route expansion during the current learning batch.
 
-## Current — evolution works; turn it into a model-selected lesson
+## Historical — evolution works; turn it into a model-selected lesson
 
 The [latest audit](audits/red-party-selection-evolution-2026-09-07.md) verifies Rapidash40, retained
 Ponyta30 and living14 to15. The final successor completed109 battles in29.807 seconds. This is
@@ -599,7 +633,7 @@ deterministic component qualification, not a new fit. Model35 / useful-play chec
 4. Advance the existing checklist only on these measured results, then reorient toward sustained
    Red play. No exit change, sealed campaign, full replay or Crystal work.
 
-## Current — XP is fast; close the party-selection boundary
+## Historical — XP is fast; close the party-selection boundary
 
 The [latest audit](audits/red-evolution-completion-2026-09-07.md) measures +9,606 XP, level 32 to 35,
 in about 18 seconds before a travel failure. Keeping a safe current venue is implemented and
@@ -612,7 +646,7 @@ All 17 specimens remain. Full evolution, learned lesson and checklist advancemen
 4. Verify exact evolution and precursor retention, then collect a model-selected lesson with
    honest partial-progress accounting. No new features, full replay or Crystal.
 
-## Current — safe XP and resumption work; make evolution useful
+## Historical — safe XP and resumption work; make evolution useful
 
 The [resumable evolution audit](audits/red-resumable-evolution-2026-09-07.md) qualifies native PC
 preparation, no-storage resumption and a four-battle / 508-XP component result. All 17 specimens
@@ -630,7 +664,7 @@ survive; reload matches without input. Ponyta has not evolved. Model 35 and chec
 No baseline exits were changed. This is another maintenance result, so the anti-drift alarm stays
 visible: next work must turn functioning execution into a useful collection outcome and lesson.
 
-## Current — the route works; qualify viable collection development
+## Historical — the route works; qualify viable collection development
 
 The [Center audit](audits/red-center-pc-boundary-2026-09-06.md) identifies unfinished farewell
 dialogue, not a wall, as the PC-route failure. Bounded dialogue completion and the unchanged
@@ -649,7 +683,7 @@ This engineering-only session triggers reorientation under the North Star. Keep 
 four-hour session bound, reassess after 90 minutes without a viable operation, and stop if the
 repair becomes another teacher project. See [active state](../ACTIVE_PRODUCT_STATE.md).
 
-## Current — 35 examples; saved Center PC access is the next blocker
+## Historical — 35 examples; saved Center PC access is the next blocker
 
 The [native evolution audit](audits/red-native-boxed-evolution-2026-09-06.md) records real
 training again: 32 → 33 → 35 examples, all prior rows preserved and three new observed failures.
@@ -667,7 +701,7 @@ No Mansion replay, fixed walk string, arbitrary party grinding or new learner fe
 Useful memory-aware play remains **2/5 (40%)**; actual fitting is not proof of improved competence.
 Red play still precedes Red-hack adaptation and Crystal. No external reviewer was invoked.
 
-## Current — history learner ready; connect a useful collection skill
+## Historical — history learner ready; connect a useful collection skill
 
 Read [the history-learner audit](audits/red-history-aware-learner-2026-09-06.md) and the active state. V2 can represent and fit search
 history while keeping all 32 old examples explicitly unknown. The separate initialized model
@@ -688,7 +722,7 @@ It is the compact visual reference for the sequence below, not a new authority o
 Update its status after a completed session or substantial verified result; preserve baseline
 goals and log material deviations. The current coding task remains history-aware useful Red play.
 
-## Current — persisted search history; history-aware learner next
+## Historical — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
 policy observations and authenticated save/restore. Missing old history remains unknown. The
@@ -704,7 +738,7 @@ revive a teacher/CI campaign. Earlier sections below are historical.
 
 
 
-## Current — 32 examples; break the unproductive search cycle
+## Historical — 32 examples; break the unproductive search cycle
 
 The [saved-endpoint learning audit](audits/red-saved-endpoint-learning-2026-09-06.md) closes a real
 31-to-32 fit with all prior rows retained. One failed search taught actual costs; the sole post-fit
@@ -723,7 +757,7 @@ still precedes unfamiliar compatible Red-modification adaptation and Crystal. Ol
 are history, not permission to reopen consumed attempts.
 
 
-## Current — recovery verified; resume useful selected-outcome learning
+## Historical — recovery verified; resume useful selected-outcome learning
 
 The [search-recovery session](audits/red-search-recovery-2026-09-06.md) reproduced the no-catch
 situation and now retains its typed negative outcome, fresh ledger and restorable endpoint.
@@ -751,7 +785,7 @@ The long-term product remains transferable play and living collections across ga
 The [completed continuation session](work-sessions/2026-09-06-fit31-continuation.md) implements only
 the first milestone; it does not start hack support, Crystal, or a new teacher.
 
-## Current — stop ordinary no-find outcomes from breaking continued play
+## Historical — stop ordinary no-find outcomes from breaking continued play
 
 The continuation authenticated and ran from the saved parent, then failed after one unsupported-menu
 acquisition: 215 actions / 8244 frames, three encounters, zero catches. Search exhaustion was followed
@@ -796,7 +830,7 @@ titles; neither full Red completion by this learned player nor cross-game transf
 
 All checkpoints below are historical.
 
-## Current checkpoint — four goals compose; make the progress durable and learn from useful contrasts
+## Historical checkpoint — four goals compose; make the progress durable and learn from useful contrasts
 
 The unchanged 29-example scorer now participates in an actual four-goal collecting chain. The
 hybrid retained two needed specimens, increasing living species 13 to 14 and reducing required
@@ -844,7 +878,7 @@ four-goal success, and the control tied. The fixed 29-example model is unchanged
 Read the [current session and six-part mission check](work-sessions/2026-09-06-resource-aware-goal-chain.md).
 All checkpoints below are historical, including older headings labeled current.
 
-## Current checkpoint — real choices executed; sustained collection is next
+## Historical checkpoint — real choices executed; sustained collection is next
 
 The four-root check is complete. The 29-example model successfully executed two resupplies and
 one party-development goal. Its collection count did not increase; one control captured a new
@@ -896,7 +930,7 @@ Keep the declared denominator and model/control pre-outcome commitments. No new 
 setup, train-only guard relaxation, easier replacement roots or full teacher replay is justified.
 See the [current session handoff](work-sessions/2026-09-06-bounded-play-and-spectator-dashboard.md).
 
-## Current checkpoint — September 6 real training and post-fit audit complete
+## Historical checkpoint — September 6 real training and post-fit audit complete
 
 **The eight-lesson Red batch ran and the existing option model was fitted once.** It now includes
 29 real train examples, up from 18: five earlier unfitted rows plus six new rows. All 23 pre-run
@@ -1389,7 +1423,7 @@ source-authenticated five-root preflight once. Stop on any mismatch or nonzero p
 preflight permits the production-resolver rehearsal and bounded selected outcomes, not fitting,
 promotion, Crystal access or a full replay.
 
-## Current checkpoint: the missing work is supplement execution, not supply
+## Historical checkpoint: the missing work is supplement execution, not supply
 
 The repaired census and one three-root freeze both succeeded on green main `7d654cdf`.
 All 429 feasible combinations bind. Three new development roots are stored and reopened,
@@ -1403,7 +1437,7 @@ model-selected factual outcomes. Do not create synthetic train rows, repeat the 
 freeze, fit on development, or open Crystal. The full six-part mission check and stop rules are
 in [the current handoff](../HANDOFF.md).
 
-## Current checkpoint: bounded census performance repair
+## Historical checkpoint: bounded census performance repair
 
 The partition fix is published as PR 211 with green CI, but its census was interrupted after
 65 minutes inside repeated binding validation. Build the validated input index once and reuse
@@ -1416,7 +1450,7 @@ This maintenance exists solely to test the already-fitted eighteen-example model
 Red situations. It does not add learning examples, controller authority or a Crystal result.
 See [current handoff](../HANDOFF.md) and the [stop evidence](evidence/red-living-dex-development-supplement-binding-performance-stop-v1-2026-09-04.json).
 
-## Current checkpoint: supply is ample; isolate the Red binding mismatch
+## Historical checkpoint: supply is ample; isolate the Red binding mismatch
 
 PR 209 merged as exact main `61b5cc4b` under green CI `33887050869/1`. One protected action-free
 census then found 13 eligible roots and 429 supplements satisfying the exact three-root family,
@@ -1513,7 +1547,7 @@ Stop if the audit changes, any root overlaps train, a private identity reaches p
 claimed setup is retried, or a development result enters fitting. Crystal remains deliberately
 deferred until this same portable decision seam earns useful Red evidence.
 
-## Current checkpoint: salvage the held exam before building another classroom
+## Historical checkpoint: salvage the held exam before building another classroom
 
 The complete eighteen-example causal model is fitted and immutable. A local action-free audit then
 reopened only its train corpus, exact model record, both historical clustered schedule records and
@@ -1540,7 +1574,7 @@ integration errors and decide whether to redesign the representation; they are n
 strong statistical promotion claim. Controller authority, Crystal, sealed Red and full replay
 remain closed.
 
-## Current checkpoint: the full causal corpus is fitted; buy independent experience next
+## Historical checkpoint: the full causal corpus is fitted; buy independent experience next
 
 PR 205 merged as exact main `4414215e` and passed exact-main CI `33856641047/1`. The authenticated
 action-free update then fitted all **18 settled causal Red train outcomes**, ten more than the prior
@@ -1558,7 +1592,7 @@ with disjoint upstream/physical lineages and the required semantic-family breadt
 selected-arm outcomes, fit train only and compare once on development. Crystal stays deferred until
 that comparison earns a promotion decision.
 
-## Current checkpoint: multi-decision play works; move learning onto prospective roots
+## Historical checkpoint: multi-decision play works; move learning onto prospective roots
 
 Exact main `7133d171` passed CI `33848221585`, and Pair 006 completed from the first eligible unused
 validation capture in canonical order. Both authorities made three acquisition decisions: two
@@ -1632,7 +1666,7 @@ The [Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) defi
 must mature through powered Red evidence, bounded teacher-free authority, living-Pokedex
 composition, and a frozen portable contract before Crystal execution opens.
 
-## Current checkpoint: trial 0 found an index-boundary defect before controller input
+## Historical checkpoint: trial 0 found an index-boundary defect before controller input
 
 The repair passed CI and trial 1 has now produced the first complete new gameplay outcome:
 `develop_team` succeeded with verified semantic change in 2,009 actions / 162,918 frames while all
@@ -1679,7 +1713,7 @@ typed outcome and verified ledger/cost evidence, and fit only completed train ou
 calibration loop for strategic goal choice; it is not independent evaluation, broad autonomy, or
 Crystal transfer. The later 8-train/4-development prospective-lineage gate remains mandatory.
 
-## Current checkpoint: Red-first evidence repair before broader authority
+## Historical checkpoint: Red-first evidence repair before broader authority
 
 The September 2 Ultra audit reclassified the first repeatable result as a **mechanism pass and
 promotion failure**. Authentic outcome adaptation remains real: the challenger improved over its
@@ -1714,7 +1748,7 @@ unique semantic clusters, menu/mechanics coverage, strongest-baseline comparison
 outcomes and safety accounting. See the
 [audit correction](evidence/repeatable-red-battle-learning-audit-v1-2026-09-02.json).
 
-## Current checkpoint: authentic battle training has started
+## Historical checkpoint: authentic battle training has started
 
 Development rigor is now intentionally lighter than benchmark rigor. A fast, reusable loop builds
 Red-backed semantic battle menus, pretrains the shared MLP, measures every legal move from exact
@@ -1744,7 +1778,7 @@ policy, full-player authority, a sealed benchmark, or a Crystal transfer result.
 
 See the [repeatable learning result](evidence/repeatable-red-battle-learning-loop-v1-2026-09-02.json).
 
-## Current checkpoint: route-derived supply is closed; qualify the one-plus-five curriculum
+## Historical checkpoint: route-derived supply is closed; qualify the one-plus-five curriculum
 
 Exact main `a891d302` passed CI `33655762177/1`. Its one two-root successor executed once and both
 assignments failed identically after 111 route steps with `planner_no_route` at the same ready Red
@@ -1775,7 +1809,7 @@ No fit, prediction, battle outcome, authority, sealed Red case, Crystal context,
 occurred in this checkpoint. The board remains **causal train 19 · model fits 6 · verified
 development 6 · unseen comparisons 4 · authority 0 · transfer 0**.
 
-## Current checkpoint: development input is complete; train input is five of seven
+## Historical checkpoint: development input is complete; train input is five of seven
 
 The broader authenticated capture recovery produced five retained train captures and seven
 retained development captures. The additive attempts then produced **0/2 train** and **1/1
@@ -1798,7 +1832,7 @@ immediate maintenance unblock is deliberately narrow:
 
 See the [partition result](evidence/red-battle-v2-partition-capture-completion-result-2026-09-02.json).
 
-## Current checkpoint: the frozen V2 roster is fully exhausted
+## Historical checkpoint: the frozen V2 roster is fully exhausted
 
 The reusable claim-supply audit merged as exact main `43f3d2c7`; CI `33611606034/1` passed. Its
 metadata-only census reopened the terminal freeze and one atomic ledger snapshot. All seven fresh
@@ -2009,7 +2043,7 @@ development partition, checks root claims and reachable venue pressure at zero f
 on any state, assignment, context or lineage collision across partitions. That gate has now passed
 as recorded above.
 
-## Current engineering checkpoint: reusable admission passed; development supply is 0/8
+## Historical engineering checkpoint: reusable admission passed; development supply is 0/8
 
 The batch contract now separates the current outcome consumer from each capture's immutable
 producer and catalog. A reusable metadata-only preflight can reject an incompatible set without a
@@ -2031,7 +2065,7 @@ That is a terminal supply result for those files, not permission to reinterpret 
 The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
 4 · authority 0 · transfer 0**.
 
-## Current engineering checkpoint: seven-input catalog passed; qualify the 7+8 consumer boundary
+## Historical engineering checkpoint: seven-input catalog passed; qualify the 7+8 consumer boundary
 
 Exact main `36d9702f` passed CI `33539191358/1`, and the one action-free catalog build authenticated
 all seven train inputs. It preserved two producer commits, seven unique source roots and capture
@@ -2059,7 +2093,7 @@ Next sequence:
 The board remains **causal train 19 · model fits 6 · verified development 6 · unseen comparisons
 4 · authority 0 · transfer 0**.
 
-## Current engineering checkpoint: mixed-producer catalog is implemented locally
+## Historical engineering checkpoint: mixed-producer catalog is implemented locally
 
 The action-free catalog now has a strict canonical parser and a source-bound builder. It preserves
 two producer records rather than rewriting seven files as one generation, independently reopens
@@ -2072,7 +2106,7 @@ retain a path-free aggregate receipt. Reorient at that result. A selected-action
 and seventh descriptive train-only fit may be designed only if all seven inputs reopen cleanly.
 The development denominator and authority gate remain separate unfinished work.
 
-## Current checkpoint: seven authenticated inputs across two producers
+## Historical checkpoint: seven authenticated inputs across two producers
 
 The additive two-assignment terminal completed **2/2** from exact source `c9547d27` under CI
 `33528613229/1`. Combined with five retained predecessor captures, the battle classroom now has
@@ -2084,7 +2118,7 @@ correct producer commit, preserve unique root/capture identities, exclude failur
 only path-free aggregate evidence. Stop for reorientation after catalog qualification. Only then
 may a selected-action outcome campaign and seventh descriptive fit be designed.
 
-## Current checkpoint: two untouched completion captures are frozen
+## Historical checkpoint: two untouched completion captures are frozen
 
 PR 142 merged as exact main `c9547d27`, and exact-main CI `33528613229/1` passed. The zero-effect
 freeze authenticated 54 catalog train roots, excluded 14 historically attempted sources, retained
@@ -2098,7 +2132,7 @@ fit a model in that execution. If both captures authenticate, the next engineeri
 mixed-producer catalog that verifies five old and two new outputs without erasing their producer
 provenance.
 
-## Current engineering checkpoint: preserve five, add only two
+## Historical engineering checkpoint: preserve five, add only two
 
 The prospective candidate-cardinality repair is published as exact main `2db2fbf1`. The additive
 completion implementation treats the terminal seven-attempt predecessor as immutable history:
@@ -2120,7 +2154,7 @@ Next sequence:
 This gate adds no learning output. The board remains **causal train 19 · model fits 6 · verified
 development 6 · unseen 4 · authority 0 · transfer 0**.
 
-## Current checkpoint: terminal materialization produced five of seven valid captures
+## Historical checkpoint: terminal materialization produced five of seven valid captures
 
 Exact main `24fe239c` passed CI `33515692262/1`, and the successor denominator executed once. Five
 captures independently authenticated: two from Diglett's Cave and three from Route 11. Two Cave
@@ -2154,7 +2188,7 @@ Five captures are scenario inputs, not causal outcomes. The board remains **caus
 model fits 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**. See the
 [terminal result](evidence/red-battle-v2-multivenue-successor-materialization-result-2026-09-01.json).
 
-## Current checkpoint: exact allocation passes at 10 eligible roots / 2 venues
+## Historical checkpoint: exact allocation passes at 10 eligible roots / 2 venues
 
 Published source `98544be8` passed GitHub CI `33487956767/1`. The one V7 census then reopened the
 complete post-exclusion bank at zero actions and frames. Ten claim-available unattempted roots have
@@ -2178,7 +2212,7 @@ This clears prospective supply only. The next order is:
 No learning counter moved: **causal train 19 · model fits 6 · verified development 6 · unseen 4 ·
 authority 0 · transfer 0**.
 
-## Current engineering checkpoint: exact reachable-venue allocation
+## Historical engineering checkpoint: exact reachable-venue allocation
 
 The local successor implements the final retained-bank falsifier. A title-neutral exact allocator
 matches opaque independent roots to semantic venues under a per-venue cap; the Red adapter exposes
@@ -2194,7 +2228,7 @@ further adaptation of the unchanged retained bank and moves directly to genuinel
 scenario generation. See the
 [readiness contract](red-battle-v2-reachable-venue-allocation-readiness.md).
 
-## Current checkpoint: resource restoration failed at 1 root / 1 venue
+## Historical checkpoint: resource restoration failed at 1 root / 1 venue
 
 Exact source `ca9cab88` passed GitHub CI `33481838000/1`. The published V6 census then reopened the
 post-exclusion bank at zero actions and frames. Eighteen roots remain claim-available, but ignoring
@@ -2228,7 +2262,7 @@ venue cap. Failure retires this current-bank conditioning design; pass opens onl
 bound conditioning-aware freezer/materializer design. No existing plan gains conditioning, and no
 learning counter moves. See the [contract](red-battle-v2-resource-conditioning-readiness.md).
 
-## Current checkpoint: the corrected successor census found zero usable roots
+## Historical checkpoint: the corrected successor census found zero usable roots
 
 PR 134 passed exact-head CI `33476185867/1` and merged as `9a5a8fb5`. The published V5 census joined
 the exact exhausted plan and journal, excluded all seven attempted source roots, and reopened 47
@@ -2353,7 +2387,7 @@ only untouched assignments may resume after interruption; every successful state
 be independently reopened against the frozen identity. See the
 [freeze result](evidence/red-battle-v2-materialization-freeze-result-2026-09-01.json).
 
-## Current checkpoint: Celadon is not the second venue
+## Historical checkpoint: Celadon is not the second venue
 
 PR 127 merged as `c9b821a5` after CI `33463086281/1` passed. The new adapter does not assume that
 a Celadon save can Fly: it shares the live executor's exact boundary, badge, living-party, and
@@ -2401,7 +2435,7 @@ belongs to this exact catalog. The next order is therefore:
 This checkpoint adds no learning output. Current evidence remains **causal train 19 · model fits
 6 · verified development 6 · unseen 4 · authority 0 · transfer 0**.
 
-## Current engineering state: the V2 contract exists locally; the roster does not
+## Historical engineering state: the V2 contract exists locally; the roster does not
 
 The outcome-blind V2 schema now joins the full V1 plan, artifact manifest, retained train record,
 and exact measured candidate denominator. It cannot substitute a different prior or a model with
@@ -2429,7 +2463,7 @@ run: no fresh inventory or roster is frozen and no fresh root is claimed. The im
    exist;
 5. separately build and qualify aggregate execution/recovery before requesting any outcomes.
 
-## Current checkpoint: scale the working battle loop into one frozen diverse batch
+## Historical checkpoint: scale the working battle loop into one frozen diverse batch
 
 Exact main `1d955492` passed CI `33424040364/1`, and battle pair V1 completed without an
 infrastructure failure. It claimed and measured three train plus three development move outcomes,
@@ -2809,7 +2843,7 @@ development, run Crystal, or substitute a full-game teacher replay. The honest b
 [consumer qualification](evidence/red-living-dex-clustered-successor-train-consumer-local-qualification-v1-2026-08-29.json),
 which records 73 focused tests and the 5,787-test full repository gate.
 
-## Current checkpoint: successor capacity passed; freeze one fixed 16-row train tranche
+## Historical checkpoint: successor capacity passed; freeze one fixed 16-row train tranche
 
 The exact-main, action-free recensus found 59 unused authenticated Red roots: 36 upstream-train
 and 23 upstream-development lineages, with 55 roots supporting at least one genuine menu. The
@@ -2839,7 +2873,7 @@ settled examples in expectation, while remaining explicitly non-guaranteed. The 
 [capacity result](evidence/red-living-dex-clustered-successor-capacity-v1-2026-08-29.json) and
 [local qualification](evidence/red-living-dex-clustered-successor-freezer-local-qualification-v1-2026-08-29.json).
 
-## Current checkpoint: five clustered examples are real; the integration fit stays closed
+## Historical checkpoint: five clustered examples are real; the integration fit stays closed
 
 All eight frozen Red train assignments are now consumed. Five yielded authentic, independently
 observed selected-arm examples from five lineages: acquisition and resupply succeeded; two
@@ -2864,7 +2898,7 @@ transfer. A five-row fit, retry, development reuse, full-game teacher campaign, 
 out of scope. See the
 [batch result](evidence/red-living-dex-clustered-train-batch-result-v1-2026-08-29.json).
 
-## Current checkpoint: the train-only consumer is local GO; publish and preflight
+## Historical checkpoint: the train-only consumer is local GO; publish and preflight
 
 The frozen 8+4 classroom now has a bounded production consumer. It accepts only train ordinals
 0–7, authenticates the exact private plan and selected root, keeps schedule ordinal separate from
@@ -2887,7 +2921,7 @@ The next product-aligned sequence is:
 The preflight must not accept a ROM and must not claim a root. A preflight pass is readiness, not a
 training example. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current checkpoint: exact private schedule frozen; engineer the train-only consumer
+## Historical checkpoint: exact private schedule frozen; engineer the train-only consumer
 
 PR 101 merged as main `4190b92b` and exact-main CI `33268744819/1` passed. The unchanged action-free
 freezer then ran once and reproduced the recorded 8-train/4-development schedule and policy. It
@@ -2987,7 +3021,7 @@ sequence. The
 binds the implementation and protected zeroes. **Causal train 1/60 · powered fit 0 · authority 0
 · transfer 0.**
 
-## Current checkpoint: the exact population gate failed again; finish one bounded repair
+## Historical checkpoint: the exact population gate failed again; finish one bounded repair
 
 Exact main `624325cf` passed CI `33232635929/1`. Its genuinely new, source-bound twelve-world V2
 plan then produced two `mansion_returned` terminals and three distinct failures before stopping as
@@ -3013,7 +3047,7 @@ The shortest honest sequence is now:
 No additional world, V3 plan, fit, sealed Red, Crystal execution, replay, or authority promotion
 is allowed before steps 1–2. **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current checkpoint: publish the world-variance repair, then freeze a genuinely new yield gate
+## Historical checkpoint: publish the world-variance repair, then freeze a genuinely new yield gate
 
 The mission is unchanged: build a transferable hierarchical agent that finishes stories and builds
 living Pokedexes across versions and generations. Red is the first causal curriculum, not the
@@ -3160,7 +3194,7 @@ Do not add the separate train and development matchings: they compete for the sa
 Do not fit now, execute sealed Red or Crystal, or treat a full-game teacher episode as evaluation.
 **Causal train 1/60 · powered fit 0 · authority 0 · transfer 0.**
 
-## Current checkpoint: one real negative lesson exists; scale evidence before fitting
+## Historical checkpoint: one real negative lesson exists; scale evidence before fitting
 
 The one authorized Red invocation is complete and permanently consumed. Exact source `76856ae1`
 ran under green CI `33120953568/1`. Its randomly selected skill raised a production-runtime error,
@@ -3192,7 +3226,7 @@ The shortest honest sequence is now:
 Do not rerun or refreeze the consumed campaign, fit one row, open sealed Red or Crystal, promote
 authority, or replay the game. **Causal train is 1/1; authority 0; transfer 0.**
 
-## Current checkpoint: public engineering is closed; execute one authentic Red causal lesson
+## Historical checkpoint: public engineering is closed; execute one authentic Red causal lesson
 
 PR 90 and exact-main push CI `33118840112/1` are green on executable commit `6fd2286f`. The
 [reorientation](evidence/red-living-dex-causal-execution-reorientation-v1-2026-08-27.json) leaves
@@ -3216,7 +3250,7 @@ Do not refreeze, retry, add another preflight or wrapper, fit the one row, open 
 Crystal, promote authority, or replay the game. **Causal train remains 0/1; authority 0; transfer
 0.**
 
-## Current checkpoint: one frozen Red lesson is ready for exact publication, not yet training
+## Historical checkpoint: one frozen Red lesson is ready for exact publication, not yet training
 
 The action-free train campaign has already been frozen. Its direct one-shot consumer is now
 locally qualified without reading private state. The production bootstrap admits only exact
@@ -3251,7 +3285,7 @@ records **69 focused · 5,475 full-suite · 299 typed source files** and two pub
 Do not add another preflight or wrapper, refreeze the campaign, retry after input, fit from one
 example, open Crystal early, or confuse feature-contract parity with transfer.
 
-## Current checkpoint: the first causal campaign can be frozen without touching gameplay
+## Historical checkpoint: the first causal campaign can be frozen without touching gameplay
 
 The title-neutral causal boundary is no longer merely local: PR 88 merged as exact main
 `74d7e7e8a27358a87c072c2ad968ba2d9d7b12a2`, and exact-main CI `33098041804/1` passed. The next
@@ -3317,7 +3351,7 @@ The shortest honest sequence is now:
 Do not add another preflight, fit one synthetic or authentic row, open a benchmark or sealed case,
 execute Crystal, promote authority, or replay the full game. Causal train remains **0/1**.
 
-## Current checkpoint: V1 failed before private access; repair one source-inventory false-negative
+## Historical checkpoint: V1 failed before private access; repair one source-inventory false-negative
 
 PR 86 passed its first CI attempt, rebased into main `af62c546`, and exact-main push CI passed. The
 sole V1 preflight then failed at `bootstrap_source_authentication`, before any private producer
@@ -4647,7 +4681,7 @@ opens a separately frozen two-decision composition pilot. Boards remain **30/15/
 **14/4/0/1/1**. This is a Red curriculum loop, not completion, promotion, Crystal, transfer, or a
 living-Pokédex claim.
 
-## Current checkpoint: the scarce-root campaign is closed; train once on the retained acquisition
+## Historical checkpoint: the scarce-root campaign is closed; train once on the retained acquisition
 
 Published source `458d47eace849d55712ff12e7a93f7ca5439579c` passed CI `32147795552/1`.
 Its single authorized action-free freeze failed at sanitized stage `action_free_root_inventory`.
@@ -4666,7 +4700,7 @@ The boards remain **30/15/4/3/0/0** and **14/4/0/1/1**; active scorecard
 **30/30 · 4/5 · 3/3**. A pass retains only a shadow successor and moves directly to a resettable,
 root-disjoint 8-train/4-development one-decision curriculum.
 
-## Current checkpoint: the private plan exists; execution and preflight remain closed
+## Historical checkpoint: the private plan exists; execution and preflight remain closed
 
 Exact source `343cadf921af2b82e79c352163c18d54b3d72d78` passed CI `32141939995/1`. The
 [path-free build receipt](evidence/acquisition-replanning-context-plan-build-v1-2026-08-18.json)
@@ -4683,7 +4717,7 @@ remain zero for this checkpoint. The active lane remains
 execution/admission, then freeze and run one zero-action preflight for the four-root, sixteen-episode
 campaign. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
 
-## Current checkpoint: Red local execution qualified; freeze the curriculum boundary
+## Historical checkpoint: Red local execution qualified; freeze the curriculum boundary
 
 Source `944fdc5b79aa240fb42084e47913f9446883e739` passed CI `32135801933/1`. The
 [path-free execution receipt](evidence/red-encounter-development-execution-qualification-v1-2026-08-18.json)
@@ -4700,7 +4734,7 @@ unused identities, then run one zero-action campaign preflight. A pass permits a
 repeatable development run; a failure closes the incompatible root or campaign without patches.
 Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
 
-## Current checkpoint: portable choice seam qualified; bind one real Red mechanic
+## Historical checkpoint: portable choice seam qualified; bind one real Red mechanic
 
 Source `6d028ea2003a4520b93a47d0607f5af01f8969e4` passed CI `32132328658/1`. The
 [path-free capability receipt](evidence/title-neutral-encounter-development-capability-v1-2026-08-18.json)
@@ -4716,7 +4750,7 @@ The offer must remain action-free. Stop before gameplay; then either freeze a se
 preflight for the 16-episode curriculum or close this mechanic. Counters remain **30/15/4/3/0/0**
 and **14/4/0/1/1**.
 
-## Current checkpoint: curriculum frozen; build one reusable post-capture choice
+## Historical checkpoint: curriculum frozen; build one reusable post-capture choice
 
 Source `96379e8074373c5a9ba981f171ee75aa7080ff4a` passed CI `32129847455/1`. The
 [path-free design receipt](evidence/acquisition-replanning-curriculum-design-v1-2026-08-18.json)
@@ -4733,7 +4767,7 @@ Prefer `DEVELOP_TEAM`; restoration or exploration is acceptable if genuine. Stop
 Red coordinate script, fixed route, root rescue, artificial menu entry, teacher choice, gameplay,
 sealed Red, or Crystal. Counters remain **30/15/4/3/0/0** and **14/4/0/1/1**.
 
-## Current checkpoint: acquisition tied; changed-state replanning is the next missing capability
+## Historical checkpoint: acquisition tied; changed-state replanning is the next missing capability
 
 The [strict paired result](evidence/paired-red-goal-manager-outcome-screen-result-v1-2026-08-18.json)
 (SHA-256 `79c4e171c5833c17e0ab328267a09c0ab538119559347447123d5699702fde38`)
@@ -4748,7 +4782,7 @@ and after collection state changes. If existing evidence cannot prove that quest
 close the lane and specify the smallest new capture requirement. Do not execute, patch routes or
 skills, fit, promote, open sealed Red, or run Crystal.
 
-## Current checkpoint: paired execution qualified; run the exact screen once
+## Historical checkpoint: paired execution qualified; run the exact screen once
 
 Successor source `e77bbe12d70f25b66f068778e0c9bcd3d7b34fb8` passed CI run
 `32126183561`. The [zero-action preflight](evidence/paired-red-goal-manager-execution-preflight-v1-2026-08-18.json)
@@ -4763,7 +4797,7 @@ actions, and frames are descriptive secondary reports only. Close the screen aft
 uninterpretable evidence, or retained failure. Do not retry, replace the root, adapt the model,
 patch routes or skills, fit, promote, open sealed Red, execute Crystal, or replay the game.
 
-## Current checkpoint: paired design frozen; qualify execution without gameplay
+## Historical checkpoint: paired design frozen; qualify execution without gameplay
 
 Exact source `952e0ed9166dd5eb12b5235fcf3a7ebb50112251` passed green CI run
 `32122694671`. One model-blind, development-outcome-unused acquisition train root was formally
@@ -5288,7 +5322,7 @@ and compare once on the twelve new development questions. Stop on post-selection
 identity reuse, weakened diversity or an intervention mismatch. See the
 [path-free design receipt](evidence/repeatable-party-scale-design-v2-2026-08-17.json).
 
-## Current checkpoint: first verified-outcome scorer exists; scale independent evidence
+## Historical checkpoint: first verified-outcome scorer exists; scale independent evidence
 
 The switch-assisted 8+4 gate completed once. Every one of 48 candidate trials measured cleanly,
 yielding eight train and four untouched development questions with both choice kinds, all four
@@ -5356,7 +5390,7 @@ teacher-route hardening, and retries of consumed trials are prohibited in the ac
 reviews benchmark/sealed statistics and claims; Antigravity challenges transfer at milestone
 decisions; neither blocks routine development iteration.
 
-## Current checkpoint: one V1 tombstone; publish and authorize the 54-trial successor
+## Historical checkpoint: one V1 tombstone; publish and authorize the 54-trial successor
 
 The first authorized outcome campaign stopped correctly on its first candidate. Its exact V1 plan
 was file SHA `e8647ac8…`, semantic SHA `8742a06e…`, source `4415667` and CI run `31978843670`
@@ -5404,7 +5438,7 @@ source, preflight advances a controller frame, or the successor lacks exact sour
 Honest counters are **outcomes 0 measured / 1 invalid / 55 total · train usable potential 8/8 ·
 development usable potential 5/6 · fits 0 · authority 0 · sealed Red 0 · Crystal 0 · replay 0**.
 
-## Current checkpoint: collector implemented; publish, bind and preflight it
+## Historical checkpoint: collector implemented; publish, bind and preflight it
 
 The source now contains the missing 14-question / 55-trial outcome campaign. One question becomes
 usable only after every available candidate is measured from an independent clone of its exact
@@ -5455,7 +5489,7 @@ only after this exact tree is published and green. No controller execution is au
 checkpoint. Honest counters remain **priors 2 · roots 14 · PP states 2/2 · menus 14 · required
 trials 55 · outcomes 0/55 (0/14 complete examples) · fits 0 · authority 0**.
 
-## Current checkpoint: input integrity verified; build the bounded outcome collector
+## Historical checkpoint: input integrity verified; build the bounded outcome collector
 
 A separate fail-closed verifier was published at exact source `e849e43`, passed GitHub CI run
 `31973374921` attempt 1, and then audited the official frozen catalog without controller input or
@@ -5503,7 +5537,7 @@ terminal record. Honest counters are **priors 2 · roots 14 · PP states 2/2 · 
 inputs 14/14 · required trials 55 · outcomes 0/55 (0/14 complete examples) · fits 0 ·
 authority 0**.
 
-## Current checkpoint: fourteen inputs frozen; independent review before outcomes
+## Historical checkpoint: fourteen inputs frozen; independent review before outcomes
 
 Exact published source `065c68a` passed GitHub CI run `31969641298` attempt 1. The official
 read-only inventory preserved the historical 81 rows and added exactly the two accepted PP states.
@@ -5532,7 +5566,7 @@ Honest counters are **priors 2 · roots 14 · PP states 2/2 · menus 14 · outco
 authority 0**. This catalog is the first small completion-aware learning experiment, not a claim
 that the final cross-game agent already exists.
 
-## Current checkpoint: both PP states passed; freeze inputs before opening answers
+## Historical checkpoint: both PP states passed; freeze inputs before opening answers
 
 Train and development each ran exactly once under separate owner authorization from source
 `27e966b`, CI run `31962598106` attempt 1 and private v4 plan-file SHA `b9d1eeef…`. Both stopped at
@@ -5564,7 +5598,7 @@ Honest counters are **priors 2 · roots 14 · natural PP states 2/2 · official 
 0/14 · fits 0 · authority 0**. This remains a deliberately small first learner task inside the
 larger cross-game living-Pokédex system; it is not the final policy.
 
-## Current checkpoint: train preparation passed; development authorization is the active gate
+## Historical checkpoint: train preparation passed; development authorization is the active gate
 
 V1, v2 and v3 preparation plans are retired and cannot authorize input. The local v4 candidate
 binds the exact runner bytes, exact CI retry attempt and a runtime cartridge/prior reconstruction;
@@ -5595,7 +5629,7 @@ Honest counters are **priors 2 · roots 14 · natural PP states 1/2 · menus 0 �
 by this lane is resource-aware party/venue ranking; the transfer target is the same choice contract
 under unseen Red roots and then Crystal's title adapter.
 
-## Current checkpoint: the PP bridge exists; publication and authorization are separate gates
+## Historical checkpoint: the PP bridge exists; publication and authorization are separate gates
 
 The project now has an implementation for the two missing natural middle-PP contexts. It does not
 edit emulator memory or ask a teacher/model for an action. A deterministic read-only refresh may
@@ -5621,7 +5655,7 @@ There are still **zero completion-aware outcomes and zero trained completion-awa
 prepared-state runner is infrastructure for authentic resource-pressure examples; it is not a
 teacher demonstration, policy rollout or training episode.
 
-## Current checkpoint: two venue priors are frozen; prepare PP diversity before answers
+## Historical checkpoint: two venue priors are frozen; prepare PP diversity before answers
 
 The one accepted Cave measurement has crossed the source-only bridge. Published head `107e034`
 passed exact CI run `31947146884`; the composer proved all 21 execution-bearing files byte-identical
@@ -5704,7 +5738,7 @@ for the 8+6 fit. Stop if provenance remains unproved, the catalog lacks genuine 
 result joins incorrectly, or Red gains come from overlevelling. No full replay is part of this
 sequence.
 
-## Current checkpoint: the missing Cave fact is measured; compose it without replay
+## Historical checkpoint: the missing Cave fact is measured; compose it without replay
 
 V2 is complete, accepted and permanently consumed. The measurement passed every bound with exact
 accounting and did not construct a learner question. The active code now prepares a distinct-source
@@ -5811,7 +5845,7 @@ write and independently review the narrow second-venue measurement, then seek co
 for only those three bounded preparations. No learner outcome, sealed Red/Crystal context or full
 run opens in this phase.
 
-## Current checkpoint: the first prior exists, but no question has run
+## Historical checkpoint: the first prior exists, but no question has run
 
 Exact head `3a24a2e688ba890c045f163db3734b6cad2034ec` passed CI run `31896779190`.
 Claude's Python 3.11/3.14 delta audit reproduced the 43-element/seven-waiver proof and killed 42 of
@@ -5837,7 +5871,7 @@ Only then inspect already-open non-sealed states for real PP diversity. No secon
 execution or context materialization is authorized yet. See the
 [path-free qualification](evidence/route-11-module-assignment-qualification-2026-08-15.json).
 
-## Current checkpoint: prove the whole live seam, not selected functions
+## Historical checkpoint: prove the whole live seam, not selected functions
 
 Claude's audit of exact `7f4d8de` rejected the first portable proof despite green CI. The central
 failure was scope: `run_red_team_balancing` called changed candidate projectors whose source was not
@@ -5863,7 +5897,7 @@ Next gate: publish, exact-head CI, then Claude's read-only delta mutation audit.
 closed. Priors 0, menus 0, outcomes 0/14, fits 0, controller/teacher 0, sealed Red 0, Crystal 0,
 replay 0 and authority 0.
 
-## Current checkpoint: make historical evidence survive source time and Python time
+## Historical checkpoint: make historical evidence survive source time and Python time
 
 Claude rejected the first Route 11 prior composer because it could correctly divide the observed
 counts while still lying about which code produced them. Source `0d89d85` closed that class of
@@ -5888,7 +5922,7 @@ locate or prospectively create depleted-PP non-sealed contexts and freeze the ge
 6-development input catalog for review. Outcomes remain 0/14; no controller, teacher, fit,
 prediction, sealed Red, Crystal, replay or authority is open.
 
-## Current checkpoint: close the real constraint gap, then build the curriculum
+## Historical checkpoint: close the real constraint gap, then build the curriculum
 
 Exact source `587fb18` passed 3,435 tests, Ruff, mypy across 222 source files and every generated-
 registry check. It upgrades prospective party bindings/catalogs to v5 and their menu document to
@@ -5923,7 +5957,7 @@ contexts; then materialize and freeze the exact 8 train / 6 development **inputs
 concrete catalog before any execution. Outcomes remain 0/14; fit, prediction, sealed Red, Crystal,
 replay and authority remain closed.
 
-## Current checkpoint: freeze the Red curriculum, not its answers
+## Historical checkpoint: freeze the Red curriculum, not its answers
 
 Exact source `85ae878` completes the prospective question-to-outcome seam and passes 3,432 tests
 plus every local quality/privacy/registry gate. A generic bound outcome keeps the digest of the
@@ -5948,7 +5982,7 @@ and materialization/freezing of exactly 8 train
 and 6 development menus. Review those inputs before execution. The counter is still 0/14; no fit,
 sealed case, Crystal context, replay or authority is authorized.
 
-## Current checkpoint: bind real Red menus without manufacturing evidence
+## Historical checkpoint: bind real Red menus without manufacturing evidence
 
 Exact source `4b4e267` closes the reusable implementation gap named by the prior checkpoint. The
 title-neutral adapter authenticates one complete private semantic snapshot, projects learner-safe
@@ -5968,7 +6002,7 @@ Search authenticated non-sealed states for depleted PP; if none qualify, prospec
 bounded materialization that creates no learner label. Only then construct and review the exact 8+6
 catalog. See the [source qualification](evidence/party-development-title-neutral-input-contract-2026-08-15.json).
 
-## Current checkpoint: construct the prospective completion-aware party catalog
+## Historical checkpoint: construct the prospective completion-aware party catalog
 
 ### Immediate gate: harden and qualify the one-shot Cave fact
 
@@ -6037,7 +6071,7 @@ evolution and role needs already shape this party representation and every futur
 capture, storage and trade expansion resumes after the Milestone 3 unseen battle gate; the current
 party lane is prerequisite infrastructure for evolving and retaining that collection efficiently.
 
-## Current checkpoint: traversal is live-qualified; widen the party curriculum
+## Historical checkpoint: traversal is live-qualified; widen the party curriculum
 
 The 39 Cave transitions in the accepted V2 party result now have a causal explanation. The old
 global pacing helper stepped off an automatic exit, hit terrain, then reversed across the exit.
@@ -6613,7 +6647,7 @@ The observatory should prioritize learning and generalization rather than elapse
 Live game video remains useful, but it is supporting evidence rather than the primary progress
 metric.
 
-## Current order of execution
+## Historical order of execution
 
 1. Milestone 0: failed-run postmortem and future diagnostic retention.
 2. Milestone 1: the first real battle scenario-to-update loop is closed with a rejected candidate;
@@ -6634,7 +6668,7 @@ multi-generation, living-Pokédex agent is a longer research program. Roadmap es
 from measured scenario throughput, never from optimism or the fact that a teacher route already
 works.
 
-## Current checkpoint — first clustered observed-arm outcome
+## Historical checkpoint — first clustered observed-arm outcome
 
 The train-only consumer is published at `bedcc0bb`, exact-main CI `33275740732/1` is green, and one
 ROM-free authenticated preflight accepted ordinal zero while every protected effect remained zero.
@@ -6654,7 +6688,7 @@ Next sequence:
 The eight-row fit is a wiring and information check, not gameplay authority. A full Red run, sealed
 evaluation, Crystal execution, and living-Pokédex completion remain downstream gates.
 
-## Current checkpoint — battle V2 multi-venue execution gate
+## Historical checkpoint — battle V2 multi-venue execution gate
 
 The V7 action-free census passed from main `65d9b2b4`: ten untouched roots support current
 two-action battle pressure at both Route 11 and Diglett's Cave, and an exact capped allocation can
@@ -6684,7 +6718,7 @@ Mission check: this restores a short genuine learning loop rather than another w
 It advances the shared battle learner that later titles can reuse, but produces no model progress
 until authentic selected actions and outcomes exist.
 
-## Current checkpoint — post-audit Red batch training gate
+## Historical checkpoint — post-audit Red batch training gate
 
 The zero-effect development freezer selected eight independent development roots, split four
 Diglett's Cave and four Route 11, with every protected effect still zero. The post-audit repair
@@ -6712,7 +6746,7 @@ Current state is **engineering ready, not executed**. The exact next sequence is
 This is the first gate where “begin training” has a literal production path. It is still bounded
 battle preference learning, not autonomous game completion or living-Pokédex authority.
 
-## Current checkpoint — development set complete, narrow legacy-prefix repair pending
+## Historical checkpoint — development set complete, narrow legacy-prefix repair pending
 
 The exact-main development plan completed all eight one-shot captures: four Diglett's Cave and
 four Route 11, each from a distinct development root. The terminal journal contains eight
@@ -6767,7 +6801,7 @@ product still requires bounded battle competence, navigation, party development,
 planning, and then frozen Red-to-Crystal transfer evidence. Counters remain train 19, fits 6,
 verified development 6, unseen comparisons 4, authority 0 and transfer 0.
 
-## Current checkpoint — targeted Red capacity census
+## Historical checkpoint — targeted Red capacity census
 
 Exact main `481accfd049bf2dc3e6cc30888e6fcd8e2167ed7` passed CI run `33985137655/1` with
 6,801 tests, four skips and one expected failure. Its production census authenticated all 81
