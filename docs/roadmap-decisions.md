@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## September8 — safe travel stopping qualified; execution origin must be explicit
+
+Source400f3d81 repairs pre-input interruption capacity and exact private failure
+retention without raising limits.350tests and a zero-input real-save round-trip
+pass. No new gameplay or learning; checklist2/3andPhase3are unchanged. Stop further
+infrastructure expansion and settle a bounded new practice origin. The lost
+Route10 terminal stays lost, and its consumed trial/costs remain recorded. No
+silent rewind, new lineage claim or automatic unsafe-state recovery is authorized.
+
 ## September8 — useful choices exposed; safe travel termination is next
 
 Four candidate sources qualified with cartridge-derived alternative stock.

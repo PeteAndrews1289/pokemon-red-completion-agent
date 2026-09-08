@@ -2,6 +2,11 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
+Latest repair: safe travel stopping and private failure-state retention qualified
+under400f3d81,350tests and exact zero-input emulator serialization. Model66still
+has66examples. Next settle the new training origin, then a useful acquisition
+lesson; no Crystal execution or new teacher. [Audit](audits/red-safe-travel-stop-2026-09-08.md).
+
 Latest September8 session: four useful source candidates admitted; the sole
 Route10 attempt stopped in Rock Tunnel after16resolved wild encounters and a17th
 entry. No capture, fit or terminal save; model66unchanged. Next is safe bounded

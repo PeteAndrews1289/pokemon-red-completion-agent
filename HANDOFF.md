@@ -1,6 +1,31 @@
 # Handoff
 
-## Current — alternative choices qualified; travel failure stopped the attempt
+## Current — safe travel-stop repair qualified; next execution origin unresolved
+
+Published source400f3d81 stops before route movement/waits when the interruption
+budget is exhausted. Limit16 unchanged; exact acknowledged completion is allowed.
+Unsafe or unsettled state is not falsely certified. Failed readiness receipts
+remain in the partial route trace.
+
+Private failure_state captures exact bytes, held buttons and counters before
+component recovery or unsafe terminal close. It is diagnostic only, not a safe
+checkpoint, continuation grant or training target. It cannot recover the previous
+lost Route10 terminal or guarantee writes during power/disk failure.
+
+311focused/adjacent tests plus39protocol tests pass; three source typechecks and
+lint pass. The actual historical save restored and167,677bytes round-tripped with
+zero input/frames/model queries. No new live episode, capture or fit: model66
+remains66rows/27successful/56distinct. Useful acquisition2/3andPhase3unchanged.
+
+Next settle the new training origin, then one useful played-and-fitted lesson.
+The old Route11 save is historical; a fresh practice branch must be explicitly
+disclosed, bounded and retain the old failed attempt/costs and same lineage.
+Never present that as uninterrupted continuation or resample the consumed trial.
+Stop infrastructure expansion now. No Flash/Claude work or pending external task.
+[Audit](docs/audits/red-safe-travel-stop-2026-09-08.md).
+Recommended: Astra High, Fast off for bounded execution and review.
+
+## Historical — alternative choices qualified; travel failure stopped the attempt
 
 Published implementation54c96ce0 qualifies four actual source candidates from
 model66's historical Route11 endpoint (previously one): Routes11,4,24,10.

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-alternative-acquisition**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-safe-travel-stop**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-alternative-acquisition-2026-09-08.json)
+[Current evidence](../docs/evidence/red-safe-travel-stop-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-safe-travel-stop
+
+Travel now checks interruption budget before new inputs; exact failure state retained as diagnostic only.350tests pass and167,677actual emulator bytes round-trip with0input. Model66/checklist2/3unchanged.
+
+**Deviation:** Engineering-only session honored the maintenance time box; no consumed replay, invented label, automatic unsafe recovery or baseline change.
+
+**Next:** Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal.
 
 ### 2026-09-08-alternative-acquisition
 

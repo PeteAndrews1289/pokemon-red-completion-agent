@@ -1,0 +1,48 @@
+{
+  "schema": "pokemon.red.safe-travel-stop-audit.v1",
+  "status": "engineering_qualified_no_new_gameplay",
+  "source_commit": "400f3d8117f540a78d371fffea893a349027569d",
+  "source_bundle_sha256": "38d4b4081ad89df99ced9bc4e8f65c6e815c34481ea4b2e3724eb482aa928771",
+  "model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+  "historical_checkpoint_sha256": "c25d56166a3f586118052c9f6bfd8f047a8a8f52c1b00254165e40d601b77786",
+  "validation": {
+    "focused_and_adjacent_tests_passed": 311,
+    "protocol_tests_passed": 39,
+    "changed_source_typecheck_files": 3,
+    "lint": "passed",
+    "route_interruption_limit_unchanged": 16,
+    "tested_limits": [1, 2, 8, 16],
+    "pre_action_stops": ["movement", "retry_wait", "transition_wait", "readiness_wait"],
+    "exact_acknowledged_terminal_at_limit_completes": true,
+    "unsettled_transition_not_certified": true,
+    "failed_readiness_receipts_retained": true,
+    "private_failure_state_written_before_emulator_close": true,
+    "unsafe_failure_state_admitted_to_continuation_or_training": false
+  },
+  "read_only_emulator_check": {
+    "historical_restore_verified": true,
+    "state_bytes": 167677,
+    "state_sha256": "e99c348d1b81674e16073d8af23313b1c5741e35e191df5ff94ff89e3ec042d3",
+    "round_trip_exact": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "original_failed_terminal_recovered": false
+  },
+  "learning": {
+    "settled_examples": 66,
+    "successful_examples": 27,
+    "distinct_selected_feature_rows": 56,
+    "new_fits": 0,
+    "new_training_examples": 0,
+    "new_captures": 0,
+    "new_input_bearing_episodes": 0
+  },
+  "scope": "Bounded maintenance unblocking useful model-selected acquisition; not live route success or independent evaluation.",
+  "external_agents_used": false,
+  "milestone": "Useful post-evolution acquisition choices remains 2/3; no whole-phase percentage.",
+  "next": "Declare a bounded fresh training origin before another acquisition lesson. The old Route11 save is historical; preserve the consumed Route10 failure, its costs and lineage, and never silently relabel a restart as continuous play.",
+  "independent_evaluation": false,
+  "teacher_queries": 0,
+  "crystal_execution": false
+}

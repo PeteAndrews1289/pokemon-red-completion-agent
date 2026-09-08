@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal.
+- Next decision: Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | Model66 has now selected Route10 from four real source candidates, but travel failed before capture and no terminal checkpoint or fit was produced.66fitted outcomes/27successful/56distinct and45native/15regional entries remain. Historical safe save:26living/31registered; failed trace ended mid-battle with fourballs209currency and six healthy. |
+| Authority now | Model66 remains66fitted outcomes/27successful/56distinct and45native/15regional entries. This session changed only safe travel stopping and diagnostic state retention; no new gameplay or fit. Its prior Route10 attempt remains failed and consumed; historical safe Route11 save is preserved. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | At the configured travel interruption limit, can the next attempt stop with field control and retain an exact resumable endpoint before another movement triggers battle? |
+| Cheapest falsifier | From an explicitly declared new training origin, can one model-selected useful acquisition retain its true terminal and admissible outcome without losing the failure boundary? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-alternative-acquisition** · status **active** · evidence [falsification](docs/evidence/red-alternative-acquisition-2026-09-08.json)
+**2026-09-08-safe-travel-stop** · status **active** · evidence [falsification](docs/evidence/red-safe-travel-stop-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Useful precursor choices support living completion, but sustained play also requires bounded travel to leave recoverable state. Reuse existing skills, not another teacher. |
-| Learning output | Zero new fits or admitted outcomes. Model66 remains at66rows/27successful/56distinct. Failed trace retains853actions/52,068frames; no new capture. |
-| Authority delta | Model66 chose Route10 from four admitted sources; failed travel produced no completed capture, new fitted row or authority promotion. |
-| Transfer result | 172focused,162adjacent,39protocol tests;192exhaustive inventories. Four action-free source candidates, then one failed actual route. No independent transfer or whole-route success claim. |
-| Blocker | The 17th wild battle exceeded the 16-interruption route limit. Mid-battle terminal save was refused; exact failed emulator state was not retained. |
-| Decision | Stop at the declared failed-skill boundary. Alternative allocation and actual support are qualified (2/3), but useful played-and-fitted acquisition remains unfinished. Repair safe travel termination next; Phase3 and long-term exits unchanged. |
-| Next session | Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal. |
-| Next falsifier | At the configured travel interruption limit, can the next attempt stop with field control and retain an exact resumable endpoint before another movement triggers battle? |
-| Stop condition | This attempt is consumed. No further gameplay this session; do not waive checkpoint safety, silently restore the old Route11 save as continuous play, or fit incomplete infrastructure diagnostics. |
+| Product alignment | Sustained collection requires travel to stop before unsupported control and preserve exact failure state. This repair unblocks the existing model-directed acquisition lesson. |
+| Learning output | Zero new inputs, model queries, captures or fits. Model66 remains66rows/27successful/56distinct; all prior evidence unchanged. |
+| Authority delta | None. Route-budget stopping and private failure-state retention qualified; no new gameplay, outcome label or fitted weight. |
+| Transfer result | 311focused/adjacent and39protocol tests at interruption limits1,2,8,16; real167,677-byte save round-trips with zero input. No new live-route or independent-transfer result. |
+| Blocker | The previous Route10 terminal was lost. Next execution needs an explicit training-origin decision; the old Route11 save is not uninterrupted continuation. |
+| Decision | Bounded maintenance completed; stop infrastructure expansion.350focused/adjacent/protocol tests and exact real-emulator serialization pass. Useful acquisition remains2/3 and Phase3current. |
+| Next session | Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal. |
+| Next falsifier | From an explicitly declared new training origin, can one model-selected useful acquisition retain its true terminal and admissible outcome without losing the failure boundary? |
+| Stop condition | No new input-bearing episode until the recovery origin is explicitly settled. The original consumed trial stays closed; unsafe diagnostic saves are not admitted checkpoints or training labels. |
 
 ### Stop conditions
 

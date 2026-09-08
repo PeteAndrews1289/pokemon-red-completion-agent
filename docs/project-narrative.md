@@ -1,5 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 8 — preserving the point of failure
+
+The previous attempt revealed a costly boundary error: the route waited until
+a seventeenth wild battle started before rejecting a sixteen-interruption budget.
+The repair checks before the next travel input. It still permits already
+acknowledged completion and does not disguise an unsettled transition as success.
+
+We also added exact private failure-state retention before recovery or shutdown,
+without releasing buttons or advancing the game. Those bytes are diagnostics,
+not safe checkpoints or training labels. A real save round-tripped167,677bytes
+exactly;350focused/adjacent/protocol tests passed.
+
+No Pokémon was captured and no model was fitted in this engineering session.
+Model66still has66examples. The lost terminal cannot be recreated honestly from
+its earlier save. The next practice run needs an explicitly declared origin,
+with the old failure preserved—not a silent rewind presented as continuous play.
+This is supporting work for sustained model-led collection, not another teacher
+or a new completion claim. Flash and Claude were unnecessary for this local repair.
+[Audit](audits/red-safe-travel-stop-2026-09-08.md).
+
 ## September 8 — more useful choices, then a travel limit exposed
 
 The stock planner learned no new weights today; its deterministic support became
