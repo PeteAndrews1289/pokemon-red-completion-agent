@@ -1,6 +1,26 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — a good attack matchup can still be a bad switch
+## Current — survival is a turn budget, not a health percentage
+
+The next recovery actually moved the game forward: Blastoise took over, used one
+Full Restore and defeated Jynx. All six party members remained unfainted. The run
+stopped at Lapras because Confuse Ray exceeds the current supported mechanics.
+
+The reusable improvement is replacing a crude half-health rule with conservative
+incoming-damage and explicit resource budgets inside a separate recovery skill.
+Damage limits account for normal/critical hits and observed coverage; item use
+must prove the exact bag change. The recorded108actions/9456frames and one item
+remain costs even though the overall recovery stopped. The new saved failure is
+the continuation source; old states are not replayed to erase those costs.
+
+This still is not new model training: the learned selector remains at76 outcomes.
+It is maintenance for a real story-versus-preparation lesson. We now need to
+distinguish a selected attack from a completed turn when confusion prevents move
+execution, not keep enlarging a general battle simulator. Flash supplied a small
+test/design critique; Claude challenged survival assumptions. Their advice was
+selectively accepted, not treated as proof. Lorelei, Red and Phase4 remain unfinished.
+
+## Historical — a good attack matchup can still be a bad switch
 
 The failed battle exposed a reusable distinction: a reserve can have the right
 attack yet take a super-effective hit before it gets to use it. The controller now

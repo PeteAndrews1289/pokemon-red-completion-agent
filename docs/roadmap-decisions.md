@@ -1,5 +1,17 @@
 # Roadmap baseline and deviations
 
+## September8 — budgeted recovery advanced; confusion is the next boundary
+
+One separately scoped deterministic recovery replaced the flat half-HP and forced
+attack-between-switch heuristics only inside its own survival budget. Default
+trainer control remains unchanged. One Full Restore and108actions/9456frames
+defeated Jynx, then the recovery stopped at unsupported Lapras confusion. All party
+members survive; neither the consumed input nor its costs may be reset.
+
+Next repair the existing turn-evidence boundary, not an entire simulator or a new
+teacher campaign. Genuine model-selected story-versus-preparation learning remains
+the named unblock. Model76, stage exits and the1/3 checklist are unchanged.
+
 ## September8 — current blocker is switch-entry survival, not training supply
 
 Two native singleton rehearsals reached actual boss combat and defeated three quoted

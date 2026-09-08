@@ -13,6 +13,22 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Latest bounded reviews — September8 recovery
+
+Claude Opus4.8 High gave no-tools survival advice; Flash3.8 High gave a short
+confusion/test-design critique. Neither was a code audit or an independent
+implementation. Codex accepted fractional-HP criticism and intent/outcome
+separation, but rejected empirical-hit maxima, HP-only self-hit proof, opponent
+zero-HP as trainer victory and full-HP assumptions after an opponent reply.
+Keep the next agent task to discriminating confusion/runtime tests, not a broad
+architecture rewrite. Codex alone implements and executes retained-state recovery.
+
+Gemini refreshed quota at approximately23:18UTC September8:100%five-hour and
+94%weekly remaining, displayed resets4h58m/3days (rounded). The initial cached
+screen was stale, so no reliable before/after consumption measurement exists.
+Claude subscription five-hour/weekly quota remains unavailable: its usage CLI
+stopped at first-run setup. No quota or permissions were changed.
+
 ### Current budget-conscious implementation loop — September 8
 
 The live retrieval/Indigo-flight slice also used no external reviewer or quota check.

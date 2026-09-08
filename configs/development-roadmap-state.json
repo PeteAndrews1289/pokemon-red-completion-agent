@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-switch-entry-screen",
+  "as_of_session": "2026-09-08-budgeted-trainer-recovery",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -384,6 +384,12 @@
       "result": "Observed coverage screen rejects the remaining ice-vulnerable reserve at the exact saved Jynx failure.364 focused tests pass; no gameplay, healing, labels or fit.",
       "deviation": "Bounded maintenance for the story lesson. No-learning alarm remains active; type screening is not survival qualification, and stage exits are unchanged.",
       "next": "Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next."
+    },
+    {
+      "session": "2026-09-08-budgeted-trainer-recovery",
+      "result": "Jynx defeated with one Full Restore in108actions/9456frames; all six unfainted. Paused at Lapras/Confuse Ray. Collection30/28/33 and model76 unchanged; checklist1/3.",
+      "deviation": "Explicit separate recovery allows survival-budgeted healing and an emergency switch without a forced attack. All prior failures and costs retained; no stage exit weakened and no support labels.",
+      "next": "Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting."
     }
   ],
   "closed_milestones": [

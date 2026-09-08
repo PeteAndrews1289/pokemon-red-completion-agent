@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next.
+- Next decision: Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Native trainer-story rehearsal reached Lorelei and defeated three opponents; switch-entry survival and recovery remain unqualified. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Native rehearsals add0labels; exact ef23 is paused mid-battle after three Lorelei opponents.30specimens/28living/33registered,619currency,bag unchanged. |
+| Reusable capability | Budgeted deterministic recovery defeated Jynx with one Full Restore; all six party members remain unfainted. Paused at Lapras because confusion turns are unsupported. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Recovery adds0labels/queries. Retained state2e9d70ff faces Lapras after Jynx;30specimens/28living/33registered,619currency,three Full Restores remain. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice? |
+| Cheapest falsifier | Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-switch-entry-screen** · status **active** · evidence [qualification](docs/evidence/red-switch-entry-screen-2026-09-08.json)
+**2026-09-08-budgeted-trainer-recovery** · status **active** · evidence [qualification](docs/evidence/red-budgeted-trainer-recovery-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Maintenance rejects an actual vulnerable switch, unblocking the named story-versus-preparation experiment without claiming learned progress. |
-| Learning output | Zero new actions, frames, items, queries or training rows.364 targeted tests; current save verified byte-for-byte unchanged. |
+| Product alignment | Maintenance unblocks the named genuine story-versus-preparation lesson. Battle support is not a model authority increase; the no-learning alarm remains active. |
+| Learning output | 108actions/9456frames; Jynx defeated; one Full Restore spent.506 focused tests. Zero model queries/fit rows; collection reverified without input. |
 | Authority delta | Zero authority promotions, model queries or new fit rows. Model76 is unchanged. |
-| Transfer result | Varied ROM-free coverage, immunity, party-order and stale-input tests pass. No independent transfer or survival claim. |
-| Blocker | The remaining prepared reserve is weak to an observed Ice Punch. Type screening rejects it but cannot qualify neutral/critical damage or a safe healing turn. |
-| Decision | Keep the exact battle paused. The entry rejection screen is qualified; stop preparation expansion and implement the smallest budgeted recovery needed for the story lesson. |
-| Next session | Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next. |
-| Next falsifier | Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice? |
-| Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
+| Transfer result | Varied ROM-free damage, item-budget, stale-input and switch-history tests pass. No cross-game or independent gameplay evaluation. |
+| Blocker | Lapras has Confuse Ray. Status/confusion damage and non-PP-consuming turn completion remain unsupported. |
+| Decision | Close the consumed Jynx recovery with its actual partial progress. Qualify only the confusion/turn boundary needed for the named story lesson, not a full battle simulator. |
+| Next session | Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting. |
+| Next falsifier | Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state? |
+| Stop condition | Stop unsupported or unsafe turns, preserve exact failure and all cumulative costs. Do not rewind consumed attempts, refresh spent budgets or count support as training. |
 
 ### Stop conditions
 

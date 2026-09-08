@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Native trainer-story rehearsal reached Lorelei and defeated three opponents; switch-entry survival and recovery remain unqualified.",
-      "cheapest_falsifier": "Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice?",
+      "capability": "Budgeted deterministic recovery defeated Jynx with one Full Restore; all six party members remain unfainted. Paused at Lapras because confusion turns are unsupported.",
+      "cheapest_falsifier": "Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "Zero authority promotions, model queries or new fit rows. Model76 is unchanged.",
-        "blocker": "The remaining prepared reserve is weak to an observed Ice Punch. Type screening rejects it but cannot qualify neutral/critical damage or a safe healing turn.",
-        "decision": "Keep the exact battle paused. The entry rejection screen is qualified; stop preparation expansion and implement the smallest budgeted recovery needed for the story lesson.",
+        "blocker": "Lapras has Confuse Ray. Status/confusion damage and non-PP-consuming turn completion remain unsupported.",
+        "decision": "Close the consumed Jynx recovery with its actual partial progress. Qualify only the confusion/turn boundary needed for the named story lesson, not a full battle simulator.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-switch-entry-screen-2026-09-08.json",
-          "sha256": "5f840142ac5e3ba43ea1df3c179b7b5b71703f731c7ca0f21a5e5591d9f816d3"
+          "path": "docs/evidence/red-budgeted-trainer-recovery-2026-09-08.json",
+          "sha256": "fcc597c0c1e962550f8d9c019b157b81e537ef3e107adc1242016e216f8c3b0e"
         },
-        "learning_output": "Zero new actions, frames, items, queries or training rows.364 targeted tests; current save verified byte-for-byte unchanged.",
-        "next_falsifier": "Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice?",
-        "next_session_goal": "Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next.",
-        "product_alignment": "Maintenance rejects an actual vulnerable switch, unblocking the named story-versus-preparation experiment without claiming learned progress.",
-        "session_id": "2026-09-08-switch-entry-screen",
+        "learning_output": "108actions/9456frames; Jynx defeated; one Full Restore spent.506 focused tests. Zero model queries/fit rows; collection reverified without input.",
+        "next_falsifier": "Can the existing runtime distinguish a resolved confused turn from an unchanged menu without assuming PP loss, then preserve the party from the retained Lapras state?",
+        "next_session_goal": "Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting.",
+        "product_alignment": "Maintenance unblocks the named genuine story-versus-preparation lesson. Battle support is not a model authority increase; the no-learning alarm remains active.",
+        "session_id": "2026-09-08-budgeted-trainer-recovery",
         "status": "active",
-        "stop_condition": "Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning.",
-        "transfer_result": "Varied ROM-free coverage, immunity, party-order and stale-input tests pass. No independent transfer or survival claim."
+        "stop_condition": "Stop unsupported or unsafe turns, preserve exact failure and all cumulative costs. Do not rewind consumed attempts, refresh spent budgets or count support as training.",
+        "transfer_result": "Varied ROM-free damage, item-budget, stale-input and switch-history tests pass. No cross-game or independent gameplay evaluation."
       },
       "learned_authority": {
-        "current": "Model76 retains76 fitted outcomes,34successful,66distinct rows. Native rehearsals add0labels; exact ef23 is paused mid-battle after three Lorelei opponents.30specimens/28living/33registered,619currency,bag unchanged.",
+        "current": "Model76 retains76 fitted outcomes,34successful,66distinct rows. Recovery adds0labels/queries. Retained state2e9d70ff faces Lapras after Jynx;30specimens/28living/33registered,619currency,three Full Restores remain.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red resource-backed story integration V1",
-      "next_decision": "Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next.",
+      "next_decision": "Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

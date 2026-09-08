@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-switch-entry-screen**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-budgeted-trainer-recovery**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-budgeted-trainer-recovery
+
+Jynx defeated with one Full Restore in108actions/9456frames; all six unfainted. Paused at Lapras/Confuse Ray. Collection30/28/33 and model76 unchanged; checklist1/3.
+
+**Deviation:** Explicit separate recovery allows survival-budgeted healing and an emergency switch without a forced attack. All prior failures and costs retained; no stage exit weakened and no support labels.
+
+**Next:** Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting.
 
 ### 2026-09-08-switch-entry-screen
 

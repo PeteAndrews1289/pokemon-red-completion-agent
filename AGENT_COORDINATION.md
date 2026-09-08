@@ -1,6 +1,42 @@
 # Three-agent coordination
 
-## Current — incoming coverage screen qualified; recovery still pending
+## Current — Jynx defeated; retained recovery paused at Lapras
+
+Published executable9cdecde2 ran exactly one budgeted deterministic recovery.
+It switched to Blastoise, used one Full Restore and defeated Jynx in108actions/
+9456frames. All six party members are unfainted. This is useful skill progress,
+not a learned policy result: zero model queries/fit rows; model76 is unchanged.
+
+The sole current state is failed episode
+`red-phase4-trainer-survival-recovery-20260908-01`, manifest`d0f30e05`,
+last failure state`2e9d70ff`. It is NOT an admitted checkpoint. Lapras56 has220HP;
+Blastoise66 is active at198/213HP. Consumed switches are[2,4,1]; one of the
+two declared Full Restores is spent, three remain in the bag. Do not refresh this
+budget or replay historical ef23. The exact saved party/boxes were reverified
+with zero input:30specimens/28living/33registered,619currency.
+
+The explicit stop is unsupported status/confusion incoming turns: Lapras has
+Confuse Ray. Next qualify confusion-aware turn evidence and self-hit/reply risk in
+the existing runtime, then a separately declared successor from2e9 only. Do not
+replace PP evidence with ambiguous HP loss or a menu that never visibly advanced.
+Trainer victory still needs terminal proof; one opponent reaching zero HP is not it.
+
+506 focused ROM-free tests passed; lint/type/registry checks passed. Full suite
+was not run. Income-to-story remains1/3, Phase4 incomplete, no-learning alarm active.
+Maintenance must unblock the named genuine story-versus-preparation choice and fit.
+
+Claude Opus4.8 High supplied no-tools survival advice, not a source audit.
+Flash3.8 High supplied a short confusion test/design review, not implementation.
+Codex accepted intent/outcome separation and rejected HP-only self-hit inference,
+enemy-zero-HP battle termination, and after-reply full-HP assumptions. Codex owns
+the next bounded implementation; no reviewer is authorized to run private states.
+Refreshed Gemini quota:100%five-hour and94%weekly remaining (rounded),
+resets in4h58m/3days at approximately23:18UTC September8. Claude quota unavailable.
+Next recommendation: Astra High, Fast off. North Star and stage exits unchanged.
+
+See [recovery audit](docs/audits/red-budgeted-trainer-recovery-2026-09-08.md).
+
+## Historical — incoming coverage screen qualified; recovery still pending
 
 A zero-input audit of the exact retained Jynx failure ef23d074 observed move IDs
 3,8,34,37 (DoubleSlap, Ice Punch, Body Slam, Thrash). The preparation filter offered
