@@ -26,6 +26,35 @@ class RedTrainerPartyError(ValueError):
     """The current party cannot support the declared preparation contract."""
 
 
+def trainer_entry_candidates(
+    party: PartyObservation, candidates: tuple[PartyMatchupProfile, ...],
+    *, incoming_moves: tuple[int, ...],
+) -> tuple[PartyMatchupProfile, ...]:
+    """Reject reserves weak to any observed ordinary damaging move.
+
+    Preparation scores only approximate incoming pressure using opponent types.
+    Entry screening must also consider coverage moves. Preserve the caller's
+    ranking and existing health/PP/level requirements; never call this a survival
+    bound. Neutral damage, criticals, multi-hit and status remain unresolved.
+    Unsupported effects reject the screen, rather than becoming zero damage.
+    """
+    if (not isinstance(incoming_moves, tuple) or len(incoming_moves) != 4
+            or any(type(move) is not int or not 0 <= move <= 165 for move in incoming_moves)
+            or not any(incoming_moves)):
+        raise RedTrainerPartyError("incoming move inventory is unavailable")
+    attacking_types = tuple(
+        RED_BATTLE_CATALOG.switch_entry_attack_type(pokemon_red_move_ref(move))
+        for move in incoming_moves if move
+    )
+    return tuple(candidate for candidate in candidates if all(
+        attack_type is None or RED_BATTLE_CATALOG.type_effectiveness(
+            attack_type, RED_BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(
+                party.members[candidate.party_slot - 1].species_id,
+            )).types,
+        ) <= 1.0 for attack_type in attacking_types
+    ))
+
+
 def trainer_matchup_candidates(
     party: PartyObservation, *, opponent_species: int, opponent_level: int,
 ) -> tuple[PartyMatchupProfile, ...]:

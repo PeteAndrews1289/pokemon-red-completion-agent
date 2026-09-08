@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open.
+- Next decision: Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next.
 
 ### Mandatory mission check
 
@@ -62,17 +62,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-native-trainer-story** · status **active** · evidence [qualification](docs/evidence/red-native-trainer-story-2026-09-08.json)
+**2026-09-08-switch-entry-screen** · status **active** · evidence [qualification](docs/evidence/red-switch-entry-screen-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Actual battle progress exposed the missing survival/resource policy. It is a fixed-skill rehearsal, not learned choice competence. |
-| Learning output | 301 new actions/27684frames across two retained attempts. Three quoted Lorelei opponents defeated,30specimens and all bag items preserved. Model76 unchanged. |
-| Authority delta | Zero authority promotions, model queries or new fit rows. Both native story attempts were forced singletons. |
-| Transfer result | Varied ROM-free controllers pass; real cartridge battle reached Jynx without a fainted party member. No independent transfer or boss-win claim. |
-| Blocker | Paused at trainer MAIN against Jynx; Dugtrio has12HP after switching. Entry-damage planning and declared item recovery are missing, and the story menu has no useful competing option. |
-| Decision | Stop the consumed attempts; preserve the exact unsafe battle state. Repair decision-relevant switch/recovery behavior, not the entrance walkthrough or more grinding. |
-| Next session | From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open. |
+| Product alignment | Maintenance rejects an actual vulnerable switch, unblocking the named story-versus-preparation experiment without claiming learned progress. |
+| Learning output | Zero new actions, frames, items, queries or training rows.364 targeted tests; current save verified byte-for-byte unchanged. |
+| Authority delta | Zero authority promotions, model queries or new fit rows. Model76 is unchanged. |
+| Transfer result | Varied ROM-free coverage, immunity, party-order and stale-input tests pass. No independent transfer or survival claim. |
+| Blocker | The remaining prepared reserve is weak to an observed Ice Punch. Type screening rejects it but cannot qualify neutral/critical damage or a safe healing turn. |
+| Decision | Keep the exact battle paused. The entry rejection screen is qualified; stop preparation expansion and implement the smallest budgeted recovery needed for the story lesson. |
+| Next session | Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next. |
 | Next falsifier | Can bounded recovery preserve the current party and finish the retained battle, without repeating the entrance or the consumed choice? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 

@@ -1,6 +1,30 @@
 # Handoff
 
-## Current — three Lorelei opponents cleared; retained mid-battle refusal
+## Current — incoming coverage screen qualified; recovery still pending
+
+A zero-input audit of the exact retained Jynx failure ef23d074 observed move IDs
+3,8,34,37 (DoubleSlap, Ice Punch, Body Slam, Thrash). The preparation filter offered
+only Farfetch'd; the new actual-move entry screen rejects that ice-vulnerable reserve.
+Separate varied ROM-free cases reject Dugtrio and distinguish coverage, immunity,
+party order, unsupported mechanics and stale observations before controller input.
+
+364 focused tests and full-source lint/type checks pass. No gameplay, healing,
+predictions or fitting occurred; model76 remains76 outcomes/34successful/66distinct
+rows. Exact save bytes,30specimens/28living/33registered,619currency and all items are
+unchanged. The original failed episodes and their costs remain consumed.
+
+This is maintenance for the named story-versus-preparation lesson, NOT a survival
+bound. Neutral attacks, critical hits, repeated hits and status remain unqualified.
+Health, switch count, move-between-switch and bag guards are unchanged. The next
+step is bounded incoming-turn risk and explicitly budgeted legitimate healing from
+the current failure, not a rewind, more grinding or another preparation catalog.
+Income-to-story remains1/3; Phase4 is not complete. The no-learning alarm stays active.
+
+No external reviewer or quota query ran. North Star and stage exits are unchanged.
+Next recommendation: Astra High, Fast off, for recovery/control integration.
+See [switch-entry audit](docs/audits/red-switch-entry-screen-2026-09-08.md).
+
+## Historical — three Lorelei opponents cleared; retained mid-battle refusal
 
 The cartridge-routed skill was actually exercised on published source2beef485.
 Transport history was imported administratively: checkpoint671879f4 retains the exact

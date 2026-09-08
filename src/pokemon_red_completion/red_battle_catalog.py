@@ -100,6 +100,21 @@ class PokemonRedBattleCatalog:
         self.resolve_move(move_ref)
         return _MOVE_EFFECT_BY_ID[identifier] == "SWITCH_AND_TELEPORT_EFFECT"
 
+    def switch_entry_attack_type(self, move_ref: str, /) -> str | None:
+        """Type-screen ordinary damage; refuse indirect or unbounded effects.
+
+        None means a non-damaging move, not a safe turn: sleep, stat changes
+        and other status effects still require observed post-switch handling.
+        This is deliberately not a damage or survival estimate.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        move = self.resolve_move(move_ref)
+        if _MOVE_EFFECT_BY_ID[identifier] in {
+            "METRONOME_EFFECT", "MIRROR_MOVE_EFFECT", "TRANSFORM_EFFECT", "BIDE_EFFECT",
+        } or move.effect_flags & {"fixed_damage", "ohko", "counter", "self_destruct", "trapping"}:
+            raise RedBattleCatalogError("incoming move needs more than an entry type screen")
+        return move.type_name if move.power > 0 and move.category != "status" else None
+
     def type_effectiveness(
         self,
         attacking_type: str,

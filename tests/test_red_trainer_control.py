@@ -34,6 +34,7 @@ def raw(*, active=0, enemy=22, hp=(160, 190), pp=(10, 15)):
 def controller(state):
     reader = SimpleNamespace(state=state)
     reader.read = lambda: reader.state
+    reader.read_trainer_entry_moves = lambda _: (33, 0, 0, 0)
     return RedTrainerPartyController(reader, object())
 
 
@@ -137,3 +138,43 @@ def test_resource_change_is_caught_before_next_move(monkeypatch):
     monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
     with pytest.raises(RedTrainerControlError, match="bag resources"):
         run(subject, object())
+
+
+def test_coverage_move_rejects_otherwise_preferred_reserve():
+    state = raw(hp=(79, 190))
+    subject = controller(state)
+    # The water reserve's attacker need not be electric to know Thunderbolt.
+    subject.reader.read_trainer_entry_moves = lambda _: (85, 0, 0, 0)
+    with pytest.raises(RedTrainerControlError, match="entry screen"):
+        subject.choose(state, lambda _: pytest.fail("unsafe active attack"))
+    assert not subject.switches and subject.moves_selected == 0
+
+
+def test_missing_incoming_moves_never_authorize_a_switch():
+    state = raw(enemy=34)
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: None
+    with pytest.raises(RedTrainerControlError, match="moves are unavailable"):
+        subject.choose(state, lambda _: pytest.fail("unsafe attack"))
+
+
+def test_good_active_does_not_require_privileged_reserve_observation():
+    subject = controller(raw())
+    subject.reader.read_trainer_entry_moves = lambda _: pytest.fail("unneeded entry read")
+    assert subject.choose(raw(), lambda _: 1) == 1
+
+
+def test_changed_coverage_before_switch_blocks_all_input(monkeypatch):
+    subject = controller(raw(enemy=34))
+    inventories = iter(((33, 0, 0, 0), (85, 0, 0, 0)))
+    subject.reader.read_trainer_entry_moves = lambda _: next(inventories)
+    def battle(reader, _actions, policy, **_):
+        try:
+            policy(reader.read())
+        except control._SwitchRequest as error:
+            raise BattleRuntimeError("switch boundary") from error
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler", lambda *_a, **_k: pytest.fail("input"))
+    with pytest.raises(RedTrainerControlError, match="entry screen"):
+        run(subject, object())
+    assert not subject.switches and subject.moves_selected == 0

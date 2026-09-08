@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-native-trainer-story**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-switch-entry-screen**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-switch-entry-screen
+
+Observed coverage screen rejects the remaining ice-vulnerable reserve at the exact saved Jynx failure.364 focused tests pass; no gameplay, healing, labels or fit.
+
+**Deviation:** Bounded maintenance for the story lesson. No-learning alarm remains active; type screening is not survival qualification, and stage exits are unchanged.
+
+**Next:** Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next.
 
 ### 2026-09-08-native-trainer-story
 

@@ -1,6 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — actual combat exposed the difference between coverage and survival
+## Current — a good attack matchup can still be a bad switch
+
+The failed battle exposed a reusable distinction: a reserve can have the right
+attack yet take a super-effective hit before it gets to use it. The controller now
+screens the opponent's actual observed moves, including coverage outside its own
+types, before switching. A read-only inspection of the paused Jynx fight rejects
+the remaining ice-vulnerable reserve. Varied tests also reject the earlier Dugtrio
+choice. This uses disclosed RAM-assisted observation, not visual inference.
+
+The save has not advanced. This session produced364 passing focused tests, not
+training examples or a boss win. The screen does not predict neutral damage,
+criticals or status. Next comes bounded healing/recovery from the same retained
+battle, then a meaningful model-selected story/preparation lesson. Model76 and the
+long-term cross-game living-Pokedex goal are unchanged.
+
+## Historical — actual combat exposed the difference between coverage and survival
 
 The first native attempt swapped the lead and entered Lorelei's room. Her automatic
 walk triggered a route-drift refusal. We kept that outcome and continued from the

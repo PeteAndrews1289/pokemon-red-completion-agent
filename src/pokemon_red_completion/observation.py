@@ -3864,6 +3864,28 @@ class PokemonRedStateReader:
             raise SemanticStateError("wild capture target move inventory differs")
         return moves
 
+    def read_trainer_entry_moves(self, expected: RawGameState) -> tuple[int, ...] | None:
+        """Read incoming moves only at the same live trainer MAIN boundary.
+
+        This privileged observation uses the pinned battle_struct move array,
+        not a species learnset or the trainer's previously defeated member.
+        It does not alter historical snapshot schemas or advance the emulator.
+        """
+        before = self.read()
+        if (
+            before != expected or before.battle_state != 2
+            or (before.enemy_hp or 0) <= 0
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
+            return None
+        moves = tuple(self._memory.read_u8(int(RamAddress.ENEMY_MOVES) + i) for i in range(4))
+        if not any(moves) or any(not 0 <= move <= 165 for move in moves):
+            raise SemanticStateError("trainer entry move inventory differs")
+        if (self.read() != before
+                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+            raise SemanticStateError("trainer entry observation changed while reading")
+        return moves
+
     def read_current_box_move_members(self) -> tuple[RedBoxMoveMember, ...]:
         """Read moves/PP with the already-verified 33-byte boxed structure.
 

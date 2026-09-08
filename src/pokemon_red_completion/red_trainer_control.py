@@ -25,7 +25,7 @@ from .battle_runtime import (
 from .observation import PokemonRedStateReader, RawGameState
 from .red_goal_context import RedGoalContextEmulator
 from .red_party import party_observation_from_raw
-from .red_trainer_party import trainer_matchup_candidates
+from .red_trainer_party import trainer_entry_candidates, trainer_matchup_candidates
 
 
 class RedTrainerControlError(BattleRuntimeError):
@@ -66,9 +66,24 @@ class RedTrainerPartyController:
         )
         active_slot = raw.active_party_index + 1
         active = next((c for c in candidates if c.party_slot == active_slot), None)
-        best = candidates[0] if candidates else None
-        if best is None:
+        if not candidates:
             raise RedTrainerControlError("no healthy offensive matchup remains")
+        # A preparation match is not an entry qualification. Only screen when
+        # a switch could be useful. A preferred switch with unknown incoming
+        # mechanics must refuse, never interpret missing data as safe entry.
+        reserves = tuple(c for c in candidates if c.party_slot != active_slot and (
+            active is None or c.score - active.score >= 0.10
+        ))
+        if reserves and self._move_since_switch and len(self.switches) < self.maximum_switches:
+            incoming = self.reader.read_trainer_entry_moves(raw)
+            if incoming is None:
+                raise RedTrainerControlError("incoming trainer moves are unavailable")
+            reserves = trainer_entry_candidates(party, reserves, incoming_moves=incoming)
+            if not reserves and active is None:
+                raise RedTrainerControlError("no reserve passes the incoming move entry screen")
+        best = reserves[0] if reserves else active
+        if best is None:
+            raise RedTrainerControlError("unfit active member cannot safely take another turn")
         should_switch = best.party_slot != active_slot and (
             active is None or best.score - active.score >= 0.10
         )

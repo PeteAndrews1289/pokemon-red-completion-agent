@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-native-trainer-story",
+  "as_of_session": "2026-09-08-switch-entry-screen",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -378,6 +378,12 @@
       "result": "Imported prior support; two native singleton rehearsals used301actions/27684frames. Three Lorelei opponents defeated; stopped at Jynx after switch damage. Model76 unchanged;30specimens retained.",
       "deviation": "Entrance drift is retained as failure; a fresh exact-state continuation did not replay it. Battle remains unsafe for ordinary checkpoint admission. No forced label or stage exit change;1/3 checklist remains.",
       "next": "From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open."
+    },
+    {
+      "session": "2026-09-08-switch-entry-screen",
+      "result": "Observed coverage screen rejects the remaining ice-vulnerable reserve at the exact saved Jynx failure.364 focused tests pass; no gameplay, healing, labels or fit.",
+      "deviation": "Bounded maintenance for the story lesson. No-learning alarm remains active; type screening is not survival qualification, and stage exits are unchanged.",
+      "next": "Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next."
     }
   ],
   "closed_milestones": [
