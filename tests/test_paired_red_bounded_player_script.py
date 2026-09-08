@@ -65,12 +65,14 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
         _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
         trainer_funding=False,
         trainer_pending_recovery=False,
+        regional_trainer_funding=False,
         retain_quantum=None, remaining_acquisition_demand=False, level_evolution_acquisitions=False,
     ):
         assert completion_dose is False
         assert routed_recovery is False
         assert trainer_funding is False
         assert trainer_pending_recovery is False
+        assert regional_trainer_funding is False
         assert remaining_acquisition_demand is remaining_mode
         assert level_evolution_acquisitions is remaining_mode
         assert retain_quantum is None
@@ -664,6 +666,21 @@ def test_pending_trainer_restore_mode_is_explicit_and_strict(value):
         read({"metadata": {"trainer_funding": False, "trainer_pending_recovery": True}})
 
 
+@pytest.mark.parametrize("value", [None, False, True, 1, "true"])
+def test_regional_trainer_restore_mode_is_explicit_and_strict(value):
+    module = runpy.run_path(str(SCRIPT))
+    read = module["_checkpoint_regional_trainer_funding"]
+    assert read({"metadata": {"trainer_funding": True}}) is False
+    metadata = {"trainer_funding": True, "regional_trainer_funding": value}
+    if type(value) is bool:
+        assert read({"metadata": metadata}) is value
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            read({"metadata": metadata})
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+        read({"metadata": {"regional_trainer_funding": True}})
+
+
 def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypatch):
     module = runpy.run_path(str(SCRIPT))
     factory = module["_player_observer"]
@@ -684,19 +701,22 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
     completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
                         completion_dose=True, routed_recovery=True, trainer_funding=True,
-                        trainer_pending_recovery=True)
+                        trainer_pending_recovery=True, regional_trainer_funding=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
         {"quote_resource_costs": False, "prepare_capture_storage": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
+         "regional_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
         {"quote_resource_costs": True, "prepare_capture_storage": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
+         "regional_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
         {"quote_resource_costs": False, "prepare_capture_storage": True, "routed_recovery": True,
          "trainer_funding": True, "trainer_pending_recovery": True,
+         "regional_trainer_funding": True,
          "maximum_controller_actions": 30000,
          "maximum_emulator_frames": 3000000},
     ]

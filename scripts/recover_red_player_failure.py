@@ -195,6 +195,7 @@ def run(args):
                     "routed_recovery": ready.routed_recovery,
                     "trainer_funding": ready.trainer_funding,
                     "trainer_pending_recovery": ready.trainer_pending_recovery,
+                    "regional_trainer_funding": ready.regional_trainer_funding,
                     "remaining_acquisition_demand": ready.remaining_acquisition_demand,
                     "level_evolution_acquisitions": ready.level_evolution_acquisitions,
                     "recovery": preflight,
@@ -339,6 +340,7 @@ def run(args):
                     routed_recovery=ready.routed_recovery,
                     trainer_funding=ready.trainer_funding,
                     trainer_pending_recovery=ready.trainer_pending_recovery,
+                    regional_trainer_funding=ready.regional_trainer_funding,
                     remaining_acquisition_demand=ready.remaining_acquisition_demand,
                     level_evolution_acquisitions=ready.level_evolution_acquisitions,
                 )

@@ -124,7 +124,12 @@ def fixture(monkeypatch):
     monkeypatch.setattr(funding, "trainer_sight_zones", lambda *_: (trainer,))
     monkeypatch.setattr(funding, "trainer_party_quote", lambda *_: quote)
     monkeypatch.setattr(funding, "Gen1TraversalObserver", lambda *_: object())
-    monkeypatch.setattr(funding, "Gen1TrainerSightProjector", lambda *_: object())
+
+    def projector(*_, full_event_offsets=False):
+        assert full_event_offsets is getattr(router, "regional_trainer_funding", False)
+        return object()
+
+    monkeypatch.setattr(funding, "Gen1TrainerSightProjector", projector)
     monkeypatch.setattr(funding, "Gen1WildFleeHandler", lambda *_a, **_k: object())
 
     def tick(name):
@@ -167,6 +172,50 @@ def fixture(monkeypatch):
     )
     bindings = GoalBindingSet((unavailable, alternate.opportunity), (alternate,))
     return router, state, target, bindings, calls
+
+
+@pytest.mark.parametrize(
+    "damage", [None, "static", "live_identity", "live_facing", "not_visible", "not_opted_in"]
+)
+def test_regional_funding_rebinds_remote_quote_before_departure_and_live_arrival(
+    monkeypatch, damage
+):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    router.regional_trainer_funding = damage != "not_opted_in"
+    quoted = replace(target.trainer, map_id=23, facing=TrainerFacing.RIGHT, visible=False)
+    target = replace(target, trainer=quoted)
+    monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
+    monkeypatch.setattr(
+        funding,
+        "static_trainer_sight_zones",
+        lambda *_: (replace(quoted, defeated=True) if damage == "static" else quoted,),
+    )
+    live = replace(quoted, visible=True)
+    if damage == "live_identity":
+        live = replace(live, trainer_set=3)
+    if damage == "live_facing":
+        live = replace(live, facing=TrainerFacing.UP)
+    if damage == "not_visible":
+        live = replace(live, visible=False)
+    monkeypatch.setattr(funding, "trainer_sight_zones", lambda *_: (live,))
+
+    def travel(*_args, **_kwargs):
+        calls.append("route")
+        state.raw = replace(state.raw, map_id=23, player_y=10, player_x=36)
+        return SimpleNamespace(passed=True)
+
+    monkeypatch.setattr(funding, "execute_route", travel)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    if damage:
+        with pytest.raises(funding.RedTrainerFundingError):
+            bound.execute()
+        assert "face" not in calls and "battle" not in calls
+        if damage in {"static", "not_opted_in"}:
+            assert calls == []
+    else:
+        report = bound.execute()
+        assert calls == ["escort", "route", "face", "battle"]
+        assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
 
 
 def test_funding_binding_preserves_alternatives_and_earns_not_buys(monkeypatch):

@@ -6,6 +6,7 @@ from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_trainer_sight import (
     TrainerFacing,
     TrainerHeader,
+    static_trainer_sight_zones,
     trainer_headers,
     trainer_sight_zones,
 )
@@ -18,6 +19,38 @@ MAP_HEADER = 0x4100
 OBJECTS = 0x4200
 SCRIPT = 0x4300
 TRAINERS = 0x4400
+
+
+def test_static_inventory_is_map_qualified_and_never_claims_visibility():
+    headers = (TrainerHeader(4, 2, 3, 10, 0), TrainerHeader(7, 2, 1, 19, 0))
+    events = (
+        MapObjectEvent(4, 6, 3, 5, 0xFF, 0xD3, 0x42, 2, 201, 4),
+        MapObjectEvent(7, 6, 9, 2, 0xFF, 0xD0, 0x42, 2, 212, 8),
+    )
+    first, second = static_trainer_sight_zones(headers, events, bytes((0, 4, 0)))
+    assert (first.map_id, first.at, first.trainer_class, first.trainer_set) == (4, (3, 5), 201, 4)
+    assert first.defeated and not first.visible and first.facing is TrainerFacing.RIGHT
+    assert (second.map_id, second.at, second.trainer_class, second.trainer_set) == (
+        7,
+        (9, 2),
+        212,
+        8,
+    )
+    assert not second.defeated and not second.visible and second.lane == ((10, 2),)
+
+
+def test_static_inventory_rejects_unknown_bits_missing_or_duplicate_bindings():
+    header = TrainerHeader(7, 2, 1, 19, 0)
+    event = MapObjectEvent(7, 6, 9, 2, 0xFF, 0xD0, 0x42, 2, 212, 8)
+    for headers, events, flags in (
+        ((header,), (event,), None),
+        ((header,), (event,), b"\x00\x00"),
+        ((header,), (), b"\x00\x00\x00"),
+        ((header, header), (event,), b"\x00\x00\x00"),
+        ((header,), (event, event), b"\x00\x00\x00"),
+    ):
+        with pytest.raises(CartridgeReadError):
+            static_trainer_sight_zones(headers, events, flags)
 
 
 def trainer_cartridge() -> bytearray:

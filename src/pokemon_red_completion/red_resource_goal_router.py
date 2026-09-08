@@ -92,6 +92,7 @@ class RedResourceGoalRouter:
     routed_recovery: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
+    regional_trainer_funding: bool = False
     prepare_capture_escort: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:

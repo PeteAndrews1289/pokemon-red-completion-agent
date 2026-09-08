@@ -258,6 +258,43 @@ def _decode_header_candidate(
     return None
 
 
+def static_trainer_sight_zones(
+    headers: Collection[TrainerHeader],
+    events: Collection[MapObjectEvent],
+    event_flags: bytes,
+) -> tuple[TrainerSightZone, ...]:
+    """Quote off-map ordinary trainers, never impersonating a live observation.
+
+    A candidate uses cartridge position/facing and observed persistent events.
+    Its visibility is unknown (reported false); execution must rebind to actual
+    engine objects on arrival. Missing event coverage is not an undefeated bit.
+    """
+    if not isinstance(event_flags, bytes):
+        raise CartridgeReadError("static trainer inventory requires observed event bytes")
+    objects = {(e.map_id, e.object_index): e for e in events if e.is_trainer}
+    if len(objects) != sum(e.is_trainer for e in events):
+        raise CartridgeReadError("static trainer inventory contains duplicate objects")
+    seen = set()
+    result = []
+    for header in headers:
+        identity = (header.map_id, header.sprite_index)
+        event = objects.get(identity)
+        if identity in seen or event is None:
+            raise CartridgeReadError("static trainer header has no unique object binding")
+        seen.add(identity)
+        if header.event_flag >= len(event_flags) * 8:
+            raise CartridgeReadError("static trainer defeated event is not observed")
+        facing = _OBJECT_FACING.get(event.direction_or_range)
+        if facing is None or event.trainer_class is None or event.trainer_set is None:
+            raise CartridgeReadError("static trainer object cannot be quoted")
+        result.append(TrainerSightZone(
+            header.map_id, header.sprite_index, event.trainer_class, event.trainer_set,
+            event.at, facing, header.engage_distance, header.event_flag,
+            event_flag_is_set(event_flags, header.event_flag), False,
+        ))
+    return tuple(result)
+
+
 def trainer_sight_zones(
     headers: Collection[TrainerHeader],
     events: Collection[MapObjectEvent],
@@ -321,6 +358,7 @@ class Gen1TrainerSightProjector:
 
     rom: bytes
     reader: PokemonRedStateReader
+    full_event_offsets: bool = False
     _events: dict[int, tuple[MapObjectEvent, ...]] = field(default_factory=dict, init=False)
     _headers: dict[int, tuple[TrainerHeader, ...]] = field(default_factory=dict, init=False)
 
@@ -329,7 +367,9 @@ class Gen1TrainerSightProjector:
             return ()
         if raw.map_id not in self._events:
             self._events[raw.map_id] = map_object_events(self.rom, {raw.map_id})
-            self._headers[raw.map_id] = trainer_headers(self.rom, {raw.map_id})
+            self._headers[raw.map_id] = trainer_headers(
+                self.rom, {raw.map_id}, full_event_offsets=self.full_event_offsets
+            )
         events = self._events[raw.map_id]
         headers = self._headers[raw.map_id]
         zones = trainer_sight_zones(

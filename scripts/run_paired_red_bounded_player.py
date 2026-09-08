@@ -200,10 +200,12 @@ class _Readiness:
     restore_routed_recovery: bool = False
     restore_trainer_funding: bool = False
     restore_trainer_pending_recovery: bool = False
+    restore_regional_trainer_funding: bool = False
     completion_dose: bool = False
     routed_recovery: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
+    regional_trainer_funding: bool = False
     regional_choice_record_sha256: str | None = None
     regional_proposal_record_sha256: str | None = None
     remaining_acquisition_demand: bool = False
@@ -267,6 +269,7 @@ class _LiveObserver:
     routed_recovery: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
+    regional_trainer_funding: bool = False
     retain_quantum: Callable[[], None] | None = None
     remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
@@ -295,6 +298,7 @@ class _LiveObserver:
             routed_recovery=self.routed_recovery,
             trainer_funding=self.trainer_funding,
             trainer_pending_recovery=self.trainer_pending_recovery,
+            regional_trainer_funding=self.regional_trainer_funding,
             remaining_acquisition_demand=self.remaining_acquisition_demand,
             level_evolution_acquisitions=self.level_evolution_acquisitions,
             retain_quantum=self.retain_quantum,
@@ -322,6 +326,7 @@ def _player_observer(
     routed_recovery: bool = False,
     trainer_funding: bool = False,
     trainer_pending_recovery: bool = False,
+    regional_trainer_funding: bool = False,
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
     retain_quantum: Callable[[], None] | None = None,
@@ -371,6 +376,7 @@ def _player_observer(
             routed_recovery=routed_recovery,
             trainer_funding=trainer_funding,
             trainer_pending_recovery=trainer_pending_recovery,
+            regional_trainer_funding=regional_trainer_funding,
             maximum_controller_actions=30_000 if completion_dose else 6_000,
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
@@ -476,6 +482,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--trainer-pending-recovery", action="store_true",
         help="resume an already-armed trainer battle after authenticating the legacy endpoint",
+    )
+    parser.add_argument(
+        "--regional-trainer-funding", action="store_true",
+        help="extend funding to inventoried adjacent maps through walking-only connections",
     )
     parser.add_argument(
         "--completion-dose",
@@ -720,6 +730,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
     trainer_funding = getattr(args, "trainer_funding", False)
+    regional_trainer_funding = getattr(args, "regional_trainer_funding", False)
+    if type(regional_trainer_funding) is not bool or (
+        regional_trainer_funding and not trainer_funding
+    ):
+        raise PairedRedBoundedPlayerRunError("regional_trainer_funding_scope")
     trainer_pending_recovery = getattr(args, "trainer_pending_recovery", False)
     if type(trainer_pending_recovery) is not bool or (
         trainer_pending_recovery and not trainer_funding
@@ -884,6 +899,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         routed_recovery=routed_recovery,
         trainer_funding=trainer_funding,
         trainer_pending_recovery=trainer_pending_recovery,
+        regional_trainer_funding=regional_trainer_funding,
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
         save_terminal_checkpoints=save_terminal_checkpoints,
@@ -1162,12 +1178,15 @@ def _continue_readiness(
             restore_routed_recovery=_checkpoint_routed_recovery(header),
             restore_trainer_funding=_checkpoint_trainer_funding(header),
             restore_trainer_pending_recovery=_checkpoint_trainer_pending_recovery(header),
+            restore_regional_trainer_funding=_checkpoint_regional_trainer_funding(header),
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
+        if readiness.restore_regional_trainer_funding and not readiness.regional_trainer_funding:
+            raise PairedRedBoundedPlayerRunError("regional_trainer_funding_rollback")
         if readiness.restore_trainer_pending_recovery and not readiness.trainer_pending_recovery:
             raise PairedRedBoundedPlayerRunError("trainer_pending_recovery_rollback")
         if (
@@ -1250,6 +1269,17 @@ def _checkpoint_trainer_pending_recovery(header: Mapping[str, object]) -> bool:
     return enabled
 
 
+def _checkpoint_regional_trainer_funding(header: Mapping[str, object]) -> bool:
+    """Historical menus remain local; new endpoints retain explicit regional scope."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("regional_trainer_funding", False)
+    if type(enabled) is not bool or (enabled and not _checkpoint_trainer_funding(header)):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_regional_trainer_funding")
+    return enabled
+
+
 def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     """Restore the parent's recorded observer settings, not the successor's.
 
@@ -1314,6 +1344,7 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
         trainer_funding=getattr(readiness, "restore_trainer_funding", False),
         trainer_pending_recovery=getattr(readiness, "restore_trainer_pending_recovery", False),
+        regional_trainer_funding=getattr(readiness, "restore_regional_trainer_funding", False),
         remaining_acquisition_demand=getattr(
             readiness, "restore_remaining_acquisition_demand", False,
         ),
@@ -1522,6 +1553,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             routed_recovery=readiness.routed_recovery,
             trainer_funding=getattr(readiness, "trainer_funding", False),
             trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
+            regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
         )
@@ -1623,6 +1655,7 @@ def _run_arm(
                 "routed_recovery": readiness.routed_recovery,
                 "trainer_funding": getattr(readiness, "trainer_funding", False),
                 "trainer_pending_recovery": getattr(readiness, "trainer_pending_recovery", False),
+                "regional_trainer_funding": getattr(readiness, "regional_trainer_funding", False),
                 **({"remaining_acquisition_demand": True}
                    if readiness.remaining_acquisition_demand else {}),
                 **({"level_evolution_acquisitions": True}
@@ -1708,6 +1741,7 @@ def _run_arm(
                 routed_recovery=readiness.routed_recovery,
                 trainer_funding=getattr(readiness, "trainer_funding", False),
                 trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
+                regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
                 remaining_acquisition_demand=readiness.remaining_acquisition_demand,
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,

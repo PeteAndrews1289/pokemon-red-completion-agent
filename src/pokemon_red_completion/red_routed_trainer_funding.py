@@ -16,6 +16,7 @@ from .gen1_trainer_parties import trainer_party_quote
 from .gen1_trainer_sight import (
     Gen1TrainerSightProjector,
     TrainerFacing,
+    static_trainer_sight_zones,
     trainer_headers,
     trainer_sight_zones,
 )
@@ -37,6 +38,10 @@ from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
 from .red_goal_skills import RedMartResupplyGoalProvider
 from .red_pc_storage import face_pc_boundary
+from .red_regional_trainer_funding import (
+    connected_funding_maps,
+    regional_trainer_funding_candidates,
+)
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_funding import TrainerFundingCandidate, local_trainer_funding_candidates
 from .route_executor import execute_route
@@ -96,12 +101,16 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
     raw = reader.read()
     if raw.map_id is None:
         return ()
+    regional = getattr(router, "regional_trainer_funding", False)
+    headers = trainer_headers(rom, {raw.map_id}, full_event_offsets=regional)
     zones = trainer_sight_zones(
-        trainer_headers(rom, {raw.map_id}),
+        headers,
         map_object_events(rom, {raw.map_id}),
         raw,
         reader.read_current_map_objects(),
     )
+    if regional and len(zones) != len(headers):
+        raise RedTrainerFundingError("regional funding lacks a complete live trainer inventory")
     pending = reader.read_pending_trainer_battle_identity()
     if pending is not None and router.trainer_pending_recovery:
         # Talking turns the trainer toward the player, so the retained square
@@ -130,7 +139,26 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
                 facing,
             ),
         )
-    start = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(rom, reader)).observe()
+    start = Gen1TraversalObserver(
+        reader, Gen1TrainerSightProjector(rom, reader, full_event_offsets=regional)
+    ).observe()
+    if regional:
+        if raw.event_flags is None:
+            return ()
+        maps = connected_funding_maps(router.world.macro_graph, raw.map_id)
+        for map_id in sorted(maps - {raw.map_id}):
+            zones += static_trainer_sight_zones(
+                trainer_headers(rom, {map_id}, full_event_offsets=True),
+                map_object_events(rom, {map_id}),
+                raw.event_flags,
+            )
+        return regional_trainer_funding_candidates(
+            rom,
+            router.world,
+            start,
+            zones,
+            inventoried_maps=maps,
+        )
     return local_trainer_funding_candidates(rom, router.world, start, zones)
 
 
@@ -206,9 +234,31 @@ def bind_local_trainer_funding(
     completed_report: GoalExecutionReport | None = None
     final_party_species: tuple[int, ...] = ()
 
-    def require_target() -> None:
+    def require_target(*, before_departure: bool = False) -> None:
         current = runtime.reader.read()
         t = target.trainer
+        if (
+            before_departure
+            and getattr(router, "regional_trainer_funding", False)
+            and current.map_id != t.map_id
+        ):
+            if current.event_flags is None:
+                raise RedTrainerFundingError("remote trainer events are not observed")
+            static = static_trainer_sight_zones(
+                trainer_headers(router.world.rom, {t.map_id}, full_event_offsets=True),
+                map_object_events(router.world.rom, {t.map_id}),
+                current.event_flags,
+            )
+            if t not in static or t.defeated:
+                raise RedTrainerFundingError("remote trainer quote changed before departure")
+            if (
+                trainer_party_quote(router.world.rom, t.trainer_class, t.trainer_set)
+                != target.quote
+            ):
+                raise RedTrainerFundingError(
+                    "remote trainer roster/reward changed before departure"
+                )
+            return
         if (
             current.map_id != t.map_id
             or current.event_flags is None
@@ -238,6 +288,13 @@ def bind_local_trainer_funding(
             current.player_x,
         ) == target.approach.terminal_at and not actual.visible:
             raise RedTrainerFundingError("trainer is not visible at interaction boundary")
+        if (
+            getattr(router, "regional_trainer_funding", False)
+            and pending_identity is None
+            and actual.active
+            and (current.player_y, current.player_x) in actual.lane
+        ):
+            raise RedTrainerFundingError("trainer turned toward the reserved interaction boundary")
         if trainer_party_quote(router.world.rom, t.trainer_class, t.trainer_set) != target.quote:
             raise RedTrainerFundingError("trainer roster/reward changed before interaction")
 
@@ -257,7 +314,7 @@ def bind_local_trainer_funding(
             or dependency_specimen_ledger(current.collection_observation) != ledger
         ):
             raise RedTrainerFundingError("trainer funding origin changed before input")
-        require_target()
+        require_target(before_departure=True)
         action_start, frame_start = actions.actions_executed, runtime.emulator.frame_count
         if runtime.reader.read_pending_trainer_battle_identity() != pending_identity:
             raise RedTrainerFundingError("pending trainer transition changed before input")
@@ -273,7 +330,12 @@ def bind_local_trainer_funding(
             maximum_trainer_battles=0,
         )
         traversal = Gen1TraversalObserver(
-            runtime.reader, Gen1TrainerSightProjector(router.world.rom, runtime.reader)
+            runtime.reader,
+            Gen1TrainerSightProjector(
+                router.world.rom,
+                runtime.reader,
+                full_event_offsets=getattr(router, "regional_trainer_funding", False),
+            ),
         )
         from .red_resource_goal_router import _ROUTE_LIMITS
 

@@ -53,6 +53,7 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
         routed_recovery=True, pair_id="preview", challenger_arm_id="test",
         remaining_acquisition_demand=True, level_evolution_acquisitions=True,
         trainer_funding=True, trainer_pending_recovery=True,
+        regional_trainer_funding=True,
     )
     order = []
 
@@ -84,6 +85,7 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
         assert kwargs["level_evolution_acquisitions"] is True
         assert kwargs["trainer_funding"] is True
         assert kwargs["trainer_pending_recovery"] is True
+        assert kwargs["regional_trainer_funding"] is True
         return observer
     monkeypatch.setattr(runner, "_player_observer", preview_observer)
 
@@ -397,6 +399,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
         readiness, profile=SimpleNamespace(profile_sha256="e" * 64), routed_recovery=True,
         remaining_acquisition_demand=True, level_evolution_acquisitions=True,
         trainer_funding=True, trainer_pending_recovery=True,
+        regional_trainer_funding=True,
     )
     emulator = SimpleNamespace(frame_count=12, pressed_buttons=frozenset())
     seen = []
@@ -422,11 +425,13 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
     def player_observer(*_args, completion_dose=False, routed_recovery=False,
                         trainer_funding=False, trainer_pending_recovery=False,
+                        regional_trainer_funding=False,
                         remaining_acquisition_demand=False, level_evolution_acquisitions=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
         assert trainer_funding is False
         assert trainer_pending_recovery is False
+        assert regional_trainer_funding is False
         assert remaining_acquisition_demand is False  # Never use successor mode for old restore.
         assert level_evolution_acquisitions is False
         return observe
