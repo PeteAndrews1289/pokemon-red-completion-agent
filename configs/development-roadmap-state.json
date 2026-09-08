@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-resource-recovery",
+  "as_of_session": "2026-09-08-phase3-chain-01",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
+      "evidence": "docs/evidence/red-phase3-chain-01-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -294,6 +294,12 @@
       "result": "Exact-failure recovery succeeded after two preserved support failures. All27specimens and Ekans11 retained; party HP/status/PP restored. Zero labels; model67 unchanged. Safe-evolution2/3, not Phase3 completion.",
       "deviation": "Support chain totals213actions/14,868frames without a rewind. Explicit PP restoration extends existing guarded Center control; no new teacher or stage exit changes.",
       "next": "Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-01",
+      "result": "Model67to68 from actual failed evolution: Ekans11to19,27specimens preserved.8899actions/778549frames. Safe terminal retained, Arbok unfinished; checklist2/3 unchanged.",
+      "deviation": "Direct-combat suppression was erased by healing. Collection-only repair retains this evidence and distinguishes ineffective healing from new encounter damage; fixed total safety budgets and stage exits remain unchanged.",
+      "next": "Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan."
     }
   ],
   "closed_milestones": [

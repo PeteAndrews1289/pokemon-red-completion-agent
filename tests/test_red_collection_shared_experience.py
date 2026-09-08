@@ -31,6 +31,88 @@ def member(species=0x1C, level=63, slot=2, move=33, pp=20):
 POLICY = BalancedTeamPolicy(minimum_direct_level_advantage=5, reserve_total_pp=5)
 
 
+@pytest.mark.parametrize("initial_recovery", [False, True])
+@pytest.mark.parametrize("helper_always_pauses", [False, True])
+def test_collection_keeps_direct_combat_failure_evidence_after_healing(
+    monkeypatch, initial_recovery, helper_always_pauses
+):
+    """Real loop: heal, direct damage/escape, heal, then switch for actual XP.
+
+    Recovery restores resources, not a failed matchup forecast. New encounter
+    damage may require another heal, but ineffective healing and total budgets
+    remain bounded. Both initial states distinguish sentinel and suppression.
+    """
+    from pokemon_red_completion.battle_runtime import BattleRuntimeError
+
+    class Memory(FakeMemory):
+        xp = 1000
+
+        def _field(self, observed, offset):
+            if observed.species == 0x6C and EXPERIENCE_OFFSET <= offset < EXPERIENCE_OFFSET + 3:
+                return (self.xp >> (8 * (EXPERIENCE_OFFSET + 2 - offset))) & 255
+            return super()._field(observed, offset)
+
+    memory = Memory()
+    memory.set_party([(0x6C, 19), (0x1C, 65)], hp=100, max_hp=100)
+    if initial_recovery:
+        memory.party[0].hp = 85
+    reader = SimpleNamespace(raw=state(active_party_index=0))
+    reader.read = lambda: reader.raw
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    fights, heals, flees = [], [], []
+
+    def seek(*args):
+        reader.raw = state(battle_state=1, enemy_level=12, enemy_species_id=0x6C,
+                           active_party_index=0)
+        return 1
+
+    def switch(*args, target_index, **kwargs):
+        reader.raw = replace(reader.raw, active_party_index=target_index)
+        return True
+
+    def fight(*args, **kwargs):
+        active = reader.raw.active_party_index
+        fights.append(active)
+        assert active == (0 if len(fights) == 1 else 1)
+        if len(fights) == 1 or helper_always_pauses:
+            memory.party[active].hp = 85
+            raise BattleRuntimeError("live guard") from training._PauseForTeamTrainingRecovery()
+        memory.xp += 123
+        reader.raw = state(active_party_index=0)
+
+    def heal(*args):
+        heals.append(True)
+        for mon in memory.party:
+            mon.hp = mon.max_hp
+
+    def flee(*args):
+        flees.append(True)
+        reader.raw = state(active_party_index=0)
+
+    monkeypatch.setattr(training, "switch_active_battler", switch)
+    monkeypatch.setattr(training, "run_adaptive_wild_battle", fight)
+    venue = replace(_venue(GrindingArea("mixed", 9, 14, measured_samples=40)),
+                    heal_and_return=heal, walk_to_grass=seek)
+    error = RuntimeError if helper_always_pauses else training.EvolutionTrainingPaused
+    with pytest.raises(error) as stopped:
+        run(memory, reader,
+            policy=replace(POLICY, retreat_hp_ratio=0.9, max_healing_trips=3),
+            venues=[venue], flee_func=flee, allow_direct_evolution=True,
+            evolution_target=(0x6C, 0x2D), evolution_battle_quantum=1,
+            collection_shared_experience=True,
+            collection_encounters={venue.map_id: [(12, 0x6C)]})
+    if helper_always_pauses:
+        assert "required-recovery budget" in str(stopped.value)
+        assert len(heals) == 3
+        assert memory.xp == 1000
+    else:
+        assert fights == [0, 1]
+        assert len(heals) == 1 + int(initial_recovery)
+        assert len(flees) == 1
+        assert memory.xp == 1123
+        assert stopped.value.battles == 1
+
+
 @pytest.mark.parametrize("recipient_species,move", [(0x94, 100), (0x71, 106), (0x7C, 106)])
 @pytest.mark.parametrize(
     "finisher_species,level,slot", [(0x1C, 63, 2), (0x40, 55, 3), (0x84, 75, 4)]

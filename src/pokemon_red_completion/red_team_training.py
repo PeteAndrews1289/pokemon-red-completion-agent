@@ -1139,7 +1139,7 @@ def run_red_team_balancing(
     battles = 0
     steps = 0
     healing_trips = 0
-    last_collection_recovery_battle: int | None = None
+    collection_recovery_pending = False
     venue_transition_trips = 0
     required_recovery_trips = 0
     optional_recovery_trips = 0
@@ -1149,7 +1149,9 @@ def run_red_team_balancing(
     # A live move guard can disprove the aggregate PP forecast after an
     # encounter begins (for example, because every qualified move is disabled
     # or otherwise unusable).  Remember that evidence until a Center recovery
-    # changes the resource state, so the next encounter earns participation
+    # changes the resource state in legacy mode. Collection mode retains it
+    # for this bounded invocation: healing does not invalidate observed direct
+    # combat damage/Wrap risk, so the next encounter earns participation
     # credit through the qualified escort instead of repeating the same failed
     # direct-combat claim eight times.
     direct_fight_suppressed_species: set[int] = set()
@@ -1970,8 +1972,10 @@ def run_red_team_balancing(
             continue
 
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
-            if collection_shared_experience and last_collection_recovery_battle == battles:
-                raise RuntimeError("Collection recovery repeated without a completed XP battle.")
+            if collection_shared_experience and collection_recovery_pending:
+                raise RuntimeError(
+                    "Collection recovery repeated without restored encounter readiness."
+                )
             if healing_trips >= policy.max_healing_trips:
                 raise RuntimeError("team training exhausted the required-recovery budget")
             selected = emit_decision(
@@ -1995,8 +1999,9 @@ def run_red_team_balancing(
             healing_trips += 1
             required_recovery_trips += 1
             if collection_shared_experience:
-                last_collection_recovery_battle = battles
-            direct_fight_suppressed_species.clear()
+                collection_recovery_pending = True
+            else:
+                direct_fight_suppressed_species.clear()
             continue
 
         if not current_venue.is_in_map(raw):
@@ -2020,7 +2025,8 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             venue_transition_trips += 1
-            direct_fight_suppressed_species.clear()
+            if not collection_shared_experience:
+                direct_fight_suppressed_species.clear()
             continue
         if evolution_target is not None:
             trainee = next(
@@ -2073,13 +2079,21 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             optional_recovery_trips += 1
-            direct_fight_suppressed_species.clear()
+            if not collection_shared_experience:
+                direct_fight_suppressed_species.clear()
             continue
         require_overworld_action(
             selected,
             TrainingControlAction.SEEK,
             "safe encounter-seeking boundary",
         )
+        # Reaching this boundary requires a healthy recipient and current
+        # per-opponent helper coverage. A subsequent encounter can consume
+        # those resources without awarding XP. Permit its bounded recovery;
+        # an ineffective heal never reaches this reset. Global heal/flee/action
+        # limits remain unchanged and suppression survives the healing trip.
+        if collection_shared_experience:
+            collection_recovery_pending = False
         steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
     if current_venue.is_in_map(reader.read()) and healing_trips < policy.max_healing_trips:

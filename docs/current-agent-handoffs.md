@@ -1,5 +1,16 @@
 # Current agent handoffs
 
+## Current — chain01 retained and fitted; model68 continues from Ekans19
+
+Actual selected evolution failed after8,899actions/778,549frames. Ekans11to19,
+27specimens intact, no Arbok. Safe terminal5b9cd135 retained; model68 now68outcomes,
+28successful/58distinct with all67prior rows preserved. No new full-game authority.
+The trace shows two direct-fight Wrap retreats around healing; healing wrongly
+cleared suppression.188focused tests qualify collection-only persistent suppression
+and a readiness-based ineffective-heal sentinel, with total safety budgets unchanged.
+Next authenticate chain01/model68 and run a new real model choice; no reset/retry.
+Helper poison remains an explicit recovery need. Phase3stillopen; checklist2/3.
+
 ## Current — exact-failure recovery complete; model continuation next
 
 The user authorizes continued bounded sessions until Phase 3 is genuinely closed.

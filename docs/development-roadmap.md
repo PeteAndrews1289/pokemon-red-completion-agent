@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-resource-recovery**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-phase3-chain-01**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-resource-recovery-2026-09-08.json)
+[Current evidence](../docs/evidence/red-phase3-chain-01-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-phase3-chain-01
+
+Model67to68 from actual failed evolution: Ekans11to19,27specimens preserved.8899actions/778549frames. Safe terminal retained, Arbok unfinished; checklist2/3 unchanged.
+
+**Deviation:** Direct-combat suppression was erased by healing. Collection-only repair retains this evidence and distinguishes ineffective healing from new encounter damage; fixed total safety budgets and stage exits remain unchanged.
+
+**Next:** Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan.
 
 ### 2026-09-08-resource-recovery
 

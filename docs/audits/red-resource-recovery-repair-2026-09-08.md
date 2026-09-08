@@ -35,6 +35,31 @@ is still failed and neither the battle nor the journey was replayed.
 
 ## Checks
 
+Post-recovery chain01 reached Ekans19 and retained a safe failed terminal. Its
+actual failure was fitted67to68;8,899actions/778,549frames and all27specimens remain.
+The recorded diagnostic is repeated recovery without an XP battle. Two observed
+Wrap retreats bracket an effective heal: clearing direct-fight suppression caused
+the same bad tactical forecast to be tried again. The collection-only repair
+keeps that evidence for the bounded invocation and resets the ineffective-heal
+sentinel only at the already-qualified encounter-seeking boundary. Existing HP,
+PP, total healing/action/frame and flee limits remain. This intentionally permits
+recovery from new encounter damage without first requiring a win; it does not
+permit ineffective healing to repeat.
+
+188focused tests pass. Four new real-loop cases distinguish initial healing,
+direct-combat suppression after a pause, actual helper-awarded XP and repeated
+helper failures stopping at the unchanged healing budget. The old code failed the
+new test before the repair. Source changes remain opt-in for collection training;
+legacy tests forbid the collection helpers and preserve old Route11 semantics.
+
+Flash High reviewd4ae3c1b correctly asks for poisoned-helper transit verification
+and a zero-XP budget test; both remain explicit. Its target-starvation objection
+misreads suppression: it suppresses the trainee's direct fighting, not encounter
+species or helper participation. Helper coverage includes current resources.
+Allowing another heal after new damage is deliberate, bounded and now tested,
+not an unlimited success retry. Post-review Gemini quota:98.701%five-hour remaining,
+94.953%weekly remaining. Claude was not called again for this narrow repair.
+
 The first live support operation on source269417ae successfully escaped the
 retained Drowzee battle with no faint. It then selected an available FIELD_RESTORE
 binding rather than the intended Center mechanic: HP/status improved using items,

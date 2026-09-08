@@ -1,5 +1,18 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
+## September 8 — a recovery lesson, not an erased failure
+
+The repaired execution layer took Ekans11 to19 before the next bounded failure.
+Two Wrap retreats exposed a different problem: healing erased the evidence that
+this trainee should let a helper fight. The actual failure was retained and fitted,
+model67to68, with every earlier row preserved. No Arbok or new living species yet.
+
+The narrow fix keeps that evidence across healing, permits recovery from genuine
+new encounter damage, and still stops ineffective heals and exhausted budgets.
+Four added real-loop cases reproduce the old defect and test useful helper XP plus
+bounded failure. Next continue from the actual level19 save, not replay level11.
+[Actual outcome and fit](evidence/red-phase3-chain-01-2026-09-08.json).
+
 ## September 8 — recovering progress without pretending the failure vanished
 
 The agent escaped the retained battle and reached a Pokémon Center. Two support
