@@ -3,16 +3,16 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-funding-runtime**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-trainer-transition-repair**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-backed story progression: 0/3 acceptance items (0%).**
+**Resource-backed story progression: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Qualify safe trainer funding from real state
+- [x] Qualify safe trainer funding from real state ([evidence](../docs/evidence/red-trainer-transition-qualification-2026-09-08.json))
 - [ ] Earn funds, buy supplies, continue collection
 - [ ] Fit a genuine resource or story-goal choice
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-trainer-transition-repair
+
+Trainer funding qualified:285 earned,29 specimens retained,0faints;104actions/9541frames include both failed prefixes. Safe recovery checkpoint06982228. Model75 unchanged,0newlabels. Resource-backed checklist1/3.
+
+**Deviation:** Armed transition, historical menu and field/battle memory lifetime required scoped repairs. Two failed prefixes remain consumed; active-menu recovery is separately metered zero-label support. No exit criterion changed.
+
+**Next:** From safe recovery checkpoint06982228, verify an affordable ball purchase and continue a genuine model-selected collection/evolution goal. Preserve both failed funding prefixes and the zero-label recovery; no rewind, catalog expansion or new CI gate.
 
 ### 2026-09-08-trainer-funding-runtime
 

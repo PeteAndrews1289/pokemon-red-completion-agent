@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate.
+- Next decision: From safe recovery checkpoint06982228, verify an affordable ball purchase and continue a genuine model-selected collection/evolution goal. Preserve both failed funding prefixes and the zero-label recovery; no rewind, catalog expansion or new CI gate.
 
 ### Mandatory mission check
 
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-trainer-funding-runtime** · status **active** · evidence [qualification](docs/evidence/red-trainer-funding-runtime-2026-09-08.json)
+**2026-09-08-trainer-transition-repair** · status **active** · evidence [qualification](docs/evidence/red-trainer-transition-qualification-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | A finite trainer-funded supply loop connects story events to continued living collection without selling protected items. |
-| Learning output | Shared implementation is published and619 focused tests pass. First safety-rule funding attempt failed after16actions/1068frames;0earnings/0labels. Reload audit preserves29specimens/28living,9currency and0balls. Model75 unchanged. |
-| Authority delta | None. Safety-rule funding attempt produced zero learned choices and zero fit rows; model75 is unchanged. |
-| Transfer result | Varied ROM-free identity/party/reward tests, not live funding success or transfer. Trainer selection and combat remain deterministic skills. |
-| Blocker | The integrated funding skill reached the trainer but stopped before battle. Exact failure state and trace are retained. An independent older full event-offset decoding defect also needs scoped repair. |
-| Decision | Second engineering/support-only session triggers reorientation: freeze feature expansion and broad audits. Diagnose the actual transition, repair only the named runtime seams and return to one measured outcome. |
-| Next session | Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate. |
-| Next falsifier | Can a bounded continuation from the actual failed endpoint establish the intended trainer battle, defeated event and exact income without a replay or lost specimen? |
+| Learning output | One ordinary trainer defeated,285 currency earned;29 specimens/28 living/33 registered preserved, zero faints.104actions/9541frames including both failed prefixes and recovery. Zero new labels; resource-backed checklist1/3. |
+| Authority delta | None. Funding and battle recovery were deterministic support; model75 and its75 fitted outcomes remain unchanged. |
+| Transfer result | Cartridge-specific transition and identity fixes have varied ROM-free tests. One same-lineage trainer success, not broad combat competence or cross-game transfer. |
+| Blocker | Trainer income is now verified. Zero balls remain;294 currency can fund a small purchase, but purchase and subsequent model-selected collection are not yet verified. |
+| Decision | Close the narrow trainer-funding repair at a safe retained state. Return directly to earned supplies and a measurable learner choice; no broad architecture audit or teacher expansion. |
+| Next session | From safe recovery checkpoint06982228, verify an affordable ball purchase and continue a genuine model-selected collection/evolution goal. Preserve both failed funding prefixes and the zero-label recovery; no rewind, catalog expansion or new CI gate. |
+| Next falsifier | Can the agent buy capture supplies with actually earned money and complete or honestly retain the outcome of a real model-selected collection goal? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

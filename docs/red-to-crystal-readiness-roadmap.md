@@ -2,7 +2,12 @@
 
 ## Current visual baseline supersedes the historical sequence below
 
-Latest result: model67 chose the retained Ekans evolution but stopped at level11
+Latest result: trainer funding qualified,285 earned and all29 specimens preserved.
+Model75 remains unchanged; the resource-backed checklist is1/3. Next is a funded
+purchase and genuine model-selected collection, not Crystal. See the
+[current audit](audits/red-trainer-transition-qualification-2026-09-08.md).
+
+Historical result: model67 chose the retained Ekans evolution but stopped at level11
 on a resource/opponent finisher mismatch. Exact failure and six quantum saves
 retained; no new fit or Arbok. Next is narrow recovery qualification, not Crystal.
 [Audit](audits/red-retained-ekans-failure-2026-09-08.md).

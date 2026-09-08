@@ -28,6 +28,12 @@ the first live attempt failed despite green component tests. Its
 [audit](audits/red-trainer-funding-runtime-2026-09-08.md) records the changes,
 corrections, remaining failure and reviewer adjudication. No agent is infallible.
 
+The subsequent [transition repair](audits/red-trainer-transition-qualification-2026-09-08.md)
+qualified actual trainer income. Flash supplied a small compatibility proposal,
+but its example addresses were wrong; Codex replaced them and diagnosed the live
+transition/WRAM-lifetime defects. Keep tasks concrete and verify primary evidence.
+Do not claim measured savings or broad audit coverage from a short advisory reply.
+
 ### Authorized isolated-draft exception — September 7
 
 The user authorizes Flash to edit explicitly named source/test/doc files in its own

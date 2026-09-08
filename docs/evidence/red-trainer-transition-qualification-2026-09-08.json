@@ -1,0 +1,109 @@
+{
+  "schema": "pokemon.red.trainer-funding-qualification.v1",
+  "session_id": "2026-09-08-trainer-transition-repair",
+  "source_commit": "d64eba0363f232a07b195cc1b302a46ae425f57f",
+  "source_bundle_sha256": "fa81e90e363cb790bbc75779d5caed7490d2749c173b390dfd887f9e958bee20",
+  "status": "qualified_bounded_support",
+  "model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+  "model_fitted": false,
+  "new_training_examples": 0,
+  "learned_decisions": 0,
+  "independent_evaluation": false,
+  "consumed_failed_prefix": [
+    {
+      "episode_id": "red-phase4-funding-20260908-01-causal",
+      "actions": 16,
+      "frames": 1068,
+      "state_sha256": "f08d4b6582f4d0781e1db27c6a1bd52f2bb10e64ed71f9f4ad3d3f395e6a06d3",
+      "failure": "armed trainer transition misclassified as closed dialogue"
+    },
+    {
+      "episode_id": "red-phase4-funding-20260908-02-causal",
+      "manifest_sha256": "5a015dfa0d259bddda647de1fca970d047621ceda6c235ed586eb2432f03f574",
+      "actions": 9,
+      "frames": 996,
+      "state_sha256": "1fdce0fcff9b52cb091c1f580885a8e8861647ec31e3f7ea7be4aadcd0e03654",
+      "failure": "field engagement union used as stable battle identity",
+      "safe_checkpoint": false
+    }
+  ],
+  "recovery": {
+    "episode_id": "red-phase4-trainer-recovery-20260908-01",
+    "manifest_sha256": "8decb6ea7c74e8c6148b212145a09dd62b51c2c4622da0df7f8bd230c25dd159",
+    "checkpoint_sha256": "06982228197b4f6d92a8a10c4ca954aadfb3abf5015e266cb4de6e026be3d6b8",
+    "state_sha256": "46defbefd717ff1d272cf90eeaa154a082373fa9d4ced04ab0265293c4afd09c",
+    "actions": 79,
+    "frames": 7477,
+    "original_choice_retried": false,
+    "training_examples": 0
+  },
+  "combined_costs": {
+    "actions": 104,
+    "frames": 9541
+  },
+  "terminal": {
+    "map_id": 22,
+    "x": 22,
+    "y": 5,
+    "battle": 0,
+    "battle_result": 0,
+    "input_ready": true,
+    "dialogue": false,
+    "pending_trainer": null,
+    "trainer_event": 1141,
+    "trainer_event_set": true,
+    "initial_money": 9,
+    "money": 294,
+    "earned_currency": 285,
+    "balls": 0,
+    "protected_full_restores": 4,
+    "living_species": 28,
+    "total_specimens": 29,
+    "registered_species": 33,
+    "party_species": [
+      141,
+      104,
+      28,
+      118,
+      132,
+      48
+    ],
+    "party_hp": [
+      73,
+      167,
+      213,
+      118,
+      272,
+      34
+    ],
+    "observed_faints": 0,
+    "undeclared_specimen_losses": 0,
+    "bag_unchanged": true
+  },
+  "verification": {
+    "state_roundtrip_exact": true,
+    "audit_controller_actions": 0,
+    "audit_emulator_frames": 0,
+    "independent_box_inventory": true,
+    "exact_reward": true,
+    "defeated_event": true,
+    "collection_counter_preserved": true
+  },
+  "tests": {
+    "focused_passed": 590,
+    "type_checked_core_files": 424,
+    "final_changed_source_typechecks_passed": true,
+    "full_suite_completed": false,
+    "interrupted_earlier_suite_passed": 5624,
+    "interrupted_earlier_suite_skipped": 1,
+    "interrupted_earlier_suite_xfailed": 1,
+    "interrupted_earlier_suite_reason": "Source evolved during the earlier broad run; stopped obsolete run, reran final focused checks."
+  },
+  "limits": [
+    "One same-lineage ordinary trainer, not general trainer competence.",
+    "Deterministic support, not model-selected play or a fit.",
+    "Money earned; no funded purchase or subsequent collection yet.",
+    "Historical menus retain legacy event offsets; fresh target verification uses corrected offsets.",
+    "No sealed evaluation, full replay, Crystal execution or transfer claim."
+  ]
+}

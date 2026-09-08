@@ -1,6 +1,29 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — parallel coding still needs a real game test
+## Current — the agent earns its next supplies
+
+The agent earned 285 currency from an ordinary trainer while retaining all 29 Pokémon.
+That is a small but necessary piece of sustained play: collecting cannot depend on
+resetting the game whenever balls or money run out. It has 294 currency now, but has
+not yet bought the next supplies or made another learned collection choice.
+
+The engineering lesson was about state, not more grinding. Our code first mistook
+a pending battle for a closed conversation. It then treated two reused memory
+locations as permanent trainer identity. Exact saved failures exposed both mistakes.
+The corrected support skill finished the same battle without a rewind, with no
+faints and all prior costs retained. Total: 104 actions / 9,541 frames across two failures
+and one successful recovery.
+
+Flash helped with a bounded compatibility proposal; Codex rejected its wrong
+address examples and owned the measured diagnosis, integration and verification.
+An earlier reviewer concern deserved more investigation. 590 focused tests pass,
+but the live outcome—not that test count—is what qualifies trainer funding.
+This is still deterministic support. Model 75 remains at 75 fitted outcomes;
+the next meaningful learning step is using earned supplies in a real model choice.
+
+[Verified result and limits](audits/red-trainer-transition-qualification-2026-09-08.md).
+
+## Historical — parallel coding still needs a real game test
 
 We used Flash to draft a bounded trainer-battle adapter while Codex built its
 routing and verification. Claude challenged the design; Codex accepted useful

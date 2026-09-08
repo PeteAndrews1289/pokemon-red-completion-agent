@@ -1,6 +1,38 @@
 # Model-first development roadmap
 
-## Current — shared funding implementation, first live attempt retained
+## Current — trainer funding qualified; earned supplies next
+
+One ordinary trainer was defeated for285 currency. Actual safe checkpoint06982228
+(state46defbef) is Route11(x22,y5), with294 currency,0balls,29 specimens/28 living/
+33 registered and all four protected FullRestores. Electrode HP73; all other party
+HP unchanged. Exact event1141, money, bag and collection verified after reload.
+No faints, no specimen loss, no new fit. Model75 retains75 outcomes.
+
+The previous funding01 failed before battle on an armed-transition interpretation.
+Funding02 advanced with one WAIT but stopped before its first move because field
+engagement bytes alias enemy battle stats. Both remain consumed; failed02 state
+1fdce0fc is historical now. Separate zero-label recovery finished the same battle.
+Combined cost:104actions/9541frames, including both failed prefixes. Do not restore
+old3fe01202 or retry either choice. No model-selected battle or transfer is claimed.
+
+Repairs: pending-latch observation; wait-only/zero-route resumption; explicit old
+restore versus new recovery menu settings; stable combat trainer identity; full
+event-offset verification. Historical route menus still use legacy decoding.
+Resource-backed milestone1/3: funded purchase and genuine model-selected continuation
+remain. Keep funding01 pending support and the failed02/recovery lineage in later
+accounting; never manufacture a training row for recovery.
+
+Next: use the existing affordable-purchase and native goal interfaces from06982228.
+Audit the resource/collection outcome and retain failures. No new teacher, catalog,
+sealed access, Crystal, full replay or broad audit.590 focused tests pass; the earlier
+broad run was interrupted after source changed, not claimed as a complete pass.
+Flash supplied a bounded advisory proposal; incorrect addresses were rejected.
+No external agent or emulator remains running. Next recommendation: Astra High,
+Fast off; Flash only for well-specified fixtures, Claude for consequential review.
+
+[Audit and next steps](audits/red-trainer-transition-qualification-2026-09-08.md).
+
+## Historical — shared funding implementation, first live attempt retained
 
 Flash's isolated battle draft is integrated with Codex's routing, observation and
 independent verification. Native training now receives an explicit conditional-income
