@@ -1,5 +1,24 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## September 8 — recovering progress without pretending the failure vanished
+
+The agent escaped the retained battle and reached a Pokémon Center. Two support
+attempts exposed a distinction our recovery interface had missed: healthy HP is
+not restored PP. Both failures and their costs remain in the record. The third
+operation completed the nurse interaction and verified the actual restored party.
+
+All27 specimens survived, including the Ekans trained from6 to11 and its retained
+spare. The recovery chain used213actions and14,868frames without rewinding the
+save or replaying the original goal. Exact failure-state retention now leads to
+an authenticated usable continuation, not merely a diagnostic screenshot.
+
+This is a deterministic execution repair, not another training success. Model67
+still has67 fitted outcomes; Arbok and sustained Red remain unfinished. Next we
+must show the model making useful choices from this recovered state and learning
+from their actual outcomes. Claude and Antigravity challenged the repair; we
+accepted concrete adversarial cases and rejected unsupported interface claims
+against executable tests. [Recovery audit](audits/red-resource-recovery-repair-2026-09-08.md).
+
 ## September 8 — choosing the useful goal exposed a recovery gap
 
 The model did choose the next useful evolution. From the actual saved state,

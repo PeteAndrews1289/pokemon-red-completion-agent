@@ -1,6 +1,6 @@
 # Current agent handoffs
 
-## Current — Phase 3 recovery repair, before live recovery
+## Current — exact-failure recovery complete; model continuation next
 
 The user authorizes continued bounded sessions until Phase 3 is genuinely closed.
 Use the unchanged exit and [prospective work plan](work-sessions/2026-09-08-phase3-completion-plan.md).
@@ -8,11 +8,15 @@ Encounter-aware current-resource coverage and a separate defensive escape are
 implemented; 331 targeted tests passed. A support-only exact-failure recovery
 runner preserves the failed prefix, costs, search memory and zero training labels.
 Read the [repair audit](audits/red-resource-recovery-repair-2026-09-08.md).
-No live recovery or new fit yet; model67, collection and original failure below
-remain the actual state. Both reviewer passes are complete; speculative source
-findings are adjudicated against the implementation/tests in the audit. Codex owns publication/execution.
-Next publish qualified source, run one exact-state escape-and-heal, authenticate
-the resulting checkpoint, then return to actual model choice and outcome fitting.
+Live recovery succeeded on source41368404. The final nurse operation used30actions/
+2160frames; all three support operations total213actions/14,868frames. Both failed
+prefixes remain retained, all27specimens preserved and party HP/status/PP restored.
+Checkpoint215d7b49 restores without input and exposes genuine acquisition/evolution
+alternatives. Zero new labels: model67 remains unchanged; Arbok is unfinished.
+Both reviewer passes are complete and adjudicated in the audit; no review pending.
+Next execute the declared model-directed continuation, fit its actual eligible
+outcome and proceed through the linked chains in the work plan. Full regression
+is running separately. Codex owns publication/execution.
 Do not stop at engineering tests or count a recovery as a model-selected goal.
 
 ## Historical input to the repair — model67 evolution stopped

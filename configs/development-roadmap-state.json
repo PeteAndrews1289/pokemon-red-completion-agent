@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-retained-ekans-failure",
+  "as_of_session": "2026-09-08-resource-recovery",
   "current_stage": "sustained-red",
   "stages": {
     "foundation": {
@@ -14,7 +14,7 @@
     },
     "sustained-red": {
       "status": "current",
-      "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
+      "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
     },
     "red-story": {
       "status": "planned",
@@ -49,8 +49,8 @@
       {
         "id": "guarded-evolution-recovery",
         "label": "Qualify encounter-aware recovery",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
       },
       {
         "id": "retained-precursor-evolution",
@@ -288,6 +288,12 @@
       "result": "Model67 chose evolution; Ekans6 to11, no Arbok or fit. Exact failure and six quantum saves retained;27specimens intact. Field/actual-opponent finisher mismatch diagnosed.",
       "deviation": "The learned goal was useful but its deterministic execution failed. Archive the prior3/3 acquisition checklist; new safe-evolution checklist1/3 is engineering diagnosis, not learned progress. No reset or stage-exit change.",
       "next": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode."
+    },
+    {
+      "session": "2026-09-08-resource-recovery",
+      "result": "Exact-failure recovery succeeded after two preserved support failures. All27specimens and Ekans11 retained; party HP/status/PP restored. Zero labels; model67 unchanged. Safe-evolution2/3, not Phase3 completion.",
+      "deviation": "Support chain totals213actions/14,868frames without a rewind. Explicit PP restoration extends existing guarded Center control; no new teacher or stage exit changes.",
+      "next": "Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

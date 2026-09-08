@@ -29,29 +29,29 @@
     },
     {
       "capability": "Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger.",
-      "cheapest_falsifier": "Can an adversarial collection-training loop stop before seeking an encounter when the only resource-ready helper fails that encounter's type check, and retreat safely if already in battle?",
+      "cheapest_falsifier": "Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state?",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual native evolution choice executed, but the unsafe partial is not admitted or fitted. Model67 and its67 earlier outcomes remain unchanged.",
-        "blocker": "Field finisher readiness ignores the actual opponent. After helper resource/status depletion, Primeape passes field checks but fails Drowzee's type matchup; no battle finisher remains. Component throws before recovery, leaving an unsafe terminal.",
-        "decision": "Stop the consumed evolution attempt. Audit and preserve exact failure plus six intermediate saves. Keep completed useful-acquisition3/3 archived; declare a focused safe-evolution checklist without changing Phase3 or stage exits.",
+        "authority_delta": "Zero new model decisions, fitted rows or authority promotions. Recovery is deterministic support; model67 remains unchanged.",
+        "blocker": "Encounter-resource mismatch and PP-only recovery have been repaired and live recovery admitted. Next demonstrate useful post-recovery model-directed progress; sustained Red is still unfinished.",
+        "decision": "Recovery submilestone2/3 verified; continue the existing Phase3 plan without weakening its exit. Preserve all original and failed-support costs.",
         "evidence": {
           "kind": "falsification",
-          "path": "docs/evidence/red-retained-ekans-failure-2026-09-08.json",
-          "sha256": "c0887d533ff8e98014220bfbd0b80b0bd339fd5116dd1fc9a7f740f749ad3108"
+          "path": "docs/evidence/red-resource-recovery-2026-09-08.json",
+          "sha256": "06ac9256ed589e984a1e25cabe860e9e6ed13a92239828074fdfae5c31f45e3f"
         },
-        "learning_output": "Zero new admitted examples or fits. Model67 chose evolution; Ekans6 to11,27specimens/26living/31registered retained.2751actions/217,562frames; two balls209currency unchanged.",
-        "next_falsifier": "Can an adversarial collection-training loop stop before seeking an encounter when the only resource-ready helper fails that encounter's type check, and retreat safely if already in battle?",
-        "next_session_goal": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode.",
+        "learning_output": "No new fit. Recovery chain213actions/14,868frames retained; final nurse operation30actions/2160frames.27specimens/26living/31registered preserved, healed HP/status/PP. Exact checkpoint215d7b49 authenticated.",
+        "next_falsifier": "Can model67 complete a useful goal after exact-failure recovery, then continue choosing from authentic changed resources and collection state?",
+        "next_session_goal": "Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal.",
         "product_alignment": "Using a captured spare for a retained-base evolution directly serves living collection. The blocking issue is deterministic recovery coverage, not another teacher or a new model architecture.",
-        "session_id": "2026-09-08-retained-ekans-failure",
+        "session_id": "2026-09-08-resource-recovery",
         "status": "active",
-        "stop_condition": "No replay or additional input in this consumed attempt. Next maintenance is bounded to recovery qualification; diagnostic states do not automatically become safe checkpoints or training labels. Stop on lost-state, collection-loss or unsupported retreat.",
-        "transfer_result": "Seven manifest streams verified. Exact failure and last quantum both restored without inputs; both retain27specimens.252focused tests pass but do not cover this runtime readiness gap. Same-lineage Red only."
+        "stop_condition": "Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning.",
+        "transfer_result": "Same-lineage Red recovery only. No cross-title or independent-evaluation result. Two reviewers completed; targeted safety and provenance tests passed; full regression still running."
       },
       "learned_authority": {
-        "current": "Model67 chose evolution from capture/evolution/healing alternatives and raised Ekans6 to11 before a deterministic finisher-selection failure. No admitted terminal or fit;67 outcomes/28 successful/57 distinct remain,46 native/16 regional entries. Exact failed state and six quantum saves retained. The model has played; Arbok has not been obtained.",
+        "current": "Model67 retains67 fitted outcomes/28successful/57distinct,46native/16regional entries. Exact-failure support recovered the party at the Center with all27specimens retained and no new labels. No Arbok yet. Genuine acquisition/evolution alternatives pass read-only continuation checks; next real choice is pending.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red bounded player integration V1",
-      "next_decision": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode.",
+      "next_decision": "Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

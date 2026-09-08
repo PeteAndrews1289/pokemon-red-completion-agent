@@ -4,7 +4,7 @@ Mission: unblock sustained model-directed Red collection without replacing goal
 choice or losing earned progress after an executor failure. The Phase 3 exit and
 prospective chain requirements remain in the [work plan](../work-sessions/2026-09-08-phase3-completion-plan.md).
 
-## Implemented; live recovery not yet demonstrated
+## Implemented and live recovery demonstrated
 
 - The native collection trainer supplies cartridge encounter rows. Every next
   encounter search checks current per-opponent HP, status, level, type and usable
@@ -22,7 +22,16 @@ prospective chain requirements remain in the [work plan](../work-sessions/2026-0
 
 The original evolution remains failed, model67 remains unchanged, and Arbok has
 not been obtained. This engineering work is not a new fitted outcome or Phase 3
-completion. Successful recovery must precede new model-directed gameplay.
+completion. Recovery is now admitted; new model-directed gameplay is next.
+
+The third support operation continued from the actual Center failure, completed
+the nurse interaction in30actions/2,160frames, and published checkpoint215d7b49.
+All27specimens, Ekans11, spare Ekans6 and26living/31registered species remain.
+HP, status and PP are restored. The three support operations cost213actions/
+14,868frames in total; both failed prefixes remain authenticated, not discarded.
+Zero model queries, decisions or fitted rows were created. The original evolution
+is still failed and neither the battle nor the journey was replayed.
+[Path-free recovery evidence](../evidence/red-resource-recovery-2026-09-08.json).
 
 ## Checks
 
@@ -83,5 +92,6 @@ Observed service usage after the initial Claude review: current session 5% used
 (reset September 8, 03:49 America/New_York), weekly 8% used (September 11, 09:59).
 After two Flash reviews: Gemini five-hour remaining 98.835%, weekly remaining
 94.976%; resets September 8 07:51:43 UTC and September 11 23:22:45 UTC respectively.
-These are provider quota readings, not token-cost estimates. The later Claude
-review receives a separate post-session reading in the operator handoff.
+These are provider quota readings, not token-cost estimates. After the second
+Claude review, the provider showed12%session used and9%weekly used. Neither
+external reviewer has an outstanding task.

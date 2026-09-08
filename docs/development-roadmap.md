@@ -3,17 +3,17 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-retained-ekans-failure**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-resource-recovery**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Safe acquired-precursor evolution: 1/3 acceptance items (33%).**
+**Safe acquired-precursor evolution: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Retain and explain the exact failure ([evidence](../docs/evidence/red-retained-ekans-failure-2026-09-08.json))
-- [ ] Qualify encounter-aware recovery
+- [x] Qualify encounter-aware recovery ([evidence](../docs/evidence/red-resource-recovery-2026-09-08.json))
 - [ ] Complete and fit a useful evolution
 
 Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -48,7 +48,7 @@ Combine navigation, battles, captures, resources and recovery.
 
 Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence.
 
-[Current evidence](../docs/evidence/red-retained-ekans-failure-2026-09-08.json)
+[Current evidence](../docs/evidence/red-resource-recovery-2026-09-08.json)
 
 ### 04. Finish Red with the model — planned
 
@@ -91,6 +91,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-resource-recovery
+
+Exact-failure recovery succeeded after two preserved support failures. All27specimens and Ekans11 retained; party HP/status/PP restored. Zero labels; model67 unchanged. Safe-evolution2/3, not Phase3 completion.
+
+**Deviation:** Support chain totals213actions/14,868frames without a rewind. Explicit PP restoration extends existing guarded Center control; no new teacher or stage exit changes.
+
+**Next:** Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal.
 
 ### 2026-09-08-retained-ekans-failure
 

@@ -1,6 +1,19 @@
 # Handoff
 
-## Current — model67 evolution stopped; exact recovery state retained
+## Current — exact failure recovered; return to model-directed progress
+
+Source41368404 admits the actual healed Center endpoint215d7b49, preserving
+all27specimens and Ekans11. Three support operations cost213actions/14,868frames;
+two failed prefixes remain authenticated. No silent rewind, goal replay or model
+label. Model67 remains67outcomes; safe-evolution checklist2/3, Phase3unfinished.
+Genuine evolution/acquisition alternatives pass the read-only continuation check.
+Next run, verify and fit linked actual model choices; do not stop at the repair.
+Both external reviews are complete; no pending reviewer.
+See [current handoffs](docs/current-agent-handoffs.md),
+[phase plan](docs/work-sessions/2026-09-08-phase3-completion-plan.md) and
+[recovery evidence](docs/evidence/red-resource-recovery-2026-09-08.json).
+
+## Historical — model67 evolution stopped; exact recovery state retained
 
 Model67 chose evolution from capture/evolution/healing alternatives. Ekans grew
 from level6 to11, then the deterministic training skill found no safe finisher
