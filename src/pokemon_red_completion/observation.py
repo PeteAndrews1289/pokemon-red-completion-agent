@@ -4044,7 +4044,8 @@ class PokemonRedStateReader:
         if self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 0:
             return None
         row = tuple(self._memory.read_u8(int(RamAddress.TILE_MAP) + i) for i in range(20))
-        if row[:3] != (0x93, 0xAE, 0x7F) or row[18:] != (0xED, 0xEE):
+        # The string is exactly "To". Column2 is town-map background, not a space.
+        if row[:2] != (0x93, 0xAE) or row[18:] != (0xED, 0xEE):
             return None
         for map_id, name in enumerate(RED_FLY_TOWN_NAMES):
             tiles = tuple(0x7F if char == " " else ord(char) - ord("A") + 0x80 for char in name)

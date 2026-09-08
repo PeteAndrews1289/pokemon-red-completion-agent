@@ -47,7 +47,7 @@ def test_fly_observation_uses_visit_flags_and_visible_name_not_normal_cursor():
     [
         (0xC3A0, 0),
         (0xC3A1, 0),
-        (0xC3A2, 0),
+        (0xC3A3, 0),
         (0xC3B2, 0),
         (0xC3B3, 0),
         (0xC3B1, 0),
@@ -65,6 +65,12 @@ def test_visits_do_not_invent_towns_from_unused_bits_or_badges():
     memory = Memory({0xD70B: 0, 0xD70C: 0xF8, 0xD356: 255})
     assert PokemonRedStateReader(memory).read_fly_destinations() == ()
     assert PokemonRedStateReader(_screen("CERULEAN CITY")).read_fly_menu_state().selected_map == 3
+
+
+def test_to_header_does_not_require_blank_town_map_background():
+    memory = _screen("PALLET TOWN", 2047)
+    memory.values[0xC3A2] = 103  # Actual retained Fly screen, map background tile.
+    assert PokemonRedStateReader(memory).read_fly_menu_state().selected_map == 0
 
 
 @pytest.mark.parametrize(
@@ -139,7 +145,7 @@ class FlyWorld:
         return {0xCC26: self.cursor, 0xCC28: 5}.get(address, 0)
 
     def read_input_readiness(self):
-        return SimpleNamespace(ready=self.stage in {"field", "landed"})
+        return SimpleNamespace(ready=self.stage in {"field", "fly", "landed"})
 
     def read_overworld_movement_mode(self):
         if self.stage == "landed" and self.fault == "wrong_locomotion":
@@ -240,6 +246,15 @@ def test_already_selected_only_destination_requires_no_cursor_input():
     world = FlyWorld(available=(9,), selected=9, transitions={})
     receipt = _port(world).execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:indigo_plateau"))
     assert receipt.observed_destinations == (9,)
+    assert world.flight_confirms == 1
+
+
+def test_retained_observed_menu_continues_without_opening_or_repeating_party_selection():
+    world = FlyWorld(stage="fly")
+    receipt = _port(world).execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:indigo_plateau"))
+    assert world.menu_steps == []
+    assert not any(action.kind is MacroActionKind.OPEN_MENU for action in world.actions)
+    assert receipt.observed_destinations == (0, 9)
     assert world.flight_confirms == 1
 
 

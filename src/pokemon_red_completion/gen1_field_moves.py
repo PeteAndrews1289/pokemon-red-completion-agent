@@ -277,6 +277,7 @@ class Gen1FieldMovePort:
     def _fly(self, destination: int) -> Gen1FlyReceipt:
         """Confirm only an observed destination; never search by trying landings."""
         before = self.reader.read()
+        retained_menu = self.reader.read_fly_menu_state()
         source_map, source_at = _require_overworld(before, "Fly source")
         if (
             not 0 <= source_map <= 0x24
@@ -338,15 +339,16 @@ class Gen1FieldMovePort:
             if departure and _overworld_position(after) != (source_map, source_at):
                 raise Gen1FieldMoveError("Fly departed before destination confirmation")
 
-        self._pulse(MacroAction(MacroActionKind.OPEN_MENU), self.timing.menu_frames)
-        for target, label in (
-            (1, "START-menu POKEMON"),
-            (party_index, "Fly holder"),
-            (submenu_row, "Fly field command"),
-        ):
-            self._select_cursor(target, label)
-            protected(departure=True)
-            self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.menu_frames)
+        if retained_menu is None:
+            self._pulse(MacroAction(MacroActionKind.OPEN_MENU), self.timing.menu_frames)
+            for target, label in (
+                (1, "START-menu POKEMON"),
+                (party_index, "Fly holder"),
+                (submenu_row, "Fly field command"),
+            ):
+                self._select_cursor(target, label)
+                protected(departure=True)
+                self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.menu_frames)
         menu = self.reader.read_fly_menu_state()
         if menu is None or menu.available_maps != available:
             raise Gen1FieldMoveError("Fly menu did not expose the declared visited towns")
