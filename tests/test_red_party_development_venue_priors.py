@@ -309,10 +309,10 @@ def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() ->
         "b30404afdcad255a6c5e6b9ab221878e9c9829c2dbbfab56dc35d99ae973204f"
     )
     assert attestation.current_elements_sha256 == (
-        "f9fa47c9dfbfa8eb41d81dac262315e7cbd4dcd6768077e0b28131b9e6bc7989"
+        "058436a75ac067612935da6918856dd4cf02c0926f4382970ec23a1e3002aec3"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "0df9cdd0217605332359cb53fb49cd9a445b6178dc9cdc895cdacf21fff8950c"
+        "76bc2c2891e66b0feb2c1e8a4ad36b382a253d0370452b57065702395e4c5ae0"
     )
 
 

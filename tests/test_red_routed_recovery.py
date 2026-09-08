@@ -334,6 +334,10 @@ def test_explicit_pp_recovery_replaces_available_field_items_with_center_only(mo
     assert ":routed-center:" in restore.binding_ref
     assert router.actions.actions_executed == 0
     assert calls == []
+    report = restore.execute()
+    assert restore.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+    assert "transport" in calls
+    assert state["raw"].party_pp == ((10, 10), (10, 10))
 
 
 def test_route_blocked(monkeypatch):

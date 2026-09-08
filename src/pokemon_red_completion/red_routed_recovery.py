@@ -418,6 +418,8 @@ def bind_routed_center_recovery(
             face_pc_boundary(router.actions, router.runtime.reader, "up")
 
         center_provider = _make_center_provider(router)
+        if require_pp_restore:
+            center_provider = replace(center_provider, require_pp_restore=True)
         center_offer = center_provider.offer(at_nurse_obs)
         if center_offer.binding is None:
             raise RedRoutedRecoveryError(

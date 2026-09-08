@@ -939,8 +939,11 @@ class RedCenterRestoreGoalProvider:
     dialogue_attempts: int = 32
     settle_frames: int = 120
     kind: GoalKind = GoalKind.RESTORE_TEAM
+    require_pp_restore: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.require_pp_restore) is not bool:
+            raise ValueError("explicit Center PP recovery mode must be boolean")
         for name in ("movement_attempts", "dialogue_attempts", "settle_frames"):
             value = getattr(self, name)
             if type(value) is not int or value <= 0:  # noqa: E721
@@ -951,7 +954,13 @@ class RedCenterRestoreGoalProvider:
 
         def boundary(current: RedGoalObservation) -> RedGoalSkillAvailability:
             raw = current.raw
-            if current.evidence.safety >= 1.0:
+            if raw.battle_state or not current.input_ready:
+                return RedGoalSkillAvailability.unavailable(
+                    GoalUnavailableReason.TEMPORARILY_BLOCKED
+                )
+            if current.evidence.safety >= 1.0 and not (
+                self.require_pp_restore and not _raw_party_restored(raw)
+            ):
                 return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             if (
                 raw.map_id not in _POKEMON_CENTER_MAPS
@@ -1006,6 +1015,31 @@ class RedCenterRestoreGoalProvider:
                 frames_executed=self.emulator.frame_count - before_frames,
                 evidence={"bounded": True, "whole_party_restore": True},
             )
+
+        if self.require_pp_restore:
+            def verify_restore(before, after, report):
+                if (
+                    report.actions_executed <= 0 or after.raw.battle_state or not after.input_ready
+                    or after.raw.map_id != before.raw.map_id
+                    or not _raw_party_restored(after.raw)
+                    or _raw_party_restored(before.raw)
+                    or before.raw.bag_items != after.raw.bag_items
+                    or before.raw.player_money != after.raw.player_money
+                    or before.raw.party_species_ids != after.raw.party_species_ids
+                    or before.raw.party_levels != after.raw.party_levels
+                    or before.raw.party_moves != after.raw.party_moves
+                    or before.collection_observation != after.collection_observation
+                    or self.adapter.graph.completed_ids(before.game_state)
+                    != self.adapter.graph.completed_ids(after.game_state)
+                ):
+                    return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+                return GoalVerification.succeeded()
+
+            return RedObservedGoalSkillProvider(
+                kind=self.kind, binding_ref="pokemon.red:recovery:pokemon-center-pp",
+                adapter=self.adapter, availability=boundary, executor=execute,
+                verifier=verify_restore, estimated_effort=0.04, estimated_risk=0.01,
+            ).offer(observation)
 
         return RedProgressGoalProvider(
             kind=self.kind,

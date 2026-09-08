@@ -35,6 +35,14 @@ no model label or safe checkpoint was published. The next support operation star
 from that state, explicitly requires Center recovery and authenticates both failed
 prefixes. Default model/legacy restore behavior remains unchanged.
 
+The next operation reached Vermilion Center(3,7) in55actions/1,632frames without
+a faint, but the leaf Center provider still rejected PP-only recovery at safety1.
+State8d174e04 and failed manifest4ff59eee preserve that exact endpoint. The explicit
+PP mode now reaches the nurse provider and verifies actual HP/status/PP changes,
+not an invented safety-score increase.118 related tests pass, including the full
+route/leaf PP-only healing path. The next operation continues from the Center;
+neither the battle nor the trip is repeated.
+
 Read-only rehearsal also caught canonical profile serialization before any input;
 the real proposal round-trip now has a regression test. Broader testing caught
 the generated source registry and historical Route11 AST attestation becoming
