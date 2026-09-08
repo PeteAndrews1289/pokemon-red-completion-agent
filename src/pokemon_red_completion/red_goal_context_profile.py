@@ -233,6 +233,22 @@ def build_red_goal_context_profile_payload(
     return payload
 
 
+def bind_cartridge_trainer_story_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Prospectively replace only the legacy story executor, preserving other goals."""
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers
+    }
+    providers[GoalKind.ADVANCE_STORY] = (
+        GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY,
+        {"trainer_objective": "defeat_lorelei"},
+    )
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    ))
+
+
 def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Explicit cash-only affordability transition, preserving all other skills."""
     providers = []
@@ -451,8 +467,14 @@ def _parse_parameters(
     value: object,
 ) -> dict[str, object]:
     row = dict(_mapping(value, "provider parameters"))
+    if mechanic is RedGoalMechanic.MIDGAME_STORY:
+        if not row:
+            return row
+        _exact_keys(row, {"trainer_objective"})
+        if row["trainer_objective"] != "defeat_lorelei":
+            raise RedGoalContextProfileError("cartridge story objective is not supported")
+        return row
     if mechanic in {
-        RedGoalMechanic.MIDGAME_STORY,
         RedGoalMechanic.BALANCED_TEAM,
         RedGoalMechanic.DIGLETT_EVOLUTION,
         RedGoalMechanic.FIELD_RESTORE,

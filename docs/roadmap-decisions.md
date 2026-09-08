@@ -1,5 +1,14 @@
 # Roadmap baseline and deviations
 
+## September8 — singleton rehearsal is support, not a manufactured learning row
+
+The actual retained Indigo menu now offers the new cartridge-routed Lorelei skill, but
+no second executable preparation goal. Qualify one native singleton rehearsal rather
+than fabricate a competing option or relabel forced input as learned selection. Import
+the historical flight as zero-input administrative support, preserving236actions/19740frames
+and the first missing report. This does not revise stage exits or close story learning.
+The current income-to-story checklist remains1/3 until live readiness is demonstrated.
+
 ## September8 — end standalone preparation work; connect the named story lesson
 
 Cartridge-relative party coverage and a verified swap component now exist; a zero-input

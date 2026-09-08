@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-flexible-trainer-preparation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-native-trainer-story**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-native-trainer-story
+
+257 focused tests pass; real zero-input Indigo menu exposes a cartridge-routed Lorelei goal. Support import and boss gameplay pending; model76 unchanged.
+
+**Deviation:** Singleton preview means first boss rehearsal is forced support, not model learning. Do not invent an alternative. Stage exits and1/3 checklist unchanged.
+
+**Next:** Publish tested story integration, import the retained support with zero labels, then one bounded native singleton Lorelei rehearsal. Multiple useful alternatives and a genuine fitted story choice remain required; no replay or invented model decisions.
 
 ### 2026-09-08-flexible-trainer-preparation
 

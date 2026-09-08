@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon.red.native-trainer-story-integration.v1",
+  "status": "implemented_action_free_preview_passed",
+  "game": "Pokemon Red",
+  "tests": {
+    "focused_passed": 257,
+    "full_suite": false,
+    "mypy_source_files": 430,
+    "ruff_passed": true
+  },
+  "retained_state_sha256": "5c66ec39e9fffea76bbd120d561ef66474303036b5e5c417925e0cbaf1c41521",
+  "historical_support": {
+    "actions": 236,
+    "frames": 19740,
+    "original_first_report_missing": true
+  },
+  "new_actions": 0,
+  "new_frames": 0,
+  "model_queries": 0,
+  "training_examples": 0,
+  "model_fitted": false,
+  "model_fitted_outcomes": 76,
+  "actual_preview": {
+    "story_available": true,
+    "executable_goal_count": 1,
+    "specimens": 30,
+    "original_profile_sha256": "bf0450a87bc7fdd4feb9143abd83af47ad7e3cee46692c21261b1d482ce8ca8f",
+    "prospective_profile_sha256": "428567cf25e6b739bc051277f615264413e0f2d28d361997664e7f94c230711c",
+    "original_native_semantics_verified": true
+  },
+  "native_support_imported": false,
+  "boss_executed": false,
+  "independent_evaluation": false
+}

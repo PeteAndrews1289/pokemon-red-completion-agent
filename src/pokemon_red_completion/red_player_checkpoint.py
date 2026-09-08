@@ -32,6 +32,11 @@ from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
     require_recovery_checkpoint_origin,
 )
+from pokemon_red_completion.red_recorded_support import (
+    SUPPORT_CHECKPOINT_SCHEMA,
+    RedRecordedSupportResult,
+    require_recorded_support_origin,
+)
 
 CHECKPOINT_KIND = "red_bounded_player_checkpoint"
 LEGACY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
@@ -141,7 +146,7 @@ def capture_red_player_terminal(
     meter: CompositionBudgetMeter,
     observe: Callable[[], GoalManagerCompositionObservation],
     parent: GoalManagerContextCapture,
-    result: BoundedPlayerResult | RedFailureRecoveryResult,
+    result: BoundedPlayerResult | RedFailureRecoveryResult | RedRecordedSupportResult,
     episode_id: str,
     profile_sha256: str,
     rom_sha256: str,
@@ -156,6 +161,10 @@ def capture_red_player_terminal(
         raise RedPlayerCheckpointError("checkpoint context origin differs")
     before = meter.checkpoint()
     frame_before = emulator.frame_count
+    if isinstance(result, RedRecordedSupportResult) and (
+        before.controller_actions != 0 or before.emulator_frames != 0 or frame_before != 0
+    ):
+        raise RedPlayerCheckpointError("recorded support import must not execute gameplay")
     if emulator.pressed_buttons:
         raise RedPlayerCheckpointError("checkpoint has held controller input")
     observation = observe()
@@ -177,7 +186,8 @@ def capture_red_player_terminal(
     envelope = replace(parent.envelope, state_sha256=state_sha256)
     return {
         "schema": (
-            RECOVERY_CHECKPOINT_SCHEMA if isinstance(result, RedFailureRecoveryResult)
+            SUPPORT_CHECKPOINT_SCHEMA if isinstance(result, RedRecordedSupportResult)
+            else RECOVERY_CHECKPOINT_SCHEMA if isinstance(result, RedFailureRecoveryResult)
             else MEMORY_CHECKPOINT_SCHEMA if search_memory is not None else CHECKPOINT_SCHEMA
         ),
         **({"search_memory": search_memory.private_dict()} if search_memory is not None else {}),
@@ -244,6 +254,7 @@ def _join_episode(store: PrivateArtifactRoot, document: Mapping[str, object]) ->
     ):
         raise RedPlayerCheckpointError("checkpoint trajectory terminal differs")
     require_recovery_checkpoint_origin(store, document)
+    require_recorded_support_origin(store, document)
     return episode.manifest_sha256
 
 
@@ -330,7 +341,7 @@ def open_red_player_checkpoint(
     schema = document.get("schema")
     if schema not in {
         CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA,
-        MEMORY_CHECKPOINT_SCHEMA, RECOVERY_CHECKPOINT_SCHEMA,
+        MEMORY_CHECKPOINT_SCHEMA, RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA,
     } or any(
         document.get(key) != value for key, value in expected.items()
     ):
@@ -368,7 +379,8 @@ def open_red_player_checkpoint(
         raise RedPlayerCheckpointError("checkpoint final ledger differs")
     memory = None
     if schema == MEMORY_CHECKPOINT_SCHEMA or (
-        schema == RECOVERY_CHECKPOINT_SCHEMA and "search_memory" in document
+        schema in {RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA}
+        and "search_memory" in document
     ):
         memory = GoalSearchMemory.from_private_dict(document.get("search_memory")).private_dict()
     elif "search_memory" in document:

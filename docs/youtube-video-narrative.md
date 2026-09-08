@@ -1,6 +1,21 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — replacing a party recipe with observed capabilities
+## Current — an executable story option is not yet a learned decision
+
+The pieces now connect: cartridge trainer data produces an approach and party preparation,
+and bounded controls can choose moves or switch to an observed stronger matchup. We kept
+the old profiles untouched so historical results still mean the same thing.
+
+The real Indigo preview caught a map-ID type mismatch that mocked tests missed. After
+repair, the next limitation was more important: only the story option is executable here.
+A rehearsal can qualify boss mechanics, but it cannot teach choosing between alternatives.
+We will record it as forced support, not manufacture a learning success. The earlier flight
+also retains its original costs and missing report in an explicitly administrative import.
+
+No new boss input or fit has run at this checkpoint. The next milestone is an actual bounded
+story outcome, then genuinely competing useful options for the goal learner.
+
+## Historical — replacing a party recipe with observed capabilities
 
 The old Lorelei implementation expected particular Pokémon, moves and items. This
 session extracted the reusable question: what can the party we actually have do

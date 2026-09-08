@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect cartridge-relative preparation to bounded generic boss control and preserve diagnostic terminal5c66ec39 plus236actions/19740frames in native continuation. Then collect and fit a real model-selected story-versus-preparation outcome. No further standalone preparation research or replay of parent21445916.
+- Next decision: Publish tested story integration, import the retained support with zero labels, then one bounded native singleton Lorelei rehearsal. Multiple useful alternatives and a genuine fitted story choice remain required; no replay or invented model decisions.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Cartridge-relative party preparation is tested; connect it to bounded boss control and an honest retained-state story choice. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct selected rows. Diagnostic5c66ec39 remains Indigo with30specimens/28living/33registered,619currency/0balls. Party preparation is tested but adds0labels; native continuation admission and generic boss execution remain pending. |
+| Reusable capability | Profile-bound cartridge-routed trainer control is implemented; real Indigo preview exposes one executable story goal. |
+| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Indigo5c66 has30specimens/28living/33registered. One supported story binding is implemented; no boss input or new model learning yet. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can bounded generic trainer control and native support continuation turn the retained Indigo state into a real model-selected story outcome? |
+| Cheapest falsifier | Can one bounded native singleton rehearsal preserve the party and complete the observed Lorelei event? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,18 +62,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-flexible-trainer-preparation** · status **active** · evidence [qualification](docs/evidence/red-flexible-trainer-preparation-2026-09-08.json)
+**2026-09-08-native-trainer-story** · status **active** · evidence [qualification](docs/evidence/red-native-trainer-story-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Observed party capabilities replace a fixed teacher roster recipe. Support-only work is explicitly not learning; the next integration must deliver the named story choice. |
-| Learning output | 177 targeted tests pass. Zero-input inspection found coverage for five Lorelei opponents and a30-step candidate approach. No gameplay, swap, battle, native admission or new model rows; model76 unchanged. |
-| Authority delta | No learned authority expansion or fit. Party preparation is tested, but neither its live swap nor a generic boss controller has executed. |
-| Transfer result | ROM-free party/opponent permutations, changed moves, health, PP, immunity and stale-plan checks pass. Same-lineage read-only Red inspection, not independent transfer. |
-| Blocker | Indigo terminal remains a diagnostic. Party coverage is not cumulative HP/PP sufficiency, battle qualification or native continuation admission. |
-| Decision | End standalone preparation work. Connect bounded generic trainer control and honest native support continuation, then collect the named model-selected story lesson. |
-| Next session | Connect cartridge-relative preparation to bounded generic boss control and preserve diagnostic terminal5c66ec39 plus236actions/19740frames in native continuation. Then collect and fit a real model-selected story-versus-preparation outcome. No further standalone preparation research or replay of parent21445916. |
-| Next falsifier | Can bounded generic trainer control and native support continuation turn the retained Indigo state into a real model-selected story outcome? |
+| Product alignment | Connect existing cartridge-relative controls to story progress. Preserve the distinction between forced skill rehearsal and learned selection. |
+| Learning output | 257 focused tests pass; actual zero-input preview confirms original native semantics and one new story binding. Model76 unchanged, no new labels. |
+| Authority delta | No authority promotion or fit. Fixed party-aware battle control is opt-in and tested, not yet live-qualified. |
+| Transfer result | Varied matchups, party order, typed refusal, stale targets, preserved resources and support-chain mutations pass. Real Red preview is same-lineage, not transfer evidence. |
+| Blocker | Indigo has one executable goal, not a genuine story-versus-preparation choice. Historical support import and first native rehearsal remain pending. |
+| Decision | Qualify the real single story option without calling forced gameplay learning. |
+| Next session | Publish tested story integration, import the retained support with zero labels, then one bounded native singleton Lorelei rehearsal. Multiple useful alternatives and a genuine fitted story choice remain required; no replay or invented model decisions. |
+| Next falsifier | Can one bounded native singleton rehearsal preserve the party and complete the observed Lorelei event? |
 | Stop condition | Stop any individual unsafe or unsupported attempt and preserve its exact failure; no silent rewind or consumed-choice retry. Continue bounded repair/new authenticated choices only. Do not count support as model learning. |
 
 ### Stop conditions

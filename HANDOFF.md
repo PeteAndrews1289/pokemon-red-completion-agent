@@ -1,6 +1,30 @@
 # Handoff
 
-## Current — party-dependent trainer preparation; no new gameplay
+## Current — native story integration; first rehearsal pending
+
+The opt-in cartridge story profile now binds a computed Lorelei approach, observed
+lead preparation and bounded party-aware battle control. Historical profiles remain
+unchanged. Fixed heuristics own moves/switches; learned battle scoring stays shadow-only.
+No item spending, sacrificed party member, unbounded switch loop or stale trainer target
+is permitted. The original trainer identity/payout/event checks remain in force.
+
+257 focused tests pass, plus source lint and typing (430 files). Real zero-input inspection
+verified the historical native endpoint and retained Indigo5c66 semantics/collection.
+The new menu has exactly ONE executable story goal. The route-map enum mismatch found
+by that real preview was fixed and regression-tested; no gameplay occurred.
+
+A typed recorded-support import preserves both diagnostic traces, exact saves, native
+ancestry, search memory, original missing report,236actions/19740frames and zero labels.
+It is an administrative record, not retrospectively invented native gameplay.
+Publication/import and one bounded native singleton rehearsal are next. A forced action
+is not a model decision; story-versus-preparation learning needs real useful alternatives.
+Model76 and the income-to-story1/3 checklist remain unchanged until actual results.
+
+No external agent or quota check ran. Codex owns the next native execution and outcome
+audit. Keep the North Star/phase exits fixed; no teacher reconstruction, sealed Red,
+Crystal or replay of consumed travel. Recommended setting: Astra High, Fast off.
+
+## Historical — party-dependent trainer preparation; no new gameplay
 
 The retained Indigo terminal5c66ec39 is unchanged. The new trainer-party component
 uses the cartridge roster and existing semantic matchup features, not the legacy

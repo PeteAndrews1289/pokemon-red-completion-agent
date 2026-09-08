@@ -5,7 +5,10 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
-from typing import Protocol, cast
+from typing import TYPE_CHECKING, Protocol, cast
+
+if TYPE_CHECKING:
+    from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 from pokemon_red_completion.blaine import (
     DIGLETT_SPECIES_ID,
@@ -184,6 +187,7 @@ class RedGoalContextRuntime:
     boxed_level_evolution_cross_box: bool = False
     remaining_acquisition_demand: bool = False
     level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
+    trainer_story_world: StrategicScenarioRouteWorld | None = None
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -353,6 +357,16 @@ def _build_provider(
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
+        if spec.parameters.get("trainer_objective") == "defeat_lorelei":
+            from .objective_skills import ObjectiveSkillRegistry
+            from .red_trainer_story import RedCartridgeLoreleiSkill
+
+            return RedStoryGoalBindingProvider(
+                COMPLETION_QUEST,
+                ObjectiveSkillRegistry((RedCartridgeLoreleiSkill(
+                    runtime, actions, runtime.trainer_story_world,
+                ),)), runtime.observer,
+            )
         return RedStoryGoalBindingProvider(
             COMPLETION_QUEST,
             build_red_midgame_objective_skill_registry(

@@ -174,8 +174,19 @@ def run_prepared_trainer_funding(
     maximum_intro_pulses: int = 32,
     maximum_settle_pulses: int = 32,
     resume_active_battle: bool = False,
+    intent: BattleIntent | None = None,
+    battle_runner_override: Callable[..., RawGameState] | None = None,
 ) -> TrainerFundingBattleReceipt:
-    """Execute a prepared ordinary trainer battle to claim verified funding."""
+    """Execute a prepared trainer with shared identity/resource/victory checks.
+
+    The default remains ordinary funding. An explicit story caller may supply
+    its own bounded battle controller and intent; neither bypasses the outer
+    party, bag, identity, payout, position or event verifier.
+    """
+    if intent is not None and not isinstance(intent, BattleIntent):
+        raise TypeError("intent must be a BattleIntent")
+    if battle_runner_override is not None and not callable(battle_runner_override):
+        raise TypeError("battle runner override must be callable")
     if type(resume_active_battle) is not bool:
         raise TypeError("resume_active_battle must be boolean")
     if (
@@ -374,11 +385,11 @@ def run_prepared_trainer_funding(
             )
         return slot
 
-    intent = BattleIntent(
+    intent = intent or BattleIntent(
         objective_id="trainer_funding",
         battle_plan_id="ordinary-trainer-funding",
     )
-    battle_final = battle_runner(
+    battle_final = (battle_runner_override or battle_runner)(
         reader,
         executor,
         _wrapped_policy,

@@ -333,6 +333,9 @@ def _player_observer(
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
+    if world is not None and any(spec.parameters.get("trainer_objective") == "defeat_lorelei"
+           for spec in runtime.profile.providers):
+        runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_type")
     if remaining_acquisition_demand or getattr(runtime, "remaining_acquisition_demand", False):
@@ -1037,7 +1040,7 @@ def _regional_profiles(
         if (
             isinstance(source, Path)
             or source.startswith("discovery:")
-            or source in {"capture-status", "affordable-capture-supply"}
+            or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1048,6 +1051,14 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if source == "cartridge-trainer-story":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_cartridge_trainer_story_profile,
+            )
+
+            profile = bind_cartridge_trainer_story_profile(profile)
+            result.append(profile)
+            continue
         if isinstance(source, str) and source.startswith("evolution:"):
             profile = _boxed_evolution_profile(
                 profile,
@@ -1290,9 +1301,9 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import COMPLETION_TRAINING_PLAN_SCHEMA
 
     metadata = header.get("metadata")
-    if isinstance(metadata, Mapping) and metadata.get("schema") == (
-        "pokemon.red.forced-recovery-header.v1"
-    ):
+    if isinstance(metadata, Mapping) and metadata.get("schema") in {
+        "pokemon.red.forced-recovery-header.v1", "pokemon.red.recorded-support-header.v1",
+    }:
         enabled = metadata.get("completion_dose")
         if type(enabled) is not bool:
             raise PairedRedBoundedPlayerRunError("continuation_recovery_observer_mode")
