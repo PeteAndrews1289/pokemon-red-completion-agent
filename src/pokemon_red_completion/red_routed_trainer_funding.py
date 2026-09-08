@@ -62,7 +62,7 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
         reader.read_current_map_objects(),
     )
     pending = reader.read_pending_trainer_battle_identity()
-    if pending is not None:
+    if pending is not None and router.trainer_pending_recovery:
         # Talking turns the trainer toward the player, so the retained square
         # is now inside its sight lane. Do not route out/re-enter or clear that
         # hazard: recover only the exact already-armed adjacent interaction.
@@ -126,7 +126,10 @@ def bind_local_trainer_funding(
     except RedCaptureLeadError:
         return bindings
     level = observation.party.members[escort.target_index].level
-    pending_identity = router.runtime.reader.read_pending_trainer_battle_identity()
+    pending_identity = (
+        router.runtime.reader.read_pending_trainer_battle_identity()
+        if router.trainer_pending_recovery else None
+    )
     candidates = tuple(
         c
         for c in _candidates(router)

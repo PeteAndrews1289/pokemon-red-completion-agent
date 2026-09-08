@@ -101,7 +101,8 @@ def fixture(monkeypatch):
         provider_for=lambda *_: provider,
         profile=SimpleNamespace(providers=(SimpleNamespace(kind=GoalKind.RESUPPLY),)),
     )
-    router = SimpleNamespace(runtime=runtime, actions=actions, world=SimpleNamespace(rom=b"test"))
+    router = SimpleNamespace(runtime=runtime, actions=actions, world=SimpleNamespace(rom=b"test"),
+                             trainer_pending_recovery=True)
     trainer = TrainerSightZone(22, 4, 212, 2, (11, 36), TrainerFacing.UP, 3, 1130, False, True)
     quote = TrainerPartyQuote(212, 2, (TrainerPartyMember(173, 81, 21),), 50, 1050)
     target = TrainerFundingCandidate(

@@ -56,3 +56,10 @@ unique visible, undefeated, matching class/set immediately in the player's facin
 direction and creates a zero-step continuation. Six additional regression cases
 check this real candidate-builder path. No movement hazard is removed, no route
 is replayed, and a preflight offering only healing is prohibited from execution.
+
+The next read-only preflight correctly rejected retrospective menu changes: the
+same state bytes now exposed a resumable funding option absent from the saved
+terminal's semantic hash. `--trainer-pending-recovery` therefore explicitly
+separates historical restore (old header defaults false) from new execution;
+new headers retain the mode and reject rollback. The checkpoint comparison stays
+intact. Both rejected preflights sent zero controller input and claimed no episode.
