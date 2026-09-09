@@ -64,10 +64,14 @@ class RedBoundedPlayerObserver:
     collection_projector: CollectionProjector = living_collection_checkpoint
     enumerate_bindings: Callable[[RedGoalObservation], GoalBindingSet] | None = None
     search_memory: GoalSearchMemory | None = None
+    registered_objective: bool = False
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
-        if getattr(self.runtime, "registration_policy", None) is not None:
+        if type(self.registered_objective) is not bool:
+            raise ValueError("registered objective requires explicit opt-in")
+        if (getattr(self.runtime, "registration_policy", None) is not None
+                and not self.registered_objective):
             raise ValueError(
                 "registered objective needs versioned checkpoint and reward integration"
             )
@@ -77,14 +81,21 @@ class RedBoundedPlayerObserver:
             raise TypeError("enumerate_bindings must be callable")
 
     def __call__(self) -> GoalManagerCompositionObservation:
-        if getattr(self.runtime, "registration_policy", None) is not None:
+        policy = getattr(self.runtime, "registration_policy", None)
+        if policy is not None and not self.registered_objective:
             raise ValueError(
                 "registered objective needs versioned checkpoint and reward integration"
             )
+        if self.registered_objective and policy is None:
+            raise ValueError("registered observer requires its frozen policy")
         self.last_live_observation = None
         live = self.runtime.adapter.observe()
         if not isinstance(live, RedGoalObservation):
             raise RedBoundedPlayerError("Red adapter returned an invalid observation")
+        if policy is not None:
+            from .red_registered_observation import project_registered_observation
+
+            live = project_registered_observation(live, policy)
         binding_set = (
             self.runtime.enumerator(self.actions).enumerate(live)
             if self.enumerate_bindings is None
@@ -92,7 +103,8 @@ class RedBoundedPlayerObserver:
         )
         if not isinstance(binding_set, GoalBindingSet):
             raise RedBoundedPlayerError("Red enumerator returned an invalid binding set")
-        collection = self.collection_projector(live)
+        collection = (live.registered_checkpoint if self.registered_objective
+                      else self.collection_projector(live))
         if not isinstance(collection, LivingCollectionCheckpoint):
             raise RedBoundedPlayerError("Red collection projector returned an invalid checkpoint")
         if self.search_memory is not None:

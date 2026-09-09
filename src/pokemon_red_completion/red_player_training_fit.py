@@ -23,6 +23,7 @@ from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_player_model import (
     PLAYER_MODEL_SCHEMA,
+    REGISTERED_PLAYER_MODEL_SCHEMA,
     RedPlayerModelRecord,
     load_player_goal_model_record_bytes,
 )
@@ -50,12 +51,16 @@ def fit_red_player_update(
     source_commit: str,
     source_bundle_sha256: str,
     regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
+    registered_objective: bool = False,
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
 
     Callers supply the full native episode history, not a success-selected subset.
     The prior checkpoint's row fingerprints prevent forgetting or rewriting old
     examples. Repeated known roots remain correlated training, not evaluation.
+    Registered opt-in starts a separate corpus: historical rewards stay archived,
+    prior parameters provide behavior/comparison only, and later registered updates
+    must retain their own prior rows. Regional labels need their own migration.
     """
     if not episodes or len({item.episode_id for item in episodes}) != len(episodes):
         raise ValueError("native training episode inventory differs")
@@ -64,7 +69,21 @@ def fit_red_player_update(
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
     ):
         raise ValueError("native fitting source identity differs")
-    base = tuple(item.example for item in load_living_dex_authenticated_causal_examples(store))
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    if type(registered_objective) is not bool:
+        raise ValueError("registered fitting requires explicit opt-in")
+    prior_registered = isinstance(prior, RedPlayerModelRecord) and prior.objective is not None
+    if (isinstance(prior, RedPlayerModelRecord) and prior_registered
+            and prior.objective != REGISTERED_OBJECTIVE):
+        raise ValueError("registered prior objective differs")
+    if prior_registered and not registered_objective:
+        raise ValueError("legacy fitting cannot consume a registered model")
+    if registered_objective and regional_choices:
+        raise ValueError("registered fitting needs migrated regional outcome records")
+    base = (() if registered_objective else tuple(
+        item.example for item in load_living_dex_authenticated_causal_examples(store)
+    ))
     datasets = tuple(
         load_red_player_training_episode(
             store,
@@ -77,6 +96,9 @@ def fit_red_player_update(
     )
     if len({item.episode_id for item in regional_choices}) != len(regional_choices):
         raise ValueError("regional training choice inventory is duplicated")
+    objective = REGISTERED_OBJECTIVE if registered_objective else None
+    if any(dataset.objective != objective for dataset in datasets):
+        raise ValueError("fitting cannot pool registered and historical reward objectives")
     regional_rows = tuple(
         load_red_regional_choice_example(store, item) for item in regional_choices
     )
@@ -88,18 +110,28 @@ def fit_red_player_update(
             + [canonical_sha256(row.public_dict()) for row in curriculum]
         )
     )
-    if isinstance(prior, RedPlayerModelRecord):
+    if isinstance(prior, RedPlayerModelRecord) and (not registered_objective or prior_registered):
         if not set(prior.retained_example_sha256).issubset(hashes):
             raise ValueError("native training would discard or rewrite prior rows")
-    elif living_dex_option_train_dataset_sha256(base) != prior.model.train_dataset_sha256:
+    elif not registered_objective and (
+        living_dex_option_train_dataset_sha256(base) != prior.model.train_dataset_sha256
+    ):
         raise ValueError("historical corpus does not match the starting model")
     settled_count = sum(row.outcome.target_vector is not None for row in rows) + sum(
         row.outcome.target_vector is not None for row in curriculum
     )
-    if settled_count <= prior.model.settled_examples:
+    previous_count = (
+        prior.model.settled_examples if not registered_objective or prior_registered else 0
+    )
+    if settled_count <= previous_count:
         raise ValueError("native training has no additional settled experience")
+    if registered_objective and settled_count < 2:
+        raise ValueError("registered fitting needs two settled choices before publication")
     corpus = {
-        "schema": "pokemon.red.native-player-corpus.v1",
+        "schema": ("pokemon.red.registered-player-corpus.v1" if registered_objective
+                   else "pokemon.red.native-player-corpus.v1"),
+        **({"objective": objective, "historical_rewards_reused": False}
+           if registered_objective else {}),
         "examples": [
             row.public_dict() for row in sorted(rows, key=lambda row: row.decision_sha256)
         ],
@@ -157,7 +189,8 @@ def fit_red_player_update(
         fit.model, rows, expected_partition="train", curriculum_examples=curriculum
     )
     document = {
-        "schema": PLAYER_MODEL_SCHEMA,
+        "schema": REGISTERED_PLAYER_MODEL_SCHEMA if registered_objective else PLAYER_MODEL_SCHEMA,
+        **({"objective": objective} if registered_objective else {}),
         "authority": "bounded_development_only",
         "model": fit.model.to_dict(),
         "model_sha256": fit.model.model_sha256,
@@ -168,7 +201,8 @@ def fit_red_player_update(
         "retained_example_sha256": list(hashes),
     }
     record = store.publish_sealed_record(
-        f"rp-model-{fit.model.model_sha256}", kind="red_player_model", record=document
+        f"{'rpr-model' if registered_objective else 'rp-model'}-{fit.model.model_sha256}",
+        kind="red_player_model", record=document,
     )
     loaded = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=fit.model.model_sha256
@@ -176,15 +210,19 @@ def fit_red_player_update(
     if loaded.model.train_dataset_sha256 != fit.model.train_dataset_sha256:
         raise ValueError("native player model round trip differs")
     return {
-        "schema": "pokemon.red.native-player-fit-result.v1",
+        "schema": ("pokemon.red.registered-player-fit-result.v1" if registered_objective
+                   else "pokemon.red.native-player-fit-result.v1"),
         "model": loaded.public_dict(),
         "corpus_record_sha256": corpus_record.summary.record_sha256,
         "fit_report": fit.report.public_dict(),
         "prior_train_error": prior_error.public_dict(),
         "updated_train_error": updated_error.public_dict(),
         "in_sample_only": True,
-        "new_settled_examples": fit.model.settled_examples - prior.model.settled_examples,
-        "prior_rows_retained": True,
+        "new_settled_examples": fit.model.settled_examples - previous_count,
+        "prior_rows_retained": not registered_objective or prior_registered,
+        **({"historical_rewards_reused": False, "parameter_warm_start": False,
+            "prior_model_role": "behavior_and_in_sample_comparison_only"}
+           if registered_objective else {}),
         "controller_actions": 0,
         "authority_promotions": 0,
         **(

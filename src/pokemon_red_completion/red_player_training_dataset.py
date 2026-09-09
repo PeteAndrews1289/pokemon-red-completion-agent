@@ -39,6 +39,7 @@ from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkp
 from pokemon_red_completion.red_player_training import (
     CURRICULUM_EVENT,
     CURRICULUM_EVENT_SCHEMA,
+    REGISTERED_TRAINING_EVENT_SCHEMA,
     TRAINING_EVENT,
     TRAINING_EVENT_SCHEMA,
 )
@@ -46,6 +47,7 @@ from pokemon_red_completion.red_player_training_plan import (
     COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
     CURRICULUM_TRAINING_PLAN_SCHEMA,
+    REGISTERED_TRAINING_PLAN_SCHEMA,
     STORY_CURRICULUM_CONTRACT,
     RedPlayerTrainingPlan,
 )
@@ -60,6 +62,7 @@ class RedPlayerTrainingDataset:
     episode_manifest_sha256: str
     plan_sha256: str
     curriculum_examples: tuple[LivingDexCurriculumOutcomeExample, ...] = ()
+    objective: str | None = None
 
 
 def load_red_player_training_episode(
@@ -188,7 +191,9 @@ def _audit_red_player_training_reader(
             raise ValueError("player training outcome is duplicated")
         if (
             payload.get("schema")
-            != (CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
+            != (REGISTERED_TRAINING_EVENT_SCHEMA
+                if plan.document["schema"] == REGISTERED_TRAINING_PLAN_SCHEMA
+                else CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
             or payload.get("plan_sha256") != plan.plan_sha256
             or event.get("episode_id") != episode_id
         ):
@@ -357,15 +362,35 @@ def _audit_red_player_training_reader(
                 censor_reason=LivingDexCensorReason.OBSERVATION_FAILED,
             )
         else:
-            expected = red_living_dex_outcome_from_observations(
-                _mapping(payload.get("before")),
-                _mapping(payload.get("after")),
-                succeeded=decision.outcome_status is GoalDecisionOutcome.SUCCEEDED,
-                actions=actions,
-                frames=frames,
-                maximum_actions=plan.maximum_actions,
-                maximum_frames=plan.maximum_frames,
-            )
+            if plan.document["schema"] == REGISTERED_TRAINING_PLAN_SCHEMA:
+                from .red_registered_outcome import red_registered_outcome_from_observations
+                from .registered_checkpoint import RegisteredCollectionCheckpoint
+
+                before_document = _mapping(payload.get("before"))
+                checkpoint = RegisteredCollectionCheckpoint.from_public(
+                    before_document.get("registration"),
+                )
+                if checkpoint.binding_sha256 != plan.document["registration_binding_sha256"]:
+                    raise ValueError("registered training plan/observation binding differs")
+                expected = red_registered_outcome_from_observations(
+                    before_document, _mapping(payload.get("after")),
+                    selected_kind=decision.question.opportunities[
+                        decision.selected_candidate_index
+                    ].kind,
+                    succeeded=decision.outcome_status is GoalDecisionOutcome.SUCCEEDED,
+                    actions=actions, frames=frames,
+                    maximum_actions=plan.maximum_actions, maximum_frames=plan.maximum_frames,
+                )
+            else:
+                expected = red_living_dex_outcome_from_observations(
+                    _mapping(payload.get("before")),
+                    _mapping(payload.get("after")),
+                    succeeded=decision.outcome_status is GoalDecisionOutcome.SUCCEEDED,
+                    actions=actions,
+                    frames=frames,
+                    maximum_actions=plan.maximum_actions,
+                    maximum_frames=plan.maximum_frames,
+                )
         if row.outcome != expected:
             raise ValueError("player training target does not match observed evidence")
         if actions == 0:
@@ -384,6 +409,7 @@ def _audit_red_player_training_reader(
         reader.manifest_sha256,
         plan.plan_sha256,
         tuple(curriculum_examples),
+        str(plan.document["objective"]) if "objective" in plan.document else None,
     )
 
 
@@ -399,6 +425,7 @@ def _require_continuation_origin(store: PrivateArtifactRoot, plan: RedPlayerTrai
         CONTINUATION_TRAINING_PLAN_SCHEMA,
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        REGISTERED_TRAINING_PLAN_SCHEMA,
     }:
         return
     ancestor_id = cast(str, plan.document["continuation_episode_id"])

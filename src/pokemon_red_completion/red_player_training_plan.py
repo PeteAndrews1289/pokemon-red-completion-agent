@@ -29,6 +29,7 @@ TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
 CONTINUATION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v3"
 COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
 CURRICULUM_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v5"
+REGISTERED_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v1"
 STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
@@ -40,8 +41,11 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
+        registered = document.get("schema") == REGISTERED_TRAINING_PLAN_SCHEMA
         curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
-        completion = curriculum or document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
+        completion = registered or curriculum or (
+            document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
+        )
         continuation = completion or document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
         if (
             document.get("schema")
@@ -50,6 +54,7 @@ class RedPlayerTrainingPlan:
                 CONTINUATION_TRAINING_PLAN_SCHEMA,
                 COMPLETION_TRAINING_PLAN_SCHEMA,
                 CURRICULUM_TRAINING_PLAN_SCHEMA,
+                REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             or document.get("partition") != "train"
         ):
@@ -100,6 +105,12 @@ class RedPlayerTrainingPlan:
             expected_fields.add("curriculum_contract")
             if document.get("curriculum_contract") != STORY_CURRICULUM_CONTRACT:
                 raise ValueError("curriculum training contract differs")
+        if registered:
+            from .registered_collection import REGISTERED_OBJECTIVE
+
+            expected_fields.update({"objective", "registration_binding_sha256"})
+            if document.get("objective") != REGISTERED_OBJECTIVE:
+                raise ValueError("registered training objective differs")
         if set(document) != expected_fields:
             raise ValueError("player training declaration fields differ")
         if any(
@@ -154,6 +165,7 @@ class RedPlayerTrainingPlan:
             COMPLETION_ACTIONS
             if self.document["schema"] in {
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+                REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             else 6000
         )
@@ -164,6 +176,7 @@ class RedPlayerTrainingPlan:
             COMPLETION_FRAMES
             if self.document["schema"] in {
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+                REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             else 600000
         )

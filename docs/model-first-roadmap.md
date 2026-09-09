@@ -1,3 +1,21 @@
+# Current — registered learning core connected
+
+The bounded observer, durable checkpoints, goal-outcome reconstruction and a
+separate-objective fitter now share registered completion.249 targeted tests
+passed, including a synthetic two-choice record/fit/reload. Duplicate captures
+have no intrinsic penalty or novelty; sole unreserved precursors may evolve.
+Historical114 examples remain unchanged and are not relabeled or pooled.
+
+No production ledger import, live gameplay or real new-objective fit occurred.
+Next: connect regional destination outcomes and the incremental launcher to this
+same contract, import the authenticated endpoint, and collect two settled choices.
+The existing fitter requires two; do not pad the corpus with historical rewards.
+No external-agent audit/usage. This is engineering, not new model competence.
+
+[Session and exact remaining work](work-sessions/2026-09-09-registered-learning-bridge.md).
+
+## Historical runtime binding
+
 # Current — registered capture/evolution runtime binding
 
 Capture surveys now accept shared registered credit; native evolution accepts a

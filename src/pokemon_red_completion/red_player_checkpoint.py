@@ -42,6 +42,7 @@ CHECKPOINT_KIND = "red_bounded_player_checkpoint"
 LEGACY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
 CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v2"
 MEMORY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v3"
+REGISTERED_PLAYER_CHECKPOINT_SCHEMA = "pokemon.red.private-registered-player-checkpoint.v1"
 MAXIMUM_STATE_BYTES = 512 * 1024
 
 
@@ -168,6 +169,11 @@ def capture_red_player_terminal(
     if emulator.pressed_buttons:
         raise RedPlayerCheckpointError("checkpoint has held controller input")
     observation = observe()
+    from .registered_checkpoint import RegisteredCollectionCheckpoint
+
+    registered = isinstance(observation.collection, RegisteredCollectionCheckpoint)
+    if registered and not isinstance(result, BoundedPlayerResult):
+        raise RedPlayerCheckpointError("registered support/recovery requires a declared contract")
     if result.steps and observation.collection != result.steps[-1].collection_after:
         raise RedPlayerCheckpointError("checkpoint terminal collection differs")
     state = emulator.save_state_bytes()
@@ -186,7 +192,8 @@ def capture_red_player_terminal(
     envelope = replace(parent.envelope, state_sha256=state_sha256)
     return {
         "schema": (
-            SUPPORT_CHECKPOINT_SCHEMA if isinstance(result, RedRecordedSupportResult)
+            REGISTERED_PLAYER_CHECKPOINT_SCHEMA if registered
+            else SUPPORT_CHECKPOINT_SCHEMA if isinstance(result, RedRecordedSupportResult)
             else RECOVERY_CHECKPOINT_SCHEMA if isinstance(result, RedFailureRecoveryResult)
             else MEMORY_CHECKPOINT_SCHEMA if search_memory is not None else CHECKPOINT_SCHEMA
         ),
@@ -342,6 +349,7 @@ def open_red_player_checkpoint(
     if schema not in {
         CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA,
         MEMORY_CHECKPOINT_SCHEMA, RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
     } or any(
         document.get(key) != value for key, value in expected.items()
     ):
@@ -368,6 +376,15 @@ def open_red_player_checkpoint(
     collection = document.get("collection")
     if not isinstance(collection, Mapping):
         raise RedPlayerCheckpointError("checkpoint collection differs")
+    from .registered_checkpoint import (
+        REGISTERED_CHECKPOINT_SCHEMA,
+        RegisteredCollectionCheckpoint,
+    )
+
+    if schema == REGISTERED_PLAYER_CHECKPOINT_SCHEMA:
+        RegisteredCollectionCheckpoint.from_public(dict(collection))
+    elif collection.get("schema") == REGISTERED_CHECKPOINT_SCHEMA:
+        raise RedPlayerCheckpointError("legacy checkpoint cannot carry registered objective")
     terminal = document.get("terminal_result")
     steps = terminal.get("steps") if isinstance(terminal, Mapping) else None
     if not isinstance(steps, list) or (
@@ -379,7 +396,8 @@ def open_red_player_checkpoint(
         raise RedPlayerCheckpointError("checkpoint final ledger differs")
     memory = None
     if schema == MEMORY_CHECKPOINT_SCHEMA or (
-        schema in {RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA}
+        schema in {RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA,
+                   REGISTERED_PLAYER_CHECKPOINT_SCHEMA}
         and "search_memory" in document
     ):
         memory = GoalSearchMemory.from_private_dict(document.get("search_memory")).private_dict()

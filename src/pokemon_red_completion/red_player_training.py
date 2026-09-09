@@ -40,6 +40,7 @@ TRAINING_EVENT = "living_dex_player_training_outcome"
 TRAINING_EVENT_SCHEMA = "pokemon.red.player-training-outcome.v1"
 CURRICULUM_EVENT = "living_dex_player_curriculum_outcome"
 CURRICULUM_EVENT_SCHEMA = "pokemon.red.player-curriculum-outcome.v1"
+REGISTERED_TRAINING_EVENT_SCHEMA = "pokemon.red.registered-player-training-outcome.v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -66,6 +67,7 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
     maximum_actions: int = 6_000
     maximum_frames: int = 600_000
     curriculum_contract: str | None = None
+    registration_binding_sha256: str | None = None
     _training: _PendingTraining | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -83,6 +85,20 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
             or self.curriculum_contract not in (None, STORY_CURRICULUM_CONTRACT)
         ):
             raise ValueError("player training requires a declared train-only observation boundary")
+        if self.registration_binding_sha256 is not None and (
+            not isinstance(self.registration_binding_sha256, str)
+            or re.fullmatch(r"[0-9a-f]{64}", self.registration_binding_sha256) is None
+            or self.curriculum_contract is not None
+        ):
+            raise ValueError("registered training requires a bound non-curriculum objective")
+
+    def _require_registration(self, observation: RedGoalObservation) -> None:
+        checkpoint = getattr(observation, "registered_checkpoint", None)
+        if self.registration_binding_sha256 is None:
+            if checkpoint is not None:
+                raise ValueError("legacy training cannot consume registered observations")
+        elif checkpoint is None or checkpoint.binding_sha256 != self.registration_binding_sha256:
+            raise ValueError("registered training observation binding differs")
 
     def record_selection(
         self,
@@ -124,6 +140,7 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
             assert self.training_meter is not None and self.observe_training is not None
             counter = self.training_meter.checkpoint()
             before = self.observe_training()
+            self._require_registration(before)
             if self.training_meter.checkpoint() != counter:
                 raise ValueError("curriculum observation changed the game")
             self._training = _PendingTraining(
@@ -157,6 +174,7 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
         assert self.training_meter is not None and self.observe_training is not None
         counter = self.training_meter.checkpoint()
         before = self.observe_training()
+        self._require_registration(before)
         if self.training_meter.checkpoint() != counter:
             raise ValueError("training observation changed the game")
         self._training = _PendingTraining(
@@ -202,7 +220,9 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
             )
         else:
             try:
-                after = self.observe_training().public_dict()
+                after_observation = self.observe_training()
+                self._require_registration(after_observation)
+                after = after_observation.public_dict()
             except Exception:
                 if training.curriculum_features is None:
                     raise
@@ -216,15 +236,28 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
                 )
             else:
                 assert after is not None
-                outcome = red_living_dex_outcome_from_observations(
-                    training.before,
-                    after,
-                    succeeded=status is GoalDecisionOutcome.SUCCEEDED,
-                    actions=actions,
-                    frames=frames,
-                    maximum_actions=self.maximum_actions,
-                    maximum_frames=self.maximum_frames,
-                )
+                if self.registration_binding_sha256 is not None:
+                    from .red_registered_outcome import red_registered_outcome_from_observations
+
+                    outcome = red_registered_outcome_from_observations(
+                        training.before, after,
+                        selected_kind=pending.question.opportunities[
+                            pending.selected_candidate_index
+                        ].kind,
+                        succeeded=status is GoalDecisionOutcome.SUCCEEDED,
+                        actions=actions, frames=frames,
+                        maximum_actions=self.maximum_actions, maximum_frames=self.maximum_frames,
+                    )
+                else:
+                    outcome = red_living_dex_outcome_from_observations(
+                        training.before,
+                        after,
+                        succeeded=status is GoalDecisionOutcome.SUCCEEDED,
+                        actions=actions,
+                        frames=frames,
+                        maximum_actions=self.maximum_actions,
+                        maximum_frames=self.maximum_frames,
+                    )
         decision_sha = canonical_sha256(
             {
                 "decision_id": pending.decision_id,
@@ -261,7 +294,10 @@ class RedPlayerTrainingTrajectory(ViewerGoalTrajectory):
                 payload=cast(
                     Mapping[str, JSONValue],
                     {
-                        "schema": CURRICULUM_EVENT_SCHEMA if curriculum else TRAINING_EVENT_SCHEMA,
+                        "schema": (REGISTERED_TRAINING_EVENT_SCHEMA
+                                   if self.registration_binding_sha256 is not None
+                                   else CURRICULUM_EVENT_SCHEMA if curriculum
+                                   else TRAINING_EVENT_SCHEMA),
                         "decision_id": pending.decision_id,
                         "plan_sha256": self.training_plan_sha256,
                         **(

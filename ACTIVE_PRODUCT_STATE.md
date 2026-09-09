@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.
+- Next decision: Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.
 
 ### Mandatory mission check
 
@@ -58,17 +58,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-registered-runtime-binding** · status **active** · evidence [qualification](docs/evidence/registered-runtime-binding-2026-09-09.json)
+**2026-09-09-registered-learning-bridge** · status **active** · evidence [qualification](docs/evidence/registered-learning-bridge-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 340 targeted tests passed. Capture surveys and native evolution now accept an explicit registered binding; simulated single-copy evolution passed. No live input, import or fit; native114 unchanged. |
-| Authority delta | No learned authority change. Provider/training identities bind the prospective objective; the old episode loop rejects it until checkpoint and reward integration. |
+| Learning output | 249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged. |
+| Authority delta | No new learned authority. The core observer and recorded goal outcomes now bind registered completion; legacy model rewards remain separate. |
 | Transfer result | Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result. |
-| Blocker | Observer pressures, checkpoint serialization and reward/corpus admission remain legacy; their explicit migration is required before the first registered-objective lesson. |
-| Decision | Accept tested capture/evolution bindings. Keep the old episode-loop rejection until the observation/checkpoint/training boundary is migrated; no further general architecture. |
-| Next session | Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson. |
+| Blocker | Regional destination records and the live incremental launcher still need registered-objective propagation and durable ledger updates before gameplay resumes. |
+| Decision | Accept the tested core bridge. Finish only the live launcher/regional outcome connection next; no general architecture expansion. |
+| Next session | Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer. |
 | Next falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
 | Stop condition | Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit. |
 

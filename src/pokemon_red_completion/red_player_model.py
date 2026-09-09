@@ -15,6 +15,7 @@ from pokemon_red_completion.living_dex_goal_model_record import (
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionValueModel
 
 PLAYER_MODEL_SCHEMA = "pokemon.red.native-player-model.v1"
+REGISTERED_PLAYER_MODEL_SCHEMA = "pokemon.red.registered-player-model.v1"
 
 
 @dataclass(frozen=True, slots=True)
@@ -26,10 +27,12 @@ class RedPlayerModelRecord:
     corpus_sha256: str
     prior_model_sha256: str
     retained_example_sha256: tuple[str, ...]
+    objective: str | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": PLAYER_MODEL_SCHEMA,
+            "schema": REGISTERED_PLAYER_MODEL_SCHEMA if self.objective else PLAYER_MODEL_SCHEMA,
+            **({"objective": self.objective} if self.objective else {}),
             "authority": "bounded_development_only",
             "file_sha256": self.file_sha256,
             "source_commit": self.source_commit,
@@ -63,13 +66,20 @@ def load_player_goal_model_record_bytes(
         return result
 
     document = json.loads(payload, object_pairs_hook=unique)
-    if not isinstance(document, dict) or document.get("schema") != PLAYER_MODEL_SCHEMA:
+    if not isinstance(document, dict) or document.get("schema") not in {
+        PLAYER_MODEL_SCHEMA, REGISTERED_PLAYER_MODEL_SCHEMA,
+    }:
         return load_living_dex_goal_model_record_bytes(
             payload, expected_model_sha256=expected_model_sha256
         )
+    registered = document.get("schema") == REGISTERED_PLAYER_MODEL_SCHEMA
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    if registered and document.get("objective") != REGISTERED_OBJECTIVE:
+        raise ValueError("registered player model objective differs")
     if (
         set(document)
-        != {
+        != ({
             "schema",
             "authority",
             "model",
@@ -79,7 +89,7 @@ def load_player_goal_model_record_bytes(
             "corpus_sha256",
             "prior_model_sha256",
             "retained_example_sha256",
-        }
+        } | ({"objective"} if registered else set()))
         or document["authority"] != "bounded_development_only"
     ):
         raise ValueError("native player model contract differs")
@@ -116,4 +126,5 @@ def load_player_goal_model_record_bytes(
         document["corpus_sha256"],
         document["prior_model_sha256"],
         tuple(hashes),
+        REGISTERED_OBJECTIVE if registered else None,
     )

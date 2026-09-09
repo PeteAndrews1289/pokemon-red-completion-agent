@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-registered-runtime-binding",
+  "as_of_session": "2026-09-09-registered-learning-bridge",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -606,6 +606,12 @@
       "result": "Capture/evolution runtime bindings passed340 targeted tests, including simulated single-copy training; no live input, import or fit. Native114 unchanged.",
       "deviation": "No baseline change. Memory remains1/3 integration items; live-runtime item is partial because checkpoint and reward consumers still require migration.",
       "next": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson."
+    },
+    {
+      "session": "2026-09-09-registered-learning-bridge",
+      "result": "249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.",
+      "deviation": "No baseline change; integration checklist remains1/3 because the live regional launcher is not migrated. Synthetic fitting is engineering evidence only.",
+      "next": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer."
     }
   ],
   "closed_milestones": [

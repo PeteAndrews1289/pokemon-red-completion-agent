@@ -11,7 +11,10 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from .registered_checkpoint import RegisteredCollectionCheckpoint
 
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.domain import GameState
@@ -125,6 +128,7 @@ class RedGoalObservation:
     free_storage_slots: int
     immediate_capture_slots: int
     pp_restoration: RedPpResourceObservation | None = None
+    registered_checkpoint: RegisteredCollectionCheckpoint | None = None
 
     @property
     def situation(self) -> GoalSituation:
@@ -160,6 +164,14 @@ class RedGoalObservation:
         if self.pp_restoration is not None:
             result["schema"] = "pokemon.red.goal-observation.v2"
             result["pp_restoration"] = self.pp_restoration.public_dict()
+        if self.registered_checkpoint is not None:
+            # Keep the resource/story schema intact for cost reconstruction;
+            # explicit registration facts are provenance, never policy features.
+            return {
+                "schema": "pokemon.red.registered-goal-observation.v1",
+                "semantic_observation": result,
+                "registration": self.registered_checkpoint.public_dict(),
+            }
         return result
 
 

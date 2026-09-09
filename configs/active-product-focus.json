@@ -33,19 +33,19 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No learned authority change. Provider/training identities bind the prospective objective; the old episode loop rejects it until checkpoint and reward integration.",
-        "blocker": "Observer pressures, checkpoint serialization and reward/corpus admission remain legacy; their explicit migration is required before the first registered-objective lesson.",
-        "decision": "Accept tested capture/evolution bindings. Keep the old episode-loop rejection until the observation/checkpoint/training boundary is migrated; no further general architecture.",
+        "authority_delta": "No new learned authority. The core observer and recorded goal outcomes now bind registered completion; legacy model rewards remain separate.",
+        "blocker": "Regional destination records and the live incremental launcher still need registered-objective propagation and durable ledger updates before gameplay resumes.",
+        "decision": "Accept the tested core bridge. Finish only the live launcher/regional outcome connection next; no general architecture expansion.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/registered-runtime-binding-2026-09-09.json",
-          "sha256": "1c89c4761f578cda826a96c1ba657da69a4be71843db7f491458fc4559a8e196"
+          "path": "docs/evidence/registered-learning-bridge-2026-09-09.json",
+          "sha256": "c5f24df4ca4028b0eba2c9005b76f494404bd401a9f666b93ba0aa4679e46576"
         },
-        "learning_output": "340 targeted tests passed. Capture surveys and native evolution now accept an explicit registered binding; simulated single-copy evolution passed. No live input, import or fit; native114 unchanged.",
+        "learning_output": "249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.",
         "next_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
-        "next_session_goal": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.",
+        "next_session_goal": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-09-registered-runtime-binding",
+        "session_id": "2026-09-09-registered-learning-bridge",
         "status": "active",
         "stop_condition": "Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit.",
         "transfer_result": "Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result."
@@ -57,7 +57,7 @@
       "maintenance_unblocks": "red-shared-registration-learning-v1",
       "measurable_outputs": [],
       "name": "Shared registered-Pokedex contract migration",
-      "next_decision": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.",
+      "next_decision": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

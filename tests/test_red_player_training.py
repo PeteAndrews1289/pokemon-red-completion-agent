@@ -102,6 +102,8 @@ def _episode(
     unreadable_after=False,
     pp_restoration=False,
     consumption_quote=False,
+    registration_observations=None,
+    repeat_registered_choice=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -219,10 +221,15 @@ def _episode(
         displayed_authority=policy,
         training_plan_sha256=plan.plan_sha256,
         training_meter=_Meter(counter),
-        observe_training=lambda: SimpleNamespace(public_dict=lambda: deepcopy(facts[0])),
+        observe_training=lambda: (
+            registration_observations[0 if counter["actions"] == 0 else 1]
+            if registration_observations is not None else
+            SimpleNamespace(public_dict=lambda: deepcopy(facts[0]))
+        ),
         maximum_actions=plan.maximum_actions,
         maximum_frames=plan.maximum_frames,
         curriculum_contract=plan.document.get("curriculum_contract"),
+        registration_binding_sha256=plan.document.get("registration_binding_sha256"),
     )
     question = trajectory.ordered_question(source.situation, source.opportunities)
     if forced_story:
@@ -264,6 +271,19 @@ def _episode(
             raise RuntimeError("observation unavailable")
         trajectory.observe_training = unreadable
     trajectory.record_outcome(pending, status=status, failure_reason=reason)
+    if repeat_registered_choice:
+        assert registration_observations is not None
+        question = trajectory.ordered_question(source.situation, source.opportunities)
+        selected = policy.select(question)
+        pending = trajectory.record_selection(
+            question, selected.selected_index, behavior_policy=policy.selection_metadata(),
+        )
+        recorder.execute({"kind": "bounded-specialist-work"})
+        counter.update(actions=counter["actions"] + 1, frames=counter["frames"] + 60)
+        trajectory.record_outcome(
+            pending, status=GoalDecisionOutcome.FAILED,
+            failure_reason=GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED,
+        )
     sink.record_event(
         SparseEvent(
             "goal-episode-1:terminal",

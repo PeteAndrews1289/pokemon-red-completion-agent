@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-runtime-binding**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-learning-bridge**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-registered-learning-bridge
+
+249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.
+
+**Deviation:** No baseline change; integration checklist remains1/3 because the live regional launcher is not migrated. Synthetic fitting is engineering evidence only.
+
+**Next:** Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.
 
 ### 2026-09-09-registered-runtime-binding
 

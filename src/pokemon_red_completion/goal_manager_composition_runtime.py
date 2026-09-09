@@ -508,6 +508,23 @@ def require_living_collection_transition(
     selected_kind: GoalKind,
     require_selected_goal_progress: bool = True,
 ) -> None:
+    from .registered_checkpoint import (
+        RegisteredCollectionCheckpoint,
+        require_registered_transition,
+    )
+
+    if isinstance(before, RegisteredCollectionCheckpoint) or isinstance(
+        after, RegisteredCollectionCheckpoint
+    ):
+        if not isinstance(before, RegisteredCollectionCheckpoint) or not isinstance(
+            after, RegisteredCollectionCheckpoint
+        ):
+            raise GoalManagerCompositionError("collection objective changed during episode")
+        require_registered_transition(
+            before, after, selected_kind=selected_kind,
+            require_selected_goal_progress=require_selected_goal_progress,
+        )
+        return
     before_specimens = dict(before.specimen_counts)
     after_specimens = dict(after.specimen_counts)
     lost_specimens = sum(
