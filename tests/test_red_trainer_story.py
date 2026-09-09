@@ -1,3 +1,4 @@
+import json
 from dataclasses import replace
 from types import SimpleNamespace
 
@@ -16,7 +17,11 @@ from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import CurrentMapBlocks, MapId
 from pokemon_red_completion.red_goal_context import _build_provider
-from pokemon_red_completion.red_goal_context_profile import bind_cartridge_trainer_story_profile
+from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalContextProfileError,
+    bind_cartridge_trainer_story_profile,
+    build_red_goal_context_profile_payload,
+)
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 
 
@@ -57,6 +62,53 @@ def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
     assert not provider.skills.get("defeat_lorelei").availability(
         GameState(GameMode.OVERWORLD, frozenset(), "indigo_plateau")
     ).executable
+
+
+@pytest.mark.parametrize("objective", ["defeat_lance", "defeat_champion"])
+@pytest.mark.parametrize("budget", [0, 1, 2])
+def test_story_recovery_profile_reaches_real_skill_without_changing_default(objective, budget):
+    from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
+    original = _supply_transition_profile()
+    changed = bind_cartridge_trainer_story_profile(
+        original, objective_id=objective, maximum_full_restores=budget,
+    )
+    expected = {"trainer_objective": objective}
+    if budget:
+        expected["maximum_full_restores"] = budget
+    assert changed.providers[0].parameters == expected
+    assert changed.providers[1:] == original.providers[1:]
+    payload = build_red_goal_context_profile_payload(
+        profile_id=changed.profile_id,
+        providers=tuple((p.kind, p.mechanic, json.loads(json.dumps(
+            dict(p.parameters), default=dict,
+        ))) for p in changed.providers),
+    )
+    assert parse_red_goal_context_profile(payload).profile_sha256 == (
+        changed.profile_sha256
+    )
+    runtime = SimpleNamespace(trainer_story_world=None, observer=object())
+    provider = _build_provider(runtime, changed.providers[0], CountingExecutor(object()))
+    assert provider.skills.get(objective).maximum_full_restores == budget
+
+
+@pytest.mark.parametrize("budget", [True, -1, 3, 1.0, "1"])
+def test_story_recovery_budget_is_explicit_bounded_integer(budget):
+    with pytest.raises(RedGoalContextProfileError):
+        bind_cartridge_trainer_story_profile(_supply_transition_profile(),
+                                            maximum_full_restores=budget)
+
+
+def test_changed_prepared_budget_and_unfunded_stock_refuse_without_input(fixture):
+    skill, reader, inputs, observe, _ = fixture
+    reader.raw = replace(reader.raw, bag_items=((16, 1), (4, 8)))
+    skill.maximum_full_restores = 2
+    assert not skill.availability(observe().game_state).executable
+    skill.maximum_full_restores = 1
+    assert skill.availability(observe().game_state).executable
+    skill.maximum_full_restores = 2
+    with pytest.raises(story.RedTrainerStoryError, match="before input"):
+        skill.execute()
+    assert not inputs
 
 
 @pytest.fixture
@@ -395,10 +447,14 @@ def test_stale_selected_story_refuses_before_input(fixture):
 
 
 @pytest.mark.parametrize("fault", [None, "route", "target", "bag", "event", "specimen"])
+@pytest.mark.parametrize("recovery_budget", [0, 1, 2])
 def test_selected_story_composes_existing_operators_and_verifies_result(
-    fixture, monkeypatch, fault,
+    fixture, monkeypatch, fault, recovery_budget,
 ):
     skill, reader, inputs, observe, zone = fixture
+    if recovery_budget:
+        reader.raw = replace(reader.raw, bag_items=((16, 2), (4, 8)))
+    skill.maximum_full_restores = recovery_budget
     assert skill.availability(observe().game_state).executable
     stages = []
     def prepare(_runtime, actions, plan, *, current_quote):
@@ -416,6 +472,11 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
     def battle(rdr, actions, *, target, validate_target, intent, battle_runner_override, **_kwargs):
         assert intent.objective_id == "defeat_lorelei"
         assert battle_runner_override.__self__.maximum_switches == 6
+        controller = battle_runner_override.__self__
+        assert isinstance(controller, story.RedTrainerSurvivalController) is bool(recovery_budget)
+        assert _kwargs['maximum_full_restores'] == recovery_budget
+        assert _kwargs['prospective_story_recovery'] is bool(recovery_budget)
+        assert intent.require_move_between_switches is (not bool(recovery_budget))
         validate_target()
         stages.append("battle")
         actions.execute(MacroAction(MacroActionKind.CONFIRM))
@@ -423,6 +484,11 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         if fault != "event":
             flags[284] |= 2
         updates = {"event_flags": bytes(flags), "player_money": 6019}
+        if recovery_budget:
+            controller.heals_claimed = recovery_budget
+            updates['bag_items'] = (
+                ((16, 1), (4, 8)) if recovery_budget == 1 else ((4, 8),)
+            )
         if fault == "bag":
             updates["bag_items"] = ((4, 1),)
         if fault == "specimen":
@@ -447,6 +513,8 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert result.actions_executed == len(inputs) == 3
         assert result.evidence["story_event_verified"] is True
         assert result.evidence["learned_battle_authority"] is False
+        assert result.evidence['bag_items_spent'] == recovery_budget
+        assert result.evidence['maximum_full_restores'] == recovery_budget
     count = len(inputs)
     with pytest.raises(story.RedTrainerStoryError, match="unconsumed"):
         skill.execute()

@@ -18,6 +18,56 @@ def _quote(*, funds=10_000, stock=0):
     return GoalResourceQuote(funds, 1_000, (GoalResourceReserve("capture", stock, 10, 10),))
 
 
+def test_story_consumption_quote_is_an_allowance_not_a_prediction():
+    decisions = []
+    for budget in (1, 2):
+        quote = GoalResourceQuote(0, 0, (), available_recovery_units=2,
+                                  maximum_recovery_consumption=budget)
+        assert quote.public_dict() == {
+            "schema": "pokemon.core.goal-resource-quote.v4", "resource": "recovery",
+            "available_units": 2, "maximum_consumption": budget,
+            "actual_consumption_predicted": False,
+        }
+        assert quote.cost_units == budget / 2
+        assert GoalResourceQuote.from_public_dict(quote.public_dict()) == quote
+        story = GoalOpportunity("private-story", GoalKind.ADVANCE_STORY,
+                                GoalAvailability.AVAILABLE, 0.2, 0.1, resource_quote=quote)
+        acquire = next(x for x in _question().opportunities if x.kind is GoalKind.ACQUIRE_SPECIES)
+        question = replace(_question(), opportunities=(story, acquire))
+        restored = GoalManagerQuestion.from_policy_input(question.policy_input)
+        assert restored.policy_input == question.policy_input
+        assert "private-story" not in str(question.policy_input)
+        reverse = replace(question, opportunities=tuple(reversed(question.opportunities)))
+        assert reverse.policy_context_sha256 == question.policy_context_sha256
+        policy = LivingDexGoalShadowPolicy(_model())
+        policy.select(question)
+        decisions.append(policy.last_decision)
+        assert policy.last_decision.public_dict()["economic_contract"] == (
+            "known-spend-and-bounded-consumption-v2"
+        )
+        with pytest.raises(ValueError):
+            replace(story, kind=GoalKind.ACQUIRE_SPECIES)
+    first, second = decisions
+    assert first.scores[0].predicted_outcomes == second.scores[0].predicted_outcomes
+    assert first.scores[0].utility - second.scores[0].utility == pytest.approx(0.25)
+    assert first.menu_sha256 == second.menu_sha256
+    assert first.economic_input_sha256 != second.economic_input_sha256
+
+
+@pytest.mark.parametrize("field,value", [
+    ("available_units", 0), ("available_units", True), ("maximum_consumption", 0),
+    ("maximum_consumption", 3), ("maximum_consumption", True),
+    ("actual_consumption_predicted", True), ("actual_consumption_predicted", 0),
+    ("resource", "capture"), ("trainer_id", 1),
+])
+def test_story_consumption_quote_rejects_unfunded_or_misleading_contract(field, value):
+    public = GoalResourceQuote(0, 0, (), available_recovery_units=2,
+                               maximum_recovery_consumption=1).public_dict()
+    public[field] = value
+    with pytest.raises(ValueError):
+        GoalResourceQuote.from_public_dict(public)
+
+
 def _quoted_question(quote):
     acquire = next(x for x in _question().opportunities if x.kind is GoalKind.ACQUIRE_SPECIES)
     supply = GoalOpportunity(

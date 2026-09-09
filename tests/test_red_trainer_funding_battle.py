@@ -7,7 +7,7 @@ import pytest
 
 import pokemon_red_completion.red_trainer_funding_battle as funding_battle
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.battle_runtime import BattleRuntimeTiming
+from pokemon_red_completion.battle_runtime import BattleIntent, BattleRuntimeTiming
 from pokemon_red_completion.gen1_trainer_parties import TrainerPartyMember, TrainerPartyQuote
 from pokemon_red_completion.gen1_trainer_sight import TrainerFacing, TrainerSightZone
 from pokemon_red_completion.observation import InputReadiness, RawGameState
@@ -229,6 +229,58 @@ def test_ordinary_battle_cannot_inherit_a_recovery_item_budget():
         run_prepared_trainer_funding(
             env, env, target=make_candidate(), validate_target=lambda: None,
             move_slot_policy=lambda _: 1, timing=TIMING, maximum_full_restores=2,
+        )
+    assert not env.actions
+
+
+@pytest.mark.parametrize("spent,allowed", [(0, True), (1, True), (2, True), (3, False)])
+def test_fresh_story_recovery_budget_survives_intro_combat_and_settlement(spent, allowed):
+    initial = make_state(bag=((16, 4), (53, 3)))
+    env = ScriptedEnvironment(initial)
+    env.transitions = [(replace(initial, battle_state=2), False, True)]
+
+    def finish(reader, _executor, _policy, **kwargs):
+        env.state = replace(reader.read(), bag_items=((16, 4 - spent), (53, 3)))
+        kwargs["move_decision_guard"](env.state)
+        env.state = replace(env.state, battle_state=0, player_money=815,
+                            event_flags=make_flag_bytes(1139))
+        return env.state
+
+    def run():
+        return run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, maximum_full_restores=2,
+            prospective_story_recovery=True, battle_runner_override=finish,
+            intent=BattleIntent('defeat_lance', 'cartridge-trainer-story'),
+        )
+    if allowed:
+        assert run().final_state.bag_items == ((16, 4 - spent), (53, 3))
+    else:
+        with pytest.raises(TrainerFundingBattleError, match="budget"):
+            run()
+    assert [a.kind for a in env.actions] == [MacroActionKind.INTERACT, MacroActionKind.WAIT]
+
+
+@pytest.mark.parametrize("fault", ["intent", "type", "resume", "controller", "zero"])
+def test_prospective_recovery_cannot_be_inherited_or_laundered(fault):
+    env = ScriptedEnvironment(make_state(bag=((16, 4),)))
+    kwargs = dict(maximum_full_restores=1, prospective_story_recovery=True,
+                  battle_runner_override=lambda *_a, **_k: env.state,
+                  intent=BattleIntent('defeat_lance', 'cartridge-trainer-story'))
+    if fault == 'intent':
+        kwargs['intent'] = BattleIntent('funding', 'ordinary')
+    elif fault == 'type':
+        kwargs['intent'] = object()
+    elif fault == 'resume':
+        kwargs['resume_active_battle'] = True
+    elif fault == 'controller':
+        kwargs['battle_runner_override'] = None
+    else:
+        kwargs['maximum_full_restores'] = 0
+    with pytest.raises(TypeError if fault == 'type' else ValueError):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, **kwargs,
         )
     assert not env.actions
 

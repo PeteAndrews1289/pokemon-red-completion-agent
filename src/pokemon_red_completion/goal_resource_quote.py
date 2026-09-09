@@ -73,6 +73,7 @@ class GoalResourceQuote:
     V1 bytes and semantics remain unchanged. Proceeds are finite, not free cash.
     V3 describes conditional income only: no purchased stock, advance credit,
     negative cost or success label. Execution must prove the actual earnings.
+    V4 is a bounded owned-item consumption allowance, not predicted spending.
     """
 
     available_funds: int
@@ -80,12 +81,28 @@ class GoalResourceQuote:
     reserves: tuple[GoalResourceReserve, ...]
     funding_proceeds: int = 0
     expected_income: int = 0
+    available_recovery_units: int | None = None
+    maximum_recovery_consumption: int = 0
 
     def __post_init__(self) -> None:
         _count(self.available_funds, "available funds")
         _count(self.purchase_cost, "purchase cost")
         _count(self.funding_proceeds, "funding proceeds")
         _count(self.expected_income, "expected income")
+        _count(self.maximum_recovery_consumption, "maximum recovery consumption")
+        if self.available_recovery_units is not None:
+            _count(self.available_recovery_units, "available recovery units")
+            if (
+                not 0 < self.maximum_recovery_consumption <= self.available_recovery_units
+                or self.available_funds or self.purchase_cost or self.reserves != ()
+                or self.funding_proceeds or self.expected_income
+            ):
+                raise ValueError(
+                    "consumption budget cannot claim purchases, income or absent stock",
+                )
+            return
+        if self.maximum_recovery_consumption:
+            raise ValueError("consumption budget requires observed recovery stock")
         if self.expected_income:
             # V3 earns conditional future income; it does not purchase stock,
             # provide spendable funds, or discount cost by an unearned reward.
@@ -105,6 +122,9 @@ class GoalResourceQuote:
 
     @property
     def cost_units(self) -> float:
+        if self.available_recovery_units is not None:
+            # Conservative allowance, not a prediction of actual expenditure.
+            return self.maximum_recovery_consumption / self.available_recovery_units
         if self.expected_income:
             return 0.0
         purchased = sum(item.purchased for item in self.reserves)
@@ -114,6 +134,13 @@ class GoalResourceQuote:
         )
 
     def public_dict(self) -> dict[str, object]:
+        if self.available_recovery_units is not None:
+            return {
+                "schema": "pokemon.core.goal-resource-quote.v4",
+                "resource": "recovery", "available_units": self.available_recovery_units,
+                "maximum_consumption": self.maximum_recovery_consumption,
+                "actual_consumption_predicted": False,
+            }
         if self.expected_income:
             return {
                 "schema": "pokemon.core.goal-resource-quote.v3",
@@ -136,6 +163,16 @@ class GoalResourceQuote:
 
     @classmethod
     def from_public_dict(cls, value: object) -> GoalResourceQuote:
+        if (isinstance(value, Mapping)
+                and value.get("schema") == "pokemon.core.goal-resource-quote.v4"):
+            if (set(value) != {"schema", "resource", "available_units", "maximum_consumption",
+                               "actual_consumption_predicted"}
+                    or value["resource"] != "recovery"
+                    or value["actual_consumption_predicted"] is not False):
+                raise ValueError("consumption budget quote schema differs")
+            return cls(0, 0, (),
+                       available_recovery_units=_count(value["available_units"], "available units"),
+                       maximum_recovery_consumption=_count(value["maximum_consumption"], "budget"))
         if (isinstance(value, Mapping)
                 and value.get("schema") == "pokemon.core.goal-resource-quote.v3"):
             if (

@@ -1,4 +1,22 @@
-# Current — repair worked live; earlier resource management is next
+# Current — proactive recovery integrated; live qualification next
+
+The story and Champion skills now accept an explicit allowance of one or two
+owned Full Restores. Zero remains the unchanged ordinary controller. Damage-aware
+control begins with the battle, not as a hidden fallback after failure. Goal
+selection sees a conservative consumption allowance; outcomes record actual spend.
+
+Targeted tests cover caller wiring, stale budgets, exact inventory through battle
+and Champion epilogue, changing threats, finite counters, and impossible recovery.
+Read-only review found a training-admission version gap; it is repaired with a
+prospectively declared economic contract. No new model fit, live victory or Phase4
+completion is claimed. Native82 and the unused seven-return shadow are unchanged.
+
+Next: a separately declared, bounded continuation from a safe post-Agatha
+checkpoint, only after stock and real choices qualify. Reapply the recovery budget
+for each new story objective. Preserve both closed Lance failures; do not resume
+them, enable critical-risk mode, or count forced story steps as model choices.
+
+# Historical — repair worked live; earlier resource management was next
 
 A separately declared89d03dd5 successor entered Lance battle successfully, then
 stopped at Aerodactyl with no healthy offensive matchup under the current screen.

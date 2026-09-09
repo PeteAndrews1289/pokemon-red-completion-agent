@@ -275,9 +275,12 @@ class GoalOpportunity:
         if self.resource_quote is not None and (
             not isinstance(self.resource_quote, GoalResourceQuote)
             or self.availability is not GoalAvailability.AVAILABLE
-            or self.kind is not GoalKind.RESUPPLY
+            or self.kind is not (
+                GoalKind.ADVANCE_STORY if self.resource_quote.available_recovery_units is not None
+                else GoalKind.RESUPPLY
+            )
         ):
-            raise GoalManagerError("resource quote requires an available resupply goal")
+            raise GoalManagerError("resource quote requires its available resupply or story goal")
         if self.availability is GoalAvailability.AVAILABLE:
             if self.estimated_effort is None or self.estimated_risk is None:
                 raise GoalManagerError(

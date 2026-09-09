@@ -149,6 +149,7 @@ def fixture(monkeypatch, fault=None):
 
     monkeypatch.setattr(module, "RedTrainerPartyController", Controller)
     skill = module.RedCartridgeChampionSkill(runtime, actions, world)
+    skill._prepared_budget = 0
     entry = RouteStep(113, (0, 5), "up", 120, (7, 3), "warp", MacroActionKind.MOVE, "land", "land")
     skill._prepared = module._Prepared(
         observe(), script, object(), reader.read_current_map_blocks(), world, approach, entry,
@@ -171,6 +172,46 @@ def test_owned_entry_single_taps_and_cartridge_epilogue_reach_concurrent_referee
     with pytest.raises(module.RedChampionStoryError, match="unconsumed"):
         skill.execute()
     assert len(inputs) == count
+
+
+@pytest.mark.parametrize("spent", [0, 1, 2])
+@pytest.mark.parametrize("fault", [None, "unclaimed_spend", "epilogue_spend"])
+def test_champion_budget_preserves_exact_bag_through_exit_and_epilogue(monkeypatch, spent, fault):
+    skill, reader, inputs, scene = fixture(monkeypatch)
+    reader.raw = replace(reader.raw, bag_items=((16, 3), (4, 8)))
+    skill.maximum_full_restores = skill._prepared_budget = 2
+    skill._prepared = replace(skill._prepared, before=skill.runtime.adapter.observe())
+    ordinary = module.RedTrainerPartyController
+
+    class Controller(module.RedTrainerSurvivalController):
+        def run(self, actual_reader, actions, policy, **kwargs):
+            assert kwargs['intent'].require_move_between_switches is False
+            guard = kwargs['move_decision_guard']
+            guard(reader.raw)
+            self.heals_claimed = spent
+            actual_spent = spent + (fault == 'unclaimed_spend')
+            reader.raw = replace(reader.raw, bag_items=((16, 3 - actual_spent), (4, 8)))
+            guard(reader.raw)
+            return ordinary(reader, skill.runtime.emulator).run(
+                actual_reader, actions, policy, **kwargs,
+            )
+
+    monkeypatch.setattr(module, 'RedTrainerSurvivalController', Controller)
+    execute = skill.actions.delegate.execute
+    def epilogue(action):
+        execute(action)
+        if fault == 'epilogue_spend' and scene['won']:
+            reader.raw = replace(reader.raw, bag_items=((16, 3 - spent), (4, 7)))
+    skill.actions.delegate.execute = epilogue
+    if fault:
+        with pytest.raises(module.RedChampionStoryError, match='bag|protected'):
+            skill.execute()
+    else:
+        result = skill.execute()
+        assert result.evidence['concurrent_champion_and_hall_of_fame'] is True
+        assert result.evidence['bag_items_spent'] == spent
+        assert result.evidence['maximum_full_restores'] == 2
+        assert reader.raw.bag_items == ((16, 3 - spent), (4, 8))
 
 
 @pytest.mark.parametrize(

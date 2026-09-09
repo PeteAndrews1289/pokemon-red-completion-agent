@@ -42,7 +42,9 @@ from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
 from .red_trainer_funding import TrainerFundingCandidate
 from .red_trainer_funding_battle import run_prepared_trainer_funding
+from .red_trainer_healing import bag_after_full_restores, require_story_recovery_stock
 from .red_trainer_party import RedTrainerPartyPlan, plan_trainer_party, prepare_trainer_lead
+from .red_trainer_survival import RedTrainerSurvivalController
 from .route_executor import execute_route
 from .route_plan import RoutePlan, RoutePlanningError
 
@@ -88,6 +90,7 @@ class RedCartridgeLoreleiSkill:
     actions: CountingExecutor
     world: StrategicScenarioRouteWorld | None
     objective_id: str = "defeat_lorelei"
+    maximum_full_restores: int = 0
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
         default=frozenset({"league:lorelei_defeated"}), init=False,
@@ -101,6 +104,7 @@ class RedCartridgeLoreleiSkill:
         default=None, init=False,
     )
     _claimed: bool = field(default=False, init=False)
+    _prepared_budget: int | None = field(default=None, init=False)
     _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
     _arrival_steps: int = field(default=0, init=False)
@@ -133,6 +137,7 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("cartridge world or fixed battle authority unavailable")
         observation = self.runtime.adapter.observe()
         raw = observation.raw
+        require_story_recovery_stock(raw, self.maximum_full_restores)
         is_bruno = self.objective_id == "defeat_bruno"
         is_agatha = self.objective_id == "defeat_agatha"
         is_lance = self.objective_id == "defeat_lance"
@@ -217,6 +222,7 @@ class RedCartridgeLoreleiSkill:
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         self._prepared = None
+        self._prepared_budget = None
         self._prepared_world, self._prepared_blocks = None, None
         self._arrival_steps = 0
         self._scripted_triggers = ()
@@ -229,6 +235,7 @@ class RedCartridgeLoreleiSkill:
         if prepared[0].game_state != state:
             return ObjectiveSkillAvailability(False, "Story observation changed during planning.")
         self._prepared = prepared
+        self._prepared_budget = self.maximum_full_restores
         return ObjectiveSkillAvailability(
             True, "Bounded cartridge trainer with observed party control.",
         )
@@ -240,7 +247,8 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("story requires a fresh unconsumed availability binding")
         self._claimed = True
         before, target, preparation = self._prepared
-        if self.runtime.adapter.observe() != before or battle_policy_override_active():
+        if (self.runtime.adapter.observe() != before or battle_policy_override_active()
+                or self._prepared_budget != self.maximum_full_restores):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
         if self._prepared_blocks is not None and (
             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
@@ -367,7 +375,13 @@ class RedCartridgeLoreleiSkill:
         require_target()
         if not self._scripted_triggers:
             face_pc_boundary(actions, reader, target.interaction_facing.value)
-        controller = RedTrainerPartyController(reader, self.runtime.emulator)
+        controller = (
+            RedTrainerSurvivalController(
+                reader, self.runtime.emulator, (), self.maximum_full_restores,
+            ) if self.maximum_full_restores else RedTrainerPartyController(
+                reader, self.runtime.emulator,
+            )
+        )
         receipt = run_prepared_trainer_funding(
             reader, actions, target=target, validate_target=require_target,
             move_slot_policy=guard._safe_trainer_move,
@@ -375,11 +389,21 @@ class RedCartridgeLoreleiSkill:
             intent=BattleIntent(
                 self.objective_id, battle_plan_id="cartridge-trainer-story",
                 switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
-                switch_limit=controller.maximum_switches, require_move_between_switches=True,
+                switch_limit=controller.maximum_switches,
+                require_move_between_switches=not bool(self.maximum_full_restores),
             ),
             battle_runner_override=controller.run,
             resume_pending_dialogue=pending_dialogue,
             validate_scripted_dialogue=scripted_dialogue,
+            maximum_full_restores=self.maximum_full_restores,
+            prospective_story_recovery=bool(self.maximum_full_restores),
+        )
+        spent = (
+            controller.heals_claimed if isinstance(controller, RedTrainerSurvivalController) else 0
+        )
+        expected_bag = (
+            bag_after_full_restores(before.raw.bag_items or (), spent)
+            if self.maximum_full_restores else before.raw.bag_items
         )
         after = self.runtime.adapter.observe()
         if (
@@ -388,7 +412,7 @@ class RedCartridgeLoreleiSkill:
             != dependency_specimen_ledger(before.collection_observation)
             or not self.expected_facts.issubset(after.game_state.facts)
             or after.raw.badge_bits != before.raw.badge_bits
-            or after.raw.bag_items != before.raw.bag_items
+            or after.raw.bag_items != expected_bag
         ):
             raise RedTrainerStoryError("story terminal lost collection, control or quest evidence")
         return ObjectiveSkillExecution(
@@ -397,5 +421,7 @@ class RedCartridgeLoreleiSkill:
             {"authority": "deterministic-trainer-controls", "story_event_verified": True,
              "route_steps": len(target.approach.steps), "switches": len(controller.switches),
              "moves_selected": controller.moves_selected, "victory_money": receipt.payout,
-             "bag_items_spent": 0, "learned_battle_authority": False},
+             "bag_items_spent": spent, "learned_battle_authority": False,
+             "maximum_full_restores": self.maximum_full_restores,
+             "battle_controller": "damage-aware" if self.maximum_full_restores else "ordinary"},
         )

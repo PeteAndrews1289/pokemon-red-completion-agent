@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort.
+- Next decision: Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
-| Authority now | Native82 made one healing choice in each of two separately declared sequences; both subsequent story steps were forced. New shadow4167759a remains unused. Battle execution stays deterministic and zero-item; no risk or healing authority added. |
+| Authority now | No new gameplay authority exercised yet. Optional damage-aware deterministic story recovery with a declared one/two-item allowance is integrated and tested; native82 remains the goal model and shadow4167759a remains unused. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
 | Cheapest falsifier | Use existing survival/healing primitives in a varied multi-turn test showing early recovery avoids stranded offense; include impossible-resource refusal and actual story bag/accounting guards before any newly declared live continuation. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-lance-resource-reorientation** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
+**2026-09-09-proactive-recovery-integration** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
 | Learning output | Seven-return shadow fit preserved. Repaired successor:1learned heal+1forced story,345actions/31944frames/1item,all30specimens retained; stopped mid-Lance,not fitted. Initialization repair works live; resource bounds identify the next execution gap. |
-| Authority delta | Native82 made one healing choice in each of two separately declared sequences; both subsequent story steps were forced. New shadow4167759a remains unused. Battle execution stays deterministic and zero-item; no risk or healing authority added. |
+| Authority delta | No new gameplay authority exercised yet. Optional damage-aware deterministic story recovery with a declared one/two-item allowance is integrated and tested; native82 remains the goal model and shadow4167759a remains unused. |
 | Transfer result | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
 | Blocker | The repaired controller entered Lance battle, then depleted offensive reserves. Current zero-item critical-inclusive survival bounds qualify no action; a late fallback cannot fix this endpoint. No Lance completion or Champion attempt. |
-| Decision | Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort. |
-| Next session | Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort. |
-| Next falsifier | Use existing survival/healing primitives in a varied multi-turn test showing early recovery avoids stranded offense; include impossible-resource refusal and actual story bag/accounting guards before any newly declared live continuation. |
-| Stop condition | Both September9 Lance sequences are closed after their first exception; neither failed save may resume. Current session ends after evidence, reorientation and publication by13:25UTC. No additional gameplay or per-boss fitting cohort. |
+| Decision | Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes. |
+| Next session | Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes. |
+| Next falsifier | Existing multi-turn and caller/accounting tests pass. Next falsifier is the actual safe post-Agatha stock/menu, followed by a bounded run using explicit one-item story recovery. |
+| Stop condition | Both prior Lance failures remain closed and may not resume. User authorized continued Phase4 development. Reassess after each bounded slice; a new live plan stops on first exception or unsupported resource envelope. No hidden risk mode, retries or per-boss fitting cohort. |
 
 ### Stop conditions
 

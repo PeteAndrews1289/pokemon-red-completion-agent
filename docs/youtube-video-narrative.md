@@ -1,4 +1,14 @@
-# Current — the fix worked; the battle exposed the next real problem
+# Current — make the recovery budget part of the decision
+
+The next engineering slice connects early damage-aware battle control to a
+declared owned-medicine allowance. The model still chooses high-level goals;
+deterministic controls handle attacks, switches and healing. The allowance is
+visible before selection, while observed outcomes charge only actual spending.
+Tests and read-only review qualify that integration, not a new gameplay victory.
+Show this as a resource-management repair in progress, not a trained battle model
+or a completed Phase4. Both failed Lance attempts remain part of the record.
+
+# Historical — the fix worked; the battle exposed the next real problem
 
 There is now genuine repaired-controller battle footage: the new continuation
 passed Lance's dialogue and fought until Aerodactyl. It then stopped with all

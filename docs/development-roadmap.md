@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-resource-reorientation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-proactive-recovery-integration**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-proactive-recovery-integration
+
+Budgeted proactive recovery integrated and tested; no new gameplay, fit or completion. Native82 unchanged.
+
+**Deviation:** No baseline or phase-exit change. One focused engineering slice connects existing survival control to story goals, with actual-spend accounting and explicit plan admission.
+
+**Next:** Qualify owned stock and real choices, then a bounded correlated Lance/Champion continuation.
 
 ### 2026-09-09-lance-resource-reorientation
 

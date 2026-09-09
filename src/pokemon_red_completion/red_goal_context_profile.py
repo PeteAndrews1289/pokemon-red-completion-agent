@@ -237,15 +237,19 @@ def build_red_goal_context_profile_payload(
 
 def bind_cartridge_trainer_story_profile(
     profile: RedGoalContextProfile, *, objective_id: str = "defeat_lorelei",
+    maximum_full_restores: int = 0,
 ) -> RedGoalContextProfile:
     """Prospectively replace only the legacy story executor, preserving other goals."""
+    if type(maximum_full_restores) is not int or not 0 <= maximum_full_restores <= 2:
+        raise RedGoalContextProfileError("story recovery budget must be zero through two")
     providers = {
         spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
         for spec in profile.providers
     }
     providers[GoalKind.ADVANCE_STORY] = (
         GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY,
-        {"trainer_objective": objective_id},
+        {"trainer_objective": objective_id,
+         **({"maximum_full_restores": maximum_full_restores} if maximum_full_restores else {})},
     )
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
@@ -510,7 +514,14 @@ def _parse_parameters(
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
         if not row:
             return row
-        _exact_keys(row, {"trainer_objective"})
+        _exact_keys(row, {"trainer_objective"} | (
+            {"maximum_full_restores"} if "maximum_full_restores" in row else set()
+        ))
+        if "maximum_full_restores" in row and (
+            type(row["maximum_full_restores"]) is not int
+            or row["maximum_full_restores"] not in (1, 2)
+        ):
+            raise RedGoalContextProfileError("explicit story recovery requires one or two items")
         if row["trainer_objective"] not in (
             "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion",
         ):

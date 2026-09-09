@@ -101,6 +101,7 @@ def _episode(
     forced_story=False,
     unreadable_after=False,
     pp_restoration=False,
+    consumption_quote=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -153,6 +154,13 @@ def _episode(
     sink.write_episode_header(metadata=metadata)
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
+    if consumption_quote:
+        from pokemon_red_completion.goal_resource_quote import GoalResourceQuote
+        source = replace(source, opportunities=(source.opportunities[0], GoalOpportunity(
+            'story', GoalKind.ADVANCE_STORY, GoalAvailability.AVAILABLE, 0.2, 0.1,
+            resource_quote=GoalResourceQuote(0, 0, (), available_recovery_units=2,
+                                            maximum_recovery_consumption=1),
+        )))
     if forced_story:
         from pokemon_red_completion.goal_manager import GoalUnavailableReason
         source = replace(source, opportunities=(GoalOpportunity(
@@ -311,6 +319,21 @@ def test_native_choices_replay_and_keep_observed_success_failure_and_censor(tmp_
 def test_safety_choices_do_not_become_exploration_rows(tmp_path):
     dataset = _episode(tmp_path, safety=True)
     assert dataset.examples == () and dataset.excluded_nonexploratory == 1
+
+
+@pytest.mark.parametrize("new_contract", [False, True])
+def test_bounded_consumption_requires_declared_economic_contract(tmp_path, new_contract):
+    def declare(_store, plan):
+        return RedPlayerTrainingPlan({**plan.document, 'economic_contract': (
+            'known-spend-and-bounded-consumption-v2' if new_contract
+            else 'known-spend-and-excess-reserve-v1'
+        )})
+    if new_contract:
+        dataset = _episode(tmp_path, consumption_quote=True, plan_transform=declare)
+        assert len(dataset.examples) == 1
+    else:
+        with pytest.raises(ValueError, match='historical economic contract'):
+            _episode(tmp_path, consumption_quote=True, plan_transform=declare)
 
 
 def test_pp_cost_survives_recording_and_independent_dataset_reconstruction(tmp_path):

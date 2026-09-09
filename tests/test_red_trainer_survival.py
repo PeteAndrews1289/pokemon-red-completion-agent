@@ -185,6 +185,68 @@ def test_observed_switch_then_one_heal_resumes_without_restarting_battle(monkeyp
     assert inputs == ["switch", "heal", "attack"]
 
 
+def test_exit_guard_survives_switch_and_heal_controller_restarts(monkeypatch):
+    subject = controller(monkeypatch)
+    inputs = simulate(monkeypatch, subject)
+    adaptive = survival.run_adaptive_trainer_battle
+    exits = []
+    def battle(*args, **kwargs):
+        result = adaptive(*args, **kwargs)
+        kwargs['battle_exit_guard'](result)
+        return result
+    monkeypatch.setattr(survival, 'run_adaptive_trainer_battle', battle)
+    result = subject.run(
+        subject.reader, object(), lambda _: 1, expected_map=245,
+        intent=BattleIntent('champion', 'budgeted-survival'), timing=BattleRuntimeTiming(),
+        label='test', consume_battle_start_schedule=False,
+        move_decision_guard=lambda _: None, battle_exit_guard=exits.append,
+    )
+    assert exits == [result] and result.battle_state == 0
+    assert inputs == ['switch', 'heal', 'attack']
+    assert subject.moves_selected == 1 and subject.heals_claimed == 1
+    assert subject.maximum_switches == 6 and subject.switches == [1]
+
+
+def test_early_recovery_keeps_attacking_then_stops_on_new_unaffordable_threat(monkeypatch):
+    subject = controller(monkeypatch, state(active=0, hp=(130, 12)), previous=(), budget=1)
+    monkeypatch.setattr(survival, 'incoming_damage_bounds',
+                        lambda raw: (80, 257) if raw.enemy_species_id == 72 else (220, 300))
+    inputs = []
+    ordinary_blocked = []
+    def battle(reader, _actions, policy, **kwargs):
+        while True:
+            raw = reader.read()
+            kwargs['move_decision_guard'](raw)
+            try:
+                policy(raw)
+            except survival._RecoveryRequest as request:
+                ordinary_blocked.append(survival.trainer_matchup_candidates(
+                    survival.party_observation_from_raw(raw),
+                    opponent_species=raw.enemy_species_id, opponent_level=raw.enemy_level,
+                ))
+                raise BattleRuntimeError('decision boundary') from request
+            inputs.append('attack')
+            if inputs.count('attack') == 1:
+                reader.raw = replace(raw, party_hp=(50, 12), active_party_hp=50)
+            else:
+                reader.raw = replace(raw, enemy_species_id=171, enemy_level=60)
+    def heal(_actions, reader, _emulator, **kwargs):
+        assert kwargs['incoming_bound'] == 80 and reader.raw.party_hp == (50, 12)
+        inputs.append('heal')
+        reader.raw = replace(reader.raw, party_hp=(133, 12), active_party_hp=133,
+                             bag_items=((16, 3), (53, 3)))
+        return reader.raw
+    monkeypatch.setattr(survival, 'run_adaptive_trainer_battle', battle)
+    monkeypatch.setattr(survival, 'use_active_full_restore', heal)
+    with pytest.raises(survival.NoTrainerSurvivalAction):
+        run(subject)
+    assert ordinary_blocked == [()]  # flat-HP actor has no offensive healthy candidate
+    assert inputs == ['attack', 'heal', 'attack']
+    assert subject.moves_selected == 2 and subject.heals_claimed == 1
+    assert subject.reader.raw.party_hp == (133, 12)
+    assert subject.reader.raw.enemy_species_id == 171
+
+
 def test_failed_item_attempt_retains_claim_no_retry(monkeypatch):
     subject = controller(monkeypatch, state(active=0, hp=(46, 12)))
     inputs = simulate(monkeypatch, subject)

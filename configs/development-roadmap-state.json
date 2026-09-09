@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-lance-resource-reorientation",
+  "as_of_session": "2026-09-09-proactive-recovery-integration",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -516,6 +516,12 @@
       "result": "Repair passed live battle entry; Lance stopped at depleted offensive reserves. All30specimens retained; Champion unattempted.",
       "deviation": "The separately declared successor preserves the earlier failure. Zero-input damage analysis rejects a late zero-item fallback; next manage resources earlier. Stable phase exits and local1/3 checklist unchanged.",
       "next": "Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort."
+    },
+    {
+      "session": "2026-09-09-proactive-recovery-integration",
+      "result": "Budgeted proactive recovery integrated and tested; no new gameplay, fit or completion. Native82 unchanged.",
+      "deviation": "No baseline or phase-exit change. One focused engineering slice connects existing survival control to story goals, with actual-spend accounting and explicit plan admission.",
+      "next": "Qualify owned stock and real choices, then a bounded correlated Lance/Champion continuation."
     }
   ],
   "closed_milestones": [

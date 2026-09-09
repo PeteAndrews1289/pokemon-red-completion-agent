@@ -60,6 +60,14 @@ class RedTrainerSurvivalController:
     reports: list[dict[str, object]] = field(default_factory=list, init=False)
     _claimed: bool = field(default=False, init=False)
 
+    @property
+    def maximum_switches(self) -> int:
+        return 6
+
+    @property
+    def moves_selected(self) -> int:
+        return sum(report.get("kind") in {"attack", "risk_attack"} for report in self.reports)
+
     def _record(self, report: dict[str, object]) -> None:
         if self.decision_sink is not None:
             self.decision_sink(report)
@@ -131,6 +139,7 @@ class RedTrainerSurvivalController:
         label: str,
         consume_battle_start_schedule: bool,
         move_decision_guard: MoveDecisionGuard,
+        battle_exit_guard: MoveDecisionGuard | None = None,
     ) -> RawGameState:
         if self._claimed:
             raise BattleRuntimeError("trainer survival controller already consumed")
@@ -194,6 +203,7 @@ class RedTrainerSurvivalController:
                     label=label,
                     consume_battle_start_schedule=False,
                     move_decision_guard=guard,
+                    battle_exit_guard=battle_exit_guard,
                 )
             except BattleRuntimeError as error:
                 request = error.__cause__

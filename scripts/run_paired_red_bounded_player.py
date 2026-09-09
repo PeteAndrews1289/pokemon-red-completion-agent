@@ -1044,6 +1044,13 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             readiness,
             training_plan=declare_completion_dose(readiness.training_plan),
         )
+    if readiness.training_plan is not None and any(
+        spec.parameters.get("maximum_full_restores", 0) for spec in readiness.profile.providers
+    ):
+        readiness = replace(readiness, training_plan=RedPlayerTrainingPlan({
+            **readiness.training_plan.document,
+            "economic_contract": "known-spend-and-bounded-consumption-v2",
+        }))
     if getattr(args, "story_outcome_curriculum", False):
         from pokemon_red_completion.red_player_training_plan import declare_story_curriculum
 
@@ -1183,6 +1190,8 @@ def _regional_profiles(
     readiness: _Readiness,
 ) -> tuple[RedGoalContextProfile, ...]:
     """Derive explicit source transitions; no emulator, policy or input is used."""
+    from pokemon_red_completion.goal_manager import GoalKind
+
     if not sources:
         return ()
     from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
@@ -1206,6 +1215,7 @@ def _regional_profiles(
                           "cartridge-trainer-story:champion",
                           "affordable-field-restore",
                           "reserved-field-restore", "field-pp-restore"}
+            or source in {"trainer-recovery:1", "trainer-recovery:2"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1216,6 +1226,21 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if source in {"trainer-recovery:1", "trainer-recovery:2"}:
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_cartridge_trainer_story_profile,
+            )
+
+            story = next((spec for spec in profile.providers
+                          if spec.kind is GoalKind.ADVANCE_STORY), None)
+            if story is None or not story.parameters.get("trainer_objective"):
+                raise PairedRedBoundedPlayerRunError("recovery_requires_cartridge_story_profile")
+            profile = bind_cartridge_trainer_story_profile(
+                profile, objective_id=str(story.parameters["trainer_objective"]),
+                maximum_full_restores=int(str(source).split(":")[1]),
+            )
+            result.append(profile)
+            continue
         if source == "field-pp-restore":
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_field_pp_restore_profile,

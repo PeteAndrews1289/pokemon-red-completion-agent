@@ -1,5 +1,32 @@
 # Next session: manage battle resources before the party is stranded
 
+## September 9 implementation checkpoint
+
+The prospective integration is implemented, not yet live-qualified. A profile
+may explicitly select a one/two-owned-Full-Restore damage-aware controller from
+the start of a story battle. Default zero-item behavior is unchanged. The real
+story and Champion callers bind the budget before input and verify exact actual
+item decrement, including Champion's battle exit and epilogue. Finite healing
+and switch counters survive battle-loop restarts; no risk controller is enabled.
+
+The title-neutral V4 resource quote exposes maximum consumption/available stock
+as a conservative cost allowance, not predicted actual expenditure. Existing
+observed outcomes still charge actual use. A new economic-plan contract is
+declared before collection; native admission rejects V4 quotes under old plans.
+The read-only reviewer identified this admission gap and the implementation
+repaired it with real sealed-episode round-trip/rejection tests.
+
+The focused integration suite passed 583 tests; an additional multi-turn case
+then passed in the 28-test survival suite. Mypy checked 453 source files and Ruff
+passed. These are targeted checks, not a new full-suite result. No gameplay,
+model fitting, authority promotion, or phase-exit claim follows from these checks.
+
+Operational cautions: each new cartridge story objective drops a previous
+recovery allowance unless explicitly reapplied; tests cover this transition.
+A two-item allowance cannot remain available after field healing leaves only
+one item. The next live plan must match actual stock and reserve behavior, not
+assume that an item budget guarantees enough resources to finish the League.
+
 ## Verified starting point
 
 The separately declared `89d03dd5` continuation passed the repaired Lance text

@@ -43,6 +43,25 @@ def test_lance_source_argument_reaches_qualified_profile_without_legacy_fallback
     assert champion[0].providers[1:] == original.providers[1:]
 
 
+@pytest.mark.parametrize("budget", [1, 2])
+def test_recovery_modifier_requires_and_binds_explicit_story_without_input(monkeypatch, budget):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    original = _supply_transition_profile()
+    profiles = derive(original, ('cartridge-trainer-story:lance', f'trainer-recovery:{budget}'),
+                      object())
+    assert profiles[-1].providers[0].parameters == {
+        'trainer_objective': 'defeat_lance', 'maximum_full_restores': budget,
+    }
+    assert profiles[-1].providers[1:] == original.providers[1:]
+    with pytest.raises(module['PairedRedBoundedPlayerRunError']):
+        derive(original, (f'trainer-recovery:{budget}',), object())
+    champion = derive(profiles[-1], ('cartridge-trainer-story:champion',), object())
+    assert 'maximum_full_restores' not in champion[-1].providers[0].parameters
+
+
 @pytest.mark.parametrize("mode", [True, False, None, 1])
 def test_support_recovery_restores_explicit_observer_mode_without_a_training_plan(mode):
     module = runpy.run_path(str(SCRIPT))

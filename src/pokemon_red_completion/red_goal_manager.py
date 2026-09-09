@@ -381,6 +381,17 @@ class RedStoryGoalBindingProvider:
             )
         objective, skill = executable[0]
         completed_before = self.graph.completed_ids(observation.game_state)
+        budget = getattr(skill, "maximum_full_restores", 0)
+        quote = None
+        if budget:
+            from .goal_resource_quote import GoalResourceQuote
+            from .red_trainer_healing import require_story_recovery_stock
+
+            require_story_recovery_stock(observation.raw, budget)
+            quote = GoalResourceQuote(
+                0, 0, (), available_recovery_units=dict(observation.raw.bag_items or ()).get(16, 0),
+                maximum_recovery_consumption=budget,
+            )
 
         def execute() -> GoalExecutionReport:
             result = self.skills.execute_bounded(skill)
@@ -392,6 +403,10 @@ class RedStoryGoalBindingProvider:
                     "declared_effect_count": (
                         len(skill.expected_facts) + len(skill.additional_effect_facts)
                     ),
+                    **({"story_control": {key: result.evidence[key] for key in (
+                        "battle_controller", "maximum_full_restores", "bag_items_spent",
+                        "learned_battle_authority",
+                    )}} if budget else {}),
                 },
             )
 
@@ -413,6 +428,7 @@ class RedStoryGoalBindingProvider:
                 estimated_risk=_specialist_risk(objective.specialist),
                 execute=execute,
                 verify=verify,
+                resource_quote=quote,
             )
         )
 

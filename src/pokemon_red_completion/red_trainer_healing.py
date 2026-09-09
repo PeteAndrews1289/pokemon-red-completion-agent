@@ -15,6 +15,16 @@ from .battle_recovery import (
 from .observation import BattleMenuPhase, ItemId, PokemonRedStateReader, RawGameState
 
 
+def require_story_recovery_stock(raw: RawGameState, maximum: int) -> None:
+    """A prospective allowance must be typed and funded before story selection."""
+    if type(maximum) is not int or not 0 <= maximum <= 2:
+        raise ValueError("story recovery budget must be zero through two")
+    if maximum and (
+        raw.bag_items is None or dict(raw.bag_items).get(int(ItemId.FULL_RESTORE), 0) < maximum
+    ):
+        raise ValueError("story recovery allowance exceeds owned Full Restores")
+
+
 def bag_after_full_restores(
     initial: tuple[tuple[int, int], ...],
     spent: int,

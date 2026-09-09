@@ -31,7 +31,9 @@ from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_control import RedTrainerPartyController
+from .red_trainer_healing import bag_after_full_restores, require_story_recovery_stock
 from .red_trainer_party import RedTrainerPartyPlan, plan_trainer_party, prepare_trainer_lead
+from .red_trainer_survival import RedTrainerSurvivalController
 from .referee import CHAMPION_DEFEATED_FACT, CompletionReferee
 from .route import HALL_OF_FAME_FACT
 from .route_executor import execute_route
@@ -63,6 +65,7 @@ class RedCartridgeChampionSkill:
     runtime: RedGoalContextRuntime
     actions: CountingExecutor
     world: StrategicScenarioRouteWorld | None
+    maximum_full_restores: int = 0
     objective_id: str = field(default="defeat_champion", init=False)
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
@@ -77,6 +80,7 @@ class RedCartridgeChampionSkill:
     max_frames: int = field(default=3000000, init=False)
     _prepared: _Prepared | None = field(default=None, init=False)
     _claimed: bool = field(default=False, init=False)
+    _prepared_budget: int | None = field(default=None, init=False)
 
     def _plan(self) -> _Prepared:
         from .red_resource_goal_router import _walking_plan
@@ -84,6 +88,7 @@ class RedCartridgeChampionSkill:
         if self.world is None or battle_policy_override_active():
             raise RedChampionStoryError("cartridge world or fixed battle authority unavailable")
         before = self.runtime.adapter.observe()
+        require_story_recovery_stock(before.raw, self.maximum_full_restores)
         reader = self.runtime.reader
         if (
             before.raw.map_id != MapId.LANCES_ROOM
@@ -137,6 +142,7 @@ class RedCartridgeChampionSkill:
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         self._prepared = None
+        self._prepared_budget = None
         if self._claimed:
             return ObjectiveSkillAvailability(False, "Final-story attempt already consumed.")
         try:
@@ -146,6 +152,7 @@ class RedCartridgeChampionSkill:
         if prepared.before.game_state != state:
             return ObjectiveSkillAvailability(False, "Final-story observation changed.")
         self._prepared = prepared
+        self._prepared_budget = self.maximum_full_restores
         return ObjectiveSkillAvailability(
             True, "Qualified final scene with observed party controls."
         )
@@ -160,6 +167,7 @@ class RedCartridgeChampionSkill:
         runtime, reader = self.runtime, self.runtime.reader
         if (
             runtime.adapter.observe() != prepared.before
+            or self._prepared_budget != self.maximum_full_restores
             or battle_policy_override_active()
             or reader.read_current_map_blocks() != prepared.blocks
             or runtime.emulator.pressed_buttons
@@ -228,11 +236,24 @@ class RedCartridgeChampionSkill:
         ):
             raise RedChampionStoryError("final-story approach did not reach its entry boundary")
 
+        controller = (
+            RedTrainerSurvivalController(reader, runtime.emulator, (), self.maximum_full_restores)
+            if self.maximum_full_restores else RedTrainerPartyController(reader, runtime.emulator)
+        )
+
         def preserve(raw: RawGameState) -> None:
             guard._require_preserved_living_slots(raw)
+            spent = (
+                controller.heals_claimed
+                if isinstance(controller, RedTrainerSurvivalController) else 0
+            )
+            expected_bag = (
+                bag_after_full_restores(baseline.bag_items or (), spent)
+                if self.maximum_full_restores else baseline.bag_items
+            )
             if (
                 raw.party_species_ids != baseline.party_species_ids
-                or raw.bag_items != baseline.bag_items
+                or raw.bag_items != expected_bag
                 or raw.badge_bits != baseline.badge_bits
             ):
                 raise RedChampionStoryError("final scene changed protected party or resources")
@@ -274,8 +295,6 @@ class RedCartridgeChampionSkill:
             ):
                 raise RedChampionStoryError("active final trainer identity changed")
 
-        controller = RedTrainerPartyController(reader, runtime.emulator)
-
         def verify_battle_exit(raw: RawGameState) -> None:
             preserve(raw)
             if raw.map_id != MapId.CHAMPIONS_ROOM or raw.battle_state or raw.battle_result != 0:
@@ -291,7 +310,7 @@ class RedCartridgeChampionSkill:
                 battle_plan_id="cartridge-final-story",
                 switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
                 switch_limit=controller.maximum_switches,
-                require_move_between_switches=True,
+                require_move_between_switches=not bool(self.maximum_full_restores),
             ),
             timing=BattleRuntimeTiming(max_runtime_pulses=1600),
             label="observed final trainer",
@@ -326,7 +345,14 @@ class RedCartridgeChampionSkill:
                         "authority": "deterministic-trainer-controls",
                         "learned_battle_authority": False,
                         "concurrent_champion_and_hall_of_fame": True,
-                        "bag_items_spent": 0,
+                        "bag_items_spent": (
+                            controller.heals_claimed
+                            if isinstance(controller, RedTrainerSurvivalController) else 0
+                        ),
+                        "maximum_full_restores": self.maximum_full_restores,
+                        "battle_controller": (
+                            "damage-aware" if self.maximum_full_restores else "ordinary"
+                        ),
                         "switches": len(controller.switches),
                         "moves_selected": controller.moves_selected,
                         "scene_movement_authority": "cartridge",

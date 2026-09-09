@@ -183,6 +183,7 @@ def run_prepared_trainer_funding(
     intent: BattleIntent | None = None,
     battle_runner_override: Callable[..., RawGameState] | None = None,
     maximum_full_restores: int = 0,
+    prospective_story_recovery: bool = False,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared trainer with shared identity/resource/victory checks.
 
@@ -192,10 +193,21 @@ def run_prepared_trainer_funding(
     """
     if type(maximum_full_restores) is not int or not 0 <= maximum_full_restores <= 2:
         raise ValueError("trainer recovery Full Restore budget must be zero through two")
-    if maximum_full_restores and (not resume_active_battle or battle_runner_override is None):
-        raise ValueError("item budget requires an explicit active-battle recovery controller")
     if intent is not None and not isinstance(intent, BattleIntent):
         raise TypeError("intent must be a BattleIntent")
+    if type(prospective_story_recovery) is not bool or (
+        prospective_story_recovery and (
+            not maximum_full_restores or resume_active_battle or battle_runner_override is None
+            or intent is None or intent.battle_plan_id != "cartridge-trainer-story"
+        )
+    ):
+        raise ValueError(
+            "prospective recovery requires an explicit fresh story controller and budget",
+        )
+    if maximum_full_restores and (
+        not (resume_active_battle or prospective_story_recovery) or battle_runner_override is None
+    ):
+        raise ValueError("item budget requires an explicit active-battle recovery controller")
     if battle_runner_override is not None and not callable(battle_runner_override):
         raise TypeError("battle runner override must be callable")
     if type(resume_active_battle) is not bool:

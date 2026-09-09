@@ -204,6 +204,12 @@ def _audit_red_player_training_reader(
     curriculum_examples = []
     nonexploratory = zero_input = 0
     for decision in joined.examples:
+        if plan.document["economic_contract"] == "known-spend-and-excess-reserve-v1" and any(
+            option.resource_quote is not None
+            and option.resource_quote.available_recovery_units is not None
+            for option in decision.question.opportunities
+        ):
+            raise ValueError("historical economic contract cannot admit bounded consumption quotes")
         row: LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample
         if decision.selection_mode is GoalSelectionMode.FORCED_SINGLETON:
             nonexploratory += 1

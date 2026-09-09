@@ -115,7 +115,9 @@ class RedPlayerTrainingPlan:
             document["behavior_policy_id"]
             not in {EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID,
                     LEGACY_RECOVERY_EXPLORATION_POLICY_ID}
-            or document["economic_contract"] != "known-spend-and-excess-reserve-v1"
+            or document["economic_contract"] not in {
+                "known-spend-and-excess-reserve-v1", "known-spend-and-bounded-consumption-v2",
+            }
         ):
             raise ValueError("player training behavior differs")
         for name in ("source_commit", "catalog_source_commit"):

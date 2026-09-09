@@ -367,6 +367,7 @@ def _build_provider(
             return RedStoryGoalBindingProvider(
                 COMPLETION_QUEST, ObjectiveSkillRegistry((RedCartridgeChampionSkill(
                     runtime, actions, runtime.trainer_story_world,
+                maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
                 ),)), runtime.observer,
             )
         if spec.parameters.get("trainer_objective") in {
@@ -380,6 +381,7 @@ def _build_provider(
                 ObjectiveSkillRegistry((RedCartridgeLoreleiSkill(
                     runtime, actions, runtime.trainer_story_world,
                     objective_id=str(spec.parameters["trainer_objective"]),
+            maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
                 ),)), runtime.observer,
             )
         return RedStoryGoalBindingProvider(

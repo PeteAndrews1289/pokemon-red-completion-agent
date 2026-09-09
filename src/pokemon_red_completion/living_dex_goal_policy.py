@@ -231,7 +231,13 @@ class LivingDexGoalShadowDecision:
             result.update(
                 {
                     "economic_input_sha256": self.economic_input_sha256,
-                    "economic_contract": "known-spend-and-excess-reserve-v1",
+                    "economic_contract": (
+                        "known-spend-and-bounded-consumption-v2"
+                        if any(score.resource_quote is not None
+                               and score.resource_quote.available_recovery_units is not None
+                               for score in self.scores)
+                        else "known-spend-and-excess-reserve-v1"
+                    ),
                 }
             )
         return result
