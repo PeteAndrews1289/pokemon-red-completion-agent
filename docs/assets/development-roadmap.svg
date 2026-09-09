@@ -7,7 +7,7 @@
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a registered Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">3 goal-value examples  /  Checkpoint-based Red story: verified</text>
+<text x="50" y="215" class="small">5 goal-value examples  /  Checkpoint-based Red story: verified</text>
 <rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Connect shared registered completion</text>
@@ -92,8 +92,8 @@
 <text x="754" y="1573" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1594" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-09-registered-live-training</text>
-<text x="50" y="1767" class="body">Registered integration3/3: real ledger, three outcomes/two fits, model2 played;39 registrations/43 specimens retained. Model3</text>
-<text x="50" y="1792" class="body">not yet played.</text>
+<text x="50" y="1732" class="small muted">2026-09-09-capture-helper-recovery</text>
+<text x="50" y="1767" class="body">Registered3 to5 with two fits. Search failed; restoration succeeded. Model5 selectedRoute15 but exhausted balls mid-battle;</text>
+<text x="50" y="1792" class="body">unfit failure state preserved. Last verified39registrations/43specimens.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

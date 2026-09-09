@@ -1,25 +1,31 @@
-# Current — registered-objective training demonstrated
+# Current — registered training continued; battle-exit recovery next
 
-The shared ledger is connected to live collection, terminal persistence and a
-separate registered-only scorer. Three actual outcomes produced two fits in a
-16-minute bounded batch: Route7 search failed, Route15 captured Pidgeotto, then
-the freshly fitted model chose capture from two native goals. Capture-helper
-preparation failed its actual readiness check; that failure became example3.
-Registrations rose38 to39; specimens42 to43, with no loss. Model2 really played;
-final model3 has not played. Old114 rewards were not reused or relabeled.
+Two more actual outcomes were fitted: a failed capture search and successful
+team restoration. The registered-objective model now contains **five examples**,
+separate from the historical114. Model5 reloaded, chose Route15 from two sources
+and played, but exhausted capture balls while still in a wild battle. Its raw
+failure state is preserved; it is not a safe continuation or fitted example.
+The four-step batch stopped after attempt3, leaving attempt4 unclaimed.
 
-This completes the three-item integration milestone, not Red collection or the
-whole agent. Learned authority is goals/destinations; controller actions and
-mechanic execution remain deterministic. No independent advantage, learned
-combat, Blue execution, Crystal transfer or full-Pokedex completion is claimed.
+Last verified ledger:39 registrations and43 specimens, unchanged this batch.
+The roughly13-minute batch recorded2,463 actions/141,484 frames including the
+unsettled attempt. These are correlated training outcomes, not independent
+competence. Learned authority remains goals/destinations; execution is deterministic.
+The completed three-item integration milestone is not completion of Red collection.
 
-Next: inspect the retained helper-readiness failure, qualify legitimate recovery,
-then resume short model3 lessons. Do not replay the consumed batch. Keep actual
-failed attempts in training and the global/local/physical inventory views separate.
-No external-agent audit or usage this session. Codex owns integration; optional
-reviewers should examine helper readiness and reward semantics, not expand scope.
+Flash3.8 High supplied isolated readiness tests/diagnostics. Codex corrected and
+integrated the draft, added verified optional helper restoration, and passed218
+focused tests before play. Actual retrieval used a different healthy helper;
+the new restoration callback is test-qualified, not demonstrated by that event.
+Claude was not used. Last Gemini account reading:95.97%five-hour/91.85%weekly
+remaining; not an isolated measure of this task's consumption.
 
-[Results, evidence and next work](work-sessions/2026-09-09-registered-live-training.md).
+Next: qualify escape/recovery after capture-ball exhaustion from the preserved
+failure state, retain costs, restore affordable supplies, then resume model5.
+Do not reset to the earlier successful checkpoint or silently admit this failure.
+No Blue, Crystal, full-game replay, learned combat or generalization claim.
+
+[Session, evidence and exact next work](work-sessions/2026-09-09-capture-helper-recovery.md).
 
 ## Historical checkpoints below — superseded where inconsistent
 

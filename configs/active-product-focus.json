@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Registered model2 selected and played a real capture-preparation goal; its failure was fitted as example3. No learned combat or independent advantage is claimed.",
-        "blocker": "The withdrawn capture helper failed its actual readiness check. The terminal and all43 specimens are retained; recovery must be qualified before another played attempt.",
-        "decision": "Integration milestone complete. Focus on helper readiness and another measured lesson, not architecture expansion.",
+        "authority_delta": "Models3 and4 made real native choices; model5 selected one of two destinations and played. No authority promotion.",
+        "blocker": "Capture balls exhausted in a wild battle. Raw failure state is preserved but is not an admitted continuation or training example.",
+        "decision": "Keep the integration milestone closed; repair bounded resource-exhaustion exit, not model architecture.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-live-learning-2026-09-09.json",
-          "sha256": "af82c9cf6bff74cf1bbf85f7fe3ca40f7172944b64397016480150b9e66af057"
+          "path": "docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json",
+          "sha256": "167bbc30cca4cf9291fffb6dc467cb596a2c1ec6f2e1bb6b870fd16817f2f73c"
         },
-        "learning_output": "Three real registered-objective outcomes and two fits;38 to39 registrations,42 to43 specimens; model2 played. Model3 awaits the next safe continuation.",
-        "next_falsifier": "Restored capture helper satisfies actual HP, PP and move requirements without specimen/resource loss; then model3 makes a real choice.",
-        "next_session_goal": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.",
+        "learning_output": "Two new settled outcomes fitted3 to5; search failure and successful restoration. No new registration. Third attempt excluded.",
+        "next_falsifier": "A no-balls wild battle reaches a verified field boundary with all actions recorded and no reset or specimen loss.",
+        "next_session_goal": "Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-09-registered-live-training",
+        "session_id": "2026-09-09-capture-helper-recovery",
         "status": "active",
-        "stop_condition": "No automatic replay after the helper-readiness failure. Preserve all outcomes, ledger and stock; stop on unsafe state or objective mixing.",
-        "transfer_result": "Synthetic shared-credit/local-stock separation passed; no Blue or cross-game live result."
+        "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
+        "transfer_result": "Synthetic readiness/status variants passed; no Blue or cross-game execution."
       },
       "learned_authority": {
-        "current": "Registered-objective training is live: three real outcomes, two fits, one new Pidgeotto registration. Model2 reloaded and selected capture from two native goals; preparation failed and became outcome3. Final model3 has not played. Historical114 rewards remain separate; no learned combat or independent advantage.",
+        "current": "Five registered-objective outcomes, four cumulative fits. Models3 and4 chose capture and restoration; model5 chose Route15 and stopped mid-battle without a fit. Last verified39 registrations/43specimens. Historical114 remains separate; no learned combat or independent advantage.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.",
+      "next_decision": "Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 3,
+        "registered_train_examples": 5,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

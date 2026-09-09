@@ -13,7 +13,26 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
-### Latest implementation loop — September9 collection preparation
+### Latest implementation loop — September9 capture readiness
+
+One194.97-second Flash3.8 High isolated draft supplied18 new regression cases
+and readiness diagnostics. Codex corrected nullable typing and broad exception
+swallowing; boxed HP-ratio filtering and unverified nurse coordinates were not
+accepted. Codex alone integrated restoration and ran the live batch. The original
+Flash draft remains in local commit95dffb83, not published separately.
+This was useful bounded legwork, not evidence of a measured overall speedup.
+
+Post-draft Gemini reading:95.97%five-hour and91.85%weekly remaining,
+with displayed resets about4h54m/48h25m. These are shared account windows;
+cached initial values prevent an isolated usage-savings claim. Claude was not
+used and its quota was not queried. No external agent remains running.
+
+Next Flash assignment, if dispatched: ROM-free resource-exhaustion/escape
+regression tests in isolation. Codex owns actual failure inspection, controller
+recovery, training admission and publication. Do not launch another broad audit.
+[Integration and live results](work-sessions/2026-09-09-capture-helper-recovery.md).
+
+### Earlier implementation loop — September9 collection preparation
 
 Flash3.8 High completed the isolated four-file draft plus one correction pass;
 Claude Opus4.8 High reviewed the frozen first draft read-only. Codex found

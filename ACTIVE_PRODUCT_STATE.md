@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.
+- Next decision: Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Registered-objective training is live: three real outcomes, two fits, one new Pidgeotto registration. Model2 reloaded and selected capture from two native goals; preparation failed and became outcome3. Final model3 has not played. Historical114 rewards remain separate; no learned combat or independent advantage. |
+| Authority now | Five registered-objective outcomes, four cumulative fits. Models3 and4 chose capture and restoration; model5 chose Route15 and stopped mid-battle without a fit. Last verified39 registrations/43specimens. Historical114 remains separate; no learned combat or independent advantage. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 3 | 12 |
+| Registered Train Example · train | 5 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-registered-live-training** · status **active** · evidence [registered train example](docs/evidence/red-registered-live-learning-2026-09-09.json)
+**2026-09-09-capture-helper-recovery** · status **active** · evidence [registered train example](docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Three real registered-objective outcomes and two fits;38 to39 registrations,42 to43 specimens; model2 played. Model3 awaits the next safe continuation. |
-| Authority delta | Registered model2 selected and played a real capture-preparation goal; its failure was fitted as example3. No learned combat or independent advantage is claimed. |
-| Transfer result | Synthetic shared-credit/local-stock separation passed; no Blue or cross-game live result. |
-| Blocker | The withdrawn capture helper failed its actual readiness check. The terminal and all43 specimens are retained; recovery must be qualified before another played attempt. |
-| Decision | Integration milestone complete. Focus on helper readiness and another measured lesson, not architecture expansion. |
-| Next session | Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson. |
-| Next falsifier | Restored capture helper satisfies actual HP, PP and move requirements without specimen/resource loss; then model3 makes a real choice. |
-| Stop condition | No automatic replay after the helper-readiness failure. Preserve all outcomes, ledger and stock; stop on unsafe state or objective mixing. |
+| Learning output | Two new settled outcomes fitted3 to5; search failure and successful restoration. No new registration. Third attempt excluded. |
+| Authority delta | Models3 and4 made real native choices; model5 selected one of two destinations and played. No authority promotion. |
+| Transfer result | Synthetic readiness/status variants passed; no Blue or cross-game execution. |
+| Blocker | Capture balls exhausted in a wild battle. Raw failure state is preserved but is not an admitted continuation or training example. |
+| Decision | Keep the integration milestone closed; repair bounded resource-exhaustion exit, not model architecture. |
+| Next session | Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts. |
+| Next falsifier | A no-balls wild battle reaches a verified field boundary with all actions recorded and no reset or specimen loss. |
+| Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
 

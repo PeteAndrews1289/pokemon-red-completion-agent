@@ -23,6 +23,29 @@ def test_actual_registered_fit_has_separate_dashboard_identity():
     assert component.model_sha256 == receipt["fit"]["model"]["model_sha256"]
 
 
+def test_recovery_session_reports_last_fit_without_crediting_unsettled_attempt():
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json")
+        .read_text()
+    )
+    training, component = _training_projection(receipt)
+    assert (training.samples_before, training.samples_after) == (4, 5)
+    assert training.successful_examples == 2
+    assert component.validation_examples == 0
+    session = receipt["session"]
+    assert (session["attempted_steps"], session["completed_steps"]) == (3, 2)
+    assert session["fits"] == 2
+    failure = session["failure"]
+    assert failure["training_target"] is False
+    assert failure["safe_checkpoint"] is False
+    assert failure["admitted_continuation"] is False
+    assert failure["episode_id"] != receipt["completed_episode"]["episode_id"]
+    assert all(failure["episode_id"] != row["episode_id"] for row in session["steps"])
+    assert sum(row["actions"] for row in session["steps"]) == 1559
+    assert session["total_recorded_actions"] == 1559 + failure["actions"]
+    assert session["helper_restore_callback_demonstrated"] is False
+
+
 @pytest.mark.parametrize(
     "mutation", [None, "count", "schema", "objective", "rewards", "weights", "bytes"]
 )

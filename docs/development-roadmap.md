@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-live-training**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-capture-helper-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 - [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 
-Current model: **3 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **5 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-capture-helper-recovery
+
+Registered3 to5 with two fits. Search failed; restoration succeeded. Model5 selectedRoute15 but exhausted balls mid-battle; unfit failure state preserved. Last verified39registrations/43specimens.
+
+**Deviation:** Four-step batch stopped after third attempt; fourth unclaimed. No stage-exit change. Helper restoration callback remains test-qualified, not demonstrated by healthy-helper retrieval.
+
+**Next:** Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts.
 
 ### 2026-09-09-registered-live-training
 

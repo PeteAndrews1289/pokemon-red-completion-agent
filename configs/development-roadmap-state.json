@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-registered-live-training",
+  "as_of_session": "2026-09-09-capture-helper-recovery",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -618,6 +618,12 @@
       "result": "Registered integration3/3: real ledger, three outcomes/two fits, model2 played;39 registrations/43 specimens retained. Model3 not yet played.",
       "deviation": "Expanded preferred species locations to real cartridge land tables; direct missing evolved forms remain alternatives. Stopped on capture-helper readiness failure. No stage exits changed.",
       "next": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson."
+    },
+    {
+      "session": "2026-09-09-capture-helper-recovery",
+      "result": "Registered3 to5 with two fits. Search failed; restoration succeeded. Model5 selectedRoute15 but exhausted balls mid-battle; unfit failure state preserved. Last verified39registrations/43specimens.",
+      "deviation": "Four-step batch stopped after third attempt; fourth unclaimed. No stage-exit change. Helper restoration callback remains test-qualified, not demonstrated by healthy-helper retrieval.",
+      "next": "Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts."
     }
   ],
   "closed_milestones": [

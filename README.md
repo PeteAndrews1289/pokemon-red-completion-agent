@@ -1,20 +1,31 @@
-# Current — registered-Pokédex training is connected
+# Current — registered training continued; battle-exit recovery next
 
-The live collector now persists verified registrations and trains a separate
-registered-objective goal scorer. A 16-minute bounded batch produced three real
-outcomes and two fits, capturing Pidgeotto and increasing registrations from 38
-to 39. All 43 specimens remain accounted for. The first fitted model reloaded,
-selected a capture goal and played; a helper-readiness failure stopped that
-attempt and became the third training outcome. The final model is saved.
+Two more actual outcomes were fitted: a failed capture search and successful
+team restoration. The registered-objective model now contains **five examples**,
+separate from the historical114. Model5 reloaded, chose Route15 from two sources
+and played, but exhausted capture balls while still in a wild battle. Its raw
+failure state is preserved; it is not a safe continuation or fitted example.
+The four-step batch stopped after attempt3, leaving attempt4 unclaimed.
 
-Historical 114-example rewards were not reused. Learned authority is choosing
-goals and destinations; mechanic execution remains deterministic. This is not
-learned combat, independent generalization, or a completed Pokédex. Next: qualify
-capture-helper recovery from the retained terminal, then another measured lesson.
-212 focused closeout tests passed; documentation and public-artifact checks passed.
+Last verified ledger:39 registrations and43 specimens, unchanged this batch.
+The roughly13-minute batch recorded2,463 actions/141,484 frames including the
+unsettled attempt. These are correlated training outcomes, not independent
+competence. Learned authority remains goals/destinations; execution is deterministic.
+The completed three-item integration milestone is not completion of Red collection.
 
-[Session, evidence and next work](docs/work-sessions/2026-09-09-registered-live-training.md)
-· [Visual roadmap](docs/development-roadmap.md)
+Flash3.8 High supplied isolated readiness tests/diagnostics. Codex corrected and
+integrated the draft, added verified optional helper restoration, and passed218
+focused tests before play. Actual retrieval used a different healthy helper;
+the new restoration callback is test-qualified, not demonstrated by that event.
+Claude was not used. Last Gemini account reading:95.97%five-hour/91.85%weekly
+remaining; not an isolated measure of this task's consumption.
+
+Next: qualify escape/recovery after capture-ball exhaustion from the preserved
+failure state, retain costs, restore affordable supplies, then resume model5.
+Do not reset to the earlier successful checkpoint or silently admit this failure.
+No Blue, Crystal, full-game replay, learned combat or generalization claim.
+
+[Session, evidence and exact next work](docs/work-sessions/2026-09-09-capture-helper-recovery.md).
 
 ## Historical runtime binding
 
