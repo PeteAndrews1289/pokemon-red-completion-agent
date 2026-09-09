@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-survival**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-critical-exposure**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-lance-survival-2026-09-09.json)
+[Current evidence](../docs/evidence/red-critical-exposure-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-critical-exposure
+
+No new admitted row or fit. Four opponents defeated, exact final Dragonite retained, one Full Restore legitimately spent. Model79 unchanged. Risk actor qualified read-only;314 related tests pass.
+
+**Deviation:** Explicit support risk mode, not weakened default safety or a changed baseline. No learned progress; risk probability not estimated.
+
+**Next:** One atmost2-intent critical-exposure continuation from exact Dragonite3ff8391e. Then reorient on actual model story choices and Champion integration; no lower stage exit.
 
 ### 2026-09-09-lance-survival
 

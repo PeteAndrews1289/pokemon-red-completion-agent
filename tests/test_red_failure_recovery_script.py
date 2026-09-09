@@ -16,6 +16,54 @@ from pokemon_red_completion.red_goal_context_profile import (
 
 
 @pytest.mark.parametrize('extra', [
+    {'maximum_critical_exposures': True},
+    {'maximum_critical_exposures': 3},
+    {'maximum_critical_exposures': 1},
+    {'maximum_critical_exposures': 1, 'finish_trainer_funding': True,
+     'maximum_full_restores': 1},
+    {'maximum_critical_exposures': 1, 'finish_trainer_funding': True,
+     'zero_item_survival': True},
+    {'maximum_critical_exposures': 1, 'finish_trainer_funding': True,
+     'finish_scripted_trainer': 'lance'},
+])
+def test_risk_authority_is_explicit_and_cannot_be_combined_with_item_authority(extra):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+    with pytest.raises(ValueError, match='critical exposure'):
+        module['run'](SimpleNamespace(**extra))
+
+
+def test_risk_intents_remain_consumed_across_failed_recovery_ancestry(monkeypatch):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+
+    def episode(key):
+        parent = {'child': 'bridge', 'bridge': 'origin'}.get(key)
+        metadata = ({'schema': 'pokemon.red.forced-recovery-header.v1',
+                     'recovery': {'failure_episode_id': parent}} if parent else {})
+        rows = ([{'kind': 'attack'}] if key == 'bridge' else
+                [{'kind': 'risk_attack', 'move_executed': False, 'pp_spent': 0},
+                 {'kind': 'attack'}, {'kind': 'heal'}])
+        return SimpleNamespace(read_header=lambda: {'metadata': metadata},
+                               stream_names=('trainer_recovery_decisions',),
+                               iter_stream=lambda _: iter(rows))
+
+    store = SimpleNamespace(open_failed_episode=episode)
+    observe = module['observed_failed_trainer_risk_claims']
+    assert observe(store, 'origin') == observe(store, 'bridge') == 1
+    assert observe(store, 'child') == 2
+    with pytest.raises(ValueError, match='ancestry'):
+        observe(store, 'child', depth=8)
+    monkeypatch.setitem(module['run'].__globals__, 'prepare',
+                        lambda _: (SimpleNamespace(private_root=store), {}))
+    with pytest.raises(ValueError, match='refresh already claimed critical'):
+        module['run'](SimpleNamespace(finish_trainer_funding=True,
+                                      maximum_critical_exposures=1, failed_episode='child'))
+
+
+@pytest.mark.parametrize('extra', [
     {'zero_item_survival': 1},
     {'zero_item_survival': True},
     {'zero_item_survival': True, 'finish_trainer_funding': True,

@@ -63,6 +63,7 @@ from pokemon_red_completion.red_team_training import (
 from pokemon_red_completion.red_trainer_control import RedTrainerPartyController
 from pokemon_red_completion.red_trainer_funding_battle import run_prepared_trainer_funding
 from pokemon_red_completion.red_trainer_healing import trainer_bag_within_budget
+from pokemon_red_completion.red_trainer_risk import RedTrainerRiskController
 from pokemon_red_completion.red_trainer_survival import RedTrainerSurvivalController
 
 
@@ -173,17 +174,42 @@ def remaining_trainer_heal_budget(store, episode_id, requested):
     return claimed
 
 
+def observed_failed_trainer_risk_claims(store, episode_id, depth=0):
+    """Count durable critical-exposure intents, including interrupted/no-PP turns."""
+    if depth >= 8:
+        raise ValueError("trainer risk ancestry exceeds its bound")
+    episode = store.open_failed_episode(episode_id)
+    metadata = episode.read_header()["metadata"]
+    count = 0
+    if metadata.get("schema") == "pokemon.red.forced-recovery-header.v1":
+        count = observed_failed_trainer_risk_claims(
+            store, metadata["recovery"]["failure_episode_id"], depth + 1,
+        )
+    if "trainer_recovery_decisions" in episode.stream_names:
+        count += sum(
+            row.get("kind") == "risk_attack"
+            for row in episode.iter_stream("trainer_recovery_decisions")
+        )
+    return count
+
+
 def run(args):
     healing_budget = getattr(args, "maximum_full_restores", 0)
     prior_switches = tuple(getattr(args, "prior_switches", ()))
     scripted_trainer = getattr(args, "finish_scripted_trainer", None)
     zero_item_survival = getattr(args, "zero_item_survival", False)
+    risk_budget = getattr(args, "maximum_critical_exposures", 0)
+    if type(risk_budget) is not int or not 0 <= risk_budget <= 2 or (
+        risk_budget and (not getattr(args, "finish_trainer_funding", False)
+                         or healing_budget or zero_item_survival or scripted_trainer)
+    ):
+        raise ValueError("critical exposure requires its explicit active zero-item mode")
     if type(zero_item_survival) is not bool or (
         zero_item_survival and (not getattr(args, "finish_trainer_funding", False)
                                or healing_budget or scripted_trainer)
     ):
         raise ValueError("zero-item survival requires its explicit active-trainer mode")
-    survival_control = bool(healing_budget) or zero_item_survival
+    survival_control = bool(healing_budget) or zero_item_survival or bool(risk_budget)
     if scripted_trainer not in {None, "lance"} or (
         scripted_trainer
         and (getattr(args, "finish_trainer_funding", False) or healing_budget or prior_switches)
@@ -197,6 +223,12 @@ def run(args):
     ):
         raise ValueError("healing budget requires the explicit active-trainer recovery mode")
     ready, failed = prepare(args)
+    prior_risk_claims = (
+        observed_failed_trainer_risk_claims(ready.private_root, args.failed_episode)
+        if risk_budget else 0
+    )
+    if prior_risk_claims + risk_budget > 2:
+        raise ValueError("recovery would refresh already claimed critical exposures")
     prior_heal_claims = (
         remaining_trainer_heal_budget(
             ready.private_root,
@@ -215,6 +247,18 @@ def run(args):
         != prior_switches
     ):
         raise ValueError("declared prior switches differ from the retained failed execution")
+
+    def survival_actor(reader, emulator, decision_sink=None):
+        if risk_budget:
+            return RedTrainerRiskController(
+                reader, emulator, prior_switches, 0, decision_sink=decision_sink,
+                maximum_critical_exposures=risk_budget,
+                previous_critical_exposures=prior_risk_claims,
+            )
+        return RedTrainerSurvivalController(
+            reader, emulator, prior_switches, healing_budget, decision_sink=decision_sink,
+        )
+
     payload = base64.urlsafe_b64decode(failed["state_base64"])
     world = base._route_world(ready)
     if world is None:
@@ -255,12 +299,7 @@ def run(args):
             ):
                 raise ValueError("trainer recovery must begin at the MAIN battle menu")
             if survival_control:
-                controller = RedTrainerSurvivalController(
-                    reader,
-                    base.ReadOnlyController(emulator),
-                    prior_switches,
-                    healing_budget,
-                )
+                controller = survival_actor(reader, base.ReadOnlyController(emulator))
                 first_survival_decision = controller.decide(before.raw)
         if before.party.fainted_count or not (
             (trainer_recovery and before.raw.battle_state == 2)
@@ -302,6 +341,8 @@ def run(args):
             "finish_scripted_trainer": scripted_trainer,
             "maximum_full_restores": healing_budget,
             "zero_item_survival": zero_item_survival,
+            "maximum_critical_exposures": risk_budget,
+            "prior_critical_exposure_claims": prior_risk_claims,
             "prior_full_restore_claims": prior_heal_claims,
             "prior_switches": list(prior_switches),
             "first_survival_action": (
@@ -437,11 +478,9 @@ def run(args):
                         ),
                         maximum_full_restores=healing_budget,
                         battle_runner_override=(
-                            RedTrainerSurvivalController(
+                            survival_actor(
                                 reader,
                                 frames,
-                                prior_switches,
-                                healing_budget,
                                 decision_sink=lambda report: writer.append(
                                     "trainer_recovery_decisions",
                                     report,
@@ -630,5 +669,6 @@ if __name__ == "__main__":
     parser.add_argument("--finish-scripted-trainer", choices=("lance",))
     parser.add_argument("--maximum-full-restores", type=int, default=0)
     parser.add_argument("--zero-item-survival", action="store_true")
+    parser.add_argument("--maximum-critical-exposures", type=int, default=0)
     parser.add_argument("--prior-switches", type=int, nargs="*", default=[])
     run(parser.parse_args())

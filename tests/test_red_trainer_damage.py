@@ -87,6 +87,19 @@ def test_separate_physical_special_and_unmodified_critical_stats():
     assert incoming_damage_bounds(observation((8, 0, 0, 0))) == (111, 106)
 
 
+def test_noncritical_projection_is_explicit_and_keeps_boosted_ordinary_maximum():
+    plain = observation((63, 0, 0, 0))
+    assert incoming_damage_bounds(plain) == (128, 65)
+    assert incoming_damage_bounds(plain, include_critical=False) == (68, 35)
+    boosted = replace(plain, enemy_attack=400)
+    assert incoming_damage_bounds(boosted) == incoming_damage_bounds(
+        boosted, include_critical=False,
+    )
+    assert incoming_damage_bounds(boosted)[0] > 128
+    with pytest.raises(TrainerDamageError, match='explicit boolean'):
+        incoming_damage_bounds(plain, include_critical=1)
+
+
 def test_all_five_multi_hits_count_and_existing_burn_adds_residual():
     assert incoming_damage_bounds(observation((3, 0, 0, 0))) == (70, 40)
     base = observation((3, 0, 0, 0))

@@ -44,6 +44,10 @@ class _RecoveryRequest(Exception):
         super().__init__(decision.kind)
 
 
+class NoTrainerSurvivalAction(BattleRuntimeError):
+    """Supported mechanics, but no action meets the strict survival contract."""
+
+
 @dataclass(slots=True)
 class RedTrainerSurvivalController:
     reader: PokemonRedStateReader
@@ -111,7 +115,7 @@ class RedTrainerSurvivalController:
                 slot = candidate.party_slot - 1
                 if slot != active and raw.party_hp[slot] > bounds[slot]:
                     return TrainerSurvivalDecision("switch", slot, bounds[slot])
-        raise BattleRuntimeError(
+        raise NoTrainerSurvivalAction(
             "no supported survival action within the remaining recovery budget"
         )
 
@@ -149,7 +153,7 @@ class RedTrainerSurvivalController:
 
         def choose(raw: RawGameState) -> int:
             decision = self.decide(raw)
-            if decision.kind != "attack":
+            if decision.kind not in {"attack", "risk_attack"}:
                 raise _RecoveryRequest(decision)
             if raw.battler_moves is None or raw.battler_pp is None:
                 raise BattleRuntimeError("trainer survival moves unavailable")
@@ -169,7 +173,7 @@ class RedTrainerSurvivalController:
                 raise BattleRuntimeError("recovery move policy selected an unsupported attack")
             self._record(
                 {
-                    "kind": "attack",
+                    "kind": decision.kind,
                     "party_index": decision.party_index,
                     "incoming_bound": decision.incoming_bound,
                     "hp_before": raw.battler_hp,

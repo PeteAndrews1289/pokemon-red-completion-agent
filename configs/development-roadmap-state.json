@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-lance-survival",
+  "as_of_session": "2026-09-09-critical-exposure",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-lance-survival-2026-09-09.json"
+      "evidence": "docs/evidence/red-critical-exposure-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -438,6 +438,12 @@
       "result": "No new admitted row or fit. Gyarados defeated during deterministic support; model79 unchanged. Retained first Dragonair qualified with zero inputs;136 focused tests pass.",
       "deviation": "Maintenance only; Phase4 exit and2/3 submilestone remain unchanged. Guided support cannot replace learned story authority.",
       "next": "One support continuation from exact retained first Dragonair aa40123d; no Gyarados replay or item spend. Then return to a genuine story/resource choice and reorient before the two-hour slice ends."
+    },
+    {
+      "session": "2026-09-09-critical-exposure",
+      "result": "No new admitted row or fit. Four opponents defeated, exact final Dragonite retained, one Full Restore legitimately spent. Model79 unchanged. Risk actor qualified read-only;314 related tests pass.",
+      "deviation": "Explicit support risk mode, not weakened default safety or a changed baseline. No learned progress; risk probability not estimated.",
+      "next": "One atmost2-intent critical-exposure continuation from exact Dragonite3ff8391e. Then reorient on actual model story choices and Champion integration; no lower stage exit."
     }
   ],
   "closed_milestones": [

@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## September9 — bounded critical exposure, unchanged learning exit
+
+The retained Lance battle reached its final Dragonite, with all six alive but no
+remaining Full Restore. Strict worst-critical survival blocks every action.
+Living-Pokédex ownership is not equivalent to never fainting. A separately declared
+support mode may accept atmost two critical-exposure attack intents when ordinary
+damage is survivable. Default strict behavior stays unchanged; first faint stops
+further input, no automatic Revive, risky switch, item refund or replay.
+
+This is a disclosed deterministic authority expansion under the user's ongoing
+development authorization, not a model promotion or altered phase criterion.
+The previous red-first-v1 baseline is retained unchanged. Future work must still
+show actual useful model choices and completion evidence. See the
+[risk reorientation audit](audits/red-critical-exposure-2026-09-09.md).
+
 ## September9 — learn guided consequences without inventing choices
 
 Prospectively declared V5 curriculum outcomes now enter regression separately from

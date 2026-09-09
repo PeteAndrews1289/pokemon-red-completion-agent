@@ -1,5 +1,22 @@
 # Handoff
 
+## Current — final Dragonite; explicit risk reorientation
+
+Four Lance opponents are defeated. The retained final Dragonite state3ff8391e
+has all six party members alive; Blastoise164/217, final Full Restore spent.
+Its ordinary incoming upper is104, critical-inclusive182. Strict support cannot
+proceed. A separate atmost2-intent critical-exposure mode is qualified; it keeps
+default guards, allows no items/risky switches, and stops on the first faint.
+314 related tests pass. This accepts risk explicitly, not a guaranteed safe turn.
+
+Model79 and all79 rows remain unchanged. These were deterministic support costs,
+not learned story choices. Next one prospective retained continuation, then
+reorient on meaningful model choices and the Champion/HoF adapter. Phase4 remains
+open; guided wins do not satisfy its exit. No replay or new full run is authorized.
+See the critical-exposure audit for exact evidence, authority and reviewer findings.
+Older sections below are historical where they conflict with this update.
+
+
 ## Current — Gyarados defeated; first Dragonair retained
 
 The Lance introduction repair worked. The support continuation stopped at the first

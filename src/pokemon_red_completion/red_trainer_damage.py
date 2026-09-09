@@ -52,7 +52,9 @@ def ordinary_damage_upper(
     return ceil(neutral * (1.5 if stab else 1.0) * effectiveness)
 
 
-def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, ...]:
+def incoming_damage_bounds(
+    observation: TrainerDamageObservation, *, include_critical: bool = True,
+) -> tuple[int, ...]:
     """Worst supported incoming turn per member, including all multi-hit strikes.
 
     All multi-hit moves conservatively receive five critical hits. Damage-side
@@ -65,6 +67,8 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
     already confused or the opponent can induce confusion. Reserves do not
     self-hit on the switch turn; their real live stats are reread before attacking.
     """
+    if type(include_critical) is not bool:
+        raise TrainerDamageError("incoming critical policy must be explicit boolean")
     raw = observation.raw
     if (
         raw.battle_state != 2
@@ -134,7 +138,7 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
                     stab=attack_type in observation.enemy_types,
                     effectiveness=factor,
                 )
-                for critical in (False, True)
+                for critical in ((False, True) if include_critical else (False,))
             )
             worst *= 5 if "multi_hit" in move.effect_flags else 1
             if "status" in move.effect_flags or raw.party_status[index] & 0x18:
