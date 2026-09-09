@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-native-choice-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-postfit-readiness**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify current-state story entry and readiness
 - [ ] Play and fit a genuine bounded story choice
 
-Current model: **77 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **78 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-postfit-readiness
+
+Model77 to78: Jolteon61 to172 HP; one Full Restore,22 actions /2184 frames.78 outcomes,36 successful,68 distinct. All30 specimens retained.
+
+**Deviation:** No stage exits changed; income-to-story remains1/3. Story/access training gap identified. Two necessary heals are not a story victory or proof of reward gaming.
+
+**Next:** From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels.
 
 ### 2026-09-08-native-choice-learning
 

@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator.
+- Next decision: From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Optional preparation is now a real native choice: one owned Full Restore healed Dugtrio12to118HP. Current observed room terrain opens a computed14-step approach to Bruno; that story execution remains untested. |
-| Authority now | Model77:77 fitted outcomes,35successful,67distinct rows. One V4 exploratory readiness decision with two supported alternatives; no forced singleton or teacher fallback.30specimens/28living/33registered,6163currency,two Full Restores. No model-led boss victory or promotion. |
+| Reusable capability | Model77 chose preparation versus story: Jolteon healed 61 to 172 HP for one Full Restore. All party now exceed half health. Story execution remains untested. |
+| Authority now | Model78: 78 fitted outcomes, 36 successful, 68 distinct rows. One new V4 choice, two supported alternatives, no forced singleton or teacher fallback. 30 specimens /28 living /33 registered; 6163 currency; one Full Restore. No model-led boss victory or promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Does the next retained-state choice use improved readiness to progress, without repeated optional-healing consumption or a fictitious story success? |
+| Cheapest falsifier | Can one bounded story continuation yield a real outcome while preserving the last restorative from minor top-offs, without calling forced support a learned choice? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-native-choice-learning** · status **active** · evidence [model fit](docs/evidence/red-native-choice-learning-2026-09-08.json)
+**2026-09-09-postfit-readiness** · status **active** · evidence [model fit](docs/evidence/red-postfit-readiness-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Learner chooses legitimate preparation versus story advancement; the outcome and consumed item enter training. Live-map observation replaces stale cartridge geometry. |
-| Learning output | One successful native restoration at58actions/4776frames;1FullRestore spent;77settled/35successful/67distinct. Prior76 rows retained.339 focused tests. |
-| Authority delta | One model-policy restoration choice and one admitted outcome fitted. Model76to77; no production promotion or independent advantage. |
-| Transfer result | Varied ROM-free live-door, object/predicate, resource and safety cases pass. Same-lineage Red only. No independent generalization or model advantage. |
-| Blocker | Bruno approach and battle have not been executed. The model strongly favors healing;77 has no post-fit gameplay. |
-| Decision | Close the integration session with its actual fitted outcome. Next test the post-fit continuation, preserving item costs and the untested-story caveat. |
-| Next session | From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator. |
-| Next falsifier | Does the next retained-state choice use improved readiness to progress, without repeated optional-healing consumption or a fictitious story success? |
-| Stop condition | Stop after the next bounded outcome and retain any failure. Do not replay Lorelei, invent Bruno victory, refresh item budgets, or count a forced singleton as learning. |
+| Product alignment | One real model-selected preparation outcome entered training with its cost; coverage inspection redirects effort toward story experience. |
+| Learning output | 22 actions /2184 frames; Jolteon 61 to172 HP; one Full Restore spent. 78 outcomes,36 successful,68 distinct. Prior77 retained;146 focused tests. |
+| Authority delta | One model77 post-fit choice and one admitted fitted outcome. Model78 has not played; no promotion. |
+| Transfer result | Same-lineage Red only. No independent generalization or advantage. Updated in-sample error is slightly higher than the prior on the expanded corpus. |
+| Blocker | Bruno unattempted. Model77 corpus had four successful restoration rows but only one failed story/access row. All party now above half health; one Full Restore remains. |
+| Decision | Stop after this completed choice. Prioritize story coverage and a prospective last-item reserve. Two needed heals do not prove reward gaming. |
+| Next session | From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels. |
+| Next falsifier | Can one bounded story continuation yield a real outcome while preserving the last restorative from minor top-offs, without calling forced support a learned choice? |
+| Stop condition | Stop after one bounded story outcome or a named pre-input blocker. Preserve failures and consumed choices. Forced support stays excluded from current choice fitting. No replay, inventory reset or fabricated labels. |
 
 ### Stop conditions
 

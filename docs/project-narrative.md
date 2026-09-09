@@ -1,6 +1,27 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — the learner chose preparation and learned its real cost
+## Current — a second useful heal exposes a story-data gap
+
+The trained goal manager played again and chose to heal Jolteon, from61 to172 HP.
+It spent a real Full Restore, kept all30 specimens, and produced one observed
+training outcome. The latest artifact now contains78 outcomes,36 successful.
+This was22 actions and2,184 frames, not a new walkthrough or a boss victory.
+
+The important finding is what the dataset lacks. Before this choice it held
+four successful restoration outcomes but only one failed story/access outcome.
+A model can therefore prefer a familiar useful action while knowing very little
+about advancing the story. Both recent heals were needed; we cannot honestly call
+them a proven healing loop. But every party member is now above half health,
+and only one Full Restore remains.
+
+The next step is bounded story experience and a prospective last-item reserve,
+not more minor top-offs. Forced curriculum support must stay visibly separate
+from genuine learned choice. Model78 has not played yet; the new in-sample fit
+does not demonstrate improvement. Bruno and cross-game transfer remain unfinished.
+Checkpoint2d1e3033 preserves the current state. The roadmap still shows1/3 on the
+income-to-story checklist; the final product remains a transferable living-Dex player.
+
+## Historical — the learner chose preparation and learned its real cost
 
 The next useful advance was not another scripted boss win. The model had two
 supported choices: advance toward Bruno, or spend an owned item on an injured
