@@ -208,7 +208,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             original.with_name(f"{original.stem}-{ordinal:02d}-source.json"),
             outcome,
         )
-        common = dict(
+        common: dict[str, Any] = dict(
             prior=ready.causal_record,
             resolve=resolve,
             source_commit=ready.source_commit,
@@ -288,10 +288,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 selected,
                 f"discovery:{selected}",
             ]
-    summary = {
+    summary: dict[str, object] = {
         "schema": "pokemon.red.regional-learning-cycle.v1",
         **(
-            {"objective": initial.training_plan.document["objective"]}
+            {"objective": "pokemon.registered-collection.v1"}
             if registered_objective
             else {}
         ),

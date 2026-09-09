@@ -1156,9 +1156,15 @@ def _registered_runtime(
             if record is None:
                 raise ValueError("registered restore binding is missing")
             policy = load_registration_policy(record.read())
-            if policy.sha256 != readiness.continuation.collection.get("binding_sha256"):
+            if (readiness.continuation is None
+                    or policy.sha256 != readiness.continuation.collection.get("binding_sha256")):
                 raise ValueError("registered restore checkpoint binding differs")
-    return replace(runtime, registration_policy=policy) if policy is not None else runtime
+    if policy is None:
+        return runtime
+    # Routes and skills also take fresh observations directly from the adapter.
+    # They must hash the same objective projection as their initial menu.
+    return replace(runtime, registration_policy=policy,
+                   adapter=replace(runtime.adapter, registration_policy=policy))
 
 
 def _training_observation(runtime: RedGoalContextRuntime) -> Any:
@@ -1731,7 +1737,10 @@ def _continue_readiness(
             readiness,
             capture=checkpoint.capture,
             continuation=checkpoint,
-            restore_registration_record_id=metadata.get("registration_session_record_id"),
+            restore_registration_record_id=cast(
+                str | None,
+                cast(Mapping[str, object], metadata).get("registration_session_record_id"),
+            ),
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
             restore_trainer_funding=_checkpoint_trainer_funding(header),
@@ -2719,6 +2728,7 @@ def _run_arm(
                 from pokemon_red_completion.red_registration_session import registration_row
                 from pokemon_red_completion.registration_memory import RegistrationMemory
 
+                assert readiness.registration_ledger is not None
                 RegistrationMemory(readiness.registration_ledger).record(
                     registration_row(terminal_checkpoint["registration_observation"]),
                 )

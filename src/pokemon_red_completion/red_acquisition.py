@@ -293,7 +293,12 @@ class RedAcquisitionCatalog:
                  if capture_species is None else capture_species),
                 protected_counts=dict(self.protected_counts),
             )
-            return {species: counts[species] + quantity for species, quantity in useful.items()}
+            # Potential future evolution is not an already registered species.
+            # A direct wild capture of a missing entry remains a legal alternative
+            # to developing existing stock; leave its cost tradeoff to the actor.
+            credited = self.registered_species | observation.owned_species
+            return {species: counts[species] + max(quantity, int(species not in credited))
+                    for species, quantity in useful.items()}
         useful = useful_capture_counts(
             frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
             tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),

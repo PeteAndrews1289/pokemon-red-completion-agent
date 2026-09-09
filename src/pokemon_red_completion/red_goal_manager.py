@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
+    from .red_registration_policy import RedRegistrationPolicy
     from .registered_checkpoint import RegisteredCollectionCheckpoint
 
 from pokemon_red_completion.collection import CollectionObservation
@@ -185,6 +186,7 @@ class PokemonRedGoalStateAdapter:
     config: RedGoalManagerConfig = RedGoalManagerConfig()
     acquisition_catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
     include_pp_restoration: bool = False
+    registration_policy: RedRegistrationPolicy | None = None
 
     def observe(self) -> RedGoalObservation:
         if type(self.include_pp_restoration) is not bool:
@@ -278,7 +280,7 @@ class PokemonRedGoalStateAdapter:
                 len(RED_SOLO_COLLECTION_CONTRACT.target_species),
             ),
         )
-        return RedGoalObservation(
+        observation = RedGoalObservation(
             raw=raw,
             game_state=game_state,
             party=party,
@@ -292,6 +294,11 @@ class PokemonRedGoalStateAdapter:
             immediate_capture_slots=immediate_capture_slots,
             pp_restoration=observe_pp_resources(raw) if self.include_pp_restoration else None,
         )
+        if self.registration_policy is not None:
+            from .red_registered_observation import project_registered_observation
+
+            return project_registered_observation(observation, self.registration_policy)
+        return observation
 
 
 @dataclass(frozen=True, slots=True)

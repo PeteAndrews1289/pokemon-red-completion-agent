@@ -32,3 +32,11 @@ evidence tampering, stable read-only observations, and historical runner compati
 Targeted typing (four modules), lint, public-artifact, documentation and focus checks pass.
 No real new-objective training is claimed at this engineering checkpoint; the next action
 is a bounded live continuation from the retained native114 endpoint.
+
+The first authenticated zero-input inventory imported38 registrations and42 specimens,
+but exposed no eligible next goals. Read-only diagnosis found the registered demand
+projection could suppress directly catchable missing evolved forms merely because a
+precursor could eventually cover them. Direct missing entries now remain alternatives;
+redundant base captures are still suppressed. The live adapter also carries the same
+registered projection used to bind routes, preventing initial/fresh hash disagreement.
+These follow-up changes passed120 targeted tests before repeating zero-input inventory.

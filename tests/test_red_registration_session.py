@@ -42,6 +42,28 @@ def session(tmp_path):
     return before, row, document, ledger_path
 
 
+def test_runtime_adapter_and_planner_share_the_same_registered_observation(tmp_path):
+    import run_paired_red_bounded_player as runner
+    runtime, _, _, policy = observations(tmp_path)
+    bound = runner._registered_runtime(SimpleNamespace(registration_policy=policy), runtime)
+    fresh = bound.adapter.observe()
+    assert fresh.registered_checkpoint is not None
+    assert runner._training_observation(bound).public_dict() == fresh.public_dict()
+    assert runtime.adapter.observe().registered_checkpoint is None
+
+
+def test_direct_missing_evolved_capture_is_not_masked_by_future_evolution(tmp_path):
+    from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG
+    from pokemon_red_completion.red_collection import red_species_ref
+    _, before, _, policy = observations(tmp_path)
+    source, target = red_species_ref(77), red_species_ref(78)
+    catalog = replace(RED_ACQUISITION_CATALOG, remaining_demand=True,
+                      registered_species=policy.registered(before.collection_observation))
+    counts = catalog.alternative_capture_holdings(before.collection_observation, (source, target))
+    assert counts[source] == 1  # existing precursor is enough, no duplicate demand
+    assert counts[target] == 1  # immediate new registration remains a legal alternative
+
+
 def test_session_roundtrip_actual_party_reserves_and_idempotent_durable_import(tmp_path):
     before, row, document, ledger_path = session(tmp_path)
     policy = load_registration_policy(document)
