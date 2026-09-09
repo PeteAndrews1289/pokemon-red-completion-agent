@@ -2,6 +2,12 @@
 
 ## Current — Agatha lesson completed and model79 verified
 
+CI maintenance follow-up: two hosted runs failed the same stale battle-module
+golden expectation after the earlier PP-timeout diagnostic change. The source diff
+was reviewed and only the expected fingerprint corrected; integrity assertions and
+historical receipts remain intact. Model79, the saved Agatha endpoint and the next
+Lance choice gate are unchanged. See [the CI diagnosis](audits/ci-battle-fingerprint-2026-09-09.md).
+
 One prospective V5 lesson defeated Agatha in241 actions/22,693 frames. The
 cartridge-driven entrance adapter handled the six-step scripted arrival without
 loosening route-drift checks. The saved victory flag and5,940 payout were reopened

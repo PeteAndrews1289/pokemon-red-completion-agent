@@ -96,7 +96,7 @@ Legitimate trades and events, special puzzles and unsupported mechanics remain v
 
 ### 2026-09-09-agatha-curriculum
 
-Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays.
+Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays. Maintenance follow-up: stale battle-module golden expectation reproduced and corrected after source review;52 related tests passed. No new model or save change.
 
 **Deviation:** Separate unit-weight curriculum permits truthful outcome learning without fake menus or historical support backfill. Initial report objective label corrected for display from unchanged serialized model; no refit. Lance grammar differs and was refused without input.
 

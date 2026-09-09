@@ -751,8 +751,11 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
+    # Reviewed at8d9dcc06: battle_runtime now reads the final post-pulse state
+    # before reporting a PP-gate timeout. The contract binds the entire module,
+    # including that diagnostic repair; keep this independent golden exact.
     assert contract.battle_timing_sha256 == (
-        "534dcd3e4ce03ac6ccaf964df330a0990c958ca1d6357acbb0cd039a2a609fce"
+        "e5cb71942537e1bf5ce7d46276cf55cec061dd4edc21695716741d509883e87d"
     )
     assert contract.accounting_sha256 == (
         "a0199f37eb398f2212c05b7e0fed751244e40689ad37f802111a7674cc9ac62a"
