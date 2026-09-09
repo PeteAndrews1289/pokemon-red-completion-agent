@@ -240,7 +240,9 @@ def bind_routed_center_recovery(
         route = None
     else:
         routes: list[RoutePlan] = []
-        for center in sorted(_POKEMON_CENTER_MAPS):
+        centers = ((observation.raw.map_id,) if observation.raw.map_id in _POKEMON_CENTER_MAPS
+                   else sorted(_POKEMON_CENTER_MAPS))
+        for center in centers:
             try:
                 plan = router.world.plan_feasible_to_map(
                     start, int(center), goal_at=(7, 3)

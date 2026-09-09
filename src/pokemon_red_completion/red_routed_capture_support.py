@@ -62,7 +62,10 @@ def bind_capture_party_support(
     traversal = Gen1TraversalObserver(runtime.reader)
     start = traversal.observe()
     routes: list[RoutePlan] = []
-    for center in sorted(_POKEMON_CENTER_MAPS):
+    current_map = getattr(start, "map_id", None)
+    centers = ((current_map,) if current_map in _POKEMON_CENTER_MAPS
+               else sorted(_POKEMON_CENTER_MAPS))
+    for center in centers:
         try:
             route = router.world.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
         except RoutePlanningError:
@@ -99,9 +102,15 @@ def bind_capture_party_support(
         )
         if not transport.passed:
             raise RedCapturePartyError("capture-helper PC route failed")
+        recovery_kwargs = {}
+        if getattr(router, "routed_recovery", False):
+            from pokemon_red_completion.red_capture_helper_recovery import restore_capture_helper
+
+            recovery_kwargs["restore_helper"] = lambda: restore_capture_helper(router)
         setup = execute_capture_party_at_pc(
             plan, router.actions, runtime.reader, pc_map_id=route.terminal_map,
             read_party=PokemonRedPartyReader(runtime.emulator).read,
+            **recovery_kwargs,
         )
         fresh = runtime.adapter.observe()
         if dependency_specimen_ledger(fresh.collection_observation) != before:

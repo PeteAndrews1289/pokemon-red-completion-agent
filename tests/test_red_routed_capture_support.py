@@ -138,3 +138,18 @@ def test_absent_helper_masks_only_capture_without_input(monkeypatch):
     assert result.bindings == () and calls == []
     assert result.opportunities[0].availability.value == 'unavailable'
     assert result.opportunities[1] == bindings.opportunities[1]
+
+
+def test_existing_center_preparation_does_not_search_distant_centers(monkeypatch):
+    router, bindings, observation, calls = fixture(monkeypatch)
+    monkeypatch.setattr(support, '_POKEMON_CENTER_MAPS', (64, 154))
+    monkeypatch.setattr(support, 'Gen1TraversalObserver',
+        lambda _: SimpleNamespace(observe=lambda: SimpleNamespace(map_id=64)))
+    destinations = []
+    def plan(_start, target, **_kwargs):
+        destinations.append(target)
+        return SimpleNamespace(steps=(), terminal_map=target)
+    router.world.plan_feasible_to_map = plan
+    support.bind_capture_party_support(router, bindings, observation)
+    assert destinations == [64]
+    assert calls == []
