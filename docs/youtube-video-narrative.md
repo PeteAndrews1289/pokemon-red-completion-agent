@@ -1,3 +1,20 @@
+# Current — shared registered Pokédex; gameplay paused
+
+Pete retired level100 and simultaneous living-form completion. Record species
+once across runs/games; catch/evolve missing lines, deposit when done, and avoid
+redundant grinding. Duplicate catches are allowed without a special penalty or
+repeated novelty credit. Global registration, local flags and physical stock
+remain separate. Story capability and real dependencies still matter.
+
+Model114 and all previous outcomes are unchanged. No new gameplay, fit or global
+ledger import occurred. The new ledger/runtime objective is not implemented yet.
+Next: shared ledger and versioned registered-only demand/reward/verification,
+then one short Red lesson. Do not resume the old living/level100 objective.
+
+[Adopted scope and next steps](shared-pokedex-registration-plan.md). No external agent audit or usage this session.
+
+## Historical state before registered-only scope
+
 # Current — Fly-enabled collection: native114
 
 4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.

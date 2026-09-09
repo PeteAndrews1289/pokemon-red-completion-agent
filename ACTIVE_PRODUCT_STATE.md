@@ -9,14 +9,14 @@ they conflict with this page.
 
 ## Product
 
-Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.
+Build a transferable Pokemon agent that finishes stories and accumulates one verified registered Pokedex across runs, mainline games, versions, trades and legitimate events.
 
-**Environment role:** Red is the first curriculum; a compatible unfamiliar Red modification is the first planned adaptation test, followed by Crystal. No single title is the product.
+**Environment role:** Red first, then Blue with shared registration credit; a compatible unfamiliar Red modification tests adaptation before Crystal. No single title is the product.
 
 Success means:
 
 - Complete each title's story and supported mechanics under declared learned authority.
-- Acquire, retain, evolve, and trade every legitimately obtainable species required by the living collection contract.
+- Register missing global species through legitimate acquisition and evolution; no level100 or simultaneous living-form quota.
 - Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.
 - Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability.
 
@@ -29,31 +29,27 @@ Not the product:
 
 ## One active lane
 
-**Red living-collection incremental training** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Shared registered-Pokedex contract migration** (`cross-title-authenticated-scenario-curriculum-v1`)
 
-- Kind: **learning**
+- Kind: **maintenance**
 - Rigor: **development**
-- Next decision: Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens.
+- Next decision: Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
+| Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
 | Authority now | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
-| Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result. |
-| Cheapest falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
+| Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
+| Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
+| Cheapest falsifier | ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 111 | 111 |
-| Composition Attempt · development | 6 | 6 |
-| Verified Composition Episode · development | 4 | 4 |
-| Development Episode · development | 29 | 24 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 This frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -62,19 +58,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-capture-fly-access** · status **active** · evidence [qualification](docs/evidence/red-capture-fly-learning-2026-09-09.json)
+**2026-09-09-shared-registration-scope** · status **active** · evidence [qualification](docs/shared-pokedex-registration-plan.md)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Choose successive collection and support opportunities without per-species direction scripts. |
-| Learning output | Four steps, three fits: 111 to114 examples. Two captures added Nidoran female and an extra Oddish; one learned recovery. Final forced search exhausted safely and was not fitted. Collection: 42 specimens, 34 living species, no losses. Cost: 1405 actions, 88200 frames, two balls, no money; automatic cycle14.7 minutes. Locations came from supplied cartridge tables, not learned habitat inference. |
-| Authority delta | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
-| Transfer result | Changed landing, access and state boundaries tested without ROM; live evidence remains one Red lineage. |
-| Blocker | Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery. |
-| Decision | Retain actual outcomes; continue the smallest useful collection capability. |
-| Next session | Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens. |
-| Next falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
-| Stop condition | Batch stopped: step_limit; no consumed trial replay. |
+| Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
+| Learning output | No gameplay, fitting, imports or new learning outputs. Model114 and its old-objective evidence remain unchanged. Shared ledger and runtime migration are planned, not implemented. |
+| Authority delta | No authority change. Historical choices keep their original objective and reward semantics. |
+| Transfer result | No new transfer test this planning session; ledger merge and dependency fixtures are the next qualification. |
+| Blocker | Current runtime still uses legacy living-specimen and level100 contracts; migrate completion, demand, reward and checkpoint semantics before new collection runs. |
+| Decision | Adopt registered-only baselineV2; preserve baselineV1 and old receipts; perform one focused migration session. |
+| Next session | Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play. |
+| Next falsifier | ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson. |
+| Stop condition | Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit. |
 
 ### Stop conditions
 

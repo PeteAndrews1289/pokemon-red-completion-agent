@@ -32,9 +32,13 @@ def _read(root: Path, relative: str) -> dict:
 def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
     state = _read(root, STATE)
     baseline_id = state["baseline_id"]
-    if baseline_id != "red-first-v1":
+    baselines = {
+        "red-first-v1": "configs/development-roadmap-baseline-v1.json",
+        "red-first-v2-registered": "configs/development-roadmap-baseline-v2.json",
+    }
+    if baseline_id not in baselines:
         raise ValueError("new roadmap baseline requires explicit adoption in the renderer")
-    baseline = _read(root, "configs/development-roadmap-baseline-v1.json")
+    baseline = _read(root, baselines[baseline_id])
     focus = _read(root, "configs/active-product-focus.json")
     lane = next(lane for lane in focus["lanes"] if lane["status"] == "active")
     latest = lane["latest_reorientation"]
@@ -79,6 +83,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     done = sum(item["done"] for item in items)
     percentage = round(100 * done / len(items))
     samples = evidence["fit"]["model"]["settled_examples"]
+    dex_kind = "registered" if baseline["baseline_id"] == "red-first-v2-registered" else "living"
     colors = {
         "verified": "#57dfb1",
         "current": "#ffd36a",
@@ -91,7 +96,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         '<title id="title">Pokemon development roadmap</title>',
         f'<desc id="description">{done} of {len(items)} current checklist items verified, '
         "not overall completion. Eight stages lead from the learning loop "
-        "to a cross-game living Pokedex.</desc>",
+        f"to a cross-game {dex_kind} Pokedex.</desc>",
         "<style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>",
         '<rect width="1420" height="1870" fill="#0b1221"/>',
         '<path d="M1120 0H1420V225Z" fill="#172947"/>',
@@ -108,7 +113,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(50, 55, "POKEMON / DEVELOPMENT ATLAS", "eyebrow", "#57dfb1")
     parts.append(
         '<text x="50" y="125" style="font-size:49px;font-weight:bold">'
-        "From Red to a living Pokedex.</text>"
+        f"From Red to a {dex_kind} Pokedex.</text>"
     )
     text(
         50,

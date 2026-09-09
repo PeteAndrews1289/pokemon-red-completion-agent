@@ -1,3 +1,20 @@
+# Current — shared registered Pokédex; gameplay paused
+
+Pete retired level100 and simultaneous living-form completion. Record species
+once across runs/games; catch/evolve missing lines, deposit when done, and avoid
+redundant grinding. Duplicate catches are allowed without a special penalty or
+repeated novelty credit. Global registration, local flags and physical stock
+remain separate. Story capability and real dependencies still matter.
+
+Model114 and all previous outcomes are unchanged. No new gameplay, fit or global
+ledger import occurred. The new ledger/runtime objective is not implemented yet.
+Next: shared ledger and versioned registered-only demand/reward/verification,
+then one short Red lesson. Do not resume the old living/level100 objective.
+
+[Scope and migration plan](docs/shared-pokedex-registration-plan.md).
+
+## Earlier milestone reports (historical scope)
+
 # Pokémon Red Completion Agent
 
 [**Development infographic: the full roadmap and our current position →**](docs/development-roadmap.md)

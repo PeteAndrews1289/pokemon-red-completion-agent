@@ -10,6 +10,7 @@ from development_roadmap import ROOT, STATE, SVG, check_roadmap, load_roadmap, r
 def project(tmp_path):
     names = [STATE, "configs/development-roadmap-baseline-v1.json",
              "configs/active-product-focus.json", "configs/dashboard-learning-evidence.json"]
+    names.append("configs/development-roadmap-baseline-v2.json")
     state = json.loads((ROOT / STATE).read_text())
     names += [row["evidence"] for row in state["stages"].values() if row["evidence"]]
     names += [row["evidence"] for row in state["milestone"]["items"] if row["evidence"]]
@@ -38,7 +39,7 @@ def test_current_graphic_and_accessible_page_are_reproducible(project):
     assert "PHASE 02" in svg and "not demonstrated" in svg
     assert "Checklist only. Not phase completion or a time estimate." in svg
     assert "Transfer and learn Crystal" in svg
-    assert "cross-game living Dex" in svg
+    assert "cross-game registered Dex" in svg
     (project / SVG).write_text((project / SVG).read_text() + "<!-- stale -->")
     with pytest.raises(ValueError, match="stale"):
         check_roadmap(project)
@@ -93,4 +94,20 @@ def test_changed_learning_evidence_is_rejected(project):
     path = project / ref["path"]
     path.write_text(path.read_text() + " ")
     with pytest.raises(ValueError, match="evidence changed"):
+        load_roadmap(project)
+
+
+def test_registered_baseline_is_explicit_and_old_baseline_remains_available(project):
+    baseline, state, lane, evidence = load_roadmap(project)
+    assert baseline["baseline_id"] == "red-first-v2-registered"
+    assert "From Red to a registered Pokedex" in render_svg(baseline, state, lane, evidence)
+    state["baseline_id"] = "red-first-v1"
+    (project / STATE).write_text(json.dumps(state))
+    old, loaded, _, _ = load_roadmap(project)
+    assert "From Red to a living Pokedex" in render_svg(old, loaded, lane, evidence)
+    assert old["stages"][4]["exit"] != baseline["stages"][4]["exit"]
+    assert [s["id"] for s in old["stages"]] == [s["id"] for s in baseline["stages"]]
+    state["baseline_id"] = "unapproved-baseline"
+    (project / STATE).write_text(json.dumps(state))
+    with pytest.raises(ValueError, match="explicit adoption"):
         load_roadmap(project)

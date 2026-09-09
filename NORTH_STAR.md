@@ -7,12 +7,12 @@ checkpoint.
 
 Build a transferable hierarchical agent that can enter a mainline Pokémon game, learn its
 game-specific details, finish its story, solve its mechanics and puzzles, and build the declared
-living Pokédex across the versions, trades, and event inputs that completion requires.
+shared registered Pokédex across the versions, trades, and event inputs that completion requires.
 
 Pokémon Red is the first curriculum and evaluation environment. It is not the product.
 
 An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
-Collection development must be practical to complete, preserve living specimens, and ultimately
+Collection development must be practical to complete, preserve verified registration and useful specimens, and ultimately
 support a measured model-selected lesson. Keep partial progress, final goal success and learned
 advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
 
@@ -24,6 +24,24 @@ Destination selection is learned authority only when real alternatives are expos
 selected destination controls the played attempt. Preserve failed searches and their resource
 costs; fitting failures alone does not establish practical collection competence. Resource
 recovery must use legitimate game mechanics, not resets that conceal unsustainable spending.
+
+## Registered completion — September 9, 2026
+
+The current user-authorized objective is one shared registered Pokédex, not simultaneous living
+forms and not level100. Catch/evolve only as needed for missing global entries, current story
+capability or genuine dependencies; deposit completed specimens when practical. Duplicate catches
+carry no intrinsic penalty and no repeated novelty credit. Actual costs remain measured.
+
+Maintain three separate views: shared verified registrations, each save's actual owned flags,
+and current physical specimens. A global entry never fabricates a local flag or transferable
+specimen. Protect story/HM carriers and needed branches, but do not require a spare base form
+merely to preserve a living Dex. This is not permission to release specimens or edit saves.
+
+Keep historical contracts and fitted outcomes unchanged. Migrate completion, demand, evolution,
+rewards, checkpoint metadata and reporting together before new registered-only training. Old
+living-Dex and level100 predicates remain legacy evidence, not the current product gate.
+See [the explicit revision](docs/roadmap-decisions.md) and
+[shared-ledger plan](docs/shared-pokedex-registration-plan.md).
 
 ## Authority order
 
@@ -64,9 +82,9 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 ### Fixed visual roadmap and session closeout
 
 Use the [development infographic](docs/development-roadmap.md) and its
-[stable baseline](configs/development-roadmap-baseline-v1.json) to locate each substantial task
+[stable baseline](configs/development-roadmap-baseline-v2.json) to locate each substantial task
 within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
-Red-era living collection, an unfamiliar compatible Red modification, Crystal, then later titles.
+Red registration and Blue/shared-ledger integration, a compatible Red modification, Crystal, then later titles.
 This baseline is subordinate to the mission and this contract; it does not authorize execution.
 
 After **every completed work session**, and during a longer session after a substantial verified
@@ -135,7 +153,7 @@ Prefer outcomes that can expose failure:
 - battle wins, objective satisfaction, HP/PP efficiency, interventions, illegal choices;
 - experience per frame, wins per heal, blackouts, party rotation, level/evolution progress;
 - multi-step goal completion and recovery from changed resources or state;
-- living-Pokédex acquisitions, dependency-plan success, recognized version/trade/event blockers;
+- new global Pokédex registrations, dependency-plan success, recognized version/trade/event blockers;
 - zero-shot and post-adaptation performance in another title.
 
 Teacher agreement is diagnostic. It is never sufficient evidence by itself.

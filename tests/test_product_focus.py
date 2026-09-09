@@ -354,7 +354,7 @@ def test_repeatable_focus_inventory_replaces_only_the_dead_story_stratum() -> No
     assert set(receipt["counter_treatment"].values()) == {0}
 
 
-def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progress() -> None:
+def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migration() -> None:
     state = load_product_focus()
 
     assert DEFAULT_FOCUS_CONFIG.read_bytes() == canonical_focus_json(state.document)
@@ -365,35 +365,17 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
         encoding="utf-8"
     )
     assert state.active_lane["id"] == "cross-title-authenticated-scenario-curriculum-v1"
-    assert state.active_lane["kind"] == "learning"
-    assert state.active_lane["maintenance_unblocks"] is None
+    assert state.active_lane["kind"] == "maintenance"
+    assert state.active_lane["maintenance_unblocks"] == "red-shared-registration-learning-v1"
     prohibited = set(state.active_lane["prohibited_actions"])
     assert "unexecuted_counterfactual_target" in prohibited
     assert "unmeasured_action_target" in prohibited
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
-    assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 111, "partition": "train"},
-        {"kind": "composition_attempt", "minimum": 6, "partition": "development"},
-        {
-            "kind": "verified_composition_episode",
-            "minimum": 4,
-            "partition": "development",
-        },
-        {
-            "kind": "development_episode",
-            "minimum": 24,
-            "partition": "development",
-        },
-    ]
+    assert state.active_lane["measurable_outputs"] == []
     assert len(state.retired_lanes) == 60
-    assert focus_progress_fraction(state) == pytest.approx(1.0)
-    assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 111, 111),
-        ("Composition Attempt · development", 6, 6),
-        ("Verified Composition Episode · development", 4, 4),
-        ("Development Episode · development", 29, 24),
-    )
+    assert focus_progress_fraction(state) == 0.0
+    assert focus_scorecard(state) == ()
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
     assert state.progress["model_fits"] == 11
     assert state.progress["composition_attempts"] == 6
@@ -1722,12 +1704,19 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Causal Train Example · train: 111/111",
-        "Composition Attempt · development: 6/6",
-        "Verified Composition Episode · development: 4/4",
-        "Development Episode · development: 29/24",
-    )
+    # Scope migration is maintenance, not another learned-progress claim.
+    assert rows == ()
+
+
+@pytest.mark.parametrize("goal", [
+    "Build a living Pokedex across mainline games.",
+    "Build a registered Pokedex in Red alone.",
+])
+def test_product_rejects_superseded_or_single_game_objective(goal: str) -> None:
+    document = _document()
+    document["product"]["goal"] = goal
+    with pytest.raises(ProductFocusError, match="cross-game registered Pokedex"):
+        validate_product_focus_document(document)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:

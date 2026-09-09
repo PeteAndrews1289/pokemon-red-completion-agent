@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-capture-fly-access**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-shared-registration-scope**.
 
-A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
+A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Start post-game collection: 2/3 acceptance items (67%).**
+**Connect shared registered completion: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Audit attainable living-Dex targets
-- [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
-- [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
+- [ ] Verify shared registration memory
+- [ ] Migrate collection and evolution goals
+- [ ] Measure a registered-objective lesson
 
 Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -60,13 +60,13 @@ Teacher completion already exists. It does not satisfy this learned-player miles
 
 [Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
 
-### 05. Build the Red-era living Dex — current
+### 05. Build the shared registered Dex — current
 
-Capture and retain specimens; evolve, store and trade as needed.
+Catch, evolve and record missing species; deposit completed lines and skip already-credited work.
 
-**Exit criterion:** Verified living collection against an explicit Red/Blue, trade and event availability contract.
+**Exit criterion:** Verified registered-objective Red collection, fresh-run sequencing and shared-ledger continuity on Blue under explicit availability rules.
 
-Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
+No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
 [Current evidence](../docs/evidence/red-capture-fly-learning-2026-09-09.json)
 
@@ -82,19 +82,27 @@ Compatibility is checked separately. Red competence does not guarantee an immedi
 
 Reuse shared skills while learning new mechanics and progression.
 
-**Exit criterion:** Measured transfer and adaptation, followed by model-led story and declared living-collection completion.
+**Exit criterion:** Measured transfer and adaptation, then model-led story and new registrations against the shared ledger.
 
 Add the title adapter, time-dependent encounters, breeding and new mechanics; not another fixed walkthrough.
 
-### 08. Accumulate a cross-game living Dex — planned
+### 08. Accumulate a cross-game registered Dex — planned
 
-Carry competence and specimen lineage into later mainline games.
+Reuse competence and verified registration while pursuing new gaps in later games.
 
-**Exit criterion:** Per-title story and supported-mechanic completion plus verified cross-version collection and transfer records.
+**Exit criterion:** Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.
 
-Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
+Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-shared-registration-scope
+
+User adopted global caught/owned registration, no level100 or living-form quota. No new gameplay or fit; model114 unchanged.
+
+**Deviation:** Explicit baselineV2 replaces the collection objective. Old post-game preparation checklist remains historical2/3; new registration integration checklist starts0/3.
+
+**Next:** Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play.
 
 ### 2026-09-09-capture-fly-access
 

@@ -1,5 +1,23 @@
 # Roadmap baseline and deviations
 
+## September9 — explicit registered-only scope revision
+
+Pete replaced simultaneous living-form completion and level100 grinding with
+verified caught/owned registration shared across games. This is an explicit
+product change, not retroactive evidence of completing the old objective.
+BaselineV1 is preserved unchanged; baselineV2 retains stage IDs and historical
+verified milestones, revises the still-open collection/cross-generation exits,
+and includes Blue/shared-ledger integration before the compatible hack.
+
+The old local collection-preparation checklist remains historical2/3. A new
+registration integration checklist starts0/3; no gameplay or learned counter
+advances for this decision. Old contracts, snapshots and rewards remain valid
+only under their original scope. Shared credit is not local in-game credit.
+No destructive specimen action is authorized.
+
+[Detailed contract and migration sequence](shared-pokedex-registration-plan.md).
+
+
 ## September9 — post-game learning is active; first collection failure retained
 
 Native85to87 contains two actual new outcomes, including the failed collection

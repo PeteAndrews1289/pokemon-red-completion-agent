@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
-  "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-capture-fly-access",
+  "baseline_id": "red-first-v2-registered",
+  "as_of_session": "2026-09-09-shared-registration-scope",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Start post-game collection",
+    "title": "Connect shared registered completion",
     "items": [
       {
-        "id": "postgame-target-census",
-        "label": "Audit attainable living-Dex targets",
+        "id": "registered-ledger",
+        "label": "Verify shared registration memory",
         "done": false,
         "evidence": null
       },
       {
-        "id": "postgame-useful-menu",
-        "label": "Qualify supply and useful alternatives",
-        "done": true,
-        "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
+        "id": "registered-runtime",
+        "label": "Migrate collection and evolution goals",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "postgame-learned-collection",
-        "label": "Measure a learned collection choice",
-        "done": true,
-        "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
+        "id": "registered-lesson",
+        "label": "Measure a registered-objective lesson",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -588,6 +588,12 @@
       "result": "4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.",
       "deviation": "No stage-exit change. Fly access is opt-in for capture and evolution; location tables remain supplied knowledge.",
       "next": "Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens."
+    },
+    {
+      "session": "2026-09-09-shared-registration-scope",
+      "result": "User adopted global caught/owned registration, no level100 or living-form quota. No new gameplay or fit; model114 unchanged.",
+      "deviation": "Explicit baselineV2 replaces the collection objective. Old post-game preparation checklist remains historical2/3; new registration integration checklist starts0/3.",
+      "next": "Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play."
     }
   ],
   "closed_milestones": [

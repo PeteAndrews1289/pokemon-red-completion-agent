@@ -1,0 +1,63 @@
+{
+  "baseline_id": "red-first-v2-registered",
+  "adopted": "2026-09-09",
+  "mission": "A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.",
+  "stages": [
+    {
+      "id": "foundation",
+      "title": "Build the learning loop",
+      "goal": "Observe, act, verify, save and learn from actual outcomes.",
+      "exit": "Authenticated saved-state collection, retained-data fitting and a bounded post-fit continuation.",
+      "scope": "Teacher and deterministic mechanics support learning; they are not the final player."
+    },
+    {
+      "id": "adaptive-red",
+      "title": "Make useful Red decisions",
+      "goal": "Remember failed searches and choose productive alternatives.",
+      "exit": "A history-aware learner chooses between useful executable goals, learns from the result and continues productively.",
+      "scope": "Search history must inform learned choices, not a scripted rule forcing another goal."
+    },
+    {
+      "id": "sustained-red",
+      "title": "Sustain model-directed play",
+      "goal": "Combine navigation, battles, captures, resources and recovery.",
+      "exit": "Repeated multi-goal progress across varied Red situations, with measured costs, interventions and recovery.",
+      "scope": "Replace brittle fixed routing with reusable skills; scale battle and navigation authority on evidence."
+    },
+    {
+      "id": "red-story",
+      "title": "Finish Red with the model",
+      "goal": "Plan quests, prerequisites and puzzles through the Champion.",
+      "exit": "Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.",
+      "scope": "Teacher completion already exists. It does not satisfy this learned-player milestone."
+    },
+    {
+      "id": "red-collection",
+      "title": "Build the shared registered Dex",
+      "goal": "Catch, evolve and record missing species; deposit completed lines and skip already-credited work.",
+      "exit": "Verified registered-objective Red collection, fresh-run sequencing and shared-ledger continuity on Blue under explicit availability rules.",
+      "scope": "No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit."
+    },
+    {
+      "id": "red-hack",
+      "title": "Adapt to an unfamiliar Red hack",
+      "goal": "Test changed encounters, rules or difficulty in a compatible hack.",
+      "exit": "Report initial performance and learning gains against an otherwise identical learner without Red experience.",
+      "scope": "Compatibility is checked separately. Red competence does not guarantee an immediate win."
+    },
+    {
+      "id": "crystal",
+      "title": "Transfer and learn Crystal",
+      "goal": "Reuse shared skills while learning new mechanics and progression.",
+      "exit": "Measured transfer and adaptation, then model-led story and new registrations against the shared ledger.",
+      "scope": "Add the title adapter, time-dependent encounters, breeding and new mechanics; not another fixed walkthrough."
+    },
+    {
+      "id": "cross-generation",
+      "title": "Accumulate a cross-game registered Dex",
+      "goal": "Reuse competence and verified registration while pursuing new gaps in later games.",
+      "exit": "Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.",
+      "scope": "Already-credited lines need no redundant grind unless useful for the current run or a new dependency."
+    }
+  ]
+}

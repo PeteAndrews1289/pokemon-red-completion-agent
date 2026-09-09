@@ -637,8 +637,10 @@ def _validate_product(product: Mapping[str, object]) -> None:
     )
     goal = _text(product, "goal", subject="product")
     lowered = goal.lower()
-    if "living pokedex" not in lowered or "mainline games" not in lowered:
-        raise ProductFocusError("product goal must retain the cross-game living Pokedex objective")
+    if "registered pokedex" not in lowered or "mainline games" not in lowered:
+        raise ProductFocusError(
+            "product goal must retain the cross-game registered Pokedex objective"
+        )
     if len(_text_sequence(product, "success_conditions", subject="product")) < 3:
         raise ProductFocusError("product success conditions are incomplete")
     if len(_text_sequence(product, "non_goals", subject="product")) < 3:
