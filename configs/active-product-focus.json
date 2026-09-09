@@ -29,29 +29,29 @@
     },
     {
       "capability": "Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger.",
-      "cheapest_falsifier": "Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay.",
+      "cheapest_falsifier": "Reproduce the failed Route3 replan request without input; a fresh57-step walking route already exists. Test the actual blocker-history defect, not a Cut workaround.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Unchanged. Offline collection catalog accepted; native85 remains unplayed. No controller input, model fit or policy promotion.",
-        "blocker": "Post-Hall-of-Fame control, legitimate capture supply and executable useful alternatives remain unverified at the current endpoint.",
-        "decision": "Stop architecture expansion. Integrate existing acquisition/evolution skills into the bounded post-game collection lesson.",
+        "authority_delta": "Native85 chose recovery; native86 chose capture over resupply. Both actual outcomes fitted; native87 unplayed. Forced capture and source proposals excluded; no promotion.",
+        "blocker": "Route3 collection stopped during execution-time replanning after storage preparation. All31 specimens retained; fresh zero-input planning finds a57-step walking route.",
+        "decision": "Training is active, not awaiting another readiness gate. Preserve the failed trial and fit; diagnose the smallest live-replan repair before further input.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/audits/phase5-collection-capability-map-2026-09-09.md",
-          "sha256": "5fefdd74576fbe56a6bda66cc00b66bb048333817d096f85eaeaf3c478713409"
+          "path": "docs/evidence/red-phase5-native-learning-2026-09-09.json",
+          "sha256": "d89b6317590f8f587086d8f80a8ecfc204a19ab28e9d567d62a5b6eb53c924ff"
         },
-        "learning_output": "None this engineering session.136 targeted tests passed;69 cover catalog/demand/edges. Native85, prior gameplay and Phase5 checklist0/3 unchanged.",
-        "next_falsifier": "Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay.",
-        "next_session_goal": "Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson.",
+        "learning_output": "85to87 examples across2 fits:1 real recovery success and1 real capture failure; all prior rows retained. Forced Spearow capture increased living28to29/specimens30to31.145 targeted tests passed.",
+        "next_falsifier": "Reproduce the failed Route3 replan request without input; a fresh57-step walking route already exists. Test the actual blocker-history defect, not a Cut workaround.",
+        "next_session_goal": "Repair and qualify the concrete live-replanning defect, then declare one safe native87 collection continuation. Keep current attainability and unsupported mechanics explicit.",
         "product_alignment": "Explain useful collection options without consuming retained specimens or substituting declared availability for executable skills.",
-        "session_id": "2026-09-09-phase5-agent-package",
+        "session_id": "2026-09-09-phase5-native-learning",
         "status": "active",
-        "stop_condition": "Bounded package accepted. No further catalog expansion; stop the next live slice on unsafe continuation, missing alternatives or unexplained specimen loss.",
-        "transfer_result": "Synthetic arbitrary-species chain, branch and resource tests only. No new game transfer or independent policy advantage."
+        "stop_condition": "First runtime failure reached; gameplay stopped and its eligible outcome fitted. No consumed-trial replay, automatic failed-state resume or new boss cohort.",
+        "transfer_result": "Changed post-game resources and destinations in one correlated Red lineage. No held-out advantage, unfamiliar game or policy promotion."
       },
       "learned_authority": {
-        "current": "Native83 sampled HP then PP recovery before a forced deterministic Champion step. Current Champion/Hall-of-Fame facts verified. Native85 fitted2 real choices, all83prior rows retained; no post-fit play or promotion.",
+        "current": "Native85 and86 made actual post-game recovery/capture choices. Native87 fitted both outcomes with all85prior examples retained.31 specimens/29 living species; final model unplayed, no independent advantage or promotion.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -77,8 +77,8 @@
           "partition": "development"
         }
       ],
-      "name": "Red living-collection continuation preparation",
-      "next_decision": "Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson.",
+      "name": "Red living-collection incremental training",
+      "next_decision": "Repair and qualify the concrete live-replanning defect, then declare one safe native87 collection continuation. Keep current attainability and unsupported mechanics explicit.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

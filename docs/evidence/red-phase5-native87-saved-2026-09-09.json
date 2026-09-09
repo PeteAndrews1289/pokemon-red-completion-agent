@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-09 16:30 UTC",
+  "location": "Route 3 — routing failure retained; model87 fitted. Saved observation, not live play.",
+  "registered_species": 33,
+  "living_species": 29,
+  "specimens": 31,
+  "capture_items": 7,
+  "money": 28568,
+  "checkpoint_sha256": "ec30d34c61d78817e458b0c066c6b0e932f16b77d503ee165c91d53bca1c50d9",
+  "live": false,
+  "controller_actions": 0
+}

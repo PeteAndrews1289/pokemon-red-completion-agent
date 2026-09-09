@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase5-agent-package**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase5-native-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Start post-game collection: 0/3 acceptance items (0%).**
+**Start post-game collection: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [ ] Audit attainable living-Dex targets
-- [ ] Qualify supply and useful alternatives
-- [ ] Measure a learned collection choice
+- [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
+- [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 
-Current model: **85 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **87 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Capture and retain specimens; evolve, store and trade as needed.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
 
-[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
+[Current evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-phase5-native-learning
+
+Native85to87 across2 real outcome fits. Legitimate supply, healing and Spearow capture retained31specimens/29species. Model-selected Route3 capture failed after storage preparation; failure fitted.145 targeted tests passed.
+
+**Deviation:** No phase exit changed. Local checklist2/3 measures a failed learned collection attempt, not successful competence. Full current attainability census unfinished; first runtime failure stopped input. No forced/source-proposal labels or independent advantage.
+
+**Next:** Diagnose execution-time blocked-cell/interruption history: the exact terminal has a fresh57-step walking plan. Qualify the smallest repair, then a declared native87 collection continuation; no replay or Cut workaround.
 
 ### 2026-09-09-phase5-agent-package
 

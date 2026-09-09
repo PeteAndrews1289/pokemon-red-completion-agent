@@ -1,0 +1,80 @@
+{
+  "schema": "pokemon.red.phase5-native-learning-session.v1",
+  "source_commit": "24e0f796ff9e08ded5da066479bc65903b6a04bb",
+  "source_bundle_sha256": "eae212bd9f227a61d760a98a946cca812779ffb9728d11935f82814eca4dc1a1",
+  "scope": "correlated post-game Red training continuation; not an independent evaluation",
+  "support": {
+    "method": "normal Hall-of-Fame credits, in-game save and Continue",
+    "actions": 288,
+    "frames": 17172,
+    "training_examples": 0,
+    "manual_reset": false,
+    "resource_injection": false,
+    "terminal_checkpoint_sha256": "160e83f063da70dcf5903b4560feec5f2fcb34c8f038554f016e8042eb84f906",
+    "administrative_import_failures_preserved": 2
+  },
+  "episodes": [
+    {"ordinal": 1, "goal": "resupply", "status": "succeeded", "actions": 171, "frames": 10164, "new_examples": 0, "authority": "deterministic safety", "checkpoint_sha256": "dc174528636d7479ca1a939aef26d6ecc7d8afc6f58ce43a240ff6e6f7844afb", "manifest_sha256": "a1d98381797e07c21776feac9750ebfcdb438516f9f95879884a072a11e3b9be"},
+    {"ordinal": 2, "goal": "restore_team", "status": "succeeded", "actions": 49, "frames": 2928, "new_examples": 1, "authority": "sampled native goal", "checkpoint_sha256": "f6a7fb9968f53c05da5ca1665c4b558bfadb8fe009ed7137b2658632888f20a1", "manifest_sha256": "79de8abc7d08d958bbc932ec00f46f3c5d599a80a9dca7ab0bb5df3b3229bf94"},
+    {"ordinal": 3, "goal": "acquire_species", "status": "succeeded", "actions": 639, "frames": 42900, "new_examples": 0, "authority": "sampled source proposal then forced native acquisition; proposal not fitted", "captures": 1, "encounters": 9, "capture_items_used": 3, "checkpoint_sha256": "7367c539cafd5b6d68e74403de26e074f6f454309756f13db85605d1fc79039a", "manifest_sha256": "ea8c46c22dbb25a5b12340113861b605b5c9942fb5edcb52c43a875f141c33ec"},
+    {"ordinal": 4, "goal": "acquire_species", "status": "failed", "actions": 615, "frames": 33421, "new_examples": 1, "authority": "sampled native goal", "failure": "route replanning found no candidate", "checkpoint_sha256": "ec30d34c61d78817e458b0c066c6b0e932f16b77d503ee165c91d53bca1c50d9", "manifest_sha256": "e56499c7af436841dbd0abe48f542b24ed3a63197c39845e75d313e836e9e227"}
+  ],
+  "native_actions": 1474,
+  "native_frames": 89413,
+  "fit": {
+    "before_examples": 85,
+    "after_examples": 87,
+    "updates": 2,
+    "new_successes": 1,
+    "new_failures": 1,
+    "all_prior_rows_retained": true,
+    "prior_model_sha256": "bbb7a8528ddb88e054e5ebe8cff9a2a6bc0fcf1d2084bc7ed3f4a46df203b85c",
+    "intermediate_model_sha256": "189dc378600626a2c44e4bfea5753468a215527dd6a28fe8eda7b4d1ef702881",
+    "model_sha256": "693606556aa7f9abbbe361f905a9c13e2c17dce43024f9376f13b3d7410765e4",
+    "final_model_record_sha256": "681091fafaa4b0796a5686a1f0578e3aea6d709b7c37da29f88a0174b7ae5b6f",
+    "corpus_sha256": "15129f76fc5d8a7a1517d72198837b3e396ef929895688cc205b6600aee0ee19",
+    "final_fit_prior_train_mse": 0.011852228442457025,
+    "final_fit_updated_train_mse": 0.01156979631422789,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "final_model_played": false
+  },
+  "collection": {
+    "before_specimens": 30,
+    "after_specimens": 31,
+    "before_living_species": 28,
+    "after_living_species": 29,
+    "registered_species": 33,
+    "new_living_species": "pokemon:national:021",
+    "declared_living_targets": 120,
+    "remaining_living_targets": 91,
+    "undeclared_specimen_losses": 0,
+    "capture_items_remaining": 7,
+    "currency_remaining": 28568,
+    "current_box_headroom": 20
+  },
+  "catalog": {
+    "actual_snapshot_projection": true,
+    "declared_options": 156,
+    "qualified_live_bindings_in_catalog_report": 0,
+    "new_controller_skills": 0,
+    "catalog_selects_actor_goal": false,
+    "full_current_attainability_census_complete": false
+  },
+  "failure_diagnosis": {
+    "controller_actions": 0,
+    "current_map": 14,
+    "current_position_yx": [4, 19],
+    "target_position_yx": [9, 61],
+    "fresh_walking_plan_with_observed_objects_steps": 57,
+    "finding": "fresh walking route exists; captured failure involved execution-time replanning, not proof that Cut is needed",
+    "cause_fully_resolved": false,
+    "failed_trial_retried": false
+  },
+  "validation": {"targeted_tests_passed": 145, "full_suite_run_this_session": false},
+  "sealed_evaluation": false,
+  "crystal_execution": false,
+  "full_game_replay": false,
+  "external_agents_used_this_session": false,
+  "external_usage_windows_queried_this_session": false
+}

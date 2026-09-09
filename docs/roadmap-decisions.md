@@ -1,5 +1,22 @@
 # Roadmap baseline and deviations
 
+## September9 — post-game learning is active; first collection failure retained
+
+Native85to87 contains two actual new outcomes, including the failed collection
+choice. The separate forced capture restored a missing living Spearow, bringing
+the physical collection to31 specimens/29 species. Normal credits and Continue,
+legitimate supply and source proposals remain disclosed support, not labels.
+The accepted pure catalog is now exercised against actual snapshot stock as a
+diagnostic; it still does not authenticate or select live bindings.
+
+The local collection-start checklist advances to2/3: useful supply/alternatives
+and a measured learned collection attempt. The attempt failed; this is not
+successful learned-collection competence. Full current attainability remains
+open. No phase exit or long-term living-Dex goal changes. Stop input at the
+first runtime failure, preserve its learned costs, and repair its execution-time
+replan history rather than start another framework or boss cohort.
+[Session](work-sessions/2026-09-09-phase5-native-learning.md).
+
 ## September9 — Phase4 verified; move to living collection
 
 The existing model-directed story exit is met under disclosed hierarchical

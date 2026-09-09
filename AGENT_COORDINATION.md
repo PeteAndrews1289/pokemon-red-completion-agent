@@ -1,3 +1,24 @@
+# Current — post-game training: native87
+
+Two real outcomes were fitted: successful model-selected recovery and failed
+model-selected capture. **85 → 87 examples**, all prior rows retained. Legitimate
+supply and a separate forced Spearow capture increased the collection to31
+specimens/29 living species. Forced goals and source proposals were not fitted.
+Native87 has not played; no independent advantage or learned combat is claimed.
+
+Gameplay stopped at the first runtime failure. Route3 execution-time replanning
+failed after storage preparation; all31 specimens remain. A zero-input check
+finds a57-step walking route from the terminal, so investigate accumulated
+blocked cells and interruption handling, not a Cut workaround. Next: the
+smallest demonstrated repair, then a declared native87 collection continuation.
+No new architecture audit, boss replay or training-readiness gate.
+
+[Session, evidence and next steps](docs/work-sessions/2026-09-09-phase5-native-learning.md). Local collection-start checklist2/3;
+full current attainability/one-shot coverage remains unfinished.145 targeted
+tests passed. No new external-agent session or quota query was used.
+
+## Prior package and Phase4 history
+
 # Current — Phase4 complete; living collection next
 
 ## Collection-planning package accepted — September 9

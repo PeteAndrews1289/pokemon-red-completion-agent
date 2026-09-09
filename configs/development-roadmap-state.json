@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-phase5-agent-package",
+  "as_of_session": "2026-09-09-phase5-native-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
+      "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -49,14 +49,14 @@
       {
         "id": "postgame-useful-menu",
         "label": "Qualify supply and useful alternatives",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
       },
       {
         "id": "postgame-learned-collection",
         "label": "Measure a learned collection choice",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
       }
     ]
   },
@@ -552,6 +552,12 @@
       "result": "Offline Flash catalog corrected and accepted after Claude review and136 targeted tests. No gameplay or fit; model85 and Phase5 lesson0/3 unchanged.",
       "deviation": "Engineering-only support session. Stop broad architecture expansion and connect existing skills; baseline exits unchanged.",
       "next": "Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson."
+    },
+    {
+      "session": "2026-09-09-phase5-native-learning",
+      "result": "Native85to87 across2 real outcome fits. Legitimate supply, healing and Spearow capture retained31specimens/29species. Model-selected Route3 capture failed after storage preparation; failure fitted.145 targeted tests passed.",
+      "deviation": "No phase exit changed. Local checklist2/3 measures a failed learned collection attempt, not successful competence. Full current attainability census unfinished; first runtime failure stopped input. No forced/source-proposal labels or independent advantage.",
+      "next": "Diagnose execution-time blocked-cell/interruption history: the exact terminal has a fresh57-step walking plan. Qualify the smallest repair, then a declared native87 collection continuation; no replay or Cut workaround."
     }
   ],
   "closed_milestones": [

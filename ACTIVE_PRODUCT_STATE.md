@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Red living-collection continuation preparation** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red living-collection incremental training** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson.
+- Next decision: Repair and qualify the concrete live-replanning defect, then declare one safe native87 collection continuation. Keep current attainability and unsupported mechanics explicit.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
-| Authority now | Native83 sampled HP then PP recovery before a forced deterministic Champion step. Current Champion/Hall-of-Fame facts verified. Native85 fitted2 real choices, all83prior rows retained; no post-fit play or promotion. |
+| Authority now | Native85 and86 made actual post-game recovery/capture choices. Native87 fitted both outcomes with all85prior examples retained.31 specimens/29 living species; final model unplayed, no independent advantage or promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
-| Cheapest falsifier | Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay. |
+| Cheapest falsifier | Reproduce the failed Route3 replan request without input; a fresh57-step walking route already exists. Test the actual blocker-history defect, not a Cut workaround. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-phase5-agent-package** · status **active** · evidence [qualification](docs/audits/phase5-collection-capability-map-2026-09-09.md)
+**2026-09-09-phase5-native-learning** · status **active** · evidence [qualification](docs/evidence/red-phase5-native-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Explain useful collection options without consuming retained specimens or substituting declared availability for executable skills. |
-| Learning output | None this engineering session.136 targeted tests passed;69 cover catalog/demand/edges. Native85, prior gameplay and Phase5 checklist0/3 unchanged. |
-| Authority delta | Unchanged. Offline collection catalog accepted; native85 remains unplayed. No controller input, model fit or policy promotion. |
-| Transfer result | Synthetic arbitrary-species chain, branch and resource tests only. No new game transfer or independent policy advantage. |
-| Blocker | Post-Hall-of-Fame control, legitimate capture supply and executable useful alternatives remain unverified at the current endpoint. |
-| Decision | Stop architecture expansion. Integrate existing acquisition/evolution skills into the bounded post-game collection lesson. |
-| Next session | Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson. |
-| Next falsifier | Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay. |
-| Stop condition | Bounded package accepted. No further catalog expansion; stop the next live slice on unsafe continuation, missing alternatives or unexplained specimen loss. |
+| Learning output | 85to87 examples across2 fits:1 real recovery success and1 real capture failure; all prior rows retained. Forced Spearow capture increased living28to29/specimens30to31.145 targeted tests passed. |
+| Authority delta | Native85 chose recovery; native86 chose capture over resupply. Both actual outcomes fitted; native87 unplayed. Forced capture and source proposals excluded; no promotion. |
+| Transfer result | Changed post-game resources and destinations in one correlated Red lineage. No held-out advantage, unfamiliar game or policy promotion. |
+| Blocker | Route3 collection stopped during execution-time replanning after storage preparation. All31 specimens retained; fresh zero-input planning finds a57-step walking route. |
+| Decision | Training is active, not awaiting another readiness gate. Preserve the failed trial and fit; diagnose the smallest live-replan repair before further input. |
+| Next session | Repair and qualify the concrete live-replanning defect, then declare one safe native87 collection continuation. Keep current attainability and unsupported mechanics explicit. |
+| Next falsifier | Reproduce the failed Route3 replan request without input; a fresh57-step walking route already exists. Test the actual blocker-history defect, not a Cut workaround. |
+| Stop condition | First runtime failure reached; gameplay stopped and its eligible outcome fitted. No consumed-trial replay, automatic failed-state resume or new boss cohort. |
 
 ### Stop conditions
 
