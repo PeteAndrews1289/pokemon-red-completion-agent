@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import pytest
 from test_goal_manager_trajectory import _Reader
 from test_red_elixir_plan import finished, state
-from test_red_forward_goal import champion_raw, observation
+from test_red_forward_goal import EXECUTION_FLAGS, champion_raw, observation
 from test_red_forward_training import harness, opportunities, run_macro, sampled
 from test_red_living_dex_causal_adapter import _store_and_registry
 from test_red_player_training import _plan
@@ -33,7 +33,7 @@ from pokemon_red_completion.trajectory import SparseEvent
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 
-def episode(tmp_path, *, terminal="success", singleton=True):
+def episode(tmp_path, *, terminal="success", singleton=True, execution_flags=None):
     store, _ = _store_and_registry(tmp_path)
     h = harness(seed=1)
     training = RedPlayerTrainingPlan(
@@ -55,7 +55,8 @@ def episode(tmp_path, *, terminal="success", singleton=True):
                     "source_bundle_sha256",
                     "profile_sha256",
                 )
-            }
+            },
+            execution_flags=execution_flags,
         ),
         training.maximum_actions * 2,
         training.maximum_frames * 2,
@@ -93,6 +94,8 @@ def episode(tmp_path, *, terminal="success", singleton=True):
         forward_story_objective="defeat_champion",
         forward_goal_authority="recording-only-existing-actor",
     )
+    if execution_flags is not None:
+        metadata.update(execution_flags)
     sink.write_episode_header(metadata=metadata)
     h.events.clear()
 
@@ -317,7 +320,7 @@ def test_missing_forward_stream_cannot_be_recreated_from_immediate_successes(tmp
 )
 def test_declared_continuation_and_limits_must_match_native_plan(tmp_path, field, value):
     item = episode(tmp_path)
-    with pytest.raises(ValueError, match="scope"):
+    with pytest.raises(ValueError, match="scope|prospective header"):
         load(item, forward_plan=replace(item.forward, **{field: value}))
 
 
@@ -541,3 +544,65 @@ def test_initial_goal_cannot_already_be_present_in_recorded_current_evidence(tmp
 
     with pytest.raises(ValueError, match="initial observation or anchor"):
         load(item, store=altered(item, mutation))
+
+
+def test_explicit_all_false_header_is_compatible_with_absent_flags(tmp_path):
+    item = episode(tmp_path, execution_flags={name: False for name in EXECUTION_FLAGS})
+    assert load(item) == item.observed
+
+    def omit_flags(rows):
+        metadata = rows["episode"][0]["metadata"]
+        for name in EXECUTION_FLAGS:
+            metadata.pop(name)
+
+    assert load(item, store=altered(item, omit_flags)) == item.observed
+
+
+def test_declared_enabled_execution_flags_admit_from_authenticated_header(tmp_path):
+    item = episode(tmp_path, execution_flags={name: True for name in EXECUTION_FLAGS})
+    assert load(item) == item.observed
+
+
+@pytest.mark.parametrize("name", EXECUTION_FLAGS)
+def test_header_cannot_enable_unbound_execution_capability(tmp_path, name):
+    item = episode(tmp_path)
+    store = altered(item, lambda rows: rows["episode"][0]["metadata"].update({name: True}))
+    with pytest.raises(ValueError, match="authenticated execution flags"):
+        load(item, store=store)
+
+
+@pytest.mark.parametrize("name", EXECUTION_FLAGS)
+def test_header_cannot_disable_or_omit_a_bound_execution_capability(tmp_path, name):
+    item = episode(tmp_path, execution_flags={key: True for key in EXECUTION_FLAGS})
+    store = altered(item, lambda rows: rows["episode"][0]["metadata"].pop(name))
+    with pytest.raises(ValueError, match="authenticated execution flags"):
+        load(item, store=store)
+
+
+@pytest.mark.parametrize("bad", [None, 0, 1, "false", [], {}])
+def test_authenticated_header_execution_values_must_be_exact_booleans(tmp_path, bad):
+    item = episode(tmp_path)
+    store = altered(
+        item,
+        lambda rows: rows["episode"][0]["metadata"].update(
+            trainer_funding=bad,
+        ),
+    )
+    with pytest.raises(ValueError, match="execution flag trainer_funding must be a boolean"):
+        load(item, store=store)
+
+
+def test_native_authentication_still_precedes_execution_flag_interpretation(tmp_path):
+    item = episode(tmp_path)
+    malformed = altered(
+        item,
+        lambda rows: rows["episode"][0]["metadata"].update(
+            routed_recovery="not a boolean",
+        ),
+    )
+    unsealed = SimpleNamespace(
+        open_episode=malformed.open_episode,
+        find_sealed_record=lambda *args, **kwargs: None,
+    )
+    with pytest.raises(ValueError, match="prospective player training declaration"):
+        load(item, store=unsealed)

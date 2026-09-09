@@ -1,5 +1,23 @@
 # Roadmap baseline and deviations
 
+## September9 — disclosed correlated forward-learning pilot
+
+The new goal-based learner needs prospective real outcomes, not labels retrofitted
+onto old actions. A bounded pilot may restore the eligible historical post-Lorelei
+training checkpoint for at most four new, separately identified two-macro lessons.
+All four seeds are fixed before prediction. The goal is Bruno completion; model82
+retains the existing stochastic choice authority. This is one correlated training
+root, not an independent test, a continuation of the failed Champion run, or a retry
+of the closed earlier practice plan. All prior artifacts and failures remain intact.
+
+Read-only preparation exposed an incorrect capability restriction: authenticated
+lineage flags cannot be deleted just to simplify the new lesson. Preserve them,
+bind them into the continuation identity, and reject any actual non-direct binding
+before selection. A routed Center option cannot impersonate a field-item choice.
+Do not filter alternatives, spend reserved last items, promote a shadow model, or
+expand into another boss-repair cascade. Stop the pilot at the first execution
+exception; no replacement trial. No phase exit or milestone denominator changes.
+
 ## September9 — separate prospective forward-goal objective, unchanged phase exit
 
 The one-step maintenance counterexample justified a separate finite-goal learner,

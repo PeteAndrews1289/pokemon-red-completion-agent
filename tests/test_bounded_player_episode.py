@@ -277,6 +277,48 @@ def test_declared_stop_cannot_hide_input_or_invent_truthiness(fault):
     assert state["actions"] == (1 if fault == "acts" else 0)
 
 
+@pytest.mark.parametrize("stop_at", [0, 1])
+def test_menu_validator_rejects_before_next_prediction_but_allows_outcome_observation(stop_at):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+    checked = []
+
+    def validate(observation):
+        checked.append(observation)
+        if authority.calls == stop_at:
+            raise ValueError("unsupported execution provenance")
+
+    with pytest.raises(ValueError, match="unsupported execution provenance"):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            validate_choice_menu=validate,
+        )
+    assert authority.calls == trajectory.next_decision_index == stop_at
+    assert len(checked) == stop_at + 1
+    assert trajectory.pending_decision is None
+    assert state["actions"] == stop_at * 5
+
+
+@pytest.mark.parametrize("fault", ["not_callable", "acts"])
+def test_menu_validation_is_action_free_and_callable(fault):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+
+    def validate(_):
+        state["actions"] += 1
+
+    with pytest.raises((TypeError, BoundedPlayerError)):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            validate_choice_menu=validate if fault == "acts" else False,
+        )
+    assert authority.calls == trajectory.next_decision_index == 0
+
+
 def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer()

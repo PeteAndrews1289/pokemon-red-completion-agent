@@ -16,13 +16,80 @@ from pokemon_red_completion.goal_manager_composition_runtime import CompositionB
 from pokemon_red_completion.observation import SemanticStateTracker, game_mode, semantic_facts
 from pokemon_red_completion.red_forward_goal import (
     RED_FORWARD_CONTEXT_NAMES,
+    RED_FORWARD_EXECUTION_FLAGS,
     RedForwardGoalCollector,
     red_forward_context,
+    red_forward_continuation_sha256,
+    red_forward_execution_flags,
     red_forward_goal_facts,
     red_forward_verifier_sha256,
 )
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
 from pokemon_red_completion.route import HALL_OF_FAME_FACT
+
+EXECUTION_FLAGS = (
+    "routed_resource_goals",
+    "quote_resource_costs",
+    "completion_dose",
+    "routed_recovery",
+    "trainer_funding",
+    "trainer_pending_recovery",
+    "regional_trainer_funding",
+    "remaining_acquisition_demand",
+    "level_evolution_acquisitions",
+)
+
+
+def continuation(**kwargs):
+    return red_forward_continuation_sha256(
+        behavior_policy_id="frozen-stochastic-policy",
+        model_sha256="a" * 64,
+        source_bundle_sha256="b" * 64,
+        profile_sha256="c" * 64,
+        **kwargs,
+    )
+
+
+def test_execution_flags_have_exact_names_and_absent_equals_explicit_false():
+    assert RED_FORWARD_EXECUTION_FLAGS == EXECUTION_FLAGS
+    expected = {name: False for name in EXECUTION_FLAGS}
+    assert red_forward_execution_flags() == expected
+    assert red_forward_execution_flags({}) == expected
+    assert red_forward_execution_flags(expected) == expected
+    assert continuation() == continuation(execution_flags={})
+    assert continuation() == continuation(execution_flags=expected)
+
+
+@pytest.mark.parametrize("name", EXECUTION_FLAGS)
+def test_every_execution_flag_changes_continuation_identity(name):
+    assert continuation(execution_flags={name: True}) != continuation()
+    assert red_forward_execution_flags({name: True})[name] is True
+
+
+@pytest.mark.parametrize("name", EXECUTION_FLAGS)
+@pytest.mark.parametrize("bad", [None, 0, 1, "false", "true", [], {}])
+def test_present_execution_flags_cannot_use_truthy_or_missing_coercions(name, bad):
+    with pytest.raises(ValueError, match="boolean"):
+        red_forward_execution_flags({name: bad})
+    with pytest.raises(ValueError, match="boolean"):
+        continuation(execution_flags={name: bad})
+
+
+@pytest.mark.parametrize("bad", [False, "metadata", [], 1])
+def test_execution_flag_container_must_be_mapping(bad):
+    with pytest.raises(ValueError, match="mapping"):
+        red_forward_execution_flags(bad)
+
+
+def test_flag_projection_is_detached_and_seed_realization_is_not_a_capability():
+    metadata = {"trainer_funding": True, "seed": 17, "episode_id": "synthetic"}
+    normalized = red_forward_execution_flags(metadata)
+    normalized["trainer_funding"] = False
+    assert metadata == {"trainer_funding": True, "seed": 17, "episode_id": "synthetic"}
+    assert red_forward_execution_flags(metadata)["trainer_funding"] is True
+    assert continuation(execution_flags=metadata) == continuation(
+        execution_flags={"trainer_funding": True, "seed": 18},
+    )
 
 
 class Meter:

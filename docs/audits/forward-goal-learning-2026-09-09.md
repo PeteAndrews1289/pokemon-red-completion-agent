@@ -64,6 +64,25 @@ different continuation contracts. There is no silent forced-story tail.
 
 ## Review and corrections
 
+### Real-context qualification correction
+
+The first read-only Red preparation rejected an attempted rollback of inherited
+regional-funding capability. No episode or controller input occurred. Preserving
+the inherited flags authenticated the same post-Lorelei checkpoint and its real
+story/field-healing menu, still with zero actions and frames. The runner now keeps
+historical restoration checks unchanged and binds nine execution flags into the
+forward continuation identity. Admission reconstructs those flags from the
+authenticated header.
+
+The reviewer identified a second, related risk: after field items become
+unavailable, routed recovery can offer a Center trip with the same semantic kind.
+Before each prediction, the opt-in player validates exact private direct-provider
+profile/configuration identities. Unsupported menus are rejected whole, not
+filtered. This guard does not obstruct post-macro observations or successful
+terminal recording. These checks are recording-scope safety, not model knowledge.
+The corrective batch passes511 focused tests, targeted typing and lint checks.
+This is not a substitute for the separately running frozen full regression.
+
 The internal reviewer supplied bounded test drafts; Codex independently reviewed
 and executed them. Important corrections made before publication:
 

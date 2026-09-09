@@ -22,6 +22,7 @@ from .red_forward_goal import (
     _CONSUMABLES,
     RED_FORWARD_CONTEXT_NAMES,
     red_forward_continuation_sha256,
+    red_forward_execution_flags,
     red_forward_goal_facts,
     red_forward_verifier_sha256,
 )
@@ -77,18 +78,6 @@ def load_red_forward_episode(
         or forward_plan.max_actions != training_plan.maximum_actions * 2
         or forward_plan.max_frames != training_plan.maximum_frames * 2
         or forward_plan.max_resources < 2
-        or forward_plan.continuation_sha256
-        != red_forward_continuation_sha256(
-            **{
-                key: cast(str, training_plan.document[key])
-                for key in (
-                    "behavior_policy_id",
-                    "model_sha256",
-                    "source_bundle_sha256",
-                    "profile_sha256",
-                )
-            }
-        )
     ):
         raise ValueError("Red forward admission scope differs")
     immediate = load_red_player_training_episode(
@@ -110,6 +99,20 @@ def load_red_forward_episode(
         or "forward_goal" not in reader.stream_names
     ):
         raise ValueError("Red forward prospective header is absent or differs")
+    execution_flags = red_forward_execution_flags(metadata)
+    if forward_plan.continuation_sha256 != red_forward_continuation_sha256(
+        **{
+            key: cast(str, training_plan.document[key])
+            for key in (
+                "behavior_policy_id",
+                "model_sha256",
+                "source_bundle_sha256",
+                "profile_sha256",
+            )
+        },
+        execution_flags=execution_flags,
+    ):
+        raise ValueError("Red forward continuation differs from authenticated execution flags")
     joined = load_goal_manager_episode(reader)
     if not joined.examples or not immediate.examples:
         raise ValueError("Red forward requires an executed native sampled first choice")

@@ -77,6 +77,7 @@ def wired(monkeypatch, *, stage="verifier", complete=False, terminal_write_error
         assert kwargs["limits"].max_decisions == 2
         assert kwargs["completion_satisfied"](None) is False
         assert kwargs["stop_requested"](None) is False
+        assert callable(kwargs["validate_choice_menu"])
         collector.anchor(choice(holder[0]))
         result = original_player(**kwargs)
         if complete:
@@ -143,3 +144,187 @@ def test_forward_append_failure_does_not_mask_original_or_prevent_failure_state(
     assert collectors[0].outcome is None
     assert len(events) == 2 and len(h.saved) == 1
     assert h.order.index("failure_state") < h.order.index("close")
+
+
+def test_actual_arm_passes_live_menu_guard_that_rejects_before_action(monkeypatch):
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
+
+    h, _, _, _, _ = wired(monkeypatch)
+    namespace = getclosurevars(h.run).nonlocals["run_arm"].__globals__
+    original_player = namespace["run_bounded_player_episode"]
+    checked = []
+
+    def may_not_run(*_):
+        pytest.fail("unsupported menu must not execute or verify")
+
+    bindings = tuple(
+        ExecutableGoalBinding(ref, kind, 0.1, 0.1, may_not_run, may_not_run)
+        for ref, kind in (
+            ("pokemon.red:recovery:routed-center:synthetic", GoalKind.RESTORE_TEAM),
+            ("pokemon.red:funding:synthetic", GoalKind.RESUPPLY),
+        )
+    )
+    unsupported = GoalBindingSet(tuple(b.opportunity for b in bindings), bindings)
+
+    def inspect_callback(**kwargs):
+        validate = kwargs["validate_choice_menu"]
+        assert callable(validate) and h.emulator.inputs == 0
+        with pytest.raises(RuntimeError, match="forward_goal_unsupported_binding"):
+            validate(SimpleNamespace(binding_set=unsupported))
+        checked.append(unsupported)
+        assert h.emulator.inputs == 0 and unsupported.bindings == bindings
+        # Catch only at this test boundary; the normal runtime does not swallow
+        # validation exceptions. Continue to exercise the arm's existing shell.
+        return original_player(**kwargs)
+
+    monkeypatch.setitem(namespace, "run_bounded_player_episode", inspect_callback)
+    with pytest.raises(ValueError) as raised:
+        h.run()
+    assert raised.value is h.error
+    assert checked == [unsupported]
+
+
+@pytest.mark.parametrize(
+    "pp_restore,inherited,exhausted",
+    [
+        (False, False, False),
+        (True, False, False),
+        (False, True, False),
+        (True, True, False),
+        (False, True, True),
+    ],
+)
+def test_actual_player_observer_supplies_story_world_without_routing_field_recovery(
+    monkeypatch,
+    pp_restore,
+    inherited,
+    exhausted,
+):
+    import runpy
+    from dataclasses import replace
+
+    from test_red_elixir_plan import state
+    from test_red_forward_runner import SCRIPT
+    from test_red_goal_skills import _adapter, _Reader
+
+    import pokemon_red_completion.red_resource_goal_router as routing
+    import pokemon_red_completion.red_routed_recovery as recovery
+    from pokemon_red_completion.executor import CountingExecutor
+    from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind
+    from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
+    from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+    from pokemon_red_completion.red_goal_skills import MapId
+    from pokemon_red_completion.route_executor import TraversalSnapshot
+
+    module = runpy.run_path(str(SCRIPT))
+    ready = forward_readiness(
+        recovery=RedGoalMechanic.FIELD_PP_RESTORE if pp_restore else RedGoalMechanic.FIELD_RESTORE,
+        parameters={} if pp_restore else {"affordable_single_item": True},
+    )
+    ready.routed_resource_goals = True
+    inherited_flags = {
+        "routed_recovery": inherited,
+        "trainer_funding": inherited,
+        "trainer_pending_recovery": inherited,
+        "regional_trainer_funding": inherited,
+    }
+    for name, value in inherited_flags.items():
+        setattr(ready, name, value)
+    # Providing cartridge routing data must be a legal opt-in, not buying authority.
+    assert module["_forward_goal_plan"](ready) is not None
+    raw = replace(
+        state(), bag_items=(*state().bag_items, (18, 2)), bag_item_ids=(*state().bag_item_ids, 18)
+    )
+    if exhausted:
+        # No HP item remains; real router can offer a nurse already in reach.
+        raw = replace(state(), map_id=int(MapId.VIRIDIAN_POKECENTER), player_x=3, player_y=7)
+    reader = _Reader(raw=raw, ready=True)
+    adapter = replace(_adapter(reader), include_pp_restoration=True)
+    current = adapter.observe()
+    emulator = SimpleNamespace(frame_count=0, pressed_buttons=frozenset())
+    actions = CountingExecutor(
+        SimpleNamespace(
+            execute=lambda _: pytest.fail("enumeration may not execute a macro"),
+        )
+    )
+    runtime = RedGoalContextRuntime(
+        ready.profile,
+        None,
+        emulator,
+        reader,
+        SimpleNamespace(observe=lambda: current.game_state),
+        adapter,
+    )
+    world = SimpleNamespace(rom=b"synthetic route world; never decode a cartridge")
+    monkeypatch.setattr(routing, "Gen1TrainerSightProjector", lambda *args: None)
+    traversal = SimpleNamespace(
+        observe=lambda: TraversalSnapshot(
+            raw.map_id,
+            (raw.player_y, raw.player_x),
+            True,
+            mode="land",
+        ),
+    )
+    monkeypatch.setattr(routing, "Gen1TraversalObserver", lambda *args, **kwargs: traversal)
+    monkeypatch.setattr(recovery, "Gen1TraversalObserver", lambda *args, **kwargs: traversal)
+    monkeypatch.setattr(
+        routing.RedResourceGoalRouter,
+        "_plan",
+        lambda *args: pytest.fail("direct story/field restore must not be routed"),
+    )
+    local_results = []
+    original = RedGoalContextRuntime.enumerator
+
+    def enumerator(self, counted):
+        actual = original(self, counted)
+
+        def enumerate_once(observed):
+            local = actual.enumerate(observed)
+            local_results.append(local)
+            return local
+
+        return SimpleNamespace(enumerate=enumerate_once)
+
+    monkeypatch.setattr(RedGoalContextRuntime, "enumerator", enumerator)
+    bridge = module["_player_observer"](runtime, actions, world, **inherited_flags)
+    assert bridge.runtime.trainer_story_world is world
+    assert runtime.trainer_story_world is None  # Original runtime is not mutated.
+    story = bridge.runtime.provider_for(GoalKind.ADVANCE_STORY, actions)
+    assert story.skills.get("defeat_champion").world is world
+    router = bridge.enumerate_bindings.__self__
+    assert router.runtime is bridge.runtime and router.world is world
+    assert router.routed_recovery is inherited and router.trainer_funding is inherited
+    assert router.prepare_capture_storage is False
+    routed = bridge.enumerate_bindings(current)
+    assert len(local_results) == 1
+    if exhausted:
+        assert not any(b.kind is GoalKind.RESTORE_TEAM for b in local_results[0].bindings)
+        restores = [b for b in routed.bindings if b.kind is GoalKind.RESTORE_TEAM]
+        assert len(restores) == 1
+        assert restores[0].binding_ref.startswith("pokemon.red:recovery:routed-center:")
+        with pytest.raises(RuntimeError, match="forward_goal_unsupported_binding"):
+            module["_require_forward_binding_scope"](routed, ready.profile)
+        # Preflight rejects the entire real menu, never filters the nurse away.
+        guarded = module["_player_observer"](
+            runtime,
+            actions,
+            world,
+            forward_story_only=True,
+            **inherited_flags,
+        )
+        with pytest.raises(RuntimeError, match="forward_goal_unsupported_binding"):
+            guarded.enumerate_bindings(current)
+        assert restores[0] in routed.bindings
+    else:
+        assert routed == local_results[0]  # Same direct skills, no transport wrappers.
+        module["_require_forward_binding_scope"](routed, ready.profile)
+    available = {
+        item.kind
+        for item in routed.opportunities
+        if item.availability is GoalAvailability.AVAILABLE
+    }
+    assert GoalKind.RESTORE_TEAM in available
+    assert GoalKind.RESUPPLY not in available
+    assert available <= {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM}
+    assert actions.actions_executed == emulator.frame_count == 0

@@ -311,6 +311,7 @@ def run_bounded_player_episode(
     failure_observer: Callable[[BaseException], None] | None = None,
     search_memory: GoalSearchMemory | None = None,
     stop_requested: CompletionPredicate | None = None,
+    validate_choice_menu: Callable[[GoalManagerCompositionObservation], None] | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -330,6 +331,8 @@ def run_bounded_player_episode(
         raise TypeError("failure_observer must be callable")
     if stop_requested is not None and not callable(stop_requested):
         raise TypeError("stop_requested must be callable")
+    if validate_choice_menu is not None and not callable(validate_choice_menu):
+        raise TypeError("validate_choice_menu must be callable")
     limits = BoundedPlayerLimits() if limits is None else limits
     if not isinstance(limits, BoundedPlayerLimits):
         raise TypeError("limits must be BoundedPlayerLimits")
@@ -415,6 +418,10 @@ def run_bounded_player_episode(
 
         before_selection = budget_meter.checkpoint()
         before_decision_index = trajectory.next_decision_index
+        if validate_choice_menu is not None:
+            validate_choice_menu(current)
+            if budget_meter.checkpoint() != before_selection:
+                raise BoundedPlayerError("choice menu validation changed state")
         try:
             execution = execute_goal_manager_decision(
                 situation=current.situation,

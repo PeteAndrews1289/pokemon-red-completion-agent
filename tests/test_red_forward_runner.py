@@ -89,11 +89,6 @@ def test_forward_declaration_uses_actual_limits_and_recording_only_authority(
         ("forward_resource_budget", True),
         ("forward_resource_budget", 1),
         ("causal_record", None),
-        ("routed_recovery", True),
-        ("trainer_funding", True),
-        ("trainer_pending_recovery", True),
-        ("regional_trainer_funding", True),
-        ("routed_resource_goals", True),
     ],
 )
 def test_unsupported_forward_scope_rejects_before_execution(module, field, value):
@@ -145,3 +140,55 @@ def test_continuation_binds_policy_and_profile_but_not_individual_rng_realizatio
     assert module["_forward_goal_plan"](different_profile).continuation_sha256 != (
         first.continuation_sha256
     )
+
+
+def test_cartridge_story_world_flag_is_not_mistaken_for_routed_healing_authority(module):
+    ready = readiness()
+    ready.routed_resource_goals = True
+    assert module["_forward_goal_plan"](ready).goal_family == "red-story-objective"
+    ready.routed_recovery = True
+    assert module["_forward_goal_plan"](ready).goal_family == "red-story-objective"
+
+
+@pytest.mark.parametrize("name", ["routed_recovery", "trainer_funding",
+                                 "trainer_pending_recovery", "regional_trainer_funding"])
+def test_inherited_flags_are_preserved_and_bound_not_rolled_back(module, name):
+    ready = readiness()
+    before = module["_forward_goal_plan"](ready)
+    setattr(ready, name, True)
+    after = module["_forward_goal_plan"](ready)
+    assert getattr(ready, name) is True
+    assert after.continuation_sha256 != before.continuation_sha256
+
+
+@pytest.mark.parametrize("kind,ref", [
+    (GoalKind.RESTORE_TEAM, "red-center-recovery:route"),
+    (GoalKind.ADVANCE_STORY, "unbound-story"),
+    (GoalKind.RESUPPLY, "red-trainer-funding:route"),
+])
+def test_scope_rejects_whole_unsupported_menu_without_filtering(module, kind, ref):
+    ready = readiness()
+    direct = ready.profile.providers[0]
+    valid = SimpleNamespace(kind=direct.kind, binding_ref=(
+        f"direct:profile-{ready.profile.profile_sha256}:config-{direct.configuration_sha256}"
+    ))
+    extra = SimpleNamespace(kind=kind, binding_ref=ref)
+    bindings = SimpleNamespace(bindings=(valid, extra))
+    with pytest.raises(RuntimeError, match="unsupported_binding"):
+        module["_require_forward_binding_scope"](bindings, ready.profile)
+    assert bindings.bindings == (valid, extra)
+    module["_require_forward_binding_scope"](SimpleNamespace(bindings=(valid,)), ready.profile)
+
+
+def test_wrong_profile_configuration_cannot_impersonate_direct_recovery(module):
+    ready = readiness()
+    spec = ready.profile.providers[1]
+    for profile, config in [("0" * 64, spec.configuration_sha256),
+                            (ready.profile.profile_sha256, "0" * 64)]:
+        binding = SimpleNamespace(kind=GoalKind.RESTORE_TEAM, binding_ref=(
+            f"field:profile-{profile}:config-{config}"
+        ))
+        with pytest.raises(RuntimeError, match="unsupported_binding"):
+            module["_require_forward_binding_scope"](
+                SimpleNamespace(bindings=(binding,)), ready.profile
+            )

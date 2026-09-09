@@ -60,6 +60,7 @@ from pokemon_red_completion.goal_manager_model import (  # noqa: E402
 )
 from pokemon_red_completion.goal_manager_runtime import (  # noqa: E402
     CompletionFirstGoalTeacher,
+    GoalBindingSet,
     GoalDecisionAuthority,
 )
 from pokemon_red_completion.goal_search_memory import GoalSearchMemory  # noqa: E402
@@ -105,6 +106,7 @@ from pokemon_red_completion.red_bounded_player import (  # noqa: E402
     preflight_red_bounded_player,
 )
 from pokemon_red_completion.red_forward_goal import (  # noqa: E402
+    RED_FORWARD_EXECUTION_FLAGS,
     RedForwardGoalCollector,
     red_forward_continuation_sha256,
     red_forward_verifier_sha256,
@@ -339,6 +341,7 @@ def _player_observer(
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
     retain_quantum: Callable[[], None] | None = None,
+    forward_story_only: bool = False,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
@@ -394,10 +397,19 @@ def _player_observer(
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
     )
+    def enumerate_forward(observation: Any) -> Any:
+        bindings = (
+            runtime.enumerator(actions).enumerate(observation)
+            if router is None else router.enumerate(observation)
+        )
+        _require_forward_binding_scope(bindings, runtime.profile)
+        return bindings
+
     observer = RedBoundedPlayerObserver(
         runtime=runtime,
         actions=actions,
-        enumerate_bindings=None if router is None else router.enumerate,
+        enumerate_bindings=(enumerate_forward if forward_story_only else
+                            None if router is None else router.enumerate),
     )
     if completion_dose:
         from pokemon_red_completion.goal_manager_composition_qualification import (
@@ -406,6 +418,33 @@ def _player_observer(
 
         observer.collection_projector = living_completion_checkpoint
     return observer
+
+
+def _require_forward_binding_scope(
+    bindings: GoalBindingSet, profile: RedGoalContextProfile,
+) -> None:
+    """Reject the whole menu if routing added a different execution mechanic.
+
+    These private identities are never model features. Exact profile/configuration
+    suffixes are added by the direct provider and are absent from routed Center,
+    funding and capture bindings. Keep inherited capabilities and unavailable
+    alternatives intact; do not manufacture a menu by filtering them away.
+    """
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+
+    allowed = {
+        (spec.kind, f":profile-{profile.profile_sha256}:config-{spec.configuration_sha256}")
+        for spec in profile.providers
+        if (spec.kind is GoalKind.ADVANCE_STORY
+            and spec.mechanic is RedGoalMechanic.MIDGAME_STORY)
+        or (spec.kind is GoalKind.RESTORE_TEAM and spec.mechanic in {
+            RedGoalMechanic.FIELD_RESTORE, RedGoalMechanic.FIELD_PP_RESTORE,
+        })
+    }
+    if any(not any(binding.kind is kind and binding.binding_ref.endswith(suffix)
+                   for kind, suffix in allowed) for binding in bindings.bindings):
+        raise PairedRedBoundedPlayerRunError("forward_goal_unsupported_binding")
 
 
 def _route_world(readiness: _Readiness) -> StrategicScenarioRouteWorld | None:
@@ -1029,15 +1068,16 @@ def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
     if (plan is None or readiness.decision_limit != 2
             or type(resources) is not int or resources < 2
             or plan.document.get("curriculum_contract") is not None
-            or readiness.causal_record is None or readiness.causal_record.model.feature_version != 3
-            or any(getattr(readiness, field, False) for field in (
-                "routed_recovery", "trainer_funding", "trainer_pending_recovery",
-                "regional_trainer_funding", "routed_resource_goals",
-            ))):
+            or readiness.causal_record is None
+            or readiness.causal_record.model.feature_version != 3):
         raise PairedRedBoundedPlayerRunError("forward_goal_scope")
     from pokemon_red_completion.goal_manager import GoalKind
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
+    # routed_resource_goals also provides the cartridge-derived story world and
+    # authenticated profile transitions. It does not turn field restoration into
+    # a Center trip. Inherited capabilities remain authenticated. Every actual
+    # menu rejects non-direct bindings before prediction, rather than filtering.
     if not {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM} <= {
         spec.kind for spec in readiness.profile.providers
     }:
@@ -1063,6 +1103,8 @@ def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
             model_sha256=readiness.model_sha256,
             source_bundle_sha256=readiness.source_bundle_sha256,
             profile_sha256=readiness.profile.profile_sha256,
+            execution_flags={key: getattr(readiness, key, False)
+                             for key in RED_FORWARD_EXECUTION_FLAGS},
         ),
         limits.max_total_actions, limits.max_total_frames, resources, 2,
     )
@@ -1694,6 +1736,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
+            forward_story_only=getattr(readiness, "forward_story_objective", None) is not None,
         )
         # Preview the same prospective history as the actor. Historical restore
         # authentication above must still use the checkpoint's original inputs.
@@ -1826,6 +1869,7 @@ def _run_arm(
                 "profile_sha256": readiness.profile.profile_sha256,
                 "model_sha256": readiness.model_sha256,
                 "continue_after_progress": readiness.continue_after_progress,
+                "completion_dose": readiness.completion_dose,
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
                 "trainer_funding": getattr(readiness, "trainer_funding", False),
@@ -2023,6 +2067,12 @@ def _run_arm(
                     retain_failure_state()
 
             try:
+                forward_callbacks: dict[str, Any] = {} if forward is None else {
+                    "stop_requested": lambda _observation: forward.outcome is not None,
+                    "validate_choice_menu": lambda observation: _require_forward_binding_scope(
+                        observation.binding_set, readiness.profile,
+                    ),
+                }
                 result = run_bounded_player_episode(
                     observe=observer,
                     authority=authority,
@@ -2037,8 +2087,7 @@ def _run_arm(
                     limits=limits,
                     failure_observer=record_component_failure,
                     search_memory=search_memory,
-                    **({} if forward is None else {"stop_requested": lambda _observation:
-                        forward.outcome is not None}),
+                    **forward_callbacks,
                 )
                 if forward is not None:
                     forward.finish()

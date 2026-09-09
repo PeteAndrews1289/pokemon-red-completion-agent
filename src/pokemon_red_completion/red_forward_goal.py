@@ -10,7 +10,7 @@ between observed macro boundaries; they are not a claim about intra-macro trades
 
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 
 from .domain import GameState
@@ -37,6 +37,17 @@ RED_FORWARD_CONTEXT_NAMES = (
     "story_pressure",
     "team_pressure",
     "safety_pressure",
+)
+RED_FORWARD_EXECUTION_FLAGS = (
+    "routed_resource_goals",
+    "quote_resource_costs",
+    "completion_dose",
+    "routed_recovery",
+    "trainer_funding",
+    "trainer_pending_recovery",
+    "regional_trainer_funding",
+    "remaining_acquisition_demand",
+    "level_evolution_acquisitions",
 )
 _CONSUMABLES = frozenset(
     int(item)
@@ -76,12 +87,35 @@ def red_forward_verifier_sha256(objective_id: str) -> str:
     )
 
 
+def red_forward_execution_flags(
+    values: Mapping[str, object] | None = None,
+) -> dict[str, bool]:
+    """Project declared execution flags, with absent flags strictly defaulting false.
+
+    The mapping may be a complete authenticated episode header. Unrelated fields
+    are not continuation features; present capability values must be exact bools.
+    Dependency and historical-rollback checks remain the runner's responsibility.
+    """
+    if values is None:
+        values = {}
+    if not isinstance(values, Mapping):
+        raise ValueError("Red forward execution flags must come from a mapping")
+    result = {}
+    for name in RED_FORWARD_EXECUTION_FLAGS:
+        enabled = values.get(name, False)
+        if type(enabled) is not bool:
+            raise ValueError(f"Red forward execution flag {name} must be a boolean")
+        result[name] = enabled
+    return result
+
+
 def red_forward_continuation_sha256(
     *,
     behavior_policy_id: str,
     model_sha256: str,
     source_bundle_sha256: str,
     profile_sha256: str,
+    execution_flags: Mapping[str, object] | None = None,
 ) -> str:
     # The episode's training plan separately binds its seed. Different seeds are
     # realizations of this same stochastic continuation, not different policies.
@@ -92,6 +126,7 @@ def red_forward_continuation_sha256(
             "model_sha256": model_sha256,
             "source_bundle_sha256": source_bundle_sha256,
             "profile_sha256": profile_sha256,
+            "execution_flags": red_forward_execution_flags(execution_flags),
             "strategy": "same-frozen-actor-and-honest-singletons-up-to-two-macros",
         }
     )
