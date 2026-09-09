@@ -1,4 +1,24 @@
-# Current — learning what recovery is for
+# Current — learn from the misses, then remove the actual blocker
+
+The final four resource-context attempts split evenly:healing then story defeated
+Agatha;healing twice used the whole decision budget without advancing. A new shadow
+fit retained all seven attempted returns,including the original controller stop.
+Training now reflects wasted recovery as well as successful recovery. It does not
+prove healing is necessary:all four new first choices were healing,and the later
+sampled choices account for the split. We stopped the small-batch loop there.
+
+The practical next improvement was shared mechanics. Fixed-damage moves had been
+sent through a type-only switch screen. The correction explicitly checks20HP,
+40HP or Night Shade's observed enemy level,while preserving coverage and fresh-state
+guards. Independent review caught a test that pretended a switch cost no HP; the
+corrected test now models the hit and distinguishes continued fighting from a
+safe stop at1HP. This is deterministic support for learned choices,not learned
+battling. Next is linked native-model story continuation with real resources and
+current Champion/Hall-of-Fame verification. Phase4 remains open.
+
+[Detailed evidence and limits](audits/red-resource-fit-and-fixed-damage-2026-09-09.md).
+
+# Historical — learning what recovery is for
 
 The important change this night was the target, not another longer teacher route.
 A useful action should help finish a declared goal within its resource budget,

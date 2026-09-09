@@ -53,7 +53,7 @@ def test_status_only_inventory_is_not_fabricated_damage():
     assert len(screened((142, 28, 0, 0))) == 3
 
 
-@pytest.mark.parametrize("move", [49, 90, 68, 120, 153, 35, 117, 118, 119, 144])
+@pytest.mark.parametrize("move", [69, 149, 90, 68, 120, 153, 35, 117, 118, 119, 144])
 def test_unsupported_effect_is_unknown_not_zero_damage(move):
     with pytest.raises(RedBattleCatalogError, match="entry type screen"):
         screened((move, 0, 0, 0))
@@ -63,6 +63,49 @@ def test_unsupported_effect_is_unknown_not_zero_damage(move):
 def test_invalid_inventory_refuses(moves):
     with pytest.raises(RedTrainerPartyError, match="inventory"):
         screened(moves)
+
+
+@pytest.mark.parametrize("move,level,bound", [(49, None, 20), (82, None, 40), (101, 55, 55)])
+def test_fixed_damage_entry_requires_strictly_positive_remaining_hp(move, level, bound):
+    party = PartyObservation(tuple(replace(member, hp=bound, max_hp=bound * 2)
+                                   for member in team().members))
+    candidates = trainer_matchup_candidates(party, opponent_species=72, opponent_level=56)
+    assert len(candidates) == 3  # Half-HP eligibility must not mask the entry boundary.
+    assert trainer_entry_candidates(party, candidates, incoming_moves=(move, 0, 0, 0),
+                                    enemy_level=level) == ()
+    healthy = PartyObservation(tuple(replace(member, hp=bound + 1) for member in party.members))
+    allowed = trainer_entry_candidates(healthy, candidates, incoming_moves=(move, 0, 0, 0),
+                                       enemy_level=level)
+    assert allowed == candidates  # Preserve ranking, not just number accepted.
+
+
+def test_level_damage_uses_enemy_level_not_reserve_level_and_tracks_permutations():
+    party = PartyObservation(tuple(replace(member, hp=56, max_hp=100)
+                                   for member in team().members))
+    for current in (party, PartyObservation(tuple(replace(member, slot=i + 1)
+                    for i, member in enumerate(reversed(party.members))))):
+        candidates = trainer_matchup_candidates(current, opponent_species=72, opponent_level=56)
+        assert len(candidates) == 3
+        # The level60 reserve still survives a level55 Night Shade at56HP.
+        assert trainer_entry_candidates(current, candidates, incoming_moves=(101, 0, 0, 0),
+                                        enemy_level=55) == candidates
+        assert trainer_entry_candidates(current, candidates, incoming_moves=(101, 0, 0, 0),
+                                        enemy_level=56) == ()
+
+
+def test_fixed_damage_does_not_hide_other_coverage_or_unsupported_slots():
+    candidates = trainer_matchup_candidates(team(), opponent_species=72, opponent_level=56)
+    assert [c.party_slot for c in trainer_entry_candidates(
+        team(), candidates, incoming_moves=(82, 85, 101, 0), enemy_level=55,
+    )] == [1]  # Ground survives; water and flying remain weak to Thunderbolt.
+    for moves in ((101, 149, 0, 0), (82, 0, 0, 90), (68, 49, 0, 0)):
+        with pytest.raises(RedBattleCatalogError, match="entry type screen"):
+            trainer_entry_candidates(team(), candidates, incoming_moves=moves, enemy_level=55)
+
+
+def test_entry_screen_does_not_guess_missing_night_shade_level():
+    with pytest.raises(RedBattleCatalogError, match="observed enemy level"):
+        screened((101, 0, 0, 0))
 
 
 class Memory:

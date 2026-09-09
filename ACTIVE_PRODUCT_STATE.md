@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition.
+- Next decision: Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Learn whether recovery or immediate story play achieves a finite goal, counting the whole attempt; separate first-choice planning from the frozen continuation policy. |
-| Authority now | Bruno head32 selected story and beat Bruno; Agatha head3bf43581 selected healing before frozen old82 beat Agatha. Both are bounded first-choice training probes, not recursive learned or full-player authority. Native82 and its82rows remain unchanged. |
+| Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
+| Authority now | Native82 remains the actor. New shadow4167759a fitted all seven Agatha controller returns without promotion; earlier Bruno32/Agatha3bf43581 first-choice probes remain verified only under their own contracts. Fixed-damage support is deterministic maintenance. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Bruno and Agatha heads each made an actual first choice in changed-resource training probes. These are correlated known lineages, not independent advantage, calibrated confidence, recursive learned control or cross-game transfer. |
-| Cheapest falsifier | Prepared zero-input source/plan check passed. Four fixed sampled attempts can expose repeat-heal budget loss or changed-resource failure; no promised action balance. Stop on first execution exception. |
+| Transfer test | Changed resources within one correlated training lineage. Literal varied-HP/level/type/controller tests qualify a reusable mechanic, not independent playing advantage, full model authority or cross-game transfer. |
+| Cheapest falsifier | Use the existing forward-goal recorder to stop at fresh Lance completion, then require concurrent current Champion/Hall-of-Fame facts. Preflight actual story/recovery alternatives; first exception or unmet finite goal ends the bounded sequence. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-agatha-control-closeout** · status **active** · evidence [composition attempt](docs/evidence/red-agatha-controller-probe-2026-09-09.json)
+**2026-09-09-resource-fit-fixed-entry** · status **active** · evidence [model fit](docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | New Agatha head controlled healing, then frozen old82 completed story:335actions/31141frames/1item,2genuine choices,all30specimens. Fresh zero-input checkpoint audit verified current Agatha completion. No additional fit/native row or promotion. |
-| Authority delta | Agatha head3bf43581 chose healing; frozen old82 then chose story from two alternatives and beat Agatha. Newhead first-choice authority is demonstrated only within this bounded training probe; no production promotion. |
-| Transfer result | Bruno and Agatha heads each made an actual first choice in changed-resource training probes. These are correlated known lineages, not independent advantage, calibrated confidence, recursive learned control or cross-game transfer. |
-| Blocker | Only three correlated Agatha fitting returns at one initial resource context; a sampled tail victory is not reliability. Known move101/move82 entry-screen gaps can teach controller-bug avoidance and must not wait for optimal recovery. Current Champion failure remains retained. |
-| Decision | At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition. |
-| Next session | At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition. |
-| Next falsifier | Prepared zero-input source/plan check passed. Four fixed sampled attempts can expose repeat-heal budget loss or changed-resource failure; no promised action balance. Stop on first execution exception. |
-| Stop condition | No further gameplay in this overnight closeout; stop10:42:58UTC. Next prepared collection stops at first execution exception; preserve every attempted return and cancel unclaimed slots. Original plans remain closed; no boss-repair cascade. |
+| Learning output | Four new train attempts:2Agatha completions/2healing-budget misses,830actions/76202frames/8genuine choices. All seven attempted returns fitted shadow4167759a;1root,3selected inputs. Native82 unchanged; fixed-damage support passed168 focused tests as maintenance. |
+| Authority delta | Native82 remains the actor. New shadow4167759a fitted all seven Agatha controller returns without promotion; earlier Bruno32/Agatha3bf43581 first-choice probes remain verified only under their own contracts. Fixed-damage support is deterministic maintenance. |
+| Transfer result | Changed resources within one correlated training lineage. Literal varied-HP/level/type/controller tests qualify a reusable mechanic, not independent playing advantage, full model authority or cross-game transfer. |
+| Blocker | No model-directed Champion/Hall-of-Fame completion yet. New Agatha data contain no changed-context first-action contrast; old forward heads cannot be relabelled under the repaired controller. Runtime profile transitions are separate launches, not automatic multi-boss execution. |
+| Decision | Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment. |
+| Next session | Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment. |
+| Next falsifier | Use the existing forward-goal recorder to stop at fresh Lance completion, then require concurrent current Champion/Hall-of-Fame facts. Preflight actual story/recovery alternatives; first exception or unmet finite goal ends the bounded sequence. |
+| Stop condition | Current resumed session targets13:25UTC September9. At most two newly declared linked episodes, two decisions each; first exception or finite-goal miss ends gameplay. No old failed state resumed, no replacement or additional Agatha cohort. |
 
 ### Stop conditions
 

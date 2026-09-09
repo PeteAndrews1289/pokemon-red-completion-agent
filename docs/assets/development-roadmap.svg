@@ -10,16 +10,16 @@
 <text x="50" y="215" class="small">82 goal-value examples  /  Full model-led Red win: not demonstrated</text>
 <rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 04</text>
-<text x="80" y="349" class="heading">Resource-aware story decisions</text>
+<text x="80" y="349" class="heading">Model-led league continuation</text>
 <text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">33%</text>
 <text x="82" y="495" class="body">1 of 3 acceptance items verified</text>
 <text x="82" y="529" class="small muted">Checklist only. Not phase completion or a time estimate.</text>
 <text x="705" y="342" class="small" style="fill:#57dfb1">DONE</text>
-<text x="778" y="342" class="body">Verify a changed-resource choice</text>
+<text x="778" y="342" class="body">Qualify shared fixed-damage entry</text>
 <text x="705" y="386" class="small" style="fill:#8594ad">NEXT</text>
-<text x="778" y="386" class="body">Fit broader real resource returns</text>
+<text x="778" y="386" class="body">Carry a real model choice forward</text>
 <text x="705" y="430" class="small" style="fill:#8594ad">NEXT</text>
-<text x="778" y="430" class="body">Test the updated first choice</text>
+<text x="778" y="430" class="body">Verify Champion and Hall of Fame</text>
 <rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>
 <rect x="80" y="577" width="420" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
@@ -91,8 +91,8 @@
 <text x="754" y="1573" class="small muted">Legitimate trades and events, special puzzles and unsupported</text>
 <text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-09-agatha-control-closeout</text>
-<text x="50" y="1767" class="body">Agatha head chose healing; frozen tail beat Agatha in 335 actions / 31,141 frames / one item. All 30 specimens retained. Two</text>
-<text x="50" y="1792" class="body">actual first-choice heads now demonstrated; Phase 4 remains open.</text>
+<text x="50" y="1732" class="small muted">2026-09-09-resource-fit-fixed-entry</text>
+<text x="50" y="1767" class="body">Seven real returns fitted, including every miss and the prior controller stop. Shared fixed-damage support passes168 focused</text>
+<text x="50" y="1792" class="body">tests. No model-led Champion/Hall-of-Fame result yet.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

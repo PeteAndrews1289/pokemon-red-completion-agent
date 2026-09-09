@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-agatha-control-closeout",
+  "as_of_session": "2026-09-09-resource-fit-fixed-entry",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
+      "evidence": "docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Resource-aware story decisions",
+    "title": "Model-led league continuation",
     "items": [
       {
-        "id": "changed-resource-control",
-        "label": "Verify a changed-resource choice",
+        "id": "fixed-damage-entry",
+        "label": "Qualify shared fixed-damage entry",
         "done": true,
-        "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
+        "evidence": "docs/evidence/red-fixed-damage-entry-2026-09-09.json"
       },
       {
-        "id": "broader-resource-return-fit",
-        "label": "Fit broader real resource returns",
+        "id": "linked-native-story",
+        "label": "Carry a real model choice forward",
         "done": false,
         "evidence": null
       },
       {
-        "id": "broader-fit-control-probe",
-        "label": "Test the updated first choice",
+        "id": "current-champion-hof",
+        "label": "Verify Champion and Hall of Fame",
         "done": false,
         "evidence": null
       }
@@ -498,6 +498,12 @@
       "result": "Agatha head chose healing; frozen tail beat Agatha in 335 actions / 31,141 frames / one item. All 30 specimens retained. Two actual first-choice heads now demonstrated; Phase 4 remains open.",
       "deviation": "Archived the completed 3/3 native-story checklist without changing Phase4's exit. The prepared resource batch is the last small within-Agatha check, not a new gate; afterward return to reusable mechanics and model-led composition. Preparation alone is engineering.",
       "next": "At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition."
+    },
+    {
+      "session": "2026-09-09-resource-fit-fixed-entry",
+      "result": "Seven real returns fitted, including every miss and the prior controller stop. Shared fixed-damage support passes168 focused tests. No model-led Champion/Hall-of-Fame result yet.",
+      "deviation": "Closed the last Agatha coverage check at2/3 without pretending the optional probe passed. Return to reusable mechanics and linked model-led story execution; no new phase gate or per-boss fitting campaign.",
+      "next": "Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment."
     }
   ],
   "closed_milestones": [
@@ -861,6 +867,32 @@
           "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
         }
       ]
+    },
+    {
+      "session": "2026-09-09-resource-fit-fixed-entry",
+      "stage": "red-story",
+      "title": "Resource-aware story decisions",
+      "items": [
+        {
+          "id": "changed-resource-control",
+          "label": "Verify a changed-resource choice",
+          "done": true,
+          "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
+        },
+        {
+          "id": "broader-resource-return-fit",
+          "label": "Fit broader real resource returns",
+          "done": true,
+          "evidence": "docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json"
+        },
+        {
+          "id": "broader-fit-control-probe",
+          "label": "Test the updated first choice",
+          "done": false,
+          "evidence": null
+        }
+      ],
+      "closure": "2/3 verified. Optional updated first-choice probe deferred: no new first-action contrast; repaired controller changes the old contract. No replacement cohort and no Phase4 exit change."
     }
   ]
 }

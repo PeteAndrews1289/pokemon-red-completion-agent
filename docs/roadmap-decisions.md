@@ -1,5 +1,29 @@
 # Roadmap baseline and deviations
 
+## September9 — close bounded resource coverage and return to story composition
+
+The final four Agatha samples all chose healing first:two then advanced and won,
+two healed again and missed the finite goal. All seven attempts entered the
+separate shadow refit,including the original controller stop. There is no new
+changed-context first-action contrast. The resource checklist is archived2/3;
+its optional updated-head probe is deferred,not counted complete. No replacement
+cohort or new Phase4 prerequisite is created. Old-controller returns keep their
+original contract after the shared fixed-damage repair.
+
+The successor checklist explicitly separates deterministic mechanics qualification,
+linked model choice and current Champion/Hall-of-Fame evidence. Existing native82
+can control separately launched authenticated episodes; it cannot automatically
+advance story profiles within one episode. Use at most one two-decision Lance
+continuation from the first newly completed Agatha checkpoint,and only after a
+verified goal one two-decision Champion continuation. The existing forward verifier
+stops on fresh story facts; Champion requires concurrent Hall-of-Fame evidence.
+First exception or finite-goal miss ends the sequence,no reset or replacement.
+No old first-choice head is relabelled or recursively deployed. This bounded
+continuation is development,not an independent final exam or cross-title evidence.
+
+The immutable stage exits and Red/living-Dex/compatible-hack/Crystal sequence remain
+unchanged. See the [session audit](audits/red-resource-fit-and-fixed-damage-2026-09-09.md).
+
 ## September9 — changed-resource control verified; broader return coverage next
 
 Bruno and Agatha fitted heads each made one real first choice in a changed-resource

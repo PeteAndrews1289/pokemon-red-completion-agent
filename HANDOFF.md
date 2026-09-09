@@ -1,4 +1,30 @@
-# Current — two fitted heads have made real choices; broader resource returns next
+# Current — seven-return fit complete; reusable battle entry repaired
+
+The final four Agatha resource attempts produced two completions and two heal/heal
+budget misses:830actions,76,202frames,eight genuine choices,all30specimens retained.
+All first choices were healing, so changed-context first-action contrast remains
+absent. The whole seven-attempt shadow fit4167759a retains the original controller
+stop and every budget miss; one correlated root,three distinct selected inputs.
+Native82/82rows and both earlier demonstrated first-choice heads are unchanged.
+The new fit has not controlled the game and is not promoted.
+
+Shared incoming fixed-damage handling now covers20/40HP and Night Shade's observed
+enemy level. The strict HP boundary, ordinary coverage and fresh-switch checks pass
+168 focused tests; deterministic mechanics, not learned battle authority. The
+reviewer's post-switch-damage test correction is incorporated. Old returns remain
+bound to the old controller, never relabelled as repaired-controller evidence.
+
+The resource checklist closes honestly at2/3; the optional repeated first-choice
+probe is deferred, not passed. No replacement Agatha cohort. Next use the existing
+bounded composition seam toward model-directed current Champion/Hall-of-Fame
+completion, without applying old heads outside their goal/horizon/source contract.
+Phase4 remains open; living-Dex, compatible-hack and Crystal goals are unchanged.
+
+Read [session audit](docs/audits/red-resource-fit-and-fixed-damage-2026-09-09.md) and [active state](ACTIVE_PRODUCT_STATE.md).
+Codex owns code/execution/publication; the internal reviewer is read-only. No new
+external review or subscription quota result is claimed this session.
+
+# Historical — two fitted heads have made real choices; broader resource returns next
 
 Agatha model 3bf43581 chose healing from two genuine alternatives; frozen native model82
 then sampled story from two genuine alternatives and completed Agatha. Cost:

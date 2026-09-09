@@ -1,4 +1,14 @@
-# Next session: learn from changed resources, not another boss route
+# Closed: final Agatha resource batch
+
+All four declarations executed once. Two reached Agatha completion; two heal/heal
+sequences hit the decision limit. All seven attempted returns, including the
+original controller stop, entered one shadow refit. No replacement cohort.
+The optional updated-head probe was deferred, not passed: all four new first
+choices were healing, and the reusable mechanics correction changes the frozen
+controller contract. Continue with bounded model-led story composition, not more
+within-Agatha collection. See the [closeout audit](audits/red-resource-fit-and-fixed-damage-2026-09-09.md).
+
+## Historical prospective plan — do not execute again
 
 ## Why this is the next useful step
 

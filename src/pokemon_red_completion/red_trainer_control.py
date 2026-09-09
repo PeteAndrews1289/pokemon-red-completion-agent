@@ -78,7 +78,9 @@ class RedTrainerPartyController:
             incoming = self.reader.read_trainer_entry_moves(raw)
             if incoming is None:
                 raise RedTrainerControlError("incoming trainer moves are unavailable")
-            reserves = trainer_entry_candidates(party, reserves, incoming_moves=incoming)
+            reserves = trainer_entry_candidates(
+                party, reserves, incoming_moves=incoming, enemy_level=raw.enemy_level,
+            )
             if not reserves and active is None:
                 raise RedTrainerControlError("no reserve passes the incoming move entry screen")
         best = reserves[0] if reserves else active

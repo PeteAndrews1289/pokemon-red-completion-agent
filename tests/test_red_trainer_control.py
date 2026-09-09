@@ -178,3 +178,85 @@ def test_changed_coverage_before_switch_blocks_all_input(monkeypatch):
     with pytest.raises(RedTrainerControlError, match="entry screen"):
         run(subject, object())
     assert not subject.switches and subject.moves_selected == 0
+
+
+@pytest.mark.parametrize("move,damage", [(49, 20), (82, 40), (101, 55)])
+def test_fixed_damage_switch_executes_and_resumes_move_policy(monkeypatch, move, damage):
+    state = raw(enemy=34, hp=(79, 190))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (move, 0, 0, 0)
+    seen = []
+    executor = object()
+
+    def battle(reader, actions, policy, **kwargs):
+        assert actions is executor
+        kwargs["move_decision_guard"](reader.read())
+        try:
+            assert policy(reader.read()) == 1
+        except control._SwitchRequest as error:
+            raise BattleRuntimeError("switch boundary") from error
+        return replace(reader.read(), battle_state=0)
+
+    def switch(actions, reader, _emulator, index, **_):
+        assert actions is executor and index == 1
+        seen.append(index)
+        # Simulate the incoming hit, not just the selected party cursor.
+        reader.state = replace(state, active_party_index=1, active_party_species_id=28,
+            party_hp=(79, 190 - damage), active_party_hp=190 - damage, active_party_max_hp=190,
+            active_party_moves=state.party_moves[1], active_party_pp=state.party_pp[1])
+
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler", switch)
+    assert run(subject, executor).battle_state == 0
+    assert seen == [1] and subject.switches == [2] and subject.moves_selected == 1
+
+
+def test_surviving_entry_at_one_hp_does_not_authorize_another_attack(monkeypatch):
+    state = replace(raw(enemy=34, hp=(79, 41)), party_max_hp=(160, 80))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (82, 0, 0, 0)
+    seen = []
+
+    def battle(reader, _actions, policy, **_):
+        try:
+            policy(reader.read())
+        except control._SwitchRequest as error:
+            raise BattleRuntimeError("switch boundary") from error
+        pytest.fail("near-fainted battler attacked")
+
+    def switch(_actions, reader, _emulator, index, **_):
+        assert index == 1
+        seen.append(index)
+        reader.state = replace(state, active_party_index=1, active_party_species_id=28,
+            party_hp=(79, 1), active_party_hp=1, active_party_max_hp=80,
+            active_party_moves=state.party_moves[1], active_party_pp=state.party_pp[1])
+
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler", switch)
+    with pytest.raises(RedTrainerControlError, match="no healthy offensive matchup"):
+        run(subject, object())
+    assert seen == [1] and subject.switches == [2] and subject.moves_selected == 0
+
+
+@pytest.mark.parametrize("change", ["hp", "enemy_level"])
+def test_fresh_night_shade_bound_blocks_newly_lethal_switch_without_input(monkeypatch, change):
+    state = replace(raw(enemy=34, hp=(79, 56)), party_max_hp=(160, 110))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (101, 0, 0, 0)
+
+    def battle(reader, _actions, policy, **_):
+        try:
+            policy(reader.read())
+        except control._SwitchRequest as error:
+            reader.state = replace(state, **(
+                {"party_hp": (79, 55)} if change == "hp" else {"enemy_level": 56}
+            ))
+            raise BattleRuntimeError("switch boundary") from error
+        pytest.fail("initial safe reserve was not selected")
+
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler",
+                        lambda *_a, **_k: pytest.fail("unsafe input"))
+    with pytest.raises(RedTrainerControlError, match="entry screen"):
+        run(subject, object())
+    assert not subject.switches and subject.moves_selected == 0

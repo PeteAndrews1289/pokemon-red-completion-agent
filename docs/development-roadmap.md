@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-control-closeout**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-resource-fit-fixed-entry**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Resource-aware story decisions: 1/3 acceptance items (33%).**
+**Model-led league continuation: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify a changed-resource choice ([evidence](../docs/evidence/red-agatha-controller-probe-2026-09-09.json))
-- [ ] Fit broader real resource returns
-- [ ] Test the updated first choice
+- [x] Qualify shared fixed-damage entry ([evidence](../docs/evidence/red-fixed-damage-entry-2026-09-09.json))
+- [ ] Carry a real model choice forward
+- [ ] Verify Champion and Hall of Fame
 
 Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-agatha-controller-probe-2026-09-09.json)
+[Current evidence](../docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-resource-fit-fixed-entry
+
+Seven real returns fitted, including every miss and the prior controller stop. Shared fixed-damage support passes168 focused tests. No model-led Champion/Hall-of-Fame result yet.
+
+**Deviation:** Closed the last Agatha coverage check at2/3 without pretending the optional probe passed. Return to reusable mechanics and linked model-led story execution; no new phase gate or per-boss fitting campaign.
+
+**Next:** Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment.
 
 ### 2026-09-09-agatha-control-closeout
 

@@ -109,13 +109,13 @@ def test_all_five_multi_hits_count_and_existing_burn_adds_residual():
     )
 
 
-@pytest.mark.parametrize("move", [69, 101, 149, 90, 68, 120, 35, 117, 118, 119, 144])
+@pytest.mark.parametrize("move", [69, 149, 90, 68, 120, 35, 117, 118, 119, 144])
 def test_unsupported_damage_and_confusion_abstain(move):
     with pytest.raises((TrainerDamageError, RedBattleCatalogError)):
         incoming_damage_bounds(observation((move, 0, 0, 0)))
 
 
-@pytest.mark.parametrize('move,bound', [(49, 20), (82, 40)])
+@pytest.mark.parametrize('move,bound', [(49, 20), (82, 40), (101, 50)])
 def test_constant_damage_uses_hp_not_stab_critical_defense_or_type(move, bound):
     current = replace(observation((move, 0, 0, 0)),
                       enemy_attack=900, enemy_special=900,
@@ -124,6 +124,28 @@ def test_constant_damage_uses_hp_not_stab_critical_defense_or_type(move, bound):
     assert incoming_damage_bounds(current) == (bound, bound)
     poisoned = replace(current, raw=replace(current.raw, party_status=(8, 16)))
     assert incoming_damage_bounds(poisoned) == (bound + 13, bound + 10)
+    assert incoming_damage_bounds(current, include_critical=False) == (bound, bound)
+
+
+def test_night_shade_uses_fresh_enemy_level_even_with_different_party_levels():
+    current = observation((101, 0, 0, 0))
+    assert incoming_damage_bounds(replace(current, raw=replace(
+        current.raw, enemy_level=55, party_levels=(100, 1),
+    ))) == (55, 55)
+    higher = replace(current, raw=replace(current.raw, enemy_level=56))
+    assert incoming_damage_bounds(higher) == (56, 56)
+    for level in (None, True, 0, 55.0, 101):
+        with pytest.raises((TrainerDamageError, RedBattleCatalogError)):
+            incoming_damage_bounds(replace(current, raw=replace(current.raw, enemy_level=level)))
+
+
+def test_night_shade_preserves_confusion_residual_and_worst_move_bounds():
+    current = confused_observation((101, 0, 0, 0), player_confused=True)
+    assert incoming_damage_bounds(current) == (69, 50)
+    assert incoming_damage_bounds(replace(current, raw=replace(
+        current.raw, party_status=(8, 16),
+    ))) == (82, 60)
+    assert incoming_damage_bounds(observation((49, 82, 101, 34))) == (86, 50)
 
 
 @pytest.mark.parametrize('move', [14, 96, 97, 104, 106, 107, 110, 111, 112, 133, 151])

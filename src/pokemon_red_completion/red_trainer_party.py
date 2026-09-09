@@ -28,25 +28,34 @@ class RedTrainerPartyError(ValueError):
 
 def trainer_entry_candidates(
     party: PartyObservation, candidates: tuple[PartyMatchupProfile, ...],
-    *, incoming_moves: tuple[int, ...],
+    *, incoming_moves: tuple[int, ...], enemy_level: int | None = None,
 ) -> tuple[PartyMatchupProfile, ...]:
-    """Reject reserves weak to any observed ordinary damaging move.
+    """Screen ordinary coverage and qualified fixed incoming HP loss.
 
     Preparation scores only approximate incoming pressure using opponent types.
     Entry screening must also consider coverage moves. Preserve the caller's
     ranking and existing health/PP/level requirements; never call this a survival
-    bound. Neutral damage, criticals, multi-hit and status remain unresolved.
+    bound. Fixed damage must leave positive HP; ordinary neutral damage,
+    criticals, multi-hit and status remain unresolved.
     Unsupported effects reject the screen, rather than becoming zero damage.
     """
     if (not isinstance(incoming_moves, tuple) or len(incoming_moves) != 4
             or any(type(move) is not int or not 0 <= move <= 165 for move in incoming_moves)
             or not any(incoming_moves)):
         raise RedTrainerPartyError("incoming move inventory is unavailable")
-    attacking_types = tuple(
-        RED_BATTLE_CATALOG.switch_entry_attack_type(pokemon_red_move_ref(move))
-        for move in incoming_moves if move
-    )
-    return tuple(candidate for candidate in candidates if all(
+    attacking_types = []
+    fixed_bound = 0
+    for move in incoming_moves:
+        if not move:
+            continue
+        ref = pokemon_red_move_ref(move)
+        fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=enemy_level)
+        if fixed is not None:
+            fixed_bound = max(fixed_bound, fixed)
+        else:
+            attacking_types.append(RED_BATTLE_CATALOG.switch_entry_attack_type(ref))
+    return tuple(candidate for candidate in candidates
+                 if party.members[candidate.party_slot - 1].hp > fixed_bound and all(
         attack_type is None or RED_BATTLE_CATALOG.type_effectiveness(
             attack_type, RED_BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(
                 party.members[candidate.party_slot - 1].species_id,

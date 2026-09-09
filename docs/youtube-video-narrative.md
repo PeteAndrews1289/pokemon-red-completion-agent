@@ -7752,3 +7752,21 @@ rows cannot be selected after seeing outcomes or accepted from a self-reported s
 - End the engineering scene on **REAL OUTCOMES 0/10** and the next visible action-free preflight.
   The following scene begins only when the published launcher passes CI and the first durable reset
   claim is written.
+# September9 — why successful healing can still be a failed plan
+
+Suggested sequence:show heal→story versus heal→heal. Both healing actions work,
+but only one sequence reaches the declared goal within the budget. The final
+four attempts produced two of each. The updated shadow fit keeps every attempt,
+including the earlier controller stop; it is not a victory-only highlight reel.
+
+Then show the engineering distinction:Dragon Rage costs40HP regardless of the
+ordinary type calculation. A type-only switch screen was the wrong interface.
+The shared repair checks actual fixed HP loss and rereads state before switching.
+The reviewer also caught a test that forgot the incoming hit—green tests are only
+useful when they model the consequence they claim to check.
+
+Honest narration:"We have trained bounded decision components and demonstrated
+some of their choices in Red. We have not yet demonstrated a complete learned
+player. Now we are connecting those choices while retaining the real costs."
+The next footage should be the actual linked story attempt,success or failure,
+not another fitted-loss chart. [Evidence](audits/red-resource-fit-and-fixed-damage-2026-09-09.md).

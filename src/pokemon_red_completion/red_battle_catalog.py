@@ -137,6 +137,28 @@ class PokemonRedBattleCatalog:
             return None
         return {49: 20, 82: 40}.get(identifier)
 
+    def incoming_fixed_damage_bound(
+        self, move_ref: str, /, *, enemy_level: int | None,
+    ) -> int | None:
+        """Qualified incoming HP loss, separate from the strict type-only API.
+
+        Pinned core.asm ApplyAttackToPlayerPokemon.specialDamage stores the
+        enemy's observed level for Night Shade, without ordinary damage, STAB
+        or critical arithmetic. Misses/immunity never discount this bound.
+        None means unqualified here, not zero damage; callers must still screen
+        ordinary moves and reject unsupported effects. Offensive support is
+        unchanged, and other level/random/special damage remains unqualified.
+        """
+        fixed = self.constant_damage_bound(move_ref)
+        if fixed is not None:
+            return fixed
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        if identifier == 101 and _MOVE_EFFECT_BY_ID[identifier] == "SPECIAL_DAMAGE_EFFECT":
+            if type(enemy_level) is not int or not 1 <= enemy_level <= 100:
+                raise RedBattleCatalogError("Night Shade requires an observed enemy level1..100")
+            return enemy_level
+        return None
+
     def type_effectiveness(
         self,
         attacking_type: str,

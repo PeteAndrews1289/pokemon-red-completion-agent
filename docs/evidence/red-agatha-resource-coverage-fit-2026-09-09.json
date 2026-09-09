@@ -1,0 +1,216 @@
+{
+  "schema": "pokemon.red.agatha-resource-coverage-fit.v1",
+  "scope": "correlated-train-only-frozen-controller-return",
+  "collector_source_commit": "669cefa319dcabf77ceab2dcd08f65bde1738530",
+  "collector_source_bundle_sha256": "8ad4318708fdb92edc7021184eaaf4220b60390d8c5e93991737d45a7f888096",
+  "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+  "episodes": [
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-01-causal",
+      "manifest_sha256": "a16c4f44f53f119b96b4da2f7a170ef83372a5599e6d28db1f332f4fc710394c",
+      "seed": 2026090941,
+      "selected_goals": [
+        "restore_team",
+        "restore_team"
+      ],
+      "goal_reached": false,
+      "actions": 80,
+      "frames": 6960,
+      "genuine_choices": 2,
+      "forced_singletons": 0,
+      "teacher_fallbacks": 0,
+      "specimens_retained": 30,
+      "terminal_checkpoint_sha256": "3210bc3724242a6609e617a00f33392b36d4668f6b55f685b38a4fde2e7feb8b"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-02-causal",
+      "manifest_sha256": "7542c2e615cad27d79bbb3fd44929852a82679d7fd997e54c23eced2ebbf6c42",
+      "seed": 2026090942,
+      "selected_goals": [
+        "restore_team",
+        "advance_story"
+      ],
+      "goal_reached": true,
+      "actions": 335,
+      "frames": 31141,
+      "genuine_choices": 2,
+      "forced_singletons": 0,
+      "teacher_fallbacks": 0,
+      "specimens_retained": 30,
+      "terminal_checkpoint_sha256": "35fd3fd78a9d3289fe84125777f2623e9d5fd2159ba9cdab71a8b6b5c33878a4"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-03-causal",
+      "manifest_sha256": "4c11df1bbafa008ae50597e497ec878ec0f7e7996300e5030a21fc8bde4a5ce3",
+      "seed": 2026090943,
+      "selected_goals": [
+        "restore_team",
+        "advance_story"
+      ],
+      "goal_reached": true,
+      "actions": 335,
+      "frames": 31141,
+      "genuine_choices": 2,
+      "forced_singletons": 0,
+      "teacher_fallbacks": 0,
+      "specimens_retained": 30,
+      "terminal_checkpoint_sha256": "39cd09ebe415e671950219965eaede376d9b70586974de39d41bc976f3371545"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-04-causal",
+      "manifest_sha256": "092ad12e1d0d901aca9d8b097d5b227b0ce3dce78e3959b8625000776b22aa93",
+      "seed": 2026090944,
+      "selected_goals": [
+        "restore_team",
+        "restore_team"
+      ],
+      "goal_reached": false,
+      "actions": 80,
+      "frames": 6960,
+      "genuine_choices": 2,
+      "forced_singletons": 0,
+      "teacher_fallbacks": 0,
+      "specimens_retained": 30,
+      "terminal_checkpoint_sha256": "61754b16e66465ab18caa8386aaaae8c86e37ff06e9bfa9afedfa8d2b058696e"
+    }
+  ],
+  "new_attempts": 4,
+  "new_goal_completions": 2,
+  "new_decision_budget_misses": 2,
+  "new_execution_exceptions": 0,
+  "new_actions": 830,
+  "new_frames": 76202,
+  "new_genuine_choices": 8,
+  "new_forced_singletons": 0,
+  "new_first_choice_kind": "restore_team",
+  "new_first_choice_contrast": false,
+  "new_native_training_rows": 0,
+  "all_attempt_fit": {
+    "attempted": 7,
+    "audit_actions": 0,
+    "audit_fits": 0,
+    "audit_frames": 0,
+    "authority": "unqualified-shadow",
+    "batch_record_sha256": "2159eccd717154bc3f6aa70b66749afa055e8503cc39578df0d6087a3d51856c",
+    "cancelled": 1,
+    "contexts": {
+      "b0f4354cb730c0dc11f3080cc6d995409f7d07c81609f81586d338e0f8767c39": {
+        "attempts": 3,
+        "estimates": [
+          {
+            "completion": 0.5093951638954776,
+            "cost": 0.25078098543762883
+          },
+          {
+            "completion": 0,
+            "cost": 0.04889792460358951
+          }
+        ],
+        "selected_indices": [
+          0,
+          0,
+          0
+        ],
+        "targets": [
+          [
+            1,
+            0.17025783333333333
+          ],
+          [
+            0,
+            0.33416444444444443
+          ],
+          [
+            1,
+            0.17025783333333333
+          ]
+        ]
+      },
+      "bb9227762b621f6cd4ae0137d15e067f5d664fe6cb05cbc2356f629b2f5b3d16": {
+        "attempts": 1,
+        "estimates": [
+          {
+            "completion": 0,
+            "cost": 0.04889792460358951
+          },
+          {
+            "completion": 0.5093951638954776,
+            "cost": 0.25078098543762883
+          }
+        ],
+        "selected_indices": [
+          1
+        ],
+        "targets": [
+          [
+            0,
+            0.33416444444444443
+          ]
+        ]
+      },
+      "ea77d18db9dad26573cf466a5c6da3ed6d3848d123a443a5413c2332cf804314": {
+        "attempts": 3,
+        "estimates": [
+          {
+            "completion": 0.0016916386279676177,
+            "cost": 0.002657858497121357
+          },
+          {
+            "completion": 0.9799136559554942,
+            "cost": 0.17257661360158508
+          }
+        ],
+        "selected_indices": [
+          1,
+          1,
+          0
+        ],
+        "targets": [
+          [
+            1,
+            0.16997272222222223
+          ],
+          [
+            1,
+            0.16997272222222223
+          ],
+          [
+            0,
+            0.0024817777777777776
+          ]
+        ]
+      }
+    },
+    "controller_stops": 1,
+    "dataset_sha256": "1f1d27afb90eb2bcdfe2c96081872b558d19cb9fc5587627c2f3f1f6e6caa6e4",
+    "decision_budget_misses": 2,
+    "distinct_selected_inputs": 3,
+    "first_choice_probes_excluded": true,
+    "goal_reached": 4,
+    "independent_evaluation": false,
+    "model_sha256": "4167759a6eebc8bf2bb5e5ebda8b791d264e1c23d0e04797172ca6dbc485e496",
+    "native_model_unchanged": true,
+    "new_fit_actual_control_decisions": 0,
+    "record_id": "red-ctrl-fit-01f60e73a4cb92e361762a05b91409f3a4d0d0cd9654fd12c4f8fa3ea5b5ee75",
+    "record_sha256": "4a811ffadb222b6bebc09a3ab491a0167948ea3ee08c6b01dd65fb660697e379",
+    "root_count": 1,
+    "schema": "pokemon.private.agatha-resource-fit-audit.v1",
+    "source_bundle_sha256": "859e9fc6be95722f0cfe2884c3b47df1a25f579d7125cc39f4a19b53aeee00a2",
+    "source_commit": "27f19104203e2396f414b9a6de6aa29a424a8233",
+    "training_mse_after": [
+      0.12211522740815839,
+      0.0032794848015331953
+    ],
+    "training_mse_before": [
+      0.24996631187710683,
+      0.013908543895047634
+    ]
+  },
+  "optional_new_head_probe": "deferred-no-new-first-action-contrast-and-controller-repair-changes-contract",
+  "no_replacement_batch": true,
+  "independent_evaluation": false,
+  "phase4_complete": false,
+  "champion_hall_of_fame_verified": false,
+  "private_path_fields": 0,
+  "private_binding_fields": 0
+}

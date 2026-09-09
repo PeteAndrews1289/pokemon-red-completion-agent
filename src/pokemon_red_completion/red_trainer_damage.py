@@ -61,7 +61,8 @@ def incoming_damage_bounds(
     status adds a full ceil(maxHP/16) residual allowance even for paralysis/freeze.
     Existing poison/burn also receive residual allowance; toxic/seeded/transformed
     states must already have been rejected by the observation adapter.
-    Pure confusion, immediate pure boosts and fixed20/40 damage are supported;
+    Pure confusion, immediate pure boosts, fixed20/40 and incoming Night Shade
+    at the observed enemy level are supported;
     other pure status and indirect effects abstain.
     The active member also receives a conservative self-hit allowance whenever
     already confused or the opponent can induce confusion. Reserves do not
@@ -91,7 +92,7 @@ def incoming_damage_bounds(
             continue
         ref = pokemon_red_move_ref(move_id)
         move = RED_BATTLE_CATALOG.resolve_move(ref)
-        fixed = RED_BATTLE_CATALOG.constant_damage_bound(ref)
+        fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=raw.enemy_level)
         if fixed is not None or (
             move.power == 0 and move.category == "status"
             and move.effect_flags == frozenset({"boost"})
