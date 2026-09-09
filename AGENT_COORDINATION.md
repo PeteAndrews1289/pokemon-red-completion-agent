@@ -1,4 +1,19 @@
-# Current — ordinary control with bounded healing; Lance-only test next
+# Current — model-selected Lance victory; Champion next
+
+Native82 sampled story rather than the teacher's available field heal and beat
+Lance in270 actions/25,813 frames. No medicine, faints, forced singleton or lost
+specimens: all30 remain. One genuine training outcome passed admission; the
+model still has82 fitted examples. See [the result](docs/evidence/red-model-selected-lance-2026-09-09.json).
+
+The carried Blastoise68 has Ice Beam3PP and Surf0PP, with2 Full Restores and1
+Elixir still owned. Read-only preparation covers all6 Champion opponents; this
+is coverage, not a victory prediction. Qualify the recovery menu and narrow
+switch-entry mechanics before the next separately declared Champion attempt.
+All prior failed episodes stay preserved and closed. The current league
+checklist is2/3, not a whole-project percentage. Phase4 still requires concurrent
+Champion and Hall-of-Fame facts under disclosed model/deterministic authority.
+
+# Historical — ordinary control with bounded healing; Lance-only test next
 
 The strict trial stopped before attacking because Leer was unqualified. Its135
 actions/12,204frames and one field item are retained; all30specimens remain.

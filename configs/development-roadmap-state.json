@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-ordinary-bounded-healing",
+  "as_of_session": "2026-09-09-model-selected-lance",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-proactive-recovery-stop-2026-09-09.json"
+      "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -49,8 +49,8 @@
       {
         "id": "linked-native-story",
         "label": "Carry a real model choice forward",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
       },
       {
         "id": "current-champion-hof",
@@ -528,6 +528,12 @@
       "result": "Strict trial stopped before attack;30 specimens retained. Ordinary bounded healing qualified; Phase4 remains open.",
       "deviation": "Same phase exit. New explicit controller mode keeps historical attack risk; strict profiles preserved. This is engineering, not a fit or completion.",
       "next": "Lance-only trial, then inspect actual carried state before Champion."
+    },
+    {
+      "session": "2026-09-09-model-selected-lance",
+      "result": "Model chose story and beat Lance:30 specimens,zero medicine/faints. Champion remains; current checklist2/3.",
+      "deviation": "No phase exit change. A real sampled model choice succeeded under disclosed deterministic combat; no independent advantage claim.",
+      "next": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts."
     }
   ],
   "closed_milestones": [

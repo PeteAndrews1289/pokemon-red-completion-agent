@@ -29,6 +29,8 @@ class RedTrainerPartyError(ValueError):
 def trainer_entry_candidates(
     party: PartyObservation, candidates: tuple[PartyMatchupProfile, ...],
     *, incoming_moves: tuple[int, ...], enemy_level: int | None = None,
+    entry_speeds: tuple[int, tuple[int, ...]] | None = None,
+    mirror_move_reset_qualified: bool = False,
 ) -> tuple[PartyMatchupProfile, ...]:
     """Screen ordinary coverage and qualified fixed incoming HP loss.
 
@@ -45,9 +47,25 @@ def trainer_entry_candidates(
         raise RedTrainerPartyError("incoming move inventory is unavailable")
     attacking_types = []
     fixed_bound = 0
+    if 119 in incoming_moves and mirror_move_reset_qualified is not True:
+        raise RedTrainerPartyError("Mirror Move entry requires no committed copied move")
+    has_ohko = any(move in (12, 32, 90) for move in incoming_moves)
+    if has_ohko and (
+        not isinstance(entry_speeds, tuple) or len(entry_speeds) != 2
+        or type(entry_speeds[0]) is not int or not 1 <= entry_speeds[0] <= 1023
+        or not isinstance(entry_speeds[1], tuple) or len(entry_speeds[1]) != party.size
+        or any(type(speed) is not int or not 1 <= speed <= 999 for speed in entry_speeds[1])
+    ):
+        raise RedTrainerPartyError("OHKO entry requires observed current enemy and party speeds")
     for move in incoming_moves:
         if not move:
             continue
+        if move == 119:
+            # Switch-entry ONLY: SendOutMon clears both used-move bytes before
+            # the reply, so MirrorMoveCopyMove fails. Never a general bound.
+            continue
+        if move in (12, 32, 90):
+            continue  # Per-candidate strict speed predicate below, not zero damage.
         ref = pokemon_red_move_ref(move)
         fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=enemy_level)
         if fixed is not None:
@@ -55,7 +73,10 @@ def trainer_entry_candidates(
         else:
             attacking_types.append(RED_BATTLE_CATALOG.switch_entry_attack_type(ref))
     return tuple(candidate for candidate in candidates
-                 if party.members[candidate.party_slot - 1].hp > fixed_bound and all(
+                 if (not has_ohko or (entry_speeds is not None
+                     and party.members[candidate.party_slot - 1].status is StatusCondition.HEALTHY
+                     and entry_speeds[1][candidate.party_slot - 1] > entry_speeds[0]))
+                 and party.members[candidate.party_slot - 1].hp > fixed_bound and all(
         attack_type is None or RED_BATTLE_CATALOG.type_effectiveness(
             attack_type, RED_BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(
                 party.members[candidate.party_slot - 1].species_id,

@@ -99,10 +99,13 @@ def incoming_damage_bounds(
             raise TrainerDamageError("confusion with incoming stat reduction is not qualified")
         if fixed is not None or (
             move.power == 0 and move.category == "status"
-            and move.effect_flags in (frozenset({"boost"}), frozenset({"debuff"}))
+            and (move.effect_flags in (
+                frozenset({"boost"}), frozenset({"debuff"}), frozenset({"heal"}),
+            ) or move_id in (113, 115))
         ):
-            # Pure stat changes cause no immediate HP loss (pinned effects.asm,
-            # StatModifierUp/DownEffect). Later turns reread live attack/defense.
+            # Pure stat changes, enemy recovery and screens cause no immediate
+            # player HP loss (pinned effects.asm, heal/reflect_light_screen.asm).
+            # Later turns reread live attack/defense; this predicts no progress.
             # Constant damage ignores STAB/critical/type arithmetic. Existing
             # poison/burn still consumes a residual tick on this same turn.
             for index, status in enumerate(raw.party_status):

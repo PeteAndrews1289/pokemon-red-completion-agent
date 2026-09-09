@@ -128,6 +128,10 @@ class RedTrainerPartyController:
                 raise RedTrainerControlError("incoming trainer moves are unavailable")
             reserves = trainer_entry_candidates(
                 party, reserves, incoming_moves=incoming, enemy_level=raw.enemy_level,
+                entry_speeds=self.reader.read_trainer_entry_speeds(raw)
+                if any(move in (12, 32, 90) for move in incoming) else None,
+                mirror_move_reset_qualified=self.reader.read_trainer_mirror_switch_ready(raw)
+                if 119 in incoming else False,
             )
             if not reserves and active is None:
                 raise RedTrainerControlError("no reserve passes the incoming move entry screen")

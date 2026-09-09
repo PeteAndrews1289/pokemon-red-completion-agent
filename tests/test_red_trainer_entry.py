@@ -53,7 +53,7 @@ def test_status_only_inventory_is_not_fabricated_damage():
     assert len(screened((142, 28, 0, 0))) == 3
 
 
-@pytest.mark.parametrize("move", [69, 149, 90, 68, 120, 153, 35, 117, 118, 119, 144])
+@pytest.mark.parametrize("move", [69, 149, 68, 120, 153, 35, 117, 118, 144])
 def test_unsupported_effect_is_unknown_not_zero_damage(move):
     with pytest.raises(RedBattleCatalogError, match="entry type screen"):
         screened((move, 0, 0, 0))
@@ -98,7 +98,7 @@ def test_fixed_damage_does_not_hide_other_coverage_or_unsupported_slots():
     assert [c.party_slot for c in trainer_entry_candidates(
         team(), candidates, incoming_moves=(82, 85, 101, 0), enemy_level=55,
     )] == [1]  # Ground survives; water and flying remain weak to Thunderbolt.
-    for moves in ((101, 149, 0, 0), (82, 0, 0, 90), (68, 49, 0, 0)):
+    for moves in ((101, 149, 0, 0), (82, 0, 0, 149), (68, 49, 0, 0)):
         with pytest.raises(RedBattleCatalogError, match="entry type screen"):
             trainer_entry_candidates(team(), candidates, incoming_moves=moves, enemy_level=55)
 
@@ -172,3 +172,118 @@ def test_corrupt_move_byte_refuses(monkeypatch):
     memory.values[0xCFF0] = 255
     with pytest.raises(SemanticStateError, match="inventory"):
         reader.read_trainer_entry_moves(raw)
+
+
+def test_mirror_move_only_becomes_inert_on_switch_entry():
+    candidates = trainer_matchup_candidates(team(), opponent_species=72, opponent_level=56)
+    with pytest.raises(RedTrainerPartyError, match="committed"):
+        screened((119, 0, 0, 0))
+    assert trainer_entry_candidates(team(), candidates, incoming_moves=(119, 0, 0, 0),
+                                    mirror_move_reset_qualified=True) == candidates
+    assert [c.party_slot for c in trainer_entry_candidates(
+        team(), candidates, incoming_moves=(119, 85, 0, 0),
+        mirror_move_reset_qualified=True,
+    )] == [1]
+    from pokemon_red_completion.red_battle_catalog import RED_BATTLE_CATALOG, pokemon_red_move_ref
+    with pytest.raises(RedBattleCatalogError):
+        RED_BATTLE_CATALOG.switch_entry_attack_type(pokemon_red_move_ref(119))
+
+
+@pytest.mark.parametrize("move", [12, 32, 90])
+def test_ohko_entry_needs_strictly_faster_observed_speed(move):
+    party = team()
+    candidates = trainer_matchup_candidates(party, opponent_species=72, opponent_level=56)
+    for missing in (None, (100, (101, 100)), (100, (True, 100, 99)),
+                    (0, (101, 100, 99)), (999, (1000, 999, 998))):
+        with pytest.raises(RedTrainerPartyError, match="speeds"):
+            trainer_entry_candidates(party, candidates, incoming_moves=(move, 0, 0, 0),
+                                     entry_speeds=missing)
+    assert [c.party_slot for c in trainer_entry_candidates(
+        party, candidates, incoming_moves=(move, 0, 0, 0),
+        entry_speeds=(100, (101, 100, 99)),
+    )] == [1]  # Same and slower speeds remain dangerous, regardless of level.
+    assert [c.party_slot for c in trainer_entry_candidates(
+        party, candidates, incoming_moves=(move, 8, 0, 0),
+        entry_speeds=(100, (101, 102, 103)),
+    )] == [2]  # Speed proof cannot hide super-effective Ice coverage.
+
+
+def speed_observer(monkeypatch):
+    reader, memory, raw = observer(monkeypatch)
+    raw = replace(raw, party_count=3)
+    monkeypatch.setattr(reader, "read", lambda: raw)
+    # Literal offsets/stride, deliberately cross the byte boundary on slot2.
+    memory.values.update({0xCFFA: 0, 0xCFFB: 100,
+                          0xD193: 0, 0xD194: 101,
+                          0xD1BF: 1, 0xD1C0: 44,
+                          0xD1EB: 0, 0xD1EC: 99})
+    return reader, memory, raw
+
+
+@pytest.mark.parametrize("flags,ready", [((0, 0, 0), True), ((128, 0, 0), True),
+    ((1, 0, 0), False), ((2, 0, 0), False), ((4, 0, 0), False),
+    ((16, 0, 0), False), ((32, 0, 0), False), ((64, 0, 0), False),
+    ((0, 32, 0), False), ((0, 64, 0), False), ((0, 0, 8), False)])
+def test_mirror_switch_requires_no_already_committed_copied_move(monkeypatch, flags, ready):
+    reader, memory, raw = observer(monkeypatch)
+    memory.values.update(dict(zip((0xD067, 0xD068, 0xD069), flags, strict=True)))
+    assert reader.read_trainer_mirror_switch_ready(raw) is ready
+
+
+def test_changed_mirror_commitment_is_not_a_reset_proof(monkeypatch):
+    reader, memory, raw = observer(monkeypatch)
+    memory.values.update({0xD067: 0, 0xD068: 0, 0xD069: 0})
+    original = memory.read_u8
+    def changing(address):
+        value = original(address)
+        if address == 0xD069:
+            memory.values[0xD067] = 16
+        return value
+    monkeypatch.setattr(memory, "read_u8", changing)
+    with pytest.raises(SemanticStateError, match="commitment changed"):
+        reader.read_trainer_mirror_switch_ready(raw)
+
+
+def test_menu_only_change_cannot_keep_a_mirror_reset_proof(monkeypatch):
+    reader, memory, raw = observer(monkeypatch)
+    memory.values.update({0xD067: 0, 0xD068: 0, 0xD069: 0})
+    phases = iter((BattleMenuPhase.MAIN, BattleMenuPhase.MAIN, BattleMenuPhase.MOVE))
+    monkeypatch.setattr(reader, "read_battle_menu_state", lambda _: BattleMenuState(next(phases)))
+    with pytest.raises(SemanticStateError, match="commitment changed"):
+        reader.read_trainer_mirror_switch_ready(raw)
+
+
+def test_speed_adapter_uses_current_enemy_and_each_party_stride(monkeypatch):
+    reader, memory, raw = speed_observer(monkeypatch)
+    assert reader.read_trainer_entry_speeds(raw) == (100, (101, 300, 99))
+    assert memory.reads == [0xCFFA, 0xCFFB, 0xD193, 0xD194,
+                           0xD1BF, 0xD1C0, 0xD1EB, 0xD1EC] * 2
+
+
+@pytest.mark.parametrize("fault", ["stale", "field", "menu", "zero", "cap", "changed"])
+def test_speed_adapter_refuses_unknown_or_changed_boundary(monkeypatch, fault):
+    reader, memory, raw = speed_observer(monkeypatch)
+    if fault == "stale":
+        assert reader.read_trainer_entry_speeds(replace(raw, enemy_hp=146)) is None
+    elif fault == "field":
+        raw = replace(raw, battle_state=0)
+        monkeypatch.setattr(reader, "read", lambda: raw)
+        assert reader.read_trainer_entry_speeds(raw) is None
+    elif fault == "menu":
+        monkeypatch.setattr(reader, "read_battle_menu_state",
+                            lambda _: BattleMenuState(BattleMenuPhase.MOVE))
+        assert reader.read_trainer_entry_speeds(raw) is None
+    elif fault in {"zero", "cap"}:
+        if fault == "zero":
+            memory.values[0xCFFB] = 0
+        else:
+            memory.values.update({0xD193: 3, 0xD194: 232})  #1000 can be capped to999.
+        with pytest.raises(SemanticStateError, match="domain"):
+            reader.read_trainer_entry_speeds(raw)
+    else:
+        reads = iter((raw, replace(raw, enemy_species_id=19)))
+        monkeypatch.setattr(reader, "read", lambda: next(reads))
+        with pytest.raises(SemanticStateError, match="changed"):
+            reader.read_trainer_entry_speeds(raw)
+    if fault in {"stale", "field", "menu"}:
+        assert not memory.reads

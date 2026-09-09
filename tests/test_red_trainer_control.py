@@ -46,6 +46,46 @@ def test_good_active_matchup_uses_existing_move_policy():
     assert not subject.switches
 
 
+@pytest.mark.parametrize("speed,allowed", [(101, True), (100, False), (99, False)])
+def test_ordinary_switch_binds_observed_speed_for_ohko(speed, allowed):
+    state = raw(enemy=34, hp=(79, 190))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (32, 0, 0, 0)
+    seen = []
+    subject.reader.read_trainer_entry_speeds = lambda observed: (
+        seen.append(observed) or (100, (200, speed))
+    )
+    error = control._SwitchRequest if allowed else RedTrainerControlError
+    with pytest.raises(error):
+        subject.choose(state, lambda _: pytest.fail("unfit lead attacked"))
+    assert seen == [state]
+    assert subject.moves_selected == 0 and not subject.switches
+
+
+@pytest.mark.parametrize("fault", ["speed", "mirror"])
+def test_switch_qualification_is_reread_before_any_controller_input(monkeypatch, fault):
+    state = raw(enemy=34, hp=(79, 190))
+    subject = controller(state)
+    subject.reader.read_trainer_entry_moves = lambda _: (
+        (32, 0, 0, 0) if fault == "speed" else (119, 0, 0, 0)
+    )
+    speeds = iter(((100, (200, 101)), (100, (200, 100))))
+    mirrors = iter((True, False))
+    subject.reader.read_trainer_entry_speeds = lambda _: next(speeds)
+    subject.reader.read_trainer_mirror_switch_ready = lambda _: next(mirrors)
+    def battle(reader, _executor, policy, **_kwargs):
+        try:
+            policy(reader.read())
+        except control._SwitchRequest as error:
+            raise BattleRuntimeError("switch boundary") from error
+    monkeypatch.setattr(control, "run_adaptive_trainer_battle", battle)
+    monkeypatch.setattr(control, "switch_active_battler", lambda *_a, **_k: pytest.fail("input"))
+    from pokemon_red_completion.red_trainer_party import RedTrainerPartyError
+    with pytest.raises((RedTrainerControlError, RedTrainerPartyError)):
+        run(subject, object())
+    assert not subject.switches and subject.moves_selected == 0
+
+
 def test_ordinary_healing_keeps_historical_attack_risk():
     subject = controller(raw())
     subject.maximum_full_restores = 1

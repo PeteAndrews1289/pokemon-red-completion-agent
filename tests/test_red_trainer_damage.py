@@ -161,6 +161,22 @@ def test_fixed_boost_and_ordinary_inventory_takes_worst_not_sum_or_first_move():
     assert incoming_damage_bounds(observation((97, 82, 34, 0))) == (86, 47)
 
 
+@pytest.mark.parametrize("move", [105, 113, 115, 135])
+def test_enemy_recovery_or_screen_does_not_erase_other_damage_or_residual(move):
+    current = observation((move, 0, 0, 0))
+    assert incoming_damage_bounds(current) == (0, 0)
+    assert incoming_damage_bounds(replace(current, raw=replace(
+        current.raw, party_status=(8, 16),
+    ))) == (13, 10)
+    assert incoming_damage_bounds(observation((move, 34, 0, 0))) == (86, 47)
+
+
+def test_actual_psychic_recovery_screen_inventory_still_bounds_attack():
+    actual = confused_observation((60, 105, 94, 115))
+    attacks = confused_observation((60, 94, 0, 0))
+    assert incoming_damage_bounds(actual) == incoming_damage_bounds(attacks)
+
+
 @pytest.mark.parametrize('move', [28, 39, 43, 45, 81, 103, 108, 134, 148])
 def test_pure_stat_drop_has_no_immediate_hp_damage_but_keeps_existing_residual(move):
     current = observation((move, 0, 0, 0))

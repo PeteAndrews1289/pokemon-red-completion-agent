@@ -3,17 +3,17 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-ordinary-bounded-healing**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-model-selected-lance**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Model-led league continuation: 1/3 acceptance items (33%).**
+**Model-led league continuation: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Qualify shared fixed-damage entry ([evidence](../docs/evidence/red-fixed-damage-entry-2026-09-09.json))
-- [ ] Carry a real model choice forward
+- [x] Carry a real model choice forward ([evidence](../docs/evidence/red-model-selected-lance-2026-09-09.json))
 - [ ] Verify Champion and Hall of Fame
 
 Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-proactive-recovery-stop-2026-09-09.json)
+[Current evidence](../docs/evidence/red-model-selected-lance-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-model-selected-lance
+
+Model chose story and beat Lance:30 specimens,zero medicine/faints. Champion remains; current checklist2/3.
+
+**Deviation:** No phase exit change. A real sampled model choice succeeded under disclosed deterministic combat; no independent advantage claim.
+
+**Next:** Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.
 
 ### 2026-09-09-ordinary-bounded-healing
 

@@ -29,29 +29,29 @@
     },
     {
       "capability": "Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split.",
-      "cheapest_falsifier": "Actual post-Agatha stock/menu then a two-decision Lance-only episode with one in-battle medicine; current party, resource cost and trainer completion decide success.",
+      "cheapest_falsifier": "Actual carried party has 2 Full Restores and 1 Elixir; read-only preparation covers all six Champion opponents. First qualify PP restoration and supported switch boundaries, then the bounded story outcome.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Strict trial: one native82 field-heal choice and one forced story, stopped before attacking. New ordinary-bounded-healing mode retains historical attack/switch risk and qualifies optional item turns; not exercised yet. Shadow4167759a remains unused.",
-        "blocker": "No Lance completion. Strict critical bounds reject healthy offense and do not guarantee progress with one medicine. Champion has known incoming-move coverage gaps and is not authorized by a Lance-only pilot.",
-        "decision": "Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion.",
+        "authority_delta": "Native82 sampled story over field restoration and beat Lance: one genuine choice, no singleton or teacher fallback. Battle control remains deterministic; bounded healing was available but unused. One outcome admitted, no new fit.",
+        "blocker": "Champion and Hall of Fame not yet reached. Ice Beam3/Surf0 and weak Jolteon HP need truthful recovery options; switch qualification must handle committed Mirror Move and observed OHKO speed.",
+        "decision": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
         "evidence": {
           "kind": "development_episode",
-          "path": "docs/evidence/red-proactive-recovery-stop-2026-09-09.json",
-          "sha256": "666a11072d502c5fac9b4af23cb8c563a4ea6730e52b38a17312243a73b27352"
+          "path": "docs/evidence/red-model-selected-lance-2026-09-09.json",
+          "sha256": "2d115cac01dc307f006cb0cc0433fc563705400b15d261d8f0225b6d95c1da88"
         },
-        "learning_output": "Closed proactive trial:135actions/12204frames/one field item,30specimens retained,no battle attack or item,no fit. Native82 unchanged. Whole trace quarantined; a pure-debuff gap and overly restrictive critical envelope identified.",
-        "next_falsifier": "Actual post-Agatha stock/menu then a two-decision Lance-only episode with one in-battle medicine; current party, resource cost and trainer completion decide success.",
-        "next_session_goal": "Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion.",
+        "learning_output": "Lance succeeded:270 actions,25813 frames,one genuine sampled choice,zero medicine/faints/specimen loss. One native outcome strictly admitted; model still82examples, no fit. Current league checklist2/3.",
+        "next_falsifier": "Actual carried party has 2 Full Restores and 1 Elixir; read-only preparation covers all six Champion opponents. First qualify PP restoration and supported switch boundaries, then the bounded story outcome.",
+        "next_session_goal": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
         "product_alignment": "Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits.",
-        "session_id": "2026-09-09-ordinary-bounded-healing",
+        "session_id": "2026-09-09-model-selected-lance",
         "status": "active",
         "stop_condition": "Each claimed attempt stops at its first exception; prior failed saves remain closed. Reorient after the next finite result. No automatic controller fallback, critical-risk mode, retry or new boss-fitting cohort.",
-        "transfer_result": "Reusable pure-stat-drop and ordinary-healing seams tested across budgets, opponents and changed targets. Cartridge-derived remaining rosters checked without input. No independent advantage or cross-game transfer."
+        "transfer_result": "Actual high-level choice carried through a later boss. This is correlated Red development, not an independent success-rate or cross-game transfer claim."
       },
       "learned_authority": {
-        "current": "Strict trial: one native82 field-heal choice and one forced story, stopped before attacking. New ordinary-bounded-healing mode retains historical attack/switch risk and qualifies optional item turns; not exercised yet. Shadow4167759a remains unused.",
+        "current": "Native82 sampled story over field restoration and beat Lance: one genuine choice, no singleton or teacher fallback. Battle control remains deterministic; bounded healing was available but unused. One outcome admitted, no new fit.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red resource-backed story integration V1",
-      "next_decision": "Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion.",
+      "next_decision": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

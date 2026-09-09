@@ -72,6 +72,7 @@ class RamAddress(IntEnum):
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
     ENEMY_ATTACK = 0xCFF6
+    ENEMY_SPEED = 0xCFFA
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
     BATTLE_MON_DEFENSE = 0xD027
@@ -3934,6 +3935,52 @@ class PokemonRedStateReader:
         ):
             raise SemanticStateError("trainer entry observation changed while reading")
         return moves
+
+    def read_trainer_mirror_switch_ready(self, expected: RawGameState) -> bool:
+        """A fresh send-out clears Mirror Move, but not an already copied move.
+
+        Reject committed multi-turn, recharge/rage or transformed opponents.
+        This qualifies only the incoming switch reply, never an item/attack turn.
+        """
+        moves = self.read_trainer_entry_moves(expected)
+        if moves is None:
+            return False
+        def flags() -> tuple[int, ...]:
+            return tuple(self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i)
+                         for i in range(3))
+        before = flags()
+        if self.read_trainer_entry_moves(expected) != moves or flags() != before:
+            raise SemanticStateError("Mirror Move commitment changed while reading")
+        return not (before[0] & 0x77 or before[1] & 0x60 or before[2] & 0x08)
+
+    def read_trainer_entry_speeds(
+        self, expected: RawGameState,
+    ) -> tuple[int, tuple[int, ...]] | None:
+        """Current enemy speed and conservative post-switch party speeds.
+
+        Pinned party_struct speed offset40 is restored on send-out, before
+        nonnegative badge boosts. Only healthy reserves may use this bound.
+        No species/base-speed or level inference, inputs, or snapshot edits.
+        """
+        before = self.read()
+        if (
+            before != expected or before.battle_state != 2 or (before.enemy_hp or 0) <= 0
+            or type(before.party_count) is not int or not 1 <= before.party_count <= 6
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
+            return None
+        def values() -> tuple[int, tuple[int, ...]]:
+            return self._read_u16_be(RamAddress.ENEMY_SPEED), tuple(
+                self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 40)
+                for index in range(before.party_count or 0)
+            )
+        speeds = values()
+        if not 1 <= speeds[0] <= 1023 or any(not 1 <= speed <= 999 for speed in speeds[1]):
+            raise SemanticStateError("trainer entry speed domain differs")
+        if (self.read() != before or values() != speeds
+                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+            raise SemanticStateError("trainer entry speeds changed while reading")
+        return speeds
 
     def read_trainer_damage_observation(self, expected: RawGameState) -> TrainerDamageObservation:
         """Observe real stats and types, including unmodified critical-hit stats.
