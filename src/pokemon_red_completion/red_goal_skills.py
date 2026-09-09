@@ -368,9 +368,12 @@ class RedFieldRestoreGoalProvider:
     emulator: RedGoalSkillEmulator
     adapter: PokemonRedGoalStateAdapter
     kind: GoalKind = GoalKind.RESTORE_TEAM
+    affordable_single_item: bool = False
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
-        plan, unavailable = self._plan(observation)
+        plan, unavailable = self._plan(
+            observation, affordable_single_item=self.affordable_single_item,
+        )
         if unavailable is not None:
             return RedGoalBindingOffer.unavailable(self.kind, unavailable)
         assert plan
@@ -378,6 +381,8 @@ class RedFieldRestoreGoalProvider:
         before_frames = self.emulator.frame_count
 
         def execute() -> GoalExecutionReport:
+            if self.affordable_single_item and self.adapter.observe() != observation:
+                raise RedGoalSkillError("field restoration origin changed before input")
             for party_index, item in plan:
                 use_field_recovery_item(
                     self.actions,
@@ -422,7 +427,10 @@ class RedFieldRestoreGoalProvider:
 
         return RedGoalBindingOffer.available(
             ExecutableGoalBinding(
-                binding_ref="pokemon.red:recovery:field-items",
+                binding_ref=(
+                    "pokemon.red:recovery:single-field-item" if self.affordable_single_item
+                    else "pokemon.red:recovery:field-items"
+                ),
                 kind=self.kind,
                 estimated_effort=min(1.0, 0.08 * len(plan)),
                 estimated_risk=0.03,
@@ -434,6 +442,7 @@ class RedFieldRestoreGoalProvider:
     @staticmethod
     def _plan(
         observation: RedGoalObservation,
+        *, affordable_single_item: bool = False,
     ) -> tuple[
         tuple[tuple[int, ItemId], ...],
         GoalUnavailableReason | None,
@@ -453,6 +462,25 @@ class RedFieldRestoreGoalProvider:
         if not plan:
             return (), GoalUnavailableReason.NO_LEGAL_TARGET
         inventory = dict(raw.bag_items or ())
+        if affordable_single_item:
+            # Fully recover one affordable target, not a fictitious whole-party heal.
+            # Prefer the narrow item when it suffices; reserve Full Restore as fallback.
+            candidates = []
+            for index, preferred in plan:
+                items = (preferred, ItemId.FULL_RESTORE)
+                for item in dict.fromkeys(items):
+                    if inventory.get(int(item), 0) <= 0:
+                        continue
+                    if item is ItemId.HYPER_POTION and maximum[index] - hp[index] > 200:
+                        continue
+                    candidates.append((index, item))
+                    break
+            if not candidates:
+                return (), GoalUnavailableReason.MISSING_RESOURCE
+            selected = min(candidates, key=lambda pair: (
+                hp[pair[0]] / maximum[pair[0]], -int(bool(status[pair[0]])), pair[0],
+            ))
+            return (selected,), None
         required = Counter(item for _, item in plan)
         if any(inventory.get(int(item), 0) < quantity for item, quantity in required.items()):
             return (), GoalUnavailableReason.MISSING_RESOURCE

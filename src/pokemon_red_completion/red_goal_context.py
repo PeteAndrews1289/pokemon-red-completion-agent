@@ -357,7 +357,7 @@ def _build_provider(
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
-        if spec.parameters.get("trainer_objective") == "defeat_lorelei":
+        if spec.parameters.get("trainer_objective") in {"defeat_lorelei", "defeat_bruno"}:
             from .objective_skills import ObjectiveSkillRegistry
             from .red_trainer_story import RedCartridgeLoreleiSkill
 
@@ -365,6 +365,7 @@ def _build_provider(
                 COMPLETION_QUEST,
                 ObjectiveSkillRegistry((RedCartridgeLoreleiSkill(
                     runtime, actions, runtime.trainer_story_world,
+                    objective_id=str(spec.parameters["trainer_objective"]),
                 ),)), runtime.observer,
             )
         return RedStoryGoalBindingProvider(
@@ -395,6 +396,7 @@ def _build_provider(
             runtime.reader,
             runtime.emulator,
             runtime.adapter,
+            affordable_single_item=spec.parameters.get("affordable_single_item") is True,
         )
     if mechanic is RedGoalMechanic.CENTER_RESTORE:
         return RedCenterRestoreGoalProvider(

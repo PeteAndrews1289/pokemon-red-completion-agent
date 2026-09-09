@@ -333,7 +333,8 @@ def _player_observer(
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
-    if world is not None and any(spec.parameters.get("trainer_objective") == "defeat_lorelei"
+    if world is not None and any(spec.parameters.get("trainer_objective")
+           in {"defeat_lorelei", "defeat_bruno"}
            for spec in runtime.profile.providers):
         runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
@@ -1040,7 +1041,8 @@ def _regional_profiles(
         if (
             isinstance(source, Path)
             or source.startswith("discovery:")
-            or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story"}
+            or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
+                          "cartridge-trainer-story:bruno", "affordable-field-restore"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1051,12 +1053,23 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
-        if source == "cartridge-trainer-story":
+        if source == "affordable-field-restore":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_affordable_field_restore_profile,
+            )
+
+            profile = bind_affordable_field_restore_profile(profile)
+            result.append(profile)
+            continue
+        if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
-            profile = bind_cartridge_trainer_story_profile(profile)
+            profile = bind_cartridge_trainer_story_profile(
+                profile, objective_id=("defeat_bruno" if source.endswith(":bruno")
+                                       else "defeat_lorelei"),
+            )
             result.append(profile)
             continue
         if isinstance(source, str) and source.startswith("evolution:"):

@@ -233,7 +233,9 @@ def build_red_goal_context_profile_payload(
     return payload
 
 
-def bind_cartridge_trainer_story_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_cartridge_trainer_story_profile(
+    profile: RedGoalContextProfile, *, objective_id: str = "defeat_lorelei",
+) -> RedGoalContextProfile:
     """Prospectively replace only the legacy story executor, preserving other goals."""
     providers = {
         spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
@@ -241,7 +243,22 @@ def bind_cartridge_trainer_story_profile(profile: RedGoalContextProfile) -> RedG
     }
     providers[GoalKind.ADVANCE_STORY] = (
         GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY,
-        {"trainer_objective": "defeat_lorelei"},
+        {"trainer_objective": objective_id},
+    )
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    ))
+
+
+def bind_affordable_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt into one owned recovery item, without changing historical profiles."""
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers
+    }
+    providers[GoalKind.RESTORE_TEAM] = (
+        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {"affordable_single_item": True},
     )
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
@@ -471,8 +488,13 @@ def _parse_parameters(
         if not row:
             return row
         _exact_keys(row, {"trainer_objective"})
-        if row["trainer_objective"] != "defeat_lorelei":
+        if row["trainer_objective"] not in ("defeat_lorelei", "defeat_bruno"):
             raise RedGoalContextProfileError("cartridge story objective is not supported")
+        return row
+    if mechanic is RedGoalMechanic.FIELD_RESTORE and row:
+        _exact_keys(row, {"affordable_single_item"})
+        if row["affordable_single_item"] is not True:
+            raise RedGoalContextProfileError("single-item recovery requires explicit opt-in")
         return row
     if mechanic in {
         RedGoalMechanic.BALANCED_TEAM,

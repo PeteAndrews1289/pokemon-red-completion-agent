@@ -257,7 +257,14 @@ class LivingDexGoalShadowPolicy:
         self.last_menu_indices = ()
         deterministic = self.safety.select(question)
         deterministic_safety_gate = (
-            deterministic.kind in {GoalKind.RECOVER_CONTROL, GoalKind.RESTORE_TEAM}
+            deterministic.kind is GoalKind.RECOVER_CONTROL
+            or (
+                deterministic.kind is GoalKind.RESTORE_TEAM
+                and (
+                    self.model.feature_version < 3
+                    or question.situation.safety_pressure >= self.safety.safety_gate
+                )
+            )
             or (
                 deterministic.kind is GoalKind.MANAGE_STORAGE
                 and question.situation.storage_pressure >= self.safety.storage_gate

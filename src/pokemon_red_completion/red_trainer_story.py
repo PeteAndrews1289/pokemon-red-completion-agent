@@ -57,7 +57,7 @@ class RedCartridgeLoreleiSkill:
     runtime: RedGoalContextRuntime
     actions: CountingExecutor
     world: StrategicScenarioRouteWorld | None
-    objective_id: str = field(default="defeat_lorelei", init=False)
+    objective_id: str = "defeat_lorelei"
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
         default=frozenset({"league:lorelei_defeated"}), init=False,
@@ -72,6 +72,12 @@ class RedCartridgeLoreleiSkill:
     )
     _claimed: bool = field(default=False, init=False)
 
+    def __post_init__(self) -> None:
+        if self.objective_id not in {"defeat_lorelei", "defeat_bruno"}:
+            raise RedTrainerStoryError("unsupported cartridge story objective")
+        if self.objective_id == "defeat_bruno":
+            self.expected_facts = frozenset({"league:bruno_defeated"})
+
     def _plan(self) -> tuple[RedGoalObservation, TrainerFundingCandidate, RedTrainerPartyPlan]:
         from .red_resource_goal_router import _walking_plan
 
@@ -79,20 +85,27 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("cartridge world or fixed battle authority unavailable")
         observation = self.runtime.adapter.observe()
         raw = observation.raw
+        is_bruno = self.objective_id == "defeat_bruno"
+        target_map = MapId.BRUNOS_ROOM if is_bruno else MapId.LORELEIS_ROOM
+        target_event = EventFlag.BEAT_BRUNO if is_bruno else EventFlag.BEAT_LORELEI
+        required_fact = "league:lorelei_defeated" if is_bruno else "story:victory_road_cleared"
+        entry_maps = (
+            {MapId.LORELEIS_ROOM, MapId.BRUNOS_ROOM} if is_bruno
+            else {MapId.INDIGO_PLATEAU, MapId.INDIGO_PLATEAU_LOBBY, MapId.LORELEIS_ROOM}
+        )
         if (
             not observation.input_ready or raw.battle_state != 0
-            or raw.map_id not in {MapId.INDIGO_PLATEAU, MapId.INDIGO_PLATEAU_LOBBY,
-                                  MapId.LORELEIS_ROOM}
-            or "story:victory_road_cleared" not in observation.game_state.facts
+            or raw.map_id not in entry_maps
+            or required_fact not in observation.game_state.facts
             or self.expected_facts.intersection(observation.game_state.facts)
             or raw.event_flags is None
             or self.runtime.reader.read_bottom_dialogue_box_visible()
         ):
             raise RedTrainerStoryError("requires a settled, undefeated Indigo story boundary")
-        headers = trainer_headers(self.world.rom, {MapId.LORELEIS_ROOM}, full_event_offsets=True)
-        objects = map_object_events(self.world.rom, {MapId.LORELEIS_ROOM})
+        headers = trainer_headers(self.world.rom, {target_map}, full_event_offsets=True)
+        objects = map_object_events(self.world.rom, {target_map})
         zones = static_trainer_sight_zones(headers, objects, raw.event_flags)
-        matches = tuple(z for z in zones if z.event_flag == EventFlag.BEAT_LORELEI)
+        matches = tuple(z for z in zones if z.event_flag == target_event)
         if len(matches) != 1 or matches[0].defeated or matches[0].engage_distance != 0:
             raise RedTrainerStoryError("story trainer is not one undefeated interaction target")
         trainer = matches[0]

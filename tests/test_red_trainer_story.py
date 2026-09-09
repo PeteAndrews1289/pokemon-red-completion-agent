@@ -90,6 +90,40 @@ def test_goal_availability_is_action_free_and_prepares_the_shortest_real_target(
     assert len(target.approach.steps) == 1
 
 
+@pytest.mark.parametrize("fault", [None, "prerequisite", "lobby", "completed", "wrong_trainer"])
+def test_bruno_plans_its_actual_target_only_from_post_lorelei_region(fixture, monkeypatch, fault):
+    old, reader, inputs, observe, zone = fixture
+    reader.raw = replace(reader.raw, map_id=245 if fault != "lobby" else 174)
+    def current():
+        result = observe()
+        facts = set(result.game_state.facts)
+        if fault != "prerequisite":
+            facts.add("league:lorelei_defeated")
+        if fault == "completed":
+            facts.add("league:bruno_defeated")
+        return replace(result, game_state=replace(result.game_state, facts=frozenset(facts)))
+    old.runtime.adapter.observe = current
+    target = replace(zone, map_id=MapId.BRUNOS_ROOM,
+                     event_flag=2273 if fault == "wrong_trainer" else 2281)
+    def headers(_rom, maps, **_kwargs):
+        assert maps == {MapId.BRUNOS_ROOM}
+        return ()
+    old_plan = old.world.plan_feasible_to_map
+    def plan(start, map_id, *, goal_at):
+        assert map_id == 246
+        return old_plan(start, 245, goal_at=goal_at)
+    old.world.plan_feasible_to_map = plan
+    monkeypatch.setattr(story, "trainer_headers", headers)
+    monkeypatch.setattr(story, "static_trainer_sight_zones", lambda *_: (target,))
+    skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
+                                         objective_id="defeat_bruno")
+    assert skill.availability(current().game_state).executable == (fault is None)
+    if fault is None:
+        assert skill._prepared[1].trainer.event_flag == 2281
+        assert skill._prepared[1].trainer.map_id == 246
+    assert not inputs
+
+
 @pytest.mark.parametrize("change", [{"map_id": 3}, {"battle_state": 1},
                                     {"party_hp": (0,)}])
 def test_unqualified_boundary_is_not_advertised(fixture, change):
