@@ -30,7 +30,7 @@ from .gen1_trainer_sight import (
 from .gen1_traversal import map_object_events
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
 from .objective_skills import ObjectiveSkillAvailability, ObjectiveSkillExecution
-from .observation import EventFlag, MapId
+from .observation import CurrentMapBlocks, EventFlag, MapId
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
@@ -71,6 +71,8 @@ class RedCartridgeLoreleiSkill:
         default=None, init=False,
     )
     _claimed: bool = field(default=False, init=False)
+    _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
+    _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if self.objective_id not in {"defeat_lorelei", "defeat_bruno"}:
@@ -102,17 +104,24 @@ class RedCartridgeLoreleiSkill:
             or self.runtime.reader.read_bottom_dialogue_box_visible()
         ):
             raise RedTrainerStoryError("requires a settled, undefeated Indigo story boundary")
-        headers = trainer_headers(self.world.rom, {target_map}, full_event_offsets=True)
-        objects = map_object_events(self.world.rom, {target_map})
+        world = self.world
+        blocks = None
+        if is_bruno:
+            blocks = self.runtime.reader.read_current_map_blocks()
+            if blocks.map_id != raw.map_id:
+                raise RedTrainerStoryError("story map changed while reading its live terrain")
+            world = world.with_current_blocks(blocks)
+        headers = trainer_headers(world.rom, {target_map}, full_event_offsets=True)
+        objects = map_object_events(world.rom, {target_map})
         zones = static_trainer_sight_zones(headers, objects, raw.event_flags)
         matches = tuple(z for z in zones if z.event_flag == target_event)
         if len(matches) != 1 or matches[0].defeated or matches[0].engage_distance != 0:
             raise RedTrainerStoryError("story trainer is not one undefeated interaction target")
         trainer = matches[0]
-        quote = trainer_party_quote(self.world.rom, trainer.trainer_class, trainer.trainer_set)
+        quote = trainer_party_quote(world.rom, trainer.trainer_class, trainer.trainer_set)
         preparation = plan_trainer_party(observation.party, quote)
         start = Gen1TraversalObserver(self.runtime.reader, Gen1TrainerSightProjector(
-            self.world.rom, self.runtime.reader, full_event_offsets=True,
+            world.rom, self.runtime.reader, full_event_offsets=True,
         )).observe()
         approaches = []
         for facing in TrainerFacing:
@@ -121,17 +130,19 @@ class RedCartridgeLoreleiSkill:
             if min(at) < 0:
                 continue
             try:
-                plan = self.world.plan_feasible_to_map(start, int(trainer.map_id), goal_at=at)
+                plan = world.plan_feasible_to_map(start, int(trainer.map_id), goal_at=at)
             except RoutePlanningError:
                 continue
             if len(plan.steps) <= 128 and _walking_plan(plan):
                 approaches.append(TrainerFundingCandidate(trainer, quote, plan, facing))
         if not approaches:
             raise RedTrainerStoryError("no bounded walking approach to the story trainer")
+        self._prepared_world, self._prepared_blocks = world, blocks
         return observation, min(approaches, key=lambda item: len(item.approach.steps)), preparation
 
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         self._prepared = None
+        self._prepared_world, self._prepared_blocks = None, None
         if self._claimed:
             return ObjectiveSkillAvailability(False, "Story attempt already consumed.")
         try:
@@ -154,8 +165,12 @@ class RedCartridgeLoreleiSkill:
         before, target, preparation = self._prepared
         if self.runtime.adapter.observe() != before or battle_policy_override_active():
             raise RedTrainerStoryError("story origin or battle authority changed before input")
-        assert self.world is not None
-        world = self.world
+        if self._prepared_blocks is not None and (
+            self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
+        ):
+            raise RedTrainerStoryError("story terrain changed before input")
+        assert self._prepared_world is not None
+        world = self._prepared_world
         reader = self.runtime.reader
         start_actions = self.actions.actions_executed
         start_frames = self.runtime.emulator.frame_count
@@ -164,7 +179,7 @@ class RedCartridgeLoreleiSkill:
             maximum_episode_actions=self.max_actions,
         ))
         quote = trainer_party_quote(
-            self.world.rom, target.trainer.trainer_class, target.trainer.trainer_set,
+            world.rom, target.trainer.trainer_class, target.trainer.trainer_set,
         )
         prepare_trainer_lead(self.runtime, actions, preparation, current_quote=quote)
         prepared_raw = reader.read()
@@ -173,11 +188,11 @@ class RedCartridgeLoreleiSkill:
             tuple(range(prepared_raw.party_count or 0)), maximum_flees=0, maximum_trainer_battles=0,
         )
         traversal = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(
-            self.world.rom, reader, full_event_offsets=True,
+            world.rom, reader, full_event_offsets=True,
         ))
         route = execute_route(
             target.approach, actions, traversal, limits=_ROUTE_LIMITS,
-            interruption_handler=guard, replanner=self.world.replanner(),
+            interruption_handler=guard, replanner=world.replanner(),
         )
         if not route.passed:
             raise RedTrainerStoryError("story approach did not reach its declared interaction")

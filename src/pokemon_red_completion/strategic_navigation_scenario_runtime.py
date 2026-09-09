@@ -22,6 +22,7 @@ from pokemon_red_completion.gen1_story_routing import (
 from pokemon_red_completion.gen1_terrain import (
     Terrain,
     Tileset,
+    terrain_from_blocks,
     terrain_with_block,
     tilesets,
     walkable_world,
@@ -41,6 +42,7 @@ from pokemon_red_completion.global_router import (
     find_macro_path,
 )
 from pokemon_red_completion.local_router import LocalGraph, LocalPath, without_coordinates
+from pokemon_red_completion.observation import CurrentMapBlocks
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.red_trajectory import POKEMON_RED_GAME_ID
 from pokemon_red_completion.route_executor import (
@@ -248,6 +250,23 @@ class StrategicScenarioRouteWorld:
                 requirements,
             )[map_id]
         return apply_gen1_seafoam_current_requirements({map_id: graph})[map_id]
+
+    def with_current_blocks(self, blocks: CurrentMapBlocks) -> StrategicScenarioRouteWorld:
+        """Overlay only an observed active map; preserve every traversal requirement.
+
+        Cartridge geometry is an initial layout, not the state of a door after
+        its script opens it. This does not predict changes in unobserved rooms.
+        """
+        if not isinstance(blocks, CurrentMapBlocks) or blocks.map_id not in self.terrain:
+            raise ValueError("current terrain needs an observed cartridge map")
+        current = terrain_from_blocks(
+            self.rom, blocks.map_id, blocks.rows, self.tilesets,
+            water_set_ids=self.water_tilesets,
+        )
+        return replace(
+            self, terrain={**self.terrain, blocks.map_id: current},
+            local_graphs={**self.local_graphs, blocks.map_id: self._graph_for_terrain(current)},
+        )
 
     def _staged_cut_plan(
         self,

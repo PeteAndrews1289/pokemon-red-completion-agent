@@ -20,6 +20,7 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOutcomeStatus,
 )
 from pokemon_red_completion.living_dex_player_exploration import (
+    LEGACY_RECOVERY_EXPLORATION_POLICY_ID,
     ExploringLivingDexGoalPolicy,
     exploration_policy_id,
 )
@@ -61,11 +62,16 @@ def load_red_player_training_episode(
     is opened here. Hashes establish recorded provenance, not ground-truth truth
     of an arbitrary external recording; only the trusted executor writes these.
     """
+    legacy_restoration = (
+        plan.document["behavior_policy_id"] == LEGACY_RECOVERY_EXPLORATION_POLICY_ID
+    )
     if (
         plan.document["episode_id"] != episode_id
         or plan.document["model_sha256"] != behavior_model.model_sha256
         or plan.document["behavior_policy_id"]
-        != exploration_policy_id(behavior_model.feature_version)
+        != exploration_policy_id(
+            behavior_model.feature_version, legacy_restoration_preference=legacy_restoration,
+        )
     ):
         raise ValueError("player training origin differs")
     sealed = store.find_sealed_record(
@@ -135,7 +141,10 @@ def load_red_player_training_episode(
             raise ValueError("player training outcome provenance differs")
         events[identity] = payload
         outcome_steps[identity] = event.get("step_index")
-    policy = ExploringLivingDexGoalPolicy(behavior_model, seed=cast(int, plan.document["seed"]))
+    policy = ExploringLivingDexGoalPolicy(
+        behavior_model, seed=cast(int, plan.document["seed"]),
+        legacy_restoration_preference=legacy_restoration,
+    )
     examples = []
     nonexploratory = zero_input = 0
     for decision in joined.examples:

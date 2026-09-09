@@ -99,6 +99,24 @@ def test_legacy_profile_still_requires_its_original_complete_plan():
     assert provider.offer(provider.adapter.observe()).binding is None
 
 
+def test_historical_v3_restoration_replays_its_original_deterministic_preference():
+    question = _recovery_question()
+    question = replace(question, situation=replace(
+        question.situation, safety_pressure=0.3, collection_pressure=0.0,
+        evolution_pressure=0.0, story_pressure=0.0,
+    ))
+    model = upgrade_option_value_model_for_optional_recovery(_model())
+    legacy = ExploringLivingDexGoalPolicy(model, seed=41, legacy_restoration_preference=True)
+    assert legacy.select(question).kind is GoalKind.RESTORE_TEAM
+    assert not legacy.training_eligible and not legacy.option_probabilities
+    # Old optional menus retain their old identifier and distribution, not V4 labels.
+    legacy.select(_recovery_question())
+    assert legacy.training_eligible
+    assert legacy.selection_metadata()["behavior_policy_id"] == (
+        "living-dex-player-optional-recovery-v3"
+    )
+
+
 def test_stale_healing_binding_refuses_before_any_input():
     provider, reader = _single_provider()
     binding = provider.offer(provider.adapter.observe()).binding

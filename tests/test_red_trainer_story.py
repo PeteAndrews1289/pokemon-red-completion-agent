@@ -12,7 +12,7 @@ from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_trainer_parties import TrainerPartyMember, TrainerPartyQuote
 from pokemon_red_completion.gen1_trainer_sight import TrainerFacing, TrainerSightZone
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.observation import CurrentMapBlocks, MapId
 from pokemon_red_completion.red_goal_context import _build_provider
 from pokemon_red_completion.red_goal_context_profile import bind_cartridge_trainer_story_profile
 
@@ -113,6 +113,8 @@ def test_bruno_plans_its_actual_target_only_from_post_lorelei_region(fixture, mo
         assert map_id == 246
         return old_plan(start, 245, goal_at=goal_at)
     old.world.plan_feasible_to_map = plan
+    reader.read_current_map_blocks = lambda: CurrentMapBlocks(reader.raw.map_id, ((1,),))
+    old.world.with_current_blocks = lambda blocks: old.world
     monkeypatch.setattr(story, "trainer_headers", headers)
     monkeypatch.setattr(story, "static_trainer_sight_zones", lambda *_: (target,))
     skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
@@ -121,6 +123,30 @@ def test_bruno_plans_its_actual_target_only_from_post_lorelei_region(fixture, mo
     if fault is None:
         assert skill._prepared[1].trainer.event_flag == 2281
         assert skill._prepared[1].trainer.map_id == 246
+    assert not inputs
+
+
+def test_bruno_refuses_a_changed_observed_door_before_controller_input(fixture, monkeypatch):
+    old, reader, inputs, observe, zone = fixture
+    reader.raw = replace(reader.raw, map_id=246)
+    old.runtime.adapter.observe = lambda: replace(observe(), game_state=replace(
+        observe().game_state, facts=frozenset({"league:lorelei_defeated"}),
+    ))
+    reader.read_current_map_blocks = lambda: CurrentMapBlocks(246, ((1,),))
+    old.world.with_current_blocks = lambda blocks: old.world
+    old_plan = old.world.plan_feasible_to_map
+    old.world.plan_feasible_to_map = (
+        lambda start, _map, goal_at: old_plan(start, 245, goal_at=goal_at)
+    )
+    monkeypatch.setattr(story, "static_trainer_sight_zones", lambda *_: (
+        replace(zone, map_id=MapId.BRUNOS_ROOM, event_flag=2281),
+    ))
+    skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
+                                         objective_id="defeat_bruno")
+    assert skill.availability(old.runtime.adapter.observe().game_state).executable
+    reader.read_current_map_blocks = lambda: CurrentMapBlocks(246, ((2,),))
+    with pytest.raises(story.RedTrainerStoryError, match="terrain changed"):
+        skill.execute()
     assert not inputs
 
 

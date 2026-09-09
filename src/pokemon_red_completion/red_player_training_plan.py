@@ -19,6 +19,7 @@ from pokemon_red_completion.goal_manager_protocol import (
 )
 from pokemon_red_completion.living_dex_player_exploration import (
     EXPLORATION_POLICY_ID,
+    LEGACY_RECOVERY_EXPLORATION_POLICY_ID,
     RECOVERY_EXPLORATION_POLICY_ID,
     exploration_policy_id,
 )
@@ -104,7 +105,8 @@ class RedPlayerTrainingPlan:
             raise ValueError("player training scope differs")
         if (
             document["behavior_policy_id"]
-            not in {EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID}
+            not in {EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID,
+                    LEGACY_RECOVERY_EXPLORATION_POLICY_ID}
             or document["economic_contract"] != "known-spend-and-excess-reserve-v1"
         ):
             raise ValueError("player training behavior differs")

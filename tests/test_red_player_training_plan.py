@@ -80,7 +80,7 @@ def test_declaration_uses_original_assignment_not_filename(
         assert plan.document["root_lineage_id"] == "original-root"
         assert plan.document["partition"] == "train"
         assert plan.document["behavior_policy_id"] == (
-            "living-dex-player-optional-recovery-v3" if feature_version == 3
+            "living-dex-player-optional-recovery-v4" if feature_version == 3
             else "living-dex-player-supported-menu-v2"
         )
     else:

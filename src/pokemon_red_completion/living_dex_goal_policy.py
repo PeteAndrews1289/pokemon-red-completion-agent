@@ -217,6 +217,7 @@ class LivingDexGoalShadowPolicy:
     model: LivingDexOptionValueModel
     utility: LivingDexOptionUtility = DEFAULT_LIVING_DEX_GOAL_UTILITY
     safety: CompletionFirstGoalTeacher = field(default_factory=CompletionFirstGoalTeacher)
+    legacy_restoration_preference: bool = False
     decisions: int = field(default=0, init=False)
     model_decisions: int = field(default=0, init=False)
     deterministic_decisions: int = field(default=0, init=False)
@@ -236,6 +237,8 @@ class LivingDexGoalShadowPolicy:
             raise TypeError("living-Dex shadow policy needs a utility contract")
         if not isinstance(self.safety, CompletionFirstGoalTeacher):
             raise TypeError("living-Dex shadow policy needs a deterministic safety policy")
+        if type(self.legacy_restoration_preference) is not bool:
+            raise TypeError("legacy restoration preference must be explicit boolean")
 
     @property
     def decision_history(self) -> tuple[LivingDexGoalShadowDecision, ...]:
@@ -262,6 +265,7 @@ class LivingDexGoalShadowPolicy:
                 deterministic.kind is GoalKind.RESTORE_TEAM
                 and (
                     self.model.feature_version < 3
+                    or self.legacy_restoration_preference
                     or question.situation.safety_pressure >= self.safety.safety_gate
                 )
             )
