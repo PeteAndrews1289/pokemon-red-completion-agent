@@ -28,6 +28,20 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_lance_source_argument_reaches_qualified_profile_without_legacy_fallback(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    original = _supply_transition_profile()
+    derived = derive(original, ('cartridge-trainer-story:lance',), object())
+    assert len(derived) == 1
+    assert derived[0].providers[0].parameters == {'trainer_objective': 'defeat_lance'}
+    assert derived[0].providers[1:] == original.providers[1:]
+    with pytest.raises(module['PairedRedBoundedPlayerRunError']):
+        derive(original, ('cartridge-trainer-story:champion',), object())
+
+
 @pytest.mark.parametrize("mode", [True, False, None, 1])
 def test_support_recovery_restores_explicit_observer_mode_without_a_training_plan(mode):
     module = runpy.run_path(str(SCRIPT))

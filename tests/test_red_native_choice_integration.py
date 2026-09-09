@@ -172,5 +172,11 @@ def test_successor_and_single_item_profiles_reach_real_factories_without_legacy_
         "league:agatha_defeated",
     })
     assert provider.skills.get("defeat_bruno") is None
+    lance = bind_cartridge_trainer_story_profile(original, objective_id="defeat_lance")
+    provider = _build_provider(runtime, lance.providers[0], CountingExecutor(object()))
+    assert provider.skills.get("defeat_lance").expected_facts == frozenset({
+        "league:lance_defeated",
+    })
+    assert provider.skills.get("defeat_agatha") is None
     with pytest.raises(RedGoalContextProfileError):
-        bind_cartridge_trainer_story_profile(original, objective_id="defeat_lance")
+        bind_cartridge_trainer_story_profile(original, objective_id="defeat_champion")

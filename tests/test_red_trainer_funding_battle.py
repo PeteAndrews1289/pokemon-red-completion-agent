@@ -205,8 +205,10 @@ def test_armed_intro_waits_without_reinteracting_or_confirming(monkeypatch, alre
     )
 
 
-@pytest.mark.parametrize("already_pending", [False, True])
-def test_armed_transition_with_visible_dialogue_requires_confirmation(monkeypatch, already_pending):
+@pytest.mark.parametrize("already_pending,scripted", [(False, False), (True, False), (True, True)])
+def test_armed_transition_with_visible_dialogue_requires_confirmation(
+    monkeypatch, already_pending, scripted,
+):
     class PendingDialogueEnvironment(ScriptedEnvironment):
         def execute(self, action):
             self.actions.append(action)
@@ -222,9 +224,11 @@ def test_armed_transition_with_visible_dialogue_requires_confirmation(monkeypatc
             ):
                 self.state = replace(self.state, battle_state=2)
                 self.pending_identity = None
+                self.ready = True
 
     env = PendingDialogueEnvironment(make_state(), dialogue=already_pending,
-                                    pending_identity=(201, 9) if already_pending else None)
+                                    pending_identity=(201, 9) if already_pending else None,
+                                    ready=not scripted)
 
     def finish(reader, *_args, **kwargs):
         assert reader.read().battle_state == 2
@@ -235,11 +239,44 @@ def test_armed_transition_with_visible_dialogue_requires_confirmation(monkeypatc
 
     monkeypatch.setattr(funding_battle, "battle_runner", finish)
     result = run_prepared_trainer_funding(env, env, target=make_candidate(),
-        validate_target=lambda: None, move_slot_policy=lambda _: 1, timing=TIMING)
+        validate_target=lambda: None, move_slot_policy=lambda _: 1, timing=TIMING,
+        resume_pending_dialogue=scripted)
     assert result.payout == 315
     buttons = [a.kind for a in env.actions if a.kind is not MacroActionKind.WAIT]
     assert buttons == ([MacroActionKind.CONFIRM] if already_pending else
                        [MacroActionKind.INTERACT, MacroActionKind.CONFIRM])
+
+
+@pytest.mark.parametrize('pending', [None, (201, 10), (202, 9)])
+def test_scripted_entry_cannot_bypass_readiness_without_exact_pending_identity(pending):
+    env = ScriptedEnvironment(make_state(), dialogue=True, ready=False, pending_identity=pending)
+    with pytest.raises(TrainerFundingBattleError, match='exact pending trainer identity'):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, resume_pending_dialogue=True,
+        )
+    assert not env.actions
+
+
+def test_default_entry_still_refuses_an_unready_correctly_named_pending_trainer():
+    env = ScriptedEnvironment(make_state(), dialogue=True, ready=False, pending_identity=(201, 9))
+    with pytest.raises(TrainerFundingBattleError, match='initial input readiness'):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING,
+        )
+    assert not env.actions
+
+
+@pytest.mark.parametrize('value', [1, 'true', None])
+def test_pending_entry_opt_in_is_exact_boolean(value):
+    env = ScriptedEnvironment(make_state())
+    with pytest.raises(TypeError, match='resume_pending_dialogue'):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, resume_pending_dialogue=value,
+        )
+    assert not env.actions
 
 
 def test_wrong_pending_dialogue_identity_cannot_be_confirmed():

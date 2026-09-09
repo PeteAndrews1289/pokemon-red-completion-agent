@@ -22,6 +22,16 @@ def test_public_arrival_requires_the_existing_exact_supported_revision(monkeypat
         arrival.trainer_room_arrival(rom, map_id, bytes(320))
 
 
+@pytest.mark.parametrize('events', [None, bytearray(320), [0] * 320])
+def test_public_arrival_cannot_use_static_inspection_to_bypass_current_events(monkeypatch, events):
+    import pokemon_red_completion.gen1_scripted_arrival as arrival
+    monkeypatch.setattr(arrival, 'verify_rom_bytes', lambda _: None)
+    monkeypatch.setattr(arrival, '_decode_trainer_room_arrival',
+                        lambda *_: pytest.fail('missing observations must not reach decoder'))
+    with pytest.raises(CartridgeReadError):
+        arrival.trainer_room_arrival(b'qualified-by-test', 113, events)
+
+
 def cartridge(*, direction=0x40, steps=6, bank=2, map_id=7):
     # Independently assembled tiny LR35902 fixture. Pointers are deliberately
     # separated rather than copied from a real room's contiguous byte layout.

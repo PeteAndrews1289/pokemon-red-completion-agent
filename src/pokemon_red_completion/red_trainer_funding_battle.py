@@ -178,6 +178,7 @@ def run_prepared_trainer_funding(
     maximum_intro_pulses: int = 32,
     maximum_settle_pulses: int = 32,
     resume_active_battle: bool = False,
+    resume_pending_dialogue: bool = False,
     intent: BattleIntent | None = None,
     battle_runner_override: Callable[..., RawGameState] | None = None,
     maximum_full_restores: int = 0,
@@ -198,6 +199,10 @@ def run_prepared_trainer_funding(
         raise TypeError("battle runner override must be callable")
     if type(resume_active_battle) is not bool:
         raise TypeError("resume_active_battle must be boolean")
+    if type(resume_pending_dialogue) is not bool:
+        raise TypeError("resume_pending_dialogue must be boolean")
+    if resume_pending_dialogue and resume_active_battle:
+        raise ValueError("pending dialogue and active battle are separate entry modes")
     if (
         type(maximum_intro_pulses) is not int
         or isinstance(maximum_intro_pulses, bool)
@@ -257,7 +262,16 @@ def run_prepared_trainer_funding(
         and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
     ):
         raise TrainerFundingBattleError("active trainer recovery requires the MAIN battle menu")
-    if not resume_active_battle and not reader.read_input_readiness().ready:
+    if resume_pending_dialogue and reader.read_pending_trainer_battle_identity() != (
+        target.trainer.trainer_class, target.trainer.trainer_set,
+    ):
+        raise TrainerFundingBattleError(
+            "scripted entry requires the exact pending trainer identity"
+        )
+    if (
+        not resume_active_battle and not resume_pending_dialogue
+        and not reader.read_input_readiness().ready
+    ):
         raise TrainerFundingBattleError("initial input readiness is not ready")
     if initial.event_flags is None or event_flag_is_set(
         initial.event_flags, target.trainer.event_flag

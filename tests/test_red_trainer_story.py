@@ -11,10 +11,35 @@ from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_trainer_parties import TrainerPartyMember, TrainerPartyQuote
 from pokemon_red_completion.gen1_trainer_sight import TrainerFacing, TrainerSightZone
+from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import CurrentMapBlocks, MapId
 from pokemon_red_completion.red_goal_context import _build_provider
 from pokemon_red_completion.red_goal_context_profile import bind_cartridge_trainer_story_profile
+from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
+
+
+def lance_plan():
+    local = LocalPath(
+        ((4, 6), (3, 6), (2, 6)),
+        (LocalEdge((3, 6), 'up'), LocalEdge((2, 6), 'up')),
+        ('land', 'land', 'land'),
+    )
+    return RoutePlan(MacroPath((113,), ()), (4, 6), 'land', (), local, (2, 6), 'land')
+
+
+def test_scripted_entry_prefix_stops_before_dialogue_without_weakening_route_success():
+    plan = lance_plan()
+    prefix = story._before_scripted_interaction(plan, ((1, 5), (2, 6)), TrainerFacing.UP)
+    assert prefix.terminal_at == (3, 6)
+    assert prefix.actions == ('up',)
+    assert plan.actions == ('up', 'up') and plan.terminal_at == (2, 6)
+    for triggers, facing in [(((3, 6), (2, 6)), TrainerFacing.UP),
+                             (((1, 5),), TrainerFacing.UP),
+                             (((2, 6),), TrainerFacing.DOWN)]:
+        with pytest.raises(story.RedTrainerStoryError):
+            story._before_scripted_interaction(plan, triggers, facing)
 
 
 def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
@@ -183,6 +208,118 @@ def test_agatha_current_room_uses_its_own_target_and_required_bruno_fact(
     if fault is None:
         assert skill.expected_facts == frozenset({'league:agatha_defeated'})
         assert skill._prepared[1].trainer.map_id == 247
+
+
+@pytest.mark.parametrize('fault', [None, 'prerequisite', 'completed', 'wrong_battle_flag'])
+def test_lance_distinguishes_battle_event_from_later_story_fact(fixture, monkeypatch, fault):
+    import pokemon_red_completion.gen1_scripted_arrival as arrival
+    old, reader, inputs, observe, zone = fixture
+    reader.raw = replace(reader.raw, map_id=113, player_y=4, player_x=6)
+    facts = set() if fault == 'prerequisite' else {'league:agatha_defeated'}
+    if fault == 'completed':
+        facts.add('league:lance_defeated')
+    old.runtime.adapter.observe = lambda: replace(observe(), game_state=GameState(
+        GameMode.OVERWORLD, frozenset(facts), 'lances_room',
+    ))
+    reader.read_current_map_blocks = lambda: CurrentMapBlocks(113, ((1,),))
+    old.world.with_current_blocks = lambda _: old.world
+    def plan(_start, map_id, *, goal_at):
+        assert map_id == 113
+        if goal_at != (2, 6):
+            raise RoutePlanningError('not a reachable approach')
+        return lance_plan()
+    old.world.plan_feasible_to_map = plan
+    target = replace(zone, map_id=MapId.LANCES_ROOM, at=(1, 6),
+                     event_flag=2302 if fault == 'wrong_battle_flag' else 2297)
+    monkeypatch.setattr(story, 'static_trainer_sight_zones', lambda *_: (target,))
+    monkeypatch.setattr(arrival, 'trainer_room_interaction_coordinates',
+                        lambda *_: ((1, 5), (2, 6)))
+    skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
+                                         objective_id='defeat_lance')
+    available = skill.availability(old.runtime.adapter.observe().game_state).executable
+    assert available is (fault is None)
+    assert not inputs
+    if fault is None:
+        assert skill._prepared[1].trainer.event_flag == 2297
+        assert skill.expected_facts == frozenset({'league:lance_defeated'})
+
+
+@pytest.mark.parametrize('fault', [None, 'wrong_pending', 'no_pending', 'drift', 'battle_only'])
+def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_verified(
+    fixture, monkeypatch, fault,
+):
+    import pokemon_red_completion.gen1_scripted_arrival as arrival
+    old, reader, inputs, observe, zone = fixture
+    reader.raw = replace(reader.raw, map_id=113, player_y=4, player_x=6)
+    pending = None
+    entered_battle = []
+    def current():
+        facts = {'league:agatha_defeated'}
+        if reader.raw.event_flags[287] & 64:
+            facts.add('league:lance_defeated')
+        return replace(observe(), game_state=GameState(
+            GameMode.OVERWORLD, frozenset(facts), 'lances_room',
+        ))
+    old.runtime.adapter.observe = current
+    reader.read_current_map_blocks = lambda: CurrentMapBlocks(113, ((1,),))
+    reader.read_pending_trainer_battle_identity = lambda: pending
+    old.world.with_current_blocks = lambda _: old.world
+    def plan(_start, _map_id, *, goal_at):
+        if goal_at != (2, 6):
+            raise RoutePlanningError('not reachable')
+        return lance_plan()
+    old.world.plan_feasible_to_map = plan
+    target = replace(zone, map_id=MapId.LANCES_ROOM, at=(1, 6), event_flag=2297)
+    monkeypatch.setattr(story, 'static_trainer_sight_zones', lambda *_: (target,))
+    monkeypatch.setattr(story, 'trainer_sight_zones', lambda *_: (target,))
+    monkeypatch.setattr(arrival, 'trainer_room_interaction_coordinates',
+                        lambda *_: ((1, 5), (2, 6)))
+    monkeypatch.setattr(story, 'prepare_trainer_lead', lambda *_a, **_k: None)
+    def route(plan, *_a, **_k):
+        assert plan.terminal_at == (3, 6) and plan.actions == ('up',)
+        reader.raw = replace(reader.raw, player_y=3)
+        return SimpleNamespace(passed=True)
+    monkeypatch.setattr(story, 'execute_route', route)
+    monkeypatch.setattr(story, 'face_pc_boundary',
+                        lambda *_: pytest.fail('must not send facing inputs into trainer dialogue'))
+    original_execute = old.actions.delegate.execute
+    def execute(action):
+        nonlocal pending
+        original_execute(action)
+        if action.kind is MacroActionKind.MOVE:
+            assert action.value == 'up'
+            reader.raw = replace(reader.raw, player_y=1 if fault == 'drift' else 2)
+            pending = None if fault == 'no_pending' else (
+                target.trainer_class, 2 if fault == 'wrong_pending' else target.trainer_set,
+            )
+    old.actions.delegate.execute = execute
+    def battle(_reader, _actions, *, resume_pending_dialogue, validate_target, **_kwargs):
+        assert resume_pending_dialogue
+        validate_target()
+        entered_battle.append(True)
+        flags = bytearray(reader.raw.event_flags)
+        flags[287] |= 2  # ordinary trainer defeat is not the later Lance story bit
+        if fault != 'battle_only':
+            flags[287] |= 64
+        reader.raw = replace(reader.raw, event_flags=bytes(flags))
+        return SimpleNamespace(payout=6200)
+    monkeypatch.setattr(story, 'run_prepared_trainer_funding', battle)
+    skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
+                                         objective_id='defeat_lance')
+    assert skill.availability(current().game_state).executable
+    if fault:
+        with pytest.raises(story.RedTrainerStoryError):
+            skill.execute()
+    else:
+        assert skill.execute().evidence['story_event_verified']
+    assert len([action for action in inputs if action.kind is MacroActionKind.MOVE]) == 1
+    assert bool(entered_battle) is (fault in {None, 'battle_only'})
+    if fault == 'no_pending':
+        assert len(inputs) == 25  # one entry plus exactly24 bounded waits; no retry
+    count = len(inputs)
+    with pytest.raises(story.RedTrainerStoryError, match='unconsumed'):
+        skill.execute()
+    assert len(inputs) == count
 
 
 @pytest.mark.parametrize("change", [{"map_id": 3}, {"battle_state": 1},

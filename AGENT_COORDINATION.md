@@ -1,6 +1,20 @@
 # Three-agent coordination
 
-## Current — Agatha lesson completed and model79 verified
+## Current — overnight Lance integration, before live qualification
+
+The eight-hour Phase4 block is active. Model79 and Agatha statedc12195a remain
+the only current learned model and retained endpoint; no new gameplay or fit yet.
+Lance's cartridge RLE entrance, distinct battle/story flags and explicit automatic
+dialogue handoff are implemented and under focused qualification. The general
+navigation drift guard remains strict. See the
+[engineering audit](docs/audits/red-lance-integration-2026-09-09.md) for review
+findings, Flash corrections, quota limitations and the unchanged Phase4 exit.
+
+Next: publish tested source, inspect the real menu without input, then one new
+bounded model/guided outcome as actually available. All previous attempts remain
+consumed. Guided boss wins do not count as model-directed or clean-start completion.
+
+## Historical — Agatha lesson completed and model79 verified
 
 CI maintenance follow-up: two hosted runs failed the same stale battle-module
 golden expectation after the earlier PP-timeout diagnostic change. The source diff

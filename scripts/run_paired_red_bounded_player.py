@@ -334,7 +334,7 @@ def _player_observer(
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
     if world is not None and any(spec.parameters.get("trainer_objective")
-           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha"}
+           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance"}
            for spec in runtime.profile.providers):
         runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
@@ -1055,6 +1055,7 @@ def _regional_profiles(
             or source.startswith("discovery:")
             or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
                           "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
+                          "cartridge-trainer-story:lance",
                           "affordable-field-restore",
                           "reserved-field-restore"}
         ):
@@ -1078,13 +1079,14 @@ def _regional_profiles(
             result.append(profile)
             continue
         if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno",
-                      "cartridge-trainer-story:agatha"}:
+                      "cartridge-trainer-story:agatha", "cartridge-trainer-story:lance"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
             profile = bind_cartridge_trainer_story_profile(
-                profile, objective_id=("defeat_agatha" if source.endswith(":agatha")
+                profile, objective_id=("defeat_lance" if source.endswith(":lance")
+                                       else "defeat_agatha" if source.endswith(":agatha")
                                        else "defeat_bruno" if source.endswith(":bruno")
                                        else "defeat_lorelei"),
             )

@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
+from .actions import MacroAction, MacroActionKind
 from .battle_runtime import (
     BattleIntent,
     BattleRuntimeTiming,
@@ -42,7 +43,7 @@ from .red_trainer_funding import TrainerFundingCandidate
 from .red_trainer_funding_battle import run_prepared_trainer_funding
 from .red_trainer_party import RedTrainerPartyPlan, plan_trainer_party, prepare_trainer_lead
 from .route_executor import execute_route
-from .route_plan import RoutePlanningError
+from .route_plan import RoutePlan, RoutePlanningError
 
 if TYPE_CHECKING:
     from .red_goal_context import RedGoalContextRuntime
@@ -51,6 +52,33 @@ if TYPE_CHECKING:
 
 class RedTrainerStoryError(RuntimeError):
     """The declared story target or its safe execution boundary changed."""
+
+
+def _before_scripted_interaction(
+    plan: RoutePlan, triggers: tuple[tuple[int, int], ...], facing: TrainerFacing,
+) -> RoutePlan:
+    """Leave the battle-starting last movement to the battle specialist.
+
+    A navigation success must still mean settled traversal, not a silently
+    ignored trainer dialogue. No earlier step may cross a script trigger.
+    """
+    steps = plan.steps
+    local = plan.terminal_approach
+    if (
+        plan.terminal_at not in triggers or not steps or local is None or not local.edges
+        or steps[-1].action != facing.value or steps[-1].kind != "walk"
+        or not steps[-1].stays_on_map
+        or any(step.expected_map == plan.terminal_map and step.expected_at in triggers
+               for step in steps[:-1])
+    ):
+        raise RedTrainerStoryError("scripted interaction requires one final bound trigger step")
+    return replace(
+        plan, terminal_at=local.coordinates[-2], terminal_mode=local.modes[-2],
+        terminal_approach=replace(
+            local, coordinates=local.coordinates[:-1], edges=local.edges[:-1],
+            modes=local.modes[:-1],
+        ),
+    )
 
 
 @dataclass(slots=True)
@@ -74,14 +102,20 @@ class RedCartridgeLoreleiSkill:
     _claimed: bool = field(default=False, init=False)
     _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
+    _arrival_steps: int = field(default=0, init=False)
+    _scripted_triggers: tuple[tuple[int, int], ...] = field(default=(), init=False)
 
     def __post_init__(self) -> None:
-        if self.objective_id not in {"defeat_lorelei", "defeat_bruno", "defeat_agatha"}:
+        if self.objective_id not in {
+            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
+        }:
             raise RedTrainerStoryError("unsupported cartridge story objective")
         if self.objective_id == "defeat_bruno":
             self.expected_facts = frozenset({"league:bruno_defeated"})
         elif self.objective_id == "defeat_agatha":
             self.expected_facts = frozenset({"league:agatha_defeated"})
+        elif self.objective_id == "defeat_lance":
+            self.expected_facts = frozenset({"league:lance_defeated"})
 
     def _plan(self) -> tuple[RedGoalObservation, TrainerFundingCandidate, RedTrainerPartyPlan]:
         from .red_resource_goal_router import _walking_plan
@@ -92,6 +126,7 @@ class RedCartridgeLoreleiSkill:
         raw = observation.raw
         is_bruno = self.objective_id == "defeat_bruno"
         is_agatha = self.objective_id == "defeat_agatha"
+        is_lance = self.objective_id == "defeat_lance"
         target_map = MapId.BRUNOS_ROOM if is_bruno else MapId.LORELEIS_ROOM
         target_event = EventFlag.BEAT_BRUNO if is_bruno else EventFlag.BEAT_LORELEI
         required_fact = "league:lorelei_defeated" if is_bruno else "story:victory_road_cleared"
@@ -103,6 +138,10 @@ class RedCartridgeLoreleiSkill:
             target_map, target_event = MapId.AGATHAS_ROOM, EventFlag.BEAT_AGATHA
             required_fact = "league:bruno_defeated"
             entry_maps = {MapId.BRUNOS_ROOM, MapId.AGATHAS_ROOM}
+        if is_lance:
+            target_map, target_event = MapId.LANCES_ROOM, EventFlag.BEAT_LANCES_ROOM_TRAINER
+            required_fact = "league:agatha_defeated"
+            entry_maps = {MapId.AGATHAS_ROOM, MapId.LANCES_ROOM}
         if (
             not observation.input_ready or raw.battle_state != 0
             or raw.map_id not in entry_maps
@@ -113,19 +152,26 @@ class RedCartridgeLoreleiSkill:
         ):
             raise RedTrainerStoryError("requires a settled, undefeated Indigo story boundary")
         world = self.world
+        if is_lance:
+            from .gen1_scripted_arrival import trainer_room_interaction_coordinates
+
+            self._scripted_triggers = trainer_room_interaction_coordinates(
+                world.rom, int(target_map),
+            )
         blocks = None
-        if is_bruno or is_agatha:
+        if is_bruno or is_agatha or is_lance:
             blocks = self.runtime.reader.read_current_map_blocks()
             if blocks.map_id != raw.map_id:
                 raise RedTrainerStoryError("story map changed while reading its live terrain")
             world = world.with_current_blocks(blocks)
-        if is_agatha and raw.map_id != target_map:
+        if (is_agatha or is_lance) and raw.map_id != target_map:
             from .gen1_scripted_arrival import (
                 trainer_room_arrival,
                 with_scripted_trainer_arrival,
             )
 
             arrival = trainer_room_arrival(world.rom, int(target_map), raw.event_flags)
+            self._arrival_steps = arrival.steps if is_lance else 0
             world = replace(world, macro_graph=with_scripted_trainer_arrival(
                 world.macro_graph, arrival,
             ))
@@ -149,7 +195,9 @@ class RedCartridgeLoreleiSkill:
                 continue
             try:
                 plan = world.plan_feasible_to_map(start, int(trainer.map_id), goal_at=at)
-            except RoutePlanningError:
+                if self._scripted_triggers:
+                    _before_scripted_interaction(plan, self._scripted_triggers, facing)
+            except (RoutePlanningError, RedTrainerStoryError):
                 continue
             if len(plan.steps) <= 128 and _walking_plan(plan):
                 approaches.append(TrainerFundingCandidate(trainer, quote, plan, facing))
@@ -161,6 +209,8 @@ class RedCartridgeLoreleiSkill:
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         self._prepared = None
         self._prepared_world, self._prepared_blocks = None, None
+        self._arrival_steps = 0
+        self._scripted_triggers = ()
         if self._claimed:
             return ObjectiveSkillAvailability(False, "Story attempt already consumed.")
         try:
@@ -208,12 +258,58 @@ class RedCartridgeLoreleiSkill:
         traversal = Gen1TraversalObserver(reader, Gen1TrainerSightProjector(
             world.rom, reader, full_event_offsets=True,
         ))
+        route_plan = target.approach
+        if self._scripted_triggers:
+            route_plan = _before_scripted_interaction(
+                target.approach, self._scripted_triggers, target.interaction_facing,
+            )
         route = execute_route(
-            target.approach, actions, traversal, limits=_ROUTE_LIMITS,
+            route_plan, actions, traversal,
+            limits=replace(
+                _ROUTE_LIMITS,
+                transition_settle_frames=max(
+                    _ROUTE_LIMITS.transition_settle_frames, self._arrival_steps * 24 + 120,
+                ),
+            ) if self._arrival_steps else _ROUTE_LIMITS,
             interruption_handler=guard, replanner=world.replanner(),
         )
         if not route.passed:
             raise RedTrainerStoryError("story approach did not reach its declared interaction")
+
+        if self._scripted_triggers:
+            current = reader.read()
+            if (
+                current.map_id != target.trainer.map_id
+                or (current.player_y, current.player_x) != route_plan.terminal_at
+                or current.battle_state or not reader.read_input_readiness().ready
+                or current.bag_items != before.raw.bag_items
+                or current.player_money != before.raw.player_money
+            ):
+                raise RedTrainerStoryError("scripted trainer entry origin changed")
+            guard._require_preserved_living_slots(current)
+            actions.execute(target.approach.steps[-1].macro_action)
+            expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
+            # Wait only; the cartridge, not another directional input, owns
+            # transition into its trainer dialogue. No retry of the entry step.
+            for _ in range(24):
+                current = reader.read()
+                pending = reader.read_pending_trainer_battle_identity()
+                if pending is not None and pending != expected_pending:
+                    raise RedTrainerStoryError("scripted entry armed another trainer")
+                if (
+                    current.map_id != target.trainer.map_id or current.battle_state
+                    or (current.player_y, current.player_x) not in {
+                        route_plan.terminal_at, target.approach.terminal_at,
+                    }
+                ):
+                    raise RedTrainerStoryError("scripted trainer entry left its declared boundary")
+                if pending == expected_pending and (
+                    current.player_y, current.player_x
+                ) == target.approach.terminal_at:
+                    break
+                actions.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
+            else:
+                raise RedTrainerStoryError("scripted trainer entry did not arm its declared target")
 
         def require_target() -> None:
             current = reader.read()
@@ -245,7 +341,8 @@ class RedCartridgeLoreleiSkill:
             guard._require_preserved_living_slots(current)
 
         require_target()
-        face_pc_boundary(actions, reader, target.interaction_facing.value)
+        if not self._scripted_triggers:
+            face_pc_boundary(actions, reader, target.interaction_facing.value)
         controller = RedTrainerPartyController(reader, self.runtime.emulator)
         receipt = run_prepared_trainer_funding(
             reader, actions, target=target, validate_target=require_target,
@@ -257,6 +354,7 @@ class RedCartridgeLoreleiSkill:
                 switch_limit=controller.maximum_switches, require_move_between_switches=True,
             ),
             battle_runner_override=controller.run,
+            resume_pending_dialogue=bool(self._scripted_triggers),
         )
         after = self.runtime.adapter.observe()
         if (

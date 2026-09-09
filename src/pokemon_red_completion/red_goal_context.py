@@ -358,7 +358,7 @@ def _build_provider(
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
         if spec.parameters.get("trainer_objective") in {
-            "defeat_lorelei", "defeat_bruno", "defeat_agatha",
+            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
         }:
             from .objective_skills import ObjectiveSkillRegistry
             from .red_trainer_story import RedCartridgeLoreleiSkill
