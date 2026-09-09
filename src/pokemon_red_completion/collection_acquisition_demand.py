@@ -101,3 +101,106 @@ def useful_capture_counts(
             useful += 1
         result[candidate] = useful
     return result
+
+
+def useful_registered_capture_counts(
+    targets: frozenset[str],
+    registered: frozenset[str],
+    counts: Mapping[str, int],
+    edges: tuple[tuple[str, str], ...],
+    capture_species: tuple[str, ...],
+    *,
+    protected_counts: Mapping[str, int] | None = None,
+) -> dict[str, int]:
+    """Marginal copies for registration, not coexistence of every form.
+
+    One specimen can register every missing species along one directed path,
+    but cannot take two branches simultaneously. A min-cost flow assigns actual
+    unreserved stock to paths, awarding each missing registration at most once.
+    Each capture candidate is evaluated independently and must be recomputed
+    after a real action. Declared edges do not prove executor/resource readiness.
+    """
+    # Reuse legacy graph/type validation only; never its living-copy demand.
+    useful_capture_counts(targets | registered, counts, edges, capture_species)
+    protected = dict(protected_counts or {})
+    if any(not isinstance(s, str) or not s.strip() for s in protected):
+        raise ValueError("protected species references must be nonempty strings")
+    if any(type(n) is not int or n < 0 for n in protected.values()):
+        raise ValueError("protected counts must be nonnegative integers")
+    if any(n > counts.get(s, 0) for s, n in protected.items()):
+        raise ValueError("cannot reserve nonexistent physical stock")
+    if not {s for s, n in counts.items() if n} <= registered:
+        raise ValueError("physical stock must have verified registration")
+    missing = targets - registered
+    if not missing:
+        return dict.fromkeys(capture_species, 0)
+    species = sorted(targets | counts.keys() | set(capture_species)
+                     | {s for edge in edges for s in edge})
+    indices = {s: 2 * i for i, s in enumerate(species)}
+    source, sink = 2 * len(species), 2 * len(species) + 1
+    bound = len(missing)
+
+    def coverage(stock: Mapping[str, int]) -> int:
+        # Residual edges are [destination, reverse-index, capacity, cost].
+        network: list[list[list[int]]] = [[] for _ in range(sink + 1)]
+
+        def add(start: int, end: int, capacity: int, cost: int) -> None:
+            forward = [end, len(network[end]), capacity, cost]
+            reverse = [start, len(network[start]), 0, -cost]
+            network[start].append(forward)
+            network[end].append(reverse)
+
+        for s, node in indices.items():
+            add(source, node, min(bound, stock.get(s, 0)), 0)
+            if s in missing:
+                add(node, node + 1, 1, -1)
+            add(node, node + 1, bound, 0)
+            add(node + 1, sink, bound, 0)
+        for source_species, target_species in set(edges):
+            add(indices[source_species] + 1, indices[target_species], bound, 0)
+
+        gain = 0
+        # Successive shortest residual paths also repair earlier branch choices.
+        # Bellman-Ford is adequate for the small species graph and negative costs.
+        while True:
+            distance = [float("inf")] * len(network)
+            previous: list[tuple[int, int] | None] = [None] * len(network)
+            distance[source] = 0
+            for _ in range(len(network) - 1):
+                changed = False
+                for start, outgoing in enumerate(network):
+                    for i, (end, _, capacity, cost) in enumerate(outgoing):
+                        if capacity and distance[start] + cost < distance[end]:
+                            distance[end] = distance[start] + cost
+                            previous[end] = start, i
+                            changed = True
+                if not changed:
+                    break
+            if distance[sink] >= 0:
+                return gain
+            gain -= int(distance[sink])
+            node = sink
+            while node != source:
+                step = previous[node]
+                assert step is not None
+                start, i = step
+                edge = network[start][i]
+                edge[2] -= 1
+                network[node][edge[1]][2] += 1
+                node = start
+
+    stock = {s: n - protected.get(s, 0) for s, n in counts.items()}
+    baseline = coverage(stock)
+    result = {}
+    for candidate in capture_species:
+        alternative = dict(stock)
+        current, copies = baseline, 0
+        while current < len(missing):
+            alternative[candidate] = alternative.get(candidate, 0) + 1
+            new = coverage(alternative)
+            if new <= current:
+                break
+            copies += 1
+            current = new
+        result[candidate] = copies
+    return result

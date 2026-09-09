@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-shared-registration-scope",
+  "as_of_session": "2026-09-09-shared-registration-foundation",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -43,8 +43,8 @@
       {
         "id": "registered-ledger",
         "label": "Verify shared registration memory",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/shared-registration-foundation-2026-09-09.json"
       },
       {
         "id": "registered-runtime",
@@ -594,6 +594,12 @@
       "result": "User adopted global caught/owned registration, no level100 or living-form quota. No new gameplay or fit; model114 unchanged.",
       "deviation": "Explicit baselineV2 replaces the collection objective. Old post-game preparation checklist remains historical2/3; new registration integration checklist starts0/3.",
       "next": "Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play."
+    },
+    {
+      "session": "2026-09-09-shared-registration-foundation",
+      "result": "Shared registration memory and registered capture/evolution projections passed 237 targeted tests; no gameplay, live import or fit. Model114 unchanged.",
+      "deviation": "No baseline or exit change. Memory is 1/3 integration items; runtime consumers and a new-objective lesson remain pending.",
+      "next": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson."
     }
   ],
   "closed_milestones": [

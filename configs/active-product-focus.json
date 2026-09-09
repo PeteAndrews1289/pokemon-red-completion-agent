@@ -29,26 +29,26 @@
     },
     {
       "capability": "Share verified species registration across runs while keeping local owned flags and physical stock separate.",
-      "cheapest_falsifier": "ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson.",
+      "cheapest_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No authority change. Historical choices keep their original objective and reward semantics.",
-        "blocker": "Current runtime still uses legacy living-specimen and level100 contracts; migrate completion, demand, reward and checkpoint semantics before new collection runs.",
-        "decision": "Adopt registered-only baselineV2; preserve baselineV1 and old receipts; perform one focused migration session.",
+        "authority_delta": "No learned authority change. A prospective registered-only projection exists; old fitted examples and rewards remain unchanged.",
+        "blocker": "Live checkpoint records, acquisition wiring, reward admission and native evolution executor still use legacy semantics; migrate them together before input.",
+        "decision": "Accept the ROM-free ledger and planning foundation; migrate live consumers next, without general architecture expansion.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/shared-pokedex-registration-plan.md",
-          "sha256": "6cb761a4a8bab8ee3d10d8b6b5bb1dad20ef6ab8f5e382d4e8dac19fbfef9319"
+          "path": "docs/evidence/shared-registration-foundation-2026-09-09.json",
+          "sha256": "226216236ad6efb90655d85003dd266f810862a6c7a31e7b14ca0eeed354bb6e"
         },
-        "learning_output": "No gameplay, fitting, imports or new learning outputs. Model114 and its old-objective evidence remain unchanged. Shared ledger and runtime migration are planned, not implemented.",
-        "next_falsifier": "ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson.",
-        "next_session_goal": "Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play.",
+        "learning_output": "237 targeted tests passed; durable shared memory, registered demand and evolution projections implemented. No production import, gameplay, fit or learning counter change. Native114 unchanged.",
+        "next_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
+        "next_session_goal": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-09-shared-registration-scope",
+        "session_id": "2026-09-09-shared-registration-foundation",
         "status": "active",
         "stop_condition": "Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit.",
-        "transfer_result": "No new transfer test this planning session; ledger merge and dependency fixtures are the next qualification."
+        "transfer_result": "Synthetic overlapping Red/Blue memory and later-branch tests pass; no live Blue or cross-title learned transfer result."
       },
       "learned_authority": {
         "current": "The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim.",
@@ -57,7 +57,7 @@
       "maintenance_unblocks": "red-shared-registration-learning-v1",
       "measurable_outputs": [],
       "name": "Shared registered-Pokedex contract migration",
-      "next_decision": "Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play.",
+      "next_decision": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

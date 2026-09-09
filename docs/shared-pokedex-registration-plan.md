@@ -1,7 +1,8 @@
-# Shared registered Pokédex — adopted scope, runtime migration planned
+# Shared registered Pokédex — memory implemented, live integration pending
 
 Pete's September9 decision supersedes the living-specimen and level100 completion
-requirements. Gameplay remains paused; the ledger and new runtime are not implemented.
+requirements. The ledger API and registered planning projections are implemented and tested.
+Gameplay remains paused until live checkpoint, reward and executor integration is complete.
 
 ## Completion contract
 
@@ -17,9 +18,11 @@ requirements. Gameplay remains paused; the ledger and new runtime are not implem
 
 ## Shared file: three separate views
 
-Proposed: a private SQLite ledger on T7, with a readable JSON export for the
-dashboard. Transactions and uniqueness constraints prevent lost or double credit
-when multiple runs eventually write. No database has been created yet.
+Implemented: a private SQLite ledger API with readable JSON export. Transactional
+recording and uniqueness checks handle overlapping concurrent imports. Production
+placement remains T7; no live database has been created and no gameplay evidence
+has been imported. The caller must authenticate checkpoint observations before
+recording them; valid digest syntax alone does not prove gameplay.
 
 1. **Global registration:** canonical species ID mapped by each title adapter,
    first verified credit and supporting evidence.
@@ -88,7 +91,12 @@ rewrite during migration. Ledger imports and documentation are not learned progr
 - Stop condition: invented local credit, lost historical registration, destructive
   inventory action, altered old rewards or an unversioned runtime objective.
 
-## Current evidence, unchanged
+## Foundation qualification
+
+237 targeted tests passed. Registered demand and evolution inventory are opt-in;
+the old live contracts remain unchanged. See the [implementation and next steps](work-sessions/2026-09-09-shared-registration-foundation.md).
+
+## Current gameplay evidence, unchanged
 
 Model114 has114 fitted examples under the old objective. The endpoint has38 local
 registrations,34 living species and42 specimens. The global union is **not yet

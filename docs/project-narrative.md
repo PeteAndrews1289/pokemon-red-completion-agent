@@ -1,3 +1,20 @@
+# Current — shared Pokédex memory and planning foundation
+
+Implemented durable registration memory, separate global/local/physical views,
+registered-only completion and novelty projections, and chain/branch-aware capture
+demand. The existing evolution inventory has an explicit registered-only mode.
+237 targeted tests passed, including legacy collection/evolution checks and an
+independent exhaustive small-graph oracle. This is engineering, not new learning.
+
+No production ledger import, gameplay or fit occurred; native114 is unchanged.
+The live checkpoint, reward, acquisition and evolution executor contracts still
+need migration before gameplay resumes. Do not resume the old living/level100
+objective or silently relabel historical rewards.
+
+[Session, review and next steps](work-sessions/2026-09-09-shared-registration-foundation.md). No external-agent audit or usage this session.
+
+## Historical scope adoption
+
 # Current — shared registered Pokédex; gameplay paused
 
 Pete retired level100 and simultaneous living-form completion. Record species

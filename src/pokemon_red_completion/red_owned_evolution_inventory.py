@@ -39,16 +39,35 @@ def inventory_red_owned_level_evolutions(
     graph: Mapping[int, tuple[Evolution, ...]],
     *,
     target_species: frozenset[str],
+    registered_species: frozenset[str] | None = None,
+    protected_source_counts: Mapping[str, int] | None = None,
 ) -> tuple[RedOwnedEvolutionPrerequisite, ...]:
     """One row per missing target reachable from a currently owned precursor.
 
-    Registered-but-no-longer-living targets are still missing. Keep one source
-    copy; expose duplicate-acquisition deficits instead of hiding them. Two
-    interchangeable specimens are one objective, not two strategic alternatives.
+    Default legacy mode keeps one source copy and treats registered-but-no-longer
+    living targets as missing. Explicit registered mode skips globally credited
+    targets and reserves only caller-declared physical dependencies, not a living
+    form quota. This inventory does not relax the native executor's old contract.
+    Two interchangeable specimens are one objective, not two strategic alternatives.
     Daycare specimens count toward retention but are not directly controllable.
     Branches share their precursor stock: this is not a simultaneous allocation.
     """
     counts = Counter(specimen.species_ref for specimen in observation.specimens)
+    protected = dict(protected_source_counts or {})
+    if registered_species is None and protected:
+        raise ValueError("physical reserves require explicit registered mode")
+    if registered_species is not None:
+        registered_species = frozenset(registered_species)
+        if not observation.owned_species <= registered_species:
+            raise ValueError("shared registration must include current local owned flags")
+        if not counts.keys() <= observation.owned_species:
+            raise ValueError("physical stock must have current local registration")
+        for species in registered_species:
+            red_species_number(species)
+    for species, quantity in protected.items():
+        red_species_number(species)
+        if type(quantity) is not int or quantity < 0:
+            raise ValueError("physical reserves must be nonnegative integers")
     rows = []
     seen: set[tuple[int, int]] = set()
     for source in sorted(counts):
@@ -71,7 +90,11 @@ def inventory_red_owned_level_evolutions(
                 raise ValueError("duplicate level evolution rule")
             seen.add(key)
             target = red_species_ref(step.to_species)
-            if target not in target_species or counts[target]:
+            already_complete = (
+                bool(counts[target]) if registered_species is None
+                else target in registered_species
+            )
+            if target not in target_species or already_complete:
                 continue
             precursors = tuple(sorted(
                 (
@@ -85,7 +108,8 @@ def inventory_red_owned_level_evolutions(
             ))
             rows.append(RedOwnedEvolutionPrerequisite(
                 source, target, step.requirement, counts[source],
-                max(0, 2 - counts[source]), precursors,
+                max(0, (2 if registered_species is None else 1 + protected.get(source, 0))
+                    - counts[source]), precursors,
             ))
     return tuple(sorted(rows, key=lambda row: (
         row.target_species_ref, row.source_species_ref,

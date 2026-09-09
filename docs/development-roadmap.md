@@ -3,16 +3,16 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-shared-registration-scope**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-shared-registration-foundation**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Connect shared registered completion: 0/3 acceptance items (0%).**
+**Connect shared registered completion: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Verify shared registration memory
+- [x] Verify shared registration memory ([evidence](../docs/evidence/shared-registration-foundation-2026-09-09.json))
 - [ ] Migrate collection and evolution goals
 - [ ] Measure a registered-objective lesson
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-shared-registration-foundation
+
+Shared registration memory and registered capture/evolution projections passed 237 targeted tests; no gameplay, live import or fit. Model114 unchanged.
+
+**Deviation:** No baseline or exit change. Memory is 1/3 integration items; runtime consumers and a new-objective lesson remain pending.
+
+**Next:** Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.
 
 ### 2026-09-09-shared-registration-scope
 

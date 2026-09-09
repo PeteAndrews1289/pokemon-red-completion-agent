@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play.
+- Next decision: Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson. |
+| Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -58,18 +58,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-shared-registration-scope** · status **active** · evidence [qualification](docs/shared-pokedex-registration-plan.md)
+**2026-09-09-shared-registration-foundation** · status **active** · evidence [qualification](docs/evidence/shared-registration-foundation-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | No gameplay, fitting, imports or new learning outputs. Model114 and its old-objective evidence remain unchanged. Shared ledger and runtime migration are planned, not implemented. |
-| Authority delta | No authority change. Historical choices keep their original objective and reward semantics. |
-| Transfer result | No new transfer test this planning session; ledger merge and dependency fixtures are the next qualification. |
-| Blocker | Current runtime still uses legacy living-specimen and level100 contracts; migrate completion, demand, reward and checkpoint semantics before new collection runs. |
-| Decision | Adopt registered-only baselineV2; preserve baselineV1 and old receipts; perform one focused migration session. |
-| Next session | Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play. |
-| Next falsifier | ROM-free Red/Blue merge, duplicate neutrality and persistent base registration after evolution; then one short migrated-objective Red lesson. |
+| Learning output | 237 targeted tests passed; durable shared memory, registered demand and evolution projections implemented. No production import, gameplay, fit or learning counter change. Native114 unchanged. |
+| Authority delta | No learned authority change. A prospective registered-only projection exists; old fitted examples and rewards remain unchanged. |
+| Transfer result | Synthetic overlapping Red/Blue memory and later-branch tests pass; no live Blue or cross-title learned transfer result. |
+| Blocker | Live checkpoint records, acquisition wiring, reward admission and native evolution executor still use legacy semantics; migrate them together before input. |
+| Decision | Accept the ROM-free ledger and planning foundation; migrate live consumers next, without general architecture expansion. |
+| Next session | Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson. |
+| Next falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
 | Stop condition | Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit. |
 
 ### Stop conditions

@@ -128,3 +128,39 @@ def test_unique_binding_needs_an_accessible_specimen_not_only_daycare_stock():
     ))
     with pytest.raises(ValueError, match="exactly one"):
         unique_owned_level_evolution(obs, GRAPH, target_species=TARGETS)
+
+
+def test_registered_mode_can_evolve_only_copy_but_legacy_executor_is_not_relaxed():
+    obs = observation(14, owned=(14,))
+    row = inventory_red_owned_level_evolutions(
+        obs, GRAPH, target_species=TARGETS, registered_species=obs.owned_species,
+    )[0]
+    assert row.duplicate_acquisitions_needed == 0 and row.evolution_level == 10
+    assert inventory(obs)[0].duplicate_acquisitions_needed == 1
+    with pytest.raises(ValueError, match="exactly one"):
+        unique_owned_level_evolution(obs, GRAPH, target_species=TARGETS)
+
+
+def test_global_credit_skips_blue_repeat_and_preserves_real_physical_dependency():
+    obs = observation(14, 56, owned=(14, 56))
+    rows = inventory_red_owned_level_evolutions(
+        obs, GRAPH, target_species=TARGETS,
+        registered_species=frozenset(map(red_species_ref, (14, 15, 56))),
+        protected_source_counts={red_species_ref(56): 1},
+    )
+    assert [row.target_species_ref for row in rows] == [red_species_ref(57)]
+    assert rows[0].duplicate_acquisitions_needed == 1
+    assert obs.owned_species == frozenset(map(red_species_ref, (14, 56)))
+
+
+def test_registered_mode_rejects_missing_local_flags_and_invalid_reserves():
+    obs = observation(14, owned=(14,))
+    with pytest.raises(ValueError, match="current local owned"):
+        inventory_red_owned_level_evolutions(
+            obs, GRAPH, target_species=TARGETS, registered_species=frozenset(),
+        )
+    with pytest.raises(ValueError, match="nonnegative"):
+        inventory_red_owned_level_evolutions(
+            obs, GRAPH, target_species=TARGETS, registered_species=obs.owned_species,
+            protected_source_counts={red_species_ref(14): True},
+        )
