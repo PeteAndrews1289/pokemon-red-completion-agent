@@ -163,3 +163,86 @@ def test_scope_and_dose_rejected_before_any_play(tmp_path, monkeypatch, field, v
     with pytest.raises(ValueError):
         cycle._run(args)
     assert played == fits == []
+
+
+def test_automatic_cycle_switches_native_goal_to_destination_and_carries_fit(tmp_path, monkeypatch):
+    args, records, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+    monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
+        'status': 'ready', 'available_goal_kinds':
+        ['restore_party', 'acquire_species'] if not played else ['acquire_species'],
+    })
+    run = cycle.source._run
+    def native(actual):
+        result = run(actual)
+        result['proposed_source'] = result.pop('selected_source')
+        return result
+    monkeypatch.setattr(cycle.goal, '_run', native)
+    def native_fit(store, *, results, **kw):
+        assert len(results) == 1 and 'proposed_source' in results[0]
+        return cycle.fit_incremental_regional_result(store, result=results[0], **kw)
+    monkeypatch.setattr(cycle, 'fit_incremental_goal_results', native_fit)
+    result = cycle._run(args)
+    assert [step['selection_scope'] for step in result['steps']] == [
+        'native_goal', 'regional_destination',
+    ]
+    assert len(played) == len(fits) == 2
+    assert played[1]['expected_living_dex_model_sha256'] == records[1].model.model_sha256
+    assert played[1]['regional_transitions'][-2:] == [
+        'wild:Route5:grass', 'discovery:wild:Route5:grass',
+    ]
+
+
+def test_automatic_support_advances_save_without_inventing_a_fit(tmp_path, monkeypatch):
+    args, records, _, played, _, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+    monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
+        'status': 'ready_for_forced_bridge', 'available_goal_kinds': ['resupply'],
+    })
+    run = cycle.source._run
+    def native(actual):
+        result = run(actual)
+        result['proposed_source'] = None
+        del result['selected_source']
+        return result
+    monkeypatch.setattr(cycle.goal, '_run', native)
+    batches = []
+    def fit(_store, *, results, **kw):
+        batches.append(results)
+        if len(results) == 1:
+            return {'status': 'support_retained_without_fit', 'new_settled_examples': 0}
+        assert kw['prior'] is records[0]
+        return {'model': records[1].public_dict()}
+    monkeypatch.setattr(cycle, 'fit_incremental_goal_results', fit)
+    result = cycle._run(args)
+    assert [len(batch) for batch in batches] == [1, 2]
+    assert played[1]['expected_living_dex_model_sha256'] == records[0].model.model_sha256
+    assert played[1]['continue_from_checkpoint'][-1] == ['cycle-fixture-01-causal', '1'*64]
+    assert played[1]['regional_transitions'] == args.regional_transitions
+    assert result['pending_support_episode_ids'] == []
+
+
+@pytest.mark.parametrize('kinds,status,candidates,reason', [
+    (['advance_story', 'acquire_species'], 'ready', (1, 2), 'story_outside_collection_scope'),
+    ([], 'not_ready', (), 'no_executable_collection_or_support_goal'),
+])
+def test_automatic_collection_cannot_launch_story_or_empty_boundary(
+    tmp_path, monkeypatch, kinds, status, candidates, reason,
+):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+    monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
+        'status': status, 'available_goal_kinds': kinds,
+    })
+    monkeypatch.setattr(cycle.source, 'inspect_sources',
+                        lambda *_a, **_kw: (None, candidates, None))
+    assert cycle._run(args)['stop_reason'] == reason
+    assert played == fits == []
+
+
+def test_automatic_flag_rejects_non_boolean_before_prepare(tmp_path, monkeypatch):
+    args, _, prepared, played, _, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = 1
+    with pytest.raises(ValueError, match='automatic goal'):
+        cycle._run(args)
+    assert prepared == played == []

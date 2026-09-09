@@ -423,7 +423,7 @@ def _execute_route(
             replacement, replan_receipt = _request_replacement(
                 plan,
                 current,
-                _with_live_constraints(blocked, current),
+                _with_live_constraints(blocked, current, interruption_handler),
                 ordinal,
                 step.expected_at,
                 "visible_object",
@@ -445,7 +445,7 @@ def _execute_route(
             replacement, replan_receipt = _request_replacement(
                 plan,
                 current,
-                _with_live_constraints(blocked, current),
+                _with_live_constraints(blocked, current, interruption_handler),
                 ordinal,
                 step.expected_at,
                 hazard.kind,
@@ -653,7 +653,7 @@ def _execute_route(
                 replacement, replan_receipt = _request_replacement(
                     plan,
                     current,
-                    _with_live_constraints(blocked, current),
+                    _with_live_constraints(blocked, current, interruption_handler),
                     ordinal,
                     step.expected_at,
                     "visible_object",
@@ -676,7 +676,7 @@ def _execute_route(
                 replacement, replan_receipt = _request_replacement(
                     plan,
                     current,
-                    _with_live_constraints(blocked, current),
+                    _with_live_constraints(blocked, current, interruption_handler),
                     ordinal,
                     step.expected_at,
                     hazard.kind,
@@ -705,7 +705,7 @@ def _execute_route(
                 replacement, replan_receipt = _request_replacement(
                     plan,
                     current,
-                    _with_live_constraints(blocked, current),
+                    _with_live_constraints(blocked, current, interruption_handler),
                     ordinal,
                     step.expected_at,
                     "settled_failed_step",
@@ -819,9 +819,16 @@ def _renew_resource(
 def _with_live_constraints(
     durable: Mapping[int, frozenset[Coordinate]],
     current: TraversalSnapshot,
+    interruption_handler: InterruptionHandler | None = None,
 ) -> dict[int, frozenset[Coordinate]]:
+    # Replanning must honor the same explicit hazard capability as execution.
+    # A trainer's sight is not a wall when the owned handler can resolve it.
+    # Occupied squares and measured durable blockers are never relaxed.
     combined = dict(durable)
-    current_constraints = current.occupied | frozenset(item.at for item in current.hazards)
+    current_constraints = current.occupied | frozenset(
+        item.at for item in current.hazards
+        if not _handler_resolves_hazard(interruption_handler, item)
+    )
     if current_constraints:
         combined[current.map_id] = combined.get(current.map_id, frozenset()) | current_constraints
     return combined
