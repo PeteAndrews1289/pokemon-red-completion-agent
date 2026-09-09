@@ -1,5 +1,24 @@
 # Current — Phase4 complete; living collection next
 
+## Collection-planning package accepted — September 9
+
+Flash 3.8 High drafted four isolated files; Claude Opus 4.8 High reviewed the
+frozen first draft. Codex corrected semantic defects and restored lost test
+coverage before local integration. **136 targeted tests passed**, including
+69 catalog/demand/edge tests; module typing and source/test lint passed.
+This is offline engineering, not a new gameplay result or fit. Native85 and
+the Phase5 lesson checklist (0/3) are unchanged.
+
+Next: verify the saved post-game continuation and supply, reuse native
+acquisition/boxed-evolution bindings, then measure a real model-selected
+collection choice. Stop broad architecture drafting. Review adjudication and
+account-wide quota observations are recorded in the session package.
+
+[Session package](docs/work-sessions/2026-09-09-phase5-agent-package.md). Gemini roughly94%five-hour/92%weekly remaining
+at15:45 UTC; Claude windows unavailable. No agents remain working on this package.
+
+## Verified starting point
+
 **Verified bounded, hierarchical model-directed Red story completion.**
 The current checkpoint has both Champion and Hall-of-Fame evidence. Native83
 made two real recovery choices before one forced deterministic Champion step:

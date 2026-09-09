@@ -1,4 +1,14 @@
-# Current — Phase4 complete; living collection next
+# Current — collection-planning package accepted
+
+The delegated Flash draft and independent Claude review are complete. Codex
+repaired evolution-readiness accounting, immutable observations and validation,
+restored dropped tests, and integrated the offline package locally.136 targeted
+tests passed; no new gameplay, model fit or living specimen was produced.
+The lesson: a green draft and an agreeing reviewer still need independent tests.
+Next, connect existing skills to the post-game collection lesson; no further
+architecture expansion. [Review and budget record](work-sessions/2026-09-09-phase5-agent-package.md).
+
+## Prior Phase4 closeout — unchanged gameplay evidence
 
 **Verified bounded, hierarchical model-directed Red story completion.**
 The current checkpoint has both Champion and Hall-of-Fame evidence. Native83

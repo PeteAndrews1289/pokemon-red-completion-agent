@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase4-complete**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase5-agent-package**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-phase5-agent-package
+
+Offline Flash catalog corrected and accepted after Claude review and136 targeted tests. No gameplay or fit; model85 and Phase5 lesson0/3 unchanged.
+
+**Deviation:** Engineering-only support session. Stop broad architecture expansion and connect existing skills; baseline exits unchanged.
+
+**Next:** Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson.
 
 ### 2026-09-09-phase4-complete
 

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-phase4-complete",
+  "as_of_session": "2026-09-09-phase5-agent-package",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -546,6 +546,12 @@
       "result": "Phase4 verified:current Champion and Hall of Fame,30specimens0faints,652actions39978frames.2genuine recovery choices,1forced story step. Native85 fitted2rows;all prior data retained.",
       "deviation": "Checkpoint-based hierarchical development, not fresh-game autonomy. Forced Champion excluded; oldfailedattemptsretained. Native85 unplayed and in-sample error slightly worse. Phase4 exit unchanged.",
       "next": "Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson."
+    },
+    {
+      "session": "2026-09-09-phase5-agent-package",
+      "result": "Offline Flash catalog corrected and accepted after Claude review and136 targeted tests. No gameplay or fit; model85 and Phase5 lesson0/3 unchanged.",
+      "deviation": "Engineering-only support session. Stop broad architecture expansion and connect existing skills; baseline exits unchanged.",
+      "next": "Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson."
     }
   ],
   "closed_milestones": [

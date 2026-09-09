@@ -13,6 +13,19 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Latest implementation loop — September9 collection preparation
+
+Flash3.8 High completed the isolated four-file draft plus one correction pass;
+Claude Opus4.8 High reviewed the frozen first draft read-only. Codex found
+additional semantic defects, repaired evolution utility, restored dropped tests
+and accepted the offline package after136 targeted tests. No new gameplay or
+fit occurred. See [the package record](work-sessions/2026-09-09-phase5-agent-package.md).
+The actual Antigravity interactive `/usage` panel is available (there is no
+separate CLI quota subcommand): approximately94%five-hour/92%weekly remained
+at15:45UTC. Claude subscription windows remain unavailable. These account-wide
+readings supersede historical quota for this session only, not measured savings.
+Next external work should be bounded adapter/test support, not a fresh broad audit.
+
 ### Latest CLI review — completed Lorelei recovery
 
 Flash3.8 High provided one7second no-tools advisory, not a source audit. Codex

@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson.
+- Next decision: Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson.
 
 ### Mandatory mission check
 
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-phase4-complete** · status **active** · evidence [development episode](docs/evidence/red-phase4-closeout-2026-09-09.json)
+**2026-09-09-phase5-agent-package** · status **active** · evidence [qualification](docs/audits/phase5-collection-capability-map-2026-09-09.md)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Phase4 checklist3/3.652actions39978frames,2genuine choices1forced,3items0faints30specimens.71carried checkpoint joins authenticated. Model85 now fitted; forced Champion excluded. |
-| Authority delta | Native83 sampled HP then PP recovery before a forced deterministic Champion step. Current Champion/Hall-of-Fame facts verified. Native85 fitted2 real choices, all83prior rows retained; no post-fit play or promotion. |
-| Transfer result | Bounded hierarchical checkpoint-based Red story completion; correlated development, not fresh-game autonomy or independent reliability. Living-Dex completion and cross-game transfer remain unproved. |
-| Blocker | Phase4 story exit met. Living collection remains unfinished:92required specimens under current contract. Native85 unplayed and in-sample error slightly worse; post-HoF control/supply and version/trade dependencies need next-session audit. |
-| Decision | Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson. |
-| Next session | Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson. |
+| Product alignment | Explain useful collection options without consuming retained specimens or substituting declared availability for executable skills. |
+| Learning output | None this engineering session.136 targeted tests passed;69 cover catalog/demand/edges. Native85, prior gameplay and Phase5 checklist0/3 unchanged. |
+| Authority delta | Unchanged. Offline collection catalog accepted; native85 remains unplayed. No controller input, model fit or policy promotion. |
+| Transfer result | Synthetic arbitrary-species chain, branch and resource tests only. No new game transfer or independent policy advantage. |
+| Blocker | Post-Hall-of-Fame control, legitimate capture supply and executable useful alternatives remain unverified at the current endpoint. |
+| Decision | Stop architecture expansion. Integrate existing acquisition/evolution skills into the bounded post-game collection lesson. |
+| Next session | Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson. |
 | Next falsifier | Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay. |
-| Stop condition | Phase4 closeout is the natural stop. Do not retry old failures or run another boss cohort. Next collection session stops for missing useful choices, unsafe continuation or unexplained specimen loss. |
+| Stop condition | Bounded package accepted. No further catalog expansion; stop the next live slice on unsafe continuation, missing alternatives or unexplained specimen loss. |
 
 ### Stop conditions
 
