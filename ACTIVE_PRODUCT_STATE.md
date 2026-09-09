@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay.
+- Next decision: Qualify the smallest prospective goal-conditioned trajectory-learning contract without hindsight actor inputs, maintenance bonus inflation, arbitrary weight tuning or historical relabeling.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Model81 retains two new genuine restoration choices from a closed dependent practice branch. Current Lance inventory also contains an unexposed Elixir: qualify PP recovery versus the Champion as a real goal choice. |
-| Authority now | Model81:80 comparative-choice outcomes plus1 guided Agatha row. Two new healing choices, no new story choice or authority promotion;69 distinct selected feature vectors unchanged. |
+| Reusable capability | Model-led owned PP resource use is verified and fitted. Current maintenance subtask tests a horizon/scoring counterexample before a prospective goal-conditioned learning contract; it grants no new player authority. |
+| Authority now | Model82 retains81 comparative-choice outcomes plus1 guided Agatha row. One new sampled Elixir use restored22PP; later singleton Champion failed and was not fitted.40 successes,69 distinct selected vectors; no independent improvement. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | ROM-free non-lead/PP-Up/item-stock cases and relocated script/three-starter cases plus read-only actual-Lance qualification. No independent gameplay or cross-title transfer result. |
-| Cheapest falsifier | At the actual retained Lance endpoint, are both useful PP restoration and the cartridge-qualified Champion executable, and can one sampled choice yield an honest fitted outcome? |
+| Transfer test | Varied ROM-free resource/script/retention tests plus one real dependent PP choice. Next diagnostic is synthetic, not unseen gameplay or cross-title transfer. |
+| Cheapest falsifier | Use a fixed ROM-free optional-versus-necessary recovery diagnostic to test the unchanged one-step objective against completion once within a total budget; preserve current model82 and all old labels. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-pp-champion-qualification** · status **active** · evidence [model fit](docs/evidence/red-dependent-story-practice-2026-09-09.json)
+**2026-09-09-pp-choice-horizon-reorientation** · status **active** · evidence [model fit](docs/evidence/red-pp-choice-champion-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Resource budgeting becomes available to the goal learner; fixed scripts remain disclosed mechanics. The stable Phase4 exit is unchanged. |
-| Learning output | Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features. |
-| Authority delta | Two real restoration choices fitted in model81; no new story choice, battle authority or independent promotion. |
-| Transfer result | ROM-free non-lead/PP-Up/item-stock cases and relocated script/three-starter cases plus read-only actual-Lance qualification. No independent gameplay or cross-title transfer result. |
-| Blocker | The historical practice branch exhausted useful alternatives and is closed. Phase4 still lacks model-directed Champion/Hall-of-Fame completion. |
-| Decision | Expose actual owned PP recovery as a meaningful current-state alternative; qualify the distinct Champion script and a bounded scene handoff. |
-| Next session | Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay. |
-| Next falsifier | At the actual retained Lance endpoint, are both useful PP restoration and the cartridge-qualified Champion executable, and can one sampled choice yield an honest fitted outcome? |
-| Stop condition | One actual outcome or named blocker, then reassess; retain consumed attempts. No further historical practice reset under the closed branch. |
+| Product alignment | Prioritize learning when recovery enables final story and collection progress, rather than rewarding easy successful maintenance. Stable Phase4 and long-term living-Pokedex/transfer exits remain unchanged. |
+| Learning output | Model82 retains81 comparative-choice outcomes plus1 guided Agatha row. One new sampled Elixir use restored22PP; later singleton Champion failed and was not fitted.40 successes,69 distinct selected vectors; no independent improvement. |
+| Authority delta | One genuine PP resource choice fitted in model82. No comparative Champion choice, new battle authority, promotion or Phase4 exit. |
+| Transfer result | Varied ROM-free resource/script/retention tests plus one real dependent PP choice. Next diagnostic is synthetic, not unseen gameplay or cross-title transfer. |
+| Blocker | The guided Champion attempt stopped at an unsupported Dragon Rage reserve-entry screen with all six alive. Separately, a synthetic counterexample exposes optional-maintenance preference in the one-step objective. |
+| Decision | Pause the consumed boss path at its exact retained failure; test the planning horizon before another deterministic repair cascade or PP-feature expansion. |
+| Next session | Complete a bounded synthetic horizon diagnostic, then define a prospectively versioned final-goal/cumulative-cost target for actual forward-logged episodes. Diagnostic maintenance does not fit or promote a model; no resampled Elixir choice, boss replay, sealed access or full run. |
+| Next falsifier | Use a fixed ROM-free optional-versus-necessary recovery diagnostic to test the unchanged one-step objective against completion once within a total budget; preserve current model82 and all old labels. |
+| Stop condition | Reorient within45minutes or on diagnostic completion. No production weight changes, oracle future actor inputs, retroactive outcome targets or automatic boss-recovery cascade. |
 
 ### Stop conditions
 

@@ -17,6 +17,7 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.living_dex_player_exploration import ExploringLivingDexGoalPolicy
 from pokemon_red_completion.observation import ItemId
+from pokemon_red_completion.red_champion_story import RedCartridgeChampionSkill
 from pokemon_red_completion.red_goal_context import _build_provider
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfileError,
@@ -178,5 +179,12 @@ def test_successor_and_single_item_profiles_reach_real_factories_without_legacy_
         "league:lance_defeated",
     })
     assert provider.skills.get("defeat_agatha") is None
+    champion = bind_cartridge_trainer_story_profile(original, objective_id="defeat_champion")
+    provider = _build_provider(runtime, champion.providers[0], CountingExecutor(object()))
+    skill = provider.skills.get("defeat_champion")
+    assert isinstance(skill, RedCartridgeChampionSkill)
+    assert skill.expected_facts == frozenset({"league:champion_defeated"})
+    assert skill.additional_effect_facts == frozenset({"game:hall_of_fame"})
+    assert provider.skills.get("defeat_lance") is None
     with pytest.raises(RedGoalContextProfileError):
-        bind_cartridge_trainer_story_profile(original, objective_id="defeat_champion")
+        bind_cartridge_trainer_story_profile(original, objective_id="unsupported_final_trainer")

@@ -1,6 +1,28 @@
 # Model-first development roadmap
 
-## Current — Agatha lesson completed and model79 verified
+## Current — model82 and goal-horizon reorientation
+
+The current goal learner has82 retained outcomes:81 comparative choices and1
+guided Agatha row. One new model-selected Elixir use restored22PP in38actions/
+3396frames. The subsequent guided Champion attempt stopped at a Dragon Rage
+switch-entry limitation with all six alive;205actions/14,406frames and the exact
+state are retained. It was not fitted and did not reach concurrent completion.
+The historical practice branch is closed and separate from this continuous run.
+
+The next sequence is a bounded planning-objective diagnostic, a prospective
+goal-conditioned trajectory contract, and then new useful-choice evidence.
+The unchanged one-step utility can favor optional maintenance in synthetic cases;
+adding exact PP inputs alone does not address that horizon. Preserve historical
+weights/targets and do not claim the actual Elixir was unnecessary. Diagnostics
+are not model training or deployable policies with knowledge of future outcomes.
+
+Do not resume a boss-repair cascade, replay consumed inputs or weaken the stable
+Phase4 exit. The native-story-choice submilestone remains2/3. See the
+[current result and audit](audits/red-pp-choice-champion-stop-2026-09-09.md) and
+[active state](../ACTIVE_PRODUCT_STATE.md). The larger living-Pokedex and
+cross-title mission remains unchanged.
+
+## Historical — Agatha lesson completed and model79 verified
 
 CI maintenance follow-up: two hosted runs failed the same stale battle-module
 golden expectation after the earlier PP-timeout diagnostic change. The source diff

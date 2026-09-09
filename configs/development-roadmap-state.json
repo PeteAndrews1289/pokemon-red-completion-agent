@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-pp-champion-qualification",
+  "as_of_session": "2026-09-09-pp-choice-horizon-reorientation",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-dependent-story-practice-2026-09-09.json"
+      "evidence": "docs/evidence/red-pp-choice-champion-stop-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -456,6 +456,12 @@
       "result": "Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features.",
       "deviation": "The two choices repeated healing rather than selecting story; no independent coverage or measured improvement. Correction: Lance has1ownedElixir, previously unexposed by the provider; 'no resource alternative' was too broad. PP/Champion work is bounded engineering until played.",
       "next": "Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay."
+    },
+    {
+      "session": "2026-09-09-pp-choice-horizon-reorientation",
+      "result": "Model81 to82 after one genuine Elixir choice:22PP,38actions/3396frames. Later guided Champion stopped at Dragon Rage entry screening with6alive;205actions/14406frames retained, no fit or Champion/HoF.82rows,40successes,69distinct features.",
+      "deviation": "The bounded boss attempt reached its guard stop. Reoriented to a synthetic objective/horizon falsifier instead of another repair cascade. No old weights/targets, stage exits or consumed scopes changed.",
+      "next": "Qualify completion-once within-budget/cumulative-cost diagnostic, then a prospective goal-conditioned trajectory-learning contract. Model-led story submilestone remains2/3; no full replay."
     }
   ],
   "closed_milestones": [

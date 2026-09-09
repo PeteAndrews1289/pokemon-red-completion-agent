@@ -1,24 +1,28 @@
-# Current — model81; PP versus Champion qualification, 2026-09-09
+# Current — model82; Champion failure retained; horizon reorientation, 2026-09-09
 
-Two actual model-selected healing lessons were fitted:80 actions/6960 frames,
-2 Full Restores spent in a separately declared historical post-Lorelei branch.
-That branch is closed before its third input: only story remained. Model81 has
-81 rows (80 comparative choices plus1 guided Agatha outcome),39 successes and
-69 distinct selected features. No new story choice or measured policy improvement.
+One genuine model81 choice spent the owned Elixir instead of advancing to Champion:
+38 actions/3396 frames,22PP restored, all30 specimens retained. Audited model82 has
+82 outcomes (81 comparative choices plus1 guided Agatha row),40 successes and69
+distinct selected vectors. No measured independent improvement or new story label.
 
-The continuous Lance endpoint is separate and unchanged:6 alive,30 specimens,
-28 living species,33 registered,23983 currency,0 Full Restores and1 Elixir.
-Correction: the previous provider omitted that legitimate PP resource.
-Read-only qualification finds22 restored PP and4 computed Champion-entry steps;
-neither option has yet been played. Next is one genuine model81 choice, not a
-forced boss run disguised as learning. Champion/HoF and Phase4 remain incomplete.
-See docs/evidence/red-dependent-story-practice-2026-09-09.json and ACTIVE_PRODUCT_STATE.md.
+The separately declared guided Champion attempt then stopped at Dragon Rage's
+unsupported reserve-entry screen:205 actions/14,406 frames, Gyarados61, all6 alive.
+Its exact failed state and raw outcome are retained, but not admitted for fitting.
+No Champion/Hall-of-Fame completion. Do not replay the consumed post-Elixir attempt.
+The earlier historical practice branch remains separate and closed.
 
-Codex owns integration, gameplay and publication. Internal helper review/tests
-caught stale scene/text and pending-trainer boundaries; fixes preserve one-shot
-input ownership. Flash supplied one limited conceptual review, not a source audit;
-several unsupported suggestions were rejected. Claude was not used. Fresh external
-five-hour/weekly remaining usage is unavailable; do not reuse historical percentages.
+Current priority: a bounded ROM-free planning-horizon diagnostic, then a prospective
+goal-conditioned trajectory contract. Easy recovery can outrank useful progress
+under the current one-step objective. This synthetic finding does not prove the
+actual Elixir unnecessary. Do not tune weights to force story or relabel old data.
+Model82, existing utility and Phase4's2/3 submilestone remain unchanged.
+See docs/evidence/red-pp-choice-champion-stop-2026-09-09.json and ACTIVE_PRODUCT_STATE.md.
+
+Codex owns integration/publication. An internal helper drafted discriminating
+retention/diagnostic tests; Flash High supplied conceptual criticism, not a source
+audit. Its naive old-reward-plus-value suggestion is not an accepted fix. Claude
+was not used; fresh five-hour/weekly quotas remain unavailable for both services.
+Full local regression runs from frozen source d8504664, independently of edits.
 Older entries below are historical where they conflict with this update.
 
 
