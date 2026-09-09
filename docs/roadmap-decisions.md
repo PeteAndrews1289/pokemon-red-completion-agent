@@ -1,5 +1,24 @@
 # Roadmap baseline and deviations
 
+## September9 final reorientation — manage resources before the stranded endpoint
+
+After publishing89d03dd5, a separately declared successor from authenticated
+Agatha03 passed initialization and entered Lance battle. It stopped at Aerodactyl
+after345actions/31,944frames/one item, with all30specimens retained. There was one
+genuine native82 healing choice and one forced story step. Champion unattempted;
+no fitting, admitted checkpoint or Phase4 exit. The original failure is preserved.
+
+The initial successor preparation exceeded the pair-ID length limit. Shortening
+the artifact name happened before any claim/input, preserving source, parent,
+seeds and budgets. The subsequently claimed episode ran exactly once.
+
+Zero-input inspection found useful reserve PP but insufficient HP for current
+critical-inclusive bounds. A late zero-item fallback refuses even with an empty
+switch history. Next use a multi-turn falsifier for earlier explicitly budgeted
+battle recovery, then integrate its real story/resource contract. No blanket
+HP-floor reduction, implicit risk mode, per-boss cohort, or failed-save resume.
+Both sequences are closed; the local1/3 checklist and stable phase exits remain.
+
 ## September9 closeout — retain the failed sequence; repair readiness, not identity
 
 The native82 continuation made one learned heal, followed by forced singleton

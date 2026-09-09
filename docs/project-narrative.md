@@ -1,4 +1,22 @@
-# Current — a drawn window is not a ready interaction
+# Current — recovery must happen while options still exist
+
+The separately declared repaired-controller continuation passed the text boundary
+and reached Lance's battle. It stopped later at Aerodactyl: useful attackers had
+lost too much HP, while healthy active Dugtrio could not hit a flying opponent
+with its Ground attacks. All30specimens remained. This run cost345actions,
+31,944frames and one field item; it contained one learned heal and one forced
+story continuation, not two model choices. Champion was not attempted.
+
+The retained battle state ruled out an easy late fallback. Even after removing
+the preparation HP floor, the existing critical-inclusive survival calculation
+found no qualified switch. That points to earlier resource management, not more
+blind boss attempts. The next skill must expose its item budget, heal or switch
+while useful options remain, and charge those resources to the selected goal.
+The new shadow fit remains separate and has not controlled gameplay.
+
+See [the next-session evidence and mission](audits/red-league-resource-management-next-session.md).
+
+# Historical — a drawn window is not a ready interaction
 
 The next live continuation did contain a real model choice: native82 selected
 healing. Its following story action was forced because no alternative remained.

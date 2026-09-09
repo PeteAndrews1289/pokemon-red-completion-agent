@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-league-initialization-closeout**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-resource-reorientation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-model-led-league-stop-2026-09-09.json)
+[Current evidence](../docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-lance-resource-reorientation
+
+Repair passed live battle entry; Lance stopped at depleted offensive reserves. All30specimens retained; Champion unattempted.
+
+**Deviation:** The separately declared successor preserves the earlier failure. Zero-input damage analysis rejects a late zero-item fallback; next manage resources earlier. Stable phase exits and local1/3 checklist unchanged.
+
+**Next:** Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort.
 
 ### 2026-09-09-league-initialization-closeout
 

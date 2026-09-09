@@ -1,4 +1,18 @@
-# Current — show the decision, then show the honest failure
+# Current — the fix worked; the battle exposed the next real problem
+
+There is now genuine repaired-controller battle footage: the new continuation
+passed Lance's dialogue and fought until Aerodactyl. It then stopped with all
+six members alive but no healthy offensive matchup under the current policy.
+Cost:345actions/31,944frames/one item. Label healing as the one model decision;
+the following singleton story step was forced. Do not imply Lance was defeated.
+
+The useful explanation is cumulative resource use. Having a move that can hit
+an opponent is not enough if the Pokémon carrying it reaches that matchup too
+depleted. Read-only damage analysis showed that a late no-item rescue did not
+qualify. The next engineering step is earlier, explicitly budgeted recovery—not
+another restart presented as success. Keep both failed attempts visible.
+
+# Historical — show the decision, then show the honest failure
 
 Suggested footage: native82 chooses healing, then show the trainer-room approach
 and the stopped status. Label the following story step as forced, not another

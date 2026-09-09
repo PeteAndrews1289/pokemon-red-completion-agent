@@ -1,4 +1,29 @@
-# Current — Lance sequence stopped; initialization repair qualified
+# Current — repair worked live; earlier resource management is next
+
+A separately declared89d03dd5 successor entered Lance battle successfully, then
+stopped at Aerodactyl with no healthy offensive matchup under the current screen.
+One learned heal plus one forced story:345actions/31,944frames/one item. All six
+party members and all30specimens remain; Champion was not attempted. The original
+97action prebattle failure remains preserved separately. Neither failed save was
+resumed, fitted or admitted as a checkpoint. Both sequences are now closed.
+
+Exact read-only damage analysis also rejects the zero-item fallback: useful
+reserves retain PP but do not survive critical-inclusive incoming bounds.
+Lowering the half-HP floor is not a qualified rescue. Next integrate earlier,
+explicitly budgeted damage-aware battle recovery into the selected story skill,
+using existing survival/healing components and exact resource accounting.
+First pass a varied multi-turn falsifier and real caller/outer-guard tests;
+do not create another boss cohort or silently activate risk/healing authority.
+
+The seven-return shadow4167759a remains fitted but unpromoted and unused.
+Native82 retains82 goal-value rows. Phase4 and its local continuation checklist
+remain open at1/3; that checklist is not an overall progress/time estimate.
+Internal read-only review agrees with this diagnosis; no new external audit or
+Claude/Antigravity usage-window measurement is claimed.
+
+Read [actual bounds, implementation seam and next-session mission](docs/audits/red-league-resource-management-next-session.md).
+
+# Historical — Lance sequence stopped; initialization repair qualified
 
 Native82 genuinely chose one heal, then a forced singleton advanced story. The
 97action/8,508frame episode stopped before Lance battle at a visible text border

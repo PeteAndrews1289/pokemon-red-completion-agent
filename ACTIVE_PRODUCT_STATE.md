@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry.
+- Next decision: Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
-| Authority now | Native82 selected one real healing action; the following story continuation was forced singleton. New shadow4167759a remains unpromoted and unused. Initialization repair changes deterministic waiting only, not learner authority. |
+| Authority now | Native82 made one healing choice in each of two separately declared sequences; both subsequent story steps were forced. New shadow4167759a remains unused. Battle execution stays deterministic and zero-item; no risk or healing authority added. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Reusable observation-readiness distinction, qualified against one actual Red boundary plus ROM-free faults. No independent gameplay advantage, live repaired victory or cross-game transfer demonstrated. |
-| Cheapest falsifier | One newly declared repaired-controller continuation must settle initialization without repeated movement or confirmation before exact identity. Count actual model choices and verify current story evidence; fail the successor on the first exception or finite-budget miss. |
+| Transfer test | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
+| Cheapest falsifier | Use existing survival/healing primitives in a varied multi-turn test showing early recovery avoids stranded offense; include impossible-resource refusal and actual story bag/accounting guards before any newly declared live continuation. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-league-initialization-closeout** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-stop-2026-09-09.json)
+**2026-09-09-lance-resource-reorientation** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Earlier seven-return shadow fit preserved. New Lance attempt:1learned heal +1forced story,97actions/8508frames/1item; stopped before battle,all30specimens retained. No admitted checkpoint,new native rows or fitting. Deterministic initialization repair:217 focused tests and0-input real-state qualification. |
-| Authority delta | Native82 selected one real healing action; the following story continuation was forced singleton. New shadow4167759a remains unpromoted and unused. Initialization repair changes deterministic waiting only, not learner authority. |
-| Transfer result | Reusable observation-readiness distinction, qualified against one actual Red boundary plus ROM-free faults. No independent gameplay advantage, live repaired victory or cross-game transfer demonstrated. |
-| Blocker | The Lance continuation stopped before battle at visible trainer text with sprite0. Champion was never attempted. WAIT-only initialization repair passes focused tests and zero-input retained-state classification, but has no live repaired success. |
-| Decision | Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry. |
-| Next session | Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry. |
-| Next falsifier | One newly declared repaired-controller continuation must settle initialization without repeated movement or confirmation before exact identity. Count actual model choices and verify current story evidence; fail the successor on the first exception or finite-budget miss. |
-| Stop condition | The September9 Lance/Champion sequence is closed after its first controller exception; Champion unattempted. Finish repair qualification and documentation by13:25UTC. No gameplay retry or replacement in this sequence. |
+| Learning output | Seven-return shadow fit preserved. Repaired successor:1learned heal+1forced story,345actions/31944frames/1item,all30specimens retained; stopped mid-Lance,not fitted. Initialization repair works live; resource bounds identify the next execution gap. |
+| Authority delta | Native82 made one healing choice in each of two separately declared sequences; both subsequent story steps were forced. New shadow4167759a remains unused. Battle execution stays deterministic and zero-item; no risk or healing authority added. |
+| Transfer result | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
+| Blocker | The repaired controller entered Lance battle, then depleted offensive reserves. Current zero-item critical-inclusive survival bounds qualify no action; a late fallback cannot fix this endpoint. No Lance completion or Champion attempt. |
+| Decision | Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort. |
+| Next session | Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort. |
+| Next falsifier | Use existing survival/healing primitives in a varied multi-turn test showing early recovery avoids stranded offense; include impossible-resource refusal and actual story bag/accounting guards before any newly declared live continuation. |
+| Stop condition | Both September9 Lance sequences are closed after their first exception; neither failed save may resume. Current session ends after evidence, reorientation and publication by13:25UTC. No additional gameplay or per-boss fitting cohort. |
 
 ### Stop conditions
 

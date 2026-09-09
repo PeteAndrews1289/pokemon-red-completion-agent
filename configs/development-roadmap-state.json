@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-league-initialization-closeout",
+  "as_of_session": "2026-09-09-lance-resource-reorientation",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-model-led-league-stop-2026-09-09.json"
+      "evidence": "docs/evidence/red-model-led-league-resource-stop-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -510,6 +510,12 @@
       "result": "Lance stopped before battle after one learned heal; Champion unattempted.217 repair tests pass; live confirmation next.",
       "deviation": "Closed the two-leg sequence at its first exception. Stable Phase4 and local1/3 checklist remain unchanged; no extra fitting cohort or replacement win.",
       "next": "Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry."
+    },
+    {
+      "session": "2026-09-09-lance-resource-reorientation",
+      "result": "Repair passed live battle entry; Lance stopped at depleted offensive reserves. All30specimens retained; Champion unattempted.",
+      "deviation": "The separately declared successor preserves the earlier failure. Zero-input damage analysis rejects a late zero-item fallback; next manage resources earlier. Stable phase exits and local1/3 checklist unchanged.",
+      "next": "Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort."
     }
   ],
   "closed_milestones": [
