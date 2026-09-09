@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-forward-stop**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-controller-fit**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-agatha-controller-fit
+
+Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate.
+
+**Deviation:** One artifact-name publication fault required deterministic recomputation;two computations/one candidate disclosed. No failed outcome omitted. Only frozen-controller meaning,not ideal-play competence.
+
+**Next:** Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.
 
 ### 2026-09-09-agatha-forward-stop
 

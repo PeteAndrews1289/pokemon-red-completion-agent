@@ -14,10 +14,14 @@ from typing import Any, cast
 from .forward_goal import ForwardGoalPlan
 from .forward_goal_learning import ForwardGoalModel
 from .forward_goal_records import restore_forward_goal_model, restore_forward_goal_outcome
-from .living_dex_option_value import option_feature_names
+from .living_dex_option_value import LivingDexOptionValueModel, option_feature_names
 from .living_dex_player_exploration import RECOVERY_EXPLORATION_POLICY_ID
 from .private_artifacts import PrivateArtifactRoot
 from .provenance import canonical_sha256
+from .red_forward_controller_batch import (
+    CONTROLLER_RETURN_CONTRACT,
+    load_red_forward_controller_batch,
+)
 from .red_forward_goal import (
     RED_FORWARD_CONTEXT_NAMES,
     RED_FORWARD_EXECUTION_FLAGS,
@@ -39,6 +43,7 @@ class RedForwardProbeSpec:
     profile_sha256: str
     fitted_source_bundle_sha256: str
     execution_flags: tuple[tuple[str, bool], ...]
+    fit_contract: str = "complete-forward.v1"
 
     def __post_init__(self) -> None:
         if (
@@ -51,6 +56,7 @@ class RedForwardProbeSpec:
             or self.tail_policy_id != RECOVERY_EXPLORATION_POLICY_ID
             or type(self.tail_seed) is not int
             or self.tail_seed < 0
+            or self.fit_contract not in {"complete-forward.v1", CONTROLLER_RETURN_CONTRACT}
             or self.fitted_plan.verifier_sha256 != red_forward_verifier_sha256(self.objective_id)
         ):
             raise ValueError("forward probe model/tail contract differs")
@@ -85,6 +91,7 @@ class RedForwardProbeSpec:
             "schema": "pokemon.red.forward-first-choice-training-probe.v1",
             "first_actor_model_sha256": self.model.sha256,
             "fit_record_sha256": self.fit_record_sha256,
+            "fit_contract": self.fit_contract,
             "fitted_plan": self.fitted_plan.public_dict(),
             "fitted_plan_sha256": self.fitted_plan.sha256,
             "fitted_source_bundle_sha256": self.fitted_source_bundle_sha256,
@@ -164,4 +171,80 @@ def load_red_forward_probe(
         native["profile_sha256"],
         native["source_bundle_sha256"],
         tuple(red_forward_execution_flags(metadata).items()),
+    )
+
+
+def load_red_forward_controller_probe(
+    store: PrivateArtifactRoot,
+    *,
+    record_id: str,
+    expected_record_sha256: str,
+    expected_model_sha256: str,
+    behavior_model: LivingDexOptionValueModel,
+    tail_seed: int,
+) -> RedForwardProbeSpec:
+    """Explicit bounded training use, after whole controller-batch readmission.
+
+    This never falls back to the ordinary loader. The source that executes the
+    probe is separately recorded; fitting does not establish calibrated support.
+    """
+    sealed = store.find_sealed_record(record_id, expected_kind="red_forward_controller_shadow_fit")
+    if sealed is None or sealed.summary.record_sha256 != expected_record_sha256:
+        raise ValueError("controller probe fit record authentication differs")
+    doc = sealed.read()
+    if (
+        doc.get("schema") != "pokemon.red.forward-controller-shadow-fit.v1"
+        or record_id != f"red-ctrl-fit-{canonical_sha256(doc)}"
+        or doc.get("return_contract") != CONTROLLER_RETURN_CONTRACT
+        or doc.get("authority") != "unqualified-shadow"
+        or doc.get("player_model_changed") is not False
+        or doc.get("independent_evaluation") is not False
+        or doc.get("in_game_loss_inferred") is not False
+        or doc.get("behavior_model_sha256") != behavior_model.model_sha256
+    ):
+        raise ValueError("controller probe fitted authority differs")
+    model = restore_forward_goal_model(doc["model"])
+    if model.sha256 != expected_model_sha256 or doc.get("model_sha256") != model.sha256:
+        raise ValueError("controller probe model identity differs")
+    batch = load_red_forward_controller_batch(
+        store,
+        batch_record_id=cast(str, doc.get("batch_record_id")),
+        expected_batch_record_sha256=cast(str, doc.get("batch_record_sha256")),
+        behavior_model=behavior_model,
+    )
+    rows = tuple(sorted(batch.outcomes, key=lambda row: row.choice.decision_sha256))
+    public = [row.public_dict() for row in rows]
+    if (
+        doc.get("outcomes") != public
+        or model.dataset_sha256
+        != canonical_sha256({"schema": "pokemon.core.forward-goal-dataset.v1", "outcomes": public})
+        or doc.get("episodes")
+        != sorted(batch.episode_requests, key=lambda row: str(row["episode_id"]))
+        or doc.get("cancelled_episode_ids") != list(batch.cancelled_episode_ids)
+        or type(doc.get("failed_controller_stops")) is not int
+        or doc["failed_controller_stops"] != batch.failed_stops
+        or model.settled_examples != sum(row.target is not None for row in rows)
+        or model.censored_examples != sum(row.target is None for row in rows)
+    ):
+        raise ValueError("controller probe fit differs from its entire admitted batch")
+    complete = [row for row in batch.episode_requests if row["status"] == "complete"]
+    if not complete:
+        raise ValueError("controller probe lacks a complete originating episode")
+    reader = store.open_episode(cast(str, complete[0]["episode_id"]))
+    if reader.manifest_sha256 != complete[0]["manifest_sha256"]:
+        raise ValueError("controller probe origin changed after admission")
+    metadata = cast(Mapping[str, Any], reader.read_header()["metadata"])
+    native = metadata["player_training_plan"]
+    return RedForwardProbeSpec(
+        model,
+        rows[0].plan,
+        expected_record_sha256,
+        native["model_sha256"],
+        native["behavior_policy_id"],
+        tail_seed,
+        metadata["forward_story_objective"],
+        native["profile_sha256"],
+        native["source_bundle_sha256"],
+        tuple(red_forward_execution_flags(metadata).items()),
+        CONTROLLER_RETURN_CONTRACT,
     )

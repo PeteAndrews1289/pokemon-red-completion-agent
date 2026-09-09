@@ -1,4 +1,28 @@
-# Current — Agatha batch closed; all-attempt controller-return fit next
+# Current — Agatha shadow fit verified; changed-resource training probe next
+
+All three attempted Agatha returns entered a separate frozen-controller shadow
+fit:two completions and one known controller stop. Model3bf43581 is verified
+against the whole admitted batch and its dataset fingerprint. Three correlated
+returns,one root,two selected inputs;not calibrated confidence or generalization.
+An identifier-length publication fault required a disclosed deterministic
+recomputation:two calculations,one saved candidate,no gameplay repeated.
+
+Bruno32's actual181action/17,293frame/no-item victory remains the current live
+learning result. Native82 and its82rows are unchanged. The explicit new Agatha
+probe loader re-admits the complete controller batch and requires a separate
+CLI flag;ordinary probe loading still rejects the new artifact kind.
+
+A different historical post-Bruno02 endpoint passed zero-input inspection with
+two genuine choices and the same Agatha profile. Next:one bounded first-choice
+training probe,Agathahead first/old82tailseed2026090940,max2macros,no fit/promotion.
+This is correlated changed-resource practice,not a retry of failedAgatha03 or an
+independent test. No new gameplay after10:20UTC;overall stop10:42:58UTC.
+All original collection plans remain closed. Phase4 and its stable exit remain
+open;no concurrent currentChampion/Hall-of-Fame completion is claimed.
+See [fit audit](audits/red-agatha-controller-fit-2026-09-09.md). Internal review found no critical probe-loader blocker;
+Codex owns integration/publication. External subscription quotas unavailable.
+
+# Historical — Agatha batch closed; all-attempt controller-return fit next
 
 The new Bruno learner's actual first-choice victory remains verified:181actions,
 17,293frames, no field item, all30specimens. Phase4 is still open.

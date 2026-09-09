@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-agatha-forward-stop",
+  "as_of_session": "2026-09-09-agatha-controller-fit",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -486,6 +486,12 @@
       "result": "Agatha:3attempted/2reached/1controllerstop,848actions/78890frames/2items. Three genuine first choices and two forced story continuations. Fourth cancelled unclaimed; noAgathafit. Bruno learnercontrol remains real;Phase4 open.",
       "deviation": "Firstmechanicalexception stoppedcollection. The retained zero is a frozen-controller failure, not an in-game loss. Separate offline quarantine diagnostic shares sampler/goal/prefix checks without relaxing fitting admission.",
       "next": "Close the Agatha batch without retry or a success-only fit. Audit its known controller-stopped return through the separate non-fitting reader, then decide whether explicit forward-only failure admission supports a useful frozen-controller shadow fit; do not repair bosses or relabel Bruno."
+    },
+    {
+      "session": "2026-09-09-agatha-controller-fit",
+      "result": "Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate.",
+      "deviation": "One artifact-name publication fault required deterministic recomputation;two computations/one candidate disclosed. No failed outcome omitted. Only frozen-controller meaning,not ideal-play competence.",
+      "next": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC."
     }
   ],
   "closed_milestones": [

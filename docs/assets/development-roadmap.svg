@@ -91,8 +91,9 @@
 <text x="754" y="1573" class="small muted">Legitimate trades and events, special puzzles and unsupported</text>
 <text x="754" y="1594" class="small muted">mechanics remain visible dependencies.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-09-agatha-forward-stop</text>
-<text x="50" y="1767" class="body">Agatha:3attempted/2reached/1controllerstop,848actions/78890frames/2items. Three genuine first choices and two forced story</text>
-<text x="50" y="1792" class="body">continuations. Fourth cancelled unclaimed; noAgathafit. Bruno learnercontrol remains real;Phase4 open.</text>
+<text x="50" y="1732" class="small muted">2026-09-09-agatha-controller-fit</text>
+<text x="50" y="1767" class="body">Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two</text>
+<text x="50" y="1792" class="body">selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one</text>
+<text x="50" y="1817" class="body">saved candidate.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v1 / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

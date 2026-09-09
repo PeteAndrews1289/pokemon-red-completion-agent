@@ -11,7 +11,15 @@ from test_red_forward_probe import fixture, load
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts/run_red_forward_training_probe.py"
 
 
-def harness(monkeypatch, *, read_only=False, claimed=False, preflight=None, fault=None):
+def harness(
+    monkeypatch,
+    *,
+    read_only=False,
+    claimed=False,
+    preflight=None,
+    fault=None,
+    controller_return=False,
+):
     module = runpy.run_path(str(SCRIPT))
     namespace = module["_run"].__globals__
     base = namespace["base"]
@@ -49,6 +57,9 @@ def harness(monkeypatch, *, read_only=False, claimed=False, preflight=None, faul
         decision_limit=2,
         forward_story_objective=None,
         forward_resource_budget=None,
+        causal_record=None
+        if fault == "missing_controller_model"
+        else SimpleNamespace(model=f.tail),
     )
     ready = make_dataclass("Ready", [(key, object) for key in values])(**values)
     args = SimpleNamespace(
@@ -57,9 +68,19 @@ def harness(monkeypatch, *, read_only=False, claimed=False, preflight=None, faul
         probe_model_sha256=probe.model.sha256,
         probe_tail_seed=41,
         probe_read_only=read_only,
+        probe_frozen_controller_return=controller_return,
     )
     monkeypatch.setattr(base, "_prepare", lambda _: ready)
     monkeypatch.setitem(namespace, "load_red_forward_probe", lambda *a, **k: probe)
+
+    def controller_loader(*args, **kwargs):
+        assert kwargs["behavior_model"] is f.tail
+        events.append(("controller_load",))
+        if fault == "controller_admission":
+            raise ValueError("controller batch differs")
+        return probe
+
+    monkeypatch.setitem(namespace, "load_red_forward_controller_probe", controller_loader)
 
     def scope(actual, spec):
         assert actual is ready and spec is probe
@@ -106,6 +127,32 @@ def harness(monkeypatch, *, read_only=False, claimed=False, preflight=None, faul
         ),
     )
     return SimpleNamespace(run=lambda: module["_run"](args), events=events, holder=holder)
+
+
+def test_controller_probe_explicit_readonly_load_does_not_claim_or_act(monkeypatch):
+    h = harness(monkeypatch, read_only=True, controller_return=True)
+    result = h.run()
+    assert h.events[0] == ("controller_load",)
+    assert not h.holder["claimed"] and result["controller_actions"] == 0
+    assert result["first_actor_predictions"] == 0
+
+
+@pytest.mark.parametrize("fault", ["missing_controller_model", "controller_admission"])
+def test_controller_fit_failure_cannot_fall_back_or_act(monkeypatch, fault):
+    h = harness(monkeypatch, controller_return=True, fault=fault)
+    with pytest.raises(ValueError):
+        h.run()
+    assert not h.holder["claimed"]
+    assert not any(event[0] in {"scope", "preflight", "claim", "run"} for event in h.events)
+
+
+def test_controller_first_actor_uses_the_same_one_shot_claim_owner(monkeypatch):
+    h = harness(monkeypatch, controller_return=True)
+    result = h.run()
+    assert result["automatic_promotion"] is False
+    assert [event[0] for event in h.events].index("claim") < [event[0] for event in h.events].index(
+        "run"
+    )
 
 
 def test_read_only_authenticates_and_preflights_without_claim_or_actor(monkeypatch):

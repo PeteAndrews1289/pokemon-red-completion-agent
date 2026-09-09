@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion.
+- Next decision: Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | New forward model32 selected a real story action from2alternatives and completed Bruno in181actions/17293frames. It remains bounded training-probe authority; old82 owns declared prospective collection and any frozen tail. No full-player promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
-| Cheapest falsifier | Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator. |
+| Cheapest falsifier | The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-agatha-forward-stop** · status **active** · evidence [qualification](docs/evidence/red-agatha-forward-batch-stop-2026-09-09.json)
+**2026-09-09-agatha-controller-fit** · status **active** · evidence [model fit](docs/evidence/red-agatha-controller-fit-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Three genuine Agatha training choices:two heal-then-forced-story completions and one immediate-story controller stop.848actions/78890frames/2items. NoAgatha fit; fourth cancelled unclaimed. NewBruno head's prior actual181action completion remains valid. |
-| Authority delta | Unchanged since model32's actual Bruno first-choice probe. Agatha used old82's declared stochastic collector, not a relabelled Bruno model; no fit or promotion. |
+| Learning output | Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate. |
+| Authority delta | Agatha head is shadow-only;the previously verified Bruno model32 first-choice victory remains the latest live authority. Explicit controller-return probe loading is separately qualified,not automatic promotion. |
 | Transfer result | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
-| Blocker | Agatha03 stopped at move101's unsupported entry screen, all6alive. Its known STOPPED0 return is separately auditable but remains quarantined; generic fitting loaders still require complete artifacts. |
-| Decision | Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion. |
-| Next session | Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion. |
-| Next falsifier | Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator. |
-| Stop condition | Batch closed on its first mechanical exception:03 never retries;04 cancelled unclaimed. No success-only fit, safe checkpoint from failure, boss-repair cascade, sealed/Crystal/full replay. Reorient within60minutes; overall hard stop10:42:58UTC. |
+| Blocker | Only three correlated Agatha returns from one initial context;near-extreme fitted estimates are not calibrated probabilities. Changed-resource probe remains unexecuted;currentChampionfailure retained. |
+| Decision | Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC. |
+| Next session | Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC. |
+| Next falsifier | The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures. |
+| Stop condition | Stop new probe on first input-bearing failure or2macro goal bound;no retry,fit,promotion or battle repair. No new gameplay after10:20UTC;overall10:42:58UTC. Consumed originalBruno/Agathaplans stayclosed. |
 
 ### Stop conditions
 

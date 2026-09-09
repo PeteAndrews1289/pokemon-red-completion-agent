@@ -14,7 +14,10 @@ from dataclasses import replace
 
 import run_paired_red_bounded_player as base
 
-from pokemon_red_completion.red_forward_probe import load_red_forward_probe
+from pokemon_red_completion.red_forward_probe import (
+    load_red_forward_controller_probe,
+    load_red_forward_probe,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -25,6 +28,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--probe-model-sha256", required=True)
     parser.add_argument("--probe-tail-seed", required=True, type=int)
     parser.add_argument("--probe-read-only", action="store_true")
+    parser.add_argument("--probe-frozen-controller-return", action="store_true")
     return parser
 
 
@@ -32,13 +36,25 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     ready = base._prepare(args)
     if not ready.save_terminal_checkpoints:
         raise ValueError("forward probe requires terminal and failure retention")
-    probe = load_red_forward_probe(
-        ready.private_root,
-        record_id=args.probe_fit_record_id,
-        expected_record_sha256=args.probe_fit_record_sha256,
-        expected_model_sha256=args.probe_model_sha256,
-        tail_seed=args.probe_tail_seed,
-    )
+    if getattr(args, "probe_frozen_controller_return", False):
+        if ready.causal_record is None:
+            raise ValueError("controller probe requires the frozen native behavior model")
+        probe = load_red_forward_controller_probe(
+            ready.private_root,
+            record_id=args.probe_fit_record_id,
+            expected_record_sha256=args.probe_fit_record_sha256,
+            expected_model_sha256=args.probe_model_sha256,
+            tail_seed=args.probe_tail_seed,
+            behavior_model=ready.causal_record.model,
+        )
+    else:
+        probe = load_red_forward_probe(
+            ready.private_root,
+            record_id=args.probe_fit_record_id,
+            expected_record_sha256=args.probe_fit_record_sha256,
+            expected_model_sha256=args.probe_model_sha256,
+            tail_seed=args.probe_tail_seed,
+        )
     base._require_forward_probe_scope(ready, probe)
     episode_id = base._episode_id(ready.pair_id, base.FORWARD_PROBE_ARM_ID)
     claim_id = "forward-probe-claim-" + ready.pair_id

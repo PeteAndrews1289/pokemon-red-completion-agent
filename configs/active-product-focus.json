@@ -29,25 +29,25 @@
     },
     {
       "capability": "Learn whether recovery or immediate story play achieves a finite goal, counting the whole attempt; separate first-choice planning from the frozen continuation policy.",
-      "cheapest_falsifier": "Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator.",
+      "cheapest_falsifier": "The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Unchanged since model32's actual Bruno first-choice probe. Agatha used old82's declared stochastic collector, not a relabelled Bruno model; no fit or promotion.",
-        "blocker": "Agatha03 stopped at move101's unsupported entry screen, all6alive. Its known STOPPED0 return is separately auditable but remains quarantined; generic fitting loaders still require complete artifacts.",
-        "decision": "Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion.",
+        "authority_delta": "Agatha head is shadow-only;the previously verified Bruno model32 first-choice victory remains the latest live authority. Explicit controller-return probe loading is separately qualified,not automatic promotion.",
+        "blocker": "Only three correlated Agatha returns from one initial context;near-extreme fitted estimates are not calibrated probabilities. Changed-resource probe remains unexecuted;currentChampionfailure retained.",
+        "decision": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-agatha-forward-batch-stop-2026-09-09.json",
-          "sha256": "75ffeb16d0bf33c6103dce56a5c2311ac355e4bfe480c4f3a9bde1d33cbde443"
+          "kind": "model_fit",
+          "path": "docs/evidence/red-agatha-controller-fit-2026-09-09.json",
+          "sha256": "226bab7a28ab2620d855fb34a1a5a13ad313d3236fbe47beb8943d3731294e55"
         },
-        "learning_output": "Three genuine Agatha training choices:two heal-then-forced-story completions and one immediate-story controller stop.848actions/78890frames/2items. NoAgatha fit; fourth cancelled unclaimed. NewBruno head's prior actual181action completion remains valid.",
-        "next_falsifier": "Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator.",
-        "next_session_goal": "Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion.",
+        "learning_output": "Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate.",
+        "next_falsifier": "The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures.",
+        "next_session_goal": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.",
         "product_alignment": "Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits.",
-        "session_id": "2026-09-09-agatha-forward-stop",
+        "session_id": "2026-09-09-agatha-controller-fit",
         "status": "active",
-        "stop_condition": "Batch closed on its first mechanical exception:03 never retries;04 cancelled unclaimed. No success-only fit, safe checkpoint from failure, boss-repair cascade, sealed/Crystal/full replay. Reorient within60minutes; overall hard stop10:42:58UTC.",
+        "stop_condition": "Stop new probe on first input-bearing failure or2macro goal bound;no retry,fit,promotion or battle repair. No new gameplay after10:20UTC;overall10:42:58UTC. Consumed originalBruno/Agathaplans stayclosed.",
         "transfer_result": "The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established."
       },
       "learned_authority": {
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red resource-backed story integration V1",
-      "next_decision": "Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion.",
+      "next_decision": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
