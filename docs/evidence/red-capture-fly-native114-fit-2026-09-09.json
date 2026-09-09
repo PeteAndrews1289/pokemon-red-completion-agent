@@ -1,0 +1,142 @@
+{
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "completed_episode": {
+    "episode_id": "red-capture-fly-20260909-e-03-causal",
+    "actions": 120,
+    "frames": 6432,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "forced_singletons": 0,
+    "verified_collection_gain": 0,
+    "status": "succeeded"
+  },
+  "current_session_status": "bounded_fly_batch_stopped",
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 113,
+    "controller_actions": 0,
+    "corpus_record_sha256": "06ce77e5feac3aa0d316d777a68cdf072042d536a7e0d35ffd32bf4d1136e9f4",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 95,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 114,
+      "successful_examples": 69,
+      "total_examples": 114,
+      "train_dataset_sha256": "75ce95165eb1e0c91d04dc02d62ecf3f53b7a73965570f64c24c6aa409be1629",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011402674314493122,
+      "weighted_mse_before": 0.03077472192309045
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "d00e5e4703ff384656c1b4867b7eca9f24215c3ed984ddc78b0b4bbcede154f4",
+      "file_sha256": "9eef6b86ea9e50754f5428318423d9da9e89377736c0410f21333695c5e49a18",
+      "independent_evaluation": false,
+      "model_sha256": "138542d0a073985847b292b86bd010e424bc3095440eb8ce71a74ccb7538728d",
+      "prior_model_sha256": "4c11fd93ceda2630c8fbcbeeb1ed13c8caf0b50f80d832a9f1a1ceb1a1e137e8",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 114,
+      "source_bundle_sha256": "6509204b53da486e9930700f3c7156ca44bd7b1f06da76a2f66bf6ea6eab50ec",
+      "source_commit": "465aeab6333073db1c3a4daba89ded297266b350"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08571074434807634,
+        5.844118027124934e-06,
+        4.2985704454337904e-05,
+        0.0050380409882313125,
+        0.003781822000612962,
+        0.003840382098212831,
+        0.0041949844615715125,
+        1.4571196298370335e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 114,
+      "total_examples": 114,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011401806759868472
+    },
+    "regional_source_examples": 26,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08571909490649526,
+        5.84481765851503e-06,
+        4.2984658132956526e-05,
+        0.005038703032997816,
+        0.0037824038653173605,
+        0.0038385997954937297,
+        0.00419498053513093,
+        1.4572192115326574e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 114,
+      "total_examples": 114,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011402674314493122
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "next_step": "Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens.",
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "scope": "4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.",
+  "session_evidence": "docs/evidence/red-capture-fly-learning-2026-09-09.json",
+  "status": "fit_complete_bounded_only"
+}

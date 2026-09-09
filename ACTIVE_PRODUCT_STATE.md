@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward.
+- Next decision: Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
-| Authority now | The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim. |
+| Authority now | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result. |
 | Cheapest falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-collection-fly-access** · status **active** · evidence [qualification](docs/evidence/red-collection-fly-learning-2026-09-09.json)
+**2026-09-09-capture-fly-access** · status **active** · evidence [qualification](docs/evidence/red-capture-fly-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Choose successive collection and support opportunities without per-species direction scripts. |
-| Learning output | 1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified. |
-| Authority delta | The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim. |
+| Learning output | Four steps, three fits: 111 to114 examples. Two captures added Nidoran female and an extra Oddish; one learned recovery. Final forced search exhausted safely and was not fitted. Collection: 42 specimens, 34 living species, no losses. Cost: 1405 actions, 88200 frames, two balls, no money; automatic cycle14.7 minutes. Locations came from supplied cartridge tables, not learned habitat inference. |
+| Authority delta | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
 | Transfer result | Changed landing, access and state boundaries tested without ROM; live evidence remains one Red lineage. |
-| Blocker | Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified. |
+| Blocker | Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery. |
 | Decision | Retain actual outcomes; continue the smallest useful collection capability. |
-| Next session | Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward. |
+| Next session | Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens. |
 | Next falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
-| Stop condition | Batch stopped: no_executable_native_goal_preflight_exception; no consumed trial replay. |
+| Stop condition | Batch stopped: step_limit; no consumed trial replay. |
 
 ### Stop conditions
 

@@ -1,12 +1,12 @@
-# Current — Fly-enabled collection: native111
+# Current — Fly-enabled collection: native114
 
-1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified.
+4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.
 
-The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim.
+The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim.
 
-Next: Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward.
+Next: Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens.
 
-[Session, evidence and handoff](work-sessions/2026-09-09-collection-fly-access.md). 320 focused tests, typing and lint passed. No external-agent review or usage this session.
+[Session, evidence and handoff](work-sessions/2026-09-09-capture-fly-access.md). 367 focused tests, typing and lint passed. No external-agent review or usage this session.
 
 ## Prior package and Phase4 history
 

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-collection-fly-access**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-capture-fly-access**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 - [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 
-Current model: **111 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Capture and retain specimens; evolve, store and trade as needed.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
 
-[Current evidence](../docs/evidence/red-collection-fly-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-capture-fly-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-capture-fly-access
+
+4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.
+
+**Deviation:** No stage-exit change. Fly access is opt-in for capture and evolution; location tables remain supplied knowledge.
+
+**Next:** Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens.
 
 ### 2026-09-09-collection-fly-access
 
