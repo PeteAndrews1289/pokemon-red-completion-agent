@@ -97,7 +97,7 @@ def fixture(monkeypatch):
     monkeypatch.setattr(story, "map_object_events", lambda *_: ())
     monkeypatch.setattr(story, "static_trainer_sight_zones", lambda *_: (zone,))
     monkeypatch.setattr(story, "trainer_sight_zones", lambda *_: (zone,))
-    monkeypatch.setattr(story, "trainer_party_quote", lambda *_: roster)
+    monkeypatch.setattr(story, "trainer_party_quote", lambda *_a, **_k: roster)
     monkeypatch.setattr(story, "Gen1TrainerSightProjector", lambda *_a, **_k: object())
     monkeypatch.setattr(story, "Gen1TraversalObserver",
                         lambda *_: SimpleNamespace(observe=lambda: object()))

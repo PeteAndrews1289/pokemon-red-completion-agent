@@ -4,8 +4,8 @@ Locate tables through the instructions that consume them, not through copied
 trainer lists. See pret/pokered revision a1a22aaf84d1675bcdbaeb194592379d586d838e,
 engine/battle/read_trainer_party.asm and home/trainers2.asm. This is an inventory
 adapter, not battle authorization: moves, AI, approach safety and actual payout
-still need separate verification. Link battles and the final, unbounded trainer
-class are deliberately unsupported.
+still need separate verification. Link battles remain unsupported. The final
+class has no next-class pointer and requires a separate exact-Red opt-in.
 """
 
 from __future__ import annotations
@@ -14,6 +14,7 @@ import re
 from dataclasses import dataclass
 
 from .gen1_cartridge import CartridgeReadError, bank_offset, internal_to_dex
+from .rom import verify_rom_bytes
 
 _PARTY_CODE = re.compile(
     rb"\xfa\x59\xd0\xd6\xc9\x87\x21(..)\x4f\x06\x00\x09\x2a\x66\x6f",
@@ -69,18 +70,32 @@ def _pointer(rom: bytes, bank: int, operand: bytes, size: int) -> int:
     return offset
 
 
-def trainer_party_quote(rom: bytes, opponent_id: int, trainer_set: int) -> TrainerPartyQuote:
+def trainer_party_quote(
+    rom: bytes, opponent_id: int, trainer_set: int, *, allow_final_class: bool = False,
+) -> TrainerPartyQuote:
     """Read a one-based trainer set without scanning into the next class.
 
     Opponent IDs include the cartridge's 200 offset. Class47 has no following
-    class pointer to authenticate its extent, so it fails closed. Empty classes,
+    pointer: by default it still refuses. Explicit supported-Red callers may
+    quote only its first set, bounded to one six-member record and its bank;
+    exact revision verification qualifies that set as Lance, not arbitrary
+    trailing bytes or a second invented set. Empty classes,
     missing sets, malformed species and unterminated or oversized parties refuse.
     Mixed-level rosters are supported, but special move overrides are not quoted.
     """
-    if type(opponent_id) is not int or not 201 <= opponent_id < 200 + _CLASS_COUNT:
+    if type(allow_final_class) is not bool:
+        raise TypeError("allow_final_class must be boolean")
+    final_class = type(opponent_id) is int and opponent_id == 200 + _CLASS_COUNT
+    if type(opponent_id) is not int or not 201 <= opponent_id <= 200 + _CLASS_COUNT:
         raise CartridgeReadError("trainer opponent needs a bounded class (201..246)")
     if type(trainer_set) is not int or not 1 <= trainer_set <= 255:
         raise CartridgeReadError("trainer set must be one-based and fit a byte")
+    if final_class:
+        if not allow_final_class or trainer_set != 1:
+            raise CartridgeReadError(
+                "final trainer class needs an explicit first-set qualification"
+            )
+        verify_rom_bytes(rom)
     code = _unique(rom, _PARTY_CODE, "trainer-party")
     bank = code.start() // 0x4000
     table = _pointer(rom, bank, code.group(1), 2 * _CLASS_COUNT)
@@ -90,7 +105,11 @@ def trainer_party_quote(rom: bytes, opponent_id: int, trainer_set: int) -> Train
     if pointers[0] < table + 2 * _CLASS_COUNT or pointers != sorted(pointers):
         raise CartridgeReadError("trainer class extents are not ordered after their table")
     index = opponent_id - 201
-    cursor, end = pointers[index : index + 2]
+    if final_class:
+        cursor = pointers[index]
+        end = min(cursor + 14, (bank + 1) * 0x4000, len(rom))
+    else:
+        cursor, end = pointers[index : index + 2]
     dex = internal_to_dex(rom)
     selected: tuple[TrainerPartyMember, ...] | None = None
     for set_number in range(1, trainer_set + 1):

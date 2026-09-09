@@ -21,7 +21,7 @@ from .domain import GameState
 from .executor import CountingExecutor
 from .gen1_cartridge import CartridgeReadError
 from .gen1_route_runtime import Gen1TraversalObserver
-from .gen1_trainer_parties import trainer_party_quote
+from .gen1_trainer_parties import TrainerPartyQuote, trainer_party_quote
 from .gen1_trainer_sight import (
     Gen1TrainerSightProjector,
     TrainerFacing,
@@ -117,6 +117,14 @@ class RedCartridgeLoreleiSkill:
         elif self.objective_id == "defeat_lance":
             self.expected_facts = frozenset({"league:lance_defeated"})
 
+    def _quote(self, trainer_class: int, trainer_set: int) -> TrainerPartyQuote:
+        assert self.world is not None
+        if self.objective_id == "defeat_lance":
+            return trainer_party_quote(
+                self.world.rom, trainer_class, trainer_set, allow_final_class=True,
+            )
+        return trainer_party_quote(self.world.rom, trainer_class, trainer_set)
+
     def _plan(self) -> tuple[RedGoalObservation, TrainerFundingCandidate, RedTrainerPartyPlan]:
         from .red_resource_goal_router import _walking_plan
 
@@ -182,7 +190,7 @@ class RedCartridgeLoreleiSkill:
         if len(matches) != 1 or matches[0].defeated or matches[0].engage_distance != 0:
             raise RedTrainerStoryError("story trainer is not one undefeated interaction target")
         trainer = matches[0]
-        quote = trainer_party_quote(world.rom, trainer.trainer_class, trainer.trainer_set)
+        quote = self._quote(trainer.trainer_class, trainer.trainer_set)
         preparation = plan_trainer_party(observation.party, quote)
         start = Gen1TraversalObserver(self.runtime.reader, Gen1TrainerSightProjector(
             world.rom, self.runtime.reader, full_event_offsets=True,
@@ -246,9 +254,7 @@ class RedCartridgeLoreleiSkill:
             self.actions, maximum_actions_per_decision=self.max_actions,
             maximum_episode_actions=self.max_actions,
         ))
-        quote = trainer_party_quote(
-            world.rom, target.trainer.trainer_class, target.trainer.trainer_set,
-        )
+        quote = self._quote(target.trainer.trainer_class, target.trainer.trainer_set)
         prepare_trainer_lead(self.runtime, actions, preparation, current_quote=quote)
         prepared_raw = reader.read()
         guard = RecoveryRouteInterruptionHandler(
@@ -334,8 +340,7 @@ class RedCartridgeLoreleiSkill:
                 or actual.event_flag != target.trainer.event_flag
                 or actual.trainer_class != target.trainer.trainer_class
                 or actual.trainer_set != target.trainer.trainer_set
-                or trainer_party_quote(world.rom, actual.trainer_class, actual.trainer_set)
-                != target.quote
+                or self._quote(actual.trainer_class, actual.trainer_set) != target.quote
             ):
                 raise RedTrainerStoryError("story trainer identity or roster changed")
             guard._require_preserved_living_slots(current)

@@ -121,3 +121,38 @@ def test_invalid_or_zero_bcd_reward_refuses(rom, value):
 def test_rom_truncation_refuses(rom):
     with pytest.raises(CartridgeReadError, match="truncated"):
         quote(rom[:0xC405])
+
+
+def test_final_class_requires_exact_revision_and_never_quotes_a_second_set(rom, monkeypatch):
+    from pokemon_red_completion.rom import RomValidationError
+    rom[0x4310:0x4316] = bytes((255, 30, 108, 40, 96, 0))
+    rom[0xc4e6:0xc4eb] = bytes.fromhex('0045010000')
+    with pytest.raises(RomValidationError):
+        trainers.trainer_party_quote(bytes(rom), 247, 1, allow_final_class=True)
+    verified = []
+    monkeypatch.setattr(trainers, 'verify_rom_bytes', lambda data: verified.append(data))
+    result = trainers.trainer_party_quote(bytes(rom), 247, 1, allow_final_class=True)
+    assert verified == [bytes(rom)]
+    assert [(m.species, m.level) for m in result.party] == [(23, 30), (27, 40)]
+    assert result.base_money == 100 and result.expected_victory_money == 4000
+    with pytest.raises(CartridgeReadError, match='first-set'):
+        trainers.trainer_party_quote(bytes(rom), 247, 2, allow_final_class=True)
+    with pytest.raises(CartridgeReadError, match='first-set'):
+        trainers.trainer_party_quote(bytes(rom), 247, 1)
+
+
+@pytest.mark.parametrize('fault', ['unterminated', 'empty', 'seven_members', 'bad_species'])
+def test_final_class_does_not_scan_arbitrary_bytes_after_its_bounded_record(
+    rom, monkeypatch, fault,
+):
+    monkeypatch.setattr(trainers, 'verify_rom_bytes', lambda _: None)
+    rom[0xc4e6:0xc4eb] = bytes.fromhex('0045010000')
+    data = {
+        'unterminated': bytes([255, 30, 108] + [40, 96] * 6),
+        'empty': bytes([30, 0]),
+        'seven_members': bytes([30] + [108] * 7 + [0]),
+        'bad_species': bytes([30, 190, 0]),
+    }[fault]
+    rom[0x4310:0x4310 + len(data)] = data
+    with pytest.raises(CartridgeReadError):
+        trainers.trainer_party_quote(bytes(rom), 247, 1, allow_final_class=True)

@@ -63,6 +63,29 @@ those scripts are outside the configured CI typing scope and were not silently
 fixed or described as passing. The prior published head's CI34304092996 is green.
 No full-suite pass is inferred for this new source from these targeted checks.
 
+### First saved-state preflight and bounded correction
+
+The first published-source preflight sent zero inputs and found no available goal:
+the trainer decoder deliberately refused final class47 because it has no following
+class pointer. Its guard was not simply widened. An explicit exact-Red opt-in now
+admits only the first set, with a14-byte/six-member/bank bound; ordinary callers
+retain the previous refusal and a second final-class set remains unsupported.
+The actual cartridge quote is five opponents and6,138 reward, not a copied roster.
+
+A separate working-tree diagnostic used an input-forbidden controller and made no
+predictions, fits or execution declaration. It found one available story goal,
+14 computed route steps and37 cartridge-controlled entrance movements. Source
+publication checks were skipped only inside that diagnostic process to batch the
+repair; this is not execution qualification. The final new attempt must revalidate
+clean published source normally. The Agatha endpoint and all79 rows are unchanged.
+
+This boundary will therefore produce a guided curriculum row if it settles, not a
+comparative policy-choice row. The final Full Restore remains reserved. Neither
+preflight failure nor the static working-tree result advances a training counter.
+After this correction,348 combined focused tests passed. Configured435-file
+typing, lint, documentation, public-artifact and product-focus checks also passed;
+the prospective source registry was regenerated before publication.
+
 The2/3 income-to-story checklist is a submilestone, not a percentage of Phase4.
 Two additional guided boss wins cannot establish model-directed completion.
 Any retained endgame result must disclose learned choices versus forced steps and
