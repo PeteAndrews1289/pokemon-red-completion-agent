@@ -443,6 +443,7 @@ def test_wild_goal_context_binds_one_capture_quantum(
         parameters["capture_species_numbers"] = (16, 21)
     _wild_provider(
         SimpleNamespace(emulator=object(), reader=object(), adapter=object(),
+                        registration_policy=None,
                         remaining_acquisition_demand=remaining_demand,
                         level_evolution_acquisition_edges=level_edges),
         SimpleNamespace(

@@ -67,12 +67,20 @@ class RedBoundedPlayerObserver:
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
+        if getattr(self.runtime, "registration_policy", None) is not None:
+            raise ValueError(
+                "registered objective needs versioned checkpoint and reward integration"
+            )
         if not callable(self.collection_projector):
             raise TypeError("collection_projector must be callable")
         if self.enumerate_bindings is not None and not callable(self.enumerate_bindings):
             raise TypeError("enumerate_bindings must be callable")
 
     def __call__(self) -> GoalManagerCompositionObservation:
+        if getattr(self.runtime, "registration_policy", None) is not None:
+            raise ValueError(
+                "registered objective needs versioned checkpoint and reward integration"
+            )
         self.last_live_observation = None
         live = self.runtime.adapter.observe()
         if not isinstance(live, RedGoalObservation):

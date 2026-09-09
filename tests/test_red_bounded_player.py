@@ -199,7 +199,7 @@ def test_observer_uses_existing_adapter_enumerator_and_collection_projector() ->
     collection = _collection()
     enumerator = Mock()
     enumerator.enumerate.return_value = binding_set
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = live
     runtime.enumerator.return_value = enumerator
     actions = Mock(spec=CountingExecutor)
@@ -244,7 +244,7 @@ def test_observer_encodes_a_post_skill_state_without_available_goals() -> None:
     collection = _collection()
     enumerator = Mock()
     enumerator.enumerate.return_value = binding_set
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = live
     runtime.enumerator.return_value = enumerator
 
@@ -272,7 +272,7 @@ def test_observer_encodes_a_post_skill_state_without_available_goals() -> None:
 
 
 def test_observer_rejects_an_invalid_collection_projection() -> None:
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = _live()
     runtime.enumerator.return_value.enumerate.return_value = _binding_set()
 

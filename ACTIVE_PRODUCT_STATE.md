@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **maintenance**
 - Rigor: **development**
-- Next decision: Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.
+- Next decision: Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.
 
 ### Mandatory mission check
 
@@ -58,17 +58,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-shared-registration-foundation** · status **active** · evidence [qualification](docs/evidence/shared-registration-foundation-2026-09-09.json)
+**2026-09-09-registered-runtime-binding** · status **active** · evidence [qualification](docs/evidence/registered-runtime-binding-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 237 targeted tests passed; durable shared memory, registered demand and evolution projections implemented. No production import, gameplay, fit or learning counter change. Native114 unchanged. |
-| Authority delta | No learned authority change. A prospective registered-only projection exists; old fitted examples and rewards remain unchanged. |
-| Transfer result | Synthetic overlapping Red/Blue memory and later-branch tests pass; no live Blue or cross-title learned transfer result. |
-| Blocker | Live checkpoint records, acquisition wiring, reward admission and native evolution executor still use legacy semantics; migrate them together before input. |
-| Decision | Accept the ROM-free ledger and planning foundation; migrate live consumers next, without general architecture expansion. |
-| Next session | Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson. |
+| Learning output | 340 targeted tests passed. Capture surveys and native evolution now accept an explicit registered binding; simulated single-copy evolution passed. No live input, import or fit; native114 unchanged. |
+| Authority delta | No learned authority change. Provider/training identities bind the prospective objective; the old episode loop rejects it until checkpoint and reward integration. |
+| Transfer result | Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result. |
+| Blocker | Observer pressures, checkpoint serialization and reward/corpus admission remain legacy; their explicit migration is required before the first registered-objective lesson. |
+| Decision | Accept tested capture/evolution bindings. Keep the old episode-loop rejection until the observation/checkpoint/training boundary is migrated; no further general architecture. |
+| Next session | Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson. |
 | Next falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
 | Stop condition | Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit. |
 

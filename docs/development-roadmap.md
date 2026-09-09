@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-shared-registration-foundation**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-runtime-binding**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-registered-runtime-binding
+
+Capture/evolution runtime bindings passed340 targeted tests, including simulated single-copy training; no live input, import or fit. Native114 unchanged.
+
+**Deviation:** No baseline change. Memory remains1/3 integration items; live-runtime item is partial because checkpoint and reward consumers still require migration.
+
+**Next:** Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.
 
 ### 2026-09-09-shared-registration-foundation
 

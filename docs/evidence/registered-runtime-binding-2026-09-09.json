@@ -1,0 +1,31 @@
+{
+  "schema": "pokemon.registered-runtime-binding-qualification.v1",
+  "status": "capture_and_evolution_bindings_qualified_learning_pipeline_pending",
+  "targeted_tests_passed": 340,
+  "new_runtime_tests": 14,
+  "verified": [
+    "immutable initial Red registration binding and explicit physical reserves",
+    "provider and training identities change with registered objective binding",
+    "capture surveys use shared credit and recompute after local acquisition",
+    "native evolution offers accept one unreserved precursor",
+    "globally completed targets and protected precursors are not offered",
+    "simulated single-copy training verifies exact transformation and persistent owned flags",
+    "legacy episode loop rejects registered binding before observation or input"
+  ],
+  "remaining": [
+    "registered observer pressures and versioned checkpoint serialization",
+    "new-objective reward admission and old-model compatibility decision",
+    "production ledger import from authenticated saved Red endpoint",
+    "bounded real collection lesson"
+  ],
+  "limits": [
+    "ROM-free simulation is not a new live evolution or learned result",
+    "native boxed engine still qualifies only one or two source specimens; larger multiplicity is rejected before preparation",
+    "only declared physical reserves are protected; runtime caller must supply story, HM and branch requirements",
+    "no external-agent audit this session"
+  ],
+  "new_gameplay_actions": 0,
+  "new_model_fits": 0,
+  "new_live_registrations": 0,
+  "current_native_model_examples": 114
+}

@@ -2,7 +2,8 @@
 
 Pete's September9 decision supersedes the living-specimen and level100 completion
 requirements. The ledger API and registered planning projections are implemented and tested.
-Gameplay remains paused until live checkpoint, reward and executor integration is complete.
+Capture/evolution runtime bindings are also tested; gameplay remains paused until
+observer, checkpoint and reward integration is complete.
 
 ## Completion contract
 
@@ -95,6 +96,12 @@ rewrite during migration. Ledger imports and documentation are not learned progr
 
 237 targeted tests passed. Registered demand and evolution inventory are opt-in;
 the old live contracts remain unchanged. See the [implementation and next steps](work-sessions/2026-09-09-shared-registration-foundation.md).
+
+## Runtime-binding qualification
+
+340 targeted tests passed for shared-credit capture surveys, single-copy native
+evolution and legacy compatibility. The old episode loop rejects registered mode
+until checkpoint and reward migration is complete. [Session and remaining integration](work-sessions/2026-09-09-registered-runtime-binding.md).
 
 ## Current gameplay evidence, unchanged
 

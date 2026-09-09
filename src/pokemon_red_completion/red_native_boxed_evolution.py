@@ -193,6 +193,20 @@ def bind_native_boxed_evolution(
         raise ValueError("native evolution cross-box mode differs")
     runtime = replace(runtime, boxed_level_evolution_cross_box=allow_cross_box)
     spec = next(s for s in runtime.profile.providers if s.kind is GoalKind.EVOLVE_SPECIES)
+    registration = runtime.registration_policy
+
+    def allowed(observation: context.RedGoalObservation) -> bool:
+        source = cast(str, spec.parameters["source_species_ref"])
+        target = cast(str, spec.parameters["target_species_ref"])
+        if registration is not None:
+            if sum(s.species_ref == source
+                   for s in observation.collection_observation.specimens) not in {1, 2}:
+                return False  # Existing boxed engine qualifies these multiplicities only.
+            return registration.evolution_allowed(
+                observation.collection_observation, source, target,
+            )
+        return sum(s.species_ref == source
+                   for s in observation.collection_observation.specimens) == 2
 
     def supported_venues(observation: context.RedGoalObservation) -> tuple[TrainingVenue, ...]:
         source_id = cast(str, spec.parameters["source_species_ref"])
@@ -250,7 +264,7 @@ def bind_native_boxed_evolution(
                 )
             )
         ]
-        if len(specimens) != 2 or not candidates:
+        if not allowed(observation) or not candidates:
             return context.RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.NO_LEGAL_TARGET
             )
@@ -329,8 +343,11 @@ def bind_native_boxed_evolution(
         expected = counts.copy()
         expected[source] -= 1
         expected[target] += 1
-        if counts[source] != 2 or expected[source] < 1:
-            raise context.RedGoalContextError("complete evolution must retain its precursor")
+        if not allowed(initial):
+            raise context.RedGoalContextError(
+                "registered evolution lacks an eligible unreserved precursor"
+                if registration is not None else "complete evolution must retain its precursor"
+            )
         started = time.monotonic()
         battles = heals = 0
         for _ in range(maximum_quanta):
@@ -350,6 +367,8 @@ def bind_native_boxed_evolution(
                 heals += paused.healing_trips
             after = runtime.adapter.observe()
             observed = Counter(s.species_ref for s in after.collection_observation.specimens)
+            if registration is not None:
+                registration.registered(after.collection_observation)
             if (
                 observed not in (counts, expected)
                 or runtime.adapter.graph.completed_ids(after.game_state) != initial_story
@@ -359,6 +378,10 @@ def bind_native_boxed_evolution(
             ):
                 raise context.RedGoalContextError("complete evolution changed collection or safety")
             if observed == expected:
+                if registration is not None and not registration.verify_evolution(
+                    initial.collection_observation, after.collection_observation, source, target,
+                ):
+                    raise context.RedGoalContextError("complete evolution lost registration")
                 if retain_quantum is not None:
                     retain_quantum()
                 return BoundedEvolutionTrainingResult(battles, heals)
@@ -414,6 +437,10 @@ def bind_native_boxed_evolution(
             report,
             actions_executed=actions.actions_executed - action_start,
             frames_executed=runtime.emulator.frame_count - frame_start,
+            evidence={**report.evidence, **(
+                {"registration_policy_sha256": registration.sha256}
+                if registration is not None else {}
+            )},
         )
 
     def execute(
@@ -421,9 +448,11 @@ def bind_native_boxed_evolution(
         actions: CountingExecutor,
     ) -> GoalExecutionReport:
         before = runtime.adapter.observe()
-        source = red_species_ref(red_internal_species_number(request.precursor_internal_species_id))
-        if sum(s.species_ref == source for s in before.collection_observation.specimens) != 2:
-            raise context.RedGoalContextError("native evolution requires two retained precursors")
+        if not allowed(before):
+            raise context.RedGoalContextError(
+                "registered evolution lacks an eligible unreserved precursor"
+                if registration is not None else "native evolution requires two retained precursors"
+            )
         if not readiness(before).executable:
             raise context.RedGoalContextError("native evolution training capability is unavailable")
         if context._RedTeamGoalProvider(runtime, spec, actions)._boxed_evolution_request(
@@ -459,19 +488,20 @@ def bind_native_boxed_evolution(
         # Old checkpoints may contain the already-healed farewell screen. They
         # have no restore offer; explicitly finish that interaction too.
         finish_center_dialogue(actions, runtime.reader)
-        identity = canonical_sha256(
-            {
-                "schema": "pokemon.red.native-boxed-evolution.v2",
-                "profile": runtime.profile.profile_sha256,
-                "max_battles": 32,
-                "max_steps": 2_000,
-                "direct_evolution": True,
-                "collection_shared_experience": True,
-                "battle_quantum": 4,
-                "maximum_quanta": maximum_quanta,
-                "pc_facing": "up",
-            }
-        )
+        identity_document = {
+            "schema": "pokemon.red.native-boxed-evolution.v2",
+            "profile": runtime.profile.profile_sha256,
+            "max_battles": 32,
+            "max_steps": 2_000,
+            "direct_evolution": True,
+            "collection_shared_experience": True,
+            "battle_quantum": 4,
+            "maximum_quanta": maximum_quanta,
+            "pc_facing": "up",
+        }
+        if registration is not None:
+            identity_document["registration_policy_sha256"] = registration.sha256
+        identity = canonical_sha256(identity_document)
 
         pc_access: SemanticPCBoundaryAccess = SemanticVenueRouteBinding(to_pc, identity)
         preparation: dict[str, object] = {}
@@ -500,6 +530,11 @@ def bind_native_boxed_evolution(
             report = executor(request, actions)
         except EvolutionTrainingPaused as paused:
             report = partial_report(paused)
+        if registration is not None:
+            evidence = dict(report.evidence)
+            evidence.pop("required_living_preserved", None)
+            evidence["registration_policy_sha256"] = registration.sha256
+            report = replace(report, evidence=evidence)
         return replace(
             report,
             actions_executed=actions.actions_executed - action_start,

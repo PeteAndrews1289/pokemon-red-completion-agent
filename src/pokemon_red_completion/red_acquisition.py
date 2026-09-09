@@ -122,8 +122,25 @@ class RedAcquisitionCatalog:
     remaining_demand: bool = False
     level_evolution_edges: tuple[tuple[str, str], ...] = ()
     wild_source_species: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    registered_species: frozenset[str] | None = None
+    protected_counts: tuple[tuple[str, int], ...] = ()
 
     def __post_init__(self) -> None:
+        if self.registered_species is not None and (
+            not isinstance(self.registered_species, frozenset) or any(
+                s not in RED_SOLO_COLLECTION_CONTRACT.species_universe
+                for s in self.registered_species
+            ) or not self.remaining_demand
+        ):
+            raise ValueError("registered catalog needs immutable credit and remaining demand")
+        if self.protected_counts and self.registered_species is None:
+            raise ValueError("registered reserves require registered catalog mode")
+        if not isinstance(self.protected_counts, tuple) or any(
+            not isinstance(row, tuple) or len(row) != 2
+            or row[0] not in RED_SOLO_COLLECTION_CONTRACT.species_universe
+            or type(row[1]) is not int or row[1] < 0 for row in self.protected_counts
+        ) or len(dict(self.protected_counts)) != len(self.protected_counts):
+            raise ValueError("registered reserves must be unique immutable species counts")
         if type(self.remaining_demand) is not bool:
             raise TypeError("remaining_demand must be a bool")
         if self.wild_source_species and not self.remaining_demand:
@@ -256,13 +273,27 @@ class RedAcquisitionCatalog:
         capture_species: tuple[str, ...] | None = None,
     ) -> dict[str, int]:
         """Marginal capture options, recomputed after each actual acquisition."""
-        from .collection_acquisition_demand import useful_capture_counts
+        from .collection_acquisition_demand import (
+            useful_capture_counts,
+            useful_registered_capture_counts,
+        )
 
         counts = Counter(specimen.species_ref for specimen in observation.specimens)
         canonical_edges = tuple(
             (method.consumes_species_ref, method.species_ref) for method in self.methods
             if method.consumes_species_ref is not None
         )
+        if self.registered_species is not None:
+            useful = useful_registered_capture_counts(
+                frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species),
+                self.registered_species | observation.owned_species, counts,
+                tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
+                (tuple(method.species_ref for method in self.methods
+                       if not method.transforms_precursor)
+                 if capture_species is None else capture_species),
+                protected_counts=dict(self.protected_counts),
+            )
+            return {species: counts[species] + quantity for species, quantity in useful.items()}
         useful = useful_capture_counts(
             frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
             tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
@@ -496,7 +527,7 @@ def summarize_red_area_survey(
         catalog.required_root_holdings(observation)
         if catalog.remaining_demand else catalog.required_root_acquisitions()
     )
-    if catalog.level_evolution_edges:
+    if catalog.level_evolution_edges or catalog.registered_species is not None:
         root_counts = catalog.alternative_capture_holdings(observation)
     requirements = tuple(
         RedAreaRequirement(

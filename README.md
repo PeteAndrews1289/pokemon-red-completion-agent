@@ -1,3 +1,18 @@
+# Current — registered capture/evolution runtime binding
+
+Capture surveys now accept shared registered credit; native evolution accepts a
+single unreserved precursor and verifies retained registration plus exact physical
+transformation. Frozen memory and reserves change provider/training identities.
+340 targeted tests passed, including a simulated single-copy training completion.
+No production import, live gameplay or fit; native114 remains unchanged.
+
+Next: version observer pressures, checkpoint records and reward/corpus admission.
+The old episode loop rejects registered mode until that bridge is implemented.
+This is partial runtime integration, not a resumed model-training run.
+[Review and next steps](docs/work-sessions/2026-09-09-registered-runtime-binding.md). No external-agent audit or usage.
+
+## Historical foundation
+
 # Current — shared Pokédex memory and planning foundation
 
 Implemented durable registration memory, separate global/local/physical views,

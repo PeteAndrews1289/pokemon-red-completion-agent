@@ -7,6 +7,9 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, Protocol, cast
 
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
+
 if TYPE_CHECKING:
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
@@ -188,6 +191,16 @@ class RedGoalContextRuntime:
     remaining_acquisition_demand: bool = False
     level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
     trainer_story_world: StrategicScenarioRouteWorld | None = None
+    registration_policy: RedRegistrationPolicy | None = None
+
+    def bound_configuration_sha256(self, configuration_sha256: str) -> str:
+        if self.registration_policy is None:
+            return configuration_sha256
+        return canonical_sha256({
+            "schema": "pokemon.red.registered-provider.v1",
+            "provider_configuration_sha256": configuration_sha256,
+            "registration_policy_sha256": self.registration_policy.sha256,
+        })
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -206,7 +219,7 @@ class RedGoalContextRuntime:
             _ProfileBoundProvider(
                 provider=_build_provider(self, spec, actions),
                 profile_sha256=self.profile.profile_sha256,
-                configuration_sha256=spec.configuration_sha256,
+                configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
             )
             for spec in self.profile.providers
         )
@@ -239,12 +252,12 @@ class RedGoalContextRuntime:
         wrapped = _ProfileBoundProvider(
             provider=provider,
             profile_sha256=self.profile.profile_sha256,
-            configuration_sha256=spec.configuration_sha256,
+            configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
         )
         return RedGoalContextProviderOffer(
             provider_type=_provider_contract_type(provider, spec),
             profile_sha256=self.profile.profile_sha256,
-            provider_configuration_sha256=spec.configuration_sha256,
+            provider_configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
             offer=wrapped.offer(observation),
         )
 
@@ -501,7 +514,18 @@ def _wild_provider(
             boundary=boundary,
             normalize_after_capture=area.finish_at_starting_endpoint,
             catalog=replace(
-                RED_ACQUISITION_CATALOG, remaining_demand=runtime.remaining_acquisition_demand,
+                RED_ACQUISITION_CATALOG,
+                remaining_demand=(runtime.remaining_acquisition_demand
+                                  or runtime.registration_policy is not None),
+                registered_species=(
+                    runtime.registration_policy.registered(
+                        runtime.adapter.observe().collection_observation,
+                    ) if runtime.registration_policy is not None else None
+                ),
+                protected_counts=(
+                    tuple(sorted(runtime.registration_policy.protected_counts.items()))
+                    if runtime.registration_policy is not None else ()
+                ),
                 level_evolution_edges=runtime.level_evolution_acquisition_edges,
                 wild_source_species=(
                     ((source_id, tuple(red_species_ref(number)
@@ -909,6 +933,12 @@ class _RedTeamGoalProvider:
         after_counts = Counter(
             specimen.species_ref for specimen in after.collection_observation.specimens
         )
+        registration = self.runtime.registration_policy
+        if (registration is not None and report.evidence.get("evolution_partial") is not True
+            and not registration.verify_evolution(
+                before.collection_observation, after.collection_observation, source_ref, target_ref,
+            )):
+            return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         before_story = self.runtime.adapter.graph.completed_ids(before.game_state)
         after_story = self.runtime.adapter.graph.completed_ids(after.game_state)
         if (
@@ -1036,6 +1066,10 @@ class _RedTeamGoalProvider:
         living_refs = frozenset(
             specimen.species_ref for specimen in observation.collection_observation.specimens
         )
+        if self.runtime.registration_policy is not None:
+            living_refs = self.runtime.registration_policy.registered(
+                observation.collection_observation,
+            )
         if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
             if self.runtime.boxed_level_evolution_executor is None:
                 return RedGoalSkillAvailability.unavailable(

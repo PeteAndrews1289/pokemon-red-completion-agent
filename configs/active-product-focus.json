@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "maintenance",
       "latest_reorientation": {
-        "authority_delta": "No learned authority change. A prospective registered-only projection exists; old fitted examples and rewards remain unchanged.",
-        "blocker": "Live checkpoint records, acquisition wiring, reward admission and native evolution executor still use legacy semantics; migrate them together before input.",
-        "decision": "Accept the ROM-free ledger and planning foundation; migrate live consumers next, without general architecture expansion.",
+        "authority_delta": "No learned authority change. Provider/training identities bind the prospective objective; the old episode loop rejects it until checkpoint and reward integration.",
+        "blocker": "Observer pressures, checkpoint serialization and reward/corpus admission remain legacy; their explicit migration is required before the first registered-objective lesson.",
+        "decision": "Accept tested capture/evolution bindings. Keep the old episode-loop rejection until the observation/checkpoint/training boundary is migrated; no further general architecture.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/shared-registration-foundation-2026-09-09.json",
-          "sha256": "226216236ad6efb90655d85003dd266f810862a6c7a31e7b14ca0eeed354bb6e"
+          "path": "docs/evidence/registered-runtime-binding-2026-09-09.json",
+          "sha256": "1c89c4761f578cda826a96c1ba657da69a4be71843db7f491458fc4559a8e196"
         },
-        "learning_output": "237 targeted tests passed; durable shared memory, registered demand and evolution projections implemented. No production import, gameplay, fit or learning counter change. Native114 unchanged.",
+        "learning_output": "340 targeted tests passed. Capture surveys and native evolution now accept an explicit registered binding; simulated single-copy evolution passed. No live input, import or fit; native114 unchanged.",
         "next_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
-        "next_session_goal": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.",
+        "next_session_goal": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-09-shared-registration-foundation",
+        "session_id": "2026-09-09-registered-runtime-binding",
         "status": "active",
         "stop_condition": "Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit.",
-        "transfer_result": "Synthetic overlapping Red/Blue memory and later-branch tests pass; no live Blue or cross-title learned transfer result."
+        "transfer_result": "Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result."
       },
       "learned_authority": {
         "current": "The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim.",
@@ -57,7 +57,7 @@
       "maintenance_unblocks": "red-shared-registration-learning-v1",
       "measurable_outputs": [],
       "name": "Shared registered-Pokedex contract migration",
-      "next_decision": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson.",
+      "next_decision": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
