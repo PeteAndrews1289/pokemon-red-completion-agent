@@ -151,6 +151,9 @@ class RamAddress(IntEnum):
     BILLS_HOUSE_SCRIPT = 0xD661
     VERMILION_CITY_SCRIPT = 0xD62A
     SS_ANNE_2F_SCRIPT = 0xD665
+    HALL_OF_FAME_SCRIPT = 0xD64B
+    CHAMPIONS_ROOM_SCRIPT = 0xD64C
+    RIVAL_STARTER = 0xD715
     STATUS_FLAGS_1 = 0xD728
     BEAT_GYM_FLAGS = 0xD72A
     STATUS_FLAGS_3 = 0xD72D
@@ -1372,6 +1375,17 @@ class InputReadiness:
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
             and self.walk_counter == 0
         )
+
+
+@dataclass(frozen=True, slots=True)
+class FinalLeagueScene:
+    """Revision-adapter scene state; no controller ownership or victory inference."""
+
+    map_id: int
+    script_stage: int
+    rival_starter: int
+    queued_movement: int
+    npc_moving: bool
 
 
 class VisibleMapObjectError(ValueError):
@@ -4458,6 +4472,28 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
             self._memory.read_u8(RamAddress.TRAINER_CLASS),
             self._memory.read_u8(RamAddress.TRAINER_NUMBER),
+        )
+
+    def read_final_league_scene(self) -> FinalLeagueScene:
+        """Read the room-local script, never the ordinary trainer-script alias."""
+        map_id = self._memory.read_u8(RamAddress.CURRENT_MAP)
+        if map_id == MapId.CHAMPIONS_ROOM:
+            address, maximum = RamAddress.CHAMPIONS_ROOM_SCRIPT, 10
+        elif map_id == MapId.HALL_OF_FAME:
+            address, maximum = RamAddress.HALL_OF_FAME_SCRIPT, 3
+        elif map_id == MapId.LANCES_ROOM:
+            # Inspect the next room's initialized stage without executing it.
+            address, maximum = RamAddress.CHAMPIONS_ROOM_SCRIPT, 10
+        else:
+            raise SemanticStateError("final league scene is outside its admitted maps")
+        stage = self._memory.read_u8(address)
+        starter = self._memory.read_u8(RamAddress.RIVAL_STARTER)
+        if not 0 <= stage <= maximum or not 1 <= starter <= 190:
+            raise SemanticStateError("final league scene fields are unavailable")
+        return FinalLeagueScene(
+            map_id, stage, starter,
+            self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
+            bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:

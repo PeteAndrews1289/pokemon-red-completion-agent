@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-lance-complete-reorientation",
+  "as_of_session": "2026-09-09-pp-champion-qualification",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-lance-support-2026-09-09.json"
+      "evidence": "docs/evidence/red-dependent-story-practice-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -450,6 +450,12 @@
       "result": "Lance defeated; all6 alive,30specimens/28living retained. Full chain368actions/32869frames,1FullRestore,1explicit critical-exposure intent. Zero new model queries or fit rows; model79 unchanged.",
       "deviation": "Supported boss progress is not learned Phase4 completion. Current room has no genuine resource alternative. A separately declared dependent practice branch is permitted by existing short-scenario training policy; no splicing, replenishment or independent-root claim.",
       "next": "Authenticate one eligible successful post-Lorelei training checkpoint, expose actual model79 story/resource alternatives, then play and fit only a newly admitted observed outcome. Champion adapter follows the learning falsifier."
+    },
+    {
+      "session": "2026-09-09-pp-champion-qualification",
+      "result": "Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features.",
+      "deviation": "The two choices repeated healing rather than selecting story; no independent coverage or measured improvement. Correction: Lance has1ownedElixir, previously unexposed by the provider; 'no resource alternative' was too broad. PP/Champion work is bounded engineering until played.",
+      "next": "Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay."
     }
   ],
   "closed_milestones": [

@@ -120,7 +120,9 @@ def test_checkpoint_boundary_requires_action_free_ready_overworld(ready, battle,
         count[0] += int(acts)
         return SimpleNamespace(input_ready=ready, raw=SimpleNamespace(battle_state=battle))
 
-    runtime = SimpleNamespace(adapter=SimpleNamespace(observe=observe))
+    runtime = SimpleNamespace(adapter=SimpleNamespace(observe=observe),
+                              profile=SimpleNamespace(providers=()),
+                              emulator=SimpleNamespace(pressed_buttons=frozenset()))
     meter = SimpleNamespace(checkpoint=lambda: count[0])
     if ready and not battle and not acts:
         runner._require_safe_checkpoint_boundary(runtime, meter)

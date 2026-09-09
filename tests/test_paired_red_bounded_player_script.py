@@ -38,8 +38,9 @@ def test_lance_source_argument_reaches_qualified_profile_without_legacy_fallback
     assert len(derived) == 1
     assert derived[0].providers[0].parameters == {'trainer_objective': 'defeat_lance'}
     assert derived[0].providers[1:] == original.providers[1:]
-    with pytest.raises(module['PairedRedBoundedPlayerRunError']):
-        derive(original, ('cartridge-trainer-story:champion',), object())
+    champion = derive(original, ('cartridge-trainer-story:champion',), object())
+    assert champion[0].providers[0].parameters == {'trainer_objective': 'defeat_champion'}
+    assert champion[0].providers[1:] == original.providers[1:]
 
 
 @pytest.mark.parametrize("mode", [True, False, None, 1])
@@ -278,9 +279,13 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
     ))
     monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
     monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_kwargs:
-        SimpleNamespace(adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
-            input_ready=not unsafe, raw=SimpleNamespace(battle_state=unsafe),
-        )))
+        SimpleNamespace(
+            adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
+                input_ready=not unsafe, raw=SimpleNamespace(battle_state=unsafe),
+            )),
+            profile=SimpleNamespace(providers=()),
+            emulator=SimpleNamespace(pressed_buttons=frozenset()),
+        )
     )
     monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k:
         SimpleNamespace(checkpoint=lambda: (0, 0))
@@ -857,3 +862,218 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch, r
     assert events[1].payload["private_diagnostic"]["exception_type"] == "KeyboardInterrupt"
     assert aborted == ["paired_arm_failed"]
     assert order == (["saved", "close"] if retain else ["close"])
+
+
+def _spent_arm_failure_harness(
+    monkeypatch, *, stage, save=True, retention_fault=None, component=False, advance=False,
+):
+    """Exercise the actual arm owner with a fake, spent in-memory game boundary."""
+    from pokemon_red_completion.bounded_player_episode import (
+        BoundedPlayerResult,
+        BoundedPlayerStopReason,
+    )
+
+    module = runpy.run_path(str(SCRIPT))
+    run_arm = module["_run_arm"]
+    namespace = run_arm.__globals__
+    original = ValueError(f"original {stage} failure")
+    order, saved, events = [], [], []
+    observation = _observation(storage=4)
+    result = BoundedPlayerResult(
+        module["CAUSAL_ARM_ID"], BoundedPlayerStopReason.DECISION_LIMIT, (), False,
+    )
+
+    class Emulator:
+        frame_count = 0
+        inputs = 0
+        closed = False
+
+        def __enter__(self):
+            order.append("open")
+            return self
+
+        def __exit__(self, *_args):
+            self.closed = True
+            order.append("close")
+
+        def load_state_bytes(self, state):
+            assert state == b"synthetic-initial-state"
+
+        def spend(self):
+            assert not self.closed
+            self.inputs += 1
+            self.frame_count += 30
+            order.append("input")
+
+    emulator = Emulator()
+
+    def append(stream, document, **kwargs):
+        assert not emulator.closed and kwargs == {"durable": True}
+        if stream == "checkpoint":
+            assert stage == "checkpoint_append"
+            order.append("checkpoint_append_failed")
+            raise original
+        assert stream == "failure_state"
+        if retention_fault == "logging":
+            raise OSError("diagnostic append failed")
+        saved.append(document)
+        order.append("failure_state")
+
+    writer = SimpleNamespace(
+        append=append, abort=lambda _: order.append("abort"),
+        complete=lambda: pytest.fail("failed arm must not complete its trajectory"),
+    )
+    sink = SimpleNamespace(
+        write_episode_header=lambda **_: None, record_event=events.append, finalize=lambda: None,
+    )
+    for name in (
+        "WindowedFrameBudgetController", "PokemonRedStateReader", "FrameSafeExecutor",
+        "HardCompositionActionLimiter", "CountingExecutor", "ViewerGoalTrajectory",
+    ):
+        monkeypatch.setitem(namespace, name, lambda *_a, **_k: SimpleNamespace())
+    monkeypatch.setitem(namespace, "PyBoyAdapter", lambda *_a, **_k: emulator)
+    monkeypatch.setitem(namespace, "EpisodeTrajectorySink", lambda *_a, **_k: sink)
+    monkeypatch.setitem(namespace, "RecordingExecutor", lambda **_: SimpleNamespace(
+        next_step_index=1, recording_failures=(),
+    ))
+    monkeypatch.setitem(namespace, "PokemonRedObservationEncoder", SimpleNamespace(
+        from_state_reader=lambda _: None,
+    ))
+    monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_: SimpleNamespace())
+    meter = SimpleNamespace(checkpoint=lambda: (emulator.inputs, emulator.frame_count))
+    monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k: meter)
+    monkeypatch.setitem(namespace, "_require_safe_checkpoint_boundary", lambda *_: None)
+
+    class Observer:
+        starting_observation = observation
+
+        def __call__(self):
+            assert emulator.inputs > 0 and not emulator.closed
+            order.append("post_observation")
+            raise original
+
+    monkeypatch.setitem(namespace, "_LiveObserver", lambda **_: Observer())
+
+    def player(**kwargs):
+        emulator.spend()
+        if component:
+            kwargs["failure_observer"](RuntimeError("earlier component failure"))
+            if advance:
+                emulator.spend()
+        if stage == "verifier":
+            order.append("verifier")
+            raise original
+        if stage == "post_observation":
+            kwargs["observe"]()
+        return result
+
+    def capture_terminal(**kwargs):
+        assert not emulator.closed and kwargs["emulator"] is emulator
+        order.append("terminal_capture")
+        if stage == "terminal_capture":
+            raise original
+        assert stage == "checkpoint_append"
+        return {"terminal": True}
+
+    def capture_failure(**kwargs):
+        assert kwargs["emulator"] is emulator and kwargs["meter"] is meter
+        assert not emulator.closed and emulator.inputs > 0
+        order.append("capture_failure")
+        if retention_fault == "capture":
+            raise OSError("diagnostic capture failed")
+        # Return a fresh equal document: de-duplication must not use identity.
+        return {
+            "safe_checkpoint": False, "automatic_resume_authorized": False,
+            "controller_actions": emulator.inputs, "emulator_frames": emulator.frame_count,
+            "state_base64": f"synthetic-state-{emulator.inputs}",
+        }
+
+    monkeypatch.setitem(namespace, "run_bounded_player_episode", player)
+    monkeypatch.setitem(namespace, "capture_red_player_terminal", capture_terminal)
+    monkeypatch.setitem(namespace, "publish_red_player_checkpoint",
+                        lambda *_: pytest.fail("failed arm must not publish a checkpoint"))
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state", capture_failure,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_training_fit.fit_red_player_update",
+        lambda *_a, **_k: pytest.fail("failure retention must not fit a model"),
+    )
+    readiness = SimpleNamespace(
+        pair_id="spent-failure", decision_limit=1, context_origin="training",
+        source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
+        model_sha256="4" * 64, rom_path=Path("unused-rom"),
+        capture=SimpleNamespace(
+            state_sha256="5" * 64, envelope_sha256="6" * 64,
+            state_bytes=b"synthetic-initial-state",
+        ),
+        profile=SimpleNamespace(profile_sha256="7" * 64),
+        private_root=SimpleNamespace(begin_episode=lambda _: writer),
+        challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=save,
+        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256=None,
+    )
+    return SimpleNamespace(
+        run=lambda: run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object()),
+        error=original, order=order, saved=saved, emulator=emulator, events=events,
+    )
+
+
+@pytest.mark.parametrize("stage", [
+    "verifier", "post_observation", "terminal_capture", "checkpoint_append",
+])
+def test_spent_arm_failure_retains_current_state_before_emulator_closes(monkeypatch, stage):
+    harness = _spent_arm_failure_harness(monkeypatch, stage=stage)
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert len(harness.saved) == 1
+    assert harness.saved[0]["controller_actions"] == 1
+    assert harness.saved[0]["emulator_frames"] == 30
+    assert harness.saved[0]["safe_checkpoint"] is False
+    assert harness.order.index("input") < harness.order.index("failure_state")
+    assert harness.order.index("failure_state") < harness.order.index("close")
+    assert harness.order[-1] == "abort"
+
+
+@pytest.mark.parametrize("stage", ["verifier", "post_observation"])
+def test_spent_failure_retention_remains_opt_in(monkeypatch, stage):
+    harness = _spent_arm_failure_harness(monkeypatch, stage=stage, save=False)
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert harness.emulator.inputs == 1 and harness.saved == []
+    assert "capture_failure" not in harness.order
+    assert harness.order[-2:] == ["close", "abort"]
+
+
+@pytest.mark.parametrize("retention_fault", ["capture", "logging"])
+def test_retention_failure_notes_but_does_not_replace_original_error(monkeypatch, retention_fault):
+    harness = _spent_arm_failure_harness(
+        monkeypatch, stage="post_observation", retention_fault=retention_fault,
+    )
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert caught.value.__notes__ == ["failure state retention also failed: OSError"]
+    assert harness.saved == []
+    assert harness.order.index("capture_failure") < harness.order.index("close")
+    assert harness.order[-1] == "abort"
+
+
+@pytest.mark.parametrize("advance", [False, True])
+def test_component_snapshot_is_deduplicated_only_when_exact_state_still_matches(
+    monkeypatch, advance,
+):
+    harness = _spent_arm_failure_harness(
+        monkeypatch, stage="post_observation", component=True, advance=advance,
+    )
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert len(harness.saved) == (2 if advance else 1)
+    assert [item["controller_actions"] for item in harness.saved] == ([1, 2] if advance else [1])
+    assert harness.order.count("capture_failure") == 2
+    assert harness.order[-2:] == ["close", "abort"]

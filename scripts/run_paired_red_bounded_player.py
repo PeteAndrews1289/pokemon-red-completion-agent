@@ -334,7 +334,7 @@ def _player_observer(
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
     if world is not None and any(spec.parameters.get("trainer_objective")
-           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance"}
+           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"}
            for spec in runtime.profile.providers):
         runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
@@ -1056,8 +1056,9 @@ def _regional_profiles(
             or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
                           "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
                           "cartridge-trainer-story:lance",
+                          "cartridge-trainer-story:champion",
                           "affordable-field-restore",
-                          "reserved-field-restore"}
+                          "reserved-field-restore", "field-pp-restore"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1068,6 +1069,14 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if source == "field-pp-restore":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_field_pp_restore_profile,
+            )
+
+            profile = bind_field_pp_restore_profile(profile)
+            result.append(profile)
+            continue
         if source in {"affordable-field-restore", "reserved-field-restore"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_affordable_field_restore_profile,
@@ -1079,13 +1088,15 @@ def _regional_profiles(
             result.append(profile)
             continue
         if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno",
-                      "cartridge-trainer-story:agatha", "cartridge-trainer-story:lance"}:
+                      "cartridge-trainer-story:agatha", "cartridge-trainer-story:lance",
+                      "cartridge-trainer-story:champion"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
             profile = bind_cartridge_trainer_story_profile(
-                profile, objective_id=("defeat_lance" if source.endswith(":lance")
+                profile, objective_id=("defeat_champion" if source.endswith(":champion")
+                                       else "defeat_lance" if source.endswith(":lance")
                                        else "defeat_agatha" if source.endswith(":agatha")
                                        else "defeat_bruno" if source.endswith(":bruno")
                                        else "defeat_lorelei"),
@@ -1646,7 +1657,27 @@ def _require_safe_checkpoint_boundary(
 ) -> None:
     before = meter.checkpoint()
     observation = runtime.adapter.observe()
-    if meter.checkpoint() != before or not observation.input_ready or observation.raw.battle_state:
+    qualified_completion = False
+    if not observation.input_ready and any(
+        spec.parameters.get("trainer_objective") == "defeat_champion"
+        for spec in runtime.profile.providers
+    ):
+        from pokemon_red_completion.observation import MapId
+        from pokemon_red_completion.referee import CompletionReferee
+
+        if (observation.raw.map_id == MapId.HALL_OF_FAME
+                and not observation.raw.battle_state
+                and CompletionReferee().inspect(observation.game_state).complete
+                and not runtime.emulator.pressed_buttons):
+            # A terminal-only scene snapshot, not a generally input-ready field
+            # checkpoint. Stop before Hall-of-Fame processing clears current events.
+            scene = runtime.reader.read_final_league_scene()
+            qualified_completion = (
+                scene.map_id == MapId.HALL_OF_FAME and scene.script_stage in {0, 1}
+            )
+    if (meter.checkpoint() != before or observation.raw.battle_state
+            or runtime.emulator.pressed_buttons
+            or not (observation.input_ready or qualified_completion)):
         raise PairedRedBoundedPlayerRunError("terminal_checkpoint_unsafe_boundary")
 
 
@@ -1847,15 +1878,19 @@ def _run_arm(
                 **training_kwargs,
             )
             component_failures = 0
+            last_failure_state: dict[str, object] | None = None
 
             def retain_failure_state() -> None:
                 from pokemon_red_completion.red_player_checkpoint import capture_red_failure_state
 
-                writer.append(
-                    "failure_state",
-                    capture_red_failure_state(emulator=emulator, meter=meter),
-                    durable=True,
-                )
+                nonlocal last_failure_state
+                state = capture_red_failure_state(emulator=emulator, meter=meter)
+                # Execution may already have retained this exact boundary. A
+                # later verification error must not duplicate it or lose a newer
+                # state reached by intervening controller input.
+                if state != last_failure_state:
+                    writer.append("failure_state", state, durable=True)
+                    last_failure_state = state
 
             def record_component_failure(error: BaseException) -> None:
                 nonlocal component_failures
@@ -1878,41 +1913,52 @@ def _run_arm(
                 if readiness.save_terminal_checkpoints:
                     retain_failure_state()
 
-            result = run_bounded_player_episode(
-                observe=observer,
-                authority=authority,
-                authority_id=arm_id,
-                trajectory=trajectory,
-                budget_meter=meter,
-                completion_satisfied=_completion_predicate(readiness),
-                limits=limits,
-                failure_observer=record_component_failure,
-                search_memory=search_memory,
-            )
-            if recorder.recording_failures:
-                raise PairedRedBoundedPlayerRunError("trajectory_durability")
-            if readiness.save_terminal_checkpoints:
-                try:
-                    _require_safe_checkpoint_boundary(runtime, meter)
-                except PairedRedBoundedPlayerRunError:
-                    retain_failure_state()
-                    raise
-                terminal_checkpoint = capture_red_player_terminal(
-                    emulator=emulator,
-                    meter=meter,
+            try:
+                result = run_bounded_player_episode(
                     observe=observer,
+                    authority=authority,
+                    authority_id=arm_id,
+                    trajectory=trajectory,
+                    budget_meter=meter,
+                    completion_satisfied=_completion_predicate(readiness),
+                    limits=limits,
+                    failure_observer=record_component_failure,
                     search_memory=search_memory,
-                    parent=readiness.capture,
-                    result=result,
-                    episode_id=episode_id,
-                    profile_sha256=readiness.profile.profile_sha256,
-                    rom_sha256=readiness.rom_sha256,
-                    model_sha256=readiness.model_sha256,
-                    source_commit=readiness.source_commit,
-                    source_bundle_sha256=readiness.source_bundle_sha256,
-                    context_origin=readiness.context_origin,
                 )
-                writer.append("checkpoint", terminal_checkpoint, durable=True)
+                if recorder.recording_failures:
+                    raise PairedRedBoundedPlayerRunError("trajectory_durability")
+                if readiness.save_terminal_checkpoints:
+                    _require_safe_checkpoint_boundary(runtime, meter)
+                    terminal_checkpoint = capture_red_player_terminal(
+                        emulator=emulator,
+                        meter=meter,
+                        observe=observer,
+                        search_memory=search_memory,
+                        parent=readiness.capture,
+                        result=result,
+                        episode_id=episode_id,
+                        profile_sha256=readiness.profile.profile_sha256,
+                        rom_sha256=readiness.rom_sha256,
+                        model_sha256=readiness.model_sha256,
+                        source_commit=readiness.source_commit,
+                        source_bundle_sha256=readiness.source_bundle_sha256,
+                        context_origin=readiness.context_origin,
+                    )
+                    writer.append("checkpoint", terminal_checkpoint, durable=True)
+            except BaseException as error:
+                # Verifiers, training observers and checkpoint serialization may
+                # fail AFTER legitimate gameplay. Save while the emulator is
+                # still open; this is diagnostic evidence, never an admitted
+                # outcome or authority to replay the attempted decision.
+                if readiness.save_terminal_checkpoints:
+                    try:
+                        retain_failure_state()
+                    except BaseException as retention_error:
+                        error.add_note(
+                            "failure state retention also failed: "
+                            + type(retention_error).__name__
+                        )
+                raise
         starting = observer.starting_observation
         if starting is None:
             raise PairedRedBoundedPlayerRunError("starting_observation")

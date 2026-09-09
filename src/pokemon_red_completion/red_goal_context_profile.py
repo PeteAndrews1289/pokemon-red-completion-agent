@@ -47,6 +47,7 @@ class RedGoalMechanic(StrEnum):
     TARGETED_PARTY_DEVELOPMENT = "targeted_party_development"
     TARGETED_LEVEL_EVOLUTION = "targeted_level_evolution"
     FIELD_RESTORE = "field_restore"
+    FIELD_PP_RESTORE = "field_pp_restore"
     CENTER_RESTORE = "center_restore"
     MART_RESUPPLY = "mart_resupply"
     BOX_SWITCH = "box_switch"
@@ -63,6 +64,7 @@ _MECHANIC_KIND = {
     RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: GoalKind.DEVELOP_TEAM,
     RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: GoalKind.EVOLVE_SPECIES,
     RedGoalMechanic.FIELD_RESTORE: GoalKind.RESTORE_TEAM,
+    RedGoalMechanic.FIELD_PP_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.CENTER_RESTORE: GoalKind.RESTORE_TEAM,
     RedGoalMechanic.MART_RESUPPLY: GoalKind.RESUPPLY,
     RedGoalMechanic.BOX_SWITCH: GoalKind.MANAGE_STORAGE,
@@ -265,6 +267,21 @@ def bind_affordable_field_restore_profile(
         GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
         {"affordable_single_item": True,
          **({"reserve_last_full_restore": True} if reserve_last_full_restore else {})},
+    )
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    ))
+
+
+def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Prospectively expose one owned PP item; old recovery profiles stay unchanged."""
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers
+    }
+    providers[GoalKind.RESTORE_TEAM] = (
+        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_PP_RESTORE, {},
     )
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
@@ -495,7 +512,7 @@ def _parse_parameters(
             return row
         _exact_keys(row, {"trainer_objective"})
         if row["trainer_objective"] not in (
-            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
+            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion",
         ):
             raise RedGoalContextProfileError("cartridge story objective is not supported")
         return row
@@ -512,6 +529,7 @@ def _parse_parameters(
         RedGoalMechanic.BALANCED_TEAM,
         RedGoalMechanic.DIGLETT_EVOLUTION,
         RedGoalMechanic.FIELD_RESTORE,
+        RedGoalMechanic.FIELD_PP_RESTORE,
         RedGoalMechanic.CENTER_RESTORE,
         RedGoalMechanic.CONTROL_RECOVERY,
     }:

@@ -709,6 +709,7 @@ def run_adaptive_trainer_battle(
     consume_battle_start_schedule: bool = True,
     move_decision_guard: MoveDecisionGuard | None = None,
     move_decision_sink: MoveDecisionSink | None = None,
+    battle_exit_guard: MoveDecisionGuard | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -745,6 +746,8 @@ def run_adaptive_trainer_battle(
         raise TypeError("consume_battle_start_schedule must be a bool")
     if move_decision_guard is not None and not callable(move_decision_guard):
         raise TypeError("move_decision_guard must be callable or None")
+    if battle_exit_guard is not None and not callable(battle_exit_guard):
+        raise TypeError("battle_exit_guard must be callable or None")
     if move_decision_sink is not None and not callable(move_decision_sink):
         raise TypeError("move_decision_sink must be callable or None")
     if required_move_id is not None and (
@@ -783,6 +786,14 @@ def run_adaptive_trainer_battle(
         _require_present_state(raw, expected_map=expected_map, label=label)
 
         if raw.battle_state == 0:
+            if battle_exit_guard is not None:
+                # Explicit scripted-scene handoff: independently verify the
+                # battle exit before any generic overworld-settlement inputs.
+                battle_exit_guard(raw)
+                if battle_start_schedule is not None:
+                    battle_start_schedule.finish(intent)
+                _battle_observation_finished()
+                return raw
             if not battle_exit_notified:
                 if battle_start_schedule is not None:
                     battle_start_schedule.finish(intent)

@@ -648,10 +648,21 @@ def red_living_dex_outcome_from_observations(
     maximum_frames: int,
 ) -> LivingDexObservedOutcome:
     """Recompute the same target from recorded semantic facts, not a supplied label."""
-    if type(succeeded) is not bool or any(
-        item.get("schema") != "pokemon.red.goal-observation.v1" for item in (before, after)
+    schema = before.get("schema")
+    if (
+        type(succeeded) is not bool
+        or schema not in {"pokemon.red.goal-observation.v1", "pokemon.red.goal-observation.v2"}
+        or after.get("schema") != schema
     ):
         raise ValueError("outcome observation schema differs")
+    pp_before = pp_after = 0
+    if schema == "pokemon.red.goal-observation.v2":
+        from .red_pp_observation import RedPpResourceObservation
+
+        pp_before = RedPpResourceObservation.from_public(before.get("pp_restoration")).item_count
+        pp_after = RedPpResourceObservation.from_public(after.get("pp_restoration")).item_count
+    elif "pp_restoration" in before or "pp_restoration" in after:
+        raise ValueError("legacy observation cannot carry unversioned PP resources")
     for value in (actions, frames, maximum_actions, maximum_frames):
         if type(value) is not int or value < 0:
             raise ValueError("outcome counters must be non-negative integers")
@@ -694,6 +705,8 @@ def red_living_dex_outcome_from_observations(
     after_resources = _observed_count(after, "capture_item_count") + _observed_count(
         after, "recovery_item_count"
     )
+    before_resources += pp_before
+    after_resources += pp_after
     living_loss = max(
         0,
         _observed_count(before, "collection", "living")

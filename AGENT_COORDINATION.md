@@ -1,13 +1,25 @@
-# Current — Lance defeated; learning reorientation, 2026-09-09
+# Current — model81; PP versus Champion qualification, 2026-09-09
 
-Lance is verified defeated with all six Pokémon alive and30 specimens retained.
-The complete retained support chain cost368 actions/32869 frames, one Full Restore
-and one explicitly bounded critical-exposure attack intent. Model79 is unchanged:
-zero new model queries or fitted rows. Champion/HoF and Phase4 remain incomplete.
-Next: one prospectively declared dependent training lesson from an eligible
-successful post-Lorelei checkpoint, exposing real story/resource choices. This is
-not replenishment or continuation of Lance; keep sibling lineage/costs separate.
-See docs/evidence/red-lance-support-2026-09-09.json and ACTIVE_PRODUCT_STATE.md.
+Two actual model-selected healing lessons were fitted:80 actions/6960 frames,
+2 Full Restores spent in a separately declared historical post-Lorelei branch.
+That branch is closed before its third input: only story remained. Model81 has
+81 rows (80 comparative choices plus1 guided Agatha outcome),39 successes and
+69 distinct selected features. No new story choice or measured policy improvement.
+
+The continuous Lance endpoint is separate and unchanged:6 alive,30 specimens,
+28 living species,33 registered,23983 currency,0 Full Restores and1 Elixir.
+Correction: the previous provider omitted that legitimate PP resource.
+Read-only qualification finds22 restored PP and4 computed Champion-entry steps;
+neither option has yet been played. Next is one genuine model81 choice, not a
+forced boss run disguised as learning. Champion/HoF and Phase4 remain incomplete.
+See docs/evidence/red-dependent-story-practice-2026-09-09.json and ACTIVE_PRODUCT_STATE.md.
+
+Codex owns integration, gameplay and publication. Internal helper review/tests
+caught stale scene/text and pending-trainer boundaries; fixes preserve one-shot
+input ownership. Flash supplied one limited conceptual review, not a source audit;
+several unsupported suggestions were rejected. Claude was not used. Fresh external
+five-hour/weekly remaining usage is unavailable; do not reuse historical percentages.
+Older entries below are historical where they conflict with this update.
 
 
 # Three-agent coordination

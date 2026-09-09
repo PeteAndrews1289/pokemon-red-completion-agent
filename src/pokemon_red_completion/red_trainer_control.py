@@ -105,6 +105,7 @@ class RedTrainerPartyController:
         move_slot_policy: MoveSlotPolicy, *, expected_map: int, intent: BattleIntent,
         timing: BattleRuntimeTiming, label: str, consume_battle_start_schedule: bool,
         move_decision_guard: MoveDecisionGuard,
+        battle_exit_guard: MoveDecisionGuard | None = None,
     ) -> RawGameState:
         if self._claimed:
             raise RedTrainerControlError("trainer controller already consumed")
@@ -129,6 +130,7 @@ class RedTrainerPartyController:
                     reader, executor, policy, expected_map=expected_map, intent=intent,
                     timing=timing, label=label, consume_battle_start_schedule=False,
                     move_decision_guard=guard,
+                    battle_exit_guard=battle_exit_guard,
                 )
             except BattleRuntimeError as error:
                 request = error.__cause__

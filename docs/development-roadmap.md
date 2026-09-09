@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-complete-reorientation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-pp-champion-qualification**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify current-state story entry and readiness ([evidence](../docs/evidence/red-bruno-support-2026-09-09.json))
 - [ ] Play and fit a genuine bounded story choice
 
-Current model: **79 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **81 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-lance-support-2026-09-09.json)
+[Current evidence](../docs/evidence/red-dependent-story-practice-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-pp-champion-qualification
+
+Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features.
+
+**Deviation:** The two choices repeated healing rather than selecting story; no independent coverage or measured improvement. Correction: Lance has1ownedElixir, previously unexposed by the provider; 'no resource alternative' was too broad. PP/Champion work is bounded engineering until played.
+
+**Next:** Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay.
 
 ### 2026-09-09-lance-complete-reorientation
 

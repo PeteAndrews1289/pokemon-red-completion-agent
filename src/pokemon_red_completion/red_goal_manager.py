@@ -58,6 +58,10 @@ from pokemon_red_completion.red_collection import (
     summarize_red_collection,
 )
 from pokemon_red_completion.red_party import party_observation_from_raw
+from pokemon_red_completion.red_pp_observation import (
+    RedPpResourceObservation,
+    observe_pp_resources,
+)
 
 
 class RedGoalManagerError(RuntimeError):
@@ -120,6 +124,7 @@ class RedGoalObservation:
     recovery_item_count: int
     free_storage_slots: int
     immediate_capture_slots: int
+    pp_restoration: RedPpResourceObservation | None = None
 
     @property
     def situation(self) -> GoalSituation:
@@ -128,7 +133,7 @@ class RedGoalObservation:
     def public_dict(self) -> dict[str, object]:
         """Return counts and normalized evidence without raw Red identities."""
 
-        return {
+        result: dict[str, object] = {
             "schema": "pokemon.red.goal-observation.v1",
             "story": {
                 "completed": self.evidence.story.completed,
@@ -152,6 +157,10 @@ class RedGoalObservation:
             "private_path_fields": 0,
             "raw_address_fields": 0,
         }
+        if self.pp_restoration is not None:
+            result["schema"] = "pokemon.red.goal-observation.v2"
+            result["pp_restoration"] = self.pp_restoration.public_dict()
+        return result
 
 
 @dataclass(slots=True)
@@ -163,8 +172,11 @@ class PokemonRedGoalStateAdapter:
     graph: QuestGraph
     config: RedGoalManagerConfig = RedGoalManagerConfig()
     acquisition_catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
+    include_pp_restoration: bool = False
 
     def observe(self) -> RedGoalObservation:
+        if type(self.include_pp_restoration) is not bool:
+            raise RedGoalManagerError("PP resource observation requires explicit profile opt-in")
         raw = self.reader.read()
         game_state = self.semantic_observer.observe_raw(raw)
         party = party_observation_from_raw(raw)
@@ -266,6 +278,7 @@ class PokemonRedGoalStateAdapter:
             recovery_item_count=recovery_items,
             free_storage_slots=free_storage,
             immediate_capture_slots=immediate_capture_slots,
+            pp_restoration=observe_pp_resources(raw) if self.include_pp_restoration else None,
         )
 
 

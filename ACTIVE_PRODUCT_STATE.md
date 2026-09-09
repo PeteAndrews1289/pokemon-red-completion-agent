@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve completed Lance checkpoint c1883f7f and all368actions/32869frames. Qualify one explicitly declared dependent practice branch from an eligible successful post-Lorelei training checkpoint, then expose actual story/resource alternatives to model79. No inventory reset of the Lance chain or full replay.
+- Next decision: Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Lance defeated through retained deterministic support; all six alive, 30 specimens retained. Model79 unchanged. The next block targets genuine learned story/resource decisions, not another guided completion claim. |
-| Authority now | Model79:78 comparative-choice outcomes plus1 guided Agatha row. Lance support adds zero model queries or fit rows. No authority promotion. |
+| Reusable capability | Model81 retains two new genuine restoration choices from a closed dependent practice branch. Current Lance inventory also contains an unexposed Elixir: qualify PP recovery versus the Champion as a real goal choice. |
+| Authority now | Model81:80 comparative-choice outcomes plus1 guided Agatha row. Two new healing choices, no new story choice or authority promotion;69 distinct selected feature vectors unchanged. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
+| Transfer test | ROM-free non-lead/PP-Up/item-stock cases and relocated script/three-starter cases plus read-only actual-Lance qualification. No independent gameplay or cross-title transfer result. |
+| Cheapest falsifier | At the actual retained Lance endpoint, are both useful PP restoration and the cartridge-qualified Champion executable, and can one sampled choice yield an honest fitted outcome? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-lance-complete-reorientation** · status **active** · evidence [qualification](docs/evidence/red-lance-support-2026-09-09.json)
+**2026-09-09-pp-champion-qualification** · status **active** · evidence [model fit](docs/evidence/red-dependent-story-practice-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Apply the North Star's short authenticated learning loop, not a second teacher-only full run. Phase4 and its unchanged Champion/HoF exit remain open. |
-| Learning output | Zero new model queries or admitted rows. Lance defeated;6 alive,30 specimens,28 living species;23983 currency, no Full Restores. Entire support chain368actions/32869frames, one heal and one risk intent. |
-| Authority delta | None. Lance is supported execution; model79 authority and79-row corpus unchanged. |
-| Transfer result | ROM-free safety tests and exact checkpoint/resource roundtrip verified. No independent or cross-title evaluation. |
-| Blocker | Current Lance room offers only forward Champion travel and no useful resource alternative. More guided boss execution alone cannot establish model-directed story choice. |
-| Decision | Prioritize one bounded genuine learning lesson from a separately disclosed eligible historical training checkpoint. Preserve Lance and its full costs as a sibling branch, never continuous recovery. |
-| Next session | Preserve completed Lance checkpoint c1883f7f and all368actions/32869frames. Qualify one explicitly declared dependent practice branch from an eligible successful post-Lorelei training checkpoint, then expose actual story/resource alternatives to model79. No inventory reset of the Lance chain or full replay. |
-| Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
-| Stop condition | Stop each attempt on its outcome or named blocker and retain the exact state; reassess before any successor. No consumed retry or inventory reset. |
+| Product alignment | Resource budgeting becomes available to the goal learner; fixed scripts remain disclosed mechanics. The stable Phase4 exit is unchanged. |
+| Learning output | Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features. |
+| Authority delta | Two real restoration choices fitted in model81; no new story choice, battle authority or independent promotion. |
+| Transfer result | ROM-free non-lead/PP-Up/item-stock cases and relocated script/three-starter cases plus read-only actual-Lance qualification. No independent gameplay or cross-title transfer result. |
+| Blocker | The historical practice branch exhausted useful alternatives and is closed. Phase4 still lacks model-directed Champion/Hall-of-Fame completion. |
+| Decision | Expose actual owned PP recovery as a meaningful current-state alternative; qualify the distinct Champion script and a bounded scene handoff. |
+| Next session | Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay. |
+| Next falsifier | At the actual retained Lance endpoint, are both useful PP restoration and the cartridge-qualified Champion executable, and can one sampled choice yield an honest fitted outcome? |
+| Stop condition | One actual outcome or named blocker, then reassess; retain consumed attempts. No further historical practice reset under the closed branch. |
 
 ### Stop conditions
 

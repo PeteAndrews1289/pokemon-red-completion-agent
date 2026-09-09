@@ -100,6 +100,7 @@ def _episode(
     plan_transform=None,
     forced_story=False,
     unreadable_after=False,
+    pp_restoration=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -195,6 +196,11 @@ def _episode(
     if safety:
         source = replace(source, situation=replace(source.situation, resource_pressure=0.99))
     facts = [_facts(source)]
+    if pp_restoration:
+        facts[0].update(schema="pokemon.red.goal-observation.v2", pp_restoration={
+            "schema": "pokemon.red.pp-resource-observation.v1", "item_count": 1,
+            "party_slots": [[[1, 5], [0, 0], [0, 0], [0, 0]]],
+        })
     trajectory = RedPlayerTrainingTrajectory(
         **{
             item.name: getattr(base, item.name)
@@ -229,6 +235,12 @@ def _episode(
         recorder.execute({"kind": "bounded-specialist-work"})
         counter.update(actions=1, frames=60)
     facts[0] = _facts(question, registered=2, balls=9)
+    if pp_restoration:
+        facts[0] = _facts(question, registered=1, balls=10)
+        facts[0].update(schema="pokemon.red.goal-observation.v2", pp_restoration={
+            "schema": "pokemon.red.pp-resource-observation.v1", "item_count": 0,
+            "party_slots": [[[5, 5], [0, 0], [0, 0], [0, 0]]],
+        })
     if forced_story:
         facts[0] = _facts(question, registered=1, balls=10)
         facts[0]["story"]["completed"] = 3 if status is GoalDecisionOutcome.SUCCEEDED else 2
@@ -299,6 +311,15 @@ def test_native_choices_replay_and_keep_observed_success_failure_and_censor(tmp_
 def test_safety_choices_do_not_become_exploration_rows(tmp_path):
     dataset = _episode(tmp_path, safety=True)
     assert dataset.examples == () and dataset.excluded_nonexploratory == 1
+
+
+def test_pp_cost_survives_recording_and_independent_dataset_reconstruction(tmp_path):
+    dataset = _episode(tmp_path, pp_restoration=True)
+    assert len(dataset.examples) == 1
+    outcome = dataset.examples[0].outcome
+    assert outcome.verified_success
+    assert outcome.completion_gain == 0
+    assert outcome.resource_cost == pytest.approx(1 / 11)
 
 
 def test_supported_menu_with_unsupported_option_survives_real_trajectory_admission(tmp_path):

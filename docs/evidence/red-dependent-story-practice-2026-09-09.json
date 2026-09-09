@@ -1,0 +1,107 @@
+{
+  "schema": "pokemon.red.dependent-story-practice-session.v1",
+  "status": "closed",
+  "execution_source": "f7f5d6a9c7481d83ec3b84a02a148a1e32ab2df2",
+  "scope": "One prospectively declared historical post-Lorelei practice branch; not continuation or replenishment of the separate completed Lance chain.",
+  "episodes": [
+    {
+      "episode_id": "red-story-practice-20260909-01-causal",
+      "selected_goal": "restore_team",
+      "actions": 58,
+      "frames": 4776,
+      "restored_party": "Dugtrio",
+      "hp_before": 12,
+      "hp_after": 118,
+      "full_restores_before": 3,
+      "full_restores_after": 2,
+      "checkpoint_sha256": "2ff0cebc78c4e0ff60a055b62498a5050aa0fd2c447c9fd6b195835a54497e90"
+    },
+    {
+      "episode_id": "red-story-practice-20260909-02-causal",
+      "selected_goal": "restore_team",
+      "actions": 22,
+      "frames": 2184,
+      "restored_party": "Jolteon",
+      "hp_before": 61,
+      "hp_after": 172,
+      "full_restores_before": 2,
+      "full_restores_after": 1,
+      "checkpoint_sha256": "975bc0608133607539e9df1165da06c77bd18f464cb909869c4f99a7919ae9fd"
+    }
+  ],
+  "new_comparative_outcomes": 2,
+  "new_story_choices": 0,
+  "new_curriculum_outcomes": 0,
+  "third_decision": {
+    "status": "stopped_before_input",
+    "reason": "Only story remained after preserving the final healing item; do not resample for a preferred choice.",
+    "actions": 0,
+    "frames": 0
+  },
+  "model": {
+    "authority": "bounded_development_only",
+    "ci_is_training_dependency": false,
+    "corpus_sha256": "2258ea02056f6b9a70d1041b0f47efb4f1400f265f7dc11796ce34f4b60cb617",
+    "file_sha256": "6d9d72462fb635c0298794b9fbcbae49730a58d6367f7b3b9b61a063ee36aec2",
+    "independent_evaluation": false,
+    "model_sha256": "849ec8bbc3209ae769f6f6698c2484b4439f922a5f8a38ec350b650dd60cd7c8",
+    "prior_model_sha256": "ac7be5cbeb96f7203cbca466b69989b5d3f2aed710366a735818a64072d5b0e5",
+    "private_path_fields": 0,
+    "schema": "pokemon.red.native-player-model.v1",
+    "settled_examples": 81,
+    "source_bundle_sha256": "4ae77bab7357fd3ce20131b69454d47dfccd1588588e5e1dd3341e0901246fef",
+    "source_commit": "f7f5d6a9c7481d83ec3b84a02a148a1e32ab2df2"
+  },
+  "fit_report": {
+    "censored_examples": 0,
+    "counterfactual_targets": 0,
+    "distinct_selected_feature_rows": 69,
+    "feature_version": 3,
+    "missing_history": "unknown_not_unattempted",
+    "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+    "outcome_balance_required": false,
+    "schema": "pokemon.core.living-dex-option-value-fit.v1",
+    "settled_examples": 81,
+    "successful_examples": 39,
+    "total_examples": 81,
+    "train_dataset_sha256": "fa26a79a1a766296a7913179eae3903c030ca8b327427ab95034add243fde5f8",
+    "unselected_action_targets": 0,
+    "weighted_mse_after": 0.012088464886183507,
+    "weighted_mse_before": 0.028405961450332327
+  },
+  "prior_rows_retained": true,
+  "comparative_choice_outcomes": 80,
+  "curriculum_outcomes": 1,
+  "distinct_selected_features": 69,
+  "in_sample_only": true,
+  "independent_evaluation": false,
+  "authority_promotions": 0,
+  "limitations": [
+    "Both added choices repeat healing behavior, not story control.",
+    "Distinct selected feature count remains69; no new independent coverage.",
+    "Second endpoint equals a historical post-healing state; this is correlated practice.",
+    "Updated weighted error on the81-row corpus is slightly worse than the previous model evaluated on that corpus; no claim of measured policy improvement."
+  ],
+  "comparison_on_same_new_corpus": {
+    "prior_mse": 0.012085787253310887,
+    "updated_mse": 0.012088464886183507
+  },
+  "continuous_lance": {
+    "checkpoint_sha256": "c1883f7f7b6b4ff846f4385f03046fec9334cf31cb274272c30e970261464b5a",
+    "actions_retained": 368,
+    "frames_retained": 32869,
+    "party_alive": 6,
+    "owned_specimens": 30,
+    "living_species": 28,
+    "registered": 33,
+    "currency": 23983,
+    "full_restores": 0,
+    "elixirs": 1,
+    "champion_defeated": false,
+    "hall_of_fame": false
+  },
+  "next": "One genuine current-Lance PP-restoration versus Champion goal choice after local qualification; preserve observed outcome regardless of selection.",
+  "full_game_replays": 0,
+  "sealed_red_accesses": 0,
+  "crystal_accesses": 0
+}

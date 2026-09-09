@@ -307,6 +307,9 @@ def build_red_goal_context_runtime(
         observer,
         COMPLETION_QUEST,
         config=profile.manager_config,
+        include_pp_restoration=any(
+            spec.mechanic is RedGoalMechanic.FIELD_PP_RESTORE for spec in profile.providers
+        ),
     )
     # Fail closed now if the envelope's claimed story frontier conflicts with
     # the actual loaded state.  This performs no action.
@@ -357,6 +360,15 @@ def _build_provider(
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
+        if spec.parameters.get("trainer_objective") == "defeat_champion":
+            from .objective_skills import ObjectiveSkillRegistry
+            from .red_champion_story import RedCartridgeChampionSkill
+
+            return RedStoryGoalBindingProvider(
+                COMPLETION_QUEST, ObjectiveSkillRegistry((RedCartridgeChampionSkill(
+                    runtime, actions, runtime.trainer_story_world,
+                ),)), runtime.observer,
+            )
         if spec.parameters.get("trainer_objective") in {
             "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
         }:
@@ -407,6 +419,12 @@ def _build_provider(
             runtime.reader,
             runtime.emulator,
             runtime.adapter,
+        )
+    if mechanic is RedGoalMechanic.FIELD_PP_RESTORE:
+        from .red_field_pp_restore import RedFieldPpRestoreGoalProvider
+
+        return RedFieldPpRestoreGoalProvider(
+            actions, runtime.reader, runtime.emulator, runtime.adapter,
         )
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         return _mart_provider(runtime, spec, actions)

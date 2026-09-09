@@ -751,11 +751,11 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
-    # Reviewed at8d9dcc06: battle_runtime now reads the final post-pulse state
-    # before reporting a PP-gate timeout. The contract binds the entire module,
-    # including that diagnostic repair; keep this independent golden exact.
+    # Reviewed September9: the module adds an explicit verified battle-exit
+    # scene handoff. Default settlement remains unchanged (dedicated regression
+    # test); this contract fingerprints the whole module, including that opt-in.
     assert contract.battle_timing_sha256 == (
-        "e5cb71942537e1bf5ce7d46276cf55cec061dd4edc21695716741d509883e87d"
+        "eb16f526570f62b01982802a751e3d495a64992b0ab8f64ad677d08baf149d31"
     )
     assert contract.accounting_sha256 == (
         "a0199f37eb398f2212c05b7e0fed751244e40689ad37f802111a7674cc9ac62a"
