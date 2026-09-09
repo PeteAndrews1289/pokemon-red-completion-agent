@@ -24,9 +24,6 @@ from pokemon_red_completion.red_goal_context_profile import (
     build_red_goal_context_profile_payload,
 )
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
-from pokemon_red_completion.red_living_dex_causal_adapter import (
-    red_living_dex_outcome_from_observations,
-)
 from pokemon_red_completion.red_player_checkpoint import open_red_player_checkpoint
 from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
 from pokemon_red_completion.red_regional_acquisition import (
@@ -40,9 +37,12 @@ from pokemon_red_completion.red_regional_choice_learning import (
     REGIONAL_CHOICE_SCHEMA,
     REGIONAL_OUTCOME_KIND,
     REGIONAL_OUTCOME_SCHEMA,
+    REGISTERED_REGIONAL_CHOICE_SCHEMA,
+    REGISTERED_REGIONAL_OUTCOME_SCHEMA,
     RedRegionalChoiceInput,
     load_red_regional_choice_example,
     regional_choice_record_id,
+    regional_observed_outcome,
     regional_outcome_record_id,
 )
 from pokemon_red_completion.red_regional_goal_proposal import regional_proposal_source_effort
@@ -55,7 +55,8 @@ def require_source_attempt_ready(observed: RedGoalObservation) -> None:
     This is an admission check, not a replacement for execution-time safety.
     """
     if (
-        observed.raw.battle_state or not observed.input_ready
+        observed.raw.battle_state
+        or not observed.input_ready
         or not observed.party.members
         or any(member.hp <= 0 for member in observed.party.members)
     ):
@@ -81,8 +82,11 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
             if effort is not None:
                 source, objective, exhausted, actions, frames = effort
                 memory.record(
-                    regional_source_memory_key(source), objective, exhausted=exhausted,
-                    actions=actions, frames=frames,
+                    regional_source_memory_key(source),
+                    objective,
+                    exhausted=exhausted,
+                    actions=actions,
+                    frames=frames,
                 )
             continue
         outcome = ready.private_root.find_sealed_record(
@@ -102,8 +106,7 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
             or outcome.read()["terminal_checkpoint_sha256"] != checkpoint_sha
             or outcome.read()["choice_record_sha256"] != choice.summary.record_sha256
             or outcome.read()["manifest_sha256"] != joined.manifest_sha256
-            or metadata.get("regional_choice_record_sha256")
-            != choice.summary.record_sha256
+            or metadata.get("regional_choice_record_sha256") != choice.summary.record_sha256
         ):
             raise ValueError("regional ancestor history binding differs")
         document = choice.read()
@@ -116,7 +119,10 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
         step = steps[0]
         memory.record(
             regional_source_memory_key(selected["source_id"]),
-            step["collection_before"]["required_specimens_sha256"],
+            step["collection_before"].get(
+                "required_registrations_sha256",
+                step["collection_before"].get("required_specimens_sha256"),
+            ),
             exhausted=step.get("failure_reason") == "search_exhausted",
             actions=step["actions_executed"],
             frames=step["frames_executed"],
@@ -144,8 +150,10 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
             reader=reader,
         )
         runtime = replace(
-            runtime, remaining_acquisition_demand=ready.remaining_acquisition_demand,
+            runtime,
+            remaining_acquisition_demand=ready.remaining_acquisition_demand,
         )
+        runtime = base._registered_runtime(ready, runtime)
         if ready.level_evolution_acquisitions:
             from pokemon_red_completion.red_acquisition_alternatives import (
                 cartridge_level_acquisition_edges,
@@ -161,7 +169,7 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
                 base.DEFAULT_NEW_GAME_TIMING.controller_timing(),
             )
         )
-        observed = runtime.adapter.observe()
+        observed = base._training_observation(runtime)
         candidates = enumerate_red_regional_acquisitions(
             runtime,
             observed,
@@ -174,7 +182,8 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
         )
         memory = source_search_memory(ready)
         menu = (
-            None if allow_no_choice and len(candidates) < 2
+            None
+            if allow_no_choice and len(candidates) < 2
             else regional_acquisition_menu(observed, candidates, memory)
         )
         if (
@@ -247,7 +256,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         )
     assert ready.training_plan is not None
     declaration = {
-        "schema": REGIONAL_CHOICE_SCHEMA,
+        "schema": (
+            REGISTERED_REGIONAL_CHOICE_SCHEMA
+            if ready.registration_policy is not None
+            else REGIONAL_CHOICE_SCHEMA
+        ),
         "episode_id": episode_id,
         "parent_plan": dict(ready.training_plan.document),
         "before": observed.public_dict(),
@@ -296,11 +309,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         expected_context_origin="training",
     )
     terminal_ready = replace(
-        ready, capture=checkpoint.capture, continuation=checkpoint, restore_profile=ready.profile,
+        ready,
+        capture=checkpoint.capture,
+        continuation=checkpoint,
+        restore_profile=ready.profile,
         restore_routed_recovery=ready.routed_recovery,
         restore_completion_dose=ready.completion_dose,
         restore_remaining_acquisition_demand=ready.remaining_acquisition_demand,
         restore_level_evolution_acquisitions=ready.level_evolution_acquisitions,
+        restore_registration_record_id=ready.registration_session_record_id,
     )
     with base.PyBoyAdapter(ready.rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(checkpoint.capture.state_bytes)
@@ -313,7 +330,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             emulator=controller,
             reader=base.PokemonRedStateReader(controller),
         )
-        after = runtime.adapter.observe().public_dict()
+        runtime = base._registered_runtime(ready, runtime)
+        after = base._training_observation(runtime).public_dict()
         if (
             before != emulator.save_state_bytes()
             or frame != emulator.frame_count
@@ -321,7 +339,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         ):
             raise ValueError("regional terminal observation changed the game")
     assert ready.training_plan is not None
-    outcome = red_living_dex_outcome_from_observations(
+    outcome = regional_observed_outcome(
+        ready.training_plan,
         observed.public_dict(),
         after,
         succeeded=steps[0]["status"] == "succeeded",
@@ -331,7 +350,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         maximum_frames=ready.training_plan.maximum_frames,
     )
     example = LivingDexObservedArmExample(
-        canonical_sha256({"schema": REGIONAL_CHOICE_SCHEMA, "choice_record_sha256": choice_sha}),
+        canonical_sha256({"schema": declaration["schema"], "choice_record_sha256": choice_sha}),
         "train",
         menu,
         cast(int, selection["selected_candidate_index"]),
@@ -342,7 +361,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         regional_outcome_record_id(episode_id),
         kind=REGIONAL_OUTCOME_KIND,
         record={
-            "schema": REGIONAL_OUTCOME_SCHEMA,
+            "schema": (
+                REGISTERED_REGIONAL_OUTCOME_SCHEMA
+                if ready.registration_policy is not None
+                else REGIONAL_OUTCOME_SCHEMA
+            ),
             "episode_id": episode_id,
             "choice_record_sha256": choice_sha,
             "manifest_sha256": result["trajectory_manifest_sha256"],
@@ -360,9 +383,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             outcome_record.summary.record_sha256,
             ready.causal_record,
         ),
+        objective=cast(str | None, ready.training_plan.document.get("objective")),
     )
     return {
         "schema": "pokemon.red.regional-acquisition-result.v1",
+        **(
+            {"objective": ready.training_plan.document["objective"]}
+            if ready.registration_policy is not None
+            else {}
+        ),
         "episode_id": episode_id,
         "selected_source": selected.source_id,
         "candidate_count": len(candidates),

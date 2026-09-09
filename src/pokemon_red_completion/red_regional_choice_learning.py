@@ -18,6 +18,7 @@ from pokemon_red_completion.living_dex_causal_journal import restore_living_dex_
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexObservedArmExample,
+    LivingDexObservedOutcome,
     LivingDexOptionKind,
 )
 from pokemon_red_completion.living_dex_policy_codec import restore_living_dex_policy_menu
@@ -38,6 +39,8 @@ from pokemon_red_completion.red_regional_acquisition import sample_regional_acqu
 
 REGIONAL_CHOICE_SCHEMA = "pokemon.red.regional-acquisition-choice.v1"
 REGIONAL_OUTCOME_SCHEMA = "pokemon.red.regional-acquisition-outcome.v1"
+REGISTERED_REGIONAL_CHOICE_SCHEMA = "pokemon.red.registered-regional-choice.v1"
+REGISTERED_REGIONAL_OUTCOME_SCHEMA = "pokemon.red.registered-regional-outcome.v1"
 REGIONAL_CHOICE_KIND = "red_regional_acquisition_choice"
 REGIONAL_OUTCOME_KIND = "red_regional_acquisition_outcome"
 
@@ -67,7 +70,15 @@ def _mapping(value: object) -> Mapping[str, object]:
 def load_red_regional_choice_example(
     store: PrivateArtifactRoot,
     item: RedRegionalChoiceInput,
+    *,
+    objective: str | None = None,
 ) -> LivingDexObservedArmExample:
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    if objective not in (None, REGISTERED_OBJECTIVE):
+        raise ValueError("regional objective differs")
+    choice_schema = REGISTERED_REGIONAL_CHOICE_SCHEMA if objective else REGIONAL_CHOICE_SCHEMA
+    outcome_schema = REGISTERED_REGIONAL_OUTCOME_SCHEMA if objective else REGIONAL_OUTCOME_SCHEMA
     choice_record = store.find_sealed_record(
         regional_choice_record_id(item.episode_id),
         expected_kind=REGIONAL_CHOICE_KIND,
@@ -99,7 +110,7 @@ def load_red_regional_choice_example(
             "controller_input_before_commit",
             "independent_evaluation",
         }
-        or choice.get("schema") != REGIONAL_CHOICE_SCHEMA
+        or choice.get("schema") != choice_schema
         or (
             choice.get("episode_id") != item.episode_id
             or choice.get("controller_input_before_commit") is not False
@@ -118,7 +129,7 @@ def load_red_regional_choice_example(
             "after",
             "example",
         }
-        or outcome.get("schema") != REGIONAL_OUTCOME_SCHEMA
+        or outcome.get("schema") != outcome_schema
         or (
             outcome.get("episode_id") != item.episode_id
             or outcome.get("choice_record_sha256") != item.choice_record_sha256
@@ -126,6 +137,8 @@ def load_red_regional_choice_example(
     ):
         raise ValueError("regional outcome declaration differs")
     plan = RedPlayerTrainingPlan(_mapping(choice["parent_plan"]))
+    if plan.document.get("objective") != objective:
+        raise ValueError("regional plan objective differs")
     if plan.document["decision_limit"] != 1:
         raise ValueError("regional parent must contain one decision")
     menu = restore_living_dex_policy_menu(_mapping(choice["menu"]))
@@ -253,7 +266,13 @@ def load_red_regional_choice_example(
         )
     ):
         raise ValueError("regional terminal result differs")
-    expected = red_living_dex_outcome_from_observations(
+    if objective is not None and (
+        _mapping(choice["before"]).get("registration") != step.get("collection_before")
+        or _mapping(outcome["after"]).get("registration") != step.get("collection_after")
+    ):
+        raise ValueError("regional registered observations differ from the played checkpoints")
+    expected = regional_observed_outcome(
+        plan,
         _mapping(choice["before"]),
         _mapping(outcome["after"]),
         succeeded=decision.outcome_status is GoalDecisionOutcome.SUCCEEDED,
@@ -273,7 +292,7 @@ def load_red_regional_choice_example(
             or example.decision_sha256
             != canonical_sha256(
                 {
-                    "schema": REGIONAL_CHOICE_SCHEMA,
+                    "schema": choice_schema,
                     "choice_record_sha256": item.choice_record_sha256,
                 }
             )
@@ -281,3 +300,42 @@ def load_red_regional_choice_example(
     ):
         raise ValueError("regional selected outcome differs from observed evidence")
     return example
+
+
+def regional_observed_outcome(
+    plan: RedPlayerTrainingPlan,
+    before: Mapping[str, object],
+    after: Mapping[str, object],
+    *,
+    succeeded: bool,
+    actions: int,
+    frames: int,
+    maximum_actions: int,
+    maximum_frames: int,
+) -> LivingDexObservedOutcome:
+    """One shared reconstruction for the writer and audited reader."""
+    if plan.document.get("objective") is None:
+        return red_living_dex_outcome_from_observations(
+            before,
+            after,
+            succeeded=succeeded,
+            actions=actions,
+            frames=frames,
+            maximum_actions=maximum_actions,
+            maximum_frames=maximum_frames,
+        )
+    from .red_registered_outcome import red_registered_outcome_from_observations
+
+    registration = _mapping(before.get("registration"))
+    if registration.get("binding_sha256") != plan.document.get("registration_binding_sha256"):
+        raise ValueError("regional registration binding differs")
+    return red_registered_outcome_from_observations(
+        before,
+        after,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=succeeded,
+        actions=actions,
+        frames=frames,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
+    )

@@ -247,6 +247,9 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
     record = store.find_sealed_record(f"rpr-model-{sha}", expected_kind="red_player_model")
     loaded = load_player_goal_model_record_bytes(record.read_bytes(), expected_model_sha256=sha)
     assert loaded.objective == REGISTERED_OBJECTIVE
+    from pokemon_red_completion.red_player_incremental_fit import load_prior_player_inventory
+    retained, regional = load_prior_player_inventory(store, loaded, lambda _: prior)
+    assert retained == (request,) and regional == ()
     with pytest.raises(ValueError, match="additional settled"):
         fit_red_player_update(store, prior=loaded, episodes=(request,),
             source_commit="b" * 40, source_bundle_sha256="c" * 64, registered_objective=True)

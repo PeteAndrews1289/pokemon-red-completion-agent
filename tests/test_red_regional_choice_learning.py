@@ -22,9 +22,6 @@ from pokemon_red_completion.red_goal_context_profile import (
     _thaw,
     build_red_goal_context_profile_payload,
 )
-from pokemon_red_completion.red_living_dex_causal_adapter import (
-    red_living_dex_outcome_from_observations,
-)
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_regional_acquisition import (
     regional_acquisition_menu,
@@ -32,7 +29,7 @@ from pokemon_red_completion.red_regional_acquisition import (
 )
 
 
-def _recorded(tmp_path, *, failed=False, omit_commit=False):
+def _recorded(tmp_path, *, failed=False, omit_commit=False, registered_pair=None):
     candidates = (_candidate(), _candidate("wild:Route11:grass", 0.7))
     question = _quoted_question(_quote())
     source_menu = regional_acquisition_menu(_observation(), candidates, GoalSearchMemory())
@@ -54,6 +51,37 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
     selected = sample_regional_acquisition(model, menu, seed=17)
     profile = candidates[selected["selected_candidate_index"]].profile
     before, after = _facts(question), _facts(question, registered=2, balls=9)
+    choice_schema = learning.REGIONAL_CHOICE_SCHEMA
+    outcome_schema = learning.REGIONAL_OUTCOME_SCHEMA
+    plan_transform = None
+    if registered_pair is not None:
+        from pokemon_red_completion.red_player_training_plan import (
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+            RedPlayerTrainingPlan,
+        )
+        from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+
+        before, after = (o.public_dict() for o in registered_pair)
+        choice_schema = learning.REGISTERED_REGIONAL_CHOICE_SCHEMA
+        outcome_schema = learning.REGISTERED_REGIONAL_OUTCOME_SCHEMA
+
+        def plan_transform(store, plan):
+            return RedPlayerTrainingPlan(
+                {
+                    **plan.document,
+                    "schema": REGISTERED_TRAINING_PLAN_SCHEMA,
+                    "objective": REGISTERED_OBJECTIVE,
+                    "maximum_actions": 30_000,
+                    "maximum_frames": 3_000_000,
+                    "registration_binding_sha256": before["registration"]["binding_sha256"],
+                    "origin_state_sha256": "a" * 64,
+                    "origin_envelope_sha256": "b" * 64,
+                    "restore_profile_sha256": "c" * 64,
+                    "continuation_episode_id": "parent",
+                    "continuation_checkpoint_sha256": "d" * 64,
+                }
+            )
+
     committed = {}
 
     def declare(store, plan, actual_model):
@@ -62,7 +90,7 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
             learning.regional_choice_record_id("goal-episode-1"),
             kind=learning.REGIONAL_CHOICE_KIND,
             record={
-                "schema": learning.REGIONAL_CHOICE_SCHEMA,
+                "schema": choice_schema,
                 "episode_id": "goal-episode-1",
                 "parent_plan": dict(plan.document),
                 "before": before,
@@ -103,6 +131,8 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
         plan_profile_sha=profile.profile_sha256,
         before_episode=declare,
         return_inputs=True,
+        plan_transform=plan_transform,
+        registration_observations=registered_pair,
     )
     status = "failed" if failed else "succeeded"
     checkpoint = store.publish_sealed_record(
@@ -115,7 +145,7 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
             "original_state_sha256": plan.document["state_sha256"],
             "model_sha256": behavior.model_sha256,
             "context_origin": "training",
-            "collection": {"living_species": 2},
+            "collection": after["registration"] if registered_pair else {"living_species": 2},
             "terminal_result": {
                 "total_actions": 1,
                 "total_frames": 60,
@@ -126,15 +156,22 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
                         "selected_kind": "acquire_species",
                         "status": status,
                         "failure_reason": "search_exhausted" if failed else None,
-                        "collection_before": {"required_specimens_sha256": "f" * 64},
-                        "collection_after": {"living_species": 2},
+                        "collection_before": (
+                            before["registration"]
+                            if registered_pair
+                            else {"required_specimens_sha256": "f" * 64}
+                        ),
+                        "collection_after": (
+                            after["registration"] if registered_pair else {"living_species": 2}
+                        ),
                     }
                 ],
             },
         },
     )
     choice_sha = committed["choice"].summary.record_sha256
-    outcome = red_living_dex_outcome_from_observations(
+    outcome = learning.regional_observed_outcome(
+        plan,
         before,
         after,
         succeeded=not failed,
@@ -146,7 +183,7 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
     example = LivingDexObservedArmExample(
         canonical_sha256(
             {
-                "schema": learning.REGIONAL_CHOICE_SCHEMA,
+                "schema": choice_schema,
                 "choice_record_sha256": choice_sha,
             }
         ),
@@ -160,7 +197,7 @@ def _recorded(tmp_path, *, failed=False, omit_commit=False):
         learning.regional_outcome_record_id("goal-episode-1"),
         kind=learning.REGIONAL_OUTCOME_KIND,
         record={
-            "schema": learning.REGIONAL_OUTCOME_SCHEMA,
+            "schema": outcome_schema,
             "episode_id": "goal-episode-1",
             "choice_record_sha256": choice_sha,
             "manifest_sha256": complete.manifest_sha256,

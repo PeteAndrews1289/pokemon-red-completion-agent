@@ -227,6 +227,11 @@ class _Readiness:
     restore_level_evolution_acquisitions: bool = False
     forward_story_objective: str | None = None
     forward_resource_budget: int | None = None
+    registration_policy: Any = None
+    registration_ledger: Path | None = None
+    registration_session_record_id: str | None = None
+    registration_sequence: int | None = None
+    restore_registration_record_id: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -349,9 +354,11 @@ def _player_observer(
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
-    if world is not None and any(spec.parameters.get("trainer_objective")
-           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"}
-           for spec in runtime.profile.providers):
+    if world is not None and any(
+        spec.parameters.get("trainer_objective")
+        in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"}
+        for spec in runtime.profile.providers
+    ):
         runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_type")
@@ -368,7 +375,8 @@ def _player_observer(
 
         assert world is not None
         runtime = replace(
-            runtime, level_evolution_acquisition_edges=cartridge_level_acquisition_edges(world.rom),
+            runtime,
+            level_evolution_acquisition_edges=cartridge_level_acquisition_edges(world.rom),
         )
     elif getattr(runtime, "level_evolution_acquisition_edges", ()):
         runtime = replace(runtime, level_evolution_acquisition_edges=())
@@ -401,10 +409,12 @@ def _player_observer(
             maximum_emulator_frames=3_000_000 if completion_dose else 600_000,
         )
     )
+
     def enumerate_forward(observation: Any) -> Any:
         bindings = (
             runtime.enumerator(actions).enumerate(observation)
-            if router is None else router.enumerate(observation)
+            if router is None
+            else router.enumerate(observation)
         )
         _require_forward_binding_scope(bindings, runtime.profile)
         return bindings
@@ -412,8 +422,14 @@ def _player_observer(
     observer = RedBoundedPlayerObserver(
         runtime=runtime,
         actions=actions,
-        enumerate_bindings=(enumerate_forward if forward_story_only else
-                            None if router is None else router.enumerate),
+        enumerate_bindings=(
+            enumerate_forward
+            if forward_story_only
+            else None
+            if router is None
+            else router.enumerate
+        ),
+        registered_objective=getattr(runtime, "registration_policy", None) is not None,
     )
     if completion_dose:
         from pokemon_red_completion.goal_manager_composition_qualification import (
@@ -425,7 +441,8 @@ def _player_observer(
 
 
 def _require_forward_binding_scope(
-    bindings: GoalBindingSet, profile: RedGoalContextProfile,
+    bindings: GoalBindingSet,
+    profile: RedGoalContextProfile,
 ) -> None:
     """Reject the whole menu if routing added a different execution mechanic.
 
@@ -440,14 +457,23 @@ def _require_forward_binding_scope(
     allowed = {
         (spec.kind, f":profile-{profile.profile_sha256}:config-{spec.configuration_sha256}")
         for spec in profile.providers
-        if (spec.kind is GoalKind.ADVANCE_STORY
-            and spec.mechanic is RedGoalMechanic.MIDGAME_STORY)
-        or (spec.kind is GoalKind.RESTORE_TEAM and spec.mechanic in {
-            RedGoalMechanic.FIELD_RESTORE, RedGoalMechanic.FIELD_PP_RESTORE,
-        })
+        if (spec.kind is GoalKind.ADVANCE_STORY and spec.mechanic is RedGoalMechanic.MIDGAME_STORY)
+        or (
+            spec.kind is GoalKind.RESTORE_TEAM
+            and spec.mechanic
+            in {
+                RedGoalMechanic.FIELD_RESTORE,
+                RedGoalMechanic.FIELD_PP_RESTORE,
+            }
+        )
     }
-    if any(not any(binding.kind is kind and binding.binding_ref.endswith(suffix)
-                   for kind, suffix in allowed) for binding in bindings.bindings):
+    if any(
+        not any(
+            binding.kind is kind and binding.binding_ref.endswith(suffix)
+            for kind, suffix in allowed
+        )
+        for binding in bindings.bindings
+    ):
         raise PairedRedBoundedPlayerRunError("forward_goal_unsupported_binding")
 
 
@@ -518,12 +544,17 @@ def _parser() -> argparse.ArgumentParser:
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument("--registered-ledger", type=Path, default=None)
+    parser.add_argument("--registration-session", default=None)
+    parser.add_argument("--registration-run-id", default=None)
     parser.add_argument(
-        "--remaining-acquisition-demand", action="store_true",
+        "--remaining-acquisition-demand",
+        action="store_true",
         help="credit retained evolved/traded forms after historical continuation restore",
     )
     parser.add_argument(
-        "--level-evolution-acquisitions", action="store_true",
+        "--level-evolution-acquisitions",
+        action="store_true",
         help="offer spare-precursor captures using cartridge level rules and actual living stock",
     )
     parser.add_argument(
@@ -532,15 +563,18 @@ def _parser() -> argparse.ArgumentParser:
         help="enable guarded walking-to-Center recovery after verified continuation restore",
     )
     parser.add_argument(
-        "--trainer-funding", action="store_true",
+        "--trainer-funding",
+        action="store_true",
         help="offer finite ordinary trainer income after authenticated training continuation",
     )
     parser.add_argument(
-        "--trainer-pending-recovery", action="store_true",
+        "--trainer-pending-recovery",
+        action="store_true",
         help="resume an already-armed trainer battle after authenticating the legacy endpoint",
     )
     parser.add_argument(
-        "--regional-trainer-funding", action="store_true",
+        "--regional-trainer-funding",
+        action="store_true",
         help="extend funding to inventoried adjacent maps through walking-only connections",
     )
     parser.add_argument(
@@ -558,12 +592,18 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
-        "--capture-fly-transport", dest="regional_transitions", action="append_const",
-        const="capture-fly", help="opt future wild capture destinations into guarded Fly access",
+        "--capture-fly-transport",
+        dest="regional_transitions",
+        action="append_const",
+        const="capture-fly",
+        help="opt future wild capture destinations into guarded Fly access",
     )
     parser.add_argument(
-        "--evolution-fly-transport", dest="regional_transitions", action="append_const",
-        const="evolution-fly", help="opt the current evolution objective into guarded Fly access",
+        "--evolution-fly-transport",
+        dest="regional_transitions",
+        action="append_const",
+        const="evolution-fly",
+        help="opt the current evolution objective into guarded Fly access",
     )
     parser.add_argument(
         "--evolution-objective",
@@ -667,13 +707,21 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
     parser.add_argument(
-        "--story-outcome-curriculum", action="store_true",
+        "--story-outcome-curriculum",
+        action="store_true",
         help="Record forced story outcomes separately from choices (completion dose only).",
     )
-    parser.add_argument("--forward-story-objective", default=None,
-                        help="Record separate forward story outcomes; no new model authority.")
-    parser.add_argument("--forward-resource-budget", type=int, default=None,
-                        help="Explicit total consumable allowance for the forward story attempt.")
+    parser.add_argument(
+        "--forward-story-objective",
+        default=None,
+        help="Record separate forward story outcomes; no new model authority.",
+    )
+    parser.add_argument(
+        "--forward-resource-budget",
+        type=int,
+        default=None,
+        help="Explicit total consumable allowance for the forward story attempt.",
+    )
     return parser
 
 
@@ -796,16 +844,14 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_scope")
     level_evolution_acquisitions = getattr(args, "level_evolution_acquisitions", False)
     if type(level_evolution_acquisitions) is not bool or (
-        level_evolution_acquisitions and (
-            not remaining_acquisition_demand or not getattr(args, "routed_resource_goals", False)
-        )
+        level_evolution_acquisitions
+        and (not remaining_acquisition_demand or not getattr(args, "routed_resource_goals", False))
     ):
         raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_scope")
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
-        routed_recovery and (
-            not getattr(args, "routed_resource_goals", False) or not continuation_chain
-        )
+        routed_recovery
+        and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
     trainer_funding = getattr(args, "trainer_funding", False)
@@ -820,8 +866,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     ):
         raise PairedRedBoundedPlayerRunError("trainer_pending_recovery_scope")
     if type(trainer_funding) is not bool or (
-        trainer_funding and (
-            not getattr(args, "routed_resource_goals", False) or not continuation_chain
+        trainer_funding
+        and (
+            not getattr(args, "routed_resource_goals", False)
+            or not continuation_chain
             or not getattr(args, "train_player", False)
         )
     ):
@@ -1062,17 +1110,23 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     if readiness.training_plan is not None and any(
         spec.parameters.get("maximum_full_restores", 0) for spec in readiness.profile.providers
     ):
-        readiness = replace(readiness, training_plan=RedPlayerTrainingPlan({
-            **readiness.training_plan.document,
-            "economic_contract": "known-spend-and-bounded-consumption-v2",
-        }))
+        readiness = replace(
+            readiness,
+            training_plan=RedPlayerTrainingPlan(
+                {
+                    **readiness.training_plan.document,
+                    "economic_contract": "known-spend-and-bounded-consumption-v2",
+                }
+            ),
+        )
     if getattr(args, "story_outcome_curriculum", False):
         from pokemon_red_completion.red_player_training_plan import declare_story_curriculum
 
         if readiness.training_plan is None:
             raise PairedRedBoundedPlayerRunError("curriculum_requires_training_plan")
         readiness = replace(
-            readiness, training_plan=declare_story_curriculum(readiness.training_plan),
+            readiness,
+            training_plan=declare_story_curriculum(readiness.training_plan),
         )
     readiness = replace(
         readiness,
@@ -1080,7 +1134,180 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         forward_resource_budget=getattr(args, "forward_resource_budget", None),
     )
     _forward_goal_plan(readiness)  # Validate the opt-in before any execution claim.
-    return readiness
+    return _prepare_registration(readiness, args)
+
+
+def _registered_runtime(
+    readiness: _Readiness, runtime: RedGoalContextRuntime, *, restore: bool = False
+) -> RedGoalContextRuntime:
+    policy = getattr(readiness, "registration_policy", None)
+    if restore:
+        from pokemon_red_completion.red_registration_session import (
+            SESSION_KIND,
+            load_registration_policy,
+        )
+
+        record_id = getattr(readiness, "restore_registration_record_id", None)
+        policy = None
+        if record_id is not None:
+            record = readiness.private_root.find_sealed_record(
+                record_id, expected_kind=SESSION_KIND
+            )
+            if record is None:
+                raise ValueError("registered restore binding is missing")
+            policy = load_registration_policy(record.read())
+            if policy.sha256 != readiness.continuation.collection.get("binding_sha256"):
+                raise ValueError("registered restore checkpoint binding differs")
+    return replace(runtime, registration_policy=policy) if policy is not None else runtime
+
+
+def _training_observation(runtime: RedGoalContextRuntime) -> Any:
+    from pokemon_red_completion.red_registered_observation import project_registered_observation
+
+    observed = runtime.adapter.observe()
+    policy = getattr(runtime, "registration_policy", None)
+    return observed if policy is None else project_registered_observation(observed, policy)
+
+
+def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _Readiness:
+    """Freeze shared credit only after authenticating a no-input saved-state restore."""
+    ledger_path = getattr(args, "registered_ledger", None)
+    name, run_id = (
+        getattr(args, "registration_session", None),
+        getattr(args, "registration_run_id", None),
+    )
+    if ledger_path is None:
+        if name is not None or run_id is not None or readiness.restore_registration_record_id:
+            raise ValueError("registered continuation requires its ledger and session")
+        return readiness
+    if (
+        not name
+        or not run_id
+        or readiness.training_plan is None
+        or readiness.continuation is None
+        or not readiness.completion_dose
+        or not readiness.save_terminal_checkpoints
+        or not readiness.remaining_acquisition_demand
+        or getattr(args, "story_outcome_curriculum", False)
+        or readiness.forward_story_objective is not None
+    ):
+        raise ValueError("registered mode requires a saved collection training continuation")
+    from pokemon_red_completion.red_player_training_plan import REGISTERED_TRAINING_PLAN_SCHEMA
+    from pokemon_red_completion.red_registration_session import (
+        SESSION_KIND,
+        load_registration_policy,
+        observe_registration,
+        publish_registration_session,
+        read_registration_state,
+        session_record_id,
+        validate_terminal_registration,
+    )
+    from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+    from pokemon_red_completion.registration_memory import RegistrationMemory
+
+    if ledger_path.is_symlink():
+        raise ValueError("registration ledger cannot be a symlink")
+    ledger_path = ledger_path.resolve()
+    if ledger_path.is_relative_to(PROJECT_ROOT) or ledger_path == readiness.rom_path:
+        raise ValueError("registration ledger must be private and separate from the ROM")
+    if ledger_path.exists():
+        if not ledger_path.is_file():
+            raise ValueError("registration ledger must be a regular database file")
+        with ledger_path.open("rb") as existing:
+            if existing.read(16) != b"SQLite format 3\x00":
+                raise ValueError("registration ledger path belongs to another file")
+    record_id = session_record_id(name)
+    record = readiness.private_root.find_sealed_record(record_id, expected_kind=SESSION_KIND)
+    if record is None:
+        with PyBoyAdapter(readiness.rom_path, watch=False, speed=None) as emulator:
+            emulator.load_state_bytes(readiness.capture.state_bytes)
+            _verify_continuation_restore(readiness, emulator)
+            controller = ReadOnlyController(emulator)
+            runtime = build_red_goal_context_runtime(
+                profile=readiness.profile,
+                capture=readiness.capture,
+                emulator=controller,
+                reader=PokemonRedStateReader(controller),
+            )
+            observed, seen = read_registration_state(emulator, runtime)
+            latest = RegistrationMemory(ledger_path).snapshot().latest(run_id)
+            if latest is not None and latest.snapshot_sha256 != readiness.capture.state_sha256:
+                raise ValueError("registration import cannot roll back the current run ledger")
+            row = observe_registration(
+                observed,
+                seen=seen,
+                run_id=run_id,
+                rom_sha256=readiness.rom_sha256,
+                snapshot_sha256=readiness.capture.state_sha256,
+                sequence=0 if latest is None else latest.sequence,
+            )
+            anchor_id, anchor_sha = readiness.continuation_chain[-1]
+            document = publish_registration_session(
+                readiness.private_root,
+                name=name,
+                ledger_path=ledger_path,
+                observation=observed,
+                row=row,
+                anchor_episode_id=anchor_id,
+                anchor_checkpoint_sha256=anchor_sha,
+            )
+    else:
+        document = record.read()
+    policy = load_registration_policy(document)
+    anchor = (document["anchor_episode_id"], document["anchor_checkpoint_sha256"])
+    if anchor not in readiness.continuation_chain or policy.run_id != run_id:
+        raise ValueError("registration session does not belong to this continuation")
+    initial = policy.initial_memory.latest(run_id)
+    if initial is None or initial.cartridge_sha256 != readiness.rom_sha256:
+        raise ValueError("registration session cartridge differs")
+    present = RegistrationMemory(ledger_path).snapshot()
+    if not {r.sha256 for r in policy.initial_memory.observations} <= {
+        r.sha256 for r in present.observations
+    }:
+        raise ValueError("registration ledger lost frozen source evidence")
+    suffix = readiness.continuation_chain[readiness.continuation_chain.index(anchor) + 1 :]
+    ledger = RegistrationMemory(ledger_path)
+    for offset, (episode_id, _) in enumerate(suffix, start=1):
+        # _continue_readiness authenticated each completed trajectory and its
+        # checkpoint before this point. Reconcile a crash after checkpoint
+        # publication but before its ledger commit, without controller input.
+        terminal = readiness.private_root.find_sealed_record(
+            checkpoint_record_id(episode_id),
+            expected_kind="red_bounded_player_checkpoint",
+        )
+        if terminal is None:
+            raise ValueError("registered continuation terminal is missing")
+        ledger.record(
+            validate_terminal_registration(
+                terminal.read(),
+                policy,
+                sequence=initial.sequence + offset,
+                rom_sha256=readiness.rom_sha256,
+            )
+        )
+    sequence = initial.sequence + len(suffix) + 1
+    latest = ledger.snapshot().latest(run_id)
+    if (
+        latest is None
+        or latest.sequence != sequence - 1
+        or latest.snapshot_sha256 != readiness.capture.state_sha256
+    ):
+        raise ValueError("registered continuation would roll back the durable ledger")
+    return replace(
+        readiness,
+        registration_policy=policy,
+        registration_ledger=ledger_path,
+        registration_session_record_id=record_id,
+        registration_sequence=sequence,
+        training_plan=RedPlayerTrainingPlan(
+            {
+                **readiness.training_plan.document,
+                "schema": REGISTERED_TRAINING_PLAN_SCHEMA,
+                "objective": REGISTERED_OBJECTIVE,
+                "registration_binding_sha256": policy.sha256,
+            }
+        ),
+    )
 
 
 def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
@@ -1091,11 +1318,15 @@ def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
             raise PairedRedBoundedPlayerRunError("forward_goal_requires_objective")
         return None
     plan = readiness.training_plan
-    if (plan is None or readiness.decision_limit != 2
-            or type(resources) is not int or resources < 2
-            or plan.document.get("curriculum_contract") is not None
-            or readiness.causal_record is None
-            or readiness.causal_record.model.feature_version != 3):
+    if (
+        plan is None
+        or readiness.decision_limit != 2
+        or type(resources) is not int
+        or resources < 2
+        or plan.document.get("curriculum_contract") is not None
+        or readiness.causal_record is None
+        or readiness.causal_record.model.feature_version != 3
+    ):
         raise PairedRedBoundedPlayerRunError("forward_goal_scope")
     from pokemon_red_completion.goal_manager import GoalKind
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
@@ -1110,7 +1341,8 @@ def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
         raise PairedRedBoundedPlayerRunError("forward_goal_missing_mechanics")
     for spec in readiness.profile.providers:
         if spec.kind is GoalKind.RESTORE_TEAM and spec.mechanic not in {
-            RedGoalMechanic.FIELD_RESTORE, RedGoalMechanic.FIELD_PP_RESTORE,
+            RedGoalMechanic.FIELD_RESTORE,
+            RedGoalMechanic.FIELD_PP_RESTORE,
         }:
             raise PairedRedBoundedPlayerRunError("forward_goal_requires_field_recovery")
         if spec.mechanic is RedGoalMechanic.FIELD_RESTORE and (
@@ -1123,48 +1355,67 @@ def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
             raise PairedRedBoundedPlayerRunError("forward_goal_story_binding_differs")
     limits = _player_limits(2, completion_dose=readiness.completion_dose)
     return ForwardGoalPlan(
-        "red-story-objective", red_forward_verifier_sha256(objective),
+        "red-story-objective",
+        red_forward_verifier_sha256(objective),
         red_forward_continuation_sha256(
             behavior_policy_id=cast(str, plan.document["behavior_policy_id"]),
             model_sha256=readiness.model_sha256,
             source_bundle_sha256=readiness.source_bundle_sha256,
             profile_sha256=readiness.profile.profile_sha256,
-            execution_flags={key: getattr(readiness, key, False)
-                             for key in RED_FORWARD_EXECUTION_FLAGS},
+            execution_flags={
+                key: getattr(readiness, key, False) for key in RED_FORWARD_EXECUTION_FLAGS
+            },
         ),
-        limits.max_total_actions, limits.max_total_frames, resources, 2,
+        limits.max_total_actions,
+        limits.max_total_frames,
+        resources,
+        2,
     )
 
 
 def _forward_goal_header(readiness: _Readiness) -> dict[str, object]:
     plan = _forward_goal_plan(readiness)
-    return {} if plan is None else {
-        "forward_goal_plan": plan.public_dict(), "forward_goal_plan_sha256": plan.sha256,
-        "forward_story_objective": readiness.forward_story_objective,
-        "forward_goal_authority": "recording-only-existing-actor",
-    }
+    return (
+        {}
+        if plan is None
+        else {
+            "forward_goal_plan": plan.public_dict(),
+            "forward_goal_plan_sha256": plan.sha256,
+            "forward_story_objective": readiness.forward_story_objective,
+            "forward_goal_authority": "recording-only-existing-actor",
+        }
+    )
 
 
 def _require_forward_probe_scope(readiness: _Readiness, probe: RedForwardProbeSpec) -> None:
-    if (not isinstance(probe, RedForwardProbeSpec)
-            or readiness.training_plan is None or readiness.continuation is None
-            or not readiness.continuation_root_lineage_id
-            or readiness.forward_story_objective is not None
-            or readiness.forward_resource_budget is not None
-            or readiness.challenger_arm_id != CAUSAL_ARM_ID
-            or readiness.model_sha256 != probe.tail_model_sha256
-            or readiness.profile.profile_sha256 != probe.profile_sha256
-            or readiness.training_plan.document["behavior_policy_id"] != probe.tail_policy_id
-            or tuple((name, getattr(readiness, name, False))
-                     for name in RED_FORWARD_EXECUTION_FLAGS) != probe.execution_flags):
+    if (
+        not isinstance(probe, RedForwardProbeSpec)
+        or readiness.training_plan is None
+        or readiness.continuation is None
+        or not readiness.continuation_root_lineage_id
+        or readiness.forward_story_objective is not None
+        or readiness.forward_resource_budget is not None
+        or readiness.challenger_arm_id != CAUSAL_ARM_ID
+        or readiness.model_sha256 != probe.tail_model_sha256
+        or readiness.profile.profile_sha256 != probe.profile_sha256
+        or readiness.training_plan.document["behavior_policy_id"] != probe.tail_policy_id
+        or tuple((name, getattr(readiness, name, False)) for name in RED_FORWARD_EXECUTION_FLAGS)
+        != probe.execution_flags
+    ):
         raise PairedRedBoundedPlayerRunError("forward_probe_scope")
-    scoped = replace(readiness, forward_story_objective=probe.objective_id,
-                     forward_resource_budget=probe.fitted_plan.max_resources)
+    scoped = replace(
+        readiness,
+        forward_story_objective=probe.objective_id,
+        forward_resource_budget=probe.fitted_plan.max_resources,
+    )
     actual = _forward_goal_plan(scoped)
     assert actual is not None
-    if ((actual.max_actions, actual.max_frames, actual.max_resources, actual.max_macros)
-            != (probe.fitted_plan.max_actions, probe.fitted_plan.max_frames,
-                probe.fitted_plan.max_resources, probe.fitted_plan.max_macros)):
+    if (actual.max_actions, actual.max_frames, actual.max_resources, actual.max_macros) != (
+        probe.fitted_plan.max_actions,
+        probe.fitted_plan.max_frames,
+        probe.fitted_plan.max_resources,
+        probe.fitted_plan.max_macros,
+    ):
         raise PairedRedBoundedPlayerRunError("forward_probe_budget_differs")
 
 
@@ -1224,13 +1475,23 @@ def _regional_profiles(
         if (
             isinstance(source, Path)
             or source.startswith("discovery:")
-            or source in {"capture-status", "opportunistic-capture", "evolution-fly", "capture-fly",
-                          "affordable-capture-supply", "cartridge-trainer-story",
-                          "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
-                          "cartridge-trainer-story:lance",
-                          "cartridge-trainer-story:champion",
-                          "affordable-field-restore",
-                          "reserved-field-restore", "field-pp-restore", "combined-field-restore"}
+            or source
+            in {
+                "capture-status",
+                "opportunistic-capture",
+                "evolution-fly",
+                "capture-fly",
+                "affordable-capture-supply",
+                "cartridge-trainer-story",
+                "cartridge-trainer-story:bruno",
+                "cartridge-trainer-story:agatha",
+                "cartridge-trainer-story:lance",
+                "cartridge-trainer-story:champion",
+                "affordable-field-restore",
+                "reserved-field-restore",
+                "field-pp-restore",
+                "combined-field-restore",
+            }
             or source in {"trainer-recovery:1", "trainer-recovery:2"}
             or source in {"ordinary-trainer-recovery:1", "ordinary-trainer-recovery:2"}
         ):
@@ -1255,21 +1516,30 @@ def _regional_profiles(
             profile = bind_evolution_fly_profile(profile)
             result.append(profile)
             continue
-        if source in {"trainer-recovery:1", "trainer-recovery:2",
-                      "ordinary-trainer-recovery:1", "ordinary-trainer-recovery:2"}:
+        if source in {
+            "trainer-recovery:1",
+            "trainer-recovery:2",
+            "ordinary-trainer-recovery:1",
+            "ordinary-trainer-recovery:2",
+        }:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
-            story = next((spec for spec in profile.providers
-                          if spec.kind is GoalKind.ADVANCE_STORY), None)
+            story = next(
+                (spec for spec in profile.providers if spec.kind is GoalKind.ADVANCE_STORY), None
+            )
             if story is None or not story.parameters.get("trainer_objective"):
                 raise PairedRedBoundedPlayerRunError("recovery_requires_cartridge_story_profile")
             profile = bind_cartridge_trainer_story_profile(
-                profile, objective_id=str(story.parameters["trainer_objective"]),
+                profile,
+                objective_id=str(story.parameters["trainer_objective"]),
                 maximum_full_restores=int(str(source).split(":")[1]),
-                recovery_controller=("ordinary-bounded-healing"
-                    if str(source).startswith("ordinary-") else "critical-inclusive"),
+                recovery_controller=(
+                    "ordinary-bounded-healing"
+                    if str(source).startswith("ordinary-")
+                    else "critical-inclusive"
+                ),
             )
             result.append(profile)
             continue
@@ -1277,6 +1547,7 @@ def _regional_profiles(
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_combined_field_restore_profile,
             )
+
             profile = bind_combined_field_restore_profile(profile)
             result.append(profile)
             continue
@@ -1294,23 +1565,35 @@ def _regional_profiles(
             )
 
             profile = bind_affordable_field_restore_profile(
-                profile, reserve_last_full_restore=source == "reserved-field-restore",
+                profile,
+                reserve_last_full_restore=source == "reserved-field-restore",
             )
             result.append(profile)
             continue
-        if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno",
-                      "cartridge-trainer-story:agatha", "cartridge-trainer-story:lance",
-                      "cartridge-trainer-story:champion"}:
+        if source in {
+            "cartridge-trainer-story",
+            "cartridge-trainer-story:bruno",
+            "cartridge-trainer-story:agatha",
+            "cartridge-trainer-story:lance",
+            "cartridge-trainer-story:champion",
+        }:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
             profile = bind_cartridge_trainer_story_profile(
-                profile, objective_id=("defeat_champion" if source.endswith(":champion")
-                                       else "defeat_lance" if source.endswith(":lance")
-                                       else "defeat_agatha" if source.endswith(":agatha")
-                                       else "defeat_bruno" if source.endswith(":bruno")
-                                       else "defeat_lorelei"),
+                profile,
+                objective_id=(
+                    "defeat_champion"
+                    if source.endswith(":champion")
+                    else "defeat_lance"
+                    if source.endswith(":lance")
+                    else "defeat_agatha"
+                    if source.endswith(":agatha")
+                    else "defeat_bruno"
+                    if source.endswith(":bruno")
+                    else "defeat_lorelei"
+                ),
             )
             result.append(profile)
             continue
@@ -1448,6 +1731,7 @@ def _continue_readiness(
             readiness,
             capture=checkpoint.capture,
             continuation=checkpoint,
+            restore_registration_record_id=metadata.get("registration_session_record_id"),
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
             restore_trainer_funding=_checkpoint_trainer_funding(header),
@@ -1564,22 +1848,26 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import (
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        REGISTERED_TRAINING_PLAN_SCHEMA,
     )
 
     metadata = header.get("metadata")
     if isinstance(metadata, Mapping) and "forward_probe" in metadata:
         probe = metadata["forward_probe"]
         enabled = metadata.get("completion_dose")
-        if (not isinstance(probe, Mapping)
-                or probe.get("schema") != "pokemon.red.forward-first-choice-training-probe.v1"
-                or type(enabled) is not bool
-                or not isinstance(probe.get("execution_flags"), Mapping)
-                or cast(Mapping[str, object], probe["execution_flags"]).get("completion_dose")
-                is not enabled):
+        if (
+            not isinstance(probe, Mapping)
+            or probe.get("schema") != "pokemon.red.forward-first-choice-training-probe.v1"
+            or type(enabled) is not bool
+            or not isinstance(probe.get("execution_flags"), Mapping)
+            or cast(Mapping[str, object], probe["execution_flags"]).get("completion_dose")
+            is not enabled
+        ):
             raise PairedRedBoundedPlayerRunError("continuation_probe_observer_mode")
         return enabled
     if isinstance(metadata, Mapping) and metadata.get("schema") in {
-        "pokemon.red.forced-recovery-header.v1", "pokemon.red.recorded-support-header.v1",
+        "pokemon.red.forced-recovery-header.v1",
+        "pokemon.red.recorded-support-header.v1",
     }:
         enabled = metadata.get("completion_dose")
         if type(enabled) is not bool:
@@ -1592,7 +1880,9 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
         raise PairedRedBoundedPlayerRunError("continuation_parent_plan")
     parsed = RedPlayerTrainingPlan(plan)
     return parsed.document["schema"] in {
-        COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+        COMPLETION_TRAINING_PLAN_SCHEMA,
+        CURRICULUM_TRAINING_PLAN_SCHEMA,
+        REGISTERED_TRAINING_PLAN_SCHEMA,
     }
 
 
@@ -1622,6 +1912,7 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         emulator=controller,
         reader=PokemonRedStateReader(controller),
     )
+    runtime = _registered_runtime(readiness, runtime, restore=True)
     actions = CountingExecutor(
         FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
     )
@@ -1636,10 +1927,14 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         trainer_pending_recovery=getattr(readiness, "restore_trainer_pending_recovery", False),
         regional_trainer_funding=getattr(readiness, "restore_regional_trainer_funding", False),
         remaining_acquisition_demand=getattr(
-            readiness, "restore_remaining_acquisition_demand", False,
+            readiness,
+            "restore_remaining_acquisition_demand",
+            False,
         ),
         level_evolution_acquisitions=getattr(
-            readiness, "restore_level_evolution_acquisitions", False,
+            readiness,
+            "restore_level_evolution_acquisitions",
+            False,
         ),
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
@@ -1831,6 +2126,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             emulator=controller,
             reader=reader,
         )
+        runtime = _registered_runtime(readiness, runtime)
         actions = CountingExecutor(
             FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
         )
@@ -1866,16 +2162,24 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
         if forward_plan is not None:
             from pokemon_red_completion.goal_manager import GoalKind
 
-            if (not isinstance(challenger, ExploringLivingDexGoalPolicy)
-                    or not challenger.training_eligible):
+            if (
+                not isinstance(challenger, ExploringLivingDexGoalPolicy)
+                or not challenger.training_eligible
+            ):
                 raise PairedRedBoundedPlayerRunError("forward_goal_requires_sampled_choice")
             available = observer().binding_set.opportunities
-            if any(op.kind not in {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM}
-                   for op in available if op.availability.value == "available"):
+            if any(
+                op.kind not in {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM}
+                for op in available
+                if op.availability.value == "available"
+            ):
                 raise PairedRedBoundedPlayerRunError("forward_goal_unsupported_option")
             collector = RedForwardGoalCollector(
-                forward_plan, cast(str, readiness.forward_story_objective),
-                runtime.adapter.observe, meter, lambda _event: None,
+                forward_plan,
+                cast(str, readiness.forward_story_objective),
+                runtime.adapter.observe,
+                meter,
+                lambda _event: None,
             )
             collector.prepare()  # Read-only qualification; no persistent episode/anchor.
         if meter.checkpoint() != CompositionBudgetCheckpoint(0, 0):
@@ -1913,19 +2217,25 @@ def _require_safe_checkpoint_boundary(
         from pokemon_red_completion.observation import MapId
         from pokemon_red_completion.referee import CompletionReferee
 
-        if (observation.raw.map_id == MapId.HALL_OF_FAME
-                and not observation.raw.battle_state
-                and CompletionReferee().inspect(observation.game_state).complete
-                and not runtime.emulator.pressed_buttons):
+        if (
+            observation.raw.map_id == MapId.HALL_OF_FAME
+            and not observation.raw.battle_state
+            and CompletionReferee().inspect(observation.game_state).complete
+            and not runtime.emulator.pressed_buttons
+        ):
             # A terminal-only scene snapshot, not a generally input-ready field
             # checkpoint. Stop before Hall-of-Fame processing clears current events.
             scene = runtime.reader.read_final_league_scene()
-            qualified_completion = (
-                scene.map_id == MapId.HALL_OF_FAME and scene.script_stage in {0, 1}
-            )
-    if (meter.checkpoint() != before or observation.raw.battle_state
-            or runtime.emulator.pressed_buttons
-            or not (observation.input_ready or qualified_completion)):
+            qualified_completion = scene.map_id == MapId.HALL_OF_FAME and scene.script_stage in {
+                0,
+                1,
+            }
+    if (
+        meter.checkpoint() != before
+        or observation.raw.battle_state
+        or runtime.emulator.pressed_buttons
+        or not (observation.input_ready or qualified_completion)
+    ):
         raise PairedRedBoundedPlayerRunError("terminal_checkpoint_unsafe_boundary")
 
 
@@ -1954,11 +2264,13 @@ def _run_arm(
             viewer.safely(
                 "start_arm",
                 learned=arm_id != BASELINE_ARM_ID,
-                model_sha256=(readiness.model_sha256 if forward_probe is None
-                              else forward_probe.model.sha256),
+                model_sha256=(
+                    readiness.model_sha256 if forward_probe is None else forward_probe.model.sha256
+                ),
                 train_examples=(
-                    forward_probe.model.settled_examples if forward_probe is not None else
-                    readiness.causal_record.model.settled_examples
+                    forward_probe.model.settled_examples
+                    if forward_probe is not None
+                    else readiness.causal_record.model.settled_examples
                     if readiness.causal_record is not None
                     else None
                 ),
@@ -1973,16 +2285,25 @@ def _run_arm(
         sink.write_episode_header(
             metadata={
                 **_context_scope(readiness),
-                **(_training_header(readiness, arm_id) if forward_probe is None else {
-                    "forward_probe": forward_probe.header(),
-                    "split": {"partition": "train", "root_lineage_id":
-                              readiness.continuation_root_lineage_id},
-                    "native_training_admission": False,
-                }),
+                **(
+                    _training_header(readiness, arm_id)
+                    if forward_probe is None
+                    else {
+                        "forward_probe": forward_probe.header(),
+                        "split": {
+                            "partition": "train",
+                            "root_lineage_id": readiness.continuation_root_lineage_id,
+                        },
+                        "native_training_admission": False,
+                    }
+                ),
                 **_forward_goal_header(readiness),
                 **_continuation_header(readiness),
-                **({"training_eligible": False, "tail_model_sha256": readiness.model_sha256}
-                   if forward_probe is not None else {}),
+                **(
+                    {"training_eligible": False, "tail_model_sha256": readiness.model_sha256}
+                    if forward_probe is not None
+                    else {}
+                ),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
                 "arm_id": arm_id,
@@ -1992,19 +2313,31 @@ def _run_arm(
                 "state_sha256": readiness.capture.state_sha256,
                 "envelope_sha256": readiness.capture.envelope_sha256,
                 "profile_sha256": readiness.profile.profile_sha256,
-                "model_sha256": (readiness.model_sha256 if forward_probe is None
-                                 else forward_probe.model.sha256),
+                "model_sha256": (
+                    readiness.model_sha256 if forward_probe is None else forward_probe.model.sha256
+                ),
                 "continue_after_progress": readiness.continue_after_progress,
                 "completion_dose": readiness.completion_dose,
+                **(
+                    {"registration_session_record_id": readiness.registration_session_record_id}
+                    if getattr(readiness, "registration_session_record_id", None) is not None
+                    else {}
+                ),
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
                 "trainer_funding": getattr(readiness, "trainer_funding", False),
                 "trainer_pending_recovery": getattr(readiness, "trainer_pending_recovery", False),
                 "regional_trainer_funding": getattr(readiness, "regional_trainer_funding", False),
-                **({"remaining_acquisition_demand": True}
-                   if readiness.remaining_acquisition_demand else {}),
-                **({"level_evolution_acquisitions": True}
-                   if readiness.level_evolution_acquisitions else {}),
+                **(
+                    {"remaining_acquisition_demand": True}
+                    if readiness.remaining_acquisition_demand
+                    else {}
+                ),
+                **(
+                    {"level_evolution_acquisitions": True}
+                    if readiness.level_evolution_acquisitions
+                    else {}
+                ),
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -2041,6 +2374,7 @@ def _run_arm(
                 emulator=frames,
                 reader=reader,
             )
+            runtime = _registered_runtime(readiness, runtime)
             snapshot_provider = PokemonRedObservationEncoder.from_state_reader(reader)
             frame_safe = FrameSafeExecutor(
                 frames,
@@ -2100,30 +2434,42 @@ def _run_arm(
                     raise PairedRedBoundedPlayerRunError("forward_probe_goal_already_complete")
                 assert readiness.causal_record is not None
                 authority = FirstChoiceForwardTrainingPolicy(
-                    forward_model=forward_probe.model, fitted_plan=forward_probe.fitted_plan,
-                    tail_model=readiness.causal_record.model, tail_seed=forward_probe.tail_seed,
+                    forward_model=forward_probe.model,
+                    fitted_plan=forward_probe.fitted_plan,
+                    tail_model=readiness.causal_record.model,
+                    tail_seed=forward_probe.tail_seed,
                     observe_context=lambda: red_forward_context(runtime.adapter.observe()),
                     meter=meter,
                     append_decision=lambda event: writer.append(
-                        "forward_probe", event, durable=True,
+                        "forward_probe",
+                        event,
+                        durable=True,
                     ),
                     training_probe=True,
                 )
             forward = None
             forward_plan = _forward_goal_plan(readiness)
             if forward_plan is not None:
+
                 def append_forward(event: dict[str, object]) -> None:
                     writer.append("forward_goal", event, durable=True)
 
                 forward = RedForwardGoalCollector(
-                    forward_plan, cast(str, readiness.forward_story_objective),
-                    runtime.adapter.observe, meter, append_forward,
+                    forward_plan,
+                    cast(str, readiness.forward_story_objective),
+                    runtime.adapter.observe,
+                    meter,
+                    append_forward,
                 )
                 forward.prepare()
             trajectory_class = (
-                ViewerGoalTrajectory if forward_probe is not None else
-                RedForwardTrainingTrajectory if forward is not None else (
-                    ViewerGoalTrajectory if readiness.training_plan is None
+                ViewerGoalTrajectory
+                if forward_probe is not None
+                else RedForwardTrainingTrajectory
+                if forward is not None
+                else (
+                    ViewerGoalTrajectory
+                    if readiness.training_plan is None
                     else RedPlayerTrainingTrajectory
                 )
             )
@@ -2131,13 +2477,17 @@ def _run_arm(
                 {}
                 if readiness.training_plan is None or forward_probe is not None
                 else {
-                    "observe_training": runtime.adapter.observe,
+                    "observe_training": lambda: _training_observation(runtime),
                     "training_meter": meter,
                     "training_plan_sha256": readiness.training_plan.plan_sha256,
                     "maximum_actions": limits.max_actions_per_decision,
                     "maximum_frames": limits.max_frames_per_decision,
                     "curriculum_contract": readiness.training_plan.document.get(
-                        "curriculum_contract"),
+                        "curriculum_contract"
+                    ),
+                    "registration_binding_sha256": readiness.training_plan.document.get(
+                        "registration_binding_sha256"
+                    ),
                 }
             )
             if forward is not None:
@@ -2162,8 +2512,11 @@ def _run_arm(
                 else "development",
                 environment_id=GAME_ID,
                 actor=arm_id,
-                policy_id=(_policy_id(readiness, arm_id) if forward_probe is None
-                           else forward_probe.policy_id),
+                policy_id=(
+                    _policy_id(readiness, arm_id)
+                    if forward_probe is None
+                    else forward_probe.policy_id
+                ),
                 collection_id=readiness.pair_id,
                 assignment_id=f"{readiness.pair_id}-{arm_id}",
                 ordering_assignment_id=readiness.pair_id,
@@ -2213,19 +2566,26 @@ def _run_arm(
                     retain_failure_state()
 
             try:
-                forward_callbacks: dict[str, Any] = {} if forward is None else {
-                    "stop_requested": lambda _observation: forward.outcome is not None,
-                    "validate_choice_menu": lambda observation: _require_forward_binding_scope(
-                        observation.binding_set, readiness.profile,
-                    ),
-                }
+                forward_callbacks: dict[str, Any] = (
+                    {}
+                    if forward is None
+                    else {
+                        "stop_requested": lambda _observation: forward.outcome is not None,
+                        "validate_choice_menu": lambda observation: _require_forward_binding_scope(
+                            observation.binding_set,
+                            readiness.profile,
+                        ),
+                    }
+                )
                 if forward_probe is not None:
                     first_choice_actor = cast(FirstChoiceForwardTrainingPolicy, authority)
 
                     def validate_probe_menu(observation: Any) -> None:
                         _require_forward_binding_scope(observation.binding_set, readiness.profile)
-                        if (first_choice_actor.forward_decisions == 0
-                                and len(observation.binding_set.bindings) < 2):
+                        if (
+                            first_choice_actor.forward_decisions == 0
+                            and len(observation.binding_set.bindings) < 2
+                        ):
                             raise PairedRedBoundedPlayerRunError("forward_probe_initial_singleton")
 
                     forward_callbacks["validate_choice_menu"] = validate_probe_menu
@@ -2236,12 +2596,20 @@ def _run_arm(
                     trajectory=trajectory,
                     budget_meter=meter,
                     completion_satisfied=(
-                        (lambda _observation: red_forward_goal_observed(
-                            runtime.adapter.observe(), forward_probe.objective_id,
-                        )) if forward_probe is not None else
-                        _completion_predicate(readiness) if forward is None else
-                        lambda _observation: forward.outcome is not None and
-                        forward.outcome.target is not None and forward.outcome.target[0] == 1.0
+                        (
+                            lambda _observation: red_forward_goal_observed(
+                                runtime.adapter.observe(),
+                                forward_probe.objective_id,
+                            )
+                        )
+                        if forward_probe is not None
+                        else _completion_predicate(readiness)
+                        if forward is None
+                        else lambda _observation: (
+                            forward.outcome is not None
+                            and forward.outcome.target is not None
+                            and forward.outcome.target[0] == 1.0
+                        )
                     ),
                     limits=limits,
                     failure_observer=record_component_failure,
@@ -2251,13 +2619,17 @@ def _run_arm(
                 if forward is not None:
                     forward.finish()
                 if forward_probe is not None:
-                    writer.append("forward_probe", {
-                        "kind": "forward_probe_terminal",
-                        "bounded_result": result.public_dict(),
-                        "native_training_admission": False,
-                        "model_fitted": False,
-                        "independent_evaluation": False,
-                    }, durable=True)
+                    writer.append(
+                        "forward_probe",
+                        {
+                            "kind": "forward_probe_terminal",
+                            "bounded_result": result.public_dict(),
+                            "native_training_admission": False,
+                            "model_fitted": False,
+                            "independent_evaluation": False,
+                        },
+                        durable=True,
+                    )
                 if recorder.recording_failures:
                     raise PairedRedBoundedPlayerRunError("trajectory_durability")
                 if readiness.save_terminal_checkpoints:
@@ -2272,12 +2644,37 @@ def _run_arm(
                         episode_id=episode_id,
                         profile_sha256=readiness.profile.profile_sha256,
                         rom_sha256=readiness.rom_sha256,
-                        model_sha256=(readiness.model_sha256 if forward_probe is None
-                                      else forward_probe.model.sha256),
+                        model_sha256=(
+                            readiness.model_sha256
+                            if forward_probe is None
+                            else forward_probe.model.sha256
+                        ),
                         source_commit=readiness.source_commit,
                         source_bundle_sha256=readiness.source_bundle_sha256,
                         context_origin=readiness.context_origin,
                     )
+                    if getattr(readiness, "registration_policy", None) is not None:
+                        from pokemon_red_completion.red_registration_session import (
+                            observe_registration,
+                            read_registration_state,
+                            validate_terminal_registration,
+                        )
+
+                        registration_state, seen = read_registration_state(emulator, runtime)
+                        terminal_checkpoint["registration_observation"] = observe_registration(
+                            registration_state,
+                            seen=seen,
+                            run_id=readiness.registration_policy.run_id,
+                            rom_sha256=readiness.rom_sha256,
+                            snapshot_sha256=cast(str, terminal_checkpoint["state_sha256"]),
+                            sequence=cast(int, readiness.registration_sequence),
+                        ).document()
+                        validate_terminal_registration(
+                            terminal_checkpoint,
+                            readiness.registration_policy,
+                            sequence=cast(int, readiness.registration_sequence),
+                            rom_sha256=readiness.rom_sha256,
+                        )
                     writer.append("checkpoint", terminal_checkpoint, durable=True)
             except BaseException as error:
                 if forward is not None:
@@ -2296,8 +2693,7 @@ def _run_arm(
                         retain_failure_state()
                     except BaseException as retention_error:
                         error.add_note(
-                            "failure state retention also failed: "
-                            + type(retention_error).__name__
+                            "failure state retention also failed: " + type(retention_error).__name__
                         )
                 raise
         starting = observer.starting_observation
@@ -2319,6 +2715,13 @@ def _run_arm(
         artifact = writer.complete()
         if terminal_checkpoint is not None:
             publish_red_player_checkpoint(readiness.private_root, terminal_checkpoint)
+            if getattr(readiness, "registration_policy", None) is not None:
+                from pokemon_red_completion.red_registration_session import registration_row
+                from pokemon_red_completion.registration_memory import RegistrationMemory
+
+                RegistrationMemory(readiness.registration_ledger).record(
+                    registration_row(terminal_checkpoint["registration_observation"]),
+                )
         if viewer is not None:
             viewer.safely("finished", result)
         return PairedBoundedPlayerArm(

@@ -90,9 +90,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 )
             ),
             "selected_source": selected.source_id if selected is not None else None,
-            "source_mode": "sampled" if selection is not None else (
-                "unique_binding" if selected is not None else "no_source"
-            ),
+            "source_mode": "sampled"
+            if selection is not None
+            else ("unique_binding" if selected is not None else "no_source"),
             "before": observed.public_dict(),
             "menu": menu.policy_dict() if menu is not None else None,
             "selection": selection,
@@ -134,6 +134,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     )
     return {
         "schema": "pokemon.red.regional-goal-step-result.v1",
+        **(
+            {"objective": ready.training_plan.document["objective"]}
+            if ready.training_plan.document.get("objective") is not None
+            else {}
+        ),
         "episode_id": episode_id,
         "model_sha256": ready.model_sha256,
         "manifest_sha256": result["trajectory_manifest_sha256"],

@@ -107,7 +107,11 @@ def regional_proposal_source_effort(
     ):
         raise ValueError("regional proposal source/profile differs")
     before = step.get("collection_before")
-    objective = before.get("required_specimens_sha256") if isinstance(before, dict) else None
+    objective = (
+        before.get("required_registrations_sha256", before.get("required_specimens_sha256"))
+        if isinstance(before, dict)
+        else None
+    )
     actions, frames = step.get("actions_executed"), step.get("frames_executed")
     if (
         not isinstance(objective, str)

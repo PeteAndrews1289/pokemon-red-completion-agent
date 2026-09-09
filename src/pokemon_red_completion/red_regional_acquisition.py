@@ -152,7 +152,7 @@ def regional_acquisition_menu(
         {candidate.source_id for candidate in candidates}
     ) != len(candidates):
         raise ValueError("regional learning needs two to eight distinct executable sources")
-    ledger = living_completion_checkpoint(observation)
+    ledger = observation.registered_checkpoint or living_completion_checkpoint(observation)
     rows = tuple(
         LivingDexOptionCandidate(
             binding_ref=f"regional-policy-row-{index}",
