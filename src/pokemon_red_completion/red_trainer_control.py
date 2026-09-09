@@ -1,13 +1,15 @@
 """Bounded deterministic party control for an already identified trainer.
 
 This composes existing observed move and switch execution. It neither chooses
-the story goal nor promotes the shadow battle learner. No recovery items,
-boosts, sacrifices, hidden RNG waits or roster-specific switch recipe.
+the story goal nor promotes the shadow battle learner. Default zero-item control
+is unchanged; an explicit positive budget enables qualified active healing.
+Ordinary attacks retain historical critical/miss risk. No boosts, sacrifices,
+hidden RNG waits or roster-specific switch recipe.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from .battle_actions import BattleAction, BattleControlRequest
 from .battle_recovery import switch_active_battler
@@ -25,6 +27,8 @@ from .battle_runtime import (
 from .observation import PokemonRedStateReader, RawGameState
 from .red_goal_context import RedGoalContextEmulator
 from .red_party import party_observation_from_raw
+from .red_trainer_damage import incoming_damage_bounds
+from .red_trainer_healing import bag_after_full_restores, use_active_full_restore
 from .red_trainer_party import trainer_entry_candidates, trainer_matchup_candidates
 
 
@@ -36,11 +40,19 @@ class _SwitchRequest(BattleControlRequest):
     pass
 
 
+@dataclass
+class _HealRequest(Exception):
+    incoming_bound: int
+    expected: RawGameState
+
+
 @dataclass(slots=True)
 class RedTrainerPartyController:
     reader: PokemonRedStateReader
     emulator: RedGoalContextEmulator
     maximum_switches: int = 6
+    maximum_full_restores: int = 0
+    heals_claimed: int = field(default=0, init=False)
     switches: list[int] = field(default_factory=list, init=False)
     moves_selected: int = field(default=0, init=False)
     _move_since_switch: bool = field(default=True, init=False)
@@ -49,6 +61,39 @@ class RedTrainerPartyController:
     def __post_init__(self) -> None:
         if type(self.maximum_switches) is not int or not 0 <= self.maximum_switches <= 6:
             raise ValueError("trainer control supports at most six switches")
+        if type(self.maximum_full_restores) is not int or not 0 <= self.maximum_full_restores <= 2:
+            raise ValueError("ordinary trainer healing supports at most two Full Restores")
+
+    def _healing_bound(self, raw: RawGameState) -> int | None:
+        """Optional item turn only; ordinary attacks retain their historical risk.
+
+        Do not replace an effective healthy lead with a worst-critical survival
+        policy. Restore an otherwise unfit active attacker before ordinary
+        matchup selection, but only if the item turn itself is qualified.
+        """
+        slot = raw.active_party_index
+        if (
+            not self.maximum_full_restores or self.heals_claimed >= self.maximum_full_restores
+            or type(slot) is not int or raw.party_hp is None or raw.party_max_hp is None
+            or raw.party_status is None or not 0 <= slot < len(raw.party_hp)
+            or not all(hp > 0 for hp in raw.party_hp) or raw.battle_state != 2
+            or raw.enemy_species_id is None or raw.enemy_level is None
+            or dict(raw.bag_items or ()).get(16, 0) <= 0
+            or (raw.party_hp[slot] * 2 >= raw.party_max_hp[slot] and not raw.party_status[slot])
+        ):
+            return None
+        restored = replace(raw, party_hp=tuple(
+            raw.party_max_hp[i] if i == slot else hp for i, hp in enumerate(raw.party_hp)
+        ), party_status=tuple(0 if i == slot else status
+                              for i, status in enumerate(raw.party_status)))
+        candidates = trainer_matchup_candidates(
+            party_observation_from_raw(restored), opponent_species=raw.enemy_species_id,
+            opponent_level=raw.enemy_level,
+        )
+        if not any(candidate.party_slot == slot + 1 for candidate in candidates):
+            return None  # Do not heal an immune/underleveled/non-offensive lead.
+        bound = incoming_damage_bounds(self.reader.read_trainer_damage_observation(raw))[slot]
+        return bound if raw.party_max_hp[slot] > bound else None
 
     def choose(self, raw: RawGameState, move_policy: MoveSlotPolicy) -> int:
         """Request a reserve only for a material matchup gain or an unfit lead."""
@@ -61,6 +106,9 @@ class RedTrainerPartyController:
             raise RedTrainerControlError("party control never recovers by sacrificing a member")
         if raw.enemy_species_id is None or raw.enemy_level is None:
             raise RedTrainerControlError("opponent mechanics are unavailable")
+        heal_bound = self._healing_bound(raw)
+        if heal_bound is not None:
+            raise _HealRequest(heal_bound, raw)
         candidates = trainer_matchup_candidates(
             party, opponent_species=raw.enemy_species_id, opponent_level=raw.enemy_level,
         )
@@ -120,7 +168,11 @@ class RedTrainerPartyController:
 
         def guard(raw: RawGameState) -> None:
             move_decision_guard(raw)
-            if raw.bag_items != before.bag_items:
+            expected_bag = (
+                bag_after_full_restores(before.bag_items or (), self.heals_claimed)
+                if self.maximum_full_restores else before.bag_items
+            )
+            if raw.bag_items != expected_bag:
                 raise RedTrainerControlError("trainer control cannot spend bag resources")
 
         def policy(raw: RawGameState) -> int:
@@ -136,6 +188,20 @@ class RedTrainerPartyController:
                 )
             except BattleRuntimeError as error:
                 request = error.__cause__
+                if isinstance(request, _HealRequest):
+                    current = reader.read()
+                    guard(current)
+                    if current != request.expected or (
+                        self._healing_bound(current) != request.incoming_bound
+                    ):
+                        raise RedTrainerControlError("healing qualification changed") from error
+                    self.heals_claimed += 1  # Claim before input; never refund a failed item.
+                    use_active_full_restore(
+                        executor, self.reader, self.emulator, expected=current,
+                        incoming_bound=request.incoming_bound,
+                    )
+                    guard(reader.read())
+                    continue
                 if not isinstance(request, _SwitchRequest):
                     raise
                 slot = request.action.party_slot

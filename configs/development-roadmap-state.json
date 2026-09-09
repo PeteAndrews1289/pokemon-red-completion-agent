@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-proactive-recovery-integration",
+  "as_of_session": "2026-09-09-ordinary-bounded-healing",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-model-led-league-resource-stop-2026-09-09.json"
+      "evidence": "docs/evidence/red-proactive-recovery-stop-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -522,6 +522,12 @@
       "result": "Budgeted proactive recovery integrated and tested; no new gameplay, fit or completion. Native82 unchanged.",
       "deviation": "No baseline or phase-exit change. One focused engineering slice connects existing survival control to story goals, with actual-spend accounting and explicit plan admission.",
       "next": "Qualify owned stock and real choices, then a bounded correlated Lance/Champion continuation."
+    },
+    {
+      "session": "2026-09-09-ordinary-bounded-healing",
+      "result": "Strict trial stopped before attack;30 specimens retained. Ordinary bounded healing qualified; Phase4 remains open.",
+      "deviation": "Same phase exit. New explicit controller mode keeps historical attack risk; strict profiles preserved. This is engineering, not a fit or completion.",
+      "next": "Lance-only trial, then inspect actual carried state before Champion."
     }
   ],
   "closed_milestones": [

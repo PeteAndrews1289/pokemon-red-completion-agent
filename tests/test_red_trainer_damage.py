@@ -161,6 +161,30 @@ def test_fixed_boost_and_ordinary_inventory_takes_worst_not_sum_or_first_move():
     assert incoming_damage_bounds(observation((97, 82, 34, 0))) == (86, 47)
 
 
+@pytest.mark.parametrize('move', [28, 39, 43, 45, 81, 103, 108, 134, 148])
+def test_pure_stat_drop_has_no_immediate_hp_damage_but_keeps_existing_residual(move):
+    current = observation((move, 0, 0, 0))
+    assert incoming_damage_bounds(current) == (0, 0)
+    assert incoming_damage_bounds(replace(current, raw=replace(
+        current.raw, party_status=(8, 16),
+    ))) == (13, 10)
+
+
+def test_leer_is_not_damage_immunity_and_live_lowered_defense_changes_next_turn():
+    current = observation((82, 43, 56, 63))
+    assert incoming_damage_bounds(current) == (128, 102)
+    lowered = replace(current, defenses=((20, 100, 100, 100), (200, 50, 200, 50)))
+    assert incoming_damage_bounds(lowered) == (332, 102)
+    # Damaging stat-down side effects still use damage arithmetic, not this exemption.
+    assert incoming_damage_bounds(observation((51, 0, 0, 0))) == (35, 18)
+
+
+@pytest.mark.parametrize('move', [28, 43, 45, 51, 94])
+def test_confusion_and_stat_drop_compound_turn_remains_unqualified(move):
+    with pytest.raises(TrainerDamageError, match='confusion with incoming stat reduction'):
+        incoming_damage_bounds(confused_observation((move, 63, 0, 0), player_confused=True))
+
+
 class Memory:
     def __init__(self):
         self.values = {

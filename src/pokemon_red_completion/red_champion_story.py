@@ -66,6 +66,7 @@ class RedCartridgeChampionSkill:
     actions: CountingExecutor
     world: StrategicScenarioRouteWorld | None
     maximum_full_restores: int = 0
+    recovery_controller: str = "critical-inclusive"
     objective_id: str = field(default="defeat_champion", init=False)
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
@@ -81,6 +82,7 @@ class RedCartridgeChampionSkill:
     _prepared: _Prepared | None = field(default=None, init=False)
     _claimed: bool = field(default=False, init=False)
     _prepared_budget: int | None = field(default=None, init=False)
+    _prepared_controller: str = field(default="critical-inclusive", init=False)
 
     def _plan(self) -> _Prepared:
         from .red_resource_goal_router import _walking_plan
@@ -88,6 +90,8 @@ class RedCartridgeChampionSkill:
         if self.world is None or battle_policy_override_active():
             raise RedChampionStoryError("cartridge world or fixed battle authority unavailable")
         before = self.runtime.adapter.observe()
+        if self.recovery_controller not in {"critical-inclusive", "ordinary-bounded-healing"}:
+            raise RedChampionStoryError("unsupported recovery controller")
         require_story_recovery_stock(before.raw, self.maximum_full_restores)
         reader = self.runtime.reader
         if (
@@ -153,6 +157,7 @@ class RedCartridgeChampionSkill:
             return ObjectiveSkillAvailability(False, "Final-story observation changed.")
         self._prepared = prepared
         self._prepared_budget = self.maximum_full_restores
+        self._prepared_controller = self.recovery_controller
         return ObjectiveSkillAvailability(
             True, "Qualified final scene with observed party controls."
         )
@@ -168,6 +173,7 @@ class RedCartridgeChampionSkill:
         if (
             runtime.adapter.observe() != prepared.before
             or self._prepared_budget != self.maximum_full_restores
+            or self._prepared_controller != self.recovery_controller
             or battle_policy_override_active()
             or reader.read_current_map_blocks() != prepared.blocks
             or runtime.emulator.pressed_buttons
@@ -241,11 +247,16 @@ class RedCartridgeChampionSkill:
             if self.maximum_full_restores else RedTrainerPartyController(reader, runtime.emulator)
         )
 
+        if self.maximum_full_restores and self.recovery_controller == "ordinary-bounded-healing":
+            controller = RedTrainerPartyController(
+                reader, runtime.emulator, maximum_full_restores=self.maximum_full_restores,
+            )
+
         def preserve(raw: RawGameState) -> None:
             guard._require_preserved_living_slots(raw)
             spent = (
                 controller.heals_claimed
-                if isinstance(controller, RedTrainerSurvivalController) else 0
+                if self.maximum_full_restores else 0
             )
             expected_bag = (
                 bag_after_full_restores(baseline.bag_items or (), spent)
@@ -310,7 +321,8 @@ class RedCartridgeChampionSkill:
                 battle_plan_id="cartridge-final-story",
                 switch_capabilities=frozenset({BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}),
                 switch_limit=controller.maximum_switches,
-                require_move_between_switches=not bool(self.maximum_full_restores),
+                require_move_between_switches=(not self.maximum_full_restores
+                    or self.recovery_controller == "ordinary-bounded-healing"),
             ),
             timing=BattleRuntimeTiming(max_runtime_pulses=1600),
             label="observed final trainer",
@@ -347,11 +359,14 @@ class RedCartridgeChampionSkill:
                         "concurrent_champion_and_hall_of_fame": True,
                         "bag_items_spent": (
                             controller.heals_claimed
-                            if isinstance(controller, RedTrainerSurvivalController) else 0
+                            if self.maximum_full_restores else 0
                         ),
                         "maximum_full_restores": self.maximum_full_restores,
                         "battle_controller": (
-                            "damage-aware" if self.maximum_full_restores else "ordinary"
+                            "ordinary-bounded-healing"
+                            if self.maximum_full_restores
+                            and self.recovery_controller == "ordinary-bounded-healing"
+                            else "damage-aware" if self.maximum_full_restores else "ordinary"
                         ),
                         "switches": len(controller.switches),
                         "moves_selected": controller.moves_selected,

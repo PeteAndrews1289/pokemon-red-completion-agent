@@ -65,16 +65,23 @@ def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
 
 
 @pytest.mark.parametrize("objective", ["defeat_lance", "defeat_champion"])
-@pytest.mark.parametrize("budget", [0, 1, 2])
-def test_story_recovery_profile_reaches_real_skill_without_changing_default(objective, budget):
+@pytest.mark.parametrize("budget,mode", [
+    (0, 'critical-inclusive'), (1, 'critical-inclusive'), (2, 'critical-inclusive'),
+    (1, 'ordinary-bounded-healing'), (2, 'ordinary-bounded-healing'),
+])
+def test_story_recovery_profile_reaches_real_skill_without_changing_default(
+    objective, budget, mode,
+):
     from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
     original = _supply_transition_profile()
     changed = bind_cartridge_trainer_story_profile(
-        original, objective_id=objective, maximum_full_restores=budget,
+        original, objective_id=objective, maximum_full_restores=budget, recovery_controller=mode,
     )
     expected = {"trainer_objective": objective}
     if budget:
         expected["maximum_full_restores"] = budget
+    if mode != 'critical-inclusive':
+        expected['recovery_controller'] = mode
     assert changed.providers[0].parameters == expected
     assert changed.providers[1:] == original.providers[1:]
     payload = build_red_goal_context_profile_payload(
@@ -89,6 +96,26 @@ def test_story_recovery_profile_reaches_real_skill_without_changing_default(obje
     runtime = SimpleNamespace(trainer_story_world=None, observer=object())
     provider = _build_provider(runtime, changed.providers[0], CountingExecutor(object()))
     assert provider.skills.get(objective).maximum_full_restores == budget
+    assert provider.skills.get(objective).recovery_controller == mode
+
+
+@pytest.mark.parametrize('budget,mode', [(0, 'ordinary-bounded-healing'), (1, 'automatic-risk')])
+def test_new_controller_requires_explicit_bounded_profile(budget, mode):
+    with pytest.raises(RedGoalContextProfileError):
+        bind_cartridge_trainer_story_profile(
+            _supply_transition_profile(), maximum_full_restores=budget, recovery_controller=mode,
+        )
+
+
+def test_changed_prepared_controller_refuses_without_input(fixture):
+    skill, reader, inputs, observe, _ = fixture
+    reader.raw = replace(reader.raw, bag_items=((16, 2),))
+    skill.maximum_full_restores = 1
+    assert skill.availability(observe().game_state).executable
+    skill.recovery_controller = 'ordinary-bounded-healing'
+    with pytest.raises(story.RedTrainerStoryError, match='before input'):
+        skill.execute()
+    assert not inputs
 
 
 @pytest.mark.parametrize("budget", [True, -1, 3, 1.0, "1"])
@@ -447,14 +474,18 @@ def test_stale_selected_story_refuses_before_input(fixture):
 
 
 @pytest.mark.parametrize("fault", [None, "route", "target", "bag", "event", "specimen"])
-@pytest.mark.parametrize("recovery_budget", [0, 1, 2])
+@pytest.mark.parametrize("recovery_budget,mode", [
+    (0, 'critical-inclusive'), (1, 'critical-inclusive'), (2, 'critical-inclusive'),
+    (1, 'ordinary-bounded-healing'), (2, 'ordinary-bounded-healing'),
+])
 def test_selected_story_composes_existing_operators_and_verifies_result(
-    fixture, monkeypatch, fault, recovery_budget,
+    fixture, monkeypatch, fault, recovery_budget, mode,
 ):
     skill, reader, inputs, observe, zone = fixture
     if recovery_budget:
         reader.raw = replace(reader.raw, bag_items=((16, 2), (4, 8)))
     skill.maximum_full_restores = recovery_budget
+    skill.recovery_controller = mode
     assert skill.availability(observe().game_state).executable
     stages = []
     def prepare(_runtime, actions, plan, *, current_quote):
@@ -473,10 +504,14 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert intent.objective_id == "defeat_lorelei"
         assert battle_runner_override.__self__.maximum_switches == 6
         controller = battle_runner_override.__self__
-        assert isinstance(controller, story.RedTrainerSurvivalController) is bool(recovery_budget)
+        assert isinstance(controller, story.RedTrainerSurvivalController) is (
+            bool(recovery_budget) and mode == 'critical-inclusive'
+        )
         assert _kwargs['maximum_full_restores'] == recovery_budget
         assert _kwargs['prospective_story_recovery'] is bool(recovery_budget)
-        assert intent.require_move_between_switches is (not bool(recovery_budget))
+        assert intent.require_move_between_switches is (
+            not recovery_budget or mode == 'ordinary-bounded-healing'
+        )
         validate_target()
         stages.append("battle")
         actions.execute(MacroAction(MacroActionKind.CONFIRM))

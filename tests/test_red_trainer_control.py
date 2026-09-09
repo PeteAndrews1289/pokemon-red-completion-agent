@@ -46,6 +46,102 @@ def test_good_active_matchup_uses_existing_move_policy():
     assert not subject.switches
 
 
+def test_ordinary_healing_keeps_historical_attack_risk():
+    subject = controller(raw())
+    subject.maximum_full_restores = 1
+    subject.reader.read_trainer_damage_observation = lambda _: pytest.fail(
+        'ordinary attacks do not claim a critical-survival proof',
+    )
+    assert subject.choose(raw(), lambda _: 1) == 1
+    assert subject.heals_claimed == 0
+
+
+@pytest.mark.parametrize('fault', [None, 'stock', 'exhausted', 'immune', 'lethal'])
+def test_only_useful_qualified_healing_preempts_matchup_choice(monkeypatch, fault):
+    current = raw(hp=(79, 190))
+    if fault == 'stock':
+        current = replace(current, bag_items=((53, 4),))
+    if fault == 'immune':
+        current = replace(current, enemy_species_id=34)
+    subject = controller(current)
+    subject.maximum_full_restores = 1
+    subject.heals_claimed = int(fault == 'exhausted')
+    subject.reader.read_trainer_damage_observation = lambda observed: observed
+    monkeypatch.setattr(control, 'incoming_damage_bounds',
+                        lambda _: (160 if fault == 'lethal' else 80, 100))
+    if fault is None:
+        with pytest.raises(control._HealRequest) as request:
+            subject.choose(current, lambda _: pytest.fail('needy member attacked'))
+        assert request.value.incoming_bound == 80
+    else:
+        with pytest.raises(control._SwitchRequest):
+            subject.choose(current, lambda _: pytest.fail('ordinary reserve bypassed'))
+    assert subject.moves_selected == 0
+
+
+@pytest.mark.parametrize('fault', [None, 'item_failure', 'unclaimed_extra', 'changed_bound'])
+def test_healing_claim_and_exact_bag_survive_ordinary_loop(monkeypatch, fault):
+    subject = controller(raw(hp=(79, 190)))
+    subject.maximum_full_restores = 1
+    subject.reader.read_trainer_damage_observation = lambda observed: observed
+    calls = []
+    def bound(_):
+        calls.append('bound')
+        return (90 if fault == 'changed_bound' and len(calls) > 1 else 80, 100)
+    monkeypatch.setattr(control, 'incoming_damage_bounds', bound)
+    actions = []
+    def battle(reader, _actions, policy, **kwargs):
+        kwargs['move_decision_guard'](reader.read())
+        try:
+            policy(reader.read())
+        except control._HealRequest as request:
+            raise BattleRuntimeError('healing boundary') from request
+        actions.append('attack')
+        return replace(reader.read(), battle_state=0)
+    def heal(_actions, reader, _emulator, **kwargs):
+        assert subject.heals_claimed == 1 and kwargs['incoming_bound'] == 80
+        actions.append('heal')
+        if fault == 'item_failure':
+            raise RuntimeError('item failed')
+        reader.state = replace(raw(hp=(120, 190)),
+                               bag_items=((16, 2 if fault == 'unclaimed_extra' else 3),))
+        return reader.state
+    monkeypatch.setattr(control, 'run_adaptive_trainer_battle', battle)
+    monkeypatch.setattr(control, 'use_active_full_restore', heal)
+    if fault:
+        with pytest.raises(RuntimeError):
+            run(subject, object())
+    else:
+        assert run(subject, object()).battle_state == 0
+    expected = [] if fault == 'changed_bound' else ['heal'] if fault else ['heal', 'attack']
+    assert actions == expected
+    assert subject.heals_claimed == int(fault != 'changed_bound')
+    assert subject.moves_selected == int(fault is None)
+    with pytest.raises(RedTrainerControlError, match='consumed'):
+        run(subject, object())
+
+
+def test_same_bound_different_active_cannot_inherit_pending_heal(monkeypatch):
+    subject = controller(raw(hp=(79, 90)))
+    subject.maximum_full_restores = 1
+    subject.reader.read_trainer_damage_observation = lambda observed: observed
+    monkeypatch.setattr(control, 'incoming_damage_bounds', lambda _: (80, 80))
+    calls = []
+    def battle(reader, _executor, policy, **kwargs):
+        try:
+            policy(reader.read())
+        except control._HealRequest as request:
+            reader.state = raw(active=1, hp=(79, 90))
+            assert subject._healing_bound(reader.state) == request.incoming_bound
+            raise BattleRuntimeError('target changed') from request
+        pytest.fail('expected a heal request')
+    monkeypatch.setattr(control, 'run_adaptive_trainer_battle', battle)
+    monkeypatch.setattr(control, 'use_active_full_restore', lambda *_a, **_k: calls.append('heal'))
+    with pytest.raises(RedTrainerControlError, match='qualification changed'):
+        run(subject, object())
+    assert not calls and subject.heals_claimed == 0 and subject.moves_selected == 0
+
+
 @pytest.mark.parametrize("state", [raw(enemy=34), raw(hp=(79, 190)), raw(pp=(0, 15))])
 def test_immunity_low_hp_or_exhaustion_requests_a_living_reserve(state):
     subject = controller(state)

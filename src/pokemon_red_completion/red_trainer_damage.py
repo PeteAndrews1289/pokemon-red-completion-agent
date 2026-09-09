@@ -93,12 +93,16 @@ def incoming_damage_bounds(
         ref = pokemon_red_move_ref(move_id)
         move = RED_BATTLE_CATALOG.resolve_move(ref)
         fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=raw.enemy_level)
+        if "debuff" in move.effect_flags and observation.player_confused:
+            # A faster stat drop (including a damaging side effect) can change
+            # self-hit damage and reapply badge boosts within this same turn.
+            raise TrainerDamageError("confusion with incoming stat reduction is not qualified")
         if fixed is not None or (
             move.power == 0 and move.category == "status"
-            and move.effect_flags == frozenset({"boost"})
+            and move.effect_flags in (frozenset({"boost"}), frozenset({"debuff"}))
         ):
-            # A pure stat boost causes no immediate HP loss. It is not a free
-            # future turn: the controller rereads live stats before each action.
+            # Pure stat changes cause no immediate HP loss (pinned effects.asm,
+            # StatModifierUp/DownEffect). Later turns reread live attack/defense.
             # Constant damage ignores STAB/critical/type arithmetic. Existing
             # poison/burn still consumes a residual tick on this same turn.
             for index, status in enumerate(raw.party_status):

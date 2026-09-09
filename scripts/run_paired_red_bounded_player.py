@@ -1216,6 +1216,7 @@ def _regional_profiles(
                           "affordable-field-restore",
                           "reserved-field-restore", "field-pp-restore"}
             or source in {"trainer-recovery:1", "trainer-recovery:2"}
+            or source in {"ordinary-trainer-recovery:1", "ordinary-trainer-recovery:2"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1226,7 +1227,8 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
-        if source in {"trainer-recovery:1", "trainer-recovery:2"}:
+        if source in {"trainer-recovery:1", "trainer-recovery:2",
+                      "ordinary-trainer-recovery:1", "ordinary-trainer-recovery:2"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
@@ -1238,6 +1240,8 @@ def _regional_profiles(
             profile = bind_cartridge_trainer_story_profile(
                 profile, objective_id=str(story.parameters["trainer_objective"]),
                 maximum_full_restores=int(str(source).split(":")[1]),
+                recovery_controller=("ordinary-bounded-healing"
+                    if str(source).startswith("ordinary-") else "critical-inclusive"),
             )
             result.append(profile)
             continue

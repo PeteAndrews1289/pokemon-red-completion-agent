@@ -446,3 +446,13 @@ deviation (or none), and next step. Refresh again within a long session after a 
 fit, gameplay result, capability or blocker changes the project position. No heartbeat or
 minute-by-minute rewrites are needed. Missing new learning is a fact to show, not a reason to
 move the goalposts.
+# September 9 — distinguish ordinary combat risk from strict item-turn proof
+
+The strict proactive trial stopped before attacking; its retained Leer failure
+and read-only worst-critical analysis do not justify another unchanged attempt.
+Keep strict recovery and ordinary zero-item profiles intact. Add a separately
+declared ordinary-controller healing mode, which retains historical attack risk
+and verifies the optional item turn. This is a controller contract change, not a
+weakened Phase4 exit or learned battle promotion. Next attempt stops at Lance;
+Champion qualification is separate. See the
+[audit and six-part mission](audits/red-ordinary-bounded-healing-2026-09-09.md).

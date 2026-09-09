@@ -238,10 +238,17 @@ def build_red_goal_context_profile_payload(
 def bind_cartridge_trainer_story_profile(
     profile: RedGoalContextProfile, *, objective_id: str = "defeat_lorelei",
     maximum_full_restores: int = 0,
+    recovery_controller: str = "critical-inclusive",
 ) -> RedGoalContextProfile:
     """Prospectively replace only the legacy story executor, preserving other goals."""
     if type(maximum_full_restores) is not int or not 0 <= maximum_full_restores <= 2:
         raise RedGoalContextProfileError("story recovery budget must be zero through two")
+    if recovery_controller not in {"critical-inclusive", "ordinary-bounded-healing"} or (
+        recovery_controller != "critical-inclusive" and not maximum_full_restores
+    ):
+        raise RedGoalContextProfileError(
+            "story recovery controller requires its explicit item budget",
+        )
     providers = {
         spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
         for spec in profile.providers
@@ -251,6 +258,8 @@ def bind_cartridge_trainer_story_profile(
         {"trainer_objective": objective_id,
          **({"maximum_full_restores": maximum_full_restores} if maximum_full_restores else {})},
     )
+    if recovery_controller != "critical-inclusive":
+        providers[GoalKind.ADVANCE_STORY][2]["recovery_controller"] = recovery_controller
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
         providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
@@ -516,7 +525,14 @@ def _parse_parameters(
             return row
         _exact_keys(row, {"trainer_objective"} | (
             {"maximum_full_restores"} if "maximum_full_restores" in row else set()
-        ))
+        ) | ({"recovery_controller"} if "recovery_controller" in row else set()))
+        if "recovery_controller" in row and (
+            row["recovery_controller"] != "ordinary-bounded-healing"
+            or "maximum_full_restores" not in row
+        ):
+            raise RedGoalContextProfileError(
+                "ordinary healing requires an explicit positive budget",
+            )
         if "maximum_full_restores" in row and (
             type(row["maximum_full_restores"]) is not int
             or row["maximum_full_restores"] not in (1, 2)

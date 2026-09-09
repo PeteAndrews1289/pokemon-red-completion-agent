@@ -176,16 +176,23 @@ def test_owned_entry_single_taps_and_cartridge_epilogue_reach_concurrent_referee
 
 @pytest.mark.parametrize("spent", [0, 1, 2])
 @pytest.mark.parametrize("fault", [None, "unclaimed_spend", "epilogue_spend"])
-def test_champion_budget_preserves_exact_bag_through_exit_and_epilogue(monkeypatch, spent, fault):
+@pytest.mark.parametrize('mode', ['critical-inclusive', 'ordinary-bounded-healing'])
+def test_champion_budget_preserves_exact_bag_through_exit_and_epilogue(
+    monkeypatch, spent, fault, mode,
+):
+    from pokemon_red_completion.red_trainer_control import RedTrainerPartyController
     skill, reader, inputs, scene = fixture(monkeypatch)
     reader.raw = replace(reader.raw, bag_items=((16, 3), (4, 8)))
     skill.maximum_full_restores = skill._prepared_budget = 2
+    skill.recovery_controller = skill._prepared_controller = mode
     skill._prepared = replace(skill._prepared, before=skill.runtime.adapter.observe())
     ordinary = module.RedTrainerPartyController
 
-    class Controller(module.RedTrainerSurvivalController):
+    controller_type = (module.RedTrainerSurvivalController if mode == 'critical-inclusive'
+                       else RedTrainerPartyController)
+    class Controller(controller_type):
         def run(self, actual_reader, actions, policy, **kwargs):
-            assert kwargs['intent'].require_move_between_switches is False
+            assert kwargs['intent'].require_move_between_switches is (mode != 'critical-inclusive')
             guard = kwargs['move_decision_guard']
             guard(reader.raw)
             self.heals_claimed = spent
@@ -196,7 +203,8 @@ def test_champion_budget_preserves_exact_bag_through_exit_and_epilogue(monkeypat
                 actual_reader, actions, policy, **kwargs,
             )
 
-    monkeypatch.setattr(module, 'RedTrainerSurvivalController', Controller)
+    monkeypatch.setattr(module, 'RedTrainerSurvivalController' if mode == 'critical-inclusive'
+                        else 'RedTrainerPartyController', Controller)
     execute = skill.actions.delegate.execute
     def epilogue(action):
         execute(action)

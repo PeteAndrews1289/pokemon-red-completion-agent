@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes.
+- Next decision: Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
-| Authority now | No new gameplay authority exercised yet. Optional damage-aware deterministic story recovery with a declared one/two-item allowance is integrated and tested; native82 remains the goal model and shadow4167759a remains unused. |
+| Authority now | Strict trial: one native82 field-heal choice and one forced story, stopped before attacking. New ordinary-bounded-healing mode retains historical attack/switch risk and qualifies optional item turns; not exercised yet. Shadow4167759a remains unused. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
-| Cheapest falsifier | Use existing survival/healing primitives in a varied multi-turn test showing early recovery avoids stranded offense; include impossible-resource refusal and actual story bag/accounting guards before any newly declared live continuation. |
+| Cheapest falsifier | Actual post-Agatha stock/menu then a two-decision Lance-only episode with one in-battle medicine; current party, resource cost and trainer completion decide success. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-proactive-recovery-integration** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
+**2026-09-09-ordinary-bounded-healing** · status **active** · evidence [development episode](docs/evidence/red-proactive-recovery-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Seven-return shadow fit preserved. Repaired successor:1learned heal+1forced story,345actions/31944frames/1item,all30specimens retained; stopped mid-Lance,not fitted. Initialization repair works live; resource bounds identify the next execution gap. |
-| Authority delta | No new gameplay authority exercised yet. Optional damage-aware deterministic story recovery with a declared one/two-item allowance is integrated and tested; native82 remains the goal model and shadow4167759a remains unused. |
-| Transfer result | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
-| Blocker | The repaired controller entered Lance battle, then depleted offensive reserves. Current zero-item critical-inclusive survival bounds qualify no action; a late fallback cannot fix this endpoint. No Lance completion or Champion attempt. |
-| Decision | Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes. |
-| Next session | Qualify actual stock and menu for one newly declared proactive-recovery Red continuation. Carry a successful Lance checkpoint into Champion only if the new objective and owned-item allowance qualify; no prior failure resumes. |
-| Next falsifier | Existing multi-turn and caller/accounting tests pass. Next falsifier is the actual safe post-Agatha stock/menu, followed by a bounded run using explicit one-item story recovery. |
-| Stop condition | Both prior Lance failures remain closed and may not resume. User authorized continued Phase4 development. Reassess after each bounded slice; a new live plan stops on first exception or unsupported resource envelope. No hidden risk mode, retries or per-boss fitting cohort. |
+| Learning output | Closed proactive trial:135actions/12204frames/one field item,30specimens retained,no battle attack or item,no fit. Native82 unchanged. Whole trace quarantined; a pure-debuff gap and overly restrictive critical envelope identified. |
+| Authority delta | Strict trial: one native82 field-heal choice and one forced story, stopped before attacking. New ordinary-bounded-healing mode retains historical attack/switch risk and qualifies optional item turns; not exercised yet. Shadow4167759a remains unused. |
+| Transfer result | Reusable pure-stat-drop and ordinary-healing seams tested across budgets, opponents and changed targets. Cartridge-derived remaining rosters checked without input. No independent advantage or cross-game transfer. |
+| Blocker | No Lance completion. Strict critical bounds reject healthy offense and do not guarantee progress with one medicine. Champion has known incoming-move coverage gaps and is not authorized by a Lance-only pilot. |
+| Decision | Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion. |
+| Next session | Test separately profiled ordinary control with bounded qualified healing in one new Lance-only continuation. Preserve historical attack risk and every failed trial; qualify a successful actual endpoint before planning Champion. |
+| Next falsifier | Actual post-Agatha stock/menu then a two-decision Lance-only episode with one in-battle medicine; current party, resource cost and trainer completion decide success. |
+| Stop condition | Each claimed attempt stops at its first exception; prior failed saves remain closed. Reorient after the next finite result. No automatic controller fallback, critical-risk mode, retry or new boss-fitting cohort. |
 
 ### Stop conditions
 

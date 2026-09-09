@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-proactive-recovery-integration**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-ordinary-bounded-healing**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-model-led-league-resource-stop-2026-09-09.json)
+[Current evidence](../docs/evidence/red-proactive-recovery-stop-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-ordinary-bounded-healing
+
+Strict trial stopped before attack;30 specimens retained. Ordinary bounded healing qualified; Phase4 remains open.
+
+**Deviation:** Same phase exit. New explicit controller mode keeps historical attack risk; strict profiles preserved. This is engineering, not a fit or completion.
+
+**Next:** Lance-only trial, then inspect actual carried state before Champion.
 
 ### 2026-09-09-proactive-recovery-integration
 

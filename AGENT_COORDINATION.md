@@ -1,4 +1,19 @@
-# Current — proactive recovery integrated; live qualification next
+# Current — ordinary control with bounded healing; Lance-only test next
+
+The strict trial stopped before attacking because Leer was unqualified. Its135
+actions/12,204frames and one field item are retained; all30specimens remain.
+No checkpoint, fit or Champion attempt. Pure-debuff arithmetic is repaired, but
+strict worst-critical control is too restrictive to promise progress with this
+party and stock. A separately profiled ordinary-plus-bounded-healing mode keeps
+historical attack/switch risk and qualifies only the optional healing turn.
+
+Tests and read-only review cover exact spending, mode binding, and stale healing
+targets. Next run is Lance-only from the safe post-Agatha checkpoint, never either
+failed Lance save. Champion needs actual endpoint qualification: known Mirror
+Move/Horn Drill and other mechanics remain. Native82, shadow fit and Phase4 exit
+are unchanged; neither test counts nor this repair are learned completion.
+
+# Historical — proactive recovery integrated; live qualification next
 
 The story and Champion skills now accept an explicit allowance of one or two
 owned Full Restores. Zero remains the unchanged ordinary controller. Damage-aware
