@@ -34,4 +34,40 @@ controller-input trial or resetting away its costs. No unattended restart of
 future unexplained failures is allowed. Only verified search exhaustion can
 continue under the existing explicit option.
 
-Status: implementation tests in progress; no new gameplay or training outcome yet.
+## Completed live result
+
+Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.
+
+The loop authenticated each actual endpoint and loaded the newly fitted model
+before the next decision. All four selected native goals; destination proposals
+were not independently fitted. Both failed searches and their costs were fitted.
+They were typed search exhaustion, not runtime defects. Native91 is unplayed.
+This proves bounded automation, not efficient collection or independent advantage.
+
+The saved endpoint is Mt Moon Pokemon Center:17 balls,26,913 currency,31
+specimens/29 living species and91 missing targets under the120-target contract.
+Read-only search inspection found only already-held Pidgey/Spearow in the two
+wild Route3 surveys; the observed Jigglypuff belonged to a trainer, not a wild
+encounter. Canonical-source filtering can still discard useful evolution
+precursors encountered outside their assigned acquisition source.
+
+## Reorientation and next session
+
+Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay.
+
+Keep the existing Phase5 checklist2/3; full current attainability coverage is
+unfinished. Batch completion is not Phase5 completion. Source ff3c36e9 is pushed.
+207 targeted tests passed, plus lint and targeted typing; not a full-suite run.
+16 additional roadmap/saved-dashboard tests passed at closeout. The regenerated
+infographic was visually inspected, and the running overview API reports native91
+and the actual saved collection, explicitly not live gameplay.
+Hosted CI34379995254 was still running at review; gameplay did not wait for CI.
+No additional Claude/Antigravity session or quota query was needed.
+
+[Measured evidence](../evidence/red-automatic-collection-learning-2026-09-09.json).
+Private resume artifacts use automatic-collection-20260909-a in the existing
+saved-endpoint session store. Never rerun that consumed batch. Next continuation
+must use its last authenticated save and native91, preserving all prior costs.
+
+Next-session recommendation: Astra High, Fast off. This is bounded collection
+integration; local candidate checks and fitting dominate the automated run.

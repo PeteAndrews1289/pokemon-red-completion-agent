@@ -1,21 +1,21 @@
-# Current — post-game training: native87
+# Current — automatic collection loop: native91
 
-Two real outcomes were fitted: successful model-selected recovery and failed
-model-selected capture. **85 → 87 examples**, all prior rows retained. Legitimate
-supply and a separate forced Spearow capture increased the collection to31
-specimens/29 living species. Forced goals and source proposals were not fitted.
-Native87 has not played; no independent advantage or learned combat is claimed.
+Four consecutive decisions and fits ran without operator retargeting:
+**87 → 91 examples**, all prior rows retained. The model chose search, resupply,
+search and recovery;1,561 actions/73,322 frames. Both searches safely exhausted
+their budgets. All31 specimens/29 living species remain; **no new capture**.
+Native91 is fitted but unplayed. The batch stopped at its four-step limit.
 
-Gameplay stopped at the first runtime failure. Route3 execution-time replanning
-failed after storage preparation; all31 specimens remain. A zero-input check
-finds a57-step walking route from the terminal, so investigate accumulated
-blocked cells and interruption handling, not a Cut workaround. Next: the
-smallest demonstrated repair, then a declared native87 collection continuation.
-No new architecture audit, boss replay or training-readiness gate.
+The generic route repair worked live. NPC replanning had treated resolvable
+trainer sight as impassable; now it shares the executor's explicit handler
+capability while preserving occupancy, durable blockers and unknown hazards.
+207 focused tests, lint and targeted typing passed; not a full-suite run.
 
-[Session, evidence and next steps](docs/work-sessions/2026-09-09-phase5-native-learning.md). Local collection-start checklist2/3;
-full current attainability/one-shot coverage remains unfinished.145 targeted
-tests passed. No new external-agent session or quota query was used.
+Next: expose useful missing specimens and evolution precursors across every
+cartridge-declared wild source, not only each species' canonical source. The
+automatic loop is demonstrated; efficient collection and independent advantage
+are not. Keep failures, costs and source proposals distinct from fitted labels.
+[Session and next steps](docs/work-sessions/2026-09-09-automatic-collection-loop.md). No new external-agent audit or quota usage.
 
 ## Prior package and Phase4 history
 

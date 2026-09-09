@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-phase5-native-learning",
+  "as_of_session": "2026-09-09-automatic-collection-loop",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-phase5-native-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-automatic-collection-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -558,6 +558,12 @@
       "result": "Native85to87 across2 real outcome fits. Legitimate supply, healing and Spearow capture retained31specimens/29species. Model-selected Route3 capture failed after storage preparation; failure fitted.145 targeted tests passed.",
       "deviation": "No phase exit changed. Local checklist2/3 measures a failed learned collection attempt, not successful competence. Full current attainability census unfinished; first runtime failure stopped input. No forced/source-proposal labels or independent advantage.",
       "next": "Diagnose execution-time blocked-cell/interruption history: the exact terminal has a fresh57-step walking plan. Qualify the smallest repair, then a declared native87 collection continuation; no replay or Cut workaround."
+    },
+    {
+      "session": "2026-09-09-automatic-collection-loop",
+      "result": "Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.",
+      "deviation": "Phase5 remains open and its local checklist stays2/3. User requested automatic collection; the existing runner was extended. Safe search exhaustion continuation was declared; no success or phase exit fabricated.",
+      "next": "Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay."
     }
   ],
   "closed_milestones": [

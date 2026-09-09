@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase5-native-learning**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-automatic-collection-loop**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 - [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 
-Current model: **87 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **91 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Capture and retain specimens; evolve, store and trade as needed.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
 
-[Current evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-automatic-collection-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-automatic-collection-loop
+
+Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.
+
+**Deviation:** Phase5 remains open and its local checklist stays2/3. User requested automatic collection; the existing runner was extended. Safe search exhaustion continuation was declared; no success or phase exit fabricated.
+
+**Next:** Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay.
 
 ### 2026-09-09-phase5-native-learning
 
