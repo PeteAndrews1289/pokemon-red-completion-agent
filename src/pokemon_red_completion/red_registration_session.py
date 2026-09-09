@@ -54,10 +54,16 @@ def validate_terminal_registration(
     rom_sha256: str,
 ) -> RegistrationObservation:
     """Join registration evidence to an already authenticated terminal checkpoint."""
-    from .red_player_checkpoint import REGISTERED_PLAYER_CHECKPOINT_SCHEMA
+    from .red_player_checkpoint import (
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
+        REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+    )
     from .registered_checkpoint import RegisteredCollectionCheckpoint
 
-    if terminal.get("schema") != REGISTERED_PLAYER_CHECKPOINT_SCHEMA:
+    if terminal.get("schema") not in {
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
+        REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+    }:
         raise ValueError("registered terminal schema differs")
     checkpoint = RegisteredCollectionCheckpoint.from_public(terminal["collection"])
     row = registration_row(terminal["registration_observation"])

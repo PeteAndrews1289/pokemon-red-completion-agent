@@ -2985,10 +2985,27 @@ def _try_catch_wild(
         raise SurgeChapterError(f"{label} capture received no target species.")
     if type(max_throws) is not int or max_throws <= 0:
         raise ValueError("max_throws must be a positive integer")
+    raw = reader.read()
+    if raw.battle_state == 2:
+        raise SurgeChapterError(f"{label} capture cannot target a trainer battle.")
+    if not raw.battle_state:
+        raise SurgeChapterError(f"{label} capture has no live encounter to exit.")
+    if raw.battle_state != 1:
+        raise SurgeChapterError(f"{label} capture requires a live wild encounter to exit.")
     starting_inventory = _ordinary_capture_ball_inventory(_bag(emulator))
     starting_balls = sum(starting_inventory)
     starting_specimens = _living_specimen_count(reader)
     if starting_balls <= 0:
+        _flee(emulator, executor, reader, raw)
+        post_escape = reader.read()
+        if post_escape.battle_state != 0:
+            raise SurgeChapterError(f"{label} flee did not end the encounter.")
+        ending_specimens = _living_specimen_count(reader)
+        if ending_specimens != starting_specimens:
+            raise SurgeChapterError(f"{label} no-balls exit changed the living collection.")
+        ending_balls = _ordinary_capture_ball_total(_bag(emulator))
+        if ending_balls != starting_balls:
+            raise SurgeChapterError(f"{label} no-balls exit changed ordinary-ball accounting.")
         raise SurgeChapterError(f"{label} capture has no ordinary capture balls remaining.")
     throws = min(starting_balls, max_throws)
     for throws_used in range(1, throws + 1):
@@ -3039,9 +3056,19 @@ def _try_catch_wild(
                 break
             _pulse(executor, MacroActionKind.CONFIRM)
     raw = reader.read()
+    if raw.battle_state == 2:
+        raise SurgeChapterError(f"{label} capture cannot flee a trainer battle.")
     if not raw.battle_state:
         raise SurgeChapterError(f"{label} capture retry lost its live encounter.")
+    if raw.battle_state != 1:
+        raise SurgeChapterError(f"{label} capture requires a live wild encounter to exit.")
     _flee(emulator, executor, reader, raw)
+    post_escape = reader.read()
+    if post_escape.battle_state != 0:
+        raise SurgeChapterError(f"{label} flee did not end the encounter.")
+    ending_specimens = _living_specimen_count(reader)
+    if ending_specimens != starting_specimens:
+        raise SurgeChapterError(f"{label} capture retry changed the living collection.")
     ending_balls = _ordinary_capture_ball_total(_bag(emulator))
     if ending_balls != starting_balls - throws:
         raise SurgeChapterError(f"{label} capture retry changed its ordinary-ball accounting.")

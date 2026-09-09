@@ -16,6 +16,7 @@ from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 
 RECOVERY_TERMINAL_SCHEMA = "pokemon.red.forced-failure-recovery-terminal.v1"
 RECOVERY_CHECKPOINT_SCHEMA = "pokemon.red.private-recovery-checkpoint.v1"
+REGISTERED_RECOVERY_CHECKPOINT_SCHEMA = "pokemon.red.private-registered-recovery-checkpoint.v1"
 
 
 class RedFailureRecoveryError(ValueError):
@@ -152,7 +153,11 @@ def require_recovery_checkpoint_origin(
 ) -> None:
     """Verify every recovery checkpoint against the unmodified failed prefix."""
     terminal = document.get("terminal_result")
-    recovery_checkpoint = document.get("schema") == RECOVERY_CHECKPOINT_SCHEMA
+    schema = document.get("schema")
+    recovery_checkpoint = schema in {
+        RECOVERY_CHECKPOINT_SCHEMA,
+        REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+    }
     recovery_terminal = (
         isinstance(terminal, Mapping) and terminal.get("schema") == RECOVERY_TERMINAL_SCHEMA
     )
@@ -161,6 +166,57 @@ def require_recovery_checkpoint_origin(
     if not recovery_checkpoint:
         return
     assert isinstance(terminal, Mapping)
+    collection = document.get("collection")
+    if not isinstance(collection, Mapping):
+        raise RedFailureRecoveryError("recovery checkpoint collection missing")
+    if schema == REGISTERED_RECOVERY_CHECKPOINT_SCHEMA:
+        from .registered_checkpoint import (
+            REGISTERED_CHECKPOINT_SCHEMA,
+            RegisteredCollectionCheckpoint,
+        )
+
+        if collection.get("schema") != REGISTERED_CHECKPOINT_SCHEMA:
+            raise RedFailureRecoveryError(
+                "registered recovery checkpoint requires registered collection"
+            )
+        try:
+            checkpoint = RegisteredCollectionCheckpoint.from_public(dict(collection))
+        except ValueError as error:
+            raise RedFailureRecoveryError(
+                "registered recovery checkpoint collection invalid"
+            ) from error
+        if "registration_observation" not in document:
+            raise RedFailureRecoveryError(
+                "registered recovery checkpoint requires registration observation"
+            )
+        from .red_collection import RED_COLLECTION_GAME_ID, red_species_ref
+        from .red_registration_session import registration_row
+
+        try:
+            row = registration_row(document["registration_observation"])
+        except ValueError as error:
+            raise RedFailureRecoveryError(
+                "registered recovery checkpoint observation invalid"
+            ) from error
+        if (
+            row.cartridge_sha256 != document.get("rom_sha256")
+            or row.game_id != RED_COLLECTION_GAME_ID
+            or row.adapter_id != "red-registration-v1"
+            or row.snapshot_sha256 != document.get("state_sha256")
+            or {red_species_ref(n) for n in row.owned} != set(checkpoint.local_species)
+            or {red_species_ref(n): count for n, count in row.physical_counts.items()}
+            != dict(checkpoint.specimen_counts)
+        ):
+            raise RedFailureRecoveryError("registered recovery observation differs from state")
+    elif schema == RECOVERY_CHECKPOINT_SCHEMA:
+        from .registered_checkpoint import REGISTERED_CHECKPOINT_SCHEMA
+
+        if collection.get("schema") == REGISTERED_CHECKPOINT_SCHEMA:
+            raise RedFailureRecoveryError(
+                "legacy recovery checkpoint cannot carry registered collection"
+            )
+        if "registration_observation" in document:
+            raise RedFailureRecoveryError("legacy recovery cannot declare registration observation")
     origin = terminal.get("failure_origin")
     if not isinstance(origin, Mapping):
         raise RedFailureRecoveryError("recovery origin missing")

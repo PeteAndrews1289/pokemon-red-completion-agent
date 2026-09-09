@@ -32,6 +32,7 @@ from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
 from pokemon_red_completion.observation import BattleMenuPhase, EventFlag, MapId
 from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
+from pokemon_red_completion.red_failed_regional_profile import committed_failed_source_profile
 from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
     authenticated_failure_state,
@@ -87,6 +88,10 @@ def prepare(args):
     failed_id = args.failed_episode
     proposal = None
     for _ in range(8):
+        chosen_profile = committed_failed_source_profile(ready.private_root, failed_id)
+        if chosen_profile is not None:
+            ready = replace(ready, profile=chosen_profile)
+            break
         proposal = ready.private_root.find_sealed_record(
             regional_proposal_record_id(failed_id),
             expected_kind=REGIONAL_PROPOSAL_KIND,
@@ -112,6 +117,17 @@ def prepare(args):
         rom_sha256=ready.rom_sha256,
     )
     return ready, state
+
+
+def require_registered_recovery_binding(ready):
+    """Reject incomplete ledger wiring before opening or controlling the game."""
+    if getattr(ready, "registration_policy", None) is None:
+        return
+    sequence = getattr(ready, "registration_sequence", None)
+    if (type(sequence) is not int or sequence < 1
+            or getattr(ready, "registration_ledger", None) is None
+            or not getattr(ready, "registration_session_record_id", None)):
+        raise ValueError("registered recovery requires its ledger, sequence and session binding")
 
 
 def observed_failed_trainer_switches(store, episode_id, depth=0):
@@ -223,6 +239,7 @@ def run(args):
     ):
         raise ValueError("healing budget requires the explicit active-trainer recovery mode")
     ready, failed = prepare(args)
+    require_registered_recovery_binding(ready)
     prior_risk_claims = (
         observed_failed_trainer_risk_claims(ready.private_root, args.failed_episode)
         if risk_budget else 0
@@ -276,6 +293,7 @@ def run(args):
             emulator=base.ReadOnlyController(emulator),
             reader=reader,
         )
+        runtime = base._registered_runtime(ready, runtime)
         before = runtime.adapter.observe()
         trainer_recovery = getattr(args, "finish_trainer_funding", False) or bool(scripted_trainer)
         trainer_target = None
@@ -375,6 +393,11 @@ def run(args):
                     "context_origin": "training",
                     "training_eligible": False,
                     "completion_dose": ready.completion_dose,
+                    **(
+                        {"registration_session_record_id": ready.registration_session_record_id}
+                        if getattr(ready, "registration_session_record_id", None) is not None
+                        else {}
+                    ),
                     "routed_recovery": ready.routed_recovery,
                     "trainer_funding": ready.trainer_funding,
                     "trainer_pending_recovery": ready.trainer_pending_recovery,
@@ -396,6 +419,7 @@ def run(args):
                 emulator=frames,
                 reader=reader,
             )
+            runtime = base._registered_runtime(ready, runtime)
             recorder = base.RecordingExecutor(
                 delegate=base.FrameSafeExecutor(
                     frames, base.DEFAULT_NEW_GAME_TIMING.controller_timing()
@@ -606,6 +630,28 @@ def run(args):
                     context_origin="training",
                     search_memory=memory,
                 )
+                if getattr(ready, "registration_policy", None) is not None:
+                    from pokemon_red_completion.red_registration_session import (
+                        observe_registration,
+                        read_registration_state,
+                        validate_terminal_registration,
+                    )
+
+                    registration_state, seen = read_registration_state(emulator, runtime)
+                    captured["registration_observation"] = observe_registration(
+                        registration_state,
+                        seen=seen,
+                        run_id=ready.registration_policy.run_id,
+                        rom_sha256=ready.rom_sha256,
+                        snapshot_sha256=str(captured["state_sha256"]),
+                        sequence=ready.registration_sequence,
+                    ).document()
+                    validate_terminal_registration(
+                        captured,
+                        ready.registration_policy,
+                        sequence=ready.registration_sequence,
+                        rom_sha256=ready.rom_sha256,
+                    )
                 writer.append("checkpoint", captured, durable=True)
             except BaseException:
                 writer.append(
@@ -627,6 +673,13 @@ def run(args):
             writer.complete()
             finalized = True
             checkpoint = publish_red_player_checkpoint(ready.private_root, captured)
+            if getattr(ready, "registration_policy", None) is not None:
+                from pokemon_red_completion.red_registration_session import registration_row
+                from pokemon_red_completion.registration_memory import RegistrationMemory
+
+                RegistrationMemory(ready.registration_ledger).record(
+                    registration_row(captured["registration_observation"]),
+                )
             base._write_exclusive(
                 args.out,
                 {
