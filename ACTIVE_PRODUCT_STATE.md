@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The story-learning checklist is3/3. Lesson04 is singleton-only, while the historical one-heal endpoint retains two alternatives. Tested role-separated first-choice control is ready for a separately declared bounded training probe.
+- Next decision: Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Learn whether recovery or immediate story play achieves a finite goal, counting the whole attempt; separate first-choice planning from the frozen continuation policy. |
-| Authority now | Existing model82 sampled seven genuine choices across four new Red lessons; three reached Bruno and one healed twice without reaching the goal. All four first-choice returns fitted separate shadow model32fd4144. No new live authority or independent advantage. |
+| Authority now | New forward model32 selected a real story action from2alternatives and completed Bruno in181actions/17293frames. It remains bounded training-probe authority; old82 owns declared prospective collection and any frozen tail. No full-player promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Four real forward returns cover one correlated historical training root and two distinct selected inputs. A changed-resource context and explicit first-actor/tail test remain; no independent or cross-game transfer. |
-| Cheapest falsifier | Check a genuine changed-resource Red context and whether the new first-choice learner can be tested without recursively replacing the frozen model82 continuation. |
+| Transfer test | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
+| Cheapest falsifier | Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-red-forward-goal-pilot** · status **active** · evidence [model fit](docs/evidence/red-forward-goal-pilot-2026-09-09.json)
+**2026-09-09-agatha-forward-stop** · status **active** · evidence [qualification](docs/evidence/red-agatha-forward-batch-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Four settled Red forward returns, three goal successes and one two-heal goal failure, zero censored; one root/two selected inputs. Separate model32fd4144 fitted. Native-story checklist3/3, not whole-Phase4 completion. |
-| Authority delta | Seven real model82 choices and four prospective forward returns fitted in a separate shadow learner. Model82 and its82-row corpus unchanged; no new live promotion or Phase4 exit. |
-| Transfer result | Four real forward returns cover one correlated historical training root and two distinct selected inputs. A changed-resource context and explicit first-actor/tail test remain; no independent or cross-game transfer. |
-| Blocker | Only four fitted returns from one correlated root; no own live forward-head decision yet. First-actor/frozen-tail integration is now tested. The separate current Champion failure remains at Dragon Rage. |
-| Decision | The story-learning checklist is3/3. Lesson04 is singleton-only, while the historical one-heal endpoint retains two alternatives. Tested role-separated first-choice control is ready for a separately declared bounded training probe. |
-| Next session | Run one prospectively declared training-only first-choice probe after the tested actor/tail integration; retain all outcomes and do not call it calibrated promotion or independent advantage. |
-| Next falsifier | Check a genuine changed-resource Red context and whether the new first-choice learner can be tested without recursively replacing the frozen model82 continuation. |
-| Stop condition | Reorient on unsupported or singleton-only context, first execution exception, contradictory actor/tail identity, or no bounded useful test. Do not start a broad RL framework or boss-repair cascade; hard session stop10:42:58UTC. |
+| Learning output | Three genuine Agatha training choices:two heal-then-forced-story completions and one immediate-story controller stop.848actions/78890frames/2items. NoAgatha fit; fourth cancelled unclaimed. NewBruno head's prior actual181action completion remains valid. |
+| Authority delta | Unchanged since model32's actual Bruno first-choice probe. Agatha used old82's declared stochastic collector, not a relabelled Bruno model; no fit or promotion. |
+| Transfer result | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
+| Blocker | Agatha03 stopped at move101's unsupported entry screen, all6alive. Its known STOPPED0 return is separately auditable but remains quarantined; generic fitting loaders still require complete artifacts. |
+| Decision | Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion. |
+| Next session | Fit one separate Agatha shadow model from all three authenticated returns under the explicit frozen-controller contract, including the known STOPPED zero. Keep cancelled04 outside outcomes, preserve old models and generic complete-only admission; no gameplay or promotion. |
+| Next falsifier | Authenticate all three attempted Agatha records and their complete prefixes offline. Reject missing/altered terminal evidence; keep cancelled trial04 outside the outcome denominator. |
+| Stop condition | Batch closed on its first mechanical exception:03 never retries;04 cancelled unclaimed. No success-only fit, safe checkpoint from failure, boss-repair cascade, sealed/Crystal/full replay. Reorient within60minutes; overall hard stop10:42:58UTC. |
 
 ### Stop conditions
 

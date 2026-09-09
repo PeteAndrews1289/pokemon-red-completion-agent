@@ -30,7 +30,7 @@ from pokemon_red_completion.living_dex_player_exploration import (
     ExploringLivingDexGoalPolicy,
     exploration_policy_id,
 )
-from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+from pokemon_red_completion.private_artifacts import PrivateArtifactRoot, PrivateEpisodeReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_living_dex_causal_adapter import (
     red_living_dex_outcome_from_observations,
@@ -76,6 +76,23 @@ def load_red_player_training_episode(
     is opened here. Hashes establish recorded provenance, not ground-truth truth
     of an arbitrary external recording; only the trusted executor writes these.
     """
+    _require_player_training_origin(store, episode_id, plan, behavior_model)
+    return _audit_red_player_training_reader(
+        store.open_episode(episode_id),
+        episode_id=episode_id,
+        expected_manifest_sha256=expected_manifest_sha256,
+        plan=plan,
+        behavior_model=behavior_model,
+    )
+
+
+def _require_player_training_origin(
+    store: PrivateArtifactRoot,
+    episode_id: str,
+    plan: RedPlayerTrainingPlan,
+    behavior_model: LivingDexOptionValueModel,
+) -> None:
+    """Keep declaration and parent checks before interpreting outcome streams."""
     legacy_restoration = (
         plan.document["behavior_policy_id"] == LEGACY_RECOVERY_EXPLORATION_POLICY_ID
     )
@@ -95,7 +112,24 @@ def load_red_player_training_episode(
     if sealed is None or sealed.read() != dict(plan.document):
         raise ValueError("prospective player training declaration is missing")
     _require_continuation_origin(store, plan)
-    reader = store.open_episode(episode_id)
+
+
+def _audit_red_player_training_reader(
+    reader: PrivateEpisodeReader,
+    *,
+    episode_id: str,
+    expected_manifest_sha256: str,
+    plan: RedPlayerTrainingPlan,
+    behavior_model: LivingDexOptionValueModel,
+) -> RedPlayerTrainingDataset:
+    """Shared recorded-choice checks; caller must authenticate origin and status.
+
+    This private helper grants no fitting authority. The public loader requires
+    a complete episode; failed-reader callers may expose diagnostics only.
+    """
+    legacy_restoration = (
+        plan.document["behavior_policy_id"] == LEGACY_RECOVERY_EXPLORATION_POLICY_ID
+    )
     if reader.manifest_sha256 != expected_manifest_sha256:
         raise ValueError("player training episode identity differs")
     metadata = cast(Mapping[str, object], reader.read_header()["metadata"])

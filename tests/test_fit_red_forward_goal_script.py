@@ -11,6 +11,7 @@ from test_goal_resource_quote import _supply_model
 from test_red_player_training import _plan
 
 from pokemon_red_completion.provenance import SourceIdentity
+from pokemon_red_completion.red_forward_controller_batch import RedForwardControllerBatch
 from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts/fit_red_forward_goal.py"
@@ -117,3 +118,77 @@ def test_cli_help_needs_no_model_private_data_or_emulator():
     with pytest.raises(SystemExit) as stopped:
         main(["--help"])
     assert stopped.value.code == 0
+
+
+def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(monkeypatch):
+    main, args, published, native_loads, _ = harness(monkeypatch)
+    rows = tuple(examples()[:2])
+    requests = tuple(
+        {
+            "episode_id": f"goal-{i}",
+            "manifest_sha256": "a" * 64,
+            "status": "complete" if i == 0 else "failed_stopped",
+        }
+        for i in range(2)
+    )
+    batch = RedForwardControllerBatch(
+        rows, ("cancelled",), ("goal-0", "goal-1"), "b" * 64, 1, requests
+    )
+    calls = []
+
+    def load_batch(store, **kwargs):
+        calls.append(kwargs)
+        return batch
+
+    monkeypatch.setitem(main.__globals__, "load_red_forward_controller_batch", load_batch)
+    args = args[:-4] + [
+        "--controller-batch-record",
+        "frozen-batch",
+        "--expected-controller-batch-sha256",
+        "b" * 64,
+    ]
+    assert main(args) == 0
+    assert len(calls) == 1 and not native_loads
+    identity, kind, doc = published[0]
+    assert identity.startswith("red-controller-fit-")
+    assert kind == "red_forward_controller_shadow_fit"
+    assert doc["schema"] == "pokemon.red.forward-controller-shadow-fit.v1"
+    assert doc["failed_controller_stops"] == 1
+    assert doc["cancelled_episode_ids"] == ["cancelled"]
+    assert doc["model"]["settled_examples"] == 2
+    assert doc["player_model_changed"] is False and doc["in_game_loss_inferred"] is False
+    assert doc["return_contract"] == "finite-goal-under-frozen-controller.v1"
+
+
+def test_controller_batch_declaration_failure_cannot_fall_back_to_success_only(monkeypatch):
+    main, args, published, native_loads, _ = harness(monkeypatch)
+
+    def reject(*args, **kwargs):
+        raise ValueError("declared failed attempt omitted")
+
+    monkeypatch.setitem(main.__globals__, "load_red_forward_controller_batch", reject)
+    with pytest.raises(ValueError, match="omitted"):
+        main(
+            args[:-4]
+            + [
+                "--controller-batch-record",
+                "frozen-batch",
+                "--expected-controller-batch-sha256",
+                "b" * 64,
+            ]
+        )
+    assert not published and not native_loads
+
+
+@pytest.mark.parametrize(
+    "flags",
+    [
+        ["--controller-batch-record", "frozen"],
+        ["--episode", "goal-1:" + "a" * 64, "--expected-controller-batch-sha256", "b" * 64],
+    ],
+)
+def test_controller_batch_requires_its_matching_pin_before_reading_models(monkeypatch, flags):
+    main, args, published, _, model_reads = harness(monkeypatch)
+    with pytest.raises(ValueError, match="pinned declaration"):
+        main(args[:-4] + flags)
+    assert not published and not model_reads

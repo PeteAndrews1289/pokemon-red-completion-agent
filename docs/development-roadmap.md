@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-red-forward-goal-pilot**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-forward-stop**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,22 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-agatha-forward-stop
+
+Agatha:3attempted/2reached/1controllerstop,848actions/78890frames/2items. Three genuine first choices and two forced story continuations. Fourth cancelled unclaimed; noAgathafit. Bruno learnercontrol remains real;Phase4 open.
+
+**Deviation:** Firstmechanicalexception stoppedcollection. The retained zero is a frozen-controller failure, not an in-game loss. Separate offline quarantine diagnostic shares sampler/goal/prefix checks without relaxing fitting admission.
+
+**Next:** Close the Agatha batch without retry or a success-only fit. Audit its known controller-stopped return through the separate non-fitting reader, then decide whether explicit forward-only failure admission supports a useful frozen-controller shadow fit; do not repair bosses or relabel Bruno.
+
+### 2026-09-09-forward-first-choice-control
+
+New four-example forward learner chose story over healing from2genuine alternatives and completed Bruno:181actions/17293frames,0fielditems,all30specimens retained. No tail query or new fit. Story checklist3/3;Phase4 open.
+
+**Deviation:** The newly declared training probe reused a changed-resource historical endpoint in the same already-observed lineage. Not independent generalization or measured advantage; old82 was shadowed only. First-actor and checkpoint identities independently audited.
+
+**Next:** Collect prospective Agatha forward returns from the actual learner-controlled Bruno successor if it has genuine story/recovery alternatives. Keep goal contracts separate; do not relabel the Bruno head or resume a boss-repair cascade.
 
 ### 2026-09-09-red-forward-goal-pilot
 

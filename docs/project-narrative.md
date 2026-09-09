@@ -1,4 +1,44 @@
-# Current — learning the difference between successful actions and useful progress
+# Current — Agatha batch closed; all-attempt controller-return fit next
+
+The new Bruno learner's actual first-choice victory remains verified:181actions,
+17,293frames, no field item, all30specimens. Phase4 is still open.
+
+Agatha collection then attempted3of4declared training resets:two sampled heals
+followed by forced-story completions, and one sampled-story controller stop.
+Total848actions/78,890frames/2items;three genuine choices,two forced continuations.
+Trial03 is retained failed,all6alive,move101 entry-screen guard. Trial04 is
+cancelled unclaimed;no replacement,replay,game-loss claim or success-only fit.
+
+Offline shared-reader validation authenticates the stopped return without making
+the failed save resumable. The separate controller-return fitting path requires
+the entire pinned attempted batch, rejects unknown-to-zero labels and an existing
+artifact hidden as cancelled, and writes a distinct unqualified-shadow artifact.
+Generic native/forward admission stays complete-only; Bruno32/native82 unchanged.
+Next:one three-return Agatha shadow fit,ridge1/cap10,no gameplay or promotion.
+This estimates return under the frozen controller,not ideal play or independence.
+
+Published669cefa3 passed9,645 full local tests and CI34331515711. Later source
+has separate focused validation. Internal review caught and closed diagnostic
+counter naming and cancelled-artifact omission issues. Codex owns publication;
+external subscription quotas remain unavailable. Overall stop10:42:58UTC.
+See [Agatha audit](audits/red-agatha-forward-batch-stop-2026-09-09.md) and [active state](../ACTIVE_PRODUCT_STATE.md).
+
+# Historical — the learner stops recommending and starts choosing
+
+After fitting four real forward returns, we gave the new head one bounded first
+choice. At a historical checkpoint with changed resources, the old model's shadow
+recommendation was another heal. The new head chose story progression and its
+deterministic skill completed Bruno: 181 actions, 17,293 frames, no healing item,
+and all 30 specimens retained. The saved trace proves which model chose.
+
+That is a concrete training-to-control milestone, not proof of full-game ability.
+The checkpoint belongs to an already observed training lineage; we did not run an
+independent old-policy comparison. No reliable win-rate or cost advantage follows.
+Next we test data collection on the genuinely different Agatha objective, keeping
+its return contract separate rather than pretending the Bruno model knows it.
+See [the control audit](audits/red-forward-first-choice-probe-2026-09-09.md).
+
+# Historical — learning the difference between successful actions and useful progress
 
 The first real forward-goal pilot gave us the contrast we needed. Four correlated
 lessons began before Bruno. The existing model chose heal/story twice, story once,

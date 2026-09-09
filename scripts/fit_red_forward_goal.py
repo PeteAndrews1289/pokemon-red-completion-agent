@@ -29,6 +29,10 @@ from pokemon_red_completion.provenance import (  # noqa: E402
     detect_source_identity,
     require_clean_source,
 )
+from pokemon_red_completion.red_forward_controller_batch import (  # noqa: E402
+    CONTROLLER_RETURN_CONTRACT,
+    load_red_forward_controller_batch,
+)
 from pokemon_red_completion.red_forward_dataset import load_red_forward_episode  # noqa: E402
 from pokemon_red_completion.red_player_model import load_player_goal_model_record  # noqa: E402
 from pokemon_red_completion.red_player_training_plan import RedPlayerTrainingPlan  # noqa: E402
@@ -39,15 +43,19 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--behavior-model-record", type=Path, required=True)
     parser.add_argument("--expected-behavior-model-sha256", required=True)
-    parser.add_argument(
+    batch_input = parser.add_mutually_exclusive_group(required=True)
+    batch_input.add_argument(
         "--episode",
         action="append",
-        required=True,
         help="episode-id:expected-manifest-sha256; the complete declared batch",
     )
+    batch_input.add_argument("--controller-batch-record")
+    parser.add_argument("--expected-controller-batch-sha256")
     parser.add_argument("--ridge", type=float, default=1.0)
     parser.add_argument("--importance-cap", type=float, default=10.0)
     args = parser.parse_args(argv)
+    if bool(args.controller_batch_record) != bool(args.expected_controller_batch_sha256):
+        raise ValueError("controller-return batch requires exactly one pinned declaration")
     source = detect_source_identity(ROOT, include_untracked=True)
     require_clean_source(source)
     model = load_player_goal_model_record(
@@ -58,7 +66,17 @@ def main(argv: list[str] | None = None) -> int:
         args.private_artifact_root, repository_root=ROOT, allow_same_device=True
     )
     requests, outcomes, seen = [], [], set()
-    for request in args.episode:
+    controller_batch = None
+    if args.controller_batch_record:
+        controller_batch = load_red_forward_controller_batch(
+            store,
+            batch_record_id=args.controller_batch_record,
+            expected_batch_record_sha256=args.expected_controller_batch_sha256,
+            behavior_model=model.model,
+        )
+        outcomes.extend(controller_batch.outcomes)
+        requests.extend(controller_batch.episode_requests)
+    for request in args.episode or ():
         episode_id, digest = request.split(":", 1)
         if episode_id in seen:
             raise ValueError("forward-goal batch repeats an episode")
@@ -113,9 +131,23 @@ def main(argv: list[str] | None = None) -> int:
         "player_model_changed": False,
         "independent_evaluation": False,
     }
+    prefix, kind = "red-forward-fit", "red_forward_goal_shadow_fit"
+    if controller_batch is not None:
+        # Deliberately separate artifact/schema: the existing live-probe loader
+        # cannot silently promote this failed-controller experimental fit.
+        document.update(
+            schema="pokemon.red.forward-controller-shadow-fit.v1",
+            return_contract=CONTROLLER_RETURN_CONTRACT,
+            batch_record_id=args.controller_batch_record,
+            batch_record_sha256=controller_batch.batch_record_sha256,
+            cancelled_episode_ids=list(controller_batch.cancelled_episode_ids),
+            failed_controller_stops=controller_batch.failed_stops,
+            in_game_loss_inferred=False,
+        )
+        prefix, kind = "red-controller-fit", "red_forward_controller_shadow_fit"
     record = store.publish_sealed_record(
-        f"red-forward-fit-{canonical_sha256(document)}",
-        kind="red_forward_goal_shadow_fit",
+        f"{prefix}-{canonical_sha256(document)}",
+        kind=kind,
         record=document,
     )
     print(

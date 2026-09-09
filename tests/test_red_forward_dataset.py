@@ -33,12 +33,21 @@ from pokemon_red_completion.trajectory import SparseEvent
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 
-def episode(tmp_path, *, terminal="success", singleton=True, execution_flags=None):
+def episode(
+    tmp_path,
+    *,
+    terminal="success",
+    singleton=True,
+    execution_flags=None,
+    episode_id="goal-episode-1",
+):
     store, _ = _store_and_registry(tmp_path)
     h = harness(seed=1)
+    h.trajectory.episode_id = h.executor.episode_id = episode_id
     training = RedPlayerTrainingPlan(
         {
             **_plan(h.policy.model).document,
+            "episode_id": episode_id,
             "seed": 1,
             "decision_limit": 2,
         }
@@ -68,8 +77,8 @@ def episode(tmp_path, *, terminal="success", singleton=True, execution_flags=Non
         kind="red_player_training_plan",
         record=dict(training.document),
     )
-    writer = store.begin_episode("goal-episode-1")
-    sink = EpisodeTrajectorySink(writer, "goal-episode-1", "pokemon.red", durable_writes=True)
+    writer = store.begin_episode(episode_id)
+    sink = EpisodeTrajectorySink(writer, episode_id, "pokemon.red", durable_writes=True)
     metadata = _Reader([], []).read_header()["metadata"]
     metadata.update(
         {
@@ -160,8 +169,8 @@ def episode(tmp_path, *, terminal="success", singleton=True, execution_flags=Non
     collector.finish()
     sink.record_event(
         SparseEvent(
-            "goal-episode-1:terminal",
-            "goal-episode-1",
+            f"{episode_id}:terminal",
+            episode_id,
             h.executor.next_step_index,
             "terminal",
             {"status": "complete"},
@@ -503,13 +512,15 @@ def test_later_verified_native_row_cannot_substitute_for_first_choice(tmp_path, 
     )
     verified_calls = []
 
+    original_reader_audit = dataset_module._audit_red_player_training_reader
+
     def verified_then_exclude(*args, **kwargs):
-        verified = load_red_player_training_episode(*args, **kwargs)
+        verified = original_reader_audit(*args, **kwargs)
         assert len(verified.examples) == 2
         verified_calls.append(True)
         return replace(verified, examples=verified.examples[1:], excluded_nonexploratory=1)
 
-    monkeypatch.setattr(dataset_module, "load_red_player_training_episode", verified_then_exclude)
+    monkeypatch.setattr(dataset_module, "_audit_red_player_training_reader", verified_then_exclude)
     with pytest.raises(ValueError, match="anchor differs"):
         load(item, store=store)
     assert verified_calls == [True]

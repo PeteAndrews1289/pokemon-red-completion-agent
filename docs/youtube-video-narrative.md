@@ -1,4 +1,45 @@
-# Current — the AI can do everything right locally and still miss the goal
+# Current — Agatha batch closed; all-attempt controller-return fit next
+
+The new Bruno learner's actual first-choice victory remains verified:181actions,
+17,293frames, no field item, all30specimens. Phase4 is still open.
+
+Agatha collection then attempted3of4declared training resets:two sampled heals
+followed by forced-story completions, and one sampled-story controller stop.
+Total848actions/78,890frames/2items;three genuine choices,two forced continuations.
+Trial03 is retained failed,all6alive,move101 entry-screen guard. Trial04 is
+cancelled unclaimed;no replacement,replay,game-loss claim or success-only fit.
+
+Offline shared-reader validation authenticates the stopped return without making
+the failed save resumable. The separate controller-return fitting path requires
+the entire pinned attempted batch, rejects unknown-to-zero labels and an existing
+artifact hidden as cancelled, and writes a distinct unqualified-shadow artifact.
+Generic native/forward admission stays complete-only; Bruno32/native82 unchanged.
+Next:one three-return Agatha shadow fit,ridge1/cap10,no gameplay or promotion.
+This estimates return under the frozen controller,not ideal play or independence.
+
+Published669cefa3 passed9,645 full local tests and CI34331515711. Later source
+has separate focused validation. Internal review caught and closed diagnostic
+counter naming and cancelled-artifact omission issues. Codex owns publication;
+external subscription quotas remain unavailable. Overall stop10:42:58UTC.
+See [Agatha audit](audits/red-agatha-forward-batch-stop-2026-09-09.md) and [active state](../ACTIVE_PRODUCT_STATE.md).
+
+# Historical — show the decision changing the game
+
+Show the two offered choices, then the actual recorded result: the newly fitted
+head chooses story instead of another heal, and Bruno is defeated in 181 actions
+and 17,293 frames. All 30 specimens remain; no item was spent. The old model's
+heal preference can be shown as a **shadow recommendation**, not a played control.
+
+Voiceover: "We trained on what the whole attempt accomplished. Then we let the
+new model make one real choice. It chose to progress, and the battle skill carried
+that choice out. That is a first step toward a player—not the finished player."
+
+Keep the labels visible: four training examples, one correlated control probe,
+deterministic low-level skills, no independent win-rate claim, Phase 4 unfinished.
+Next comes a different story objective, with new prospective data rather than a
+renamed Bruno model. See [audited control](audits/red-forward-first-choice-probe-2026-09-09.md).
+
+# Historical — the AI can do everything right locally and still miss the goal
 
 Suggested beat: show four short Red training attempts side by side. Two heal then
 beat Bruno; one goes straight to Bruno and wins; one heals twice and runs out of

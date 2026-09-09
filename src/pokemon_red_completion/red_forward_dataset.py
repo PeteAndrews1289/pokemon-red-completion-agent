@@ -16,7 +16,7 @@ from .forward_goal_records import _mapping, read_forward_goal_events
 from .goal_manager import GoalKind, GoalSelectionMode
 from .goal_manager_trajectory import GOAL_MANAGER_OUTCOME_KIND, load_goal_manager_episode
 from .living_dex_option_value import LivingDexOptionValueModel, option_feature_names
-from .private_artifacts import PrivateArtifactRoot
+from .private_artifacts import PrivateArtifactRoot, PrivateEpisodeReader
 from .provenance import canonical_sha256
 from .red_forward_goal import (
     _CONSUMABLES,
@@ -26,7 +26,11 @@ from .red_forward_goal import (
     red_forward_goal_facts,
     red_forward_verifier_sha256,
 )
-from .red_player_training_dataset import load_red_player_training_episode
+from .red_player_training_dataset import (
+    RedPlayerTrainingDataset,
+    _audit_red_player_training_reader,
+    _require_player_training_origin,
+)
 from .red_player_training_plan import RedPlayerTrainingPlan
 from .referee import CompletionReferee
 
@@ -69,6 +73,30 @@ def load_red_forward_episode(
     forward_plan: ForwardGoalPlan,
     objective_id: str,
 ) -> ForwardGoalOutcome:
+    _require_red_forward_scope(training_plan, forward_plan, objective_id)
+    _require_player_training_origin(store, episode_id, training_plan, behavior_model)
+    reader = store.open_episode(episode_id)
+    immediate = _audit_red_player_training_reader(
+        reader,
+        episode_id=episode_id,
+        expected_manifest_sha256=expected_manifest_sha256,
+        plan=training_plan,
+        behavior_model=behavior_model,
+    )
+    return _audit_red_forward_reader(
+        reader,
+        immediate=immediate,
+        training_plan=training_plan,
+        forward_plan=forward_plan,
+        objective_id=objective_id,
+    )
+
+
+def _require_red_forward_scope(
+    training_plan: RedPlayerTrainingPlan,
+    forward_plan: ForwardGoalPlan,
+    objective_id: str,
+) -> None:
     if (
         forward_plan.goal_family != "red-story-objective"
         or forward_plan.verifier_sha256 != red_forward_verifier_sha256(objective_id)
@@ -80,16 +108,19 @@ def load_red_forward_episode(
         or forward_plan.max_resources < 2
     ):
         raise ValueError("Red forward admission scope differs")
-    immediate = load_red_player_training_episode(
-        store,
-        episode_id=episode_id,
-        expected_manifest_sha256=expected_manifest_sha256,
-        plan=training_plan,
-        behavior_model=behavior_model,
-    )
-    reader = store.open_episode(episode_id)
-    if reader.manifest_sha256 != expected_manifest_sha256:
-        raise ValueError("Red forward episode changed between verified reads")
+
+
+def _audit_red_forward_reader(
+    reader: PrivateEpisodeReader,
+    *,
+    immediate: RedPlayerTrainingDataset,
+    training_plan: RedPlayerTrainingPlan,
+    forward_plan: ForwardGoalPlan,
+    objective_id: str,
+) -> ForwardGoalOutcome:
+    """Audit one immutable authenticated reader, without changing its status."""
+    if reader.manifest_sha256 != immediate.episode_manifest_sha256:
+        raise ValueError("Red forward and native episode identities differ")
     metadata = _mapping(reader.read_header()["metadata"])
     if (
         metadata.get("forward_goal_plan") != forward_plan.public_dict()
