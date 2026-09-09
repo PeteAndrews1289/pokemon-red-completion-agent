@@ -8,6 +8,7 @@ from types import SimpleNamespace
 import pytest
 from test_forward_goal_learning import examples
 from test_goal_resource_quote import _supply_model
+from test_red_living_dex_causal_adapter import _store_and_registry
 from test_red_player_training import _plan
 
 from pokemon_red_completion.provenance import SourceIdentity
@@ -120,7 +121,9 @@ def test_cli_help_needs_no_model_private_data_or_emulator():
     assert stopped.value.code == 0
 
 
-def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(monkeypatch):
+def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(
+    monkeypatch, tmp_path
+):
     main, args, published, native_loads, _ = harness(monkeypatch)
     rows = tuple(examples()[:2])
     requests = tuple(
@@ -135,6 +138,14 @@ def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(m
         rows, ("cancelled",), ("goal-0", "goal-1"), "b" * 64, 1, requests
     )
     calls = []
+    real_store, _ = _store_and_registry(tmp_path)
+
+    def real_publish(record_id, *, kind, record):
+        published.append((record_id, kind, record))
+        return real_store.publish_sealed_record(record_id, kind=kind, record=record)
+
+    real_store_proxy = SimpleNamespace(publish_sealed_record=real_publish)
+    monkeypatch.setitem(main.__globals__, "open_private_root", lambda *a, **k: real_store_proxy)
 
     def load_batch(store, **kwargs):
         calls.append(kwargs)
@@ -150,7 +161,7 @@ def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(m
     assert main(args) == 0
     assert len(calls) == 1 and not native_loads
     identity, kind, doc = published[0]
-    assert identity.startswith("red-controller-fit-")
+    assert identity.startswith("red-ctrl-fit-")
     assert kind == "red_forward_controller_shadow_fit"
     assert doc["schema"] == "pokemon.red.forward-controller-shadow-fit.v1"
     assert doc["failed_controller_stops"] == 1
@@ -158,6 +169,8 @@ def test_explicit_controller_batch_fits_all_rows_into_distinct_shadow_artifact(m
     assert doc["model"]["settled_examples"] == 2
     assert doc["player_model_changed"] is False and doc["in_game_loss_inferred"] is False
     assert doc["return_contract"] == "finite-goal-under-frozen-controller.v1"
+    saved = real_store.find_sealed_record(identity, expected_kind=kind)
+    assert saved.read() == doc
 
 
 def test_controller_batch_declaration_failure_cannot_fall_back_to_success_only(monkeypatch):

@@ -54,6 +54,13 @@ that earlier full-suite result to this later executable source.
 
 ## Next decision and limits
 
+The first three-return fit calculation hit a publication-only identifier-length
+error before any candidate artifact was created. The controller-fit prefix has
+been shortened, and the CLI test now publishes through the real private store
+instead of a mocked publisher. A separately documented deterministic recomputation
+uses the same batch and hyperparameters; report two computations if it succeeds,
+not a clean first-attempt publication. No game attempt is repeated.
+
 The immediate next step is one all-three-return Agatha shadow fit, ridge1/cap10,
 with no success-only subset or gameplay replay. No Agatha fit had occurred when
 this collection receipt was written. A later fit gets its own receipt.

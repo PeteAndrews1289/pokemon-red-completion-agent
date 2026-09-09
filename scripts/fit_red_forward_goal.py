@@ -144,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
             failed_controller_stops=controller_batch.failed_stops,
             in_game_loss_inferred=False,
         )
-        prefix, kind = "red-controller-fit", "red_forward_controller_shadow_fit"
+        prefix, kind = "red-ctrl-fit", "red_forward_controller_shadow_fit"
     record = store.publish_sealed_record(
         f"{prefix}-{canonical_sha256(document)}",
         kind=kind,
