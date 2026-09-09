@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay.
+- Next decision: Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
-| Authority now | Native87through90 made four actual goal choices without operator retargeting. Native91 fitted all four outcomes retaining all87prior rows; final model unplayed. No independent advantage or learned combat. |
+| Authority now | Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result. |
-| Cheapest falsifier | A ROM-free alternate-source encounter for a needed specimen or useful evolution precursor, followed by a short automatic collection batch. |
+| Cheapest falsifier | A longer bounded run must produce useful retained collection progress with measured resource costs and no lost specimens; another low-yield batch falsifies scaling alone. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-automatic-collection-loop** · status **active** · evidence [qualification](docs/evidence/red-automatic-collection-learning-2026-09-09.json)
+**2026-09-09-opportunistic-collection** · status **active** · evidence [qualification](docs/evidence/red-opportunistic-collection-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Choose successive collection and support opportunities without per-species direction scripts. |
-| Learning output | Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures. |
-| Authority delta | Native87through90 made four actual goal choices without operator retargeting. Native91 fitted all four outcomes retaining all87prior rows; final model unplayed. No independent advantage or learned combat. |
-| Transfer result | Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result. |
-| Blocker | Automatic loop works, but collection gain was zero. Capture catalog remains canonical-source limited; useful evolution precursors can be ignored outside their assigned source. |
-| Decision | Automatic execution and fitting are demonstrated; prioritize useful captures rather than repeating low-yield searches or adding training gates. |
-| Next session | Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay. |
-| Next falsifier | A ROM-free alternate-source encounter for a needed specimen or useful evolution precursor, followed by a short automatic collection batch. |
-| Stop condition | Four-step batch limit reached cleanly. Future unexpected failures stop; only explicitly verified search exhaustion can continue. No consumed-trial replay. |
+| Learning output | Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures. |
+| Authority delta | Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result. |
+| Transfer result | Changed cartridge tables and physical stock in ROM-free tests; live runs remain one correlated Red lineage. |
+| Blocker | Small-batch learning works and captures are broader. Sustained collection efficiency, all remaining supported destinations and non-grass mechanics are not yet demonstrated. |
+| Decision | Broader useful captures qualify scaling the existing learning loop, not another training framework. |
+| Next session | Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay. |
+| Next falsifier | A longer bounded run must produce useful retained collection progress with measured resource costs and no lost specimens; another low-yield batch falsifies scaling alone. |
+| Stop condition | Batch stopped: step_limit. No consumed trial may replay; unexplained failures require diagnosis. |
 
 ### Stop conditions
 

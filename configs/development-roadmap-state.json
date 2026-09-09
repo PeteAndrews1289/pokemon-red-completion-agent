@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-automatic-collection-loop",
+  "as_of_session": "2026-09-09-opportunistic-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-automatic-collection-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-opportunistic-collection-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -564,6 +564,12 @@
       "result": "Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.",
       "deviation": "Phase5 remains open and its local checklist stays2/3. User requested automatic collection; the existing runner was extended. Safe search exhaustion continuation was declared; no success or phase exit fabricated.",
       "next": "Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay."
+    },
+    {
+      "session": "2026-09-09-opportunistic-collection",
+      "result": "Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.",
+      "deviation": "No stage-exit change. Existing supported grass sources only; living target census still unfinished.",
+      "next": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay."
     }
   ],
   "closed_milestones": [

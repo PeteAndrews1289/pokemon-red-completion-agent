@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-automatic-collection-loop**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-opportunistic-collection**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 - [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 
-Current model: **91 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **95 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Capture and retain specimens; evolve, store and trade as needed.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
 
-[Current evidence](../docs/evidence/red-automatic-collection-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-opportunistic-collection-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-opportunistic-collection
+
+Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.
+
+**Deviation:** No stage-exit change. Existing supported grass sources only; living target census still unfinished.
+
+**Next:** Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.
 
 ### 2026-09-09-automatic-collection-loop
 

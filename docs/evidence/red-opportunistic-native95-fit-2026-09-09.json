@@ -1,0 +1,142 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "current_session_status": "opportunistic_automatic_batch_complete",
+  "scope": "Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.",
+  "session_evidence": "docs/evidence/red-opportunistic-collection-learning-2026-09-09.json",
+  "boundaries": {
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "episode_id": "red-opportunistic-collection-20260909-b-04-causal",
+    "actions": 224,
+    "frames": 17004,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "forced_singletons": 1,
+    "verified_collection_gain": 0,
+    "status": "succeeded"
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 94,
+    "controller_actions": 0,
+    "corpus_record_sha256": "8c23f74f99e3bff89dc67ebd17a256f485fca243b5c9f73d33a8d233163e7ef4",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 78,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 95,
+      "successful_examples": 50,
+      "total_examples": 95,
+      "train_dataset_sha256": "3cbad7c3fd7f0d20cabfbd7ae47b42657cd48911d71bddb30cc24f81ebbd5fa8",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012187039934034024,
+      "weighted_mse_before": 0.029425159564992517
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "c988220dbf1de763f2efef4e96b1a4877978ed31c5f61e640e25bef0126913b1",
+      "file_sha256": "c37ffe9526f1d1889cf429774665a1220aa70d0caf0713db6c88aba4f1bfd9c2",
+      "independent_evaluation": false,
+      "model_sha256": "794a984265a4026bb92391e245af66ec2616ca672410032b65196e6925610fbc",
+      "prior_model_sha256": "c219711439397e4c0796105cd9f456f229b368114ce33ba381b49444d2f98438",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 95,
+      "source_bundle_sha256": "6aa4f290293f2d23acc0e4adfe50c408b7cb8774595c68374708cbec7b7306b7",
+      "source_commit": "71fde67957b12d735f53a64bd7594413a2da68d4"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09904599010285,
+        4.584142561995866e-06,
+        4.972866279281579e-05,
+        0.004735454564682781,
+        0.0035188673703947493,
+        0.003635027448086144,
+        0.0007227392589305781,
+        1.4721474520342278e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 95,
+      "total_examples": 95,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012412651521972344
+    },
+    "regional_source_examples": 20,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09701589753974056,
+        4.581054926532352e-06,
+        4.970892065532842e-05,
+        0.004738135958044639,
+        0.0035205137671955504,
+        0.003631172770039775,
+        0.0007219193629408157,
+        1.4300327630208603e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 95,
+      "total_examples": 95,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012187039934034024
+    }
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "independent_evaluation": false,
+    "controller_actions": 0
+  },
+  "next_step": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay."
+}

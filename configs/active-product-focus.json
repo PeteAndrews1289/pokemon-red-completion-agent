@@ -29,29 +29,29 @@
     },
     {
       "capability": "Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger.",
-      "cheapest_falsifier": "A ROM-free alternate-source encounter for a needed specimen or useful evolution precursor, followed by a short automatic collection batch.",
+      "cheapest_falsifier": "A longer bounded run must produce useful retained collection progress with measured resource costs and no lost specimens; another low-yield batch falsifies scaling alone.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Native87through90 made four actual goal choices without operator retargeting. Native91 fitted all four outcomes retaining all87prior rows; final model unplayed. No independent advantage or learned combat.",
-        "blocker": "Automatic loop works, but collection gain was zero. Capture catalog remains canonical-source limited; useful evolution precursors can be ignored outside their assigned source.",
-        "decision": "Automatic execution and fitting are demonstrated; prioritize useful captures rather than repeating low-yield searches or adding training gates.",
+        "authority_delta": "Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result.",
+        "blocker": "Small-batch learning works and captures are broader. Sustained collection efficiency, all remaining supported destinations and non-grass mechanics are not yet demonstrated.",
+        "decision": "Broader useful captures qualify scaling the existing learning loop, not another training framework.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-automatic-collection-learning-2026-09-09.json",
-          "sha256": "ed9c753b92f2cb55082192fa5efdd3886ccfc8cf555e2365ea8ea923334b9abb"
+          "path": "docs/evidence/red-opportunistic-collection-learning-2026-09-09.json",
+          "sha256": "8f410dbc7faf189848227516c040b86c5bad6cd093f47330edaf89d11c713dd7"
         },
-        "learning_output": "Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.",
-        "next_falsifier": "A ROM-free alternate-source encounter for a needed specimen or useful evolution precursor, followed by a short automatic collection batch.",
-        "next_session_goal": "Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay.",
+        "learning_output": "Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.",
+        "next_falsifier": "A longer bounded run must produce useful retained collection progress with measured resource costs and no lost specimens; another low-yield batch falsifies scaling alone.",
+        "next_session_goal": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.",
         "product_alignment": "Choose successive collection and support opportunities without per-species direction scripts.",
-        "session_id": "2026-09-09-automatic-collection-loop",
+        "session_id": "2026-09-09-opportunistic-collection",
         "status": "active",
-        "stop_condition": "Four-step batch limit reached cleanly. Future unexpected failures stop; only explicitly verified search exhaustion can continue. No consumed-trial replay.",
-        "transfer_result": "Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result."
+        "stop_condition": "Batch stopped: step_limit. No consumed trial may replay; unexplained failures require diagnosis.",
+        "transfer_result": "Changed cartridge tables and physical stock in ROM-free tests; live runs remain one correlated Red lineage."
       },
       "learned_authority": {
-        "current": "Native87through90 made four actual goal choices without operator retargeting. Native91 fitted all four outcomes retaining all87prior rows; final model unplayed. No independent advantage or learned combat.",
+        "current": "Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red living-collection incremental training",
-      "next_decision": "Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay.",
+      "next_decision": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

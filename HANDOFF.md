@@ -1,21 +1,16 @@
-# Current — automatic collection loop: native91
+# Current — opportunistic collection: native95
 
-Four consecutive decisions and fits ran without operator retargeting:
-**87 → 91 examples**, all prior rows retained. The model chose search, resupply,
-search and recovery;1,561 actions/73,322 frames. Both searches safely exhausted
-their budgets. All31 specimens/29 living species remain; **no new capture**.
-Native91 is fitted but unplayed. The batch stopped at its four-step limit.
+Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.
 
-The generic route repair worked live. NPC replanning had treated resolvable
-trainer sight as impassable; now it shares the executor's explicit handler
-capability while preserving occupancy, durable blockers and unknown hazards.
-207 focused tests, lint and targeted typing passed; not a full-suite run.
+Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result.
 
-Next: expose useful missing specimens and evolution precursors across every
-cartridge-declared wild source, not only each species' canonical source. The
-automatic loop is demonstrated; efficient collection and independent advantage
-are not. Keep failures, costs and source proposals distinct from fitted labels.
-[Session and next steps](docs/work-sessions/2026-09-09-automatic-collection-loop.md). No new external-agent audit or quota usage.
+The capture skill now considers all useful species in the local cartridge grass table, including spare evolution stock and directly encountered evolved forms. Canonical dependencies and historical profiles are preserved; retargeting rederives local offers. 254 focused tests, lint and targeted typing passed; not the full suite.
+
+Next: Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.
+
+Small-batch learning works and captures are broader. Sustained collection efficiency, all remaining supported destinations and non-grass mechanics are not yet demonstrated.
+
+[Session, evidence and next steps](docs/work-sessions/2026-09-09-opportunistic-collection.md). No new external-agent session or quota use.
 
 ## Prior package and Phase4 history
 
