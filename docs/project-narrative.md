@@ -1,6 +1,25 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
-## Current — a second useful heal exposes a story-data gap
+## Current — preparation led to a real story result
+
+Bruno is defeated, with the final Full Restore still in the bag and all30
+Pokémon specimens retained. The bounded trainer controller earned5,742 currency.
+The first doorway crossing exposed an entry-script mismatch and stopped; we
+preserved its new room state, checked it without inputs, and completed one
+separate continuation. Both attempts and their total183 actions remain recorded.
+
+This matters as executable story support, not as a claim that the model learned
+to beat Bruno. Only one goal was available, so neither attempt became a comparative
+choice-training label. Model78 is unchanged. The next development priority is
+letting prospectively declared story experience teach outcome prediction while
+keeping curriculum selection separate from measured model competence.
+
+The latest save is0243af84 in Bruno's room, with11,905 currency. Our current-room
+story/readiness item is verified, moving the income-to-story checklist to2/3;
+the story-choice learning item remains unfinished. Scripted cross-map arrivals
+still need qualification, and Agatha is not yet in this native trainer integration.
+
+## Historical — a second useful heal exposes a story-data gap
 
 The trained goal manager played again and chose to heal Jolteon, from61 to172 HP.
 It spent a real Full Restore, kept all30 specimens, and produced one observed

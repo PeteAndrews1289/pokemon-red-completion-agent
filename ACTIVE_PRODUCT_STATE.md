@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels.
+- Next decision: Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Model77 chose preparation versus story: Jolteon healed 61 to 172 HP for one Full Restore. All party now exceed half health. Story execution remains untested. |
-| Authority now | Model78: 78 fitted outcomes, 36 successful, 68 distinct rows. One new V4 choice, two supported alternatives, no forced singleton or teacher fallback. 30 specimens /28 living /33 registered; 6163 currency; one Full Restore. No model-led boss victory or promotion. |
+| Reusable capability | Finite-resource readiness qualified and Bruno defeated from the retained room state. One scripted-arrival failure remains recorded. Same fixed trainer skill, no broad route-drift relaxation. |
+| Authority now | Model78 unchanged:78 fitted outcomes,36 successful,68 distinct rows. Bruno victory is deterministic support; zero new fits or learned choices.30 specimens /28 living /33 registered;11905 currency;one Full Restore. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Can one bounded story continuation yield a real outcome while preserving the last restorative from minor top-offs, without calling forced support a learned choice? |
+| Cheapest falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-postfit-readiness** · status **active** · evidence [model fit](docs/evidence/red-postfit-readiness-learning-2026-09-09.json)
+**2026-09-09-bruno-support** · status **active** · evidence [development episode](docs/evidence/red-bruno-support-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | One real model-selected preparation outcome entered training with its cost; coverage inspection redirects effort toward story experience. |
-| Learning output | 22 actions /2184 frames; Jolteon 61 to172 HP; one Full Restore spent. 78 outcomes,36 successful,68 distinct. Prior77 retained;146 focused tests. |
-| Authority delta | One model77 post-fit choice and one admitted fitted outcome. Model78 has not played; no promotion. |
-| Transfer result | Same-lineage Red only. No independent generalization or advantage. Updated in-sample error is slightly higher than the prior on the expanded corpus. |
-| Blocker | Bruno unattempted. Model77 corpus had four successful restoration rows but only one failed story/access row. All party now above half health; one Full Restore remains. |
-| Decision | Stop after this completed choice. Prioritize story coverage and a prospective last-item reserve. Two needed heals do not prove reward gaming. |
-| Next session | From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels. |
-| Next falsifier | Can one bounded story continuation yield a real outcome while preserving the last restorative from minor top-offs, without calling forced support a learned choice? |
-| Stop condition | Stop after one bounded story outcome or a named pre-input blocker. Preserve failures and consumed choices. Forced support stays excluded from current choice fitting. No replay, inventory reset or fabricated labels. |
+| Product alignment | Demonstrated resource-conserving story execution needed to supply story experience; fixed support is not learned mastery. |
+| Learning output | Zero new training examples or fits. One failed arrival at6 actions/300 frames, then one successful Bruno continuation at177 actions/17137 frames;5742 earned, no items spent. |
+| Authority delta | None. Both attempts were forced singleton support. Model78 and historical choice labels unchanged. |
+| Transfer result | Same-lineage Red only.249 focused tests cover reserve and integration boundaries; no independent advantage or transfer. |
+| Blocker | Bruno is complete, but current native skill does not cover Agatha. Scripted warp displacement still fails closed. Current choice-fit pipeline excludes forced support and has sparse story data. |
+| Decision | Close the two-attempt session. Prioritize prospective story-outcome training admission before more support-only bosses; no broad controller rewrite. |
+| Next session | Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim. |
+| Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
+| Stop condition | Stop after one prospectively scoped learning result or named blocker. No consumed replay, retroactive support-to-choice relabeling, automatic successor or inventory reset. |
 
 ### Stop conditions
 

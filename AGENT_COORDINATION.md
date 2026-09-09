@@ -1,6 +1,40 @@
 # Three-agent coordination
 
-## Current — post-fit readiness verified; model78; story coverage next
+## Current — Bruno defeated; model78 unchanged
+
+The resource reserve is published in source738d2cd7. It protects the last
+Full Restore from healthy targets at or above half HP, while retaining needed
+recovery and narrower items. Old profiles and V4 scoring are unchanged.
+
+The first attempt entered Bruno's room but stopped on scripted displacement:
+expected map246 at11,4; observed5,4. Its6 actions/300 frames and failed state368703d0
+remain recorded. No route guard was weakened. After a zero-input review, one
+separately declared continuation from that safe room state defeated Bruno in
+177 actions/17,137 frames. Total session cost:183 actions/17,437 frames.
+The victory flag and5,742 payout are verified; currency is11,905. All30 specimens,
+28 living species,33 registered species and the final Full Restore are retained.
+Blastoise is now level67,202/217 HP. Every party member remains unfainted.
+
+Both attempts had one executable goal: they are deterministic support, not
+learned choices. Model78 remains78 outcomes/36 successful/68 distinct rows.
+No fit, promotion, independent evaluation or new goal-model query occurred.
+New endpoint0243af84, checkpoint43645b73, trajectorycefc86c6.
+Do not replay the old doorway, restore2d1e or resume the consumed attempts.
+
+Next: establish prospective story-outcome learning admission before collecting
+more support-only boss wins, then extend the same cartridge-driven trainer
+integration to Agatha. Preserve separate curriculum and comparative-choice claims.
+The generic scripted-arrival boundary remains unqualified. Income-to-story is2/3:
+current-room entry/readiness passed, but genuine story-choice fitting is pending.
+No whole-phase percentage, learned boss victory or North Star change is claimed.
+
+249 focused tests, targeted typing and lint passed. ROM-free reserve tests cover
+the exact half-health boundary, status exceptions, final versus surplus stock,
+narrower items and stale bindings. No external agent was dispatched this session.
+Next recommendation: Astra High, Fast off; focus on learning admission and bounded
+integration, not a new teacher or broad routing rewrite.
+
+## Historical — post-fit readiness verified; model78; story coverage next
 
 One declared model77 continuation chose restoration over advancing toward Bruno
 (probabilities 0.861785 and 0.138215). Jolteon healed from 61 to 172 HP in

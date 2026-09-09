@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-postfit-readiness",
+  "as_of_session": "2026-09-09-bruno-support",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -49,8 +49,8 @@
       {
         "id": "truthful-story-entry",
         "label": "Qualify current-state story entry and readiness",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-bruno-support-2026-09-09.json"
       },
       {
         "id": "native-story-lesson",
@@ -408,6 +408,12 @@
       "result": "Model77 to78: Jolteon61 to172 HP; one Full Restore,22 actions /2184 frames.78 outcomes,36 successful,68 distinct. All30 specimens retained.",
       "deviation": "No stage exits changed; income-to-story remains1/3. Story/access training gap identified. Two necessary heals are not a story victory or proof of reward gaming.",
       "next": "From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels."
+    },
+    {
+      "session": "2026-09-09-bruno-support",
+      "result": "Bruno defeated from audited room endpoint:177 actions/17137 frames;5742 earned; all30 specimens and final Full Restore preserved. Model78 unchanged;zero fit labels.",
+      "deviation": "After retained doorway drift failure(6 actions/300 frames), reviewed safe arrival and declared one current-room continuation. No rollback or guard weakening. Current-room story/readiness earns item2; scripted cross-map arrival remains unqualified. No stage exit changed.",
+      "next": "Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim."
     }
   ],
   "closed_milestones": [

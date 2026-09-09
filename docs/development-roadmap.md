@@ -3,17 +3,17 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-postfit-readiness**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-bruno-support**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Reachable income to model-led story: 1/3 acceptance items (33%).**
+**Reachable income to model-led story: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Earn funds through safe adjacent-map travel ([evidence](../docs/evidence/red-regional-income-qualification-2026-09-08.json))
-- [ ] Qualify current-state story entry and readiness
+- [x] Qualify current-state story entry and readiness ([evidence](../docs/evidence/red-bruno-support-2026-09-09.json))
 - [ ] Play and fit a genuine bounded story choice
 
 Current model: **78 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-bruno-support
+
+Bruno defeated from audited room endpoint:177 actions/17137 frames;5742 earned; all30 specimens and final Full Restore preserved. Model78 unchanged;zero fit labels.
+
+**Deviation:** After retained doorway drift failure(6 actions/300 frames), reviewed safe arrival and declared one current-room continuation. No rollback or guard weakening. Current-room story/readiness earns item2; scripted cross-map arrival remains unqualified. No stage exit changed.
+
+**Next:** Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim.
 
 ### 2026-09-09-postfit-readiness
 
