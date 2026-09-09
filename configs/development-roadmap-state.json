@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-agatha-controller-fit",
+  "as_of_session": "2026-09-09-agatha-control-closeout",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
+      "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Reachable income to model-led story",
+    "title": "Resource-aware story decisions",
     "items": [
       {
-        "id": "regional-income",
-        "label": "Earn funds through safe adjacent-map travel",
+        "id": "changed-resource-control",
+        "label": "Verify a changed-resource choice",
         "done": true,
-        "evidence": "docs/evidence/red-regional-income-qualification-2026-09-08.json"
+        "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
       },
       {
-        "id": "truthful-story-entry",
-        "label": "Qualify current-state story entry and readiness",
-        "done": true,
-        "evidence": "docs/evidence/red-bruno-support-2026-09-09.json"
+        "id": "broader-resource-return-fit",
+        "label": "Fit broader real resource returns",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "native-story-lesson",
-        "label": "Play and fit a genuine bounded story choice",
-        "done": true,
-        "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
+        "id": "broader-fit-control-probe",
+        "label": "Test the updated first choice",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -492,6 +492,12 @@
       "result": "Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate.",
       "deviation": "One artifact-name publication fault required deterministic recomputation;two computations/one candidate disclosed. No failed outcome omitted. Only frozen-controller meaning,not ideal-play competence.",
       "next": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC."
+    },
+    {
+      "session": "2026-09-09-agatha-control-closeout",
+      "result": "Agatha head chose healing; frozen tail beat Agatha in 335 actions / 31,141 frames / one item. All 30 specimens retained. Two actual first-choice heads now demonstrated; Phase 4 remains open.",
+      "deviation": "Archived the completed 3/3 native-story checklist without changing Phase4's exit. The prepared resource batch is the last small within-Agatha check, not a new gate; afterward return to reusable mechanics and model-led composition. Preparation alone is engineering.",
+      "next": "At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition."
     }
   ],
   "closed_milestones": [
@@ -828,6 +834,31 @@
           "label": "Fit a genuine resource or story-goal choice",
           "done": true,
           "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-09-agatha-control-closeout",
+      "stage": "red-story",
+      "title": "Reachable income to model-led story",
+      "items": [
+        {
+          "id": "regional-income",
+          "label": "Earn funds through safe adjacent-map travel",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-income-qualification-2026-09-08.json"
+        },
+        {
+          "id": "truthful-story-entry",
+          "label": "Qualify current-state story entry and readiness",
+          "done": true,
+          "evidence": "docs/evidence/red-bruno-support-2026-09-09.json"
+        },
+        {
+          "id": "native-story-lesson",
+          "label": "Play and fit a genuine bounded story choice",
+          "done": true,
+          "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
         }
       ]
     }

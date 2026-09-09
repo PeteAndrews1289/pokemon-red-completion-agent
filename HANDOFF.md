@@ -1,4 +1,43 @@
-# Current — Agatha shadow fit verified; changed-resource training probe next
+# Current — two fitted heads have made real choices; broader resource returns next
+
+Agatha model 3bf43581 chose healing from two genuine alternatives; frozen native model82
+then sampled story from two genuine alternatives and completed Agatha. Cost:
+335 actions, 31,141 frames, one Full Restore; all 30 specimens retained. The separate
+zero-input endpoint audit verifies current Agatha completion and checkpoint/actor
+identity. No fit, native admission, recursive authority or promotion came from this
+probe. Bruno32's earlier 181-action/17,293-frame/no-item victory is also retained.
+
+These are two correlated first-choice training demonstrations, not a reliable
+whole-game player. Agatha's frozen tail selected story with probability 0.3233;
+one successful realization does not establish continuation reliability. Clipped
+head scores of 0 and 1 are not calibrated probabilities. Original stopped Agatha03,
+cancelled 04 and the current Champion failure remain unchanged.
+
+Next: four prospectively fixed old82-sampled returns at the authenticated changed-
+resource Agatha context,then at most one all-attempt shadow refit if admissible.
+Zero-input preparation verified the exact original published 669cefa3 collector
+still binds the same forward plan. Newer source cannot silently reuse its
+continuation digest. All new episode executions remain unclaimed. Preserve the
+original three returns, any new failures and unknown interruptions; no seed shopping.
+This is the last planned small Agatha batch, not a new Phase4 gate. After its
+bounded result or justified cancellation, return to reusable mechanic support and
+declared model-led story composition. Do not require optimal healing or repeat
+cohorts before addressing the known fixed-damage entry-screen limitation.
+
+The previous native-story 3/3 checklist is archived complete. The new resource-
+coverage checklist is 1/3; neither fraction is a whole-Phase4 percentage. Phase4's
+Champion/Hall-of-Fame exit and the long-term living-Pokedex goal are unchanged.
+No more gameplay is scheduled in this overnight closeout; stop 10:42:58 UTC.
+
+Read [probe audit](docs/audits/red-agatha-controller-probe-2026-09-09.md) and
+[next-session plan](docs/agatha-resource-coverage-next-session.md).
+The [full overnight review](docs/audits/phase4-overnight-learning-review-2026-09-09.md)
+separates native lessons, deterministic support, forward fits and actual control.
+Codex owns implementation/execution/publication; reviewers are read-only.
+The internal review confirmed source compatibility and the narrow success claim.
+External five-hour/weekly quota information remains unavailable.
+
+# Historical — Agatha shadow fit verified; changed-resource training probe next
 
 All three attempted Agatha returns entered a separate frozen-controller shadow
 fit:two completions and one known controller stop. Model3bf43581 is verified

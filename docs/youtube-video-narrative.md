@@ -1,4 +1,39 @@
-# Current — Agatha shadow fit verified; changed-resource training probe next
+# Current — learning what recovery is for
+
+The important change this night was the target, not another longer teacher route.
+A useful action should help finish a declared goal within its resource budget,
+not merely complete a maintenance task successfully. Four real Bruno returns
+included a two-heal sequence that used its whole decision budget without beating
+Bruno. A fitted first-choice head then chose story and completed Bruno without
+spending an item.
+
+Agatha provided a different lesson: two healing sequences completed the goal;
+one immediate story attempt stopped at an unsupported battle entry screen with
+all six party members alive. We retained that negative as a return under the
+frozen controller, not an in-game defeat or proof that healing is always needed.
+A separate head fitted all three attempted returns. An artifact-name publication
+fault needed one disclosed deterministic recomputation: two calculations, one
+published candidate, no replayed game attempt.
+
+At a different authentic training resource state, the new Agatha head chose
+healing. Frozen native82 then sampled story and completed Agatha. The verified
+cost was 335 actions, 31,141 frames and one item, with all 30 specimens retained. That is
+actual learned first-choice control using deterministic skills, not a scripted
+victory being passed off as an autonomous whole-game model.
+
+The honest next question is reliability. The tail picked story with probability
+0.3233, and this head saw only one resource context in its original training.
+We prepared a four-attempt changed-resource batch using the same source-bound
+controller; it has not executed. The purpose is broader real return evidence,
+not more demonstrations selected because they look successful.
+
+Phase4 is still open. The north star remains a reusable Pokémon player and living
+Pokédex across games; boss-specific first-choice heads are intermediary evidence,
+not the final architecture or a claim of transfer.
+See [verified probe](audits/red-agatha-controller-probe-2026-09-09.md) and
+[next work](agatha-resource-coverage-next-session.md).
+
+# Historical — Agatha shadow fit verified; changed-resource training probe next
 
 All three attempted Agatha returns entered a separate frozen-controller shadow
 fit:two completions and one known controller stop. Model3bf43581 is verified

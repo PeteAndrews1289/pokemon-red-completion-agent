@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC.
+- Next decision: At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Learn whether recovery or immediate story play achieves a finite goal, counting the whole attempt; separate first-choice planning from the frozen continuation policy. |
-| Authority now | New forward model32 selected a real story action from2alternatives and completed Bruno in181actions/17293frames. It remains bounded training-probe authority; old82 owns declared prospective collection and any frozen tail. No full-player promotion. |
+| Authority now | Bruno head32 selected story and beat Bruno; Agatha head3bf43581 selected healing before frozen old82 beat Agatha. Both are bounded first-choice training probes, not recursive learned or full-player authority. Native82 and its82rows remain unchanged. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
-| Cheapest falsifier | The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures. |
+| Transfer test | Bruno and Agatha heads each made an actual first choice in changed-resource training probes. These are correlated known lineages, not independent advantage, calibrated confidence, recursive learned control or cross-game transfer. |
+| Cheapest falsifier | Prepared zero-input source/plan check passed. Four fixed sampled attempts can expose repeat-heal budget loss or changed-resource failure; no promised action balance. Stop on first execution exception. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-agatha-controller-fit** · status **active** · evidence [model fit](docs/evidence/red-agatha-controller-fit-2026-09-09.json)
+**2026-09-09-agatha-control-closeout** · status **active** · evidence [composition attempt](docs/evidence/red-agatha-controller-probe-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate. |
-| Authority delta | Agatha head is shadow-only;the previously verified Bruno model32 first-choice victory remains the latest live authority. Explicit controller-return probe loading is separately qualified,not automatic promotion. |
-| Transfer result | The new head acted on changed first-input resources in an already observed correlated training lineage. It completed Bruno, but no independent comparison, calibrated confidence, cross-goal pooling or cross-game transfer is established. |
-| Blocker | Only three correlated Agatha returns from one initial context;near-extreme fitted estimates are not calibrated probabilities. Changed-resource probe remains unexecuted;currentChampionfailure retained. |
-| Decision | Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC. |
-| Next session | Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC. |
-| Next falsifier | The zero-input different-parent check passed with2genuine choices and unchanged Agatha profile. Next one bounded actual choice can falsify whether the new head works with changed resources; retain failures. |
-| Stop condition | Stop new probe on first input-bearing failure or2macro goal bound;no retry,fit,promotion or battle repair. No new gameplay after10:20UTC;overall10:42:58UTC. Consumed originalBruno/Agathaplans stayclosed. |
+| Learning output | New Agatha head controlled healing, then frozen old82 completed story:335actions/31141frames/1item,2genuine choices,all30specimens. Fresh zero-input checkpoint audit verified current Agatha completion. No additional fit/native row or promotion. |
+| Authority delta | Agatha head3bf43581 chose healing; frozen old82 then chose story from two alternatives and beat Agatha. Newhead first-choice authority is demonstrated only within this bounded training probe; no production promotion. |
+| Transfer result | Bruno and Agatha heads each made an actual first choice in changed-resource training probes. These are correlated known lineages, not independent advantage, calibrated confidence, recursive learned control or cross-game transfer. |
+| Blocker | Only three correlated Agatha fitting returns at one initial resource context; a sampled tail victory is not reliability. Known move101/move82 entry-screen gaps can teach controller-bug avoidance and must not wait for optimal recovery. Current Champion failure remains retained. |
+| Decision | At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition. |
+| Next session | At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition. |
+| Next falsifier | Prepared zero-input source/plan check passed. Four fixed sampled attempts can expose repeat-heal budget loss or changed-resource failure; no promised action balance. Stop on first execution exception. |
+| Stop condition | No further gameplay in this overnight closeout; stop10:42:58UTC. Next prepared collection stops at first execution exception; preserve every attempted return and cancel unclaimed slots. Original plans remain closed; no boss-repair cascade. |
 
 ### Stop conditions
 

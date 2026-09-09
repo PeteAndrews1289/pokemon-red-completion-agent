@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-controller-fit**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-control-closeout**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Reachable income to model-led story: 3/3 acceptance items (100%).**
+**Resource-aware story decisions: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Earn funds through safe adjacent-map travel ([evidence](../docs/evidence/red-regional-income-qualification-2026-09-08.json))
-- [x] Qualify current-state story entry and readiness ([evidence](../docs/evidence/red-bruno-support-2026-09-09.json))
-- [x] Play and fit a genuine bounded story choice ([evidence](../docs/evidence/red-forward-goal-pilot-2026-09-09.json))
+- [x] Verify a changed-resource choice ([evidence](../docs/evidence/red-agatha-controller-probe-2026-09-09.json))
+- [ ] Fit broader real resource returns
+- [ ] Test the updated first choice
 
 Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-forward-goal-pilot-2026-09-09.json)
+[Current evidence](../docs/evidence/red-agatha-controller-probe-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-agatha-control-closeout
+
+Agatha head chose healing; frozen tail beat Agatha in 335 actions / 31,141 frames / one item. All 30 specimens retained. Two actual first-choice heads now demonstrated; Phase 4 remains open.
+
+**Deviation:** Archived the completed 3/3 native-story checklist without changing Phase4's exit. The prepared resource batch is the last small within-Agatha check, not a new gate; afterward return to reusable mechanics and model-led composition. Preparation alone is engineering.
+
+**Next:** At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition.
 
 ### 2026-09-09-agatha-controller-fit
 

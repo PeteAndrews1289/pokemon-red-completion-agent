@@ -1,5 +1,33 @@
 # Roadmap baseline and deviations
 
+## September9 — changed-resource control verified; broader return coverage next
+
+Bruno and Agatha fitted heads each made one real first choice in a changed-resource
+training probe. The earlier native-story-learning subchecklist is archived3/3,
+not reinterpreted as Phase4 completion. A new local resource-aware checklist starts
+at1/3:verified changed-context choice,broader actual return fit,updated own-choice
+test. Phase IDs,full-stage exits and the living-Dex/Red-hack/Crystal sequence are
+unchanged. This is a successor checklist,not a renamed easier exit.
+
+The next experiment uses sampled selected-action returns instead of more greedy
+demonstrations, which might all heal and cannot enter the existing fitter. A
+zero-input preparation verified four fixed seeds on the exact original collector
+source. Source identity is part of the frozen continuation; later tooling cannot
+silently label newer execution equivalent. The original three attempts,including
+the controller stop,remain mandatory. No native82 update,failed-state retry or
+automatic boss-repair lane is authorized by this reorientation.
+
+See [next-session plan](agatha-resource-coverage-next-session.md). This measures
+finite return under the frozen controller,not intrinsic necessity of healing or
+independent superiority. The permanent North Star needs no requirements change.
+
+The final review explicitly prevents this local checklist from becoming a new
+Phase4 gate. At most the prepared four attempts and one admissible shadow fit;
+no replacement cohort for desired action balance,loss improvement or confidence.
+After that bounded result—or justified cancellation—return to reusable mechanics
+and model-led story composition. Incomplete local checklist items may be archived
+with their actual reason; they do not replace the unchanged Champion/HoF exit.
+
 ## September9 — explicit first-choice training probe, not recursive promotion
 
 Four real Red finite-goal returns are now fitted. A separate bounded probe may
