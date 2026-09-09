@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-learning-bridge**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-registered-live-training**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Connect shared registered completion: 1/3 acceptance items (33%).**
+**Connect shared registered completion: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify shared registration memory ([evidence](../docs/evidence/shared-registration-foundation-2026-09-09.json))
-- [ ] Migrate collection and evolution goals
-- [ ] Measure a registered-objective lesson
+- [x] Verify shared registration memory ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
+- [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
+- [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 
-Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **3 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-capture-fly-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-09-registered-live-training
+
+Registered integration3/3: real ledger, three outcomes/two fits, model2 played;39 registrations/43 specimens retained. Model3 not yet played.
+
+**Deviation:** Expanded preferred species locations to real cartridge land tables; direct missing evolved forms remain alternatives. Stopped on capture-helper readiness failure. No stage exits changed.
+
+**Next:** Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.
 
 ### 2026-09-09-registered-learning-bridge
 

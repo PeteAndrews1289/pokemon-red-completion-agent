@@ -365,17 +365,19 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
         encoding="utf-8"
     )
     assert state.active_lane["id"] == "cross-title-authenticated-scenario-curriculum-v1"
-    assert state.active_lane["kind"] == "maintenance"
-    assert state.active_lane["maintenance_unblocks"] == "red-shared-registration-learning-v1"
+    assert state.active_lane["kind"] == "learning"
+    assert state.active_lane["maintenance_unblocks"] is None
     prohibited = set(state.active_lane["prohibited_actions"])
     assert "unexecuted_counterfactual_target" in prohibited
     assert "unmeasured_action_target" in prohibited
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
-    assert state.active_lane["measurable_outputs"] == []
+    assert state.active_lane["measurable_outputs"] == [
+        {"kind": "registered_train_example", "partition": "train", "minimum": 12}
+    ]
     assert len(state.retired_lanes) == 60
-    assert focus_progress_fraction(state) == 0.0
-    assert focus_scorecard(state) == ()
+    assert focus_progress_fraction(state) == 0.25
+    assert focus_scorecard(state) == (("Registered Train Example · train", 3, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
     assert state.progress["model_fits"] == 11
     assert state.progress["composition_attempts"] == 6
@@ -1704,8 +1706,8 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    # Scope migration is maintenance, not another learned-progress claim.
-    assert rows == ()
+    # Only actual new-objective outcomes advance this separate counter.
+    assert rows == ("Registered Train Example · train: 3/12",)
 
 
 @pytest.mark.parametrize("goal", [
@@ -2223,7 +2225,7 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     )
     encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
     assert "31-example living-Pokédex goal scorer" in encoded
-    assert "Historical cross-family ledger" in encoded
+    assert "Registered-objective outcomes" in encoded
     assert "supply validation before training" not in encoded
     assert "10 untouched" not in encoded
     assert "Brier 0.397811" not in encoded

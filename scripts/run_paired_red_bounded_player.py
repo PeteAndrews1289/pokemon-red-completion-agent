@@ -2496,7 +2496,7 @@ def _run_arm(
                 {}
                 if readiness.training_plan is None or forward_probe is not None
                 else {
-                    "observe_training": lambda: _training_observation(runtime),
+        "observe_training": runtime.adapter.observe,
                     "training_meter": meter,
                     "training_plan_sha256": readiness.training_plan.plan_sha256,
                     "maximum_actions": limits.max_actions_per_decision,

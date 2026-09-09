@@ -29,48 +29,49 @@ Not the product:
 
 ## One active lane
 
-**Shared registered-Pokedex contract migration** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red shared-registration learning** (`cross-title-authenticated-scenario-curriculum-v1`)
 
-- Kind: **maintenance**
+- Kind: **learning**
 - Rigor: **development**
-- Next decision: Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.
+- Next decision: Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim. |
+| Authority now | Registered-objective training is live: three real outcomes, two fits, one new Pidgeotto registration. Model2 reloaded and selected capture from two native goals; preparation failed and became outcome3. Final model3 has not played. Historical114 rewards remain separate; no learned combat or independent advantage. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
 | Time box | 1 session / 2 hours |
 
-### Historical cross-family counter snapshot
+### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
+| Registered Train Example · train | 3 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
-This frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
+The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-registered-learning-bridge** · status **active** · evidence [qualification](docs/evidence/registered-learning-bridge-2026-09-09.json)
+**2026-09-09-registered-live-training** · status **active** · evidence [registered train example](docs/evidence/red-registered-live-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged. |
-| Authority delta | No new learned authority. The core observer and recorded goal outcomes now bind registered completion; legacy model rewards remain separate. |
-| Transfer result | Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result. |
-| Blocker | Regional destination records and the live incremental launcher still need registered-objective propagation and durable ledger updates before gameplay resumes. |
-| Decision | Accept the tested core bridge. Finish only the live launcher/regional outcome connection next; no general architecture expansion. |
-| Next session | Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer. |
-| Next falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
-| Stop condition | Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit. |
+| Learning output | Three real registered-objective outcomes and two fits;38 to39 registrations,42 to43 specimens; model2 played. Model3 awaits the next safe continuation. |
+| Authority delta | Registered model2 selected and played a real capture-preparation goal; its failure was fitted as example3. No learned combat or independent advantage is claimed. |
+| Transfer result | Synthetic shared-credit/local-stock separation passed; no Blue or cross-game live result. |
+| Blocker | The withdrawn capture helper failed its actual readiness check. The terminal and all43 specimens are retained; recovery must be qualified before another played attempt. |
+| Decision | Integration milestone complete. Focus on helper readiness and another measured lesson, not architecture expansion. |
+| Next session | Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson. |
+| Next falsifier | Restored capture helper satisfies actual HP, PP and move requirements without specimen/resource loss; then model3 makes a real choice. |
+| Stop condition | No automatic replay after the helper-readiness failure. Preserve all outcomes, ledger and stock; stop on unsafe state or objective mixing. |
 
 ### Stop conditions
 

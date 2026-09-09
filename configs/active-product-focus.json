@@ -31,33 +31,39 @@
       "capability": "Share verified species registration across runs while keeping local owned flags and physical stock separate.",
       "cheapest_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
-      "kind": "maintenance",
+      "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new learned authority. The core observer and recorded goal outcomes now bind registered completion; legacy model rewards remain separate.",
-        "blocker": "Regional destination records and the live incremental launcher still need registered-objective propagation and durable ledger updates before gameplay resumes.",
-        "decision": "Accept the tested core bridge. Finish only the live launcher/regional outcome connection next; no general architecture expansion.",
+        "authority_delta": "Registered model2 selected and played a real capture-preparation goal; its failure was fitted as example3. No learned combat or independent advantage is claimed.",
+        "blocker": "The withdrawn capture helper failed its actual readiness check. The terminal and all43 specimens are retained; recovery must be qualified before another played attempt.",
+        "decision": "Integration milestone complete. Focus on helper readiness and another measured lesson, not architecture expansion.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/registered-learning-bridge-2026-09-09.json",
-          "sha256": "c5f24df4ca4028b0eba2c9005b76f494404bd401a9f666b93ba0aa4679e46576"
+          "kind": "registered_train_example",
+          "path": "docs/evidence/red-registered-live-learning-2026-09-09.json",
+          "sha256": "af82c9cf6bff74cf1bbf85f7fe3ca40f7172944b64397016480150b9e66af057"
         },
-        "learning_output": "249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.",
-        "next_falsifier": "A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input.",
-        "next_session_goal": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.",
+        "learning_output": "Three real registered-objective outcomes and two fits;38 to39 registrations,42 to43 specimens; model2 played. Model3 awaits the next safe continuation.",
+        "next_falsifier": "Restored capture helper satisfies actual HP, PP and move requirements without specimen/resource loss; then model3 makes a real choice.",
+        "next_session_goal": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-09-registered-learning-bridge",
+        "session_id": "2026-09-09-registered-live-training",
         "status": "active",
-        "stop_condition": "Gameplay remains paused until the registered-only consumers agree; no automatic releases, old-reward relabeling or synthetic global credit.",
-        "transfer_result": "Synthetic inherited credit suppresses redundant capture/evolution offers without inventing local flags. No live Blue or learned transfer result."
+        "stop_condition": "No automatic replay after the helper-readiness failure. Preserve all outcomes, ledger and stock; stop on unsafe state or objective mixing.",
+        "transfer_result": "Synthetic shared-credit/local-stock separation passed; no Blue or cross-game live result."
       },
       "learned_authority": {
-        "current": "The native goal/destination model now has 114 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not yet made a learned choice; its final loaded episode was forced. No learned combat, independent advantage or cross-title claim.",
+        "current": "Registered-objective training is live: three real outcomes, two fits, one new Pidgeotto registration. Model2 reloaded and selected capture from two native goals; preparation failed and became outcome3. Final model3 has not played. Historical114 rewards remain separate; no learned combat or independent advantage.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
-      "maintenance_unblocks": "red-shared-registration-learning-v1",
-      "measurable_outputs": [],
-      "name": "Shared registered-Pokedex contract migration",
-      "next_decision": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer.",
+      "maintenance_unblocks": null,
+      "measurable_outputs": [
+        {
+          "kind": "registered_train_example",
+          "minimum": 12,
+          "partition": "train"
+        }
+      ],
+      "name": "Red shared-registration learning",
+      "next_decision": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -221,6 +227,7 @@
           "development": 61,
           "train": 103
         },
+        "registered_train_examples": 3,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

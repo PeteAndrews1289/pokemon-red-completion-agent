@@ -1,3 +1,28 @@
+# Current — registered-objective training demonstrated
+
+The shared ledger is connected to live collection, terminal persistence and a
+separate registered-only scorer. Three actual outcomes produced two fits in a
+16-minute bounded batch: Route7 search failed, Route15 captured Pidgeotto, then
+the freshly fitted model chose capture from two native goals. Capture-helper
+preparation failed its actual readiness check; that failure became example3.
+Registrations rose38 to39; specimens42 to43, with no loss. Model2 really played;
+final model3 has not played. Old114 rewards were not reused or relabeled.
+
+This completes the three-item integration milestone, not Red collection or the
+whole agent. Learned authority is goals/destinations; controller actions and
+mechanic execution remain deterministic. No independent advantage, learned
+combat, Blue execution, Crystal transfer or full-Pokedex completion is claimed.
+
+Next: inspect the retained helper-readiness failure, qualify legitimate recovery,
+then resume short model3 lessons. Do not replay the consumed batch. Keep actual
+failed attempts in training and the global/local/physical inventory views separate.
+No external-agent audit or usage this session. Codex owns integration; optional
+reviewers should examine helper readiness and reward semantics, not expand scope.
+
+[Results, evidence and next work](work-sessions/2026-09-09-registered-live-training.md).
+
+## Historical checkpoints below — superseded where inconsistent
+
 # Current — registered learning core connected
 
 The bounded observer, durable checkpoints, goal-outcome reconstruction and a

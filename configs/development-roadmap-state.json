@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-registered-learning-bridge",
+  "as_of_session": "2026-09-09-registered-live-training",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-capture-fly-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -44,19 +44,19 @@
         "id": "registered-ledger",
         "label": "Verify shared registration memory",
         "done": true,
-        "evidence": "docs/evidence/shared-registration-foundation-2026-09-09.json"
+        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
       },
       {
         "id": "registered-runtime",
         "label": "Migrate collection and evolution goals",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
       },
       {
         "id": "registered-lesson",
         "label": "Measure a registered-objective lesson",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
       }
     ]
   },
@@ -612,6 +612,12 @@
       "result": "249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.",
       "deviation": "No baseline change; integration checklist remains1/3 because the live regional launcher is not migrated. Synthetic fitting is engineering evidence only.",
       "next": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer."
+    },
+    {
+      "session": "2026-09-09-registered-live-training",
+      "result": "Registered integration3/3: real ledger, three outcomes/two fits, model2 played;39 registrations/43 specimens retained. Model3 not yet played.",
+      "deviation": "Expanded preferred species locations to real cartridge land tables; direct missing evolved forms remain alternatives. Stopped on capture-helper readiness failure. No stage exits changed.",
+      "next": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson."
     }
   ],
   "closed_milestones": [

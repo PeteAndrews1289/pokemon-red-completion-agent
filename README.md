@@ -1,18 +1,20 @@
-# Current — registered learning core connected
+# Current — registered-Pokédex training is connected
 
-The bounded observer, durable checkpoints, goal-outcome reconstruction and a
-separate-objective fitter now share registered completion.249 targeted tests
-passed, including a synthetic two-choice record/fit/reload. Duplicate captures
-have no intrinsic penalty or novelty; sole unreserved precursors may evolve.
-Historical114 examples remain unchanged and are not relabeled or pooled.
+The live collector now persists verified registrations and trains a separate
+registered-objective goal scorer. A 16-minute bounded batch produced three real
+outcomes and two fits, capturing Pidgeotto and increasing registrations from 38
+to 39. All 43 specimens remain accounted for. The first fitted model reloaded,
+selected a capture goal and played; a helper-readiness failure stopped that
+attempt and became the third training outcome. The final model is saved.
 
-No production ledger import, live gameplay or real new-objective fit occurred.
-Next: connect regional destination outcomes and the incremental launcher to this
-same contract, import the authenticated endpoint, and collect two settled choices.
-The existing fitter requires two; do not pad the corpus with historical rewards.
-No external-agent audit/usage. This is engineering, not new model competence.
+Historical 114-example rewards were not reused. Learned authority is choosing
+goals and destinations; mechanic execution remains deterministic. This is not
+learned combat, independent generalization, or a completed Pokédex. Next: qualify
+capture-helper recovery from the retained terminal, then another measured lesson.
+212 focused closeout tests passed; documentation and public-artifact checks passed.
 
-[Session and exact remaining work](docs/work-sessions/2026-09-09-registered-learning-bridge.md).
+[Session, evidence and next work](docs/work-sessions/2026-09-09-registered-live-training.md)
+· [Visual roadmap](docs/development-roadmap.md)
 
 ## Historical runtime binding
 

@@ -239,7 +239,10 @@ def _run_recap_projection(
 def _training_projection(
     evidence: Mapping[str, object],
 ) -> tuple[DashboardTrainingState, DashboardLearningComponent]:
-    if evidence.get("schema") == "pokemon.red.native-player-learning-session.v1":
+    if evidence.get("schema") in {
+        "pokemon.red.native-player-learning-session.v1",
+        "pokemon.red.registered-player-learning-session.v1",
+    }:
         return _native_training_projection(evidence)
     if (
         evidence.get("schema") != "pokemon.red.living-dex-retired-bank-train-campaign-result.v1"
@@ -308,6 +311,14 @@ def _native_training_projection(
     boundaries = _mapping(evidence, "boundaries")
     replay = _mapping(evidence, "in_sample_policy_replay")
     total = _count(model, "settled_examples")
+    registered = evidence.get("schema") == "pokemon.red.registered-player-learning-session.v1"
+    if registered and (
+        model.get("objective") != "pokemon.registered-collection.v1"
+        or model.get("schema") != "pokemon.red.registered-player-model.v1"
+        or fit.get("historical_rewards_reused") is not False
+        or fit.get("parameter_warm_start") is not False
+    ):
+        raise ProgressDashboardError("dashboard registered objective boundary differs")
     added = _count(fit, "new_settled_examples")
     curriculum = _count(episode, "curriculum_outcomes") if "curriculum_outcomes" in episode else 0
     if curriculum and (
@@ -361,7 +372,7 @@ def _native_training_projection(
         training_choice_changes=disagreements,
     )
     component = DashboardLearningComponent(
-        name="Living-Pokédex goal scorer",
+        name="Registered-Pokédex goal scorer" if registered else "Living-Pokédex goal scorer",
         scope=(
             "Sampled choices plus separately recorded guided outcomes; no independent evaluation"
             if curriculum else
@@ -393,7 +404,10 @@ def product_focus_dashboard_snapshot(
     training, component = _training_projection(
         evidence if evidence is not None else _load_learning_evidence()
     )
-    output_event = "Historical cross-family ledger · " + " · ".join(
+    output_label = ("Registered-objective outcomes" if
+                    "registered_train_examples" in state.progress
+                    else "Historical cross-family ledger")
+    output_event = output_label + " · " + " · ".join(
         f"{label.split(' ·', 1)[0]} {current}/{minimum}"
         for label, current, minimum in focus_scorecard(state)
     )
@@ -413,7 +427,9 @@ def product_focus_dashboard_snapshot(
         collection_target=151,
         model=DashboardModelState(
             mode="shadow",
-            candidate=f"{training.samples_after}-example living-Pokédex goal scorer",
+            candidate=(f"{training.samples_after}-example "
+                       + ("registered" if component.name.startswith("Registered") else "living")
+                       + "-Pokédex goal scorer"),
             choice="No live choice — trained artifact awaiting bounded play",
             decisions=0,
             teacher_queries=0,

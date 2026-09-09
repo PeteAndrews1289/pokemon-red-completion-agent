@@ -25,6 +25,7 @@ _IDENTIFIER = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*\Z")
 _LANE_KINDS = {"learning", "maintenance"}
 _RIGOR_TIERS = {"development", "benchmark", "sealed"}
 _OUTPUT_KINDS = {
+    "registered_train_example",
     "atomic_goal_episode",
     "authority_promotion",
     "causal_train_example",
@@ -456,7 +457,8 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
                 f"{time_box_hours} {time_box_hour_label} |"
             ),
             "",
-            "### Historical cross-family counter snapshot",
+            ("### Registered-objective learning" if "registered_train_examples" in progress
+             else "### Historical cross-family counter snapshot"),
             "",
             "| Output | Current | Minimum for the next decision |",
             "| --- | ---: | ---: |",
@@ -470,7 +472,7 @@ def render_product_focus_markdown(state: ProductFocusState) -> str:
             "",
             "Each counter changes only when tracked, path-free evidence supports it.",
             (
-                "This frozen legacy projection aggregates older learner heads and scenario "
+                "The frozen legacy projection aggregates older learner heads and scenario "
                 "families; it excludes newer native-player batches. Use Authority now and the "
                 "latest session evidence for the active checkpoint, not these historical totals."
             ),
@@ -817,7 +819,7 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
             raise ProductFocusError(
                 "model-led development output must use the development partition"
             )
-        if kind == "causal_train_example" and partition != "train":
+        if kind in {"causal_train_example", "registered_train_example"} and partition != "train":
             raise ProductFocusError("causal train example must use the train partition")
         if (
             kind
@@ -849,7 +851,7 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
         "development_episode",
         "verified_composition_episode",
     } <= kinds
-    causal_train_contract = "causal_train_example" in kinds
+    causal_train_contract = bool({"causal_train_example", "registered_train_example"} & kinds)
     synthetic_rootless_contract = {
         "synthetic_rootless_atomic_goal_episode",
         "synthetic_rootless_train_outcome",
@@ -879,8 +881,12 @@ def _validate_learning_outputs(outputs: Sequence[Mapping[str, object]]) -> None:
 
 
 def _validate_progress(progress: Mapping[str, object]) -> None:
+    legacy_progress = {key: value for key, value in progress.items()
+                       if key != "registered_train_examples"}
+    if "registered_train_examples" in progress:
+        _count(progress, "registered_train_examples", subject="active lane progress")
     _require_keys(
-        progress,
+        legacy_progress,
         {
             "authority_promotions",
             "atomic_goal_episodes",
@@ -1428,6 +1434,38 @@ def _validate_projected_counters(
         raise ProductFocusError(
             "active learning counters differ from their typed evidence projection"
         )
+    if "registered_train_examples" in progress:
+        _validate_registered_counter(progress, root)
+
+
+def _validate_registered_counter(progress: Mapping[str, object], root: Path) -> None:
+    """Keep the new objective separate from the frozen historical projection."""
+    try:
+        reference = json.loads((root / "configs/dashboard-learning-evidence.json").read_text())
+        relative = Path(reference["path"])
+        target = (root / relative).resolve()
+        if relative.is_absolute() or ".." in relative.parts or not target.is_relative_to(root):
+            raise ValueError("unsafe reference")
+        payload = target.read_bytes()
+        if hashlib.sha256(payload).hexdigest() != reference["sha256"]:
+            raise ValueError("changed receipt")
+        receipt = json.loads(payload)
+        fit, model = receipt["fit"], receipt["fit"]["model"]
+        count = progress["registered_train_examples"]
+        if (
+            receipt["schema"] != "pokemon.red.registered-player-learning-session.v1"
+            or model["schema"] != "pokemon.red.registered-player-model.v1"
+            or model["objective"] != "pokemon.registered-collection.v1"
+            or type(count) is not int or count < 2
+            or count != model["settled_examples"]
+            or count != fit["fit_report"]["settled_examples"]
+            or fit["historical_rewards_reused"] is not False
+            or fit["parameter_warm_start"] is not False
+            or receipt["boundaries"]["independent_evaluation"] is not False
+        ):
+            raise ValueError("registered projection differs")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        raise ProductFocusError("registered learning counter lacks matching evidence") from error
 
 
 def _validate_repeatable_living_dex_first_two_projection(
@@ -2888,6 +2926,7 @@ def _current_output_count(
             raise ProductFocusError("outcome question must use train or development partition")
         return _count(outcomes, partition, subject="outcome progress")
     progress_key = {
+        "registered_train_example": "registered_train_examples",
         "atomic_goal_episode": "atomic_goal_episodes",
         "authority_promotion": "authority_promotions",
         "causal_train_example": "causal_train_examples",
