@@ -1042,7 +1042,8 @@ def _regional_profiles(
             isinstance(source, Path)
             or source.startswith("discovery:")
             or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
-                          "cartridge-trainer-story:bruno", "affordable-field-restore"}
+                          "cartridge-trainer-story:bruno", "affordable-field-restore",
+                          "reserved-field-restore"}
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
@@ -1053,12 +1054,14 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
-        if source == "affordable-field-restore":
+        if source in {"affordable-field-restore", "reserved-field-restore"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_affordable_field_restore_profile,
             )
 
-            profile = bind_affordable_field_restore_profile(profile)
+            profile = bind_affordable_field_restore_profile(
+                profile, reserve_last_full_restore=source == "reserved-field-restore",
+            )
             result.append(profile)
             continue
         if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno"}:

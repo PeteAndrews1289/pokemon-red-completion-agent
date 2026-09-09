@@ -369,10 +369,18 @@ class RedFieldRestoreGoalProvider:
     adapter: PokemonRedGoalStateAdapter
     kind: GoalKind = GoalKind.RESTORE_TEAM
     affordable_single_item: bool = False
+    reserve_last_full_restore: bool = False
+
+    def __post_init__(self) -> None:
+        if type(self.reserve_last_full_restore) is not bool:
+            raise RedGoalSkillError("restoration reserve must be an explicit boolean")
+        if self.reserve_last_full_restore and not self.affordable_single_item:
+            raise RedGoalSkillError("restoration reserve requires single-item recovery")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         plan, unavailable = self._plan(
             observation, affordable_single_item=self.affordable_single_item,
+            reserve_last_full_restore=self.reserve_last_full_restore,
         )
         if unavailable is not None:
             return RedGoalBindingOffer.unavailable(self.kind, unavailable)
@@ -443,6 +451,7 @@ class RedFieldRestoreGoalProvider:
     def _plan(
         observation: RedGoalObservation,
         *, affordable_single_item: bool = False,
+        reserve_last_full_restore: bool = False,
     ) -> tuple[
         tuple[tuple[int, ItemId], ...],
         GoalUnavailableReason | None,
@@ -470,6 +479,13 @@ class RedFieldRestoreGoalProvider:
                 items = (preferred, ItemId.FULL_RESTORE)
                 for item in dict.fromkeys(items):
                     if inventory.get(int(item), 0) <= 0:
+                        continue
+                    # A prospective resource constraint, not a learned preference.
+                    # Keep the final broad restorative for status or sub-readiness
+                    # recovery; do not block narrower affordable items or emergencies.
+                    if (reserve_last_full_restore and item is ItemId.FULL_RESTORE
+                            and inventory[int(item)] == 1 and not status[index]
+                            and hp[index] * 2 >= maximum[index]):
                         continue
                     if item is ItemId.HYPER_POTION and maximum[index] - hp[index] > 200:
                         continue

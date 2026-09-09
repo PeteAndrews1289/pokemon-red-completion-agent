@@ -251,14 +251,20 @@ def bind_cartridge_trainer_story_profile(
     ))
 
 
-def bind_affordable_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+def bind_affordable_field_restore_profile(
+    profile: RedGoalContextProfile, *, reserve_last_full_restore: bool = False,
+) -> RedGoalContextProfile:
     """Opt into one owned recovery item, without changing historical profiles."""
+    if type(reserve_last_full_restore) is not bool:
+        raise RedGoalContextProfileError("restoration reserve must be an explicit boolean")
     providers = {
         spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
         for spec in profile.providers
     }
     providers[GoalKind.RESTORE_TEAM] = (
-        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {"affordable_single_item": True},
+        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
+        {"affordable_single_item": True,
+         **({"reserve_last_full_restore": True} if reserve_last_full_restore else {})},
     )
     return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id,
@@ -492,9 +498,13 @@ def _parse_parameters(
             raise RedGoalContextProfileError("cartridge story objective is not supported")
         return row
     if mechanic is RedGoalMechanic.FIELD_RESTORE and row:
-        _exact_keys(row, {"affordable_single_item"})
+        _exact_keys(row, {"affordable_single_item"} | (
+            {"reserve_last_full_restore"} if "reserve_last_full_restore" in row else set()
+        ))
         if row["affordable_single_item"] is not True:
             raise RedGoalContextProfileError("single-item recovery requires explicit opt-in")
+        if "reserve_last_full_restore" in row and row["reserve_last_full_restore"] is not True:
+            raise RedGoalContextProfileError("restoration reserve requires explicit opt-in")
         return row
     if mechanic in {
         RedGoalMechanic.BALANCED_TEAM,

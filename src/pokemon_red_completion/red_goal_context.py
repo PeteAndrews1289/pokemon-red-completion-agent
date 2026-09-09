@@ -397,6 +397,7 @@ def _build_provider(
             runtime.emulator,
             runtime.adapter,
             affordable_single_item=spec.parameters.get("affordable_single_item") is True,
+            reserve_last_full_restore=spec.parameters.get("reserve_last_full_restore") is True,
         )
     if mechanic is RedGoalMechanic.CENTER_RESTORE:
         return RedCenterRestoreGoalProvider(
