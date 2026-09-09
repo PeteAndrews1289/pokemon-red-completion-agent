@@ -659,6 +659,17 @@ def _parse_parameters(
         if mechanic is RedGoalMechanic.WILD_CORRIDOR_DEVELOPMENT:
             required.add("completed_battles")
         local_species = row.get("source_species_numbers")
+        capture_species = row.get("capture_species_numbers")
+        if "capture_species_numbers" in row:
+            if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
+                not isinstance(capture_species, list)
+                or not capture_species
+                or any(type(number) is not int or not 1 <= number <= 151
+                       for number in capture_species)
+                or capture_species != sorted(set(capture_species))
+            ):
+                raise RedGoalContextProfileError("local capture species are invalid")
+            required.add("capture_species_numbers")
         if "capture_status_support" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 type(row["capture_status_support"]) is not bool
@@ -711,6 +722,8 @@ def _parse_parameters(
             )
         if local_species is not None:
             parsed["source_species_numbers"] = local_species
+        if capture_species is not None:
+            parsed["capture_species_numbers"] = capture_species
         if "capture_status_support" in row:
             parsed["capture_status_support"] = row["capture_status_support"]
         return parsed

@@ -133,11 +133,10 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     monkeypatch.setattr(
         regional, "derive_red_living_dex_wild_corridor", lambda target, *a, **k: target
     )
-    monkeypatch.setattr(
-        regional,
-        "retarget_red_wild_profile",
-        lambda profile, target: next(i.profile for i in items if i.source_id == target.source_id),
-    )
+    def retarget(profile, target, *, rom):
+        assert rom == b"fixture"
+        return next(i.profile for i in items if i.source_id == target.source_id)
+    monkeypatch.setattr(regional, "retarget_red_wild_profile", retarget)
     monkeypatch.setattr(regional, "bind_red_local_discovery_profile", lambda profile, *a: profile)
 
     class Router:

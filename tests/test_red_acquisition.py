@@ -1,4 +1,5 @@
 from collections import Counter
+from dataclasses import replace
 
 import pytest
 
@@ -62,6 +63,64 @@ def _observation(
         current_box_index=0,
         box_capacity=20,
     )
+
+
+def test_opportunistic_capture_uses_local_offers_and_preserves_dependencies():
+    source = "wild:Route3:grass"
+    catalog = replace(RED_ACQUISITION_CATALOG, remaining_demand=True,
+                      level_evolution_edges=((red_species_ref(16), red_species_ref(17)),
+                                             (red_species_ref(17), red_species_ref(18))),
+                      wild_source_species=((source, tuple(map(red_species_ref, (16, 21, 39)))),))
+    assert catalog.methods == RED_ACQUISITION_CATALOG.methods
+    observation = _observation(16, 21)
+    survey = summarize_red_area_survey(source, observation, catalog)
+    assert {red_species_number(r.species_ref): r.missing_count for r in survey.requirements} == {
+        16: 2, 21: 1, 39: 1,
+    }
+    for species in (16, 21, 39):
+        assert plan_red_area_encounter(source, observation,
+            encountered_species_ref=red_species_ref(species), catalog=catalog,
+        ).directive is RedAreaDirective.CAPTURE_ENCOUNTER
+    assert plan_red_area_encounter(source, observation,
+        encountered_species_ref=red_species_ref(16),
+    ).directive is RedAreaDirective.FLEE_ENCOUNTER
+    # Once enough physical stock exists for both evolutions, never catch a fourth Pidgey.
+    assert plan_red_area_encounter(source, _observation(16, 16, 16, 21),
+        encountered_species_ref=red_species_ref(16), catalog=catalog,
+    ).directive is RedAreaDirective.FLEE_ENCOUNTER
+
+
+def test_opportunistic_evolved_form_and_registered_but_absent_specimen():
+    source = "wild:Route15:grass"
+    catalog = replace(RED_ACQUISITION_CATALOG, remaining_demand=True,
+                      level_evolution_edges=((red_species_ref(16), red_species_ref(17)),
+                                             (red_species_ref(17), red_species_ref(18))),
+                      wild_source_species=((source, tuple(map(red_species_ref, (16, 17, 18)))),))
+    survey = summarize_red_area_survey(source, _observation(16, owned_numbers=(17, 18)), catalog)
+    assert {red_species_number(r.species_ref): r.missing_count for r in survey.requirements} == {
+        16: 2, 17: 2, 18: 1,
+    }
+    after = summarize_red_area_survey(source, _observation(16, 17, 18), catalog)
+    assert after.complete
+    assert catalog.methods == RED_ACQUISITION_CATALOG.methods
+
+
+@pytest.mark.parametrize("offers", [
+    [], (("wild:Route3:water", (red_species_ref(16),)),),
+    (("wild:Route3:grass", ()),),
+    (("wild:Route3:grass", (red_species_ref(16), red_species_ref(16))),),
+    (("wild:Route3:grass", ("foreign:species",)),),
+    (("wild:Route3:grass", (red_species_ref(16),)),) * 2,
+])
+def test_opportunistic_offers_reject_invalid_metadata(offers):
+    with pytest.raises(ValueError):
+        replace(RED_ACQUISITION_CATALOG, remaining_demand=True, wild_source_species=offers)
+
+
+def test_opportunistic_offers_require_live_remaining_demand():
+    with pytest.raises(ValueError, match="remaining acquisition demand"):
+        replace(RED_ACQUISITION_CATALOG,
+                wild_source_species=(("wild:Route3:grass", (red_species_ref(16),)),))
 
 
 def _full_party_observation(

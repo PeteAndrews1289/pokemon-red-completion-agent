@@ -586,6 +586,13 @@ def _parser() -> argparse.ArgumentParser:
         help="explicit source-local sighting coverage from the authenticated cartridge",
     )
     parser.add_argument(
+        "--opportunistic-capture",
+        dest="regional_transitions",
+        action="append_const",
+        const="opportunistic-capture",
+        help="Accept useful local cartridge grass encounters, not canonical targets only.",
+    )
+    parser.add_argument(
         "--capture-status-support",
         dest="regional_transitions",
         action="append_const",
@@ -1209,7 +1216,8 @@ def _regional_profiles(
         if (
             isinstance(source, Path)
             or source.startswith("discovery:")
-            or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
+            or source in {"capture-status", "opportunistic-capture",
+                          "affordable-capture-supply", "cartridge-trainer-story",
                           "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
                           "cartridge-trainer-story:lance",
                           "cartridge-trainer-story:champion",
@@ -1309,6 +1317,14 @@ def _regional_profiles(
             profile = bind_red_capture_status_profile(profile)
             result.append(profile)
             continue
+        if source == "opportunistic-capture":
+            from pokemon_red_completion.red_living_dex_wild_corridor import (
+                bind_red_opportunistic_capture_profile,
+            )
+
+            profile = bind_red_opportunistic_capture_profile(profile, world.rom)
+            result.append(profile)
+            continue
         if isinstance(source, str) and source.startswith("discovery:"):
             from pokemon_red_completion.red_living_dex_wild_corridor import (
                 bind_red_local_discovery_profile,
@@ -1339,7 +1355,7 @@ def _regional_profiles(
             world.local_graphs[map_id],
             excluded=world.object_blockers[map_id],
         )
-        profile = retarget_red_wild_profile(profile, corridor)
+        profile = retarget_red_wild_profile(profile, corridor, rom=world.rom)
         result.append(profile)
     return tuple(result)
 

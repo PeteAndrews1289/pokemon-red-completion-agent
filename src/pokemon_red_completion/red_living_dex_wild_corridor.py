@@ -101,8 +101,44 @@ def bind_red_local_discovery_profile(
     ))
 
 
+def bind_red_opportunistic_capture_profile(
+    profile: RedGoalContextProfile, rom: bytes,
+) -> RedGoalContextProfile:
+    """Bind all local cartridge grass offers without changing canonical dependencies."""
+    from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
+    from pokemon_red_completion.red_collection import (
+        RED_SOLO_COLLECTION_CONTRACT,
+        red_species_number,
+    )
+
+    targets = {red_species_number(ref) for ref in RED_SOLO_COLLECTION_CONTRACT.target_species}
+    dex = internal_to_dex(rom)
+    tables = wild_tables(rom, medium="grass")
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            map_id = int(map_id_for_wild_source(str(parameters["source_id"])))
+            if parameters["map_id"] != map_id:
+                raise RedLivingDexWildCorridorError("capture source differs from its map")
+            numbers = sorted({dex[species] for _, species in tables.get(map_id, ())} & targets)
+            if not numbers:
+                raise RedLivingDexWildCorridorError("capture source has no target grass encounters")
+            parameters["capture_species_numbers"] = numbers
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedLivingDexWildCorridorError("opportunistic capture needs a corridor capture")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def retarget_red_wild_profile(
     profile: RedGoalContextProfile, corridor: RedLivingDexWildCorridor,
+    *, rom: bytes | None = None,
 ) -> RedGoalContextProfile:
     """Move capture/discovery together, preserving every other skill and bound.
 
@@ -137,9 +173,14 @@ def retarget_red_wild_profile(
                 derived["capture_status_support"] = parameters["capture_status_support"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
-    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+    result = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id, providers=tuple(providers),
     ))
+    if any("capture_species_numbers" in spec.parameters for spec in profile.providers):
+        if rom is None:
+            raise RedLivingDexWildCorridorError("opportunistic retargeting requires cartridge data")
+        return bind_red_opportunistic_capture_profile(result, rom)
+    return result
 
 
 class RedLivingDexWildCorridorError(ValueError):

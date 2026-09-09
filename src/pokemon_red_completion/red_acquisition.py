@@ -121,10 +121,27 @@ class RedAcquisitionCatalog:
     source_commit: str = PRET_POKERED_ACQUISITION_COMMIT
     remaining_demand: bool = False
     level_evolution_edges: tuple[tuple[str, str], ...] = ()
+    wild_source_species: tuple[tuple[str, tuple[str, ...]], ...] = ()
 
     def __post_init__(self) -> None:
         if type(self.remaining_demand) is not bool:
             raise TypeError("remaining_demand must be a bool")
+        if self.wild_source_species and not self.remaining_demand:
+            raise ValueError("wild offers require remaining acquisition demand")
+        if not isinstance(self.wild_source_species, tuple):
+            raise ValueError("wild offers must be immutable")
+        sources: set[str] = set()
+        for offer in self.wild_source_species:
+            if not isinstance(offer, tuple) or len(offer) != 2:
+                raise ValueError("wild offer shape differs")
+            source, refs = offer
+            if (not isinstance(source, str) or not source.startswith("wild:")
+                    or not source.endswith(":grass") or source in sources
+                    or not isinstance(refs, tuple) or not refs
+                    or any(ref not in RED_SOLO_COLLECTION_CONTRACT.target_species for ref in refs)
+                    or len(refs) != len(set(refs))):
+                raise ValueError("wild offers need unique grass sources and target species")
+            sources.add(source)
         if self.level_evolution_edges and not self.remaining_demand:
             raise ValueError("level alternatives require remaining acquisition demand")
         if not isinstance(self.level_evolution_edges, tuple) or any(
@@ -234,7 +251,10 @@ class RedAcquisitionCatalog:
                     changed = True
         return frozenset(reachable)
 
-    def alternative_capture_holdings(self, observation: CollectionObservation) -> dict[str, int]:
+    def alternative_capture_holdings(
+        self, observation: CollectionObservation,
+        capture_species: tuple[str, ...] | None = None,
+    ) -> dict[str, int]:
         """Marginal capture options, recomputed after each actual acquisition."""
         from .collection_acquisition_demand import useful_capture_counts
 
@@ -246,7 +266,8 @@ class RedAcquisitionCatalog:
         useful = useful_capture_counts(
             frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
             tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
-            tuple(method.species_ref for method in self.methods if not method.transforms_precursor),
+            (tuple(method.species_ref for method in self.methods if not method.transforms_precursor)
+             if capture_species is None else capture_species),
         )
         return {species: counts[species] + quantity for species, quantity in useful.items()}
 
@@ -456,9 +477,17 @@ def summarize_red_area_survey(
     observation: CollectionObservation,
     catalog: RedAcquisitionCatalog | None = None,
 ) -> RedAreaSurvey:
-    """Report canonical direct targets still missing from one encounter area."""
+    """Report useful local captures, preserving canonical transformation dependencies."""
 
     catalog = catalog or RED_ACQUISITION_CATALOG
+    offers = dict(catalog.wild_source_species).get(source_id)
+    if offers is not None:
+        living = Counter(specimen.species_ref for specimen in observation.specimens)
+        holdings = catalog.alternative_capture_holdings(observation, offers)
+        return RedAreaSurvey(source_id, tuple(
+            RedAreaRequirement(ref, holdings[ref], living[ref])
+            for ref in sorted(offers, key=red_species_number) if ref in holdings
+        ))
     methods = catalog.methods_at_source(source_id)
     if not methods:
         raise ValueError("source_id is not present in the Red acquisition catalog")

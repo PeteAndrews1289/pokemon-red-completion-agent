@@ -535,11 +535,20 @@ def test_regional_builder_uses_cartridge_edges_and_keeps_nonwild_provider(monkey
         ),
     ))
     world = SimpleNamespace(terrain={13: _terrain()}, local_graphs={13: _graph()},
-                            object_blockers={13: frozenset({(3, 1)})})
+                            object_blockers={13: frozenset({(3, 1)})}, rom=b"fixture")
     monkeypatch.setattr(runner, "_route_world", lambda _: world)
     built, = runner._regional_profiles(profile, ("wild:Route2:grass",), object())
     assert built.providers[0].parameters["player_x"] == 4
     assert built.providers[1] == profile.providers[1]
+    from pokemon_red_completion import gen1_cartridge as cartridge
+    monkeypatch.setattr(cartridge, "internal_to_dex", lambda _: {90: 16, 91: 21})
+    monkeypatch.setattr(cartridge, "wild_tables", lambda _, **kw: {13: [(3, 90), (5, 91)]})
+    expanded, moved = runner._regional_profiles(
+        profile, ("opportunistic-capture", "wild:Route2:grass"), object(),
+    )
+    assert expanded.providers[0].parameters["capture_species_numbers"] == (16, 21)
+    assert moved.providers[0].parameters["capture_species_numbers"] == (16, 21)
+    assert "capture_species_numbers" not in profile.providers[0].parameters
     world.local_graphs[13] = _graph(one_way=True)
     with pytest.raises(RedLivingDexWildCorridorError, match="no unobstructed"):
         runner._regional_profiles(profile, ("wild:Route2:grass",), object())
@@ -562,6 +571,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--wild-source", "wild:Route24:grass",
         "--discovery-source", "wild:Route24:grass",
         "--capture-status-support",
+        "--opportunistic-capture",
         "--affordable-capture-supply",
         "--evolution-objective", "63:64:16",
     ])
@@ -569,6 +579,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
         "discovery:wild:Route24:grass",
         "capture-status",
+        "opportunistic-capture",
         "affordable-capture-supply",
         "evolution:63:64:16",
     ]

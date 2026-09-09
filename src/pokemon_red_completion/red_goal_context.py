@@ -489,6 +489,9 @@ def _wild_provider(
         return RedGoalSkillAvailability.available()
 
     if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+        from .red_collection import red_species_ref
+
+        local_captures = parameters.get("capture_species_numbers")
         return RedAreaSurveyGoalProvider(
             source_id=source_id,
             area_executor=area,
@@ -500,11 +503,16 @@ def _wild_provider(
             catalog=replace(
                 RED_ACQUISITION_CATALOG, remaining_demand=runtime.remaining_acquisition_demand,
                 level_evolution_edges=runtime.level_evolution_acquisition_edges,
+                wild_source_species=(
+                    ((source_id, tuple(red_species_ref(number)
+                                      for number in cast(tuple[int, ...], local_captures))),)
+                    if local_captures is not None else ()
+                ),
             ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
                 max_encounters=_integer(parameters, "maximum_encounters"),
-                capture_in_requirement_order=True,
+                capture_in_requirement_order=local_captures is None,
                 capture_quota=1,
             ),
         )

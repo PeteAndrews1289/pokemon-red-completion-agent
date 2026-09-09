@@ -113,7 +113,7 @@ def enumerate_red_regional_acquisitions(
                 excluded=world.object_blockers[map_id],
             )
             profile = bind_red_local_discovery_profile(
-                retarget_red_wild_profile(runtime.profile, corridor),
+                retarget_red_wild_profile(runtime.profile, corridor, rom=world.rom),
                 source,
                 world.rom,
             )

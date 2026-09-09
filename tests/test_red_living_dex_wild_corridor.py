@@ -111,6 +111,45 @@ def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():
             ))
 
 
+def test_opportunistic_capture_retargets_actual_cartridge_offers(monkeypatch):
+    from pokemon_red_completion import gen1_cartridge as cartridge
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_opportunistic_capture_profile,
+    )
+    monkeypatch.setattr(cartridge, "internal_to_dex", lambda _: {90: 16, 91: 17, 92: 21})
+    def tables(_, *, medium):
+        assert medium == "grass"
+        return {int(MapId.ROUTE_2): [(2, 90), (3, 91), (4, 90)],
+                int(MapId.ROUTE_11): [(9, 92)]}
+    monkeypatch.setattr(cartridge, "wild_tables", tables)
+    original = _local_discovery_profile()
+    bound = bind_red_opportunistic_capture_profile(original, b"fixture")
+    assert bound.providers[0].parameters["capture_species_numbers"] == (16, 17)
+    assert bound.providers[1:] == original.providers[1:]
+    assert "capture_species_numbers" not in original.providers[0].parameters
+    from dataclasses import replace
+    corridor = replace(derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    ), source_id="wild:Route11:grass", map_id=int(MapId.ROUTE_11))
+    moved = retarget_red_wild_profile(bound, corridor, rom=b"fixture")
+    assert moved.providers[0].parameters["capture_species_numbers"] == (21,)
+    with pytest.raises(RedLivingDexWildCorridorError, match="requires cartridge"):
+        retarget_red_wild_profile(bound, corridor)
+
+
+@pytest.mark.parametrize("numbers", [[], [True], [0], [152], [9, 9], [16, 9]])
+def test_profile_rejects_invalid_local_capture_species(numbers):
+    profile = _local_discovery_profile()
+    with pytest.raises(RedGoalContextProfileError, match="local capture species"):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id="invalid-capture-offers", providers=((
+                GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                {**profile.providers[0].parameters, "forward_directions": ["up"],
+                 "capture_species_numbers": numbers},
+            ),),
+        ))
+
+
 def _local_discovery_profile(numbers=None):
     corridor = derive_red_living_dex_wild_corridor(
         RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
