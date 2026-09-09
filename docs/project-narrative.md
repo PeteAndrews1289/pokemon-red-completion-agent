@@ -1,4 +1,34 @@
-# Current — native83 fitted; combined recovery before Champion
+# Current — Phase4 complete; living collection next
+
+**Verified bounded, hierarchical model-directed Red story completion.**
+The current checkpoint has both Champion and Hall-of-Fame evidence. Native83
+made two real recovery choices before one forced deterministic Champion step:
+652 actions,39,978 frames,3 items,0 faints,all30 specimens retained. The carried
+Lance win was a real native82 story choice. All71 carried checkpoint joins were
+authenticated. [Closeout audit](audits/red-phase4-closeout-2026-09-09.md).
+
+This is not fresh-game autonomy,learned combat,an independent reliability result,
+or completion of the full project. Item selection,battle mechanics and profile
+sequencing remain deterministic/operator support. The raw living-Dex predicate
+remains false:92 required specimens remain under the current declared contract.
+Earlier failed trials remain quarantined and visible.
+
+The two admitted recovery outcomes were fitted once with all prior data retained.
+Native85 now has85 examples (84 comparative,1 historical guided). Forced Champion
+was excluded. Native83 played the win; native85 has not played. Its in-sample
+error rose slightly,so no improved-policy or promotion claim is made.
+
+Phase4 checklist is archived3/3. The next local Phase5 checklist starts0/3:
+attainable-target census,legitimate supply/useful menu,and a measured collection
+lesson. [Next-session plan](work-sessions/2026-09-09-phase5-collection-plan.md).
+No further gameplay is running at this stopping point. Do not reopen boss
+cohorts; audit post-Hall-of-Fame control before continuing to collection.
+
+Internal read-only review accepted the closeout scope. No external Claude or
+Antigravity session/quota was used or measured here. Codex owns integration;
+use external reviewers next only for bounded availability/accounting questions.
+
+## Historical checkpoint — native83 fitted; combined recovery before Champion
 
 The real model-selected Lance win is now fitted:83 examples, all82 prior rows
 retained, one new outcome. The next model selected Elixir restoration and a

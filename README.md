@@ -7,6 +7,24 @@ percentage belongs only to its named checklist—not overall game or project com
 
 ## Latest development checkpoint
 
+**Phase4 is complete: checkpoint-based, hierarchical model-directed Red story
+completion, with verified Champion and Hall-of-Fame evidence.** All30 living
+specimens were preserved with zero faints. In the final episode, the83-example
+model chose HP recovery and PP recovery before a forced Champion continuation:
+652 actions,39,978 frames and3 owned items. Battles and item targets remain
+deterministic; this is not fresh-game autonomy or independent reliability.
+
+The two genuine choices were then fitted, retaining all prior data:the new model
+has85 examples and has not played yet. The forced Champion step was excluded.
+Its in-sample error rose slightly; we do not claim the refit is better.
+
+Next is the living collection:92 required specimens remain under the current
+contract. Version exclusives,trades and unavailable events remain explicit
+dependencies. [Verified closeout](docs/audits/red-phase4-closeout-2026-09-09.md)
+· [Next-session plan](docs/work-sessions/2026-09-09-phase5-collection-plan.md).
+
+### Historical development checkpoint — September7
+
 The goal-value learner has **60 retained examples**. Its latest acquisition choice failed,
 and the failure was fitted while retaining all59earlier examples. Capture preparation did
 successfully open **20 active storage slots**, preserving **23 living species /25 specimens**

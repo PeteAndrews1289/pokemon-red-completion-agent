@@ -1,8 +1,8 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-combined-owned-recovery",
-  "current_stage": "red-story",
+  "as_of_session": "2026-09-09-phase4-complete",
+  "current_stage": "red-collection",
   "stages": {
     "foundation": {
       "status": "verified",
@@ -17,12 +17,12 @@
       "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
     },
     "red-story": {
-      "status": "current",
-      "evidence": "docs/evidence/red-lance-fit-champion-stop-2026-09-09.json"
+      "status": "verified",
+      "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
     },
     "red-collection": {
-      "status": "planned",
-      "evidence": null
+      "status": "current",
+      "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Model-led league continuation",
+    "title": "Start post-game collection",
     "items": [
       {
-        "id": "fixed-damage-entry",
-        "label": "Qualify shared fixed-damage entry",
-        "done": true,
-        "evidence": "docs/evidence/red-fixed-damage-entry-2026-09-09.json"
+        "id": "postgame-target-census",
+        "label": "Audit attainable living-Dex targets",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "linked-native-story",
-        "label": "Carry a real model choice forward",
-        "done": true,
-        "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
+        "id": "postgame-useful-menu",
+        "label": "Qualify supply and useful alternatives",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "current-champion-hof",
-        "label": "Verify Champion and Hall of Fame",
+        "id": "postgame-learned-collection",
+        "label": "Measure a learned collection choice",
         "done": false,
         "evidence": null
       }
@@ -540,6 +540,12 @@
       "result": "Native83 fitted actual Lance victory with all prior rows retained. Later Champion attempt beat3opponents, stopped atGyarados:331actions25998frames3items0faints30specimens.",
       "deviation": "PP profile replaced HP restoration; combined opt-in restores both offers. Failed episode remains quarantined; no new tactic learner, reset or phase-exit change.",
       "next": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence."
+    },
+    {
+      "session": "2026-09-09-phase4-complete",
+      "result": "Phase4 verified:current Champion and Hall of Fame,30specimens0faints,652actions39978frames.2genuine recovery choices,1forced story step. Native85 fitted2rows;all prior data retained.",
+      "deviation": "Checkpoint-based hierarchical development, not fresh-game autonomy. Forced Champion excluded; oldfailedattemptsretained. Native85 unplayed and in-sample error slightly worse. Phase4 exit unchanged.",
+      "next": "Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson."
     }
   ],
   "closed_milestones": [
@@ -929,6 +935,31 @@
         }
       ],
       "closure": "2/3 verified. Optional updated first-choice probe deferred: no new first-action contrast; repaired controller changes the old contract. No replacement cohort and no Phase4 exit change."
+    },
+    {
+      "session": "2026-09-09-phase4-complete",
+      "stage": "red-story",
+      "title": "Model-led league continuation",
+      "items": [
+        {
+          "id": "fixed-damage-entry",
+          "label": "Qualify shared fixed-damage entry",
+          "done": true,
+          "evidence": "docs/evidence/red-fixed-damage-entry-2026-09-09.json"
+        },
+        {
+          "id": "linked-native-story",
+          "label": "Carry a real model choice forward",
+          "done": true,
+          "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
+        },
+        {
+          "id": "current-champion-hof",
+          "label": "Verify Champion and Hall of Fame",
+          "done": true,
+          "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
+        }
+      ]
     }
   ]
 }

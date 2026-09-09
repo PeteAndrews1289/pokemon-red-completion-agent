@@ -29,21 +29,21 @@ Not the product:
 
 ## One active lane
 
-**Red resource-backed story integration V1** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red living-collection continuation preparation** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence.
+- Next decision: Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
-| Authority now | Native83 now contains the admitted model-selected Lance win, all82prior rows retained. Later model-selected Elixir plus forced Champion stopped at fourth opponent; no failed trace fitted. |
+| Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
+| Authority now | Native83 sampled HP then PP recovery before a forced deterministic Champion step. Current Champion/Hall-of-Fame facts verified. Native85 fitted2 real choices, all83prior rows retained; no post-fit play or promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Reusable text readiness now exercised in real Red battle entry. Resource-management diagnosis uses actual varied party HP, moves and incoming bounds; no independent advantage, new native training rows or cross-game transfer. |
-| Cheapest falsifier | The actual Lance party can heal Jolteon then restore Blastoise PP using owned items. Test offer composition, then measure actual sampled goals; the proposed order is not guaranteed. |
+| Cheapest falsifier | Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-combined-owned-recovery** · status **active** · evidence [development episode](docs/evidence/red-lance-fit-champion-stop-2026-09-09.json)
+**2026-09-09-phase4-complete** · status **active** · evidence [development episode](docs/evidence/red-phase4-closeout-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Model83 fitted one new Lance outcome. Later Champion episode331actions25998frames3items0faints30specimens, quarantined. Phase4 checklist2/3. |
-| Authority delta | Native83 now contains the admitted model-selected Lance win, all82prior rows retained. Later model-selected Elixir plus forced Champion stopped at fourth opponent; no failed trace fitted. |
-| Transfer result | Actual high-level choice carried through a later boss. This is correlated Red development, not an independent success-rate or cross-game transfer claim. |
-| Blocker | Champion and Hall of Fame remain absent. PP-only profile hid HP restoration, leaving Jolteon61/172 unable to help; no healthy offensive matchup remained at Gyarados after2FullRestores. |
-| Decision | Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence. |
-| Next session | Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence. |
-| Next falsifier | The actual Lance party can heal Jolteon then restore Blastoise PP using owned items. Test offer composition, then measure actual sampled goals; the proposed order is not guaranteed. |
-| Stop condition | Each claimed attempt stops at its first exception; prior failed saves remain closed. Reorient after the next finite result. No automatic controller fallback, critical-risk mode, retry or new boss-fitting cohort. |
+| Learning output | Phase4 checklist3/3.652actions39978frames,2genuine choices1forced,3items0faints30specimens.71carried checkpoint joins authenticated. Model85 now fitted; forced Champion excluded. |
+| Authority delta | Native83 sampled HP then PP recovery before a forced deterministic Champion step. Current Champion/Hall-of-Fame facts verified. Native85 fitted2 real choices, all83prior rows retained; no post-fit play or promotion. |
+| Transfer result | Bounded hierarchical checkpoint-based Red story completion; correlated development, not fresh-game autonomy or independent reliability. Living-Dex completion and cross-game transfer remain unproved. |
+| Blocker | Phase4 story exit met. Living collection remains unfinished:92required specimens under current contract. Native85 unplayed and in-sample error slightly worse; post-HoF control/supply and version/trade dependencies need next-session audit. |
+| Decision | Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson. |
+| Next session | Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson. |
+| Next falsifier | Read-only Hall-of-Fame continuation and remaining-specimen census, then require two attainable useful collection goals. No new boss replay. |
+| Stop condition | Phase4 closeout is the natural stop. Do not retry old failures or run another boss cohort. Next collection session stops for missing useful choices, unsafe continuation or unexplained specimen loss. |
 
 ### Stop conditions
 

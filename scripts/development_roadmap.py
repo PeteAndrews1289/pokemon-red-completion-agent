@@ -122,7 +122,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(
         50,
         215,
-        f"{samples} goal-value examples  /  Full model-led Red win: {story_status}",
+        f"{samples} goal-value examples  /  Checkpoint-based Red story: {story_status}",
         "small",
     )
     parts.append('<rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>')

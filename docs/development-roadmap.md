@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-combined-owned-recovery**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-phase4-complete**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Model-led league continuation: 2/3 acceptance items (67%).**
+**Start post-game collection: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Qualify shared fixed-damage entry ([evidence](../docs/evidence/red-fixed-damage-entry-2026-09-09.json))
-- [x] Carry a real model choice forward ([evidence](../docs/evidence/red-model-selected-lance-2026-09-09.json))
-- [ ] Verify Champion and Hall of Fame
+- [ ] Audit attainable living-Dex targets
+- [ ] Qualify supply and useful alternatives
+- [ ] Measure a learned collection choice
 
-Current model: **83 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **85 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -50,7 +50,7 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — current
+### 04. Finish Red with the model — verified
 
 Plan quests, prerequisites and puzzles through the Champion.
 
@@ -58,15 +58,17 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-lance-fit-champion-stop-2026-09-09.json)
+[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
 
-### 05. Build the Red-era living Dex — planned
+### 05. Build the Red-era living Dex — current
 
 Capture and retain specimens; evolve, store and trade as needed.
 
 **Exit criterion:** Verified living collection against an explicit Red/Blue, trade and event availability contract.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
+
+[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -93,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-phase4-complete
+
+Phase4 verified:current Champion and Hall of Fame,30specimens0faints,652actions39978frames.2genuine recovery choices,1forced story step. Native85 fitted2rows;all prior data retained.
+
+**Deviation:** Checkpoint-based hierarchical development, not fresh-game autonomy. Forced Champion excluded; oldfailedattemptsretained. Native85 unplayed and in-sample error slightly worse. Phase4 exit unchanged.
+
+**Next:** Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson.
 
 ### 2026-09-09-combined-owned-recovery
 

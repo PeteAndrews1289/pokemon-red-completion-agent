@@ -83,9 +83,9 @@ def test_graphic_updates_current_position_and_checklist_without_static_claims(pr
     graphic = render_svg(baseline, state, lane, evidence)
     assert "60%" in graphic and "PHASE 04" in graphic
     assert "47 goal-value examples" in graphic
-    assert "Full model-led Red win: not demonstrated" in graphic
+    assert "Checkpoint-based Red story: not demonstrated" in graphic
     state["stages"]["red-story"]["status"] = "verified"
-    assert "Full model-led Red win: verified" in render_svg(baseline, state, lane, evidence)
+    assert "Checkpoint-based Red story: verified" in render_svg(baseline, state, lane, evidence)
 
 
 def test_changed_learning_evidence_is_rejected(project):

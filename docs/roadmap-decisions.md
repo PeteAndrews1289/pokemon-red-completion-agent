@@ -1,5 +1,27 @@
 # Roadmap baseline and deviations
 
+## September9 — Phase4 verified; move to living collection
+
+The existing model-directed story exit is met under disclosed hierarchical
+development authority:concurrent Champion and Hall-of-Fame facts,30 specimens
+retained,2 genuine model recovery choices and1 forced Champion step. The actual
+model-selected Lance victory is its authenticated parent. No fresh-game run,
+learned battle tactics or independent reliability is claimed.
+
+Archive the Phase4 checklist at3/3 and move the current stage toRed collection.
+Its new0/3 local checklist is preparation,not the entire collection exit. Stable
+phase IDs,exits and the Red→living collection→compatible hack→Crystal sequence
+remain unchanged. The infographic caption now explicitly says checkpoint-based
+Red story,preventing a verified stage from implying fresh-game autonomy.
+
+The three-decision combined-resource successor was a new declared engineering
+plan after the PP-only failure,not a retry or resumed failed save. It kept HP
+and PP skills available; native83 chose both. Native85 fitted the2 eligible
+choices without the forced Champion step. The slight in-sample error increase
+is retained; no automatic promotion. See the
+[closeout](audits/red-phase4-closeout-2026-09-09.md) and
+[next-session plan](work-sessions/2026-09-09-phase5-collection-plan.md).
+
 ## September9 final reorientation — manage resources before the stranded endpoint
 
 After publishing89d03dd5, a separately declared successor from authenticated
