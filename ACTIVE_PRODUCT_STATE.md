@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion.
+- Next decision: From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Lorelei recovery completed and verified: Lapras defeated,5544 income, all specimens and party preserved. Native model-facing story/restoration choices remain to qualify. |
-| Authority now | Model76 retains76 fitted outcomes,34successful,66distinct rows. Lorelei recovery adds0labels/queries. Completed checkpoint93c7fef8:30specimens/28living/33registered,6163currency,three Full Restores. Story ledger31/36 is not model-led Red completion. |
+| Reusable capability | Optional preparation is now a real native choice: one owned Full Restore healed Dugtrio12to118HP. Current observed room terrain opens a computed14-step approach to Bruno; that story execution remains untested. |
+| Authority now | Model77:77 fitted outcomes,35successful,67distinct rows. One V4 exploratory readiness decision with two supported alternatives; no forced singleton or teacher fallback.30specimens/28living/33registered,6163currency,two Full Restores. No model-led boss victory or promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
-| Cheapest falsifier | Does retained post-Lorelei93c7 expose two genuinely executable useful alternatives, rather than a forced boss sequence or an item-menu opening mislabeled as a complete option? |
+| Cheapest falsifier | Does the next retained-state choice use improved readiness to progress, without repeated optional-healing consumption or a fictitious story success? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-08-confusion-recovery** · status **active** · evidence [qualification](docs/evidence/red-confusion-recovery-2026-09-08.json)
+**2026-09-08-native-choice-learning** · status **active** · evidence [model fit](docs/evidence/red-native-choice-learning-2026-09-08.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A completed deterministic battle skill and legitimate resources unblock a genuine story-choice lesson; neither is a learned story victory. |
-| Learning output | 57actions/5413frames; Lorelei victory/payout verified,5544 earned,zero new items or faints.630 focused tests. Zero new training rows. |
-| Authority delta | No model queries, new fit rows or authority promotions. Model76 unchanged. |
-| Transfer result | ROM-free confusion/self-hit/stat/menu cases pass. Live continuation used three PP-spending attacks, not a demonstrated self-hit. No independent transfer. |
-| Blocker | Recovery is complete; the remaining gap is genuinely executable native story/restoration choice and measured learning, not more boss replay. |
-| Decision | Stop battle-mechanics expansion after the completed recovery. Return to the named model-selected story-versus-preparation lesson. |
-| Next session | From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion. |
-| Next falsifier | Does retained post-Lorelei93c7 expose two genuinely executable useful alternatives, rather than a forced boss sequence or an item-menu opening mislabeled as a complete option? |
-| Stop condition | No consumed replay, fictitious alternative, unexecuted labels or further generic simulator. Preserve current checkpoint and costs; if options are forced, do not claim a learned choice. |
+| Product alignment | Learner chooses legitimate preparation versus story advancement; the outcome and consumed item enter training. Live-map observation replaces stale cartridge geometry. |
+| Learning output | One successful native restoration at58actions/4776frames;1FullRestore spent;77settled/35successful/67distinct. Prior76 rows retained.339 focused tests. |
+| Authority delta | One model-policy restoration choice and one admitted outcome fitted. Model76to77; no production promotion or independent advantage. |
+| Transfer result | Varied ROM-free live-door, object/predicate, resource and safety cases pass. Same-lineage Red only. No independent generalization or model advantage. |
+| Blocker | Bruno approach and battle have not been executed. The model strongly favors healing;77 has no post-fit gameplay. |
+| Decision | Close the integration session with its actual fitted outcome. Next test the post-fit continuation, preserving item costs and the untested-story caveat. |
+| Next session | From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator. |
+| Next falsifier | Does the next retained-state choice use improved readiness to progress, without repeated optional-healing consumption or a fictitious story success? |
+| Stop condition | Stop after the next bounded outcome and retain any failure. Do not replay Lorelei, invent Bruno victory, refresh item budgets, or count a forced singleton as learning. |
 
 ### Stop conditions
 

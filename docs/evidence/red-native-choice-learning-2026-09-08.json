@@ -1,0 +1,99 @@
+{
+  "schema": "pokemon.red.native-story-readiness-learning.v1",
+  "status": "one_learned_readiness_outcome_fitted",
+  "source_commit": "67caa2f7fdbc424fa249e33f7a6cb654ddf9de9c",
+  "source_bundle_sha256": "f0e4cfe843abd2c9df9f83f67be513b8bcf6aa9d72a7540805340db6d8a59dec",
+  "episode_id": "red-native-choice-20260908-01-causal",
+  "trajectory_manifest_sha256": "42babeae12667a217220be0dd14521b8fe36b3cc868fe3a941965af6402c2e07",
+  "checkpoint_record_sha256": "7126a72240dbfd7e552de0ca016a42ba7a30d103d09dd4252f904ee2b1002f2b",
+  "checkpoint_state_sha256": "11ff52b06ada61c3a8bb12aab241aba172bc3ea54a51fb530acb809c7b535dcb",
+  "prior_checkpoint_state_sha256": "93c7fef84378c7960d541579ef092c8a8c48ec62b341c94b4eb2770c2c1f510b",
+  "behavior_policy_id": "living-dex-player-optional-recovery-v4",
+  "model_feature_version": 3,
+  "available_goals": [
+    "restore_team",
+    "advance_story"
+  ],
+  "selected_goal": "restore_team",
+  "selected_probability": 0.8612820599507578,
+  "alternative_probability": 0.13871794004924215,
+  "completed_goal": true,
+  "actions": 58,
+  "frames": 4776,
+  "full_restores_spent": 1,
+  "full_restores_remaining": 2,
+  "healed_party_slot": 4,
+  "healed_species": "Dugtrio",
+  "hp_before": 12,
+  "hp_after": 118,
+  "hp_maximum": 118,
+  "party_hp": [
+    198,
+    61,
+    71,
+    118,
+    34,
+    139
+  ],
+  "party_levels": [
+    66,
+    56,
+    30,
+    55,
+    13,
+    55
+  ],
+  "money": 6163,
+  "specimens": 30,
+  "living_species": 28,
+  "registered_species": 33,
+  "story_objectives": 31,
+  "story_target": 36,
+  "source_proposal_examples": 0,
+  "new_fitted_examples": 1,
+  "model_settled_examples": 77,
+  "model_successful_examples": 35,
+  "model_distinct_selected_rows": 67,
+  "model_sha256": "57e1c2e26ef1c663b2efb4c78da0f435c706043255ea7776933eb06290c41b3f",
+  "prior_model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+  "corpus_sha256": "96175748404cda26ffe924694ea1b5a2e772d3cdc31e8f7f223b7b5b962758d9",
+  "prior_rows_retained": true,
+  "teacher_fallbacks": 0,
+  "forced_singleton_steps": 0,
+  "authority_promotions": 0,
+  "independent_evaluation": false,
+  "post_fit_gameplay": false,
+  "bruno_executed": false,
+  "full_game_replays": 0,
+  "retries": 0,
+  "current_map_overlay": {
+    "static_routes_found": 0,
+    "observed_routes_steps": [
+      16,
+      14,
+      16,
+      14
+    ],
+    "executed_route": false
+  },
+  "historical_native_replay": {
+    "episodes": 61,
+    "rows": 29,
+    "regional_inventory_entries": 18
+  },
+  "audit": {
+    "actions": 0,
+    "frames": 0,
+    "save_bytes_unchanged": true,
+    "collection_recounted": true
+  },
+  "verification": {
+    "focused_tests_passed": 339,
+    "full_suite": false,
+    "ruff_passed": true,
+    "mypy_source_files": 433,
+    "registry_checked": true
+  },
+  "limitation": "One authentic optional-healing lesson, not a learned boss victory or measured advantage. In-sample weighted error did not improve against the prior; model77 has not played.",
+  "next": "One declared post-fit readiness-versus-story decision from checkpoint11ff52b0. Preserve finite items and examine repeated-healing preference; do not manufacture boss labels or restart Lorelei."
+}

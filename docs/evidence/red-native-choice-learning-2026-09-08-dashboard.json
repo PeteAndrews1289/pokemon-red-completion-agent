@@ -1,0 +1,168 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "One actual optional-healing choice versus advancing to Bruno; verified and fitted. No learned boss victory.",
+  "session_evidence": "docs/evidence/red-native-choice-learning-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 58,
+    "frames": 4776,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-native-choice-20260908-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "697716f3855ed344ae4ae10509f2eef8d0cd207a6e396774e23ccfbc4f7852b0",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 67,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 77,
+      "successful_examples": 35,
+      "total_examples": 77,
+      "train_dataset_sha256": "38a97c45f3c7fb4bfec292cc423df7afc6b3050398f817a50ea1fa9d251ea125",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.01233036147832876,
+      "weighted_mse_before": 0.02795066928172753
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "96175748404cda26ffe924694ea1b5a2e772d3cdc31e8f7f223b7b5b962758d9",
+      "file_sha256": "363b4d77556aecde7436cad7e9bd6e538eb743f828fcdc0c4eb22ab75cc50505",
+      "independent_evaluation": false,
+      "model_sha256": "57e1c2e26ef1c663b2efb4c78da0f435c706043255ea7776933eb06290c41b3f",
+      "prior_model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 77,
+      "source_bundle_sha256": "f0e4cfe843abd2c9df9f83f67be513b8bcf6aa9d72a7540805340db6d8a59dec",
+      "source_commit": "67caa2f7fdbc424fa249e33f7a6cb654ddf9de9c"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09877019643130429,
+        0.000005535402163390899,
+        0.0000603789899254471,
+        0.0057319594990952825,
+        0.004259110486023901,
+        0.0013511584325868054,
+        0.0007898471516704401,
+        0.000001301342977794245,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 77,
+      "total_examples": 77,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012329943081749705
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09878476816398638,
+        0.000005536519994319451,
+        0.00006037866650749495,
+        0.005732799800710706,
+        0.004259778229607034,
+        0.001338887921394004,
+        0.0007898025838179585,
+        0.0000013014189409356352,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 77,
+      "total_examples": 77,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012330361478328758
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "One authentic optional-healing lesson, not a learned boss victory or measured advantage. In-sample weighted error did not improve against the prior; model77 has not played.",
+  "next_session": "One declared post-fit readiness-versus-story decision from checkpoint11ff52b0. Preserve finite items and examine repeated-healing preference; do not manufacture boss labels or restart Lorelei.",
+  "session_totals": {
+    "actions": 58,
+    "frames": 4776,
+    "new_fitted_examples": 1,
+    "full_restores_spent": 1,
+    "earned_money": 0
+  },
+  "fit_scope": "77 settled outcomes: prior76 retained plus one verified native restoration. No counterfactual boss result or independent advantage.",
+  "latest_support_episode": {
+    "actions": 57,
+    "frames": 5413,
+    "admitted_examples": 0,
+    "sampled_choices": 0,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase4-confusion-recovery-20260908-01",
+    "status": "completed",
+    "trainer_defeated": "Lorelei",
+    "payout": 5544
+  },
+  "latest_engineering_qualification": {
+    "session": "2026-09-08-native-choice-learning",
+    "evidence_path": "docs/evidence/red-native-choice-learning-2026-09-08.json",
+    "focused_tests_passed": 339,
+    "full_suite": false,
+    "new_actions": 58,
+    "new_frames": 4776,
+    "training_examples": 1,
+    "model_fitted": true
+  }
+}

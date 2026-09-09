@@ -1,6 +1,47 @@
 # Model-first development roadmap
 
-## Current — Lorelei recovered; return to genuine model choices
+## Current — one genuine readiness lesson fitted; model77
+
+Published source67caa2f7 enabled an actual choice between advancing toward Bruno
+and using one owned restoration item. V4 exploration chose restoration
+(probability0.861282; story0.138718). Dugtrio healed12to118HP in58actions/4776frames;
+one Full Restore was spent, two remain. All30specimens/28living/33registered and
+6163currency are preserved. No teacher fallback, forced singleton or replay.
+
+The actual settled outcome was fitted:76to77examples,35successful,67distinct rows.
+Model57e1c2e2; all prior76 rows retained. This is a learned preparation choice,
+NOT learned Bruno victory or an independent advantage. The updated in-sample error
+is slightly higher than the prior on the expanded corpus; fitting alone is not
+proof of a better player. Model77 has no post-fit gameplay yet.
+
+Current episode:red-native-choice-20260908-01-causal; manifest42babeae,
+checkpoint record7126a722, state11ff52b0. Read-only reopen verified exact HP,
+item cost, collection and unchanged save bytes. This replaces93c7 as the next
+continuation origin; do not replay its consumed choice or historical Lorelei.
+
+The routing blocker was stale initial cartridge geometry. The observed opened
+room exit yields a14-step Bruno approach; runtime preserves object/story guards
+and rejects changed terrain before input. The approach and Bruno battle have NOT
+been played. Earlier availability failure was retained as a zero-input inspection.
+V4 behavior is prospective; historical V3 decisions retain their original gate.
+All61 prior native episodes re-admit, including29 native rows and18 regional
+inventory entries.339 focused ROM-free tests, lint,433-file typing and registry
+checks pass; not a full-suite claim.
+
+Next: one declared post-fit readiness-versus-story choice from11ff withmodel77.
+Watch for repeated-healing preference instead of progression; item stock is finite.
+Income-to-story stays1/3 conservatively until the story integration evidence is
+actually earned. No stage exits or North Star requirements changed.
+
+Codex owns implementation/publication. Flash3.8 High provided a15-second CLI
+design advisory, not a full source audit. It helped select boundary tests; its
+implied per-frame policy interruption does not match this runtime. Claude was not
+dispatched. Five-hour/weekly quotas unavailable; Flash reported23292 CLI tokens.
+Next recommendation:Astra High, Fast off for the bounded integration/verification.
+
+See [native learning audit](audits/red-native-choice-integration-2026-09-08.md).
+
+## Historical — Lorelei recovered; return to genuine model choices
 
 Source8d9dcc06 completed one continuation from retained Lapras2e9:57actions/
 5413frames, three slot2 attacks, no additional healing or switching. Lorelei's

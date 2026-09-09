@@ -1,6 +1,30 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — Lorelei is finished, but the model has not learned this victory
+## Current — the learner chose preparation and learned its real cost
+
+The next useful advance was not another scripted boss win. The model had two
+supported choices: advance toward Bruno, or spend an owned item on an injured
+party member. Its exploratory policy chose healing. Dugtrio recovered from12to118HP,
+one Full Restore was consumed, and that completed outcome entered training:
+76to77 settled examples,35successful,67distinct rows. All30 specimens survived.
+
+The integration also exposed an important difference between a cartridge and a
+world model: the cartridge held the original closed exit, while the saved game
+held the open exit after Lorelei. Reading the actual room made a14-step route
+available without writing a walkthrough. That route is planned, not yet played.
+
+This is a small but real learning result, not proof of intelligent full-game play.
+The policy favored healing strongly; the next test must show preparation leads
+to progress rather than repeated consumable spending. Model77 has no post-fit
+gameplay, no Bruno victory and no measured generalization. A slightly worse
+in-sample error also prevents claiming this fit made the model better.
+
+339 focused tests and exact saved-state verification support this report. The
+current checkpoint is11ff52b0, with6163currency and two Full Restores remaining.
+Long-term goals and stage exits remain unchanged.
+See [session audit](audits/red-native-choice-integration-2026-09-08.md).
+
+## Historical — Lorelei is finished, but the model has not learned this victory
 
 The saved Lapras continuation finished in57controller actions and5413frames.
 Three attacks defeated the final opponent; no additional healing item was needed.

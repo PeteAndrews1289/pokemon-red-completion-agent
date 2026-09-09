@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-08-confusion-recovery",
+  "as_of_session": "2026-09-08-native-choice-learning",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -396,6 +396,12 @@
       "result": "Lorelei defeated;57actions/5413frames,5544earned, no additional heal or faint. Collection30/28/33 preserved. Model76 unchanged; income-to-story1/3 pending native choice integration.",
       "deviation": "Existing no-PP suppressed-turn behavior was already present; qualified it and added narrow confusion bounds instead of another turn engine. No stage exit changed. Live self-hit remains unobserved.",
       "next": "From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion."
+    },
+    {
+      "session": "2026-09-08-native-choice-learning",
+      "result": "Model76to77: one genuine readiness choice, Dugtrio12to118HP, one Full Restore.339 focused tests; live layout yields14-step Bruno route.30specimens preserved.",
+      "deviation": "No baseline exits changed. Bruno has not been executed, so income-to-story stays1/3 conservatively. A successful healing lesson is not learned story completion.",
+      "next": "From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator."
     }
   ],
   "closed_milestones": [

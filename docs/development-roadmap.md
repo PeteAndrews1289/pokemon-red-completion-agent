@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-08-confusion-recovery**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-08-native-choice-learning**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify current-state story entry and readiness
 - [ ] Play and fit a genuine bounded story choice
 
-Current model: **76 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **77 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-08-native-choice-learning
+
+Model76to77: one genuine readiness choice, Dugtrio12to118HP, one Full Restore.339 focused tests; live layout yields14-step Bruno route.30specimens preserved.
+
+**Deviation:** No baseline exits changed. Bruno has not been executed, so income-to-story stays1/3 conservatively. A successful healing lesson is not learned story completion.
+
+**Next:** From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator.
 
 ### 2026-09-08-confusion-recovery
 
