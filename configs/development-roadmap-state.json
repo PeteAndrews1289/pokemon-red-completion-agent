@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-critical-exposure",
+  "as_of_session": "2026-09-09-lance-complete-reorientation",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-critical-exposure-2026-09-09.json"
+      "evidence": "docs/evidence/red-lance-support-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -444,6 +444,12 @@
       "result": "No new admitted row or fit. Four opponents defeated, exact final Dragonite retained, one Full Restore legitimately spent. Model79 unchanged. Risk actor qualified read-only;314 related tests pass.",
       "deviation": "Explicit support risk mode, not weakened default safety or a changed baseline. No learned progress; risk probability not estimated.",
       "next": "One atmost2-intent critical-exposure continuation from exact Dragonite3ff8391e. Then reorient on actual model story choices and Champion integration; no lower stage exit."
+    },
+    {
+      "session": "2026-09-09-lance-complete-reorientation",
+      "result": "Lance defeated; all6 alive,30specimens/28living retained. Full chain368actions/32869frames,1FullRestore,1explicit critical-exposure intent. Zero new model queries or fit rows; model79 unchanged.",
+      "deviation": "Supported boss progress is not learned Phase4 completion. Current room has no genuine resource alternative. A separately declared dependent practice branch is permitted by existing short-scenario training policy; no splicing, replenishment or independent-root claim.",
+      "next": "Authenticate one eligible successful post-Lorelei training checkpoint, expose actual model79 story/resource alternatives, then play and fit only a newly admitted observed outcome. Champion adapter follows the learning falsifier."
     }
   ],
   "closed_milestones": [

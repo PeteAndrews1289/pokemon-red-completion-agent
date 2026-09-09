@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red.lance-support-result.v1",
+  "status": "lance_defeated_supported_not_model_directed",
+  "episode_id": "red-lance-critical-exposure-20260909-01",
+  "checkpoint_sha256": "c1883f7f7b6b4ff846f4385f03046fec9334cf31cb274272c30e970261464b5a",
+  "state_sha256": "ab28fadb627a5648efa3156b78a371ba3fa14673ed0b8ac599fcaeadec3f7947",
+  "trajectory_manifest_sha256": "6237c66c443678c8c3dc8d514e172d6b294a6a1e06ccc6e6d131fc1ccea1bc8b",
+  "source_commit": "992608bec0ba185ee9a18fce377187df1a41a1bb",
+  "source_bundle_sha256": "ef9074b4ec4af027b04fbbcca3b7b971dd250efa762e5c733a4c6b39230294aa",
+  "model_sha256": "0a96728643bd19fdc442ed203a2251ce8bcb4cb08aec77611b63684a58af761f",
+  "flags": {
+    "lance_battle": true,
+    "lance_story": true,
+    "champion": false
+  },
+  "field_ready": true,
+  "party_faints": 0,
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 28,
+    "registered_species": 33,
+    "required_specimens_remaining": 92,
+    "required_specimens_sha256": "9d2010e371a0e0456207f2f0461d0f9c0ed80c4f4b83d3a79bc185741dbcb60e",
+    "retained_captures": 28,
+    "specimen_ledger_sha256": "e3211a707efc0cb1956d59ca8bf07f9bd77a7c38a469fb7d650b42eb1712c346",
+    "storage_headroom": 2,
+    "total_living_specimens": 30,
+    "undeclared_specimen_losses": 0
+  },
+  "support_actions": 61,
+  "support_frames": 6001,
+  "total_lance_chain_actions": 368,
+  "total_lance_chain_frames": 32869,
+  "critical_exposure_intents": 1,
+  "full_restores_spent_in_chain": 1,
+  "model_queries": 0,
+  "fit_rows": 0,
+  "audit_actions": 0,
+  "audit_frames": 0,
+  "exact_roundtrip": true,
+  "money": 23983,
+  "party_levels": [
+    56,
+    55,
+    30,
+    68,
+    13,
+    55
+  ],
+  "party_hp": [
+    137,
+    118,
+    71,
+    167,
+    34,
+    139
+  ],
+  "party_max_hp": [
+    172,
+    118,
+    89,
+    220,
+    39,
+    139
+  ],
+  "independent_evaluation": false,
+  "phase4_complete": false,
+  "champion_hall_of_fame_completion": false,
+  "new_fit": false,
+  "branch_policy": "Current Lance endpoint and all incurred costs remain immutable. Any historical practice branch must be separately declared as dependent training reuse; it cannot replenish or continue this trajectory."
+}

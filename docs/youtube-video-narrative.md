@@ -1,3 +1,15 @@
+# Current — Lance defeated; learning reorientation, 2026-09-09
+
+Lance is verified defeated with all six Pokémon alive and30 specimens retained.
+The complete retained support chain cost368 actions/32869 frames, one Full Restore
+and one explicitly bounded critical-exposure attack intent. Model79 is unchanged:
+zero new model queries or fitted rows. Champion/HoF and Phase4 remain incomplete.
+Next: one prospectively declared dependent training lesson from an eligible
+successful post-Lorelei checkpoint, exposing real story/resource choices. This is
+not replenishment or continuation of Lance; keep sibling lineage/costs separate.
+See docs/evidence/red-lance-support-2026-09-09.json and ACTIVE_PRODUCT_STATE.md.
+
+
 # YouTube narrative: teaching a model to actually play Pokémon
 
 ## Current — final Dragonite; explicit risk reorientation

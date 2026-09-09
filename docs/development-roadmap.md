@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-critical-exposure**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-complete-reorientation**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-critical-exposure-2026-09-09.json)
+[Current evidence](../docs/evidence/red-lance-support-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-lance-complete-reorientation
+
+Lance defeated; all6 alive,30specimens/28living retained. Full chain368actions/32869frames,1FullRestore,1explicit critical-exposure intent. Zero new model queries or fit rows; model79 unchanged.
+
+**Deviation:** Supported boss progress is not learned Phase4 completion. Current room has no genuine resource alternative. A separately declared dependent practice branch is permitted by existing short-scenario training policy; no splicing, replenishment or independent-root claim.
+
+**Next:** Authenticate one eligible successful post-Lorelei training checkpoint, expose actual model79 story/resource alternatives, then play and fit only a newly admitted observed outcome. Champion adapter follows the learning falsifier.
 
 ### 2026-09-09-critical-exposure
 

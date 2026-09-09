@@ -61,7 +61,7 @@ def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
 
 @pytest.fixture
 def fixture(monkeypatch):
-    reader = _Reader(raw=replace(_raw(), map_id=9, event_flags=bytes(320),
+    reader = _Reader(raw=replace(_raw(), map_id=245, event_flags=bytes(320),
                                 player_money=619, badge_bits=255), ready=True)
     reader.read_current_map_objects = lambda: ()
     adapter = _adapter(reader)
@@ -118,7 +118,7 @@ def test_goal_availability_is_action_free_and_prepares_the_shortest_real_target(
 @pytest.mark.parametrize("fault", [None, "prerequisite", "lobby", "completed", "wrong_trainer"])
 def test_bruno_plans_its_actual_target_only_from_post_lorelei_region(fixture, monkeypatch, fault):
     old, reader, inputs, observe, zone = fixture
-    reader.raw = replace(reader.raw, map_id=245 if fault != "lobby" else 174)
+    reader.raw = replace(reader.raw, map_id=246 if fault != "lobby" else 174)
     def current():
         result = observe()
         facts = set(result.game_state.facts)

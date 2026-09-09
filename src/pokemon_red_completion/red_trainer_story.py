@@ -173,7 +173,7 @@ class RedCartridgeLoreleiSkill:
             if blocks.map_id != raw.map_id:
                 raise RedTrainerStoryError("story map changed while reading its live terrain")
             world = world.with_current_blocks(blocks)
-        if (is_agatha or is_lance) and raw.map_id != target_map:
+        if raw.map_id != target_map:
             from .gen1_scripted_arrival import (
                 trainer_room_arrival,
                 with_scripted_trainer_arrival,

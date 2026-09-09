@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-09 04:40 UTC",
+  "location": "Lance defeated; six Pokémon alive. Supported execution, not model-directed completion.",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "capture_items": 0,
+  "money": 23983,
+  "checkpoint_sha256": "c1883f7f7b6b4ff846f4385f03046fec9334cf31cb274272c30e970261464b5a",
+  "live": false,
+  "controller_actions": 0
+}

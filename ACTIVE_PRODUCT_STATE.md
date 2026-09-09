@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice.
+- Next decision: Preserve completed Lance checkpoint c1883f7f and all368actions/32869frames. Qualify one explicitly declared dependent practice branch from an eligible successful post-Lorelei training checkpoint, then expose actual story/resource alternatives to model79. No inventory reset of the Lance chain or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Four Lance opponents defeated during retained support. Final Dragonite exposes strict critical-bound deadlock; a separate finite risk allowance is qualified without changing default safeguards or claiming learning. |
-| Authority now | Model79 remains78 comparative-choice outcomes plus1 guided story row. Four Lance opponents defeated with deterministic support, final Full Restore spent, all6 alive. No new model query/fit or authority promotion. |
+| Reusable capability | Lance defeated through retained deterministic support; all six alive, 30 specimens retained. Model79 unchanged. The next block targets genuine learned story/resource decisions, not another guided completion claim. |
+| Authority now | Model79:78 comparative-choice outcomes plus1 guided Agatha row. Lance support adds zero model queries or fit rows. No authority promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
@@ -62,17 +62,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-critical-exposure** · status **active** · evidence [qualification](docs/evidence/red-critical-exposure-2026-09-09.json)
+**2026-09-09-lance-complete-reorientation** · status **active** · evidence [qualification](docs/evidence/red-lance-support-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Distinguish retained living specimens from additional zero-critical-risk guarantees. Bound maintenance to unblock meaningful story/party experience, not endlessly optimize teacher safety. |
-| Learning output | No new admitted row or fit. Four opponents defeated, exact final Dragonite retained, one Full Restore legitimately spent. Model79 unchanged. |
-| Authority delta | Separate deterministic support mode explicitly accepts at most2 critical-exposure attack intents; zero learned authority promotion. |
-| Transfer result | ROM-free ordinary/full damage, no-PP intent, ancestry and first-faint boundary tests pass; no cross-title execution. |
-| Blocker | Final Dragonite: activeHP164 exceeds ordinary upper104 but not critical-inclusive182. No healing items remain; default strict support cannot act. |
-| Decision | Keep strict defaults. Qualify an explicit capped risk actor with durable ancestry and first-faint stop; no risky switches, extra items, replay or probability claims. |
-| Next session | One atmost2-intent critical-exposure continuation from exact Dragonite3ff8391e. Then reorient on actual model story choices and Champion integration; no lower stage exit. |
+| Product alignment | Apply the North Star's short authenticated learning loop, not a second teacher-only full run. Phase4 and its unchanged Champion/HoF exit remain open. |
+| Learning output | Zero new model queries or admitted rows. Lance defeated;6 alive,30 specimens,28 living species;23983 currency, no Full Restores. Entire support chain368actions/32869frames, one heal and one risk intent. |
+| Authority delta | None. Lance is supported execution; model79 authority and79-row corpus unchanged. |
+| Transfer result | ROM-free safety tests and exact checkpoint/resource roundtrip verified. No independent or cross-title evaluation. |
+| Blocker | Current Lance room offers only forward Champion travel and no useful resource alternative. More guided boss execution alone cannot establish model-directed story choice. |
+| Decision | Prioritize one bounded genuine learning lesson from a separately disclosed eligible historical training checkpoint. Preserve Lance and its full costs as a sibling branch, never continuous recovery. |
+| Next session | Preserve completed Lance checkpoint c1883f7f and all368actions/32869frames. Qualify one explicitly declared dependent practice branch from an eligible successful post-Lorelei training checkpoint, then expose actual story/resource alternatives to model79. No inventory reset of the Lance chain or full replay. |
 | Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
 | Stop condition | Stop each attempt on its outcome or named blocker and retain the exact state; reassess before any successor. No consumed retry or inventory reset. |
 
