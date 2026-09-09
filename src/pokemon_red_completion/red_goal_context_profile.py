@@ -287,6 +287,23 @@ def bind_affordable_field_restore_profile(
     ))
 
 
+def bind_combined_field_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Explicit affordable reserved HP recovery, retaining owned PP as fallback."""
+    providers = {
+        spec.kind: (spec.kind, spec.mechanic, cast(dict[str, object], _thaw(spec.parameters)))
+        for spec in profile.providers
+    }
+    providers[GoalKind.RESTORE_TEAM] = (
+        GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE,
+        {"affordable_single_item": True, "reserve_last_full_restore": True,
+         "include_pp_fallback": True},
+    )
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id,
+        providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
+    ))
+
+
 def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Prospectively expose one owned PP item; old recovery profiles stay unchanged."""
     providers = {
@@ -546,11 +563,16 @@ def _parse_parameters(
     if mechanic is RedGoalMechanic.FIELD_RESTORE and row:
         _exact_keys(row, {"affordable_single_item"} | (
             {"reserve_last_full_restore"} if "reserve_last_full_restore" in row else set()
-        ))
+        ) | ({"include_pp_fallback"} if "include_pp_fallback" in row else set()))
         if row["affordable_single_item"] is not True:
             raise RedGoalContextProfileError("single-item recovery requires explicit opt-in")
         if "reserve_last_full_restore" in row and row["reserve_last_full_restore"] is not True:
             raise RedGoalContextProfileError("restoration reserve requires explicit opt-in")
+        if "include_pp_fallback" in row and (
+            row["include_pp_fallback"] is not True
+            or row.get("reserve_last_full_restore") is not True
+        ):
+            raise RedGoalContextProfileError("combined restoration requires explicit reserved mode")
         return row
     if mechanic in {
         RedGoalMechanic.BALANCED_TEAM,

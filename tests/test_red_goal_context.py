@@ -290,6 +290,21 @@ def _targeted_team_profile(profile_id: str):  # type: ignore[no-untyped-def]
     )
 
 
+def test_combined_profile_enables_pp_observation_without_changing_old_default(tmp_path):
+    from pokemon_red_completion.red_goal_context_profile import bind_combined_field_restore_profile
+
+    profile = _profile('combined-fixture')
+    original = build_red_goal_context_runtime(
+        profile=profile, capture=_capture(tmp_path), emulator=_Emulator(), reader=_Reader(),
+    )
+    combined = build_red_goal_context_runtime(
+        profile=bind_combined_field_restore_profile(profile), capture=_capture(tmp_path),
+        emulator=_Emulator(), reader=_Reader(),
+    )
+    assert original.adapter.include_pp_restoration is False
+    assert combined.adapter.include_pp_restoration is True
+
+
 def test_context_factory_binds_exact_profile_only_beside_policy_menu(
     tmp_path: Path,
 ) -> None:

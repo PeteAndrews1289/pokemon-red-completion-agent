@@ -1214,7 +1214,7 @@ def _regional_profiles(
                           "cartridge-trainer-story:lance",
                           "cartridge-trainer-story:champion",
                           "affordable-field-restore",
-                          "reserved-field-restore", "field-pp-restore"}
+                          "reserved-field-restore", "field-pp-restore", "combined-field-restore"}
             or source in {"trainer-recovery:1", "trainer-recovery:2"}
             or source in {"ordinary-trainer-recovery:1", "ordinary-trainer-recovery:2"}
         ):
@@ -1243,6 +1243,13 @@ def _regional_profiles(
                 recovery_controller=("ordinary-bounded-healing"
                     if str(source).startswith("ordinary-") else "critical-inclusive"),
             )
+            result.append(profile)
+            continue
+        if source == "combined-field-restore":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_combined_field_restore_profile,
+            )
+            profile = bind_combined_field_restore_profile(profile)
             result.append(profile)
             continue
         if source == "field-pp-restore":

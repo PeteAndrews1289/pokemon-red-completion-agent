@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-model-selected-lance**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-combined-owned-recovery**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Carry a real model choice forward ([evidence](../docs/evidence/red-model-selected-lance-2026-09-09.json))
 - [ ] Verify Champion and Hall of Fame
 
-Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **83 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-model-selected-lance-2026-09-09.json)
+[Current evidence](../docs/evidence/red-lance-fit-champion-stop-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-combined-owned-recovery
+
+Native83 fitted actual Lance victory with all prior rows retained. Later Champion attempt beat3opponents, stopped atGyarados:331actions25998frames3items0faints30specimens.
+
+**Deviation:** PP profile replaced HP restoration; combined opt-in restores both offers. Failed episode remains quarantined; no new tactic learner, reset or phase-exit change.
+
+**Next:** Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence.
 
 ### 2026-09-09-model-selected-lance
 

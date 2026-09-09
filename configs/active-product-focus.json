@@ -29,29 +29,29 @@
     },
     {
       "capability": "Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split.",
-      "cheapest_falsifier": "Actual carried party has 2 Full Restores and 1 Elixir; read-only preparation covers all six Champion opponents. First qualify PP restoration and supported switch boundaries, then the bounded story outcome.",
+      "cheapest_falsifier": "The actual Lance party can heal Jolteon then restore Blastoise PP using owned items. Test offer composition, then measure actual sampled goals; the proposed order is not guaranteed.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Native82 sampled story over field restoration and beat Lance: one genuine choice, no singleton or teacher fallback. Battle control remains deterministic; bounded healing was available but unused. One outcome admitted, no new fit.",
-        "blocker": "Champion and Hall of Fame not yet reached. Ice Beam3/Surf0 and weak Jolteon HP need truthful recovery options; switch qualification must handle committed Mirror Move and observed OHKO speed.",
-        "decision": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
+        "authority_delta": "Native83 now contains the admitted model-selected Lance win, all82prior rows retained. Later model-selected Elixir plus forced Champion stopped at fourth opponent; no failed trace fitted.",
+        "blocker": "Champion and Hall of Fame remain absent. PP-only profile hid HP restoration, leaving Jolteon61/172 unable to help; no healthy offensive matchup remained at Gyarados after2FullRestores.",
+        "decision": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence.",
         "evidence": {
           "kind": "development_episode",
-          "path": "docs/evidence/red-model-selected-lance-2026-09-09.json",
-          "sha256": "2d115cac01dc307f006cb0cc0433fc563705400b15d261d8f0225b6d95c1da88"
+          "path": "docs/evidence/red-lance-fit-champion-stop-2026-09-09.json",
+          "sha256": "a8749d0c6eed2f90a4fb5b90f4285ddc8f1ab8a8499aa236e10a458b5b1fa26c"
         },
-        "learning_output": "Lance succeeded:270 actions,25813 frames,one genuine sampled choice,zero medicine/faints/specimen loss. One native outcome strictly admitted; model still82examples, no fit. Current league checklist2/3.",
-        "next_falsifier": "Actual carried party has 2 Full Restores and 1 Elixir; read-only preparation covers all six Champion opponents. First qualify PP restoration and supported switch boundaries, then the bounded story outcome.",
-        "next_session_goal": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
+        "learning_output": "Model83 fitted one new Lance outcome. Later Champion episode331actions25998frames3items0faints30specimens, quarantined. Phase4 checklist2/3.",
+        "next_falsifier": "The actual Lance party can heal Jolteon then restore Blastoise PP using owned items. Test offer composition, then measure actual sampled goals; the proposed order is not guaranteed.",
+        "next_session_goal": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence.",
         "product_alignment": "Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits.",
-        "session_id": "2026-09-09-model-selected-lance",
+        "session_id": "2026-09-09-combined-owned-recovery",
         "status": "active",
         "stop_condition": "Each claimed attempt stops at its first exception; prior failed saves remain closed. Reorient after the next finite result. No automatic controller fallback, critical-risk mode, retry or new boss-fitting cohort.",
         "transfer_result": "Actual high-level choice carried through a later boss. This is correlated Red development, not an independent success-rate or cross-game transfer claim."
       },
       "learned_authority": {
-        "current": "Native82 sampled story over field restoration and beat Lance: one genuine choice, no singleton or teacher fallback. Battle control remains deterministic; bounded healing was available but unused. One outcome admitted, no new fit.",
+        "current": "Native83 now contains the admitted model-selected Lance win, all82prior rows retained. Later model-selected Elixir plus forced Champion stopped at fourth opponent; no failed trace fitted.",
         "target": "Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering."
       },
       "maintenance_unblocks": null,
@@ -78,7 +78,7 @@
         }
       ],
       "name": "Red resource-backed story integration V1",
-      "next_decision": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts.",
+      "next_decision": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

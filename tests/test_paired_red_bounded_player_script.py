@@ -28,6 +28,25 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_combined_recovery_source_preserves_champion_and_explicit_battle_budget(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    profiles = derive(_supply_transition_profile(), (
+        'cartridge-trainer-story:champion', 'ordinary-trainer-recovery:1',
+        'combined-field-restore',
+    ), object())
+    assert profiles[-1].providers[0].parameters == {
+        'trainer_objective': 'defeat_champion', 'maximum_full_restores': 1,
+        'recovery_controller': 'ordinary-bounded-healing',
+    }
+    assert profiles[-1].providers[1].parameters == {
+        'affordable_single_item': True, 'reserve_last_full_restore': True,
+        'include_pp_fallback': True,
+    }
+
+
 def test_lance_source_argument_reaches_qualified_profile_without_legacy_fallback(monkeypatch):
     from test_red_goal_context_profile import _supply_transition_profile
     module = runpy.run_path(str(SCRIPT))

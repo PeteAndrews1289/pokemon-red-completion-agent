@@ -17,12 +17,42 @@ from .lavender import (
 )
 from .observation import ItemId, PokemonRedStateReader
 from .red_elixir_plan import RedElixirPlanError, plan_field_elixir, verify_field_elixir
-from .red_goal_manager import PokemonRedGoalStateAdapter, RedGoalBindingOffer, RedGoalObservation
+from .red_goal_manager import (
+    PokemonRedGoalStateAdapter,
+    RedGoalBindingOffer,
+    RedGoalBindingProvider,
+    RedGoalObservation,
+)
 from .victory_road import _pulse
 
 
 class RedFieldPpRestoreError(RuntimeError):
     """A one-shot owned-item restoration failed without replay or replenishment."""
+
+
+@dataclass(frozen=True, slots=True)
+class RedCombinedFieldRestoreGoalProvider:
+    """Prospective HP-then-PP offer composition, never execution-error fallback.
+
+    The model chooses RESTORE_TEAM versus other goals; item/target selection is
+    deterministic. Each offer preserves the selected provider's exact verifier.
+    """
+
+    hp_provider: RedGoalBindingProvider
+    pp_provider: RedGoalBindingProvider
+    kind: GoalKind = GoalKind.RESTORE_TEAM
+
+    def __post_init__(self) -> None:
+        if self.hp_provider.kind is not self.kind or self.pp_provider.kind is not self.kind:
+            raise RedFieldPpRestoreError("combined recovery provider kinds differ")
+
+    def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
+        hp = self.hp_provider.offer(observation)
+        if hp.binding is not None or hp.unavailable_reason not in {
+            GoalUnavailableReason.NO_LEGAL_TARGET, GoalUnavailableReason.MISSING_RESOURCE,
+        }:
+            return hp
+        return self.pp_provider.offer(observation)
 
 
 @dataclass(slots=True)

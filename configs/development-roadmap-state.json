@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-model-selected-lance",
+  "as_of_session": "2026-09-09-combined-owned-recovery",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
+      "evidence": "docs/evidence/red-lance-fit-champion-stop-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -534,6 +534,12 @@
       "result": "Model chose story and beat Lance:30 specimens,zero medicine/faints. Champion remains; current checklist2/3.",
       "deviation": "No phase exit change. A real sampled model choice succeeded under disclosed deterministic combat; no independent advantage claim.",
       "next": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts."
+    },
+    {
+      "session": "2026-09-09-combined-owned-recovery",
+      "result": "Native83 fitted actual Lance victory with all prior rows retained. Later Champion attempt beat3opponents, stopped atGyarados:331actions25998frames3items0faints30specimens.",
+      "deviation": "PP profile replaced HP restoration; combined opt-in restores both offers. Failed episode remains quarantined; no new tactic learner, reset or phase-exit change.",
+      "next": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence."
     }
   ],
   "closed_milestones": [

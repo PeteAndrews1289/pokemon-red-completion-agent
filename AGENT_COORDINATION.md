@@ -1,4 +1,26 @@
-# Current — model-selected Lance victory; Champion next
+# Current — native83 fitted; combined recovery before Champion
+
+The real model-selected Lance win is now fitted:83 examples, all82 prior rows
+retained, one new outcome. The next model selected Elixir restoration and a
+forced story continuation beat the Champion's first three opponents, then
+stopped at Gyarados:331 actions,25,998 frames,3 items,0 faints,30 specimens.
+That entire failed episode is quarantined; it is not training data or a
+restart point. See [the receipt](docs/evidence/red-lance-fit-champion-stop-2026-09-09.json).
+
+The demonstrated gap was that PP restoration replaced HP restoration in the
+menu. The opt-in combined provider retains both existing skills, with HP-first
+and PP fallback only when HP has no legal target/resource. The model still
+chooses recovery versus story; medicine priority and battles are deterministic.
+The final Full Restore reserve is conditional, not guaranteed in an emergency.
+Internal read-only review found no blocking defect. No external-agent usage was
+consumed or measured in this slice.
+
+Next: one newly declared three-decision native83 continuation from the successful
+Lance checkpoint. No failed-save resume, forced choice relabeled as learned,
+full-game replay or Crystal execution. Phase4 remains open at2/3 checklist items:
+only current Champion plus Hall-of-Fame evidence can close the story phase.
+
+## Historical checkpoint — model-selected Lance victory; Champion next
 
 Native82 sampled story rather than the teacher's available field heal and beat
 Lance in270 actions/25,813 frames. No medicine, faints, forced singleton or lost

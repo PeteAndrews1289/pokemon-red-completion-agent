@@ -308,7 +308,8 @@ def build_red_goal_context_runtime(
         COMPLETION_QUEST,
         config=profile.manager_config,
         include_pp_restoration=any(
-            spec.mechanic is RedGoalMechanic.FIELD_PP_RESTORE for spec in profile.providers
+            spec.mechanic is RedGoalMechanic.FIELD_PP_RESTORE
+            or spec.parameters.get("include_pp_fallback") is True for spec in profile.providers
         ),
     )
     # Fail closed now if the envelope's claimed story frontier conflicts with
@@ -413,7 +414,7 @@ def _build_provider(
     }:
         return _team_provider(runtime, spec, actions)
     if mechanic is RedGoalMechanic.FIELD_RESTORE:
-        return RedFieldRestoreGoalProvider(
+        hp_provider = RedFieldRestoreGoalProvider(
             actions,
             runtime.reader,
             runtime.emulator,
@@ -421,6 +422,17 @@ def _build_provider(
             affordable_single_item=spec.parameters.get("affordable_single_item") is True,
             reserve_last_full_restore=spec.parameters.get("reserve_last_full_restore") is True,
         )
+        if spec.parameters.get("include_pp_fallback") is True:
+            from .red_field_pp_restore import (
+                RedCombinedFieldRestoreGoalProvider,
+                RedFieldPpRestoreGoalProvider,
+            )
+            return RedCombinedFieldRestoreGoalProvider(
+                hp_provider, RedFieldPpRestoreGoalProvider(
+                    actions, runtime.reader, runtime.emulator, runtime.adapter,
+                ),
+            )
+        return hp_provider
     if mechanic is RedGoalMechanic.CENTER_RESTORE:
         return RedCenterRestoreGoalProvider(
             actions,
