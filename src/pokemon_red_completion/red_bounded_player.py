@@ -16,7 +16,9 @@ from pokemon_red_completion.bounded_player_episode import _retaining_binding_set
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
+    GoalAvailability,
     GoalKind,
+    GoalManagerError,
     GoalManagerQuestion,
     bind_goal_selection,
 )
@@ -41,6 +43,10 @@ from pokemon_red_completion.red_goal_manager import RedGoalObservation
 
 class RedBoundedPlayerError(RuntimeError):
     """Raised when Red cannot produce a truthful generic player observation."""
+
+
+class RedNoAvailableGoalError(GoalManagerError):
+    """An action-free inventory found no executable next goal, not a failed attempt."""
 
 
 _PUBLIC_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
@@ -203,6 +209,11 @@ def preflight_red_bounded_player(
     # Exercise the same metadata-preserving wrapper as real play, without
     # invoking a binding. This catches integration mismatches before an episode.
     _retaining_binding_set(observation.binding_set, budget_meter)
+    if not any(
+        item.availability is GoalAvailability.AVAILABLE
+        for item in observation.binding_set.opportunities
+    ):
+        raise RedNoAvailableGoalError("goal manager needs at least one available option")
     question = ordered_goal_manager_question(
         assignment_id=assignment_id,
         decision_index=0,

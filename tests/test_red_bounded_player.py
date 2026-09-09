@@ -11,7 +11,6 @@ from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
     GoalAvailability,
     GoalKind,
-    GoalManagerError,
     GoalOpportunity,
     GoalSituation,
     GoalUnavailableReason,
@@ -327,7 +326,9 @@ def test_continuation_preflight_never_queries_authority_for_forced_bridge(availa
         result = check()
         assert result.choices == () and len(result.available_goal_kinds) == 1
     else:
-        with pytest.raises(GoalManagerError, match="at least one available option"):
+        from pokemon_red_completion.red_bounded_player import RedNoAvailableGoalError
+
+        with pytest.raises(RedNoAvailableGoalError, match="at least one available option"):
             check()
     authority.select.assert_not_called()
     assert state == {"actions": 0, "frames": 0}

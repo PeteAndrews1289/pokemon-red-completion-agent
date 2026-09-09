@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-09T19:10:02.246726+00:00",
+  "location": "Route 11 \u00b7 batch stopped",
+  "registered_species": 37,
+  "living_species": 33,
+  "specimens": 40,
+  "capture_items": 11,
+  "money": 20913,
+  "checkpoint_sha256": "1d2c828199a6222f471ed45d7868fbe2e8e27987e83e35e382c4d3992bc29e46"
+}

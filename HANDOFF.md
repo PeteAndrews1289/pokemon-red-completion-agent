@@ -1,16 +1,12 @@
-# Current — extended collection: native110
+# Current — Fly-enabled collection: native111
 
-16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures.
+1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified.
 
-Actual native goals and regional destinations fitted from 95 to 110 examples, retaining prior rows. Forced support receives no invented training credit. Native110 has not yet played; no independent advantage or learned combat.
+The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim.
 
-The automatic loop now supports16 bounded steps and a between-episode deadline. It retains actual captures, supplies, recovery and per-step fitting. Deadline checks prevent the next episode from starting, without discarding an in-flight bounded outcome. 119 focused tests, lint passed; not the full suite.
+Next: Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward.
 
-Next: Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch.
-
-The starting collection had executable Drowzee evolution stock but no permitted route to its supported training Centers. The current collection router is walking-only; the existing observed-menu Fly controller is not integrated. Broader access is the next capability, not merely a larger step budget.
-
-[Session, evidence and next steps](docs/work-sessions/2026-09-09-extended-collection.md). No new external-agent session or quota use.
+[Session, evidence and handoff](docs/work-sessions/2026-09-09-collection-fly-access.md). 320 focused tests, typing and lint passed. No external-agent review or usage this session.
 
 ## Prior package and Phase4 history
 

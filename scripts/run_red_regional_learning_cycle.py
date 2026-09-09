@@ -17,6 +17,7 @@ from typing import Any, cast
 import run_red_regional_goal_step as goal
 import run_red_regional_source_choice as source
 
+from pokemon_red_completion.red_bounded_player import RedNoAvailableGoalError
 from pokemon_red_completion.red_player_incremental_fit import (
     BehaviorRecord,
     fit_incremental_goal_results,
@@ -135,7 +136,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         _observed, candidates, _menu = source.inspect_sources(ready, allow_no_choice=True)
         regional = True
         if automatic_goals:
-            preflight = source.base._action_free_preflight(ready)
+            try:
+                preflight = source.base._action_free_preflight(ready)
+            except RedNoAvailableGoalError:
+                # No next input occurred. Preserve completed outcomes and fits
+                # in a normal terminal summary; do not catch unrelated defects.
+                stop = "no_executable_native_goal"
+                break
             kinds = preflight.get("available_goal_kinds", [])
             if not isinstance(kinds, list) or any(not isinstance(kind, str) for kind in kinds):
                 raise ValueError("automatic collection goal inventory differs")

@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch.
+- Next decision: Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose useful collection and prerequisite goals using observed resources and history while preserving the living specimen ledger. |
-| Authority now | Actual native goals and regional destinations fitted from 95 to 110 examples, retaining prior rows. Forced support receives no invented training credit. Native110 has not yet played; no independent advantage or learned combat. |
+| Authority now | The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | Changed goal menus and resources in one correlated Red lineage; ROM-free changed hazard and task menus. No independent or cross-game result. |
-| Cheapest falsifier | A short Fly-enabled continuation must preserve the party and collection, land at the observed chosen destination, and expose/complete a useful evolution or new-source choice without a fixed direction script. |
+| Cheapest falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-extended-collection** · status **active** · evidence [qualification](docs/evidence/red-extended-collection-learning-2026-09-09.json)
+**2026-09-09-collection-fly-access** · status **active** · evidence [qualification](docs/evidence/red-collection-fly-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Choose successive collection and support opportunities without per-species direction scripts. |
-| Learning output | 16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures. |
-| Authority delta | Actual native goals and regional destinations fitted from 95 to 110 examples, retaining prior rows. Forced support receives no invented training credit. Native110 has not yet played; no independent advantage or learned combat. |
-| Transfer result | Changed step/time budgets in ROM-free tests; live resources and useful stock changed within one correlated Red lineage. No independent transfer claim. |
-| Blocker | The starting collection had executable Drowzee evolution stock but no permitted route to its supported training Centers. The current collection router is walking-only; the existing observed-menu Fly controller is not integrated. Broader access is the next capability, not merely a larger step budget. |
-| Decision | Retain the measured local collection result; connect travel access before repeating the same opportunities. |
-| Next session | Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch. |
-| Next falsifier | A short Fly-enabled continuation must preserve the party and collection, land at the observed chosen destination, and expose/complete a useful evolution or new-source choice without a fixed direction script. |
-| Stop condition | Batch stopped: step_limit. No consumed trial may replay; unexplained failures require diagnosis. |
+| Learning output | 1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified. |
+| Authority delta | The native goal/destination model now has 111 examples; every intermediate model was carried into the next attempt. Only admitted actual outcomes were fitted; deterministic safety support receives no learned-choice credit. The final fitted model has not played. No learned combat, independent advantage or cross-title claim. |
+| Transfer result | Changed landing, access and state boundaries tested without ROM; live evidence remains one Red lineage. |
+| Blocker | Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified. |
+| Decision | Retain actual outcomes; continue the smallest useful collection capability. |
+| Next session | Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward. |
+| Next falsifier | A fresh bounded continuation must produce useful retained collection progress with honest costs. |
+| Stop condition | Batch stopped: no_executable_native_goal_preflight_exception; no consumed trial replay. |
 
 ### Stop conditions
 

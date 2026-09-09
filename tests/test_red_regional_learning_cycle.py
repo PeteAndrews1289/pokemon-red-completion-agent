@@ -58,6 +58,39 @@ def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_
     return args, records, prepared, played, fits, files
 
 
+def test_empty_native_inventory_closes_after_retained_fit_without_new_attempt(
+    tmp_path, monkeypatch,
+):
+    args, records, _, played, fits, files = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+
+    def preflight(_ready):
+        if played:
+            raise cycle.RedNoAvailableGoalError("no available goal")
+        return {"status": "ready", "available_goal_kinds": ["acquire_species"]}
+
+    monkeypatch.setattr(cycle.source.base, "_action_free_preflight", preflight)
+    result = cycle._run(args)
+    assert result["stop_reason"] == "no_executable_native_goal"
+    assert len(played) == len(fits) == len(result["steps"]) == 1
+    assert result["steps"][0]["fit"]["model"] == records[1].public_dict()
+    assert files[args.out] == result
+
+
+def test_unrelated_preflight_errors_still_abort_without_reclassification(tmp_path, monkeypatch):
+    from pokemon_red_completion.goal_manager import GoalManagerError
+    args, _, _, played, fits, files = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+
+    def preflight(_ready):
+        raise GoalManagerError("malformed opportunity")
+
+    monkeypatch.setattr(cycle.source.base, "_action_free_preflight", preflight)
+    with pytest.raises(GoalManagerError, match="malformed opportunity"):
+        cycle._run(args)
+    assert not played and not fits and args.out not in files
+
+
 def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monkeypatch):
     args, records, _, played, fits, files = harness(tmp_path, monkeypatch)
     result = cycle._run(args)
