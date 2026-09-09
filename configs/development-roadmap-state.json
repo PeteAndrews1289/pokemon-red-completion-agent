@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-story-curriculum",
+  "as_of_session": "2026-09-09-agatha-curriculum",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
+      "evidence": "docs/evidence/red-agatha-curriculum-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -420,6 +420,12 @@
       "result": "Prospective singleton-story outcome recording, admission and unit-weight regression qualified; model78/hash and all78 prior outcomes unchanged.358 focused tests pass. Agatha and exact revision-bound entry are implemented but not live-tested. Income-to-story remains2/3.",
       "deviation": "Added a separate curriculum-outcome stream, not forced-choice labels or retrospective support backfill. Narrow cartridge entry qualification preserves ordinary route-drift rejection. No stage-exit changes.",
       "next": "Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run."
+    },
+    {
+      "session": "2026-09-09-agatha-curriculum",
+      "result": "Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays.",
+      "deviation": "Separate unit-weight curriculum permits truthful outcome learning without fake menus or historical support backfill. Initial report objective label corrected for display from unchanged serialized model; no refit. Lance grammar differs and was refused without input.",
+      "next": "Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run."
     }
   ],
   "closed_milestones": [

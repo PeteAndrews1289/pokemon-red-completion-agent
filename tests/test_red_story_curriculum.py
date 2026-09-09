@@ -267,6 +267,8 @@ def test_mixed_regression_has_unit_curriculum_weight_without_changing_choice_row
     fit = fit_living_dex_option_value(choices, curriculum_examples=(row,))
     assert fit.model.settled_examples == 3
     assert fit.model.objective == "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1"
+    assert fit.report.public_dict()["objective"] == fit.model.objective
+    assert base.report.public_dict()["objective"] == base.model.objective
     assert fit.model.model_sha256 != base.model.model_sha256
     assert (
         LivingDexOptionValueModel.from_dict(fit.model.to_dict()).model_sha256

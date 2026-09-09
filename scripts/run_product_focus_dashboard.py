@@ -65,7 +65,21 @@ def _load_saved_collection(
             raise ValueError("saved collection schema differs")
         if receipt.pop("live", None) is not False or receipt.pop("controller_actions", None) != 0:
             raise ValueError("saved collection observation claim differs")
-        return DashboardSavedCollection(**receipt)
+        if set(receipt) != {
+            "verified_at", "location", "registered_species", "living_species",
+            "specimens", "capture_items", "money", "checkpoint_sha256",
+        }:
+            raise ValueError("saved collection fields differ")
+        return DashboardSavedCollection(
+            verified_at=_text(receipt, "verified_at"),
+            location=_text(receipt, "location"),
+            registered_species=_count(receipt, "registered_species"),
+            living_species=_count(receipt, "living_species"),
+            specimens=_count(receipt, "specimens"),
+            capture_items=_count(receipt, "capture_items"),
+            money=_count(receipt, "money"),
+            checkpoint_sha256=_text(receipt, "checkpoint_sha256"),
+        )
     except (OSError, ValueError, TypeError, KeyError) as error:
         raise ProgressDashboardError(
             "saved collection evidence is unavailable or changed"
@@ -295,6 +309,15 @@ def _native_training_projection(
     replay = _mapping(evidence, "in_sample_policy_replay")
     total = _count(model, "settled_examples")
     added = _count(fit, "new_settled_examples")
+    curriculum = _count(episode, "curriculum_outcomes") if "curriculum_outcomes" in episode else 0
+    if curriculum and (
+        evidence.get("curriculum_contract") != "forced-singleton-story-outcome-unit-weight-v1"
+        or fit.get("curriculum_is_comparative_evidence") is not False
+        or _count(fit, "curriculum_outcomes") < curriculum
+        or _count(fit, "curriculum_outcomes") + _count(fit, "comparative_choice_outcomes") != total
+        or report.get("objective") != "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1"
+    ):
+        raise ProgressDashboardError("dashboard curriculum learning boundary differs")
     if (
         evidence.get("status") != "fit_complete_bounded_only"
         or model.get("authority") != "bounded_development_only"
@@ -311,15 +334,18 @@ def _native_training_projection(
         or total != _count(report, "settled_examples")
         or not 0 < added <= total
         or added != _count(episode, "admitted_examples")
-        or added != _count(episode, "sampled_choices")
+        or added != _count(episode, "sampled_choices") + curriculum
     ):
         raise ProgressDashboardError("dashboard native training claim boundary differs")
     choices = replay.get("choices")
     if not isinstance(choices, list) or not all(isinstance(row, Mapping) for row in choices):
         raise ProgressDashboardError("dashboard native replay differs")
+    performed = replay.get("performed", True)
+    if not isinstance(performed, bool) or (not performed and choices):
+        raise ProgressDashboardError("dashboard native replay measurement differs")
     disagreements = sum(
         _text(row, "prior_greedy") != _text(row, "updated_greedy") for row in choices
-    )
+    ) if performed else None
     training = DashboardTrainingState(
         samples_before=total - added,
         samples_after=total,
@@ -336,7 +362,11 @@ def _native_training_projection(
     )
     component = DashboardLearningComponent(
         name="Living-Pokédex goal scorer",
-        scope="Native sampled outcomes; bounded development only; no independent evaluation",
+        scope=(
+            "Sampled choices plus separately recorded guided outcomes; no independent evaluation"
+            if curriculum else
+            "Native sampled outcomes; bounded development only; no independent evaluation"
+        ),
         status="shadow",
         authority="shadow_only",
         train_examples=total,
@@ -412,7 +442,9 @@ def product_focus_dashboard_snapshot(
             f"New data · {training.newly_collected} outcomes; "
             f"{training.setup_censors} setup censors",
             f"Retained earlier data · {training.previously_unfitted} previously unfitted examples",
-            f"Training calibration · {training.training_choice_changes} changed menu choices",
+            (f"Training calibration · {training.training_choice_changes} changed menu choices"
+             if training.training_choice_changes is not None
+             else "Training calibration · menu-choice comparison not performed"),
             "Training error is not an unseen gameplay score; the updated model remains shadow-only",
             "No live party or collection ledger is attached; missing observations show as unknown",
             _event("Next session", _text(reorientation, "next_session_goal")),

@@ -1,5 +1,19 @@
 # Roadmap baseline and deviations
 
+## September9 — learn guided consequences without inventing choices
+
+Prospectively declared V5 curriculum outcomes now enter regression separately from
+sampled choices. Their unit weight is disclosed, not estimated confidence. Historical
+support is not backfilled; existing choice weights, fingerprints and phase exits stay
+unchanged. Agatha provided the first real guided row: model78 to79, all30 specimens
+retained. This resolves the zero-learning support loop without claiming a model chose
+the victory. The genuine story-choice checklist remains2/3, not complete.
+
+Next qualify Lance's distinct scripted arrival and a legal story/recovery choice from
+the retained Agatha endpoint. The narrow Agatha parser refused Lance without input;
+do not fix it by weakening drift checks or copying an unverified displacement.
+See [the closeout audit](audits/red-agatha-curriculum-2026-09-09.md).
+
 ## September8 — Lorelei recovery closes; stop maintenance expansion
 
 Exact-state continuation93c7 is now a completed support checkpoint: Lorelei event

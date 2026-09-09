@@ -545,10 +545,12 @@ class DashboardTrainingState:
     fit_count: int
     weighted_mse_before: float
     weighted_mse_after: float
-    training_choice_changes: int
+    training_choice_changes: int | None
 
     def __post_init__(self) -> None:
         for key, value in asdict(self).items():
+            if key == "training_choice_changes" and value is None:
+                continue
             if key.startswith("weighted_mse"):
                 if (
                     isinstance(value, bool) or not isinstance(value, (int, float))
@@ -564,7 +566,8 @@ class DashboardTrainingState:
             or self.terminal_lessons != self.total_lessons
             or self.setup_censors + self.newly_collected != self.terminal_lessons
             or self.fit_count != 1
-            or self.training_choice_changes > self.samples_after
+            or (self.training_choice_changes is not None
+                and self.training_choice_changes > self.samples_after)
         ):
             raise ProgressDashboardError("completed training evidence accounting differs")
 
@@ -1492,7 +1495,8 @@ function render(data) {
     safeText("fit-after", Number(training.weighted_mse_after).toFixed(6));
     el("fit-before-bar").style.width = pct(training.weighted_mse_before / scale);
     el("fit-after-bar").style.width = pct(training.weighted_mse_after / scale);
-    safeText("fit-note", `${training.newly_collected} new examples + ${training.previously_unfitted} earlier unfitted. ${training.training_choice_changes} changed training-menu choices. In-sample calibration, not unseen gameplay ability.`);
+    const comparison = training.training_choice_changes === null ? "Menu-choice comparison not performed" : `${training.training_choice_changes} changed training-menu choices`;
+    safeText("fit-note", `${training.newly_collected} new examples + ${training.previously_unfitted} earlier unfitted. ${comparison}. In-sample calibration, not unseen gameplay ability.`);
   }
   const party = el("party"); party.replaceChildren();
   if (!data.party.length) { const empty = document.createElement("span"); empty.className = "muted"; empty.textContent = "Party unavailable"; party.append(empty); }

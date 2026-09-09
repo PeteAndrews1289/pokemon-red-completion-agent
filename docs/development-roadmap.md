@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-story-curriculum**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-curriculum**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify current-state story entry and readiness ([evidence](../docs/evidence/red-bruno-support-2026-09-09.json))
 - [ ] Play and fit a genuine bounded story choice
 
-Current model: **78 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **79 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
+[Current evidence](../docs/evidence/red-agatha-curriculum-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-agatha-curriculum
+
+Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays.
+
+**Deviation:** Separate unit-weight curriculum permits truthful outcome learning without fake menus or historical support backfill. Initial report objective label corrected for display from unchanged serialized model; no refit. Lance grammar differs and was refused without input.
+
+**Next:** Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run.
 
 ### 2026-09-09-story-curriculum
 

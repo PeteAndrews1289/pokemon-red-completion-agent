@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-09 UTC",
+  "location": "Agatha defeated; model79 fitted on one guided outcome; one Full Restore remains",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "capture_items": 0,
+  "money": 17845,
+  "checkpoint_sha256": "dc12195a5775b5c662799013a44671ddf8f5d4716f149fee9adfeaa6f7f1a7a1",
+  "live": false,
+  "controller_actions": 0
+}

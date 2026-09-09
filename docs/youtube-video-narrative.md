@@ -1,6 +1,38 @@
 # YouTube narrative: teaching a model to actually play Pokémon
 
-## Current — prospective story outcomes can now teach the learner
+## Current — Agatha lesson completed and model79 verified
+
+One prospective V5 lesson defeated Agatha in241 actions/22,693 frames. The
+cartridge-driven entrance adapter handled the six-step scripted arrival without
+loosening route-drift checks. The saved victory flag and5,940 payout were reopened
+with zero controller input. All30 specimens,28 living species,33 registered species
+and the final Full Restore remain; currency is17,845.
+
+The real outcome was fitted:78 comparative-choice rows plus1 separate unit-weight
+curriculum row,79 settled/37 successful/69 distinct feature rows. Every prior row
+remains unchanged. Model0a967286 and corpus94ae59ed were independently reopened;
+the mixed training dataset hash and original sampled rows matched. This is guided
+outcome learning, not a model-selected Agatha victory or independent advantage.
+Model79 has not yet made a fresh gameplay choice.
+
+An audit caught a fit-report label still naming the legacy objective. The saved
+model already used the correct mixed objective. Reporting code and display metadata
+were corrected with an explicit erratum; the original receipt is preserved.
+No model refit, coefficient rewrite, historical support admission or reward change.
+
+Current state dc12195a; checkpoint5f10f19a; trajectoryecb0eb16.
+The Agatha attempt and fit are consumed. Continue only from this endpoint.
+Lance's script fails the narrow Agatha grammar before input: qualify its distinct
+entrance behavior next, then expose a genuine story-versus-recovery choice.
+Do not invent a same-shape arrival or spend the final recovery item unnecessarily.
+
+The income-to-model-led-story checklist remains2/3 because this lesson was forced;
+Phase4 remains incomplete. Story completion, full living Pokédex, a held-out Red
+hack and Crystal transfer are still separate future demonstrations.
+Flash High advised on the design; an independent code reviewer checked the final
+guards. Claude was not used. Service five-hour/weekly quota readings unavailable.
+
+## Historical — prospective story outcomes engineering qualification
 
 V5 adds a separately declared singleton-story outcome stream. It records actual
 executed features, progress and costs, with failures retained and unreadable or

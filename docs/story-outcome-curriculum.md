@@ -1,5 +1,13 @@
 # Prospective story-outcome learning
 
+## Verified first lesson — September9
+
+Agatha's prospective V5 lesson succeeded and produced one authenticated guided
+outcome. Model78 to79 retained all earlier rows; the saved model and dataset were
+reopened independently. This validates the outcome-learning path, not comparative
+choice quality. No historical support was relabeled. The next distinct Lance
+entrance remains unqualified. See [the live-result audit](audits/red-agatha-curriculum-2026-09-09.md).
+
 The goal remains a player that learns to complete stories and living collections,
 not a fixed Red walkthrough. A forced action can teach its observed consequences
 without proving that a model selected the best action.

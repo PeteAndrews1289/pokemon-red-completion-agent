@@ -1075,13 +1075,14 @@ class LivingDexOptionValueFitReport:
     weighted_mse_before: float
     weighted_mse_after: float
     feature_version: int = 1
+    objective: str = LIVING_DEX_OPTION_OBJECTIVE
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
             "censored_examples": self.censored_examples,
             "counterfactual_targets": 0,
             "distinct_selected_feature_rows": self.distinct_selected_feature_rows,
-            "objective": LIVING_DEX_OPTION_OBJECTIVE,
+            "objective": self.objective,
             "outcome_balance_required": False,
             "schema": LIVING_DEX_OPTION_FIT_SCHEMA,
             "settled_examples": self.settled_examples,
@@ -1324,6 +1325,7 @@ def fit_living_dex_option_value(
         weighted_mse_before=before,
         weighted_mse_after=after,
         feature_version=feature_version,
+        objective=model.objective,
     )
     return LivingDexOptionValueFit(model, report)
 
