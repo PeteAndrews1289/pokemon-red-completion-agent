@@ -1,4 +1,27 @@
-# Current — forward-goal learner qualified in a toy task; Red model82 unchanged
+# Current — four real Red forward returns fitted; native story checklist3/3
+
+Four newly declared correlated post-Lorelei training lessons produced three Bruno
+completions and one heal/heal finite-goal failure. Model82 made seven genuine
+choices; no teacher substituted a selection. All30 specimens were retained.
+All four first-choice returns passed admission and fitted separate shadow model
+32fd4144: one root, two distinct selected inputs. Existing model82/82 rows unchanged.
+
+The genuine story-learning checklist is3/3, not whole-Phase4 completion. The new
+head has not controlled Red, its fitted estimates are not calibrated probabilities,
+and no independent advantage or transfer is established. Current Champion failure
+is retained unchanged. No old trial reopened, sealed/Crystal input or full replay.
+
+The lesson04 endpoint was inspected without input: only story remains, so no
+choice was invented. The separate historical one-heal endpoint still has two
+genuine options. First-choice/frozen-tail integration now passes655 focused tests,
+including role identity and failure retention. No live probe has executed yet.
+Next is one explicitly declared bounded training probe, not production promotion.
+Reorient within the remaining session; overall stop10:42:58UTC. Codex owns integration/publication. Internal
+review agreed with the narrow closure and warned about actor/tail conflation;
+external reviewer quotas remain unavailable. See [audit](docs/audits/red-forward-goal-pilot-2026-09-09.md) and
+[active state](ACTIVE_PRODUCT_STATE.md). Older conflicting entries below are historical.
+
+# Historical — forward-goal learner qualified in a toy task; Red model82 unchanged
 
 A separate two-output learner now predicts completion within a declared budget
 and cumulative attempt cost. In the controlled resource task, eight supported new

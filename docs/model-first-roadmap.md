@@ -1,6 +1,22 @@
 # Model-first development roadmap
 
-## Current — separate forward-goal learner; real Red evidence next
+## Current — real forward-goal pilot fitted; bounded own-decision test next
+
+Four prospective Red returns fitted separate shadow model32fd4144. Three sampled
+sequences beat Bruno; heal/heal failed the two-macro goal. All30 specimens retained.
+One correlated root, two distinct selected inputs, no independent advantage.
+Model82 remains the live actor and its82-row corpus is unchanged. The specific
+genuine-story-learning checklist is now3/3; Phase4 is still open.
+
+Read-only endpoint checks found a singleton after two heals and a genuine choice
+after one heal. The new first-choice/frozen-tail integration passed655 focused
+tests; no probe has run yet. Next declare one bounded training control experiment
+with explicit first-actor and tail identities. Do not recursively deploy the head, copy toy support
+bounds, or claim training error as confidence. Preserve the current Champion
+failure, stable phase exit and long-term living-Pokedex goal. See
+[the real pilot audit](audits/red-forward-goal-pilot-2026-09-09.md).
+
+## Historical — separate forward-goal learner; real Red evidence next
 
 The [new forward-goal learner](audits/forward-goal-learning-2026-09-09.md) passes
 the controlled optional-versus-necessary recovery falsifier:8/8 supported new

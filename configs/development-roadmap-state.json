@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-forward-goal-learner",
+  "as_of_session": "2026-09-09-red-forward-goal-pilot",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-pp-choice-champion-stop-2026-09-09.json"
+      "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "native-story-lesson",
         "label": "Play and fit a genuine bounded story choice",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
       }
     ]
   },
@@ -468,6 +468,12 @@
       "result": "Separate toy forward-goal learner:8/8 supported new contexts complete efficiently;3 unsupported abstain. Red collector/admission/shadow-fit path tested. Model82,82 real rows and2/3 unchanged.",
       "deviation": "Separate prospective target replaces neither historical labels nor live authority. Current Champion failure remains retained. Toy evidence is not counted as Red progress; stable phase exits unchanged.",
       "next": "Collect a prospectively declared bounded Red story/recovery lesson with genuine alternatives and the same frozen continuation, then fit separate forward outcomes and test different contexts before new authority."
+    },
+    {
+      "session": "2026-09-09-red-forward-goal-pilot",
+      "result": "Four real forward returns fitted separate shadow model32fd4144: three Bruno completions, one heal/heal goal failure; all30 specimens retained. Seven genuine choices, one correlated root/two inputs. Native story-learning checklist3/3.",
+      "deviation": "Disclosed historical training resets for a new prospective goal objective, not old-trial retries, Champion continuation or independent tests. Stable Phase4 exit unchanged; shadow estimates are not calibrated authority.",
+      "next": "Inspect changed-resource support, separate the learned first-choice actor from its frozen model82 tail, and qualify a bounded own-decision test. Keep Champion failure and oldmodel82 unchanged."
     }
   ],
   "closed_milestones": [

@@ -1,4 +1,24 @@
-# Current — forward-goal learner qualified in a toy task; Red model82 unchanged
+# Current — learning the difference between successful actions and useful progress
+
+The first real forward-goal pilot gave us the contrast we needed. Four correlated
+lessons began before Bruno. The existing model chose heal/story twice, story once,
+and heal/heal once. The first three beat Bruno; the last spent its two-decision
+budget on successful healing without completing the story objective. All30 living
+specimens were retained. We kept that failure and its full cost in the dataset.
+
+A separate two-output learner was fitted from all four prospective first-choice
+returns. It now ranks immediate story above healing on that fitted context, but
+one root and two distinct inputs do not establish generalization or calibrated
+success probabilities. It remains a shadow model; the82-row immediate learner is
+unchanged. The specific genuine-story-learning checklist is complete, not Phase4.
+
+This was the point of changing the objective: teach what a sequence accomplishes,
+not merely congratulate each successful maintenance action. Next distinguish the
+first-choice learner from the frozen continuation before testing its own decisions.
+The failed Champion state remains preserved and full model-led Red is unfinished.
+See [the real pilot audit](audits/red-forward-goal-pilot-2026-09-09.md).
+
+# Historical — forward-goal learner qualified in a toy task; Red model82 unchanged
 
 A separate two-output learner now predicts completion within a declared budget
 and cumulative attempt cost. In the controlled resource task, eight supported new

@@ -1,5 +1,21 @@
 # Roadmap baseline and deviations
 
+## September9 — explicit first-choice training probe, not recursive promotion
+
+Four real Red finite-goal returns are now fitted. A separate bounded probe may
+test that head's FIRST choice while the frozen old model82 owns any remaining
+choice, using an explicitly independent tail seed. This is a greedy uncalibrated
+training rule, not the qualified production selector. Its new source is recorded
+separately from the fitted continuation source; compatibility is tested, not
+assumed. No native-fit labels, automatic promotion, hidden teacher substitution,
+replayed old trial, or changed Phase4 exit. Retained historical training checkpoints
+require a new prospective disclosure; the four collected lessons stay closed.
+
+The two-heal endpoint has only story, so it supplies no invented comparison. The
+historical one-heal endpoint has two genuine alternatives. Both inspections had
+zero input and no new episode. Preserve the distinction between a model choosing
+a bounded skill and a learned full-game player.
+
 ## September9 — disclosed correlated forward-learning pilot
 
 The new goal-based learner needs prospective real outcomes, not labels retrofitted

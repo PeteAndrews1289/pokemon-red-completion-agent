@@ -87,6 +87,17 @@ def red_forward_verifier_sha256(objective_id: str) -> str:
     )
 
 
+def red_forward_goal_observed(observation: RedGoalObservation, objective_id: str) -> bool:
+    """Verify the current sample rather than a historical semantic tracker latch."""
+    raw = observation.raw
+    if not isinstance(raw.event_flags, bytes) or len(raw.event_flags) != 319:
+        raise ValueError("forward-goal verifier requires complete current event flags")
+    fresh = GameState(mode=game_mode(raw), facts=semantic_facts(raw))
+    if objective_id in {"defeat_champion", "enter_hall_of_fame"}:
+        return CompletionReferee().inspect(fresh).complete
+    return red_forward_goal_facts(objective_id) <= fresh.facts
+
+
 def red_forward_execution_flags(
     values: Mapping[str, object] | None = None,
 ) -> dict[str, bool]:
@@ -251,15 +262,7 @@ class RedForwardGoalCollector:
         return before, observation
 
     def _goal(self, observation: RedGoalObservation) -> bool:
-        raw = observation.raw
-        if not isinstance(raw.event_flags, bytes) or len(raw.event_flags) != 319:
-            raise ValueError("forward-goal verifier requires complete current event flags")
-        # Captured/clean-run observers can latch historical semantic facts. The
-        # independent goal verifier must instead inspect this exact raw sample.
-        fresh = GameState(mode=game_mode(raw), facts=semantic_facts(raw))
-        if self.objective_id in {"defeat_champion", "enter_hall_of_fame"}:
-            return CompletionReferee().inspect(fresh).complete
-        return red_forward_goal_facts(self.objective_id) <= fresh.facts
+        return red_forward_goal_observed(observation, self.objective_id)
 
     def prepare(self) -> None:
         if self._start is not None:

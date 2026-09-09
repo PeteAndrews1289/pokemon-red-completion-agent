@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-forward-goal-learner**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-red-forward-goal-pilot**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
 ## Current milestone
 
-**Reachable income to model-led story: 2/3 acceptance items (67%).**
+**Reachable income to model-led story: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Earn funds through safe adjacent-map travel ([evidence](../docs/evidence/red-regional-income-qualification-2026-09-08.json))
 - [x] Qualify current-state story entry and readiness ([evidence](../docs/evidence/red-bruno-support-2026-09-09.json))
-- [ ] Play and fit a genuine bounded story choice
+- [x] Play and fit a genuine bounded story choice ([evidence](../docs/evidence/red-forward-goal-pilot-2026-09-09.json))
 
 Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-pp-choice-champion-stop-2026-09-09.json)
+[Current evidence](../docs/evidence/red-forward-goal-pilot-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-red-forward-goal-pilot
+
+Four real forward returns fitted separate shadow model32fd4144: three Bruno completions, one heal/heal goal failure; all30 specimens retained. Seven genuine choices, one correlated root/two inputs. Native story-learning checklist3/3.
+
+**Deviation:** Disclosed historical training resets for a new prospective goal objective, not old-trial retries, Champion continuation or independent tests. Stable Phase4 exit unchanged; shadow estimates are not calibrated authority.
+
+**Next:** Inspect changed-resource support, separate the learned first-choice actor from its frozen model82 tail, and qualify a bounded own-decision test. Keep Champion failure and oldmodel82 unchanged.
 
 ### 2026-09-09-forward-goal-learner
 

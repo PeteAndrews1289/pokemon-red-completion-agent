@@ -1,5 +1,17 @@
 # Forward-goal learning: a separate target, not a renamed Red success
 
+## Subsequent real pilot and full regression
+
+The [real Red pilot](red-forward-goal-pilot-2026-09-09.md) subsequently collected
+and fitted four new forward returns. Earlier zero-Red-row statements below describe
+the engineering slice, not the current state. The separate head remains shadow-only.
+
+Frozen source4c0ce577 completed its full non-integration regression:9424 passed,
+1 skipped,3 deselected,1 expected failure,1 SDL warning in32m16s. Hosted
+[CI34325456903](https://github.com/PeteAndrews1289/pokemon-red-completion-agent/actions/runs/34325456903)
+also passed that exact source. The later inherited-capability correction in
+d1adee32 has511 focused passing tests; do not attribute the4c full result to it.
+
 ## Result and limits
 
 A new two-output learner predicts **completion within a declared budget** and

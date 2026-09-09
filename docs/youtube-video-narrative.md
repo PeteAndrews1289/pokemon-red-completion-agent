@@ -1,4 +1,22 @@
-# Current — forward-goal learner qualified in a toy task; Red model82 unchanged
+# Current — the AI can do everything right locally and still miss the goal
+
+Suggested beat: show four short Red training attempts side by side. Two heal then
+beat Bruno; one goes straight to Bruno and wins; one heals twice and runs out of
+its declared decision allowance. Both heals worked. The overall goal did not.
+
+That is the lesson the new learner receives: completion and cost across the whole
+attempt, not a reward for every successful button sequence. All four real returns
+were retained and fitted; all30 specimens survived. Do not portray these four
+resets of one starting state as independent tests, or the new shadow estimates as
+a model that can already finish Red. The old82-row model still owns live choices.
+
+Honest milestone: a genuine story choice was played and fitted, completing the
+three-item integration checklist. Next is a controlled test of the new learner's
+first decision with its continuation policy kept explicit. Phase4, Champion/HoF,
+the living Pokédex and later-game adaptation remain unfinished.
+See [the audited results](audits/red-forward-goal-pilot-2026-09-09.md).
+
+# Historical — forward-goal learner qualified in a toy task; Red model82 unchanged
 
 A separate two-output learner now predicts completion within a declared budget
 and cumulative attempt cost. In the controlled resource task, eight supported new

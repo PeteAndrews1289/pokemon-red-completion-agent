@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The separate forward-goal learner and Red recording/admission path are qualified in ROM-free tests. Reorient on the smallest genuine Red first-choice lesson; no current Champion replay or automatic promotion.
+- Next decision: The story-learning checklist is3/3. Lesson04 is singleton-only, while the historical one-heal endpoint retains two alternatives. Tested role-separated first-choice control is ready for a separately declared bounded training probe.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | A separate forward-goal learner will predict completion within a declared continuation budget and total attempt cost; controlled synthetic qualification comes before Red integration or authority. |
-| Authority now | Model82 retains81 comparative-choice outcomes plus1 guided Agatha row. One new sampled Elixir use restored22PP; later singleton Champion failed and was not fitted.40 successes,69 distinct selected vectors; no independent improvement. |
+| Reusable capability | Learn whether recovery or immediate story play achieves a finite goal, counting the whole attempt; separate first-choice planning from the frozen continuation policy. |
+| Authority now | Existing model82 sampled seven genuine choices across four new Red lessons; three reached Bruno and one healed twice without reaching the goal. All four first-choice returns fitted separate shadow model32fd4144. No new live authority or independent advantage. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | The toy actor uses only start-state observables, not future outcomes. Different synthetic values pass within declared support; no Red or cross-game transfer is established. |
-| Cheapest falsifier | Can real Red first-choice trajectories supply both useful story completion and recovery tradeoffs, without invented alternatives or resampling a consumed failure? |
+| Transfer test | Four real forward returns cover one correlated historical training root and two distinct selected inputs. A changed-resource context and explicit first-actor/tail test remain; no independent or cross-game transfer. |
+| Cheapest falsifier | Check a genuine changed-resource Red context and whether the new first-choice learner can be tested without recursively replacing the frozen model82 continuation. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-forward-goal-learner** · status **active** · evidence [model fit](docs/evidence/red-pp-choice-champion-stop-2026-09-09.json)
+**2026-09-09-red-forward-goal-pilot** · status **active** · evidence [model fit](docs/evidence/red-forward-goal-pilot-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Prioritize learning when recovery enables final story and collection progress, rather than rewarding easy successful maintenance. Stable Phase4 and long-term living-Pokedex/transfer exits remain unchanged. |
-| Learning output | Model82 and82 real outcomes unchanged. Separate toy learner:128 settled+1 censored episode,4 repeated roots,8/8 supported new contexts efficient,3 unsupported abstentions. Zero real forward-goal rows or promotions. |
-| Authority delta | One genuine PP resource choice fitted in model82. No comparative Champion choice, new battle authority, promotion or Phase4 exit. |
-| Transfer result | The toy actor uses only start-state observables, not future outcomes. Different synthetic values pass within declared support; no Red or cross-game transfer is established. |
-| Blocker | No prospective real Red forward-goal examples yet. The current Champion battle is a retained Dragon Rage guard failure with no genuine field recovery alternative, not a usable new first-choice anchor. |
-| Decision | The separate forward-goal learner and Red recording/admission path are qualified in ROM-free tests. Reorient on the smallest genuine Red first-choice lesson; no current Champion replay or automatic promotion. |
-| Next session | Collect a prospectively declared bounded Red story/recovery lesson with genuine alternatives and the same frozen continuation, then fit separate forward outcomes and test different contexts before new authority. |
-| Next falsifier | Can real Red first-choice trajectories supply both useful story completion and recovery tradeoffs, without invented alternatives or resampling a consumed failure? |
-| Stop condition | Reorient by 08:45 UTC or earlier on the controlled result; no full RL framework, retrospective target changes, oracle features, unqualified policy promotion or boss replay. |
+| Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
+| Learning output | Four settled Red forward returns, three goal successes and one two-heal goal failure, zero censored; one root/two selected inputs. Separate model32fd4144 fitted. Native-story checklist3/3, not whole-Phase4 completion. |
+| Authority delta | Seven real model82 choices and four prospective forward returns fitted in a separate shadow learner. Model82 and its82-row corpus unchanged; no new live promotion or Phase4 exit. |
+| Transfer result | Four real forward returns cover one correlated historical training root and two distinct selected inputs. A changed-resource context and explicit first-actor/tail test remain; no independent or cross-game transfer. |
+| Blocker | Only four fitted returns from one correlated root; no own live forward-head decision yet. First-actor/frozen-tail integration is now tested. The separate current Champion failure remains at Dragon Rage. |
+| Decision | The story-learning checklist is3/3. Lesson04 is singleton-only, while the historical one-heal endpoint retains two alternatives. Tested role-separated first-choice control is ready for a separately declared bounded training probe. |
+| Next session | Run one prospectively declared training-only first-choice probe after the tested actor/tail integration; retain all outcomes and do not call it calibrated promotion or independent advantage. |
+| Next falsifier | Check a genuine changed-resource Red context and whether the new first-choice learner can be tested without recursively replacing the frozen model82 continuation. |
+| Stop condition | Reorient on unsupported or singleton-only context, first execution exception, contradictory actor/tail identity, or no bounded useful test. Do not start a broad RL framework or boss-repair cascade; hard session stop10:42:58UTC. |
 
 ### Stop conditions
 

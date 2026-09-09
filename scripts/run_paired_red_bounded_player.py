@@ -108,9 +108,12 @@ from pokemon_red_completion.red_bounded_player import (  # noqa: E402
 from pokemon_red_completion.red_forward_goal import (  # noqa: E402
     RED_FORWARD_EXECUTION_FLAGS,
     RedForwardGoalCollector,
+    red_forward_context,
     red_forward_continuation_sha256,
+    red_forward_goal_observed,
     red_forward_verifier_sha256,
 )
+from pokemon_red_completion.red_forward_probe import RedForwardProbeSpec  # noqa: E402
 from pokemon_red_completion.red_forward_training import RedForwardTrainingTrajectory  # noqa: E402
 from pokemon_red_completion.red_goal_context import (  # noqa: E402
     RedGoalContextRuntime,
@@ -163,6 +166,7 @@ LEARNED_ARM_ID = "learned-goal-manager"
 CAUSAL_ARM_ID = "living-dex-causal-shadow"
 CALIBRATION_ARM_ID = "multi-goal-calibration-shadow"
 BASELINE_ARM_ID = "completion-first-teacher"
+FORWARD_PROBE_ARM_ID = "forward-first-choice-training-probe"
 _CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID, CALIBRATION_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
 # Historical references, not controller authority. A living collection can need
@@ -1119,6 +1123,29 @@ def _forward_goal_header(readiness: _Readiness) -> dict[str, object]:
     }
 
 
+def _require_forward_probe_scope(readiness: _Readiness, probe: RedForwardProbeSpec) -> None:
+    if (not isinstance(probe, RedForwardProbeSpec)
+            or readiness.training_plan is None or readiness.continuation is None
+            or not readiness.continuation_root_lineage_id
+            or readiness.forward_story_objective is not None
+            or readiness.forward_resource_budget is not None
+            or readiness.challenger_arm_id != CAUSAL_ARM_ID
+            or readiness.model_sha256 != probe.tail_model_sha256
+            or readiness.profile.profile_sha256 != probe.profile_sha256
+            or readiness.training_plan.document["behavior_policy_id"] != probe.tail_policy_id
+            or tuple((name, getattr(readiness, name, False))
+                     for name in RED_FORWARD_EXECUTION_FLAGS) != probe.execution_flags):
+        raise PairedRedBoundedPlayerRunError("forward_probe_scope")
+    scoped = replace(readiness, forward_story_objective=probe.objective_id,
+                     forward_resource_budget=probe.fitted_plan.max_resources)
+    actual = _forward_goal_plan(scoped)
+    assert actual is not None
+    if ((actual.max_actions, actual.max_frames, actual.max_resources, actual.max_macros)
+            != (probe.fitted_plan.max_actions, probe.fitted_plan.max_frames,
+                probe.fitted_plan.max_resources, probe.fitted_plan.max_macros)):
+        raise PairedRedBoundedPlayerRunError("forward_probe_budget_differs")
+
+
 def _evolution_objective_argument(value: str) -> str:
     parts = value.split(":")
     if (
@@ -1468,6 +1495,17 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     )
 
     metadata = header.get("metadata")
+    if isinstance(metadata, Mapping) and "forward_probe" in metadata:
+        probe = metadata["forward_probe"]
+        enabled = metadata.get("completion_dose")
+        if (not isinstance(probe, Mapping)
+                or probe.get("schema") != "pokemon.red.forward-first-choice-training-probe.v1"
+                or type(enabled) is not bool
+                or not isinstance(probe.get("execution_flags"), Mapping)
+                or cast(Mapping[str, object], probe["execution_flags"]).get("completion_dose")
+                is not enabled):
+            raise PairedRedBoundedPlayerRunError("continuation_probe_observer_mode")
+        return enabled
     if isinstance(metadata, Mapping) and metadata.get("schema") in {
         "pokemon.red.forced-recovery-header.v1", "pokemon.red.recorded-support-header.v1",
     }:
@@ -1577,6 +1615,7 @@ def _episode_id(pair_id: str, arm_id: str) -> str:
         CAUSAL_ARM_ID: "causal",
         CALIBRATION_ARM_ID: "calibration",
         BASELINE_ARM_ID: "baseline",
+        FORWARD_PROBE_ARM_ID: "forward-probe",
     }
     try:
         suffix = suffix_by_arm[arm_id]
@@ -1824,7 +1863,12 @@ def _run_arm(
     arm_id: str,
     authority: GoalDecisionAuthority,
     viewer: BoundedPlayerDashboard | None = None,
+    forward_probe: RedForwardProbeSpec | None = None,
 ) -> PairedBoundedPlayerArm:
+    if (arm_id == FORWARD_PROBE_ARM_ID) != (forward_probe is not None):
+        raise PairedRedBoundedPlayerRunError("forward_probe_arm_identity")
+    if forward_probe is not None:
+        _require_forward_probe_scope(readiness, forward_probe)
     episode_id = _episode_id(readiness.pair_id, arm_id)
     limits = _player_limits(readiness.decision_limit, completion_dose=readiness.completion_dose)
     if readiness.continuation is not None:
@@ -1838,8 +1882,10 @@ def _run_arm(
             viewer.safely(
                 "start_arm",
                 learned=arm_id != BASELINE_ARM_ID,
-                model_sha256=readiness.model_sha256,
+                model_sha256=(readiness.model_sha256 if forward_probe is None
+                              else forward_probe.model.sha256),
                 train_examples=(
+                    forward_probe.model.settled_examples if forward_probe is not None else
                     readiness.causal_record.model.settled_examples
                     if readiness.causal_record is not None
                     else None
@@ -1855,9 +1901,16 @@ def _run_arm(
         sink.write_episode_header(
             metadata={
                 **_context_scope(readiness),
-                **_training_header(readiness, arm_id),
+                **(_training_header(readiness, arm_id) if forward_probe is None else {
+                    "forward_probe": forward_probe.header(),
+                    "split": {"partition": "train", "root_lineage_id":
+                              readiness.continuation_root_lineage_id},
+                    "native_training_admission": False,
+                }),
                 **_forward_goal_header(readiness),
                 **_continuation_header(readiness),
+                **({"training_eligible": False, "tail_model_sha256": readiness.model_sha256}
+                   if forward_probe is not None else {}),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
                 "arm_id": arm_id,
@@ -1867,7 +1920,8 @@ def _run_arm(
                 "state_sha256": readiness.capture.state_sha256,
                 "envelope_sha256": readiness.capture.envelope_sha256,
                 "profile_sha256": readiness.profile.profile_sha256,
-                "model_sha256": readiness.model_sha256,
+                "model_sha256": (readiness.model_sha256 if forward_probe is None
+                                 else forward_probe.model.sha256),
                 "continue_after_progress": readiness.continue_after_progress,
                 "completion_dose": readiness.completion_dose,
                 "routed_resource_goals": readiness.routed_resource_goals,
@@ -1965,6 +2019,24 @@ def _run_arm(
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
+            if forward_probe is not None:
+                from pokemon_red_completion.forward_first_choice_policy import (
+                    FirstChoiceForwardTrainingPolicy,
+                )
+
+                if red_forward_goal_observed(runtime.adapter.observe(), forward_probe.objective_id):
+                    raise PairedRedBoundedPlayerRunError("forward_probe_goal_already_complete")
+                assert readiness.causal_record is not None
+                authority = FirstChoiceForwardTrainingPolicy(
+                    forward_model=forward_probe.model, fitted_plan=forward_probe.fitted_plan,
+                    tail_model=readiness.causal_record.model, tail_seed=forward_probe.tail_seed,
+                    observe_context=lambda: red_forward_context(runtime.adapter.observe()),
+                    meter=meter,
+                    append_decision=lambda event: writer.append(
+                        "forward_probe", event, durable=True,
+                    ),
+                    training_probe=True,
+                )
             forward = None
             forward_plan = _forward_goal_plan(readiness)
             if forward_plan is not None:
@@ -1977,6 +2049,7 @@ def _run_arm(
                 )
                 forward.prepare()
             trajectory_class = (
+                ViewerGoalTrajectory if forward_probe is not None else
                 RedForwardTrainingTrajectory if forward is not None else (
                     ViewerGoalTrajectory if readiness.training_plan is None
                     else RedPlayerTrainingTrajectory
@@ -1984,7 +2057,7 @@ def _run_arm(
             )
             training_kwargs: dict[str, Any] = (
                 {}
-                if readiness.training_plan is None
+                if readiness.training_plan is None or forward_probe is not None
                 else {
                     "observe_training": runtime.adapter.observe,
                     "training_meter": meter,
@@ -2017,7 +2090,8 @@ def _run_arm(
                 else "development",
                 environment_id=GAME_ID,
                 actor=arm_id,
-                policy_id=_policy_id(readiness, arm_id),
+                policy_id=(_policy_id(readiness, arm_id) if forward_probe is None
+                           else forward_probe.policy_id),
                 collection_id=readiness.pair_id,
                 assignment_id=f"{readiness.pair_id}-{arm_id}",
                 ordering_assignment_id=readiness.pair_id,
@@ -2073,6 +2147,16 @@ def _run_arm(
                         observation.binding_set, readiness.profile,
                     ),
                 }
+                if forward_probe is not None:
+                    first_choice_actor = cast(FirstChoiceForwardTrainingPolicy, authority)
+
+                    def validate_probe_menu(observation: Any) -> None:
+                        _require_forward_binding_scope(observation.binding_set, readiness.profile)
+                        if (first_choice_actor.forward_decisions == 0
+                                and len(observation.binding_set.bindings) < 2):
+                            raise PairedRedBoundedPlayerRunError("forward_probe_initial_singleton")
+
+                    forward_callbacks["validate_choice_menu"] = validate_probe_menu
                 result = run_bounded_player_episode(
                     observe=observer,
                     authority=authority,
@@ -2080,6 +2164,9 @@ def _run_arm(
                     trajectory=trajectory,
                     budget_meter=meter,
                     completion_satisfied=(
+                        (lambda _observation: red_forward_goal_observed(
+                            runtime.adapter.observe(), forward_probe.objective_id,
+                        )) if forward_probe is not None else
                         _completion_predicate(readiness) if forward is None else
                         lambda _observation: forward.outcome is not None and
                         forward.outcome.target is not None and forward.outcome.target[0] == 1.0
@@ -2091,6 +2178,14 @@ def _run_arm(
                 )
                 if forward is not None:
                     forward.finish()
+                if forward_probe is not None:
+                    writer.append("forward_probe", {
+                        "kind": "forward_probe_terminal",
+                        "bounded_result": result.public_dict(),
+                        "native_training_admission": False,
+                        "model_fitted": False,
+                        "independent_evaluation": False,
+                    }, durable=True)
                 if recorder.recording_failures:
                     raise PairedRedBoundedPlayerRunError("trajectory_durability")
                 if readiness.save_terminal_checkpoints:
@@ -2105,7 +2200,8 @@ def _run_arm(
                         episode_id=episode_id,
                         profile_sha256=readiness.profile.profile_sha256,
                         rom_sha256=readiness.rom_sha256,
-                        model_sha256=readiness.model_sha256,
+                        model_sha256=(readiness.model_sha256 if forward_probe is None
+                                      else forward_probe.model.sha256),
                         source_commit=readiness.source_commit,
                         source_bundle_sha256=readiness.source_bundle_sha256,
                         context_origin=readiness.context_origin,
