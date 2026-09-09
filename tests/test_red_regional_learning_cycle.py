@@ -13,7 +13,7 @@ from pokemon_red_completion.red_player_model import RedPlayerModelRecord
 def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_first=False):
     base = _supply_model()
     records = [RedPlayerModelRecord(replace(base, settled_examples=base.settled_examples+i),
-        'b'*64, 'e'*40, 'f'*64, 'a'*64, 'c'*64, ()) for i in range(3)]
+        'b'*64, 'e'*40, 'f'*64, 'a'*64, 'c'*64, ()) for i in range(17)]
     by_sha = {r.model.model_sha256: r for r in records}
     args = argparse.Namespace(learning_steps=2, train_player=True, decision_limit=1,
         completion_dose=True, pair_id='cycle-fixture', training_seed=10,
@@ -154,7 +154,7 @@ def test_no_actual_next_alternatives_stops_without_inventing_a_choice(tmp_path, 
 
 
 @pytest.mark.parametrize('field,value', [
-    ('learning_steps', True), ('learning_steps', 0), ('learning_steps', 5),
+    ('learning_steps', True), ('learning_steps', 0), ('learning_steps', 17),
     ('train_player', False), ('decision_limit', 2), ('completion_dose', False),
 ])
 def test_scope_and_dose_rejected_before_any_play(tmp_path, monkeypatch, field, value):
@@ -163,6 +163,58 @@ def test_scope_and_dose_rejected_before_any_play(tmp_path, monkeypatch, field, v
     with pytest.raises(ValueError):
         cycle._run(args)
     assert played == fits == []
+
+
+def test_extended_cycle_retains_each_actual_model_and_checkpoint(tmp_path, monkeypatch):
+    args, records, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.learning_steps = 16
+    args.maximum_cycle_seconds = 3600
+    result = cycle._run(args)
+    assert len(played) == len(fits) == 16
+    assert fits[-1]['prior'] is records[15]
+    assert len(played[-1]['continue_from_checkpoint']) == 16
+    assert len({row['pair_id'] for row in played}) == 16
+    assert result['maximum_controller_actions'] == 480_000
+    assert result['maximum_emulator_frames'] == 48_000_000
+    assert result['maximum_cycle_seconds'] == 3600
+
+
+@pytest.mark.parametrize('seconds', [None, True, 0, -1, 7201, 1.5])
+def test_extended_cycle_requires_valid_declared_time_bound(tmp_path, monkeypatch, seconds):
+    args, _, prepared, played, _, _ = harness(tmp_path, monkeypatch)
+    args.learning_steps = 5
+    args.maximum_cycle_seconds = seconds
+    with pytest.raises(ValueError, match='time bound'):
+        cycle._run(args)
+    assert prepared == played == []
+
+
+@pytest.mark.parametrize('expire_during', ['inventory', 'inspection', 'fit'])
+def test_deadline_stops_before_next_input_but_preserves_inflight_fit(
+    tmp_path, monkeypatch, expire_during,
+):
+    args, _, _, played, fits, files = harness(tmp_path, monkeypatch)
+    args.maximum_cycle_seconds = 60
+    clock = [100.0]
+    monkeypatch.setattr(cycle.time, 'monotonic', lambda: clock[0])
+    owner, method = {
+        'inventory': (cycle, 'load_prior_player_inventory'),
+        'inspection': (cycle.source, 'inspect_sources'),
+        'fit': (cycle, 'fit_incremental_regional_result'),
+    }[expire_during]
+    original = getattr(owner, method)
+    def expire(*args, **kwargs):
+        result = original(*args, **kwargs)
+        clock[0] = 160.0
+        return result
+    monkeypatch.setattr(owner, method, expire)
+    result = cycle._run(args)
+    assert len(played) == len(fits) == (1 if expire_during == 'fit' else 0)
+    assert result['stop_reason'] == 'time_limit_before_next_step'
+    assert result['elapsed_seconds'] == 60
+    assert args.out in files
+    if expire_during == 'fit':
+        assert args.out.with_name('cycle-01-fit.json') in files
 
 
 def test_automatic_cycle_switches_native_goal_to_destination_and_carries_fit(tmp_path, monkeypatch):

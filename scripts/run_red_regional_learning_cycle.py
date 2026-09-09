@@ -9,6 +9,8 @@ The second step must restore the first step's actual checkpoint and fitted model
 from __future__ import annotations
 
 import argparse
+import json
+import time
 from pathlib import Path
 from typing import Any, cast
 
@@ -30,7 +32,9 @@ from pokemon_red_completion.red_player_model import (
 
 def _parser() -> argparse.ArgumentParser:
     parser = source.base._parser()
-    parser.add_argument("--learning-steps", type=int, choices=(1, 2, 3, 4), default=2)
+    parser.add_argument("--learning-steps", type=int, choices=range(1, 17), default=2)
+    parser.add_argument("--maximum-cycle-seconds", type=int,
+                        help="Stop between bounded episodes; required for more than four steps.")
     parser.add_argument("--continue-after-search-exhaustion", action="store_true")
     parser.add_argument("--automatic-goals", action="store_true",
                         help="Choose native tasks and capture destinations; fit real outcomes.")
@@ -63,8 +67,19 @@ def _safe_exhausted_search(parent: dict[str, Any]) -> bool:
 
 
 def _run(args: argparse.Namespace) -> dict[str, object]:
-    if type(args.learning_steps) is not int or not 1 <= args.learning_steps <= 4:
+    if type(args.learning_steps) is not int or not 1 <= args.learning_steps <= 16:
         raise ValueError("learning cycle step bound differs")
+    maximum_seconds = getattr(args, "maximum_cycle_seconds", None)
+    if maximum_seconds is not None and (
+        type(maximum_seconds) is not int or not 1 <= maximum_seconds <= 7200
+    ):
+        raise ValueError("learning cycle time bound differs")
+    if args.learning_steps > 4 and maximum_seconds is None:
+        raise ValueError("extended learning cycle needs a time bound")
+    started = time.monotonic()
+
+    def deadline_reached() -> bool:
+        return maximum_seconds is not None and time.monotonic() - started >= maximum_seconds
     if not args.train_player or args.decision_limit != 1 or not args.completion_dose:
         raise ValueError("learning cycle requires bounded single-choice training")
     continue_search = getattr(args, "continue_after_search_exhaustion", False)
@@ -106,6 +121,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     pending_support: list[dict[str, object]] = []
     stop = "step_limit"
     for ordinal in range(1, args.learning_steps + 1):
+        if deadline_reached():
+            stop = "time_limit_before_next_step"
+            break
         current.pair_id = f"{args.pair_id}-{ordinal:02d}"
         current.training_seed = args.training_seed + ordinal - 1
         current.out = original.with_name(f"{original.stem}-{ordinal:02d}-parent.json")
@@ -133,6 +151,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         elif len(candidates) < 2:
             stop = "no_genuine_source_choice"
             break
+        if deadline_reached():
+            stop = "time_limit_before_next_step"
+            break
         # Existing runner records the actual sampled source before any input.
         outcome = source._run(current) if regional else goal._run(current)
         source.base._write_exclusive(
@@ -156,6 +177,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         results.append({"ordinal": ordinal, "outcome": outcome, "fit": fitted,
                         "selection_scope": "regional_destination" if regional else "native_goal"})
         parent = cast(dict[str, Any], outcome["parent_episode"])
+        print(json.dumps({
+            "status": "learning_step_settled", "ordinal": ordinal,
+            "maximum_steps": args.learning_steps,
+            "elapsed_seconds": round(time.monotonic() - started, 3),
+            "selection_scope": results[-1]["selection_scope"],
+            "episode_id": outcome["episode_id"],
+            "new_model": fitted.get("model"),
+            "parent_episode": parent,
+        }), flush=True)
         failed = len(parent["steps"]) != 1 or parent["steps"][0]["status"] != "succeeded"
         if failed and not (continue_search and _safe_exhausted_search(parent)):
             stop = "failed_step_retained_and_fitted"
@@ -178,6 +208,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     summary = {
         "schema": "pokemon.red.regional-learning-cycle.v1", "steps": results,
         "declared_maximum_steps": args.learning_steps, "stop_reason": stop,
+        "maximum_cycle_seconds": maximum_seconds,
+        "elapsed_seconds": round(time.monotonic() - started, 3),
+        "deadline_scope": "between_bounded_episodes_no_inflight_interruption",
         "source_commit": initial.source_commit,
         "starting_model_sha256": initial.model_sha256,
         "maximum_controller_actions": args.learning_steps * 30_000,
@@ -193,5 +226,4 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
 
 if __name__ == "__main__":
-    import json
     print(json.dumps(_run(_parser().parse_args()), indent=2, sort_keys=True))
