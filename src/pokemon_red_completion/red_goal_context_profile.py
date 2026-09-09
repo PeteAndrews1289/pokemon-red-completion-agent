@@ -169,6 +169,23 @@ def build_native_boxed_evolution_profile_payload(
     )
 
 
+def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt only the existing wild capture objective into qualified Fly transport."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["fly_transport"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("Fly transport needs an existing capture objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_evolution_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt the existing evolution objective into qualified Fly transport only."""
     providers = []
@@ -681,6 +698,12 @@ def _parse_parameters(
             required.add("completed_battles")
         local_species = row.get("source_species_numbers")
         capture_species = row.get("capture_species_numbers")
+        if "fly_transport" in row:
+            if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
+                type(row["fly_transport"]) is not bool
+            ):
+                raise RedGoalContextProfileError("capture Fly transport differs")
+            required.add("fly_transport")
         if "capture_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 not isinstance(capture_species, list)
@@ -747,6 +770,8 @@ def _parse_parameters(
             parsed["capture_species_numbers"] = capture_species
         if "capture_status_support" in row:
             parsed["capture_status_support"] = row["capture_status_support"]
+        if "fly_transport" in row:
+            parsed["fly_transport"] = row["fly_transport"]
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(

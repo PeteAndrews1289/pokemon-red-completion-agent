@@ -558,6 +558,10 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
+        "--capture-fly-transport", dest="regional_transitions", action="append_const",
+        const="capture-fly", help="opt future wild capture destinations into guarded Fly access",
+    )
+    parser.add_argument(
         "--evolution-fly-transport", dest="regional_transitions", action="append_const",
         const="evolution-fly", help="opt the current evolution objective into guarded Fly access",
     )
@@ -1220,7 +1224,7 @@ def _regional_profiles(
         if (
             isinstance(source, Path)
             or source.startswith("discovery:")
-            or source in {"capture-status", "opportunistic-capture", "evolution-fly",
+            or source in {"capture-status", "opportunistic-capture", "evolution-fly", "capture-fly",
                           "affordable-capture-supply", "cartridge-trainer-story",
                           "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
                           "cartridge-trainer-story:lance",
@@ -1239,6 +1243,12 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        if source == "capture-fly":
+            from pokemon_red_completion.red_goal_context_profile import bind_capture_fly_profile
+
+            profile = bind_capture_fly_profile(profile)
+            result.append(profile)
+            continue
         if source == "evolution-fly":
             from pokemon_red_completion.red_goal_context_profile import bind_evolution_fly_profile
 

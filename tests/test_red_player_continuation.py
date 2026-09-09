@@ -575,6 +575,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--affordable-capture-supply",
         "--evolution-objective", "63:64:16",
         "--evolution-fly-transport",
+        "--capture-fly-transport",
     ])
     assert args.regional_transitions == [
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
@@ -584,6 +585,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "affordable-capture-supply",
         "evolution:63:64:16",
         "evolution-fly",
+        "capture-fly",
     ]
 
 
@@ -610,6 +612,24 @@ def test_fly_modifier_is_ordered_after_old_profiles_without_changing_them(monkey
     assert [s for s in before.providers if s.kind.value != "evolve_species"] == [
         s for s in future.providers if s.kind.value != "evolve_species"
     ]
+
+
+def test_capture_fly_modifier_keeps_ancestors_and_other_skills_unchanged(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    from pokemon_red_completion.goal_manager import GoalKind
+
+    before = _local_discovery_profile()
+    monkeypatch.setattr(runner, "_route_world", lambda _: object())
+    digest = before.profile_sha256
+    (future,) = runner._regional_profiles(before, ("capture-fly",), object())
+    assert before.profile_sha256 == digest
+    for old, new in zip(before.providers, future.providers, strict=True):
+        if old.kind is GoalKind.ACQUIRE_SPECIES:
+            assert "fly_transport" not in old.parameters
+            assert dict(new.parameters) == {**dict(old.parameters), "fly_transport": True}
+        else:
+            assert new == old
 
 
 def test_future_evolution_preserves_historical_supply_profiles(monkeypatch):

@@ -92,7 +92,7 @@ def bind_collection_fly(
 ) -> ExecutableGoalBinding | None:
     """Offer only a legal flight with a feasible onward walking plan.
 
-    First scope is evolution access. Profiles without the explicit flag retain
+    Scope is capture or evolution access. Profiles without the explicit flag retain
     their historical walking-only behavior. No controller actions occur here.
     """
     from pokemon_red_completion.observation import MapId
@@ -100,7 +100,9 @@ def bind_collection_fly(
     from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
 
     if (
-        spec.mechanic is not RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+        spec.mechanic not in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        }
         or spec.parameters.get("fly_transport") is not True
     ):
         return None
@@ -126,6 +128,17 @@ def bind_collection_fly(
     except Gen1FieldMoveError:
         return None
     landings = dict(red_fly_landings(router.world.rom))
+    destinations: tuple[tuple[int, tuple[int, int]], ...]
+    if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        destinations = (
+            (int(MapId.CINNABAR_POKECENTER), (3, 3)),
+            (int(MapId.VERMILION_POKECENTER), (3, 3)),
+        )
+    else:
+        target, x, y = (spec.parameters[key] for key in ("map_id", "player_x", "player_y"))
+        if type(target) is not int or type(x) is not int or type(y) is not int:
+            raise Gen1FieldMoveError("capture destination is not an integer boundary")
+        destinations = ((target, (y, x)),)
     possibilities = []
     for town in reader.read_fly_destinations():
         if town == start.map_id or town not in landings or not 0 <= town < len(RED_FLY_TOWN_NAMES):
@@ -141,18 +154,18 @@ def bind_collection_fly(
         projected = replace(
             start, map_id=town, at=landing, last_outside_map=town, occupied=frozenset()
         )
-        for center in (int(MapId.CINNABAR_POKECENTER), int(MapId.VERMILION_POKECENTER)):
+        for target, goal_at in destinations:
             try:
                 topology = find_macro_path(
-                    router.world.macro_graph, town, center, last_outside=town
+                    router.world.macro_graph, town, target, last_outside=town
                 )
             except GlobalRouterError:
                 continue
-            possibilities.append((len(topology.edges), town, center, projected))
+            possibilities.append((len(topology.edges), town, target, goal_at, projected))
     chosen = None
-    for _, town, center, projected in sorted(possibilities, key=lambda p: p[:3]):
+    for _, town, target, goal_at, projected in sorted(possibilities, key=lambda p: p[:3]):
         try:
-            plan = router.world.plan_feasible_to_map(projected, center, goal_at=(3, 3))
+            plan = router.world.plan_feasible_to_map(projected, target, goal_at=goal_at)
         except RoutePlanningError:
             continue
         if plan.steps and _walking_plan(plan):
@@ -259,7 +272,14 @@ def bind_collection_fly(
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
 
-    return RoutedSemanticGoalComposer(
+    from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
+
+    destination_provider = provider
+    if router.routed_recovery and isinstance(provider, RedAreaSurveyGoalProvider):
+        from pokemon_red_completion.red_capture_preparation import EscortPreparedCaptureProvider
+
+        destination_provider = EscortPreparedCaptureProvider(provider, runtime, actions)
+    binding = RoutedSemanticGoalComposer(
         binding_ref="red-collection-fly-goal:" + origin + ":" + spec.configuration_sha256,
         destination_kind=spec.kind,
         estimated_effort=min(1.0, 0.42 + len(plan.steps) / 1000),
@@ -268,10 +288,16 @@ def bind_collection_fly(
             "red-collection-fly:" + origin, origin, boundary.sha256, execute, verify
         ),
         bind_fresh_destination=RedFreshGoalDestinationBinder(
-            spec.kind, boundary, observe, provider
+            spec.kind, boundary, observe, destination_provider
         ),
         budget_meter=meter,
         limits=RoutedSemanticGoalLimits(
             router.maximum_controller_actions, router.maximum_emulator_frames
         ),
     ).binding()
+    if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+        binding = replace(
+            binding,
+            search_source_ref="pokemon.red:acquisition:" + str(spec.parameters["source_id"]),
+        )
+    return binding

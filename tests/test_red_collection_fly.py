@@ -20,6 +20,7 @@ from pokemon_red_completion.local_router import LocalGraph, LocalPath
 from pokemon_red_completion.red_collection_fly import bind_collection_fly, red_fly_landings
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfileError,
+    bind_capture_fly_profile,
     bind_evolution_fly_profile,
     build_native_boxed_evolution_profile_payload,
     parse_red_goal_context_profile,
@@ -79,12 +80,15 @@ def test_truncated_table_and_aliased_pointers_reject():
 class Scene(FlyWorld):
     frame_count = 0
     walk_calls = 0
+    destination_map = 89
+    destination_at = (3, 3)
 
     def execute(self, action):
         self.frame_count += action.repeat
         if self.stage == "landed" and action.kind is MacroActionKind.MOVE:
             self.walk_calls += 1
-            self.raw = replace(self.raw, map_id=89, player_x=3, player_y=3)
+            y, x = self.destination_at
+            self.raw = replace(self.raw, map_id=self.destination_map, player_x=x, player_y=y)
             return
         super().execute(action)
 
@@ -149,7 +153,7 @@ def scene():
 
         binding = ExecutableGoalBinding(
             "synthetic-evolution",
-            GoalKind.EVOLVE_SPECIES,
+            provider.kind,
             0.1,
             0.1,
             execute,
@@ -178,6 +182,7 @@ def scene():
         world=world,
         maximum_controller_actions=6000,
         maximum_emulator_frames=600000,
+        routed_recovery=False,
         _replan=lambda request: plan,
     )
 
@@ -327,5 +332,97 @@ def test_opt_in_preserves_previous_profile_and_rejects_nonboolean():
     next(s for s in payload["providers"] if s["kind"] == "evolve_species")["parameters"][
         "fly_transport"
     ] = 1
-    with pytest.raises(RedGoalContextProfileError):
-        parse_red_goal_context_profile(json.dumps(payload).encode())
+    with pytest.raises(RedGoalContextProfileError, match="Fly transport"):
+        parse_red_goal_context_profile(
+            (json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode()
+        )
+
+
+@pytest.mark.parametrize("succeeded", [True, False])
+def test_capture_uses_declared_grass_boundary_and_keeps_source_history(scene, succeeded):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    profile = bind_capture_fly_profile(_local_discovery_profile())
+    spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
+    target = spec.parameters["map_id"]
+    goal_at = (spec.parameters["player_y"], spec.parameters["player_x"])
+    assert (target, goal_at) != (89, (3, 3))
+    scene.provider.kind = GoalKind.ACQUIRE_SPECIES
+    scene.skill_passed[0] = succeeded
+    scene.game.destination_map, scene.game.destination_at = target, goal_at
+    segment = replace(scene.plan.segments[0], target_map=target,
+                      transition=MacroTransition((6, 9), goal_at, "down"))
+    plan = replace(scene.plan, macro_path=MacroPath((5, target), (MacroEdge(target),)),
+                   segments=(segment,), terminal_at=goal_at)
+    scene.router.world.macro_graph = MacroGraph({5: (MacroEdge(target),)})
+
+    def plan_to(start, map_id, *, goal_at):
+        assert map_id == target
+        assert goal_at == scene.game.destination_at
+        assert start.map_id == 5 and start.at == (6, 9)
+        return plan
+
+    scene.router.world.plan_feasible_to_map = plan_to
+    fresh = FreshRedGoalObservation(
+        "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
+    )
+    binding = bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer)
+    assert scene.game.actions == [] and scene.provider_calls == []
+    assert binding.kind is GoalKind.ACQUIRE_SPECIES
+    assert binding.search_source_ref == "pokemon.red:acquisition:" + spec.parameters["source_id"]
+    report = binding.execute()
+    assert binding.verify(report).status.value == ("succeeded" if succeeded else "failed")
+    assert scene.provider_calls == [(target, *goal_at)]
+    assert scene.game.flight_confirms == scene.game.walk_calls == 1
+    assert report.actions_executed == scene.router.actions.actions_executed
+
+
+def test_capture_fly_opt_in_is_strict_and_survives_source_retargeting():
+    import json
+
+    from test_red_living_dex_wild_corridor import _graph, _local_discovery_profile, _terrain
+
+    from pokemon_red_completion.red_goal_context_profile import (
+        _thaw,
+        build_red_goal_context_profile_payload,
+    )
+    from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        derive_red_living_dex_wild_corridor,
+        retarget_red_wild_profile,
+    )
+
+    original = _local_discovery_profile()
+    updated = bind_capture_fly_profile(original)
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    moved = retarget_red_wild_profile(updated, corridor)
+    for profile in (updated, moved):
+        capture = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
+        assert capture.parameters["fly_transport"] is True
+        assert all("fly_transport" not in s.parameters for s in profile.providers
+                   if s.kind is not GoalKind.ACQUIRE_SPECIES)
+    assert all("fly_transport" not in s.parameters for s in original.providers)
+    data = json.loads(build_red_goal_context_profile_payload(
+        profile_id=updated.profile_id,
+        providers=tuple((s.kind, s.mechanic, _thaw(s.parameters)) for s in updated.providers),
+    ))
+    capture = next(s for s in data["providers"] if s["kind"] == "acquire_species")
+    capture["parameters"]["fly_transport"] = 1
+    with pytest.raises(RedGoalContextProfileError, match="capture Fly transport"):
+        parse_red_goal_context_profile(
+            (json.dumps(data, sort_keys=True, separators=(",", ":")) + "\n").encode()
+        )
+
+
+def test_legacy_capture_profile_does_not_gain_fly_access(scene):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    spec = next(s for s in _local_discovery_profile().providers
+                if s.kind is GoalKind.ACQUIRE_SPECIES)
+    fresh = FreshRedGoalObservation(
+        "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
+    )
+    assert bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer) is None
+    assert scene.game.actions == [] and scene.provider_calls == []

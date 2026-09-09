@@ -139,10 +139,14 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             try:
                 preflight = source.base._action_free_preflight(ready)
             except RedNoAvailableGoalError:
-                # No next input occurred. Preserve completed outcomes and fits
-                # in a normal terminal summary; do not catch unrelated defects.
-                stop = "no_executable_native_goal"
-                break
+                # The retained local source may be exhausted while a newly
+                # inventoried regional source is executable. Its runner checks
+                # the selected profile before input; do not invent a local goal.
+                if not candidates:
+                    stop = "no_executable_native_goal"
+                    break
+                preflight = {"status": "regional_candidates_available",
+                             "available_goal_kinds": []}
             kinds = preflight.get("available_goal_kinds", [])
             if not isinstance(kinds, list) or any(not isinstance(kind, str) for kind in kinds):
                 raise ValueError("automatic collection goal inventory differs")
@@ -154,7 +158,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             }:
                 stop = "no_executable_collection_or_support_goal"
                 break
-            regional = kinds == ["acquire_species"] and len(candidates) >= 2
+            regional = kinds in ([], ["acquire_species"]) and len(candidates) >= 2
         elif len(candidates) < 2:
             stop = "no_genuine_source_choice"
             break

@@ -171,6 +171,8 @@ def retarget_red_wild_profile(
                 derived[key] = min(new_bound, old_bound)
             if "capture_status_support" in parameters:
                 derived["capture_status_support"] = parameters["capture_status_support"]
+            if "fly_transport" in parameters:
+                derived["fly_transport"] = parameters["fly_transport"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
     result = parse_red_goal_context_profile(build_red_goal_context_profile_payload(

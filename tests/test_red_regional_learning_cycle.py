@@ -61,7 +61,7 @@ def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_
 def test_empty_native_inventory_closes_after_retained_fit_without_new_attempt(
     tmp_path, monkeypatch,
 ):
-    args, records, _, played, fits, files = harness(tmp_path, monkeypatch)
+    args, records, _, played, fits, files = harness(tmp_path, monkeypatch, stop_after_first=True)
     args.automatic_goals = True
 
     def preflight(_ready):
@@ -89,6 +89,20 @@ def test_unrelated_preflight_errors_still_abort_without_reclassification(tmp_pat
     with pytest.raises(GoalManagerError, match="malformed opportunity"):
         cycle._run(args)
     assert not played and not fits and args.out not in files
+
+
+def test_empty_old_source_does_not_hide_new_executable_regional_choices(tmp_path, monkeypatch):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+
+    def preflight(_ready):
+        raise cycle.RedNoAvailableGoalError("old source exhausted")
+
+    monkeypatch.setattr(cycle.source.base, "_action_free_preflight", preflight)
+    result = cycle._run(args)
+    assert len(played) == len(fits) == 2
+    assert all(row["selection_scope"] == "regional_destination" for row in result["steps"])
+    assert result["stop_reason"] == "step_limit"
 
 
 def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monkeypatch):
