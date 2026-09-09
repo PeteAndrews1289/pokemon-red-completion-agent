@@ -1068,7 +1068,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         else None
     )
     regional_profiles = _regional_profiles(
-        execution_profile or expanded_profile or profile, tuple(wild_sources), readiness
+        execution_profile or expanded_profile or profile, tuple(wild_sources), readiness,
+        allow_cartridge_sources=getattr(args, "registered_ledger", None) is not None,
     )
     readiness = replace(
         readiness,
@@ -1460,6 +1461,7 @@ def _regional_profiles(
     profile: RedGoalContextProfile,
     sources: tuple[str | Path, ...],
     readiness: _Readiness,
+    *, allow_cartridge_sources: bool = False,
 ) -> tuple[RedGoalContextProfile, ...]:
     """Derive explicit source transitions; no emulator, policy or input is used."""
     from pokemon_red_completion.goal_manager import GoalKind
@@ -1503,6 +1505,13 @@ def _regional_profiles(
         ):
             continue
         methods = RED_ACQUISITION_CATALOG.methods_at_source(source)
+        if not methods and allow_cartridge_sources:
+            from pokemon_red_completion.gen1_cartridge import wild_tables
+
+            if wild_tables(readiness.rom_path.read_bytes(), medium="grass").get(
+                int(map_id_for_wild_source(source))
+            ):
+                continue
         if not methods or any(method.kind is not RedAcquisitionKind.WILD for method in methods):
             raise PairedRedBoundedPlayerRunError("regional_source_requires_ordinary_wild_capture")
     world = _route_world(readiness)
@@ -1663,6 +1672,7 @@ def _regional_profiles(
             world.terrain[map_id],
             world.local_graphs[map_id],
             excluded=world.object_blockers[map_id],
+            **({"cartridge": world.rom} if allow_cartridge_sources else {}),
         )
         profile = retarget_red_wild_profile(profile, corridor, rom=world.rom)
         result.append(profile)

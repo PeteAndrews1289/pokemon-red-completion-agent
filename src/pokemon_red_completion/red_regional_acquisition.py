@@ -100,6 +100,11 @@ def enumerate_red_regional_acquisitions(
             if method.kind is RedAcquisitionKind.WILD
         }
     )
+    if getattr(runtime, "registration_policy", None) is not None:
+        # The historical catalog names one preferred source per species. It is
+        # not a complete location index: alternative reachable grass patches
+        # matter once those preferred routes are exhausted or gated.
+        sources = sorted(set(sources) | set(cartridge_grass_sources(world.rom)))
     candidates = []
     for source in sources:
         try:
@@ -111,6 +116,8 @@ def enumerate_red_regional_acquisitions(
                 world.terrain[map_id],
                 world.local_graphs[map_id],
                 excluded=world.object_blockers[map_id],
+                **({"cartridge": world.rom}
+                   if getattr(runtime, "registration_policy", None) is not None else {}),
             )
             profile = bind_red_local_discovery_profile(
                 retarget_red_wild_profile(runtime.profile, corridor, rom=world.rom),
@@ -140,6 +147,19 @@ def enumerate_red_regional_acquisitions(
         raise ValueError("regional source enumeration changed the game")
     candidates.sort(key=lambda candidate: (candidate.binding.estimated_effort, candidate.source_id))
     return tuple(candidates[:MAXIMUM_SOURCE_CANDIDATES])
+
+
+def cartridge_grass_sources(rom: bytes) -> tuple[str, ...]:
+    """All named cartridge land-encounter maps, not hand-picked species routes."""
+    from pokemon_red_completion.gen1_cartridge import wild_tables
+    from pokemon_red_completion.observation import MapId
+
+    known = {int(item): item for item in MapId}
+    return tuple(sorted(
+        "wild:" + "".join(part.title() for part in known[map_id].name.split("_")) + ":grass"
+        for map_id, slots in wild_tables(rom, medium="grass").items()
+        if slots and map_id in known and "SAFARI" not in known[map_id].name
+    ))
 
 
 def regional_acquisition_menu(

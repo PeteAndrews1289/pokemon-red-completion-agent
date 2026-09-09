@@ -66,6 +66,21 @@ def _graph(*, one_way: bool = False) -> LocalGraph:
     return LocalGraph(edges)
 
 
+def test_noncanonical_corridor_requires_matching_cartridge_encounters(monkeypatch):
+    terrain = replace(_terrain(), map_id=int(MapId.ROUTE_15))
+    target = RedEncounterSourceTarget("wild:Route15:grass")
+    with pytest.raises(RedLivingDexWildCorridorError, match="authenticated ordinary"):
+        derive_red_living_dex_wild_corridor(target, terrain, _graph())
+    monkeypatch.setattr("pokemon_red_completion.gen1_cartridge.wild_tables",
+                        lambda rom, *, medium: {int(MapId.ROUTE_15): [(10, 1)]})
+    actual = derive_red_living_dex_wild_corridor(target, terrain, _graph(), cartridge=b"fixture")
+    assert actual.source_id == target.source_id and actual.map_id == int(MapId.ROUTE_15)
+    monkeypatch.setattr("pokemon_red_completion.gen1_cartridge.wild_tables",
+                        lambda rom, *, medium: {int(MapId.ROUTE_11): [(10, 1)]})
+    with pytest.raises(RedLivingDexWildCorridorError, match="authenticated ordinary"):
+        derive_red_living_dex_wild_corridor(target, terrain, _graph(), cartridge=b"fixture")
+
+
 def test_regional_retargeting_moves_both_surveys_not_other_skills_or_budgets():
     corridor = derive_red_living_dex_wild_corridor(
         RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),

@@ -40,3 +40,10 @@ precursor could eventually cover them. Direct missing entries now remain alterna
 redundant base captures are still suppressed. The live adapter also carries the same
 registered projection used to bind routes, preventing initial/fresh hash disagreement.
 These follow-up changes passed120 targeted tests before repeating zero-input inventory.
+
+The repeated inventory still found no choice. Its location list was also limited to
+canonical preferred acquisition sources, excluding alternate cartridge locations.
+Registered-mode enumeration now considers named ordinary land-encounter tables,
+requires real reversible encounter terrain, and preserves route feasibility checks.
+Noncanonical profile continuations require matching cartridge evidence; Safari remains
+excluded because its capture rules differ.120 targeted tests passed for this extension.

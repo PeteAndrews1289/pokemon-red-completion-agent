@@ -280,6 +280,7 @@ def derive_red_living_dex_wild_corridor(
     graph: LocalGraph,
     *,
     excluded: Collection[Coordinate] = (),
+    cartridge: bytes | None = None,
 ) -> RedLivingDexWildCorridor:
     """Choose a deterministic safe pair from real grass and traversal edges."""
 
@@ -296,9 +297,14 @@ def derive_red_living_dex_wild_corridor(
         method.source_id == target.source_id
         for method in RED_ACQUISITION_CATALOG.methods
     ):
-        raise RedLivingDexWildCorridorError(
-            "wild corridor source has no Red acquisition method"
-        )
+        from pokemon_red_completion.gen1_cartridge import wild_tables
+        from pokemon_red_completion.observation import MapId
+
+        if (cartridge is None or "SAFARI" in MapId(map_id).name
+                or not wild_tables(cartridge, medium="grass").get(map_id)):
+            raise RedLivingDexWildCorridorError(
+                "wild corridor source has no authenticated ordinary encounter table"
+            )
     blocked = frozenset(excluded)
     if any(
         not isinstance(coordinate, tuple)

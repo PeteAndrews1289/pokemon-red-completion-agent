@@ -54,6 +54,19 @@ def _observation():
     return _adapter(_Reader(raw=_raw(), ready=True)).observe()
 
 
+def test_cartridge_source_inventory_includes_noncanonical_locations_and_roundtrips(monkeypatch):
+    from pokemon_red_completion.observation import MapId
+    from pokemon_red_completion.red_living_dex_multifamily_curriculum import map_id_for_wild_source
+    monkeypatch.setattr("pokemon_red_completion.gen1_cartridge.wild_tables",
+        lambda rom, *, medium: {int(MapId.ROUTE_15): [(20, 1)],
+            int(MapId.ROUTE_11): [(15, 2)], int(MapId.ROUTE_12): [], 9999: [(1, 1)]})
+    sources = regional.cartridge_grass_sources(b"fixture")
+    assert sources == ("wild:Route11:grass", "wild:Route15:grass")
+    assert {int(map_id_for_wild_source(s)) for s in sources} == {
+        int(MapId.ROUTE_11), int(MapId.ROUTE_15),
+    }
+
+
 def test_source_projection_excludes_identity_and_preserves_observed_history():
     first, second = _candidate(), _candidate("wild:Route11:grass", 0.7)
     observation = _observation()
