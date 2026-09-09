@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-opportunistic-collection",
+  "as_of_session": "2026-09-09-extended-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-opportunistic-collection-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-extended-collection-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -570,6 +570,12 @@
       "result": "Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.",
       "deviation": "No stage-exit change. Existing supported grass sources only; living target census still unfinished.",
       "next": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay."
+    },
+    {
+      "session": "2026-09-09-extended-collection",
+      "result": "16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures.",
+      "deviation": "No stage-exit change. Existing supported grass sources only; living target census still unfinished.",
+      "next": "Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch."
     }
   ],
   "closed_milestones": [

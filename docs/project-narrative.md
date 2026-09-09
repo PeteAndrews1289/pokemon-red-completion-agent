@@ -1,16 +1,16 @@
-# Current — opportunistic collection: native95
+# Current — extended collection: native110
 
-Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.
+16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures.
 
-Actual native goal or regional destination choices fitted from 91 to 95 examples, retaining every prior row. Native95 is fitted but unplayed. Capture mechanics remain deterministic; no independent advantage or cross-game result.
+Actual native goals and regional destinations fitted from 95 to 110 examples, retaining prior rows. Forced support receives no invented training credit. Native110 has not yet played; no independent advantage or learned combat.
 
-The capture skill now considers all useful species in the local cartridge grass table, including spare evolution stock and directly encountered evolved forms. Canonical dependencies and historical profiles are preserved; retargeting rederives local offers. 254 focused tests, lint and targeted typing passed; not the full suite.
+The automatic loop now supports16 bounded steps and a between-episode deadline. It retains actual captures, supplies, recovery and per-step fitting. Deadline checks prevent the next episode from starting, without discarding an in-flight bounded outcome. 119 focused tests, lint passed; not the full suite.
 
-Next: Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay.
+Next: Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch.
 
-Small-batch learning works and captures are broader. Sustained collection efficiency, all remaining supported destinations and non-grass mechanics are not yet demonstrated.
+The starting collection had executable Drowzee evolution stock but no permitted route to its supported training Centers. The current collection router is walking-only; the existing observed-menu Fly controller is not integrated. Broader access is the next capability, not merely a larger step budget.
 
-[Session, evidence and next steps](work-sessions/2026-09-09-opportunistic-collection.md). No new external-agent session or quota use.
+[Session, evidence and next steps](work-sessions/2026-09-09-extended-collection.md). No new external-agent session or quota use.
 
 ## Prior package and Phase4 history
 

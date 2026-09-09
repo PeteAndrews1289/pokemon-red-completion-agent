@@ -1,0 +1,13 @@
+{
+  "capture_items": 11,
+  "checkpoint_sha256": "02711287344cd37f18f420fbd6e41fded202e5167b4c208e30694bcb410def41",
+  "controller_actions": 0,
+  "live": false,
+  "living_species": 32,
+  "location": "Route 22 \u00b7 batch stopped",
+  "money": 20913,
+  "registered_species": 36,
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "specimens": 40,
+  "verified_at": "2026-09-09T18:40:10.635135+00:00"
+}

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-opportunistic-collection**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-extended-collection**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Qualify supply and useful alternatives ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 - [x] Measure a learned collection choice ([evidence](../docs/evidence/red-phase5-native-learning-2026-09-09.json))
 
-Current model: **95 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **110 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Capture and retain specimens; evolve, store and trade as needed.
 
 Version exclusives and trade evolutions require partner versions; unavailable event inputs stay explicit blockers.
 
-[Current evidence](../docs/evidence/red-opportunistic-collection-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-extended-collection-learning-2026-09-09.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-extended-collection
+
+16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures.
+
+**Deviation:** No stage-exit change. Existing supported grass sources only; living target census still unfinished.
+
+**Next:** Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch.
 
 ### 2026-09-09-opportunistic-collection
 
