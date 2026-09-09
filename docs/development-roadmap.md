@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-resource-fit-fixed-entry**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-league-initialization-closeout**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json)
+[Current evidence](../docs/evidence/red-model-led-league-stop-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-league-initialization-closeout
+
+Lance stopped before battle after one learned heal; Champion unattempted.217 repair tests pass; live confirmation next.
+
+**Deviation:** Closed the two-leg sequence at its first exception. Stable Phase4 and local1/3 checklist remain unchanged; no extra fitting cohort or replacement win.
+
+**Next:** Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry.
 
 ### 2026-09-09-resource-fit-fixed-entry
 

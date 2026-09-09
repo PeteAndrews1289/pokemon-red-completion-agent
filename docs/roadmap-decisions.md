@@ -1,5 +1,26 @@
 # Roadmap baseline and deviations
 
+## September9 closeout — retain the failed sequence; repair readiness, not identity
+
+The native82 continuation made one learned heal, followed by forced singleton
+story. It stopped before Lance battle at a partly initialized text boundary;
+97actions/8,508frames/one item,all30specimens retained. Champion was never attempted.
+The original sequence is closed and its failure remains quarantined. A zero-input
+inspection classifies the retained state without resuming it.
+
+The deterministic repair waits only inside the existing owned-trigger24 WAIT12
+bound. Exact trainer identity remains mandatory for dialogue input.217 focused
+tests and independent read-only review pass. The stable Phase4 exit and local
+1/3 continuation checklist do not advance for a failed story step. The preceding
+resource checklist remains closed2/3, with its optional probe honestly deferred.
+
+Next use a separately declared repaired-controller development successor from
+an authenticated safe checkpoint, preserving this correlated failure and every
+new terminal. Do not create another per-boss fitting cohort, replace a failed
+result, resume the closed failed save, or count a forced action as a learned one.
+Only current Lance success can admit the conditional Champion leg. No new phase
+gate and no sealed, full-replay or Crystal execution are introduced.
+
 ## September9 — close bounded resource coverage and return to story composition
 
 The final four Agatha samples all chose healing first:two then advanced and won,

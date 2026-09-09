@@ -1,4 +1,35 @@
-# Current — seven-return fit complete; reusable battle entry repaired
+# Current — Lance sequence stopped; initialization repair qualified
+
+Native82 genuinely chose one heal, then a forced singleton advanced story. The
+97action/8,508frame episode stopped before Lance battle at a visible text border
+whose trainer sprite had not initialized. All30specimens remained; Champion was
+never attempted. The closed failure is authenticated, quarantined and not fitted.
+No admitted checkpoint, new native row, learned battle authority or Phase4 exit.
+
+The narrow repair permits only bounded waiting in the fresh owned-trigger loop:
+at most24 WAIT12 actions, no repeated movement, and no confirmation before exact
+trainer identity. Every other protected-state guard remains strict.217 focused
+tests pass; independent read-only review approved with81 independently passing.
+The real failed save classifies as initializing with0input/0frames and unchanged
+bytes. This is not a live repaired victory. The earlier broad snapshot passed
+9,759tests; it predates this repair and final fixed-damage test refinements.
+
+The seven-return resource shadow fit4167759a is complete but unpromoted and has
+not controlled the game. Native82 and both earlier demonstrated first-choice
+heads retain their original contracts. No more Agatha fitting cohort is planned.
+
+Next declare one bounded repaired-controller development successor from a safe
+authenticated post-Agatha checkpoint, retaining the closed failure. Only current
+verified Lance completion can admit the conditional Champion leg. Never relaunch
+the consumed helper or resume its failed save. Keep learned choices distinct from
+forced actions; no independent-evaluation or cross-game claim.
+
+Codex owns implementation/execution/publication; reviewers stay read-only.
+The internal reviewer approved this repair. Claude/Antigravity were not queried
+this session; no external usage-window values are available or implied.
+See [failure, repair and next-session audit](audits/red-model-led-league-stop-2026-09-09.md).
+
+# Historical — seven-return fit complete; reusable battle entry repaired
 
 The final four Agatha resource attempts produced two completions and two heal/heal
 budget misses:830actions,76,202frames,eight genuine choices,all30specimens retained.

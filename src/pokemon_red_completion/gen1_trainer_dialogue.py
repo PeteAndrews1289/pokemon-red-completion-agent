@@ -32,6 +32,14 @@ class TrainerDialogueReader(Protocol):
     def read_input_readiness(self) -> InputReadiness: ...
 
 
+class TrainerDialogueInitializing(CartridgeReadError):
+    """Qualified text border exists, but its trainer identity is not ready.
+
+    This never authorizes a dialogue input. Only the fresh owned-trigger entry
+    loop may catch it to spend one of its already bounded WAIT actions.
+    """
+
+
 def _qualified_header(rom: bytes, target: TrainerFundingCandidate) -> int:
     """Decode a target's map/default/text thunk under the public revision gate."""
     map_id = int(target.trainer.map_id)
@@ -106,13 +114,14 @@ def bind_scripted_trainer_dialogue(
         ):
             raise CartridgeReadError("automatic text armed another trainer")
         readiness = reader.read_input_readiness()
+        context_header, sprite = reader.read_trainer_dialogue_context()
         if (
             raw.battle_state != 0
             or raw.map_id != target.trainer.map_id
             or (raw.player_y, raw.player_x) != target.approach.terminal_at
             or reader.read_player_facing() != target.interaction_facing.value
             or not reader.read_bottom_dialogue_box_visible()
-            or reader.read_trainer_dialogue_context() != (header, target.trainer.sprite_index)
+            or context_header != header
             or readiness.joy_ignore
             or readiness.simulated_joypad_index
             or readiness.npc_movement_script_table
@@ -128,6 +137,13 @@ def bind_scripted_trainer_dialogue(
             or any(hp <= 0 for hp in raw.party_hp)
         ):
             raise CartridgeReadError("automatic trainer dialogue context changed")
+        if sprite != target.trainer.sprite_index:
+            # DisplayTextIDInit draws the border before DisplayTextID copies
+            # hTextID to wSpriteIndex. All other guards must pass before this
+            # narrow not-ready signal; it is not a generic text-error waiver.
+            if sprite == 0 and pending is None:
+                raise TrainerDialogueInitializing("automatic trainer text identity initializing")
+            raise CartridgeReadError("automatic trainer dialogue sprite changed")
 
     return validate
 

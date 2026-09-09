@@ -175,3 +175,39 @@ def test_live_prelatch_binding_rechecks_text_and_protected_state(fixture, fault)
         with pytest.raises(CartridgeReadError):
             validate()
     assert not env.actions
+
+
+@pytest.mark.parametrize("fault", [None, "header", "sprite", "pending", "latched",
+                                  "hp", "money", "bag", "readiness"])
+def test_initializing_sprite_is_not_input_permission_or_a_protected_state_waiver(fixture, fault):
+    rom, _, target = fixture
+    initial = make_state(map_id=12, yx=(2, 6))
+    env = ScriptedEnvironment(initial, dialogue=True, ready=True)
+    env.read_trainer_dialogue_context = lambda: (
+        0x4801 if fault == "header" else 0x4800, 2 if fault == "sprite" else 0,
+    )
+    validate = dialogue.bind_scripted_trainer_dialogue(
+        bytes(rom), env, target, initial, final_event_flag=1200,
+    )
+    if fault in {"pending", "latched"}:
+        env.pending_identity = (target.trainer.trainer_class,
+                                target.trainer.trainer_set if fault == "latched" else 10)
+    if fault == "hp":
+        env.state = replace(initial, party_hp=(49, 40))
+    if fault == "money":
+        env.state = replace(initial, player_money=501)
+    if fault == "bag":
+        env.state = replace(initial, bag_items=())
+    if fault == "readiness":
+        env.ready = False
+    with pytest.raises(CartridgeReadError) as caught:
+        validate()
+    assert isinstance(caught.value, dialogue.TrainerDialogueInitializing) is (fault is None)
+    if fault is None:
+        env.read_trainer_dialogue_context = lambda: (0x4800, 1)
+        validate()
+        env.read_trainer_dialogue_context = lambda: (0x4800, 0)
+        # Even after a previous success, this validator never accepts sprite0.
+        with pytest.raises(dialogue.TrainerDialogueInitializing):
+            validate()
+    assert not env.actions

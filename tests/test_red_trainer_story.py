@@ -246,6 +246,8 @@ def test_lance_distinguishes_battle_event_from_later_story_fact(fixture, monkeyp
 
 @pytest.mark.parametrize('fault', [
     None, 'prelatch', 'wrong_pending', 'no_pending', 'drift', 'battle_only',
+    'initializing', 'initializing_timeout', 'initializing_hp', 'initializing_header',
+    'initializing_sprite', 'initializing_regression',
 ])
 def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_verified(
     fixture, monkeypatch, fault,
@@ -254,6 +256,9 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
     old, reader, inputs, observe, zone = fixture
     reader.raw = replace(reader.raw, map_id=113, player_y=4, player_x=6)
     pending = None
+    initializing = isinstance(fault, str) and fault.startswith('initializing')
+    sprite = 0
+    waits = []
     entered_battle = []
     def current():
         facts = {'league:agatha_defeated'}
@@ -266,12 +271,23 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
     reader.read_current_map_blocks = lambda: CurrentMapBlocks(113, ((1,),))
     reader.read_pending_trainer_battle_identity = lambda: pending
     reader.read_bottom_dialogue_box_visible = (
-        lambda: fault == 'prelatch' and reader.raw.player_y == 2
+        lambda: (fault == 'prelatch' or initializing) and reader.raw.player_y == 2
     )
     validated = []
     def bind(*_a, **_k):
         return lambda: validated.append(reader.raw.player_y)
     monkeypatch.setattr(story, 'bind_scripted_trainer_dialogue', bind)
+    if initializing:
+        import pokemon_red_completion.gen1_trainer_dialogue as dialogue
+        monkeypatch.setattr(dialogue, 'verify_rom_bytes', lambda _: None)
+        monkeypatch.setattr(dialogue, '_qualified_header', lambda *_: 0x4800)
+        monkeypatch.setattr(story, 'bind_scripted_trainer_dialogue',
+                            dialogue.bind_scripted_trainer_dialogue)
+        reader.read_player_facing = lambda: 'up'
+        reader.read_trainer_dialogue_context = lambda: (
+            0x4801 if fault == 'initializing_header' else 0x4800,
+            2 if fault == 'initializing_sprite' else sprite,
+        )
     old.world.with_current_blocks = lambda _: old.world
     def plan(_start, _map_id, *, goal_at):
         if goal_at != (2, 6):
@@ -293,21 +309,36 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
                         lambda *_: pytest.fail('must not send facing inputs into trainer dialogue'))
     original_execute = old.actions.delegate.execute
     def execute(action):
-        nonlocal pending
+        nonlocal pending, sprite
         original_execute(action)
         if action.kind is MacroActionKind.MOVE:
             assert action.value == 'up'
             reader.raw = replace(reader.raw, player_y=1 if fault == 'drift' else 2)
-            pending = None if fault in {'no_pending', 'prelatch'} else (
+            pending = None if initializing or fault in {'no_pending', 'prelatch'} else (
                 target.trainer_class, 2 if fault == 'wrong_pending' else target.trainer_set,
             )
+        if initializing and action.kind is MacroActionKind.WAIT:
+            assert action.repeat == 12
+            waits.append(action)
+            if fault in {'initializing', 'initializing_regression'} and len(waits) == 2:
+                sprite = 1
+            if fault == 'initializing_hp':
+                reader.raw = replace(
+                    reader.raw, party_hp=tuple(hp - 1 for hp in reader.raw.party_hp),
+                )
     old.actions.delegate.execute = execute
     def battle(_reader, _actions, *, resume_pending_dialogue, validate_scripted_dialogue,
                validate_target, **_kwargs):
-        assert resume_pending_dialogue is (fault != 'prelatch')
+        nonlocal sprite
+        assert resume_pending_dialogue is (fault != 'prelatch' and not initializing)
         if fault == 'prelatch':
             assert validated == [2]
             validate_scripted_dialogue()
+        if initializing:
+            assert len(waits) == 2
+            if fault == 'initializing_regression':
+                sprite = 0
+            validate_scripted_dialogue()  # strict before any dialogue input
         validate_target()
         entered_battle.append(True)
         flags = bytearray(reader.raw.event_flags)
@@ -320,15 +351,25 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
     skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
                                          objective_id='defeat_lance')
     assert skill.availability(current().game_state).executable
-    if fault not in {None, 'prelatch'}:
-        with pytest.raises(story.RedTrainerStoryError):
+    if fault not in {None, 'prelatch', 'initializing'}:
+        expected_error = (
+            dialogue.CartridgeReadError
+            if initializing and fault != 'initializing_timeout' else story.RedTrainerStoryError
+        )
+        with pytest.raises(expected_error):
             skill.execute()
     else:
         assert skill.execute().evidence['story_event_verified']
     assert len([action for action in inputs if action.kind is MacroActionKind.MOVE]) == 1
-    assert bool(entered_battle) is (fault in {None, 'prelatch', 'battle_only'})
+    assert bool(entered_battle) is (fault in {None, 'prelatch', 'battle_only', 'initializing'})
     if fault == 'no_pending':
         assert len(inputs) == 25  # one entry plus exactly24 bounded waits; no retry
+    if initializing:
+        assert len(waits) == {
+            'initializing': 2, 'initializing_timeout': 24, 'initializing_hp': 1,
+            'initializing_header': 0, 'initializing_sprite': 0, 'initializing_regression': 2,
+        }[fault]
+        assert all(action.kind in {MacroActionKind.MOVE, MacroActionKind.WAIT} for action in inputs)
     count = len(inputs)
     with pytest.raises(story.RedTrainerStoryError, match='unconsumed'):
         skill.execute()

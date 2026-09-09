@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-resource-fit-fixed-entry",
+  "as_of_session": "2026-09-09-league-initialization-closeout",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json"
+      "evidence": "docs/evidence/red-model-led-league-stop-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -504,6 +504,12 @@
       "result": "Seven real returns fitted, including every miss and the prior controller stop. Shared fixed-damage support passes168 focused tests. No model-led Champion/Hall-of-Fame result yet.",
       "deviation": "Closed the last Agatha coverage check at2/3 without pretending the optional probe passed. Return to reusable mechanics and linked model-led story execution; no new phase gate or per-boss fitting campaign.",
       "next": "Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment."
+    },
+    {
+      "session": "2026-09-09-league-initialization-closeout",
+      "result": "Lance stopped before battle after one learned heal; Champion unattempted.217 repair tests pass; live confirmation next.",
+      "deviation": "Closed the two-leg sequence at its first exception. Stable Phase4 and local1/3 checklist remain unchanged; no extra fitting cohort or replacement win.",
+      "next": "Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry."
     }
   ],
   "closed_milestones": [

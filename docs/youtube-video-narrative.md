@@ -1,4 +1,24 @@
-# Current — learning what recovery is for
+# Current — show the decision, then show the honest failure
+
+Suggested footage: native82 chooses healing, then show the trainer-room approach
+and the stopped status. Label the following story step as forced, not another
+model choice. The run used97actions/8,508frames/one item; all30specimens survived,
+but Lance battle never began and Champion was not attempted.
+
+The engineering reveal is small and visual: the dialogue border appears before
+the cartridge finishes setting its trainer identity. A controller that treats
+those as simultaneous stops too early. We added a bounded wait, keeping exact
+identity mandatory before confirmation.217 focused tests plus unchanged-save,
+zero-input inspection qualify that distinction. Do not portray the diagnostic
+save as resumed gameplay or show a repaired victory until one actually exists.
+
+This comes after real outcome fitting, not instead of it: the seven-return
+shadow model retained success, wasted healing and a controller stop. It has not
+yet controlled the game. Earlier Bruno/Agatha first-choice heads did, under their
+own bounded contracts. The eventual product remains a model-directed Red player
+and living Pokédex; the present result is a component-level step toward it.
+
+# Historical — learning what recovery is for
 
 The important change this night was the target, not another longer teacher route.
 A useful action should help finish a declared goal within its resource budget,

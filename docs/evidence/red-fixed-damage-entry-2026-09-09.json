@@ -24,7 +24,7 @@
   "outgoing_night_shade_support": false,
   "focused_tests_passed": 168,
   "mypy_source_files": 452,
-  "full_suite": "running-record-result-at-closeout",
+  "full_suite": "Earlier collected snapshot:9759 passed,1 skipped,3 deselected,1 xfailed. Predates final fixed-damage test refinements and the later dialogue repair; final focused168 separately passed.",
   "reviewer": "internal-read-only",
   "review_fix": "Simulate incoming damage before claiming post-switch attack resumption; separately refuse next attack at1HP.",
   "gameplay_actions": 0,

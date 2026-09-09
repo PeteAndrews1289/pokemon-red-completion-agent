@@ -21,7 +21,7 @@ from .domain import GameState
 from .executor import CountingExecutor
 from .gen1_cartridge import CartridgeReadError
 from .gen1_route_runtime import Gen1TraversalObserver
-from .gen1_trainer_dialogue import bind_scripted_trainer_dialogue
+from .gen1_trainer_dialogue import TrainerDialogueInitializing, bind_scripted_trainer_dialogue
 from .gen1_trainer_parties import TrainerPartyQuote, trainer_party_quote
 from .gen1_trainer_sight import (
     Gen1TrainerSightProjector,
@@ -323,9 +323,15 @@ class RedCartridgeLoreleiSkill:
                 if reader.read_bottom_dialogue_box_visible() and (
                     current.player_y, current.player_x
                 ) == target.approach.terminal_at:
-                    qualified_dialogue()
-                    scripted_dialogue = qualified_dialogue
-                    break
+                    try:
+                        qualified_dialogue()
+                    except TrainerDialogueInitializing:
+                        # The border can precede its identity. Wait only within
+                        # this fresh trigger's existing bound, never confirm.
+                        pass
+                    else:
+                        scripted_dialogue = qualified_dialogue
+                        break
                 actions.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
             else:
                 raise RedTrainerStoryError("scripted trainer entry did not arm its declared target")

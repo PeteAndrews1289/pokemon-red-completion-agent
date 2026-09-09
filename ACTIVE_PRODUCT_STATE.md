@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment.
+- Next decision: Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Choose recovery versus story using real resources, then compose authenticated story episodes while preserving specimens and reporting the actual learned/deterministic authority split. |
-| Authority now | Native82 remains the actor. New shadow4167759a fitted all seven Agatha controller returns without promotion; earlier Bruno32/Agatha3bf43581 first-choice probes remain verified only under their own contracts. Fixed-damage support is deterministic maintenance. |
+| Authority now | Native82 selected one real healing action; the following story continuation was forced singleton. New shadow4167759a remains unpromoted and unused. Initialization repair changes deterministic waiting only, not learner authority. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Changed resources within one correlated training lineage. Literal varied-HP/level/type/controller tests qualify a reusable mechanic, not independent playing advantage, full model authority or cross-game transfer. |
-| Cheapest falsifier | Use the existing forward-goal recorder to stop at fresh Lance completion, then require concurrent current Champion/Hall-of-Fame facts. Preflight actual story/recovery alternatives; first exception or unmet finite goal ends the bounded sequence. |
+| Transfer test | Reusable observation-readiness distinction, qualified against one actual Red boundary plus ROM-free faults. No independent gameplay advantage, live repaired victory or cross-game transfer demonstrated. |
+| Cheapest falsifier | One newly declared repaired-controller continuation must settle initialization without repeated movement or confirmation before exact identity. Count actual model choices and verify current story evidence; fail the successor on the first exception or finite-budget miss. |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-resource-fit-fixed-entry** · status **active** · evidence [model fit](docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json)
+**2026-09-09-league-initialization-closeout** · status **active** · evidence [development episode](docs/evidence/red-model-led-league-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Reward progress toward story and living-Pokedex goals rather than isolated successful maintenance. Preserve actual failed attempts, retained specimens and unchanged Red-first phase exits. |
-| Learning output | Four new train attempts:2Agatha completions/2healing-budget misses,830actions/76202frames/8genuine choices. All seven attempted returns fitted shadow4167759a;1root,3selected inputs. Native82 unchanged; fixed-damage support passed168 focused tests as maintenance. |
-| Authority delta | Native82 remains the actor. New shadow4167759a fitted all seven Agatha controller returns without promotion; earlier Bruno32/Agatha3bf43581 first-choice probes remain verified only under their own contracts. Fixed-damage support is deterministic maintenance. |
-| Transfer result | Changed resources within one correlated training lineage. Literal varied-HP/level/type/controller tests qualify a reusable mechanic, not independent playing advantage, full model authority or cross-game transfer. |
-| Blocker | No model-directed Champion/Hall-of-Fame completion yet. New Agatha data contain no changed-context first-action contrast; old forward heads cannot be relabelled under the repaired controller. Runtime profile transitions are separate launches, not automatic multi-boss execution. |
-| Decision | Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment. |
-| Next session | Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment. |
-| Next falsifier | Use the existing forward-goal recorder to stop at fresh Lance completion, then require concurrent current Champion/Hall-of-Fame facts. Preflight actual story/recovery alternatives; first exception or unmet finite goal ends the bounded sequence. |
-| Stop condition | Current resumed session targets13:25UTC September9. At most two newly declared linked episodes, two decisions each; first exception or finite-goal miss ends gameplay. No old failed state resumed, no replacement or additional Agatha cohort. |
+| Learning output | Earlier seven-return shadow fit preserved. New Lance attempt:1learned heal +1forced story,97actions/8508frames/1item; stopped before battle,all30specimens retained. No admitted checkpoint,new native rows or fitting. Deterministic initialization repair:217 focused tests and0-input real-state qualification. |
+| Authority delta | Native82 selected one real healing action; the following story continuation was forced singleton. New shadow4167759a remains unpromoted and unused. Initialization repair changes deterministic waiting only, not learner authority. |
+| Transfer result | Reusable observation-readiness distinction, qualified against one actual Red boundary plus ROM-free faults. No independent gameplay advantage, live repaired victory or cross-game transfer demonstrated. |
+| Blocker | The Lance continuation stopped before battle at visible trainer text with sprite0. Champion was never attempted. WAIT-only initialization repair passes focused tests and zero-input retained-state classification, but has no live repaired success. |
+| Decision | Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry. |
+| Next session | Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry. |
+| Next falsifier | One newly declared repaired-controller continuation must settle initialization without repeated movement or confirmation before exact identity. Count actual model choices and verify current story evidence; fail the successor on the first exception or finite-budget miss. |
+| Stop condition | The September9 Lance/Champion sequence is closed after its first controller exception; Champion unattempted. Finish repair qualification and documentation by13:25UTC. No gameplay retry or replacement in this sequence. |
 
 ### Stop conditions
 

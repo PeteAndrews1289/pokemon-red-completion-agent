@@ -66,7 +66,9 @@ execution cannot silently share that contract.
 enemy-versus-reserve level, invalid observed level, party permutations, mixed
 Thunderbolt coverage, unsupported effects, residual/confusion, actual controller
 switch requests and fresh-observation rejection. Mypy checked452 source files.
-The broader suite is recorded separately at session closeout.
+The earlier broadly collected snapshot passed9,759tests with1skip,3deselected
+and1expected failure. It predates the final fixed-damage test refinements and
+later dialogue repair; the final focused168 are reported separately.
 
 The independent internal reviewer found no production blocker but caught a test
 overclaim: the switch fixture initially did not apply incoming damage. The fixed
@@ -81,7 +83,8 @@ No new Claude/Antigravity review or external quota measurement is claimed.
 Phase4 is still open. The final criterion remains model-directed story completion
 with concurrent current Champion and Hall-of-Fame evidence, preserving the living
 collection. Neither seven fitted returns nor green tests substitute for that.
-Next inspect the existing bounded story-composition seam and use the smallest
-declared current-source model-led continuation. Do not build per-boss head after
+The subsequent native82 continuation stopped before Lance battle; see the
+[later failure/repair audit](red-model-led-league-stop-2026-09-09.md).
+Next use a separately declared repaired-controller continuation. Do not build per-boss head after
 per-boss head or recursively apply a head outside its fitted goal/horizon/tail.
 Full replay, sealed Red and Crystal remain outside this development session.

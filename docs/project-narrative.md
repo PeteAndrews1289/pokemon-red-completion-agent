@@ -1,4 +1,27 @@
-# Current — learn from the misses, then remove the actual blocker
+# Current — a drawn window is not a ready interaction
+
+The next live continuation did contain a real model choice: native82 selected
+healing. Its following story action was forced because no alternative remained.
+After97actions and8,508frames, the run stopped before Lance battle. No Pokémon
+fainted and all30specimens remained, but this was still a failed continuation,
+not progress to Champion. The run and its cost stay visible in the evidence.
+
+The diagnostic save showed the correct trainer header and a drawn dialogue box,
+but the trainer sprite field was still zero. Reading the cartridge implementation
+revealed that drawing the border precedes filling that field. The repair makes
+the controller wait briefly for initialization while preserving strict identity
+checks before input. It does not teach the model new battle strategy.217 focused
+tests and a0-input classification of the actual failure qualify the boundary;
+a successful live repaired continuation remains the next demonstration.
+
+The lesson is about asynchronous observations: visible UI can be partly
+initialized. Reliable agency needs both useful learned decisions and executors
+that know when an observation is ready to act on. Neither green tests nor this
+fix alone demonstrate a complete game-playing model.
+
+See [the exact stop and repair audit](audits/red-model-led-league-stop-2026-09-09.md).
+
+# Historical — learn from the misses, then remove the actual blocker
 
 The final four resource-context attempts split evenly:healing then story defeated
 Agatha;healing twice used the whole decision budget without advancing. A new shadow
