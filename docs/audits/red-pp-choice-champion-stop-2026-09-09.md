@@ -80,11 +80,16 @@ Claude was not used in this slice and its quota is unknown.
 The Phase4 exit and income-to-model-led-story checklist stay unchanged at2/3.
 No model-selected story outcome, full Red model completion, living-Dex completion,
 unfamiliar hack result or Crystal transfer is claimed. Latest executable source
-is d8504664; full local regression runs in a frozen separate checkout. Hosted
+for those attempts is d8504664. Its frozen full local regression finished with
+9,071 passed, one failed, one skipped, three deselected and one expected failure
+in 32m33s. The sole failure was the same stale Champion factory expectation below,
+corrected in published8a130429. Hosted
 CI run 34317948648 failed after 4,460 passed tests because one older factory test
 still expected Champion to be unsupported. The replacement asserts the Champion
 controller and its exact effect facts, excludes the Lance fallback, and continues
 to reject unknown objectives. All 48 tests across that integration file, Champion
 controller tests and the horizon diagnostic pass locally. This is a focused pass,
 not a full-suite pass. CI is checked periodically rather than used as a training
-prerequisite, with fixes batched into one publication.
+prerequisite, with fixes batched into one publication. The replacement published
+head8a130429 passed hosted CI run34320266004. This does not retroactively make
+the d8504664 full-suite result green or qualify later unpublished source.

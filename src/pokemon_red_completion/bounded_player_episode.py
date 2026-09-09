@@ -71,6 +71,7 @@ class BoundedPlayerStopReason(StrEnum):
     FAILURE_CONTEXT_UNCHANGED = "failure_context_unchanged"
     RECOVERY_GOAL_REPEATED = "recovery_goal_repeated"
     INSUFFICIENT_AVAILABLE_GOALS = "insufficient_available_goals"
+    DECLARED_STOP = "declared_stop"
 
 
 @dataclass(frozen=True, slots=True)
@@ -309,6 +310,7 @@ def run_bounded_player_episode(
     limits: BoundedPlayerLimits | None = None,
     failure_observer: Callable[[BaseException], None] | None = None,
     search_memory: GoalSearchMemory | None = None,
+    stop_requested: CompletionPredicate | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -326,6 +328,8 @@ def run_bounded_player_episode(
         raise TypeError("completion_satisfied must be callable")
     if failure_observer is not None and not callable(failure_observer):
         raise TypeError("failure_observer must be callable")
+    if stop_requested is not None and not callable(stop_requested):
+        raise TypeError("stop_requested must be callable")
     limits = BoundedPlayerLimits() if limits is None else limits
     if not isinstance(limits, BoundedPlayerLimits):
         raise TypeError("limits must be BoundedPlayerLimits")
@@ -349,6 +353,16 @@ def run_bounded_player_episode(
     replans_used = 0
 
     for decision_index in range(limits.max_decisions):
+        if stop_requested is not None and _completion_without_actions(
+            stop_requested, current, budget_meter,
+        ):
+            trajectory.require_settled()
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=BoundedPlayerStopReason.DECLARED_STOP,
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         available_count = sum(
             opportunity.availability is GoalAvailability.AVAILABLE
             for opportunity in current.binding_set.opportunities

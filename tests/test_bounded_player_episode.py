@@ -238,6 +238,45 @@ def _complete(observation: GoalManagerCompositionObservation) -> bool:
     return observation.collection.storage_headroom >= 9
 
 
+@pytest.mark.parametrize("stop_before_input", [False, True])
+def test_declared_stop_prevents_next_choice_without_claiming_completion(stop_before_input):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+    result = run_bounded_player_episode(
+        observe=observe, authority=authority, authority_id="completion-first-v1",
+        trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+        stop_requested=lambda _: stop_before_input or state["actions"] >= 5,
+    )
+    expected = 0 if stop_before_input else 1
+    assert result.stop_reason is BoundedPlayerStopReason.DECLARED_STOP
+    assert result.completion_satisfied is False
+    assert len(result.steps) == authority.calls == expected
+    assert state["actions"] == expected * 5 and state["frames"] == expected * 50
+    assert trajectory.pending_decision is None
+
+
+@pytest.mark.parametrize("fault", ["not_callable", "not_bool", "acts"])
+def test_declared_stop_cannot_hide_input_or_invent_truthiness(fault):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+
+    def stop(_):
+        if fault == "acts":
+            state["actions"] += 1
+        return 1 if fault == "not_bool" else False
+
+    with pytest.raises((TypeError, BoundedPlayerError)):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            stop_requested=False if fault == "not_callable" else stop,
+        )
+    assert authority.calls == 0 and trajectory.next_decision_index == 0
+    assert state["actions"] == (1 if fault == "acts" else 0)
+
+
 def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer()

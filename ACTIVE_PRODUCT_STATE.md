@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify the smallest prospective goal-conditioned trajectory-learning contract without hindsight actor inputs, maintenance bonus inflation, arbitrary weight tuning or historical relabeling.
+- Next decision: The separate forward-goal learner and Red recording/admission path are qualified in ROM-free tests. Reorient on the smallest genuine Red first-choice lesson; no current Champion replay or automatic promotion.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Model-led owned PP resource use is verified and fitted. Current maintenance subtask tests a horizon/scoring counterexample before a prospective goal-conditioned learning contract; it grants no new player authority. |
+| Reusable capability | A separate forward-goal learner will predict completion within a declared continuation budget and total attempt cost; controlled synthetic qualification comes before Red integration or authority. |
 | Authority now | Model82 retains81 comparative-choice outcomes plus1 guided Agatha row. One new sampled Elixir use restored22PP; later singleton Champion failed and was not fitted.40 successes,69 distinct selected vectors; no independent improvement. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Varied ROM-free resource/script/retention tests plus one real dependent PP choice. Next diagnostic is synthetic, not unseen gameplay or cross-title transfer. |
-| Cheapest falsifier | Use a fixed ROM-free optional-versus-necessary recovery diagnostic to test the unchanged one-step objective against completion once within a total budget; preserve current model82 and all old labels. |
+| Transfer test | The toy actor uses only start-state observables, not future outcomes. Different synthetic values pass within declared support; no Red or cross-game transfer is established. |
+| Cheapest falsifier | Can real Red first-choice trajectories supply both useful story completion and recovery tradeoffs, without invented alternatives or resampling a consumed failure? |
 | Time box | 1 session / 2 hours |
 
 ### Historical cross-family counter snapshot
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-pp-choice-horizon-reorientation** · status **active** · evidence [model fit](docs/evidence/red-pp-choice-champion-stop-2026-09-09.json)
+**2026-09-09-forward-goal-learner** · status **active** · evidence [model fit](docs/evidence/red-pp-choice-champion-stop-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Prioritize learning when recovery enables final story and collection progress, rather than rewarding easy successful maintenance. Stable Phase4 and long-term living-Pokedex/transfer exits remain unchanged. |
-| Learning output | Model82 retains81 comparative-choice outcomes plus1 guided Agatha row. One new sampled Elixir use restored22PP; later singleton Champion failed and was not fitted.40 successes,69 distinct selected vectors; no independent improvement. |
+| Learning output | Model82 and82 real outcomes unchanged. Separate toy learner:128 settled+1 censored episode,4 repeated roots,8/8 supported new contexts efficient,3 unsupported abstentions. Zero real forward-goal rows or promotions. |
 | Authority delta | One genuine PP resource choice fitted in model82. No comparative Champion choice, new battle authority, promotion or Phase4 exit. |
-| Transfer result | Varied ROM-free resource/script/retention tests plus one real dependent PP choice. Next diagnostic is synthetic, not unseen gameplay or cross-title transfer. |
-| Blocker | The guided Champion attempt stopped at an unsupported Dragon Rage reserve-entry screen with all six alive. Separately, a synthetic counterexample exposes optional-maintenance preference in the one-step objective. |
-| Decision | Pause the consumed boss path at its exact retained failure; test the planning horizon before another deterministic repair cascade or PP-feature expansion. |
-| Next session | Complete a bounded synthetic horizon diagnostic, then define a prospectively versioned final-goal/cumulative-cost target for actual forward-logged episodes. Diagnostic maintenance does not fit or promote a model; no resampled Elixir choice, boss replay, sealed access or full run. |
-| Next falsifier | Use a fixed ROM-free optional-versus-necessary recovery diagnostic to test the unchanged one-step objective against completion once within a total budget; preserve current model82 and all old labels. |
-| Stop condition | Reorient within45minutes or on diagnostic completion. No production weight changes, oracle future actor inputs, retroactive outcome targets or automatic boss-recovery cascade. |
+| Transfer result | The toy actor uses only start-state observables, not future outcomes. Different synthetic values pass within declared support; no Red or cross-game transfer is established. |
+| Blocker | No prospective real Red forward-goal examples yet. The current Champion battle is a retained Dragon Rage guard failure with no genuine field recovery alternative, not a usable new first-choice anchor. |
+| Decision | The separate forward-goal learner and Red recording/admission path are qualified in ROM-free tests. Reorient on the smallest genuine Red first-choice lesson; no current Champion replay or automatic promotion. |
+| Next session | Collect a prospectively declared bounded Red story/recovery lesson with genuine alternatives and the same frozen continuation, then fit separate forward outcomes and test different contexts before new authority. |
+| Next falsifier | Can real Red first-choice trajectories supply both useful story completion and recovery tradeoffs, without invented alternatives or resampling a consumed failure? |
+| Stop condition | Reorient by 08:45 UTC or earlier on the controlled result; no full RL framework, retrospective target changes, oracle features, unqualified policy promotion or boss replay. |
 
 ### Stop conditions
 

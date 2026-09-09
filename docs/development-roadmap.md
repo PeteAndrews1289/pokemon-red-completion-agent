@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-pp-choice-horizon-reorientation**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-forward-goal-learner**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-forward-goal-learner
+
+Separate toy forward-goal learner:8/8 supported new contexts complete efficiently;3 unsupported abstain. Red collector/admission/shadow-fit path tested. Model82,82 real rows and2/3 unchanged.
+
+**Deviation:** Separate prospective target replaces neither historical labels nor live authority. Current Champion failure remains retained. Toy evidence is not counted as Red progress; stable phase exits unchanged.
+
+**Next:** Collect a prospectively declared bounded Red story/recovery lesson with genuine alternatives and the same frozen continuation, then fit separate forward outcomes and test different contexts before new authority.
 
 ### 2026-09-09-pp-choice-horizon-reorientation
 

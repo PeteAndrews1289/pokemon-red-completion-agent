@@ -1,5 +1,21 @@
 # Roadmap baseline and deviations
 
+## September9 — separate prospective forward-goal objective, unchanged phase exit
+
+The one-step maintenance counterexample justified a separate finite-goal learner,
+not a retuning of old weights or a change to the product. It estimates completion
+within a fixed continuation and whole-attempt cost. Its controlled toy actor
+passed8/8 supported new contexts and abstained on3 unsupported ones; this does
+not count as Red training. The old82-row model and histories remain intact.
+
+An opt-in Red stream reuses the current actor and existing authenticated episode
+reader. Only new prospective first-choice trajectories can enter the new fitter.
+Goal/verifier/continuation IDs remain provenance, not model features. Censoring,
+failures, costs and lack of live support are explicit. Next requires real Red
+choices rather than more independent teacher-completion repair. See the
+[audit](audits/forward-goal-learning-2026-09-09.md). No baseline IDs, milestone
+denominators, living-Pokedex goals or Red-hack/Crystal sequencing changed.
+
 ## September9 — bounded critical exposure, unchanged learning exit
 
 The retained Lance battle reached its final Dragonite, with all six alive but no

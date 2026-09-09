@@ -38,6 +38,7 @@ from pokemon_red_completion.executor import (  # noqa: E402
     ReadOnlyController,
     WindowedFrameBudgetController,
 )
+from pokemon_red_completion.forward_goal import ForwardGoalPlan  # noqa: E402
 from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
     CompositionIndependentBudgetMeter,
     HardCompositionActionLimiter,
@@ -103,6 +104,12 @@ from pokemon_red_completion.red_bounded_player import (  # noqa: E402
     RedBoundedPlayerObserver,
     preflight_red_bounded_player,
 )
+from pokemon_red_completion.red_forward_goal import (  # noqa: E402
+    RedForwardGoalCollector,
+    red_forward_continuation_sha256,
+    red_forward_verifier_sha256,
+)
+from pokemon_red_completion.red_forward_training import RedForwardTrainingTrajectory  # noqa: E402
 from pokemon_red_completion.red_goal_context import (  # noqa: E402
     RedGoalContextRuntime,
     build_red_goal_context_runtime,
@@ -212,6 +219,8 @@ class _Readiness:
     restore_remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
     restore_level_evolution_acquisitions: bool = False
+    forward_story_objective: str | None = None
+    forward_resource_budget: int | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -603,6 +612,10 @@ def _parser() -> argparse.ArgumentParser:
         "--story-outcome-curriculum", action="store_true",
         help="Record forced story outcomes separately from choices (completion dose only).",
     )
+    parser.add_argument("--forward-story-objective", default=None,
+                        help="Record separate forward story outcomes; no new model authority.")
+    parser.add_argument("--forward-resource-budget", type=int, default=None,
+                        help="Explicit total consumable allowance for the forward story attempt.")
     return parser
 
 
@@ -996,7 +1009,72 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         readiness = replace(
             readiness, training_plan=declare_story_curriculum(readiness.training_plan),
         )
+    readiness = replace(
+        readiness,
+        forward_story_objective=getattr(args, "forward_story_objective", None),
+        forward_resource_budget=getattr(args, "forward_resource_budget", None),
+    )
+    _forward_goal_plan(readiness)  # Validate the opt-in before any execution claim.
     return readiness
+
+
+def _forward_goal_plan(readiness: _Readiness) -> ForwardGoalPlan | None:
+    objective = getattr(readiness, "forward_story_objective", None)
+    resources = getattr(readiness, "forward_resource_budget", None)
+    if objective is None:
+        if resources is not None:
+            raise PairedRedBoundedPlayerRunError("forward_goal_requires_objective")
+        return None
+    plan = readiness.training_plan
+    if (plan is None or readiness.decision_limit != 2
+            or type(resources) is not int or resources < 2
+            or plan.document.get("curriculum_contract") is not None
+            or readiness.causal_record is None or readiness.causal_record.model.feature_version != 3
+            or any(getattr(readiness, field, False) for field in (
+                "routed_recovery", "trainer_funding", "trainer_pending_recovery",
+                "regional_trainer_funding", "routed_resource_goals",
+            ))):
+        raise PairedRedBoundedPlayerRunError("forward_goal_scope")
+    from pokemon_red_completion.goal_manager import GoalKind
+    from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+
+    if not {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM} <= {
+        spec.kind for spec in readiness.profile.providers
+    }:
+        raise PairedRedBoundedPlayerRunError("forward_goal_missing_mechanics")
+    for spec in readiness.profile.providers:
+        if spec.kind is GoalKind.RESTORE_TEAM and spec.mechanic not in {
+            RedGoalMechanic.FIELD_RESTORE, RedGoalMechanic.FIELD_PP_RESTORE,
+        }:
+            raise PairedRedBoundedPlayerRunError("forward_goal_requires_field_recovery")
+        if spec.mechanic is RedGoalMechanic.FIELD_RESTORE and (
+            spec.parameters.get("affordable_single_item") is not True
+        ):
+            raise PairedRedBoundedPlayerRunError("forward_goal_requires_single_item_recovery")
+        if spec.kind is GoalKind.ADVANCE_STORY and (
+            spec.parameters.get("trainer_objective") != objective
+        ):
+            raise PairedRedBoundedPlayerRunError("forward_goal_story_binding_differs")
+    limits = _player_limits(2, completion_dose=readiness.completion_dose)
+    return ForwardGoalPlan(
+        "red-story-objective", red_forward_verifier_sha256(objective),
+        red_forward_continuation_sha256(
+            behavior_policy_id=cast(str, plan.document["behavior_policy_id"]),
+            model_sha256=readiness.model_sha256,
+            source_bundle_sha256=readiness.source_bundle_sha256,
+            profile_sha256=readiness.profile.profile_sha256,
+        ),
+        limits.max_total_actions, limits.max_total_frames, resources, 2,
+    )
+
+
+def _forward_goal_header(readiness: _Readiness) -> dict[str, object]:
+    plan = _forward_goal_plan(readiness)
+    return {} if plan is None else {
+        "forward_goal_plan": plan.public_dict(), "forward_goal_plan_sha256": plan.sha256,
+        "forward_story_objective": readiness.forward_story_objective,
+        "forward_goal_authority": "recording-only-existing-actor",
+    }
 
 
 def _evolution_objective_argument(value: str) -> str:
@@ -1630,6 +1708,22 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             ),
             allow_forced_bridge=readiness.continuation is not None,
         )
+        forward_plan = _forward_goal_plan(readiness)
+        if forward_plan is not None:
+            from pokemon_red_completion.goal_manager import GoalKind
+
+            if (not isinstance(challenger, ExploringLivingDexGoalPolicy)
+                    or not challenger.training_eligible):
+                raise PairedRedBoundedPlayerRunError("forward_goal_requires_sampled_choice")
+            available = observer().binding_set.opportunities
+            if any(op.kind not in {GoalKind.ADVANCE_STORY, GoalKind.RESTORE_TEAM}
+                   for op in available if op.availability.value == "available"):
+                raise PairedRedBoundedPlayerRunError("forward_goal_unsupported_option")
+            collector = RedForwardGoalCollector(
+                forward_plan, cast(str, readiness.forward_story_objective),
+                runtime.adapter.observe, meter, lambda _event: None,
+            )
+            collector.prepare()  # Read-only qualification; no persistent episode/anchor.
         if meter.checkpoint() != CompositionBudgetCheckpoint(0, 0):
             raise PairedRedBoundedPlayerRunError("preflight_budget")
     if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
@@ -1719,6 +1813,7 @@ def _run_arm(
             metadata={
                 **_context_scope(readiness),
                 **_training_header(readiness, arm_id),
+                **_forward_goal_header(readiness),
                 **_continuation_header(readiness),
                 "schema": "pokemon.red.paired-bounded-player-arm-header.v1",
                 "pair_id": readiness.pair_id,
@@ -1826,10 +1921,22 @@ def _run_arm(
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
+            forward = None
+            forward_plan = _forward_goal_plan(readiness)
+            if forward_plan is not None:
+                def append_forward(event: dict[str, object]) -> None:
+                    writer.append("forward_goal", event, durable=True)
+
+                forward = RedForwardGoalCollector(
+                    forward_plan, cast(str, readiness.forward_story_objective),
+                    runtime.adapter.observe, meter, append_forward,
+                )
+                forward.prepare()
             trajectory_class = (
-                ViewerGoalTrajectory
-                if readiness.training_plan is None
-                else RedPlayerTrainingTrajectory
+                RedForwardTrainingTrajectory if forward is not None else (
+                    ViewerGoalTrajectory if readiness.training_plan is None
+                    else RedPlayerTrainingTrajectory
+                )
             )
             training_kwargs: dict[str, Any] = (
                 {}
@@ -1844,6 +1951,8 @@ def _run_arm(
                         "curriculum_contract"),
                 }
             )
+            if forward is not None:
+                training_kwargs["forward"] = forward
             if readiness.continuation is not None and not readiness.continuation_root_lineage_id:
                 raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(
@@ -1920,11 +2029,19 @@ def _run_arm(
                     authority_id=arm_id,
                     trajectory=trajectory,
                     budget_meter=meter,
-                    completion_satisfied=_completion_predicate(readiness),
+                    completion_satisfied=(
+                        _completion_predicate(readiness) if forward is None else
+                        lambda _observation: forward.outcome is not None and
+                        forward.outcome.target is not None and forward.outcome.target[0] == 1.0
+                    ),
                     limits=limits,
                     failure_observer=record_component_failure,
                     search_memory=search_memory,
+                    **({} if forward is None else {"stop_requested": lambda _observation:
+                        forward.outcome is not None}),
                 )
+                if forward is not None:
+                    forward.finish()
                 if recorder.recording_failures:
                     raise PairedRedBoundedPlayerRunError("trajectory_durability")
                 if readiness.save_terminal_checkpoints:
@@ -1946,6 +2063,13 @@ def _run_arm(
                     )
                     writer.append("checkpoint", terminal_checkpoint, durable=True)
             except BaseException as error:
+                if forward is not None:
+                    try:
+                        forward.finish(interrupted=True)
+                    except BaseException as forward_error:
+                        error.add_note(
+                            "forward-goal terminal unavailable: " + type(forward_error).__name__
+                        )
                 # Verifiers, training observers and checkpoint serialization may
                 # fail AFTER legitimate gameplay. Save while the emulator is
                 # still open; this is diagnostic evidence, never an admitted
@@ -2152,6 +2276,7 @@ def _run_prepared(readiness: _Readiness) -> dict[str, object]:
     summary = {
         **comparison_document,
         **_context_scope(readiness),
+        **_forward_goal_header(readiness),
         "preflight": preflight,
         "source_commit": readiness.source_commit,
         "source_bundle_sha256": readiness.source_bundle_sha256,

@@ -1,4 +1,33 @@
-# Current — model82; Champion failure retained; horizon reorientation, 2026-09-09
+# Current — forward-goal learner qualified in a toy task; Red model82 unchanged
+
+A separate two-output learner now predicts completion within a declared budget
+and cumulative attempt cost. In the controlled resource task, eight supported new
+test states completed at the toy-optimal cost and three unsupported states
+abstained. Training used128 settled plus1 censored episode from just4 repeated
+toy roots; this is not independent Red evidence or cross-game transfer.
+
+The opt-in Red collector, native first-choice join, current goal verifier,
+execution/resource accounting, save/load and separate shadow-fit path are now
+implemented and tested. Existing immediate training and model82 are unchanged.
+No real forward-goal episode has yet been collected; no live authority is granted.
+The current Champion failure remains retained, all6 alive, with no replay or
+concurrent Champion/Hall-of-Fame completion. The native-story checklist remains2/3,
+not a whole-phase percentage.
+
+Next: a small prospectively declared Red story/recovery lesson with real
+alternatives and a useful continuation, then different-context checks before
+promotion. Do not translate toy bounds into Red confidence, rewrite old labels,
+or spend another session only repairing deterministic boss completion.
+See [the forward-goal audit](docs/audits/forward-goal-learning-2026-09-09.md) and [active state](ACTIVE_PRODUCT_STATE.md).
+The permanent North Star and stage exits are unchanged.
+
+Codex owns integration and publication. The internal reviewer contributed bounded
+test work; Flash's prior conceptual review is already adjudicated. No fresh
+Claude/Antigravity subscription quotas are available. Hosted CI34320266004 passed
+published8a130429; later source must be reported separately.
+Older entries below are historical where they conflict with this update.
+
+# Historical — model82; Champion failure retained; horizon reorientation, 2026-09-09
 
 One genuine model81 choice spent the owned Elixir instead of advancing to Champion:
 38 actions/3396 frames,22PP restored, all30 specimens retained. Audited model82 has

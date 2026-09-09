@@ -1,5 +1,22 @@
 # Model-first development roadmap
 
+## Current — separate forward-goal learner; real Red evidence next
+
+The [new forward-goal learner](audits/forward-goal-learning-2026-09-09.md) passes
+the controlled optional-versus-necessary recovery falsifier:8/8 supported new
+toy states complete efficiently;3 unsupported states abstain. Those results are
+synthetic, not Red training or authority. Model82 and its82 real outcomes remain
+unchanged. The optional Red collector, current verifier, actual execution/resource
+accounting, native first-choice admission and separate shadow fitter are tested.
+
+Next sequence: collect a small prospective Red story/recovery batch with genuine
+alternatives; retain every failure and cost; fit the new shadow objective; test
+different contexts and support before granting any new control. No copied toy
+confidence bounds, retrospective label changes or concealed resource resets.
+The current Champion failure has no new field-choice anchor, so deterministic
+completion alone cannot supply this dataset. Reorient before another boss cascade.
+Phase4 and the native-story2/3 checklist remain open; stage exits are unchanged.
+
 ## Current — model82 and goal-horizon reorientation
 
 The current goal learner has82 retained outcomes:81 comparative choices and1
