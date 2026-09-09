@@ -96,10 +96,34 @@ def test_all_five_multi_hits_count_and_existing_burn_adds_residual():
     )
 
 
-@pytest.mark.parametrize("move", [49, 90, 68, 120, 35, 117, 118, 119, 144])
+@pytest.mark.parametrize("move", [69, 101, 149, 90, 68, 120, 35, 117, 118, 119, 144])
 def test_unsupported_damage_and_confusion_abstain(move):
     with pytest.raises((TrainerDamageError, RedBattleCatalogError)):
         incoming_damage_bounds(observation((move, 0, 0, 0)))
+
+
+@pytest.mark.parametrize('move,bound', [(49, 20), (82, 40)])
+def test_constant_damage_uses_hp_not_stab_critical_defense_or_type(move, bound):
+    current = replace(observation((move, 0, 0, 0)),
+                      enemy_attack=900, enemy_special=900,
+                      enemy_base_attack=999, enemy_base_special=999,
+                      party_types=(('ghost',), ('dragon',)))
+    assert incoming_damage_bounds(current) == (bound, bound)
+    poisoned = replace(current, raw=replace(current.raw, party_status=(8, 16)))
+    assert incoming_damage_bounds(poisoned) == (bound + 13, bound + 10)
+
+
+@pytest.mark.parametrize('move', [14, 96, 97, 104, 106, 107, 110, 111, 112, 133, 151])
+def test_pure_boost_is_zero_immediate_damage_but_existing_residual_remains(move):
+    current = observation((move, 0, 0, 0))
+    assert incoming_damage_bounds(current) == (0, 0)
+    poisoned = replace(current, raw=replace(current.raw, party_status=(8, 0)))
+    assert incoming_damage_bounds(poisoned) == (13, 0)
+
+
+def test_fixed_boost_and_ordinary_inventory_takes_worst_not_sum_or_first_move():
+    assert incoming_damage_bounds(observation((97, 82, 33, 0))) == (40, 40)
+    assert incoming_damage_bounds(observation((97, 82, 34, 0))) == (86, 47)
 
 
 class Memory:

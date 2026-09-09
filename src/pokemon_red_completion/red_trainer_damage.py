@@ -53,13 +53,14 @@ def ordinary_damage_upper(
 
 
 def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, ...]:
-    """Worst supported ordinary hit per member, including all multi-hit strikes.
+    """Worst supported incoming turn per member, including all multi-hit strikes.
 
     All multi-hit moves conservatively receive five critical hits. Damage-side
     status adds a full ceil(maxHP/16) residual allowance even for paralysis/freeze.
     Existing poison/burn also receive residual allowance; toxic/seeded/transformed
     states must already have been rejected by the observation adapter.
-    Pure confusion is supported; other pure status and indirect effects abstain.
+    Pure confusion, immediate pure boosts and fixed20/40 damage are supported;
+    other pure status and indirect effects abstain.
     The active member also receives a conservative self-hit allowance whenever
     already confused or the opponent can induce confusion. Reserves do not
     self-hit on the switch turn; their real live stats are reread before attacking.
@@ -86,6 +87,21 @@ def incoming_damage_bounds(observation: TrainerDamageObservation) -> tuple[int, 
             continue
         ref = pokemon_red_move_ref(move_id)
         move = RED_BATTLE_CATALOG.resolve_move(ref)
+        fixed = RED_BATTLE_CATALOG.constant_damage_bound(ref)
+        if fixed is not None or (
+            move.power == 0 and move.category == "status"
+            and move.effect_flags == frozenset({"boost"})
+        ):
+            # A pure stat boost causes no immediate HP loss. It is not a free
+            # future turn: the controller rereads live stats before each action.
+            # Constant damage ignores STAB/critical/type arithmetic. Existing
+            # poison/burn still consumes a residual tick on this same turn.
+            for index, status in enumerate(raw.party_status):
+                damage = (fixed or 0) + (
+                    ceil(raw.party_max_hp[index] / 16) if status & 0x18 else 0
+                )
+                result[index] = max(result[index], damage)
+            continue
         if "confusion" in move.effect_flags:
             confusion_possible = True
             if move.power == 0:

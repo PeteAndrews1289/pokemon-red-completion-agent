@@ -1,6 +1,33 @@
 # Lance integration: engineering checkpoint
 
-## Live result and retained dialogue repair
+## Current — dialogue recovered; first Dragonair retained
+
+The qualified introduction worked: support recovery defeated Gyarados and reached
+the first Dragonair. It then stopped safely because ordinary reserve-entry screening
+does not support Dragon Rage. This consumed56 actions/5,652 frames in addition to
+the original69 actions/4,452 frames. Exact stateaa40123d and manifest81106c49 are
+retained; all six party members are alive, money17,845 and bag unchanged. No new
+query, fit or admitted checkpoint; model79 remains unchanged. No Lance victory.
+
+The bounded survival actor now qualifies constant20/40 damage and pure stat boosts'
+immediate HP effect. Other special-damage/indirect effects still abstain. It rereads
+live stats each decision and remains conservative about critical hits, residual
+damage and every available move. Ordinary type-only entry screening is unchanged.
+Recovery explicitly opts into zero-item survival; both preflight and execution
+receive a zero healing budget and authenticate retained switch history.
+
+Read-only qualification of the exact battle produced incoming bounds
+143/190/252/87/837/190 against HP172/118/71/129/34/139: attack with active Jolteon.
+No frame or input advanced.136 focused tests passed. Independent review found no
+blocker and requested fresh-live-stat and no-heal-after-switch discriminators;
+both are present. Three completed CI runs since the fingerprint repair are green;
+the latest source run is pending. This remains an engineering unblock, not learned
+story progress. Next: one continuation from this exact retained battle, never a
+Gyarados replay, then reorient on actual model-directed story experience.
+
+Primary damage implementation: [cartridge battle engine](https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/engine/battle/core.asm).
+
+## Historical — retained dialogue repair before its execution
 
 The single Lance02 attempt is consumed. It reached Lance's actual automatic text
 trigger, then failed after69 actions/4,452 frames because the intro text appeared

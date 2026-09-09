@@ -39,8 +39,8 @@ Not the product:
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Cartridge-derived Lance arrival reached its automatic trainer text. A narrow pre-latch dialogue seam and authenticated support recovery are engineering-qualified; battle and fresh learning remain unverified. |
-| Authority now | Model79 remains78 comparative-choice outcomes plus1 guided story row. Lance02 was forced, with69 actions/4452 frames and no battle or model query. Exact failure retained; no fit or authority promotion. |
+| Reusable capability | Lance dialogue recovered and Gyarados defeated. Exact first-Dragonair failure retained; constant-damage and zero-item survival qualification unblock continued story experience, not new learning. |
+| Authority now | Model79 remains78 comparative-choice outcomes plus1 guided story row. Lance support recovery has zero model queries or fit rows; all six party members alive. No authority promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
@@ -62,17 +62,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-lance-dialogue** · status **active** · evidence [qualification](docs/evidence/red-lance-dialogue-2026-09-09.json)
+**2026-09-09-lance-survival** · status **active** · evidence [qualification](docs/evidence/red-lance-survival-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Repair only the introduction handoff blocking continued story experience; preserve the model-directed living-collection objective and unchanged stage exit. |
-| Learning output | No new admitted row or fit. Exact failed introduction retained and qualified read-only; model79 unchanged. |
+| Product alignment | Unblock actual story experience without mistaking deterministic battle support for learned completion. |
+| Learning output | No new admitted row or fit. Gyarados defeated during deterministic support; model79 unchanged. |
 | Authority delta | None; deterministic maintenance only. |
-| Transfer result | ROM-free text/bank/context fixtures pass; no modified-ROM or Crystal transfer. |
-| Blocker | Lance introduction prints before the pending battle latch; the consumed attempt stopped before battle. |
-| Decision | Retain the failure and repair the dialogue seam. Continue that exact introduction once under support accounting; do not replay the guided lesson. |
-| Next session | Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice. |
+| Transfer result | ROM-free damage, live-stat and zero-item authority tests pass; no modified-ROM or Crystal transfer. |
+| Blocker | Ordinary switch-entry screen refuses Dragon Rage at first Dragonair; exact active battle retained. |
+| Decision | Use separately explicit zero-item survival after qualifying20/40 fixed damage and fresh-stat bounds; retain all incurred costs and original failure. |
+| Next session | One support continuation from exact retained first Dragonair aa40123d; no Gyarados replay or item spend. Then return to a genuine story/resource choice and reorient before the two-hour slice ends. |
 | Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
 | Stop condition | Stop each attempt on its outcome or named blocker and retain the exact state; reassess before any successor. No consumed retry or inventory reset. |
 

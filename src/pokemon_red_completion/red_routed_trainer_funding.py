@@ -90,7 +90,11 @@ def active_trainer_funding_candidate(
         raise RedTrainerFundingError("active trainer has no unique adjacent cartridge binding")
     return TrainerFundingCandidate(
         matches[0],
-        trainer_party_quote(rom, opponent, trainer_set),
+        (
+            trainer_party_quote(rom, opponent, trainer_set, allow_final_class=True)
+            if opponent == 247
+            else trainer_party_quote(rom, opponent, trainer_set)
+        ),
         RoutePlan(MacroPath((raw.map_id,), ()), at, None, (), None, at, None),
         facing,
     )

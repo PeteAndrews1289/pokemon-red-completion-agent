@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-lance-dialogue",
+  "as_of_session": "2026-09-09-lance-survival",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-lance-dialogue-2026-09-09.json"
+      "evidence": "docs/evidence/red-lance-survival-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -432,6 +432,12 @@
       "result": "Lance reached, then stopped before battle after69 actions/4452 frames. Exact introduction retained; model79 unchanged.520 focused tests qualify the narrow pre-latch dialogue and retained recovery. Phase4 remains incomplete, sub-checklist2/3.",
       "deviation": "Cartridge text precedes the battle latch, contrary to the initial handoff assumption. Repair is support-only maintenance; no replay, failed-episode fitting or lowered completion gate.",
       "next": "Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice."
+    },
+    {
+      "session": "2026-09-09-lance-survival",
+      "result": "No new admitted row or fit. Gyarados defeated during deterministic support; model79 unchanged. Retained first Dragonair qualified with zero inputs;136 focused tests pass.",
+      "deviation": "Maintenance only; Phase4 exit and2/3 submilestone remain unchanged. Guided support cannot replace learned story authority.",
+      "next": "One support continuation from exact retained first Dragonair aa40123d; no Gyarados replay or item spend. Then return to a genuine story/resource choice and reorient before the two-hour slice ends."
     }
   ],
   "closed_milestones": [

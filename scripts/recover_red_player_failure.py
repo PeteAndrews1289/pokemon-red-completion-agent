@@ -177,6 +177,13 @@ def run(args):
     healing_budget = getattr(args, "maximum_full_restores", 0)
     prior_switches = tuple(getattr(args, "prior_switches", ()))
     scripted_trainer = getattr(args, "finish_scripted_trainer", None)
+    zero_item_survival = getattr(args, "zero_item_survival", False)
+    if type(zero_item_survival) is not bool or (
+        zero_item_survival and (not getattr(args, "finish_trainer_funding", False)
+                               or healing_budget or scripted_trainer)
+    ):
+        raise ValueError("zero-item survival requires its explicit active-trainer mode")
+    survival_control = bool(healing_budget) or zero_item_survival
     if scripted_trainer not in {None, "lance"} or (
         scripted_trainer
         and (getattr(args, "finish_trainer_funding", False) or healing_budget or prior_switches)
@@ -186,7 +193,7 @@ def run(args):
         type(healing_budget) is not int
         or not 0 <= healing_budget <= 2
         or (healing_budget and not getattr(args, "finish_trainer_funding", False))
-        or (prior_switches and not healing_budget)
+        or (prior_switches and not survival_control)
     ):
         raise ValueError("healing budget requires the explicit active-trainer recovery mode")
     ready, failed = prepare(args)
@@ -200,7 +207,7 @@ def run(args):
         else 0
     )
     if (
-        healing_budget
+        survival_control
         and observed_failed_trainer_switches(
             ready.private_root,
             args.failed_episode,
@@ -247,7 +254,7 @@ def run(args):
                 and reader.read_battle_menu_state(before.raw).phase is not BattleMenuPhase.MAIN
             ):
                 raise ValueError("trainer recovery must begin at the MAIN battle menu")
-            if healing_budget:
+            if survival_control:
                 controller = RedTrainerSurvivalController(
                     reader,
                     base.ReadOnlyController(emulator),
@@ -294,10 +301,11 @@ def run(args):
             "finish_trainer_funding": trainer_recovery,
             "finish_scripted_trainer": scripted_trainer,
             "maximum_full_restores": healing_budget,
+            "zero_item_survival": zero_item_survival,
             "prior_full_restore_claims": prior_heal_claims,
             "prior_switches": list(prior_switches),
             "first_survival_action": (
-                first_survival_decision.kind if trainer_recovery and healing_budget else None
+                first_survival_decision.kind if trainer_recovery and survival_control else None
             ),
         }
         if not args.execute:
@@ -440,7 +448,7 @@ def run(args):
                                     durable=True,
                                 ),
                             ).run
-                            if healing_budget
+                            if survival_control
                             else story_controller.run
                             if story_controller is not None
                             else None
@@ -621,5 +629,6 @@ if __name__ == "__main__":
     parser.add_argument("--finish-trainer-funding", action="store_true")
     parser.add_argument("--finish-scripted-trainer", choices=("lance",))
     parser.add_argument("--maximum-full-restores", type=int, default=0)
+    parser.add_argument("--zero-item-survival", action="store_true")
     parser.add_argument("--prior-switches", type=int, nargs="*", default=[])
     run(parser.parse_args())

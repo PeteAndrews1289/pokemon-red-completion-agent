@@ -272,6 +272,25 @@ def test_active_recovery_identifies_only_exact_adjacent_cartridge_trainer(monkey
     assert not calls
 
 
+def test_active_recovery_explicitly_qualifies_final_trainer_class(monkeypatch):
+    router, state, target, _bindings, _calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, battle_state=2, player_y=10, player_x=36)
+    reader = router.runtime.reader
+    reader.read_active_trainer_identity = lambda: (247, 47, 1)
+    trainer = replace(target.trainer, trainer_class=247, trainer_set=1)
+    monkeypatch.setattr(funding, 'trainer_sight_zones', lambda *_: (trainer,))
+    calls = []
+
+    def quote(rom, trainer_class, trainer_set, **kwargs):
+        calls.append((rom, trainer_class, trainer_set, kwargs))
+        return target.quote
+
+    monkeypatch.setattr(funding, 'trainer_party_quote', quote)
+    result = funding.active_trainer_funding_candidate(b'test', reader)
+    assert result.trainer == trainer
+    assert calls == [(b'test', 247, 1, {'allow_final_class': True})]
+
+
 def test_pending_funding_resumes_without_party_menu_route_or_second_interaction(monkeypatch):
     router, state, target, bindings, calls = fixture(monkeypatch)
     state.raw = replace(state.raw, player_y=10, player_x=36)

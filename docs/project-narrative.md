@@ -1,5 +1,21 @@
 # Project Narrative: From a Completed Run to a Transferable Pokémon Agent
 
+## Current — Gyarados defeated; first Dragonair retained
+
+The Lance introduction repair worked. The support continuation stopped at the first
+Dragonair because ordinary switch screening cannot bound Dragon Rage. All six party
+members are alive; bag unchanged, money17,845. Exact stateaa40123d/manifest81106c49
+retains56 actions/5,652 frames plus the earlier69 actions/4,452 frames. No replay,
+new fit, model query or admitted checkpoint. Model79 remains unchanged.
+
+Constant20/40 damage and fresh-stat bounds are qualified for a separately explicit
+zero-item survival continuation.136 focused tests pass; independent review found
+no blocker and its two requested regressions were added. Next continue this exact
+battle once, then reorient on useful model story decisions. Phase4 remains open.
+
+Older sections below are historical where they conflict with this update.
+
+
 
 ## Current — Lance reached; introduction retained, not yet recovered
 

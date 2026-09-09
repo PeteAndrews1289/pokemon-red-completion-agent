@@ -124,6 +124,19 @@ class PokemonRedBattleCatalog:
             raise RedBattleCatalogError("incoming move needs more than an entry type screen")
         return move.type_name if move.power > 0 and move.category != "status" else None
 
+    def constant_damage_bound(self, move_ref: str, /) -> int | None:
+        """Pinned constant HP loss, not a type multiplier or guaranteed hit.
+
+        core.asm ApplyAttackToPlayerPokemon overwrites damage with20/40 for
+        SonicBoom/Dragon Rage. Other special damage and indirect effects are
+        deliberately unqualified here. Ignoring immunity/misses is conservative.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        self.resolve_move(move_ref)
+        if _MOVE_EFFECT_BY_ID[identifier] != "SPECIAL_DAMAGE_EFFECT":
+            return None
+        return {49: 20, 82: 40}.get(identifier)
+
     def type_effectiveness(
         self,
         attacking_type: str,

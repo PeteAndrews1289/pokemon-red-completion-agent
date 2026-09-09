@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-dialogue**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-survival**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-lance-dialogue-2026-09-09.json)
+[Current evidence](../docs/evidence/red-lance-survival-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-lance-survival
+
+No new admitted row or fit. Gyarados defeated during deterministic support; model79 unchanged. Retained first Dragonair qualified with zero inputs;136 focused tests pass.
+
+**Deviation:** Maintenance only; Phase4 exit and2/3 submilestone remain unchanged. Guided support cannot replace learned story authority.
+
+**Next:** One support continuation from exact retained first Dragonair aa40123d; no Gyarados replay or item spend. Then return to a genuine story/resource choice and reorient before the two-hour slice ends.
 
 ### 2026-09-09-lance-dialogue
 

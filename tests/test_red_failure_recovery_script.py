@@ -16,6 +16,36 @@ from pokemon_red_completion.red_goal_context_profile import (
 
 
 @pytest.mark.parametrize('extra', [
+    {'zero_item_survival': 1},
+    {'zero_item_survival': True},
+    {'zero_item_survival': True, 'finish_trainer_funding': True,
+     'maximum_full_restores': 1},
+    {'zero_item_survival': True, 'finish_trainer_funding': True,
+     'finish_scripted_trainer': 'lance'},
+])
+def test_zero_item_survival_is_explicit_and_does_not_borrow_healing_authority(extra):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+    with pytest.raises(ValueError, match='zero-item survival'):
+        module['run'](SimpleNamespace(**extra))
+
+
+def test_zero_item_survival_validates_recorded_switch_history_before_loading(monkeypatch):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+    # Reach the real mode/history gate, but no ROM/emulator is available to this test.
+    namespace = module['run'].__globals__
+    monkeypatch.setitem(namespace, 'prepare', lambda _: (SimpleNamespace(private_root='store'), {}))
+    monkeypatch.setitem(namespace, 'remaining_trainer_heal_budget', lambda *_: 0)
+    monkeypatch.setitem(namespace, 'observed_failed_trainer_switches', lambda *_: (2, 4))
+    with pytest.raises(ValueError, match='prior switches differ'):
+        module['run'](SimpleNamespace(zero_item_survival=True, finish_trainer_funding=True,
+                                      failed_episode='retained', prior_switches=[2]))
+
+
+@pytest.mark.parametrize('extra', [
     {'finish_scripted_trainer': 'champion'},
     {'finish_scripted_trainer': 'lance', 'finish_trainer_funding': True},
     {'finish_scripted_trainer': 'lance', 'maximum_full_restores': 1},

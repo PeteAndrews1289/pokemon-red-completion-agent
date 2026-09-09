@@ -10,7 +10,13 @@ from pokemon_red_completion.battle_runtime import (
     BattleRuntimeError,
     BattleRuntimeTiming,
 )
-from pokemon_red_completion.observation import BattleMenuPhase, BattleMenuState, RawGameState
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    BattleMenuState,
+    RawGameState,
+    TrainerDamageObservation,
+)
+from pokemon_red_completion.red_trainer_damage import incoming_damage_bounds
 from pokemon_red_completion.red_trainer_healing import (
     bag_after_full_restores,
     trainer_bag_within_budget,
@@ -76,6 +82,44 @@ def test_used_item_and_switch_budgets_do_not_reset(monkeypatch):
     subject = controller(monkeypatch, previous=(2, 4, 1, 2, 1, 2))
     with pytest.raises(BattleRuntimeError, match="remaining recovery budget"):
         subject.decide(subject.reader.raw)
+
+
+@pytest.mark.parametrize('move,field,hp', [(34, 'enemy_attack', 100), (8, 'enemy_special', 50)])
+def test_each_decision_rereads_live_boosted_stats_even_when_raw_is_unchanged(move, field, hp):
+    raw = state(active=0, hp=(hp, 12))
+    initial = TrainerDamageObservation(
+        raw, (move, 97, 0, 0), ('normal',), 100, 100, 100, 100,
+        ((150, 150, 150, 150), (50, 50, 50, 50)), (('water',), ('ground',)),
+    )
+    live = SimpleNamespace(observation=initial, reads=0)
+
+    def observe(observed_raw):
+        assert observed_raw is raw
+        live.reads += 1
+        return live.observation
+
+    reader = SimpleNamespace(read_trainer_damage_observation=observe)
+    subject = RedTrainerSurvivalController(reader, object(), (), 0)
+    assert subject.decide(raw).kind == 'attack'
+    initial_bound = incoming_damage_bounds(initial)[0]
+    live.observation = replace(initial, **{field: 600})
+    assert incoming_damage_bounds(live.observation)[0] > initial_bound
+    with pytest.raises(BattleRuntimeError, match='remaining recovery budget'):
+        subject.decide(raw)
+    assert live.reads == 2
+
+
+def test_zero_item_mode_never_heals_even_after_a_safe_switch(monkeypatch):
+    subject = controller(monkeypatch, budget=0)
+    inputs = simulate(monkeypatch, subject)
+    # Switch survives, but leaves the member below the next conservative bound.
+    # Four Full Restores are present and would otherwise enable healing.
+    with pytest.raises(BattleRuntimeError, match='remaining recovery budget'):
+        run(subject)
+    assert inputs == ['switch'] and subject.switches == [1]
+    assert subject.heals_claimed == 0
+    assert subject.reader.raw.bag_items == ((16, 4), (53, 3))
+    assert [row['kind'] for row in subject.reports] == ['switch']
 
 
 @pytest.mark.parametrize("change", [{"hp": (0, 12)}, {"hp": (53, 12)}])
