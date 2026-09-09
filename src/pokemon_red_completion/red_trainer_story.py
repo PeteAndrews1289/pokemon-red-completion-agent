@@ -21,6 +21,7 @@ from .domain import GameState
 from .executor import CountingExecutor
 from .gen1_cartridge import CartridgeReadError
 from .gen1_route_runtime import Gen1TraversalObserver
+from .gen1_trainer_dialogue import bind_scripted_trainer_dialogue
 from .gen1_trainer_parties import TrainerPartyQuote, trainer_party_quote
 from .gen1_trainer_sight import (
     Gen1TrainerSightProjector,
@@ -282,6 +283,8 @@ class RedCartridgeLoreleiSkill:
         if not route.passed:
             raise RedTrainerStoryError("story approach did not reach its declared interaction")
 
+        scripted_dialogue = None
+        pending_dialogue = False
         if self._scripted_triggers:
             current = reader.read()
             if (
@@ -293,6 +296,9 @@ class RedCartridgeLoreleiSkill:
             ):
                 raise RedTrainerStoryError("scripted trainer entry origin changed")
             guard._require_preserved_living_slots(current)
+            qualified_dialogue = bind_scripted_trainer_dialogue(
+                world.rom, reader, target, current, final_event_flag=int(EventFlag.BEAT_LANCE),
+            )
             actions.execute(target.approach.steps[-1].macro_action)
             expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
             # Wait only; the cartridge, not another directional input, owns
@@ -312,6 +318,13 @@ class RedCartridgeLoreleiSkill:
                 if pending == expected_pending and (
                     current.player_y, current.player_x
                 ) == target.approach.terminal_at:
+                    pending_dialogue = True
+                    break
+                if reader.read_bottom_dialogue_box_visible() and (
+                    current.player_y, current.player_x
+                ) == target.approach.terminal_at:
+                    qualified_dialogue()
+                    scripted_dialogue = qualified_dialogue
                     break
                 actions.execute(MacroAction(MacroActionKind.WAIT, repeat=12))
             else:
@@ -359,7 +372,8 @@ class RedCartridgeLoreleiSkill:
                 switch_limit=controller.maximum_switches, require_move_between_switches=True,
             ),
             battle_runner_override=controller.run,
-            resume_pending_dialogue=bool(self._scripted_triggers),
+            resume_pending_dialogue=pending_dialogue,
+            validate_scripted_dialogue=scripted_dialogue,
         )
         after = self.runtime.adapter.observe()
         if (

@@ -123,6 +123,80 @@ def make_state(
 TIMING = BattleRuntimeTiming(dialogue_wait_frames=5)
 
 
+@pytest.mark.parametrize('fault', [None, 'validator', 'money', 'wrong_pending', 'lost_text'])
+def test_explicit_prelatch_text_can_precede_battle_without_reinteraction(monkeypatch, fault):
+    env = ScriptedEnvironment(make_state(), dialogue=True, ready=False)
+    checks = []
+    def validate():
+        checks.append(len(env.actions))
+        if fault == 'validator' and env.actions:
+            raise ValueError('changed header')
+    confirms = []
+    def execute(action):
+        env.actions.append(action)
+        assert action.kind is not MacroActionKind.INTERACT
+        if action.kind is MacroActionKind.CONFIRM:
+            confirms.append(action)
+            if len(confirms) == 1:
+                if fault == 'money':
+                    env.state = replace(env.state, player_money=501)
+                if fault == 'wrong_pending':
+                    env.pending_identity = (202, 9)
+                if fault == 'lost_text':
+                    env.dialogue = False
+                    env.ready = True
+            if len(confirms) == 3:
+                # A transient pending latch need not be sampled; active identity
+                # is still verified before the battle controller receives input.
+                env.state = replace(env.state, battle_state=2)
+                env.dialogue = False
+                env.ready = True
+    env.execute = execute
+    def finish(reader, *_a, **kwargs):
+        kwargs['move_decision_guard'](reader.read())
+        env.state = replace(env.state, battle_state=0, player_money=815,
+                            event_flags=make_flag_bytes(1139))
+        return env.state
+    monkeypatch.setattr(funding_battle, 'battle_runner', finish)
+    def run():
+        return run_prepared_trainer_funding(env, env, target=make_candidate(),
+            validate_target=lambda: None, validate_scripted_dialogue=validate,
+            move_slot_policy=lambda _: 1, timing=TIMING)
+    if fault:
+        with pytest.raises((ValueError, TrainerFundingBattleError)):
+            run()
+        assert len(confirms) == 1
+    else:
+        assert run().payout == 315 and len(confirms) == 3 and len(checks) == 4
+
+
+def test_prelatch_text_loss_while_unready_waits_to_bound_without_blind_confirm():
+    env = ScriptedEnvironment(make_state(), dialogue=True, ready=False)
+    def execute(action):
+        env.actions.append(action)
+        env.dialogue = False
+    env.execute = execute
+    with pytest.raises(TrainerFundingBattleError, match='exhausted intro'):
+        run_prepared_trainer_funding(
+            env, env, target=make_candidate(), validate_target=lambda: None,
+            validate_scripted_dialogue=lambda: None, move_slot_policy=lambda _: 1,
+            timing=TIMING, maximum_intro_pulses=3,
+        )
+    assert [a.kind for a in env.actions] == [MacroActionKind.CONFIRM] + [MacroActionKind.WAIT] * 3
+
+
+@pytest.mark.parametrize('entry', [
+    {'resume_active_battle': True}, {'resume_pending_dialogue': True},
+])
+def test_prelatch_capability_cannot_be_combined_with_other_entry_modes(entry):
+    env = ScriptedEnvironment(make_state(), dialogue=True)
+    with pytest.raises(ValueError, match='own entry mode'):
+        run_prepared_trainer_funding(env, env, target=make_candidate(),
+            validate_target=lambda: None, validate_scripted_dialogue=lambda: None,
+            move_slot_policy=lambda _: 1, timing=TIMING, **entry)
+    assert not env.actions
+
+
 @pytest.mark.parametrize("bag,allowed", [
     (((16, 3), (53, 3)), True), (((16, 2), (53, 3)), True),
     (((16, 1), (53, 3)), False), (((16, 3), (53, 2)), False),

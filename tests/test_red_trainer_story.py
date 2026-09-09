@@ -244,7 +244,9 @@ def test_lance_distinguishes_battle_event_from_later_story_fact(fixture, monkeyp
         assert skill.expected_facts == frozenset({'league:lance_defeated'})
 
 
-@pytest.mark.parametrize('fault', [None, 'wrong_pending', 'no_pending', 'drift', 'battle_only'])
+@pytest.mark.parametrize('fault', [
+    None, 'prelatch', 'wrong_pending', 'no_pending', 'drift', 'battle_only',
+])
 def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_verified(
     fixture, monkeypatch, fault,
 ):
@@ -263,6 +265,13 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
     old.runtime.adapter.observe = current
     reader.read_current_map_blocks = lambda: CurrentMapBlocks(113, ((1,),))
     reader.read_pending_trainer_battle_identity = lambda: pending
+    reader.read_bottom_dialogue_box_visible = (
+        lambda: fault == 'prelatch' and reader.raw.player_y == 2
+    )
+    validated = []
+    def bind(*_a, **_k):
+        return lambda: validated.append(reader.raw.player_y)
+    monkeypatch.setattr(story, 'bind_scripted_trainer_dialogue', bind)
     old.world.with_current_blocks = lambda _: old.world
     def plan(_start, _map_id, *, goal_at):
         if goal_at != (2, 6):
@@ -289,12 +298,16 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
         if action.kind is MacroActionKind.MOVE:
             assert action.value == 'up'
             reader.raw = replace(reader.raw, player_y=1 if fault == 'drift' else 2)
-            pending = None if fault == 'no_pending' else (
+            pending = None if fault in {'no_pending', 'prelatch'} else (
                 target.trainer_class, 2 if fault == 'wrong_pending' else target.trainer_set,
             )
     old.actions.delegate.execute = execute
-    def battle(_reader, _actions, *, resume_pending_dialogue, validate_target, **_kwargs):
-        assert resume_pending_dialogue
+    def battle(_reader, _actions, *, resume_pending_dialogue, validate_scripted_dialogue,
+               validate_target, **_kwargs):
+        assert resume_pending_dialogue is (fault != 'prelatch')
+        if fault == 'prelatch':
+            assert validated == [2]
+            validate_scripted_dialogue()
         validate_target()
         entered_battle.append(True)
         flags = bytearray(reader.raw.event_flags)
@@ -307,13 +320,13 @@ def test_lance_trigger_owned_once_by_battle_controller_and_final_story_fact_veri
     skill = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world,
                                          objective_id='defeat_lance')
     assert skill.availability(current().game_state).executable
-    if fault:
+    if fault not in {None, 'prelatch'}:
         with pytest.raises(story.RedTrainerStoryError):
             skill.execute()
     else:
         assert skill.execute().evidence['story_event_verified']
     assert len([action for action in inputs if action.kind is MacroActionKind.MOVE]) == 1
-    assert bool(entered_battle) is (fault in {None, 'battle_only'})
+    assert bool(entered_battle) is (fault in {None, 'prelatch', 'battle_only'})
     if fault == 'no_pending':
         assert len(inputs) == 25  # one entry plus exactly24 bounded waits; no retry
     count = len(inputs)

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run.
+- Next decision: Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Agatha defeated and one prospectively declared story curriculum outcome fitted. Model78 to79 retains every prior row; guided learning remains separate from model-selected authority. |
-| Authority now | Model79:78 comparative-choice outcomes plus1 guided story outcome;37 successes,69 distinct rows. Agatha verified;30 specimens/28 living/33 registered;17845 currency;one Full Restore. No post-fit model79 gameplay yet. |
+| Reusable capability | Cartridge-derived Lance arrival reached its automatic trainer text. A narrow pre-latch dialogue seam and authenticated support recovery are engineering-qualified; battle and fresh learning remain unverified. |
+| Authority now | Model79 remains78 comparative-choice outcomes plus1 guided story row. Lance02 was forced, with69 actions/4452 frames and no battle or model query. Exact failure retained; no fit or authority promotion. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
 | Cheapest falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
@@ -62,17 +62,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-agatha-curriculum** · status **active** · evidence [qualification](docs/evidence/red-agatha-curriculum-2026-09-09.json)
+**2026-09-09-lance-dialogue** · status **active** · evidence [qualification](docs/evidence/red-lance-dialogue-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Makes actual story experience available to the outcome learner while retaining honest choice authority and the cross-title living-collection mission. |
-| Learning output | One real guided outcome; model78 to79, all78 prior rows retained. Agatha defeat,241 actions/22693 frames,zero specimen loss. Mixed-model identity and dataset independently reopened. |
-| Authority delta | One guided story outcome now informs regression; no comparative choice or authority promotion. |
-| Transfer result | Known-training Red continuation only. Arrival tests vary mechanics; no ROM-hack or Crystal transfer measured. |
-| Blocker | Lance entrance uses a different script shape; model79 has not yet made a fresh gameplay choice. |
-| Decision | Close the successful Agatha lesson and its fit. Next qualify the distinct Lance boundary, then expose a useful choice without inventory reset. |
-| Next session | Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run. |
+| Product alignment | Repair only the introduction handoff blocking continued story experience; preserve the model-directed living-collection objective and unchanged stage exit. |
+| Learning output | No new admitted row or fit. Exact failed introduction retained and qualified read-only; model79 unchanged. |
+| Authority delta | None; deterministic maintenance only. |
+| Transfer result | ROM-free text/bank/context fixtures pass; no modified-ROM or Crystal transfer. |
+| Blocker | Lance introduction prints before the pending battle latch; the consumed attempt stopped before battle. |
+| Decision | Retain the failure and repair the dialogue seam. Continue that exact introduction once under support accounting; do not replay the guided lesson. |
+| Next session | Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice. |
 | Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
 | Stop condition | Stop each attempt on its outcome or named blocker and retain the exact state; reassess before any successor. No consumed retry or inventory reset. |
 

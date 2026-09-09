@@ -1,5 +1,20 @@
 # Three-agent coordination
 
+
+## Current — Lance reached; introduction retained, not yet recovered
+
+The overnight Phase4 block continues. One attempt reached Lance but waited for a
+battle identity that appears only after introduction text is dismissed. It stopped
+before battle after69 actions/4,452 frames. Exact failure statea3d29985 and
+manifest0740f527 are retained; no earlier-state replay. Model79 and its79 rows
+remain unchanged; no new fit or learned choice. A narrow cartridge-qualified text
+validator and zero-item retained recovery path passed520 focused tests. Recovery
+is next, followed by a real useful model choice. Phase4 is not complete; guided
+battles alone will not satisfy its learned-completion exit. See
+[the audit](docs/audits/red-lance-integration-2026-09-09.md).
+
+Earlier dated sections below are history where they conflict with this state.
+
 ## Current — overnight Lance integration, before live qualification
 
 The eight-hour Phase4 block is active. Model79 and Agatha statedc12195a remain

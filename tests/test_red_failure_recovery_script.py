@@ -15,6 +15,20 @@ from pokemon_red_completion.red_goal_context_profile import (
 )
 
 
+@pytest.mark.parametrize('extra', [
+    {'finish_scripted_trainer': 'champion'},
+    {'finish_scripted_trainer': 'lance', 'finish_trainer_funding': True},
+    {'finish_scripted_trainer': 'lance', 'maximum_full_restores': 1},
+    {'finish_scripted_trainer': 'lance', 'prior_switches': [2]},
+])
+def test_scripted_recovery_does_not_borrow_active_battle_or_healing_authority(extra):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+    with pytest.raises(ValueError, match='separate zero-item'):
+        module['run'](SimpleNamespace(**extra))
+
+
 def test_switch_history_comes_from_actual_battle_transitions_and_retains_ancestry():
     module = runpy.run_path(
         str(Path(__file__).resolve().parents[1] / "scripts/recover_red_player_failure.py")

@@ -1,5 +1,45 @@
 # Lance integration: engineering checkpoint
 
+## Live result and retained dialogue repair
+
+The single Lance02 attempt is consumed. It reached Lance's actual automatic text
+trigger, then failed after69 actions/4,452 frames because the intro text appeared
+before the expected pending trainer latch. No battle occurred. The exact retained
+statea3d29985 and failed manifest0740f527 were reopened without input; currency,
+bag and party HP are preserved, with Jolteon prepared as lead. Model79 is unchanged.
+The failed curriculum event remains in its aborted episode; no fit or completed
+checkpoint is claimed. Never return to the preceding Agatha state to repeat it.
+
+The primary trainer engine proves the causal ordering: `TalkToTrainer` calls
+`PrintText` before `EngageMapTrainer`/`StartTrainerBattle`. The pending observer
+was correct; the story handoff assumed the latch appeared too early. A distinct
+validator now binds the cartridge's automatic text branch, text-table thunk and
+trainer header to visible live text. It checks the stable text sprite and
+high-byte-first header pointer, not the text-ID byte that aliases an arrow-blink
+counter. Wrong pending/active identity, resources, party, position and event changes
+still abort. Each pre-latch acknowledgement is revalidated; text loss gets no blind
+confirmation and no repeated movement/interaction.
+
+The existing failed-state recovery driver has an explicit zero-item Lance-text
+mode. It restores only an authenticated retained failure, logs support costs, and
+does not resample a choice or create a fit row. This is tested engineering awaiting
+one prospective recovery, not a successful Lance fight.520 focused tests and
+configured typing of436 source files passed; this is not a full-suite claim.
+One read-only report initially used an incorrect reward attribute; correcting it
+changed only report serialization, with no inputs or overwritten output.
+
+Independent review confirmed the causal ordering and caught a `MapId` enum crossing
+an exact-integer decoder boundary; the fix has an explicit regression. No new
+external-model session or quota observation occurred during this repair. Earlier
+Flash usage below remains historical. The next operation is retained-text recovery,
+then a useful actual model choice; Phase4 and its2/3 sub-checklist remain open.
+
+Sources: [trainer engine](https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/home/trainers.asm),
+[text scrolling](https://github.com/pret/pokered/blob/a1a22aaf84d1675bcdbaeb194592379d586d838e/home/joypad2.asm),
+[symbols](https://github.com/pret/pokered/blob/3f618d59edf43918f48f5e558c34e04cb2fc5619/pokered.sym).
+
+## Historical — pre-execution engineering checkpoint
+
 ## Scope and current truth
 
 This is the first sub-session of the authorized eight-hour Phase4 block. Model79

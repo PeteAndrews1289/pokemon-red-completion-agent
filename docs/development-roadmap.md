@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-agatha-curriculum**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-lance-dialogue**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -58,7 +58,7 @@ Plan quests, prerequisites and puzzles through the Champion.
 
 Teacher completion already exists. It does not satisfy this learned-player milestone.
 
-[Current evidence](../docs/evidence/red-agatha-curriculum-2026-09-09.json)
+[Current evidence](../docs/evidence/red-lance-dialogue-2026-09-09.json)
 
 ### 05. Build the Red-era living Dex — planned
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-lance-dialogue
+
+Lance reached, then stopped before battle after69 actions/4452 frames. Exact introduction retained; model79 unchanged.520 focused tests qualify the narrow pre-latch dialogue and retained recovery. Phase4 remains incomplete, sub-checklist2/3.
+
+**Deviation:** Cartridge text precedes the battle latch, contrary to the initial handoff assumption. Repair is support-only maintenance; no replay, failed-episode fitting or lowered completion gate.
+
+**Next:** Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice.
 
 ### 2026-09-09-agatha-curriculum
 

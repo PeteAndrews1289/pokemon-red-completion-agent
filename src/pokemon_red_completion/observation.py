@@ -59,6 +59,7 @@ class RamAddress(IntEnum):
     MISC_FLAGS = 0xCD60
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    TRAINER_TEXT_SPRITE_INDEX = 0xCF13
     SHOP_SELECTED_ITEM = 0xCF91
     SHOP_QUANTITY = 0xCF96
     WALK_COUNTER = 0xCFC5
@@ -165,6 +166,7 @@ class RamAddress(IntEnum):
     VERMILION_GYM_SECOND_LOCK = 0xD744
     EVENT_FLAGS = 0xD747
     SAFARI_STEPS = 0xD70D
+    TRAINER_HEADER_POINTER = 0xDA30
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
     CURRENT_BOX_COUNT = 0xDA80
@@ -4478,6 +4480,20 @@ class PokemonRedStateReader:
         if opponent < 201 or engaged != opponent or trainer_set == 0:
             return None
         return opponent, trainer_set
+
+    def read_trainer_dialogue_context(self) -> tuple[int, int]:
+        """Current trainer header and text sprite, not an armed battle identity.
+
+        StoreTrainerHeaderPointer writes HIGH then LOW. DisplayTextID retains
+        its sprite in wSpriteIndex; hTextID is unsuitable because text scrolling
+        aliases it as an arrow-blink counter. Callers must bind this otherwise
+        stale context to a qualified cartridge trigger and visible dialogue.
+        """
+        at = int(RamAddress.TRAINER_HEADER_POINTER)
+        return (
+            self._memory.read_u8(at) * 256 + self._memory.read_u8(at + 1),
+            self._memory.read_u8(RamAddress.TRAINER_TEXT_SPRITE_INDEX),
+        )
 
     def read_player_facing(self) -> str:
         """Decode the sprite's settled facing inside the revision adapter."""

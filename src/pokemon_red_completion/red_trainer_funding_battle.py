@@ -179,6 +179,7 @@ def run_prepared_trainer_funding(
     maximum_settle_pulses: int = 32,
     resume_active_battle: bool = False,
     resume_pending_dialogue: bool = False,
+    validate_scripted_dialogue: Callable[[], None] | None = None,
     intent: BattleIntent | None = None,
     battle_runner_override: Callable[..., RawGameState] | None = None,
     maximum_full_restores: int = 0,
@@ -203,6 +204,11 @@ def run_prepared_trainer_funding(
         raise TypeError("resume_pending_dialogue must be boolean")
     if resume_pending_dialogue and resume_active_battle:
         raise ValueError("pending dialogue and active battle are separate entry modes")
+    if validate_scripted_dialogue is not None:
+        if not callable(validate_scripted_dialogue):
+            raise TypeError("scripted dialogue validator must be callable")
+        if resume_active_battle or resume_pending_dialogue:
+            raise ValueError("pre-latch scripted dialogue requires its own entry mode")
     if (
         type(maximum_intro_pulses) is not int
         or isinstance(maximum_intro_pulses, bool)
@@ -270,6 +276,7 @@ def run_prepared_trainer_funding(
         )
     if (
         not resume_active_battle and not resume_pending_dialogue
+        and validate_scripted_dialogue is None
         and not reader.read_input_readiness().ready
     ):
         raise TrainerFundingBattleError("initial input readiness is not ready")
@@ -310,10 +317,12 @@ def run_prepared_trainer_funding(
         return pending is not None
 
     resuming_pending = pending_start()
+    if validate_scripted_dialogue is not None:
+        validate_scripted_dialogue()
     if (not resume_active_battle and reader.read_bottom_dialogue_box_visible()
-            and not resuming_pending):
+            and not resuming_pending and validate_scripted_dialogue is None):
         raise TrainerFundingBattleError("dialogue box is visible before interaction")
-    if not resuming_pending and not resume_active_battle:
+    if not resuming_pending and not resume_active_battle and validate_scripted_dialogue is None:
         executor.execute(MacroAction(MacroActionKind.INTERACT))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
 
@@ -326,6 +335,15 @@ def run_prepared_trainer_funding(
             raise TrainerFundingBattleError(f"unsupported battle state {state.battle_state}")
         pending = pending_start()
         dialogue = reader.read_bottom_dialogue_box_visible()
+        if validate_scripted_dialogue is not None and (
+            state.party_species_ids != initial.party_species_ids
+            or state.party_hp != initial.party_hp or state.party_count != initial.party_count
+            or state.bag_items != initial.bag_items or state.player_money != initial.player_money
+            or state.map_id != initial.map_id
+            or (state.player_y, state.player_x) != target.approach.terminal_at
+            or reader.read_player_facing() != target.interaction_facing.value
+        ):
+            raise TrainerFundingBattleError("scripted introduction changed protected state")
         if not pending and not dialogue and reader.read_input_readiness().ready:
             if intro_count == 0 and not resuming_pending:
                 raise TrainerFundingBattleError(
@@ -337,7 +355,10 @@ def run_prepared_trainer_funding(
         # The start latch can coexist with a text page still awaiting dismissal.
         # Confirm that observed dialogue; a dialogue-free armed transition gets
         # waits only. Never re-interact with a trainer whose start is already armed.
-        if dialogue or not pending:
+        if validate_scripted_dialogue is not None and dialogue and not pending:
+            validate_target()
+            validate_scripted_dialogue()
+        if dialogue or (not pending and validate_scripted_dialogue is None):
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
         intro_count += 1

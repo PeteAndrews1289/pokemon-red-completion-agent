@@ -16,12 +16,21 @@ from pathlib import Path
 
 import run_paired_red_bounded_player as base
 
-from pokemon_red_completion.battle_runtime import DEFAULT_BATTLE_RUNTIME_TIMING
+from pokemon_red_completion.battle_runtime import (
+    DEFAULT_BATTLE_RUNTIME_TIMING,
+    BattleIntent,
+    BattleRuntimeTiming,
+    BattleSwitchCapability,
+)
 from pokemon_red_completion.blaine import MANSION_TEAM_POLICY, MANSION_TRAINING_FLEE_TIMING
 from pokemon_red_completion.celadon import _flee
+from pokemon_red_completion.gen1_trainer_dialogue import (
+    bind_scripted_trainer_dialogue,
+    retained_scripted_trainer_candidate,
+)
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_runtime import GoalDecisionOutcome
-from pokemon_red_completion.observation import BattleMenuPhase
+from pokemon_red_completion.observation import BattleMenuPhase, EventFlag, MapId
 from pokemon_red_completion.red_capture_preparation import prepare_capture_escort
 from pokemon_red_completion.red_failure_recovery import (
     RedFailureRecoveryResult,
@@ -51,6 +60,7 @@ from pokemon_red_completion.red_team_training import (
     collection_escape_escort,
     escape_collection_battle,
 )
+from pokemon_red_completion.red_trainer_control import RedTrainerPartyController
 from pokemon_red_completion.red_trainer_funding_battle import run_prepared_trainer_funding
 from pokemon_red_completion.red_trainer_healing import trainer_bag_within_budget
 from pokemon_red_completion.red_trainer_survival import RedTrainerSurvivalController
@@ -166,6 +176,12 @@ def remaining_trainer_heal_budget(store, episode_id, requested):
 def run(args):
     healing_budget = getattr(args, "maximum_full_restores", 0)
     prior_switches = tuple(getattr(args, "prior_switches", ()))
+    scripted_trainer = getattr(args, "finish_scripted_trainer", None)
+    if scripted_trainer not in {None, "lance"} or (
+        scripted_trainer
+        and (getattr(args, "finish_trainer_funding", False) or healing_budget or prior_switches)
+    ):
+        raise ValueError("scripted trainer recovery is a separate zero-item introduction mode")
     if (
         type(healing_budget) is not int
         or not 0 <= healing_budget <= 2
@@ -210,13 +226,26 @@ def run(args):
             reader=reader,
         )
         before = runtime.adapter.observe()
-        trainer_recovery = getattr(args, "finish_trainer_funding", False)
+        trainer_recovery = getattr(args, "finish_trainer_funding", False) or bool(scripted_trainer)
         trainer_target = None
         if trainer_recovery:
             if not ready.trainer_funding or before.party.fainted_count:
                 raise ValueError("trainer recovery requires the funding mode and preserved party")
-            trainer_target = active_trainer_funding_candidate(world.rom, reader)
-            if reader.read_battle_menu_state(before.raw).phase is not BattleMenuPhase.MAIN:
+            trainer_target = (
+                retained_scripted_trainer_candidate(
+                    world.rom,
+                    reader,
+                    map_id=int(MapId.LANCES_ROOM),
+                    trainer_event_flag=int(EventFlag.BEAT_LANCES_ROOM_TRAINER),
+                    final_event_flag=int(EventFlag.BEAT_LANCE),
+                )
+                if scripted_trainer
+                else active_trainer_funding_candidate(world.rom, reader)
+            )
+            if (
+                not scripted_trainer
+                and reader.read_battle_menu_state(before.raw).phase is not BattleMenuPhase.MAIN
+            ):
                 raise ValueError("trainer recovery must begin at the MAIN battle menu")
             if healing_budget:
                 controller = RedTrainerSurvivalController(
@@ -228,6 +257,7 @@ def run(args):
                 first_survival_decision = controller.decide(before.raw)
         if before.party.fainted_count or not (
             (trainer_recovery and before.raw.battle_state == 2)
+            or (scripted_trainer and before.raw.battle_state == 0)
             or before.raw.battle_state == 1
             or (
                 before.raw.battle_state == 0
@@ -262,6 +292,7 @@ def run(args):
             "training_examples": 0,
             "original_choice_retried": False,
             "finish_trainer_funding": trainer_recovery,
+            "finish_scripted_trainer": scripted_trainer,
             "maximum_full_restores": healing_budget,
             "prior_full_restore_claims": prior_heal_claims,
             "prior_switches": list(prior_switches),
@@ -334,9 +365,23 @@ def run(args):
             try:
                 trainer_receipt = None
                 if trainer_target is not None:
+                    story_controller = (
+                        RedTrainerPartyController(reader, frames) if scripted_trainer else None
+                    )
 
                     def validate_trainer():
-                        if active_trainer_funding_candidate(world.rom, reader) != trainer_target:
+                        current_target = (
+                            retained_scripted_trainer_candidate(
+                                world.rom,
+                                reader,
+                                map_id=int(MapId.LANCES_ROOM),
+                                trainer_event_flag=int(EventFlag.BEAT_LANCES_ROOM_TRAINER),
+                                final_event_flag=int(EventFlag.BEAT_LANCE),
+                            )
+                            if scripted_trainer
+                            else active_trainer_funding_candidate(world.rom, reader)
+                        )
+                        if current_target != trainer_target:
                             raise ValueError("active trainer recovery target changed before input")
 
                     guard = RecoveryRouteInterruptionHandler(
@@ -352,8 +397,36 @@ def run(args):
                         target=trainer_target,
                         validate_target=validate_trainer,
                         move_slot_policy=guard._safe_trainer_move,
-                        timing=DEFAULT_BATTLE_RUNTIME_TIMING,
-                        resume_active_battle=True,
+                        timing=(
+                            BattleRuntimeTiming(max_runtime_pulses=1600)
+                            if scripted_trainer
+                            else DEFAULT_BATTLE_RUNTIME_TIMING
+                        ),
+                        resume_active_battle=not scripted_trainer,
+                        validate_scripted_dialogue=(
+                            bind_scripted_trainer_dialogue(
+                                world.rom,
+                                reader,
+                                trainer_target,
+                                before.raw,
+                                final_event_flag=int(EventFlag.BEAT_LANCE),
+                            )
+                            if scripted_trainer
+                            else None
+                        ),
+                        intent=(
+                            BattleIntent(
+                                "defeat_lance",
+                                battle_plan_id="cartridge-trainer-story-recovery",
+                                switch_capabilities=frozenset(
+                                    {BattleSwitchCapability.TEMPORARY_ROLE_PIVOT}
+                                ),
+                                switch_limit=story_controller.maximum_switches,
+                                require_move_between_switches=True,
+                            )
+                            if story_controller is not None
+                            else None
+                        ),
                         maximum_full_restores=healing_budget,
                         battle_runner_override=(
                             RedTrainerSurvivalController(
@@ -368,6 +441,8 @@ def run(args):
                                 ),
                             ).run
                             if healing_budget
+                            else story_controller.run
+                            if story_controller is not None
                             else None
                         ),
                     )
@@ -433,6 +508,10 @@ def run(args):
                         and after.raw.player_money == trainer_receipt.final_money
                         and trainer_bag_within_budget(before.raw, after.raw, healing_budget)
                     )
+                    if scripted_trainer:
+                        checks["lance_story_event_verified"] = (
+                            "league:lance_defeated" in after.game_state.facts
+                        )
                 else:
                     checks["hp_status_pp_restored"] = _raw_party_restored(after.raw)
                 writer.append("recovery_verification", checks, durable=True)
@@ -540,6 +619,7 @@ if __name__ == "__main__":
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
     parser.add_argument("--finish-trainer-funding", action="store_true")
+    parser.add_argument("--finish-scripted-trainer", choices=("lance",))
     parser.add_argument("--maximum-full-restores", type=int, default=0)
     parser.add_argument("--prior-switches", type=int, nargs="*", default=[])
     run(parser.parse_args())

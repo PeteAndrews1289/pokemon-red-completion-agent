@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-agatha-curriculum",
+  "as_of_session": "2026-09-09-lance-dialogue",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -18,7 +18,7 @@
     },
     "red-story": {
       "status": "current",
-      "evidence": "docs/evidence/red-agatha-curriculum-2026-09-09.json"
+      "evidence": "docs/evidence/red-lance-dialogue-2026-09-09.json"
     },
     "red-collection": {
       "status": "planned",
@@ -426,6 +426,12 @@
       "result": "Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays. Maintenance follow-up: stale battle-module golden expectation reproduced and corrected after source review;52 related tests passed. No new model or save change.",
       "deviation": "Separate unit-weight curriculum permits truthful outcome learning without fake menus or historical support backfill. Initial report objective label corrected for display from unchanged serialized model; no refit. Lance grammar differs and was refused without input.",
       "next": "Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run."
+    },
+    {
+      "session": "2026-09-09-lance-dialogue",
+      "result": "Lance reached, then stopped before battle after69 actions/4452 frames. Exact introduction retained; model79 unchanged.520 focused tests qualify the narrow pre-latch dialogue and retained recovery. Phase4 remains incomplete, sub-checklist2/3.",
+      "deviation": "Cartridge text precedes the battle latch, contrary to the initial handoff assumption. Repair is support-only maintenance; no replay, failed-episode fitting or lowered completion gate.",
+      "next": "Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice."
     }
   ],
   "closed_milestones": [
