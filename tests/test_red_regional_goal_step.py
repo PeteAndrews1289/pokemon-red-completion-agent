@@ -89,7 +89,7 @@ def test_native_parent_keeps_authority_and_is_the_only_learning_target(
     def dataset(_store, **kwargs):
         assert kwargs["plan"] is calls[0].training_plan
         assert kwargs["behavior_model"] is ready.causal_record.model
-        return SimpleNamespace(examples=(object(),))
+        return SimpleNamespace(examples=(object(),), curriculum_examples=())
 
     monkeypatch.setattr(driver, "load_red_player_training_episode", dataset)
     result = driver._run(SimpleNamespace())
@@ -148,7 +148,8 @@ def test_native_goals_do_not_require_or_sample_multiple_sources(case, monkeypatc
     monkeypatch.setattr(driver.source.base, "_run_prepared", run)
     monkeypatch.setattr(driver, "regional_proposal_source_effort", lambda *_: None)
     monkeypatch.setattr(driver, "load_red_player_training_episode",
-                        lambda *_a, **_k: SimpleNamespace(examples=(object(),)))
+                        lambda *_a, **_k: SimpleNamespace(
+                            examples=(object(),), curriculum_examples=()))
     result = driver._run(SimpleNamespace())
     assert result["eligible_examples"] == 1 and result["eligible_source_examples"] == 0
     assert result["candidate_count"] == count

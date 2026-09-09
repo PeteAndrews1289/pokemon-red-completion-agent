@@ -6,18 +6,24 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import cast
 
-from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalSelectionMode
+from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind, GoalSelectionMode
 from pokemon_red_completion.goal_manager_trajectory import (
     GOAL_MANAGER_DECISION_TYPE,
     load_goal_manager_episode,
 )
-from pokemon_red_completion.living_dex_causal_journal import restore_living_dex_observed_arm_example
+from pokemon_red_completion.living_dex_causal_journal import (
+    restore_living_dex_observed_arm_example,
+    restore_living_dex_observed_outcome,
+)
+from pokemon_red_completion.living_dex_goal_policy import project_living_dex_goal_candidate
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexCensorReason,
+    LivingDexCurriculumOutcomeExample,
     LivingDexObservedArmExample,
     LivingDexObservedOutcome,
     LivingDexOptionValueModel,
     LivingDexOutcomeStatus,
+    living_dex_option_context_from_goal_situation,
 )
 from pokemon_red_completion.living_dex_player_exploration import (
     LEGACY_RECOVERY_EXPLORATION_POLICY_ID,
@@ -30,10 +36,17 @@ from pokemon_red_completion.red_living_dex_causal_adapter import (
     red_living_dex_outcome_from_observations,
 )
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
-from pokemon_red_completion.red_player_training import TRAINING_EVENT, TRAINING_EVENT_SCHEMA
+from pokemon_red_completion.red_player_training import (
+    CURRICULUM_EVENT,
+    CURRICULUM_EVENT_SCHEMA,
+    TRAINING_EVENT,
+    TRAINING_EVENT_SCHEMA,
+)
 from pokemon_red_completion.red_player_training_plan import (
     COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
+    CURRICULUM_TRAINING_PLAN_SCHEMA,
+    STORY_CURRICULUM_CONTRACT,
     RedPlayerTrainingPlan,
 )
 
@@ -46,6 +59,7 @@ class RedPlayerTrainingDataset:
     excluded_zero_input: int
     episode_manifest_sha256: str
     plan_sha256: str
+    curriculum_examples: tuple[LivingDexCurriculumOutcomeExample, ...] = ()
 
 
 def load_red_player_training_episode(
@@ -70,7 +84,8 @@ def load_red_player_training_episode(
         or plan.document["model_sha256"] != behavior_model.model_sha256
         or plan.document["behavior_policy_id"]
         != exploration_policy_id(
-            behavior_model.feature_version, legacy_restoration_preference=legacy_restoration,
+            behavior_model.feature_version,
+            legacy_restoration_preference=legacy_restoration,
         )
     ):
         raise ValueError("player training origin differs")
@@ -126,64 +141,139 @@ def load_red_player_training_episode(
     ):
         raise ValueError("player training partition differs")
     events: dict[str, Mapping[str, object]] = {}
+    curriculum_events: dict[str, Mapping[str, object]] = {}
     for event in reader.iter_stream("events"):
-        if event.get("kind") != TRAINING_EVENT:
+        is_curriculum = event.get("kind") == CURRICULUM_EVENT
+        if event.get("kind") not in {TRAINING_EVENT, CURRICULUM_EVENT}:
             continue
+        if is_curriculum and plan.document["schema"] != CURRICULUM_TRAINING_PLAN_SCHEMA:
+            raise ValueError("historical plan cannot admit curriculum outcomes")
         payload = _mapping(event.get("payload"))
         identity = payload.get("decision_id")
-        if not isinstance(identity, str) or identity in events:
+        if not isinstance(identity, str) or identity in events or identity in curriculum_events:
             raise ValueError("player training outcome is duplicated")
         if (
-            payload.get("schema") != TRAINING_EVENT_SCHEMA
+            payload.get("schema")
+            != (CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
             or payload.get("plan_sha256") != plan.plan_sha256
             or event.get("episode_id") != episode_id
         ):
             raise ValueError("player training outcome provenance differs")
-        events[identity] = payload
+        (curriculum_events if is_curriculum else events)[identity] = payload
         outcome_steps[identity] = event.get("step_index")
     policy = ExploringLivingDexGoalPolicy(
-        behavior_model, seed=cast(int, plan.document["seed"]),
+        behavior_model,
+        seed=cast(int, plan.document["seed"]),
         legacy_restoration_preference=legacy_restoration,
     )
     examples = []
+    curriculum_examples = []
     nonexploratory = zero_input = 0
     for decision in joined.examples:
+        row: LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample
         if decision.selection_mode is GoalSelectionMode.FORCED_SINGLETON:
             nonexploratory += 1
-            continue
-        selection = policy.select(decision.question)
-        expected_behavior = policy.selection_metadata()
-        if (
-            selection.selected_index != decision.selected_candidate_index
-            or tuple(cast(list[float], expected_behavior["candidate_probabilities"]))
-            != decision.behavior_candidate_probabilities
-            or expected_behavior["behavior_policy_id"] != decision.behavior_policy_id
-        ):
-            raise ValueError("recorded choice does not replay from its declared behavior")
-        if not policy.training_eligible:
-            nonexploratory += 1
-            continue
-        if decision.decision_id not in events:
-            raise ValueError("exploratory choice lacks its observed outcome")
-        payload = events.pop(decision.decision_id)
-        row = restore_living_dex_observed_arm_example(_mapping(payload.get("example")))
-        if (
-            row.menu != policy.last_menu
-            or row.behavior_probabilities != policy.option_probabilities
-            or payload.get("option_indices") != list(policy.last_menu_indices)
-            or row.selected_candidate_index
-            != policy.last_menu_indices.index(selection.selected_index)
-            or row.partition != "train"
-            or row.decision_sha256
-            != canonical_sha256(
-                {
-                    "decision_id": decision.decision_id,
-                    "plan_sha256": plan.plan_sha256,
-                    "question_sha256": decision.question.ordered_policy_input_sha256,
-                }
+            eligible_story = (
+                plan.document["schema"] == CURRICULUM_TRAINING_PLAN_SCHEMA
+                and decision.question.opportunities[decision.selected_candidate_index].kind
+                is GoalKind.ADVANCE_STORY
             )
-        ):
-            raise ValueError("player training menu or selected arm differs")
+            if not eligible_story:
+                continue
+            if (
+                decision.question.available_indices != (decision.selected_candidate_index,)
+                or decision.decision_id not in curriculum_events
+            ):
+                raise ValueError("curriculum story lacks its singleton observed outcome")
+            payload = curriculum_events.pop(decision.decision_id)
+            if (
+                payload.get("curriculum_contract") != STORY_CURRICULUM_CONTRACT
+                or type(payload.get("observation_failed")) is not bool
+                or decision.behavior_policy_id is not None
+                or decision.behavior_candidate_probabilities is not None
+                or set(payload)
+                != {
+                    "schema",
+                    "decision_id",
+                    "plan_sha256",
+                    "curriculum_contract",
+                    "observation_failed",
+                    "example",
+                    "before",
+                    "after",
+                    "actions",
+                    "frames",
+                    "maximum_actions",
+                    "maximum_frames",
+                    "has_controller_input",
+                    "start_step",
+                    "end_step",
+                }
+            ):
+                raise ValueError("curriculum contract differs")
+            candidate = project_living_dex_goal_candidate(
+                decision.question,
+                decision.selected_candidate_index,
+                feature_version=behavior_model.feature_version,
+                binding_ref="curriculum-executed-option",
+            )
+            assert candidate is not None
+            row = LivingDexCurriculumOutcomeExample(
+                canonical_sha256(
+                    {
+                        "decision_id": decision.decision_id,
+                        "plan_sha256": plan.plan_sha256,
+                        "question_sha256": decision.question.ordered_policy_input_sha256,
+                    }
+                ),
+                "train",
+                behavior_model.feature_version,
+                candidate.vector(
+                    living_dex_option_context_from_goal_situation(decision.question.situation),
+                    feature_version=behavior_model.feature_version,
+                ),
+                restore_living_dex_observed_outcome(
+                    _mapping(_mapping(payload.get("example")).get("outcome"))
+                ),
+            )
+            if canonical_sha256(row.public_dict()) != canonical_sha256(
+                _mapping(payload.get("example"))
+            ):
+                raise ValueError("curriculum features or example differ from executed story")
+        else:
+            selection = policy.select(decision.question)
+            expected_behavior = policy.selection_metadata()
+            if (
+                selection.selected_index != decision.selected_candidate_index
+                or tuple(cast(list[float], expected_behavior["candidate_probabilities"]))
+                != decision.behavior_candidate_probabilities
+                or expected_behavior["behavior_policy_id"] != decision.behavior_policy_id
+            ):
+                raise ValueError("recorded choice does not replay from its declared behavior")
+            if not policy.training_eligible:
+                nonexploratory += 1
+                continue
+            if decision.decision_id not in events:
+                raise ValueError("exploratory choice lacks its observed outcome")
+            payload = events.pop(decision.decision_id)
+            row = restore_living_dex_observed_arm_example(_mapping(payload.get("example")))
+            if (
+                row.menu != policy.last_menu
+                or row.behavior_probabilities != policy.option_probabilities
+                or payload.get("option_indices") != list(policy.last_menu_indices)
+                or row.selected_candidate_index
+                != policy.last_menu_indices.index(selection.selected_index)
+                or row.partition != "train"
+                or row.decision_sha256
+                != canonical_sha256(
+                    {
+                        "decision_id": decision.decision_id,
+                        "plan_sha256": plan.plan_sha256,
+                        "question_sha256": decision.question.ordered_policy_input_sha256,
+                    }
+                )
+            ):
+                raise ValueError("player training menu or selected arm differs")
         actions, frames = payload.get("actions"), payload.get("frames")
         if (
             type(actions) is not int
@@ -217,8 +307,15 @@ def load_red_player_training_episode(
                 LivingDexOutcomeStatus.CENSORED,
                 censor_reason=LivingDexCensorReason.EXTERNAL_INTERRUPTION,
             )
-            if payload.get("after") is not None:
+            if payload.get("after") is not None or payload.get("observation_failed", False):
                 raise ValueError("interrupted player choice has an invented after-state")
+        elif isinstance(row, LivingDexCurriculumOutcomeExample) and payload["observation_failed"]:
+            if payload.get("after") is not None:
+                raise ValueError("unreadable curriculum has an invented after-state")
+            expected = LivingDexObservedOutcome(
+                LivingDexOutcomeStatus.CENSORED,
+                censor_reason=LivingDexCensorReason.OBSERVATION_FAILED,
+            )
         else:
             expected = red_living_dex_outcome_from_observations(
                 _mapping(payload.get("before")),
@@ -233,9 +330,11 @@ def load_red_player_training_episode(
             raise ValueError("player training target does not match observed evidence")
         if actions == 0:
             zero_input += 1
+        elif isinstance(row, LivingDexCurriculumOutcomeExample):
+            curriculum_examples.append(row)
         else:
             examples.append(row)
-    if events:
+    if events or curriculum_events:
         raise ValueError("unselected or nonexploratory outcome was offered for training")
     return RedPlayerTrainingDataset(
         tuple(examples),
@@ -244,6 +343,7 @@ def load_red_player_training_episode(
         zero_input,
         reader.manifest_sha256,
         plan.plan_sha256,
+        tuple(curriculum_examples),
     )
 
 
@@ -258,6 +358,7 @@ def _require_continuation_origin(store: PrivateArtifactRoot, plan: RedPlayerTrai
     if plan.document["schema"] not in {
         CONTINUATION_TRAINING_PLAN_SCHEMA,
         COMPLETION_TRAINING_PLAN_SCHEMA,
+        CURRICULUM_TRAINING_PLAN_SCHEMA,
     }:
         return
     ancestor_id = cast(str, plan.document["continuation_episode_id"])

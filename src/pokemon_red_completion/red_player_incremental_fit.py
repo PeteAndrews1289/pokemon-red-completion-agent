@@ -183,9 +183,15 @@ def fit_incremental_goal_results(
             store, episode_id=episode_id, expected_manifest_sha256=reader.manifest_sha256,
             plan=plan, behavior_model=prior.model,
         )
-        if len(dataset.examples) != result["eligible_examples"]:
+        if (
+            len(dataset.examples) != result["eligible_examples"]
+            or type(result.get("curriculum_outcomes", 0)) is not int
+            or len(dataset.curriculum_examples) != result.get("curriculum_outcomes", 0)
+        ):
             raise ValueError("incremental native eligible count differs from recorded decisions")
-        expected_rows += len(dataset.examples)
+        expected_rows += sum(row.outcome.target_vector is not None for row in dataset.examples)
+        expected_rows += sum(row.outcome.target_vector is not None
+                             for row in dataset.curriculum_examples)
         added.append(RedPlayerEpisodeInput(plan, episode_id, reader.manifest_sha256, prior))
     if not expected_rows:
         return {

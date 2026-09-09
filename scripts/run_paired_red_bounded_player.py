@@ -334,7 +334,7 @@ def _player_observer(
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
     if world is not None and any(spec.parameters.get("trainer_objective")
-           in {"defeat_lorelei", "defeat_bruno"}
+           in {"defeat_lorelei", "defeat_bruno", "defeat_agatha"}
            for spec in runtime.profile.providers):
         runtime = replace(runtime, trainer_story_world=world)
     if type(remaining_acquisition_demand) is not bool:
@@ -599,6 +599,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--private-artifact-root", type=Path, required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
+    parser.add_argument(
+        "--story-outcome-curriculum", action="store_true",
+        help="Record forced story outcomes separately from choices (completion dose only).",
+    )
     return parser
 
 
@@ -984,6 +988,14 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             readiness,
             training_plan=declare_completion_dose(readiness.training_plan),
         )
+    if getattr(args, "story_outcome_curriculum", False):
+        from pokemon_red_completion.red_player_training_plan import declare_story_curriculum
+
+        if readiness.training_plan is None:
+            raise PairedRedBoundedPlayerRunError("curriculum_requires_training_plan")
+        readiness = replace(
+            readiness, training_plan=declare_story_curriculum(readiness.training_plan),
+        )
     return readiness
 
 
@@ -1042,7 +1054,8 @@ def _regional_profiles(
             isinstance(source, Path)
             or source.startswith("discovery:")
             or source in {"capture-status", "affordable-capture-supply", "cartridge-trainer-story",
-                          "cartridge-trainer-story:bruno", "affordable-field-restore",
+                          "cartridge-trainer-story:bruno", "cartridge-trainer-story:agatha",
+                          "affordable-field-restore",
                           "reserved-field-restore"}
         ):
             continue
@@ -1064,13 +1077,15 @@ def _regional_profiles(
             )
             result.append(profile)
             continue
-        if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno"}:
+        if source in {"cartridge-trainer-story", "cartridge-trainer-story:bruno",
+                      "cartridge-trainer-story:agatha"}:
             from pokemon_red_completion.red_goal_context_profile import (
                 bind_cartridge_trainer_story_profile,
             )
 
             profile = bind_cartridge_trainer_story_profile(
-                profile, objective_id=("defeat_bruno" if source.endswith(":bruno")
+                profile, objective_id=("defeat_agatha" if source.endswith(":agatha")
+                                       else "defeat_bruno" if source.endswith(":bruno")
                                        else "defeat_lorelei"),
             )
             result.append(profile)
@@ -1314,7 +1329,10 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     Reconstructing its terminal with legacy settings changes the semantic hash
     even when the emulator bytes and complete specimen ledger match exactly.
     """
-    from pokemon_red_completion.red_player_training_plan import COMPLETION_TRAINING_PLAN_SCHEMA
+    from pokemon_red_completion.red_player_training_plan import (
+        COMPLETION_TRAINING_PLAN_SCHEMA,
+        CURRICULUM_TRAINING_PLAN_SCHEMA,
+    )
 
     metadata = header.get("metadata")
     if isinstance(metadata, Mapping) and metadata.get("schema") in {
@@ -1330,7 +1348,9 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     if not isinstance(plan, Mapping):
         raise PairedRedBoundedPlayerRunError("continuation_parent_plan")
     parsed = RedPlayerTrainingPlan(plan)
-    return parsed.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
+    return parsed.document["schema"] in {
+        COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+    }
 
 
 def _continuation_header(readiness: _Readiness) -> dict[str, object]:
@@ -1787,6 +1807,8 @@ def _run_arm(
                     "training_plan_sha256": readiness.training_plan.plan_sha256,
                     "maximum_actions": limits.max_actions_per_decision,
                     "maximum_frames": limits.max_frames_per_decision,
+                    "curriculum_contract": readiness.training_plan.document.get(
+                        "curriculum_contract"),
                 }
             )
             if readiness.continuation is not None and not readiness.continuation_root_lineage_id:

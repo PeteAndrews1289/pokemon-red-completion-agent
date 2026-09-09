@@ -494,7 +494,7 @@ def _parse_parameters(
         if not row:
             return row
         _exact_keys(row, {"trainer_objective"})
-        if row["trainer_objective"] not in ("defeat_lorelei", "defeat_bruno"):
+        if row["trainer_objective"] not in ("defeat_lorelei", "defeat_bruno", "defeat_agatha"):
             raise RedGoalContextProfileError("cartridge story objective is not supported")
         return row
     if mechanic is RedGoalMechanic.FIELD_RESTORE and row:

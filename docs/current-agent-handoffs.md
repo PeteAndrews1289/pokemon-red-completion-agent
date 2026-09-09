@@ -1,5 +1,36 @@
 # Current agent handoffs
 
+## Current — prospective story outcomes can now teach the learner
+
+V5 adds a separately declared singleton-story outcome stream. It records actual
+executed features, progress and costs, with failures retained and unreadable or
+interrupted outcomes censored. No dummy alternatives, choice probabilities or
+historical support backfill. Mixed regression preserves existing choice weights
+and uses a disclosed unit curriculum weight. Counts and fingerprints stay separate.
+
+358 focused tests and targeted typing of11 changed modules pass. The actual
+model78 and its78-row corpus retain their exact hashes; no real fit or gameplay
+has occurred in this engineering slice. Current checkpoint remains0243af84,
+with30 specimens,11905 currency and the final Full Restore retained.
+
+Agatha is now an opt-in cartridge trainer objective. Its entrance walk supplies
+an exact settled warp coordinate under the existing supported Red revision pin.
+Unknown scripts fail closed; the general route executor was not relaxed.
+A reviewer exposed unchecked simulation-call semantics, now guarded by the
+revision check. This adapter still needs one live bounded qualification.
+
+Next: one V5 Agatha curriculum from0243af84/model78, preserving its actual
+outcome, followed by an authenticated fit if a settled row exists. A forced
+lesson is outcome learning, not model-selected victory. The income-to-story
+checklist remains2/3, Phase4 remains incomplete, and no transfer is claimed.
+
+Flash High supplied a24-second design advisory (not a source audit); response
+and conversation ID were saved durably. Its suggestions to change historic
+weights or assert ranking regret without unchosen outcomes were rejected.
+A read-only code reviewer found metadata, censoring and engine-call gaps that
+Codex repaired. Claude was not dispatched; fresh service quotas were unavailable.
+See [the curriculum contract](story-outcome-curriculum.md).
+
 ## Current — Lorelei recovered; return to genuine model choices
 
 Source8d9dcc06 completed one continuation from retained Lapras2e9:57actions/

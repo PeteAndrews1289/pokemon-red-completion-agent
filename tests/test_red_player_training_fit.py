@@ -26,13 +26,15 @@ def _prior(rows):
     return LivingDexGoalModelRecord(model, "a" * 64, "b" * 40, "c" * 64, 1, 1)
 
 
-def _fit(tmp_path, monkeypatch, *, failure=False, history=False, optional_recovery=False):
+def _fit(tmp_path, monkeypatch, *, failure=False, history=False, optional_recovery=False,
+         forced_story=False, plan_transform=None):
     store, plan, behavior, completed = _episode(
         tmp_path,
         status=GoalDecisionOutcome.FAILED if failure else GoalDecisionOutcome.SUCCEEDED,
         return_inputs=True,
         history=history,
         optional_recovery=optional_recovery,
+        forced_story=forced_story, plan_transform=plan_transform,
     )
     rows = tuple(
         _example(

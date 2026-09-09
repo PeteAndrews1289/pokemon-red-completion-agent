@@ -151,7 +151,9 @@ def test_native_fit_preserves_support_and_native_authority_without_source_credit
     def load(_store, **kwargs):
         assert kwargs['behavior_model'] is prior.model
         admitted.append(kwargs['episode_id'])
-        return SimpleNamespace(examples=() if kwargs['episode_id'] == 'support' else (object(),))
+        return SimpleNamespace(curriculum_examples=(), examples=()
+            if kwargs['episode_id'] == 'support'
+            else (SimpleNamespace(outcome=SimpleNamespace(target_vector=(1.0,))),))
     monkeypatch.setattr(incremental, 'load_red_player_training_episode', load)
     def fit(_store, **kwargs):
         assert [e.episode_id for e in kwargs['episodes']] == [
@@ -172,7 +174,7 @@ def test_support_alone_is_authenticated_but_not_fitted(tmp_path, monkeypatch):
     calls = []
     def load(*_a, **kw):
         calls.append(kw['episode_id'])
-        return SimpleNamespace(examples=())
+        return SimpleNamespace(examples=(), curriculum_examples=())
     monkeypatch.setattr(incremental, 'load_red_player_training_episode', load)
     monkeypatch.setattr(incremental, 'fit_red_player_update',
                         lambda *_a, **_k: pytest.fail('support cannot fit'))
@@ -198,8 +200,9 @@ def test_native_fit_authenticates_counts_and_prevents_duplicate_or_source_credit
         store.open_episode = lambda _: SimpleNamespace(manifest_sha256='a'*64,
             read_header=lambda: {'metadata': {'regional_choice_record_sha256': 'b'*64}})
     monkeypatch.setattr(incremental, 'load_red_player_training_episode',
-                        lambda *_a, **_k: SimpleNamespace(examples=() if damage == 'count'
-                                                           else (object(),)))
+                        lambda *_a, **_k: SimpleNamespace(curriculum_examples=(),
+                            examples=() if damage == 'count'
+                            else (SimpleNamespace(outcome=SimpleNamespace(target_vector=(1.0,))),)))
     monkeypatch.setattr(incremental, 'fit_red_player_update',
                         lambda *_a, **_k: pytest.fail('invalid evidence cannot fit'))
     with pytest.raises(ValueError):

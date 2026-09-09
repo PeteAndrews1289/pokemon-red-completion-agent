@@ -143,6 +143,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "candidate_count": len(candidates),
         "parent_episode": parent,
         "eligible_examples": len(dataset.examples),
+        "curriculum_outcomes": len(dataset.curriculum_examples),
         "eligible_source_examples": 0,
         "source_proposal_fitted": False,
         "source_acquisition_attempted": effort is not None,

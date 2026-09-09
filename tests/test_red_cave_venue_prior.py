@@ -314,7 +314,10 @@ def test_working_runtime_drift_cannot_masquerade_as_measured_cave_source() -> No
     # current runtime, so the old byte-identity attestation must no longer be
     # treated as current-source authority.  Any further drift requires an
     # explicit review here rather than silently inheriting the old result.
+    # 8d9dcc06 also refreshed the observation used to diagnose a final PP-gate
+    # timeout in battle_runtime. It does not restore historical byte identity.
     assert drifted == (
+        "src/pokemon_red_completion/battle_runtime.py",
         "src/pokemon_red_completion/blaine.py",
         "src/pokemon_red_completion/emulator.py",
         "src/pokemon_red_completion/executor.py",

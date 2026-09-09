@@ -80,14 +80,23 @@ def fit_red_player_update(
     regional_rows = tuple(
         load_red_regional_choice_example(store, item) for item in regional_choices
     )
+    curriculum = tuple(row for dataset in datasets for row in dataset.curriculum_examples)
     rows = (*base, *(row for dataset in datasets for row in dataset.examples), *regional_rows)
-    hashes = tuple(sorted(canonical_sha256(row.public_dict()) for row in rows))
+    hashes = tuple(
+        sorted(
+            [canonical_sha256(row.public_dict()) for row in rows]
+            + [canonical_sha256(row.public_dict()) for row in curriculum]
+        )
+    )
     if isinstance(prior, RedPlayerModelRecord):
         if not set(prior.retained_example_sha256).issubset(hashes):
             raise ValueError("native training would discard or rewrite prior rows")
     elif living_dex_option_train_dataset_sha256(base) != prior.model.train_dataset_sha256:
         raise ValueError("historical corpus does not match the starting model")
-    if sum(row.outcome.target_vector is not None for row in rows) <= prior.model.settled_examples:
+    settled_count = sum(row.outcome.target_vector is not None for row in rows) + sum(
+        row.outcome.target_vector is not None for row in curriculum
+    )
+    if settled_count <= prior.model.settled_examples:
         raise ValueError("native training has no additional settled experience")
     corpus = {
         "schema": "pokemon.red.native-player-corpus.v1",
@@ -108,6 +117,10 @@ def fit_red_player_update(
         "independent_evaluation": False,
     }
     corpus_sha = canonical_sha256(corpus)
+    if curriculum:
+        corpus["curriculum_examples"] = [row.public_dict() for row in curriculum]
+        corpus["curriculum_contract"] = "forced-singleton-story-outcome-unit-weight-v1"
+        corpus_sha = canonical_sha256(corpus)
     if regional_choices:
         corpus["regional_choices"] = [
             {
@@ -122,8 +135,14 @@ def fit_red_player_update(
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
-    feature_version = max(prior.model.feature_version, *(row.menu.feature_version for row in rows))
-    fit = fit_living_dex_option_value(rows, feature_version=feature_version)
+    feature_version = max(
+        prior.model.feature_version,
+        *(row.menu.feature_version for row in rows),
+        *(row.feature_version for row in curriculum),
+    )
+    fit = fit_living_dex_option_value(
+        rows, feature_version=feature_version, curriculum_examples=curriculum
+    )
     baseline_model = (
         upgrade_option_value_model_for_optional_recovery(prior.model)
         if feature_version == 3
@@ -131,8 +150,12 @@ def fit_red_player_update(
         if feature_version == 2
         else prior.model
     )
-    prior_error = evaluate_living_dex_option_value(baseline_model, rows, expected_partition="train")
-    updated_error = evaluate_living_dex_option_value(fit.model, rows, expected_partition="train")
+    prior_error = evaluate_living_dex_option_value(
+        baseline_model, rows, expected_partition="train", curriculum_examples=curriculum
+    )
+    updated_error = evaluate_living_dex_option_value(
+        fit.model, rows, expected_partition="train", curriculum_examples=curriculum
+    )
     document = {
         "schema": PLAYER_MODEL_SCHEMA,
         "authority": "bounded_development_only",
@@ -164,6 +187,15 @@ def fit_red_player_update(
         "prior_rows_retained": True,
         "controller_actions": 0,
         "authority_promotions": 0,
+        **(
+            {
+                "curriculum_outcomes": len(curriculum),
+                "comparative_choice_outcomes": len(rows),
+                "curriculum_is_comparative_evidence": False,
+            }
+            if curriculum
+            else {}
+        ),
         **({"regional_source_examples": len(regional_rows)} if regional_choices else {}),
     }
 

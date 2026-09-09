@@ -33,13 +33,13 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim.
+- Next decision: Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Finite-resource readiness qualified and Bruno defeated from the retained room state. One scripted-arrival failure remains recorded. Same fixed trainer skill, no broad route-drift relaxation. |
+| Reusable capability | Prospective story-outcome recording and mixed regression qualified in ROM-free tests; exact revision-bound Agatha arrival added. Live Agatha and the first real curriculum fit remain pending. |
 | Authority now | Model78 unchanged:78 fitted outcomes,36 successful,68 distinct rows. Bruno victory is deterministic support; zero new fits or learned choices.30 specimens /28 living /33 registered;11905 currency;one Full Restore. |
 | Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
 | Transfer test | This continuation is same-lineage Red integration, not independent generalization. Establish sustained Red goal/collection competence, then compare Red-trained initialization with an otherwise identical untrained learner on a compatible unfamiliar Red modification before Crystal. Report initial performance and adaptation separately; interface compatibility is not a replacement walkthrough. Unsupported mechanics remain explicit abstentions. |
@@ -62,19 +62,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-bruno-support** · status **active** · evidence [development episode](docs/evidence/red-bruno-support-2026-09-09.json)
+**2026-09-09-story-curriculum** · status **active** · evidence [qualification](docs/evidence/red-story-curriculum-qualification-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Demonstrated resource-conserving story execution needed to supply story experience; fixed support is not learned mastery. |
-| Learning output | Zero new training examples or fits. One failed arrival at6 actions/300 frames, then one successful Bruno continuation at177 actions/17137 frames;5742 earned, no items spent. |
-| Authority delta | None. Both attempts were forced singleton support. Model78 and historical choice labels unchanged. |
-| Transfer result | Same-lineage Red only.249 focused tests cover reserve and integration boundaries; no independent advantage or transfer. |
-| Blocker | Bruno is complete, but current native skill does not cover Agatha. Scripted warp displacement still fails closed. Current choice-fit pipeline excludes forced support and has sparse story data. |
-| Decision | Close the two-attempt session. Prioritize prospective story-outcome training admission before more support-only bosses; no broad controller rewrite. |
-| Next session | Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim. |
+| Product alignment | Makes actual story experience available to the outcome learner while retaining honest choice authority and the cross-title living-collection mission. |
+| Learning output | Zero new real rows or fits during implementation. Model78 and its78 retained rows deserialize with unchanged model and dataset hashes. |
+| Authority delta | Outcome learning now supports prospectively declared forced story executions, separately from comparative choices. No live example, model update or authority promotion yet. |
+| Transfer result | ROM-free varied-script and outcome tests only; known-training Red continuation remains correlated, not transfer. |
+| Blocker | First real curriculum execution and subsequent useful model choice are unmeasured. The Agatha adapter and scripted arrival have not run live. |
+| Decision | Proceed from engineering qualification to one bounded prospective Agatha curriculum; do not replay Bruno or relabel old support. |
+| Next session | Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run. |
 | Next falsifier | Can the next prospective curriculum produce a truthful story-outcome learning signal and a subsequent useful choice, without calling deterministic support comparative policy competence? |
-| Stop condition | Stop after one prospectively scoped learning result or named blocker. No consumed replay, retroactive support-to-choice relabeling, automatic successor or inventory reset. |
+| Stop condition | Stop each attempt on its outcome or named blocker and retain the exact state; reassess before any successor. No consumed retry or inventory reset. |
 
 ### Stop conditions
 

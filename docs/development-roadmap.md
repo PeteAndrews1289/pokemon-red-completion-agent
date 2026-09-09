@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v1**. Reviewed through **2026-09-09-bruno-support**.
+Baseline: **red-first-v1**. Reviewed through **2026-09-09-story-curriculum**.
 
 A learned player that finishes Pokemon games and builds a living Pokedex across versions and generations.
 
@@ -93,6 +93,14 @@ Carry competence and specimen lineage into later mainline games.
 Legitimate trades and events, special puzzles and unsupported mechanics remain visible dependencies.
 
 ## Session reviews
+
+### 2026-09-09-story-curriculum
+
+Prospective singleton-story outcome recording, admission and unit-weight regression qualified; model78/hash and all78 prior outcomes unchanged.358 focused tests pass. Agatha and exact revision-bound entry are implemented but not live-tested. Income-to-story remains2/3.
+
+**Deviation:** Added a separate curriculum-outcome stream, not forced-choice labels or retrospective support backfill. Narrow cartridge entry qualification preserves ordinary route-drift rejection. No stage-exit changes.
+
+**Next:** Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run.
 
 ### 2026-09-09-bruno-support
 

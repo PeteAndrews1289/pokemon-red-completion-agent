@@ -707,6 +707,49 @@ class LivingDexObservedArmExample:
 
 
 @dataclass(frozen=True, slots=True)
+class LivingDexCurriculumOutcomeExample:
+    """One observed execution, not a choice or an importance-weighted arm.
+
+    Features are the same portable candidate vector used at inference. Admission
+    must reconstruct them from a prospectively recorded semantic question.
+    """
+
+    decision_sha256: str
+    partition: str
+    feature_version: int
+    features: tuple[float, ...]
+    outcome: LivingDexObservedOutcome
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.decision_sha256, str)
+            or _SHA256.fullmatch(self.decision_sha256) is None
+            or self.partition != "train"
+            or type(self.feature_version) is not int
+            or not isinstance(self.features, tuple)
+            or len(self.features) != len(option_feature_names(self.feature_version))
+            or any(
+                type(value) not in (int, float) or not math.isfinite(value)
+                for value in self.features
+            )
+            or not isinstance(self.outcome, LivingDexObservedOutcome)
+        ):
+            raise LivingDexOptionValueError("curriculum outcome example differs")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.core.living-dex-curriculum-outcome.v1",
+            "decision_sha256": self.decision_sha256,
+            "partition": self.partition,
+            "feature_version": self.feature_version,
+            "features": list(self.features),
+            "outcome": self.outcome.public_dict(),
+            "regression_weight": 1.0,
+            "comparative_choice": False,
+        }
+
+
+@dataclass(frozen=True, slots=True)
 class LivingDexPredictedOutcome:
     verified_success: float
     completion_gain: float
@@ -807,8 +850,14 @@ class LivingDexOptionValueModel:
     ridge: float
     maximum_importance_weight: float
     feature_version: int = 1
+    objective: str = LIVING_DEX_OPTION_OBJECTIVE
 
     def __post_init__(self) -> None:
+        if self.objective not in {
+            LIVING_DEX_OPTION_OBJECTIVE,
+            "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+        }:
+            raise LivingDexOptionValueError("living-Dex regression objective differs")
         width = len(option_feature_names(self.feature_version))
         targets = len(LIVING_DEX_OPTION_OUTCOME_NAMES)
         arrays = tuple(
@@ -920,7 +969,7 @@ class LivingDexOptionValueModel:
                 if self.feature_version == 1
                 else f"pokemon.core.living-dex-option-normalization.v{self.feature_version}"
             ),
-            "objective": LIVING_DEX_OPTION_OBJECTIVE,
+            "objective": self.objective,
             "outcome_names": list(LIVING_DEX_OPTION_OUTCOME_NAMES),
             "ridge": self.ridge,
             "schema": (
@@ -973,7 +1022,11 @@ class LivingDexOptionValueModel:
                 if version == 1
                 else f"pokemon.core.living-dex-option-value-model.v{version}"
             )
-            or value.get("objective") != LIVING_DEX_OPTION_OBJECTIVE
+            or value.get("objective")
+            not in {
+                LIVING_DEX_OPTION_OBJECTIVE,
+                "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+            }
             or value.get("normalization")
             != (
                 LIVING_DEX_OPTION_NORMALIZATION
@@ -1005,6 +1058,7 @@ class LivingDexOptionValueModel:
                 ridge=float(ridge),
                 maximum_importance_weight=float(maximum_importance_weight),
                 feature_version=version,
+                objective=str(value["objective"]),
             )
         except (KeyError, TypeError, ValueError):
             raise LivingDexOptionValueError("living-Dex model document is invalid") from None
@@ -1125,6 +1179,8 @@ def upgrade_option_value_model_for_optional_recovery(
 
 def living_dex_option_train_dataset_sha256(
     examples: Iterable[LivingDexObservedArmExample],
+    *,
+    curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample] = (),
 ) -> str:
     """Return the order-independent identity used by the option-value fitter.
 
@@ -1139,6 +1195,16 @@ def living_dex_option_train_dataset_sha256(
             key=lambda row: row.decision_sha256,
         )
     )
+    curriculum = _validated_curriculum(curriculum_examples, rows)
+    if curriculum:
+        return canonical_sha256(
+            {
+                "schema": "pokemon.core.living-dex-mixed-outcome-train-dataset.v1",
+                "choices": [row.public_dict() for row in rows],
+                "curriculum": [row.public_dict() for row in curriculum],
+                "curriculum_regression_weight": 1.0,
+            }
+        )
     return canonical_sha256(
         {
             "rows": [row.public_dict() for row in rows],
@@ -1153,6 +1219,7 @@ def fit_living_dex_option_value(
     ridge: float = DEFAULT_OPTION_VALUE_RIDGE,
     maximum_importance_weight: float = DEFAULT_MAX_IMPORTANCE_WEIGHT,
     feature_version: int = 1,
+    curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample] = (),
 ) -> LivingDexOptionValueFit:
     """Fit all outcome heads using only settled selected-arm train evidence."""
 
@@ -1169,18 +1236,29 @@ def fit_living_dex_option_value(
             key=lambda row: row.decision_sha256,
         )
     )
-    settled = tuple(row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
+    curriculum = _validated_curriculum(curriculum_examples, rows)
+    combined: tuple[LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample, ...] = (
+        *rows,
+        *curriculum,
+    )
+    settled = tuple(row for row in combined if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
     if len(settled) < 2:
         raise LivingDexOptionValueError(
             "living-Dex option fit needs two settled selected-arm examples"
         )
-    dataset_sha256 = living_dex_option_train_dataset_sha256(rows)
+    dataset_sha256 = living_dex_option_train_dataset_sha256(rows, curriculum_examples=curriculum)
     option_feature_names(feature_version)
     if any(row.menu.feature_version > feature_version for row in rows):
         raise LivingDexOptionValueError("legacy fitter cannot ignore search history")
+    if any(row.feature_version != feature_version for row in curriculum):
+        raise LivingDexOptionValueError("curriculum feature version differs from fitter")
     features = np.asarray(
         [
-            row.menu.candidate_vector(row.selected_candidate_index, feature_version=feature_version)
+            row.features
+            if isinstance(row, LivingDexCurriculumOutcomeExample)
+            else row.menu.candidate_vector(
+                row.selected_candidate_index, feature_version=feature_version
+            )
             for row in settled
         ],
         dtype=np.float64,
@@ -1190,7 +1268,12 @@ def fit_living_dex_option_value(
         dtype=np.float64,
     )
     weights = np.asarray(
-        [row.importance_weight(cap) for row in settled],
+        [
+            1.0
+            if isinstance(row, LivingDexCurriculumOutcomeExample)
+            else row.importance_weight(cap)
+            for row in settled
+        ],
         dtype=np.float64,
     )
     mean = np.average(features, axis=0, weights=weights)
@@ -1221,16 +1304,21 @@ def fit_living_dex_option_value(
         feature_scale=scale,
         train_dataset_sha256=dataset_sha256,
         settled_examples=len(settled),
-        censored_examples=len(rows) - len(settled),
+        censored_examples=len(combined) - len(settled),
         ridge=ridge_value,
         maximum_importance_weight=cap,
         feature_version=feature_version,
+        objective=(
+            "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1"
+            if curriculum
+            else LIVING_DEX_OPTION_OBJECTIVE
+        ),
     )
     report = LivingDexOptionValueFitReport(
         train_dataset_sha256=dataset_sha256,
-        total_examples=len(rows),
+        total_examples=len(combined),
         settled_examples=len(settled),
-        censored_examples=len(rows) - len(settled),
+        censored_examples=len(combined) - len(settled),
         successful_examples=sum(bool(row.outcome.verified_success) for row in settled),
         distinct_selected_feature_rows=len({tuple(row) for row in features}),
         weighted_mse_before=before,
@@ -1245,13 +1333,24 @@ def evaluate_living_dex_option_value(
     examples: Iterable[LivingDexObservedArmExample],
     *,
     expected_partition: str = "development",
+    curriculum_examples: Iterable[LivingDexCurriculumOutcomeExample] = (),
 ) -> LivingDexOptionValueEvaluation:
     """Measure selected-arm prediction error without producing policy-quality claims."""
 
     if not isinstance(model, LivingDexOptionValueModel):
         raise TypeError("model must be a LivingDexOptionValueModel")
     rows = _validated_examples(examples, expected_partition=expected_partition)
-    settled = tuple(row for row in rows if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
+    curriculum = _validated_curriculum(curriculum_examples, rows)
+    if curriculum and (
+        expected_partition != "train"
+        or any(row.feature_version != model.feature_version for row in curriculum)
+    ):
+        raise LivingDexOptionValueError("curriculum is training-only with exact feature version")
+    combined: tuple[LivingDexObservedArmExample | LivingDexCurriculumOutcomeExample, ...] = (
+        *rows,
+        *curriculum,
+    )
+    settled = tuple(row for row in combined if row.outcome.status is LivingDexOutcomeStatus.SETTLED)
     if not settled:
         raise LivingDexOptionValueError("living-Dex evaluation has no settled outcomes")
     targets = np.asarray(
@@ -1260,7 +1359,18 @@ def evaluate_living_dex_option_value(
     )
     predictions = np.asarray(
         [
-            model.predict_candidate(
+            tuple(
+                float(value)
+                for value in np.clip(
+                    model.intercept
+                    + ((np.asarray(row.features) - model.feature_mean) / model.feature_scale)
+                    @ model.coefficients,
+                    0.0,
+                    1.0,
+                )
+            )
+            if isinstance(row, LivingDexCurriculumOutcomeExample)
+            else model.predict_candidate(
                 row.menu.context,
                 row.menu.candidates[row.selected_candidate_index],
             ).vector()
@@ -1269,7 +1379,12 @@ def evaluate_living_dex_option_value(
         dtype=np.float64,
     )
     weights = np.asarray(
-        [row.importance_weight(model.maximum_importance_weight) for row in settled],
+        [
+            1.0
+            if isinstance(row, LivingDexCurriculumOutcomeExample)
+            else row.importance_weight(model.maximum_importance_weight)
+            for row in settled
+        ],
         dtype=np.float64,
     )
     squared = (targets - predictions) ** 2
@@ -1278,12 +1393,25 @@ def evaluate_living_dex_option_value(
     )
     return LivingDexOptionValueEvaluation(
         partition=expected_partition,
-        total_examples=len(rows),
+        total_examples=len(combined),
         settled_examples=len(settled),
-        censored_examples=len(rows) - len(settled),
+        censored_examples=len(combined) - len(settled),
         weighted_mse=sum(per_outcome) / len(per_outcome),
         per_outcome_weighted_mse=per_outcome,
     )
+
+
+def _validated_curriculum(
+    examples: Iterable[LivingDexCurriculumOutcomeExample],
+    choices: tuple[LivingDexObservedArmExample, ...],
+) -> tuple[LivingDexCurriculumOutcomeExample, ...]:
+    rows = tuple(examples)
+    if any(not isinstance(row, LivingDexCurriculumOutcomeExample) for row in rows):
+        raise TypeError("curriculum evidence rows differ")
+    identities = [row.decision_sha256 for row in choices] + [row.decision_sha256 for row in rows]
+    if len(set(identities)) != len(identities):
+        raise LivingDexOptionValueError("choice and curriculum decision identities repeat")
+    return tuple(sorted(rows, key=lambda row: row.decision_sha256))
 
 
 def _validated_examples(

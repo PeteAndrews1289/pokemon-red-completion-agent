@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v1",
-  "as_of_session": "2026-09-09-bruno-support",
+  "as_of_session": "2026-09-09-story-curriculum",
   "current_stage": "red-story",
   "stages": {
     "foundation": {
@@ -414,6 +414,12 @@
       "result": "Bruno defeated from audited room endpoint:177 actions/17137 frames;5742 earned; all30 specimens and final Full Restore preserved. Model78 unchanged;zero fit labels.",
       "deviation": "After retained doorway drift failure(6 actions/300 frames), reviewed safe arrival and declared one current-room continuation. No rollback or guard weakening. Current-room story/readiness earns item2; scripted cross-map arrival remains unqualified. No stage exit changed.",
       "next": "Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim."
+    },
+    {
+      "session": "2026-09-09-story-curriculum",
+      "result": "Prospective singleton-story outcome recording, admission and unit-weight regression qualified; model78/hash and all78 prior outcomes unchanged.358 focused tests pass. Agatha and exact revision-bound entry are implemented but not live-tested. Income-to-story remains2/3.",
+      "deviation": "Added a separate curriculum-outcome stream, not forced-choice labels or retrospective support backfill. Narrow cartridge entry qualification preserves ordinary route-drift rejection. No stage-exit changes.",
+      "next": "Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run."
     }
   ],
   "closed_milestones": [

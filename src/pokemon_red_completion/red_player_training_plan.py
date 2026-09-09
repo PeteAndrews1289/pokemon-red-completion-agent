@@ -28,6 +28,8 @@ from pokemon_red_completion.provenance import canonical_sha256
 TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v2"
 CONTINUATION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v3"
 COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
+CURRICULUM_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v5"
+STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
 
@@ -38,7 +40,8 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        completion = document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
+        curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
+        completion = curriculum or document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
         continuation = completion or document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
         if (
             document.get("schema")
@@ -46,6 +49,7 @@ class RedPlayerTrainingPlan:
                 TRAINING_PLAN_SCHEMA,
                 CONTINUATION_TRAINING_PLAN_SCHEMA,
                 COMPLETION_TRAINING_PLAN_SCHEMA,
+                CURRICULUM_TRAINING_PLAN_SCHEMA,
             }
             or document.get("partition") != "train"
         ):
@@ -92,6 +96,10 @@ class RedPlayerTrainingPlan:
                 or document["maximum_frames"] != COMPLETION_FRAMES
             ):
                 raise ValueError("completion training dose differs")
+        if curriculum:
+            expected_fields.add("curriculum_contract")
+            if document.get("curriculum_contract") != STORY_CURRICULUM_CONTRACT:
+                raise ValueError("curriculum training contract differs")
         if set(document) != expected_fields:
             raise ValueError("player training declaration fields differ")
         if any(
@@ -142,7 +150,9 @@ class RedPlayerTrainingPlan:
     def maximum_actions(self) -> int:
         return (
             COMPLETION_ACTIONS
-            if self.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
+            if self.document["schema"] in {
+                COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+            }
             else 6000
         )
 
@@ -150,9 +160,21 @@ class RedPlayerTrainingPlan:
     def maximum_frames(self) -> int:
         return (
             COMPLETION_FRAMES
-            if self.document["schema"] == COMPLETION_TRAINING_PLAN_SCHEMA
+            if self.document["schema"] in {
+                COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
+            }
             else 600000
         )
+
+
+def declare_story_curriculum(plan: RedPlayerTrainingPlan) -> RedPlayerTrainingPlan:
+    """Opt in before execution; existing V2/V3/V4 declarations remain unchanged."""
+    if plan.document["schema"] != COMPLETION_TRAINING_PLAN_SCHEMA:
+        raise ValueError("story curriculum requires a completion-dose continuation")
+    return RedPlayerTrainingPlan({
+        **plan.document, "schema": CURRICULUM_TRAINING_PLAN_SCHEMA,
+        "curriculum_contract": STORY_CURRICULUM_CONTRACT,
+    })
 
 
 def declare_completion_dose(plan: RedPlayerTrainingPlan) -> RedPlayerTrainingPlan:

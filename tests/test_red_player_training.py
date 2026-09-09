@@ -97,6 +97,9 @@ def _episode(
     plan_profile_sha=None,
     before_episode=None,
     optional_recovery=False,
+    plan_transform=None,
+    forced_story=False,
+    unreadable_after=False,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -107,6 +110,8 @@ def _episode(
         model = upgrade_option_value_model_for_optional_recovery(model)
     policy = ExploringLivingDexGoalPolicy(model, seed=17)
     plan = _plan(policy.model)
+    if plan_transform is not None:
+        plan = plan_transform(store, plan)
     if acquire_only:
         plan = RedPlayerTrainingPlan(
             {**plan.document, "decision_limit": 1, "profile_sha256": plan_profile_sha}
@@ -147,6 +152,12 @@ def _episode(
     sink.write_episode_header(metadata=metadata)
     counter = {"actions": 0, "frames": 0}
     source = _quoted_question(_quote())
+    if forced_story:
+        from pokemon_red_completion.goal_manager import GoalUnavailableReason
+        source = replace(source, opportunities=(GoalOpportunity(
+            "story", GoalKind.ADVANCE_STORY, GoalAvailability.AVAILABLE, 0.2, 0.1,
+        ), GoalOpportunity("unavailable", GoalKind.ACQUIRE_SPECIES, GoalAvailability.UNAVAILABLE,
+                           None, None, GoalUnavailableReason.MISSING_RESOURCE)))
     if acquire_only:
         source = replace(
             source,
@@ -171,7 +182,7 @@ def _episode(
                 for item in source.opportunities
             ),
         )
-    if unsupported_restore or optional_recovery:
+    if not forced_story and (unsupported_restore or optional_recovery):
         source = replace(
             source,
             opportunities=(
@@ -195,18 +206,32 @@ def _episode(
         training_plan_sha256=plan.plan_sha256,
         training_meter=_Meter(counter),
         observe_training=lambda: SimpleNamespace(public_dict=lambda: deepcopy(facts[0])),
+        maximum_actions=plan.maximum_actions,
+        maximum_frames=plan.maximum_frames,
+        curriculum_contract=plan.document.get("curriculum_contract"),
     )
     question = trajectory.ordered_question(source.situation, source.opportunities)
-    selected = policy.select(question)
-    pending = trajectory.record_selection(
-        question, selected.selected_index, behavior_policy=policy.selection_metadata()
-    )
+    if forced_story:
+        from pokemon_red_completion.goal_manager import GoalSelectionMode
+        pending = trajectory.record_selection(
+            question, question.available_indices[0],
+            selection_mode=GoalSelectionMode.FORCED_SINGLETON,
+        )
+        assert policy.decisions == 0
+    else:
+        selected = policy.select(question)
+        pending = trajectory.record_selection(
+            question, selected.selected_index, behavior_policy=policy.selection_metadata()
+        )
     # There is no target before execution.
     assert trajectory.pending_was_recorded and counter == {"actions": 0, "frames": 0}
     if not zero:
         recorder.execute({"kind": "bounded-specialist-work"})
         counter.update(actions=1, frames=60)
     facts[0] = _facts(question, registered=2, balls=9)
+    if forced_story:
+        facts[0] = _facts(question, registered=1, balls=10)
+        facts[0]["story"]["completed"] = 3 if status is GoalDecisionOutcome.SUCCEEDED else 2
     reason = (
         None
         if status is GoalDecisionOutcome.SUCCEEDED
@@ -214,6 +239,10 @@ def _episode(
         if status is GoalDecisionOutcome.INTERRUPTED
         else GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED
     )
+    if unreadable_after:
+        def unreadable():
+            raise RuntimeError("observation unavailable")
+        trajectory.observe_training = unreadable
     trajectory.record_outcome(pending, status=status, failure_reason=reason)
     sink.record_event(
         SparseEvent(

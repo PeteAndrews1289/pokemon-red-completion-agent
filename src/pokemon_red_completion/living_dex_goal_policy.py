@@ -27,7 +27,6 @@ from enum import StrEnum
 
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
-    GoalAvailability,
     GoalKind,
     GoalManagerQuestion,
     bind_goal_selection,
@@ -88,6 +87,34 @@ DEFAULT_LIVING_DEX_GOAL_UTILITY = LivingDexOptionUtility(
     storage_cost_weight=0.50,
     irreversible_loss_weight=4.0,
 )
+
+
+def project_living_dex_goal_candidate(
+    question: GoalManagerQuestion, index: int, *, feature_version: int,
+    binding_ref: str,
+) -> LivingDexOptionCandidate | None:
+    """Project one executable semantic option without scoring it or inventing a menu."""
+    if type(index) is not int or index not in question.available_indices:
+        raise LivingDexGoalPolicyError("projected goal is unavailable")
+    opportunity = question.opportunities[index]
+    option_kind = _OPTION_BY_GOAL.get(opportunity.kind)
+    if opportunity.kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
+        option_kind = LivingDexOptionKind.RESTORE
+    if option_kind is None:
+        return None
+    if opportunity.estimated_effort is None or opportunity.estimated_risk is None:
+        raise LivingDexGoalPolicyError("available goal lacks bounded estimates")
+    return LivingDexOptionCandidate(
+        binding_ref=binding_ref,
+        features=red_living_dex_setup_candidate_features(
+            option_kind, route_controller_actions=0, maximum_controller_actions=1,
+            estimated_effort=opportunity.estimated_effort,
+            estimated_risk=opportunity.estimated_risk,
+            storage_unit=question.situation.storage_pressure,
+        ),
+        availability=LivingDexOptionAvailability.AVAILABLE,
+        search_history=opportunity.search_history,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -289,38 +316,17 @@ class LivingDexGoalShadowPolicy:
         context = living_dex_option_context_from_goal_situation(question.situation)
         for index in question.available_indices:
             opportunity = question.opportunities[index]
-            option_kind = _OPTION_BY_GOAL.get(opportunity.kind)
-            if opportunity.kind is GoalKind.RESTORE_TEAM and self.model.feature_version >= 3:
-                option_kind = LivingDexOptionKind.RESTORE
-            if option_kind is None:
-                continue
-            if (
-                opportunity.availability is not GoalAvailability.AVAILABLE
-                or opportunity.estimated_effort is None
-                or opportunity.estimated_risk is None
-            ):
-                raise LivingDexGoalPolicyError("available goal lacks bounded estimates")
-            features = red_living_dex_setup_candidate_features(
-                option_kind,
-                # The goal-manager boundary has a bounded aggregate effort but
-                # no separately measured route.  Do not invent route actions or
-                # double-charge the aggregate estimate in shadow scoring.
-                route_controller_actions=0,
-                maximum_controller_actions=1,
-                estimated_effort=opportunity.estimated_effort,
-                estimated_risk=opportunity.estimated_risk,
-                storage_unit=question.situation.storage_pressure,
+            candidate = project_living_dex_goal_candidate(
+                question, index, feature_version=self.model.feature_version,
+                binding_ref=f"policy-row-{len(projected)}",
             )
+            if candidate is None:
+                continue
             projected.append(
                 (
                     index,
                     opportunity.kind,
-                    LivingDexOptionCandidate(
-                        binding_ref=f"policy-row-{len(projected)}",
-                        features=features,
-                        availability=LivingDexOptionAvailability.AVAILABLE,
-                        search_history=opportunity.search_history,
-                    ),
+                    candidate,
                 )
             )
         if len(projected) < 2:

@@ -7,7 +7,7 @@ No availability claim is made outside the explicitly supported entry region.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
 from .battle_runtime import (
@@ -18,6 +18,7 @@ from .battle_runtime import (
 )
 from .domain import GameState
 from .executor import CountingExecutor
+from .gen1_cartridge import CartridgeReadError
 from .gen1_route_runtime import Gen1TraversalObserver
 from .gen1_trainer_parties import trainer_party_quote
 from .gen1_trainer_sight import (
@@ -75,10 +76,12 @@ class RedCartridgeLoreleiSkill:
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
-        if self.objective_id not in {"defeat_lorelei", "defeat_bruno"}:
+        if self.objective_id not in {"defeat_lorelei", "defeat_bruno", "defeat_agatha"}:
             raise RedTrainerStoryError("unsupported cartridge story objective")
         if self.objective_id == "defeat_bruno":
             self.expected_facts = frozenset({"league:bruno_defeated"})
+        elif self.objective_id == "defeat_agatha":
+            self.expected_facts = frozenset({"league:agatha_defeated"})
 
     def _plan(self) -> tuple[RedGoalObservation, TrainerFundingCandidate, RedTrainerPartyPlan]:
         from .red_resource_goal_router import _walking_plan
@@ -88,6 +91,7 @@ class RedCartridgeLoreleiSkill:
         observation = self.runtime.adapter.observe()
         raw = observation.raw
         is_bruno = self.objective_id == "defeat_bruno"
+        is_agatha = self.objective_id == "defeat_agatha"
         target_map = MapId.BRUNOS_ROOM if is_bruno else MapId.LORELEIS_ROOM
         target_event = EventFlag.BEAT_BRUNO if is_bruno else EventFlag.BEAT_LORELEI
         required_fact = "league:lorelei_defeated" if is_bruno else "story:victory_road_cleared"
@@ -95,6 +99,10 @@ class RedCartridgeLoreleiSkill:
             {MapId.LORELEIS_ROOM, MapId.BRUNOS_ROOM} if is_bruno
             else {MapId.INDIGO_PLATEAU, MapId.INDIGO_PLATEAU_LOBBY, MapId.LORELEIS_ROOM}
         )
+        if is_agatha:
+            target_map, target_event = MapId.AGATHAS_ROOM, EventFlag.BEAT_AGATHA
+            required_fact = "league:bruno_defeated"
+            entry_maps = {MapId.BRUNOS_ROOM, MapId.AGATHAS_ROOM}
         if (
             not observation.input_ready or raw.battle_state != 0
             or raw.map_id not in entry_maps
@@ -106,11 +114,21 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("requires a settled, undefeated Indigo story boundary")
         world = self.world
         blocks = None
-        if is_bruno:
+        if is_bruno or is_agatha:
             blocks = self.runtime.reader.read_current_map_blocks()
             if blocks.map_id != raw.map_id:
                 raise RedTrainerStoryError("story map changed while reading its live terrain")
             world = world.with_current_blocks(blocks)
+        if is_agatha and raw.map_id != target_map:
+            from .gen1_scripted_arrival import (
+                trainer_room_arrival,
+                with_scripted_trainer_arrival,
+            )
+
+            arrival = trainer_room_arrival(world.rom, int(target_map), raw.event_flags)
+            world = replace(world, macro_graph=with_scripted_trainer_arrival(
+                world.macro_graph, arrival,
+            ))
         headers = trainer_headers(world.rom, {target_map}, full_event_offsets=True)
         objects = map_object_events(world.rom, {target_map})
         zones = static_trainer_sight_zones(headers, objects, raw.event_flags)
@@ -147,7 +165,7 @@ class RedCartridgeLoreleiSkill:
             return ObjectiveSkillAvailability(False, "Story attempt already consumed.")
         try:
             prepared = self._plan()
-        except (RedTrainerStoryError, ValueError, RoutePlanningError) as error:
+        except (RedTrainerStoryError, ValueError, RoutePlanningError, CartridgeReadError) as error:
             return ObjectiveSkillAvailability(False, str(error))
         if prepared[0].game_state != state:
             return ObjectiveSkillAvailability(False, "Story observation changed during planning.")

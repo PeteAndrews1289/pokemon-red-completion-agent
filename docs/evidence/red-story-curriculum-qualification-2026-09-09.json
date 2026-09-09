@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon.red.story-curriculum-qualification.v1",
+  "session": "2026-09-09-story-curriculum",
+  "baseline_commit": "0c60c7164a711e25d27f54cac39f18803e037912",
+  "status": "engineering_qualified_live_execution_pending",
+  "contract": "forced-singleton-story-outcome-unit-weight-v1",
+  "historical_choices_unchanged": true,
+  "historical_support_backfilled": false,
+  "curriculum_is_comparative_evidence": false,
+  "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+  "retained_state_sha256": "0243af84ccd62db159668ae39505cf602450b996edfa7e76d39f188ca654234d",
+  "model_outcomes": 78,
+  "new_real_training_examples": 0,
+  "model_fits": 0,
+  "controller_actions": 0,
+  "independent_evaluation": false,
+  "authority_promotions": 0,
+  "qualified_components": [
+    "Prospective V5 train-only continuation declaration",
+    "Separate singleton story outcome stream without choice probabilities",
+    "Recorded execution intervals, actual targets, failures and censored observations",
+    "Mixed outcome regression with unchanged choice weights and unit curriculum weight",
+    "Retained historical row fingerprints and separate corpus inventories",
+    "Agatha cartridge trainer profile and exact revision-bound scripted arrival"
+  ],
+  "limitations": [
+    "ROM-free qualification is not successful Agatha execution",
+    "No new real example or updated model yet",
+    "Mixed feature-version migration requires explicit qualification",
+    "Script decoder is revision-pinned, not general ROM-hack support"
+  ],
+  "next": "One prospectively declared bounded Agatha curriculum attempt from0243af84; preserve its actual outcome, then consider a fit without claiming comparative advantage."
+}
