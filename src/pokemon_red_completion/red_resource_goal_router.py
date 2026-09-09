@@ -144,6 +144,12 @@ class RedResourceGoalRouter:
                 provider = fixed_provider
             plan = self._plan(spec, fresh)
             if plan is None:
+                from pokemon_red_completion.red_collection_fly import bind_collection_fly
+
+                flight = bind_collection_fly(self, spec, provider, fresh, traversal)
+                if flight is not None:
+                    replacements[flight.binding_ref] = flight
+                    opportunities[index] = flight.opportunity
                 continue
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
                 self.actions, self.runtime.reader, maximum_flees=16,

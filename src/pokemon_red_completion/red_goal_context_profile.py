@@ -169,6 +169,23 @@ def build_native_boxed_evolution_profile_payload(
     )
 
 
+def bind_evolution_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt the existing evolution objective into qualified Fly transport only."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+            parameters["fly_transport"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("Fly transport needs an existing evolution objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def require_resupply_only_profile_transition(
     before: RedGoalContextProfile, after: RedGoalContextProfile,
 ) -> None:
@@ -603,13 +620,16 @@ def _parse_parameters(
             "level_increment": level_increment,
         }
     if mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        optional = {"fly_transport"} if "fly_transport" in row else set()
+        if optional and type(row["fly_transport"]) is not bool:
+            raise RedGoalContextProfileError("Fly transport must be an explicit boolean")
         _exact_keys(
             row,
             {
                 "source_species_ref",
                 "target_species_ref",
                 "evolution_level",
-            },
+            } | optional,
         )
         source_species_ref = _species_ref(
             row["source_species_ref"],
@@ -638,6 +658,7 @@ def _parse_parameters(
             "source_species_ref": source_species_ref,
             "target_species_ref": target_species_ref,
             "evolution_level": evolution_level,
+            **({"fly_transport": row["fly_transport"]} if optional else {}),
         }
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,

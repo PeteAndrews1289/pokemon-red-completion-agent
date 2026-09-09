@@ -574,6 +574,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "--opportunistic-capture",
         "--affordable-capture-supply",
         "--evolution-objective", "63:64:16",
+        "--evolution-fly-transport",
     ])
     assert args.regional_transitions == [
         "wild:Route11:grass", Path("shop.json"), "wild:Route24:grass",
@@ -582,6 +583,7 @@ def test_regional_transition_parser_preserves_interleaved_source_supply_order():
         "opportunistic-capture",
         "affordable-capture-supply",
         "evolution:63:64:16",
+        "evolution-fly",
     ]
 
 
@@ -591,6 +593,23 @@ def test_future_evolution_argument_rejects_malformed_targets(value):
     import argparse
     with pytest.raises(argparse.ArgumentTypeError):
         runner._evolution_objective_argument(value)
+
+
+def test_fly_modifier_is_ordered_after_old_profiles_without_changing_them(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    before = runner._boxed_evolution_profile(_supply_transition_profile(), (96, 97, 26))
+    monkeypatch.setattr(runner, "_route_world", lambda _: object())
+    old_hash = before.profile_sha256
+    (future,) = runner._regional_profiles(before, ("evolution-fly",), object())
+    assert before.profile_sha256 == old_hash
+    old = next(s for s in before.providers if s.kind.value == "evolve_species")
+    new = next(s for s in future.providers if s.kind.value == "evolve_species")
+    assert "fly_transport" not in old.parameters
+    assert dict(new.parameters) == {**dict(old.parameters), "fly_transport": True}
+    assert [s for s in before.providers if s.kind.value != "evolve_species"] == [
+        s for s in future.providers if s.kind.value != "evolve_species"
+    ]
 
 
 def test_future_evolution_preserves_historical_supply_profiles(monkeypatch):
