@@ -169,6 +169,23 @@ def build_native_boxed_evolution_profile_payload(
     )
 
 
+def bind_capture_surf_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt future capture transport into observed Surf; historical profiles stay unchanged."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["surf_transport"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("Surf transport needs an existing capture objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_capture_cut_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt future capture transport into observed, land-only Cut execution."""
     providers = []
@@ -802,6 +819,12 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("capture search budget differs")
             required.add("capture_search_budget")
+        if "surf_transport" in row:
+            if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
+                type(row["surf_transport"]) is not bool
+            ):
+                raise RedGoalContextProfileError("capture Surf transport differs")
+            required.add("surf_transport")
         if "cut_transport" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 type(row["cut_transport"]) is not bool
@@ -909,6 +932,8 @@ def _parse_parameters(
             parsed["capture_search_budget"] = row["capture_search_budget"]
         if "cut_transport" in row:
             parsed["cut_transport"] = row["cut_transport"]
+        if "surf_transport" in row:
+            parsed["surf_transport"] = row["surf_transport"]
         if "fly_transport" in row:
             parsed["fly_transport"] = row["fly_transport"]
         if "indoor_fly_departure" in row:

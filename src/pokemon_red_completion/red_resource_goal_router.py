@@ -13,20 +13,24 @@ from functools import partial
 
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
+from pokemon_red_completion.gen1_field_moves import (
+    SEAFOAM_ISLANDS_B4F_MAP_ID,
+    Gen1FieldMovePort,
+    surf_permission,
+)
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
-from pokemon_red_completion.gen1_traversal import cut_capabilities
+from pokemon_red_completion.gen1_traversal import cut_capabilities, surf_capabilities
 from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
     GoalExecutionReport,
 )
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.observation import MapId, RawGameState, ReadOnlyMemory
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
@@ -110,13 +114,15 @@ class RedResourceGoalRouter:
         traversal = Gen1TraversalObserver(
             self.runtime.reader,
             hazard_projector=Gen1TrainerSightProjector(self.world.rom, self.runtime.reader),
-            **({"capability_projector": cut_capabilities} if any(
-                _cut_enabled(spec) for spec in self.runtime.profile.providers
-            ) else {}),
+            capability_projector=partial(
+                collection_field_capabilities, self.runtime.emulator,
+                allow_cut=any(_cut_enabled(s) for s in self.runtime.profile.providers),
+                allow_surf=any(_surf_enabled(s) for s in self.runtime.profile.providers),
+            ),
         )
         fresh = FreshRedGoalObservation("0" * 64, observation, traversal.observe())
-        # Cut is an explicit prospective option with its own metered action port.
-        # Surf/Strength remain closed even if the party knows them.
+        # New transports start on land and finish at a land encounter corridor.
+        # Cut/Surf require explicit options and share the existing primitive meter.
         if fresh.traversal.mode != "land":
             return local
         origin = red_living_dex_setup_fresh_observation_sha256(fresh)
@@ -214,7 +220,7 @@ class RedResourceGoalRouter:
                     {
                         "schema": "pokemon.red.resource-goal-router.v1",
                         "profile_sha256": self.runtime.profile.profile_sha256,
-                        "walking_only": not _cut_enabled(spec),
+                        "walking_only": not (_cut_enabled(spec) or _surf_enabled(spec)),
                     }
                 ),
                 plan=plan,
@@ -222,7 +228,9 @@ class RedResourceGoalRouter:
                 traversal_observer=traversal,
                 emulator=self.runtime.emulator,
                 interruption_handler=interruption_handler,
-                replanner=partial(self._replan, allow_cut=_cut_enabled(spec)),
+                replanner=partial(
+                    self._replan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+                ),
                 field_actions=self.field_actions_for(spec),
                 route_limits=_ROUTE_LIMITS,
                 prepare_departure=lambda: prepare_center_departure(
@@ -373,7 +381,9 @@ class RedResourceGoalRouter:
                     )
                 except RoutePlanningError:
                     continue
-                if plan.steps and _supported_plan(plan, allow_cut=_cut_enabled(spec)):
+                if plan.steps and _supported_plan(
+                    plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+                ):
                     return plan
             return None
         target_map = parameters["map_id"]
@@ -387,22 +397,26 @@ class RedResourceGoalRouter:
             plan = self.world.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
         except RoutePlanningError:
             return None
-        if not plan.steps or not _supported_plan(plan, allow_cut=_cut_enabled(spec)):
+        if not plan.steps or not _supported_plan(
+            plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+        ):
             return None
         return plan
 
     def field_actions_for(self, spec: RedGoalProviderSpec) -> Gen1FieldMovePort | None:
         """Expand field macros through the same counted/budgeted primitive port."""
-        if not _cut_enabled(spec):
+        if not (_cut_enabled(spec) or _surf_enabled(spec)):
             return None
         return Gen1FieldMovePort(
             self.actions, self.runtime.reader, self.runtime.emulator,
             cut_block_swaps={swap.before: swap.after for swap in self.world.rules.cut_block_swaps},
         )
 
-    def _replan(self, request: ReplanRequest, *, allow_cut: bool = False) -> RoutePlan:
+    def _replan(
+        self, request: ReplanRequest, *, allow_cut: bool = False, allow_surf: bool = False,
+    ) -> RoutePlan:
         plan = self.world.replanner()(request)
-        if not _supported_plan(plan, allow_cut=allow_cut):
+        if not _supported_plan(plan, allow_cut=allow_cut, allow_surf=allow_surf):
             raise RedResourceGoalRoutingError("resource route requires an unsupported field action")
         return plan
 
@@ -412,15 +426,51 @@ def _cut_enabled(spec: RedGoalProviderSpec) -> bool:
             and spec.parameters.get("cut_transport") is True)
 
 
-def _supported_plan(plan: RoutePlan, *, allow_cut: bool = False) -> bool:
-    return all(
-        ((step.action_kind is MacroActionKind.MOVE and step.action in _WALK_ACTIONS)
-         or (allow_cut and step.action_kind is MacroActionKind.FIELD_MOVE
-             and step.action in {"cut:" + direction for direction in _WALK_ACTIONS}))
-        and step.source_mode in {None, "land"}
-        and step.expected_mode in {None, "land"}
-        for step in plan.steps
-    )
+def _surf_enabled(spec: RedGoalProviderSpec) -> bool:
+    return (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and spec.parameters.get("surf_transport") is True)
+
+
+def collection_field_capabilities(
+    memory: ReadOnlyMemory, raw: RawGameState, *, allow_cut: bool, allow_surf: bool,
+) -> frozenset[str]:
+    """Expose only declared mechanics with live badge/holder/title permission."""
+    result = cut_capabilities(raw) if allow_cut else frozenset()
+    if allow_surf:
+        result = result.union(surf_capabilities(
+            raw, surf_allowed=surf_permission(memory, raw).allowed,
+        ))
+    return result
+
+
+def _supported_plan(
+    plan: RoutePlan, *, allow_cut: bool = False, allow_surf: bool = False,
+) -> bool:
+    for step in plan.steps:
+        if step.action_kind is MacroActionKind.MOVE and step.action in _WALK_ACTIONS:
+            modes = {None, "land", "water"} if allow_surf else {None, "land"}
+            if step.source_mode not in modes or step.expected_mode not in modes:
+                return False
+            # Entering water needs the metered Surf macro, not a plain arrow.
+            if step.source_mode != "water" and step.expected_mode == "water":
+                return False
+        elif step.action_kind is MacroActionKind.FIELD_MOVE:
+            if allow_cut and step.action in {"cut:" + d for d in _WALK_ACTIONS}:
+                if (step.source_mode not in {None, "land"}
+                        or step.expected_mode not in {None, "land"}):
+                    return False
+            elif allow_surf and step.action in {"surf:" + d for d in _WALK_ACTIONS}:
+                if (
+                    step.source_mode != "land" or step.expected_mode != "water"
+                    or step.source_map != step.expected_map
+                    or step.source_map == SEAFOAM_ISLANDS_B4F_MAP_ID
+                ):
+                    return False
+            else:
+                return False
+        else:
+            return False
+    return True
 
 
 def _walking_plan(plan: RoutePlan) -> bool:

@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T22:16:18.022545+00:00",
+  "location": "power_plant \u00b7 saved, not live",
+  "registered_species": 63,
+  "living_species": 49,
+  "specimens": 53,
+  "capture_items": 0,
+  "money": 1638,
+  "checkpoint_sha256": "445f68aac643a6482f41972ead962d5ba75ef69b0d84b946326c02c41d48d871"
+}

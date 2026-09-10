@@ -211,6 +211,8 @@ def retarget_red_wild_profile(
                 derived["capture_status_support"] = parameters["capture_status_support"]
             if "cut_transport" in parameters:
                 derived["cut_transport"] = parameters["cut_transport"]
+            if "surf_transport" in parameters:
+                derived["surf_transport"] = parameters["surf_transport"]
             if "fly_transport" in parameters:
                 derived["fly_transport"] = parameters["fly_transport"]
             if "indoor_fly_departure" in parameters:

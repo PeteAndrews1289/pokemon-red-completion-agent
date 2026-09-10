@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection: 62 verified registrations and 60 examples under the registered-only learning objective. Doduo was added through a forced Cut-enabled capture goal, not a new model choice. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+Current work is Red collection: 63 verified registrations and 61 examples under the registered-only learning objective. The latest batch added Dodrio through forced evolution and fitted an actual failed choice among seven destinations. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-PR240 merged. AF01 reached Route16 and caught Doduo: 62 registrations and 53 specimens retained. Model60 is unchanged because capture was the sole available goal. The recorded tree crossing supports access; a higher-level field receipt was not persisted. AB's incidental-arrival repair still lacks live qualification.
+PR241 merged. AG01's forced evolution was followed by a genuine seven-way choice. AG02 reached Power Plant but failed after spending both remaining balls; that failed outcome produced model61. The exact terminal is input-ready with 63 registrations, 53 specimens and 1,638 money. The downstream exception lost the completed route's field summary. AB's incidental-arrival repair still lacks live qualification.
 
-Resume from AF01/model60 with complete ancestry, capture-Cut and the proposed Route16 source. Two consecutive zero-fit sessions make genuine alternatives the priority: qualify observed Surf acquisition alongside owned evolution, check funding/two remaining balls, retain field receipts and measure planning overhead. Allow 60–90 minutes for one access/choice qualification, not full collection. Stone procurement remains unfinished. Capture/resume stays 1/3, not a project-completion percentage.
+Resume from AG02/model61 with complete ancestry, capture-Cut/Surf and the selected Power Plant source. The read-only menu confirms affordable resupply is blocked by transport capability. Connect truthful indoor departure/field transport to the existing supply routine, then attempt one productive collection choice. Return ball exhaustion as a bounded typed outcome and preserve completed-route diagnostics. Allow 60–90 minutes; repeated unchanged-state route inspection is a secondary optimization, not a new infrastructure campaign. Stone procurement remains unfinished. Capture/resume stays 1/3, not a project-completion percentage.
 
 ## How to stay focused
 
@@ -34,4 +34,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-cut-collection-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-10-surf-collection-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)

@@ -63,6 +63,8 @@ def _composer(
     capture_support: dict[str, int] | None = None,
     capture_survey: dict[str, object] | None = None,
     storage_preparation: dict[str, object] | None = None,
+    route_fields: dict[str, int] | None = None,
+    destination_fields: dict[str, int] | None = None,
 ) -> tuple[
     RoutedSemanticGoalComposer,
     ExecutableGoalBinding,
@@ -81,7 +83,10 @@ def _composer(
     def execute_route() -> GoalExecutionReport:
         events.append("route_execute")
         meter.spend(*route_spend)
-        return GoalExecutionReport(*route_values, {"private_route": True})
+        return GoalExecutionReport(*route_values, {
+            "private_route": True,
+            **({"field_moves": route_fields} if route_fields is not None else {}),
+        })
 
     def verify_route(_report: GoalExecutionReport) -> GoalVerification:
         events.append("route_verify")
@@ -102,6 +107,7 @@ def _composer(
         return GoalExecutionReport(
             *destination_values,
             {"semantic_destination": offered_kind.value,
+             **({"field_moves": destination_fields} if destination_fields is not None else {}),
              **({"capture_support": capture_support} if capture_support is not None else {}),
              **({"capture_survey": capture_survey} if capture_survey is not None else {}),
              **({"storage_preparation": storage_preparation}

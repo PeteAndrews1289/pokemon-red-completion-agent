@@ -1,53 +1,56 @@
 # Current development handoff
 
-Updated September 10, 2026. Older results remain in dated reports and [history](docs/history/handoff-through-2026-09-10.md).
+Updated September 10, 2026. Earlier results remain in dated reports and [history](docs/history/handoff-through-2026-09-10.md).
 
 ## Goal and scope
 
-Build a learned player that completes stories and accumulates a shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock stay separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
+Build a learned player that completes stories and accumulates one shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock remain separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
 
-## Latest verified save: AF01
+## Latest verified save: AG02
 
-- Cut-enabled acquisition reached Route 16 and caught Doduo.
-- **62 global/local registrations, 53 specimens, 49 living species**, independently verified.
-- **Model60 unchanged: zero new fitted choices.** One available capture goal meant forced singleton authority.
-- One successful goal: **480 actions / 26,868 frames**; one encounter, one capture, paralysis support, one ball spent.
-- Route16/map27, row5 col35; input-ready, outside battle, no pending trainer. Two capture balls and 138 money remain.
-- The batch stopped at its one-goal limit after 392.530 seconds including preparation. Gameplay is stopped.
-- [Session report](docs/work-sessions/2026-09-10-cut-collection-access.md) · [Outcome evidence](docs/evidence/red-cut-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-cut-access-saved-2026-09-10.json).
+- **63 global/local registrations, 53 specimens, 49 living species**, independently checked from the exact save.
+- AG01 evolved Doduo into Dodrio: 17,950 actions / 1,616,756 frames, one recorded Fly. This forced setup produced no fit.
+- AG02 exposed seven executable destinations. The existing model-plus-exploration policy selected Power Plant and reached it. Both remaining balls were spent without a capture; a later no-balls encounter raised a generic error.
+- The actual failed destination outcome was fitted: **model60 → model61**. This is development experience, not improved independent performance.
+- AG02 used 1,273 actions / 70,285 frames. Total batch: 19,223 actions / 1,687,041 frames, 1,390.502 seconds including preparation.
+- Exact terminal: Power Plant/map83, row19 col17, input-ready, battle0, no pending trainer; **zero balls and 1,638 money**.
+- Gameplay is stopped after the failed second goal. The third goal was never attempted.
+- [Session report](docs/work-sessions/2026-09-10-surf-collection-access.md) · [Outcome evidence](docs/evidence/red-surf-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-surf-access-saved-2026-09-10.json).
 
 Exact identities:
 
-- Episode: `red-registered-cut-access-20260910-af-01-causal`
-- Checkpoint: `ac8cb149fc869c166f4ab1ede83b95bcc6e22e56ca5e08ebc6723fccee1caece`
-- Manifest: `978ff7ac7cc9c2bf6bd9f351ae6a6441591a631567085eab05684ebc10f0df99`
-- State: `68fe0eed489f8eccb20237a5e79d04864b9bfe66b43c459f2bde71cfc9b776fd`
-- Model60: `260efe95e444c5035283a613442f84da2528ea1ad9b8c95a17c997fa881ecb0c`
-- Corpus: `3ac77782801f56728484b6ea7926ffd48985e7d5757eadfdc8d9c80db3d2b8b3`
-- Played source: `14116b475ee6325d307bf2ccb2bcf17b61985b1e`
+- Episode: `red-registered-surf-choices-20260910-ag-02-causal`
+- Checkpoint: `445f68aac643a6482f41972ead962d5ba75ef69b0d84b946326c02c41d48d871`
+- Manifest: `74db044a6836694a1e777d3a9338c561034049e8a34c8c81118b9ab094b8e951`
+- State: `d3be0828db030c995aa00013fb31a68029920093f667f0369189fdfa91351840`
+- Model61: `a699c3f740fad9182273140d98cfe0f77827765eb5b73b484dc6730cf13c3476`
+- Corpus: `4b27c0e83c0edfb40c14c2facdfb513d7abe5433344e241b0c8f4b237c8fe0d0`
+- Played source: `282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad`
 
-The latest fit still belongs to AB. Preserve unfitted AC/AE/AF support artifacts and costs. Full arguments and audits remain private.
+Preserve all earlier support episodes and costs. AF and AG01 are historical ancestors, not restart points. Never rerun the AG launcher.
 
-## Repair and qualification
+## Repair and limitations
 
-A read-only AE comparison found no walking acquisition but one Cut-enabled source. The prospective `--capture-cut-transport` transition preserves old profiles and survives source retargeting. Navigation uses observed Cut capability and the existing field-move port; expanded inputs share the original action/frame budgets. Surf and Strength remain unavailable through this option.
+The first Surf-only projection exposed zero candidates. Diagnosis found eleven unnamed land-encounter maps and two unnamed water maps. Thirteen independent map-ID tests failed before repair. All actual nonempty encounter maps now have adapter names; names do not grant access.
 
-430 targeted tests passed at closeout, including documentation checks. A separate overlapping group of 83 route/capture tests also passed; do not add overlapping counts. Configured mypy covered 470 source files. These are not a full-suite claim.
+Capture-only Surf is explicitly enabled, requires observed badge/healthy holder/title permission, shares the original primitive budget, and preserves Cut/Strength boundaries. After map repair, seven routes remained preparation-blocked by the injured helper. Legitimate evolution/recovery restored that helper; seven actual destination choices then became executable.
 
-The primitive trace shows blocked movement, a field-menu sequence, then movement through the cartridge tree. The higher-level Cut receipt was not persisted, and a final-map comparison showed no remaining changed blocks. Do not fabricate a retained receipt or infer the reset cause. Preserve field receipts prospectively. The earlier incidental-arrival reporting repair remains unqualified by this destination capture; AB remains failed and capture/resume stays 1/3.
+347 targeted tests passed, plus a separate 127 checkpoint/fit/cycle tests. Ruff and configured mypy passed (471 source files). These are not a full-suite claim. Field counts survive successful composition (AG01 Fly), but AG02's downstream exception prevented its completed route summary from propagating. Do not invent retained Surf counts.
+
+The last streamed AG02 snapshot was not ready; the exact final checkpoint is ready. Always use the authenticated terminal for continuation decisions. AB's earlier incidental-arrival repair remains unqualified; capture/resume stays 1/3.
 
 ## Next bounded session
 
-1. Start from AF01/model60, never replay AF or restore AE. Inherit AF's complete declaration and append the AF checkpoint, then `warp-safe-wild-source wild:Route16:grass` and `discovery-source wild:Route16:grass`, as prior source continuations do. Retain the existing capture-Cut flag. AF proposed that source; it did not sample among multiple destinations.
-2. Check current resources and stock. Only two capture balls remain; establish legitimate funding before a long acquisition loop.
-3. Qualify one observed Surf acquisition path using the existing field executor, with missing-badge/holder and blocked-water tests. Pair a genuinely new acquisition option with supported owned evolution so the learner has real alternatives.
-4. Persist higher-level field receipts and measure preparation overhead while integrating that path. Do not start a separate broad infrastructure campaign.
-5. Allow 60–90 minutes for one access/choice qualification, not full collection or independent reliability.
+1. Continue from AG02/model61 with all ancestry and capture-Cut/Surf options. Reconstruct AG's transitions in order: its owned Doduo→Dodrio transition plus evolution-Fly/indoor options, AG01 checkpoint, then AG02 checkpoint and selected Power Plant warp-safe/discovery source. The private read-only next-menu script reconstructs these exact arguments.
+2. The exact native preflight offers no goal: resupply resources are available, but transport reports missing capability. Extend the existing supply transport to truthful indoor departure/required field movement; do not weaken capture-only permissions globally.
+3. Qualify one legitimate purchase from the actual terminal, then one productive collection choice. Preserve the failed AG label and costs; no old-save replay.
+4. Return ball exhaustion as a typed bounded outcome and preserve completed transport evidence when the destination stops. An exception must not masquerade as successful capture.
+5. Time box 60–90 minutes. Duplicate unchanged-state route inspections are a measured secondary cost; optimize only where it directly unblocks this loop.
 
-No full replay, sealed Red, Crystal, consumed retry, release or independent-performance claim. No stage exit changed.
+No reset, sealed Red, Crystal, full replay, release or independent-performance claim. Stage exits are unchanged.
 
 ## External work and publication
 
-No external agents were dispatched in this session; no fresh Flash or Claude quota was queried. Flash's earlier isolated stone draft remains at local commit `895b4d6b`, with 40 tests passing after Codex corrections, **not integrated or live-qualified**. Its procurement, move-learning admission and native-provider work remain incomplete.
+No external agents ran this session; no fresh external quota was queried. Flash's prior stone draft remains isolated at `895b4d6b`, not integrated or live-qualified.
 
-PR240 passed CI and merged as `8abdc7ab`. Played source `14116b47` is separately published and must remain recoverable. Publish this closeout as one tested batch; CI is not a dependency for ordinary development gameplay.
+PR241 merged as `83038a7b`. Played source is published on `codex/red-surf-choices-20260910` and must remain recoverable. Publish this evidence closeout as one tested batch; ordinary gameplay does not wait on hosted CI.

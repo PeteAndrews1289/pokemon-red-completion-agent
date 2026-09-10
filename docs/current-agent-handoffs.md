@@ -1,24 +1,25 @@
 # Reviewer handoff
 
-Start with the [current operational handoff](../HANDOFF.md) and [role assignments](../AGENT_COORDINATION.md). They are the only current agent entry points; do not infer authority from old dated reports.
+Start with the [operational handoff](../HANDOFF.md) and [role assignments](../AGENT_COORDINATION.md). They are the current agent entry points; old reports cannot authorize work.
 
 ## Current facts
 
-- The goal is a transferable player and one shared registered Pokédex, not a perfect Red script.
-- Active collection model: 60 examples; latest saved collection: 62 registrations.
-- Goal/destination choices are learned; navigation, battle and other mechanics remain deterministic.
-- Gameplay stopped after AF01: Cut-enabled travel and a forced Doduo capture succeeded. Zero new fits; prior AB failure remains unchanged. PR240 merged.
-- Latest save is AF01; latest fit is still AB/model60. Preserve all ancestry plus the capture-Cut option and proposed Route16 source. Review the logged tree-crossing evidence separately from the missing persisted field receipt. No external agents ran this session; Flash's older stone draft remains isolated.
+- Goal: a transferable player and one shared registered Pokédex, not a fixed Red walkthrough.
+- Latest exact save: AG02, Power Plant; 63 registrations, 53 specimens, input-ready, zero balls and 1,638 money.
+- Model61 contains 61 related development examples. Goal/destination choices are learned; game mechanics remain deterministic.
+- AG01's Dodrio evolution was forced and unfitted. AG02 selected Power Plant among seven destinations; the capture failed after ball exhaustion and its actual outcome was fitted.
+- Gameplay is stopped. The next menu has no goal: resupply is affordable but transport-blocked.
+- Missing map identities and explicit capture-Surf access are integrated. The failed destination lost its completed field summary; arrival is verified, a retained Surf count is not.
+- No external agents ran this session. Flash's older stone draft remains isolated.
 
-## Review questions
+## Focused review questions
 
-1. Does the public README explain the objective, demonstrated capability, unfinished work and AI-assisted authorship without requiring internal documents?
-2. Are current status and historical results clearly separated?
-3. Does each learning claim correspond to a real played choice, with failures and deterministic support accounted for?
-4. Does the next task produce useful collection experience or unblock it with a bounded repair?
-5. Does new collection access use an actual bounded field-move executor and observed capabilities, rather than merely loosening walking-only guards? Can it expose genuine new choices?
-6. Have private game assets and paths stayed outside Git?
+1. Does supply transport support an actual indoor exit/field journey without globally relaxing capture-only permissions?
+2. Does exhaustion retain spending, safe terminal control and completed transport diagnostics without changing AG's failed label?
+3. Does the next fit correspond to a real played choice, with deterministic setup excluded?
+4. Can redundant unchanged-state route inspection be removed without reusing stale observations or live executor bindings?
+5. Are the public README, roadmap and learning claims readable and consistent with evidence?
 
-Submit focused findings with evidence and a proposed falsifier. Codex makes integration decisions and explains disagreements. Do not run the game, open protected evaluation contexts or edit the shared worktree as part of a review.
+Review only; do not play the game, open protected contexts or edit the shared worktree. Submit concrete defects and the shortest falsifier. Codex owns integration decisions and explains disagreements.
 
 [Previous handoffs](history/agent-handoffs-through-2026-09-10.md)

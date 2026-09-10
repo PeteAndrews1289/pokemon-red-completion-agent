@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay.
+- Next decision: Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority now | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 60 | 12 |
+| Registered Train Example · train | 61 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-cut-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-cut-access-learning-2026-09-10.json)
+**2026-09-10-surf-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-surf-access-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 0 real fits; no independent or cross-title authority promotion. |
+| Learning output | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority delta | 1 real fits; no independent or cross-title authority promotion. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Cut access is connected; this singleton qualification does not establish learned destination choice. Broader acquisition mechanics, reserves and independent performance remain incomplete. |
-| Decision | Reorient after zero new fitted choices: broaden executable access, not repeated searches or forced support. Preserve actual costs and registrations without inventing learning. |
-| Next session | Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay. |
-| Next falsifier | Observed Surf access must expose a real acquisition alternative alongside owned evolution; missing badge, move or water permission must reject unsafe access. No fit without an actual multi-option decision. |
+| Blocker | Seven executable destinations yielded one actual learned choice, but Power Plant capture exhausted its balls and raised a generic error. The exact terminal is ready; affordable resupply remains transport-blocked. Failed composition lost its completed field summary. |
+| Decision | Preserve Dodrio and the real failed destination lesson. Restore supplies from the actual Power Plant terminal, not the old save; pursue a productive choice without more access infrastructure. |
+| Next session | Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock. |
+| Next falsifier | From exact AG02, qualify affordable resupply through observed indoor/field transport; reject missing holder, permission or stale terminal before input. Preserve spending and route evidence when balls run out, then attempt one productive choice without replaying AG. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -41,6 +41,8 @@ Follow with [Cut-enabled Route16 access and Doduo](work-sessions/2026-09-10-cut-
 
 ## Closing — What remains unproved
 
+Use the [Surf-access batch](work-sessions/2026-09-10-surf-collection-access.md) to show the first real menu after forced-only setup: seven destinations, a recorded Power Plant choice and actual arrival. Contrast Dodrio's successful forced evolution with the failed capture after two balls were spent. End the segment at 63 registrations and 61 examples—not a successful capture or proven improvement. The exact saved terminal is ready, although the final streamed snapshot was earlier; disclose that distinction if showing the footage.
+
 Fresh-game autonomous play, complete collection and transfer to Blue, modified Red or Crystal remain unfinished. The next evidence should show useful decisions beyond the situations used to fit the model.
 
 Credit Pete's product direction and validation, along with Codex, Claude and Antigravity's AI-assisted implementation/review contributions. Do not suggest every line was manually authored.

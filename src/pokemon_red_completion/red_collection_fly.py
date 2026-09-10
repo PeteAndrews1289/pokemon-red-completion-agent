@@ -100,6 +100,7 @@ def bind_collection_fly(
         _ROUTE_LIMITS,
         _cut_enabled,
         _supported_plan,
+        _surf_enabled,
     )
     from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
     from pokemon_red_completion.red_travel_capture_runtime import (
@@ -185,7 +186,9 @@ def bind_collection_fly(
             plan = router.world.plan_feasible_to_map(projected, target, goal_at=goal_at)
         except RoutePlanningError:
             continue
-        if plan.steps and _supported_plan(plan, allow_cut=_cut_enabled(spec)):
+        if plan.steps and _supported_plan(
+            plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+        ):
             chosen = town, projected, plan
             break
     if chosen is None:
@@ -257,14 +260,20 @@ def bind_collection_fly(
             traversal_observer=traversal,
             emulator=runtime.emulator,
             interruption_handler=travel_handler,
-            replanner=partial(router._replan, allow_cut=_cut_enabled(spec)),
-            field_actions=router.field_actions_for(spec) if _cut_enabled(spec) else None,
+            replanner=partial(
+                router._replan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+            ),
+            field_actions=(router.field_actions_for(spec)
+                           if _cut_enabled(spec) or _surf_enabled(spec) else None),
             route_limits=_ROUTE_LIMITS,
         )
         walking = walk.route_binding()
         result = walking.execute()
         passed = walking.verify(result).status.value == "succeeded"
         after = meter.checkpoint()
+        from pokemon_red_completion.field_move_summary import FieldMoveSummary
+        fields = FieldMoveSummary.from_evidence(result.evidence) or FieldMoveSummary()
+        fields = fields.plus(FieldMoveSummary(flights=len(port.fly_receipts)))
         route_report = GoalExecutionReport(
             actions_executed=after.controller_actions - before.controller_actions,
             frames_executed=after.emulator_frames - before.emulator_frames,
@@ -272,6 +281,7 @@ def bind_collection_fly(
                 "schema": "pokemon.red.collection-fly-transport.v1",
                 "passed": passed,
                 "verified_flights": len(port.fly_receipts),
+                "field_moves": fields.public_dict(),
                 "cartridge_landing_verified": True,
                 "onward_walk": dict(result.evidence),
                 "transport_is_policy_kind": False,
