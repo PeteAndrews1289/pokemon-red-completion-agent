@@ -1,49 +1,57 @@
 # Current development handoff
 
-Updated September 10, 2026. This is the single operational summary; older reports are [historical](docs/history/handoff-through-2026-09-10.md).
+Updated September 10, 2026. Older reports are [historical](docs/history/handoff-through-2026-09-10.md).
 
 ## Goal and current scope
 
 Build a learned player that finishes stories and accumulates verified Pokédex registrations across games. Red first; global registration, local owned flags and physical specimens remain distinct. No level-100 quota or simultaneous living-form requirement.
 
-The active lane is registered-objective collection learning. The learned component chooses goals/destinations; deterministic skills execute mechanics. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) before implementation.
+The model chooses goals/destinations; deterministic skills execute mechanics. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) before implementation.
 
-## Last verified gameplay: batch Z
+## Last verified gameplay: AB01
 
-- Two of four goals succeeded: safety resupply and sampled team recovery. Both Mt. Moon destination searches exhausted their bounds without a catch.
-- **59 registrations, 51 physical specimens, 47 living species** independently verified.
-- Three actual outcomes fitted: **56→59 examples**. The first safety step added no example; registrations stayed at59.
-- Saved in Mt. Moon B1F, map60 row17 col10; field-ready, outside battle, no pending trainer.
-- Supplies: four capture items and138 money. Gameplay is stopped.
-- [Collection report](docs/work-sessions/2026-09-10-preparation-collection.md) · [Learning evidence](docs/evidence/red-preparation-collection-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-preparation-collection-saved-2026-09-10.json).
+- The model selected MtMoon1F from three alternatives and Paras was caught during travel.
+- **60 registrations, 52 physical specimens, 48 living species** independently verified.
+- One actual failed goal outcome fitted: **59→60 examples**. The catch does not change the failed goal label.
+- Saved in MtMoon1F, map59 row18 col20; field-ready, outside battle, no pending trainer.
+- Supplies: three capture items and138money. Gameplay is stopped.
+- Cost:280actions/20,208frames/213.459seconds. The loop stopped after one of at most three goals.
+- [Session report](docs/work-sessions/2026-09-10-search-budget.md) · [Learning evidence](docs/evidence/red-search-budget-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-search-budget-saved-2026-09-10.json).
 
 Exact continuation identities:
 
-- Episode: `red-registered-collection-20260910-z-04-causal`
-- Checkpoint: `9773887b5aaafe1369fb1d99443c885036d77350028bd2547e3622496ce5c1a5`
-- Model: `46967672cce37dc553b01b30f1b81e24d8a8769a9f26bc987164bf0ac31ec7c2`
-- Corpus: `468be6be346077edf4602998aad81bf0c187ff58515c0b37f558523bec7b4d53`
+- Episode: `red-registered-search-20260910-ab-01-causal`
+- Checkpoint: `9091fd17a85c1c70e7f4d8110aac2e13da9fc771c6dff165faa81e326265036a`
+- Model: `260efe95e444c5035283a613442f84da2528ea1ad9b8c95a17c997fa881ecb0c`
+- Corpus: `3ac77782801f56728484b6ea7926ffd48985e7d5757eadfdc8d9c80db3d2b8b3`
+- Played source: `d11089fafb32bc83acbe1bd445caf5757ef4008b`
 
-Private storage locations and complete continuation arguments remain in private operational notes, not Git.
+Private paths, complete arguments and audit remain in private operational notes.
 
-## This session
+## Engineering and failure
 
-PR237 merged as `8431ebe5` after required CI34512379244 passed. Z played published source `6b8ca9eb`, with a small call-local reuse of already-verified episode snapshots. Preparation measured44.830→28.290seconds on the same saved input; this is one comparison, not a whole-batch speed guarantee. Integrity, fresh-read and mismatched-binding regressions passed.
+The prospective search profile permits up to160legs while reserving encounter handling within the existing256semantic-action/32encounter caps. Historical profiles remain unchanged. Local/routed offers disclose the larger effort allowance.490targeted tests passed before AB; type checking covered470source files.
 
-The Z launcher is consumed and must never run again. Z01 was nontraining safety support; Z02 recovery and Z03/Z04 failed searches each added one example. Both destination choices exposed three alternatives. Z04 now owns both the latest save and model59. The batch used1,822actions/81,144frames/900.341seconds. Read-only decoding verified all saved collection and model facts.
+The first256-leg draft overlooked fleeing and non-displacing encounters consuming semantic actions. AA preparation was deliberately interrupted before controller input; its declaration is retained and never reused. A new regression verifies32flees plus160legs produce clean search exhaustion at225actions.
 
-## Next bounded development session
+AB failed after the travel catch satisfied its destination: `TravelSatisfiedCaptureProvider` omitted three required capture-summary fields. The downstream codec rejected the report. The producer is now repaired with a cross-module regression, but that repair has not run live. No destination-survey/full-travel receipt survived the old wrapper error; do not claim the larger patrol caused the Paras catch.
 
-1. Confirm this handoff against saved evidence and private operational notes.
-2. Continue from Z with all four Z checkpoint/source transitions, including support, and model59. No new Z evolution transition was recorded. Do not restore Y as latest or retry Z.
-3. Inspect the64-leg patrol cap: Z's surveys stopped after two/four destination encounters. Test a source-agnostic prospective search dose while preserving old profile identities, resource guards and action/frame limits. Time-box repair to45minutes; do not change historical outcomes.
-4. Then play fresh bounded choices and retain actual costs. Allow roughly60–90minutes including audit; stop on safety/authentication failure or the declared bounds. Training-history validation remains costly, but another general caching project is not the next objective.
-5. Verify saved collection/model outcomes, then update the current summary and append one dated session report.
+PR238 merged as `ae2b09a1`. The current search session is a separate publication. Keep the played source in history; no force-push or retry.
 
-Travel capture followed by route resumption remains unqualified: its named checklist is1/3, not a whole-project percentage. Stone evolution and broader collection mechanics remain incomplete. Do not force a destination just to close a checklist.
+## Next bounded session
 
-No full replay, sealed Red evaluation, Crystal execution, consumed-trial retry or automatic specimen release. New independent performance claims need genuinely separate evaluation lineages.
+1. Reconcile this handoff with private `CURRENT_AB_20260910.md`.
+2. Inherit the AB declaration's complete history (including all Z transitions and the prospective search-budget opt-in), append AB01 checkpoint/source, and use model60. Include any actually recorded evolution transition. Never restore Z or replay AB.
+3. Test one fresh bounded goal under the repaired reporting contract. Preserve failures, catch credit and actual costs; stop on an unsafe/unhandled failure.
+4. Then inspect the existing isolated party-item-evolution draft against actual stock and stone availability. Do not commission a duplicate implementation. Connect one reusable mechanic to a real model-selected goal before broadening to NPC trades/fishing.
+5. Allow45–60minutes including audit; update concise handoffs, evidence, infographic and narrative.
 
-## Documentation and review
+The travel-capture checklist remains1/3, not a project-completion percentage. Stone evolution and broader collection remain incomplete. No full replay, sealed Red, Crystal, consumed-trial retry or automatic specimen release. Same-lineage outcomes are not independent evaluation.
 
-Keep this file current by replacing sections, not stacking new “Current” headings. Preserve details in [session reports](docs/work-sessions) and [historical index](docs/history/README.md). See [roles](AGENT_COORDINATION.md) and [next-step strategy](docs/model-first-roadmap.md).
+## External research
+
+Flash3.8High completed read-only encounter/gap research. Accepted finite search budgeting and stone/NPC-trade priorities; rejected incorrect Clefairy-slot and working-Time-Capsule claims. Codex verified recommendations and integrated no Flash code this session. The existing item-evolution draft remains isolated.
+
+Refreshed Gemini-group allowance around19:23UTC:95.19%five-hour/79.74%weekly remaining, resets approximately1h11m/28h1m. Shared account readings do not measure this session alone. Claude was not used.
+
+Keep summaries current by replacement, not stacked status banners. See [roles](AGENT_COORDINATION.md), [roadmap](docs/model-first-roadmap.md) and the dated session report.

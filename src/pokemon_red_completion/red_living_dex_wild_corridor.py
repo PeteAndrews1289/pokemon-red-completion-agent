@@ -41,6 +41,37 @@ RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
 )
 
 
+def bind_red_capture_search_budget_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt future captures into up to160legs; all other existing caps survive.
+
+    The explicit marker carries this allowance through destination enumeration.
+    Legacy derived corridors and checkpoint profiles retain their64-leg default.
+    """
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = _thaw(spec.parameters)
+        assert isinstance(parameters, dict)
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["capture_search_budget"] = "bounded-search-v1"
+            # One encounter can consume a non-displacing seek plus a flee.
+            # Leave room for both for every permitted encounter and terminal
+            # exhaustion; use an even number so ordinary exhaustion ends home.
+            actions, encounters = parameters["maximum_seek_steps"], parameters["maximum_encounters"]
+            assert isinstance(actions, int) and isinstance(encounters, int)
+            legs = min(160, actions - 2 * encounters - 2)
+            if legs < 2:
+                raise RedLivingDexWildCorridorError("search budget has no safe patrol allowance")
+            parameters["maximum_legs"] = legs - legs % 2
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedLivingDexWildCorridorError("search budget needs an existing corridor capture")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_red_capture_status_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Explicitly opt into bounded, observed sleep/paralysis preparation.
 
@@ -168,6 +199,9 @@ def retarget_red_wild_profile(
         assert isinstance(parameters, dict)
         if spec.mechanic in wild:
             derived = corridor.profile_parameters()
+            if parameters.get("capture_search_budget") == "bounded-search-v1":
+                derived["capture_search_budget"] = "bounded-search-v1"
+                derived["maximum_legs"] = 160
             # Location changes cannot silently increase the old survey budget.
             for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
                 old_bound, new_bound = parameters[key], derived[key]

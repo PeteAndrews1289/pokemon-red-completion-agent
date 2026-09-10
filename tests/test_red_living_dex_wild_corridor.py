@@ -41,6 +41,87 @@ def _terrain() -> Terrain:
     )
 
 
+def test_search_budget_is_prospective_and_survives_real_source_retargeting():
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    original = _local_discovery_profile()
+    original_hash = original.profile_sha256
+    bound = bind_red_capture_search_budget_profile(original)
+    assert bound.profile_sha256 != original_hash
+    assert original == _local_discovery_profile()
+    assert original.providers[0].parameters["maximum_legs"] == 64
+    assert "capture_search_budget" not in original.providers[0].parameters
+    assert bound.providers[1:] == original.providers[1:]
+    assert bound.providers[0].parameters["maximum_legs"] == 160
+    assert bound.providers[0].parameters["maximum_seek_steps"] == 256
+    assert bound.providers[0].parameters["maximum_encounters"] == 32
+    assert bind_red_capture_search_budget_profile(bound) == bound
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph(),
+    )
+    for source, map_id in (("wild:Route2:grass", MapId.ROUTE_2),
+                           ("wild:Route11:grass", MapId.ROUTE_11)):
+        target = replace(corridor, source_id=source, map_id=int(map_id))
+        moved = retarget_red_wild_profile(bound, target)
+        assert moved.providers[0].parameters["maximum_legs"] == 160
+        assert moved.providers[0].parameters["capture_search_budget"] == "bounded-search-v1"
+        assert moved.providers[2].parameters["maximum_legs"] == 64
+        assert retarget_red_wild_profile(original, target).providers[0].parameters[
+            "maximum_legs"
+        ] == 64
+
+
+@pytest.mark.parametrize("key,value", [
+    ("capture_search_budget", True), ("capture_search_budget", "unlimited"),
+    ("maximum_legs", 161), ("maximum_legs", True),
+    ("maximum_seek_steps", 257), ("maximum_encounters", 33),
+    ("maximum_seek_steps", 200), ("maximum_legs", 159),
+])
+def test_search_budget_rejects_malformed_or_expanded_caps(key, value):
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    bound = bind_red_capture_search_budget_profile(_local_discovery_profile())
+    parameters = _thaw(bound.providers[0].parameters)
+    parameters[key] = value
+    with pytest.raises(RedGoalContextProfileError):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id="invalid-budget", providers=((
+                GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, parameters,
+            ), (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+                (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {})),
+        ))
+
+
+def test_search_budget_preserves_tighter_nonleg_limits_and_rejects_discovery_marker():
+    from pokemon_red_completion.red_goal_context_profile import _thaw
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    parameters = _thaw(_local_discovery_profile().providers[0].parameters)
+    parameters.update(maximum_seek_steps=20, maximum_encounters=3)
+    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id="tight-budget", providers=((
+            GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, parameters,
+        ), (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+            (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {})),
+    ))
+    bound = bind_red_capture_search_budget_profile(profile)
+    assert bound.providers[0].parameters["maximum_legs"] == 12
+    assert bound.providers[0].parameters["maximum_seek_steps"] == 20
+    assert bound.providers[0].parameters["maximum_encounters"] == 3
+    parameters["capture_search_budget"] = "bounded-search-v1"
+    with pytest.raises(RedGoalContextProfileError, match="capture search budget"):
+        parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+            profile_id="bad-mechanic", providers=((
+                GoalKind.EXPLORE, RedGoalMechanic.WILD_CORRIDOR_DISCOVERY, parameters,
+            ), (GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE, {}),
+                (GoalKind.RECOVER_CONTROL, RedGoalMechanic.CONTROL_RECOVERY, {})),
+        ))
+
+
 def _graph(*, one_way: bool = False) -> LocalGraph:
     edges: dict[tuple[int, int], tuple[LocalEdge, ...]] = {}
     for x in (1, 4):

@@ -405,17 +405,21 @@ def test_team_development_is_one_level_quantum_not_a_full_duplicate_grind() -> N
     (True, ((red_species_ref(96), red_species_ref(97)),), False),
     (True, (), True), (True, ((red_species_ref(96), red_species_ref(97)),), True),
 ])
+@pytest.mark.parametrize("extended_search", [False, True])
 def test_wild_goal_context_binds_one_capture_quantum(
     monkeypatch: pytest.MonkeyPatch, remaining_demand: bool, level_edges: tuple,
-    opportunistic: bool,
+    opportunistic: bool, extended_search: bool,
 ) -> None:
     captured: dict[str, object] = {}
+    executor_args = {}
+
+    def survey_executor(*_args, **kwargs):
+        executor_args.update(kwargs)
+        return SimpleNamespace(finish_at_starting_endpoint=lambda: None)
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_goal_context.LiveWildCorridorSurveyExecutor",
-        lambda *_args, **_kwargs: SimpleNamespace(
-            finish_at_starting_endpoint=lambda: None
-        ),
+        survey_executor,
     )
 
     def provider(**kwargs: object) -> object:
@@ -441,6 +445,10 @@ def test_wild_goal_context_binds_one_capture_quantum(
 
     if opportunistic:
         parameters["capture_species_numbers"] = (16, 21)
+    if extended_search:
+        parameters["capture_search_budget"] = "bounded-search-v1"
+        parameters["maximum_legs"] = 160
+        parameters["maximum_seek_steps"] = 256
     _wild_provider(
         SimpleNamespace(emulator=object(), reader=object(), adapter=object(),
                         registration_policy=None,
@@ -454,10 +462,14 @@ def test_wild_goal_context_binds_one_capture_quantum(
     )
 
     assert captured["catalog"].remaining_demand is remaining_demand
+    assert captured["search_effort_surcharge"] == (0.096 if extended_search else 0.0)
+    assert executor_args["max_legs"] == (160 if extended_search else 8)
     assert captured["catalog"].level_evolution_edges == level_edges
     policy = captured["policy"]
     assert isinstance(policy, RedAreaExecutionPolicy)
     assert policy.capture_quota == 1
+    assert policy.max_actions == (256 if extended_search else 64)
+    assert policy.max_encounters == 16
     assert policy.capture_in_requirement_order is (not opportunistic)
     assert captured["catalog"].wild_source_species == (
         (("wild:Route1:grass", (red_species_ref(16), red_species_ref(21))),)

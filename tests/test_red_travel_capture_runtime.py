@@ -227,6 +227,16 @@ def test_verified_travel_catch_can_satisfy_arrival_without_second_capture_or_lab
     assert report.actions_executed == report.frames_executed == 0
     assert report.evidence["new_learning_labels"] == 0
     assert report.evidence["capture_survey"]["captures"] == 0
+    # Exercise the actual downstream codec: route completion used to throw
+    # after a legitimate travel catch because three required fields were absent.
+    from pokemon_red_completion.capture_survey import CaptureSurveySummary
+
+    summary = CaptureSurveySummary.from_evidence(report.evidence)
+    assert summary is not None
+    assert summary.public_dict() == {
+        "semantic_actions": 0, "captures": 0, "encounters_seen": 0,
+        "flees": 0, "search_exhausted": False, "safety_stopped": False,
+    }
     assert offered.binding.verify(report).status is GoalDecisionOutcome.SUCCEEDED
     assert h.calls == 1
     with pytest.raises(RedTravelCaptureError, match="consumed"):

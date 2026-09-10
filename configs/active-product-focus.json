@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "3 real fits; no independent or cross-title authority promotion.",
-        "blocker": "No new registration this batch. Both searches hit the64-leg cap after two and four encounters; preparation and training-history validation still dominate short gameplay.",
+        "authority_delta": "1 real fits; no independent or cross-title authority promotion.",
+        "blocker": "Paras was registered, but travel-satisfied arrival omitted required capture-summary fields. The goal remains failed; the small reporting repair is not yet live-qualified. Broader collection and independent performance remain unproved.",
         "decision": "Retain actual goal outcomes and costs; do not force a destination or relabel support as learning.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-preparation-collection-learning-2026-09-10.json",
-          "sha256": "f7f727f79c9b7321ac92146c597e00d294d36cbddff63d0677bd2d8b481bd4ab"
+          "path": "docs/evidence/red-search-budget-learning-2026-09-10.json",
+          "sha256": "8f5b3529793f52a96f02871ba269da57e012147ef2d0857e9a9d0551729bb589"
         },
-        "learning_output": "2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.",
+        "learning_output": "0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
         "next_falsifier": "A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success.",
-        "next_session_goal": "From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay.",
+        "next_session_goal": "Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-preparation-collection",
+        "session_id": "2026-09-10-search-budget",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.",
+        "current": "0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay.",
+      "next_decision": "Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 59,
+        "registered_train_examples": 60,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

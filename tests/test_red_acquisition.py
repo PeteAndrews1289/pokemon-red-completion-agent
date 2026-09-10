@@ -515,6 +515,41 @@ def test_search_does_not_swallow_control_or_battle_failure(reason, battle) -> No
         run_red_area_survey("wild:Route1:grass", BrokenSurvey(()))
 
 
+def test_prospective_patrol_reserves_actions_for_every_permitted_flee():
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        bind_red_capture_search_budget_profile,
+    )
+    parameters = bind_red_capture_search_budget_profile(
+        _local_discovery_profile(),
+    ).providers[0].parameters
+
+    class Patrol(_RouteOneSurveySimulation):
+        legs = 0
+
+        def seek_encounter(self):
+            # All32encounters interrupt a step before movement; fleeing also
+            # consumes an action. Then consume the complete patrol allowance.
+            if self.encounters:
+                super().seek_encounter()
+            elif self.legs < parameters["maximum_legs"]:
+                self.legs += 1
+            else:
+                raise RedAreaExecutionError("done", reason_code="survey_leg_limit_exceeded")
+
+    patrol = Patrol((21,) * 32)
+    report = run_red_area_survey("wild:Route1:grass", patrol, policy=RedAreaExecutionPolicy(
+        max_actions=parameters["maximum_seek_steps"],
+        max_encounters=parameters["maximum_encounters"],
+    ))
+    assert report.search_exhausted and report.captures == 0
+    assert report.search_stop_reason == "survey_leg_limit_exceeded"
+    assert report.encounters_seen == report.flees == 32
+    assert patrol.legs == 160
+    assert report.actions_executed == 225
+
+
 def test_area_executor_retries_a_bounded_failed_capture_on_a_fresh_encounter() -> None:
     class _RetryingRouteOneSurvey(_RouteOneSurveySimulation):
         failed_once = False
