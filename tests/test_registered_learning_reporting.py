@@ -101,6 +101,29 @@ def test_registered_counter_checks_actual_receipt(tmp_path, mutation):
             _validate_registered_counter(progress, tmp_path)
 
 
+def test_transform_session_credits_only_the_completed_venonat_choice():
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-registered-transform-learning-2026-09-10.json").read_text()
+    )
+    training, component = _training_projection(receipt)
+    assert (training.samples_before, training.samples_after) == (6, 7)
+    assert training.successful_examples == 3
+    assert component.validation_examples == 0
+    session = receipt["session"]
+    assert (session["completed_steps"], session["attempted_steps"],
+            session["unclaimed_steps"], session["fits"]) == (1, 1, 3, 1)
+    assert (session["last_verified_registered"], session["last_verified_specimens"]) == (40, 44)
+    assert (session["total_recorded_actions"], session["total_recorded_frames"]) == (415, 32160)
+    assert session["steps"][0]["new_registrations"] == ["pokemon:national:048"]
+    assert session["automatic_cycle_summary_published"] is False
+    assert session["stop_reason"] == "operator_stopped_unclaimed_preparation"
+    profiles = session["planning_profiles"]
+    assert profiles["end_to_end_speedup_established"] is False
+    for profile in (profiles["before"], profiles["after"]):
+        assert profile["controller_inputs"] == profile["predictions"] == 0
+        assert profile["status"] == "time_box_reached"
+
+
 @pytest.mark.parametrize("key", ["historical_rewards_reused", "parameter_warm_start"])
 def test_registered_dashboard_rejects_mixed_objective_claim(key):
     receipt = json.loads(RECEIPT.read_text())

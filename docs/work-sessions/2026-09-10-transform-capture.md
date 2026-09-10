@@ -102,3 +102,42 @@ Regional enumeration opts out only of discarded RESTORE_TEAM offers; native
 enumeration keeps its default. Escort qualification and fresh execution checks
 still reject a fainted or unqualified party. No route cache or cross-state
 memoization is introduced. Timing improvement remains unverified until measured.
+
+## Comparison and closeout
+
+The follow-up profile on published source `97542ada` also reached90.03 seconds
+during source enumeration. It reached five router enumerations rather than three,
+but neither profile completed the operation: this is not a measured end-to-end
+speedup. Remaining work includes route searches for Fly connections (two calls,
+21.63 cumulative seconds) and repeated authenticated checkpoint reads. Recovery
+still exists in the native menu; only capture-only menus omit unused offers.
+
+Validation:559 focused tests passed, full source typing passed (463 files), and
+whole-repository lint, registry and documentation checks passed before publishing
+the performance repair. This is not a full-suite test claim. GitHub CI for the
+preceding Transform publication completed successfully.
+
+Latest retained continuation: episode `red-registered-transform-20260910-a-01-causal`,
+checkpoint SHA `38e4610b2bb857a620a98831cda08f9a43262b22e8434ddbe55754639ba8486f`,
+registered model SHA `ffaa3135163828d57679f595d85f82c57bb6a7c8f77214353932081709947049`.
+Use a new declaration from this endpoint; do not rerun the consumed launcher.
+Its source/fit records authenticate the exact state and seven-row corpus.
+Retained state SHA: `865bb2cf4e4f72ae26497999e943d3f7da4d25de6cf96089c81e8a5b22eb4711`;
+registration observation sequence10. The refreshed saved-state dashboard projection
+authenticates the episode manifest and shows Route15,40 registrations,36 current
+species,44 specimens,14 capture items and15,503 money. This is saved evidence, not
+a live game feed. Historical saved-state receipts remain unchanged.
+
+Flash contributed an isolated mechanics draft and a read-only performance review.
+Codex integrated, tested, corrected and measured; Claude was not used. The most
+recent refreshed Flash quota showed61.86% five-hour and87.05% weekly remaining.
+Those are account snapshots, not a measured cost for these calls.
+
+Next session: a bounded route-search optimization, an unprofiled preparation-time
+measurement, then fresh model7 gameplay. Keep this maintenance tied to that actual
+learning attempt; do not expand into a routing rewrite or repeat cartridge audits.
+The gameplay loop is stopped at this closeout; the status dashboard remains available.
+Final combined regression run:676 focused tests passed, including reporting and
+focus counters. The infographic was regenerated and visually checked; its
+three-line scope text was moved inside the existing card boundary. The North Star
+remains unchanged because no product requirement or authority gate changed.

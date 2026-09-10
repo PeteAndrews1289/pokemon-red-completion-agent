@@ -1,26 +1,25 @@
-# Current — live resource recovery and model6
+# Current — Transform repair and registered model7
 
-Recovered both actual failed encounters without retry; bought20 Great Balls through the existing routed shop; one real failed-search lesson fitted5 to6. Model6 then selected Route15 and hit the Transform target-identity guard. Final verified39 registrations/43specimens; safe recovered checkpoint. No new registration or independent advantage; historical114 remains separate.
+1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat.
 
-The safe purchase cost12,000 currency and preserved the collection. The third
-attempt used576 actions/18,372frames before the capture guard rejected a
-displayed species change during Ditto's Transform. It remains an excluded failed
-attempt, not a sixth-to-seventh example. Both recoveries are support-only.
-The fourth scheduled step was never claimed. The model chooses goals/destinations;
-deterministic game skills still execute movement, battles and captures.
+Flash High drafted the encounter/form adapter and capture-status tests. Codex
+verified cartridge semantics against the actual retained failure with zero input,
+corrected fixtures, added per-turn escape checks and conversion-sensitive typing,
+and tested five targeted fault injections. Actual received stock—not battle
+appearance—remains the source of capture credit. Historical114 is not pooled.
+The learner chooses goals/destinations; deterministic skills still execute them.
 
-Flash3.8 High supplied three isolated implementation/test drafts plus two
-correction passes. Codex corrected fixture/API mistakes, reviewed and integrated
-the source, and verified live recovery, supplies and the new fit.249 recovery/
-capture tests and91 shop/profile/router tests passed in their targeted runs,
-not a full-suite claim. A final read-only Flash review examines Transform.
-Historical rewards are not pooled; no Blue, Crystal, full replay or generalization.
+Next: Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.
 
-Next: Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture.
-Then broaden useful collection choices and reduce repeated preparation overhead;
-do not spend another session on general audits or CI-only work.
+Codex owns integration, live execution, fits and publication. Flash can draft a
+bounded route-search repair from the measured profile, with ROM-free regressions;
+its static recommendation to cache the whole routing world is not accepted because
+nested mappings remain mutable. The unused Center-offer repair is published, but
+both90-second profiles stopped before enumeration completed: no end-to-end speedup
+is claimed. Latest refreshed Flash quota:61.86% five-hour /87.05% weekly remaining.
+Claude was not used. No Blue, Crystal, full replay or generalization claim.
 
-[Evidence, audit, exact continuation and agent roles](work-sessions/2026-09-09-capture-resource-exit.md).
+[Session, evidence, continuation and review decisions](work-sessions/2026-09-10-transform-capture.md).
 
 ## Historical checkpoints below — superseded where inconsistent
 

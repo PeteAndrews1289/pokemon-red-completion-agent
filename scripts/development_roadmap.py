@@ -166,7 +166,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         text(x + 24, y + 31, f"{i + 1:02d} / {status.upper()}", "eyebrow", color)
         text(x + 24, y + 72, stage["title"], "heading")
         lines(x + 24, y + 106, stage["goal"], width=57, gap=24)
-        lines(x + 24, y + 163, stage["scope"], width=68, cls="small muted", gap=21)
+        lines(x + 24, y + 155, stage["scope"], width=68, cls="small muted", gap=19)
     text(50, 1694, "SESSION CHECK-IN", "eyebrow", "#57dfb1")
     text(50, 1732, state["as_of_session"], "small muted")
     lines(50, 1767, state["reviews"][-1]["result"], width=125)

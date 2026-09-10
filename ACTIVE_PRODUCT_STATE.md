@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture.
+- Next decision: Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Recovered both actual failed encounters without retry; bought20 Great Balls through the existing routed shop; one real failed-search lesson fitted5 to6. Model6 then selected Route15 and hit the Transform target-identity guard. Final verified39 registrations/43specimens; safe recovered checkpoint. No new registration or independent advantage; historical114 remains separate. |
+| Authority now | 1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 6 | 12 |
+| Registered Train Example · train | 7 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-capture-resource-exit** · status **active** · evidence [registered train example](docs/evidence/red-registered-resource-exit-learning-2026-09-09.json)
+**2026-09-10-transform-capture** · status **active** · evidence [registered train example](docs/evidence/red-registered-transform-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | One settled failed search fitted5 to6; forced purchase and both recoveries added zero labels. No new registration. |
-| Authority delta | Models5 and6 chose real destinations; one new outcome fitted. No promotion. |
-| Transfer result | ROM-free recovery/supply variants only; no independent or cross-title evaluation. |
-| Blocker | A legitimate Transform changed displayed species during capture setup; original-encounter identity is not yet separated from battle form. |
-| Decision | Resource exit and registered recovery work live. Stop at the next mechanics boundary; fix encounter identity, not the model architecture. |
-| Next session | Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture. |
-| Next falsifier | A transformed opponent retains original encounter identity while unrelated species changes, party changes and bag changes still reject. |
+| Learning output | 1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat. |
+| Authority delta | Fresh learned choices drove actual play and new fits; no authority promotion. |
+| Transfer result | ROM-free Transform/Conversion variants only; no cross-title or held-out evaluation. |
+| Blocker | Unused Center offers removed, but the second read-only profile still reached its90-second limit in source enumeration. Remaining route search and checkpoint verification need a bounded throughput repair. |
+| Decision | Continue the existing registered learner, with focused mechanics repairs rather than new architecture. |
+| Next session | Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts. |
+| Next falsifier | A useful new choice improves verified registration while preserving existing credit and physical stock. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

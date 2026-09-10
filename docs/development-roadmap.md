@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-09-capture-resource-exit**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-transform-capture**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 - [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 
-Current model: **6 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **7 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-resource-exit-learning-2026-09-09.json)
+[Current evidence](../docs/evidence/red-registered-transform-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-transform-capture
+
+Transform adapter repaired. 1 steps / 1 fits; examples 6 to 7. 1 new registrations; 40 registered / 44 specimens. Bounded training only.
+
+**Deviation:** No goal or stage redefinition. Flash drafted mechanics; Codex corrected and verified. No consumed failure replay.
+
+**Next:** Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.
 
 ### 2026-09-09-capture-resource-exit
 

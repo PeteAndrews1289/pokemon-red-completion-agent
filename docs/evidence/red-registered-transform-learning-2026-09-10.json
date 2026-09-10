@@ -1,0 +1,609 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "ff26c8b9c2021d65ae5c718c7443a9ce236966e441935c1bb88c12e6e994e88f",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 7,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 7,
+      "successful_examples": 3,
+      "total_examples": 7,
+      "train_dataset_sha256": "597920e719a6883d6ee7f62923693cdd9d45f68ab1328c46fd9d97cd03ea0c4e",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.016681253104759354,
+      "weighted_mse_before": 0.030026416680343622
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "767dfc5d8e172e1473af7e57407d8029b5b4576a43a4e3d16444b631046dd13d",
+      "file_sha256": "d7bd2e2dcef63346d7f0129bf81076cded709cae3616eac81caf3cd12ad40ba7",
+      "independent_evaluation": false,
+      "model_sha256": "ffaa3135163828d57679f595d85f82c57bb6a7c8f77214353932081709947049",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "8cececd18cc24d4447cf55a08aebb139fe4b916fcc38a1a8876ac458e85e62ed",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 7,
+      "source_bundle_sha256": "2089f022b97c7c0a5cf24f77347fe0fbafaa4ff836f89b8637012fecb9f26b65",
+      "source_commit": "b3db8e01bec400f4b3bf8f647d372a3cba666b27"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.19322216549348037,
+        1.2698686851332047e-05,
+        5.738413107024621e-05,
+        0.00011479158091420852,
+        4.357431880177729e-05,
+        0.0048400725756455355,
+        0.014869178487613158,
+        4.717622339924435e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 7,
+      "total_examples": 7,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.02368495365519073
+    },
+    "regional_source_examples": 4,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.141141590609767,
+        9.18412643697683e-06,
+        5.568637021772749e-05,
+        0.00011039410827211764,
+        4.3176230750730475e-05,
+        0.002646893633522132,
+        0.006120949667919742,
+        3.4031959477912055e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 7,
+      "total_examples": 7,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.016681253104759357
+    }
+  },
+  "current_session_status": "operator_stopped_unclaimed_preparation",
+  "completed_episode": {
+    "episode_id": "red-registered-transform-20260910-a-01-causal",
+    "actions": 415,
+    "frames": 32160,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 1,
+    "status": "succeeded"
+  },
+  "session": {
+    "completed_steps": 1,
+    "attempted_steps": 1,
+    "unclaimed_steps": 3,
+    "fits": 1,
+    "registered_examples_before": 6,
+    "registered_examples_after": 7,
+    "initial_registered": 39,
+    "last_verified_registered": 40,
+    "last_verified_specimens": 44,
+    "steps": [
+      {
+        "ordinal": 1,
+        "episode_id": "red-registered-transform-20260910-a-01-causal",
+        "selection_scope": "regional_destination",
+        "selected_kind": "acquire_species",
+        "selected_source": "wild:Route15:grass",
+        "status": "succeeded",
+        "failure_reason": null,
+        "actions": 415,
+        "frames": 32160,
+        "registered_before": 39,
+        "registered_after": 40,
+        "new_registrations": [
+          "pokemon:national:048"
+        ],
+        "physical_specimens": 44,
+        "checkpoint_sha256": "38e4610b2bb857a620a98831cda08f9a43262b22e8434ddbe55754639ba8486f",
+        "eligible_examples": 1,
+        "behavior_model_sha256": "8cececd18cc24d4447cf55a08aebb139fe4b916fcc38a1a8876ac458e85e62ed",
+        "capture_survey": {
+          "captures": 1,
+          "encounters_seen": 2,
+          "flees": 1,
+          "safety_stopped": false,
+          "search_exhausted": false,
+          "semantic_actions": 8
+        },
+        "capture_support": {
+          "party_preparations": 0,
+          "status_attempts": 3,
+          "verified_status_observations": 1
+        },
+        "new_model_sha256": "ffaa3135163828d57679f595d85f82c57bb6a7c8f77214353932081709947049"
+      }
+    ],
+    "total_recorded_actions": 415,
+    "total_recorded_frames": 32160,
+    "elapsed_seconds": null,
+    "stop_reason": "operator_stopped_unclaimed_preparation",
+    "failed_attempts_retried": 0,
+    "source_commit": "b3db8e01bec400f4b3bf8f647d372a3cba666b27",
+    "transform_adapter_read_only_verified": true,
+    "mutation_probes_killed": 5,
+    "mutation_probes_total": 5,
+    "mutation_scope": "targeted_not_global_score",
+    "automatic_cycle_summary_published": false,
+    "unclaimed_preparation_interrupted": true,
+    "planning_profiles": {
+      "before": {
+        "controller_inputs": 0,
+        "predictions": 0,
+        "schema": "pokemon.red.read-only-planning-profile.v1",
+        "stage": "inspect_sources",
+        "status": "time_box_reached",
+        "top_cumulative": [
+          {
+            "calls": 1,
+            "cumulative_seconds": 60.108,
+            "file": "run_red_regional_source_choice.py",
+            "function": "inspect_sources",
+            "line": 133,
+            "self_seconds": 0.01
+          },
+          {
+            "calls": 3,
+            "cumulative_seconds": 54.043,
+            "file": "red_resource_goal_router.py",
+            "function": "enumerate",
+            "line": 98,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 53.635,
+            "file": "strategic_navigation_scenario_runtime.py",
+            "function": "plan_feasible_to_map",
+            "line": 533,
+            "self_seconds": 0.001
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 53.615,
+            "file": "route_plan.py",
+            "function": "plan_route",
+            "line": 312,
+            "self_seconds": 0.031
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 53.582,
+            "file": "route_plan.py",
+            "function": "_find_composed_route",
+            "line": 362,
+            "self_seconds": 1.124
+          },
+          {
+            "calls": 3,
+            "cumulative_seconds": 39.664,
+            "file": "red_routed_recovery.py",
+            "function": "bind_routed_center_recovery",
+            "line": 204,
+            "self_seconds": 0.02
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 30.785,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_verify_continuation_restore",
+            "line": 1922,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 19346,
+            "cumulative_seconds": 30.717,
+            "file": "local_router.py",
+            "function": "find_local_paths",
+            "line": 161,
+            "self_seconds": 16.195
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 29.902,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_prepare",
+            "line": 813,
+            "self_seconds": 0.01
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 27.946,
+            "file": "red_bounded_player.py",
+            "function": "__call__",
+            "line": 83,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 26.179,
+            "file": "red_regional_acquisition.py",
+            "function": "enumerate_red_regional_acquisitions",
+            "line": 78,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 21.006,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_continue_readiness",
+            "line": 1682,
+            "self_seconds": 0.021
+          },
+          {
+            "calls": 241,
+            "cumulative_seconds": 17.798,
+            "file": "private_artifacts.py",
+            "function": "open_episode",
+            "line": 722,
+            "self_seconds": 0.004
+          },
+          {
+            "calls": 30521,
+            "cumulative_seconds": 17.482,
+            "file": "route_plan.py",
+            "function": "without_warp_transit",
+            "line": 491,
+            "self_seconds": 9.311
+          }
+        ],
+        "top_self": [
+          {
+            "calls": 19346,
+            "cumulative_seconds": 30.717,
+            "file": "local_router.py",
+            "function": "find_local_paths",
+            "line": 161,
+            "self_seconds": 16.195
+          },
+          {
+            "calls": 30521,
+            "cumulative_seconds": 17.482,
+            "file": "route_plan.py",
+            "function": "without_warp_transit",
+            "line": 491,
+            "self_seconds": 9.311
+          },
+          {
+            "calls": 59904310,
+            "cumulative_seconds": 4.256,
+            "file": "route_plan.py",
+            "function": "<genexpr>",
+            "line": 529,
+            "self_seconds": 4.242
+          },
+          {
+            "calls": 174899,
+            "cumulative_seconds": 3.933,
+            "file": "local_router.py",
+            "function": "_reconstruct",
+            "line": 267,
+            "self_seconds": 2.414
+          },
+          {
+            "calls": 660,
+            "cumulative_seconds": 6.972,
+            "file": "gen1_traversal.py",
+            "function": "_local_graph",
+            "line": 411,
+            "self_seconds": 2.092
+          },
+          {
+            "calls": 4816612,
+            "cumulative_seconds": 1.43,
+            "file": "private_artifacts.py",
+            "function": "_unique_json_object",
+            "line": 3627,
+            "self_seconds": 1.43
+          },
+          {
+            "calls": 16939512,
+            "cumulative_seconds": 1.396,
+            "file": "local_router.py",
+            "function": "permits_mode",
+            "line": 53,
+            "self_seconds": 1.396
+          },
+          {
+            "calls": 5327509,
+            "cumulative_seconds": 1.844,
+            "file": "local_router.py",
+            "function": "neighbors",
+            "line": 66,
+            "self_seconds": 1.171
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 53.582,
+            "file": "route_plan.py",
+            "function": "_find_composed_route",
+            "line": 362,
+            "self_seconds": 1.124
+          },
+          {
+            "calls": 16722589,
+            "cumulative_seconds": 1.01,
+            "file": "local_router.py",
+            "function": "next_mode",
+            "line": 56,
+            "self_seconds": 1.01
+          }
+        ],
+        "wall_seconds": 90.031
+      },
+      "after": {
+        "controller_inputs": 0,
+        "predictions": 0,
+        "schema": "pokemon.red.read-only-planning-profile.v1",
+        "stage": "inspect_sources",
+        "status": "time_box_reached",
+        "top_cumulative": [
+          {
+            "calls": 1,
+            "cumulative_seconds": 59.568,
+            "file": "run_red_regional_source_choice.py",
+            "function": "inspect_sources",
+            "line": 133,
+            "self_seconds": 0.011
+          },
+          {
+            "calls": 5,
+            "cumulative_seconds": 53.604,
+            "file": "red_resource_goal_router.py",
+            "function": "enumerate",
+            "line": 101,
+            "self_seconds": 0.001
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 52.785,
+            "file": "strategic_navigation_scenario_runtime.py",
+            "function": "plan_feasible_to_map",
+            "line": 533,
+            "self_seconds": 0.001
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 52.768,
+            "file": "route_plan.py",
+            "function": "plan_route",
+            "line": 312,
+            "self_seconds": 0.019
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 52.747,
+            "file": "route_plan.py",
+            "function": "_find_composed_route",
+            "line": 362,
+            "self_seconds": 1.117
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 30.582,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_verify_continuation_restore",
+            "line": 1922,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 30.442,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_prepare",
+            "line": 813,
+            "self_seconds": 0.01
+          },
+          {
+            "calls": 19070,
+            "cumulative_seconds": 29.825,
+            "file": "local_router.py",
+            "function": "find_local_paths",
+            "line": 161,
+            "self_seconds": 15.713
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 27.884,
+            "file": "red_bounded_player.py",
+            "function": "__call__",
+            "line": 83,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 25.823,
+            "file": "red_regional_acquisition.py",
+            "function": "enumerate_red_regional_acquisitions",
+            "line": 78,
+            "self_seconds": 0.0
+          },
+          {
+            "calls": 2,
+            "cumulative_seconds": 21.632,
+            "file": "red_collection_fly.py",
+            "function": "bind_collection_fly",
+            "line": 86,
+            "self_seconds": 0.024
+          },
+          {
+            "calls": 1,
+            "cumulative_seconds": 21.425,
+            "file": "run_paired_red_bounded_player.py",
+            "function": "_continue_readiness",
+            "line": 1682,
+            "self_seconds": 0.021
+          },
+          {
+            "calls": 241,
+            "cumulative_seconds": 18.198,
+            "file": "private_artifacts.py",
+            "function": "open_episode",
+            "line": 722,
+            "self_seconds": 0.003
+          },
+          {
+            "calls": 30877,
+            "cumulative_seconds": 17.537,
+            "file": "route_plan.py",
+            "function": "without_warp_transit",
+            "line": 491,
+            "self_seconds": 9.402
+          }
+        ],
+        "top_self": [
+          {
+            "calls": 19070,
+            "cumulative_seconds": 29.825,
+            "file": "local_router.py",
+            "function": "find_local_paths",
+            "line": 161,
+            "self_seconds": 15.713
+          },
+          {
+            "calls": 30877,
+            "cumulative_seconds": 17.537,
+            "file": "route_plan.py",
+            "function": "without_warp_transit",
+            "line": 491,
+            "self_seconds": 9.402
+          },
+          {
+            "calls": 60503187,
+            "cumulative_seconds": 4.171,
+            "file": "route_plan.py",
+            "function": "<genexpr>",
+            "line": 529,
+            "self_seconds": 4.157
+          },
+          {
+            "calls": 169759,
+            "cumulative_seconds": 3.799,
+            "file": "local_router.py",
+            "function": "_reconstruct",
+            "line": 267,
+            "self_seconds": 2.355
+          },
+          {
+            "calls": 660,
+            "cumulative_seconds": 6.829,
+            "file": "gen1_traversal.py",
+            "function": "_local_graph",
+            "line": 411,
+            "self_seconds": 2.05
+          },
+          {
+            "calls": 4816612,
+            "cumulative_seconds": 1.462,
+            "file": "private_artifacts.py",
+            "function": "_unique_json_object",
+            "line": 3627,
+            "self_seconds": 1.462
+          },
+          {
+            "calls": 16469165,
+            "cumulative_seconds": 1.356,
+            "file": "local_router.py",
+            "function": "permits_mode",
+            "line": 53,
+            "self_seconds": 1.356
+          },
+          {
+            "calls": 5194030,
+            "cumulative_seconds": 1.801,
+            "file": "local_router.py",
+            "function": "neighbors",
+            "line": 66,
+            "self_seconds": 1.148
+          },
+          {
+            "calls": 43,
+            "cumulative_seconds": 52.747,
+            "file": "route_plan.py",
+            "function": "_find_composed_route",
+            "line": 362,
+            "self_seconds": 1.117
+          },
+          {
+            "calls": 16250703,
+            "cumulative_seconds": 0.98,
+            "file": "local_router.py",
+            "function": "next_mode",
+            "line": 56,
+            "self_seconds": 0.98
+          }
+        ],
+        "wall_seconds": 90.031
+      },
+      "end_to_end_speedup_established": false
+    }
+  }
+}

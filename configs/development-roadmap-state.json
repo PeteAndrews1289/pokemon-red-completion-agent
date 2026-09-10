@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-capture-resource-exit",
+  "as_of_session": "2026-09-10-transform-capture",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-resource-exit-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-registered-transform-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -630,6 +630,12 @@
       "result": "Recovered both failures; bought 20 balls. Scorer examples 5 to 6. Ditto Transform stopped the next attempt, then recovery succeeded. No new registration: 39 registered / 43 specimens retained.",
       "deviation": "No milestone redefinition. Added one explicit nearby shop using existing routing; preserved a new failed Transform encounter and separately recovered it. Setup/support is not learning.",
       "next": "Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture."
+    },
+    {
+      "session": "2026-09-10-transform-capture",
+      "result": "Transform adapter repaired. 1 steps / 1 fits; examples 6 to 7. 1 new registrations; 40 registered / 44 specimens. Bounded training only.",
+      "deviation": "No goal or stage redefinition. Flash drafted mechanics; Codex corrected and verified. No consumed failure replay.",
+      "next": "Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts."
     }
   ],
   "closed_milestones": [
