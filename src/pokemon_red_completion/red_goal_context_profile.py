@@ -169,6 +169,23 @@ def build_native_boxed_evolution_profile_payload(
     )
 
 
+def bind_resupply_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt only Mart supply into observed indoor departure and Fly transport."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            parameters.update(fly_transport=True, indoor_fly_departure=True)
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("resupply Fly needs an existing Mart objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_capture_surf_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt future capture transport into observed Surf; historical profiles stay unchanged."""
     providers = []
@@ -955,8 +972,17 @@ def _parse_parameters(
                 "interaction_direction",
                 "purchases",
             } | ({"funding_sale"} if "funding_sale" in row else set())
-            | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set()),
+            | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
+            | {key for key in ("fly_transport", "indoor_fly_departure") if key in row},
         )
+        transport_fields: dict[str, object] = {}
+        for key in ("fly_transport", "indoor_fly_departure"):
+            if key in row:
+                if type(row[key]) is not bool:
+                    raise RedGoalContextProfileError("Mart transport flags must be bools")
+                transport_fields[key] = row[key]
+        if "indoor_fly_departure" in row and row.get("fly_transport") is not True:
+            raise RedGoalContextProfileError("Mart indoor departure requires Fly transport")
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
             raise RedGoalContextProfileError("Mart purchases must be a non-empty list")
@@ -1005,6 +1031,7 @@ def _parse_parameters(
             "purchases": parsed_purchases,
             **sale_fields,
             **affordability_fields,
+            **transport_fields,
         }
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         _exact_keys(

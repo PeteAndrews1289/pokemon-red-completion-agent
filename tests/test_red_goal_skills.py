@@ -681,6 +681,61 @@ def test_area_survey_labels_verified_no_find_without_claiming_success(
     assert report.frames_executed > 0
 
 
+@pytest.mark.parametrize("caught", [False, True])
+@pytest.mark.parametrize("reserved_master_ball", [False, True])
+def test_area_survey_last_ball_stops_before_another_encounter_and_retains_costs(
+    caught, reserved_master_ball,
+):
+    reader = _Reader(raw=_raw(poke_balls=1), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    calls = []
+
+    class LastBallArea(_AreaExecutor):
+        def seek_encounter(self):
+            calls.append("seek")
+            assert calls == ["seek"], "must not search again without balls"
+            super().seek_encounter()
+
+        def capture_encounter(self, species_ref):
+            if caught:
+                super().capture_encounter(species_ref)
+            else:
+                self.encountered = None
+                self.actions.execute(MacroAction(MacroActionKind.WAIT))
+            reader.raw = replace(reader.raw, bag_items=_raw(poke_balls=0).bag_items)
+            if reserved_master_ball:
+                reader.raw = replace(reader.raw, bag_items=(
+                    *(reader.raw.bag_items or ()), (int(ItemId.MASTER_BALL), 1),
+                ))
+            return caught
+
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:Route1:grass", area_executor=LastBallArea(reader, actions),
+        actions=actions, emulator=port, adapter=adapter,
+    )
+    binding = provider.offer(adapter.observe()).binding
+    assert binding is not None
+    report = binding.execute()
+    assert report.actions_executed == 2 and report.frames_executed > 0
+    assert report.evidence["capture_survey"]["capture_items_exhausted"] is True
+    assert report.evidence["search_exhausted"] is False
+    assert report.evidence["encounters_seen"] == 1
+    assert report.evidence["captures"] == int(caught)
+    assert report.evidence["flees"] == int(not caught)
+    verdict = binding.verify(report)
+    assert verdict.status.value == ("succeeded" if caught else "failed")
+    if not caught:
+        assert verdict.failure_reason is GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED
+        # The marker alone cannot certify exhaustion or a safe terminal boundary.
+        reader.raw = replace(reader.raw, bag_items=_raw(poke_balls=1).bag_items)
+        assert binding.verify(report).failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+        reader.raw = replace(reader.raw, bag_items=_raw(poke_balls=0).bag_items)
+        reader.ready = False
+        assert binding.verify(report).failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+
+
 @pytest.mark.parametrize("when", ["before_execution", "after_flee", "after_capture"])
 def test_area_survey_stops_on_faint_without_another_search_or_normalization(when):
     reader = _Reader(raw=_raw(poke_balls=20), ready=True)

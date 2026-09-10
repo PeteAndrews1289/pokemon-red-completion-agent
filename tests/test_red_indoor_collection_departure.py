@@ -258,6 +258,32 @@ def test_indoor_departure_then_fly_and_destination_share_actual_accounting(indoo
     assert report.frames_executed == indoor_scene.game.frame_count
 
 
+@pytest.mark.parametrize("fault", [None, "wrong_exit", "unavailable_after_exit"])
+def test_supply_exit_rebinds_actual_flight_and_preserves_failure(indoor_scene, fault):
+    from test_red_resupply_fly import supply_spec
+    scene = indoor_scene
+    spec = supply_spec(scene)
+    fresh = FreshRedGoalObservation("0" * 64, scene.adapter.observe(), scene.observer.observe())
+    binding = bind_indoor_collection_departure(
+        scene.router, spec, scene.provider, fresh, scene.observer
+    )
+    assert binding is not None and not scene.game.actions
+    assert binding.kind is GoalKind.RESUPPLY
+    scene.game.fault = fault
+    if fault == "wrong_exit":
+        with pytest.raises(RouteExecutionError):
+            binding.execute()
+        assert scene.game.flight_confirms == 0 and not scene.provider_calls
+        return
+    report = binding.execute()
+    assert binding.verify(report).status.value == ("succeeded" if fault is None else "failed")
+    assert scene.game.indoor_walk_calls == 1
+    assert scene.game.flight_confirms == int(fault is None)
+    assert scene.provider_calls == ([(89, 3, 3)] if fault is None else [])
+    assert report.actions_executed == scene.router.actions.actions_executed
+    assert report.frames_executed == scene.game.frame_count
+
+
 def test_consumed_binding_rejects_second_execution(indoor_scene):
     binding = indoor_scene.bind()
     assert binding is not None
