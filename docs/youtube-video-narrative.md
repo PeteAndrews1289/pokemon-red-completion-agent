@@ -33,6 +33,8 @@ The [Champion milestone](audits/red-phase4-closeout-2026-09-09.md) is supporting
 
 ## Act4 — Keep the failures in the story
 
+Show [Paras evolving into Parasect](work-sessions/2026-09-10-owned-evolution-access.md) after an empty-menu transport repair. Display61registrations but still60model examples: the only available goal was forced, so a real collection gain did not become a fake model lesson. Flash helped repair an isolated stone-evolution draft; Codex rejected incorrect mechanics claims, repaired remaining fixtures and kept the draft out of live play.
+
 Explain one blocked-route or boxed-capture verification failure and the reusable fix. Keep actual costs visible. Explain why the shared Pokédex records legitimate acquisition once rather than requiring every species at level100.
 
 ## Closing — What remains unproved

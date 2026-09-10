@@ -15,6 +15,8 @@ from pokemon_red_completion.gen1_cartridge import evolution_graph
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.red_collection import red_species_number
 from pokemon_red_completion.red_goal_context_profile import (
+    bind_evolution_fly_profile,
+    bind_indoor_fly_departure_profile,
     build_native_boxed_evolution_profile_payload,
     parse_red_goal_context_profile,
 )
@@ -26,12 +28,16 @@ from pokemon_red_completion.red_owned_evolution_priority import prioritize_owned
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
 
 
-def inspect_owned_evolution(ready: base._Readiness) -> dict[str, Any]:
+def inspect_owned_evolution(
+    ready: base._Readiness, *, fly_transport: bool = False,
+) -> dict[str, Any]:
     """Offer the first stock-prioritized objective with a real native binding.
 
     A route being enumerable is not evidence of successful execution. Cost and
     outcome remain those of the actual played decision, never this proposal.
     """
+    if type(fly_transport) is not bool:
+        raise ValueError("owned evolution Fly opt-in must be boolean")
     if (
         ready.continuation is None
         or ready.registration_policy is None
@@ -93,6 +99,10 @@ def inspect_owned_evolution(ready: base._Readiness) -> dict[str, Any]:
                     evolution_level=row.evolution_level,
                 )
             )
+            if fly_transport:
+                # Prospective access only. Keep the historical profile builder
+                # unchanged: old checkpoint identities depend on its bytes.
+                profile = bind_indoor_fly_departure_profile(bind_evolution_fly_profile(profile))
             native = bind_native_boxed_evolution(
                 replace(runtime, profile=profile),
                 world,
@@ -137,6 +147,7 @@ def inspect_owned_evolution(ready: base._Readiness) -> dict[str, Any]:
             "selected_transition": selected,
             "selection_authority": "deterministic_minimum_level_gain_shortlist",
             "learned_target_selection": False,
+            "fly_transport_enabled": fly_transport,
             "controller_actions": 0,
             "emulator_frames": 0,
         }

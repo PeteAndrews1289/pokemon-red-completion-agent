@@ -135,6 +135,40 @@ def test_unavailable_shortest_option_does_not_hide_next_real_binding(monkeypatch
     assert [r["available"] for r in result["checked"]] == [False, True]
 
 
+@pytest.mark.parametrize("enabled", [False, True])
+def test_new_owned_objective_qualifies_the_same_prospective_transport(monkeypatch, enabled):
+    ready, _, _ = fixture(monkeypatch)
+    old_profile = ready.profile
+    original = module.RedResourceGoalRouter
+    observed_flags = []
+
+    def require_flight(runtime, *args, **kwargs):
+        routed = original(runtime, *args, **kwargs)
+        spec = next(s for s in runtime.profile.providers if s.kind is GoalKind.EVOLVE_SPECIES)
+        flags = (spec.parameters.get("fly_transport"),
+                 spec.parameters.get("indoor_fly_departure"))
+        observed_flags.append(flags)
+        return routed if flags == (True, True) else SimpleNamespace(
+            enumerate=lambda observation: SimpleNamespace(bindings=()),
+        )
+
+    monkeypatch.setattr(module, "RedResourceGoalRouter", require_flight)
+    result = module.inspect_owned_evolution(ready, fly_transport=enabled)
+    assert result["selected_transition"] == ("evolution:48:49:31" if enabled else None)
+    assert all(flags == ((True, True) if enabled else (None, None)) for flags in observed_flags)
+    assert result["fly_transport_enabled"] is enabled
+    assert ready.profile is old_profile
+    assert result["controller_actions"] == result["emulator_frames"] == 0
+
+
+@pytest.mark.parametrize("invalid", [1, "yes", None])
+def test_owned_transport_opt_in_rejects_non_boolean_before_restore(monkeypatch, invalid):
+    ready, checked, restored = fixture(monkeypatch)
+    with pytest.raises(ValueError, match="boolean"):
+        module.inspect_owned_evolution(ready, fly_transport=invalid)
+    assert checked == restored == []
+
+
 def test_mixed_capped_stock_is_not_claimed_executable_from_lower_level_alternative(monkeypatch):
     ready, checked, _ = fixture(monkeypatch, mixed_cap=True)
     result = module.inspect_owned_evolution(ready)

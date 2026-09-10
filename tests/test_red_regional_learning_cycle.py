@@ -128,13 +128,15 @@ def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monk
     assert len(played) == 2
 
 
+@pytest.mark.parametrize("fly", [False, True])
 def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ancestry(
-    tmp_path, monkeypatch,
+    tmp_path, monkeypatch, fly,
 ):
     import inspect_red_owned_evolution as owned
 
     args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
     args.automatic_goals = args.owned_evolution_objectives = True
+    args.owned_evolution_fly_transport = fly
     original_prepare = cycle.source.base._prepare
 
     def prepare(actual):
@@ -150,15 +152,20 @@ def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ances
         "status": "ready", "available_goal_kinds": ["acquire_species", "evolve_species"],
     })
     transitions = iter(["evolution:48:49:31", "evolution:17:18:36"])
-    monkeypatch.setattr(owned, "inspect_owned_evolution", lambda ready: {
-        "selected_transition": next(transitions), "controller_actions": 0,
-    })
+    def inspect(ready, **kwargs):
+        assert kwargs == ({"fly_transport": True} if fly else {})
+        return {"selected_transition": next(transitions), "controller_actions": 0}
+    monkeypatch.setattr(owned, "inspect_owned_evolution", inspect)
     result = cycle._run(args)
     assert len(played) == len(fits) == 2
-    assert played[0]["regional_transitions"][-1] == "evolution:48:49:31"
+    transport = ["evolution-fly", "indoor-fly-departure"] if fly else []
+    assert played[0]["regional_transitions"] == [
+        "wild:Route24:grass", "evolution:48:49:31", *transport,
+    ]
     assert played[1]["regional_transitions"] == [
-        "wild:Route24:grass", "evolution:48:49:31",
+        "wild:Route24:grass", "evolution:48:49:31", *transport,
         "warp-safe:wild:Route5:grass", "discovery:wild:Route5:grass", "evolution:17:18:36",
+        *transport,
     ]
     assert played[1]["continue_from_checkpoint"][-1] == ["cycle-fixture-01-causal", "1" * 64]
     assert result["steps"][0]["owned_evolution_inventory"]["selected_transition"] == (
@@ -167,6 +174,15 @@ def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ances
     assert all(row["selection_scope"] == "native_goal" for row in result["steps"])
     assert all(row["continuation_source_rule"] == "warp_safe_v1" for row in result["steps"])
     assert args.regional_transitions == ["wild:Route24:grass"]
+
+
+@pytest.mark.parametrize("value", [True, 1, None, "yes"])
+def test_owned_fly_requires_explicit_boolean_and_owned_objectives(tmp_path, monkeypatch, value):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.owned_evolution_fly_transport = value
+    with pytest.raises(ValueError, match="owned evolution Fly"):
+        cycle._run(args)
+    assert played == fits == []
 
 
 def test_completed_step_survives_later_preparation_failure(tmp_path, monkeypatch):

@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 60 verified registered species and 60 examples in the current collection-learning dataset.
+- 61 verified registered species and60 examples in the current collection-learning dataset. The latest Parasect evolution was deterministic support, not a new model lesson.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current collection](work-sessions/2026-09-10-search-budget.md).
+[Evidence for the current collection](work-sessions/2026-09-10-owned-evolution-access.md).
 
 ## My role and the stack
 
