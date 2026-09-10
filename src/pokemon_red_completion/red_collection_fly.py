@@ -109,6 +109,12 @@ def bind_collection_fly(
     runtime, actions = router.runtime, router.actions
     reader = runtime.reader
     raw, start = fresh.observation.raw, fresh.traversal
+    if start.map_id >= 0x25:
+        from pokemon_red_completion.red_indoor_collection_departure import (
+            bind_indoor_collection_departure,
+        )
+
+        return bind_indoor_collection_departure(router, spec, provider, fresh, traversal)
     if (
         not fresh.observation.input_ready
         or raw.battle_state

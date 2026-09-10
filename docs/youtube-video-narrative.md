@@ -1,3 +1,14 @@
+# Current —51 registrations, model26 retained
+
+Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.
+
+Next: Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live.
+
+The actor chooses goals and destinations; deterministic skills still execute mechanics. Historical114 remains separate. No learned combat, independent reliability or transfer claim.
+[Session and next step](work-sessions/2026-09-10-indoor-departure.md).
+
+## Prior checkpoints
+
 # Current —49 registrations, model23 retained
 
 2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.

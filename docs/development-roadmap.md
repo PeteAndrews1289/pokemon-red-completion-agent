@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-corridor-continuation**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-indoor-departure**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 - [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **23 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **26 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-retained-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-indoor-departure
+
+Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.
+
+**Deviation:** None to product or stage exits; indoor departure is maintenance unblocking collection. Stone draft remains unintegrated.
+
+**Next:** Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live.
 
 ### 2026-09-10-corridor-continuation
 

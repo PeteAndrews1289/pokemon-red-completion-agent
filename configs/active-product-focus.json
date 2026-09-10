@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Two evolution goals chosen with real indoor capture alternatives; proposals not fitted.",
-        "blocker": "Reconstruction omitted warp exclusions for Mansion3F and selected a different adjacent lane.",
-        "decision": "Align reconstruction without weakening checkpoint validation; retain completed steps separately.",
+        "authority_delta": "Two native evolution choices and one regional destination choice fitted; singleton parent is not a second label.",
+        "blocker": "Capture helper preparation ends indoors; existing Fly transport cannot rebind there.",
+        "decision": "Add bounded outdoor departure and actual same-destination requalification; preserve failed endpoint.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-indoor-learning-2026-09-10.json",
-          "sha256": "2acd353f1b1e2142d6cf6b091e15f71c177ceaa7d8613b9cae3a85701a3910fb"
+          "path": "docs/evidence/red-registered-retained-learning-2026-09-10.json",
+          "sha256": "1b64cfe37ab9cbebde32257ee880fd7adc0a04b1557f05335b83a4bc67d94b80"
         },
-        "learning_output": "2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.",
-        "next_falsifier": "Actual model23 checkpoint restores without input.",
-        "next_session_goal": "Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.",
+        "learning_output": "Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.",
+        "next_falsifier": "No-input qualification from the actual Center, then a fresh bounded choice.",
+        "next_session_goal": "Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-corridor-continuation",
+        "session_id": "2026-09-10-indoor-departure",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "Changed-warp and legacy-versus-registered reconstruction tests; no cross-title result."
+        "transfer_result": "Actual latest checkpoint restores with zero input; no independent or cross-title result."
       },
       "learned_authority": {
-        "current": "2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.",
+        "current": "Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.",
+      "next_decision": "Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 23,
+        "registered_train_examples": 26,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
