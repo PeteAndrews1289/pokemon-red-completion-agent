@@ -32,3 +32,13 @@ the actual outdoor endpoint is independently verified before a fresh flight is
 bound.202 focused tests pass, including existing Fly, capture preparation,
 resource routing and documentation/focus tests.452 source files pass type checks.
 This is engineering evidence, not proof of an actual indoor capture.
+
+The first actual restore rejected the changed menu before input. The repair is
+now a prospective `--indoor-fly-departure` profile transition, preserving the old
+checkpoint's exact availability semantics. Historical flight profiles still
+refuse indoor departures. New profiles explicitly retain the capability when
+capture destinations change. This avoids weakening the checkpoint verifier.
+The wider compatibility/script/profile suite passes315 tests before the added
+retarget-retention regression. Latest Flash allowance77.27% five-hour and82.86%
+weekly remaining; the CLI is closed. No live input was issued under the first
+indoor-capable source because its old-menu restoration was correctly rejected.

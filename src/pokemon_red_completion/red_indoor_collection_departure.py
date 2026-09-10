@@ -85,6 +85,7 @@ def bind_indoor_collection_departure(
             RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
         }
         or spec.parameters.get("fly_transport") is not True
+        or spec.parameters.get("indoor_fly_departure") is not True
     ):
         return None
 

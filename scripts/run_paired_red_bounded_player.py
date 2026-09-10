@@ -592,6 +592,13 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
+        "--indoor-fly-departure",
+        dest="regional_transitions",
+        action="append_const",
+        const="indoor-fly-departure",
+        help="prospective indoor departure before Fly; preserves prior checkpoint menus",
+    )
+    parser.add_argument(
         "--capture-fly-transport",
         dest="regional_transitions",
         action="append_const",
@@ -1500,6 +1507,7 @@ def _regional_profiles(
                 "opportunistic-capture",
                 "evolution-fly",
                 "capture-fly",
+                "indoor-fly-departure",
                 "affordable-capture-supply",
                 "cartridge-trainer-story",
                 "cartridge-trainer-story:bruno",
@@ -1538,6 +1546,14 @@ def _regional_profiles(
             from pokemon_red_completion.red_goal_context_profile import bind_capture_fly_profile
 
             profile = bind_capture_fly_profile(profile)
+            result.append(profile)
+            continue
+        if source == "indoor-fly-departure":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_indoor_fly_departure_profile,
+            )
+
+            profile = bind_indoor_fly_departure_profile(profile)
             result.append(profile)
             continue
         if source == "evolution-fly":

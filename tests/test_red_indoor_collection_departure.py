@@ -18,6 +18,7 @@ from pokemon_red_completion.local_router import LocalGraph, LocalPath
 from pokemon_red_completion.red_goal_context_profile import (
     bind_capture_fly_profile,
     bind_evolution_fly_profile,
+    bind_indoor_fly_departure_profile,
     build_native_boxed_evolution_profile_payload,
     parse_red_goal_context_profile,
 )
@@ -117,6 +118,7 @@ def indoor_scene():
             )
         )
     )
+    profile = bind_indoor_fly_departure_profile(profile)
     spec = next(s for s in profile.providers if s.kind is GoalKind.EVOLVE_SPECIES)
 
     exit_segment = RouteSegment(
@@ -332,7 +334,9 @@ def test_capture_source_identity_preserved_and_verified(indoor_scene, monkeypatc
 
     monkeypatch.setattr(flight, "bind_collection_fly", bind)
 
-    profile = bind_capture_fly_profile(_local_discovery_profile())
+    profile = bind_indoor_fly_departure_profile(
+        bind_capture_fly_profile(_local_discovery_profile())
+    )
     spec = next(s for s in profile.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
     target = spec.parameters["map_id"]
     goal_at = (spec.parameters["player_y"], spec.parameters["player_x"])
@@ -429,6 +433,70 @@ def test_flight_receives_only_the_remaining_action_budget(indoor_scene):
     assert indoor_scene.router.actions.actions_executed == 3
     assert indoor_scene.game.flight_confirms == 0
     assert indoor_scene.provider_calls == []
+
+
+def test_legacy_fly_profile_keeps_its_original_indoor_menu(indoor_scene):
+    legacy = bind_evolution_fly_profile(parse_red_goal_context_profile(
+        build_native_boxed_evolution_profile_payload(
+            indoor_scene.router.runtime.profile,
+            source_species=96, target_species=97, evolution_level=26,
+        )
+    ))
+    legacy_spec = next(s for s in legacy.providers if s.kind is GoalKind.EVOLVE_SPECIES)
+    assert "indoor_fly_departure" not in legacy_spec.parameters
+    fresh = FreshRedGoalObservation(
+        "0" * 64, indoor_scene.adapter.observe(), indoor_scene.observer.observe()
+    )
+    assert bind_indoor_collection_departure(
+        indoor_scene.router, legacy_spec, indoor_scene.provider, fresh, indoor_scene.observer
+    ) is None
+    enabled = bind_indoor_fly_departure_profile(legacy)
+    enabled_spec = next(s for s in enabled.providers if s.kind is GoalKind.EVOLVE_SPECIES)
+    assert enabled.profile_sha256 != legacy.profile_sha256
+    assert bind_indoor_collection_departure(
+        indoor_scene.router, enabled_spec, indoor_scene.provider, fresh, indoor_scene.observer
+    ) is not None
+    assert indoor_scene.router.actions.actions_executed == 0
+
+
+def test_capture_retarget_preserves_the_explicit_departure_version():
+    from test_red_living_dex_wild_corridor import _graph, _local_discovery_profile, _terrain
+
+    from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        derive_red_living_dex_wild_corridor,
+        retarget_red_wild_profile,
+    )
+
+    profile = bind_indoor_fly_departure_profile(
+        bind_capture_fly_profile(_local_discovery_profile())
+    )
+    corridor = derive_red_living_dex_wild_corridor(
+        RedEncounterSourceTarget("wild:Route2:grass"), _terrain(), _graph()
+    )
+    moved = retarget_red_wild_profile(profile, corridor)
+    capture = next(s for s in moved.providers if s.kind is GoalKind.ACQUIRE_SPECIES)
+    assert capture.parameters["indoor_fly_departure"] is True
+    assert capture.parameters["source_id"] == "wild:Route2:grass"
+
+
+@pytest.mark.parametrize("invalid", [1, "true", None])
+def test_indoor_departure_requires_explicit_boolean(indoor_scene, invalid):
+    import json
+
+    from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfileError
+
+    document = json.loads(build_native_boxed_evolution_profile_payload(
+        indoor_scene.router.runtime.profile,
+        source_species=96, target_species=97, evolution_level=26,
+    ))
+    row = next(p for p in document["providers"] if p["kind"] == "evolve_species")
+    row["parameters"]["fly_transport"] = True
+    row["parameters"]["indoor_fly_departure"] = invalid
+    with pytest.raises(RedGoalContextProfileError, match="explicit boolean"):
+        parse_red_goal_context_profile(
+            (json.dumps(document, sort_keys=True, separators=(",", ":")) + "\n").encode()
+        )
 
 
 def test_different_indoor_and_outdoor_maps(indoor_scene):

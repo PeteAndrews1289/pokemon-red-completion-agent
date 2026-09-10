@@ -28,6 +28,22 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_indoor_departure_is_an_ordered_prospective_profile_transition(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    old, new = derive(before, ('capture-fly', 'indoor-fly-departure'), object())
+    original = next(p for p in old.providers if p.kind is GoalKind.ACQUIRE_SPECIES)
+    enabled = next(p for p in new.providers if p.kind is GoalKind.ACQUIRE_SPECIES)
+    assert original.parameters.get('indoor_fly_departure') is None
+    assert enabled.parameters['indoor_fly_departure'] is True
+    assert old.profile_sha256 != new.profile_sha256
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
 def test_combined_recovery_source_preserves_champion_and_explicit_battle_budget(monkeypatch):
     from test_red_goal_context_profile import _supply_transition_profile
     module = runpy.run_path(str(SCRIPT))

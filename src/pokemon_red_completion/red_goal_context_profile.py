@@ -186,6 +186,25 @@ def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
     ))
 
 
+def bind_indoor_fly_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Version indoor access prospectively without changing old checkpoint menus."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic in {
+            RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        } and parameters.get("fly_transport") is True:
+            parameters["indoor_fly_departure"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("indoor departure needs an existing Fly objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_evolution_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt the existing evolution objective into qualified Fly transport only."""
     providers = []
@@ -637,9 +656,11 @@ def _parse_parameters(
             "level_increment": level_increment,
         }
     if mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
-        optional = {"fly_transport"} if "fly_transport" in row else set()
-        if optional and type(row["fly_transport"]) is not bool:
+        optional = {key for key in ("fly_transport", "indoor_fly_departure") if key in row}
+        if any(type(row[key]) is not bool for key in optional):
             raise RedGoalContextProfileError("Fly transport must be an explicit boolean")
+        if "indoor_fly_departure" in row and row.get("fly_transport") is not True:
+            raise RedGoalContextProfileError("indoor departure requires Fly transport")
         _exact_keys(
             row,
             {
@@ -675,7 +696,7 @@ def _parse_parameters(
             "source_species_ref": source_species_ref,
             "target_species_ref": target_species_ref,
             "evolution_level": evolution_level,
-            **({"fly_transport": row["fly_transport"]} if optional else {}),
+            **{key: row[key] for key in optional},
         }
     if mechanic in {
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
@@ -704,6 +725,14 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("capture Fly transport differs")
             required.add("fly_transport")
+        if "indoor_fly_departure" in row:
+            if (
+                mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                or type(row["indoor_fly_departure"]) is not bool
+                or row.get("fly_transport") is not True
+            ):
+                raise RedGoalContextProfileError("indoor departure requires capture Fly transport")
+            required.add("indoor_fly_departure")
         if "capture_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 not isinstance(capture_species, list)
@@ -772,6 +801,8 @@ def _parse_parameters(
             parsed["capture_status_support"] = row["capture_status_support"]
         if "fly_transport" in row:
             parsed["fly_transport"] = row["fly_transport"]
+        if "indoor_fly_departure" in row:
+            parsed["indoor_fly_departure"] = row["indoor_fly_departure"]
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(
