@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Four actual choices fitted: new evolution, trainer income, ball purchase and needed healing.",
-        "blocker": "Low remaining funds and incomplete item/puzzle support limit sustained collection.",
-        "decision": "Continue the working collector from actual resources; keep unqualified stone draft isolated.",
+        "authority_delta": "One failed destination outcome retained and fitted. No authority promotion or gameplay in this audit.",
+        "blocker": "Status-changing wild escape currently terminates collection instead of returning a qualified recovery need.",
+        "decision": "Repair the smallest reusable recovery boundary; no general rewrite or new mandatory external audit gate.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-evolution-income-learning-2026-09-10.json",
-          "sha256": "79b1447c3d5845c74ee3e5ad405370368aa0783f4a66d58354e088f9f64d8041"
+          "path": "docs/evidence/red-registered-status-audit-learning-2026-09-10.json",
+          "sha256": "8d50347c74d046b13f8d3eba91ad1ca3002473e100d9adcc95a92eca15e03e83"
         },
-        "learning_output": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
-        "next_falsifier": "Actual retained endpoint offers supported collection or legitimate recovery without invented resources.",
-        "next_session_goal": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.",
+        "learning_output": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
+        "next_falsifier": "A status-only transition is distinguished from unsafe party, location, PP or control changes.",
+        "next_session_goal": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-capture-to-evolution",
+        "session_id": "2026-09-10-status-recovery-audit",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "Actual latest checkpoint restores with zero input; no independent or cross-title result."
+        "transfer_result": "No independent or cross-title result; same-lineage training outcomes only."
       },
       "learned_authority": {
-        "current": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
+        "current": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.",
+      "next_decision": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 35,
+        "registered_train_examples": 36,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

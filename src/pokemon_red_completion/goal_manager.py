@@ -128,6 +128,7 @@ class GoalFailureReason(StrEnum):
 
     BINDING_FAILED = "binding_failed"
     SEARCH_EXHAUSTED = "search_exhausted"
+    RECOVERY_REQUIRED = "recovery_required"
     CAPTURE_ITEMS_EXHAUSTED = "capture_items_exhausted"
     EXECUTION_BUDGET_EXHAUSTED = "execution_budget_exhausted"
     EXTERNAL_INTERRUPTION = "external_interruption"

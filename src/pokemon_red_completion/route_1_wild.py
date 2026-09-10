@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable, Iterable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Protocol, overload
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -37,6 +37,59 @@ ROUTE_1_WALKER_GATES = {
 
 class ActionExecutor(Protocol):
     def execute(self, action: MacroAction) -> object: ...
+
+
+class WildFleeStatusChange(RuntimeError):
+    """Private cause: an otherwise verified escape acquired a lead status.
+
+    This is not permission to resume a route. Collection recovery must independently
+    check the current protected party before turning it into a replanning request.
+    Legacy callers still receive their original error type.
+    """
+
+    def __init__(
+        self, before: RawGameState, after: RawGameState, evidence: Route1WildFleeEvidence,
+    ) -> None:
+        if not _status_only_flee_change(before, after, evidence):
+            raise ValueError("status recovery requires a fully qualified degraded exit")
+        super().__init__("verified wild exit requires status recovery")
+        self.before = before
+        self.after = after
+
+
+def _status_only_flee_change(
+    before: RawGameState, after: RawGameState, evidence: Route1WildFleeEvidence,
+) -> bool:
+    """Require complete party evidence, not just a living lead in the field."""
+    count = before.party_count
+    fields = ("party_species_ids", "party_levels", "party_max_hp", "party_moves", "party_pp")
+    if type(count) is not int or not 1 <= count <= 6 or after.party_count != count:
+        return False
+    for name in (*fields, "party_hp", "party_status"):
+        old, new = getattr(before, name), getattr(after, name)
+        if old is None or new is None or len(old) != count or len(new) != count:
+            return False
+        if name in fields and old != new:
+            return False
+    assert before.party_hp is not None and after.party_hp is not None
+    assert before.party_status is not None and after.party_status is not None
+    return (
+        not evidence.status_preserved
+        and replace(evidence, status_preserved=True).verified
+        and (before.player_y, before.player_x) == (after.player_y, after.player_x)
+        and before.first_party_status == before.party_status[0] == 0
+        and after.first_party_status == after.party_status[0]
+        and after.first_party_status in (*range(1, 8), 8, 16, 32, 64)
+        and before.party_status[1:] == after.party_status[1:]
+        and before.first_party_hp == before.party_hp[0]
+        and after.first_party_hp == after.party_hp[0]
+        and before.party_hp[1:] == after.party_hp[1:]
+        and all(0 < new <= old for old, new in zip(before.party_hp, after.party_hp, strict=True))
+        and before.bag_items is not None and before.bag_items == after.bag_items
+        and before.player_money is not None and before.player_money == after.player_money
+        and before.badge_bits == after.badge_bits
+        and before.event_flags == after.event_flags
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -587,6 +640,11 @@ def flee_wild(
                 stabilization_frames=stabilization_frames,
             )
             if expected_position != (raw.player_x, raw.player_y) or not evidence.verified:
+                if _status_only_flee_change(encounter, raw, evidence):
+                    raise error_type(
+                        f"{route_name} flee failed its stabilized semantic evidence gate: "
+                        "status recovery required."
+                    ) from WildFleeStatusChange(encounter, raw, evidence)
                 raise error_type(f"{route_name} flee failed its stabilized semantic evidence gate.")
             note_observed_battle_exit()
             return evidence

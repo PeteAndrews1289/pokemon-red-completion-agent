@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.
+- Next decision: Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial. |
+| Authority now | Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 35 | 12 |
+| Registered Train Example · train | 36 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-capture-to-evolution** · status **active** · evidence [registered train example](docs/evidence/red-registered-evolution-income-learning-2026-09-10.json)
+**2026-09-10-status-recovery-audit** · status **active** · evidence [registered train example](docs/evidence/red-registered-status-audit-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial. |
-| Authority delta | Four actual choices fitted: new evolution, trainer income, ball purchase and needed healing. |
-| Transfer result | Actual latest checkpoint restores with zero input; no independent or cross-title result. |
-| Blocker | Low remaining funds and incomplete item/puzzle support limit sustained collection. |
-| Decision | Continue the working collector from actual resources; keep unqualified stone draft isolated. |
-| Next session | Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated. |
-| Next falsifier | Actual retained endpoint offers supported collection or legitimate recovery without invented resources. |
+| Learning output | Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry. |
+| Authority delta | One failed destination outcome retained and fitted. No authority promotion or gameplay in this audit. |
+| Transfer result | No independent or cross-title result; same-lineage training outcomes only. |
+| Blocker | Status-changing wild escape currently terminates collection instead of returning a qualified recovery need. |
+| Decision | Repair the smallest reusable recovery boundary; no general rewrite or new mandatory external audit gate. |
+| Next session | Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated. |
+| Next falsifier | A status-only transition is distinguished from unsafe party, location, PP or control changes. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

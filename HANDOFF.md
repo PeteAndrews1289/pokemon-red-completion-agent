@@ -1,3 +1,14 @@
+# Current — status-recovery audit; model36 retained
+
+Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.
+
+Next: Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.
+
+Flash High reviewed supplied excerpts; Codex accepted status triage and rejected unsupported counter/memorization claims. No runtime repair in this audit. The learner chooses goals/destinations; deterministic skills execute mechanics. No independent improvement or transfer claim.
+[Audit, next steps and session reporting](docs/audits/red-status-recovery-2026-09-10.md).
+
+## Prior checkpoints
+
 # Current —53 registrations, model35 retained
 
 Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.

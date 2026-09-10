@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-capture-to-evolution",
+  "as_of_session": "2026-09-10-status-recovery-audit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-evolution-income-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-registered-status-audit-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -702,6 +702,12 @@
       "result": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
       "deviation": "No stage-exit change. New capture developed into its next missing registration. No stage-exit change or independent reliability claim.",
       "next": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated."
+    },
+    {
+      "session": "2026-09-10-status-recovery-audit",
+      "result": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
+      "deviation": "No stage-exit change. Audit prioritizes bounded status recovery; training volume is not learned advantage.",
+      "next": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated."
     }
   ],
   "closed_milestones": [

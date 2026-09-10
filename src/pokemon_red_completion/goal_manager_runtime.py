@@ -39,6 +39,10 @@ class GoalManagerRuntimeError(RuntimeError):
     """Raised when execution crosses a goal-manager authority boundary."""
 
 
+class GoalRecoveryRequired(RuntimeError):
+    """A verified degraded terminal needs replanning, not continued execution."""
+
+
 @dataclass(frozen=True, slots=True)
 class GoalExecutionReport:
     """Bounded mechanic evidence returned before independent verification."""

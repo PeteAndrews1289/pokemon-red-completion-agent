@@ -254,6 +254,38 @@ def test_opt_in_does_not_continue_other_failure(tmp_path, monkeypatch):
     assert len(played) == len(fits) == 1
 
 
+@pytest.mark.parametrize('enabled', [False, True])
+def test_status_replanning_is_opt_in_and_uses_actual_saved_model(tmp_path, monkeypatch, enabled):
+    args, records, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
+    args.automatic_goals = True
+    args.continue_after_status_recovery = enabled
+    monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
+        'status': 'ready', 'available_goal_kinds': ['acquire_species'],
+    })
+    original = cycle.source._run
+
+    def degraded(actual):
+        result = original(actual)
+        result['parent_episode']['steps'][0].update(
+            failure_reason='recovery_required', semantic_state_changed=True,
+            collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
+            collection_after={'living_species': 21, 'undeclared_specimen_losses': 0},
+        )
+        return result
+
+    monkeypatch.setattr(cycle.source, '_run', degraded)
+    result = cycle._run(args)
+    assert len(played) == len(fits) == (2 if enabled else 1)
+    assert result['automatic_retry'] is False
+    if enabled:
+        assert played[1]['expected_living_dex_model_sha256'] == records[1].model.model_sha256
+        assert played[1]['continue_from_checkpoint'][-1] == ['cycle-fixture-01-causal', '1'*64]
+        assert played[1]['pair_id'] != played[0]['pair_id']
+        assert result['stop_reason'] == 'step_limit'
+    else:
+        assert result['stop_reason'] == 'failed_step_retained_and_fitted'
+
+
 def test_fit_error_preserves_source_receipt_and_never_continues(tmp_path, monkeypatch):
     args, _, _, played, fits, files = harness(tmp_path, monkeypatch, fit_fails=True)
     with pytest.raises(ValueError, match='fit admission'):

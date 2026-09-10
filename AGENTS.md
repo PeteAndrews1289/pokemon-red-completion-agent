@@ -36,6 +36,19 @@ Do not create a new CI workflow or count documentation work as model progress.
 
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 
+## User-facing session closeout
+
+After each session, provide a concise outcome-first update: verified work, learning
+and collection deltas, whether gameplay is running or stopped, failures/limitations,
+next bounded objective and estimate, and candid suggestions when useful. End with
+the recommended next-session model, reasoning effort and whether Fast is worthwhile,
+with a task-specific reason. Never imply a recommendation changed the selected model.
+When Flash or Claude was used, identify its actual contribution, accepted/rejected
+findings, completion status and refreshed service quota (or explicitly unavailable).
+Use bounded Flash drafts/reviews when they save real work; do not add a standing
+external-review gate to ordinary development. Keep roadmap, handoff and narrative
+aligned with verified evidence; tests and documentation are not learning progress.
+
 - Do not copy experimental claims or results from the predecessor into this repository.
 - Never commit ROMs, saves, snapshots, recordings, datasets, checkpoints, credentials, or private
   machine paths.

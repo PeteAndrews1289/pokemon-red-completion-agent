@@ -41,6 +41,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalDecisionAuthority,
     GoalExecutionReport,
     GoalManagerExecutionResult,
+    GoalRecoveryRequired,
     GoalVerification,
     execute_goal_manager_decision,
 )
@@ -225,7 +226,7 @@ def _retain_executor_failure(
 ) -> ExecutableGoalBinding:
     """Turn an executor exception into one metered failure for bounded recovery."""
 
-    failed = False
+    failed: GoalFailureReason | None = None
 
     def execute() -> GoalExecutionReport:
         nonlocal failed
@@ -238,7 +239,11 @@ def _retain_executor_failure(
         except Exception as error:
             after = budget_meter.checkpoint()
             _report_executor_failure(error, failure_observer, budget_meter)
-            failed = True
+            failed = (
+                GoalFailureReason.RECOVERY_REQUIRED
+                if isinstance(error, GoalRecoveryRequired)
+                else GoalFailureReason.BINDING_FAILED
+            )
             return GoalExecutionReport(
                 actions_executed=(
                     after.controller_actions - before.controller_actions
@@ -248,8 +253,8 @@ def _retain_executor_failure(
             )
 
     def verify(report: GoalExecutionReport) -> GoalVerification:
-        if failed:
-            return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
+        if failed is not None:
+            return GoalVerification.failed(failed)
         return binding.verify(report)
 
     # Wrapping execution must preserve every declared policy fact, including

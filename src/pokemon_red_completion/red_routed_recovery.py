@@ -25,6 +25,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
     GoalExecutionReport,
+    GoalRecoveryRequired,
     GoalVerification,
 )
 from pokemon_red_completion.observation import PokemonRedStateReader, RawGameState
@@ -41,6 +42,7 @@ from pokemon_red_completion.red_goal_skills import (
     prepare_center_departure,
 )
 from pokemon_red_completion.red_pc_storage import face_pc_boundary
+from pokemon_red_completion.route_1_wild import WildFleeStatusChange
 from pokemon_red_completion.route_executor import (
     InterruptionReceipt,
     RouteActionPort,
@@ -104,7 +106,19 @@ class RecoveryRouteInterruptionHandler:
 
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         assert self.inner is not None
-        receipt = self.inner.handle(interruption)
+        try:
+            receipt = self.inner.handle(interruption)
+        except RouteExecutionError as error:
+            cause = error.__cause__
+            if not isinstance(cause, WildFleeStatusChange):
+                raise
+            raw = self.reader.read()
+            if raw != cause.after or not self.reader.read_input_readiness().ready:
+                raise RedRoutedRecoveryError(
+                    "status recovery terminal changed before handoff"
+                ) from error
+            self._require_preserved_living_slots(raw)
+            raise GoalRecoveryRequired("verified wild exit needs party status recovery") from error
         raw = self.reader.read()
         readiness = self.reader.read_input_readiness()
         if raw.battle_state != 0 or not readiness.ready:

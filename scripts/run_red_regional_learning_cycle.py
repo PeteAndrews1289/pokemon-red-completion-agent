@@ -37,6 +37,10 @@ def _parser() -> argparse.ArgumentParser:
     parser = source.base._parser()
     parser.add_argument("--learning-steps", type=int, choices=range(1, 17), default=2)
     parser.add_argument(
+        "--continue-after-status-recovery", action="store_true",
+        help="Permit a fresh bounded choice after a verified degraded-status terminal.",
+    )
+    parser.add_argument(
         "--maximum-cycle-seconds",
         type=int,
         help="Stop between bounded episodes; required for more than four steps.",
@@ -59,6 +63,11 @@ def _parser() -> argparse.ArgumentParser:
 
 def _safe_exhausted_search(parent: dict[str, Any]) -> bool:
     """Only the existing verified, unchanged-collection failure permits replanning."""
+    return _safe_failed_terminal(parent, "search_exhausted")
+
+
+def _safe_failed_terminal(parent: dict[str, Any], reason: str) -> bool:
+    """Replan from typed, verified terminals; never retry or hide failed costs."""
     steps = parent.get("steps")
     if not isinstance(steps, list) or len(steps) != 1:
         return False
@@ -77,7 +86,7 @@ def _safe_exhausted_search(parent: dict[str, Any]) -> bool:
         registered_safe = True
     return (
         step.get("status") == "failed"
-        and step.get("failure_reason") == "search_exhausted"
+        and step.get("failure_reason") == reason
         # Travel and failed throws legitimately change location/resources. The
         # provider's typed SEARCH_EXHAUSTED verification already requires a
         # settled field and living party; the next source runner rechecks them.
@@ -113,11 +122,16 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if not args.train_player or args.decision_limit != 1 or not args.completion_dose:
         raise ValueError("learning cycle requires bounded single-choice training")
     continue_search = getattr(args, "continue_after_search_exhaustion", False)
+    continue_status = getattr(args, "continue_after_status_recovery", False)
+    if type(continue_status) is not bool:
+        raise ValueError("status continuation declaration must be boolean")
     if type(continue_search) is not bool:
         raise ValueError("search continuation declaration must be boolean")
     automatic_goals = getattr(args, "automatic_goals", False)
     if type(automatic_goals) is not bool:
         raise ValueError("automatic goal declaration must be boolean")
+    if continue_status and not automatic_goals:
+        raise ValueError("status continuation requires native recovery choices")
     initial = source.base._prepare(args)
     if initial.continuation is None or not isinstance(initial.causal_record, RedPlayerModelRecord):
         raise ValueError("learning cycle requires a retained native model and saved endpoint")
@@ -289,7 +303,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             flush=True,
         )
         failed = len(parent["steps"]) != 1 or parent["steps"][0]["status"] != "succeeded"
-        if failed and not (continue_search and _safe_exhausted_search(parent)):
+        if failed and not (
+            (continue_search and _safe_exhausted_search(parent))
+            or (continue_status and _safe_failed_terminal(parent, "recovery_required"))
+        ):
             stop = "failed_step_retained_and_fitted"
             break
         if "model" in fitted:
@@ -334,6 +351,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "independent_evaluation": False,
         "automatic_retry": False,
         "continue_after_search_exhaustion": continue_search,
+        "continue_after_status_recovery": continue_status,
         "automatic_goals": automatic_goals,
         "owned_evolution_objectives": owned_evolutions,
         "pending_support_episode_ids": [row["episode_id"] for row in pending_support],
