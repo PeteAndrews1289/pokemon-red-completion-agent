@@ -113,6 +113,7 @@ def fixture(monkeypatch):
         trainer, quote, SimpleNamespace(steps=(object(),), terminal_at=(10, 36)), TrainerFacing.DOWN
     )
     monkeypatch.setattr(funding, "_candidates", lambda _: (target,))
+    monkeypatch.setattr(funding, "_observed_funding_target", lambda _router, quoted: quoted)
     monkeypatch.setattr(funding, "dependency_specimen_ledger", lambda c: tuple(sorted(c)))
 
     def checked_headers(*_args, **kwargs):
@@ -172,6 +173,38 @@ def fixture(monkeypatch):
     )
     bindings = GoalBindingSet((unavailable, alternate.opportunity), (alternate,))
     return router, state, target, bindings, calls
+
+
+def test_observed_route_rejection_stops_before_escort_or_input(monkeypatch):
+    router, state, _, bindings, calls = fixture(monkeypatch)
+
+    def reject(_router, _target):
+        raise funding.RedTrainerFundingError("observed route blocked")
+
+    monkeypatch.setattr(funding, "_observed_funding_target", reject)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    with pytest.raises(funding.RedTrainerFundingError, match="observed route blocked"):
+        bound.execute()
+    assert calls == []
+
+
+def test_execution_uses_requalified_approach_not_stale_quoted_plan(monkeypatch):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    revised = replace(target, approach=SimpleNamespace(
+        steps=("observed-safe-step",), terminal_at=(10, 36)))
+    monkeypatch.setattr(funding, "_observed_funding_target", lambda *_: revised)
+
+    def travel(plan, *_args, **_kwargs):
+        assert plan is revised.approach
+        assert plan.steps == ("observed-safe-step",)
+        calls.append("observed_route")
+        state.raw = replace(state.raw, player_y=10, player_x=36)
+        return SimpleNamespace(passed=True)
+
+    monkeypatch.setattr(funding, "execute_route", travel)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    bound.execute()
+    assert "observed_route" in calls
 
 
 @pytest.mark.parametrize(

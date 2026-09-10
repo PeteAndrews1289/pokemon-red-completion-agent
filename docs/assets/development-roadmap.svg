@@ -92,9 +92,9 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-10-qualified-status-recovery</text>
-<text x="50" y="1767" class="body">Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new</text>
-<text x="50" y="1792" class="body">registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its</text>
-<text x="50" y="1817" class="body">exact state was admitted with zero input, no healing trip and no extra training row.</text>
+<text x="50" y="1732" class="small muted">2026-09-10-observed-funding</text>
+<text x="50" y="1767" class="body">Funding execution now requalifies the same trainer against observed terrain before input. 168 focused tests passed. The</text>
+<text x="50" y="1792" class="body">actual retained state has no safe approach to its quoted trainer; zero-input qualification rejects it. No fresh gameplay or</text>
+<text x="50" y="1817" class="body">fit: model 38, 53 registrations and 47 specimens remain unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

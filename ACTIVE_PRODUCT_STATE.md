@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
+- Next decision: Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-qualified-status-recovery** · status **active** · evidence [registered train example](docs/evidence/red-qualified-status-learning-2026-09-10.json)
+**2026-09-10-observed-funding** · status **active** · evidence [registered train example](docs/evidence/red-qualified-status-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row. |
-| Authority delta | 2 fitted choices. Deterministic recovery/admission is not additional learned authority. |
+| Learning output | No new fitted choices or registrations. Model 38 and 53 registrations retained. |
+| Authority delta | None. Deterministic execution repair only; historical learner choices remain unchanged. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Funding used static geometry across an observed closed passage. Party healthy; 53 registrations, six balls and 548 money retained. No registration gain this session. |
-| Decision | Audit the actual route blockage before fresh play; preserve failed costs and avoid broad rewrites or artificial recovery trips. |
-| Next session | Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal. |
-| Next falsifier | The retained-state route diagnosis distinguishes a real occupied or gated cell from a controller timing defect without replaying the consumed choice. |
+| Blocker | The sole static funding target has no observed-terrain route. New menu eligibility must exclude it before selection. |
+| Decision | Preserve old menus; version prospective eligibility before fresh play. |
+| Next session | Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice. |
+| Next falsifier | An impossible funding target is absent from the new menu, while the exact prior checkpoint still authenticates. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

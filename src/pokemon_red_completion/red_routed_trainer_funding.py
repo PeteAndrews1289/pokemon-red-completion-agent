@@ -49,6 +49,7 @@ from .route_plan import RoutePlan
 
 if TYPE_CHECKING:
     from .red_resource_goal_router import RedResourceGoalRouter
+    from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
 class RedTrainerFundingError(RuntimeError):
@@ -100,7 +101,10 @@ def active_trainer_funding_candidate(
     )
 
 
-def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate, ...]:
+def _candidates(
+    router: RedResourceGoalRouter, *, world: StrategicScenarioRouteWorld | None = None,
+) -> tuple[TrainerFundingCandidate, ...]:
+    world = router.world if world is None else world
     reader, rom = router.runtime.reader, router.world.rom
     raw = reader.read()
     if raw.map_id is None:
@@ -149,7 +153,7 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
     if regional:
         if raw.event_flags is None:
             return ()
-        maps = connected_funding_maps(router.world.macro_graph, raw.map_id)
+        maps = connected_funding_maps(world.macro_graph, raw.map_id)
         for map_id in sorted(maps - {raw.map_id}):
             zones += static_trainer_sight_zones(
                 trainer_headers(rom, {map_id}, full_event_offsets=True),
@@ -158,12 +162,34 @@ def _candidates(router: RedResourceGoalRouter) -> tuple[TrainerFundingCandidate,
             )
         return regional_trainer_funding_candidates(
             rom,
-            router.world,
+            world,
             start,
             zones,
             inventoried_maps=maps,
         )
-    return local_trainer_funding_candidates(rom, router.world, start, zones)
+    return local_trainer_funding_candidates(rom, world, start, zones)
+
+
+def _observed_funding_target(
+    router: RedResourceGoalRouter, target: TrainerFundingCandidate,
+) -> TrainerFundingCandidate:
+    """Requalify the same quoted trainer before input, keeping old menus stable."""
+    reader = router.runtime.reader
+    before = reader.read()
+    blocks = reader.read_current_map_blocks()
+    if before.map_id != blocks.map_id or before.battle_state != 0:
+        raise RedTrainerFundingError("funding terrain does not match the active field")
+    world = router.world.with_current_blocks(blocks)
+    candidates = _candidates(router, world=world)
+    if reader.read() != before or reader.read_current_map_blocks() != blocks:
+        raise RedTrainerFundingError("funding observation changed during route qualification")
+    matches = tuple(
+        candidate for candidate in candidates
+        if candidate.trainer == target.trainer and candidate.quote == target.quote
+    )
+    if len(matches) != 1:
+        raise RedTrainerFundingError("quoted trainer has no unique observed-terrain approach")
+    return matches[0]
 
 
 def bind_local_trainer_funding(
@@ -303,7 +329,7 @@ def bind_local_trainer_funding(
             raise RedTrainerFundingError("trainer roster/reward changed before interaction")
 
     def execute() -> GoalExecutionReport:
-        nonlocal claimed, completed_report, final_party_species
+        nonlocal claimed, completed_report, final_party_species, target
         if claimed:
             raise RedTrainerFundingError("trainer funding binding already consumed")
         claimed = True
@@ -323,6 +349,8 @@ def bind_local_trainer_funding(
         if runtime.reader.read_pending_trainer_battle_identity() != pending_identity:
             raise RedTrainerFundingError("pending trainer transition changed before input")
         if pending_identity is None:
+            target = _observed_funding_target(router, target)
+            require_target(before_departure=True)
             prepare_capture_escort(runtime, actions)
         prepared_raw = runtime.reader.read()
         final_party_species = tuple(prepared_raw.party_species_ids or ())

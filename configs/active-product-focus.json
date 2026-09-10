@@ -33,19 +33,19 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "2 fitted choices. Deterministic recovery/admission is not additional learned authority.",
-        "blocker": "Funding used static geometry across an observed closed passage. Party healthy; 53 registrations, six balls and 548 money retained. No registration gain this session.",
-        "decision": "Audit the actual route blockage before fresh play; preserve failed costs and avoid broad rewrites or artificial recovery trips.",
+        "authority_delta": "None. Deterministic execution repair only; historical learner choices remain unchanged.",
+        "blocker": "The sole static funding target has no observed-terrain route. New menu eligibility must exclude it before selection.",
+        "decision": "Preserve old menus; version prospective eligibility before fresh play.",
         "evidence": {
           "kind": "registered_train_example",
           "path": "docs/evidence/red-qualified-status-learning-2026-09-10.json",
           "sha256": "9f39f98619f4fb774ae0134cffdc36110fa61ce63f1366ed0a31df18ed16f482"
         },
-        "learning_output": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
-        "next_falsifier": "The retained-state route diagnosis distinguishes a real occupied or gated cell from a controller timing defect without replaying the consumed choice.",
-        "next_session_goal": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.",
+        "learning_output": "No new fitted choices or registrations. Model 38 and 53 registrations retained.",
+        "next_falsifier": "An impossible funding target is absent from the new menu, while the exact prior checkpoint still authenticates.",
+        "next_session_goal": "Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-qualified-status-recovery",
+        "session_id": "2026-09-10-observed-funding",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.",
+      "next_decision": "Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

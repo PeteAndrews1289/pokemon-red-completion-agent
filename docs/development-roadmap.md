@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-qualified-status-recovery**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-observed-funding**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-observed-funding
+
+Funding execution now requalifies the same trainer against observed terrain before input. 168 focused tests passed. The actual retained state has no safe approach to its quoted trainer; zero-input qualification rejects it. No fresh gameplay or fit: model 38, 53 registrations and 47 specimens remain unchanged.
+
+**Deviation:** Same resource/collection lane; no stage-exit or learner-counter change. Live qualification found no safe funding route, so the batch was not launched.
+
+**Next:** Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.
 
 ### 2026-09-10-qualified-status-recovery
 

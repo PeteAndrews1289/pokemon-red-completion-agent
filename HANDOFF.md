@@ -1,3 +1,13 @@
+# Current — observed funding guard; model 38 unchanged
+
+Funding execution now requalifies the same trainer against observed terrain before input. 168 focused tests passed. The actual retained state has no safe approach to its quoted trainer; zero-input qualification rejects it. No fresh gameplay or fit: model 38, 53 registrations and 47 specimens remain unchanged.
+
+Next: Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.
+
+[Repair, actual-state check and next step](docs/work-sessions/2026-09-10-observed-funding.md).
+
+## Prior checkpoints
+
 # Current — qualified recovery; model38/53 registrations
 
 Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.
