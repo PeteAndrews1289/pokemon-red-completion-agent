@@ -171,6 +171,41 @@ def test_continuation_changes_state_not_lineage_or_partition(case):
     continued.continuation.require_restored_observation(case[2])
 
 
+def test_continuation_opens_each_ancestor_once_and_revalidates_on_next_call(case, monkeypatch):
+    from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+
+    readiness, ancestor = _completed(case)
+    original = PrivateArtifactRoot.open_episode
+    opened = []
+
+    def counted(store, episode_id):
+        opened.append(episode_id)
+        return original(store, episode_id)
+
+    monkeypatch.setattr(PrivateArtifactRoot, "open_episode", counted)
+    first = runner._continue_readiness(readiness, (ancestor,))
+    assert opened == [ancestor[0]]
+    second = runner._continue_readiness(readiness, (ancestor,))
+    assert opened == [ancestor[0], ancestor[0]]
+    assert first.capture == second.capture
+    assert first.continuation == second.continuation
+
+
+@pytest.mark.parametrize("stream", ["episode", "checkpoint", "events", "manifest"])
+def test_next_continuation_rejects_changed_history(case, tmp_path, stream):
+    from pokemon_red_completion.private_artifacts import PrivateArtifactError
+
+    readiness, ancestor = _completed(case)
+    first = runner._continue_readiness(readiness, (ancestor,))
+    assert first.capture.state_bytes == b"actual-terminal-state"
+    suffix = ".json" if stream == "manifest" else ".jsonl"
+    path = tmp_path / "private" / ancestor[0] / (stream + suffix)
+    payload = path.read_bytes()
+    path.write_bytes(payload.replace(b'"', b'!', 1))
+    with pytest.raises(PrivateArtifactError):
+        runner._continue_readiness(readiness, (ancestor,))
+
+
 @pytest.mark.parametrize("parent_mode", [False, True])
 def test_recovery_restore_mode_is_taken_from_recorded_parent_not_successor(case, parent_mode):
     store, arguments, _observation = case

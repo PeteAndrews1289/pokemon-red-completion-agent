@@ -1797,7 +1797,8 @@ def _continue_readiness(
         if episode_id in seen:
             raise PairedRedBoundedPlayerRunError("continuation_duplicate_ancestor")
         seen.add(episode_id)
-        header = readiness.private_root.open_episode(episode_id).read_header()
+        episode = readiness.private_root.open_episode(episode_id)
+        header = episode.read_header()
         metadata = header.get("metadata")
         if isinstance(metadata, Mapping):
             matches = [
@@ -1821,6 +1822,7 @@ def _continue_readiness(
             expected_profile_sha256=readiness.profile.profile_sha256,
             expected_rom_sha256=readiness.rom_sha256,
             expected_context_origin=readiness.context_origin,
+            verified_episode=episode,
         )
         if readiness.continuation is not None and readiness.continuation.search_memory is not None:
             if checkpoint.search_memory is None:
