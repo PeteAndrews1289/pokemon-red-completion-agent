@@ -9,11 +9,11 @@ A learned player that finishes Pokemon stories and accumulates verified species 
 
 ## Current milestone
 
-**Broaden owned-evolution coverage: 0/3 acceptance items (0%).**
+**Broaden owned-evolution coverage: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Qualify native three-plus-copy stock
-- [ ] Verify reserves and unchanged legacy guards
+- [x] Qualify native three-plus-copy stock ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
+- [x] Verify reserves and unchanged legacy guards ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
 - [ ] Retain a model-selected expanded-stock lesson
 
 Current model: **19 examples**. This is a small goal-value learner, not a demonstrated full-game player.

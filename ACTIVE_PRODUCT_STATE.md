@@ -67,7 +67,7 @@ outputs.
 | Learning output | 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat. |
 | Authority delta | Stock-derived evolution is offered alongside capture; the model chooses goal kinds, while target shortlisting and mechanics remain deterministic. |
 | Transfer result | ROM-free changed stock, registration, reserve, level-cap and continuation tests; no title transfer. |
-| Blocker | Native three-plus-copy evolution and broader mechanics remain unsupported; no independent generalization claim. |
+| Blocker | Native three-plus-copy evolution is ROM-free qualified; a live expanded-stock outcome and broader mechanics remain pending. No independent generalization claim. |
 | Decision | Retain the verified stock-derived evolution and capture loop; broaden the specific remaining mechanic boundary rather than add manual species routes. |
 | Next session | Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset. |
 | Next falsifier | A useful option produces verified novelty or a diagnosed settled failure. |

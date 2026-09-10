@@ -6,7 +6,7 @@ authenticates the actual save and qualifies runtime routes before presenting an
 EVOLVE goal alongside ACQUIRE.
 
 Rows needing duplicate acquisitions, rows with no controllable precursor, and
-rows with retained source copies outside {1, 2} are rejected. Precursors at
+rows with zero retained source copies are rejected. Precursors at
 level 100 are ignored because they cannot gain a level to evolve. Required
 level gains are computed as max(1, evolution_level - precursor.level).
 """
@@ -52,7 +52,7 @@ def prioritize_owned_level_evolutions(
     """Prioritize existing RedOwnedEvolutionPrerequisite rows for native qualification.
 
     Reject rows needing duplicate acquisitions, no controllable precursor, or
-    retained_source_copies outside {1, 2} (current engine limitation).
+    no retained source copies.
     Ignore level-100 precursors because they cannot gain a level.
     Compute cheapest required level gains as max(1, evolution_level - precursor.level).
     Sort eligible objectives ascending by required gains, then target and source
@@ -87,8 +87,8 @@ def prioritize_owned_level_evolutions(
         if row.duplicate_acquisitions_needed != 0:
             continue
 
-        # Reject rows with retained_source_copies outside {1, 2} (current engine limitation)
-        if row.retained_source_copies not in {1, 2}:
+        # Reject rows with no retained source copies
+        if row.retained_source_copies < 1:
             continue
 
         # Filter controllable precursors capable of gaining a level (level < 100)

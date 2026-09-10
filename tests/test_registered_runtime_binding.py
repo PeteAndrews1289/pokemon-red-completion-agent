@@ -86,7 +86,7 @@ def encounter_fixture(monkeypatch):
         (1, (), 1, False),
         (0, (78,), 1, False),
         (1, (), 2, True),
-        (0, (), 3, False),
+        (0, (), 3, True),  # Explicit native stock contract replaces the old adapter restriction.
     ],
 )
 def test_native_offer_uses_registration_and_real_reserves(

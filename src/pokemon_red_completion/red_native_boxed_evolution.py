@@ -199,9 +199,6 @@ def bind_native_boxed_evolution(
         source = cast(str, spec.parameters["source_species_ref"])
         target = cast(str, spec.parameters["target_species_ref"])
         if registration is not None:
-            if sum(s.species_ref == source
-                   for s in observation.collection_observation.specimens) not in {1, 2}:
-                return False  # Existing boxed engine qualifies these multiplicities only.
             return registration.evolution_allowed(
                 observation.collection_observation, source, target,
             )
@@ -525,6 +522,7 @@ def bind_native_boxed_evolution(
             emulator=runtime.emulator,
             replanner=world.replanner(),
             pc_facing="up",
+            registration_policy=registration,
         )
         try:
             report = executor(request, actions)

@@ -43,14 +43,14 @@
       {
         "id": "native-stock-contract",
         "label": "Qualify native three-plus-copy stock",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-native-stock-engineering-2026-09-10.json"
       },
       {
         "id": "native-stock-safety",
         "label": "Verify reserves and unchanged legacy guards",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-native-stock-engineering-2026-09-10.json"
       },
       {
         "id": "native-stock-lesson",

@@ -230,20 +230,24 @@ def test_protected_and_reserve_deficits_rejected():
     assert prioritize_owned_level_evolutions([row_double_protected_deficit]) == ()
 
 
-def test_three_plus_stock_rejected_due_to_current_engine_limitation():
-    # 3 copies owned (outside {1, 2}) -> rejected
+def test_three_plus_stock_supported_with_explicit_native_contract():
+    # 3 copies owned -> eligible
     row_3_stock = make_prerequisite(
         14, 15, evolution_level=10, retained_copies=3, deficit=0, precursor_levels=(5, 6, 7)
     )
-    assert prioritize_owned_level_evolutions([row_3_stock]) == ()
+    res_3 = prioritize_owned_level_evolutions([row_3_stock])
+    assert len(res_3) == 1
+    assert res_3[0].minimum_level_gains == 3  # min(10-5, 10-6, 10-7) = 3
 
-    # 4 copies owned -> rejected
+    # 4 copies owned -> eligible
     row_4_stock = make_prerequisite(
         14, 15, evolution_level=10, retained_copies=4, deficit=0, precursor_levels=(5, 6, 7, 8)
     )
-    assert prioritize_owned_level_evolutions([row_4_stock]) == ()
+    res_4 = prioritize_owned_level_evolutions([row_4_stock])
+    assert len(res_4) == 1
+    assert res_4[0].minimum_level_gains == 2  # min(10-5, 10-6, 10-7, 10-8) = 2
 
-    # 1 copy owned (retained_copies == 1 in {1, 2}, deficit == 0 in registered mode) -> eligible
+    # 1 copy owned -> eligible
     row_1_stock = make_prerequisite(
         14, 15, evolution_level=10, retained_copies=1, deficit=0, precursor_levels=(7,)
     )
@@ -251,7 +255,7 @@ def test_three_plus_stock_rejected_due_to_current_engine_limitation():
     assert len(res_1) == 1
     assert res_1[0].minimum_level_gains == 3
 
-    # 2 copies owned (retained_copies == 2 in {1, 2}, deficit == 0) -> eligible
+    # 2 copies owned -> eligible
     row_2_stock = make_prerequisite(
         14, 15, evolution_level=10, retained_copies=2, deficit=0, precursor_levels=(7, 8)
     )
@@ -260,13 +264,20 @@ def test_three_plus_stock_rejected_due_to_current_engine_limitation():
     assert res_2[0].minimum_level_gains == 2  # min(10-7, 10-8) = 2
 
 
+def test_zero_retained_copies_rejected():
+    row_0 = make_prerequisite(
+        14, 15, evolution_level=10, retained_copies=0, deficit=0, precursor_levels=(5,)
+    )
+    assert prioritize_owned_level_evolutions([row_0]) == ()
+
+
 def test_unavailable_rows_filtered_leaving_only_eligible_shortlist():
     # Mix of unavailable and eligible rows
     row_deficit = make_prerequisite(
         56, 57, 28, retained_copies=1, deficit=1, precursor_levels=(10,)
     )
-    row_3_copies = make_prerequisite(
-        19, 20, 20, retained_copies=3, deficit=0, precursor_levels=(15,)
+    row_3_copies_deficit = make_prerequisite(
+        19, 20, 20, retained_copies=3, deficit=1, precursor_levels=(15,)
     )
     row_0_copies = make_prerequisite(29, 30, 16, retained_copies=0, deficit=0, precursor_levels=())
     row_empty_precursors = make_prerequisite(
@@ -287,7 +298,7 @@ def test_unavailable_rows_filtered_leaving_only_eligible_shortlist():
     all_rows = [
         row_deficit,
         row_eligible_2,
-        row_3_copies,
+        row_3_copies_deficit,
         row_0_copies,
         row_empty_precursors,
         row_level_100,
@@ -302,7 +313,9 @@ def test_unavailable_rows_filtered_leaving_only_eligible_shortlist():
     assert result[1].minimum_level_gains == 6
 
     # All-unavailable input
-    assert prioritize_owned_level_evolutions([row_deficit, row_3_copies, row_level_100]) == ()
+    assert prioritize_owned_level_evolutions([
+        row_deficit, row_3_copies_deficit, row_level_100,
+    ]) == ()
     # Empty input
     assert prioritize_owned_level_evolutions([]) == ()
 
