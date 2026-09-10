@@ -63,3 +63,42 @@ at most four steps and1,200 seconds between-step budget. Neither consumed failur
 is replayed. An initial preparation call stopped at the dirty-worktree check
 before opening the gameplay path; actual execution requires this tested source
 to be committed and published first. Live results will be recorded below.
+
+## Fresh learning and measured preparation bottleneck
+
+The published Transform repair drove one new model-selected Route15 attempt:
+Venonat was captured and retained, registered credit rose39 to40, and physical
+stock rose43 to44. The verified episode used415 actions and32,160 frames. Its one
+eligible destination-choice outcome advanced the registered corpus6 to7 and
+fitted model7. This is bounded development learning, not independent evaluation
+or learned battle control. No live Ditto capture was demonstrated in this run.
+
+The four-step runner was interrupted during preparation of step2 after repeated
+Center path planning. No step2 proposal, choice, episode or controller input was
+committed. Step1, its checkpoint and model7 remain durable; the other three steps
+are unclaimed. The interrupted runner did not publish its normal final summary.
+
+A90.03-second read-only profile at the retained checkpoint timed out in source
+enumeration, with zero predictions or controller inputs. It recorded43 route
+plans (53.62 cumulative seconds), including three Center-offer enumerations
+(39.66 cumulative seconds). These are nested timings, not additive totals.
+Flash's82.30-second static review suggested caching decoded routing worlds;
+Codex did not adopt it: mutable nested data complicates safe caching and the
+measured hot path was repeated recovery routing, not primarily ROM decoding.
+
+### Bounded maintenance follow-through
+
+- Capability: practical enumeration of missing-registration destinations.
+- Learned authority: unchanged; unblock the next model7 destination choice.
+- Transfer test: both default native recovery and capture-only menus, preserving
+  guarded transport and escort qualification.
+- Cheapest falsifier: disabling Center offers must not disable those guards;
+  source-only enumeration must request no unused recovery offers.
+- Time box: remaining session time, followed by a90-second read-only comparison.
+- Stop: any changed capture qualification, failed regression, or unsafe input.
+
+The router now separates recovery offers from guarded capture operation.
+Regional enumeration opts out only of discarded RESTORE_TEAM offers; native
+enumeration keeps its default. Escort qualification and fresh execution checks
+still reject a fainted or unqualified party. No route cache or cross-state
+memoization is introduced. Timing improvement remains unverified until measured.

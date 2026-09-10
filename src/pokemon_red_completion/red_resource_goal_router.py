@@ -94,6 +94,9 @@ class RedResourceGoalRouter:
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
     prepare_capture_escort: bool = True
+    # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
+    # and escort preparation enabled without planning unused Center routes.
+    include_recovery_offers: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -252,10 +255,11 @@ class RedResourceGoalRouter:
             def prepare_escort() -> None:
                 prepare_capture_escort(self.runtime, self.actions)
 
-            result = bind_routed_center_recovery(
-                self, result, observation,
-                prepare_escort=prepare_escort,
-            )
+            if self.include_recovery_offers:
+                result = bind_routed_center_recovery(
+                    self, result, observation,
+                    prepare_escort=prepare_escort,
+                )
             if self.prepare_capture_escort:
                 result = bind_capture_escort(self, result, observation)
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):

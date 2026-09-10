@@ -154,6 +154,8 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
 
     class Router:
         def __init__(self, runtime, *a, **kw):
+            assert kw["include_recovery_offers"] is False
+            assert kw["routed_recovery"] is True
             self.profile = runtime.profile
 
         def enumerate(self, observation):
@@ -177,6 +179,7 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         world,
         maximum_actions=30000,
         maximum_frames=3000000,
+        routed_recovery=True,
     )
     assert [item.source_id for item in result] == [items[1].source_id, items[0].source_id]
 
@@ -193,4 +196,5 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
             world,
             maximum_actions=30000,
             maximum_frames=3000000,
+            routed_recovery=True,
         )

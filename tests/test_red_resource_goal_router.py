@@ -182,6 +182,46 @@ def _supply(bindings):
     return next(item for item in bindings.opportunities if item.kind is GoalKind.RESUPPLY)
 
 
+@pytest.mark.parametrize("include_offers", [None, False])
+def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
+    fixture, monkeypatch, include_offers,
+):
+    f = fixture
+    f.router.routed_recovery = True
+    if include_offers is not None:
+        f.router.include_recovery_offers = include_offers
+    calls = []
+
+    def center(router, bindings, observation, *, prepare_escort):
+        calls.append("center")
+        assert callable(prepare_escort)
+        return bindings
+
+    def escort(router, bindings, observation):
+        calls.append("escort")
+        return bindings
+
+    def guard(*args, **kwargs):
+        calls.append("guard")
+        return object()
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_routed_recovery.bind_routed_center_recovery", center,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_routed_recovery.guarded_collection_route_handler", guard,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_capture_preparation.bind_capture_escort", escort,
+    )
+    before = f.port.frame_count
+    result = f.router.enumerate(f.adapter.observe())
+    assert _supply(result).binding_ref
+    assert calls == (["guard", "center", "escort"] if include_offers is None
+                     else ["guard", "escort"])
+    assert f.actions.actions_executed == 0 and f.port.frame_count == before
+
+
 @pytest.mark.parametrize("at_clerk", [False, True])
 def test_quotes_bind_actual_prices_funds_and_reserves_without_actions(fixture, at_clerk):
     f = fixture

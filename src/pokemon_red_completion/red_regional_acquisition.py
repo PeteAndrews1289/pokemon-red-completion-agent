@@ -135,6 +135,7 @@ def enumerate_red_regional_acquisitions(
             quote_resource_costs=True,
             routed_recovery=routed_recovery,
             prepare_capture_storage=prepare_capture_storage,
+            include_recovery_offers=False,
         ).enumerate(observation)
         bindings = [
             binding for binding in routed.bindings if binding.kind is GoalKind.ACQUIRE_SPECIES
