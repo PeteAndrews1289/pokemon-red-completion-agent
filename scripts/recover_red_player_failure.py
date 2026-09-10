@@ -210,6 +210,16 @@ def observed_failed_trainer_risk_claims(store, episode_id, depth=0):
 
 
 def run(args):
+    settled_admission = getattr(args, "admit_settled_field", False)
+    if type(settled_admission) is not bool or (settled_admission and any((
+        getattr(args, "finish_trainer_funding", False),
+        getattr(args, "finish_scripted_trainer", None),
+        getattr(args, "maximum_full_restores", 0),
+        getattr(args, "zero_item_survival", False),
+        getattr(args, "maximum_critical_exposures", 0),
+        getattr(args, "prior_switches", ()),
+    ))):
+        raise ValueError("settled admission is an exclusive zero-controller mode")
     healing_budget = getattr(args, "maximum_full_restores", 0)
     prior_switches = tuple(getattr(args, "prior_switches", ()))
     scripted_trainer = getattr(args, "finish_scripted_trainer", None)
@@ -319,7 +329,14 @@ def run(args):
             if survival_control:
                 controller = survival_actor(reader, base.ReadOnlyController(emulator))
                 first_survival_decision = controller.decide(before.raw)
+        if settled_admission and not (
+            before.raw.battle_state == 0 and before.input_ready
+            and not before.party.fainted_count and _raw_party_restored(before.raw)
+        ):
+            raise ValueError("settled admission requires a healthy input-ready field")
         if before.party.fainted_count or not (
+            settled_admission
+            or
             (trainer_recovery and before.raw.battle_state == 2)
             or (scripted_trainer and before.raw.battle_state == 0)
             or before.raw.battle_state == 1
@@ -350,8 +367,9 @@ def run(args):
             "profile_sha256": ready.profile.profile_sha256,
             "model_sha256": ready.model_sha256,
             "escape_escort_species": escort.species_id if escort is not None else None,
-            "maximum_actions": 6000,
-            "maximum_frames": 600000,
+            "maximum_actions": 0 if settled_admission else 6000,
+            "maximum_frames": 0 if settled_admission else 600000,
+            "settled_admission": settled_admission,
             "model_queries": 0,
             "training_examples": 0,
             "original_choice_retried": False,
@@ -408,7 +426,7 @@ def run(args):
                 }
             )
             frames = base.WindowedFrameBudgetController(
-                emulator,
+                base.ReadOnlyController(emulator) if settled_admission else emulator,
                 maximum_frames_per_window=600000,
                 maximum_total_frames=600000,
             )
@@ -546,7 +564,7 @@ def run(args):
                 # mechanic, not whichever same-kind local goal is offered.
                 bindings = (
                     None
-                    if trainer_recovery
+                    if trainer_recovery or settled_admission
                     else bind_routed_center_recovery(
                         router,
                         runtime.enumerator(actions).enumerate(runtime.adapter.observe()),
@@ -591,6 +609,11 @@ def run(args):
                 if recorder.recording_failures:
                     raise ValueError("recovery trajectory lost evidence")
                 costs = meter.checkpoint()
+                if settled_admission and (
+                    costs.controller_actions != 0 or costs.emulator_frames != 0
+                    or emulator.save_state_bytes() != payload
+                ):
+                    raise ValueError("settled admission changed state or consumed controller input")
                 result = RedFailureRecoveryResult(
                     args.failed_episode,
                     args.failed_manifest,
@@ -599,6 +622,7 @@ def run(args):
                     failed["frames"],
                     costs.controller_actions,
                     costs.emulator_frames,
+                    settled_admission=settled_admission,
                 )
                 observer = base._player_observer(
                     runtime,
@@ -718,6 +742,7 @@ if __name__ == "__main__":
     parser.add_argument("--failed-state", required=True)
     parser.add_argument("--out", type=Path, required=True)
     parser.add_argument("--execute", action="store_true")
+    parser.add_argument("--admit-settled-field", action="store_true")
     parser.add_argument("--finish-trainer-funding", action="store_true")
     parser.add_argument("--finish-scripted-trainer", choices=("lance",))
     parser.add_argument("--maximum-full-restores", type=int, default=0)

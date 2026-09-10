@@ -107,23 +107,30 @@ class RedFailureRecoveryResult:
     failed_frames: int
     actions: int
     frames: int
+    settled_admission: bool = False
 
     @property
     def steps(self) -> tuple[()]:
         return ()
 
     def public_dict(self) -> dict[str, object]:
+        if type(self.settled_admission) is not bool:
+            raise RedFailureRecoveryError("settled admission must be boolean")
         if any(
             type(value) is not int or value <= 0
             for value in (
                 self.failed_actions,
                 self.failed_frames,
-                self.actions,
-                self.frames,
             )
         ):
             raise RedFailureRecoveryError("recovery costs must include actual inputs")
+        if any(type(value) is not int for value in (self.actions, self.frames)) or (
+            (self.actions != 0 or self.frames != 0) if self.settled_admission
+            else (self.actions <= 0 or self.frames <= 0)
+        ):
+            raise RedFailureRecoveryError("recovery costs disagree with admission mode")
         return {
+            **({"settled_admission": True} if self.settled_admission else {}),
             "schema": RECOVERY_TERMINAL_SCHEMA,
             "authority_id": "deterministic-failure-recovery",
             "status": "durable_terminal",
@@ -238,11 +245,14 @@ def require_recovery_checkpoint_origin(
         cast(int, state["frames"]),
         terminal["total_actions"],
         terminal["total_frames"],
+        settled_admission=terminal.get("settled_admission", False),
     ).public_dict()
     if terminal != expected:
         raise RedFailureRecoveryError("recovery terminal changed support scope or costs")
+    if terminal.get("settled_admission") and document.get("state_sha256") != state["state_sha256"]:
+        raise RedFailureRecoveryError("settled admission changed the exact failure state")
     episode = store.open_episode(cast(str, document["episode_id"]))
-    rows = list(episode.iter_stream("executions"))
+    rows = list(episode.iter_stream("executions")) if "executions" in episode.stream_names else []
     if (
         len(rows) != terminal["total_actions"]
         or sum(cast(int, row["frames"]) for row in rows) != (terminal["total_frames"])

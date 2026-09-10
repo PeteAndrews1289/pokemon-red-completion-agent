@@ -158,6 +158,33 @@ def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
     assert trainer_headers(bytes(rom), {0}) == ()
 
 
+def test_mixed_table_decodes_interaction_row_before_filtering_sight_headers() -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2  # object two is interaction-only, not fixed-facing
+    rom[TRAINERS + 1] = 0  # its valid header has no engage distance
+    assert trainer_headers(bytes(rom), {0}) == (TrainerHeader(0, 3, 4, 19, 0x440C),)
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=True) == (
+        TrainerHeader(0, 3, 4, 19, 0x440C),
+    )
+
+
+def test_mixed_table_never_silently_drops_a_nonfacing_sight_hazard() -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2
+    with pytest.raises(CartridgeReadError, match="nonzero sight"):
+        trainer_headers(bytes(rom), {0})
+
+
+@pytest.mark.parametrize('offset,value', [(2, 0), (5, 0), (24, 0)])
+def test_mixed_table_still_validates_the_omitted_row_and_sentinel(offset, value) -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2
+    rom[TRAINERS + 1] = 0
+    rom[TRAINERS + offset] = value
+    with pytest.raises(CartridgeReadError, match="0 validated"):
+        trainer_headers(bytes(rom), {0})
+
+
 def test_ordinary_facing_interaction_trainer_without_a_header_table_has_no_lane() -> None:
     rom = trainer_cartridge()
     rom[SCRIPT + 4 : SCRIPT + 6] = (0x4500).to_bytes(2, "little")

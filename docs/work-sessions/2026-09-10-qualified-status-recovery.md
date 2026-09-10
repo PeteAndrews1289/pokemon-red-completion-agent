@@ -49,3 +49,37 @@ retry. An exclusion would force policy behavior and is not this repair's contrac
 
 Validation and actual gameplay outcome are recorded at closeout; no live success is
 claimed by the existence of this implementation note.
+
+## First live result and discovered decoder defect
+
+O01 selected healing among three goals, cured the retained burn and restored the
+injured member67-to93HP using a healthy escort. It retained53 registrations and47
+specimens and fitted model36-to37:230 actions/11568 frames. O02 then selected Mansion3F
+among eight sources and reached it, but mixed trainer-table decoding stopped both
+execution and final goal observation. Its88 actions/4164 frames and exact raw failure
+state remain preserved; O02 has no admitted outcome/fit and must not be replayed.
+
+The cartridge has an interaction-only, zero-range trainer followed by a fixed-facing
+sight trainer. Filtering objects before decoding incorrectly rejected that complete
+table. Decode all trainer records first, then omit only the validated zero-range
+non-facing records. Non-facing positive-range hazards and malformed records still
+fail closed. Existing scripted-only behavior remains unchanged. The local ROM read
+now identifies the floor's ordinary trainer (sprite2, distance2, event2066).
+The [matching disassembly](https://github.com/pret/pokered/blob/master/scripts/PokemonMansion3F.asm)
+also declares both rows; cartridge inspection, not the external file revision, is
+the decisive local evidence.
+
+## Settled-state admission contract
+
+Existing forced recovery deliberately requires a battle or a needy party. Forcing
+a redundant healing trip simply to admit an already healthy failed state would add
+unnecessary gameplay. The explicit settled-field mode instead requires healthy,
+input-ready field state and uses a read-only controller. Admission must preserve
+the exact authenticated failure-state bytes, perform zero actions/frames, preserve
+the original failed costs and produce zero training examples or model decisions.
+The checkpoint reader verifies the byte identity again. Ordinary recovery still
+requires positive actual costs; its contract is not silently relaxed.
+
+Actual admission and next collection remain pending until their explicit results
+are recorded. This capability is maintenance unblocking fresh model37 play from
+the true third-floor terminal, not permission to restore its older Center state.

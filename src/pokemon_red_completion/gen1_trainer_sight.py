@@ -132,14 +132,24 @@ def trainer_headers(
         # engaged by map script, not by an ordinary line-of-sight header.
         # Only cartridge facings understood by the sight engine can therefore
         # require a trainer-header table.
-        events = tuple(
+        all_trainers = tuple(
             event
             for event in map_object_events(rom, {map_id})
-            if event.is_trainer and event.direction_or_range in _OBJECT_FACING
+            if event.is_trainer
         )
+        events = tuple(e for e in all_trainers if e.direction_or_range in _OBJECT_FACING)
         if not events:
             continue
-        found.extend(_trainer_headers_for_map(rom, map_id, events, full_event_offsets))
+        # A valid table can include zero-range, interaction-only trainers before
+        # ordinary sight trainers. Decode the complete table before filtering;
+        # removing those objects first makes the real table look malformed.
+        headers = _trainer_headers_for_map(rom, map_id, all_trainers, full_event_offsets)
+        sight_slots = {event.object_index for event in events}
+        for header in headers:
+            if header.sprite_index in sight_slots:
+                found.append(header)
+            elif header.engage_distance != 0:
+                raise CartridgeReadError("non-facing trainer has nonzero sight distance")
     return tuple(found)
 
 

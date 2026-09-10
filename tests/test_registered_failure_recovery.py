@@ -192,6 +192,52 @@ def _complete_registered_recovery(
     return writer
 
 
+@pytest.mark.parametrize('mutation', [None, 'state', 'execution'])
+def test_settled_admission_requires_exact_failure_bytes_and_zero_inputs(case, mutation):
+    import base64
+
+    store, arguments, _, policy, failed, _ = case
+    arguments['emulator'].state = (
+        b'changed-state' if mutation == 'state'
+        else base64.urlsafe_b64decode(failed['state_base64'])
+    )
+    arguments['meter'] = SimpleNamespace(
+        checkpoint=lambda: CompositionBudgetCheckpoint(controller_actions=0, emulator_frames=0)
+    )
+    arguments['result'] = replace(arguments['result'], actions=0, frames=0, settled_admission=True)
+    document = capture_red_player_terminal(**arguments)
+    row = observe_registration(
+        SimpleNamespace(collection_observation=policy.initial_collection),
+        seen=frozenset(range(1, 152)), run_id=policy.run_id,
+        rom_sha256=arguments['rom_sha256'], snapshot_sha256=document['state_sha256'], sequence=1,
+    )
+    document['registration_observation'] = row.document()
+    _complete_registered_recovery(
+        store, document, alter_executions=[{'frames': 0}] if mutation == 'execution' else [],
+    )
+    if mutation:
+        with pytest.raises(ValueError):
+            publish_red_player_checkpoint(store, document)
+    else:
+        summary = publish_red_player_checkpoint(store, document)
+        assert summary['training_example'] is False
+        assert document['terminal_result']['total_actions'] == 0
+        assert document['terminal_result']['total_frames'] == 0
+        assert document['state_sha256'] == failed['state_sha256']
+        assert document['terminal_result']['failure_origin']['actions'] == 2
+
+
+@pytest.mark.parametrize('mode,actions,frames', [
+    (False, 0, 0), (True, 1, 0), (True, 0, 1), (True, False, 0), (1, 0, 0),
+])
+def test_settled_admission_cannot_relax_positive_cost_recovery(case, mode, actions, frames):
+    _, arguments, *_ = case
+    with pytest.raises(ValueError):
+        replace(
+            arguments['result'], settled_admission=mode, actions=actions, frames=frames,
+        ).public_dict()
+
+
 def test_registered_recovery_roundtrip_zero_model_decisions(case):
     store, arguments, observation, policy, _, _ = case
     document = capture_red_player_terminal(**arguments)

@@ -34,6 +34,20 @@ def test_risk_authority_is_explicit_and_cannot_be_combined_with_item_authority(e
         module['run'](SimpleNamespace(**extra))
 
 
+@pytest.mark.parametrize('extra', [
+    {'admit_settled_field': 1},
+    {'admit_settled_field': True, 'finish_trainer_funding': True},
+    {'admit_settled_field': True, 'maximum_full_restores': 1},
+    {'admit_settled_field': True, 'prior_switches': [0]},
+])
+def test_settled_admission_rejects_mixed_authority_before_prepare(extra):
+    module = runpy.run_path(
+        str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
+    )
+    with pytest.raises(ValueError, match='exclusive zero-controller'):
+        module['run'](SimpleNamespace(**extra))
+
+
 def test_risk_intents_remain_consumed_across_failed_recovery_ancestry(monkeypatch):
     module = runpy.run_path(
         str(Path(__file__).resolve().parents[1] / 'scripts/recover_red_player_failure.py')
