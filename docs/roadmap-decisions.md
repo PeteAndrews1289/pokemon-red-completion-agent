@@ -1,5 +1,22 @@
 # Roadmap baseline and deviations
 
+## September 10 — make the current checklist reflect missed travel captures
+
+The indoor-eligibility checklist remains completed 3/3, with its original IDs,
+criteria and evidence preserved in `closed_milestones`. It is no longer the current
+task. The [latest retained batch](work-sessions/2026-09-10-registration-opportunities.md)
+added three fitted choices but no registrations, and recorded unregistered Onix
+and Koffing encounters that travel handling fled rather than attempting to capture.
+
+The new local checklist is **capture useful encounters during travel**: verify the
+missed-opportunity evidence (done), qualify capture/resumption guards (planned),
+and retain a productive model-selected outcome (planned). Its 1/3 is a local
+engineering/learning checklist, not a Phase 5 or whole-project percentage. No stage
+exit criterion, historical failure, model-authority claim or baseline has changed.
+First diagnose the retained Mansion route without input. Then prioritize this
+reusable collection capability over broad provenance caching; retain the profile
+measurement for a later bounded throughput repair if it becomes necessary.
+
 ## September10 — advance the completed integration checklist
 
 Shared-registration integration completed its three acceptance items: memory,

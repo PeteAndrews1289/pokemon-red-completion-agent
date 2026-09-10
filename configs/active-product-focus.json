@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "4 actual fits; no independent or cross-title authority promotion.",
-        "blocker": "Preparations are slow; search exhaustion remains a measured cost, not a routing crash. No fresh-game autonomy or independent advantage demonstrated.",
-        "decision": "Keep useful collection learning; measure preparation cost before optimizing or expanding architecture.",
+        "authority_delta": "3 actual fits; no independent or cross-title authority promotion.",
+        "blocker": "Travel can flee unregistered encounters; preparation repeatedly verifies a long lineage. No independent advantage or fresh-game autonomy established.",
+        "decision": "Finish the bounded batch, then prioritize observed missed registration opportunities over unmeasured cache work.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-purposeful-collection-learning-2026-09-10.json",
-          "sha256": "fde074cc396e972db8e3450c10456f7987f6bcc705402b69d9e4d0de63608bc9"
+          "path": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json",
+          "sha256": "3c28ece63359790269ef37a99c21b8bee7ec17dbf67251b9629cb565ee1ba3fd"
         },
-        "learning_output": "3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.",
-        "next_falsifier": "Any reused preparation must preserve exact fresh-state menus and reject changed checkpoint, ledger, source or mode; the fresh batch must still produce real choices.",
-        "next_session_goal": "Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.",
+        "learning_output": "1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.",
+        "next_falsifier": "A missing species encountered in transit can be handled with bounded capture and exact route resumption; unsafe or already-credited cases preserve documented fallback.",
+        "next_session_goal": "Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-purposeful-collection",
+        "session_id": "2026-09-10-registration-opportunities",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.",
+        "current": "1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.",
+      "next_decision": "Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 44,
+        "registered_train_examples": 47,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

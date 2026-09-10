@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-purposeful-collection**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-registration-opportunities**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Restore useful indoor collection choices: 3/3 acceptance items (100%).**
+**Capture useful encounters during travel: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Qualify cave-floor encounter rules ([evidence](../docs/evidence/red-indoor-encounter-engineering-2026-09-10.json))
-- [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
-- [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
+- [x] Verify missed registration opportunities ([evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json))
+- [ ] Qualify capture and route-resume guards
+- [ ] Fit a productive model-selected outcome
 
-Current model: **44 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **47 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-purposeful-collection-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-registration-opportunities
+
+1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.
+
+**Deviation:** Stage exits unchanged. Measured preparation; removed only redundant standalone preview. New missed-registration evidence prioritizes reusable travel capture over broad caching. Archived prior indoor checklist3/3; new travel-capture checklist1/3 is diagnostic evidence, not phase completion.
+
+**Next:** Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.
 
 ### 2026-09-10-purposeful-collection
 

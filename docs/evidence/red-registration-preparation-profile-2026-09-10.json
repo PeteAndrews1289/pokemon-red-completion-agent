@@ -1,0 +1,21 @@
+{
+  "schema": "pokemon.red.development-preparation-profile.v1",
+  "source_commit": "35a19b659322dafd09991967203dfa27f4fde80a",
+  "checkpoint_sha256": "bbaf2c37f3b33e40070c0284b4776b3d2e2b6d0951ba8028356178a1f7ea9eb4",
+  "model_sha256": "d488a89d8161f5722f8b6463b951ed9fc5f131a0424be40700a7bca4b77f6a2a",
+  "method": "cProfile of one action-free preparation call; profiler overhead included",
+  "wall_seconds": 49.22571179107763,
+  "continuation_ancestors": 158,
+  "continuation_cumulative_seconds": 36.749,
+  "episode_open_calls": 326,
+  "episode_open_cumulative_seconds": 32.176,
+  "cumulative_times_overlap": true,
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "predictions": 0,
+  "fits": 0,
+  "runtime_source_changed": false,
+  "optimization_applied": "Private launcher omitted redundant standalone preview; existing runtime preflights unchanged",
+  "controlled_speedup_measurement": false,
+  "learning_progress": false
+}

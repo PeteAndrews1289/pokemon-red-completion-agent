@@ -1,12 +1,12 @@
-# Current — Graveler registered; model 44, 55 registered
+# Current — collection learning audited; model 47, 55 registered
 
-3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.
+1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.
 
-Next: Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.
+Next: Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.
 
 Bounded goal/destination learning with deterministic mechanics; not a new-game autonomous player.
 
-[Session, review and evidence](docs/work-sessions/2026-09-10-purposeful-collection.md).
+[Session, review and evidence](docs/work-sessions/2026-09-10-registration-opportunities.md).
 
 ## Prior checkpoints
 
