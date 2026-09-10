@@ -232,6 +232,52 @@ def test_durable_state_round_trip_preserves_parent_scope_and_quest_claims(case):
     assert recover_completed_red_player_checkpoint(store, arguments["episode_id"]) == summary
 
 
+def test_reused_verified_episode_has_identical_checkpoint_without_reopening(case, monkeypatch):
+    from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document)
+    summary = publish_red_player_checkpoint(store, document)
+    expected = _open(store, arguments, summary)
+    snapshot = store.open_episode(arguments["episode_id"])
+
+    def forbidden(*_args):
+        pytest.fail("verified snapshot must not reopen all streams")
+
+    monkeypatch.setattr(PrivateArtifactRoot, "open_episode", forbidden)
+    assert _open(store, arguments, summary, verified_episode=snapshot) == expected
+
+
+@pytest.mark.parametrize("mutation", ["foreign", "unverified", "record", "parent", "profile"])
+def test_reused_snapshot_cannot_bypass_checkpoint_bindings(case, mutation):
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document)
+    summary = publish_red_player_checkpoint(store, document)
+    changes = {"verified_episode": store.open_episode(arguments["episode_id"])}
+    if mutation == "foreign":
+        other = capture_red_player_terminal(**{**arguments, "episode_id": "another-episode"})
+        _complete(store, other)
+        changes["verified_episode"] = store.open_episode("another-episode")
+    elif mutation == "unverified":
+        changes["verified_episode"] = object()
+    elif mutation == "record":
+        changes["expected_record_sha256"] = "0" * 64
+    elif mutation == "parent":
+        state = b"foreign-state"
+        envelope = replace(
+            arguments["parent"].envelope, state_sha256=hashlib.sha256(state).hexdigest()
+        )
+        changes["original_parent"] = parse_goal_manager_context_capture(
+            state, json.dumps(envelope.to_dict()).encode("ascii")
+        )
+    elif mutation == "profile":
+        changes["expected_profile_sha256"] = "0" * 64
+    with pytest.raises((RedPlayerCheckpointError, ValueError)):
+        _open(store, arguments, summary, **changes)
+
+
 @pytest.mark.parametrize("mutation", [None, "origin", "costs", "model", "type", "rewind"])
 def test_separate_recovery_authenticates_failed_prefix_and_keeps_zero_labels(case, mutation):
     from pokemon_red_completion.provenance import canonical_sha256
