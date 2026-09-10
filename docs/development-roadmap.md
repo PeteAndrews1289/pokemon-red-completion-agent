@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-indoor-departure**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-observed-local-capture**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 - [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **26 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **27 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-retained-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-local-layout-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-observed-local-capture
+
+One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet.
+
+**Deviation:** No stage-exit change. Observed local terrain adaptation replaces an unreachable same-map patch, not the chosen source. Stone draft stays parked.
+
+**Next:** Qualify a reachable encounter patch from actual current-map blocks within the same selected area, then continue model27 from its retained Mansion endpoint. No source substitution, consumed retry or resource reset. Keep stone evolution parked until useful collection resumes.
 
 ### 2026-09-10-indoor-departure
 

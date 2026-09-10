@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live.
+- Next decision: Qualify a reachable encounter patch from actual current-map blocks within the same selected area, then continue model27 from its retained Mansion endpoint. No source substitution, consumed retry or resource reset. Keep stone evolution parked until useful collection resumes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet. |
+| Authority now | One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 26 | 12 |
+| Registered Train Example · train | 27 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-indoor-departure** · status **active** · evidence [registered train example](docs/evidence/red-registered-retained-learning-2026-09-10.json)
+**2026-09-10-observed-local-capture** · status **active** · evidence [registered train example](docs/evidence/red-registered-local-layout-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet. |
-| Authority delta | Two native evolution choices and one regional destination choice fitted; singleton parent is not a second label. |
+| Learning output | One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet. |
+| Authority delta | One failed regional choice fitted once; indoor departure and flight reached the chosen map. |
 | Transfer result | Actual latest checkpoint restores with zero input; no independent or cross-title result. |
-| Blocker | Capture helper preparation ends indoors; existing Fly transport cannot rebind there. |
-| Decision | Add bounded outdoor departure and actual same-destination requalification; preserve failed endpoint. |
-| Next session | Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live. |
-| Next falsifier | No-input qualification from the actual Center, then a fresh bounded choice. |
+| Blocker | Closed doors make the static capture patch unreachable, despite other reachable encounter cells. |
+| Decision | Add opt-in current-map reachable capture lanes; preserve source choice and historical declared profiles. |
+| Next session | Qualify a reachable encounter patch from actual current-map blocks within the same selected area, then continue model27 from its retained Mansion endpoint. No source substitution, consumed retry or resource reset. Keep stone evolution parked until useful collection resumes. |
+| Next falsifier | Actual current-map lane qualifies without input, then a fresh learned source choice. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T08:41:41.186400+00:00",
+  "location": "Pokemon Mansion1F \u00b7 saved, not live",
+  "registered_species": 51,
+  "living_species": 42,
+  "specimens": 46,
+  "capture_items": 18,
+  "money": 3503,
+  "checkpoint_sha256": "101b1cc9016015eee41ed96a42ff413f761257363bbe66b852ec8c89dcf4a589"
+}

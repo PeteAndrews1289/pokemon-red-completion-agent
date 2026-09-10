@@ -7,7 +7,7 @@
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a registered Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">26 goal-value examples  /  Checkpoint-based Red story: verified</text>
+<text x="50" y="215" class="small">27 goal-value examples  /  Checkpoint-based Red story: verified</text>
 <rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Restore useful indoor collection choices</text>
@@ -92,9 +92,9 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-10-indoor-departure</text>
-<text x="50" y="1767" class="body">Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51</text>
-<text x="50" y="1792" class="body">registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped</text>
-<text x="50" y="1817" class="body">at a Center before the destination. No indoor capture yet.</text>
+<text x="50" y="1732" class="small muted">2026-09-10-observed-local-capture</text>
+<text x="50" y="1767" class="body">One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached</text>
+<text x="50" y="1792" class="body">Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No</text>
+<text x="50" y="1817" class="body">indoor capture yet.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

@@ -28,6 +28,19 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    old, new = derive(before, ('capture-fly', 'observed-local-capture'), object())
+    assert 'observed_local_capture' not in old.providers[0].parameters
+    assert new.providers[0].parameters['observed_local_capture'] is True
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
 def test_indoor_departure_is_an_ordered_prospective_profile_transition(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 

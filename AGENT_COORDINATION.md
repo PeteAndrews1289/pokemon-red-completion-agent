@@ -1,3 +1,14 @@
+# Current —51 registrations, model27 retained
+
+One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet.
+
+Next: Qualify a reachable encounter patch from actual current-map blocks within the same selected area, then continue model27 from its retained Mansion endpoint. No source substitution, consumed retry or resource reset. Keep stone evolution parked until useful collection resumes.
+
+The actor chooses goals and destinations; deterministic skills still execute mechanics. Historical114 remains separate. No learned combat, independent reliability or transfer claim.
+[Session and next step](docs/work-sessions/2026-09-10-observed-local-capture.md).
+
+## Prior checkpoints
+
 # Current —51 registrations, model26 retained
 
 Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.

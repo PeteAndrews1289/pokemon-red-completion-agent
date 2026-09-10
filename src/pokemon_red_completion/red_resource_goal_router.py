@@ -115,9 +115,38 @@ class RedResourceGoalRouter:
         origin = red_living_dex_setup_fresh_observation_sha256(fresh)
         replacements: dict[str, ExecutableGoalBinding] = {}
         specs = {spec.kind: spec for spec in self.runtime.profile.providers}
+        capture_spec = specs.get(GoalKind.ACQUIRE_SPECIES)
+        observed_capture = bool(
+            capture_spec is not None
+            and capture_spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and capture_spec.parameters.get("observed_local_capture") is True
+            and capture_spec.parameters["map_id"] == observation.raw.map_id
+        )
+        if observed_capture:
+            from pokemon_red_completion.red_observed_local_capture import (
+                bind_observed_local_capture,
+            )
+
+            assert capture_spec is not None
+            capture = bind_observed_local_capture(self, capture_spec, observation)
+            local = GoalBindingSet(
+                tuple(
+                    (capture.opportunity if capture is not None else replace(
+                        item, availability=GoalAvailability.UNAVAILABLE,
+                        estimated_effort=None, estimated_risk=None,
+                        unavailable_reason=GoalUnavailableReason.MISSING_CAPABILITY,
+                    )) if item.kind is GoalKind.ACQUIRE_SPECIES else item
+                    for item in local.opportunities
+                ),
+                tuple(b for b in local.bindings if b.kind is not GoalKind.ACQUIRE_SPECIES)
+                + (() if capture is None else (capture,)),
+            )
         opportunities = list(local.opportunities)
         for index, opportunity in enumerate(opportunities):
             spec = specs.get(opportunity.kind)
+            if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
+                # Never reinstate the static, unreachable patch as a fallback.
+                continue
             if (
                 opportunity.availability is GoalAvailability.AVAILABLE
                 or opportunity.unavailable_reason is not GoalUnavailableReason.MISSING_CAPABILITY

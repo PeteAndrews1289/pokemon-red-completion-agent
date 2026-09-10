@@ -186,6 +186,23 @@ def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
     ))
 
 
+def bind_observed_local_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt current-map capture into observed reachable lanes, preserving old profiles."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["observed_local_capture"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("observed local capture needs a capture objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_indoor_fly_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Version indoor access prospectively without changing old checkpoint menus."""
     providers = []
@@ -733,6 +750,13 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("indoor departure requires capture Fly transport")
             required.add("indoor_fly_departure")
+        if "observed_local_capture" in row:
+            if (
+                mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                or type(row["observed_local_capture"]) is not bool
+            ):
+                raise RedGoalContextProfileError("observed local capture must be a boolean")
+            required.add("observed_local_capture")
         if "capture_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 not isinstance(capture_species, list)
@@ -803,6 +827,8 @@ def _parse_parameters(
             parsed["fly_transport"] = row["fly_transport"]
         if "indoor_fly_departure" in row:
             parsed["indoor_fly_departure"] = row["indoor_fly_departure"]
+        if "observed_local_capture" in row:
+            parsed["observed_local_capture"] = row["observed_local_capture"]
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(
