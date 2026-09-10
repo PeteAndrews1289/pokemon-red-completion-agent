@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-resume-learning**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-collection-continuation**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **51 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **54 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-travel-resume-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-collection-continuation-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-collection-continuation
+
+Model54; 58 registrations. 4/4 fresh goals succeeded; 3 actual fits. Collection and goal outcome remain separate.
+
+**Deviation:** No stage exits changed. Actual goal choices and collection gains are counted separately from the still-pending travel-capture/resume test.
+
+**Next:** Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
 
 ### 2026-09-10-travel-resume-learning
 

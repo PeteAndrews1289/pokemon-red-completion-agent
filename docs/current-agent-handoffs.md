@@ -1,12 +1,12 @@
-# Current — Weezing registered; model51, 57 registrations
+# Current — collection learning; model54, 58 registrations
 
-3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.
+4/4 fresh goals succeeded; 3 actual fits, model51 to54. 57 to58 registrations, 50 specimens retained. Actual costs, partial gains and failed outcomes remain visible.
 
-Next: Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
+Next: Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
 
 Bounded goal/destination learning with deterministic mechanics; not a fresh-game autonomous player. Gameplay is stopped.
 
-[Session, review and evidence](work-sessions/2026-09-10-travel-resume-learning.md).
+[Session, review and evidence](work-sessions/2026-09-10-collection-continuation.md).
 
 ## Prior checkpoints
 

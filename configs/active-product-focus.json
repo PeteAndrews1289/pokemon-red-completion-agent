@@ -38,20 +38,20 @@
         "decision": "Count actual goal outcomes and new registration, not an unexercised travel-capture gate. Continue useful collection rather than forcing a specific destination.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-travel-resume-learning-2026-09-10.json",
-          "sha256": "fe99ee8cbde210f783da7234d7ab615ccde4520e7ba50759fa5553b2b403572e"
+          "path": "docs/evidence/red-collection-continuation-learning-2026-09-10.json",
+          "sha256": "012482d46ae2ae890aec2736f7084eeeeab9419bca8c3e6570ae53471524504f"
         },
-        "learning_output": "3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.",
+        "learning_output": "4/4 fresh goals succeeded; 3 actual fits, model51 to54. 57 to58 registrations, 50 specimens retained. Actual costs, partial gains and failed outcomes remain visible.",
         "next_falsifier": "A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success.",
-        "next_session_goal": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
+        "next_session_goal": "Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-travel-resume-learning",
+        "session_id": "2026-09-10-collection-continuation",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.",
+        "current": "4/4 fresh goals succeeded; 3 actual fits, model51 to54. 57 to58 registrations, 50 specimens retained. Actual costs, partial gains and failed outcomes remain visible.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
+      "next_decision": "Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 51,
+        "registered_train_examples": 54,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
