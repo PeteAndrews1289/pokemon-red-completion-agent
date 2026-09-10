@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-planning-throughput",
+  "as_of_session": "2026-09-10-capture-efficiency",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-throughput-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -642,6 +642,12 @@
       "result": "5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.",
       "deviation": "No stage-exit change. Projection-only performance repair; historical objective corpus unchanged.",
       "next": "The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits."
+    },
+    {
+      "session": "2026-09-10-capture-efficiency",
+      "result": "4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.",
+      "deviation": "No stage-exit change. Added pre-throw diagnostics instead of assuming weakening is safe or failures are ordinary variance.",
+      "next": "Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts."
     }
   ],
   "closed_milestones": [

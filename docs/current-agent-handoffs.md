@@ -1,3 +1,25 @@
+# Current — resource recovery and capture diagnostics
+
+4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.
+
+The saved model12 endpoint passed authenticated restoration with no input. Legitimate
+resupply succeeded and was excluded from fitting as deterministic safety support.
+New diagnostics distinguish successful status moves from the actual condition after
+switching, immediately before a planned throw. They do not claim executed throws,
+capture success, learned battle control or improved capture efficiency.
+
+Next: Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts.
+
+Codex owns integration and execution. Flash High supplied a bounded read-only review;
+Codex accepted caution about blind weakening but rejected unsupported variance/zero-risk
+claims. Latest Flash quota:61.15% five-hour /86.88% weekly remaining. Claude was not used.
+Flash may next draft isolated capture-mechanics tests after Codex specifies the measured
+failure hypothesis; no broad rewrite or additional audit gate is required.
+
+[Session and exact continuation](work-sessions/2026-09-10-capture-efficiency.md).
+
+## Historical checkpoints below — superseded where inconsistent
+
 # Current — measured planning and registered model12
 
 5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.

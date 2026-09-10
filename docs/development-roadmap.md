@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-planning-throughput**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-capture-efficiency**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 - [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 
-Current model: **12 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **15 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-throughput-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-capture-efficiency
+
+4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.
+
+**Deviation:** No stage-exit change. Added pre-throw diagnostics instead of assuming weakening is safe or failures are ordinary variance.
+
+**Next:** Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts.
 
 ### 2026-09-10-planning-throughput
 
