@@ -1,3 +1,15 @@
+# Current — restore genuine indoor collection choices
+
+Ordinary indoor land encounters now qualify through cartridge tiles and actual land tables; 187 targeted tests, 465-file type check and lint passed. Real-ROM inspection found 1141 eligible static cells in Mt. Moon1F and1078 in Rock Tunnel1F despite zero literal grass. These counts do not establish accessible routes or successful capture. Model21 and47 registered species are unchanged.
+
+Next: Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.
+
+Flash drafted the isolated adapter; Codex corrected map-boundary, test-fixture and block-validation defects.
+Flash remaining allowance:85.38% five-hour /83.69% weekly. Claude was not used.
+[Bounded session](docs/work-sessions/2026-09-10-indoor-collection-options.md).
+
+## Previous checkpoints
+
 # Current — native multi-copy evolution verified
 
 4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.

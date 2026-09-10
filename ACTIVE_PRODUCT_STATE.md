@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.
+- Next decision: Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.
 
 ### Mandatory mission check
 
@@ -59,7 +59,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-native-stock-overnight** · status **active** · evidence [registered train example](docs/evidence/red-registered-native-stock-learning-2026-09-10.json)
+**2026-09-10-indoor-collection-options** · status **active** · evidence [registered train example](docs/evidence/red-registered-native-stock-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -67,10 +67,10 @@ outputs.
 | Learning output | 4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim. |
 | Authority delta | Model-selected Gloom evolution from three Oddish qualified; later singleton Muk/Fearow evolution was not fitted. |
 | Transfer result | Changed-count/reserve/box-position ROM-free checks and one actual three-copy evolution. No title transfer. |
-| Blocker | Capture alternatives disappeared after Gloom; diagnose before more singleton-only collection. No independent generalization claim. |
-| Decision | Native-stock milestone complete. Prioritize genuine decision breadth and measured learning throughput. |
-| Next session | Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal. |
-| Next falsifier | Current-state inspection explains absent capture options or exposes a genuinely executable alternative. |
+| Blocker | Indoor encounter eligibility repaired; live source access and capture remain unverified. |
+| Decision | Restore genuine capture breadth from cartridge data, then gather actual model-selected outcomes. |
+| Next session | Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal. |
+| Next falsifier | Authenticated saved-state inspection exposes at least two genuine executable alternatives. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

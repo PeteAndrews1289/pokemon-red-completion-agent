@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-native-stock-overnight",
+  "as_of_session": "2026-09-10-indoor-collection-options",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Broaden owned-evolution coverage",
+    "title": "Restore useful indoor collection choices",
     "items": [
       {
-        "id": "native-stock-contract",
-        "label": "Qualify native three-plus-copy stock",
+        "id": "indoor-eligibility",
+        "label": "Qualify cave-floor encounter rules",
         "done": true,
-        "evidence": "docs/evidence/red-native-stock-engineering-2026-09-10.json"
+        "evidence": "docs/evidence/red-indoor-encounter-engineering-2026-09-10.json"
       },
       {
-        "id": "native-stock-safety",
-        "label": "Verify reserves and unchanged legacy guards",
-        "done": true,
-        "evidence": "docs/evidence/red-native-stock-engineering-2026-09-10.json"
+        "id": "indoor-executable-choices",
+        "label": "Verify actual saved-state alternatives",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "native-stock-lesson",
-        "label": "Retain a model-selected expanded-stock lesson",
-        "done": true,
-        "evidence": "docs/evidence/red-registered-native-stock-learning-2026-09-10.json"
+        "id": "indoor-choice-learning",
+        "label": "Retain and fit a model-selected lesson",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -660,6 +660,12 @@
       "result": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
       "deviation": "No stage-exit change. Native-stock checklist3/3; two forced singletons explicitly excluded from fit counts.",
       "next": "Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-indoor-collection-options",
+      "result": "Ordinary indoor land encounters now qualify through cartridge tiles and actual land tables; 187 targeted tests, 465-file type check and lint passed. Real-ROM inspection found 1141 eligible static cells in Mt. Moon1F and1078 in Rock Tunnel1F despite zero literal grass. These counts do not establish accessible routes or successful capture. Model21 and47 registered species are unchanged.",
+      "deviation": "Next bounded checklist replaces completed native-stock3/3; stage exits unchanged. No learning count advanced.",
+      "next": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal."
     }
   ],
   "closed_milestones": [

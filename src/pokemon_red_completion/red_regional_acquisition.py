@@ -111,11 +111,18 @@ def enumerate_red_regional_acquisitions(
             map_id = int(map_id_for_wild_source(source))
             if map_id not in world.terrain or map_id not in world.local_graphs:
                 continue
+            excluded = world.object_blockers[map_id]
+            if getattr(runtime, "registration_policy", None) is not None:
+                # A reversible local edge can still land on an automatic map
+                # warp. Such coordinates are not valid survey endpoints.
+                excluded = frozenset(excluded) | frozenset(
+                    world.macro_graph.warp_locations.get(map_id, ())
+                )
             corridor = derive_red_living_dex_wild_corridor(
                 RedEncounterSourceTarget(source),
                 world.terrain[map_id],
                 world.local_graphs[map_id],
-                excluded=world.object_blockers[map_id],
+                excluded=excluded,
                 **({"cartridge": world.rom}
                    if getattr(runtime, "registration_policy", None) is not None else {}),
             )

@@ -14,6 +14,10 @@ from collections.abc import Collection
 from dataclasses import dataclass
 
 from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.gen1_indoor_encounters import (
+    FIRST_INDOOR_MAP,
+    FOREST_TILESET,
+)
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.local_router import Coordinate, LocalEdge, LocalGraph
 from pokemon_red_completion.provenance import canonical_sha256
@@ -282,7 +286,7 @@ def derive_red_living_dex_wild_corridor(
     excluded: Collection[Coordinate] = (),
     cartridge: bytes | None = None,
 ) -> RedLivingDexWildCorridor:
-    """Choose a deterministic safe pair from real grass and traversal edges."""
+    """Choose a reversible land-encounter pair; cartridge indoor support is explicit."""
 
     if not isinstance(target, RedEncounterSourceTarget):
         raise TypeError("wild corridor derivation needs an encounter target")
@@ -316,6 +320,15 @@ def derive_red_living_dex_wild_corridor(
             "wild corridor exclusions contain an invalid coordinate"
         )
 
+    encounter_grid = terrain.grass
+    if (cartridge is not None and terrain.map_id >= FIRST_INDOOR_MAP
+            and terrain.tileset != FOREST_TILESET):
+        from pokemon_red_completion.gen1_indoor_encounters import indoor_land_encounter_mask
+
+        # Do not relabel Terrain.grass: indoor land encounters are a separate
+        # cartridge rule. Legacy no-cartridge callers keep their exact behavior.
+        encounter_grid = indoor_land_encounter_mask(cartridge, terrain)
+
     candidates: list[tuple[int, int, int, Coordinate, Coordinate]] = []
     for south_y in range(1, terrain.height):
         for x in range(terrain.width):
@@ -324,8 +337,8 @@ def derive_red_living_dex_wild_corridor(
             if (
                 south in blocked
                 or north in blocked
-                or not terrain.grass[south[0]][south[1]]
-                or not terrain.grass[north[0]][north[1]]
+                or not encounter_grid[south[0]][south[1]]
+                or not encounter_grid[north[0]][north[1]]
                 or not _plain_land_walk(graph, south, north, "up")
                 or not _plain_land_walk(graph, north, south, "down")
             ):

@@ -1,0 +1,47 @@
+{
+  "schema": "pokemon.red.indoor-encounter-engineering.v1",
+  "status": "engineering_qualified",
+  "tests_passed": 187,
+  "typechecked_source_files": 465,
+  "rom_free_checks": [
+    "water_halves",
+    "block_strides",
+    "indoor_boundary",
+    "safari_boundary",
+    "automatic_warps",
+    "object_and_coordinate_exclusions",
+    "bidirectional_plain_edges",
+    "missing_blocks",
+    "inconsistent_tiles",
+    "truncated_rom",
+    "invalid_block_bytes"
+  ],
+  "static_rom_inspection": {
+    "mt_moon_1f": {
+      "literal_grass_cells": 0,
+      "eligible_land_cells": 1141
+    },
+    "rock_tunnel_1f": {
+      "literal_grass_cells": 0,
+      "eligible_land_cells": 1078
+    }
+  },
+  "controller_actions": 0,
+  "predictions": 0,
+  "fits": 0,
+  "new_registrations": 0,
+  "live_route_verified": false,
+  "live_capture_verified": false,
+  "legacy_no_cartridge_unchanged": true,
+  "flash_review_corrections": [
+    "Safari range shifted into Cerulean Cave",
+    "truncated-ROM fixture expanded by slice assignment",
+    "unvalidated negative block IDs"
+  ],
+  "flash_usage_remaining": {
+    "five_hour_percent": 85.38,
+    "weekly_percent": 83.69
+  },
+  "external_draft_seconds": 253.624263,
+  "claude_used": false
+}

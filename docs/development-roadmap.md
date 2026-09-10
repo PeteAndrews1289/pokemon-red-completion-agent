@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-native-stock-overnight**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-indoor-collection-options**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden owned-evolution coverage: 3/3 acceptance items (100%).**
+**Restore useful indoor collection choices: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Qualify native three-plus-copy stock ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
-- [x] Verify reserves and unchanged legacy guards ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
-- [x] Retain a model-selected expanded-stock lesson ([evidence](../docs/evidence/red-registered-native-stock-learning-2026-09-10.json))
+- [x] Qualify cave-floor encounter rules ([evidence](../docs/evidence/red-indoor-encounter-engineering-2026-09-10.json))
+- [ ] Verify actual saved-state alternatives
+- [ ] Retain and fit a model-selected lesson
 
 Current model: **21 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-indoor-collection-options
+
+Ordinary indoor land encounters now qualify through cartridge tiles and actual land tables; 187 targeted tests, 465-file type check and lint passed. Real-ROM inspection found 1141 eligible static cells in Mt. Moon1F and1078 in Rock Tunnel1F despite zero literal grass. These counts do not establish accessible routes or successful capture. Model21 and47 registered species are unchanged.
+
+**Deviation:** Next bounded checklist replaces completed native-stock3/3; stage exits unchanged. No learning count advanced.
+
+**Next:** Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.
 
 ### 2026-09-10-native-stock-overnight
 

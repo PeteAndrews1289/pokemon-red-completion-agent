@@ -34,18 +34,18 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "Model-selected Gloom evolution from three Oddish qualified; later singleton Muk/Fearow evolution was not fitted.",
-        "blocker": "Capture alternatives disappeared after Gloom; diagnose before more singleton-only collection. No independent generalization claim.",
-        "decision": "Native-stock milestone complete. Prioritize genuine decision breadth and measured learning throughput.",
+        "blocker": "Indoor encounter eligibility repaired; live source access and capture remain unverified.",
+        "decision": "Restore genuine capture breadth from cartridge data, then gather actual model-selected outcomes.",
         "evidence": {
           "kind": "registered_train_example",
           "path": "docs/evidence/red-registered-native-stock-learning-2026-09-10.json",
           "sha256": "2d057d59a86b9f67883edee0ebedcca957ae8cb64b81bd23a497a5699b0cc695"
         },
         "learning_output": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
-        "next_falsifier": "Current-state inspection explains absent capture options or exposes a genuinely executable alternative.",
-        "next_session_goal": "Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.",
+        "next_falsifier": "Authenticated saved-state inspection exposes at least two genuine executable alternatives.",
+        "next_session_goal": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-native-stock-overnight",
+        "session_id": "2026-09-10-indoor-collection-options",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Changed-count/reserve/box-position ROM-free checks and one actual three-copy evolution. No title transfer."
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.",
+      "next_decision": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

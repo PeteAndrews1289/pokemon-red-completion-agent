@@ -531,3 +531,7 @@ and verifies the optional item turn. This is a controller contract change, not a
 weakened Phase4 exit or learned battle promotion. Next attempt stops at Lance;
 Champion qualification is separate. See the
 [audit and six-part mission](audits/red-ordinary-bounded-healing-2026-09-09.md).
+
+## September10 — indoor choices after native stock completion
+
+The native-stock checklist closed3/3 with model21 and47 registrations. Read-only inspection then found no capture alternatives despite18 capture items and healthy party members. The next checklist measures indoor eligibility, actual alternatives and a learned lesson; permanent stage exits do not change. Ordinary cave floors were incorrectly excluded by a literal-grass test. Prioritize this specific coverage repair over speculative preparation optimizations.

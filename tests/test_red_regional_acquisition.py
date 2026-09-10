@@ -133,9 +133,13 @@ def test_source_sampling_replays_full_support_without_turning_it_into_greedy_pla
 class _Runtime:
     profile: object
     emulator: object
+    registration_policy: object = None
 
 
-def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(monkeypatch):
+@pytest.mark.parametrize("registered", [False, True])
+def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
+    monkeypatch, registered,
+):
     items = [_candidate("wild:Route2:grass", 0.7), _candidate("wild:Route11:grass", 0.2)]
     methods = [
         SimpleNamespace(source_id=item.source_id, kind=RedAcquisitionKind.WILD) for item in items
@@ -143,9 +147,12 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     methods.append(SimpleNamespace(source_id="safari:unsupported", kind=RedAcquisitionKind.SAFARI))
     monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=methods))
     monkeypatch.setattr(regional, "map_id_for_wild_source", lambda source: 1)
-    monkeypatch.setattr(
-        regional, "derive_red_living_dex_wild_corridor", lambda target, *a, **k: target
-    )
+    def derive(target, *args, **kwargs):
+        assert kwargs["excluded"] == ({(4, 4), (2, 3)} if registered else {(4, 4)})
+        assert ("cartridge" in kwargs) is registered
+        return target
+    monkeypatch.setattr(regional, "derive_red_living_dex_wild_corridor", derive)
+    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: ())
     def retarget(profile, target, *, rom):
         assert rom == b"fixture"
         return next(i.profile for i in items if i.source_id == target.source_id)
@@ -165,11 +172,14 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
 
     monkeypatch.setattr(regional, "RedResourceGoalRouter", Router)
     runtime = _Runtime(items[0].profile, SimpleNamespace(frame_count=0))
+    if registered:
+        runtime.registration_policy = object()
     actions = SimpleNamespace(actions_executed=0)
     world = SimpleNamespace(
         terrain={1: object()},
         local_graphs={1: object()},
-        object_blockers={1: set()},
+        object_blockers={1: {(4, 4)}},
+        macro_graph=SimpleNamespace(warp_locations={1: ((2, 3),)}),
         rom=b"fixture",
     )
     result = regional.enumerate_red_regional_acquisitions(
