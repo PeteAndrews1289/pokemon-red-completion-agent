@@ -502,11 +502,14 @@ def _wild_provider(
         return RedGoalSkillAvailability.available()
 
     if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+        from .red_capture_access import required_wild_source_items
         from .red_collection import red_species_ref
 
         local_captures = parameters.get("capture_species_numbers")
         return RedAreaSurveyGoalProvider(
             source_id=source_id,
+            required_capture_items=(required_wild_source_items(source_id)
+                if parameters.get("capture_access_requirements") is True else ()),
             area_executor=area,
             actions=actions,
             emulator=runtime.emulator,

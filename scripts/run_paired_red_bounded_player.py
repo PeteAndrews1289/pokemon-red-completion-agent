@@ -592,6 +592,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--training-catalog", type=Path, default=None)
     parser.add_argument(
+        "--capture-access-requirements", dest="regional_transitions",
+        action="append_const", const="capture-access-requirements",
+        help="prospective item prerequisites for capture destinations",
+    )
+    parser.add_argument(
         "--observed-local-capture",
         dest="regional_transitions",
         action="append_const",
@@ -1516,6 +1521,7 @@ def _regional_profiles(
                 "capture-fly",
                 "indoor-fly-departure",
                 "observed-local-capture",
+                "capture-access-requirements",
                 "affordable-capture-supply",
                 "cartridge-trainer-story",
                 "cartridge-trainer-story:bruno",
@@ -1562,6 +1568,14 @@ def _regional_profiles(
             )
 
             profile = bind_indoor_fly_departure_profile(profile)
+            result.append(profile)
+            continue
+        if source == "capture-access-requirements":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_capture_access_requirements_profile,
+            )
+
+            profile = bind_capture_access_requirements_profile(profile)
             result.append(profile)
             continue
         if source == "observed-local-capture":

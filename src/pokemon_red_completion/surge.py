@@ -2994,6 +2994,11 @@ def _try_catch_wild(
         raise SurgeChapterError(f"{label} capture has no live encounter to exit.")
     if raw.battle_state != 1:
         raise SurgeChapterError(f"{label} capture requires a live wild encounter to exit.")
+    from .red_capture_access import is_unidentified_ghost_encounter
+
+    if is_unidentified_ghost_encounter(raw):
+        raise SurgeChapterError(
+            f"{label} cannot capture an unidentified ghost without Silph Scope.")
     starting_inventory = _ordinary_capture_ball_inventory(_bag(emulator))
     starting_balls = sum(starting_inventory)
     starting_specimens = _living_specimen_count(reader)
@@ -3019,6 +3024,9 @@ def _try_catch_wild(
             ):
                 raise SurgeChapterError(f"{label} preparation exit changed collection or balls.")
             return False
+        if is_unidentified_ghost_encounter(reader.read()):
+            raise SurgeChapterError(
+                f"{label} capture lost its required Silph Scope before a throw.")
         ball = _next_ordinary_capture_ball(_bag(emulator))
         _navigate_main(executor, reader, 1)
         _pulse(executor, MacroActionKind.CONFIRM)

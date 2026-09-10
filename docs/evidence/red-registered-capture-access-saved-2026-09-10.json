@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T09:15:23.060348+00:00",
+  "location": "Pokemon Tower3F \u00b7 saved, not live",
+  "registered_species": 51,
+  "living_species": 42,
+  "specimens": 46,
+  "capture_items": 0,
+  "money": 3503,
+  "checkpoint_sha256": "d28d7b3434c6a9788ed4d4fb7ee2485fef6d96ff6e721813c0e75b6553c3e14c"
+}

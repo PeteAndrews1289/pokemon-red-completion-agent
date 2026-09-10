@@ -1329,6 +1329,7 @@ class RedAreaSurveyGoalProvider:
     policy: RedAreaExecutionPolicy = RedAreaExecutionPolicy()
     catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
     kind: GoalKind = GoalKind.ACQUIRE_SPECIES
+    required_capture_items: tuple[ItemId, ...] = ()
 
     def __post_init__(self) -> None:
         if not isinstance(self.source_id, str) or not self.source_id:
@@ -1362,6 +1363,10 @@ class RedAreaSurveyGoalProvider:
                 GoalUnavailableReason.NO_LEGAL_TARGET,
             )
         inventory = dict(observation.raw.bag_items or ())
+        if any(inventory.get(int(item), 0) <= 0 for item in self.required_capture_items):
+            return RedGoalSkillAvailability.unavailable(
+                GoalUnavailableReason.MISSING_RESOURCE,
+            )
         if sum(inventory.get(int(item), 0) for item in _ORDINARY_CAPTURE_ITEMS) <= 0:
             return RedGoalSkillAvailability.unavailable(
                 GoalUnavailableReason.MISSING_RESOURCE,

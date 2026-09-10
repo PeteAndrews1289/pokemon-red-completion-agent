@@ -186,6 +186,25 @@ def bind_capture_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextPr
     ))
 
 
+def bind_capture_access_requirements_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
+    """Prospective prerequisite-aware acquisition, preserving historical menus."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["capture_access_requirements"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("capture access requirements need a capture objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_observed_local_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt current-map capture into observed reachable lanes, preserving old profiles."""
     providers = []
@@ -757,6 +776,11 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("observed local capture must be a boolean")
             required.add("observed_local_capture")
+        if "capture_access_requirements" in row:
+            if (mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                    or type(row["capture_access_requirements"]) is not bool):
+                raise RedGoalContextProfileError("capture access requirements must be a boolean")
+            required.add("capture_access_requirements")
         if "capture_species_numbers" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 not isinstance(capture_species, list)
@@ -829,6 +853,8 @@ def _parse_parameters(
             parsed["indoor_fly_departure"] = row["indoor_fly_departure"]
         if "observed_local_capture" in row:
             parsed["observed_local_capture"] = row["observed_local_capture"]
+        if "capture_access_requirements" in row:
+            parsed["capture_access_requirements"] = row["capture_access_requirements"]
         return parsed
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         _exact_keys(

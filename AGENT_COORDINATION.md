@@ -1,3 +1,14 @@
+# Current —51 registrations, model28 retained
+
+One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.
+
+Next: Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished.
+
+The actor chooses goals and destinations; deterministic skills still execute mechanics. Historical114 remains separate. No learned combat, independent reliability or transfer claim.
+[Session and next step](docs/work-sessions/2026-09-10-capture-prerequisites.md).
+
+## Prior checkpoints
+
 # Current —51 registrations, model27 retained
 
 One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet.

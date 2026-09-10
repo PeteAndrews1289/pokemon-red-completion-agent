@@ -181,6 +181,8 @@ def retarget_red_wild_profile(
                 derived["indoor_fly_departure"] = parameters["indoor_fly_departure"]
             if "observed_local_capture" in parameters:
                 derived["observed_local_capture"] = parameters["observed_local_capture"]
+            if "capture_access_requirements" in parameters:
+                derived["capture_access_requirements"] = parameters["capture_access_requirements"]
             parameters = derived
         providers.append((spec.kind, spec.mechanic, parameters))
     result = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
