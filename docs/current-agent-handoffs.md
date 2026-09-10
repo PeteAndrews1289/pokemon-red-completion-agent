@@ -1,3 +1,13 @@
+# Current — observed menus; model 40, 54 registered
+
+Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.
+
+Next: Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.
+
+[Session and evidence](work-sessions/2026-09-10-observed-funding-menu.md).
+
+## Prior checkpoints
+
 # Current — observed funding guard; model 38 unchanged
 
 Funding execution now requalifies the same trainer against observed terrain before input. 168 focused tests passed. The actual retained state has no safe approach to its quoted trainer; zero-input qualification rejects it. No fresh gameplay or fit: model 38, 53 registrations and 47 specimens remain unchanged.

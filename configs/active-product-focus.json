@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Deterministic execution repair only; historical learner choices remain unchanged.",
-        "blocker": "The sole static funding target has no observed-terrain route. New menu eligibility must exclude it before selection.",
-        "decision": "Preserve old menus; version prospective eligibility before fresh play.",
+        "authority_delta": "2 actual fits; no independent or cross-title authority promotion.",
+        "blocker": "No new routing blocker in this batch. One bounded search was exhausted; three balls and1073 money remain. Sustained useful collection is not yet independently established.",
+        "decision": "Continue from the exact retained terminal; no replay or resource reset.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-qualified-status-learning-2026-09-10.json",
-          "sha256": "9f39f98619f4fb774ae0134cffdc36110fa61ce63f1366ed0a31df18ed16f482"
+          "path": "docs/evidence/red-observed-menu-learning-2026-09-10.json",
+          "sha256": "c3c4594169b5fde8f65d28beb019b6d258e9fb2d5e8a2e0079b8d83a43cebbd9"
         },
-        "learning_output": "No new fitted choices or registrations. Model 38 and 53 registrations retained.",
-        "next_falsifier": "An impossible funding target is absent from the new menu, while the exact prior checkpoint still authenticates.",
-        "next_session_goal": "Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.",
+        "learning_output": "Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.",
+        "next_falsifier": "A fresh supported acquisition adds registration without a forced destination or reset.",
+        "next_session_goal": "Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-observed-funding",
+        "session_id": "2026-09-10-observed-funding-menu",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
+        "current": "Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.",
+      "next_decision": "Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 38,
+        "registered_train_examples": 40,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

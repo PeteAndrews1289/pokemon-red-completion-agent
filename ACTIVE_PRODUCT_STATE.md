@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice.
+- Next decision: Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row. |
+| Authority now | Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 38 | 12 |
+| Registered Train Example · train | 40 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-observed-funding** · status **active** · evidence [registered train example](docs/evidence/red-qualified-status-learning-2026-09-10.json)
+**2026-09-10-observed-funding-menu** · status **active** · evidence [registered train example](docs/evidence/red-observed-menu-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | No new fitted choices or registrations. Model 38 and 53 registrations retained. |
-| Authority delta | None. Deterministic execution repair only; historical learner choices remain unchanged. |
+| Learning output | Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices. |
+| Authority delta | 2 actual fits; no independent or cross-title authority promotion. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | The sole static funding target has no observed-terrain route. New menu eligibility must exclude it before selection. |
-| Decision | Preserve old menus; version prospective eligibility before fresh play. |
-| Next session | Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice. |
-| Next falsifier | An impossible funding target is absent from the new menu, while the exact prior checkpoint still authenticates. |
+| Blocker | No new routing blocker in this batch. One bounded search was exhausted; three balls and1073 money remain. Sustained useful collection is not yet independently established. |
+| Decision | Continue from the exact retained terminal; no replay or resource reset. |
+| Next session | Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal. |
+| Next falsifier | A fresh supported acquisition adds registration without a forced destination or reset. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

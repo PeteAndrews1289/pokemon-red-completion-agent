@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T12:47:03.217679+00:00",
+  "location": "rock_tunnel_b1f \u00b7 saved, not live",
+  "registered_species": 54,
+  "living_species": 44,
+  "specimens": 48,
+  "capture_items": 3,
+  "money": 1073,
+  "checkpoint_sha256": "282a38bad5ec27e2b833979a6ae13d63c06b528be536a0a1eedd8dfaa03e4ec7"
+}

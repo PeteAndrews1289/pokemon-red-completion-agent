@@ -223,6 +223,27 @@ def test_invalid_checkpoint_demand_mode_cannot_change_observation(value):
 
 
 @pytest.mark.parametrize("parent_mode", [False, True])
+def test_observed_funding_restores_parent_mode_and_forbids_rollback(case, parent_mode):
+    store, arguments, _ = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document, alter_header={
+        "split": {"partition": "train", "root_lineage_id": "original-training-root"},
+        "trainer_funding": True,
+        **({"observed_trainer_funding": True} if parent_mode else {}),
+    })
+    record = publish_red_player_checkpoint(store, document)
+    ready = replace(_readiness(store, arguments), trainer_funding=True,
+                    observed_trainer_funding=True)
+    chain = ((arguments["episode_id"], record["record_sha256"]),)
+    resumed = runner._continue_readiness(ready, chain)
+    assert resumed.restore_observed_trainer_funding is parent_mode
+    assert resumed.observed_trainer_funding is True
+    if parent_mode:
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="funding_rollback"):
+            runner._continue_readiness(replace(ready, observed_trainer_funding=False), chain)
+
+
+@pytest.mark.parametrize("parent_mode", [False, True])
 def test_level_alternatives_restore_parent_mode_and_forbid_rollback(case, parent_mode):
     store, arguments, _ = case
     document = capture_red_player_terminal(**arguments)
@@ -402,6 +423,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
         remaining_acquisition_demand=True, level_evolution_acquisitions=True,
         trainer_funding=True, trainer_pending_recovery=True,
         regional_trainer_funding=True,
+        observed_trainer_funding=True,
     )
     emulator = SimpleNamespace(frame_count=12, pressed_buttons=frozenset())
     seen = []
@@ -428,12 +450,14 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     def player_observer(*_args, completion_dose=False, routed_recovery=False,
                         trainer_funding=False, trainer_pending_recovery=False,
                         regional_trainer_funding=False,
+                        observed_trainer_funding=False,
                         remaining_acquisition_demand=False, level_evolution_acquisitions=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
         assert trainer_funding is False
         assert trainer_pending_recovery is False
         assert regional_trainer_funding is False
+        assert observed_trainer_funding is False
         assert remaining_acquisition_demand is False  # Never use successor mode for old restore.
         assert level_evolution_acquisitions is False
         return observe
