@@ -64,6 +64,32 @@ def test_generic_red_exploration_report_stays_none() -> None:
     assert CaptureSurveySummary.from_evidence(explore_evidence) is None
 
 
+def test_capture_resource_stop_is_optional_and_round_trips():
+    expected = {**VALID_SURVEY, "capture_items_exhausted": True}
+    parsed = CaptureSurveySummary.from_evidence({"capture_survey": expected})
+    assert parsed is not None and parsed.capture_items_exhausted
+    assert parsed.public_dict() == expected
+    legacy = CaptureSurveySummary.from_evidence({"capture_survey": VALID_SURVEY})
+    assert legacy is not None and not legacy.capture_items_exhausted
+    assert legacy.public_dict() == VALID_SURVEY
+
+
+@pytest.mark.parametrize("value", [0, 1, None, "true"])
+def test_capture_resource_stop_rejects_coercion(value):
+    with pytest.raises(ValueError, match="exact bool"):
+        CaptureSurveySummary.from_evidence({
+            "capture_survey": {**VALID_SURVEY, "capture_items_exhausted": value},
+        })
+
+
+@pytest.mark.parametrize("other", ["safety_stopped", "search_exhausted"])
+def test_capture_resource_stop_cannot_hide_another_stop(other):
+    with pytest.raises(ValueError, match="distinct terminal"):
+        CaptureSurveySummary.from_evidence({
+            "capture_survey": {**VALID_SURVEY, "capture_items_exhausted": True, other: True},
+        })
+
+
 def test_missing_or_none_marker_returns_none() -> None:
     assert CaptureSurveySummary.from_evidence({}) is None
     assert CaptureSurveySummary.from_evidence({"capture_survey": None}) is None
