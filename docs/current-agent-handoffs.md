@@ -5,10 +5,10 @@ Start with the [current operational handoff](../HANDOFF.md) and [role assignment
 ## Current facts
 
 - The goal is a transferable player and one shared registered Pokédex, not a perfect Red script.
-- Active collection model:60 examples; latest saved collection:61 registrations.
+- Active collection model: 60 examples; latest saved collection: 62 registrations.
 - Goal/destination choices are learned; navigation, battle and other mechanics remain deterministic.
-- Gameplay stopped after AE01: Paras evolved into Parasect through a forced goal. Zero new fits; prior AB failure remains unchanged. PR239 merged.
-- Latest save is AE01; latest fit is still AB/model60. Preserve complete ancestry, including AE's evolution/Fly/indoor transitions. Flash's repaired stone draft passes40tests but remains isolated and unqualified for live execution.
+- Gameplay stopped after AF01: Cut-enabled travel and a forced Doduo capture succeeded. Zero new fits; prior AB failure remains unchanged. PR240 merged.
+- Latest save is AF01; latest fit is still AB/model60. Preserve all ancestry plus the capture-Cut option and proposed Route16 source. Review the logged tree-crossing evidence separately from the missing persisted field receipt. No external agents ran this session; Flash's older stone draft remains isolated.
 
 ## Review questions
 

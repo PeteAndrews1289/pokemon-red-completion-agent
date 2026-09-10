@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from AE01/model60 with Parasect retained and ordered evolution/Fly/indoor transitions. Qualify one generic Cut-enabled collection route using observed capabilities and the existing field-move executor; start with read-only feasibility and blocked-access tests. Expose real destination choices, not repeated forced support. Allow 45-90 minutes for first-access qualification. No reset, sealed Red, Crystal or full replay; stone procurement remains separate.
+- Next decision: Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority now | 1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-owned-evolution-access** · status **active** · evidence [registered train example](docs/evidence/red-evolution-access-learning-2026-09-10.json)
+**2026-09-10-cut-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-cut-access-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate. |
+| Learning output | 1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
 | Authority delta | 0 real fits; no independent or cross-title authority promotion. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | An empty goal menu exposed lost evolution transport access; prospective Fly/indoor access is repaired. Stone acquisition and broader resource/traversal mechanics remain incomplete. Forced skills are not new learner outcomes; independent performance remains unproved. |
+| Blocker | Cut access is connected; this singleton qualification does not establish learned destination choice. Broader acquisition mechanics, reserves and independent performance remain incomplete. |
 | Decision | Reorient after zero new fitted choices: broaden executable access, not repeated searches or forced support. Preserve actual costs and registrations without inventing learning. |
-| Next session | Continue from AE01/model60 with Parasect retained and ordered evolution/Fly/indoor transitions. Qualify one generic Cut-enabled collection route using observed capabilities and the existing field-move executor; start with read-only feasibility and blocked-access tests. Expose real destination choices, not repeated forced support. Allow 45-90 minutes for first-access qualification. No reset, sealed Red, Crystal or full replay; stone procurement remains separate. |
-| Next falsifier | An observed Cut-capable party must expose and execute one newly reachable route; removing the required move or badge must reject it before input. Preserve actual costs, checkpoints and failure labels. |
+| Next session | Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay. |
+| Next falsifier | Observed Surf access must expose a real acquisition alternative alongside owned evolution; missing badge, move or water permission must reject unsafe access. No fit without an actual multi-option decision. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

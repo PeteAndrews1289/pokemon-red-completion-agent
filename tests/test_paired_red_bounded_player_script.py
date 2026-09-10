@@ -46,6 +46,20 @@ def test_search_budget_transition_preserves_history_and_requires_registration(mo
     assert '--capture-search-budget' in parser.format_help()
 
 
+def test_capture_cut_is_an_ordered_prospective_transition(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    old, new = derive(before, ('capture-fly', 'capture-cut'), object())
+    assert 'cut_transport' not in old.providers[0].parameters
+    assert new.providers[0].parameters['cut_transport'] is True
+    assert new.providers[0].parameters['fly_transport'] is True
+    assert derive(before, ('capture-fly',), object()) == (old,)
+    assert '--capture-cut-transport' in module['_parser']().format_help()
+
+
 def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 

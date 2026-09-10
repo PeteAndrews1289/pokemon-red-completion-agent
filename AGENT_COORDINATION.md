@@ -13,9 +13,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-PR239 merged. Codex repaired lost Fly/indoor access for newly proposed owned evolutions, then qualified Paras8→Parasect24 live. AE01 retains61registrations/52specimens, model60 unchanged: AC healing and AE evolution were forced singleton support. Gameplay stopped at an empty menu. Next qualify one reusable Cut-enabled collection route before requesting more actual destination choices. The earlier arrival-summary repair remains unqualified by live capture.
+PR240 merged. Codex connected observed Cut navigation to the existing metered field executor. AF01 reached Route16 and caught Doduo: 62 registrations, 53 specimens, model60 unchanged. Gameplay stopped at its one-goal limit. Next qualify observed Surf access alongside owned evolution to expose real alternatives, check resources and preserve field receipts. The earlier incidental-arrival repair remains unqualified.
 
-Flash3.8High completed a read-only stone-draft audit and an isolated two-file repair. Codex corrected three remaining fixtures and lint;40draft tests pass, local commit895b4d6b, not integrated. Accepted ID/guard/test defects; rejected blanket no-move-learning and mandatory evolution-Pokédex-modal claims after primary-source checks. Refreshed Gemini-group quota85.74%five-hour/78.00%weekly around20:08UTC; shared counters, not isolated consumption. Both tasks stopped; Claude unused.
+No external agents ran during the Cut session and no fresh quota was queried. Flash's prior stone draft remains isolated at895b4d6b with40passing tests after Codex corrections, not integrated or live-qualified. Its earlier review and usage readings are historical. Codex owns the next bounded Surf integration; request focused external help only if useful.
 
 Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
 
@@ -25,6 +25,6 @@ Not adopted: archiving or privatizing the repository. It remains an active proje
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-10-owned-evolution-access.md) for limitations and adjudication.
+Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-10-cut-collection-access.md) for limitations and adjudication.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

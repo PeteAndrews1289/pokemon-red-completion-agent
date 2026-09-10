@@ -626,6 +626,13 @@ def _parser() -> argparse.ArgumentParser:
         help="prospective indoor departure before Fly; preserves prior checkpoint menus",
     )
     parser.add_argument(
+        "--capture-cut-transport",
+        dest="regional_transitions",
+        action="append_const",
+        const="capture-cut",
+        help="opt future capture routes into observed land-only Cut access",
+    )
+    parser.add_argument(
         "--capture-fly-transport",
         dest="regional_transitions",
         action="append_const",
@@ -1546,6 +1553,7 @@ def _regional_profiles(
                 "opportunistic-capture",
                 "evolution-fly",
                 "capture-fly",
+                "capture-cut",
                 "indoor-fly-departure",
                 "observed-local-capture",
                 "travel-capture",
@@ -1584,6 +1592,12 @@ def _regional_profiles(
         if warp_safe:
             assert isinstance(source, str)
             source = source.removeprefix("warp-safe:")
+        if source == "capture-cut":
+            from pokemon_red_completion.red_goal_context_profile import bind_capture_cut_profile
+
+            profile = bind_capture_cut_profile(profile)
+            result.append(profile)
+            continue
         if source == "capture-fly":
             from pokemon_red_completion.red_goal_context_profile import bind_capture_fly_profile
 
