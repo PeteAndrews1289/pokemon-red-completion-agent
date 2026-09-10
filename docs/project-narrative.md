@@ -30,6 +30,8 @@ The next [bounded continuation](work-sessions/2026-09-10-search-budget.md) caugh
 
 ## What the failures taught us
 
+The [next session](work-sessions/2026-09-10-owned-evolution-access.md) exposed an empty goal menu: newly proposed evolutions had lost their transport settings. Restoring existing Fly/indoor access let the system retrieve and train Paras8→Parasect24, reaching61registrations. The model stayed at60examples because this was the only available goal. That distinction matters: extending usable mechanics can unlock future learning without being learning itself. The next bottleneck is access/resources, not more searches in already-cleared areas.
+
 Navigation could propose an apparently connected route that was blocked by actual game state. Capture verification could misinterpret the way a new boxed Pokémon shifts existing slots. Resource recovery could be necessary even when its action should not be counted as learned judgment.
 
 The engineering lesson is to verify the consequence, preserve the failed trace and repair a reusable boundary—not conceal a failed attempt with a reset or claim every successful action as model progress.

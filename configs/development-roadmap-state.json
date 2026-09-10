@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-search-budget",
+  "as_of_session": "2026-09-10-owned-evolution-access",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-search-budget-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-evolution-access-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -786,6 +786,12 @@
       "result": "0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
       "deviation": "Prospective search-budget repair and reviewed Flash research, followed by fresh bounded goals. AA preparation stopped before input after a budget interaction was found. No stage exits changed; costs retained.",
       "next": "Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay."
+    },
+    {
+      "session": "2026-09-10-owned-evolution-access",
+      "result": "2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
+      "deviation": "AC healed with no fit; AD had no executable goal and no gameplay. A read-only probe isolated lost evolution transport settings; a prospective opt-in qualified the same access for admission and execution. Flash repaired an isolated stone draft; not integrated. No stage exits changed; costs retained.",
+      "next": "Continue from AE01/model60 with Parasect retained, not AB or AC. Preserve the selected evolution plus explicit Fly/indoor transitions. Reorient after zero new fitted choices: qualify one generic Cut-enabled collection route using the existing field-move executor, starting with action-free feasibility and a changed-party/blocked-access falsifier. Do not merely remove walking-only guards or hand-route a species. Then expose real destination alternatives and fit actual outcomes. Allow45-90minutes to qualify the first access mechanic, not finish collection. Stone acquisition/funding and the isolated item-evolution draft remain separate; no reset, sealed Red, Crystal or full replay."
     }
   ],
   "closed_milestones": [

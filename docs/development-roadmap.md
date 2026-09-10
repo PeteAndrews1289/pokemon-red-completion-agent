@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-search-budget**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-owned-evolution-access**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-search-budget-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-evolution-access-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-owned-evolution-access
+
+2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** AC healed with no fit; AD had no executable goal and no gameplay. A read-only probe isolated lost evolution transport settings; a prospective opt-in qualified the same access for admission and execution. Flash repaired an isolated stone draft; not integrated. No stage exits changed; costs retained.
+
+**Next:** Continue from AE01/model60 with Parasect retained, not AB or AC. Preserve the selected evolution plus explicit Fly/indoor transitions. Reorient after zero new fitted choices: qualify one generic Cut-enabled collection route using the existing field-move executor, starting with action-free feasibility and a changed-party/blocked-access falsifier. Do not merely remove walking-only guards or hand-route a species. Then expose real destination alternatives and fit actual outcomes. Allow45-90minutes to qualify the first access mechanic, not finish collection. Stone acquisition/funding and the isolated item-evolution draft remain separate; no reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-search-budget
 
