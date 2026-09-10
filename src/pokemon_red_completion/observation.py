@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
 from typing import Protocol, runtime_checkable
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.encounters import encounter_log_path, is_wild_encounter
+from pokemon_red_completion.red_battle_catalog import RED_BATTLE_CATALOG
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
 from pokemon_red_completion.route import HALL_OF_FAME_FACT
 
@@ -64,9 +66,12 @@ class RamAddress(IntEnum):
     SHOP_QUANTITY = 0xCF96
     WALK_COUNTER = 0xCFC5
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
+    ENEMY_SPECIES_2 = 0xCFD8
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
     ENEMY_STATUS = 0xCFE9
+    ENEMY_TYPE_1 = 0xCFEA
+    ENEMY_TYPE_2 = 0xCFEB
     ENEMY_MOVES = 0xCFED
     ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
@@ -81,6 +86,7 @@ class RamAddress(IntEnum):
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
     ENEMY_BATTLE_STATUS_1 = 0xD067
+    ENEMY_BATTLE_STATUS_3 = 0xD069
     PLAYER_BATTLE_STATUS_1 = 0xD062
     PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
@@ -918,6 +924,28 @@ RED_BOXES_PER_SRAM_BANK = 6
 RED_BOX_SRAM_BASE = 0xA000
 RED_BOX_SRAM_BANKS = (2, 3)
 RED_BOX_CHANGED_MASK = 0x80
+ENEMY_TRANSFORMED_MASK = 0x08
+
+GEN1_INTERNAL_SPECIES_IDS = frozenset(RED_BATTLE_CATALOG.species_ids)
+
+GEN1_TYPE_NAMES_BY_CODE: Mapping[int, str] = {
+    0: "normal",
+    1: "fighting",
+    2: "flying",
+    3: "poison",
+    4: "ground",
+    5: "rock",
+    7: "bug",
+    8: "ghost",
+    20: "fire",
+    21: "water",
+    22: "grass",
+    23: "electric",
+    24: "psychic",
+    25: "ice",
+    26: "dragon",
+}
+GEN1_TYPE_CODES = frozenset(GEN1_TYPE_NAMES_BY_CODE.keys())
 
 
 RED_FLY_TOWN_NAMES = (
@@ -3635,6 +3663,42 @@ class TrainerDamageObservation:
     active_self_hit_stats: tuple[int, int] | None = None
 
 
+@dataclass(frozen=True, slots=True)
+class WildCaptureIdentity:
+    """Privileged wild capture identity snapshot separating original from transformed form."""
+
+    original_species_id: int
+    displayed_species_id: int
+    transformed: bool
+    type_ids: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.original_species_id) is not int
+            or self.original_species_id not in GEN1_INTERNAL_SPECIES_IDS
+        ):
+            raise ValueError(f"invalid original species identifier: {self.original_species_id}")
+        if (
+            type(self.displayed_species_id) is not int
+            or self.displayed_species_id not in GEN1_INTERNAL_SPECIES_IDS
+        ):
+            raise ValueError(f"invalid displayed species identifier: {self.displayed_species_id}")
+        if not isinstance(self.transformed, bool):
+            raise TypeError("transformed must be a boolean")
+        if (
+            not isinstance(self.type_ids, tuple)
+            or len(self.type_ids) != 2
+            or any(type(t) is not int or t not in GEN1_TYPE_CODES for t in self.type_ids)
+        ):
+            raise ValueError(f"invalid type IDs: {self.type_ids}")
+        if not self.transformed and self.original_species_id != self.displayed_species_id:
+            raise ValueError("nontransformed wild capture identity species mismatch")
+
+    @property
+    def type_names(self) -> tuple[str, ...]:
+        return tuple(dict.fromkeys(GEN1_TYPE_NAMES_BY_CODE[code] for code in self.type_ids))
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -3912,6 +3976,36 @@ class PokemonRedStateReader:
             raise SemanticStateError("wild capture target move inventory differs")
         return moves
 
+    def read_wild_capture_identity(self) -> WildCaptureIdentity | None:
+        """Privileged wild encounter identity separating original from battle form.
+
+        Returns None if not in a live wild encounter or enemy HP is zero or less.
+        Raw RAM addresses stay strictly inside this observation adapter.
+        Uses pret/pokered ram/wram.asm pinned locations:
+        - wEnemyMonSpecies2 at 0xCFD8 (enemy battle struct minus 13)
+        - displayed species at 0xCFE5
+        - live types at 0xCFEA / 0xCFEB
+        - transformed flag at 0xD069 (wEnemyBattleStatus3 bit 3, mask 0x08).
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        original_species_id = self._memory.read_u8(RamAddress.ENEMY_SPECIES_2)
+        displayed_species_id = self._memory.read_u8(RamAddress.ENEMY_SPECIES)
+        type_1 = self._memory.read_u8(RamAddress.ENEMY_TYPE_1)
+        type_2 = self._memory.read_u8(RamAddress.ENEMY_TYPE_2)
+        status_3 = self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_3)
+        transformed = bool(status_3 & ENEMY_TRANSFORMED_MASK)
+        try:
+            return WildCaptureIdentity(
+                original_species_id=original_species_id,
+                displayed_species_id=displayed_species_id,
+                transformed=transformed,
+                type_ids=(type_1, type_2),
+            )
+        except (ValueError, TypeError) as error:
+            raise SemanticStateError(f"wild capture identity differs: {error}") from error
+
     def read_trainer_entry_moves(self, expected: RawGameState) -> tuple[int, ...] | None:
         """Read incoming moves only at the same live trainer MAIN boundary.
 
@@ -4002,37 +4096,24 @@ class PokemonRedStateReader:
             )
             for i in range(3)
         )
-        enemy_flags3 = self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + 2)
+        enemy_flags3 = self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_3)
         if (
             player_flags[0] & 0x7F
             or player_flags[1] & 0xF0
             or player_flags[2] & 0x09
-            or enemy_flags3 & 0x08
+            or enemy_flags3 & ENEMY_TRANSFORMED_MASK
         ):
             raise SemanticStateError("trainer damage has unsupported volatile mechanics")
         if self._memory.read_u8(RamAddress.ENEMY_UNMODIFIED_LEVEL) != expected.enemy_level:
             raise SemanticStateError("trainer damage unmodified opponent level differs")
-        types = {
-            0: "normal",
-            1: "fighting",
-            2: "flying",
-            3: "poison",
-            4: "ground",
-            5: "rock",
-            7: "bug",
-            8: "ghost",
-            20: "fire",
-            21: "water",
-            22: "grass",
-            23: "electric",
-            24: "psychic",
-            25: "ice",
-            26: "dragon",
-        }
 
         def read_types(base: int) -> tuple[str, ...]:
             try:
-                return tuple(dict.fromkeys(types[self._memory.read_u8(base + i)] for i in (5, 6)))
+                return tuple(
+                    dict.fromkeys(
+                        GEN1_TYPE_NAMES_BY_CODE[self._memory.read_u8(base + i)] for i in (5, 6)
+                    )
+                )
             except KeyError as error:
                 raise SemanticStateError("trainer damage has unsupported type bytes") from error
 

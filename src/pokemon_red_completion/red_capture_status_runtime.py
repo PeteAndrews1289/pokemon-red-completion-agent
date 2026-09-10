@@ -19,7 +19,11 @@ from pokemon_red_completion.battle_runtime import (
 )
 from pokemon_red_completion.capture_support import choose_capture_status
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.observation import PokemonRedStateReader, RawGameState
+from pokemon_red_completion.observation import (
+    PokemonRedStateReader,
+    RawGameState,
+    WildCaptureIdentity,
+)
 from pokemon_red_completion.party import StatusCondition
 from pokemon_red_completion.red_capture_support import red_capture_status_options
 from pokemon_red_completion.red_party import PokemonRedPartyReader, decode_status
@@ -38,6 +42,7 @@ class RedCaptureStatusPreparer:
     attempts: int = field(default=0, init=False)
     reports: list[dict[str, object]] = field(default_factory=list, init=False)
     bypassed_for_escape: bool = field(default=False, init=False)
+    latched_original_species_id: int | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if type(self.maximum_attempts) is not int or not 1 <= self.maximum_attempts <= 10:
@@ -52,12 +57,20 @@ class RedCaptureStatusPreparer:
         initial = self.reader.read()
         if initial.battle_state != 1:
             return False
-        target = initial.enemy_species_id
+        identity = self.reader.read_wild_capture_identity()
+        if identity is None:
+            raise RedCaptureStatusError("capture preparation lacks a live target")
+        if self.latched_original_species_id is None:
+            self.latched_original_species_id = identity.original_species_id
+        elif identity.original_species_id != self.latched_original_species_id:
+            raise RedCaptureStatusError("capture status changed target, party or bag")
+
         target_hp = initial.enemy_hp
         party_ids = initial.party_species_ids
         initial_bag = initial.bag_items
-        if target is None or target_hp is None or target_hp <= 0 or initial.map_id is None:
+        if target_hp is None or target_hp <= 0 or initial.map_id is None:
             raise RedCaptureStatusError("capture preparation lacks a live target")
+        self._require_protected(initial, identity, target_hp, party_ids, initial_bag)
         advance_battle_to_policy_boundary(
             self.reader, self.actions, expected_map=initial.map_id,
             expected_battle_state=1, label="capture status introduction",
@@ -75,21 +88,39 @@ class RedCaptureStatusPreparer:
             # A setup/switch turn may lose the encounter before any ball. Keep
             # the current battler and permit the ball; do not invent sleep or
             # assume the opponent's move choice, speed or escape outcome.
-            self._require_protected(self.reader.read(), target, target_hp, party_ids, initial_bag)
+            identity = self.reader.read_wild_capture_identity()
+            self._require_protected(self.reader.read(), identity, target_hp, party_ids, initial_bag)
             self.bypassed_for_escape = True
             return True
         for _ in range(self.maximum_attempts - self.attempts):
             raw = self.reader.read()
             if raw.battle_state != 1:
                 return False
-            self._require_protected(raw, target, target_hp, party_ids, initial_bag)
+            identity = self.reader.read_wild_capture_identity()
+            self._require_protected(raw, identity, target_hp, party_ids, initial_bag)
+            assert identity is not None
+            # Transform can also happen in reply to a status move, not only a
+            # switch. Recheck before each additional setup turn.
+            current_moves = self.reader.read_enemy_capture_moves()
+            if current_moves is None:
+                raise RedCaptureStatusError("capture target moves are unavailable")
+            if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+                   for move in current_moves if move):
+                self.bypassed_for_escape = True
+                return True
             status_byte = self.reader.read_enemy_capture_status()
             if status_byte is None:
                 raise RedCaptureStatusError("capture target status is unavailable")
             party = PokemonRedPartyReader(self.emulator).read()
             option = choose_capture_status(
-                party, red_capture_status_options(party, enemy_species_id=target),
-                target_status=decode_status(status_byte), attempts_used=self.attempts,
+                party,
+                red_capture_status_options(
+                    party,
+                    enemy_species_id=identity.displayed_species_id,
+                    live_type_names=identity.type_names,
+                ),
+                target_status=decode_status(status_byte),
+                attempts_used=self.attempts,
                 maximum_attempts=self.maximum_attempts,
                 active_party_slot=(
                     raw.active_party_index + 1 if raw.active_party_index is not None else None
@@ -108,9 +139,44 @@ class RedCaptureStatusPreparer:
                         return False
                     raise
                 raw = self.reader.read()
-                self._require_protected(raw, target, target_hp, party_ids, initial_bag)
+                identity = self.reader.read_wild_capture_identity()
+                self._require_protected(raw, identity, target_hp, party_ids, initial_bag)
+                assert identity is not None
                 helper = PokemonRedPartyReader(self.emulator).read().members[option.party_slot - 1]
                 if helper.hp_ratio <= 0.5 or helper.status is not StatusCondition.HEALTHY:
+                    break
+                # Recheck live types and escape moves after a switch so newly
+                # transformed types do not use stale immunity or risk escape.
+                post_moves = self.reader.read_enemy_capture_moves()
+                if post_moves is None:
+                    raise RedCaptureStatusError("capture target moves are unavailable")
+                if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
+                       for move in post_moves if move):
+                    self.bypassed_for_escape = True
+                    return True
+                post_status_byte = self.reader.read_enemy_capture_status()
+                if post_status_byte is None:
+                    raise RedCaptureStatusError("capture target status is unavailable")
+                current_status = decode_status(post_status_byte)
+                if current_status is not StatusCondition.HEALTHY:
+                    break
+                party = PokemonRedPartyReader(self.emulator).read()
+                live_options = red_capture_status_options(
+                    party,
+                    enemy_species_id=identity.displayed_species_id,
+                    live_type_names=identity.type_names,
+                )
+                option = choose_capture_status(
+                    party,
+                    live_options,
+                    target_status=current_status,
+                    attempts_used=self.attempts,
+                    maximum_attempts=self.maximum_attempts,
+                    active_party_slot=(
+                        raw.active_party_index + 1 if raw.active_party_index is not None else None
+                    ),
+                )
+                if option is None or option.party_slot - 1 != raw.active_party_index:
                     break
             before_pp = PokemonRedPartyReader(self.emulator).read().members[
                 option.party_slot - 1
@@ -126,7 +192,8 @@ class RedCaptureStatusPreparer:
                 self.reports.append({"attempt": self.attempts, "encounter_ended": True,
                                      "status_success": False})
                 return False
-            self._require_protected(after, target, target_hp, party_ids, initial_bag)
+            identity = self.reader.read_wild_capture_identity()
+            self._require_protected(after, identity, target_hp, party_ids, initial_bag)
             if (after.battler_hp or 0) <= 0:
                 raise RedCaptureStatusError("capture status helper fainted; stop safely")
             advance_battle_to_policy_boundary(
@@ -134,7 +201,8 @@ class RedCaptureStatusPreparer:
                 expected_battle_state=1, label="capture status turn settlement",
             )
             after = self.reader.read()
-            self._require_protected(after, target, target_hp, party_ids, initial_bag)
+            identity = self.reader.read_wild_capture_identity()
+            self._require_protected(after, identity, target_hp, party_ids, initial_bag)
             after_pp = PokemonRedPartyReader(self.emulator).read().members[
                 option.party_slot - 1
             ].moves[option.move_slot - 1].current_pp
@@ -146,6 +214,7 @@ class RedCaptureStatusPreparer:
             actual = decode_status(after_byte)
             if actual not in {StatusCondition.HEALTHY, option.condition}:
                 raise RedCaptureStatusError("capture status effect differs from selected move")
+            assert identity is not None
             self.reports.append({
                 "attempt": self.attempts, "party_slot": option.party_slot,
                 "move_slot": option.move_slot, "condition": option.condition.value,
@@ -153,11 +222,15 @@ class RedCaptureStatusPreparer:
                 "status_success": actual is option.condition,
                 "target_hp_before": target_hp, "target_hp_after": after.enemy_hp,
                 "target_preserved": True, "balls_spent": 0,
+                "original_species_id": identity.original_species_id,
+                "displayed_species_id": identity.displayed_species_id,
+                "transformed": identity.transformed,
             })
         current = self.reader.read()
         if current.battle_state != 1:
             return False
-        self._require_protected(current, target, target_hp, party_ids, initial_bag)
+        identity = self.reader.read_wild_capture_identity()
+        self._require_protected(current, identity, target_hp, party_ids, initial_bag)
         healthy = [
             member for member in PokemonRedPartyReader(self.emulator).read().members
             if member.hp_ratio > 0.5 and member.status is StatusCondition.HEALTHY
@@ -173,20 +246,34 @@ class RedCaptureStatusPreparer:
                 expected_battle_state=1, label="capture protected catcher", wait_frames=120,
             )
             self._require_protected(
-                self.reader.read(), target, target_hp, party_ids, initial_bag,
+                self.reader.read(), self.reader.read_wild_capture_identity(),
+                target_hp, party_ids, initial_bag,
             )
         return True
 
-    @staticmethod
     def _require_protected(
+        self,
         raw: RawGameState,
-        target: int,
+        identity: WildCaptureIdentity | None,
         hp: int,
         party_ids: tuple[int, ...] | None,
         bag: tuple[tuple[int, int], ...] | None,
     ) -> None:
         if (
-            raw.battle_state != 1 or raw.enemy_species_id != target or raw.enemy_hp != hp
-            or raw.party_species_ids != party_ids or raw.bag_items != bag
+            raw.battle_state != 1
+            or raw.enemy_hp != hp
+            or raw.party_species_ids != party_ids
+            or raw.bag_items != bag
         ):
+            raise RedCaptureStatusError("capture status changed target, party or bag")
+        if identity is None:
+            raise RedCaptureStatusError("capture status lacks a live target")
+        if (
+            self.latched_original_species_id is not None
+            and identity.original_species_id != self.latched_original_species_id
+        ):
+            raise RedCaptureStatusError("capture status changed target, party or bag")
+        if not identity.transformed and raw.enemy_species_id != identity.original_species_id:
+            raise RedCaptureStatusError("capture status changed target, party or bag")
+        if identity.transformed and raw.enemy_species_id != identity.displayed_species_id:
             raise RedCaptureStatusError("capture status changed target, party or bag")

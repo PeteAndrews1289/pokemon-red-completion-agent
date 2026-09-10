@@ -5,7 +5,7 @@ from types import SimpleNamespace
 import pytest
 
 import pokemon_red_completion.red_capture_status_runtime as runtime
-from pokemon_red_completion.observation import RawGameState
+from pokemon_red_completion.observation import RawGameState, WildCaptureIdentity
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation, PartyObservation
 
 
@@ -29,6 +29,13 @@ class World:
 
     def read_enemy_capture_status(self):
         return self.status
+
+    def read_wild_capture_identity(self):
+        if self.raw.battle_state != 1 or (self.raw.enemy_hp or 0) <= 0:
+            return None
+        return WildCaptureIdentity(
+            self.raw.enemy_species_id, self.raw.enemy_species_id, False, (0, 0),
+        )
 
     def read_enemy_capture_moves(self):
         return (33, 45, 0, 0)
