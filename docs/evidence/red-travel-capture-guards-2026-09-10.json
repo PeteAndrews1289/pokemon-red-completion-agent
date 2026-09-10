@@ -1,0 +1,42 @@
+{
+  "schema": "pokemon.red.travel-capture-engineering.v1",
+  "classification": "engineering_only",
+  "diagnostic_source_commit": "8fdbfbbafc092e8a1b0329c748fba20664ce4c97",
+  "checkpoint_sha256": "41780f035687a350a6af2dbf9769b76e944e1a4d8ad77bba24fc43bc39c72e99",
+  "diagnosis": {
+    "map_id": 165,
+    "position": [16, 20],
+    "selected_source": "wild:PokemonMansionB1F:grass",
+    "static_route_steps": 26,
+    "observed_route_status": "no_bounded_feasible_route",
+    "static_current_square_steps": 0,
+    "observed_current_square_steps": 0,
+    "actions": 0,
+    "frames": 0,
+    "predictions": 0,
+    "fits": 0
+  },
+  "qualification": {
+    "focused_tests_passed": 88,
+    "test_files": [
+      "tests/test_red_travel_capture.py",
+      "tests/test_red_routed_recovery.py",
+      "tests/test_route_executor.py"
+    ],
+    "targeted_lint_passed": true,
+    "targeted_typecheck_passed": true,
+    "production_route_executor_tested_with_simulated_observations": true,
+    "gameplay_enabled": false,
+    "live_capture_verified": false,
+    "hard_dispatch_budget_bound": false,
+    "full_suite_pass_claimed": false
+  },
+  "retained": {
+    "registered_train_examples": 47,
+    "global_registrations": 55,
+    "local_registrations": 55,
+    "specimens": 48
+  },
+  "learning_delta": 0,
+  "registration_delta": 0
+}

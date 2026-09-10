@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "3 actual fits; no independent or cross-title authority promotion.",
-        "blocker": "Travel can flee unregistered encounters; preparation repeatedly verifies a long lineage. No independent advantage or fresh-game autonomy established.",
-        "decision": "Finish the bounded batch, then prioritize observed missed registration opportunities over unmeasured cache work.",
+        "authority_delta": "0 new fits or authority promotions; model47 retained.",
+        "blocker": "Standalone travel-capture guards pass tests but are not wired into gameplay. Hard dispatch budgets and already-satisfied arrival attribution need qualification; Mansion observed topology still blocks the static route.",
+        "decision": "Close this engineering-only checkpoint. Connect the existing bounded capture mechanics next; do not expand into a new routing framework or count tests as learning.",
         "evidence": {
           "kind": "registered_train_example",
           "path": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json",
           "sha256": "3c28ece63359790269ef37a99c21b8bee7ec17dbf67251b9629cb565ee1ba3fd"
         },
-        "learning_output": "1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.",
+        "learning_output": "0 new gameplay outcomes or fits. 47 registered-objective examples, 55 registrations and48 specimens remain unchanged; 88 focused tests are engineering evidence only.",
         "next_falsifier": "A missing species encountered in transit can be handled with bounded capture and exact route resumption; unsafe or already-credited cases preserve documented fallback.",
-        "next_session_goal": "Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.",
+        "next_session_goal": "Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-registration-opportunities",
+        "session_id": "2026-09-10-travel-capture-guards",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.",
+        "current": "47 registered-objective examples and55 registrations retained. No new gameplay, predictions or fits this engineering session; travel capture is not yet enabled.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.",
+      "next_decision": "Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-registration-opportunities**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-capture-guards**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-travel-capture-guards
+
+Capture/resume and route-failure guards: 88 focused tests passed. Zero-input Mansion diagnosis confirmed a route mismatch. Not enabled in gameplay; model47 and55 registrations unchanged.
+
+**Deviation:** Engineering-only session; live connection and productive outcome were not reached. Checklist stays1/3 and stage exits unchanged. Reorient on bounded integration, not a broader navigation rewrite.
+
+**Next:** Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal.
 
 ### 2026-09-10-registration-opportunities
 

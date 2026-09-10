@@ -1,12 +1,12 @@
-# Current — collection learning audited; model 47, 55 registered
+# Current — travel capture component tested; model47 unchanged
 
-1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.
+Travel-capture component and route-failure preservation tested: 88 focused tests passed. Static Mansion route differs from observed terrain. Gameplay integration remains unfinished; no new input or fit. Model47, 55 registrations and48 specimens retained.
 
-Next: Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal.
+Next: Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal.
 
 Bounded goal/destination learning with deterministic mechanics; not a new-game autonomous player.
 
-[Session, review and evidence](work-sessions/2026-09-10-registration-opportunities.md).
+[Session, limitations and next step](work-sessions/2026-09-10-travel-capture-guards.md). Prior model47 learning outcomes remain [preserved](work-sessions/2026-09-10-registration-opportunities.md).
 
 ## Prior checkpoints
 

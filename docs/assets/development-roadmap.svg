@@ -92,8 +92,8 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-10-registration-opportunities</text>
-<text x="50" y="1767" class="body">1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at</text>
-<text x="50" y="1792" class="body">failed_step_retained_and_fitted; failures and costs are retained.</text>
+<text x="50" y="1732" class="small muted">2026-09-10-travel-capture-guards</text>
+<text x="50" y="1767" class="body">Capture/resume and route-failure guards: 88 focused tests passed. Zero-input Mansion diagnosis confirmed a route mismatch.</text>
+<text x="50" y="1792" class="body">Not enabled in gameplay; model47 and55 registrations unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>
