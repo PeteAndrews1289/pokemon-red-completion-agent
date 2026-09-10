@@ -521,18 +521,16 @@ def without_warp_transit(
             return False
         return not (start_at[1] >= max_x - 1 and target[1] > start_at[1])
 
-    return LocalGraph(
-        {
-            source: (
-                ()
-                if source in absorbing
-                else tuple(
-                    edge for edge in outgoing if source != start_at or safe_start_departure(edge)
-                )
-            )
-            for source, outgoing in graph.edges.items()
-        }
-    )
+    # Edge tuples are immutable: copy the mapping, not every unaffected tuple.
+    # Never add absent coordinates or mutate the caller's graph. The projection
+    # is fresh for every observed start, with no cache across changing worlds.
+    edges = dict(graph.edges)
+    for source in absorbing:
+        if source in edges:
+            edges[source] = ()
+    if start_at in warps and start_at in edges:
+        edges[start_at] = tuple(edge for edge in edges[start_at] if safe_start_departure(edge))
+    return LocalGraph(edges)
 
 
 def _local_goals(graph: MacroGraph, map_id: int) -> set[LocalGoal]:
