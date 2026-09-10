@@ -56,6 +56,10 @@ def _parser() -> argparse.ArgumentParser:
         help="Offer stock-derived native level evolutions alongside automatic capture goals.",
     )
     parser.add_argument(
+        "--owned-evolution-fly-transport", action="store_true",
+        help="Prospectively qualify and retain Fly/indoor access for new owned evolution goals.",
+    )
+    parser.add_argument(
         "--behavior-model-record", nargs=2, action="append", default=[], metavar=("SHA256", "PATH")
     )
     return parser
@@ -168,6 +172,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     # Fail before controller input if any retained behavior model is unavailable.
     registered_objective = getattr(initial, "registration_policy", None) is not None
     owned_evolutions = getattr(args, "owned_evolution_objectives", False)
+    owned_fly = getattr(args, "owned_evolution_fly_transport", False)
+    if type(owned_fly) is not bool or (owned_fly and not owned_evolutions):
+        raise ValueError("owned evolution Fly requires owned evolution objectives")
     if type(owned_evolutions) is not bool or (
         owned_evolutions and (not automatic_goals or not registered_objective)
     ):
@@ -191,10 +198,17 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if owned_evolutions:
             from inspect_red_owned_evolution import inspect_owned_evolution
 
-            evolution_inventory = inspect_owned_evolution(ready)
+            evolution_inventory = (
+                inspect_owned_evolution(ready, fly_transport=True)
+                if owned_fly else inspect_owned_evolution(ready)
+            )
             transition = evolution_inventory["selected_transition"]
             if transition is not None:
                 current.regional_transitions = [*current.regional_transitions, transition]
+                if owned_fly:
+                    # The exact prospective transitions used in admission must
+                    # also bind execution and every subsequent saved ancestor.
+                    current.regional_transitions += ["evolution-fly", "indoor-fly-departure"]
                 ready = source.base._prepare(current)
         if (
             ready.source_commit != initial.source_commit
