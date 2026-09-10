@@ -56,3 +56,26 @@ Claude was not used for this narrow change.
 
 This is engineering evidence only. Model19 and the saved collection remain unchanged
 until the next fresh learning run completes.
+
+
+## Verified batch G closeout
+
+4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.
+
+Elapsed batch time: 1050.569 seconds. New registrations:
+Gloom (model-selected, three-to-two Oddish copies), Muk and Fearow (forced singleton).
+Model21 has12 successful /9 failed registered examples. The two singleton outcomes
+were saved without fitting; no inflated model23 or four-choice claim.
+
+Latest actual checkpoint `1bf7cfaf3df44ae276418e7909a3f442b0b22aa1b11d0f367f924a254ff97013` in `red-registered-native-stock-20260910-g-04-causal`.
+Latest fitted model `e443f18ae237393ce08f701409414f7da30cd40ef0691d14fadbd1d0d925f462`.
+Saved resources: 18 capture items; money3503.
+The native-stock milestone is3/3, not Phase5 complete.
+
+Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.
+
+Both latest published CI runs are green. Flash review quota about89% five-hour /85%
+weekly remaining; Claude unused. Its duplication finding is code-inferred, not a
+benchmark. Never reuse a preflight across a changed selected profile.
+
+Next setting: Astra High, Fast off; use Flash High only for a bounded useful draft.

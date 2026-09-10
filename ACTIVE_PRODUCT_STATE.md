@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.
+- Next decision: Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat. |
+| Authority now | 4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 19 | 12 |
+| Registered Train Example · train | 21 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-owned-evolution-options** · status **active** · evidence [registered train example](docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json)
+**2026-09-10-native-stock-overnight** · status **active** · evidence [registered train example](docs/evidence/red-registered-native-stock-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat. |
-| Authority delta | Stock-derived evolution is offered alongside capture; the model chooses goal kinds, while target shortlisting and mechanics remain deterministic. |
-| Transfer result | ROM-free changed stock, registration, reserve, level-cap and continuation tests; no title transfer. |
-| Blocker | Native three-plus-copy evolution is ROM-free qualified; a live expanded-stock outcome and broader mechanics remain pending. No independent generalization claim. |
-| Decision | Retain the verified stock-derived evolution and capture loop; broaden the specific remaining mechanic boundary rather than add manual species routes. |
-| Next session | Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset. |
-| Next falsifier | A useful option produces verified novelty or a diagnosed settled failure. |
+| Learning output | 4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim. |
+| Authority delta | Model-selected Gloom evolution from three Oddish qualified; later singleton Muk/Fearow evolution was not fitted. |
+| Transfer result | Changed-count/reserve/box-position ROM-free checks and one actual three-copy evolution. No title transfer. |
+| Blocker | Capture alternatives disappeared after Gloom; diagnose before more singleton-only collection. No independent generalization claim. |
+| Decision | Native-stock milestone complete. Prioritize genuine decision breadth and measured learning throughput. |
+| Next session | Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal. |
+| Next falsifier | Current-state inspection explains absent capture options or exposes a genuinely executable alternative. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

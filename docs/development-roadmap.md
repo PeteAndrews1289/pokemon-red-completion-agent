@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-owned-evolution-options**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-native-stock-overnight**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden owned-evolution coverage: 2/3 acceptance items (67%).**
+**Broaden owned-evolution coverage: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Qualify native three-plus-copy stock ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
 - [x] Verify reserves and unchanged legacy guards ([evidence](../docs/evidence/red-native-stock-engineering-2026-09-10.json))
-- [ ] Retain a model-selected expanded-stock lesson
+- [x] Retain a model-selected expanded-stock lesson ([evidence](../docs/evidence/red-registered-native-stock-learning-2026-09-10.json))
 
-Current model: **19 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **21 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-native-stock-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-native-stock-overnight
+
+4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.
+
+**Deviation:** No stage-exit change. Native-stock checklist3/3; two forced singletons explicitly excluded from fit counts.
+
+**Next:** Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.
 
 ### 2026-09-10-owned-evolution-options
 

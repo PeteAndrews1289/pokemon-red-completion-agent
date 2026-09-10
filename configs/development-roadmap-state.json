@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-owned-evolution-options",
+  "as_of_session": "2026-09-10-native-stock-overnight",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-registered-native-stock-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "native-stock-lesson",
         "label": "Retain a model-selected expanded-stock lesson",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-registered-native-stock-learning-2026-09-10.json"
       }
     ]
   },
@@ -654,6 +654,12 @@
       "result": "4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.",
       "deviation": "No stage-exit change. Connected existing stock inventory and native evolution to the learning loop; target shortlisting is disclosed deterministic support.",
       "next": "Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset."
+    },
+    {
+      "session": "2026-09-10-native-stock-overnight",
+      "result": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
+      "deviation": "No stage-exit change. Native-stock checklist3/3; two forced singletons explicitly excluded from fit counts.",
+      "next": "Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

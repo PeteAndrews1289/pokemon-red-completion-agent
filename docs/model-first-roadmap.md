@@ -1,3 +1,25 @@
+# Current — native multi-copy evolution verified
+
+4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.
+
+The model chose to evolve one of three Oddish into Gloom while preserving the
+other copies and all existing registration. Muk and Fearow followed as forced
+single-option mechanics; these added collection progress, not choice-training rows.
+The first failed capture search was retained and fitted once. Current model21 has
+12 successes /9 failures in its separate registered-objective corpus.
+
+Next: Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal.
+
+Codex integrated and corrected Flash's isolated draft, verified232 relevant tests,
+and audited authenticated outcomes. Flash's read-only throughput review identified
+repeated preparation; no speedup is claimed or implemented. Historical114 examples
+remain separate. No learned individual target selection, new combat authority or
+cross-title transfer is demonstrated. The overnight window continues.
+
+[Session and exact continuation](work-sessions/2026-09-10-native-stock-overnight.md).
+
+## Historical checkpoints below — superseded where inconsistent
+
 # Current — model-directed capture and owned evolution
 
 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.
