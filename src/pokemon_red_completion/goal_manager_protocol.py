@@ -285,6 +285,7 @@ class GoalManagerCollectionRegistry:
 
 
 def goal_manager_contract_document() -> dict[str, object]:
+    """The frozen V1 collection contract, not the expanding player vocabulary."""
     rules = GoalCurriculumRequirements()
     return {
         "admission": {
@@ -304,7 +305,16 @@ def goal_manager_contract_document() -> dict[str, object]:
         "fit": goal_manager_fit_configuration(),
         "red_adapter": red_goal_manager_contract_document(),
         "availability": sorted(item.value for item in GoalAvailability),
-        "failure_reasons": sorted(item.value for item in GoalFailureReason),
+        # Historical registry identity must not drift when the development
+        # player adds an outcome. A successor collection needs a new contract.
+        "failure_reasons": sorted(item.value for item in (
+            GoalFailureReason.BINDING_FAILED,
+            GoalFailureReason.EXECUTION_BUDGET_EXHAUSTED,
+            GoalFailureReason.EXTERNAL_INTERRUPTION,
+            GoalFailureReason.OUTCOME_NOT_VERIFIED,
+            GoalFailureReason.RESOURCE_LOST,
+            GoalFailureReason.WORLD_STATE_DIVERGED,
+        )),
         "goal_kinds": sorted(item.value for item in GoalKind),
         "goal_needs": sorted(item.value for item in GoalNeed),
         "kind_need_mapping": {

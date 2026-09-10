@@ -1,0 +1,136 @@
+{
+  "schema": "pokemon.red.regional-income-qualification.v1",
+  "session_id": "2026-09-08-regional-income",
+  "source_commits": [
+    "c5687c1c3cd1b5656d210e80d6889288e88f6d64",
+    "46e43319b347d73d6d3a2a663acdcd548a79acf1"
+  ],
+  "source_bundle_sha256": "b7a4b8a8a6556a3393cb7941e5cd7e942dbe4b14d609991a68d1b61fe1a2e99d",
+  "model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+  "settled_examples": 76,
+  "new_learned_examples": 0,
+  "episodes": [
+    {
+      "episode_id": "red-phase4-regional-funding-20260908-01-causal",
+      "manifest_sha256": "feacea1be35f973c8c88a0bf8812e80d1a5e2e08608c005ed8de74af2a80df5d",
+      "checkpoint_sha256": "1c1b89addac20c7a03c6cf0061c35d08296ff5c5e48cbfb9dd7f28f51e6520d3",
+      "state_sha256": "73e15d0ca4041566d34fc71c97d723ccb39eed6efa769acf6bc18cea5b1eb423",
+      "actions": 141,
+      "frames": 13836,
+      "status": "failed",
+      "eligible_examples": 0,
+      "selection_mode": "deterministic_safety",
+      "actual": {
+        "map_id": 36,
+        "x": 8,
+        "y": 5,
+        "money": 94,
+        "balls": 0,
+        "protected_full_restores": 4,
+        "specimens": 30,
+        "living_species": 28,
+        "registered_species": 33,
+        "party_hp": [
+          89,
+          167,
+          213,
+          118,
+          272,
+          34
+        ],
+        "party_species": [
+          141,
+          104,
+          28,
+          118,
+          132,
+          48
+        ],
+        "battle_state": 0,
+        "input_ready": true,
+        "dialogue": true,
+        "pending_trainer": [
+          209,
+          2
+        ]
+      },
+      "audit_actions": 0,
+      "audit_frames": 0
+    },
+    {
+      "episode_id": "red-phase4-regional-income-resume-20260908-01-causal",
+      "manifest_sha256": "f03be778d55b216ddf5970915df2ff8774fa71f6f8daba774c993383e5efe6bd",
+      "checkpoint_sha256": "21445916d23e92742784e608386c36607b63a38a7a79701821b86b77461f3d16",
+      "state_sha256": "34949deb95ffd48902b29ab3eba91e092823588d6c6361fd2d7d924368ba8736",
+      "actions": 78,
+      "frames": 7513,
+      "status": "succeeded",
+      "eligible_examples": 0,
+      "selection_mode": "deterministic_safety",
+      "actual": {
+        "map_id": 36,
+        "x": 8,
+        "y": 5,
+        "money": 619,
+        "balls": 0,
+        "protected_full_restores": 4,
+        "specimens": 30,
+        "living_species": 28,
+        "registered_species": 33,
+        "party_hp": [
+          71,
+          167,
+          213,
+          118,
+          272,
+          34
+        ],
+        "party_species": [
+          141,
+          104,
+          28,
+          118,
+          132,
+          48
+        ],
+        "battle_state": 0,
+        "input_ready": true,
+        "dialogue": false,
+        "pending_trainer": null
+      },
+      "audit_actions": 0,
+      "audit_frames": 0
+    }
+  ],
+  "total_actions": 219,
+  "total_frames": 21349,
+  "earned_money": 525,
+  "collection_preserved": true,
+  "controller_free_reload_verified": true,
+  "trainer_event": {
+    "map_id": 36,
+    "sprite_index": 7,
+    "event_flag": 1367,
+    "before": false,
+    "after": true
+  },
+  "failure": "Pending trainer start coexisted with visible dialogue; wait-only intro exhausted its unchanged bound.",
+  "repair": "Confirm visible dialogue after authenticating the pending target; wait only when that latch is dialogue-free.",
+  "focused_tests_passed": 276,
+  "story_state": {
+    "badge_count": 8,
+    "next_dependency_legal_objective": "defeat_lorelei",
+    "currently_executable": false,
+    "reason": "Current location is Route25. Existing Lorelei chapter requires a specific Indigo entrance, lead/moves and exact stock; it is not a generic current-state battle binding."
+  },
+  "claims": {
+    "adjacent_map_income_demonstrated": true,
+    "sustainable_economy": false,
+    "model_selected_trainer": false,
+    "whole_phase_complete": false,
+    "model_led_red_completed": false,
+    "independent_evaluation": false,
+    "transfer_result": false
+  },
+  "private_path_fields": 0
+}

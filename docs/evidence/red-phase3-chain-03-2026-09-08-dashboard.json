@@ -1,0 +1,139 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
+  "session_evidence": "docs/evidence/red-phase3-chain-03-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 73,
+    "frames": 2712,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase3-chain-20260908-03-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "cea7176caaa7f588054a5ed9773a5f36b2f6777a15948e833977cd493b072612",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 60,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 70,
+      "successful_examples": 29,
+      "total_examples": 70,
+      "train_dataset_sha256": "425c42242e25f0319bbe45d1e4a285ff00433ad39311273dc858a136daf11277",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.01264907537023701,
+      "weighted_mse_before": 0.02662422204071249
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "80f0fecdc366ac0cc4168af39b1e632032bc04068b8666018cf20d87024643df",
+      "file_sha256": "0e750c34e84ca337855660f7831f83f40458abd7e863cb0c866c626d45245e10",
+      "independent_evaluation": false,
+      "model_sha256": "20c6494610eb0839795b59f2e8c3c1a251aaeb546a1e8a00d4857a35cdd61ad9",
+      "prior_model_sha256": "205a37b796bed1575c93d7807dc4eb759bd20b318a783db97618843c283d179c",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 70,
+      "source_bundle_sha256": "2ff513951d3865a52ef59927c4b3a40531c0a9a9ca7d7182dda99105c476951a",
+      "source_commit": "361d8c18a4c874a70545721b068ebac62cfea8ae"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10114792797848726,
+        0.000005800127377662445,
+        0.00005747413770976156,
+        0.006165324003688645,
+        0.004569989401951864,
+        0.0013335825725108335,
+        0.0008448523544622943,
+        0.0000012862253675891867,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 70,
+      "total_examples": 70,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012680692977950657
+    },
+    "regional_source_examples": 16,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10088442128328272,
+        0.000005791126862595365,
+        0.00005745818570847178,
+        0.006163680481762764,
+        0.0045692977343020705,
+        0.0013169813669793337,
+        0.000842765756349156,
+        0.000001282396885963727,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 70,
+      "total_examples": 70,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012649075370237009
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "Model70 has not played after fitting. Capture failed before moving any stored specimen; the actual PC menu is retained.",
+  "next_session": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3."
+}

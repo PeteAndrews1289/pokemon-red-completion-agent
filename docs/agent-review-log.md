@@ -1,5 +1,66 @@
 # Agent review and adjudication log
 
+## September 7 — Flash survey summary and live integration audit
+
+Flash3.8High used its isolated branch only; reviewed draft f76cc46d. Codex accepted
+the explicit typed marker, bounded counts and optional recorded stop cause. Initial
+draft:55tests passed/one inconsistent None assertion failed. Codex also rejected a
+flat-field detector that would mistake generic exploration for capture reporting.
+Flash revised both; Codex preserved positional compatibility and wired Red reports.
+
+The actual capture succeeded, but Codex's terminal audit found the routed composer
+dropped the new marker. The prospective repair now passes success/exhaustion,
+unexecuted-destination and malformed-report tests;261combined checks pass. The old
+episode remains unchanged and its action trace independently verifies the capture.
+This exposes a real limitation of the draft/review loop: component tests are not
+end-to-end integration coverage. Keep Flash scoped and require active-path review.
+
+Provider cumulative duration466seconds/two turns, not a measured overall speedup.
+No Claude audit used. At23:50UTC, Gemini79.64%five-hour/94.50%weekly remaining;
+resets02:11UTC September8/23:22UTC September11. Separate Claude83%/92%remaining;
+resets22:09EDT September7/09:59EDT September11. Account-wide, not task-attributed.
+
+Decision: useful narrow drafting; Codex owns integration and gameplay. Next use the
+new Mankey prerequisite for a mixed-goal lesson. Do not request another broad agent
+architecture audit or claim that more training rows prove better play.
+
+## Flash bounded follow-up — September 7 safe-capture integration
+
+Accepted after review: eight independent recovery route-interruption tests from
+Flash3.8High in its isolated branch. They exercise the actual wrapper around an
+injected interruption handler: changed/truncated party, newly fainted member,
+unsettled field and propagated errors. No emulator, private save or publication
+access was granted. Its initial directory-list denial was resolved with exact
+absolute file paths, not broader permissions.
+
+The unchanged Flash draft is preserved locally as commit `b8ce5d43` on
+`agent/flash-capture-guard-tests-20260907`; Codex's reviewed integration is
+published as `1a2ff13f` on the existing PR236 branch. Main was not changed.
+
+Codex corrected formatting, ran all eight, and independently added fresh-binding,
+stale-state, selected-source and real trainer-move safety tests. Final focused
+integration94passed; typecheck416sourcefiles. The real recovery then succeeded;
+the subsequent source search failed safely with no catch and was fitted honestly.
+Neither this review nor the live trial exercises every trainer interruption or
+proves a general capture advantage. Claude was not used for audit.
+
+Verdict: this narrow draft/review loop was useful. Keep Flash assignments bounded
+by interfaces and independent acceptance tests; do not infer broad architecture
+readiness or a measured token saving. AstraExtraHigh is a task choice this session,
+not a controlled comparison with Sol or a reason to default to Max.
+See [full session record](work-sessions/2026-09-07-safe-capture-integration.md).
+
+## Flash direct-write loop — September 7
+
+Accepted: scoped isolated file editing and reuse of existing Center mechanics.
+Rejected as live-ready: first draft could not import; revision passed 11/15 proposed
+tests but used nonexistent controller fields. Codex corrected those and expanded
+stale-state, full member/PP preservation and final-boundary falsifiers. The integration
+passes 272 targeted ROM-free tests; no live saved-state qualification, fitting or
+publication occurred. Claude was conserved, not silently treated as having approved.
+The next gate is safe capture/PC preparation plus a retained-state recovery, not another
+broad architecture rewrite. See [session details](work-sessions/2026-09-07-flash-safe-capture-prototype.md).
+
 This log records material external-agent findings and Codex's disposition. Review process and memo
 format are defined in [three-agent-workflow.md](three-agent-workflow.md).
 

@@ -1,0 +1,53 @@
+{
+  "actions": 0,
+  "declarations": [
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-01-causal",
+      "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+      "seed": 2026090941,
+      "training_plan_sha256": "9991433b30fab73868ce092ab99d833a2d5f41b2ec9562ac948b85491ac33a87"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-02-causal",
+      "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+      "seed": 2026090942,
+      "training_plan_sha256": "68dd48d3f6f11cac254f4cf64d331679e82c37dda75e434164607a4c1ccc089f"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-03-causal",
+      "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+      "seed": 2026090943,
+      "training_plan_sha256": "e33e10c5e6c2c13dc4c395c686e849e25c386108cd1b02b2ff35ca9689fa7d9d"
+    },
+    {
+      "episode_id": "red-agatha-resource-coverage-20260909-04-causal",
+      "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+      "seed": 2026090944,
+      "training_plan_sha256": "3e7bb0205d50e403b14812ff260e2d00a8ed00083132629b52ba5d0dd7b2a91d"
+    }
+  ],
+  "episodes_created": 0,
+  "execution_claims": 0,
+  "fits": 0,
+  "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+  "frames": 0,
+  "independent_evaluation": false,
+  "no_gameplay_scheduled_this_session": true,
+  "profile_sha256": "f7d56b3b05895c79c759443ac9dbeead2d30834ede93a5257260b5a6ed63e39b",
+  "schema": "pokemon.red.agatha-resource-coverage-preparation.v1",
+  "source_bundle_sha256": "8ad4318708fdb92edc7021184eaaf4220b60390d8c5e93991737d45a7f888096",
+  "source_commit": "669cefa319dcabf77ceab2dcd08f65bde1738530",
+  "source_plan_compatibility_verified": true,
+  "state_sha256": "f10ab4dd592c73bb0d05871fc2981668310d94aee8d52577baaa9f78a10fe2fb",
+  "date": "2026-09-09",
+  "correlated_training_contexts": 2,
+  "independent_roots_claimed": 0,
+  "prepared_trials": 4,
+  "controller_model_sha256": "d5dd4db2d44a3abef287733a089e1fc91883f17a7d8bd68625cd6e07264d5781",
+  "maximum_macros_per_trial": 2,
+  "maximum_field_items_per_trial": 2,
+  "original_attempts_retained": 3,
+  "original_cancelled_trial_reopened": false,
+  "original_failed_trial_retried": false,
+  "phase4_complete": false
+}

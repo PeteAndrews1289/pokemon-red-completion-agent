@@ -13,6 +13,147 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Latest loop — September9 resource exit and Transform review
+
+Flash3.8 High supplied three isolated implementation/test drafts and two bounded
+correction passes. Codex integrated capture exhaustion, registered recovery and
+the nearby-shop map identifier after correcting real fixture/API mistakes.
+Original drafts are preserved locally as`e112d248`, `449e6ed7` and`a2a457ae`;
+only reviewed integration is published.249 capture/recovery tests and91 shop/
+profile/router tests passed in separate targeted runs before live execution.
+
+Actual play recovered the old failure, bought20 Great Balls, and fitted one
+new failed-search lesson: registered5 to6. The next attempt exposed Transform
+identity handling; it was excluded and separately recovered, not retried.
+Flash's final80.43-second read-only review identified identity/form and typing
+consumers. Codex accepts the distinction, but rejects blindly crediting original
+species: the cartridge's transformed-capture quirk requires actual received-stock
+verification. The original-identity address still needs qualification.
+
+Latest refreshed quota:71.15%five-hour /88.31%weekly remaining, resets about
+3h33m/47h4m. These are shared Gemini windows, not measured task savings.
+Claude was unused and unqueried; no external task remains running. Drafting
+offloaded work, but correction costs preclude a measured overall-speedup claim.
+
+Next Flash role: isolated Transform adapter/status/capture regression draft only
+after Codex specifies the verified cartridge identity contract. Codex owns the
+contract, integration, mutation checks, recovered-state execution, fit and push.
+Claude may review the final encounter/attribution boundary if a focused second
+opinion adds value; no broad audit is a prerequisite.
+[Results and continuation](work-sessions/2026-09-09-capture-resource-exit.md).
+
+### Latest implementation loop — September9 capture readiness
+
+One194.97-second Flash3.8 High isolated draft supplied18 new regression cases
+and readiness diagnostics. Codex corrected nullable typing and broad exception
+swallowing; boxed HP-ratio filtering and unverified nurse coordinates were not
+accepted. Codex alone integrated restoration and ran the live batch. The original
+Flash draft remains in local commit95dffb83, not published separately.
+This was useful bounded legwork, not evidence of a measured overall speedup.
+
+Post-draft Gemini reading:95.97%five-hour and91.85%weekly remaining,
+with displayed resets about4h54m/48h25m. These are shared account windows;
+cached initial values prevent an isolated usage-savings claim. Claude was not
+used and its quota was not queried. No external agent remains running.
+
+Next Flash assignment, if dispatched: ROM-free resource-exhaustion/escape
+regression tests in isolation. Codex owns actual failure inspection, controller
+recovery, training admission and publication. Do not launch another broad audit.
+[Integration and live results](work-sessions/2026-09-09-capture-helper-recovery.md).
+
+### Earlier implementation loop — September9 collection preparation
+
+Flash3.8 High completed the isolated four-file draft plus one correction pass;
+Claude Opus4.8 High reviewed the frozen first draft read-only. Codex found
+additional semantic defects, repaired evolution utility, restored dropped tests
+and accepted the offline package after136 targeted tests. No new gameplay or
+fit occurred. See [the package record](work-sessions/2026-09-09-phase5-agent-package.md).
+The actual Antigravity interactive `/usage` panel is available (there is no
+separate CLI quota subcommand): approximately94%five-hour/92%weekly remained
+at15:45UTC. Claude subscription windows remain unavailable. These account-wide
+readings supersede historical quota for this session only, not measured savings.
+Next external work should be bounded adapter/test support, not a fresh broad audit.
+
+### Latest CLI review — completed Lorelei recovery
+
+Flash3.8 High provided one7second no-tools advisory, not a source audit. Codex
+accepted the warning against fictitious restoration choices. It rejected a
+single menu input as proof of the complete alternative, and rejected inferred
+confusion RNG outcomes: this run recorded PP-spending attacks, not confusion flags
+or self-hits. Next agents should challenge the actual native option boundary, not
+reopen battle simulation. Claude was not used in this slice.
+
+No fresh service quota was available: the CLI exposes no usage command and the
+bounded app fallback did not open Models. Previously recorded percentages remain
+historical, not evidence of this session's consumption. No permissions changed.
+
+### Latest bounded reviews — September8 recovery
+
+Claude Opus4.8 High gave no-tools survival advice; Flash3.8 High gave a short
+confusion/test-design critique. Neither was a code audit or an independent
+implementation. Codex accepted fractional-HP criticism and intent/outcome
+separation, but rejected empirical-hit maxima, HP-only self-hit proof, opponent
+zero-HP as trainer victory and full-HP assumptions after an opponent reply.
+Keep the next agent task to discriminating confusion/runtime tests, not a broad
+architecture rewrite. Codex alone implements and executes retained-state recovery.
+
+Gemini refreshed quota at approximately23:18UTC September8:100%five-hour and
+94%weekly remaining, displayed resets4h58m/3days (rounded). The initial cached
+screen was stale, so no reliable before/after consumption measurement exists.
+Claude subscription five-hour/weekly quota remains unavailable: its usage CLI
+stopped at first-run setup. No quota or permissions were changed.
+
+### Current budget-conscious implementation loop — September 8
+
+The live retrieval/Indigo-flight slice also used no external reviewer or quota check.
+Its325 focused tests and retained game results are Codex-owned verification; the report
+serialization failure is disclosed in the session audit. Next consequential review
+should examine flexible-party boss authority, not repeat completed storage/Fly research.
+
+The preceding observed-Fly component slice used no external reviewer and made no new
+quota check. Its311 focused tests plus153 dashboard/product/roadmap tests are local
+verification, not an independent audit. The next task is live integration rather
+than another general review.
+
+The preceding story-entry slice used one Flash High no-tools advisory review. It favored
+verified PC/Fly capability retrieval over extending the old chapter. Codex rejected
+its overclaim that a static candidate was proven travel and its level-only deposit
+suggestion. This was not a code audit. Gemini quota after review:91.08%five-hour,
+94.22%weekly. Claude was not called; its separate subscription quota is unknown.
+
+Use Flash for a tightly bounded adapter or test draft while Codex does useful,
+non-overlapping integration work. Pin the real interfaces and exact editable files.
+Codex runs independent tests, corrects the integration and alone publishes/executes.
+Give one concrete failing-test revision before deciding whether direct correction
+is cheaper. Claude supplies one compact consequential review, not an approval gate.
+Reject fabricated tool/file claims and unsupported reasoning explicitly. Keep the
+handoff current and report actual service quota after each external session.
+
+The trainer-funding cycle demonstrates this division, but not a measured speedup:
+the first live attempt failed despite green component tests. Its
+[audit](audits/red-trainer-funding-runtime-2026-09-08.md) records the changes,
+corrections, remaining failure and reviewer adjudication. No agent is infallible.
+
+The subsequent [transition repair](audits/red-trainer-transition-qualification-2026-09-08.md)
+qualified actual trainer income. Flash supplied a small compatibility proposal,
+but its example addresses were wrong; Codex replaced them and diagnosed the live
+transition/WRAM-lifetime defects. Keep tasks concrete and verify primary evidence.
+Do not claim measured savings or broad audit coverage from a short advisory reply.
+
+### Authorized isolated-draft exception — September 7
+
+The user authorizes Flash to edit explicitly named source/test/doc files in its own
+worktree. Codex owns task scope, independent tests, integration and publication.
+This is not permission for concurrent edits in the active checkout, shared/private
+artifact access, controller input, fitting, credential access or broad shell execution.
+A branch isolates Git changes, not saves, processes or secrets. Local file grants
+must name the isolated tree, and deliverables stay unqualified until inspected.
+Use short implementation/revision loops with actual interfaces and concrete failing
+tests; stop expanding a draft when direct Codex correction is cheaper. Reserve Claude
+for consequential independent audits rather than every draft. Report service quota
+after each external session, without confusing Antigravity's third-party pool with
+the user's separate Claude subscription.
+
 ### Codex — implementation owner
 
 - owns the active implementation plan;
@@ -65,6 +206,44 @@ coverage, declared metrics, exact transfer questions and no private identities. 
 at most three claims, each with a cross-title counterexample, missing shared observable, smallest
 Red/Crystal falsifier, decision impact and work to delete. Claude audits evidence; Codex adjudicates
 and implements. There is no three-agent vote.
+
+### Flash architecture preparation lane
+
+Pete's September 7 preference is to use Flash for larger, bounded architecture preparation
+packages that Codex and Claude verify. Flash may map existing components, draft interfaces and
+data-flow diagrams, compare integration designs, identify reusable code, and propose regression
+matrices. Give it a defined subsystem and deliverable, not permission for a sweeping active-code
+rewrite. The current recovery/capture handoff is the first applicable subsystem; do not reopen
+Crystal or unrelated architecture while sustained Red play remains the active lane.
+
+Codex reviews the plan and owns integration. Claude challenges consequential assumptions,
+state/checkpoint compatibility, failure classification, and test quality. Reviews must check actual
+code rather than merely agree with each other. Neither reviewer is infallible. Read-only remains
+the default; advisory code prototypes require an explicitly scoped separate worktree and cannot
+touch live checkpoints, training data, gameplay, or publication. Avoid adding a new subsystem when
+existing skills can be connected. Promote only the smallest verified changes serving the named
+gameplay/learning outcome.
+
+### External-agent usage reporting
+
+Before substantial external-agent work, and after every Claude or Antigravity session (including
+failed or partial sessions), query the service's own usage display. Include in the user-facing
+closeout for each service used:
+
+- exact model/effort actually requested and whether the session completed;
+- five-hour usage used/remaining and reset time, when the service exposes that window;
+- weekly usage used/remaining and reset time, when exposed;
+- any separately reported model-specific quota or credits, with its actual label;
+- observation time and any unavailable fields or access error.
+
+Prefer the supported CLI usage command; an authorized app usage screen is the fallback. Do not
+assume both providers use identical windows. Missing or unsupported data must say unavailable,
+not zero or unlimited. Never derive subscription percentages from tokens, API-equivalent dollar
+estimates, a model's self-report, or successful access. These are account-level readings shared
+with other work: before/after changes cannot isolate this session's consumption if other usage
+occurred. Do not purchase credits, redeem resets, switch to paid API billing, extract credentials,
+or bypass permissions merely to obtain quota data. A quota-display problem is not a reason to
+turn a short review into a tooling project; report it plainly and proceed within known capacity.
 
 ## Source of truth and write safety
 

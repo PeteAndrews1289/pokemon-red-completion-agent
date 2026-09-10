@@ -1,0 +1,97 @@
+{
+  "schema": "pokemon.red.budgeted-trainer-recovery.v1",
+  "status": "partial_progress_retained_failure",
+  "source_commit": "9cdecde240e4cd0c0b649746b70539dc06131fd4",
+  "source_bundle_sha256": "c366dd45e52a0c17c3dcbcc3c15dc73df4b17c1db4271ab87ee3d2ce6a308a1f",
+  "episode_id": "red-phase4-trainer-survival-recovery-20260908-01",
+  "manifest_sha256": "d0f30e0535a11c8af694054028780317ec223ffadeb50dcd79fae2f4ce7ff1ad",
+  "origin_state_sha256": "ef23d074ce55ab15923661058ff4574a9f07c34a98da0aef533204b1264a7799",
+  "terminal_state_sha256": "2e9d70ffbc8b1d80fc7d1e2710a7451282cfd4add50fbd5a283363f2c2f8d5c5",
+  "actions": 108,
+  "frames": 9456,
+  "full_restore_budget": 2,
+  "full_restores_spent": 1,
+  "full_restores_remaining_in_bag": 3,
+  "consumed_switches_one_based": [
+    2,
+    4,
+    1
+  ],
+  "total_switch_budget": 6,
+  "maximum_actions": 6000,
+  "maximum_frames": 600000,
+  "verified_defeated_opponent": "Jynx",
+  "current_opponent": "Lapras",
+  "current_opponent_level": 56,
+  "current_opponent_hp": 220,
+  "current_opponent_move_ids": [
+    34,
+    109,
+    59,
+    56
+  ],
+  "party_hp": [
+    198,
+    61,
+    71,
+    12,
+    34,
+    139
+  ],
+  "party_max_hp": [
+    213,
+    172,
+    89,
+    118,
+    39,
+    139
+  ],
+  "active_party_index": 0,
+  "all_party_unfainted": true,
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "money": 619,
+  "collection_audit": {
+    "actions": 0,
+    "frames": 0,
+    "save_bytes_unchanged": true,
+    "box_counts": [
+      18,
+      6,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "stop_reason": "Status/confusion incoming turns are not yet qualified; Lapras has Confuse Ray.",
+  "trainer_victory_verified": false,
+  "admitted_continuation": false,
+  "safe_checkpoint": false,
+  "training_target": false,
+  "prior_trial_retries": 0,
+  "model_queries": 0,
+  "new_fitted_examples": 0,
+  "model": {
+    "settled_examples": 76,
+    "successful_examples": 34,
+    "distinct_selected_feature_rows": 66,
+    "changed": false
+  },
+  "verification": {
+    "focused_rom_free_tests_passed": 506,
+    "full_suite": false,
+    "ruff_passed": true,
+    "mypy_source_files": 433,
+    "registry_checked": true
+  },
+  "scope": "Deterministic recovery maintenance for the named story-versus-preparation learning lesson, not learned gameplay or an independent evaluation.",
+  "next": "Qualify confusion-aware turn evidence and conservative damage in the existing adapter/runtime, then a separately declared successor from the retained Lapras state only. Carry spent item and switch budgets; never replay this recovery."
+}

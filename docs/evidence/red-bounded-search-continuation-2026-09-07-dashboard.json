@@ -1,0 +1,147 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Model64 chose Route5 and retained a second Mankey. One real outcome fitted into model65; no second source choice was available.",
+  "session_evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "actions": 334,
+    "frames": 20628,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "verified_specimen_gain": 1,
+    "episode_id": "red-bounded-search-20260907-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "c03c7f84a41ec315de0dc91ed4ae990f94e9fa4d9a5d0ca93ff7b46e73da4a94",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 55,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 65,
+      "successful_examples": 26,
+      "total_examples": 65,
+      "train_dataset_sha256": "ee5fe8da5c0f55e12dcf6fd0a41b91d05d472cde23552bff6685cc5f6b7ed57c",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.0109733469688914,
+      "weighted_mse_before": 0.025044353547894638
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "c3e0378052a9bd53789172f3040189e5134b8035a4830fc8f5e3b97e6a8fcad8",
+      "file_sha256": "937d55fce0b40faec3f7b1c5cd719b20e757da8bcf77e2cff5989143dae00e9a",
+      "independent_evaluation": false,
+      "model_sha256": "1eae09436364a425145c51693b2214360395cdf742343ea7f0c6d21b21b4e635",
+      "prior_model_sha256": "657e621e0b13c26c04387721899dcb3242579c3cfa89b0b62fad0e52ea794c9e",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 65,
+      "source_bundle_sha256": "c8d1e39763ff6bdf31bc0e4cf99bf45abd0146a2b9f0bfdf5ddf1e0e57167051",
+      "source_commit": "c99d18ae9374ca6766b1ae0de7668e983a192230"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08887583214733266,
+        0.000006485882485807879,
+        0.000052640908039956206,
+        0.004005058246830505,
+        0.003003705608533125,
+        0.001356729829176834,
+        0.0006590414160540347,
+        9.608206993315435e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 65,
+      "total_examples": 65,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01088449498435025
+    },
+    "regional_source_examples": 15,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08972305987726259,
+        0.000005957183749827239,
+        0.000052645570456186264,
+        0.004004970096743045,
+        0.0030045186233387203,
+        0.0013223418772005456,
+        0.0006456834899462493,
+        9.460013254315932e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 65,
+      "total_examples": 65,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.0109733469688914
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Model65 is a bounded goal/destination scorer, not an autonomous whole-game player.",
+    "The new Mankey is a duplicate prerequisite for Primeape; 25 distinct living species and 95 missing required specimens are unchanged.",
+    "One source remained after capture, so the second trial was not played. Model65 has not played.",
+    "Same-lineage practice and in-sample fitting do not establish independent advantage or transfer."
+  ],
+  "next_session": "Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset.",
+  "current_limitation": "Safe retained acquisition checklist is complete (3/3), not Phase3. Next connect the owned evolution prerequisite to a genuine mixed-goal choice. Gameplay is stopped."
+}

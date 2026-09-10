@@ -655,6 +655,44 @@ def test_a_semantic_hazard_replans_without_becoming_visible_occupancy() -> None:
     assert world.actions[0] == MacroAction(MacroActionKind.MOVE, "down")
 
 
+@pytest.mark.parametrize("during_settle", [False, True])
+def test_object_detour_can_cross_a_hazard_the_owned_handler_resolves(during_settle):
+    initial, macro, local = _visible_blocker_fixture()
+    world = _visible_blocker_world(
+        occupied=frozenset() if during_settle else frozenset({(0, 1)}),
+        occupancy_after_waits={1: frozenset({(0, 1)})} if during_settle else {},
+        hazards=(TraversalHazard((1, 1), "trainer_sight"),),
+    )
+    requests = []
+
+    def replan(request):
+        requests.append(request)
+        return plan_route(macro, local, 1, request.current.at, 1,
+                          goal_at=request.goal_at, blocked=request.blocked)
+
+    report = execute_route(initial, world, world, replanner=replan,
+                           interruption_handler=TrainerClearingHandler(world))
+    assert report.passed
+    assert requests[0].blocked == {1: frozenset({(0, 1)})}
+    assert report.movement_requests == (5 if during_settle else 4)
+    assert report.replans[0].reason == "visible_object"
+
+
+def test_handler_does_not_relax_occupied_durable_or_unknown_hazards():
+    from pokemon_red_completion.route_executor import _with_live_constraints
+
+    world = FakeWorld(occupied=frozenset({(0, 1)}), hazards=(
+        TraversalHazard((0, 1), "trainer_sight"),
+        TraversalHazard((0, 2), "trainer_sight"),
+        TraversalHazard((0, 3), "unknown_script"),
+    ))
+    durable = {1: frozenset({(0, 2)}), 2: frozenset({(9, 9)})}
+    assert _with_live_constraints(durable, world.observe(), TrainerClearingHandler(world)) == {
+        1: frozenset({(0, 1), (0, 2), (0, 3)}), 2: frozenset({(9, 9)}),
+    }
+    assert durable == {1: frozenset({(0, 2)}), 2: frozenset({(9, 9)})}
+
+
 def test_an_explicit_handler_can_cross_and_settle_a_semantic_hazard() -> None:
     local = {
         1: LocalGraph(

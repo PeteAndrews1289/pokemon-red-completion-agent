@@ -1,5 +1,69 @@
 # The story: teaching a model to actually play Pokémon
 
+## Current — persisted search history; history-aware learner next
+
+The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned
+policy observations and authenticated save/restore. Missing old history remains unknown. The
+32-example scorer is unchanged and cannot silently consume this new input. No new gameplay or
+fitting occurred. Evolution/storage remain unavailable at the saved endpoint; arbitrary leveling
+is not a useful collection alternative. Next: versioned history-aware learning with honest old-data
+retention, then two useful executable alternatives and a short measured lesson.
+
+Progress to that specific next stage is **2 of 5 acceptance items (40%)**, not full-project or
+elapsed-time completion. Codex owns implementation; no external reviewer was invoked. If requested,
+reviewers should challenge history missingness, source aliasing and actual useful choices, not
+revive a teacher/CI campaign. Earlier sections below are historical.
+
+
+## September 6: negative evidence is not automatically better judgment
+
+We connected saved-state play to a real 31-to-32 model update, preserving every old example and
+teaching the cost of a failed search. The subsequent player still searched without a catch.
+The honest milestone is a functioning learning loop, not improved sustained competence. Next is
+remembering exhausted searches and offering useful collection alternatives. No specimens were
+lost. [Session audit](audits/red-saved-endpoint-learning-2026-09-06.md).
+
+
+
+## September 6 — retaining an honest unsuccessful outcome
+
+The recovery repair reproduced the same no-catch search and retained its exact endpoint instead
+of aborting without a save. This is not a victory montage: zero new catches or training rows, and
+one model proposal stopped before execution. The useful engineering gain is that an ordinary
+unsuccessful search no longer destroys the next starting point. [Audit](audits/red-search-recovery-2026-09-06.md).
+
+## September 6: continuing a save exposes an ordinary-search recovery problem
+
+The newly fitted 31-example player resumed its predecessor's real endpoint. It travelled to the
+capture area, entered three wild battles and caught nothing before the bounded search ended.
+Recovery chose that failed goal again; the guard blocked repetition but raised an exception and
+prevented a new terminal save. All 215 actions / 8244 frames remain in the failed record. Money,
+supplies and party were unchanged, and the original save is safe. No new learning is claimed.
+
+This is a sharper next task than replaying the game: normal unsuccessful searching must return
+usable state and evidence, and the model needs useful alternative tasks. Pete also defined an
+intermediate transfer demonstration: adapt to a compatible unfamiliar Red modification before
+Crystal, while keeping the long-term cross-title living-Pokedex goal.
+
+## September 6: teaching from the player's own choices
+
+The 29-example scorer has participated in a real supply-and-capture chain, but overspending
+revealed a blind spot: success at shopping is not the same as sensible resource use. This session
+adds explicit price/reserve facts beside learned predictions, preserving the old labels. It also
+connects newly sampled player choices to the existing fitter, so both successful and failed
+actions can become experience without another scripted setup campaign. The resulting episode
+completed four goals and contributed two genuinely sampled outcomes to a **31-example** fit,
+retaining every prior row. Earlier initialization and save failures remain in the audit.
+
+The newly fitted model prefers continued collecting over a second shopping trip on a recorded
+training input. That is a changed learned preference, not yet a demonstrated better run. Actual
+gameplay still overspent, and the next session must test useful continuation rather than celebrate
+training error alone. A needed duplicate precursor also exposes a target limitation: it advances
+the living-specimen plan without increasing the current species-count completion label.
+
+The engineering distinction matters: the model learns observed success/progress/cost outcomes;
+a deterministic quote supplies known prices. Neither is full-game autonomy or demonstrated transfer.
+
 ## Latest checkpoint: supplement adapter and positive-path rehearsal
 
 The development-only reader now authenticates all three real stored supplement rows. Its shared

@@ -1,0 +1,142 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Funded regional continuations G/H fitted47 to49; both navigation failures retained. LatestHfit48to49. No independent advantage.",
+  "session_evidence": "docs/evidence/red-regional-funded-navigation-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 368,
+    "frames": 24204,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-regional-source-20260907-h-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "66ac24e12bc25b68b90ba68b3cf629c1ca9faa3736354ebb7f0585cd3b348bea",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 39,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 49,
+      "successful_examples": 16,
+      "total_examples": 49,
+      "train_dataset_sha256": "c1ad0569b2d338830a1794cf131a5b0c03263ea4b7541d2f748bf8a999511cea",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.008156746110413227,
+      "weighted_mse_before": 0.020460960012717463
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "0a628b9beb74c73176d0549f70c2b4b25c4406a21552b5cca0c31cc70b2ab02d",
+      "file_sha256": "85e4a5fe24b54fe35bb49cb7a72ac6f30da6a0b8a5bd86f32536fba4db0ebab0",
+      "independent_evaluation": false,
+      "model_sha256": "87772dfad682ca7fbaa112ce98f7728de412fb37828a85232a6de9a3dc6e1e64",
+      "prior_model_sha256": "6ed4a021d1785028235858aedc25e7c3c2e5c97ec3854c0f832c0ab4a8d756c1",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 49,
+      "source_bundle_sha256": "ee82f919afbbd21c436063d5f8960bddfccf1de7963950b27b352b14c3447aef",
+      "source_commit": "323bcc066460bd59f56c343be4d2b0ac84c5f8f2"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06428766546780505,
+        0.0000035851426987236345,
+        0.000039887689175648725,
+        0.005061501169422949,
+        0.0038104229561650503,
+        0.0002991634854135738,
+        0.00039317605175686926,
+        6.14133820516522e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 49,
+      "total_examples": 49,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.00821066845513982
+    },
+    "regional_source_examples": 4,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06374959236753386,
+        0.0000035759625192439788,
+        0.00003990908575397052,
+        0.005060805274834952,
+        0.0038098162191744864,
+        0.00031097810575666645,
+        0.00043542742115819215,
+        6.105569876829467e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 49,
+      "total_examples": 49,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.008156746110413228
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Four cumulative regional source outcomes are all failures: two searches and two navigation failures. No collection advantage demonstrated.",
+    "F is finite surplus funding, not renewable income. G earned trainer money but no general income policy is learned.",
+    "Source destinations varied over Route24, Route10 and Route4; same upstream lineage, not independent test roots.",
+    "Model49 has not played. The arrival repair is locally tested/read-only cartridge qualified, not yet live verified."
+  ]
+}

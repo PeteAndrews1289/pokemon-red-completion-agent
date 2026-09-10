@@ -38,7 +38,6 @@ from pokemon_red_completion.goal_manager_runtime import (
 )
 from pokemon_red_completion.living_dex_goal_model_record import (
     LivingDexGoalModelRecord,
-    load_living_dex_goal_model_record,
 )
 from pokemon_red_completion.living_dex_goal_policy import LivingDexGoalShadowPolicy
 from pokemon_red_completion.observation import PokemonRedStateReader
@@ -53,6 +52,10 @@ from pokemon_red_completion.red_bounded_player import (
 )
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import load_red_goal_context_profile
+from pokemon_red_completion.red_player_model import RedPlayerModelRecord
+from pokemon_red_completion.red_player_model import (
+    load_player_goal_model_record as load_living_dex_goal_model_record,
+)
 from pokemon_red_completion.rom import resolve_rom_path, verify_rom
 from pokemon_red_completion.route_evidence import rom_adjacent_artifacts
 
@@ -195,7 +198,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     if capture.capture_id != profile.profile_id:
         raise RedBoundedPlayerPreflightRunError("capture and profile identity differ")
     model, model_file_sha256, model_sha256 = _load_model(paths["model"])
-    causal_record: LivingDexGoalModelRecord | None = None
+    causal_record: LivingDexGoalModelRecord | RedPlayerModelRecord | None = None
     causal_policy: LivingDexGoalShadowPolicy | None = None
     if causal_arguments is not None:
         _, expected_causal_model_sha256 = causal_arguments

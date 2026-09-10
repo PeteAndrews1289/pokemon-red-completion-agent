@@ -81,6 +81,86 @@ class RecordingMemory:
         return self.values.get(int(address), 0)
 
 
+def test_trainer_identity_preserves_independent_opponent_class_and_set_bytes():
+    memory = RecordingMemory({0xD059: 212, 0xD031: 12, 0xCD2D: 201, 0xCD2E: 9})
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_trainer_battle_identity() == (212, 12, 201, 9)
+    assert memory.reads == [0xD059, 0xD031, 0xCD2D, 0xCD2E]
+    memory.values[0xCD2E] = 10
+    assert reader.read_trainer_battle_identity() == (212, 12, 201, 10)
+
+
+def test_active_trainer_identity_ignores_overwritten_engagement_union():
+    memory = RecordingMemory({0xD059: 201, 0xD031: 1, 0xD05D: 10, 0xCD2D: 19, 0xCD2E: 7})
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_active_trainer_identity() == (201, 1, 10)
+    assert memory.reads == [0xD059, 0xD031, 0xD05D]
+    memory.values.update({0xCD2D: 42, 0xCD2E: 6})
+    assert reader.read_active_trainer_identity() == (201, 1, 10)
+    memory.values[0xD05D] = 11
+    assert reader.read_active_trainer_identity() == (201, 1, 11)
+
+
+@pytest.mark.parametrize(
+    "change,expected",
+    [
+        ({}, (201, 10)),
+        ({0xD72D: 0}, None),
+        ({0xD72D: 0x80}, None),
+        ({0xD72E: 0x10}, None),
+        ({0xD057: 2}, None),
+        ({0xD057: 1}, None),
+        ({0xD059: 200, 0xCD2D: 200}, None),
+        ({0xCD2D: 202}, None),
+        ({0xCD2E: 0}, None),
+        ({0xD031: 44}, (201, 10)),
+    ],
+)
+def test_pending_trainer_start_requires_live_latch_not_stale_identity(change, expected):
+    memory = RecordingMemory(
+        {0xD72D: 0xC0, 0xD72E: 0x0A, 0xD057: 0, 0xD059: 201, 0xCD2D: 201, 0xCD2E: 10, **change}
+    )
+    reader = PokemonRedStateReader(memory)
+    assert reader.read_input_readiness().ready
+    assert not reader.read_bottom_dialogue_box_visible()
+    assert reader.read_pending_trainer_battle_identity() == expected
+
+
+@pytest.mark.parametrize("corrupt", [None, 0, 8, 19, 100, 119])
+def test_bottom_dialogue_requires_frame_not_ready_movement_flags(corrupt):
+    # Literal independently specified screenshot-frame tiles, not constants
+    # imported from the detector under test. Middle border and lower corners
+    # distinguish a frame from lone font tiles and unrelated smaller menus.
+    base = 0xC3A0 + 240
+    values = {base: 0x79, base + 19: 0x7B, base + 100: 0x7D, base + 119: 0x7E}
+    values.update({base + x: 0x7A for x in range(1, 19)})
+    if corrupt is not None:
+        values[base + corrupt] = 0
+    reader = PokemonRedStateReader(RecordingMemory(values))
+    assert reader.read_input_readiness().ready
+    assert reader.read_bottom_dialogue_box_visible() is (corrupt is None)
+
+
+@pytest.mark.parametrize("encoded,direction", [(0, "down"), (4, "up"), (8, "left"), (12, "right")])
+def test_player_facing_decodes_cardinal_sprite_state(encoded, direction):
+    assert (
+        PokemonRedStateReader(RecordingMemory({0xC109: encoded})).read_player_facing() == direction
+    )
+
+
+def test_invalid_player_facing_does_not_guess():
+    with pytest.raises(SemanticStateError, match="facing"):
+        PokemonRedStateReader(RecordingMemory({0xC109: 3})).read_player_facing()
+
+
+@pytest.mark.parametrize(
+    "flags,active", [(0, False), (1, False), (0x20, False), (8, True), (0x28, True), (0xF7, False)]
+)
+def test_generic_pc_session_uses_its_own_flag_not_cursor_residue(flags, active):
+    memory = RecordingMemory({0xCD60: flags})
+    assert PokemonRedStateReader(memory).read_generic_pc_session_active() is active
+
+
 class BankedRecordingMemory(RecordingMemory):
     def __init__(
         self,
@@ -755,6 +835,121 @@ def test_all_box_reader_rejects_missing_port_and_corrupt_checksum() -> None:
         PokemonRedStateReader(
             BankedRecordingMemory(work_ram, cartridge_values)
         ).read_all_box_states()
+
+
+def _move_inventory_memory() -> BankedRecordingMemory:
+    # Independent SRAM layout literals and deliberately different slots/banks.
+    data = {}
+    for bank in (2, 3):
+        payload = bytearray(6 * 0x462)
+        if bank == 3:
+            base = 0x462  # box eight, not the first box in this bank
+            payload[base : base + 4] = bytes([2, 64, 28, 255])
+            for slot, species, level, moves, pp in (
+                (0, 64, 50, (15, 19, 31, 97), (0xCE, 15, 20, 30)),
+                (1, 28, 66, (57, 70, 58, 66), (15, 15, 10, 25)),
+            ):
+                at = base + 22 + slot * 33
+                payload[at] = species
+                payload[at + 3] = level
+                payload[at + 8 : at + 12] = bytes(moves)
+                payload[at + 29 : at + 33] = bytes(pp)
+        for offset, value in enumerate(payload):
+            data[(bank, 0xA000 + offset)] = value
+        data[(bank, 0xA000 + len(payload))] = 255 - (sum(payload) % 256)
+        for box in range(6):
+            part = payload[box * 0x462 : (box + 1) * 0x462]
+            data[(bank, 0xA000 + len(payload) + 1 + box)] = 255 - (sum(part) % 256)
+    return BankedRecordingMemory(
+        {RamAddress.CURRENT_BOX_NUMBER: 0x81, RamAddress.CURRENT_BOX_COUNT: 0}, data
+    )
+
+
+def test_inactive_box_move_inventory_decodes_actual_moves_across_banks_and_slots():
+    memory = _move_inventory_memory()
+    before = memory.cartridge_values.copy()
+    reader = PokemonRedStateReader(memory)
+    members = reader.read_box_move_members(7)
+    assert [(m.box_slot, m.species_id, m.level, m.moves, m.pp) for m in members] == [
+        (1, 64, 50, (15, 19, 31, 97), (14, 15, 20, 30)),
+        (2, 28, 66, (57, 70, 58, 66), (15, 15, 10, 25)),
+    ]
+    assert reader.read_box_move_members(0) == ()
+    assert reader.read_box_move_members(11) == ()
+    assert memory.cartridge_values == before
+
+
+def test_box_move_inventory_uses_live_box_instead_of_stale_sram():
+    memory = _move_inventory_memory()
+    memory.values[RamAddress.CURRENT_BOX_NUMBER] = 0x87
+    memory.values[RamAddress.CURRENT_BOX_COUNT] = 0
+    assert PokemonRedStateReader(memory).read_box_move_members(7) == ()
+    assert memory.cartridge_reads == []
+
+
+def test_box_move_inventory_returns_live_moves_not_saved_species():
+    memory = _move_inventory_memory()
+    memory.values.update(
+        {
+            RamAddress.CURRENT_BOX_NUMBER: 0x87,
+            RamAddress.CURRENT_BOX_COUNT: 1,
+            RamAddress.CURRENT_BOX_SPECIES: 64,
+            RamAddress.CURRENT_BOX_MONS: 64,
+            int(RamAddress.CURRENT_BOX_MONS) + 3: 55,
+            int(RamAddress.CURRENT_BOX_MONS) + 8: 19,
+            int(RamAddress.CURRENT_BOX_MONS) + 29: 15,
+        }
+    )
+    members = PokemonRedStateReader(memory).read_box_move_members(7)
+    assert [(m.species_id, m.level, m.moves, m.pp) for m in members] == [
+        (64, 55, (19, 0, 0, 0), (15, 0, 0, 0))
+    ]
+    assert memory.cartridge_reads == []
+
+
+def test_box_move_inventory_requires_read_only_banked_port():
+    with pytest.raises(SemanticStateError, match="cartridge-RAM port"):
+        PokemonRedStateReader(
+            RecordingMemory(
+                {
+                    RamAddress.CURRENT_BOX_NUMBER: 0x81,
+                    RamAddress.CURRENT_BOX_COUNT: 0,
+                }
+            )
+        ).read_box_move_members(7)
+
+
+def test_box_move_inventory_does_not_read_uninitialized_storage():
+    memory = RecordingMemory({RamAddress.CURRENT_BOX_NUMBER: 1, RamAddress.CURRENT_BOX_COUNT: 0})
+    assert PokemonRedStateReader(memory).read_box_move_members(7) == ()
+
+
+@pytest.mark.parametrize("box_index", [-1, 12, True, 1.0, "1"])
+def test_box_move_inventory_rejects_invalid_index(box_index):
+    with pytest.raises(ValueError, match="box_index"):
+        PokemonRedStateReader(RecordingMemory({})).read_box_move_members(box_index)
+
+
+@pytest.mark.parametrize("corruption", ["bank", "box"])
+def test_box_move_inventory_checks_both_checksum_levels(corruption):
+    memory = _move_inventory_memory()
+    checksum = 0xA000 + 6 * 0x462 + (2 if corruption == "box" else 0)
+    memory.cartridge_values[(3, checksum)] ^= 1
+    with pytest.raises(SemanticStateError, match="checksum"):
+        PokemonRedStateReader(memory).read_box_move_members(7)
+
+
+def test_box_move_inventory_rejects_selection_change_during_read():
+    memory = _move_inventory_memory()
+    original = memory.read_cartridge_ram_u8
+
+    def changed(bank, address):
+        memory.values[RamAddress.CURRENT_BOX_NUMBER] = 0x82
+        return original(bank, address)
+
+    memory.read_cartridge_ram_u8 = changed
+    with pytest.raises(SemanticStateError, match="selection changed"):
+        PokemonRedStateReader(memory).read_box_move_members(7)
 
 
 def test_reader_extracts_bounded_bag_and_event_state() -> None:

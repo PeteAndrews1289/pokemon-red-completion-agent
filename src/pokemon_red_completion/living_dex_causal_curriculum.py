@@ -30,6 +30,7 @@ from pokemon_red_completion.evaluation_design import (
     paired_one_sided_exact_power_with_forced_losses,
 )
 from pokemon_red_completion.living_dex_option_value import (
+    LIVING_DEX_LEGACY_OPTION_KINDS,
     LIVING_DEX_OPTION_FEATURE_NAMES,
     LIVING_DEX_OPTION_OUTCOME_NAMES,
     LivingDexOptionContext,
@@ -67,7 +68,7 @@ _PARTITIONS = frozenset({"train", "development"})
 # in the shared schema and is an explicit Crystal-shaped transfer falsifier;
 # manufacturing a Red trade row would be title-specific label fiction.
 RED_DIRECT_CAUSAL_OPTION_KINDS = tuple(
-    kind for kind in LivingDexOptionKind if kind is not LivingDexOptionKind.TRADE
+    kind for kind in LIVING_DEX_LEGACY_OPTION_KINDS if kind is not LivingDexOptionKind.TRADE
 )
 
 _RED_PROSPECTIVE_SELECTED_KIND_COUNTS: Mapping[LivingDexOptionKind, int] = {
@@ -322,7 +323,7 @@ class LivingDexCausalCurriculumDesign:
                 ),
                 "outcome_head_count": len(LIVING_DEX_OPTION_OUTCOME_NAMES),
                 "outcome_names": list(LIVING_DEX_OPTION_OUTCOME_NAMES),
-                "portable_option_kinds": [kind.value for kind in LivingDexOptionKind],
+                "portable_option_kinds": [kind.value for kind in LIVING_DEX_LEGACY_OPTION_KINDS],
                 "red_direct_option_kinds": [kind.value for kind in RED_DIRECT_CAUSAL_OPTION_KINDS],
                 "red_trade_rows_fabricated": 0,
                 "transfer_falsifiers": [

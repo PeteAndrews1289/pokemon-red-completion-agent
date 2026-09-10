@@ -1,0 +1,46 @@
+{
+  "schema": "pokemon.red.resource-recovery-qualification.v1",
+  "classification": "engineering qualification; not a learning result",
+  "model_sha256": "a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2",
+  "checkpoint_sha256": "554a66c2f765d40508c7d75d94ded7df7149cb1bff2caef096c34f9ddb16d13f",
+  "retained_examples": 60,
+  "new_examples": 0,
+  "new_gameplay_actions": 0,
+  "new_emulator_frames": 0,
+  "focused_tests_passed": 145,
+  "checks": [
+    "cross-box selection is opt-in; current-box preference and exact stored slot",
+    "nonzero target boxes7and11; target capacity and protected party",
+    "actual PC arrival and rotation, unchanged specimens, levels, bag, money, story and party",
+    "walking-only replans; all preparation actions and frames included in original goal",
+    "typed path-free storage diagnostics survive routing and bounded episode",
+    "zero capture items distinguished from bounded search; historical U unchanged"
+  ],
+  "previous_source_checks": {
+    "source": "18535c2a48aec49cb6c7546d61caab267f2fdaad",
+    "github_ci_run": 34143810607,
+    "conclusion": "success",
+    "local_passed": 7604,
+    "local_skipped": 1,
+    "local_deselected": 3,
+    "local_expected_failure": 1
+  },
+  "live_qualification": "pending; no new gameplay or prediction claimed",
+  "milestone": {
+    "name": "Storage-safe varied collection",
+    "completed": 2,
+    "total": 3
+  },
+  "next": "Authenticate U/model60 and inspect available goals without input. A unique evolution bridge is deterministic support, not a learning row.",
+  "broader_verification": {
+    "initial_passed": 386,
+    "initial_stale_fingerprint_failures": 3,
+    "followup_passed": 158,
+    "all_initial_failures_rechecked": true,
+    "ruff": "passed",
+    "mypy_source_files": 412,
+    "public_artifacts": "passed",
+    "docs_and_focus": "passed",
+    "full_new_source_suite": "not run; prior-source full result listed separately"
+  }
+}

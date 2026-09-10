@@ -1,0 +1,144 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "R completed two linked model-selected captures and automatic fits,56to58examples. Mankey12 and a second Abra12 retained;22living/25specimens. No resets or independent advantage.",
+  "session_evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 516,
+    "frames": 31128,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-incremental-replan-20260907-r-02-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "921d24e3180a1a4e7419ec8e920b350540e5b50539bb1d0dd3b90b22383c2f62",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 48,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 58,
+      "successful_examples": 22,
+      "total_examples": 58,
+      "train_dataset_sha256": "0e18e4de2bdf6d28b26466f86d306e81440c481e0c14b66b62034cab33718639",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.008834407158624305,
+      "weighted_mse_before": 0.023663626703155156
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "fbb6e618e460650bc6226f9f9e1c0d8db956cdd1243e881f23f43a52d8298b4f",
+      "file_sha256": "37b4a7cf12ee6e6061045fa411346ef687ed5d0b47c26a2ec407ba9af29f28fd",
+      "independent_evaluation": false,
+      "model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+      "prior_model_sha256": "11f367ebc451a18fec322c8237f30a5f754202927e32987b73514c24d2548394",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 58,
+      "source_bundle_sha256": "e3cfb42e73c08e417b03b7f1063b2b35296ad0e4cc399afe7db6c91ee6fcede9",
+      "source_commit": "c1d4fb557eb0730826e52a3ec96b37eb61285871"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.06998141166748333,
+        0.000005051707278533606,
+        0.000034320516796173716,
+        0.004357709620087276,
+        0.0032762484523774765,
+        0.0013559245190861739,
+        0.0004270985292314235,
+        8.233915909991099e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 58,
+      "total_examples": 58,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.008826509822659041
+    },
+    "regional_source_examples": 12,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07006276259122447,
+        0.000004431173931648044,
+        0.000034320629639747563,
+        0.004357299791473033,
+        0.0032759381839813704,
+        0.0013436707901770665,
+        0.00043041741722201523,
+        8.238499693938525e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 58,
+      "total_examples": 58,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.008834407158624305
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Two same-lineage source choices succeeded; not independent learned advantage or a full-game player.",
+    "Both R steps succeeded, so optional safe-failure replanning is tested in unit cases, not exercised live here.",
+    "Only one source remains available. Another source-only cycle cannot invent a second alternative.",
+    "Finite supplies and one box slot remain; next work must integrate real resource, storage and evolution choices."
+  ],
+  "next_session": "Integrate mixed goals from the actual R/model58 save; only one source and one ball remain.",
+  "current_limitation": "The source-only cycle cannot continue with a genuine choice: one source remains. Resource, storage and evolution composition is the next task."
+}

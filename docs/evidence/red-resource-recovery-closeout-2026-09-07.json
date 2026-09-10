@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon.red.resource-recovery-closeout.v1",
+  "status": "stopped_before_unsupported_model_selection",
+  "engineering_source_commit": "74a95fed3d4271cbb127478e0018047dfe1b1a09",
+  "source_bundle_sha256": "8412a842e4236b50a22ee2c8e40e48ef258f1c410484a1859edeb2ca38146f2c",
+  "model_sha256": "a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2",
+  "checkpoint_sha256": "361216a3988f95a272606dfa33b0e1862043327e96d35ed8d5263765eb3b2f03",
+  "retained_examples": 60,
+  "successful_examples": 23,
+  "new_examples": 0,
+  "new_fits": 0,
+  "live_evidence": "docs/evidence/red-resource-recovery-live-2026-09-07.json",
+  "working": [
+    "authenticated cross-box rotation and exact precursor withdrawal",
+    "all25specimens preserved",
+    "zero-input terminal restoration"
+  ],
+  "qualified_not_live_validated": [
+    "whole-party Center recovery after withdrawal and nurse orientation",
+    "new capture-items-exhausted classification",
+    "typed storage subtotals on returned reports"
+  ],
+  "preflight": {
+    "available_goal_kinds": [
+      "evolve_species",
+      "restore_team"
+    ],
+    "available_goal_count": 2,
+    "model_mode": "deterministic_unsupported",
+    "model_scores": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "episode_created": false,
+    "proposal_created": false,
+    "fit_executed": false
+  },
+  "reason": "restore_team is absent from the learned option mapping; two game goals leave only one scorable option. No fallback was executed.",
+  "tests": {
+    "recovery_targeted_caller_and_source_passed": 154,
+    "additional_native_pc_tests_passed": 54,
+    "overlap_between_test_sets": true,
+    "ruff": "passed",
+    "mypy_modules": 412
+  },
+  "boundaries": {
+    "retry_consumed_attempts": false,
+    "full_replays": 0,
+    "sealed_accesses": 0,
+    "crystal_accesses": 0,
+    "new_authority_promotions": 0,
+    "external_agents_invoked": 0
+  },
+  "milestone": {
+    "title": "Storage-safe varied collection",
+    "completed": 2,
+    "total": 3
+  },
+  "next_plan": "docs/work-sessions/2026-09-07-optional-recovery-learning-plan.md"
+}

@@ -196,15 +196,21 @@ def bank_offset(bank: int, address: int) -> int:
     return bank * 0x4000 + (address - 0x4000)
 
 
-def wild_tables(rom: bytes) -> dict[int, list[tuple[int, int]]]:
+def wild_tables(
+    rom: bytes, *, medium: str | None = None,
+) -> dict[int, list[tuple[int, int]]]:
     """Every ``(level, internal species)`` slot each map can field.
 
     Grass and water only. Fishing, Game Corner prizes, gifts, fossils, in-game
     trades and evolution are separate routes stored elsewhere, so absence here
-    is not unobtainability.
+    is not unobtainability. An explicit grass/water medium returns only that
+    encounter mechanism; structural anchors still verify the complete tables.
     """
 
+    if medium not in {None, "grass", "water"}:
+        raise CartridgeReadError("wild-table medium must be grass or water")
     tables: dict[int, list[tuple[int, int]]] = {}
+    selected: dict[int, list[tuple[int, int]]] = {}
     for map_id in range(MAP_ID_LIMIT):
         at = WILD_POINTER_ARRAY + 2 * map_id
         address = int.from_bytes(rom[at : at + 2], "little")
@@ -212,20 +218,23 @@ def wild_tables(rom: bytes) -> dict[int, list[tuple[int, int]]]:
             continue
         cursor = bank_offset(WILD_DATA_BANK, address)
         slots: list[tuple[int, int]] = []
-        for _ in range(2):
+        for table_medium in ("grass", "water"):
             rate = rom[cursor]
             cursor += 1
             if rate == 0:
                 continue
-            slots.extend(
+            block = [
                 (rom[cursor + 2 * slot], rom[cursor + 2 * slot + 1])
                 for slot in range(SLOTS_PER_TABLE)
-            )
+            ]
+            slots.extend(block)
+            if medium == table_medium:
+                selected[map_id] = block
             cursor += 2 * SLOTS_PER_TABLE
         if slots:
             tables[map_id] = slots
     _verify_wild_tables(tables)
-    return tables
+    return tables if medium is None else selected
 
 
 def _verify_wild_tables(tables: Mapping[int, list[tuple[int, int]]]) -> None:

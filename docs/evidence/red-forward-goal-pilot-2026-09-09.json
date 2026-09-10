@@ -1,0 +1,138 @@
+{
+  "schema": "pokemon.red.forward-goal-pilot-result.v1",
+  "source_commit": "d1adee3248508059dab75928a32272bbf3da74ec",
+  "source_bundle_sha256": "324cfc2b29baea8860d46417904fe2bc824127a0e0629946b4d48c432d40be3f",
+  "objective": "defeat_bruno",
+  "complete_declared_batch": true,
+  "same_historical_training_root": true,
+  "independent_evaluation": false,
+  "new_player_authority": false,
+  "old_model_sha256": "d5dd4db2d44a3abef287733a089e1fc91883f17a7d8bd68625cd6e07264d5781",
+  "episodes": [
+    {
+      "episode_id": "red-forward-bruno-20260909-01-causal",
+      "manifest_sha256": "2847a5258f859cc260ed6b1939add7e03f1cad0e71aef216f821b826d01e70b4",
+      "choices": [
+        "restore_team",
+        "advance_story"
+      ],
+      "retained_specimens": 30,
+      "counters": {
+        "actions": 239,
+        "frames": 22069,
+        "macros": 2,
+        "resources": 1
+      },
+      "target": [
+        1,
+        0.1692205
+      ],
+      "terminal": "reached"
+    },
+    {
+      "episode_id": "red-forward-bruno-20260909-02-causal",
+      "manifest_sha256": "7f28a322aa70f384340abc8561a36ee21a2c8221968ecacf45c0034a7425b097",
+      "choices": [
+        "advance_story"
+      ],
+      "retained_specimens": 30,
+      "counters": {
+        "actions": 185,
+        "frames": 17641,
+        "macros": 1,
+        "resources": 0
+      },
+      "target": [
+        1,
+        0.0020078333333333333
+      ],
+      "terminal": "reached"
+    },
+    {
+      "episode_id": "red-forward-bruno-20260909-03-causal",
+      "manifest_sha256": "b83c05b47ef3313eb21c7bc5759b1bde8e39d70e19fdd016b5e5b3a73411616e",
+      "choices": [
+        "restore_team",
+        "advance_story"
+      ],
+      "retained_specimens": 30,
+      "counters": {
+        "actions": 239,
+        "frames": 22069,
+        "macros": 2,
+        "resources": 1
+      },
+      "target": [
+        1,
+        0.1692205
+      ],
+      "terminal": "reached"
+    },
+    {
+      "episode_id": "red-forward-bruno-20260909-04-causal",
+      "manifest_sha256": "cc8ca10785680d0d1a42b64ace0b1179ca3050bff4d897a66cfcbf94b6d052aa",
+      "choices": [
+        "restore_team",
+        "restore_team"
+      ],
+      "retained_specimens": 30,
+      "counters": {
+        "actions": 80,
+        "frames": 6960,
+        "macros": 2,
+        "resources": 2
+      },
+      "target": [
+        0,
+        0.33416444444444443
+      ],
+      "terminal": "stopped"
+    }
+  ],
+  "forward_model_sha256": "32fd4144b72a4048e7ce78a4becf99df77e3675eb95fe083f0063bc8b1ef0fc0",
+  "forward_fit_record_sha256": "0de0fa9be425700d32afcb4d6b2f64f6275bfd64c2743b1812042d929f06d51e",
+  "forward_fit_document_sha256": "69f830fba0fb82213b02eacaf4f2b1a8c54d067419e9bf1d790bb8e9255aaaba",
+  "settled_forward_examples": 4,
+  "censored_forward_examples": 0,
+  "recorded_roots": 1,
+  "distinct_selected_inputs": 2,
+  "genuine_macro_choices": 7,
+  "forced_singletons": 0,
+  "goal_successes": 3,
+  "goal_failures": 1,
+  "total_actions": 743,
+  "total_frames": 68739,
+  "total_field_items": 4,
+  "training_mse_before": [
+    0.15369524033401746,
+    0.015547593891610763
+  ],
+  "training_mse_after": [
+    0.12644681617333695,
+    0.00344026102067455
+  ],
+  "fitted_context_estimates": [
+    {
+      "option": "restore_team",
+      "completion": 0.6670597882962764,
+      "cost": 0.2239397670345462
+    },
+    {
+      "option": "advance_story",
+      "completion": 0.9994809858357644,
+      "cost": 0.0023537988041238134
+    }
+  ],
+  "authority": "unqualified-shadow",
+  "player_model_changed": false,
+  "independent_advantage": false,
+  "probability_calibration": false,
+  "transfer_established": false,
+  "current_champion_run_unchanged": true,
+  "champion_and_hall_of_fame_complete": false,
+  "prior_consumed_trials_retried": 0,
+  "sealed_red_accesses": 0,
+  "crystal_accesses": 0,
+  "full_game_replays": 0,
+  "interpretation": "Four correlated prospective training returns. Heal/heal failed the finite story goal, not the healing mechanics. Fitted-context estimates are not independent evidence or calibrated probabilities."
+}

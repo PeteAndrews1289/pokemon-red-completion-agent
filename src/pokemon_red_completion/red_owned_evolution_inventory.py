@@ -1,0 +1,139 @@
+"""Action-free living-collection prerequisites from cartridge evolution rules.
+
+This is an inventory, not a gameplay permission or a learned selection. Surplus
+ownership does not prove navigation, storage access, battle safety or affordability.
+Exact specimen identities remain on the executor side of the policy boundary.
+"""
+
+from __future__ import annotations
+
+from collections import Counter
+from collections.abc import Mapping
+from dataclasses import dataclass
+
+from pokemon_red_completion.collection import (
+    CollectionLocation,
+    CollectionObservation,
+    LivingSpecimen,
+)
+from pokemon_red_completion.gen1_cartridge import Evolution, EvolutionMethod
+from pokemon_red_completion.red_collection import red_species_number, red_species_ref
+
+
+@dataclass(frozen=True, slots=True)
+class RedOwnedEvolutionPrerequisite:
+    source_species_ref: str
+    target_species_ref: str
+    evolution_level: int
+    retained_source_copies: int
+    duplicate_acquisitions_needed: int
+    party_or_box_precursors: tuple[LivingSpecimen, ...]
+
+    @property
+    def has_owned_surplus(self) -> bool:
+        return self.duplicate_acquisitions_needed == 0
+
+
+def inventory_red_owned_level_evolutions(
+    observation: CollectionObservation,
+    graph: Mapping[int, tuple[Evolution, ...]],
+    *,
+    target_species: frozenset[str],
+    registered_species: frozenset[str] | None = None,
+    protected_source_counts: Mapping[str, int] | None = None,
+) -> tuple[RedOwnedEvolutionPrerequisite, ...]:
+    """One row per missing target reachable from a currently owned precursor.
+
+    Default legacy mode keeps one source copy and treats registered-but-no-longer
+    living targets as missing. Explicit registered mode skips globally credited
+    targets and reserves only caller-declared physical dependencies, not a living
+    form quota. This inventory does not relax the native executor's old contract.
+    Two interchangeable specimens are one objective, not two strategic alternatives.
+    Daycare specimens count toward retention but are not directly controllable.
+    Branches share their precursor stock: this is not a simultaneous allocation.
+    """
+    counts = Counter(specimen.species_ref for specimen in observation.specimens)
+    protected = dict(protected_source_counts or {})
+    if registered_species is None and protected:
+        raise ValueError("physical reserves require explicit registered mode")
+    if registered_species is not None:
+        registered_species = frozenset(registered_species)
+        if not observation.owned_species <= registered_species:
+            raise ValueError("shared registration must include current local owned flags")
+        if not counts.keys() <= observation.owned_species:
+            raise ValueError("physical stock must have current local registration")
+        for species in registered_species:
+            red_species_number(species)
+    for species, quantity in protected.items():
+        red_species_number(species)
+        if type(quantity) is not int or quantity < 0:
+            raise ValueError("physical reserves must be nonnegative integers")
+    rows = []
+    seen: set[tuple[int, int]] = set()
+    for source in sorted(counts):
+        number = red_species_number(source)
+        for step in graph.get(number, ()):
+            if step.from_species != number:
+                raise ValueError("evolution graph source differs from its key")
+            if step.method is not EvolutionMethod.LEVEL:
+                continue
+            if (
+                type(step.requirement) is not int
+                or not 1 <= step.requirement <= 100
+                or type(step.to_species) is not int
+                or not 1 <= step.to_species <= 151
+                or step.to_species == number
+            ):
+                raise ValueError("level evolution rule is invalid")
+            key = number, step.to_species
+            if key in seen:
+                raise ValueError("duplicate level evolution rule")
+            seen.add(key)
+            target = red_species_ref(step.to_species)
+            already_complete = (
+                bool(counts[target]) if registered_species is None
+                else target in registered_species
+            )
+            if target not in target_species or already_complete:
+                continue
+            precursors = tuple(sorted(
+                (
+                    specimen for specimen in observation.specimens
+                    if specimen.species_ref == source
+                    and specimen.location in {CollectionLocation.PARTY, CollectionLocation.BOX}
+                ),
+                key=lambda specimen: (
+                    specimen.location.value, specimen.container_index, specimen.slot_index,
+                ),
+            ))
+            rows.append(RedOwnedEvolutionPrerequisite(
+                source, target, step.requirement, counts[source],
+                max(0, (2 if registered_species is None else 1 + protected.get(source, 0))
+                    - counts[source]), precursors,
+            ))
+    return tuple(sorted(rows, key=lambda row: (
+        row.target_species_ref, row.source_species_ref,
+    )))
+
+
+def unique_owned_level_evolution(
+    observation: CollectionObservation,
+    graph: Mapping[int, tuple[Evolution, ...]],
+    *,
+    target_species: frozenset[str],
+) -> RedOwnedEvolutionPrerequisite:
+    """Bind a unique supported target, not an artificial learned target choice.
+
+    The existing native executor requires exactly two copies and can operate on
+    party/box specimens. Do not relax that executor contract through inventory.
+    More than one objective requires real downstream selection, not first-row wins.
+    """
+    rows = tuple(
+        row for row in inventory_red_owned_level_evolutions(
+            observation, graph, target_species=target_species,
+        )
+        if row.retained_source_copies == 2 and row.party_or_box_precursors
+    )
+    if len(rows) != 1:
+        raise ValueError("owned evolution needs exactly one supported surplus target")
+    return rows[0]

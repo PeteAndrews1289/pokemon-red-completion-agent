@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon.red.agatha-controller-training-probe.v1",
+  "date": "2026-09-09",
+  "source_commit": "f5e3ec623d2126ea4beeb061b78baa4d8ec3f721",
+  "source_bundle_sha256": "859e9fc6be95722f0cfe2884c3b47df1a25f579d7125cc39f4a19b53aeee00a2",
+  "episode_id": "red-agatha-forward-probe-20260909-01-forward-probe",
+  "manifest_sha256": "70ff34778c527849bea327b6ca3c61831de010205f5a65d16c693192a87bebe5",
+  "first_actor_model_sha256": "3bf43581a0fda3c0b8e34d60abccb69cbf68bc9f72f834a2a0cc64b970669d97",
+  "frozen_tail_model_sha256": "d5dd4db2d44a3abef287733a089e1fc91883f17a7d8bd68625cd6e07264d5781",
+  "frozen_tail_seed": 2026090940,
+  "fit_record_sha256": "e27e797c676e96d7d3de7184643b6b71ac89cf8018899233d5c3a10ed8a5e2fe",
+  "claim_sha256": "cae3622dc39a90eb74a3dbb17f708bce126f3de8cf2534c1e4083adea53eb5a5",
+  "start_state_sha256": "f10ab4dd592c73bb0d05871fc2981668310d94aee8d52577baaa9f78a10fe2fb",
+  "checkpoint_sha256": "907cd7cd990072712d8e4d3e56384f3c895e320df9e972b78b848eda35062b6d",
+  "checkpoint_state_sha256": "ab3641b7323ef2559918e0199f1ba07eef431c85be4d51208bf148f0a08d571a",
+  "first_choice": "restore_team",
+  "frozen_tail_choice": "advance_story",
+  "first_actor_choices": 1,
+  "frozen_tail_choices": 1,
+  "genuine_choices": 2,
+  "forced_singletons": 0,
+  "completion_satisfied": true,
+  "current_agatha_before": false,
+  "current_agatha_after": true,
+  "actions": 335,
+  "frames": 31141,
+  "field_items": 1,
+  "retained_specimens": 30,
+  "current_living_species": 28,
+  "current_registered_species": 33,
+  "first_actor_estimates": [
+    {
+      "completion": 1,
+      "cost": 0.17742558443686068
+    },
+    {
+      "completion": 0,
+      "cost": 0
+    }
+  ],
+  "frozen_tail_selected_probability": 0.32333456339825317,
+  "zero_input_endpoint_audit": {
+    "actions": 0,
+    "frames": 0,
+    "held_buttons": 0,
+    "checkpoint_and_state_verified": true
+  },
+  "model_fitted": false,
+  "native_training_admission": false,
+  "automatic_promotion": false,
+  "independent_evaluation": false,
+  "phase4_complete": false,
+  "limitations": [
+    "One changed-resource training probe within already observed correlated lineage, not independent evaluation.",
+    "New model owns only the first genuine choice; frozen native model owns the continuation.",
+    "Clipped completion estimates of zero and one are not calibrated probabilities.",
+    "Frozen tail sampled story at probability 0.32333456339825317; this run does not establish reliable continuation or superiority to an unplayed action.",
+    "Original Agatha trial03 and current Champion failure remain failed, retained and non-retried.",
+    "No new native or forward training data were admitted from this probe."
+  ]
+}

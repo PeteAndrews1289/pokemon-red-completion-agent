@@ -122,3 +122,30 @@ def test_catalog_values_are_immutable() -> None:
     mechanics = RED_BATTLE_CATALOG.resolve_move(_move(33))
     with pytest.raises(FrozenInstanceError):
         mechanics.power = 999  # type: ignore[misc]
+
+
+@pytest.mark.parametrize("move,level,expected", [(49, None, 20), (82, None, 40),
+                                               (101, 1, 1), (101, 55, 55), (101, 100, 100)])
+def test_qualified_incoming_fixed_damage_is_separate_from_type_only_api(move, level, expected):
+    ref = _move(move)
+    assert RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=level) == expected
+    with pytest.raises(RedBattleCatalogError, match="entry type screen"):
+        RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
+    # Existing constant-damage learner support stays intact; this incoming-only
+    # extension must not grant outgoing Night Shade support.
+    assert red_battle_move_is_refreshable_model_supported(move) is (move in (49, 82))
+
+
+@pytest.mark.parametrize("level", [None, True, False, 0, -1, 101, 55.0, "55"])
+def test_night_shade_requires_exact_observed_enemy_level(level):
+    with pytest.raises(RedBattleCatalogError, match="observed enemy level"):
+        RED_BATTLE_CATALOG.incoming_fixed_damage_bound(_move(101), enemy_level=level)
+
+
+@pytest.mark.parametrize("move", [33, 69, 149, 90, 68, 117, 118])
+def test_unqualified_effects_do_not_become_fixed_zero_damage(move):
+    assert RED_BATTLE_CATALOG.incoming_fixed_damage_bound(_move(move), enemy_level=55) is None
+
+
+def test_constant_only_contract_is_not_silently_extended_to_level_damage():
+    assert RED_BATTLE_CATALOG.constant_damage_bound(_move(101)) is None

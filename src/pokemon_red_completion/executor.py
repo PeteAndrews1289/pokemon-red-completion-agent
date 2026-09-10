@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
+from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -155,6 +157,7 @@ class WindowedFrameBudgetController:
         "_maximum_frames_per_window",
         "_maximum_total_frames",
         "_window_start",
+        "_nested_frame_deadlines",
     )
 
     def __init__(
@@ -180,6 +183,22 @@ class WindowedFrameBudgetController:
         self._window_start = frame_count
         self._maximum_frames_per_window = maximum_frames_per_window
         self._maximum_total_frames = maximum_total_frames
+        self._nested_frame_deadlines: list[int] = []
+
+    @contextmanager
+    def limit_additional_frames(self, maximum_frames: int) -> Iterator[None]:
+        """Narrow the existing controller chain without resetting any budget.
+
+        The absolute deadline survives begin_window; nested scopes cannot widen
+        an outer cap. Exceptions restore the outer limits, never spent frames.
+        """
+        if type(maximum_frames) is not int or maximum_frames <= 0:
+            raise ValueError("nested frame limit must be a positive integer")
+        self._nested_frame_deadlines.append(self.frame_count + maximum_frames)
+        try:
+            yield
+        finally:
+            self._nested_frame_deadlines.pop()
 
     @property
     def frame_count(self) -> int:
@@ -205,6 +224,7 @@ class WindowedFrameBudgetController:
             or frames < 0
             or self.frames_executed + frames > self._maximum_total_frames
             or self.frames_this_window + frames > self._maximum_frames_per_window
+            or any(self.frame_count + frames > end for end in self._nested_frame_deadlines)
         ):
             raise ControllerFrameBudgetExhausted(
                 "controller exhausted its hard windowed frame budget"

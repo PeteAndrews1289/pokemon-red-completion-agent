@@ -261,10 +261,10 @@ def test_every_portable_option_kind_has_a_distinct_title_neutral_projection() ->
 
     vectors = tuple(menu.candidate_vector(index) for index in menu.available_indices)
 
-    assert len(menu.available_indices) == len(LivingDexOptionKind) == 8
-    assert len(set(vectors)) == 8
+    assert len(menu.available_indices) == len(LivingDexOptionKind) == 9
+    assert len(set(vectors)) == 9
     for vector in vectors:
-        assert sum(vector[: len(LivingDexOptionKind)]) == pytest.approx(1.0)
+        assert sum(vector[:8]) + vector[-2] == pytest.approx(1.0)
 
 
 def test_behavior_policy_requires_full_support_and_hard_masking() -> None:

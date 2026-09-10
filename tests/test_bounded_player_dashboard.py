@@ -97,6 +97,7 @@ def test_safety_and_forced_steps_are_not_learned_decisions(forced: bool) -> None
     public = _public(state)
     assert public["model"]["decisions"] == 0
     assert public["model"]["fallbacks"] == 1
+    assert public["experiment"]["predictions_committed"] is False
     assert ("Forced single option" if forced else "Deterministic safety") in public["stage"]
     assert not viewer.disabled
 
@@ -206,3 +207,25 @@ def test_completed_collection_observation_changes_the_display_without_crediting_
     assert _public(state)["collection"]["living"] == 11
     assert _public(state)["experiment"]["sealed_test"]["completed"] == 0
     assert _public(state)["model"]["decisions"] == 0
+
+
+def test_registered_live_display_uses_declared_target_and_separate_physical_stock(tmp_path):
+    from test_registered_learning_bridge import observations
+
+    from pokemon_red_completion.red_registered_observation import project_registered_observation
+
+    viewer, state, _policy, _trajectory, _sink = _viewer()
+    _, before, _, policy = observations(tmp_path, inherited=(78,))
+    live = project_registered_observation(before, policy)
+    checkpoint = live.registered_checkpoint
+    assert checkpoint is not None
+    composition = replace(_observation(storage=2), collection=checkpoint)
+    viewer.observed(live, composition)
+    public = _public(state)
+    assert public["collection"]["target"] == 124
+    assert public["collection"]["registered"] == checkpoint.registered_species
+    assert "required registrations remain" in public["events"][-1]
+    assert "physical specimens" in public["events"][-1]
+    assert "required specimens remain" not in public["events"][-1]
+    assert viewer._snapshot.learning_components[0].name == "Registered-Pokédex goal scorer"
+    assert public["model"]["decisions"] == 0

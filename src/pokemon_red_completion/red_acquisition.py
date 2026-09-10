@@ -15,6 +15,7 @@ denominator.
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Callable
 from dataclasses import dataclass
 from enum import StrEnum
 from typing import Protocol
@@ -118,8 +119,54 @@ class RedAcquisitionCatalog:
 
     methods: tuple[RedAcquisitionMethod, ...]
     source_commit: str = PRET_POKERED_ACQUISITION_COMMIT
+    remaining_demand: bool = False
+    level_evolution_edges: tuple[tuple[str, str], ...] = ()
+    wild_source_species: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    registered_species: frozenset[str] | None = None
+    protected_counts: tuple[tuple[str, int], ...] = ()
 
     def __post_init__(self) -> None:
+        if self.registered_species is not None and (
+            not isinstance(self.registered_species, frozenset) or any(
+                s not in RED_SOLO_COLLECTION_CONTRACT.species_universe
+                for s in self.registered_species
+            ) or not self.remaining_demand
+        ):
+            raise ValueError("registered catalog needs immutable credit and remaining demand")
+        if self.protected_counts and self.registered_species is None:
+            raise ValueError("registered reserves require registered catalog mode")
+        if not isinstance(self.protected_counts, tuple) or any(
+            not isinstance(row, tuple) or len(row) != 2
+            or row[0] not in RED_SOLO_COLLECTION_CONTRACT.species_universe
+            or type(row[1]) is not int or row[1] < 0 for row in self.protected_counts
+        ) or len(dict(self.protected_counts)) != len(self.protected_counts):
+            raise ValueError("registered reserves must be unique immutable species counts")
+        if type(self.remaining_demand) is not bool:
+            raise TypeError("remaining_demand must be a bool")
+        if self.wild_source_species and not self.remaining_demand:
+            raise ValueError("wild offers require remaining acquisition demand")
+        if not isinstance(self.wild_source_species, tuple):
+            raise ValueError("wild offers must be immutable")
+        sources: set[str] = set()
+        for offer in self.wild_source_species:
+            if not isinstance(offer, tuple) or len(offer) != 2:
+                raise ValueError("wild offer shape differs")
+            source, refs = offer
+            if (not isinstance(source, str) or not source.startswith("wild:")
+                    or not source.endswith(":grass") or source in sources
+                    or not isinstance(refs, tuple) or not refs
+                    or any(ref not in RED_SOLO_COLLECTION_CONTRACT.target_species for ref in refs)
+                    or len(refs) != len(set(refs))):
+                raise ValueError("wild offers need unique grass sources and target species")
+            sources.add(source)
+        if self.level_evolution_edges and not self.remaining_demand:
+            raise ValueError("level alternatives require remaining acquisition demand")
+        if not isinstance(self.level_evolution_edges, tuple) or any(
+            not isinstance(edge, tuple) or len(edge) != 2
+            or any(s not in RED_SOLO_COLLECTION_CONTRACT.target_species for s in edge)
+            for edge in self.level_evolution_edges
+        ):
+            raise ValueError("level alternative edges must belong to the Red catalog")
         if self.source_commit != PRET_POKERED_ACQUISITION_COMMIT:
             raise ValueError("acquisition catalog source commit is not the pinned revision")
         species = tuple(method.species_ref for method in self.methods)
@@ -170,6 +217,40 @@ class RedAcquisitionCatalog:
                 roots[species_ref] += quantity
         return dict(sorted(roots.items(), key=lambda item: red_species_number(item[0])))
 
+    def required_root_holdings(self, observation: CollectionObservation) -> dict[str, int]:
+        """Root holdings still needed after crediting actual intermediate forms.
+
+        Process descendants before precursors, combining all branch demand before
+        spending any retained specimen. Each living target contributes one reserved
+        copy; only a node's deficit propagates to its consumed precursor. Surplus
+        descendants cannot satisfy a missing ancestor or a sibling branch. Trade
+        edges consume exactly one specimen, just like evolution edges.
+
+        Root holdings are gross requirements: callers subtract actual root copies.
+        This leaves the historical, from-empty ``required_root_acquisitions`` intact.
+        Registration flags alone never satisfy a living requirement.
+        """
+        counts = Counter(specimen.species_ref for specimen in observation.specimens)
+        pending = Counter(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species)
+        by_species = {method.species_ref: method for method in self.methods}
+        depths: dict[str, int] = {}
+
+        def depth(species_ref: str) -> int:
+            if species_ref not in depths:
+                precursor = by_species[species_ref].consumes_species_ref
+                depths[species_ref] = 0 if precursor is None else depth(precursor) + 1
+            return depths[species_ref]
+
+        roots: dict[str, int] = {}
+        for method in sorted(self.methods, key=lambda item: depth(item.species_ref), reverse=True):
+            demand = pending[method.species_ref]
+            precursor = method.consumes_species_ref
+            if precursor is None:
+                roots[method.species_ref] = demand
+            else:
+                pending[precursor] += max(0, demand - counts[method.species_ref])
+        return dict(sorted(roots.items(), key=lambda item: red_species_number(item[0])))
+
     def reachable_registration_species(self) -> frozenset[str]:
         """Species registered while building the maximal living collection."""
 
@@ -186,6 +267,45 @@ class RedAcquisitionCatalog:
                     reachable.add(method.species_ref)
                     changed = True
         return frozenset(reachable)
+
+    def alternative_capture_holdings(
+        self, observation: CollectionObservation,
+        capture_species: tuple[str, ...] | None = None,
+    ) -> dict[str, int]:
+        """Marginal capture options, recomputed after each actual acquisition."""
+        from .collection_acquisition_demand import (
+            useful_capture_counts,
+            useful_registered_capture_counts,
+        )
+
+        counts = Counter(specimen.species_ref for specimen in observation.specimens)
+        canonical_edges = tuple(
+            (method.consumes_species_ref, method.species_ref) for method in self.methods
+            if method.consumes_species_ref is not None
+        )
+        if self.registered_species is not None:
+            useful = useful_registered_capture_counts(
+                frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species),
+                self.registered_species | observation.owned_species, counts,
+                tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
+                (tuple(method.species_ref for method in self.methods
+                       if not method.transforms_precursor)
+                 if capture_species is None else capture_species),
+                protected_counts=dict(self.protected_counts),
+            )
+            # Potential future evolution is not an already registered species.
+            # A direct wild capture of a missing entry remains a legal alternative
+            # to developing existing stock; leave its cost tradeoff to the actor.
+            credited = self.registered_species | observation.owned_species
+            return {species: counts[species] + max(quantity, int(species not in credited))
+                    for species, quantity in useful.items()}
+        useful = useful_capture_counts(
+            frozenset(RED_SOLO_COLLECTION_CONTRACT.resolved_living_target_species), counts,
+            tuple(sorted(set((*canonical_edges, *self.level_evolution_edges)))),
+            (tuple(method.species_ref for method in self.methods if not method.transforms_precursor)
+             if capture_species is None else capture_species),
+        )
+        return {species: counts[species] + quantity for species, quantity in useful.items()}
 
     def required_transformation_counts(self) -> dict[str, int]:
         """Count every evolution/trade execution required by the living plan."""
@@ -355,10 +475,13 @@ class RedAreaExecutionReport:
     captures: int
     flees: int
     box_switches: int
+    search_exhausted: bool = False
+    safety_stopped: bool = False
+    search_stop_reason: str | None = None
 
     @property
     def passed(self) -> bool:
-        return not self.final_missing_species_refs
+        return not self.safety_stopped and not self.final_missing_species_refs
 
 
 def plan_red_acquisition(
@@ -390,14 +513,27 @@ def summarize_red_area_survey(
     observation: CollectionObservation,
     catalog: RedAcquisitionCatalog | None = None,
 ) -> RedAreaSurvey:
-    """Report canonical direct targets still missing from one encounter area."""
+    """Report useful local captures, preserving canonical transformation dependencies."""
 
     catalog = catalog or RED_ACQUISITION_CATALOG
+    offers = dict(catalog.wild_source_species).get(source_id)
+    if offers is not None:
+        living = Counter(specimen.species_ref for specimen in observation.specimens)
+        holdings = catalog.alternative_capture_holdings(observation, offers)
+        return RedAreaSurvey(source_id, tuple(
+            RedAreaRequirement(ref, holdings[ref], living[ref])
+            for ref in sorted(offers, key=red_species_number) if ref in holdings
+        ))
     methods = catalog.methods_at_source(source_id)
     if not methods:
         raise ValueError("source_id is not present in the Red acquisition catalog")
     living = Counter(specimen.species_ref for specimen in observation.specimens)
-    root_counts = catalog.required_root_acquisitions()
+    root_counts = (
+        catalog.required_root_holdings(observation)
+        if catalog.remaining_demand else catalog.required_root_acquisitions()
+    )
+    if catalog.level_evolution_edges or catalog.registered_species is not None:
+        root_counts = catalog.alternative_capture_holdings(observation)
     requirements = tuple(
         RedAreaRequirement(
             method.species_ref,
@@ -557,6 +693,7 @@ def run_red_area_survey(
     *,
     policy: RedAreaExecutionPolicy | None = None,
     catalog: RedAcquisitionCatalog | None = None,
+    safety_check: Callable[[], bool] | None = None,
 ) -> RedAreaExecutionReport:
     """Execute one bounded source survey through a semantic game adapter."""
 
@@ -568,7 +705,25 @@ def run_red_area_survey(
     flees = 0
     box_switches = 0
 
+    def safety_stop(action_count: int) -> RedAreaExecutionReport | None:
+        if safety_check is None:
+            return None
+        safe = safety_check()
+        if type(safe) is not bool:
+            raise TypeError("area safety check must return a bool")
+        if safe:
+            return None
+        final = summarize_red_area_survey(source_id, executor.read_collection(), catalog)
+        return RedAreaExecutionReport(
+            source_id, initial.missing_species_refs, final.missing_species_refs,
+            action_count, encounters_seen, captures, flees, box_switches,
+            safety_stopped=True,
+        )
+
     for action_count in range(policy.max_actions + 1):
+        stopped = safety_stop(action_count)
+        if stopped is not None:
+            return stopped
         observation = executor.read_collection()
         encountered = executor.encountered_species_ref()
         survey = summarize_red_area_survey(source_id, observation, catalog)
@@ -599,7 +754,31 @@ def run_red_area_survey(
         if action_count >= policy.max_actions:
             break
         if decision.directive is RedAreaDirective.SEEK_ENCOUNTER:
-            executor.seek_encounter()
+            try:
+                executor.seek_encounter()
+            except RedAreaExecutionError as error:
+                # A bounded overworld search can legitimately find nothing.
+                # Battle/control defects and other limits remain exceptions.
+                if (
+                    error.reason_code != "survey_leg_limit_exceeded"
+                    or executor.encountered_species_ref() is not None
+                ):
+                    raise
+                final = summarize_red_area_survey(
+                    source_id, executor.read_collection(), catalog
+                )
+                return RedAreaExecutionReport(
+                    source_id,
+                    initial.missing_species_refs,
+                    final.missing_species_refs,
+                    action_count + 1,
+                    encounters_seen,
+                    captures,
+                    flees,
+                    box_switches,
+                    search_exhausted=True,
+                    search_stop_reason="survey_leg_limit_exceeded",
+                )
             if executor.encountered_species_ref() is not None:
                 encounters_seen += 1
                 if encounters_seen > policy.max_encounters:
@@ -634,6 +813,9 @@ def run_red_area_survey(
                 )
             captures += 1
             if policy.capture_quota is not None and captures >= policy.capture_quota:
+                stopped = safety_stop(action_count + 1)
+                if stopped is not None:
+                    return stopped
                 final = summarize_red_area_survey(
                     source_id,
                     after_observation,

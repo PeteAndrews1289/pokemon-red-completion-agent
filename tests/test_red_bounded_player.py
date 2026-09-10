@@ -199,7 +199,7 @@ def test_observer_uses_existing_adapter_enumerator_and_collection_projector() ->
     collection = _collection()
     enumerator = Mock()
     enumerator.enumerate.return_value = binding_set
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = live
     runtime.enumerator.return_value = enumerator
     actions = Mock(spec=CountingExecutor)
@@ -244,7 +244,7 @@ def test_observer_encodes_a_post_skill_state_without_available_goals() -> None:
     collection = _collection()
     enumerator = Mock()
     enumerator.enumerate.return_value = binding_set
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = live
     runtime.enumerator.return_value = enumerator
 
@@ -272,7 +272,7 @@ def test_observer_encodes_a_post_skill_state_without_available_goals() -> None:
 
 
 def test_observer_rejects_an_invalid_collection_projection() -> None:
-    runtime = Mock(spec=RedGoalContextRuntime)
+    runtime = Mock(spec=RedGoalContextRuntime, registration_policy=None)
     runtime.adapter.observe.return_value = _live()
     runtime.enumerator.return_value.enumerate.return_value = _binding_set()
 
@@ -309,6 +309,29 @@ def test_preflight_compares_two_authorities_without_emulator_work_or_private_dat
     assert "private:red" not in encoded
     assert "binding_ref" not in encoded
     assert "/" not in result.assignment_id
+
+
+@pytest.mark.parametrize("available", [set(), {GoalKind.ADVANCE_STORY}])
+def test_continuation_preflight_never_queries_authority_for_forced_bridge(available):
+    state = {"actions": 0, "frames": 0}
+    authority = Mock()
+    authority.select.side_effect = AssertionError("singleton is not learned")
+    def check():
+        return preflight_red_bounded_player(
+            observe=lambda: _composition_observation(available=available),
+            budget_meter=_Meter(state), assignment_id="continued-player",
+            authorities=(("a", authority), ("b", authority)), allow_forced_bridge=True,
+        )
+    if available:
+        result = check()
+        assert result.choices == () and len(result.available_goal_kinds) == 1
+    else:
+        from pokemon_red_completion.red_bounded_player import RedNoAvailableGoalError
+
+        with pytest.raises(RedNoAvailableGoalError, match="at least one available option"):
+            check()
+    authority.select.assert_not_called()
+    assert state == {"actions": 0, "frames": 0}
 
 
 def test_preflight_rejects_snapshot_without_a_genuine_choice() -> None:

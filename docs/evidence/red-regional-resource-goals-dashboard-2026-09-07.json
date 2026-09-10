@@ -1,0 +1,145 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Native resupply succeeded and fitted50 to51. Two post-fit source searches failed and fitted51 to53; all earlier outcomes retained. Productive follow-up remains open.",
+  "session_evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 1100,
+    "frames": 56497,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-regional-source-20260907-m-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "d1472df29cb050b13c1f3f5139a3740b9d75be5eb05c4138f50d3c961a075c69",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 43,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 53,
+      "successful_examples": 18,
+      "total_examples": 53,
+      "train_dataset_sha256": "a4968ca7e7cbe94a41d079a2f02a07401742312f0bf012ed143edb7a8291b340",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.007585666975126538,
+      "weighted_mse_before": 0.021804048845710477
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "fc0edd7fe7f24cecde647f95ee87d0ed23d8d5cd984a6e9645bde65eac9231ef",
+      "file_sha256": "4a74b76f88e016cdc7c7ccf47f3c6dfa30f70803cdb4587b5e4b4d641635720d",
+      "independent_evaluation": false,
+      "model_sha256": "62fac5757b0cd2c17088901e42921ed70c58c27acfc77c70b60b2e9307cc49e2",
+      "prior_model_sha256": "e0e62e007dd32a6a8f63664da4b2d59a22f6be1e34f592ee3b0e736d9c55aae3",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 53,
+      "source_bundle_sha256": "3fbbac6cac60f9a5f117e4f5f2219794c23c990d834e34b17e681503d0af8d01",
+      "source_commit": "1b47d4c3a05bece6485ceaa171d3ebb2530ff40e"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.05880484782988768,
+        0.000003333371233947712,
+        0.000036739439762151216,
+        0.004656114445003671,
+        0.003505866591595422,
+        0.001336901906938056,
+        0.00040025729801287165,
+        5.623745827451882e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 53,
+      "total_examples": 53,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.007638291473001839
+    },
+    "regional_source_examples": 7,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0587909413564692,
+        0.000003333373861299682,
+        0.00003673548762000872,
+        0.004655474046941064,
+        0.003505297765318238,
+        0.000877893731397102,
+        0.000400764578109479,
+        5.624364224469751e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 53,
+      "total_examples": 53,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.007585666975126538
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "K source proposal contributed no target or source effort.",
+    "L/M both failed; stop condition reached, no further capture attempt declared.",
+    "L threw ten balls at full-HP Voltorb; the existing helper selector accepts only three species, none in the party.",
+    "M spent one ball; trainer rewards increased cash by400.",
+    "No full-game, independent advantage or transfer claim."
+  ],
+  "next_session": "Reusable capture preparation: inspect stored party and move effects before more ball-only searches.",
+  "current_limitation": "Two bounded post-resupply searches failed. The existing capture helper is species-listed, and the current party cannot use it. Local checklist2/3; no productive follow-up yet."
+}

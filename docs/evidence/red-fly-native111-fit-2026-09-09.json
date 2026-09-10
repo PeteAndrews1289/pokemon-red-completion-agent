@@ -1,0 +1,142 @@
+{
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "completed_episode": {
+    "episode_id": "red-collection-fly-20260909-d-01-causal",
+    "actions": 17523,
+    "frames": 1549746,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "forced_singletons": 0,
+    "verified_collection_gain": 1,
+    "status": "succeeded"
+  },
+  "current_session_status": "bounded_fly_batch_stopped",
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 110,
+    "controller_actions": 0,
+    "corpus_record_sha256": "aceaebb515ec1265fbd67d1bc3b811cb0963a5646f82b19cf7792e86b2c6a957",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 92,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 111,
+      "successful_examples": 66,
+      "total_examples": 111,
+      "train_dataset_sha256": "3877f1f63d2b433deaedc341d05f00d4a37d51a000b238a244042c8abce57e28",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011736435222158248,
+      "weighted_mse_before": 0.030917388672918676
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "dd9acbd0a228efce1b60c43dd7db80514baf81f8532deec8a5ed071750ecda19",
+      "file_sha256": "05a144b0c0a993d56b92b586340e90a928d4476a48e9dfb9c67bacd42845899c",
+      "independent_evaluation": false,
+      "model_sha256": "1c3cae3ac49bdf1a446031962633207c58f329f1b3790ac474716e7afbb59fcb",
+      "prior_model_sha256": "5c810c6e871824ea23db83fafa8a2eccb2697b9b76504f3f59fe759f83748c56",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 111,
+      "source_bundle_sha256": "f33269bb9511de12ca47711aca18de70b2bef42ef47826723c99d6c85ab83b15",
+      "source_commit": "3c0fb0f875797d4b69073c77cb548de6c21f5bed"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08823268851669737,
+        5.632729193619424e-06,
+        4.4542105587825384e-05,
+        0.005652807740537856,
+        0.004277048291056521,
+        0.003891233233591882,
+        0.004291015446595919,
+        1.4855134716507016e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 111,
+      "total_examples": 111,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011821828175192515
+    },
+    "regional_source_examples": 24,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0884758732670365,
+        5.576214661804933e-06,
+        4.430183431548182e-05,
+        0.005093316963166883,
+        0.0038259190818039452,
+        0.0038908283414485086,
+        0.004290612433700979,
+        1.488863290141871e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 111,
+      "total_examples": 111,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011736435222158248
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "next_step": "Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward.",
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "scope": "1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified.",
+  "session_evidence": "docs/evidence/red-collection-fly-learning-2026-09-09.json",
+  "status": "fit_complete_bounded_only"
+}

@@ -55,7 +55,9 @@ def adjacency(record: dict) -> dict[int, set[int]]:
     }
 
 
-def test_every_named_map_is_reachable_from_the_start(record: dict) -> None:
+def test_every_named_map_is_reachable_from_the_start(
+    record: dict, adjacency: dict[int, set[int]]
+) -> None:
     """The cross-check that proves the header offsets.
 
     ``MapId`` is maintained by hand and entirely independent of this read, so
@@ -63,10 +65,29 @@ def test_every_named_map_is_reachable_from_the_start(record: dict) -> None:
     strand some of them.
     """
 
-    reachable = set(record["by_title"]["red"]["named_maps_reachable"])
+    # The archived list names the enum members present when the read was made.
+    # Check today's names against actual graph reachability, not that old subset.
+    reachable: set[int] = set()
+    pending = [record["starting_map"]]
+    while pending:
+        current = pending.pop()
+        if current not in reachable:
+            reachable.add(current)
+            pending.extend(adjacency.get(current, set()))
 
-    assert reachable == {m.value for m in MapId}
-    assert len(reachable) == 147
+    historical_names = set(record["by_title"]["red"]["named_maps_reachable"])
+    assert len(historical_names) == 147
+    assert historical_names <= reachable
+    assert {m.value for m in MapId} <= reachable
+    assert len(reachable) == record["by_title"]["red"]["maps"] == 220
+
+
+def test_fuchsia_mart_is_reached_through_fuchsia_city(
+    adjacency: dict[int, set[int]],
+) -> None:
+    # Independent cartridge map numbers pin the newly named shop and its edge.
+    assert MapId.FUCHSIA_MART.value == 0x98
+    assert 0x98 in adjacency[0x07]
 
 
 def test_the_graph_agrees_with_the_encounter_reads(record: dict) -> None:

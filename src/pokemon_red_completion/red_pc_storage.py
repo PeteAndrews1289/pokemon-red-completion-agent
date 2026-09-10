@@ -119,6 +119,35 @@ class RedPCSwitchBoxReport:
         )
 
 
+def face_pc_boundary(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+    *,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> None:
+    """Orient at an already-bound PC tile and prove no movement occurred."""
+    if direction not in {"up", "down", "left", "right"}:
+        raise ValueError("PC facing must be cardinal")
+    before = reader.read()
+    if before.battle_state != 0 or not reader.read_input_readiness().ready:
+        raise RedPCStorageError("PC facing requires settled overworld control")
+    if reader.read_bottom_dialogue_box_visible():
+        raise RedPCStorageError("PC facing is blocked by dialogue")
+    if reader.read_player_facing() != direction:
+        actions.execute(MacroAction(MacroActionKind.MOVE, direction))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))
+    after = reader.read()
+    if (
+        (before.map_id, before.player_y, before.player_x)
+        != (after.map_id, after.player_y, after.player_x)
+        or after.battle_state != 0
+        or not reader.read_input_readiness().ready
+        or reader.read_player_facing() != direction
+    ):
+        raise RedPCStorageError("PC facing did not preserve its bound position")
+
+
 def open_bills_pc(
     actions: ActionExecutor,
     reader: PokemonRedStateReader,
@@ -133,7 +162,9 @@ def open_bills_pc(
     if (
         (generic.top_x, generic.top_y) != GENERIC_PC_MENU_POSITION
         or generic.maximum_visible_index not in GENERIC_PC_MENU_MAXIMA
-        or generic.selected_absolute_index != 0
+        # DisplayPCMainMenu resets wCurrentMenuItem but leaves the previous
+        # bag's wListScrollOffset intact. Only Bill's submenu clears it.
+        or generic.selected_visible_index != 0
     ):
         raise RedPCStorageError(f"generic PC menu did not open: {generic!r}")
 
@@ -349,6 +380,48 @@ def switch_box(
         f"box switch did not select box {target_box_index + 1}; "
         f"current box is {current.box_index + 1}"
     )
+
+
+def close_generic_pc_session(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> None:
+    """Cancel a retained PC interaction before field transport, never confirm.
+
+    Generic input-readiness flags can be true inside this menu. Require its
+    actual session flag to clear while party, storage, items and position stay
+    unchanged. A stale cursor alone never initiates this recovery.
+    """
+    if not reader.read_generic_pc_session_active():
+        return
+    before = reader.read()
+    boxes = reader.read_all_box_states()
+    if before.battle_state != 0:
+        raise RedPCStorageError("PC session recovery cannot run in battle")
+    invariant_fields = (
+        "map_id", "player_x", "player_y", "battle_state", "party_species_ids",
+        "party_levels", "party_hp", "party_max_hp", "party_status", "party_moves",
+        "party_pp", "bag_items", "player_money",
+    )
+    for attempt in range(timing.max_dialogue_pulses + 1):
+        current = reader.read()
+        if (
+            any(getattr(current, field) != getattr(before, field) for field in invariant_fields)
+            or reader.read_all_box_states() != boxes
+        ):
+            raise RedPCStorageError("PC session recovery changed its retained boundary")
+        if (
+            not reader.read_generic_pc_session_active()
+            and reader.read_input_readiness().ready
+            and not reader.read_bottom_dialogue_box_visible()
+        ):
+            return
+        if attempt == timing.max_dialogue_pulses:
+            break
+        _pulse(actions, MacroActionKind.CANCEL, timing=timing)
+    raise RedPCStorageError("PC session did not close within its cancel budget")
 
 
 def _require_bills_pc_menu(state: MenuCursorState) -> None:

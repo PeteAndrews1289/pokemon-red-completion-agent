@@ -291,6 +291,8 @@ class MapNode:
     tileset: int = -1
     warp_locations: tuple[tuple[int, int], ...] = ()
     retained_outside_override: int | None = None
+    #: Settled arrivals in raw warp order; None means not terrain-qualified.
+    warp_arrivals: tuple[tuple[int, int], ...] | None = None
 
     def neighbours(self) -> frozenset[int]:
         return frozenset(passage.to_map for passage in self.passages if passage.to_map is not None)
@@ -358,15 +360,13 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
     from pokemon_red_completion.gen1_terrain import (
         automatic_warp_tiles,
         directional_warp_tiles,
+        door_tiles,
         terrain_for,
         tilesets,
     )
 
     sets = tilesets(rom)
-    terrain_tiles = {
-        map_id: terrain_for(rom, map_id, sets).tiles
-        for map_id in graph
-    }
+    terrain_tiles = {map_id: terrain_for(rom, map_id, sets).tiles for map_id in graph}
     directional_tiles = directional_warp_tiles(rom)
     automatic_tiles = automatic_warp_tiles(rom)
     graph = _with_directional_warp_actions(
@@ -385,6 +385,7 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         directional_tiles,
         automatic_tiles,
     )
+    graph = _with_warp_arrivals(graph, terrain_tiles, door_tiles(rom))
     verify_against_encounter_reads(
         reachable=set(graph),
         named_maps={item.value for item in MapId},
@@ -392,6 +393,27 @@ def map_graph(rom: bytes) -> dict[int, MapNode]:
         fishable=set(fishing_tables(rom).by_map),
     )
     return graph
+
+
+def _with_warp_arrivals(
+    graph: Mapping[int, MapNode],
+    tile_grids: Mapping[int, tuple[tuple[int, ...], ...]],
+    doors: Mapping[int, frozenset[int]],
+) -> dict[int, MapNode]:
+    """Declare arrival from the destination door, never departure geometry."""
+    result = {}
+    for map_id, node in graph.items():
+        tiles = tile_grids[map_id]
+        arrivals = []
+        for y, x in node.warp_locations:
+            if not (0 <= y < len(tiles) and 0 <= x < len(tiles[y])):
+                raise CartridgeReadError("warp arrival is outside destination terrain")
+            down = tiles[y][x] in doors[node.tileset]
+            if down and y + 1 >= len(tiles):
+                raise CartridgeReadError("door arrival would leave destination terrain")
+            arrivals.append((y + int(down), x))
+        result[map_id] = replace(node, warp_arrivals=tuple(arrivals))
+    return result
 
 
 def _with_directional_warp_actions(
@@ -428,8 +450,7 @@ def _with_directional_warp_actions(
                 action
                 for action, (dy, dx) in delta.items()
                 if 0 <= passage.at[0] + dy < len(source_tiles)
-                and 0 <= passage.at[1] + dx
-                < len(source_tiles[passage.at[0] + dy])
+                and 0 <= passage.at[1] + dx < len(source_tiles[passage.at[0] + dy])
                 and source_tiles[passage.at[0] + dy][passage.at[1] + dx]
                 in directional_tiles[action]
             )
@@ -500,9 +521,7 @@ def _without_inert_directional_warps(
                 or source_tileset not in OUTSIDE_TILESETS
             ):
                 return True
-            if source_tiles[passage.at[0]][passage.at[1]] in automatic_tiles[
-                source_tileset
-            ]:
+            if source_tiles[passage.at[0]][passage.at[1]] in automatic_tiles[source_tileset]:
                 return True
             if passage.exit_action is None:
                 return False
@@ -913,6 +932,9 @@ def macro_graph(rom: bytes) -> MacroGraph:
 def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
     """Project decoded nodes without dropping the edge needed to act on a route."""
 
+    qualified = [node.warp_arrivals is not None for node in graph.values()]
+    if any(qualified) and not all(qualified):
+        raise CartridgeReadError("warp arrival qualification is incomplete")
     return MacroGraph(
         edges={
             map_id: tuple(
@@ -933,6 +955,11 @@ def macro_graph_from_nodes(graph: Mapping[int, MapNode]) -> MacroGraph:
         },
         outside_nodes=frozenset(map_id for map_id, node in graph.items() if node.is_outside),
         warp_locations={map_id: node.warp_locations for map_id, node in graph.items()},
+        warp_arrivals=(
+            {map_id: node.warp_arrivals or () for map_id, node in graph.items()}
+            if all(qualified)
+            else None
+        ),
         retained_outside_overrides={
             map_id: node.retained_outside_override
             for map_id, node in graph.items()

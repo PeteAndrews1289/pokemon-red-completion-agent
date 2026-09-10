@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon.shared-registration-qualification.v1",
+  "status": "rom_free_foundation_qualified_runtime_pending",
+  "objective": "pokemon.registered-collection.v1",
+  "targeted_tests_passed": 237,
+  "independent_capture_oracle": {
+    "acyclic_graphs": 64,
+    "initial_stock_variants_per_graph": 3,
+    "method": "exhaustive physical path enumeration independent of flow implementation"
+  },
+  "verified_engineering": [
+    "durable append-only registration observations and idempotent imports",
+    "concurrent overlap credits each new species once",
+    "abrupt process exit rolls back uncommitted database writes",
+    "payload-digest and index corruption rejection",
+    "separate global registration, local flags and physical stock",
+    "frozen initial memory and duplicate-neutral novelty projection",
+    "checkpoint-bound semantic inventory bridge rejects stale joins",
+    "registered capture demand covers chains without coexistence duplicates",
+    "registered evolution inventory reserves only explicit physical dependencies",
+    "legacy contracts and default executor behavior retained"
+  ],
+  "limits": [
+    "synthetic ROM-free observations are not live Red or Blue achievements",
+    "caller must authenticate checkpoint and adapter before recording; hashes alone do not prove gameplay",
+    "no production ledger created or existing checkpoint imported",
+    "live actor, reward admission, checkpoint contract and evolution executor migration remain pending",
+    "demand does not prove reachability, resources, branch safety or qualified execution",
+    "no external-agent audit this session"
+  ],
+  "new_gameplay_actions": 0,
+  "new_model_fits": 0,
+  "new_live_registrations": 0,
+  "current_native_model_examples": 114
+}

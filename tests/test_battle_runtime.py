@@ -326,9 +326,7 @@ def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
 
 
 def test_bounded_move_turn_rejects_invalid_policy_boundary_without_input() -> None:
-    runtime = MeasuredTurnRuntime(
-        menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
-    )
+    runtime = MeasuredTurnRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
 
     with pytest.raises(BattleRuntimeError, match="semantic MAIN menu"):
         execute_bounded_battle_move_turn(
@@ -824,9 +822,7 @@ def test_battle_intent_accepts_typed_switch_capabilities() -> None:
         switch_capabilities=frozenset({BattleSwitchCapability.RESET_STAT_STAGES}),
     )
 
-    assert intent.switch_capabilities == frozenset(
-        {BattleSwitchCapability.RESET_STAT_STAGES}
-    )
+    assert intent.switch_capabilities == frozenset({BattleSwitchCapability.RESET_STAT_STAGES})
 
 
 def test_battle_intent_rejects_untyped_switch_capabilities() -> None:
@@ -1424,9 +1420,7 @@ def test_move_decision_sink_observes_learned_choices_without_querying_teacher() 
             runtime,
             teacher,
             expected_map=MapId.CERULEAN_CITY,
-            move_decision_sink=lambda raw, slot: observed.append(
-                (raw.enemy_species_id, slot)
-            ),
+            move_decision_sink=lambda raw, slot: observed.append((raw.enemy_species_id, slot)),
         )
 
     assert final.battle_state == 0
@@ -2764,6 +2758,81 @@ def test_opted_in_zero_pp_main_snapshot_is_confirmed_as_move_learning_dialogue()
     assert final.battle_state == 0
     assert policy_calls == 1
     assert _non_wait_actions(runtime)[0] == MacroAction(MacroActionKind.CONFIRM)
+
+
+@pytest.mark.parametrize("hp_loss", [0, 7])
+def test_confirmed_move_returning_main_is_not_claimed_as_executed(hp_loss) -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+
+    def finish_suppressed(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(initial, first_party_hp=initial.battler_hp - hp_loss)
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = finish_suppressed
+    executed = _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="suppressed selected move",
+    )
+    assert executed is False
+    assert runtime.raw.battle_state == 2  # not a trainer victory
+    assert runtime.raw.battler_pp == initial.battler_pp
+
+
+@pytest.mark.parametrize("phase", [BattleMenuPhase.MOVE, BattleMenuPhase.UNKNOWN])
+def test_hp_loss_without_completed_menu_transition_cannot_prove_a_turn(phase) -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+
+    def ambiguous(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(initial, first_party_hp=initial.battler_hp - 7)
+            runtime.menu = BattleMenuState(
+                phase, selected_move_slot=1 if phase is BattleMenuPhase.MOVE else None
+            )
+
+    runtime.on_action = ambiguous
+    with pytest.raises(BattleRuntimeError, match="PP-decrement gate"):
+        _confirm_attack_with_pp_gate(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            initial_raw=initial,
+            slot=1,
+            initial_pp=35,
+            timing=BattleRuntimeTiming(max_pp_confirmation_pulses=3),
+            label="ambiguous turn",
+        )
+
+
+def test_other_slot_pp_loss_cannot_be_called_confusion_suppression() -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+
+    def wrong_move(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(initial, first_party_pp=(35, 29, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = wrong_move
+    with pytest.raises(BattleRuntimeError, match="required PP decrement"):
+        _confirm_attack_with_pp_gate(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            initial_raw=initial,
+            slot=1,
+            initial_pp=35,
+            timing=BattleRuntimeTiming(),
+            label="wrong move",
+        )
 
 
 def test_status_suppressed_turn_can_return_without_spending_pp() -> None:

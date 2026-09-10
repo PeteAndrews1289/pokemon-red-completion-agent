@@ -10,12 +10,15 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
+from pokemon_red_completion.bounded_player_episode import _retaining_binding_set
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
+    GoalAvailability,
     GoalKind,
+    GoalManagerError,
     GoalManagerQuestion,
     bind_goal_selection,
 )
@@ -32,6 +35,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalDecisionAuthority,
 )
 from pokemon_red_completion.goal_manager_trajectory import ordered_goal_manager_question
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
@@ -39,6 +43,10 @@ from pokemon_red_completion.red_goal_manager import RedGoalObservation
 
 class RedBoundedPlayerError(RuntimeError):
     """Raised when Red cannot produce a truthful generic player observation."""
+
+
+class RedNoAvailableGoalError(GoalManagerError):
+    """An action-free inventory found no executable next goal, not a failed attempt."""
 
 
 _PUBLIC_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
@@ -55,19 +63,39 @@ class RedBoundedPlayerObserver:
     actions: CountingExecutor
     collection_projector: CollectionProjector = living_collection_checkpoint
     enumerate_bindings: Callable[[RedGoalObservation], GoalBindingSet] | None = None
+    search_memory: GoalSearchMemory | None = None
+    registered_objective: bool = False
     last_live_observation: RedGoalObservation | None = field(default=None, init=False, repr=False)
 
     def __post_init__(self) -> None:
+        if type(self.registered_objective) is not bool:
+            raise ValueError("registered objective requires explicit opt-in")
+        if (getattr(self.runtime, "registration_policy", None) is not None
+                and not self.registered_objective):
+            raise ValueError(
+                "registered objective needs versioned checkpoint and reward integration"
+            )
         if not callable(self.collection_projector):
             raise TypeError("collection_projector must be callable")
         if self.enumerate_bindings is not None and not callable(self.enumerate_bindings):
             raise TypeError("enumerate_bindings must be callable")
 
     def __call__(self) -> GoalManagerCompositionObservation:
+        policy = getattr(self.runtime, "registration_policy", None)
+        if policy is not None and not self.registered_objective:
+            raise ValueError(
+                "registered objective needs versioned checkpoint and reward integration"
+            )
+        if self.registered_objective and policy is None:
+            raise ValueError("registered observer requires its frozen policy")
         self.last_live_observation = None
         live = self.runtime.adapter.observe()
         if not isinstance(live, RedGoalObservation):
             raise RedBoundedPlayerError("Red adapter returned an invalid observation")
+        if policy is not None:
+            from .red_registered_observation import project_registered_observation
+
+            live = project_registered_observation(live, policy)
         binding_set = (
             self.runtime.enumerator(self.actions).enumerate(live)
             if self.enumerate_bindings is None
@@ -75,9 +103,22 @@ class RedBoundedPlayerObserver:
         )
         if not isinstance(binding_set, GoalBindingSet):
             raise RedBoundedPlayerError("Red enumerator returned an invalid binding set")
-        collection = self.collection_projector(live)
+        collection = (live.registered_checkpoint if self.registered_objective
+                      else self.collection_projector(live))
         if not isinstance(collection, LivingCollectionCheckpoint):
             raise RedBoundedPlayerError("Red collection projector returned an invalid checkpoint")
+        if self.search_memory is not None:
+            bindings = tuple(
+                replace(binding, search_history=self.search_memory.lookup(
+                    binding.search_memory_source, collection.required_specimens_sha256,
+                )) if binding.kind is GoalKind.ACQUIRE_SPECIES else binding
+                for binding in binding_set.bindings
+            )
+            by_ref = {binding.binding_ref: binding.opportunity for binding in bindings}
+            binding_set = GoalBindingSet(tuple(
+                by_ref.get(opportunity.binding_ref, opportunity)
+                for opportunity in binding_set.opportunities
+            ), bindings)
         semantic_document = red_bounded_player_semantic_document(
             live=live,
             binding_set=binding_set,
@@ -152,11 +193,14 @@ def preflight_red_bounded_player(
     budget_meter: CompositionBudgetMeter,
     assignment_id: str,
     authorities: tuple[tuple[str, GoalDecisionAuthority], ...],
+    allow_forced_bridge: bool = False,
 ) -> RedBoundedPlayerPreflight:
     """Observe and compare authorities without executing a binding or opening an episode."""
 
     if not callable(observe):
         raise TypeError("observe must be callable")
+    if type(allow_forced_bridge) is not bool:
+        raise TypeError("allow_forced_bridge must be a bool")
     checkpoint = getattr(budget_meter, "checkpoint", None)
     if not callable(checkpoint):
         raise TypeError("budget_meter must expose checkpoint")
@@ -182,16 +226,25 @@ def preflight_red_bounded_player(
         raise RedBoundedPlayerError("preflight observer returned an invalid observation")
     if checkpoint() != initial_budget:
         raise RedBoundedPlayerError("preflight observation attempted emulator work")
+    # Exercise the same metadata-preserving wrapper as real play, without
+    # invoking a binding. This catches integration mismatches before an episode.
+    _retaining_binding_set(observation.binding_set, budget_meter)
+    if not any(
+        item.availability is GoalAvailability.AVAILABLE
+        for item in observation.binding_set.opportunities
+    ):
+        raise RedNoAvailableGoalError("goal manager needs at least one available option")
     question = ordered_goal_manager_question(
         assignment_id=assignment_id,
         decision_index=0,
         situation=observation.situation,
         opportunities=observation.binding_set.opportunities,
     )
-    if len(question.available_indices) < 2:
+    forced_bridge = allow_forced_bridge and len(question.available_indices) == 1
+    if len(question.available_indices) < 2 and not forced_bridge:
         raise RedBoundedPlayerError("preflight snapshot lacks a genuine semantic choice")
     choices_list: list[RedBoundedPlayerPreflightChoice] = []
-    for authority_id, authority in authorities:
+    for authority_id, authority in (() if forced_bridge else authorities):
         choices_list.append(_preflight_choice(authority_id, authority, question))
         if checkpoint() != initial_budget:
             raise RedBoundedPlayerError(
@@ -257,7 +310,11 @@ def red_bounded_player_semantic_document(
         # requires at least one selectable candidate when a policy is actually
         # asked to choose.
         "candidates": [item.policy_dict() for item in binding_set.opportunities],
-        "schema": "pokemon.core.goal-manager-input.v1",
+        "schema": (
+            "pokemon.core.goal-manager-input.v2"
+            if any(item.resource_quote is not None for item in binding_set.opportunities)
+            else "pokemon.core.goal-manager-input.v1"
+        ),
         "situation": live.situation.policy_dict(),
     }
     return {

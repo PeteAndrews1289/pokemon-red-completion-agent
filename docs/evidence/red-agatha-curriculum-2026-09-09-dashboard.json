@@ -1,0 +1,147 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "current_session_status": "guided_story_outcome_fitted",
+  "scope": "Agatha victory teaches one real guided outcome. 78 comparative-choice outcomes plus one curriculum outcome; no independent evaluation.",
+  "session_evidence": "docs/evidence/red-agatha-curriculum-2026-09-09.json",
+  "curriculum_contract": "forced-singleton-story-outcome-unit-weight-v1",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 241,
+    "frames": 22693,
+    "admitted_examples": 1,
+    "sampled_choices": 0,
+    "curriculum_outcomes": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-agatha-curriculum-20260909-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 78,
+    "controller_actions": 0,
+    "corpus_record_sha256": "9f265423d784bf7f72c8d0adb9757c39c545f79ba275e6dd3fb6d62a70b4e406",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 69,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 79,
+      "successful_examples": 37,
+      "total_examples": 79,
+      "train_dataset_sha256": "032426cad037da53615e071b51eac611522cb52d264203cb54449a009c193843",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012274433921661256,
+      "weighted_mse_before": 0.02815747542589614
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "94ae59edbbaf1805c4faf571411ea96b56d2f0bdb650626a96217ccb62196e64",
+      "file_sha256": "1700391178f005208c25a7dbb68c7f1edba9887f2625d5267380352de0510ccc",
+      "independent_evaluation": false,
+      "model_sha256": "0a96728643bd19fdc442ed203a2251ce8bcb4cb08aec77611b63684a58af761f",
+      "prior_model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 79,
+      "source_bundle_sha256": "1ec4409cb30020312993ddc26706c4d882e09426fda02fef27b72f8920d683f4",
+      "source_commit": "3c9d8ce6d402254ed2ef6edebc76fbd9a2697522"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10308075525885438,
+        0.000005472458354218503,
+        0.00006386730810153772,
+        0.005666691149088052,
+        0.0042107615868777395,
+        0.001327943103866516,
+        0.000790648886745499,
+        0.0000012990580759705552,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 79,
+      "total_examples": 79,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012794159867773767
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09841605225555551,
+        0.000005488301707781908,
+        0.000060402922746556494,
+        0.005667230500141521,
+        0.004211019235651004,
+        0.0013283212780501829,
+        0.0007801023633751782,
+        0.0000012884377235971177,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 79,
+      "total_examples": 79,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012274433921661259
+    }
+  },
+  "fit_report_metadata_correction": {
+    "recorded_objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+    "verified_model_objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+    "model_recomputed": false,
+    "reason": "Initial fit report retained the legacy objective label; serialized model and dataset use the verified mixed objective. Correct display metadata only; do not refit."
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "performed": false
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 15:53 UTC",
+  "location": "Route 24 — stopped after capture-item exhaustion",
+  "registered_species": 28,
+  "living_species": 23,
+  "specimens": 25,
+  "capture_items": 0,
+  "money": 109,
+  "checkpoint_sha256": "554a66c2f765d40508c7d75d94ded7df7149cb1bff2caef096c34f9ddb16d13f",
+  "live": false,
+  "controller_actions": 0
+}

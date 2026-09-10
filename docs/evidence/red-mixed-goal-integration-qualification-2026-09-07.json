@@ -1,0 +1,21 @@
+{
+  "schema": "pokemon.red.mixed-goal-integration-qualification.v1",
+  "source_bundle_sha256": "10d0144214ed358cedd445c72e6a9aed2c72b71b29464cbfe1ec10464a79f143",
+  "claims": [
+    "A future evolution objective is an ordered transition after historical profiles, not a replacement of their global declaration.",
+    "Earlier supply-only profile checks still reject changes to non-supply skills.",
+    "Zero or one capture source can reach native goal selection without sampling a fabricated source choice.",
+    "Native incremental inventory retains previous native and source rows and authenticates newly played goals using the existing episode reader.",
+    "Support-only results do not fit a model; their retained episodes must accompany the next eligible result. Source proposals are never additional targets."
+  ],
+  "focused_tests_passed": 136,
+  "typed_package_modules": 409,
+  "typed_changed_modules_and_commands": 3,
+  "new_gameplay": false,
+  "new_training_examples": 0,
+  "model_settled_examples": 58,
+  "model_sha256": "dbfedde668502467c9b4cd3df109ed3d36000656eb7217d8dc0cb1717fe370ae",
+  "independent_evaluation": false,
+  "live_mixed_goal_qualified": false,
+  "next_check": "Action-free feasibility of the prospective evolution objective at the actual retained endpoint; no unsupported trainer execution."
+}

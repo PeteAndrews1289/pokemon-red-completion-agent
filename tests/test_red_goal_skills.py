@@ -11,6 +11,7 @@ from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
+    GoalFailureReason,
     GoalKind,
     GoalUnavailableReason,
 )
@@ -29,6 +30,7 @@ from pokemon_red_completion.observation import (
 )
 from pokemon_red_completion.quest import Objective, QuestGraph, Specialist
 from pokemon_red_completion.red_acquisition import (
+    RedAreaExecutionError,
     RedAreaExecutionPolicy,
     summarize_red_area_survey,
 )
@@ -53,6 +55,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedMartResupplyGoalProvider,
     RedProgressGoalProvider,
     RedRouteGoalProvider,
+    finish_center_dialogue,
 )
 from pokemon_red_completion.red_party import party_observation_from_raw
 from pokemon_red_completion.route_executor import TraversalSnapshot
@@ -109,6 +112,7 @@ class _Reader:
     def __init__(self, *, raw: RawGameState, ready: bool) -> None:
         self.raw = raw
         self.ready = ready
+        self.dialogue = False
         self.pokedex = RedPokedexState(frozenset({9}), frozenset({9}))
         self.boxes = RedBoxCollectionState(
             tuple(RedCurrentBoxState(index, (), ()) for index in range(12)),
@@ -127,6 +131,12 @@ class _Reader:
 
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(0 if self.ready else 1, 0, 0, 0, 0)
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        return self.dialogue
+
+    def read_generic_pc_session_active(self) -> bool:
+        return getattr(self, "pc_active", False)
 
 
 class _Observer:
@@ -296,6 +306,109 @@ def test_center_restore_reaches_nurse_and_verifies_whole_party_recovery() -> Non
     assert offer.binding.verify(report).status.value == "succeeded"
     assert reader.raw.player_y == 3
     assert reader.raw.party_hp == reader.raw.party_max_hp
+
+
+@pytest.mark.parametrize("pages", [1, 3, 7])
+def test_center_healing_does_not_complete_while_farewell_is_visible(pages):
+    reader = _Reader(
+        raw=replace(_raw(hp=100), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3),
+        ready=True,
+    )
+
+    class FarewellPort(_CenterPort):
+        cancels = 0
+
+        def execute(self, action):
+            result = super().execute(action)
+            if action.kind is MacroActionKind.CONFIRM:
+                reader.dialogue = True
+            if action.kind is MacroActionKind.CANCEL:
+                self.cancels += 1
+                reader.dialogue = self.cancels < pages
+            return result
+
+    port = FarewellPort(reader)
+    offer = RedCenterRestoreGoalProvider(
+        CountingExecutor(port), reader, port, _adapter(reader), settle_frames=1
+    ).offer(_adapter(reader).observe())
+    report = offer.binding.execute()
+    assert port.cancels == pages
+    assert not reader.dialogue
+    assert report.actions_executed == 2 + 2 * pages
+
+
+@pytest.mark.parametrize("visible,at_nurse", [(True, True), (False, True), (True, False)])
+def test_travel_departure_reuses_farewell_only_at_its_boundary(visible, at_nurse):
+    from pokemon_red_completion.red_goal_skills import prepare_center_departure
+
+    reader = _Reader(
+        raw=replace(_raw(), map_id=MapId.CINNABAR_POKECENTER,
+                    player_x=3 if at_nurse else 4, player_y=3), ready=True,
+    )
+    reader.dialogue = visible
+
+    class Port(_ActionPort):
+        def execute(self, action):
+            if action.kind is MacroActionKind.CANCEL:
+                reader.dialogue = False
+            return super().execute(action)
+
+    actions = CountingExecutor(Port(reader))
+    prepare_center_departure(actions, reader)
+    assert actions.actions_executed == (2 if visible and at_nurse else 0)
+    assert reader.raw.player_x == (3 if at_nurse else 4)
+
+
+@pytest.mark.parametrize("active", [False, True])
+def test_center_departure_closes_actual_pc_session_not_merely_ready_flags(active):
+    from pokemon_red_completion.red_goal_skills import prepare_center_departure
+
+    reader = _Reader(raw=replace(_raw(), map_id=MapId.VERMILION_POKECENTER,
+                                player_x=13, player_y=4), ready=True)
+    reader.pc_active = active
+    before = reader.raw
+
+    class Port(_ActionPort):
+        def execute(self, action):
+            if action.kind is MacroActionKind.CANCEL:
+                reader.pc_active = False
+            return super().execute(action)
+
+    actions = CountingExecutor(Port(reader))
+    prepare_center_departure(actions, reader)
+    assert actions.actions_executed == (2 if active else 0)
+    assert reader.raw == before
+    assert not reader.pc_active
+
+
+def test_center_farewell_stuck_fails_without_movement():
+    reader = _Reader(
+        raw=replace(_raw(), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3), ready=True
+    )
+    reader.dialogue = True
+    actions = CountingExecutor(_ActionPort(reader))
+    with pytest.raises(RedGoalSkillError, match="farewell"):
+        finish_center_dialogue(actions, reader, maximum_attempts=2, settle_frames=1)
+    assert actions.actions_executed == 4
+    assert (reader.raw.player_x, reader.raw.player_y) == (3, 3)
+
+
+@pytest.mark.parametrize("change", ["battle", "location", "unhealed"])
+def test_center_farewell_rejects_unsafe_boundary_before_input(change):
+    raw = replace(_raw(), map_id=MapId.CINNABAR_POKECENTER, player_x=3, player_y=3)
+    raw = replace(
+        raw,
+        **{
+            "battle": {"battle_state": 1},
+            "location": {"player_x": 4},
+            "unhealed": {"party_hp": (1,)},
+        }[change],
+    )
+    reader = _Reader(raw=raw, ready=True)
+    actions = CountingExecutor(_ActionPort(reader))
+    with pytest.raises(RedGoalSkillError, match="healed nurse boundary"):
+        finish_center_dialogue(actions, reader)
+    assert actions.actions_executed == 0
 
 
 class _MartPort(_ActionPort):
@@ -472,14 +585,20 @@ class _DiscoveryExecutor(_AreaExecutor):
         self.actions.execute(MacroAction(MacroActionKind.WAIT))
 
 
-def test_area_survey_provider_captures_and_independently_reloads_collection() -> None:
+@pytest.mark.parametrize('escape_bypasses', [0, 2])
+def test_area_survey_provider_captures_and_independently_reloads_collection(
+    escape_bypasses: int,
+) -> None:
     reader = _Reader(raw=_raw(poke_balls=20), ready=True)
     port = _ActionPort(reader)
     actions = CountingExecutor(port)
     adapter = _adapter(reader)
+    area = _AreaExecutor(reader, actions)
+    area.capture_escape_bypasses = escape_bypasses
+    area.capture_throw_preparations = [{'target_status': 'healthy', 'throw_executed': False}]
     provider = RedAreaSurveyGoalProvider(
         source_id="wild:Route1:grass",
-        area_executor=_AreaExecutor(reader, actions),
+        area_executor=area,
         actions=actions,
         emulator=port,
         adapter=adapter,
@@ -497,10 +616,155 @@ def test_area_survey_provider_captures_and_independently_reloads_collection() ->
     verdict = offer.binding.verify(report)
     assert verdict.status.value == "succeeded"
     assert report.evidence["captures"] >= 2
+    assert report.evidence['capture_throw_preparations'] == tuple(area.capture_throw_preparations)
+    assert report.evidence['capture_support'] == {
+            'status_attempts': 0, 'verified_status_observations': 0,
+            'party_preparations': 0,
+            **({'escape_setup_bypasses': 2} if escape_bypasses else {}),
+            'prepared_throws': 1, 'prepared_asleep': 0,
+            'prepared_paralyzed': 0, 'prepared_full_hp': 0,
+        }
     assert not summarize_red_area_survey(
         "wild:Route1:grass",
         adapter.observe().collection_observation,
     ).missing_species_refs
+
+
+@pytest.mark.parametrize("unsafe", [False, True])
+@pytest.mark.parametrize("balls_remaining", [0, 1, 20])
+def test_area_survey_labels_verified_no_find_without_claiming_success(
+    unsafe, balls_remaining,
+) -> None:
+    reader = _Reader(raw=_raw(poke_balls=20), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+
+    class ExhaustedArea(_AreaExecutor):
+        def seek_encounter(self):
+            self.actions.execute(MacroAction(MacroActionKind.WAIT))
+            raise RedAreaExecutionError("bounded search", reason_code="survey_leg_limit_exceeded")
+
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:Route1:grass",
+        area_executor=ExhaustedArea(reader, actions),
+        actions=actions,
+        emulator=port,
+        adapter=adapter,
+    )
+    offer = provider.offer(adapter.observe())
+    assert offer.binding is not None
+    report = offer.binding.execute()
+    reader.raw = replace(reader.raw, bag_items=_raw(poke_balls=balls_remaining).bag_items)
+    if unsafe:
+        reader.ready = False
+    verdict = offer.binding.verify(report)
+    assert verdict.status.value == "failed"
+    assert verdict.failure_reason is (
+        GoalFailureReason.OUTCOME_NOT_VERIFIED if unsafe
+        else GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED if balls_remaining == 0
+        else GoalFailureReason.SEARCH_EXHAUSTED
+    )
+    assert report.evidence["search_exhausted"] is True
+    assert report.evidence["search_stop_reason"] == "survey_leg_limit_exceeded"
+    assert report.evidence["capture_survey"] == {
+        "semantic_actions": 1, "encounters_seen": 0, "captures": 0, "flees": 0,
+        "search_exhausted": True, "safety_stopped": False,
+        "search_stop_reason": "survey_leg_limit_exceeded",
+    }
+    assert report.evidence["captures"] == 0
+    assert report.evidence["encounters_seen"] == 0
+    assert (
+        report.evidence["initial_missing_specimens"] == report.evidence["final_missing_specimens"]
+    )
+    assert report.actions_executed == 1
+    assert report.frames_executed > 0
+
+
+@pytest.mark.parametrize("when", ["before_execution", "after_flee", "after_capture"])
+def test_area_survey_stops_on_faint_without_another_search_or_normalization(when):
+    reader = _Reader(raw=_raw(poke_balls=20), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    calls = []
+
+    def faint():
+        reader.raw = replace(reader.raw, party_hp=(0,))
+
+    class FaintingArea(_AreaExecutor):
+        def seek_encounter(self):
+            calls.append("seek")
+            assert calls.count("seek") == 1, "must not search again after a faint"
+            super().seek_encounter()
+            if when == "after_flee":
+                self.encountered = red_species_ref(150)  # Not a Route1 requirement.
+
+        def flee_encounter(self):
+            calls.append("flee")
+            super().flee_encounter()
+            self.actions.execute(MacroAction(MacroActionKind.WAIT))
+            faint()
+
+        def capture_encounter(self, species_ref):
+            calls.append("capture")
+            result = super().capture_encounter(species_ref)
+            faint()
+            return result
+
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:Route1:grass", area_executor=FaintingArea(reader, actions),
+        actions=actions, emulator=port, adapter=adapter,
+        policy=RedAreaExecutionPolicy(capture_quota=1),
+        normalize_after_capture=lambda: pytest.fail("unsafe endpoint must not walk to normalize"),
+    )
+    binding = provider.offer(adapter.observe()).binding
+    assert binding is not None
+    if when == "before_execution":
+        faint()
+    report = binding.execute()
+    assert report.evidence["safety_stopped"] is True
+    assert report.evidence["source_normalized"] is False
+    assert report.evidence["search_exhausted"] is False
+    assert "search_stop_reason" not in report.evidence
+    assert report.evidence["captures"] == int(when == "after_capture")
+    assert report.evidence["flees"] == int(when == "after_flee")
+    assert report.evidence["encounters_seen"] == int(when != "before_execution")
+    assert calls == ([] if when == "before_execution" else ["seek", when.removeprefix("after_")])
+    assert binding.verify(report).failure_reason is GoalFailureReason.RESOURCE_LOST
+    # Availability participates in older checkpoint fingerprints. Keep its
+    # projection stable; the execution-time safety check prevents searching.
+    assert provider.resource_availability(adapter.observe()).executable
+    # A fabricated safety marker cannot invent a faint in the referee's fresh read.
+    reader.raw = replace(reader.raw, party_hp=(180,))
+    assert binding.verify(report).failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+
+
+def test_area_survey_preserves_old_offer_but_stops_for_fainted_non_lead_before_input():
+    raw = replace(
+        _raw(poke_balls=20), party_count=2, party_species_ids=(28, 114),
+        party_levels=(55, 10), party_hp=(180, 0), party_max_hp=(180, 35),
+        party_status=(0, 0), party_moves=((57, 58, 55, 0), (106, 0, 0, 0)),
+        party_pp=((15, 10, 5, 0), (30, 0, 0, 0)),
+    )
+    reader = _Reader(raw=raw, ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    provider = RedAreaSurveyGoalProvider(
+        source_id="wild:Route1:grass", area_executor=_AreaExecutor(reader, actions),
+        actions=actions, emulator=port, adapter=adapter,
+    )
+    assert adapter.observe().party.members[0].hp == 180
+    binding = provider.offer(adapter.observe()).binding
+    assert binding is not None
+    report = binding.execute()
+    assert report.evidence["safety_stopped"] is True
+    assert binding.verify(report).failure_reason is GoalFailureReason.RESOURCE_LOST
+    assert actions.actions_executed == 0
+    reader.raw = replace(raw, party_hp=(180, 35))
+    assert provider.offer(adapter.observe()).binding is not None
+    assert actions.actions_executed == 0
 
 
 def test_area_survey_verifies_one_required_duplicate_precursor() -> None:
@@ -578,6 +842,36 @@ def test_area_survey_reserves_master_ball_for_nonordinary_targets() -> None:
 
     assert offer.binding is None
     assert offer.kind is GoalKind.ACQUIRE_SPECIES
+
+
+def test_local_discovery_refuses_exhausted_source_but_not_unseen_target() -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    adapter = _adapter(reader)
+    provider = RedEncounterDiscoveryGoalProvider(
+        source_id="wild:Route1:grass", area_executor=_DiscoveryExecutor(reader, actions),
+        actions=actions, emulator=port, adapter=adapter, source_species_numbers=(9,),
+    )
+    observed = adapter.observe()
+    assert observed.evidence.world_knowledge.satisfaction < 1.0
+    assert provider.offer(observed).unavailable_reason is GoalUnavailableReason.NO_LEGAL_TARGET
+    assert replace(provider, source_species_numbers=(9, 16)).offer(observed).binding is not None
+    assert replace(provider, source_species_numbers=None).offer(observed).binding is not None
+    assert actions.actions_executed == 0
+
+
+@pytest.mark.parametrize("numbers", [(), (True,), (0,), (152,), (9, 9), (16, 9)])
+def test_local_discovery_rejects_invalid_species(numbers) -> None:
+    reader = _Reader(raw=_raw(), ready=True)
+    port = _ActionPort(reader)
+    actions = CountingExecutor(port)
+    with pytest.raises(RedGoalSkillError, match="local species"):
+        RedEncounterDiscoveryGoalProvider(
+            source_id="wild:Route1:grass", area_executor=_DiscoveryExecutor(reader, actions),
+            actions=actions, emulator=port, adapter=_adapter(reader),
+            source_species_numbers=numbers,
+        )
 
 
 def test_encounter_discovery_learns_a_new_sighting_without_capturing() -> None:

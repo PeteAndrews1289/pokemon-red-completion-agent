@@ -1,0 +1,148 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Model65 chose evolution over capture. Spare Mankey12 became Primeape28 while retaining Mankey; actual outcome fitted into model66.",
+  "session_evidence": "docs/evidence/red-mixed-owned-evolution-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "actions": 20425,
+    "frames": 1736776,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-mixed-owned-20260908-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "0853bb7015c4bbcc4ff9a9c29e96f64e4c54988c4ea85a8c7692178798c287f1",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 56,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 66,
+      "successful_examples": 27,
+      "total_examples": 66,
+      "train_dataset_sha256": "32a222b82c2eaf0660c6a9cc8a9942e0c2d13e814ad8112e9c8eb24f9aac1438",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011440974467052554,
+      "weighted_mse_before": 0.025956641049518364
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "a412af299729cdb73093a08767641955cf33620c09a2b409bf4a2127883270cf",
+      "file_sha256": "ce98b6890e56334ebd9de97fd233a73d95a800454c0d713937f41926ebda4741",
+      "independent_evaluation": false,
+      "model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+      "prior_model_sha256": "1eae09436364a425145c51693b2214360395cdf742343ea7f0c6d21b21b4e635",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 66,
+      "source_bundle_sha256": "af2eb985659d3d3dccaf52a8c0331bb4977da67de314fa2aca0f65e836793ba7",
+      "source_commit": "da16785a9e83f8a8b3f6fe422f53ee1cd3ad1401"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0907655099281345,
+        0.000006053391093810882,
+        0.000060026316396626785,
+        0.006780950734449839,
+        0.005012521107389782,
+        0.0013114155436470827,
+        0.0006403482938802723,
+        9.381846433753869e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 66,
+      "total_examples": 66,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011619751499959476
+    },
+    "regional_source_examples": 15,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08984580632010537,
+        0.000005987317786281892,
+        0.000057856002885053385,
+        0.006381449345970198,
+        0.004724634291911077,
+        0.001311410530301738,
+        0.0006406881080274953,
+        9.382864857812393e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 66,
+      "total_examples": 66,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011440974467052556
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "Same-lineage train practice; no independent advantage or cross-game transfer claim.",
+    "Deterministic skills still own navigation, PC management, grinding and battle controls. Learned authority is the selected semantic goal.",
+    "256 observed encounters are not claimed as256 battle wins; no separate measured XP or healing-count claim.",
+    "Preview-history repair is post-run and ROM-free qualified only. Gameplay and fitting used published da16785a.",
+    "Phase3 sustained Red remains current; this is not whole-game completion.",
+    "A read-only audit found unnecessary duplicate demand after evolution. Future capture is paused pending the remaining-demand repair."
+  ],
+  "next_session": "Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice.",
+  "current_limitation": "Evolution succeeded, but static source demand incorrectly requests another Mankey after Primeape is retained. Repair remaining-demand accounting before more capture. Model66 has not played; Phase3 remains open."
+}

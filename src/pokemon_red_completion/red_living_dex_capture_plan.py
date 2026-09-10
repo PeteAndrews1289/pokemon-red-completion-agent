@@ -30,7 +30,10 @@ from pokemon_red_completion.living_dex_capture_curriculum import (
     LivingDexProspectiveCapturePlan,
     LivingDexProspectiveCaptureSlot,
 )
-from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
+from pokemon_red_completion.living_dex_option_value import (
+    LIVING_DEX_LEGACY_OPTION_KINDS,
+    LivingDexOptionKind,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 from pokemon_red_completion.red_goal_manager import RedStoryGoalBindingProvider
@@ -614,7 +617,8 @@ class RedLivingDexCapturePlanFeasibility:
         self.plan.__post_init__()
         if (
             not isinstance(self.capabilities, tuple)
-            or tuple(item.option_kind for item in self.capabilities) != tuple(LivingDexOptionKind)
+            or tuple(item.option_kind for item in self.capabilities)
+            != LIVING_DEX_LEGACY_OPTION_KINDS
             or len({item.capability_sha256 for item in self.capabilities}) != len(self.capabilities)
         ):
             raise RedLivingDexCapturePlanError("Red capture capability audit is incomplete")

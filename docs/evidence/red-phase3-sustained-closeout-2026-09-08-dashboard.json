@@ -1,0 +1,139 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Phase 3 bounded milestone complete: two linked chains with 5 and 3 genuine model choices, two new living species (Arbok and Electrode), 54,971 actions / 4,913,974 frames including failures and support. Model75: 75 fitted outcomes, 33 successful, 65 distinct rows. 28 living species / 29 specimens / 33 registered; no losses or observed faints. Correlated development, not independent advantage or full Red.",
+  "session_evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 498,
+    "frames": 30432,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase3-chain-20260908-12-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "f6ae563b993cfa57e8b50e05ec81dc422d323dad99165cc3f7d73df9e8f85570",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 65,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 75,
+      "successful_examples": 33,
+      "total_examples": 75,
+      "train_dataset_sha256": "8457da7ba147c6c8f446ed94f503bc885c3e552c6191ac0b18916b016c836ce7",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012487613513127802,
+      "weighted_mse_before": 0.02770107230968175
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "6e0ad75543fd5ab2b4b29b0cc8a2d092b53dffa61371aa5ef6c3632d2c491ba3",
+      "file_sha256": "a09cfc32493cef55c1cada33324a4be18e0eb4d1b11e28359c4c91c7a34fd342",
+      "independent_evaluation": false,
+      "model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+      "prior_model_sha256": "ec4c78ff88ce18a32fe67cbdcfd3dec6992eb73d0bac6560084f8855487b2c9b",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 75,
+      "source_bundle_sha256": "8701b4d7ad83739525db9c30752c8756def2ff5ee635b9703262e070637157d7",
+      "source_commit": "3d3fc4142cea6b54a1326ac27682743c47795ccf"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.10157129578132254,
+        0.000005613519210317848,
+        0.00006119277645119471,
+        0.005804707543609936,
+        0.004312890163031321,
+        0.0013132655854987724,
+        0.0008005735301226981,
+        0.0000013428891080174158,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 75,
+      "total_examples": 75,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012652320198706088
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.1000826374849399,
+        0.000005607893375421925,
+        0.00006119123619618321,
+        0.005808567672369214,
+        0.004316004520343152,
+        0.0013126552085011825,
+        0.0008005386172497059,
+        0.000001318985175506432,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 75,
+      "total_examples": 75,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012487613513127806
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "This is a small semantic goal-value model over deterministic skills. No independent advantage, full-game learned completion or cross-game transfer is established. Model75 has not played after its last fit; zero balls and9currency remain.",
+  "next_session": "From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion."
+}

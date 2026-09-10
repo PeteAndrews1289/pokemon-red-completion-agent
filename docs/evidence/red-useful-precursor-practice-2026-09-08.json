@@ -1,0 +1,175 @@
+{
+  "schema": "pokemon.red.useful-precursor-practice.v1",
+  "classification": "Authorized same-lineage practice restart; useful spare capture and one actual regional outcome fitted",
+  "source_commit": "06371c4b40f14dad5e24a3e09e4052f088733c56",
+  "source_bundle_sha256": "38d4b4081ad89df99ced9bc4e8f65c6e815c34481ea4b2e3724eb482aa928771",
+  "episode_id": "red-fresh-practice-20260908-causal",
+  "manifest_sha256": "bb6c44b78222b077febc30ebcdf5cd51ac8fd4c730779f8fd84e5dd9d96e5374",
+  "checkpoint_sha256": "f4c4b577347d0d54f296ed697c5f5ce690d98da813dc73a35e183cfe27389059",
+  "choice_record_sha256": "19ac9817e309956567db9fd98948e8097ab67a5d641df17543b00abca4528aa3",
+  "outcome_record_sha256": "d0cb0deb2109a01972fdbf943f4745754a782779d2ed9cbcd6193cdb7ed203eb",
+  "origin": {
+    "historical_checkpoint_sha256": "c25d56166a3f586118052c9f6bfd8f047a8a8f52c1b00254165e40d601b77786",
+    "user_authorized_restart": true,
+    "same_lineage": true,
+    "uninterrupted_continuation": false,
+    "independent_evaluation": false,
+    "prior_failure": {
+      "actions": 853,
+      "choice_sha256": "3886b78e86c2d77519bdcbd04e69971d5e8026aef3b134f85260693f8ba08cf1",
+      "episode_id": "red-alternate-precursor-20260908-causal",
+      "fit_eligible": false,
+      "frames": 52068,
+      "manifest_sha256": "908e55810b6a17f7aa037cbec46b084af15ee2dc21a7185fca29810151313d88",
+      "reason": "No authenticated terminal checkpoint retained.",
+      "retry": false
+    }
+  },
+  "decision": {
+    "behavior_model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+    "candidates": [
+      "wild:Route11:grass",
+      "wild:Route4:grass",
+      "wild:Route24:grass",
+      "wild:Route10:grass"
+    ],
+    "selected_source": "wild:Route4:grass",
+    "exploration_mix": 0.25,
+    "menu_sha256": "d3dcaa6c226057875e638d15f88cf1d7c8e1eeb49793f3c911bf46c341e3878f",
+    "model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+    "policy_id": "living-dex-regional-source-softmax-v1",
+    "probabilities": [
+      0.270357327550507,
+      0.2509482581688958,
+      0.24829113170201667,
+      0.23040328257858048
+    ],
+    "scores": [
+      0.5942196964400961,
+      0.49619125406648096,
+      0.48199087222731324,
+      0.38075589201904725
+    ],
+    "seed": 2026090804,
+    "selected_candidate_index": 1,
+    "temperature": 1,
+    "operator_selected_destination": false,
+    "forced_parent_learning_examples": 0,
+    "teacher_fallbacks": 0
+  },
+  "outcome": {
+    "status": "succeeded",
+    "actions": 748,
+    "frames": 45276,
+    "captured_species": "Ekans",
+    "captured_level": 6,
+    "specimens_before": 26,
+    "specimens_after": 27,
+    "distinct_living_species_before": 26,
+    "distinct_living_species_after": 26,
+    "registered_species": 31,
+    "undeclared_specimen_losses": 0,
+    "retained_ekans": 2,
+    "arbok_obtained": false,
+    "owned_surplus_level_evolution": {
+      "source": 23,
+      "target": 24,
+      "evolution_level": 22,
+      "duplicate_acquisitions_needed": 0
+    },
+    "capture_survey": {
+      "captures": 1,
+      "encounters_seen": 6,
+      "flees": 5,
+      "safety_stopped": false,
+      "search_exhausted": false,
+      "semantic_actions": 59
+    },
+    "capture_support": {
+      "party_preparations": 1,
+      "status_attempts": 3,
+      "verified_status_observations": 1
+    }
+  },
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 26,
+    "registered_species": 31,
+    "required_specimens_remaining": 94,
+    "required_specimens_sha256": "9df36601181940ba39bd7f94d5db36c3d2f9f5a8e73661b8a2818faaae4dbe85",
+    "retained_captures": 26,
+    "specimen_ledger_sha256": "8e59ec48d85f59f4a118df993bdd68e8884fce3ee9cbb88f8b3a7a3fcc006f41",
+    "storage_headroom": 18,
+    "total_living_specimens": 27,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "capture_items_before": 4,
+    "capture_items_after": 2,
+    "money_before": 209,
+    "money_after": 209,
+    "fainted_party_members": 0,
+    "capture_helper_hp": 34,
+    "capture_helper_max_hp": 39
+  },
+  "trace": {
+    "actions": 748,
+    "frames": 45276,
+    "observed_wild_entries": 8,
+    "ball_changes": 2,
+    "observed_any_faint": false,
+    "observed_any_trainer_battle": false,
+    "execution_errors": 0
+  },
+  "training": {
+    "retained_examples": 67,
+    "successful_examples": 28,
+    "distinct_selected_feature_rows": 57,
+    "new_examples": 1,
+    "prior_rows_retained": true,
+    "model_sha256": "75408d6f80c8dc3b39c3089ec075bd34b256de65bdd1efbf531099bb8cca8ec3",
+    "model_record_sha256": "75f047871fd46c331a11e4068c0a1144683f4f9bdf4d28f9ad9ea267a0272c64",
+    "corpus_sha256": "6a60ef85ebb00fd230ccc27f640a9b57d61fc41ce7c913f8bb0c974a9d289fe3",
+    "corpus_record_sha256": "de09defa4eeffd8f02eba5c4a468ee3a84510912a494a4eb0934bd43ec71f3f1",
+    "retained_native_episodes": 46,
+    "retained_regional_choices": 16,
+    "updated_model_has_played": false,
+    "in_sample_only": true,
+    "completion_gain_target": 0,
+    "dependency_unlock_gain_target": 0
+  },
+  "audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "map_id": 15,
+    "x": 73,
+    "y": 11,
+    "input_ready": true,
+    "battle_state": 0,
+    "next_source_candidates": [
+      "wild:Route24:grass",
+      "wild:Route11:grass",
+      "wild:Route10:grass"
+    ],
+    "route4_demand_closed": true,
+    "unique_owned_surplus_target": "Ekans to Arbok"
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "prior_trial_retries": 0,
+    "practice_restarts": 1
+  },
+  "limitations": [
+    "One correlated training lesson, not generalization or demonstrated model advantage.",
+    "Learned authority selects a destination; navigation, capture preparation and controller decisions remain deterministic skills.",
+    "The spare enables a future retained-base evolution; Arbok is not yet obtained. Explicit completion/dependency gain targets remain zero in this fit.",
+    "Safe travel-budget repair did not reach its interruption limit in this run; exact-cap live behavior remains untested.",
+    "The previous Route10 failure remains excluded from fitting because its true terminal was not retained; its cost is preserved, not erased."
+  ],
+  "next_session": "Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal."
+}

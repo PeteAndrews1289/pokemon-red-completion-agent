@@ -1,0 +1,33 @@
+{
+  "schema": "pokemon.red.switch-entry-screen-qualification.v1",
+  "status": "qualified_rejection_screen_recovery_pending",
+  "retained_state_sha256": "ef23d074ce55ab15923661058ff4574a9f07c34a98da0aef533204b1264a7799",
+  "focused_tests_passed": 364,
+  "full_suite": false,
+  "ruff_passed": true,
+  "mypy_source_files": 430,
+  "new_actions": 0,
+  "new_frames": 0,
+  "items_spent": 0,
+  "model_queries": 0,
+  "training_examples": 0,
+  "model_fitted": false,
+  "model_fitted_outcomes": 76,
+  "read_only_actual_state": {
+    "incoming_moves": [3, 8, 34, 37],
+    "preparation_candidate_slots": [6],
+    "entry_screen_candidate_slots": [],
+    "exact_state_bytes_unchanged": true,
+    "held_buttons": []
+  },
+  "survival_bound": false,
+  "recovery_executed": false,
+  "gameplay_running": false,
+  "independent_transfer_test": false,
+  "limitations": [
+    "Type screening rejects exposed reserves; neutral damage, critical hits, multi-hit damage and status are not survival-qualified.",
+    "No healing budget or healing execution is introduced by this qualification.",
+    "Existing health, switch-count and move-between-switch guards remain unchanged.",
+    "No new learned authority or training output; bounded recovery still blocks the named story-versus-preparation lesson."
+  ]
+}

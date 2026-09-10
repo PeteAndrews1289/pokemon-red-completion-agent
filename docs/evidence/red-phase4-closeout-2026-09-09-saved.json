@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-09 15:02 UTC",
+  "location": "Hall of Fame — Champion verified; Phase4 complete. Saved observation, not live play.",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 30,
+  "capture_items": 0,
+  "money": 30418,
+  "checkpoint_sha256": "3cae71742bbc25577b9b45c3bae2521a3dca2579d9b5c57606531be09ac08c88",
+  "live": false,
+  "controller_actions": 0
+}

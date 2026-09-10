@@ -113,8 +113,17 @@ class TrainerSightZone:
         )
 
 
-def trainer_headers(rom: bytes, map_ids: Collection[int]) -> tuple[TrainerHeader, ...]:
-    """Decode map trainer headers through each map script's loaded pointer."""
+def trainer_headers(
+    rom: bytes, map_ids: Collection[int], *, full_event_offsets: bool = False
+) -> tuple[TrainerHeader, ...]:
+    """Decode map trainer headers through each map script's loaded pointer.
+
+    Historical route/menu reconstruction retains the legacy truncated bit offset
+    by default. New callers must opt into cartridge-accurate full offsets; do not
+    silently switch previously recorded capability menus to the corrected mode.
+    """
+    if type(full_event_offsets) is not bool:
+        raise TypeError("full_event_offsets must be boolean")
 
     found: list[TrainerHeader] = []
     for map_id in sorted(set(map_ids)):
@@ -123,14 +132,24 @@ def trainer_headers(rom: bytes, map_ids: Collection[int]) -> tuple[TrainerHeader
         # engaged by map script, not by an ordinary line-of-sight header.
         # Only cartridge facings understood by the sight engine can therefore
         # require a trainer-header table.
-        events = tuple(
+        all_trainers = tuple(
             event
             for event in map_object_events(rom, {map_id})
-            if event.is_trainer and event.direction_or_range in _OBJECT_FACING
+            if event.is_trainer
         )
+        events = tuple(e for e in all_trainers if e.direction_or_range in _OBJECT_FACING)
         if not events:
             continue
-        found.extend(_trainer_headers_for_map(rom, map_id, events))
+        # A valid table can include zero-range, interaction-only trainers before
+        # ordinary sight trainers. Decode the complete table before filtering;
+        # removing those objects first makes the real table look malformed.
+        headers = _trainer_headers_for_map(rom, map_id, all_trainers, full_event_offsets)
+        sight_slots = {event.object_index for event in events}
+        for header in headers:
+            if header.sprite_index in sight_slots:
+                found.append(header)
+            elif header.engage_distance != 0:
+                raise CartridgeReadError("non-facing trainer has nonzero sight distance")
     return tuple(found)
 
 
@@ -138,6 +157,7 @@ def _trainer_headers_for_map(
     rom: bytes,
     map_id: int,
     trainer_events: tuple[MapObjectEvent, ...],
+    full_event_offsets: bool = False,
 ) -> tuple[TrainerHeader, ...]:
     if not 0 <= map_id < MAP_ID_LIMIT:
         raise CartridgeReadError(f"map id {map_id} is outside the header table")
@@ -167,8 +187,7 @@ def _trainer_headers_for_map(
         referenced = bank_offset(bank, address)
         event_address = int.from_bytes(rom[referenced + 2 : referenced + 4], "little")
         if rom[referenced] in trainer_slots or (
-            rom[referenced + 1] & 0x0F == 0
-            and EVENT_FLAGS_START <= event_address < EVENT_FLAGS_END
+            rom[referenced + 1] & 0x0F == 0 and EVENT_FLAGS_START <= event_address < EVENT_FLAGS_END
         ):
             plausible_references += 1
         candidate = _decode_header_candidate(
@@ -177,6 +196,7 @@ def _trainer_headers_for_map(
             map_id,
             address,
             trainer_events,
+            full_event_offsets,
         )
         if candidate is not None and candidate not in candidates:
             candidates.append(candidate)
@@ -202,6 +222,7 @@ def _decode_header_candidate(
     map_id: int,
     address: int,
     trainer_events: tuple[MapObjectEvent, ...],
+    full_event_offsets: bool = False,
 ) -> tuple[TrainerHeader, ...] | None:
     start = bank_offset(bank, address)
     event_by_slot = {event.object_index: event for event in trainer_events}
@@ -230,7 +251,11 @@ def _decode_header_candidate(
             or any(not 0x4000 <= pointer <= 0x7FFF for pointer in text_pointers)
         ):
             return None
-        event_flag = (event_address - EVENT_FLAGS_START) * 8 + sprite_index % 8
+        event_flag = (event_address - EVENT_FLAGS_START) * 8 + (
+            sprite_index if full_event_offsets else sprite_index % 8
+        )
+        if full_event_offsets and event_flag >= (EVENT_FLAGS_END - EVENT_FLAGS_START) * 8:
+            return None
         decoded.append(
             TrainerHeader(
                 map_id=map_id,
@@ -241,6 +266,43 @@ def _decode_header_candidate(
             )
         )
     return None
+
+
+def static_trainer_sight_zones(
+    headers: Collection[TrainerHeader],
+    events: Collection[MapObjectEvent],
+    event_flags: bytes,
+) -> tuple[TrainerSightZone, ...]:
+    """Quote off-map ordinary trainers, never impersonating a live observation.
+
+    A candidate uses cartridge position/facing and observed persistent events.
+    Its visibility is unknown (reported false); execution must rebind to actual
+    engine objects on arrival. Missing event coverage is not an undefeated bit.
+    """
+    if not isinstance(event_flags, bytes):
+        raise CartridgeReadError("static trainer inventory requires observed event bytes")
+    objects = {(e.map_id, e.object_index): e for e in events if e.is_trainer}
+    if len(objects) != sum(e.is_trainer for e in events):
+        raise CartridgeReadError("static trainer inventory contains duplicate objects")
+    seen = set()
+    result = []
+    for header in headers:
+        identity = (header.map_id, header.sprite_index)
+        event = objects.get(identity)
+        if identity in seen or event is None:
+            raise CartridgeReadError("static trainer header has no unique object binding")
+        seen.add(identity)
+        if header.event_flag >= len(event_flags) * 8:
+            raise CartridgeReadError("static trainer defeated event is not observed")
+        facing = _OBJECT_FACING.get(event.direction_or_range)
+        if facing is None or event.trainer_class is None or event.trainer_set is None:
+            raise CartridgeReadError("static trainer object cannot be quoted")
+        result.append(TrainerSightZone(
+            header.map_id, header.sprite_index, event.trainer_class, event.trainer_set,
+            event.at, facing, header.engage_distance, header.event_flag,
+            event_flag_is_set(event_flags, header.event_flag), False,
+        ))
+    return tuple(result)
 
 
 def trainer_sight_zones(
@@ -306,6 +368,7 @@ class Gen1TrainerSightProjector:
 
     rom: bytes
     reader: PokemonRedStateReader
+    full_event_offsets: bool = False
     _events: dict[int, tuple[MapObjectEvent, ...]] = field(default_factory=dict, init=False)
     _headers: dict[int, tuple[TrainerHeader, ...]] = field(default_factory=dict, init=False)
 
@@ -314,7 +377,9 @@ class Gen1TrainerSightProjector:
             return ()
         if raw.map_id not in self._events:
             self._events[raw.map_id] = map_object_events(self.rom, {raw.map_id})
-            self._headers[raw.map_id] = trainer_headers(self.rom, {raw.map_id})
+            self._headers[raw.map_id] = trainer_headers(
+                self.rom, {raw.map_id}, full_event_offsets=self.full_event_offsets
+            )
         events = self._events[raw.map_id]
         headers = self._headers[raw.map_id]
         zones = trainer_sight_zones(
@@ -324,7 +389,5 @@ class Gen1TrainerSightProjector:
             self.reader.read_current_map_objects(),
         )
         return tuple(
-            TraversalHazard(at=at, kind="trainer_sight")
-            for zone in zones
-            for at in zone.lane
+            TraversalHazard(at=at, kind="trainer_sight") for zone in zones for at in zone.lane
         )

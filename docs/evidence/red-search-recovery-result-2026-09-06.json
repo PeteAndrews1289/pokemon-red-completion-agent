@@ -1,0 +1,222 @@
+{
+  "authenticated_snapshots": 51,
+  "checkpoint_record_sha256": "9f626320f7d39c9a66fcdb6f9bb87667c7ad959c6b1a448b03f50433a739d824",
+  "component_exceptions": 0,
+  "endpoint_inspection": {
+    "collection": {
+      "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+      "living_species": 14,
+      "registered_species": 19,
+      "required_specimens_remaining": 106,
+      "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+      "retained_captures": 14,
+      "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+      "storage_headroom": 9,
+      "total_living_specimens": 17,
+      "undeclared_specimen_losses": 0
+    },
+    "controller_actions": 0,
+    "expanded_profile_executed": false,
+    "expanded_profile_sha256": "0ae381c09ac805f2d6ebf880a7e459b7e90b24f7c7bcb51f13fac7d470666d39",
+    "frames_advanced": 0,
+    "independent_generalization": false,
+    "menus": {
+      "expanded_local_development": {
+        "acquire_species": {
+          "availability": "available",
+          "reason": null
+        },
+        "advance_story": {
+          "availability": "unavailable",
+          "reason": "temporarily_blocked"
+        },
+        "develop_team": {
+          "availability": "available",
+          "reason": null
+        },
+        "evolve_species": {
+          "availability": "unavailable",
+          "reason": "missing_capability"
+        },
+        "explore": {
+          "availability": "available",
+          "reason": null
+        },
+        "manage_storage": {
+          "availability": "unavailable",
+          "reason": "missing_capability"
+        },
+        "recover_control": {
+          "availability": "unavailable",
+          "reason": "no_legal_target"
+        },
+        "restore_team": {
+          "availability": "available",
+          "reason": null
+        },
+        "resupply": {
+          "availability": "unavailable",
+          "reason": "missing_resource"
+        }
+      },
+      "original": {
+        "acquire_species": {
+          "availability": "available",
+          "reason": null
+        },
+        "advance_story": {
+          "availability": "unavailable",
+          "reason": "temporarily_blocked"
+        },
+        "develop_team": {
+          "availability": "unavailable",
+          "reason": "missing_capability"
+        },
+        "evolve_species": {
+          "availability": "unavailable",
+          "reason": "missing_capability"
+        },
+        "explore": {
+          "availability": "available",
+          "reason": null
+        },
+        "manage_storage": {
+          "availability": "unavailable",
+          "reason": "missing_capability"
+        },
+        "recover_control": {
+          "availability": "unavailable",
+          "reason": "no_legal_target"
+        },
+        "restore_team": {
+          "availability": "available",
+          "reason": null
+        },
+        "resupply": {
+          "availability": "unavailable",
+          "reason": "missing_resource"
+        }
+      }
+    },
+    "model_fitted": false,
+    "original_profile_sha256": "2b74125f55cd8245b2406b4f540d4574ecb46fefce284362e6a2a2409f30264b",
+    "party_levels": [
+      63,
+      55,
+      55,
+      55,
+      55,
+      55
+    ],
+    "restored_checkpoint_sha256": "9f626320f7d39c9a66fcdb6f9bb87667c7ad959c6b1a448b03f50433a739d824",
+    "restored_original_semantics_verified": true,
+    "saved_bytes_unchanged": true,
+    "schema": "pokemon.red.search-recovery-endpoint-inspection.v1"
+  },
+  "episode": {
+    "authority_decisions": 1,
+    "authority_id": "living-dex-causal-shadow",
+    "completion_satisfied": false,
+    "decisions": 1,
+    "forced_singleton_steps": 0,
+    "private_binding_fields": 0,
+    "private_path_fields": 0,
+    "recovery_attempts": 0,
+    "schema": "pokemon.core.bounded-player-episode-result.v1",
+    "status": "durable_terminal",
+    "steps": [
+      {
+        "actions_executed": 215,
+        "available_goal_count": 2,
+        "available_menu_sha256": "41a90de9b79eddf879135c11cca807cfeeeaa41cb2ecddaa4895279bfac220fc",
+        "collection_after": {
+          "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+          "living_species": 14,
+          "registered_species": 19,
+          "required_specimens_remaining": 106,
+          "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+          "retained_captures": 14,
+          "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+          "storage_headroom": 9,
+          "total_living_specimens": 17,
+          "undeclared_specimen_losses": 0
+        },
+        "collection_before": {
+          "completion_contract_sha256": "0e8bfd140dabb8df47b7fe51c24ce898e9ab9643bf8dfcccd55c95e7183c6b31",
+          "living_species": 14,
+          "registered_species": 19,
+          "required_specimens_remaining": 106,
+          "required_specimens_sha256": "556f3c48c8cf230efaeb8169213e53e613ea84d8ab05e2a3c54ee5c1ee0cc1e2",
+          "retained_captures": 14,
+          "specimen_ledger_sha256": "1018b152b89d17c909d212fb4f4515d26d48b654421d54d2a8ff08235a80bf1e",
+          "storage_headroom": 9,
+          "total_living_specimens": 17,
+          "undeclared_specimen_losses": 0
+        },
+        "decision_ordinal": 1,
+        "failure_reason": "search_exhausted",
+        "frames_executed": 8244,
+        "policy_context_sha256": "8a7f864d7d18d1af9e2b052992aa3c541e79f1fe4b78b4dd3dbb0f19a8385371",
+        "recovery_attempt": false,
+        "selected_kind": "acquire_species",
+        "selection_mode": "authority",
+        "semantic_state_changed": true,
+        "status": "failed"
+      }
+    ],
+    "stop_reason": "recovery_goal_repeated",
+    "teacher_fallbacks": 0,
+    "total_actions": 215,
+    "total_frames": 8244
+  },
+  "episode_id": "red-search-recovery-20260906-a-causal",
+  "executed_deterministic_choices": 1,
+  "executed_model_ranked_choices": 0,
+  "independent_evaluation": false,
+  "interpretation": "The unchanged bounded search remains unsuccessful. Its settled negative outcome and unchanged fresh ledger now survive a typed stop; the saved state restores exactly. The rejected second proposal is not an executed learned choice. Expanded local development was inspected with zero input, not executed.",
+  "known_state_regression": true,
+  "model_settled_examples": 31,
+  "model_sha256": "95f62eaafc55a053cf65e23a8dcbf99955360040b85ef56ad8eff3e925edb472",
+  "new_fits": 0,
+  "new_training_examples": 0,
+  "party_unchanged": true,
+  "qualification": {
+    "external_reviewers_invoked": false,
+    "focused_and_registry_tests_passed": 311,
+    "new_full_suite_pass_claimed": false,
+    "subsequent_runner_boundary_tests_passed": 46,
+    "typechecked_files": 399
+  },
+  "recorded_goal_choices": 1,
+  "rejected_model_ranked_recovery_proposals": 1,
+  "repeated_goal_controller_actions": 0,
+  "resources_after": {
+    "accuracy_boost_count": 3,
+    "attack_boost_count": 1,
+    "capture_item_count": 19,
+    "healing_item_count": 18,
+    "money": 649,
+    "revive_item_count": 3,
+    "special_boost_count": 8,
+    "status_recovery_item_count": 13
+  },
+  "resources_before": {
+    "accuracy_boost_count": 3,
+    "attack_boost_count": 1,
+    "capture_item_count": 19,
+    "healing_item_count": 18,
+    "money": 649,
+    "revive_item_count": 3,
+    "special_boost_count": 8,
+    "status_recovery_item_count": 13
+  },
+  "schema": "pokemon.red.search-recovery-qualification.v1",
+  "source_bundle_sha256": "362d994cc12ff9a22dd339caa1cf61bb3a63fbee2b4449d5bc125f5cedcfa2c5",
+  "source_commit": "1fb2d883a24ecf87c153a00d8439f617a47c5d7d",
+  "split": {
+    "partition": "train",
+    "root_lineage_id": "red-goal-root-82276184a2d8aa1c13649695b485b8306af2a7dadd7521536c24199f47865ddd"
+  },
+  "status": "engineering_repair_verified_not_training",
+  "trajectory_manifest_sha256": "9f0b9ed26f77e419fdf02a6b196626990e51e36bd16a0e45e7ff6157f12816a7"
+}

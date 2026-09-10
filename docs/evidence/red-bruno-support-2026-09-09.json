@@ -1,0 +1,256 @@
+{
+  "schema": "pokemon.red.bruno-support-result.v1",
+  "session": "2026-09-09-bruno-support",
+  "source_commit": "738d2cd7f25fb44d2dab8057f33c5e8b576c4c24",
+  "source_bundle_sha256": "11a469f0e7449168074f0f43a4b1877be70b8aa9525ed2402dad682938073ce4",
+  "implementation": {
+    "reserve_last_full_restore": "Prospective opt-in refuses the final Full Restore for healthy targets at or above half HP. Status and sub-half-health recovery, narrower items and historical profiles retain behavior.",
+    "historical_v4_utility_unchanged": true,
+    "route_drift_guard_unchanged": true
+  },
+  "attempts": [
+    {
+      "candidate_count": 0,
+      "checkpoint_sha256": "c46682b93c1fe4bc2035300f1d41fc9653e8e9ac3abcf2e75b9039f0c21281b4",
+      "eligible_examples": 0,
+      "eligible_source_examples": 0,
+      "episode_id": "red-story-readiness-20260909-01-causal",
+      "independent_evaluation": false,
+      "manifest_sha256": "aa1846331e89f05d793cbf90d29e2db53f35395d994f1157ce25742d80eb42f8",
+      "model_fitted": false,
+      "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+      "parent_episode": {
+        "authority_decisions": 0,
+        "authority_id": "living-dex-causal-shadow",
+        "completion_satisfied": false,
+        "decisions": 1,
+        "forced_singleton_steps": 1,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "recovery_attempts": 0,
+        "schema": "pokemon.core.bounded-player-episode-result.v1",
+        "status": "durable_terminal",
+        "steps": [
+          {
+            "actions_executed": 6,
+            "available_goal_count": 1,
+            "available_menu_sha256": "a71778d4da748bfd077118e92306f55f779ee6dd9494e650332c0014f636100e",
+            "collection_after": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 28,
+              "registered_species": 33,
+              "required_specimens_remaining": 92,
+              "required_specimens_sha256": "9d2010e371a0e0456207f2f0461d0f9c0ed80c4f4b83d3a79bc185741dbcb60e",
+              "retained_captures": 28,
+              "specimen_ledger_sha256": "e3211a707efc0cb1956d59ca8bf07f9bd77a7c38a469fb7d650b42eb1712c346",
+              "storage_headroom": 2,
+              "total_living_specimens": 30,
+              "undeclared_specimen_losses": 0
+            },
+            "collection_before": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 28,
+              "registered_species": 33,
+              "required_specimens_remaining": 92,
+              "required_specimens_sha256": "9d2010e371a0e0456207f2f0461d0f9c0ed80c4f4b83d3a79bc185741dbcb60e",
+              "retained_captures": 28,
+              "specimen_ledger_sha256": "e3211a707efc0cb1956d59ca8bf07f9bd77a7c38a469fb7d650b42eb1712c346",
+              "storage_headroom": 2,
+              "total_living_specimens": 30,
+              "undeclared_specimen_losses": 0
+            },
+            "decision_ordinal": 1,
+            "failure_reason": "binding_failed",
+            "frames_executed": 300,
+            "policy_context_sha256": "5dbff3909479944514d592c61ee5ca987742f0a253820128d299961b1ff0ba87",
+            "recovery_attempt": false,
+            "selected_kind": "advance_story",
+            "selection_mode": "forced_singleton",
+            "semantic_state_changed": false,
+            "status": "failed"
+          }
+        ],
+        "stop_reason": "verified_failure",
+        "teacher_fallbacks": 0,
+        "total_actions": 6,
+        "total_frames": 300
+      },
+      "parent_overridden": false,
+      "proposal_record_sha256": "4ebb64d28f4a4a55f38d868244297354d21cff2827c44828f90e2739fc0777c2",
+      "proposed_source": null,
+      "schema": "pokemon.red.regional-goal-step-result.v1",
+      "source_acquisition_attempted": false,
+      "source_proposal_fitted": false
+    },
+    {
+      "candidate_count": 0,
+      "checkpoint_sha256": "43645b73ebafad6f6c36605908f67d4814a892355c803ab55a36ffd9d44e4f3c",
+      "eligible_examples": 0,
+      "eligible_source_examples": 0,
+      "episode_id": "red-story-room-continuation-20260909-01-causal",
+      "independent_evaluation": false,
+      "manifest_sha256": "cefc86c6e39a6033bb69df54b9af01c41a318a8d0775d6653da296c6e679f3fc",
+      "model_fitted": false,
+      "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+      "parent_episode": {
+        "authority_decisions": 0,
+        "authority_id": "living-dex-causal-shadow",
+        "completion_satisfied": false,
+        "decisions": 1,
+        "forced_singleton_steps": 1,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "recovery_attempts": 0,
+        "schema": "pokemon.core.bounded-player-episode-result.v1",
+        "status": "durable_terminal",
+        "steps": [
+          {
+            "actions_executed": 177,
+            "available_goal_count": 1,
+            "available_menu_sha256": "a71778d4da748bfd077118e92306f55f779ee6dd9494e650332c0014f636100e",
+            "collection_after": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 28,
+              "registered_species": 33,
+              "required_specimens_remaining": 92,
+              "required_specimens_sha256": "9d2010e371a0e0456207f2f0461d0f9c0ed80c4f4b83d3a79bc185741dbcb60e",
+              "retained_captures": 28,
+              "specimen_ledger_sha256": "e3211a707efc0cb1956d59ca8bf07f9bd77a7c38a469fb7d650b42eb1712c346",
+              "storage_headroom": 2,
+              "total_living_specimens": 30,
+              "undeclared_specimen_losses": 0
+            },
+            "collection_before": {
+              "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+              "living_species": 28,
+              "registered_species": 33,
+              "required_specimens_remaining": 92,
+              "required_specimens_sha256": "9d2010e371a0e0456207f2f0461d0f9c0ed80c4f4b83d3a79bc185741dbcb60e",
+              "retained_captures": 28,
+              "specimen_ledger_sha256": "e3211a707efc0cb1956d59ca8bf07f9bd77a7c38a469fb7d650b42eb1712c346",
+              "storage_headroom": 2,
+              "total_living_specimens": 30,
+              "undeclared_specimen_losses": 0
+            },
+            "decision_ordinal": 1,
+            "failure_reason": null,
+            "frames_executed": 17137,
+            "policy_context_sha256": "5dbff3909479944514d592c61ee5ca987742f0a253820128d299961b1ff0ba87",
+            "recovery_attempt": false,
+            "selected_kind": "advance_story",
+            "selection_mode": "forced_singleton",
+            "semantic_state_changed": true,
+            "status": "succeeded"
+          }
+        ],
+        "stop_reason": "decision_limit",
+        "teacher_fallbacks": 0,
+        "total_actions": 177,
+        "total_frames": 17137
+      },
+      "parent_overridden": false,
+      "proposal_record_sha256": "c288cf2776f00497b6a96452205b5a60b7fb73eb8b0da28ebc5b366d0edde9a8",
+      "proposed_source": null,
+      "schema": "pokemon.red.regional-goal-step-result.v1",
+      "source_acquisition_attempted": false,
+      "source_proposal_fitted": false
+    }
+  ],
+  "saved_state": {
+    "state_sha256": "0243af84ccd62db159668ae39505cf602450b996edfa7e76d39f188ca654234d",
+    "checkpoint_record_sha256": "43645b73ebafad6f6c36605908f67d4814a892355c803ab55a36ffd9d44e4f3c",
+    "manifest_sha256": "cefc86c6e39a6033bb69df54b9af01c41a318a8d0775d6653da296c6e679f3fc",
+    "map": 246,
+    "at": [
+      3,
+      5
+    ],
+    "trainer_defeated": "Bruno",
+    "verified_fact": "league:bruno_defeated",
+    "party_hp": [
+      202,
+      172,
+      71,
+      118,
+      34,
+      139
+    ],
+    "party_max_hp": [
+      217,
+      172,
+      89,
+      118,
+      39,
+      139
+    ],
+    "party_levels": [
+      67,
+      56,
+      30,
+      55,
+      13,
+      55
+    ],
+    "party_status": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "money": 11905,
+    "full_restores_remaining": 1,
+    "specimens": 30,
+    "living_species": 28,
+    "registered_species": 33,
+    "input_ready": true,
+    "battle_state": 0
+  },
+  "session_totals": {
+    "controller_actions": 183,
+    "emulator_frames": 17437,
+    "earned_money": 5742,
+    "full_restores_spent": 0,
+    "story_objectives_gained": 1,
+    "training_examples": 0,
+    "model_fits": 0,
+    "model_queries": 0,
+    "authority_promotions": 0
+  },
+  "model": {
+    "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+    "settled_examples": 78,
+    "successful_examples": 36,
+    "distinct_selected_feature_rows": 68,
+    "unchanged": true
+  },
+  "audit": {
+    "zero_input_reopen": true,
+    "save_bytes_unchanged_on_reopen": true,
+    "focused_tests_passed": 249,
+    "mypy_source_files": 3,
+    "ruff_passed": true,
+    "full_suite": false
+  },
+  "failure": {
+    "exception": "RouteExecutionError",
+    "message": "route drifted after up: expected (246, (11, 4)), observed (246, (5, 4))",
+    "actions": 6,
+    "frames": 300,
+    "retained_state_sha256": "368703d02944f91aa872412e3bf2d2a468cb80cd20e52cb4de2a7106e89f621d",
+    "disposition": "Retained failed transition; no rollback or guard weakening. A separately declared continuation started from the audited safe room endpoint."
+  },
+  "boundaries": {
+    "forced_singleton_steps": 2,
+    "learned_choices": 0,
+    "new_fit_labels": 0,
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "historical_attempt_retries": 0
+  },
+  "reorientation": "After the first stop, zero-input audit established settled Bruno-room entry without resource loss. One new current-room attempt was prospectively declared and succeeded. Both attempts and all costs remain. The cross-map scripted-arrival assumption remains unqualified; do not claim a general routing repair.",
+  "next_session": "Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim."
+}

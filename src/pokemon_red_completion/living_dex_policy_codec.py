@@ -21,12 +21,14 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import cast
 
+from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.living_dex_option_value import (
     LIVING_DEX_OPTION_CONTEXT_SCHEMA,
     LIVING_DEX_OPTION_FEATURE_NAMES,
     LIVING_DEX_OPTION_FEATURE_SCHEMA,
     LIVING_DEX_OPTION_MENU_SCHEMA,
     LIVING_DEX_OPTION_NORMALIZATION,
+    LIVING_DEX_RECOVERY_FEATURE_NAMES,
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
     LivingDexOptionContext,
@@ -106,7 +108,11 @@ def restore_living_dex_policy_menu(
     """Restore a learner-visible policy menu with inert references by default."""
 
     _exact_keys(document, {"candidates", "context", "schema"}, subject="policy menu")
-    if document["schema"] != LIVING_DEX_OPTION_MENU_SCHEMA:
+    if document["schema"] not in (
+        LIVING_DEX_OPTION_MENU_SCHEMA,
+        "pokemon.core.living-dex-option-menu.v2",
+        "pokemon.core.living-dex-option-menu.v3",
+    ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
     context = _restore_context(context_document)
@@ -162,7 +168,8 @@ def _restore_candidate(
 ) -> LivingDexOptionCandidate:
     _exact_keys(
         document,
-        {"availability", "features", "unavailable_reason"},
+        {"availability", "features", "unavailable_reason"}
+        | ({"search_history"} if "search_history" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -171,15 +178,23 @@ def _restore_candidate(
         {"feature_names", "kind", "normalization", "schema", "values"},
         subject="candidate features",
     )
+    recovery = feature_document["kind"] == LivingDexOptionKind.RESTORE.value
+    names = LIVING_DEX_OPTION_FEATURE_NAMES + (
+        LIVING_DEX_RECOVERY_FEATURE_NAMES if recovery else ()
+    )
+    schema = (
+        "pokemon.core.living-dex-option-features.v3"
+        if recovery
+        else LIVING_DEX_OPTION_FEATURE_SCHEMA
+    )
     if (
-        feature_document["schema"] != LIVING_DEX_OPTION_FEATURE_SCHEMA
+        feature_document["schema"] != schema
         or feature_document["normalization"] != LIVING_DEX_OPTION_NORMALIZATION
-        or tuple(_strings(feature_document["feature_names"], subject="feature names"))
-        != LIVING_DEX_OPTION_FEATURE_NAMES
+        or tuple(_strings(feature_document["feature_names"], subject="feature names")) != names
     ):
         raise LivingDexPolicyCodecError("living-Dex candidate feature contract differs")
     values = _numbers(feature_document["values"], subject="candidate feature values")
-    if len(values) != len(LIVING_DEX_OPTION_FEATURE_NAMES):
+    if len(values) != len(names):
         raise LivingDexPolicyCodecError("living-Dex candidate feature width differs")
     try:
         kind = LivingDexOptionKind(_string(feature_document["kind"], subject="option kind"))
@@ -188,7 +203,7 @@ def _restore_candidate(
         )
     except ValueError:
         raise LivingDexPolicyCodecError("living-Dex candidate enum differs") from None
-    kind_count = len(LivingDexOptionKind)
+    kind_count = 8  # Frozen legacy one-hot prefix; v3 recovery is appended.
     feature_values = values[kind_count : kind_count + len(_CANDIDATE_FIELDS)]
     try:
         features = LivingDexOptionFeatures(
@@ -211,6 +226,11 @@ def _restore_candidate(
             features,
             availability,
             reason,
+            (
+                GoalSearchHistory.from_public_dict(document["search_history"])
+                if "search_history" in document
+                else None
+            ),
         )
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None

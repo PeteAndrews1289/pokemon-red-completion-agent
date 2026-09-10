@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon.red.optional-recovery-qualification.v1",
+  "classification": "engineering and historical replay; not new learned competence",
+  "model_sha256": "a645e264990b3b93a3f46dc368459c9c6c1391f0d4bfab46abd349bb77fc27e2",
+  "prospective_bootstrap_model_sha256": "0fcdf3f5bdbc7cc33875d38781e9e2d59292399ed0ee5c4032a9b3f654327c33",
+  "checkpoint_sha256": "361216a3988f95a272606dfa33b0e1862043327e96d35ed8d5263765eb3b2f03",
+  "historical_replay": {
+    "retained_examples": 60,
+    "native_episodes": 35,
+    "native_training_rows": 19,
+    "excluded_nonexploratory_decisions": 24,
+    "regional_choices_in_inventory": 12,
+    "maximum_candidate_prediction_difference": 0.0,
+    "artifact_writes": 0,
+    "emulator_opens": 0
+  },
+  "feature_layout": {
+    "v1_width": 24,
+    "v2_width": 29,
+    "v3_width": 31,
+    "appended_features": ["kind.restore", "party_pressure_x_restore"],
+    "legacy_layouts_and_campaign_menus_preserved": true,
+    "new_coefficients_initialized_to_zero": true,
+    "mandatory_recovery_randomized": false,
+    "behavior_policy": "living-dex-player-optional-recovery-v3"
+  },
+  "focused_core_checks_passed": 93,
+  "final_active_core_trajectory_fit_and_runner_checks_passed": 215,
+  "legacy_journal_fit_cases_passed_before_budget_stop": 3,
+  "regenerated_source_registry_checks_passed": 50,
+  "lint_typing_docs_focus_public_artifacts": "passed",
+  "qualified_source_bundle_sha256": "cb4b33e0f5cf6fdcfe309befb2ae64e726bf0bb06e101cb16d29a6b1fd817343",
+  "focused_recovery_and_runner_checks_passed": 57,
+  "test_counts_overlap": true,
+  "broader_compatibility": {
+    "passed_before_budget_stop": 1135,
+    "stale_legacy_fixture_failures": 1,
+    "failed_fixture_rechecked_and_passed": true,
+    "provider_and_native_recovery_followup_passed": 54,
+    "elapsed_seconds": 1182.27,
+    "stopped_deliberately": true,
+    "full_suite_claimed": false,
+    "reason": "Bounded the broad retired-campaign regression near twenty minutes; active fitting and live-runner callers passed separately."
+  },
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "fits": 0,
+  "new_examples": 0,
+  "independent_evaluation": false,
+  "authority_promotions": 0,
+  "live_status": "not executed; exact V successor check follows publication",
+  "next": "Publish the authenticated zero-recovery-weight model, verify two real V choices without input, then retain one selected outcome plus original V zero-row support."
+}

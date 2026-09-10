@@ -108,8 +108,9 @@ def test_red_plan_uses_every_existing_portable_kind_except_trade() -> None:
 
 
 def test_capability_audit_is_complete_and_bound_to_real_goal_mechanics() -> None:
-    assert tuple(item.option_kind for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES) == tuple(
-        LivingDexOptionKind
+    assert tuple(item.option_kind.value for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES) == (
+        "acquire", "evolve", "trade", "develop", "manage_storage", "resupply",
+        "unlock_access", "explore",
     )
     capabilities = {item.option_kind: item for item in RED_LIVING_DEX_EXECUTOR_CAPABILITIES}
 

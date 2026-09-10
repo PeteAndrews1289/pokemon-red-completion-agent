@@ -229,6 +229,18 @@ def automatic_warp_tiles(rom: bytes) -> dict[int, frozenset[int]]:
         )
         found[tileset_id].update(values)
 
+    for tileset_id, door_values in door_tiles(rom).items():
+        found[tileset_id].update(door_values)
+    return {index: frozenset(values) for index, values in found.items()}
+
+
+def door_tiles(rom: bytes) -> dict[int, frozenset[int]]:
+    """Decode only doors, which simulate one DOWN after warp arrival.
+
+    Automatic stairs/pads trigger warps too, but do not imply a doorway exit.
+    Keep this table separate from the union used for source trigger semantics.
+    """
+    found: dict[int, frozenset[int]] = {index: frozenset() for index in range(TILESET_COUNT)}
     cursor = DOOR_TILE_ID_POINTERS
     seen_tilesets: set[int] = set()
     for _ in range(DOOR_TILESET_RECORDS):
@@ -244,12 +256,12 @@ def automatic_warp_tiles(rom: bytes) -> dict[int, frozenset[int]]:
             terminator=0,
             subject=f"tileset {tileset_id}'s automatic-door list",
         )
-        found[tileset_id].update(values)
+        found[tileset_id] = frozenset(values)
         seen_tilesets.add(tileset_id)
         cursor += 3
     if rom[cursor] != 0xFF:
         raise CartridgeReadError("the automatic-door tileset table does not end")
-    return {index: frozenset(values) for index, values in found.items()}
+    return found
 
 
 def directional_warp_tiles(rom: bytes) -> dict[str, frozenset[int]]:

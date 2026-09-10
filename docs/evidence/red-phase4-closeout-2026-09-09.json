@@ -1,0 +1,335 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "current_session_status": "phase4_bounded_hierarchical_story_verified",
+  "scope": "Phase4: checkpoint-based hierarchical model-directed Red story completion. Native83 chose two recoveries before a forced deterministic Champion step. Concurrent Champion/Hall-of-Fame facts verified. No fresh-game autonomous or independent reliability claim.",
+  "phase4_complete": true,
+  "phase4_exit": "Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.",
+  "session_evidence": "docs/audits/red-phase4-closeout-2026-09-09.md",
+  "boundaries": {
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "historical_practice_branch_reopened": false,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "actions": 652,
+    "frames": 39978,
+    "admitted_examples": 2,
+    "sampled_choices": 2,
+    "curriculum_outcomes": 0,
+    "forced_singletons": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-model-combined-20260909-champion-01-causal"
+  },
+  "verified_story": {
+    "actions": 652,
+    "audit_actions": 0,
+    "audit_frames": 0,
+    "bag": [
+      [
+        42,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        198,
+        1
+      ],
+      [
+        199,
+        1
+      ],
+      [
+        46,
+        3
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        214,
+        1
+      ],
+      [
+        43,
+        1
+      ],
+      [
+        209,
+        1
+      ],
+      [
+        201,
+        2
+      ],
+      [
+        68,
+        8
+      ],
+      [
+        65,
+        1
+      ],
+      [
+        52,
+        6
+      ],
+      [
+        53,
+        3
+      ]
+    ],
+    "checkpoint_sha256": "3cae71742bbc25577b9b45c3bae2521a3dca2579d9b5c57606531be09ac08c88",
+    "current_facts": [
+      "badge:boulder",
+      "badge:cascade",
+      "badge:earth",
+      "badge:marsh",
+      "badge:rainbow",
+      "badge:soul",
+      "badge:thunder",
+      "badge:volcano",
+      "game:hall_of_fame",
+      "item:poke_flute",
+      "item:secret_key",
+      "item:ss_ticket",
+      "league:agatha_defeated",
+      "league:bruno_defeated",
+      "league:champion_defeated",
+      "league:lance_defeated",
+      "league:lorelei_defeated",
+      "move:cut_available",
+      "move:strength_available",
+      "move:surf_available",
+      "party:starter_obtained",
+      "story:adventure_begun",
+      "story:oak_lab_reached",
+      "story:pokedex_received",
+      "story:rocket_hideout_cleared",
+      "story:saffron_guards_open",
+      "story:silph_co_liberated",
+      "story:starter_selection_ready"
+    ],
+    "current_goal_reached": true,
+    "episode_id": "red-model-combined-20260909-champion-01-causal",
+    "forced_singletons": 1,
+    "frames": 39978,
+    "genuine_choices": 2,
+    "manifest_sha256": "86a9476a28cac1cdbadf801344e06903529f040670ea2d7f1455720b2acc12e0",
+    "map_id": 118,
+    "objective": "defeat_champion",
+    "party_faints": 0,
+    "party_hp": [
+      138,
+      172,
+      71,
+      118,
+      34,
+      139
+    ],
+    "party_pp": [
+      [
+        25,
+        15,
+        7,
+        6
+      ],
+      [
+        3,
+        15,
+        30,
+        30
+      ],
+      [
+        30,
+        40,
+        15,
+        5
+      ],
+      [
+        9,
+        40,
+        10,
+        15
+      ],
+      [
+        35,
+        19,
+        20,
+        0
+      ],
+      [
+        20,
+        15,
+        30,
+        15
+      ]
+    ],
+    "registered_species": 33,
+    "retained_specimens": 30,
+    "state_sha256": "310ca55af66a5310c46b5ab8e2a364421117eed5fd5234892ec496f35e99996a",
+    "plan_sha256": "a7af69092b38a79236f778f61b1870c8b69ad53f435d1be7be63075efaf13fbc",
+    "source_commit": "03e14672b635bc9473f06d56efbc779c7fe3b6fe",
+    "source_bundle_sha256": "f957e9cfa0537e373a6192c5b95962bb4aa202967a2585bf022ee6d36ceadb0c",
+    "played_model_sha256": "f9eafd7f6a2588535abadaa08c88d66a3940f6b06aad73fe0628ca3d6f7356f4",
+    "teacher_queries": 0,
+    "teacher_fallbacks": 0,
+    "field_hp_items": 1,
+    "field_pp_items": 1,
+    "battle_full_restores": 1,
+    "champion_defeated": true,
+    "hall_of_fame": true,
+    "authenticated_carried_checkpoints": 71,
+    "raw_living_dex_completion_satisfied": false,
+    "raw_stop_reason": "decision_limit",
+    "required_specimens_remaining": 92
+  },
+  "authority": {
+    "high_level_choices": "two prospectively sampled recovery-vs-story choices",
+    "item_target_selection": "deterministic HP-first and PP-fallback",
+    "battle_control": "deterministic ordinary trainer control; at most one qualified active Full Restore",
+    "champion_selection": "forced singleton; excluded from comparative training",
+    "profile_orchestration": "declared operator support",
+    "independent_generalization": false,
+    "fresh_game_autonomy": false,
+    "living_pokedex_complete": false,
+    "cross_game_transfer": false
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 84,
+    "controller_actions": 0,
+    "corpus_record_sha256": "248dfea2cc2e2935e9a10f867c225d21777c6dc6a042c3b50779e62bc47ed8c8",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 69,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 85,
+      "successful_examples": 43,
+      "total_examples": 85,
+      "train_dataset_sha256": "3907eab3883b8e2f62a4f8afde60a1c0de7e822ae0faffc2c6b3d96917cad41f",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011611490387643565,
+      "weighted_mse_before": 0.028957135311298655
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "c2cbccae04b13ff632d4772252d0fed2efcbf34213b966f68fb79240cfff1779",
+      "file_sha256": "7b101d0e8614e8f5932cbca3d7f1d51d65dda48575d69ba7eab2c62c24a008cb",
+      "independent_evaluation": false,
+      "model_sha256": "bbb7a8528ddb88e054e5ebe8cff9a2a6bc0fcf1d2084bc7ed3f4a46df203b85c",
+      "prior_model_sha256": "f9eafd7f6a2588535abadaa08c88d66a3940f6b06aad73fe0628ca3d6f7356f4",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 85,
+      "source_bundle_sha256": "f957e9cfa0537e373a6192c5b95962bb4aa202967a2585bf022ee6d36ceadb0c",
+      "source_commit": "03e14672b635bc9473f06d56efbc779c7fe3b6fe"
+    },
+    "new_settled_examples": 2,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09304757187856955,
+        0.000005187224037769044,
+        0.0000570405238035707,
+        0.005347651710741318,
+        0.003973718753628559,
+        0.0012638756989554693,
+        0.000772683297083922,
+        0.0000012152972666714363,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 85,
+      "total_examples": 85,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01160766048712076
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09308091019689226,
+        0.000005188927171591348,
+        0.00005704043490622037,
+        0.0053488959346769185,
+        0.003974718008175405,
+        0.0012628046322028638,
+        0.0007726400106650249,
+        0.0000012153441017746235,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 85,
+      "total_examples": 85,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011611490387643562
+    }
+  },
+  "training_error_improved": false,
+  "in_sample_policy_replay": {
+    "choices": [],
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "performed": false
+  },
+  "preserved_failures": [
+    "docs/evidence/red-proactive-recovery-stop-2026-09-09.json",
+    "docs/evidence/red-lance-fit-champion-stop-2026-09-09.json"
+  ]
+}

@@ -7,13 +7,41 @@ checkpoint.
 
 Build a transferable hierarchical agent that can enter a mainline Pokémon game, learn its
 game-specific details, finish its story, solve its mechanics and puzzles, and build the declared
-living Pokédex across the versions, trades, and event inputs that completion requires.
+shared registered Pokédex across the versions, trades, and event inputs that completion requires.
 
 Pokémon Red is the first curriculum and evaluation environment. It is not the product.
+
+An intermediate skill earning XP or surviving a checkpoint is not itself the learning milestone.
+Collection development must be practical to complete, preserve verified registration and useful specimens, and ultimately
+support a measured model-selected lesson. Keep partial progress, final goal success and learned
+advantage distinct; inspect throughput before repeating many tiny deterministic training doses.
 
 The deterministic teacher is an oracle, demonstrator, verifier, and emergency safety authority.
 It is not the final player. A fixed route completing Red does not count as learned progress unless
 the work also increases model authority or produces evidence needed to do so.
+
+Destination selection is learned authority only when real alternatives are exposed and the
+selected destination controls the played attempt. Preserve failed searches and their resource
+costs; fitting failures alone does not establish practical collection competence. Resource
+recovery must use legitimate game mechanics, not resets that conceal unsustainable spending.
+
+## Registered completion — September 9, 2026
+
+The current user-authorized objective is one shared registered Pokédex, not simultaneous living
+forms and not level100. Catch/evolve only as needed for missing global entries, current story
+capability or genuine dependencies; deposit completed specimens when practical. Duplicate catches
+carry no intrinsic penalty and no repeated novelty credit. Actual costs remain measured.
+
+Maintain three separate views: shared verified registrations, each save's actual owned flags,
+and current physical specimens. A global entry never fabricates a local flag or transferable
+specimen. Protect story/HM carriers and needed branches, but do not require a spare base form
+merely to preserve a living Dex. This is not permission to release specimens or edit saves.
+
+Keep historical contracts and fitted outcomes unchanged. Migrate completion, demand, evolution,
+rewards, checkpoint metadata and reporting together before new registered-only training. Old
+living-Dex and level100 predicates remain legacy evidence, not the current product gate.
+See [the explicit revision](docs/roadmap-decisions.md) and
+[shared-ledger plan](docs/shared-pokedex-registration-plan.md).
 
 ## Authority order
 
@@ -51,6 +79,51 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 
 ## Default development loop
 
+### Fixed visual roadmap and session closeout
+
+Use the [development infographic](docs/development-roadmap.md) and its
+[stable baseline](configs/development-roadmap-baseline-v2.json) to locate each substantial task
+within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
+Red registration and Blue/shared-ledger integration, a compatible Red modification, Crystal, then later titles.
+This baseline is subordinate to the mission and this contract; it does not authorize execution.
+
+After **every completed work session**, and during a longer session after a substantial verified
+capability, fit, gameplay result or blocker changes our position:
+
+1. Update the active state and the [roadmap status](configs/development-roadmap-state.json).
+   Preserve earlier reviews; record what changed, whether it deviated from the plan, and why.
+2. Regenerate the infographic and its accessible Markdown with
+   `python scripts/development_roadmap.py --write`. Inspect the visual after layout/content changes.
+3. Refresh the handoff, next steps and YouTube/project narrative with the same factual result.
+   Update this North Star only when requirements, operating rules or the agreed sequence change;
+   do not rewrite its goals merely to make a session look successful.
+   Refresh concise summaries in place; do not prepend accumulating “Current” blocks.
+   The public README explains the project to a new reader, not to another agent.
+   Detailed session reports and superseded directions belong in dated history. Keep
+   explicit AI-assisted authorship, working/unfinished distinctions and links to evidence.
+4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
+   mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
+
+At closeout, also share candid feedback with Pete when there is a meaningful concern, tradeoff
+or recommendation. Do not manufacture feedback or confuse it with measured progress.
+
+End every session report with a recommendation for the **next session's model and thinking
+effort**, plus whether Fast mode is worthwhile and a brief task-specific reason. Pete's current
+priority is verified progress while conserving the primary Codex allowance: use bounded isolated
+Flash drafts, Codex integration and occasional Claude review where they reduce duplicate work.
+Do not trade away outcome verification merely for cheaper drafting. A recommendation is not permission to consume
+a reset or change the selected model. Reassess this guidance if Pete changes the budget priority.
+
+Stage exit criteria stay stable. Material changes require an explicit entry in
+[roadmap decisions](docs/roadmap-decisions.md), retaining the previous baseline and recording
+the evidence/user direction, tradeoffs and effect on the final product. Never silently replace
+a difficult milestone with an easier one or count teacher completion as learned completion.
+Any percentage must name its checklist and denominator; do not report a whole-project percentage
+or turn equal checklist weights into a remaining-time estimate. Progress without a new learning
+result must remain visibly classified as engineering or documentation.
+
+### Runtime learning loop
+
 Use authenticated development checkpoints and short randomized scenarios:
 
 1. restore a relevant state;
@@ -84,7 +157,7 @@ Prefer outcomes that can expose failure:
 - battle wins, objective satisfaction, HP/PP efficiency, interventions, illegal choices;
 - experience per frame, wins per heal, blackouts, party rotation, level/evolution progress;
 - multi-step goal completion and recovery from changed resources or state;
-- living-Pokédex acquisitions, dependency-plan success, recognized version/trade/event blockers;
+- new global Pokédex registrations, dependency-plan success, recognized version/trade/event blockers;
 - zero-shot and post-adaptation performance in another title.
 
 Teacher agreement is diagnostic. It is never sufficient evidence by itself.

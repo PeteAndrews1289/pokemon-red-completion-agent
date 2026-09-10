@@ -1,0 +1,207 @@
+{
+  "schema": "pokemon.red.earned-resource-continuation.v1",
+  "session_id": "2026-09-08-earned-supply-continuation",
+  "source_commit": "d9e8c6e2074685078823013a2bb608c8f6952fb6",
+  "source_bundle_sha256": "fa81e90e363cb790bbc75779d5caed7490d2749c173b390dfd887f9e958bee20",
+  "model_before": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+  "model_after": {
+    "authority": "bounded_development_only",
+    "ci_is_training_dependency": false,
+    "corpus_sha256": "66ecb75dc60f6332681056589070ed9f32a01d09b8f722a41eb29210385910c8",
+    "file_sha256": "051ff70de0ead9750c71283e4b4b6468e4588fb294ab9ce09b4c26c8c1d62a9c",
+    "independent_evaluation": false,
+    "model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+    "prior_model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+    "private_path_fields": 0,
+    "schema": "pokemon.red.native-player-model.v1",
+    "settled_examples": 76,
+    "source_bundle_sha256": "fa81e90e363cb790bbc75779d5caed7490d2749c173b390dfd887f9e958bee20",
+    "source_commit": "d9e8c6e2074685078823013a2bb608c8f6952fb6"
+  },
+  "settled_examples_before": 75,
+  "settled_examples_after": 76,
+  "new_learned_examples": 1,
+  "successful_examples": 34,
+  "distinct_selected_feature_rows": 66,
+  "prior_rows_retained": true,
+  "episodes": [
+    {
+      "actions": 287,
+      "actual": {
+        "balls": 1,
+        "battle_state": 0,
+        "input_ready": true,
+        "living_species": 28,
+        "map_id": 67,
+        "money": 94,
+        "party_hp": [
+          73,
+          167,
+          213,
+          118,
+          272,
+          34
+        ],
+        "party_species": [
+          141,
+          104,
+          28,
+          118,
+          132,
+          48
+        ],
+        "protected_full_restores": 4,
+        "registered_species": 33,
+        "specimens": 29,
+        "state_sha256": "c481c10a371962c9e7b17bbfd41b997ce031ba8b910b3a0925d824ebdac424d0",
+        "x": 2,
+        "y": 5
+      },
+      "checkpoint_sha256": "c16b598576feddf48f454cc5156ed3c46d49d0feebf041f27ed12ee2326d4fac",
+      "eligible_examples": 0,
+      "episode_id": "red-phase4-earned-supply-20260908-01-causal",
+      "frames": 13452,
+      "manifest_sha256": "320476d6f5c2a198c99d953284edba295a74e3c4af208d9e0d72259da7f9da4d",
+      "selected_kind": "resupply",
+      "selection_mode": "deterministic_safety"
+    },
+    {
+      "actions": 55,
+      "actual": {
+        "balls": 1,
+        "battle_state": 0,
+        "input_ready": true,
+        "living_species": 28,
+        "map_id": 64,
+        "money": 94,
+        "party_hp": [
+          89,
+          167,
+          213,
+          118,
+          272,
+          39
+        ],
+        "party_species": [
+          141,
+          104,
+          28,
+          118,
+          132,
+          48
+        ],
+        "protected_full_restores": 4,
+        "registered_species": 33,
+        "specimens": 29,
+        "state_sha256": "1990499428033298b23226d6e4f9492387fb90afb783c1743c1f297846fcfdc9",
+        "x": 3,
+        "y": 3
+      },
+      "checkpoint_sha256": "92410be0c9a7f4247a9be2f1f97d74b86538a23a821f1759f0e565ec3e7ccc4f",
+      "eligible_examples": 1,
+      "episode_id": "red-phase4-earned-collection-20260908-01-causal",
+      "frames": 3072,
+      "manifest_sha256": "09b51576d488a894311bf773813019637f48d71a40c4ecfc55f5b0970f9bcc16",
+      "selected_kind": "restore_team",
+      "selection_mode": "learned_optional_recovery"
+    },
+    {
+      "actions": 434,
+      "actual": {
+        "balls": 0,
+        "battle_state": 0,
+        "input_ready": true,
+        "living_species": 28,
+        "map_id": 35,
+        "money": 94,
+        "party_hp": [
+          89,
+          167,
+          213,
+          118,
+          272,
+          34
+        ],
+        "party_species": [
+          141,
+          104,
+          28,
+          118,
+          132,
+          48
+        ],
+        "protected_full_restores": 4,
+        "registered_species": 33,
+        "specimens": 30,
+        "state_sha256": "77c4d2649e66e49bbe279a85435cf89a14f11f4c1099b3a75a5834b93e9310c9",
+        "x": 5,
+        "y": 30
+      },
+      "checkpoint_sha256": "4a60956929c102ccfdcbb6bd8657ffeaeb2b4f552bbabef445dc17cece02e4ca",
+      "eligible_examples": 0,
+      "episode_id": "red-phase4-earned-followup-20260908-01-causal",
+      "frames": 29856,
+      "manifest_sha256": "7ae0bdb2e666dc2c95f27c2510c6f08a29f9c6865ad3681e27a9efe426d07fc8",
+      "selected_kind": "acquire_species",
+      "selection_mode": "forced_singleton"
+    }
+  ],
+  "added_species": {
+    "species_ref": "pokemon:national:043",
+    "name": "Oddish",
+    "count": 1,
+    "new_distinct_living_species": 0
+  },
+  "session_cost": {
+    "actions": 776,
+    "frames": 46380
+  },
+  "funding_and_continuation_cost_including_failed_prefixes": {
+    "actions": 880,
+    "frames": 55921
+  },
+  "learned_choice": {
+    "alternatives": [
+      "restore_team",
+      "acquire_species"
+    ],
+    "selected_kind": "restore_team",
+    "selected_probability": 0.7797310506567174,
+    "interpretation": "HP/PP resource-management choice; not learned trainer or quest-target selection"
+  },
+  "pending_zero_label_support": "red-phase4-earned-followup-20260908-01-causal",
+  "read_only_audit": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "all_three_terminals_reloaded": true,
+    "prior_species_counts_preserved": true,
+    "all_terminal_party_members_living": true
+  },
+  "next_endpoint": {
+    "available_goal_kinds": [
+      "restore_team"
+    ],
+    "status": "ready_for_forced_bridge",
+    "executed": false,
+    "model_queries": 0,
+    "limitation": "Zero balls and 94 currency; no current executable income or collection option. Do not repeat healing to claim progress."
+  },
+  "ci": {
+    "repeated_failure": "test_actual_restore_is_checked_through_readonly_controls rejected the trainer_funding keyword",
+    "repair": "Explicit test arguments and assertions for legacy restore versus successor execution; no checks removed.",
+    "focused_tests_passed": 111,
+    "repair_run": 34244100279,
+    "full_run_status_at_report": "in_progress",
+    "publication_policy": "Batch changes at useful session boundaries; no manual reruns or weakened CI."
+  },
+  "claims": {
+    "resource_backed_checklist_completed": 3,
+    "resource_backed_checklist_total": 3,
+    "whole_phase_complete": false,
+    "sustainable_economy": false,
+    "new_authority_promotion": false,
+    "full_model_led_red": false,
+    "independent_evaluation": false,
+    "transfer_result": false
+  }
+}

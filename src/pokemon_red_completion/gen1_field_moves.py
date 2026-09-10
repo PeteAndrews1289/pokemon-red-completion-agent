@@ -26,6 +26,8 @@ from pokemon_red_completion.gen1_traversal import (
     surf_capabilities,
 )
 from pokemon_red_completion.observation import (
+    RED_FLY_TOWN_NAMES,
+    Badge,
     OverworldMovementMode,
     PokemonRedStateReader,
     RamAddress,
@@ -105,6 +107,16 @@ class Gen1FieldMoveTiming:
 
 
 DEFAULT_GEN1_FIELD_MOVE_TIMING = Gen1FieldMoveTiming()
+
+
+@dataclass(frozen=True, slots=True)
+class Gen1FlyReceipt:
+    source_map: int
+    destination_map: int
+    party_index: int
+    submenu_row: int
+    observed_destinations: tuple[int, ...]
+    flight_confirmations: int = 1
 
 
 @dataclass(frozen=True, slots=True)
@@ -194,6 +206,11 @@ def strength_menu_indices(raw: RawGameState) -> tuple[int, int]:
     return _field_move_menu_indices(raw, STRENGTH_MOVE_ID, "Strength")
 
 
+def fly_menu_indices(raw: RawGameState) -> tuple[int, int]:
+    """Select an observed living Fly holder, independent of species or party slot."""
+    return _field_move_menu_indices(raw, FLY_MOVE_ID, "Fly")
+
+
 def _field_move_menu_indices(
     raw: RawGameState,
     move_id: int,
@@ -223,6 +240,7 @@ class Gen1FieldMovePort:
     receipts: list[Gen1SurfReceipt] = field(default_factory=list, init=False)
     cut_receipts: list[Gen1CutReceipt] = field(default_factory=list, init=False)
     strength_receipts: list[Gen1StrengthReceipt] = field(default_factory=list, init=False)
+    fly_receipts: list[Gen1FlyReceipt] = field(default_factory=list, init=False)
 
     def execute(self, action: MacroAction) -> object:
         if action.kind is not MacroActionKind.FIELD_MOVE:
@@ -231,6 +249,14 @@ class Gen1FieldMovePort:
             raise Gen1FieldMoveError("a Gen I field action needs a semantic value")
         if action.repeat != 1:
             raise Gen1FieldMoveError("a field action cannot be repeated implicitly")
+        if action.value.startswith("fly:"):
+            town = action.value.removeprefix("fly:")
+            destinations = tuple(name.lower().replace(" ", "_") for name in RED_FLY_TOWN_NAMES)
+            if town not in destinations:
+                raise Gen1FieldMoveError("unsupported Fly destination")
+            receipt = self._fly(destinations.index(town))
+            self.fly_receipts.append(receipt)
+            return receipt
         if action.value == "strength:activate":
             strength_receipt = self._strength()
             self.strength_receipts.append(strength_receipt)
@@ -248,13 +274,135 @@ class Gen1FieldMovePort:
             return cut_receipt
         raise Gen1FieldMoveError(f"unsupported Gen I field action {action.value!r}")
 
+    def _fly(self, destination: int) -> Gen1FlyReceipt:
+        """Confirm only an observed destination; never search by trying landings."""
+        before = self.reader.read()
+        retained_menu = self.reader.read_fly_menu_state()
+        source_map, source_at = _require_overworld(before, "Fly source")
+        if (
+            not 0 <= source_map <= 0x24
+            or source_map == 0x0B
+            or source_map == destination
+            or not int(before.badge_bits or 0) & int(Badge.THUNDER)
+            or self.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+            or not self.reader.read_input_readiness().ready
+            or self.reader.read_bottom_dialogue_box_visible()
+            or self.reader.read_pending_trainer_battle_identity() is not None
+        ):
+            raise Gen1FieldMoveError(
+                "Fly requires an idle outdoor walking boundary and Thunder Badge"
+            )
+        available = self.reader.read_fly_destinations()
+        if destination not in available:
+            raise Gen1FieldMoveError("Fly destination is not observed as visited")
+        count = before.party_count
+        fields = (
+            "party_species_ids",
+            "party_hp",
+            "party_max_hp",
+            "party_status",
+            "party_moves",
+            "party_pp",
+            "party_levels",
+        )
+        if (
+            count is None
+            or not 1 <= count <= 6
+            or any(
+                getattr(before, name) is None or len(getattr(before, name)) != count
+                for name in fields
+            )
+            or before.bag_items is None
+            or before.player_money is None
+            or before.event_flags is None
+        ):
+            raise Gen1FieldMoveError("Fly lacks complete protected party/resource observation")
+        party_index, submenu_row = fly_menu_indices(before)
+
+        def protected(*, departure: bool) -> None:
+            after = self.reader.read()
+            _require_protected_field_state("Fly", before, after)
+            if any(
+                getattr(before, name) != getattr(after, name)
+                for name in (
+                    "party_species_ids",
+                    "party_max_hp",
+                    "party_levels",
+                    "player_money",
+                    "badge_bits",
+                    "event_flags",
+                )
+            ):
+                raise Gen1FieldMoveError("Fly changed protected party or story resources")
+            if after.battle_state != 0:
+                raise Gen1FieldMoveError("Fly entered an unexpected battle")
+            if departure and _overworld_position(after) != (source_map, source_at):
+                raise Gen1FieldMoveError("Fly departed before destination confirmation")
+
+        if retained_menu is None:
+            self._pulse(MacroAction(MacroActionKind.OPEN_MENU), self.timing.menu_frames)
+            for target, label in (
+                (1, "START-menu POKEMON"),
+                (party_index, "Fly holder"),
+                (submenu_row, "Fly field command"),
+            ):
+                self._select_cursor(target, label)
+                protected(departure=True)
+                self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.menu_frames)
+        menu = self.reader.read_fly_menu_state()
+        if menu is None or menu.available_maps != available:
+            raise Gen1FieldMoveError("Fly menu did not expose the declared visited towns")
+        observed = [menu.selected_map]
+        for _ in range(len(available)):
+            protected(departure=True)
+            if menu.selected_map == destination:
+                break
+            current = available.index(menu.selected_map)
+            target = available.index(destination)
+            up = (target - current) % len(available)
+            down = (current - target) % len(available)
+            direction, delta = ("up", 1) if up <= down else ("down", -1)
+            expected = available[(current + delta) % len(available)]
+            self._pulse(MacroAction(MacroActionKind.MOVE, direction), self.timing.menu_frames)
+            menu = self.reader.read_fly_menu_state()
+            if menu is None or menu.available_maps != available or menu.selected_map != expected:
+                raise Gen1FieldMoveError("Fly cursor did not acknowledge its expected destination")
+            observed.append(menu.selected_map)
+        else:
+            raise Gen1FieldMoveError("Fly destination selection exceeded its town bound")
+        # Re-observe immediately before the sole irreversible flight confirmation.
+        protected(departure=True)
+        if self.reader.read_fly_menu_state() != menu or menu.selected_map != destination:
+            raise Gen1FieldMoveError("Fly destination changed before confirmation")
+        self._pulse(MacroAction(MacroActionKind.CONFIRM), self.timing.settle_frames)
+        for _ in range(self.timing.max_confirmations):
+            protected(departure=False)
+            after = self.reader.read()
+            if after.map_id not in {source_map, destination}:
+                raise Gen1FieldMoveError("Fly landed on the wrong map; no repeat flight")
+            if (
+                after.map_id == destination
+                and after.game_started
+                and _overworld_position(after) is not None
+                and self.reader.read_overworld_movement_mode() is OverworldMovementMode.WALKING
+                and self.reader.read_fly_menu_state() is None
+                and self.reader.read_input_readiness().ready
+                and not self.reader.read_bottom_dialogue_box_visible()
+                and self.reader.read_pending_trainer_battle_identity() is None
+            ):
+                return Gen1FlyReceipt(
+                    source_map, destination, party_index, submenu_row, tuple(observed)
+                )
+            self.delegate.execute(
+                MacroAction(MacroActionKind.WAIT, repeat=self.timing.settle_frames)
+            )
+        raise Gen1FieldMoveError("Fly landing did not settle; no repeat confirmation")
+
     def _strength(self) -> Gen1StrengthReceipt:
         before = self.reader.read()
         source_map, source_at = _require_overworld(before, "Strength source")
         if not strength_capabilities(before):
-            raise Gen1FieldMoveError(
-                "Strength requires Rainbow Badge and a living move holder"
-            )
+            raise Gen1FieldMoveError("Strength requires Rainbow Badge and a living move holder")
         if self.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING:
             raise Gen1FieldMoveError("Strength requires ordinary walking mode")
         party_index, submenu_row = strength_menu_indices(before)
@@ -389,10 +537,7 @@ class Gen1FieldMovePort:
         if blocks_before.map_id != source_map:
             raise Gen1FieldMoveError("Cut block buffer does not match the observed map")
         block_at = target_at[0] // 2, target_at[1] // 2
-        if not (
-            0 <= block_at[0] < blocks_before.height
-            and 0 <= block_at[1] < blocks_before.width
-        ):
+        if not (0 <= block_at[0] < blocks_before.height and 0 <= block_at[1] < blocks_before.width):
             raise Gen1FieldMoveError("Cut target falls outside the current block buffer")
         block_before = blocks_before.at(*block_at)
         block_after = self.cut_block_swaps.get(block_before)
@@ -505,6 +650,4 @@ def _require_protected_field_state(
         ("bag", before.bag_items, after.bag_items),
     ):
         if before_value != after_value:
-            raise Gen1FieldMoveError(
-                f"field {field_label} changed protected {state_label}"
-            )
+            raise Gen1FieldMoveError(f"field {field_label} changed protected {state_label}")

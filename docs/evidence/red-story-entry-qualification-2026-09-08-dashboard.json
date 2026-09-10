@@ -1,0 +1,161 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Story admission corrected; owned Cut/Fly capability verified in storage without input. Model76 and retained30specimens/619currency unchanged. No new gameplay or training.",
+  "session_evidence": "docs/evidence/red-story-entry-qualification-2026-09-08.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 55,
+    "frames": 3072,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase4-earned-collection-20260908-01-causal"
+  },
+  "final_model_post_fit_gameplay": true,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "6da588328427e31d4bdb008afb62d2ba52793e029fcde41c0b6250ae6641062d",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 66,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 76,
+      "successful_examples": 34,
+      "total_examples": 76,
+      "train_dataset_sha256": "8514263d0d3b263e23fd6ea43e275c1ff1a89e2cfa3b6836cf6b20470f510111",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.01240749158455218,
+      "weighted_mse_before": 0.027834233863139272
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "66ecb75dc60f6332681056589070ed9f32a01d09b8f722a41eb29210385910c8",
+      "file_sha256": "051ff70de0ead9750c71283e4b4b6468e4588fb294ab9ce09b4c26c8c1d62a9c",
+      "independent_evaluation": false,
+      "model_sha256": "24f247431666d96b88bccdcc70c2abdbbb2b5982018b5e9ee46d900739fcdf8b",
+      "prior_model_sha256": "4de31b7cd0b1fa7ac5e24d8e90e74ffc42954123b1e1f20a7c5f6edc94b41388",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 76,
+      "source_bundle_sha256": "fa81e90e363cb790bbc75779d5caed7490d2749c173b390dfd887f9e958bee20",
+      "source_commit": "d9e8c6e2074685078823013a2bb608c8f6952fb6"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09941124265436549,
+        0.000005568060207085471,
+        0.00006075659155354412,
+        0.0057673329778588,
+        0.004285355156136495,
+        0.0013897590062218635,
+        0.0007949597080794405,
+        0.0000013096194039840912,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 76,
+      "total_examples": 76,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012412920419314077
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09940448195321526,
+        0.0000055709975497392565,
+        0.00006076437415819253,
+        0.005768794811009537,
+        0.004286482384858489,
+        0.0013451249756374836,
+        0.000794895053281146,
+        0.0000013097112597544364,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 76,
+      "total_examples": 76,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012407491584552179
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "Travel and generic boss execution remain unqualified. Static Cerulean route is not live evidence; Indigo Fly unlock has not been observed. Legacy party/stock recipe will not be reconstructed.",
+  "next_session": "Retrieve the observed travel capability safely, qualify destination-observed Fly, then generic boss readiness and a genuine model-selected story-versus-preparation lesson.",
+  "session_totals": {
+    "actions": 0,
+    "frames": 0,
+    "earned_money": 0,
+    "new_fitted_examples": 0
+  },
+  "fit_scope": "Last actual fit remains the earlier earned-collection session. This story-entry inspection performed no fit and no gameplay.",
+  "latest_support_episode": {
+    "actions": 78,
+    "frames": 7513,
+    "admitted_examples": 0,
+    "sampled_choices": 0,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase4-regional-income-resume-20260908-01-causal"
+  },
+  "latest_engineering_qualification": {
+    "readiness_false_offer_repaired": true,
+    "stored_cut_and_fly_verified": true,
+    "story_execution_qualified": false,
+    "checkpoint_changed": false,
+    "new_fitted_examples": 0
+  }
+}

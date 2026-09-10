@@ -16,7 +16,54 @@ Run `python scripts/check_product_focus.py` before committing. It rejects multip
 learning work without measurable outputs, maintenance without a named unblock, weakened alarms,
 unsupported counters, and a stale generated active-state page.
 
+Before publishing executable-source changes, regenerate the existing prospective
+collection registry with `PYTHONPATH=src python scripts/regenerate_collection_registry.py`,
+then run the same command with `--check` and include its two generated metadata files.
+This is metadata maintenance only: it does not authorize or launch a collection run.
+Do not repeatedly discover stale registry hashes through hosted CI emails.
+
+Batch ordinary implementation commits into a tested publication at a useful session
+boundary; do not push every small repair or manually rerun unchanged failing CI.
+Fix relevant failures locally, preserve safety assertions, and distinguish a targeted
+pass from a full-suite pass. Development gameplay does not wait on hosted CI.
+
+At session closeout and after substantial verified progress, refresh the
+[development infographic](docs/development-roadmap.md), its status/review log, handoffs and
+project/video narrative under the North Star's closeout rules. Regenerate with
+`python scripts/development_roadmap.py --write`; `scripts/check_docs.py` checks freshness.
+Keep stage IDs and exit criteria stable; log material deviations in `docs/roadmap-decisions.md`.
+Do not create a new CI workflow or count documentation work as model progress.
+
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
+
+## Public documentation discipline
+
+The README is a reader-facing introduction, not an agent work log. Keep it under100lines,
+with one title, plain-language capability/limitation statements and explicit AI-assisted
+authorship. Update it only when the public milestone or scope changes; never prepend a
+session report or another “Current” block. Do not use archived publisher scripts that stack
+status banners or overwrite concise documents with historical templates.
+
+Replace the relevant current handoff/roadmap sections in place. Keep current entry points
+under200lines; put detailed measurements in one dated work-session report. Preserve old
+reports in `docs/history/` or Git, clearly labeled historical, with working relative links.
+Current counters belong to the active-state source and evidence, not copied daily logs.
+Run `tests/test_documentation_surface.py` with the existing documentation checks. Never
+weaken its size limits to accommodate another status dump. Documentation and CI are not
+model progress, and an archived report cannot authorize gameplay.
+
+## User-facing session closeout
+
+After each session, provide a concise outcome-first update: verified work, learning
+and collection deltas, whether gameplay is running or stopped, failures/limitations,
+next bounded objective and estimate, and candid suggestions when useful. End with
+the recommended next-session model, reasoning effort and whether Fast is worthwhile,
+with a task-specific reason. Never imply a recommendation changed the selected model.
+When Flash or Claude was used, identify its actual contribution, accepted/rejected
+findings, completion status and refreshed service quota (or explicitly unavailable).
+Use bounded Flash drafts/reviews when they save real work; do not add a standing
+external-review gate to ordinary development. Keep roadmap, handoff and narrative
+aligned with verified evidence; tests and documentation are not learning progress.
 
 - Do not copy experimental claims or results from the predecessor into this repository.
 - Never commit ROMs, saves, snapshots, recordings, datasets, checkpoints, credentials, or private

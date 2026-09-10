@@ -17,15 +17,21 @@ from pokemon_red_completion.gen1_route_runtime import (
     Gen1TraversalObserver,
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
-from pokemon_red_completion.goal_manager import GoalAvailability, GoalUnavailableReason
-from pokemon_red_completion.goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
+from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
+    GoalExecutionReport,
+)
+from pokemon_red_completion.observation import MapId
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
+from pokemon_red_completion.red_goal_context import RedGoalContextRuntime, _RedTeamGoalProvider
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic, RedGoalProviderSpec
-from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.red_goal_manager import RedGoalBindingProvider, RedGoalObservation
 from pokemon_red_completion.red_goal_skills import (
     RedAreaSurveyGoalProvider,
     RedMartResupplyGoalProvider,
+    prepare_center_departure,
 )
 from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
@@ -36,7 +42,11 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedSemanticTransportRoute,
     build_red_routed_semantic_goal_composer,
 )
-from pokemon_red_completion.route_executor import ReplanRequest, RouteExecutionLimits
+from pokemon_red_completion.route_executor import (
+    InterruptionHandler,
+    ReplanRequest,
+    RouteExecutionLimits,
+)
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalLimits
 from pokemon_red_completion.strategic_navigation_scenario_runtime import (
@@ -44,7 +54,13 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 )
 
 _WALK_ACTIONS = frozenset({"up", "right", "down", "left"})
-_MECHANICS = frozenset({RedGoalMechanic.WILD_CORRIDOR_CAPTURE, RedGoalMechanic.MART_RESUPPLY})
+_MECHANICS = frozenset(
+    {
+        RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        RedGoalMechanic.MART_RESUPPLY,
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+    }
+)
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
@@ -70,6 +86,18 @@ class RedResourceGoalRouter:
     world: StrategicScenarioRouteWorld
     maximum_controller_actions: int = 6_000
     maximum_emulator_frames: int = 600_000
+    quote_resource_costs: bool = False
+    prepare_capture_party: bool = True
+    prepare_capture_storage: bool = False
+    routed_recovery: bool = False
+    trainer_funding: bool = False
+    trainer_pending_recovery: bool = False
+    regional_trainer_funding: bool = False
+    observed_trainer_funding: bool = False
+    prepare_capture_escort: bool = True
+    # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
+    # and escort preparation enabled without planning unused Center routes.
+    include_recovery_offers: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
@@ -88,9 +116,38 @@ class RedResourceGoalRouter:
         origin = red_living_dex_setup_fresh_observation_sha256(fresh)
         replacements: dict[str, ExecutableGoalBinding] = {}
         specs = {spec.kind: spec for spec in self.runtime.profile.providers}
+        capture_spec = specs.get(GoalKind.ACQUIRE_SPECIES)
+        observed_capture = bool(
+            capture_spec is not None
+            and capture_spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and capture_spec.parameters.get("observed_local_capture") is True
+            and capture_spec.parameters["map_id"] == observation.raw.map_id
+        )
+        if observed_capture:
+            from pokemon_red_completion.red_observed_local_capture import (
+                bind_observed_local_capture,
+            )
+
+            assert capture_spec is not None
+            capture = bind_observed_local_capture(self, capture_spec, observation)
+            local = GoalBindingSet(
+                tuple(
+                    (capture.opportunity if capture is not None else replace(
+                        item, availability=GoalAvailability.UNAVAILABLE,
+                        estimated_effort=None, estimated_risk=None,
+                        unavailable_reason=GoalUnavailableReason.MISSING_CAPABILITY,
+                    )) if item.kind is GoalKind.ACQUIRE_SPECIES else item
+                    for item in local.opportunities
+                ),
+                tuple(b for b in local.bindings if b.kind is not GoalKind.ACQUIRE_SPECIES)
+                + (() if capture is None else (capture,)),
+            )
         opportunities = list(local.opportunities)
         for index, opportunity in enumerate(opportunities):
             spec = specs.get(opportunity.kind)
+            if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
+                # Never reinstate the static, unreachable patch as a fallback.
+                continue
             if (
                 opportunity.availability is GoalAvailability.AVAILABLE
                 or opportunity.unavailable_reason is not GoalUnavailableReason.MISSING_CAPABILITY
@@ -99,7 +156,10 @@ class RedResourceGoalRouter:
             ):
                 continue
             provider = self.runtime.provider_for(spec.kind, self.actions)
-            if not isinstance(provider, (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider)):
+            if not isinstance(
+                provider,
+                (RedAreaSurveyGoalProvider, RedMartResupplyGoalProvider, _RedTeamGoalProvider),
+            ):
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
@@ -107,9 +167,40 @@ class RedResourceGoalRouter:
                     opportunity, unavailable_reason=availability.unavailable_reason
                 )
                 continue
+            if (
+                isinstance(provider, RedMartResupplyGoalProvider)
+                and provider.affordable_ball_purchase
+            ):
+                fixed_provider = provider.affordable_provider(observation)
+                if fixed_provider is None:
+                    raise RedResourceGoalRoutingError("available purchase lost its fixed quote")
+                provider = fixed_provider
             plan = self._plan(spec, fresh)
             if plan is None:
+                from pokemon_red_completion.red_collection_fly import bind_collection_fly
+
+                flight = bind_collection_fly(self, spec, provider, fresh, traversal)
+                if flight is not None:
+                    replacements[flight.binding_ref] = flight
+                    opportunities[index] = flight.opportunity
                 continue
+            interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
+                self.actions, self.runtime.reader, maximum_flees=16,
+                maximum_trainer_battles=8, stabilization_frames=180,
+                route_name="bounded resource-goal transport",
+            )
+            if self.routed_recovery:
+                from pokemon_red_completion.red_routed_recovery import (
+                    guarded_collection_route_handler,
+                )
+                interruption_handler = guarded_collection_route_handler(
+                    self.actions, self.runtime.reader, route_name="guarded resource-goal transport",
+                )
+            from pokemon_red_completion.red_travel_capture_runtime import (
+                bind_travel_capture_destination,
+                bind_travel_capture_handler,
+            )
+            interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
             transport = RedSemanticTransportRoute(
                 binding_ref=f"red-resource-route:{spec.configuration_sha256}",
                 origin_observation_sha256=origin,
@@ -124,16 +215,12 @@ class RedResourceGoalRouter:
                 actions=self.actions,
                 traversal_observer=traversal,
                 emulator=self.runtime.emulator,
-                interruption_handler=Gen1RouteInterruptionHandler(
-                    self.actions,
-                    self.runtime.reader,
-                    maximum_flees=16,
-                    maximum_trainer_battles=8,
-                    stabilization_frames=180,
-                    route_name="bounded resource-goal transport",
-                ),
+                interruption_handler=interruption_handler,
                 replanner=self._replan,
                 route_limits=_ROUTE_LIMITS,
+                prepare_departure=lambda: prepare_center_departure(
+                    self.actions, self.runtime.reader
+                ),
             )
 
             def observe_fresh() -> FreshRedGoalObservation:
@@ -145,11 +232,22 @@ class RedResourceGoalRouter:
                     observation_sha256=red_living_dex_setup_fresh_observation_sha256(current),
                 )
 
+            destination_provider: RedGoalBindingProvider = provider
+            if self.routed_recovery and isinstance(provider, RedAreaSurveyGoalProvider):
+                from pokemon_red_completion.red_capture_preparation import (
+                    EscortPreparedCaptureProvider,
+                )
+                destination_provider = EscortPreparedCaptureProvider(
+                    provider, self.runtime, self.actions,
+                )
+            destination_provider = bind_travel_capture_destination(
+                self, spec, destination_provider, provider, observation, [interruption_handler],
+            )
             destination = RedFreshGoalDestinationBinder(
                 kind=spec.kind,
                 boundary=transport.terminal_boundary,
                 observe_fresh=observe_fresh,
-                provider=provider,
+                provider=destination_provider,
             )
             binding = build_red_routed_semantic_goal_composer(
                 binding_ref=f"red-resource-goal:{origin}:{spec.configuration_sha256}",
@@ -161,14 +259,112 @@ class RedResourceGoalRouter:
                     self.maximum_controller_actions, self.maximum_emulator_frames
                 ),
             ).binding()
+            if isinstance(provider, RedAreaSurveyGoalProvider):
+                binding = replace(
+                    binding, search_source_ref=f"pokemon.red:acquisition:{provider.source_id}"
+                )
             replacements[binding.binding_ref] = binding
             opportunities[index] = binding.opportunity
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
-        return GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        if self.prepare_capture_storage:
+            from pokemon_red_completion.red_routed_capture_storage import (
+                bind_capture_storage_support,
+            )
+
+            result = bind_capture_storage_support(self, result, observation)
+        if self.prepare_capture_party and any(
+            spec.parameters.get("capture_status_support") is True
+            for spec in self.runtime.profile.providers
+        ):
+            from pokemon_red_completion.red_routed_capture_support import bind_capture_party_support
+
+            result = bind_capture_party_support(self, result, observation)
+        if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
+            raise RedResourceGoalRoutingError("capture support enumeration changed the game")
+        if self.routed_recovery:
+            from pokemon_red_completion.red_capture_preparation import (
+                bind_capture_escort,
+                prepare_capture_escort,
+            )
+            from pokemon_red_completion.red_routed_recovery import bind_routed_center_recovery
+
+            def prepare_escort() -> None:
+                prepare_capture_escort(self.runtime, self.actions)
+
+            if self.include_recovery_offers:
+                result = bind_routed_center_recovery(
+                    self, result, observation,
+                    prepare_escort=prepare_escort,
+                )
+            if self.prepare_capture_escort:
+                result = bind_capture_escort(self, result, observation)
+        if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
+            raise RedResourceGoalRoutingError("recovery enumeration changed the game")
+        if self.quote_resource_costs:
+            result = self._with_quotes(result, observation)
+        # Income is not a Mart purchase and must never inherit a spend quote.
+        if self.trainer_funding:
+            from pokemon_red_completion.red_routed_trainer_funding import bind_local_trainer_funding
+
+            result = bind_local_trainer_funding(self, result, observation)
+        if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
+            raise RedResourceGoalRoutingError("trainer funding enumeration changed the game")
+        return result
+
+    def _with_quotes(
+        self, bindings: GoalBindingSet, observation: RedGoalObservation
+    ) -> GoalBindingSet:
+        """Bind exact costs to the same opportunity and executable skill."""
+        quoted = []
+        for binding in bindings.bindings:
+            if binding.kind is GoalKind.RESUPPLY:
+                provider = self.runtime.provider_for(binding.kind, self.actions)
+                if not isinstance(provider, RedMartResupplyGoalProvider):
+                    raise RedResourceGoalRoutingError("resource-cost quote needs a Mart provider")
+                binding = self._quoted_binding(binding, provider, observation)
+            quoted.append(binding)
+        by_ref = {item.binding_ref: item.opportunity for item in quoted}
+        return GoalBindingSet(
+            tuple(by_ref.get(item.binding_ref, item) for item in bindings.opportunities),
+            tuple(quoted),
+        )
+
+    def _quoted_binding(
+        self,
+        binding: ExecutableGoalBinding,
+        provider: RedMartResupplyGoalProvider,
+        observation: RedGoalObservation,
+    ) -> ExecutableGoalBinding:
+        quote = provider.resource_quote(observation)
+
+        def execute() -> GoalExecutionReport:
+            # Reject stale economic facts before transport or menu input. The
+            # destination skill separately verifies actual inventory/money deltas.
+            current = provider.resource_quote(self.runtime.adapter.observe())
+            if current != quote:
+                raise RedResourceGoalRoutingError("resource quote changed before execution")
+            return binding.execute()
+
+        return replace(binding, resource_quote=quote, execute=execute)
 
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
+        if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+            # Known mechanic entry boundaries, connected by the cartridge router.
+            for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
+                try:
+                    plan = self.world.plan_feasible_to_map(
+                        fresh.traversal,
+                        int(center),
+                        goal_at=(3, 3),
+                    )
+                except RoutePlanningError:
+                    continue
+                if plan.steps and _walking_plan(plan):
+                    return plan
+            return None
         target_map = parameters["map_id"]
         x, y = parameters["player_x"], parameters["player_y"]
         if any(type(value) is not int for value in (target_map, x, y)):

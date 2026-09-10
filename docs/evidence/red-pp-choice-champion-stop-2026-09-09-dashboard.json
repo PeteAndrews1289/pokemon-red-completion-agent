@@ -1,0 +1,141 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "current_session_status": "owned_pp_choice_fitted_later_guided_champion_failed",
+  "scope": "82 outcomes:81 comparative choices plus1 guided Agatha row. New model-selected Elixir use fitted. Later guided Champion stopped with six alive; no new story label or Phase4 completion.",
+  "session_evidence": "docs/evidence/red-pp-choice-champion-stop-2026-09-09.json",
+  "boundaries": {
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "historical_practice_branch_reopened": false,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "actions": 38,
+    "frames": 3396,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 0,
+    "episode_id": "red-pp-champion-choice-20260909-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "comparative_choice_outcomes": 81,
+    "controller_actions": 0,
+    "corpus_record_sha256": "49b147dd7e764f415cdb8a57c7eef73e1d8e71f87e6aae1b753805531f34b54e",
+    "curriculum_is_comparative_evidence": false,
+    "curriculum_outcomes": 1,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 69,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-ips-plus-unit-curriculum-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 82,
+      "successful_examples": 40,
+      "total_examples": 82,
+      "train_dataset_sha256": "18777464ff374bde5d21d46ef014b531df591323466ab0d37466bb5d26a77d8a",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.01199673945668958,
+      "weighted_mse_before": 0.028522112278354016
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "22c6ffb118067e2b1b364b2e6b0fa62ea401447e66f84411bf56c6116d9cf9ea",
+      "file_sha256": "9dfe4f65e85e1b583c055f8b4b8a59648a7840ea45eb6b6fc30d5f1ae5b9e945",
+      "independent_evaluation": false,
+      "model_sha256": "d5dd4db2d44a3abef287733a089e1fc91883f17a7d8bd68625cd6e07264d5781",
+      "prior_model_sha256": "849ec8bbc3209ae769f6f6698c2484b4439f922a5f8a38ec350b650dd60cd7c8",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 82,
+      "source_bundle_sha256": "3e5c464b52f010dbf038831dbe1c30f8eaa2acbe4397253631baa167b7e8ba3d",
+      "source_commit": "d8504664d69f84dd2c89bda163ed390c256f1d49"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09616294559550084,
+        0.000005362707662399528,
+        0.00005899720253731215,
+        0.0055369113274241774,
+        0.004114281484775617,
+        0.0013078822959688942,
+        0.000761862573972444,
+        0.0000012584568226267705,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 82,
+      "total_examples": 82,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011994389071629369
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09618400245200606,
+        0.0000053637039785039565,
+        0.00005899800452485489,
+        0.005537635367799813,
+        0.004114863547388455,
+        0.0013066876584335444,
+        0.0007618458823847795,
+        0.0000012584936902304674,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 82,
+      "total_examples": 82,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011996739456689583
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "performed": false
+  }
+}

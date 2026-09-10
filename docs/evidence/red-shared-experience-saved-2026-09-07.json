@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 14:31 UTC",
+  "location": "Route 11 — Kadabra evolved; original Abra retained",
+  "registered_species": 28,
+  "living_species": 23,
+  "specimens": 25,
+  "capture_items": 1,
+  "money": 309,
+  "checkpoint_sha256": "1b5cd2f83f744da861d96768b409178ffceeda9ad8b465e7e7b6ef49e6c2dc67",
+  "live": false,
+  "controller_actions": 0
+}

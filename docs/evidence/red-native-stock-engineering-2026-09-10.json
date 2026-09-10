@@ -1,0 +1,18 @@
+{
+  "schema": "pokemon.red.native-stock-engineering.v1",
+  "session": "2026-09-10-native-stock-overnight",
+  "classification": "ROM-free engineering, not learned progress",
+  "targeted_tests_passed": 232,
+  "typed_source_files_checked": 464,
+  "native_stock_contract": true,
+  "registered_reserves_verified": true,
+  "legacy_multiplicity_guards_unchanged": true,
+  "exact_species_delta_verified": true,
+  "owned_flag_regression_rejected": true,
+  "controller_slot_selection_tested": true,
+  "unique_genetic_identity_claim": false,
+  "new_gameplay_actions": 0,
+  "new_training_examples": 0,
+  "new_model_fits": 0,
+  "live_multi_copy_result": false
+}

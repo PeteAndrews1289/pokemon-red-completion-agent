@@ -1,0 +1,224 @@
+{
+  "schema": "pokemon.red.postfit-readiness-learning.v1",
+  "session": "2026-09-09-postfit-readiness",
+  "source_commit": "b8aae554152e5bc283b65bf2f2b34042e335ac10",
+  "source_bundle_sha256": "f0e4cfe843abd2c9df9f83f67be513b8bcf6aa9d72a7540805340db6d8a59dec",
+  "episode_id": "red-postfit-choice-20260909-01-causal",
+  "seed": 2026090851,
+  "trajectory_manifest_sha256": "cde902f8b1ca5342ec6eae27ac6858888b822fa53c2c11bd32c20038bfa2b8bf",
+  "checkpoint_record_sha256": "054f8cbd47f434eacbb45b9015a639c2510ca715a91d6f9120a0938820e5a969",
+  "checkpoint_state_sha256": "2d1e3033ba68e4115f7546b1c9a711f4f2756997766455c947cf45d856f427c3",
+  "selection": {
+    "policy": "living-dex-player-optional-recovery-v4",
+    "selected": "restore_team",
+    "selected_probability": 0.861784612713122,
+    "story_probability": 0.1382153872868779,
+    "supported_options": 2,
+    "forced_singleton": false,
+    "teacher_fallback": false
+  },
+  "outcome": {
+    "status": "succeeded",
+    "actions": 22,
+    "frames": 2184,
+    "healed_species": "Jolteon",
+    "hp_before": 61,
+    "hp_after": 172,
+    "max_hp": 172,
+    "full_restores_spent": 1,
+    "full_restores_remaining": 1,
+    "money": 6163,
+    "specimens": 30,
+    "living_species": 28,
+    "registered_species": 33,
+    "story_objectives": 31,
+    "story_objectives_total": 36,
+    "story_progress_this_session": 0,
+    "bruno_attempted": false,
+    "party_hp": [
+      198,
+      172,
+      71,
+      118,
+      34,
+      139
+    ],
+    "party_max_hp": [
+      213,
+      172,
+      89,
+      118,
+      39,
+      139
+    ]
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "57f7d18c214b3d9aacebf74e6547c148dba4828a31fb0dffd0f0510424c2213e",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 68,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 78,
+      "successful_examples": 36,
+      "total_examples": 78,
+      "train_dataset_sha256": "03aa6787ce50b9a006b333f614c2194a83a88a2bb98114e2c153b4a6df19a055",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012254869690899811,
+      "weighted_mse_before": 0.028062560224054605
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "df12696e6ee21dbcb285ab9ae663acb63dd68b07474107745e05f653eb0138fd",
+      "file_sha256": "ce94f5b1aa8c37a570761094b4270ea2e7c61cb671046f83978d97c366f4519c",
+      "independent_evaluation": false,
+      "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+      "prior_model_sha256": "57e1c2e26ef1c663b2efb4c78da0f435c706043255ea7776933eb06290c41b3f",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 78,
+      "source_bundle_sha256": "f0e4cfe843abd2c9df9f83f67be513b8bcf6aa9d72a7540805340db6d8a59dec",
+      "source_commit": "b8aae554152e5bc283b65bf2f2b34042e335ac10"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09815796245385033,
+        0.000005501465585768015,
+        0.00005999660257232502,
+        0.005696592356552182,
+        0.004232875093599911,
+        0.001336424938840384,
+        0.0007847967393359942,
+        0.0000012931692918438897,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 78,
+      "total_examples": 78,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01225282697995875
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09817625188949873,
+        0.000005502382665235678,
+        0.000059997281215459876,
+        0.0056973246722225816,
+        0.0042334738467059325,
+        0.001335204517271806,
+        0.0007847793922399548,
+        0.0000012932362785969283,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 78,
+      "total_examples": 78,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012254869690899811
+    }
+  },
+  "coverage_before_this_fit": {
+    "actions": 0,
+    "corpus_sha256": "96175748404cda26ffe924694ea1b5a2e772d3cdc31e8f7f223b7b5b962758d9",
+    "frames": 0,
+    "menus_offering_kind": {
+      "acquire": 61,
+      "develop": 15,
+      "evolve": 37,
+      "explore": 31,
+      "manage_storage": 12,
+      "restore": 5,
+      "resupply": 14,
+      "unlock_access": 5
+    },
+    "new_predictions": 0,
+    "selected_outcomes_by_kind": {
+      "acquire": 35,
+      "develop": 6,
+      "evolve": 14,
+      "explore": 8,
+      "manage_storage": 4,
+      "restore": 4,
+      "resupply": 5,
+      "unlock_access": 1
+    },
+    "successful_outcomes_by_kind": {
+      "acquire": 17,
+      "develop": 3,
+      "evolve": 6,
+      "explore": 0,
+      "manage_storage": 0,
+      "restore": 4,
+      "resupply": 5,
+      "unlock_access": 0
+    },
+    "total_examples": 77
+  },
+  "interpretation": "Two restorations addressed genuine sub-half-health deficits. This does not yet prove reward gaming. Story/access has only one selected failed outcome in model77's corpus, versus four successful restoration rows. A zero story-success prediction is not verified impossibility. All party are now above half health; preserve the final Full Restore from minor top-offs.",
+  "boundaries": {
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "retries": 0,
+    "new_counterfactual_targets": 0,
+    "model78_post_fit_gameplay": false
+  },
+  "validation": {
+    "focused_tests_passed": 146,
+    "full_suite": false,
+    "zero_input_saved_state_audit": true
+  },
+  "next_session": "From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels.",
+  "external_review": {
+    "provider": "Antigravity CLI",
+    "model": "gemini-3.8-flash-high",
+    "requested_effort": "high",
+    "status": "response_unavailable_after_context_rollover",
+    "conclusions_relied_on": false,
+    "five_hour_usage": null,
+    "weekly_usage": null
+  }
+}
+

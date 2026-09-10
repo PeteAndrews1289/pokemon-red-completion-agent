@@ -771,6 +771,12 @@ class PrivateArtifactRoot:
             failure_diagnostic=failure_diagnostic,
         )
 
+    def open_failed_episode(self, episode_id: str) -> PrivateEpisodeReader:
+        """Read retained failure streams after full manifest validation; never resume."""
+        _validate_episode_id(episode_id)
+        self._revalidate()
+        return _open_private_episode(self._root, episode_id, expected_status="failed")
+
     def _revalidate(self) -> None:
         _validate_root_location(
             self._root,

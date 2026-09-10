@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-07 UTC",
+  "location": "Route 5 — second Mankey retained; all six healthy",
+  "registered_species": 30,
+  "living_species": 25,
+  "specimens": 26,
+  "capture_items": 4,
+  "money": 209,
+  "checkpoint_sha256": "5135f21193bb1c2505119c119b61325d68b70cca24437dae96668edd4af358c5",
+  "live": false,
+  "controller_actions": 0
+}

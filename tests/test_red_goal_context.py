@@ -290,6 +290,21 @@ def _targeted_team_profile(profile_id: str):  # type: ignore[no-untyped-def]
     )
 
 
+def test_combined_profile_enables_pp_observation_without_changing_old_default(tmp_path):
+    from pokemon_red_completion.red_goal_context_profile import bind_combined_field_restore_profile
+
+    profile = _profile('combined-fixture')
+    original = build_red_goal_context_runtime(
+        profile=profile, capture=_capture(tmp_path), emulator=_Emulator(), reader=_Reader(),
+    )
+    combined = build_red_goal_context_runtime(
+        profile=bind_combined_field_restore_profile(profile), capture=_capture(tmp_path),
+        emulator=_Emulator(), reader=_Reader(),
+    )
+    assert original.adapter.include_pp_restoration is False
+    assert combined.adapter.include_pp_restoration is True
+
+
 def test_context_factory_binds_exact_profile_only_beside_policy_menu(
     tmp_path: Path,
 ) -> None:
@@ -385,8 +400,14 @@ def test_team_development_is_one_level_quantum_not_a_full_duplicate_grind() -> N
     assert evolution.required_size == party.size
 
 
+@pytest.mark.parametrize("remaining_demand,level_edges,opportunistic", [
+    (False, (), False), (True, (), False),
+    (True, ((red_species_ref(96), red_species_ref(97)),), False),
+    (True, (), True), (True, ((red_species_ref(96), red_species_ref(97)),), True),
+])
 def test_wild_goal_context_binds_one_capture_quantum(
-    monkeypatch: pytest.MonkeyPatch,
+    monkeypatch: pytest.MonkeyPatch, remaining_demand: bool, level_edges: tuple,
+    opportunistic: bool,
 ) -> None:
     captured: dict[str, object] = {}
 
@@ -418,8 +439,13 @@ def test_wild_goal_context_binds_one_capture_quantum(
         "maximum_encounters": 16,
     }
 
+    if opportunistic:
+        parameters["capture_species_numbers"] = (16, 21)
     _wild_provider(
-        SimpleNamespace(emulator=object(), reader=object(), adapter=object()),
+        SimpleNamespace(emulator=object(), reader=object(), adapter=object(),
+                        registration_policy=None,
+                        remaining_acquisition_demand=remaining_demand,
+                        level_evolution_acquisition_edges=level_edges),
         SimpleNamespace(
             parameters=parameters,
             mechanic=RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
@@ -427,10 +453,16 @@ def test_wild_goal_context_binds_one_capture_quantum(
         CountingExecutor(_ActionDelegate()),
     )
 
+    assert captured["catalog"].remaining_demand is remaining_demand
+    assert captured["catalog"].level_evolution_edges == level_edges
     policy = captured["policy"]
     assert isinstance(policy, RedAreaExecutionPolicy)
     assert policy.capture_quota == 1
-    assert policy.capture_in_requirement_order is True
+    assert policy.capture_in_requirement_order is (not opportunistic)
+    assert captured["catalog"].wild_source_species == (
+        (("wild:Route1:grass", (red_species_ref(16), red_species_ref(21))),)
+        if opportunistic else ()
+    )
     assert callable(captured["normalize_after_capture"])
 
 

@@ -1,0 +1,307 @@
+{
+  "limitations": [
+    "Four repeated deterministic toy starts; no independent real-game coverage.",
+    "Empirical toy error bounds are not calibrated Red confidence intervals.",
+    "A frozen two-macro continuation, not a general planner or optimal Q model.",
+    "No live adapter, persistent episode reader or real player promotion is implied."
+  ],
+  "no_red_inputs": true,
+  "prospective_configuration": {
+    "completion_error_bound": 0.08,
+    "cost_error_bound": 0.015,
+    "equivalence_margin": 0.25,
+    "minimum_completion": 0.8,
+    "plan": {
+      "continuation_sha256": "c468c6d004c961175e53f2d5d11385f504a3d6914acd1f69d0b1fd9b200fd273",
+      "cost_proxy": "fixed-start-budget-mean.v1",
+      "goal_family": "synthetic-resource-goal",
+      "max_actions": 100,
+      "max_frames": 1000,
+      "max_macros": 2,
+      "max_resources": 4,
+      "schema": "pokemon.core.forward-goal-plan.v1",
+      "verifier_sha256": "df3201ea43c84687b0a6c13b8515f248a75e2b0f6c54b9c38caeb88db97e7322"
+    },
+    "qualification_energies": [
+      0.025,
+      0.075,
+      0.125,
+      0.175,
+      0.825,
+      0.875,
+      0.925,
+      0.975
+    ],
+    "ridge": 0.01,
+    "seed": 2026090901,
+    "test_energies": [
+      0,
+      0.05,
+      0.15,
+      0.195,
+      0.805,
+      0.85,
+      0.94,
+      0.99
+    ],
+    "train_energies": [
+      0.1,
+      0.2,
+      0.8,
+      0.9
+    ],
+    "unsupported_energies": [
+      0.35,
+      0.5,
+      0.65
+    ]
+  },
+  "qualification": {
+    "cases": [
+      {
+        "energy": 0.025,
+        "supported": true
+      },
+      {
+        "energy": 0.075,
+        "supported": true
+      },
+      {
+        "energy": 0.125,
+        "supported": true
+      },
+      {
+        "energy": 0.175,
+        "supported": true
+      },
+      {
+        "energy": 0.825,
+        "supported": true
+      },
+      {
+        "energy": 0.875,
+        "supported": true
+      },
+      {
+        "energy": 0.925,
+        "supported": true
+      },
+      {
+        "energy": 0.975,
+        "supported": true
+      }
+    ],
+    "completion_max_error": 0.047228157191897435,
+    "cost_max_error": 0.000005053405083693674,
+    "passed": true
+  },
+  "red_authority_promotions": 0,
+  "red_model_changed": false,
+  "red_training_rows_created": 0,
+  "schema": "pokemon.synthetic.forward-goal-qualification.v1",
+  "scope": "controlled_synthetic_not_pokemon_or_real_calibration",
+  "tests": [
+    {
+      "completion_estimates": [
+        0,
+        0.9998919120666505
+      ],
+      "cost_estimates": [
+        0.200005220376055,
+        0.38332965466518515
+      ],
+      "energy": 0,
+      "observed_target": [
+        1,
+        0.3833333333333333
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 1,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0,
+        0.9999033188547575
+      ],
+      "cost_estimates": [
+        0.2000048864341123,
+        0.38332991418241313
+      ],
+      "energy": 0.05,
+      "observed_target": [
+        1,
+        0.3833333333333333
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 1,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0.012389515551616936,
+        0.9999261324309713
+      ],
+      "cost_estimates": [
+        0.20000421855022693,
+        0.3833304332168692
+      ],
+      "energy": 0.15,
+      "observed_target": [
+        1,
+        0.3833333333333333
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 1,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0.07509907050412201,
+        0.9999363985402674
+      ],
+      "cost_estimates": [
+        0.20000391800247852,
+        0.3833306667823745
+      ],
+      "energy": 0.195,
+      "observed_target": [
+        1,
+        0.3833333333333333
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 1,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0.9251619265269682,
+        1
+      ],
+      "cost_estimates": [
+        0.19999984391077769,
+        0.38333383289255646
+      ],
+      "energy": 0.805,
+      "observed_target": [
+        1,
+        0.19999999999999998
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 0,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0.9878714814794731,
+        1
+      ],
+      "cost_estimates": [
+        0.19999954336302928,
+        0.3833340664580617
+      ],
+      "energy": 0.85,
+      "observed_target": [
+        1,
+        0.19999999999999998
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 0,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        1,
+        1
+      ],
+      "cost_estimates": [
+        0.19999894226753245,
+        0.3833345335890721
+      ],
+      "energy": 0.94,
+      "observed_target": [
+        1,
+        0.19999999999999998
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 0,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        1,
+        1
+      ],
+      "cost_estimates": [
+        0.19999860832558974,
+        0.38333479310630014
+      ],
+      "energy": 0.99,
+      "observed_target": [
+        1,
+        0.19999999999999998
+      ],
+      "regret_against_known_toy_optimum": false,
+      "selected_option": 0,
+      "supported": true
+    },
+    {
+      "completion_estimates": [
+        0.2910986486738616,
+        0.9999717595833989
+      ],
+      "cost_estimates": [
+        0.20000288278245618,
+        0.3833314712857814
+      ],
+      "energy": 0.35,
+      "observed_target": null,
+      "regret_against_known_toy_optimum": null,
+      "selected_option": null,
+      "supported": false
+    },
+    {
+      "completion_estimates": [
+        0.500130498515545,
+        1
+      ],
+      "cost_estimates": [
+        0.20000188095662813,
+        0.38333224983746544
+      ],
+      "energy": 0.5,
+      "observed_target": null,
+      "regret_against_known_toy_optimum": null,
+      "selected_option": null,
+      "supported": false
+    },
+    {
+      "completion_estimates": [
+        0.7091623483572286,
+        1
+      ],
+      "cost_estimates": [
+        0.20000087913080006,
+        0.3833330283891495
+      ],
+      "energy": 0.65,
+      "observed_target": null,
+      "regret_against_known_toy_optimum": null,
+      "selected_option": null,
+      "supported": false
+    }
+  ],
+  "training": {
+    "censored_examples": 1,
+    "completion_mse_after": 0.0016251100871505682,
+    "completion_mse_before": 0.161865234375,
+    "cost_mse_after": 6.371096014393125e-12,
+    "cost_mse_before": 0.008402777777777768,
+    "dataset_sha256": "5d0788efb8e2893f261a4e1041914223dddf589effe8aa2dcf6ead15f216f843",
+    "distinct_selected_inputs": 8,
+    "model_sha256": "d4031c3621bd49cc124387e49d120c9fbb04aff79e1f83f05b492807ff21be43",
+    "recorded_roots": 4,
+    "settled_examples": 128,
+    "settled_roots": 4
+  }
+}

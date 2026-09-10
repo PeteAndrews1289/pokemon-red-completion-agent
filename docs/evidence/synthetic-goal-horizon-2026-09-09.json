@@ -1,0 +1,267 @@
+{
+  "assumptions": [
+    "All macro outcomes and terminal evidence are fixed synthetic stipulations.",
+    "Future completion facts are oracle hindsight, unavailable to a live actor.",
+    "One-step and naive sums use DEFAULT_LIVING_DEX_GOAL_UTILITY unchanged.",
+    "Costs share fixed units across steps; completion is counted once within budget.",
+    "Completion evidence is at plan end; earlier completion is not inferred.",
+    "Unknown/interrupted terminal evidence is censored, never an inferred failure.",
+    "Scores for censored cases describe only the known macro prefix."
+  ],
+  "authority_promotions": 0,
+  "cases": [
+    {
+      "budget": {
+        "action_cost": 1.0,
+        "frame_cost": 1.0
+      },
+      "case": "optional_positive_recovery",
+      "completion_once_hindsight_preferred": "story_now",
+      "completion_once_hindsight_ranking": [
+        "story_now",
+        "recover_then_story"
+      ],
+      "first_macro_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "naive_sum_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "plans": [
+        {
+          "action_cost": 0.1,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": true,
+          "cumulative_cost": 0.23,
+          "first_macro_utility": 3.853333333333333,
+          "frame_cost": 0.1,
+          "macro_steps": 1,
+          "naive_sum_utility": 3.853333333333333,
+          "plan": "story_now",
+          "positive_pp_restored": 0,
+          "terminal_evidence": "complete"
+        },
+        {
+          "action_cost": 0.11,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": true,
+          "cumulative_cost": 0.258,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.11,
+          "macro_steps": 2,
+          "naive_sum_utility": 7.825333333333333,
+          "plan": "recover_then_story",
+          "positive_pp_restored": 1,
+          "terminal_evidence": "complete"
+        }
+      ]
+    },
+    {
+      "budget": {
+        "action_cost": 1.0,
+        "frame_cost": 1.0
+      },
+      "case": "necessary_recovery",
+      "completion_once_hindsight_preferred": "recover_then_story",
+      "completion_once_hindsight_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "first_macro_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "naive_sum_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "plans": [
+        {
+          "action_cost": 0.1,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": false,
+          "cumulative_cost": 0.23,
+          "first_macro_utility": -0.23,
+          "frame_cost": 0.1,
+          "macro_steps": 1,
+          "naive_sum_utility": -0.23,
+          "plan": "story_now",
+          "positive_pp_restored": 0,
+          "terminal_evidence": "incomplete"
+        },
+        {
+          "action_cost": 0.11,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": true,
+          "cumulative_cost": 0.258,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.11,
+          "macro_steps": 2,
+          "naive_sum_utility": 7.825333333333333,
+          "plan": "recover_then_story",
+          "positive_pp_restored": 1,
+          "terminal_evidence": "complete"
+        }
+      ]
+    },
+    {
+      "budget": {
+        "action_cost": 0.1,
+        "frame_cost": 0.1
+      },
+      "case": "completion_after_budget_is_not_within_budget",
+      "completion_once_hindsight_preferred": "story_now",
+      "completion_once_hindsight_ranking": [
+        "story_now",
+        "recover_then_story"
+      ],
+      "first_macro_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "naive_sum_ranking": [
+        "recover_then_story",
+        "story_now"
+      ],
+      "plans": [
+        {
+          "action_cost": 0.1,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": true,
+          "cumulative_cost": 0.23,
+          "first_macro_utility": 3.853333333333333,
+          "frame_cost": 0.1,
+          "macro_steps": 1,
+          "naive_sum_utility": 3.853333333333333,
+          "plan": "story_now",
+          "positive_pp_restored": 0,
+          "terminal_evidence": "complete"
+        },
+        {
+          "action_cost": 0.11,
+          "budget_exceeded": true,
+          "censored": false,
+          "completion_within_budget": false,
+          "cumulative_cost": 0.258,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.11,
+          "macro_steps": 2,
+          "naive_sum_utility": 7.825333333333333,
+          "plan": "recover_then_story",
+          "positive_pp_restored": 1,
+          "terminal_evidence": "complete"
+        }
+      ]
+    },
+    {
+      "budget": {
+        "action_cost": 1.0,
+        "frame_cost": 1.0
+      },
+      "case": "repeated_maintenance_success_bonus",
+      "completion_once_hindsight_preferred": "story_now",
+      "completion_once_hindsight_ranking": [
+        "story_now",
+        "five_positive_recoveries"
+      ],
+      "first_macro_ranking": [
+        "five_positive_recoveries",
+        "story_now"
+      ],
+      "naive_sum_ranking": [
+        "five_positive_recoveries",
+        "story_now"
+      ],
+      "plans": [
+        {
+          "action_cost": 0.1,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": true,
+          "cumulative_cost": 0.23,
+          "first_macro_utility": 3.853333333333333,
+          "frame_cost": 0.1,
+          "macro_steps": 1,
+          "naive_sum_utility": 3.853333333333333,
+          "plan": "story_now",
+          "positive_pp_restored": 0,
+          "terminal_evidence": "complete"
+        },
+        {
+          "action_cost": 0.05,
+          "budget_exceeded": false,
+          "censored": false,
+          "completion_within_budget": false,
+          "cumulative_cost": 0.14,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.05,
+          "macro_steps": 5,
+          "naive_sum_utility": 19.86,
+          "plan": "five_positive_recoveries",
+          "positive_pp_restored": 5,
+          "terminal_evidence": "incomplete"
+        }
+      ]
+    },
+    {
+      "budget": {
+        "action_cost": 1.0,
+        "frame_cost": 1.0
+      },
+      "case": "terminal_evidence_censored",
+      "completion_once_hindsight_preferred": null,
+      "completion_once_hindsight_ranking": [],
+      "first_macro_ranking": [
+        "interrupted_after_recovery",
+        "unknown_after_recovery"
+      ],
+      "naive_sum_ranking": [
+        "interrupted_after_recovery",
+        "unknown_after_recovery"
+      ],
+      "plans": [
+        {
+          "action_cost": 0.01,
+          "budget_exceeded": false,
+          "censored": true,
+          "completion_within_budget": null,
+          "cumulative_cost": 0.028,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.01,
+          "macro_steps": 1,
+          "naive_sum_utility": 3.972,
+          "plan": "unknown_after_recovery",
+          "positive_pp_restored": 1,
+          "terminal_evidence": "unknown"
+        },
+        {
+          "action_cost": 0.01,
+          "budget_exceeded": false,
+          "censored": true,
+          "completion_within_budget": null,
+          "cumulative_cost": 0.028,
+          "first_macro_utility": 3.972,
+          "frame_cost": 0.01,
+          "macro_steps": 1,
+          "naive_sum_utility": 3.972,
+          "plan": "interrupted_after_recovery",
+          "positive_pp_restored": 1,
+          "terminal_evidence": "interrupted"
+        }
+      ]
+    }
+  ],
+  "controller_actions": 0,
+  "model_queries": 0,
+  "production_policy_changed": false,
+  "schema": "pokemon.synthetic.goal-horizon-diagnostic.v1",
+  "scope": "hindsight_toy_diagnostic_not_a_deployable_actor",
+  "training_labels_created": 0
+}

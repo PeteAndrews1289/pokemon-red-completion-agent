@@ -1,0 +1,169 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "One model77 post-fit choice restored Jolteon, preserved the collection and entered model78. Bruno remains unattempted.",
+  "session_evidence": "docs/evidence/red-postfit-readiness-learning-2026-09-09.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "completed_episode": {
+    "actions": 22,
+    "frames": 2184,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 0,
+    "episode_id": "red-postfit-choice-20260909-01-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "57f7d18c214b3d9aacebf74e6547c148dba4828a31fb0dffd0f0510424c2213e",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 68,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 78,
+      "successful_examples": 36,
+      "total_examples": 78,
+      "train_dataset_sha256": "03aa6787ce50b9a006b333f614c2194a83a88a2bb98114e2c153b4a6df19a055",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012254869690899811,
+      "weighted_mse_before": 0.028062560224054605
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "df12696e6ee21dbcb285ab9ae663acb63dd68b07474107745e05f653eb0138fd",
+      "file_sha256": "ce94f5b1aa8c37a570761094b4270ea2e7c61cb671046f83978d97c366f4519c",
+      "independent_evaluation": false,
+      "model_sha256": "9ab7411fbdf69b2b73b0de41ae32f6ab42b39641df791a67ad0b4ffbd33c116b",
+      "prior_model_sha256": "57e1c2e26ef1c663b2efb4c78da0f435c706043255ea7776933eb06290c41b3f",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 78,
+      "source_bundle_sha256": "f0e4cfe843abd2c9df9f83f67be513b8bcf6aa9d72a7540805340db6d8a59dec",
+      "source_commit": "b8aae554152e5bc283b65bf2f2b34042e335ac10"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09815796245385033,
+        0.000005501465585768015,
+        0.00005999660257232502,
+        0.005696592356552182,
+        0.004232875093599911,
+        0.001336424938840384,
+        0.0007847967393359942,
+        0.0000012931692918438897,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 78,
+      "total_examples": 78,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01225282697995875
+    },
+    "regional_source_examples": 18,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09817625188949873,
+        0.000005502382665235678,
+        0.000059997281215459876,
+        0.0056973246722225816,
+        0.0042334738467059325,
+        0.001335204517271806,
+        0.0007847793922399548,
+        0.0000012932362785969283,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 78,
+      "total_examples": 78,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012254869690899811
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": []
+  },
+  "current_limitation": "Model78 has not played. No Bruno attempt or measured advantage. Story/access coverage is one failed prior example; all party now above half health and only one Full Restore remains.",
+  "next_session": "From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels.",
+  "session_totals": {
+    "actions": 22,
+    "frames": 2184,
+    "new_fitted_examples": 1,
+    "full_restores_spent": 1,
+    "earned_money": 0
+  },
+  "fit_scope": "78 settled outcomes: prior77 retained plus one verified native restoration. 36 successful, 68 distinct selected feature rows. No independent advantage.",
+  "latest_support_episode": {
+    "actions": 57,
+    "frames": 5413,
+    "admitted_examples": 0,
+    "sampled_choices": 0,
+    "verified_collection_gain": 0,
+    "episode_id": "red-phase4-confusion-recovery-20260908-01",
+    "status": "completed",
+    "trainer_defeated": "Lorelei",
+    "payout": 5544
+  },
+  "latest_engineering_qualification": {
+    "session": "2026-09-08-native-choice-learning",
+    "evidence_path": "docs/evidence/red-native-choice-learning-2026-09-08.json",
+    "focused_tests_passed": 339,
+    "full_suite": false,
+    "new_actions": 58,
+    "new_frames": 4776,
+    "training_examples": 1,
+    "model_fitted": true
+  }
+}
+

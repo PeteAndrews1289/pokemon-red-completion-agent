@@ -34,6 +34,20 @@ from product_focus import (  # noqa: E402
 CHECKER = runpy.run_path(str(SCRIPTS / "check_product_focus.py"))
 CHECK_DOCS = runpy.run_path(str(SCRIPTS / "check_docs.py"))
 DASHBOARD = runpy.run_path(str(SCRIPTS / "run_product_focus_dashboard.py"))
+
+
+def test_current_dashboard_receipt_passes_the_real_native_training_boundary():
+    # Validate the published pointer too, not just a hand-built dashboard fixture.
+    # Support episodes must not replace the last fit's admitted episode binding.
+    evidence = DASHBOARD["_load_learning_evidence"]()
+    training, _ = DASHBOARD["_native_training_projection"](evidence)
+    assert training.samples_after > 0
+    if "latest_support_episode" in evidence:
+        assert evidence["latest_support_episode"]["admitted_examples"] == 0
+        assert evidence["latest_support_episode"]["sampled_choices"] == 0
+        assert evidence["completed_episode"]["admitted_examples"] > 0
+
+
 BATTLE_OUTCOME_CYCLE_RESULT = (
     PROJECT_ROOT
     / "docs/evidence/red-battle-outcome-cycle-v1-pair-01-result-2026-08-31.json"
@@ -340,14 +354,14 @@ def test_repeatable_focus_inventory_replaces_only_the_dead_story_stratum() -> No
     assert set(receipt["counter_treatment"].values()) == {0}
 
 
-def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progress() -> None:
+def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migration() -> None:
     state = load_product_focus()
 
     assert DEFAULT_FOCUS_CONFIG.read_bytes() == canonical_focus_json(state.document)
     assert DEFAULT_FOCUS_DOCUMENT.read_text(encoding="utf-8") == (
         render_product_focus_markdown(state)
     )
-    assert "| Time box | 1 session / 4 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
+    assert "| Time box | 1 session / 2 hours |" in DEFAULT_FOCUS_DOCUMENT.read_text(
         encoding="utf-8"
     )
     assert state.active_lane["id"] == "cross-title-authenticated-scenario-curriculum-v1"
@@ -359,27 +373,11 @@ def test_tracked_focus_is_canonical_and_reports_evidence_backed_learning_progres
     assert "counterfactual_target" not in prohibited
     assert "unselected_action_target" not in prohibited
     assert state.active_lane["measurable_outputs"] == [
-        {"kind": "causal_train_example", "minimum": 111, "partition": "train"},
-        {"kind": "composition_attempt", "minimum": 6, "partition": "development"},
-        {
-            "kind": "verified_composition_episode",
-            "minimum": 4,
-            "partition": "development",
-        },
-        {
-            "kind": "development_episode",
-            "minimum": 24,
-            "partition": "development",
-        },
+        {"kind": "registered_train_example", "partition": "train", "minimum": 12}
     ]
     assert len(state.retired_lanes) == 60
-    assert focus_progress_fraction(state) == pytest.approx(1.0)
-    assert focus_scorecard(state) == (
-        ("Causal Train Example · train", 111, 111),
-        ("Composition Attempt · development", 6, 6),
-        ("Verified Composition Episode · development", 4, 4),
-        ("Development Episode · development", 29, 24),
-    )
+    assert focus_progress_fraction(state) == 1.0
+    assert focus_scorecard(state) == (("Registered Train Example · train", 54, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
     assert state.progress["model_fits"] == 11
     assert state.progress["composition_attempts"] == 6
@@ -1708,12 +1706,19 @@ def test_v3_failure_and_v4_design_preserve_the_training_boundary() -> None:
 def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
-    assert rows == (
-        "Causal Train Example · train: 111/111",
-        "Composition Attempt · development: 6/6",
-        "Verified Composition Episode · development: 4/4",
-        "Development Episode · development: 29/24",
-    )
+    # Only actual new-objective outcomes advance this separate counter.
+    assert rows == ("Registered Train Example · train: 54/12",)
+
+
+@pytest.mark.parametrize("goal", [
+    "Build a living Pokedex across mainline games.",
+    "Build a registered Pokedex in Red alone.",
+])
+def test_product_rejects_superseded_or_single_game_objective(goal: str) -> None:
+    document = _document()
+    document["product"]["goal"] = goal
+    with pytest.raises(ProductFocusError, match="cross-game registered Pokedex"):
+        validate_product_focus_document(document)
 
 
 def test_existing_ci_documentation_gate_invokes_the_focus_checker() -> None:
@@ -2194,7 +2199,11 @@ def test_tracked_public_evidence_reader_is_qualified_without_protected_effects()
 
 def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     state = load_product_focus()
-    public = DASHBOARD["product_focus_dashboard_snapshot"](state).public_dict()
+    # This is the historical 29-to-31 fixture, not whichever model the live
+    # dashboard happens to reference after the next real training session.
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-native-player-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](state, evidence=evidence).public_dict()
     assert public["run_status"] == "waiting"
     assert public["actions"] == 0
     assert public["stage_progress"] == 0
@@ -2203,25 +2212,41 @@ def test_focus_dashboard_is_view_only_and_does_not_overclaim_training() -> None:
     assert public["model"]["fallbacks"] == 0
     assert public["model"]["mode"] == "shadow"
     assert public["collection"]["observed"] is False
-    assert public["training"]["samples_before"] == 18
-    assert public["training"]["samples_after"] == 29
-    assert public["training"]["newly_collected"] == 6
-    assert public["training"]["previously_unfitted"] == 5
-    assert public["training"]["setup_censors"] == 2
+    assert public["training"]["samples_before"] == 29
+    assert public["training"]["samples_after"] == 31
+    assert public["training"]["newly_collected"] == 2
+    assert public["training"]["previously_unfitted"] == 0
+    assert public["training"]["setup_censors"] == 0
     assert public["training"]["held_out_claim"] is False
     assert public["experiment"]["predictions_committed"] is False
     assert public["learning_components"][0]["validation_examples"] == 0
     assert public["learning_components"][0]["model_sha256"] == (
-        "bbd36e556bd57a3afb212d0f2a4fd3360336bd17afaefe92a31a72c60a17d01a"
+        "95f62eaafc55a053cf65e23a8dcbf99955360040b85ef56ad8eff3e925edb472"
     )
     encoded = json.dumps(public, sort_keys=True, ensure_ascii=False)
-    assert "29-example living-Pokédex goal scorer" in encoded
-    assert "Historical cross-family ledger" in encoded
+    assert "31-example living-Pokédex goal scorer" in encoded
+    assert "Registered-objective outcomes" in encoded
     assert "supply validation before training" not in encoded
     assert "10 untouched" not in encoded
     assert "Brier 0.397811" not in encoded
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+def test_dashboard_projects_saved_negative_search_fit_without_a_gameplay_claim() -> None:
+    evidence = json.loads((PROJECT_ROOT / "docs/evidence" /
+        "red-saved-endpoint-learning-result-2026-09-06.json").read_text())
+    public = DASHBOARD["product_focus_dashboard_snapshot"](
+        load_product_focus(), evidence=evidence,
+    ).public_dict()
+    assert public["training"]["samples_before"] == 31
+    assert public["training"]["samples_after"] == 32
+    assert public["training"]["newly_collected"] == 1
+    assert public["training"]["held_out_claim"] is False
+    assert public["model"]["decisions"] == public["actions"] == 0
+    assert public["learning_components"][0]["model_sha256"] == (
+        "5b92e48c39a7eff724d9ed0ddb32ed2460997e95cdaecdc16ac5ec603b4683bc"
+    )
 
 
 def test_develop_team_freeze_failure_is_path_free_and_closes_the_exact_lane() -> None:

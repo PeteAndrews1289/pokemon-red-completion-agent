@@ -545,10 +545,12 @@ class DashboardTrainingState:
     fit_count: int
     weighted_mse_before: float
     weighted_mse_after: float
-    training_choice_changes: int
+    training_choice_changes: int | None
 
     def __post_init__(self) -> None:
         for key, value in asdict(self).items():
+            if key == "training_choice_changes" and value is None:
+                continue
             if key.startswith("weighted_mse"):
                 if (
                     isinstance(value, bool) or not isinstance(value, (int, float))
@@ -564,7 +566,8 @@ class DashboardTrainingState:
             or self.terminal_lessons != self.total_lessons
             or self.setup_censors + self.newly_collected != self.terminal_lessons
             or self.fit_count != 1
-            or self.training_choice_changes > self.samples_after
+            or (self.training_choice_changes is not None
+                and self.training_choice_changes > self.samples_after)
         ):
             raise ProgressDashboardError("completed training evidence accounting differs")
 
@@ -646,6 +649,37 @@ class DashboardRunRecap:
 
 
 @dataclass(frozen=True, slots=True)
+class DashboardSavedCollection:
+    """Verified saved endpoint; never an assertion of current live gameplay."""
+
+    verified_at: str
+    location: str
+    registered_species: int
+    living_species: int
+    specimens: int
+    capture_items: int
+    money: int
+    checkpoint_sha256: str
+
+    def __post_init__(self) -> None:
+        _plain_text(self.verified_at, subject="saved verification time", maximum=40)
+        _plain_text(self.location, subject="saved location", maximum=96)
+        for name in ("registered_species", "living_species", "specimens", "capture_items", "money"):
+            _count(getattr(self, name), subject=name)
+        if not 0 <= self.living_species <= self.registered_species <= 151:
+            raise ProgressDashboardError("saved collection counts differ")
+        if self.specimens < self.living_species or self.specimens > 246:
+            raise ProgressDashboardError("saved specimen count differs")
+        if (not isinstance(self.checkpoint_sha256, str)
+                or len(self.checkpoint_sha256) != 64
+                or any(char not in "0123456789abcdef" for char in self.checkpoint_sha256)):
+            raise ProgressDashboardError("saved checkpoint identity differs")
+
+    def public_dict(self) -> dict[str, object]:
+        return {**asdict(self), "live": False}
+
+
+@dataclass(frozen=True, slots=True)
 class DashboardSnapshot:
     """One identity-safe, human-facing status update."""
 
@@ -675,9 +709,14 @@ class DashboardSnapshot:
     collection_observed: bool = True
     training: DashboardTrainingState | None = None
     last_run: DashboardRunRecap | None = None
+    saved_collection: DashboardSavedCollection | None = None
 
     def __post_init__(self) -> None:
         _plain_text(self.game, subject="game", maximum=64)
+        if self.saved_collection is not None:
+            if not isinstance(self.saved_collection, DashboardSavedCollection):
+                raise ProgressDashboardError("saved collection must be typed")
+            self.saved_collection.__post_init__()
         if not isinstance(self.collection_observed, bool):
             raise ProgressDashboardError("collection observation flag must be boolean")
         if self.training is not None:
@@ -794,6 +833,8 @@ class DashboardSnapshot:
             "work": self.work.public_dict(),
             "training": self.training.public_dict() if self.training is not None else None,
             **({"last_run": self.last_run.public_dict()} if self.last_run is not None else {}),
+            **({"saved_collection": self.saved_collection.public_dict()}
+               if self.saved_collection is not None else {}),
             "events": list(self.events),
             "private_path_fields": 0,
             "raw_address_fields": 0,
@@ -1309,10 +1350,11 @@ button:focus-visible { outline:3px solid var(--lime); outline-offset:4px; }
     </section>
     <section class="panel section" id="collection-panel">
       <div class="section-head"><h2>03 / Collection and party</h2><span class="muted" id="resources">Not observed</span></div>
+      <p class="muted" id="collection-source">Waiting for a live observation or verified saved result.</p>
       <div class="triplet">
         <div class="metric"><span>Registered</span><b id="registered">0</b></div>
         <div class="metric"><span>Retained species</span><b id="living">0</b></div>
-        <div class="metric"><span>Level 100</span><b id="level-cap">0</b></div>
+        <div class="metric"><span id="third-collection-label">Level 100</span><b id="level-cap">—</b></div>
       </div>
       <div class="party" id="party"><span class="muted">Party unavailable</span></div>
     </section>
@@ -1411,10 +1453,14 @@ function render(data) {
   const componentPanel = el("learning-components-panel"); const components = el("learning-components");
   componentPanel.hidden = !data.learning_components.length; components.replaceChildren(...data.learning_components.map(componentRow));
   const observed = data.collection.observed !== false;
-  safeText("registered", observed ? `${data.collection.registered}/${data.collection.target}` : "—");
-  safeText("living", observed ? data.collection.living : "—");
-  safeText("level-cap", observed ? data.collection.level_cap : "—");
-  safeText("resources", observed ? `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots` : "No live inventory observation");
+  const savedCollection = data.saved_collection?.live === false ? data.saved_collection : null;
+  const savedOnly = !observed && savedCollection;
+  safeText("registered", observed ? `${data.collection.registered}/${data.collection.target}` : savedCollection?.registered_species);
+  safeText("living", observed ? data.collection.living : savedCollection?.living_species);
+  safeText("third-collection-label", savedOnly ? "Retained specimens" : "Level 100");
+  safeText("level-cap", observed ? data.collection.level_cap : savedCollection?.specimens);
+  safeText("resources", observed ? `${data.resources.capture_items} capture items · ${data.resources.free_storage_slots} free slots` : savedCollection ? `${savedCollection.capture_items} capture items · ${fmt(savedCollection.money)} money` : "No verified inventory observation");
+  safeText("collection-source", observed ? "Collection reported by the game feed; see its live / ended indicator above." : savedCollection ? `LAST VERIFIED SAVE · ${savedCollection.location} · ${savedCollection.verified_at} · Not live gameplay` : "Waiting for a live observation or verified saved result.");
   const training = data.training;
   const recap = data.last_run;
   el("recap-panel").hidden = !recap;
@@ -1449,7 +1495,8 @@ function render(data) {
     safeText("fit-after", Number(training.weighted_mse_after).toFixed(6));
     el("fit-before-bar").style.width = pct(training.weighted_mse_before / scale);
     el("fit-after-bar").style.width = pct(training.weighted_mse_after / scale);
-    safeText("fit-note", `${training.newly_collected} new examples + ${training.previously_unfitted} earlier unfitted. ${training.training_choice_changes} changed training-menu choices. In-sample calibration, not unseen gameplay ability.`);
+    const comparison = training.training_choice_changes === null ? "Menu-choice comparison not performed" : `${training.training_choice_changes} changed training-menu choices`;
+    safeText("fit-note", `${training.newly_collected} new examples + ${training.previously_unfitted} earlier unfitted. ${comparison}. In-sample calibration, not unseen gameplay ability.`);
   }
   const party = el("party"); party.replaceChildren();
   if (!data.party.length) { const empty = document.createElement("span"); empty.className = "muted"; empty.textContent = "Party unavailable"; party.append(empty); }

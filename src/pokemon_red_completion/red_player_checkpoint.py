@@ -24,11 +24,26 @@ from pokemon_red_completion.goal_manager_context_catalog import (
     GoalManagerContextCapture,
     parse_goal_manager_context_capture,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_failure_recovery import (
+    RECOVERY_CHECKPOINT_SCHEMA,
+    REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+    RedFailureRecoveryResult,
+    require_recovery_checkpoint_origin,
+)
+from pokemon_red_completion.red_recorded_support import (
+    SUPPORT_CHECKPOINT_SCHEMA,
+    RedRecordedSupportResult,
+    require_recorded_support_origin,
+)
 
 CHECKPOINT_KIND = "red_bounded_player_checkpoint"
-CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
+LEGACY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v1"
+CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v2"
+MEMORY_CHECKPOINT_SCHEMA = "pokemon.red.private-bounded-player-checkpoint.v3"
+REGISTERED_PLAYER_CHECKPOINT_SCHEMA = "pokemon.red.private-registered-player-checkpoint.v1"
 MAXIMUM_STATE_BYTES = 512 * 1024
 
 
@@ -48,7 +63,73 @@ class _StateSource(Protocol):
 
 def checkpoint_record_id(episode_id: str) -> str:
     # Fixed-length IDs also work for the longest supported private episode IDs.
-    return "rpc-" + canonical_sha256({"episode_id": episode_id, "schema": CHECKPOINT_SCHEMA})
+    # Keep the address stable when the payload encoding evolves.
+    return "rpc-" + canonical_sha256({"episode_id": episode_id, "schema": LEGACY_CHECKPOINT_SCHEMA})
+
+
+def capture_red_skill_recovery(
+    *, emulator: _StateSource, meter: CompositionBudgetMeter,
+) -> dict[str, object]:
+    """Private diagnostic save, never an admitted continuation or training target.
+
+    The caller has independently checked the completed quantum's safe boundary.
+    Saving must not advance gameplay or controller state.
+    """
+    before = meter.checkpoint()
+    frame_before = emulator.frame_count
+    if emulator.pressed_buttons:
+        raise RedPlayerCheckpointError("skill recovery has held input")
+    state = emulator.save_state_bytes()
+    if (
+        meter.checkpoint() != before
+        or emulator.frame_count != frame_before
+        or emulator.pressed_buttons
+    ):
+        raise RedPlayerCheckpointError("skill recovery changed protected state")
+    if not isinstance(state, bytes) or not 0 < len(state) <= MAXIMUM_STATE_BYTES:
+        raise RedPlayerCheckpointError("skill recovery state size differs")
+    return {
+        "schema": "pokemon.red.private-skill-recovery.v1",
+        "admitted_continuation": False,
+        "training_target": False,
+        "state_sha256": hashlib.sha256(state).hexdigest(),
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
+        "actions": before.controller_actions,
+        "frames": before.emulator_frames,
+    }
+
+
+def capture_red_failure_state(
+    *, emulator: _StateSource, meter: CompositionBudgetMeter,
+) -> dict[str, object]:
+    """Retain an exact private failure state, even with held input or a battle.
+
+    This is diagnostic evidence only, not a safe checkpoint, continuation grant,
+    or label. Never release buttons, tick the emulator or normalize the failure.
+    The episode header supplies the original source, ROM, model and parent scope.
+    """
+    before = meter.checkpoint()
+    frame_before, buttons = emulator.frame_count, emulator.pressed_buttons
+    state = emulator.save_state_bytes()
+    if (
+        meter.checkpoint() != before or emulator.frame_count != frame_before
+        or emulator.pressed_buttons != buttons
+    ):
+        raise RedPlayerCheckpointError("failure capture changed protected state")
+    if not isinstance(state, bytes) or not 0 < len(state) <= MAXIMUM_STATE_BYTES:
+        raise RedPlayerCheckpointError("failure state size differs")
+    return {
+        "schema": "pokemon.red.private-failure-state.v1",
+        "admitted_continuation": False,
+        "safe_checkpoint": False,
+        "training_target": False,
+        "state_sha256": hashlib.sha256(state).hexdigest(),
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
+        "held_buttons": sorted(buttons),
+        "emulator_frame_count": frame_before,
+        "actions": before.controller_actions,
+        "frames": before.emulator_frames,
+    }
 
 
 def _sha(value: object) -> str:
@@ -67,7 +148,7 @@ def capture_red_player_terminal(
     meter: CompositionBudgetMeter,
     observe: Callable[[], GoalManagerCompositionObservation],
     parent: GoalManagerContextCapture,
-    result: BoundedPlayerResult,
+    result: BoundedPlayerResult | RedFailureRecoveryResult | RedRecordedSupportResult,
     episode_id: str,
     profile_sha256: str,
     rom_sha256: str,
@@ -75,15 +156,25 @@ def capture_red_player_terminal(
     source_commit: str,
     source_bundle_sha256: str,
     context_origin: str,
+    search_memory: GoalSearchMemory | None = None,
 ) -> dict[str, object]:
     """Capture without input; return private bytes pending trajectory completion."""
     if context_origin not in {"training", "development", "unspecified"}:
         raise RedPlayerCheckpointError("checkpoint context origin differs")
     before = meter.checkpoint()
     frame_before = emulator.frame_count
+    if isinstance(result, RedRecordedSupportResult) and (
+        before.controller_actions != 0 or before.emulator_frames != 0 or frame_before != 0
+    ):
+        raise RedPlayerCheckpointError("recorded support import must not execute gameplay")
     if emulator.pressed_buttons:
         raise RedPlayerCheckpointError("checkpoint has held controller input")
     observation = observe()
+    from .registered_checkpoint import RegisteredCollectionCheckpoint
+
+    registered = isinstance(observation.collection, RegisteredCollectionCheckpoint)
+    if registered and not isinstance(result, (BoundedPlayerResult, RedFailureRecoveryResult)):
+        raise RedPlayerCheckpointError("registered support/recovery requires a declared contract")
     if result.steps and observation.collection != result.steps[-1].collection_after:
         raise RedPlayerCheckpointError("checkpoint terminal collection differs")
     state = emulator.save_state_bytes()
@@ -101,7 +192,15 @@ def capture_red_player_terminal(
     state_sha256 = hashlib.sha256(state).hexdigest()
     envelope = replace(parent.envelope, state_sha256=state_sha256)
     return {
-        "schema": CHECKPOINT_SCHEMA,
+        "schema": (
+            REGISTERED_RECOVERY_CHECKPOINT_SCHEMA
+            if registered and isinstance(result, RedFailureRecoveryResult)
+            else REGISTERED_PLAYER_CHECKPOINT_SCHEMA if registered
+            else SUPPORT_CHECKPOINT_SCHEMA if isinstance(result, RedRecordedSupportResult)
+            else RECOVERY_CHECKPOINT_SCHEMA if isinstance(result, RedFailureRecoveryResult)
+            else MEMORY_CHECKPOINT_SCHEMA if search_memory is not None else CHECKPOINT_SCHEMA
+        ),
+        **({"search_memory": search_memory.private_dict()} if search_memory is not None else {}),
         "episode_id": episode_id,
         "context_origin": context_origin,
         "original_state_sha256": parent.state_sha256,
@@ -112,7 +211,9 @@ def capture_red_player_terminal(
         "source_commit": source_commit,
         "source_bundle_sha256": _sha(source_bundle_sha256),
         "state_sha256": state_sha256,
-        "state_base64": base64.b64encode(state).decode("ascii"),
+        # Ordinary base64 can contain '/', which the path-free record boundary
+        # correctly rejects. Change this encoding, not the global path guard.
+        "state_base64": base64.urlsafe_b64encode(state).decode("ascii"),
         "envelope": envelope.to_dict(),
         "semantic_state_sha256": observation.semantic_state_sha256,
         "collection": observation.collection.public_dict(),
@@ -162,6 +263,8 @@ def _join_episode(store: PrivateArtifactRoot, document: Mapping[str, object]) ->
         or canonical_sha256(payload.get("bounded_player")) != document.get("terminal_result_sha256")
     ):
         raise RedPlayerCheckpointError("checkpoint trajectory terminal differs")
+    require_recovery_checkpoint_origin(store, document)
+    require_recorded_support_origin(store, document)
     return episode.manifest_sha256
 
 
@@ -206,6 +309,7 @@ class RedPlayerCheckpoint:
     semantic_state_sha256: str
     collection: Mapping[str, object]
     record_sha256: str
+    search_memory: Mapping[str, object] | None = None
 
     def require_restored_observation(self, observation: GoalManagerCompositionObservation) -> None:
         """Require a fresh adapter read before any future continuation may act."""
@@ -234,7 +338,6 @@ def open_red_player_checkpoint(
         raise RedPlayerCheckpointError("checkpoint record is absent or changed")
     document = record.read()
     expected = {
-        "schema": CHECKPOINT_SCHEMA,
         "episode_id": episode_id,
         "original_state_sha256": original_parent.state_sha256,
         "original_envelope_sha256": original_parent.envelope_sha256,
@@ -245,7 +348,14 @@ def open_red_player_checkpoint(
         "training_example": False,
         "automatic_resume_authorized": False,
     }
-    if any(document.get(key) != value for key, value in expected.items()):
+    schema = document.get("schema")
+    if schema not in {
+        CHECKPOINT_SCHEMA, LEGACY_CHECKPOINT_SCHEMA,
+        MEMORY_CHECKPOINT_SCHEMA, RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA, REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+    } or any(
+        document.get(key) != value for key, value in expected.items()
+    ):
         raise RedPlayerCheckpointError("checkpoint parent or scope differs")
     if _join_episode(store, document) != document.get("trajectory_manifest_sha256"):
         raise RedPlayerCheckpointError("checkpoint trajectory identity differs")
@@ -253,7 +363,9 @@ def open_red_player_checkpoint(
     if not isinstance(encoded, str) or len(encoded) > 4 * ((MAXIMUM_STATE_BYTES + 2) // 3):
         raise RedPlayerCheckpointError("checkpoint encoded state differs")
     try:
-        state = base64.b64decode(encoded, validate=True)
+        state = base64.b64decode(
+            encoded, altchars=b"-_" if schema != LEGACY_CHECKPOINT_SCHEMA else None, validate=True
+        )
     except ValueError as error:
         raise RedPlayerCheckpointError("checkpoint encoded state differs") from error
     if not state or hashlib.sha256(state).hexdigest() != document.get("state_sha256"):
@@ -267,6 +379,18 @@ def open_red_player_checkpoint(
     collection = document.get("collection")
     if not isinstance(collection, Mapping):
         raise RedPlayerCheckpointError("checkpoint collection differs")
+    from .registered_checkpoint import (
+        REGISTERED_CHECKPOINT_SCHEMA,
+        RegisteredCollectionCheckpoint,
+    )
+
+    if schema in {REGISTERED_PLAYER_CHECKPOINT_SCHEMA, REGISTERED_RECOVERY_CHECKPOINT_SCHEMA}:
+        try:
+            RegisteredCollectionCheckpoint.from_public(dict(collection))
+        except ValueError as error:
+            raise RedPlayerCheckpointError("registered checkpoint collection invalid") from error
+    elif collection.get("schema") == REGISTERED_CHECKPOINT_SCHEMA:
+        raise RedPlayerCheckpointError("legacy checkpoint cannot carry registered objective")
     terminal = document.get("terminal_result")
     steps = terminal.get("steps") if isinstance(terminal, Mapping) else None
     if not isinstance(steps, list) or (
@@ -276,6 +400,15 @@ def open_red_player_checkpoint(
         )
     ):
         raise RedPlayerCheckpointError("checkpoint final ledger differs")
+    memory = None
+    if schema == MEMORY_CHECKPOINT_SCHEMA or (
+        schema in {RECOVERY_CHECKPOINT_SCHEMA, SUPPORT_CHECKPOINT_SCHEMA,
+                   REGISTERED_PLAYER_CHECKPOINT_SCHEMA, REGISTERED_RECOVERY_CHECKPOINT_SCHEMA}
+        and "search_memory" in document
+    ):
+        memory = GoalSearchMemory.from_private_dict(document.get("search_memory")).private_dict()
+    elif "search_memory" in document:
+        raise RedPlayerCheckpointError("legacy checkpoint cannot declare search memory")
     return RedPlayerCheckpoint(
         capture=capture,
         original_state_sha256=original_parent.state_sha256,
@@ -283,4 +416,5 @@ def open_red_player_checkpoint(
         semantic_state_sha256=_sha(document.get("semantic_state_sha256")),
         collection=MappingProxyType(dict(collection)),
         record_sha256=record.summary.record_sha256,
+        search_memory=memory,
     )

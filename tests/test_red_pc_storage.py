@@ -14,6 +14,7 @@ from pokemon_red_completion.red_pc_storage import (
     RedPCStorageError,
     RedPCStorageTiming,
     deposit_party_member,
+    face_pc_boundary,
     open_bills_pc,
     switch_box,
     withdraw_box_member,
@@ -49,6 +50,36 @@ class _Reader:
 
     def read_menu_cursor_state(self) -> MenuCursorState:
         return self.menu
+
+
+@pytest.mark.parametrize("direction", ["up", "down", "left", "right"])
+@pytest.mark.parametrize("displaced", [False, True])
+def test_pc_orientation_verifies_facing_and_unchanged_position(direction, displaced):
+    from types import SimpleNamespace
+
+    reader = _Reader()
+    reader.facing = "right" if direction != "right" else "left"
+    reader.read_player_facing = lambda: reader.facing
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    reader.read_bottom_dialogue_box_visible = lambda: False
+    observed = []
+
+    class Port:
+        def execute(self, action):
+            observed.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                reader.facing = str(action.value)
+                if displaced:
+                    reader.raw = replace(reader.raw, player_x=12)
+
+    if displaced:
+        with pytest.raises(RedPCStorageError, match="bound position"):
+            face_pc_boundary(Port(), reader, direction)
+    else:
+        face_pc_boundary(Port(), reader, direction)
+        face_pc_boundary(Port(), reader, direction)
+    assert len(observed) == 2
+    assert observed[0] == MacroAction(MacroActionKind.MOVE, direction)
 
 
 class _DepositExecutor:
@@ -311,7 +342,8 @@ def test_switch_box_rejects_current_box_and_collection_loss() -> None:
         )
 
 
-def test_open_bills_pc_verifies_generic_and_bills_menu_boundaries() -> None:
+@pytest.mark.parametrize("stale_list_scroll", [0, 14, 255])
+def test_open_bills_pc_verifies_generic_and_bills_menu_boundaries(stale_list_scroll) -> None:
     reader = _Reader()
     reader.menu = MenuCursorState(0, 0, 0, 0, 0)
 
@@ -325,7 +357,8 @@ def test_open_bills_pc_verifies_generic_and_bills_menu_boundaries() -> None:
                 return
             self.confirms += 1
             if self.confirms == 1:
-                reader.menu = MenuCursorState(0, 0, 3, 1, 2)
+                # Generic PC does not clear the previous bag list offset.
+                reader.menu = MenuCursorState(0, stale_list_scroll, 3, 1, 2)
             elif self.confirms == 4:
                 reader.menu = MenuCursorState(0, 0, 4, 1, 2)
 
@@ -338,3 +371,70 @@ def test_open_bills_pc_verifies_generic_and_bills_menu_boundaries() -> None:
 
     assert executor.confirms == 4
     assert reader.menu == MenuCursorState(0, 0, 4, 1, 2)
+
+
+@pytest.mark.parametrize("failure", [None, "stuck", "moved", "party", "box"])
+def test_pc_session_cancellation_is_bounded_and_preserves_retained_state(failure):
+    from types import SimpleNamespace
+
+    from pokemon_red_completion.red_pc_storage import close_generic_pc_session
+
+    reader = _Reader()
+    reader.active = True
+    reader.read_generic_pc_session_active = lambda: reader.active
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+    reader.read_bottom_dialogue_box_visible = lambda: False
+    reader.read_all_box_states = lambda: reader.box
+
+    class Executor:
+        actions = []
+
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.CANCEL:
+                if failure != "stuck":
+                    reader.active = False
+                if failure == "moved":
+                    reader.raw = replace(reader.raw, player_x=12)
+                elif failure == "party":
+                    reader.raw = replace(reader.raw, party_species_ids=(WARTORTLE,))
+                elif failure == "box":
+                    reader.box = RedCurrentBoxState(1, (), ())
+
+    actions = Executor()
+    timing = RedPCStorageTiming(wait_frames=1, max_dialogue_pulses=2)
+    if failure:
+        with pytest.raises(RedPCStorageError, match="budget" if failure == "stuck" else "changed"):
+            close_generic_pc_session(actions, reader, timing=timing)
+    else:
+        close_generic_pc_session(actions, reader, timing=timing)
+        assert not reader.active
+    assert len(actions.actions) == (4 if failure == "stuck" else 2)
+    assert all(a.kind in {MacroActionKind.CANCEL, MacroActionKind.WAIT} for a in actions.actions)
+
+
+def test_stale_pc_cursor_without_live_session_causes_no_recovery_input():
+    from types import SimpleNamespace
+
+    from pokemon_red_completion.red_pc_storage import close_generic_pc_session
+    close_generic_pc_session(
+        SimpleNamespace(execute=lambda _: pytest.fail("stale cursor is not a live PC session")),
+        SimpleNamespace(read_generic_pc_session_active=lambda: False),
+    )
+
+
+@pytest.mark.parametrize("menu", [MenuCursorState(1, 14, 3, 1, 2),
+                                  MenuCursorState(0, 14, 2, 1, 2),
+                                  MenuCursorState(0, 14, 3, 2, 2)])
+def test_generic_pc_still_rejects_wrong_visible_choice_or_menu_shape(menu):
+    from types import SimpleNamespace
+    actions = []
+    with pytest.raises(RedPCStorageError, match="generic PC"):
+        open_bills_pc(SimpleNamespace(execute=actions.append),
+                      SimpleNamespace(read_menu_cursor_state=lambda: menu),
+                      timing=RedPCStorageTiming(wait_frames=1))
+    # One interact + one confirm; never select a different PC or storage action.
+    assert [a.kind for a in actions] == [
+        MacroActionKind.INTERACT, MacroActionKind.WAIT,
+        MacroActionKind.CONFIRM, MacroActionKind.WAIT,
+    ]

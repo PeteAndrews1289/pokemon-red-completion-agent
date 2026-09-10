@@ -26,6 +26,7 @@ from pokemon_red_completion.progress_dashboard import (
     DashboardPartyMember,
     DashboardRunRecap,
     DashboardRunStep,
+    DashboardSavedCollection,
     DashboardSnapshot,
     DashboardState,
     DashboardTrainingState,
@@ -103,6 +104,12 @@ def snapshot_from_public_status(document: object) -> DashboardSnapshot:
             raise ProgressDashboardError("saved run claim boundary differs")
         saved["steps"] = tuple(_typed(DashboardRunStep, step) for step in saved["steps"])
         recap = _typed(DashboardRunRecap, saved)
+    saved_collection = None
+    if data.get("saved_collection") is not None:
+        saved_state = _object(data["saved_collection"])
+        if saved_state.get("live") is not False:
+            raise ProgressDashboardError("saved collection cannot claim live gameplay")
+        saved_collection = _typed(DashboardSavedCollection, saved_state)
     snapshot = DashboardSnapshot(
         game=data["game"],
         run_status=data["run_status"],
@@ -143,6 +150,7 @@ def snapshot_from_public_status(document: object) -> DashboardSnapshot:
             else None
         ),
         last_run=recap,
+        saved_collection=saved_collection,
         work=_typed(DashboardWorkState, data["work"]),
         events=tuple(data["events"]),
     )
@@ -242,6 +250,8 @@ class DashboardRelayState(DashboardState):
                 result["work"] = self._snapshot.work.public_dict()
                 if self._snapshot.last_run is not None:
                     result["last_run"] = self._snapshot.last_run.public_dict()
+                if self._snapshot.saved_collection is not None:
+                    result["saved_collection"] = self._snapshot.saved_collection.public_dict()
                 # Keep the saved training chart only when the live producer
                 # identifies that exact fitted artifact and sample count.
                 training = self._snapshot.training

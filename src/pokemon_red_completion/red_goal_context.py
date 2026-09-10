@@ -5,7 +5,13 @@ from __future__ import annotations
 from collections import Counter
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, replace
-from typing import Protocol, cast
+from typing import TYPE_CHECKING, Protocol, cast
+
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
+
+if TYPE_CHECKING:
+    from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 from pokemon_red_completion.blaine import (
     DIGLETT_SPECIES_ID,
@@ -33,7 +39,6 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 )
 from pokemon_red_completion.goal_manager_context_catalog import GoalManagerContextCapture
 from pokemon_red_completion.goal_manager_runtime import (
-    ExecutableGoalBinding,
     GoalExecutionReport,
     GoalVerification,
 )
@@ -44,7 +49,7 @@ from pokemon_red_completion.observation import (
     PokemonRedStateReader,
 )
 from pokemon_red_completion.party import PartyObservation
-from pokemon_red_completion.red_acquisition import RedAreaExecutionPolicy
+from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAreaExecutionPolicy
 from pokemon_red_completion.red_collection import (
     red_internal_species_id,
     red_internal_species_number,
@@ -76,6 +81,7 @@ from pokemon_red_completion.red_goal_skills import (
     RedGoalSkillAvailability,
     RedMartPurchase,
     RedMartResupplyGoalProvider,
+    RedMartSurplusSale,
     RedObservedGoalSkillProvider,
     RedProgressGoalProvider,
 )
@@ -175,10 +181,28 @@ class RedGoalContextRuntime:
     observer: CapturedPokemonRedObserver
     adapter: PokemonRedGoalStateAdapter
     boxed_level_evolution_executor: RedBoxedLevelEvolutionGoalExecutor | None = None
+    party_level_evolution_executor: (
+        Callable[[int, int, CountingExecutor], GoalExecutionReport] | None
+    ) = None
+    boxed_level_evolution_readiness: (
+        Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
+    ) = None
+    boxed_level_evolution_cross_box: bool = False
+    remaining_acquisition_demand: bool = False
+    level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
+    trainer_story_world: StrategicScenarioRouteWorld | None = None
+    registration_policy: RedRegistrationPolicy | None = None
 
-    def provider_for(
-        self, kind: GoalKind, actions: CountingExecutor
-    ) -> RedGoalBindingProvider:
+    def bound_configuration_sha256(self, configuration_sha256: str) -> str:
+        if self.registration_policy is None:
+            return configuration_sha256
+        return canonical_sha256({
+            "schema": "pokemon.red.registered-provider.v1",
+            "provider_configuration_sha256": configuration_sha256,
+            "registration_policy_sha256": self.registration_policy.sha256,
+        })
+
+    def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
 
         if not isinstance(kind, GoalKind) or not isinstance(actions, CountingExecutor):
@@ -195,7 +219,7 @@ class RedGoalContextRuntime:
             _ProfileBoundProvider(
                 provider=_build_provider(self, spec, actions),
                 profile_sha256=self.profile.profile_sha256,
-                configuration_sha256=spec.configuration_sha256,
+                configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
             )
             for spec in self.profile.providers
         )
@@ -228,12 +252,12 @@ class RedGoalContextRuntime:
         wrapped = _ProfileBoundProvider(
             provider=provider,
             profile_sha256=self.profile.profile_sha256,
-            configuration_sha256=spec.configuration_sha256,
+            configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
         )
         return RedGoalContextProviderOffer(
             provider_type=_provider_contract_type(provider, spec),
             profile_sha256=self.profile.profile_sha256,
-            provider_configuration_sha256=spec.configuration_sha256,
+            provider_configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
             offer=wrapped.offer(observation),
         )
 
@@ -288,9 +312,7 @@ def build_red_goal_context_runtime(
         raise TypeError("profile must be a RedGoalContextProfile")
     if not isinstance(capture, GoalManagerContextCapture):
         raise TypeError("capture must be a verified GoalManagerContextCapture")
-    if boxed_level_evolution_executor is not None and not callable(
-        boxed_level_evolution_executor
-    ):
+    if boxed_level_evolution_executor is not None and not callable(boxed_level_evolution_executor):
         raise TypeError("boxed level evolution executor must be callable")
     observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, capture.envelope)
     adapter = PokemonRedGoalStateAdapter(
@@ -298,6 +320,10 @@ def build_red_goal_context_runtime(
         observer,
         COMPLETION_QUEST,
         config=profile.manager_config,
+        include_pp_restoration=any(
+            spec.mechanic is RedGoalMechanic.FIELD_PP_RESTORE
+            or spec.parameters.get("include_pp_fallback") is True for spec in profile.providers
+        ),
     )
     # Fail closed now if the envelope's claimed story frontier conflicts with
     # the actual loaded state.  This performs no action.
@@ -331,16 +357,12 @@ class _ProfileBoundProvider:
             return offer
         binding = offer.binding
         return RedGoalBindingOffer.available(
-            ExecutableGoalBinding(
+            replace(
+                binding,
                 binding_ref=(
                     f"{binding.binding_ref}:profile-{self.profile_sha256}:"
                     f"config-{self.configuration_sha256}"
                 ),
-                kind=binding.kind,
-                estimated_effort=binding.estimated_effort,
-                estimated_risk=binding.estimated_risk,
-                execute=binding.execute,
-                verify=binding.verify,
             )
         )
 
@@ -352,6 +374,36 @@ def _build_provider(
 ) -> RedGoalBindingProvider:
     mechanic = spec.mechanic
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
+        if spec.parameters.get("trainer_objective") == "defeat_champion":
+            from .objective_skills import ObjectiveSkillRegistry
+            from .red_champion_story import RedCartridgeChampionSkill
+
+            return RedStoryGoalBindingProvider(
+                COMPLETION_QUEST, ObjectiveSkillRegistry((RedCartridgeChampionSkill(
+                    runtime, actions, runtime.trainer_story_world,
+                maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
+                recovery_controller=cast(str, spec.parameters.get(
+                    "recovery_controller", "critical-inclusive",
+                )),
+                ),)), runtime.observer,
+            )
+        if spec.parameters.get("trainer_objective") in {
+            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
+        }:
+            from .objective_skills import ObjectiveSkillRegistry
+            from .red_trainer_story import RedCartridgeLoreleiSkill
+
+            return RedStoryGoalBindingProvider(
+                COMPLETION_QUEST,
+                ObjectiveSkillRegistry((RedCartridgeLoreleiSkill(
+                    runtime, actions, runtime.trainer_story_world,
+                    objective_id=str(spec.parameters["trainer_objective"]),
+            maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
+            recovery_controller=cast(str, spec.parameters.get(
+                "recovery_controller", "critical-inclusive",
+            )),
+                ),)), runtime.observer,
+            )
         return RedStoryGoalBindingProvider(
             COMPLETION_QUEST,
             build_red_midgame_objective_skill_registry(
@@ -375,18 +427,37 @@ def _build_provider(
     }:
         return _team_provider(runtime, spec, actions)
     if mechanic is RedGoalMechanic.FIELD_RESTORE:
-        return RedFieldRestoreGoalProvider(
+        hp_provider = RedFieldRestoreGoalProvider(
             actions,
             runtime.reader,
             runtime.emulator,
             runtime.adapter,
+            affordable_single_item=spec.parameters.get("affordable_single_item") is True,
+            reserve_last_full_restore=spec.parameters.get("reserve_last_full_restore") is True,
         )
+        if spec.parameters.get("include_pp_fallback") is True:
+            from .red_field_pp_restore import (
+                RedCombinedFieldRestoreGoalProvider,
+                RedFieldPpRestoreGoalProvider,
+            )
+            return RedCombinedFieldRestoreGoalProvider(
+                hp_provider, RedFieldPpRestoreGoalProvider(
+                    actions, runtime.reader, runtime.emulator, runtime.adapter,
+                ),
+            )
+        return hp_provider
     if mechanic is RedGoalMechanic.CENTER_RESTORE:
         return RedCenterRestoreGoalProvider(
             actions,
             runtime.reader,
             runtime.emulator,
             runtime.adapter,
+        )
+    if mechanic is RedGoalMechanic.FIELD_PP_RESTORE:
+        from .red_field_pp_restore import RedFieldPpRestoreGoalProvider
+
+        return RedFieldPpRestoreGoalProvider(
+            actions, runtime.reader, runtime.emulator, runtime.adapter,
         )
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         return _mart_provider(runtime, spec, actions)
@@ -421,6 +492,7 @@ def _wild_provider(
         forward_directions=_directions(parameters, "forward_directions"),
         starting_endpoint=_text(parameters, "starting_endpoint"),
         max_legs=_integer(parameters, "maximum_legs"),
+        capture_status_support=parameters.get("capture_status_support", False) is True,
     )
 
     def boundary(observation: RedGoalObservation) -> RedGoalSkillAvailability:
@@ -430,18 +502,44 @@ def _wild_provider(
         return RedGoalSkillAvailability.available()
 
     if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+        from .red_capture_access import required_wild_source_items
+        from .red_collection import red_species_ref
+
+        local_captures = parameters.get("capture_species_numbers")
         return RedAreaSurveyGoalProvider(
             source_id=source_id,
+            required_capture_items=(required_wild_source_items(source_id)
+                if parameters.get("capture_access_requirements") is True else ()),
             area_executor=area,
             actions=actions,
             emulator=runtime.emulator,
             adapter=runtime.adapter,
             boundary=boundary,
             normalize_after_capture=area.finish_at_starting_endpoint,
+            catalog=replace(
+                RED_ACQUISITION_CATALOG,
+                remaining_demand=(runtime.remaining_acquisition_demand
+                                  or runtime.registration_policy is not None),
+                registered_species=(
+                    runtime.registration_policy.registered(
+                        runtime.adapter.observe().collection_observation,
+                    ) if runtime.registration_policy is not None else None
+                ),
+                protected_counts=(
+                    tuple(sorted(runtime.registration_policy.protected_counts.items()))
+                    if runtime.registration_policy is not None else ()
+                ),
+                level_evolution_edges=runtime.level_evolution_acquisition_edges,
+                wild_source_species=(
+                    ((source_id, tuple(red_species_ref(number)
+                                      for number in cast(tuple[int, ...], local_captures))),)
+                    if local_captures is not None else ()
+                ),
+            ),
             policy=RedAreaExecutionPolicy(
                 max_actions=_integer(parameters, "maximum_seek_steps"),
                 max_encounters=_integer(parameters, "maximum_encounters"),
-                capture_in_requirement_order=True,
+                capture_in_requirement_order=local_captures is None,
                 capture_quota=1,
             ),
         )
@@ -462,6 +560,10 @@ def _wild_provider(
         boundary=boundary,
         maximum_seek_steps=_integer(parameters, "maximum_seek_steps"),
         maximum_encounters=_integer(parameters, "maximum_encounters"),
+        source_species_numbers=(
+            cast(tuple[int, ...], parameters["source_species_numbers"])
+            if "source_species_numbers" in parameters else None
+        ),
     )
 
 
@@ -505,16 +607,12 @@ def _wild_development_provider(
             raise RedGoalContextError(
                 "encounter-source development lacks one unique trainable member"
             )
-        if before.party.fainted_count or member_is_unsafe_for_team_training(
-            trainee, dose_policy
-        ):
+        if before.party.fainted_count or member_is_unsafe_for_team_training(trainee, dose_policy):
             raise RedGoalContextError(
                 "encounter-source development needs restoration before its fixed dose"
             )
         if map_id != MANSION_TRAINING_VENUE.map_id:
-            raise RedGoalContextError(
-                "encounter-source development lacks a measured local venue"
-            )
+            raise RedGoalContextError("encounter-source development lacks a measured local venue")
         before_actions = actions.actions_executed
         before_frames = runtime.emulator.frame_count
 
@@ -531,9 +629,7 @@ def _wild_development_provider(
             _reader: object,
             _emulator: object,
         ) -> None:
-            raise RedGoalContextError(
-                "encounter-source development cannot travel or heal"
-            )
+            raise RedGoalContextError("encounter-source development cannot travel or heal")
 
         local_venue = TrainingVenue(
             band=MANSION_TRAINING_VENUE.band,
@@ -569,9 +665,7 @@ def _wild_development_provider(
             ),
         )
         if battles != completed_battles or healing_trips:
-            raise RedGoalContextError(
-                "encounter-source development left its fixed local dose"
-            )
+            raise RedGoalContextError("encounter-source development left its fixed local dose")
         # Return to the same source boundary so the next goal-manager decision
         # is based on a fresh, co-available menu rather than corridor interior.
         area.finish_at_starting_endpoint()
@@ -612,9 +706,7 @@ def _wild_development_provider(
             or observation.party.fainted_count > 0
             or member_is_unsafe_for_team_training(trainee, dose_policy)
         ):
-            return RedGoalSkillAvailability.unavailable(
-                GoalUnavailableReason.MISSING_CAPABILITY
-            )
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         return result
 
     return RedEncounterSourceDevelopmentGoalProvider(
@@ -671,15 +763,32 @@ class _RedTeamGoalProvider:
             else self._policy(observation)
         )
         evolution_target = self._evolution_target()
+        resume_evolution = (
+            self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+            and evolution_target is not None
+            and evolution_target[0] in observation.party.species_ids()
+            and self.runtime.party_level_evolution_executor is not None
+        )
         boxed_request = (
             self._boxed_evolution_request(observation)
             if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+            and not resume_evolution
             else None
         )
         before_actions = self.actions.actions_executed
         before_frames = self.runtime.emulator.frame_count
 
         def execute() -> GoalExecutionReport:
+            if resume_evolution:
+                resume = self.runtime.party_level_evolution_executor
+                assert resume is not None and evolution_target is not None
+                report = resume(*evolution_target, self.actions)
+                if (
+                    report.actions_executed != self.actions.actions_executed - before_actions
+                    or report.frames_executed != self.runtime.emulator.frame_count - before_frames
+                ):
+                    raise RedGoalContextError("resumed evolution cost differs from execution")
+                return report
             if boxed_request is not None:
                 executor = self.runtime.boxed_level_evolution_executor
                 if executor is None:
@@ -690,10 +799,8 @@ class _RedTeamGoalProvider:
                 if not isinstance(report, GoalExecutionReport):
                     raise RedGoalContextError("boxed evolution executor returned no report")
                 if (
-                    report.actions_executed
-                    != self.actions.actions_executed - before_actions
-                    or report.frames_executed
-                    != self.runtime.emulator.frame_count - before_frames
+                    report.actions_executed != self.actions.actions_executed - before_actions
+                    or report.frames_executed != self.runtime.emulator.frame_count - before_frames
                 ):
                     raise RedGoalContextError(
                         "boxed evolution report differs from measured execution"
@@ -817,8 +924,7 @@ class _RedTeamGoalProvider:
         source_ref = _text(self.spec.parameters, "source_species_ref")
         target_ref = _text(self.spec.parameters, "target_species_ref")
         before_counts = Counter(
-            specimen.species_ref
-            for specimen in before.collection_observation.specimens
+            specimen.species_ref for specimen in before.collection_observation.specimens
         )
         expected_counts = before_counts.copy()
         if expected_counts[source_ref] < 1:
@@ -828,18 +934,32 @@ class _RedTeamGoalProvider:
             del expected_counts[source_ref]
         expected_counts[target_ref] += 1
         after_counts = Counter(
-            specimen.species_ref
-            for specimen in after.collection_observation.specimens
+            specimen.species_ref for specimen in after.collection_observation.specimens
         )
+        registration = self.runtime.registration_policy
+        if (registration is not None and report.evidence.get("evolution_partial") is not True
+            and not registration.verify_evolution(
+                before.collection_observation, after.collection_observation, source_ref, target_ref,
+            )):
+            return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         before_story = self.runtime.adapter.graph.completed_ids(before.game_state)
         after_story = self.runtime.adapter.graph.completed_ids(after.game_state)
+        if (
+            report.evidence.get("evolution_partial") is True
+            and before_counts == after_counts
+            and before_story == after_story
+            and after.raw.battle_state == 0
+            and after.input_ready
+            and not after.party.fainted_count
+        ):
+            # A bounded experience quantum is resumable work, not a species
+            # transformation and not fabricated collection success.
+            return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         evolution_target = self._evolution_target()
         if evolution_target is None:
             raise RedGoalContextError("boxed evolution lost its target")
         evolved_party = tuple(
-            member
-            for member in after.party.members
-            if member.species_id == evolution_target[1]
+            member for member in after.party.members if member.species_id == evolution_target[1]
         )
         if (
             before_story != after_story
@@ -880,8 +1000,7 @@ class _RedTeamGoalProvider:
             or before.party.species_ids() != after.party.species_ids()
             or after.collection.collection.pokedex_owned_count
             < before.collection.collection.pokedex_owned_count
-            or after.collection.collection.living_count
-            < before.collection.collection.living_count
+            or after.collection.collection.living_count < before.collection.collection.living_count
         ):
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         index = before_indexes[0]
@@ -890,8 +1009,7 @@ class _RedTeamGoalProvider:
             or after.raw.battle_state
             or not after.input_ready
             or after.party.fainted_count
-            or after.party.members[index].level
-            < before.party.members[index].level + increment
+            or after.party.members[index].level < before.party.members[index].level + increment
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
@@ -901,13 +1019,21 @@ class _RedTeamGoalProvider:
         observation: RedGoalObservation,
     ) -> RedGoalSkillAvailability:
         raw = observation.raw
-        required_size = self.runtime.profile.manager_config.required_party_size
         if (
             raw.map_id not in {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
             or raw.player_x != 3
             or raw.player_y != 3
-            or BLASTOISE_SPECIES_ID not in observation.party.species_ids()
         ):
+            return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
+        return self.resource_availability(observation)
+
+    def resource_availability(
+        self,
+        observation: RedGoalObservation,
+    ) -> RedGoalSkillAvailability:
+        """Check real resources independently of transport; never invent arrival state."""
+        required_size = self.runtime.profile.manager_config.required_party_size
+        if BLASTOISE_SPECIES_ID not in observation.party.species_ids():
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         if self.kind is GoalKind.DEVELOP_TEAM:
             if observation.party.size < required_size:
@@ -943,21 +1069,37 @@ class _RedTeamGoalProvider:
         living_refs = frozenset(
             specimen.species_ref for specimen in observation.collection_observation.specimens
         )
+        if self.runtime.registration_policy is not None:
+            living_refs = self.runtime.registration_policy.registered(
+                observation.collection_observation,
+            )
         if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
             if self.runtime.boxed_level_evolution_executor is None:
                 return RedGoalSkillAvailability.unavailable(
                     GoalUnavailableReason.MISSING_CAPABILITY
                 )
-            try:
-                self._boxed_evolution_request(observation)
-            except RedGoalContextError:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.NO_LEGAL_TARGET
-                )
+            if self.runtime.boxed_level_evolution_readiness is not None:
+                readiness = self.runtime.boxed_level_evolution_readiness(observation)
+                if not readiness.executable:
+                    return readiness
+            if (
+                evolution_target is not None
+                and evolution_target[0] in observation.party.species_ids()
+                and self.runtime.party_level_evolution_executor is not None
+            ):
+                if observation.party.species_ids().count(evolution_target[0]) != 1:
+                    return RedGoalSkillAvailability.unavailable(
+                        GoalUnavailableReason.NO_LEGAL_TARGET
+                    )
+            else:
+                try:
+                    self._boxed_evolution_request(observation)
+                except RedGoalContextError:
+                    return RedGoalSkillAvailability.unavailable(
+                        GoalUnavailableReason.NO_LEGAL_TARGET
+                    )
             if evolved_ref in living_refs:
-                return RedGoalSkillAvailability.unavailable(
-                    GoalUnavailableReason.NO_LEGAL_TARGET
-                )
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             return RedGoalSkillAvailability.available()
         if self.kind is GoalKind.EVOLVE_SPECIES and (
             evolution_target is None
@@ -982,8 +1124,7 @@ class _RedTeamGoalProvider:
                 raise RedGoalContextError("targeted development lost its trainee")
             return replace(
                 MANSION_TEAM_POLICY,
-                minimum_level=target.level
-                + _integer(self.spec.parameters, "level_increment"),
+                minimum_level=target.level + _integer(self.spec.parameters, "level_increment"),
                 required_size=self.runtime.profile.manager_config.required_party_size,
             )
         return red_team_development_quantum_policy(
@@ -997,21 +1138,15 @@ class _RedTeamGoalProvider:
             return DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID
         if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
             return (
-                _internal_species_id(
-                    _text(self.spec.parameters, "source_species_ref")
-                ),
-                _internal_species_id(
-                    _text(self.spec.parameters, "target_species_ref")
-                ),
+                _internal_species_id(_text(self.spec.parameters, "source_species_ref")),
+                _internal_species_id(_text(self.spec.parameters, "target_species_ref")),
             )
         return None
 
     def _development_target_species_id(self) -> int:
         if self.spec.mechanic is not RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
             raise RedGoalContextError("development provider has no targeted trainee")
-        return _internal_species_id(
-            _text(self.spec.parameters, "trainee_species_ref")
-        )
+        return _internal_species_id(_text(self.spec.parameters, "trainee_species_ref"))
 
     def _boxed_evolution_request(
         self,
@@ -1030,29 +1165,33 @@ class _RedTeamGoalProvider:
             for specimen in collection.specimens
             if specimen.species_ref == source_ref
             and specimen.location is CollectionLocation.BOX
-            and specimen.container_index == current_box
+            and (
+                specimen.container_index == current_box
+                or self.runtime.boxed_level_evolution_cross_box
+            )
+            and specimen.container_index < len(collection.box_counts)
+            and collection.box_counts[specimen.container_index] < collection.box_capacity
         )
         deposit_candidates = tuple(
             (index + 1, member.species_id)
             for index, member in enumerate(observation.party.members)
-            if member.species_id
-            not in {BLASTOISE_SPECIES_ID, source_internal, target_internal}
+            if member.species_id not in {BLASTOISE_SPECIES_ID, source_internal, target_internal}
         )
         if (
             len(candidates) < 1
             or source_internal in observation.party.species_ids()
             or observation.party.size != 6
-            or current_box >= len(collection.box_counts)
-            or collection.box_counts[current_box] >= collection.box_capacity
             or not deposit_candidates
         ):
             raise RedGoalContextError("boxed evolution has no executable storage binding")
-        precursor = min(candidates, key=lambda item: item.slot_index)
+        precursor = min(candidates, key=lambda item: (
+            item.container_index != current_box, item.container_index, item.slot_index,
+        ))
         deposit_slot, deposit_species = deposit_candidates[-1]
         return RedBoxedLevelEvolutionGoalRequest(
             precursor_internal_species_id=source_internal,
             evolved_internal_species_id=target_internal,
-            current_box_index=current_box,
+            current_box_index=precursor.container_index,
             precursor_box_slot=precursor.slot_index + 1,
             deposit_party_slot=deposit_slot,
             deposit_internal_species_id=deposit_species,
@@ -1062,17 +1201,11 @@ class _RedTeamGoalProvider:
         if self.spec.mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
             return "pokemon.red:evolution:diglett-to-dugtrio"
         if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
-            source = red_species_number(
-                _text(self.spec.parameters, "source_species_ref")
-            )
-            target = red_species_number(
-                _text(self.spec.parameters, "target_species_ref")
-            )
+            source = red_species_number(_text(self.spec.parameters, "source_species_ref"))
+            target = red_species_number(_text(self.spec.parameters, "target_species_ref"))
             return f"pokemon.red:evolution:national-{source:03d}-to-national-{target:03d}"
         if self.spec.mechanic is RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT:
-            target = red_species_number(
-                _text(self.spec.parameters, "trainee_species_ref")
-            )
+            target = red_species_number(_text(self.spec.parameters, "trainee_species_ref"))
             return f"pokemon.red:development:national-{target:03d}:one-level-quantum"
         raise RedGoalContextError("team provider has no targeted binding")
 
@@ -1149,6 +1282,8 @@ def _mart_provider(
         )
         for item in raw_purchases
     )
+    raw_sale = parameters.get("funding_sale")
+    sale = _parameter_mapping(raw_sale) if raw_sale is not None else None
     return RedMartResupplyGoalProvider(
         map_id=MapId(_integer(parameters, "map_id")),
         player_x=_integer(parameters, "player_x"),
@@ -1159,6 +1294,11 @@ def _mart_provider(
         reader=runtime.reader,
         emulator=runtime.emulator,
         adapter=runtime.adapter,
+        funding_sale=(RedMartSurplusSale(
+            ItemId(_integer(sale, "item_id")), _integer(sale, "quantity"),
+            _integer(sale, "minimum_retained"),
+        ) if sale is not None else None),
+        affordable_ball_purchase=parameters.get("affordable_ball_purchase", False) is True,
     )
 
 

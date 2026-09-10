@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Protocol
 
@@ -26,6 +26,7 @@ from pokemon_red_completion.party import (
 )
 from pokemon_red_completion.red_battle_catalog import (
     RED_BATTLE_CATALOG,
+    pokemon_red_move_ref,
     pokemon_red_species_ref,
 )
 from pokemon_red_completion.red_party import (
@@ -49,6 +50,7 @@ from pokemon_red_completion.team_training import (
     member_needs_training,
     plan_team_training,
     summarize_team_readiness,
+    training_safety_ceiling,
 )
 from pokemon_red_completion.training_candidate_rank import (
     TrainingCandidateDecision,
@@ -276,8 +278,7 @@ class FixedPartyTrainingDose:
         if (
             not isinstance(self.trainee_species_lineage, tuple)
             or not self.trainee_species_lineage
-            or len(self.trainee_species_lineage)
-            != len(set(self.trainee_species_lineage))
+            or len(self.trainee_species_lineage) != len(set(self.trainee_species_lineage))
             or any(
                 type(species_id) is not int or not 1 <= species_id <= 0xFF  # noqa: E721
                 for species_id in self.trainee_species_lineage
@@ -304,7 +305,7 @@ def pulse(
     actions: CountingExecutor, kind: MacroActionKind, value: str | None = None, frames: int = 180
 ) -> None:
     actions.execute(MacroAction(kind, value))
-    actions.execute(MacroAction(MacroActionKind.WAIT, frames))
+    actions.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
 
 def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None:
@@ -331,7 +332,15 @@ def close_menu(actions: CountingExecutor, reader: PokemonRedStateReader) -> None
 def training_attack_pp(member: PartyMemberObservation) -> int:
     damaging = set(TRAINING_MOVE_IDS.get(member.species_id, ()))
     if not damaging:
-        return member.total_pp
+        from pokemon_red_completion.red_battle_catalog import pokemon_red_move_ref
+
+        # Unknown roster species still have known move mechanics. Status PP
+        # cannot keep an exhausted attacker away from the healer.
+        damaging = {
+            move.move_id
+            for move in member.known_moves
+            if RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move.move_id)).power > 0
+        }
     return sum(move.current_pp for move in member.known_moves if move.move_id in damaging)
 
 
@@ -363,11 +372,18 @@ def red_training_matchup_acceptable(
     simply deleted.
     """
 
+    return training_type_matchup_acceptable(
+        member.species_id, enemy_species
+    ) and is_matchup_acceptable(member, enemy_level, policy)
+
+
+def training_type_matchup_acceptable(trainee_species: int, enemy_species: int | None) -> bool:
+    """Structural opponent safety, independent of recoverable current HP/PP."""
     if enemy_species == 0x88:  # Muk
         return False
     if enemy_species is not None:
         trainee_types = RED_BATTLE_CATALOG.resolve_species(
-            pokemon_red_species_ref(member.species_id)
+            pokemon_red_species_ref(trainee_species)
         ).types
         enemy_types = RED_BATTLE_CATALOG.resolve_species(
             pokemon_red_species_ref(enemy_species)
@@ -377,7 +393,7 @@ def red_training_matchup_acceptable(
             for enemy_type in enemy_types
         ):
             return False
-    return is_matchup_acceptable(member, enemy_level, policy)
+    return True
 
 
 def member_is_unsafe_for_team_training(
@@ -390,6 +406,143 @@ def member_is_unsafe_for_team_training(
         or member.status is not StatusCondition.HEALTHY
         or training_attack_pp(member) <= training_attack_pp_reserve(member, policy)
     )
+
+
+COLLECTION_UNSUPPORTED_MOVE_EFFECTS = frozenset(
+    {"recoil", "self_destruct", "ohko", "charge", "recharge"}
+)
+
+
+def collection_damage_pp(
+    member: PartyMemberObservation, enemy_species: int | None = None, *, resources: bool = True
+) -> int:
+    """Immediate, non-self-damaging attacks, independent of the old roster slots."""
+    enemy_types = (
+        RED_BATTLE_CATALOG.resolve_species(pokemon_red_species_ref(enemy_species)).types
+        if enemy_species is not None
+        else None
+    )
+    total = 0
+    for known in member.known_moves:
+        move = RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(known.move_id))
+        if (
+            move.power > 0
+            and not move.effect_flags.intersection(COLLECTION_UNSUPPORTED_MOVE_EFFECTS)
+            and (
+                enemy_types is None
+                or RED_BATTLE_CATALOG.type_effectiveness(move.type_name, enemy_types) > 0
+            )
+        ):
+            total += known.current_pp if resources else 1
+    return total
+
+
+def collection_recipient_needs_recovery(
+    member: PartyMemberObservation, policy: BalancedTeamPolicy
+) -> bool:
+    # Entering battle and immediately switching earns participation XP. No move
+    # is requested from the recipient; healing cannot give Teleport damage.
+    return (
+        member.is_fainted
+        or member.hp_ratio <= policy.retreat_hp_ratio
+        or member.status is not StatusCondition.HEALTHY
+    )
+
+
+def collection_finisher(
+    party: PartyObservation,
+    recipient_species_id: int,
+    policy: BalancedTeamPolicy,
+    *,
+    enemy_level: int | None,
+    enemy_species: int | None = None,
+    resources: bool = True,
+) -> PartyMemberObservation | None:
+    """Choose a safe switch recipient by mechanics, never starter identity/cap.
+
+    ``resources=False`` only establishes whether a Center recovery could help.
+    Live combat must use the resource-checked form and recheck the actual enemy.
+    This deliberately does not alter the legacy parity curriculum.
+    """
+    candidates = [
+        member
+        for member in party.members
+        if member.species_id != recipient_species_id
+        and enemy_level is not None
+        and enemy_level <= training_safety_ceiling(member, policy)
+        and training_type_matchup_acceptable(member.species_id, enemy_species)
+        and collection_damage_pp(member, enemy_species, resources=resources)
+        > (policy.reserve_total_pp if resources else 0)
+        and (not resources or not collection_recipient_needs_recovery(member, policy))
+    ]
+    # Prefer the strongest qualified finisher, then its health and usable PP.
+    # The game may change slots on every trip; resolve the observed slot afresh.
+    return max(
+        candidates,
+        key=lambda member: (
+            member.level,
+            member.hp_ratio,
+            collection_damage_pp(member),
+            -member.slot,
+        ),
+        default=None,
+    )
+
+
+def collection_encounter_coverage(
+    party: PartyObservation,
+    recipient_species_id: int,
+    policy: BalancedTeamPolicy,
+    encounters: Sequence[tuple[int, int]],
+    *,
+    resources: bool = True,
+) -> bool:
+    """Every possible opponent needs a helper; it need not be the same helper."""
+    return bool(encounters) and all(
+        collection_finisher(
+            party, recipient_species_id, policy,
+            enemy_level=level, enemy_species=species, resources=resources,
+        ) is not None
+        for level, species in encounters
+    )
+
+
+def collection_escape_escort(
+    party: PartyObservation,
+    recipient_species_id: int,
+    policy: BalancedTeamPolicy,
+    *,
+    enemy_level: int | None,
+    enemy_species: int | None,
+) -> PartyMemberObservation | None:
+    """Qualify a defensive switch for escape only, never for attacking.
+
+    PP does not power RUN. Preserve the health, status, level and incoming
+    type guards, however: an exhausted healthy helper is not a fainted one.
+    This is not a promise of guaranteed escape or permission to fight.
+    """
+    return max(
+        (
+            member for member in party.members
+            if member.species_id != recipient_species_id
+            and enemy_level is not None
+            and enemy_species is not None
+            and enemy_level <= training_safety_ceiling(member, policy)
+            and training_type_matchup_acceptable(member.species_id, enemy_species)
+            and not collection_recipient_needs_recovery(member, policy)
+        ),
+        key=lambda member: (member.level, member.hp_ratio, -member.slot),
+        default=None,
+    )
+
+
+class EvolutionTrainingPaused(RuntimeError):
+    """A completed-battle quantum ended safely; retain and resume its state."""
+
+    def __init__(self, battles: int, healing_trips: int) -> None:
+        super().__init__("bounded evolution experience quantum completed without evolution")
+        self.battles = battles
+        self.healing_trips = healing_trips
 
 
 def trainee_should_fight_directly(
@@ -417,6 +570,55 @@ def require_zero_faints(party_reader: PokemonRedPartyReader, context: str) -> No
             for member in party.members
         )
         raise RuntimeError(f"Team training recorded a faint after {context}: party={state!r}.")
+
+
+def escape_collection_battle(
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    emulator: EmulatorState,
+    *,
+    recipient_species_id: int,
+    policy: BalancedTeamPolicy,
+    flee_func: Callable[..., None],
+    flee_timing: object,
+) -> int:
+    """One bounded defensive exit; never resumes training or selects a goal.
+
+    Existing switch/flee menu routines have finite pulse limits. Check the
+    whole party before and after each action, so a failed switch/flee cannot
+    continue issuing inputs after a faint. The caller retains action/frame
+    budgets and records this as recovery, not a completed XP battle.
+    """
+    party_reader = PokemonRedPartyReader(emulator)
+    raw = reader.read()
+    if raw.battle_state != 1:
+        raise RuntimeError("Collection escape requires a live wild battle.")
+    escort = collection_escape_escort(
+        party_reader.read(), recipient_species_id, policy,
+        enemy_level=raw.enemy_level, enemy_species=raw.enemy_species_id,
+    )
+    if escort is None:
+        raise RuntimeError("Collection battle has neither a finisher nor a safe escape escort.")
+
+    class FaintGuard:
+        def execute(self, action: MacroAction) -> object:
+            require_zero_faints(party_reader, "before collection escape action")
+            result = actions.execute(action)
+            require_zero_faints(party_reader, "collection escape action")
+            return result
+
+    guarded = FaintGuard()
+    require_zero_faints(party_reader, "collection escape admission")
+    if switch_active_battler(
+        guarded, reader, emulator, target_index=escort.slot - 1,
+        label="collection resource escape escort",
+    ):
+        require_zero_faints(party_reader, "resource escape switch")
+        flee_func(guarded, reader, emulator, _RunState(wilds=[]), flee_timing)
+    require_zero_faints(party_reader, "collection resource escape")
+    if reader.read().battle_state != 0 or not reader.read_input_readiness().ready:
+        raise RuntimeError("Collection resource escape did not reach a safe field boundary.")
+    return int(raw.active_party_index != escort.slot - 1)
 
 
 def restore_training_core_order(
@@ -574,14 +776,25 @@ def swap_field_party_slots(
         pulse(actions, MacroActionKind.OPEN_MENU)
         select_cursor(actions, emulator, 1, hideout_timing, "start-menu POKEMON")
         pulse(actions, MacroActionKind.CONFIRM)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            raise RuntimeError(f"{label} did not open the party list before source selection.")
         select_cursor(actions, emulator, first_index, hideout_timing, "party source slot")
         open_party_member_submenu(actions, emulator, label=label)
         if row > emulator.read_u8(RamAddress.MAX_MENU_ITEM):
             close_menu(actions, reader)
             continue
-        _walk_cursor_to(actions, emulator, row)
+        select_cursor(actions, emulator, row, hideout_timing, "member SWITCH candidate")
         pulse(actions, MacroActionKind.CONFIRM)
-        _walk_cursor_to(actions, emulator, second_index)
+        if (
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_X),
+            emulator.read_u8(RamAddress.TOP_MENU_ITEM_Y),
+        ) != PARTY_LIST_MENU_TOP:
+            close_menu(actions, reader)
+            continue
+        select_cursor(actions, emulator, second_index, hideout_timing, "party destination slot")
         pulse(actions, MacroActionKind.CONFIRM)
         close_menu(actions, reader)
 
@@ -842,6 +1055,10 @@ def run_red_team_balancing(
     execution_summary_sink: Callable[[TeamTrainingExecutionSummary], None] | None = None,
     completed_checkpoint_count: int = 0,
     evolution_target: tuple[int, int] | None = None,
+    allow_direct_evolution: bool = False,
+    collection_shared_experience: bool = False,
+    collection_encounters: Mapping[int, Sequence[tuple[int, int]]] | None = None,
+    evolution_battle_quantum: int | None = None,
     development_target_species_id: int | None = None,
     venues: Sequence[TrainingVenue],
     report_label: str,
@@ -849,22 +1066,56 @@ def run_red_team_balancing(
     fixed_dose: FixedPartyTrainingDose | None = None,
 ) -> tuple[object | None, int, int]:
     party_reader = PokemonRedPartyReader(emulator)
+    if type(allow_direct_evolution) is not bool:
+        raise ValueError("direct evolution mode must be boolean")
+    if type(collection_shared_experience) is not bool:
+        raise ValueError("collection shared-experience mode must be boolean")
+    if collection_encounters is not None:
+        if not collection_shared_experience:
+            raise ValueError("collection encounter coverage requires shared-experience mode")
+        for venue in venues:
+            rows = collection_encounters.get(venue.map_id, ())
+            if not rows or any(
+                type(level) is not int or not 1 <= level <= 100
+                or type(species) is not int or not 1 <= species <= 0xFF
+                for level, species in rows
+            ):
+                raise ValueError("collection venue requires valid cartridge encounters")
+    if (
+        allow_direct_evolution
+        or evolution_battle_quantum is not None
+        or collection_shared_experience
+    ) and evolution_target is None:
+        raise ValueError("evolution controls require an evolution target")
+    if collection_shared_experience and evolution_battle_quantum is None:
+        raise ValueError("collection shared experience requires a bounded evolution quantum")
+    if evolution_battle_quantum is not None and (
+        type(evolution_battle_quantum) is not int
+        or not 1 <= evolution_battle_quantum <= policy.max_battles
+    ):
+        raise ValueError("evolution quantum exceeds its battle bound")
     if not venues:
         raise RuntimeError(
             "Team training was given no venue. There is nowhere to walk, nowhere to heal, "
             "and no band to judge a matchup against."
         )
-    if BLASTOISE_SPECIES_ID not in party_reader.read().species_ids():
+    if (
+        not collection_shared_experience
+        and BLASTOISE_SPECIES_ID not in party_reader.read().species_ids()
+    ):
         raise RuntimeError("Team training lacks its qualified Blastoise escort.")
     if development_target_species_id is not None and (
         type(development_target_species_id) is not int  # noqa: E721
         or not 1 <= development_target_species_id <= 0xFF
     ):
         raise ValueError("Targeted party development species is invalid.")
-    if sum(
-        item is not None
-        for item in (fixed_dose, evolution_target, development_target_species_id)
-    ) > 1:
+    if (
+        sum(
+            item is not None
+            for item in (fixed_dose, evolution_target, development_target_species_id)
+        )
+        > 1
+    ):
         raise RuntimeError(
             "Party training can bind only one fixed dose, evolution, or development target."
         )
@@ -888,6 +1139,7 @@ def run_red_team_balancing(
     battles = 0
     steps = 0
     healing_trips = 0
+    collection_recovery_pending = False
     venue_transition_trips = 0
     required_recovery_trips = 0
     optional_recovery_trips = 0
@@ -897,7 +1149,9 @@ def run_red_team_balancing(
     # A live move guard can disprove the aggregate PP forecast after an
     # encounter begins (for example, because every qualified move is disabled
     # or otherwise unusable).  Remember that evidence until a Center recovery
-    # changes the resource state, so the next encounter earns participation
+    # changes the resource state in legacy mode. Collection mode retains it
+    # for this bounded invocation: healing does not invalidate observed direct
+    # combat damage/Wrap risk, so the next encounter earns participation
     # credit through the qualified escort instead of repeating the same failed
     # direct-combat claim eight times.
     direct_fight_suppressed_species: set[int] = set()
@@ -1061,6 +1315,20 @@ def run_red_team_balancing(
             rotations_executed += 1
         return switched
 
+    def verify_collection_experience(previous: PartyMemberObservation) -> None:
+        if not collection_shared_experience:
+            return
+        assert evolution_target is not None
+        after = party_reader.read()
+        matches = [m for m in after.members if m.species_id in evolution_target]
+        if (
+            len(matches) != 1
+            or previous.experience is None
+            or matches[0].experience is None
+            or matches[0].experience <= previous.experience
+        ):
+            raise RuntimeError("Collection battle made no verified recipient XP progress.")
+
     def restore_core_and_count() -> None:
         nonlocal rotations_executed
         observed = list(party_reader.read().species_ids())
@@ -1083,7 +1351,7 @@ def run_red_team_balancing(
         # every trip. A counterfactual dose must instead retain the selected
         # specimen as lead so party-slot churn cannot change which candidate is
         # being measured. Field-move helpers discover their users from memory.
-        if fixed_dose is None:
+        if fixed_dose is None and not collection_shared_experience:
             restore_core_and_count()
 
     def bound_trainee(party: PartyObservation) -> PartyMemberObservation:
@@ -1095,18 +1363,14 @@ def run_red_team_balancing(
             if member.species_id in fixed_dose.trainee_species_lineage
         )
         if len(matches) != 1:
-            raise RuntimeError(
-                "Fixed party-training dose lost its unique trainee lineage binding."
-            )
+            raise RuntimeError("Fixed party-training dose lost its unique trainee lineage binding.")
         return matches[0]
 
     def bound_development_trainee(party: PartyObservation) -> PartyMemberObservation:
         if development_target_species_id is None:
             raise AssertionError("targeted development trainee requested without a binding")
         matches = tuple(
-            member
-            for member in party.members
-            if member.species_id == development_target_species_id
+            member for member in party.members if member.species_id == development_target_species_id
         )
         if len(matches) != 1:
             raise RuntimeError(
@@ -1129,6 +1393,8 @@ def run_red_team_balancing(
 
     while True:
         party = party_reader.read()
+        if collection_shared_experience:
+            require_zero_faints(party_reader, "collection training boundary")
         progress = TeamTrainingProgress(
             battles_completed=battles,
             steps_taken=steps,
@@ -1309,21 +1575,59 @@ def run_red_team_balancing(
             precursor_species, final_species = evolution_target
             if final_species in party.species_ids():
                 break
-            if battles >= 200:
-                raise RuntimeError("Targeted evolution exceeded 200 battles.")
+            if (
+                evolution_battle_quantum is not None
+                and battles >= evolution_battle_quantum
+                and reader.read().battle_state == 0
+                and reader.read_input_readiness().ready
+            ):
+                require_zero_faints(party_reader, "evolution quantum boundary")
+                raise EvolutionTrainingPaused(battles, healing_trips)
+            if battles >= min(200, policy.max_battles) or steps >= policy.max_steps:
+                raise RuntimeError("Targeted evolution exhausted its bounded training budget.")
             trainee = next((m for m in party.members if m.species_id == precursor_species), None)
             if trainee is None:
                 raise RuntimeError("Targeted evolution lost its precursor.")
             bands = tuple(venue.band for venue in venues)
-            target_band = choose_grinding_area(bands, trainee, policy)
+            if collection_shared_experience:
+                supported = [
+                    venue.band
+                    for venue in venues
+                    if venue.band.has_nearby_healer
+                    and (
+                        collection_encounter_coverage(
+                            party, trainee.species_id, policy,
+                            collection_encounters[venue.map_id], resources=False,
+                        )
+                        if collection_encounters is not None
+                        else collection_finisher(
+                        party,
+                        trainee.species_id,
+                        policy,
+                        enemy_level=venue.band.rare_maximum_encounter_level
+                        or venue.band.maximum_encounter_level,
+                        resources=False,
+                    )
+                    is not None
+                    )
+                ]
+                target_band = min(
+                    supported, key=lambda band: band.maximum_encounter_level, default=None
+                )
+            else:
+                target_band = choose_grinding_area(bands, trainee, policy)
             if target_band is None:
                 raise RuntimeError(f"No provided venue suits precursor at level {trainee.level}.")
             current_venue = next(v for v in venues if v.band == target_band)
-            venue_projection = project_venue_candidates(
-                party,
-                policy,
-                trainee,
-                bands,
+            venue_projection = (
+                None
+                if collection_shared_experience
+                else project_venue_candidates(
+                    party,
+                    policy,
+                    trainee,
+                    bands,
+                )
             )
             if venue_projection is not None:
                 projected_area, selected_index, observation = venue_projection
@@ -1342,7 +1646,12 @@ def run_red_team_balancing(
                     )
                     current_venue = next(v for v in venues if v.band == target_band)
 
-            if member_is_unsafe_for_team_training(trainee, policy):
+            recipient_unsafe = (
+                collection_recipient_needs_recovery(trainee, policy)
+                if collection_shared_experience
+                else member_is_unsafe_for_team_training(trainee, policy)
+            )
+            if recipient_unsafe:
                 directive = TeamTrainingDirective.RESTORE_TEAM
             elif trainee.slot != 1:
                 directive = TeamTrainingDirective.SWITCH_TRAINEE
@@ -1379,15 +1688,68 @@ def run_red_team_balancing(
             break
 
         raw = reader.read()
-        escort = next((m for m in party.members if m.species_id == BLASTOISE_SPECIES_ID), None)
+        if collection_shared_experience:
+            assert trainee is not None
+            escort = collection_finisher(
+                party,
+                trainee.species_id,
+                policy,
+                enemy_level=(
+                    raw.enemy_level
+                    if raw.battle_state == 1
+                    else current_venue.band.rare_maximum_encounter_level
+                    or current_venue.band.maximum_encounter_level
+                ),
+                enemy_species=raw.enemy_species_id if raw.battle_state == 1 else None,
+            )
+            escort_unsafe = escort is None
+            if raw.battle_state != 1 and collection_encounters is not None:
+                escort_unsafe = not collection_encounter_coverage(
+                    party, trainee.species_id, policy,
+                    collection_encounters[current_venue.map_id],
+                )
+            if escort is None and raw.battle_state != 1:
+                escort = collection_finisher(
+                    party,
+                    trainee.species_id,
+                    policy,
+                    enemy_level=current_venue.band.rare_maximum_encounter_level
+                    or current_venue.band.maximum_encounter_level,
+                    resources=False,
+                )
+        else:
+            escort = next((m for m in party.members if m.species_id == BLASTOISE_SPECIES_ID), None)
+            escort_unsafe = (
+                escort is None
+                or escort.is_fainted
+                or escort.hp_ratio <= policy.retreat_hp_ratio
+                or escort.status is not StatusCondition.HEALTHY
+                or training_attack_pp(escort) <= training_attack_pp_reserve(escort, policy)
+            )
+        if collection_shared_experience and escort is None and raw.battle_state == 1:
+            assert trainee is not None
+            if consecutive_flees >= max_consecutive_flees:
+                raise RuntimeError("Collection resource escape exhausted its flee bound.")
+            selected = emit_decision(
+                TrainingControlAction.FLEE,
+                "no resource-qualified collection finisher",
+                phase=TrainingControlPhase.BATTLE,
+                party=party, progress=progress, trainee=trainee,
+                enemy_level=raw.enemy_level, fight_allowed=False,
+            )
+            require_safe_exit(selected, "collection resource escape")
+            rotations_executed += escape_collection_battle(
+                actions, reader, emulator, recipient_species_id=trainee.species_id,
+                policy=policy, flee_func=flee_func, flee_timing=flee_timing,
+            )
+            record_flee("collection resource exhaustion")
+            continue
         if escort is None:
-            raise RuntimeError("Team training lost its Blastoise escort.")
-        escort_unsafe = (
-            escort.is_fainted
-            or escort.hp_ratio <= policy.retreat_hp_ratio
-            or escort.status is not StatusCondition.HEALTHY
-            or training_attack_pp(escort) <= training_attack_pp_reserve(escort, policy)
-        )
+            raise RuntimeError(
+                "Team training lacks a safe collection finisher."
+                if collection_shared_experience
+                else "Team training lost its Blastoise escort."
+            )
         if raw.battle_state == 1:
             if evolution_target is not None:
                 trainee = next(
@@ -1462,11 +1824,19 @@ def run_red_team_balancing(
                     enemy_level=raw.enemy_level,
                     enemy_species=raw.enemy_species_id,
                     policy=policy,
-                    participation_only=evolution_target is not None,
+                    participation_only=evolution_target is not None and not allow_direct_evolution,
+                )
+                and (
+                    not collection_shared_experience
+                    or collection_damage_pp(trainee, raw.enemy_species_id) > policy.reserve_total_pp
                 )
             )
 
-            if not trainee_fights and escort.level >= ESCORT_LEVEL_CAP:
+            if (
+                not collection_shared_experience
+                and not trainee_fights
+                and escort.level >= ESCORT_LEVEL_CAP
+            ):
                 if not switch_and_count(
                     target_index=escort.slot - 1,
                     label="Blastoise capped escort flee",
@@ -1493,10 +1863,15 @@ def run_red_team_balancing(
 
             fighter = trainee if trainee_fights else escort
             fighter_unsafe = (
-                fighter.is_fainted
-                or fighter.hp_ratio <= policy.retreat_hp_ratio
-                or fighter.status is not StatusCondition.HEALTHY
-                or training_attack_pp(fighter) <= training_attack_pp_reserve(fighter, policy)
+                collection_recipient_needs_recovery(fighter, policy)
+                or (collection_damage_pp(fighter, raw.enemy_species_id) <= policy.reserve_total_pp)
+                if collection_shared_experience
+                else (
+                    fighter.is_fainted
+                    or fighter.hp_ratio <= policy.retreat_hp_ratio
+                    or fighter.status is not StatusCondition.HEALTHY
+                    or training_attack_pp(fighter) <= training_attack_pp_reserve(fighter, policy)
+                )
             )
             if fighter_unsafe:
                 selected = emit_decision(
@@ -1519,6 +1894,7 @@ def run_red_team_balancing(
                 label="Blastoise escort",
             ):
                 require_zero_faints(party_reader, "terminal escort switch")
+                verify_collection_experience(trainee)
                 battles += 1
                 consecutive_flees = 0
                 emit_progress()
@@ -1589,12 +1965,17 @@ def run_red_team_balancing(
                 record_flee("live PP exhaustion or Disable")
                 continue
             require_zero_faints(party_reader, "completed training battle")
+            verify_collection_experience(trainee)
             battles += 1
             consecutive_flees = 0
             emit_progress()
             continue
 
         if decision.directive is TeamTrainingDirective.RESTORE_TEAM or escort_unsafe:
+            if collection_shared_experience and collection_recovery_pending:
+                raise RuntimeError(
+                    "Collection recovery repeated without restored encounter readiness."
+                )
             if healing_trips >= policy.max_healing_trips:
                 raise RuntimeError("team training exhausted the required-recovery budget")
             selected = emit_decision(
@@ -1617,7 +1998,10 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             required_recovery_trips += 1
-            direct_fight_suppressed_species.clear()
+            if collection_shared_experience:
+                collection_recovery_pending = True
+            else:
+                direct_fight_suppressed_species.clear()
             continue
 
         if not current_venue.is_in_map(raw):
@@ -1641,7 +2025,8 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             venue_transition_trips += 1
-            direct_fight_suppressed_species.clear()
+            if not collection_shared_experience:
+                direct_fight_suppressed_species.clear()
             continue
         if evolution_target is not None:
             trainee = next(
@@ -1694,19 +2079,24 @@ def run_red_team_balancing(
             current_venue.heal_and_return(actions, reader, emulator)
             healing_trips += 1
             optional_recovery_trips += 1
-            direct_fight_suppressed_species.clear()
+            if not collection_shared_experience:
+                direct_fight_suppressed_species.clear()
             continue
         require_overworld_action(
             selected,
             TrainingControlAction.SEEK,
             "safe encounter-seeking boundary",
         )
+        # Reaching this boundary requires a healthy recipient and current
+        # per-opponent helper coverage. A subsequent encounter can consume
+        # those resources without awarding XP. Permit its bounded recovery;
+        # an ineffective heal never reaches this reset. Global heal/flee/action
+        # limits remain unchanged and suppression survives the healing trip.
+        if collection_shared_experience:
+            collection_recovery_pending = False
         steps += venue_walkers[current_venue.band.identity](actions, reader, emulator)
 
-    if (
-        current_venue.is_in_map(reader.read())
-        and healing_trips < policy.max_healing_trips
-    ):
+    if current_venue.is_in_map(reader.read()) and healing_trips < policy.max_healing_trips:
         prepare_for_recovery()
         current_venue.heal_and_return(actions, reader, emulator)
         healing_trips += 1

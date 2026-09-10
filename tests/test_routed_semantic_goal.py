@@ -60,6 +60,9 @@ def _composer(
     destination_ref: str = "private:destination",
     unavailable_reason: GoalUnavailableReason | None = None,
     limits: RoutedSemanticGoalLimits | None = None,
+    capture_support: dict[str, int] | None = None,
+    capture_survey: dict[str, object] | None = None,
+    storage_preparation: dict[str, object] | None = None,
 ) -> tuple[
     RoutedSemanticGoalComposer,
     ExecutableGoalBinding,
@@ -98,7 +101,11 @@ def _composer(
         meter.spend(*destination_spend)
         return GoalExecutionReport(
             *destination_values,
-            {"semantic_destination": offered_kind.value},
+            {"semantic_destination": offered_kind.value,
+             **({"capture_support": capture_support} if capture_support is not None else {}),
+             **({"capture_survey": capture_survey} if capture_survey is not None else {}),
+             **({"storage_preparation": storage_preparation}
+                if storage_preparation is not None else {})},
         )
 
     def verify_destination(_report: GoalExecutionReport) -> GoalVerification:
@@ -144,6 +151,51 @@ def _composer(
     return composer, composer.binding(), meter, events
 
 
+@pytest.mark.parametrize('escape_bypasses', [0, 2])
+def test_capture_support_counts_survive_routing_without_forwarding_private_evidence(
+    escape_bypasses,
+):
+    counts = {'status_attempts': 3, 'verified_status_observations': 1, 'party_preparations': 0}
+    if escape_bypasses:
+        counts['escape_setup_bypasses'] = escape_bypasses
+    _, binding, _, _ = _composer(capture_support=counts)
+    report = binding.execute()
+    assert report.evidence['capture_support'] == counts
+    assert 'private_route' not in report.evidence
+
+
+@pytest.mark.parametrize("exhausted", [False, True])
+def test_capture_survey_survives_routed_destination(exhausted: bool) -> None:
+    counts = {
+        "semantic_actions": 17, "encounters_seen": 5,
+        "captures": 0 if exhausted else 1, "flees": 4,
+        "search_exhausted": exhausted, "safety_stopped": False,
+        **({"search_stop_reason": "survey_leg_limit_exceeded"} if exhausted else {}),
+    }
+    verdict = (GoalVerification.failed(GoalFailureReason.SEARCH_EXHAUSTED)
+               if exhausted else GoalVerification.succeeded())
+    _, binding, _, _ = _composer(capture_survey=counts, destination_verification=verdict)
+    report = binding.execute()
+    assert report.evidence["capture_survey"] == counts
+    assert binding.verify(report) == verdict
+    assert "private_route" not in report.evidence
+    assert "semantic_destination" not in report.evidence
+
+
+def test_unexecuted_destination_does_not_invent_survey_counts() -> None:
+    _, binding, _, _ = _composer(
+        route_verification=GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED),
+        capture_survey={"must_not_be_read": True},
+    )
+    assert "capture_survey" not in binding.execute().evidence
+
+
+def test_malformed_destination_survey_is_not_silently_discarded() -> None:
+    _, binding, _, _ = _composer(capture_survey={"private_path": "fixture-private"})
+    with pytest.raises(ValueError, match="fields"):
+        binding.execute()
+
+
 def test_success_keeps_route_out_of_the_policy_kind_and_verifies_in_order() -> None:
     composer, binding, _meter, events = _composer()
 
@@ -156,6 +208,7 @@ def test_success_keeps_route_out_of_the_policy_kind_and_verifies_in_order() -> N
     assert report.evidence["destination_bound"] is True
     assert report.evidence["destination_executed"] is True
     assert report.evidence["destination_kind"] == "resupply"
+    assert "capture_survey" not in report.evidence
     assert report.evidence["route_is_policy_kind"] is False
     assert events == [
         "route_execute",

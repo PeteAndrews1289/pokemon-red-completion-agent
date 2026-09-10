@@ -1,0 +1,34 @@
+{
+  "schema": "pokemon.red.fixed-damage-entry-qualification.v1",
+  "scope": "ROM-free-deterministic-mechanics-maintenance",
+  "source_bundle_sha256": "65704ce1ee51deb7d5043a8f9d6d0c9859a1c924aedca79a120eb44897d6b6f4",
+  "pinned_cartridge_source": "1e96034092686d006e863cace09e87273051a3d8",
+  "supported_incoming_moves": [
+    {
+      "id": 49,
+      "hp_bound": 20
+    },
+    {
+      "id": 82,
+      "hp_bound": 40
+    },
+    {
+      "id": 101,
+      "hp_bound": "observed_enemy_level_integer_1_to_100"
+    }
+  ],
+  "entry_remaining_hp_strictly_positive": true,
+  "ordinary_coverage_preserved": true,
+  "fresh_enemy_level_and_hp_before_switch": true,
+  "strict_type_only_api_unchanged": true,
+  "outgoing_night_shade_support": false,
+  "focused_tests_passed": 168,
+  "mypy_source_files": 452,
+  "full_suite": "Earlier collected snapshot:9759 passed,1 skipped,3 deselected,1 xfailed. Predates final fixed-damage test refinements and the later dialogue repair; final focused168 separately passed.",
+  "reviewer": "internal-read-only",
+  "review_fix": "Simulate incoming damage before claiming post-switch attack resumption; separately refuse next attack at1HP.",
+  "gameplay_actions": 0,
+  "training_examples": 0,
+  "authority_promotions": 0,
+  "phase4_complete": false
+}

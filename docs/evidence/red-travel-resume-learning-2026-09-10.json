@@ -1,0 +1,261 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "e31e667c14e44e9d7cdad39dd3bd0f6e71b50309810714d518d776e8e9637548",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 51,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 51,
+      "successful_examples": 32,
+      "total_examples": 51,
+      "train_dataset_sha256": "13591a4af7186691bc8a2b8dbb4c85b532f799835d62e2b5ea53cf1421d02698",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011906972025072014,
+      "weighted_mse_before": 0.03401942919555253
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "a9e2701bb4c8a02dbb83d6edbc47e70f4c6527258f8b3871bd6d6874c88bb507",
+      "file_sha256": "2da2d0ce959a7b8b994c00b3075b330a29b18237c14064be89e281bc33a09a2f",
+      "independent_evaluation": false,
+      "model_sha256": "19e9cdd346dc17244e8a5118c1bd9dfbe6c967644a137a2a7727c7d11594e07d",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "ae77ed77608b0320d283969b93744c47967e1dd6c699eb51e1f7df1f4ad6a442",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 51,
+      "source_bundle_sha256": "9365b0be45c3a441797366ba61daa56a4c6236b783e4644ffaa4407d18fcc6b8",
+      "source_commit": "d1079d9df1c755b7bf9257829434c8bfbbef5186"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08756585046985114,
+        5.481365699027695e-06,
+        6.7622975165695555e-06,
+        0.0017765412151352147,
+        0.0013827922729729917,
+        0.015151518462944918,
+        0.0018945087134157896,
+        2.082668048361881e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 51,
+      "total_examples": 51,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011976170829509336
+    },
+    "regional_source_examples": 17,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08692401077131107,
+        5.495416491640143e-06,
+        6.773433329782592e-06,
+        0.0017761907667866162,
+        0.0013826430754611332,
+        0.015173735001168006,
+        0.0018918136968193975,
+        2.08606428048366e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 51,
+      "total_examples": 51,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011906972025072014
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-registered-travel-resume-20260910-w-03-causal",
+    "actions": 97,
+    "frames": 6949,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 0,
+    "status": "succeeded"
+  },
+  "session": {
+    "steps": [
+      {
+        "actions": 197,
+        "available_goal_count": 3,
+        "capture_survey": null,
+        "checkpoint_sha256": "686a8af678852a9976c42a28f5917241ecb2a0bd9b8bc02bfce1be1bb4a59fdb",
+        "destination_candidate_count": 8,
+        "eligible_examples": 1,
+        "episode_id": "red-registered-travel-resume-20260910-w-01-causal",
+        "failure_reason": null,
+        "fit_performed": true,
+        "frames": 11412,
+        "manifest_sha256": "1cd1167d386b0212520fbee8a8d4df48414041ce111e6f48e87046213dafc7a0",
+        "new_registrations": [],
+        "proposed_source": "wild:MtMoon1F:grass",
+        "registered_after": 56,
+        "registered_before": 56,
+        "selected_kind": "restore_team",
+        "selected_source": null,
+        "selection_mode": "authority",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "observed_wild_battle_starts_count": 3
+      },
+      {
+        "actions": 6847,
+        "available_goal_count": 2,
+        "capture_survey": null,
+        "checkpoint_sha256": "156690b68640f5f4491a41c0a59bf7caf48826791adcd863915d0119b07149ce",
+        "destination_candidate_count": 8,
+        "eligible_examples": 1,
+        "episode_id": "red-registered-travel-resume-20260910-w-02-causal",
+        "failure_reason": null,
+        "fit_performed": true,
+        "frames": 599732,
+        "manifest_sha256": "fe8a0cec5af8d105c9a384b5b8908a6034a9c725cb39390b3a7a0dfb98cd17dc",
+        "new_registrations": [
+          "pokemon:national:110"
+        ],
+        "proposed_source": "wild:PokemonMansionB1F:grass",
+        "registered_after": 57,
+        "registered_before": 56,
+        "selected_kind": "evolve_species",
+        "selected_source": null,
+        "selection_mode": "authority",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "observed_wild_battle_starts_count": 96
+      },
+      {
+        "actions": 97,
+        "available_goal_count": 2,
+        "capture_survey": null,
+        "checkpoint_sha256": "b6d30b57681c85819117f14fb123d5a3f1f55796e4875d24eaa6444c1a250c2c",
+        "destination_candidate_count": 5,
+        "eligible_examples": 1,
+        "episode_id": "red-registered-travel-resume-20260910-w-03-causal",
+        "failure_reason": null,
+        "fit_performed": true,
+        "frames": 6949,
+        "manifest_sha256": "249b6498e72775519b3917a884ce90683b13722fce80ce4f568a62f1d4082223",
+        "new_registrations": [],
+        "proposed_source": "wild:MtMoonB1F:grass",
+        "registered_after": 57,
+        "registered_before": 57,
+        "selected_kind": "resupply",
+        "selected_source": null,
+        "selection_mode": "authority",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "observed_wild_battle_starts_count": 1
+      }
+    ],
+    "attempted_steps": 3,
+    "completed_steps": 3,
+    "fits": 3,
+    "registered_examples_before": 48,
+    "registered_examples_after": 51,
+    "initial_registered": 56,
+    "last_verified_registered": 57,
+    "last_verified_specimens": 49,
+    "source_commit": "d1079d9df1c755b7bf9257829434c8bfbbef5186",
+    "elapsed_seconds": 833.657,
+    "stop_reason": "step_limit",
+    "latest_fit_belongs_to_session": true,
+    "failed_attempts_retried": 0,
+    "total_recorded_actions": 7141,
+    "total_recorded_frames": 618093,
+    "forced_singleton_parent_steps": 0,
+    "model_selected_goal_steps": 3,
+    "sampled_destination_choices": 0,
+    "terminal_observation": {
+      "source": "exact_authenticated_checkpoint_read",
+      "state_sha256": "82cebb85a8e31edbce817b0b9cf7e6d76f556b8462f47d02083632b7b80b6292",
+      "input_ready": true,
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "collection_verified_from_saved_state": true
+    },
+    "corpus_coverage": {
+      "acquire": {
+        "rows": 24,
+        "successes": 6
+      },
+      "evolve": {
+        "rows": 10,
+        "successes": 10
+      },
+      "restore": {
+        "rows": 10,
+        "successes": 10
+      },
+      "resupply": {
+        "rows": 7,
+        "successes": 6
+      }
+    },
+    "fresh_game_autonomy": false,
+    "policy_sampling": "25 percent uniform exploration mixed with 75 percent model softmax; not greedy-only play",
+    "mechanics": "Deterministic navigation, capture and evolution execution; learned goal/destination choice."
+  }
+}

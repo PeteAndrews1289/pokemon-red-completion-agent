@@ -1,0 +1,128 @@
+# Qualified status recovery — bounded implementation session
+
+Mission: sustained model-directed Red collection supporting the eventual shared
+registered Pokedex across titles. This repair is maintenance unblocking the next
+model36 learning batch, not a new learner result by itself.
+
+## Scope and stop rules
+
+- Capability: distinguish an authenticated wild exit with new lead status from an
+  unsafe escape; return a recovery need to the planner rather than silently walk on.
+- Learned authority: existing goal/destination choice is preserved. The repair does
+  not learn combat, dictate the next target or promote player authority.
+- Transfer falsifier: ROM-free status, map, roster and resource variants; no live
+  transfer result. Same-lineage variants are not independent evaluation.
+- Cheapest falsifier: status-only change versus additional PP, bench HP, position,
+  roster, resource, control or battle-result changes.
+- Time box: 60–90 minutes to qualify then reassess; a separate four-step continuation
+  remains bounded to its own budget.
+- Stop on uncertain terminal, lost guards, false success, reset/refund or consumed
+  retry. No sealed evaluation, Crystal or full replay.
+
+## Implementation
+
+Legacy escape callers still receive the original failure type. Only a fully observed
+healthy-to-valid-status transition with preserved party, PP, bench HP, resources,
+position and verified escape receipt attaches a typed private cause. The collection
+handler independently rereads the terminal and protects all previously living slots
+before raising a portable recovery-required failure. It does not resume the route.
+
+The bounded player retains metered costs and classifies this as failure, not success.
+The learning-cycle opt-in permits a new choice after fitting and saving that exact
+failed terminal. Defaults remain stop-on-failure. Generic errors and changed collection
+records never qualify. New choice identities and actual post-fit checkpoints remain
+mandatory. Recovery can itself stop if another previously healthy lead gains status;
+this is conservative triage, not permission to override survival guards.
+
+Historical N remains a generic binding failure under its original source. This
+change does not rewrite that receipt or fit. The first new batch starts from its
+actual model36 terminal, not the earlier healthy model35 checkpoint.
+
+## Flash adjudication
+
+Flash3.8 High reviewed supplied patch/test excerpts, without tools or repository
+access. Codex accepted the bench-HP gap and added its discriminator. It deferred
+special treatment for travel already bound to healing: maintaining safe replanning
+is preferable to implicitly continuing through new status damage. It rejected the
+claim that the same destination on a fresh retained state is a consumed-identity
+retry. An exclusion would force policy behavior and is not this repair's contract.
+
+Validation and actual gameplay outcome are recorded at closeout; no live success is
+claimed by the existence of this implementation note.
+
+## First live result and discovered decoder defect
+
+O01 selected healing among three goals, cured the retained burn and restored the
+injured member67-to93HP using a healthy escort. It retained53 registrations and47
+specimens and fitted model36-to37:230 actions/11568 frames. O02 then selected Mansion3F
+among eight sources and reached it, but mixed trainer-table decoding stopped both
+execution and final goal observation. Its88 actions/4164 frames and exact raw failure
+state remain preserved; O02 has no admitted outcome/fit and must not be replayed.
+
+The cartridge has an interaction-only, zero-range trainer followed by a fixed-facing
+sight trainer. Filtering objects before decoding incorrectly rejected that complete
+table. Decode all trainer records first, then omit only the validated zero-range
+non-facing records. Non-facing positive-range hazards and malformed records still
+fail closed. Existing scripted-only behavior remains unchanged. The local ROM read
+now identifies the floor's ordinary trainer (sprite2, distance2, event2066).
+The [matching disassembly](https://github.com/pret/pokered/blob/master/scripts/PokemonMansion3F.asm)
+also declares both rows; cartridge inspection, not the external file revision, is
+the decisive local evidence.
+
+## Settled-state admission contract
+
+Existing forced recovery deliberately requires a battle or a needy party. Forcing
+a redundant healing trip simply to admit an already healthy failed state would add
+unnecessary gameplay. The explicit settled-field mode instead requires healthy,
+input-ready field state and uses a read-only controller. Admission must preserve
+the exact authenticated failure-state bytes, perform zero actions/frames, preserve
+the original failed costs and produce zero training examples or model decisions.
+The checkpoint reader verifies the byte identity again. Ordinary recovery still
+requires positive actual costs; its contract is not silently relaxed.
+
+P admission subsequently succeeded with byte-identical state and zero actions,
+frames, predictions or fitted examples. Q then continued from that true third-floor
+terminal, not the older Center state. The resulting Q failure is recorded below.
+
+## Authenticated closeout
+
+Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.
+
+Next: Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
+
+Q stop reason:`failed_step_retained_and_fitted`. Actual per-step results are in [the path-free receipt](../evidence/red-qualified-status-learning-2026-09-10.json). No hardware execution of the new status-degraded branch is claimed unless separately observed.
+
+Status-boundary suite288passed/1skipped. Subsequent mixed-table/admission suite262passed;454source-file type check,lint,registry and documentation checks passed. These suites overlap and are not a full-suite claim.
+
+Flash3.8 High supplied bounded patch criticism; Codex accepted bench-HP validation, rejected blanket destination exclusion and retained conservative replanning. Last service display about11:24UTC:92.23%five-hour remaining(reset~3h8m),80.45%weekly(reset~35h59m). Shared/cached readings do not measure task cost. Claude unused.
+
+Recommended next session:AstraHigh,Fastoff for execution-heavy work; ExtraHigh only for a specific unresolved contract.
+
+## Read-only diagnosis of the remaining route blocker
+
+The exact Q checkpoint was inspected without input, ticking, prediction or fitting.
+No visible object occupied the failed target. The cartridge's default block at
+row 5, column 7 was 14; the actual saved-map block was 95. The static local graph
+offered a rightward edge from row 11, column 14, while the graph built from observed
+blocks correctly omitted it. Funding candidate enumeration passes the static world
+to its planner, unlike the already-qualified observed local capture path.
+
+[Path-free diagnostic](../evidence/red-funding-live-block-diagnostic-2026-09-10.json).
+This identifies the immediate blocked edge; it does not prove a feasible alternate
+funding route or a successful future goal. No retry was performed and no repair is
+claimed by the diagnostic.
+
+Next: time-box a current-map overlay for funding candidate enumeration, with tests
+that closed passages are rejected, open alternate routes preserve trainer identity,
+and malformed or mismatched observations fail closed. Then authenticate the actual
+model 38 checkpoint before a fresh short learner batch. Allow 60–90 minutes for the
+repair, focused tests and first bounded outcome; reassess if no safe route exists.
+Do not increase retries, author a Mansion-specific walk or reset to an older save.
+
+Session totals: three gameplay attempts, one successful healing task, one admitted
+failed funding task and one unfit decoder failure. Two fitted choices increased the
+current-objective corpus from 36 to 38. Registrations stayed at 53; total specimens
+stayed at 47. Recorded gameplay cost was 368 actions and 18,360 frames. The saved
+party is healthy with six balls and 548 money. Gameplay is stopped at closeout.
+The 112 dashboard/roadmap closeout tests passed in addition to the targeted runtime
+suites above. These tests are engineering evidence, not additional learned progress.

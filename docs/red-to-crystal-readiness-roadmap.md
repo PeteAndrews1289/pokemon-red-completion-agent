@@ -1,5 +1,43 @@
 # Red-to-Crystal readiness roadmap
 
+## Current visual baseline supersedes the historical sequence below
+
+Latest result: the earned-resource checklist is 3/3, not Phase 4 completion.
+One learned healing choice fitted model75 to76; a singleton Oddish capture raised
+specimens29 to30, with28 living species unchanged. Actual Route24 state offers
+only healing with94 currency and zero balls. Reachable income and genuine
+resource/story choices are next, not Crystal. See the
+[current audit](audits/red-earned-resource-continuation-2026-09-08.md).
+
+Historical result: model67 chose the retained Ekans evolution but stopped at level11
+on a resource/opponent finisher mismatch. Exact failure and six quantum saves
+retained; no new fit or Arbok. Next is narrow recovery qualification, not Crystal.
+[Audit](audits/red-retained-ekans-failure-2026-09-08.md).
+
+Historical result: one authorized same-lineage practice restart captured a spare
+Ekans6 from model-selectedRoute4 and fitted66to67.27specimens/26living; useful
+acquisition3/3closed,Phase3current. Actual Route4 terminal enables Arbok22 while
+retaining Ekans; that evolution and model67 post-fit play are still next. No
+Crystal or independent transfer. [Audit](audits/red-useful-precursor-practice-2026-09-08.md).
+
+Historical repair: safe travel stopping and private failure-state retention qualified
+under400f3d81,350tests and exact zero-input emulator serialization. Model66still
+has66examples. Next settle the new training origin, then a useful acquisition
+lesson; no Crystal execution or new teacher. [Audit](audits/red-safe-travel-stop-2026-09-08.md).
+
+Historical September8 session: four useful source candidates admitted; the sole
+Route10 attempt stopped in Rock Tunnel after16resolved wild encounters and a17th
+entry. No capture, fit or terminal save; model66unchanged. Next is safe bounded
+travel termination/recovery, not Crystal or another teacher.
+See [the audit](audits/red-alternative-acquisition-2026-09-08.md).
+
+Use the [development infographic](development-roadmap.md), [North Star](../NORTH_STAR.md) and
+[active state](../ACTIVE_PRODUCT_STATE.md). The agreed order is useful and sustained Red play,
+model-led Red story completion, a declared Red-era living collection, an unfamiliar compatible
+Red hack, Crystal, then later generations. Crystal is no longer the first planned transfer test.
+The older counters, powered-campaign gates and forecasts below are historical, not the current
+work queue or permission to reopen consumed runs. Shared architectural goals remain relevant.
+
 ## September 6 orientation
 
 The long-term destination and title-neutral architecture below remain in force. The immediate

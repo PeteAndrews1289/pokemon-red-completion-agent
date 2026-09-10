@@ -238,6 +238,87 @@ def _complete(observation: GoalManagerCompositionObservation) -> bool:
     return observation.collection.storage_headroom >= 9
 
 
+@pytest.mark.parametrize("stop_before_input", [False, True])
+def test_declared_stop_prevents_next_choice_without_claiming_completion(stop_before_input):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+    result = run_bounded_player_episode(
+        observe=observe, authority=authority, authority_id="completion-first-v1",
+        trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+        stop_requested=lambda _: stop_before_input or state["actions"] >= 5,
+    )
+    expected = 0 if stop_before_input else 1
+    assert result.stop_reason is BoundedPlayerStopReason.DECLARED_STOP
+    assert result.completion_satisfied is False
+    assert len(result.steps) == authority.calls == expected
+    assert state["actions"] == expected * 5 and state["frames"] == expected * 50
+    assert trajectory.pending_decision is None
+
+
+@pytest.mark.parametrize("fault", ["not_callable", "not_bool", "acts"])
+def test_declared_stop_cannot_hide_input_or_invent_truthiness(fault):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+
+    def stop(_):
+        if fault == "acts":
+            state["actions"] += 1
+        return 1 if fault == "not_bool" else False
+
+    with pytest.raises((TypeError, BoundedPlayerError)):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            stop_requested=False if fault == "not_callable" else stop,
+        )
+    assert authority.calls == 0 and trajectory.next_decision_index == 0
+    assert state["actions"] == (1 if fault == "acts" else 0)
+
+
+@pytest.mark.parametrize("stop_at", [0, 1])
+def test_menu_validator_rejects_before_next_prediction_but_allows_outcome_observation(stop_at):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+    checked = []
+
+    def validate(observation):
+        checked.append(observation)
+        if authority.calls == stop_at:
+            raise ValueError("unsupported execution provenance")
+
+    with pytest.raises(ValueError, match="unsupported execution provenance"):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            validate_choice_menu=validate,
+        )
+    assert authority.calls == trajectory.next_decision_index == stop_at
+    assert len(checked) == stop_at + 1
+    assert trajectory.pending_decision is None
+    assert state["actions"] == stop_at * 5
+
+
+@pytest.mark.parametrize("fault", ["not_callable", "acts"])
+def test_menu_validation_is_action_free_and_callable(fault):
+    trajectory, _ = _trajectory()
+    observe, meter, state = _observer(fail_first=False)
+    authority = _CountingAuthority()
+
+    def validate(_):
+        state["actions"] += 1
+
+    with pytest.raises((TypeError, BoundedPlayerError)):
+        run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="completion-first-v1",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=lambda _: False,
+            validate_choice_menu=validate if fault == "acts" else False,
+        )
+    assert authority.calls == trajectory.next_decision_index == 0
+
+
 def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer()
@@ -313,6 +394,33 @@ def test_successful_step_can_settle_before_an_unavailable_followup_menu() -> Non
     trajectory.require_settled()
 
 
+@pytest.mark.parametrize("allowed", [False, True])
+@pytest.mark.parametrize("empty", [False, True])
+def test_saved_initial_bridge_never_becomes_a_model_decision(allowed, empty):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(
+        singleton_after_first=True, no_goals_after_first=empty, fail_first=False,
+    )
+    state["stage"] = 1
+    authority = _CountingAuthority()
+    def run():
+        return run_bounded_player_episode(
+            observe=observe, authority=authority, authority_id="learned-goal-manager",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=_complete,
+            limits=BoundedPlayerLimits(allow_initial_forced_bridge=allowed),
+        )
+    if not allowed or empty:
+        with pytest.raises(BoundedPlayerError, match="genuine semantic choice"):
+            run()
+        assert state["actions"] == 0 and not sink.decisions
+    else:
+        result = run()
+        assert result.forced_singleton_steps == 1 and result.authority_decisions == 0
+        assert result.steps[0].selection_mode is GoalSelectionMode.FORCED_SINGLETON
+        assert state["actions"] == 5
+    assert authority.calls == 0
+
+
 def test_single_available_followup_is_a_forced_bridge_not_model_authority() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer(
@@ -347,17 +455,61 @@ def test_single_available_followup_is_a_forced_bridge_not_model_authority() -> N
 
 
 def test_recovery_cannot_repeat_the_failed_semantic_goal() -> None:
-    trajectory, _sink = _trajectory()
-    observe, meter, _state = _observer(repeated_failure=True)
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(repeated_failure=True)
 
-    with pytest.raises(BoundedPlayerError, match="repeated the failed goal"):
+    result = run_bounded_player_episode(
+        observe=observe,
+        authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1",
+        trajectory=trajectory,
+        budget_meter=meter,
+        completion_satisfied=_complete,
+    )
+    assert result.stop_reason is BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED
+    assert not result.completion_satisfied
+    assert len(result.steps) == len(sink.decisions) == len(sink.events) == 1
+    assert result.steps[0].failure_reason is GoalFailureReason.OUTCOME_NOT_VERIFIED
+    assert result.steps[0].semantic_state_changed
+    assert result.steps[0].collection_after == observe().collection
+    assert result.recovery_attempts == 0
+    assert (state["actions"], state["frames"]) == (5, 50)
+    trajectory.require_settled()
+
+
+def test_rejected_recovery_must_not_hide_authority_side_effects() -> None:
+    trajectory, _sink = _trajectory()
+    observe, meter, state = _observer(repeated_failure=True)
+
+    class ActingAuthority:
+        def select(self, question):
+            if state["stage"]:
+                state["actions"] += 1
+            return CompletionFirstGoalTeacher().select(question)
+
+    with pytest.raises(BoundedPlayerError, match="rejected recovery selection changed state"):
         run_bounded_player_episode(
             observe=observe,
-            authority=CompletionFirstGoalTeacher(),
+            authority=ActingAuthority(),
             authority_id="completion-first-v1",
             trajectory=trajectory,
             budget_meter=meter,
             completion_satisfied=_complete,
+        )
+
+
+def test_unrelated_authority_failure_is_not_a_safe_recovery_stop() -> None:
+    trajectory, _sink = _trajectory()
+    observe, meter, _state = _observer(repeated_failure=True)
+
+    class BrokenAuthority:
+        def select(self, question):
+            raise BoundedPlayerError("unrelated selection defect")
+
+    with pytest.raises(BoundedPlayerError, match="unrelated selection defect"):
+        run_bounded_player_episode(
+            observe=observe, authority=BrokenAuthority(), authority_id="broken",
+            trajectory=trajectory, budget_meter=meter, completion_satisfied=_complete,
         )
 
 

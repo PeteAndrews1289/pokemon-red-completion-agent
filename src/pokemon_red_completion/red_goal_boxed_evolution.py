@@ -23,6 +23,7 @@ from pokemon_red_completion.red_boxed_level_evolution import (
     BoxedLevelEvolutionPlan,
     ObservedSemanticBoundaryBinding,
     RedBoxedLevelEvolutionAdapter,
+    RedNativeStockEvolutionContract,
     SemanticPCBoundaryAccess,
 )
 from pokemon_red_completion.red_collection import (
@@ -36,8 +37,10 @@ from pokemon_red_completion.red_dual_capability_curriculum_runtime import (
 from pokemon_red_completion.red_goal_context import RedBoxedLevelEvolutionGoalRequest
 from pokemon_red_completion.red_living_dex_dependency_curriculum import (
     RedDependencySpeciesBinding,
+    RedDualCapabilityScenarioSpec,
     red_dual_capability_scenario_specs,
 )
+from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.route_executor import (
     DEFAULT_ROUTE_EXECUTION_LIMITS,
     InterruptionHandler,
@@ -74,6 +77,8 @@ class RedGoalBoxedEvolutionExecutor:
     replanner: RouteReplanner | None = None
     resource_manager: RouteResourceManager | None = None
     route_limits: RouteExecutionLimits = DEFAULT_ROUTE_EXECUTION_LIMITS
+    pc_facing: str | None = None
+    registration_policy: RedRegistrationPolicy | None = None
 
     def __post_init__(self) -> None:
         if not isinstance(self.reset_state_sha256, str) or len(self.reset_state_sha256) != 64:
@@ -96,6 +101,10 @@ class RedGoalBoxedEvolutionExecutor:
             raise TypeError("boxed goal needs an emulator frame counter")
         if not isinstance(self.route_limits, RouteExecutionLimits):
             raise TypeError("boxed goal route limits differ")
+        if self.registration_policy is not None and not isinstance(
+            self.registration_policy, RedRegistrationPolicy
+        ):
+            raise TypeError("boxed goal executor registration policy differs")
 
     def __call__(
         self,
@@ -107,7 +116,8 @@ class RedGoalBoxedEvolutionExecutor:
         if not isinstance(actions, CountingExecutor):
             raise TypeError("boxed goal executor needs counted controller authority")
         request.__post_init__()
-        before_ledger = dependency_specimen_ledger(self.observe_collection())
+        current_obs = self.observe_collection()
+        before_ledger = dependency_specimen_ledger(current_obs)
         source_ref = red_species_ref(
             red_internal_species_number(request.precursor_internal_species_id)
         )
@@ -116,12 +126,29 @@ class RedGoalBoxedEvolutionExecutor:
         )
         source_count = before_ledger.count(source_ref)
         target_count = before_ledger.count(target_ref)
-        scenarios = red_dual_capability_scenario_specs()
-        if target_count != 0 or source_count not in {1, 2}:
-            raise RedGoalBoxedEvolutionError(
-                "boxed goal does not match a supported living dependency multiplicity"
+        scenario: RedDualCapabilityScenarioSpec | RedNativeStockEvolutionContract
+        if self.registration_policy is None:
+            scenarios = red_dual_capability_scenario_specs()
+            if target_count != 0 or source_count not in {1, 2}:
+                raise RedGoalBoxedEvolutionError(
+                    "boxed goal does not match a supported living dependency multiplicity"
+                )
+            scenario = scenarios[source_count - 1]
+        else:
+            if target_count != 0 or source_count <= 0:
+                raise RedGoalBoxedEvolutionError(
+                    "registered boxed goal requires a positive source count and zero target count"
+                )
+            if not self.registration_policy.evolution_allowed(
+                current_obs, source_ref, target_ref
+            ):
+                raise RedGoalBoxedEvolutionError(
+                    "registered boxed goal violates registration policy reserves"
+                )
+            scenario = RedNativeStockEvolutionContract(
+                source_count=source_count,
+                target_count=target_count,
             )
-        scenario = scenarios[source_count - 1]
         species_binding = RedDependencySpeciesBinding(source_ref, target_ref)
         plan = BoxedLevelEvolutionPlan(
             reset_state_sha256=self.reset_state_sha256,
@@ -135,6 +162,7 @@ class RedGoalBoxedEvolutionExecutor:
             route_to_pc=self.route_to_pc,
             route_to_training=self.route_to_training,
             training_binding_sha256=self.training_binding_sha256,
+            pc_facing=self.pc_facing,
         )
         adapter = RedBoxedLevelEvolutionAdapter(
             plan=plan,
@@ -159,6 +187,18 @@ class RedGoalBoxedEvolutionExecutor:
         if not isinstance(execution, BoxedLevelEvolutionExecutionReport):
             raise RedGoalBoxedEvolutionError("boxed goal engine returned no typed evidence")
         evidence = execution.public_dict()
+        if self.registration_policy is not None:
+            if not self.registration_policy.verify_evolution(
+                current_obs, self.observe_collection(), source_ref, target_ref,
+            ):
+                raise RedGoalBoxedEvolutionError(
+                    "registered boxed evolution failed its post-execution collection gate"
+                )
+            evidence = dict(evidence)
+            evidence.pop("required_living_preserved", None)
+            evidence["registration_policy_sha256"] = self.registration_policy.sha256
+            assert isinstance(scenario, RedNativeStockEvolutionContract)
+            evidence["native_stock_contract"] = scenario.public_dict()
         return GoalExecutionReport(
             actions_executed=actions.actions_executed - action_start,
             frames_executed=self.emulator.frame_count - frame_start,

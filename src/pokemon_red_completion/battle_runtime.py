@@ -166,8 +166,7 @@ class BattleIntent:
         if not isinstance(self.resource_policy, BattleResourcePolicy):
             raise TypeError("resource_policy must be a BattleResourcePolicy")
         if not isinstance(self.recovery_capabilities, frozenset) or any(
-            not isinstance(value, BattleRecoveryCapability)
-            for value in self.recovery_capabilities
+            not isinstance(value, BattleRecoveryCapability) for value in self.recovery_capabilities
         ):
             raise TypeError("recovery_capabilities must contain recovery capabilities")
         if (
@@ -189,17 +188,13 @@ class BattleIntent:
                 or value[1] < 1
                 for value in self.boost_use_limits
             )
-            or len({stat for stat, _limit in self.boost_use_limits})
-            != len(self.boost_use_limits)
+            or len({stat for stat, _limit in self.boost_use_limits}) != len(self.boost_use_limits)
         ):
             raise TypeError("boost_use_limits must contain unique positive typed limits")
-        if any(
-            stat not in self.boost_capabilities for stat, _limit in self.boost_use_limits
-        ):
+        if any(stat not in self.boost_capabilities for stat, _limit in self.boost_use_limits):
             raise ValueError("boost use limits require matching executor capabilities")
         if not isinstance(self.switch_capabilities, frozenset) or any(
-            not isinstance(value, BattleSwitchCapability)
-            for value in self.switch_capabilities
+            not isinstance(value, BattleSwitchCapability) for value in self.switch_capabilities
         ):
             raise TypeError("switch_capabilities must contain switch capabilities")
         if self.switch_limit is not None and (
@@ -212,9 +207,7 @@ class BattleIntent:
             if not isinstance(self.required_boost_before_first_move, BattleBoostStat):
                 raise TypeError("required pre-move boost must be a boost stat or None")
             if self.required_boost_before_first_move not in self.boost_capabilities:
-                raise ValueError(
-                    "required pre-move boost requires a matching executor capability"
-                )
+                raise ValueError("required pre-move boost requires a matching executor capability")
             if dict(self.boost_use_limits).get(self.required_boost_before_first_move, 0) < 1:
                 raise ValueError("required pre-move boost requires a matching use budget")
         if self.minimum_hp_before_move is not None and (
@@ -243,9 +236,7 @@ class BattleIntent:
             self.require_status_clear_before_move
             and not self.recovery_capabilities & status_recovery_capabilities
         ):
-            raise ValueError(
-                "status-clear move constraint requires a status recovery capability"
-            )
+            raise ValueError("status-clear move constraint requires a status recovery capability")
         if not isinstance(self.require_move_before_first_switch, bool):
             raise TypeError("require_move_before_first_switch must be a bool")
         if self.require_move_before_first_switch and not self.switch_capabilities:
@@ -638,16 +629,12 @@ def execute_bounded_battle_move_turn(
         initial = reader.read()
         _require_present_state(initial, expected_map=expected_map, label=label)
         if initial.battle_state != expected_battle_state:
-            raise BattleRuntimeError(
-                f"{label} must start in battle state {expected_battle_state}."
-            )
+            raise BattleRuntimeError(f"{label} must start in battle state {expected_battle_state}.")
         menu = _validated_menu(reader.read_battle_menu_state(initial), label=label)
         if menu.phase is not BattleMenuPhase.MAIN:
             raise BattleRuntimeError(f"{label} must start at the semantic MAIN menu.")
         if initial.enemy_hp is None or initial.enemy_hp <= 0:
-            raise BattleRuntimeError(
-                f"{label} lacks a live opponent at the policy boundary."
-            )
+            raise BattleRuntimeError(f"{label} lacks a live opponent at the policy boundary.")
 
         slot = _choose_usable_slot(
             lambda _state: selected_slot,
@@ -722,6 +709,7 @@ def run_adaptive_trainer_battle(
     consume_battle_start_schedule: bool = True,
     move_decision_guard: MoveDecisionGuard | None = None,
     move_decision_sink: MoveDecisionSink | None = None,
+    battle_exit_guard: MoveDecisionGuard | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -758,6 +746,8 @@ def run_adaptive_trainer_battle(
         raise TypeError("consume_battle_start_schedule must be a bool")
     if move_decision_guard is not None and not callable(move_decision_guard):
         raise TypeError("move_decision_guard must be callable or None")
+    if battle_exit_guard is not None and not callable(battle_exit_guard):
+        raise TypeError("battle_exit_guard must be callable or None")
     if move_decision_sink is not None and not callable(move_decision_sink):
         raise TypeError("move_decision_sink must be callable or None")
     if required_move_id is not None and (
@@ -796,6 +786,14 @@ def run_adaptive_trainer_battle(
         _require_present_state(raw, expected_map=expected_map, label=label)
 
         if raw.battle_state == 0:
+            if battle_exit_guard is not None:
+                # Explicit scripted-scene handoff: independently verify the
+                # battle exit before any generic overworld-settlement inputs.
+                battle_exit_guard(raw)
+                if battle_start_schedule is not None:
+                    battle_start_schedule.finish(intent)
+                _battle_observation_finished()
+                return raw
             if not battle_exit_notified:
                 if battle_start_schedule is not None:
                     battle_start_schedule.finish(intent)
@@ -829,8 +827,7 @@ def run_adaptive_trainer_battle(
                 executor,
                 MacroAction(
                     MacroActionKind.CANCEL
-                    if trainer_switch_prompt
-                    or unknown_menu_pulses % unknown_cancel_interval == 0
+                    if trainer_switch_prompt or unknown_menu_pulses % unknown_cancel_interval == 0
                     else MacroActionKind.CONFIRM
                 ),
                 timing.dialogue_wait_frames,
@@ -1477,6 +1474,9 @@ def _confirm_attack_with_pp_gate(
             return False
         raise BattleRuntimeError(f"{label} left move selection without its required PP decrement.")
 
+    # The final bounded pulse may have advanced the cartridge. Diagnostic
+    # menu reads must use a fresh observation, not mask the original timeout.
+    raw = reader.read()
     raise BattleRuntimeError(
         f"{label} failed its bounded move-slot {slot} PP-decrement gate: "
         f"initial_pp={initial_pp}, current_pp={raw.battler_pp}, "

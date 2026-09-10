@@ -22,7 +22,10 @@ def _sha(value: object) -> str:
 
 
 def _inventory() -> tuple[LivingDexClusteredScenarioCapability, ...]:
-    kinds = tuple(LivingDexOptionKind)
+    kinds = tuple(LivingDexOptionKind(value) for value in (
+        "acquire", "evolve", "trade", "develop", "manage_storage", "resupply",
+        "unlock_access", "explore",
+    ))
     capabilities: list[LivingDexClusteredScenarioCapability] = []
     for partition, count in (("train", 16), ("development", 4)):
         for ordinal in range(count):

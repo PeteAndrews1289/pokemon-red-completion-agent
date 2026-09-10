@@ -1,0 +1,122 @@
+{
+  "schema": "pokemon.red.bounded-search-continuation.v1",
+  "classification": "Successful retained duplicate acquisition and one actual selected-source fit; second choice not played",
+  "source_commit": "c99d18ae9374ca6766b1ae0de7668e983a192230",
+  "source_bundle_sha256": "c8d1e39763ff6bdf31bc0e4cf99bf45abd0146a2b9f0bfdf5ddf1e0e57167051",
+  "cycle": {
+    "declared_maximum_steps": 2,
+    "executed_steps": 1,
+    "stop_reason": "no_genuine_source_choice",
+    "next_sources": [
+      "wild:Route24:grass"
+    ],
+    "automatic_retry": false
+  },
+  "capture": {
+    "episode_id": "red-bounded-search-20260907-01-causal",
+    "manifest_sha256": "0250da2edf288ce54d97f44664feba69b0f87108523a7268902bd68242550957",
+    "checkpoint_sha256": "5135f21193bb1c2505119c119b61325d68b70cca24437dae96668edd4af358c5",
+    "choice_record_sha256": "ff36715549eb56e4b3340f8d3abf92ff867df6f331a431fdcaf596ff21e16fff",
+    "outcome_record_sha256": "ae3efd7a493968b3c4a74ffa8eeee55b7f0cf8b5d5e707f8402314176a4216ff",
+    "behavior_model_sha256": "657e621e0b13c26c04387721899dcb3242579c3cfa89b0b62fad0e52ea794c9e",
+    "selected_source": "wild:Route5:grass",
+    "selected_probability": 0.7841651295937929,
+    "candidate_count": 2,
+    "status": "succeeded",
+    "actions": 334,
+    "frames": 20628,
+    "captured_species": "Mankey",
+    "captured_level": 12,
+    "capture_support": {
+      "party_preparations": 0,
+      "status_attempts": 1,
+      "verified_status_observations": 1
+    },
+    "verified_new_distinct_species": 0,
+    "verified_new_specimens": 1,
+    "completion_gain_target": 0
+  },
+  "collection": {
+    "completion_contract_sha256": "7fc77cbc50d67f28fe93078b9162d6015117f59893d46480c158278a264868ab",
+    "living_species": 25,
+    "registered_species": 30,
+    "required_specimens_remaining": 95,
+    "required_specimens_sha256": "256d145ed3a8f282c763f13039564ab29d982066b60bbcd37fe6e1ef613c740a",
+    "retained_captures": 25,
+    "specimen_ledger_sha256": "b05e35a16748c3d10d51291dbfe9ee59876dc0fc508b0b449bc401767c2ece8f",
+    "storage_headroom": 19,
+    "total_living_specimens": 26,
+    "undeclared_specimen_losses": 0
+  },
+  "resources": {
+    "capture_items_before": 5,
+    "capture_items_after": 4,
+    "money_before": 209,
+    "money_after": 209,
+    "all_six_full_hp": true,
+    "undeclared_specimen_losses": 0
+  },
+  "dependency": {
+    "retained_mankey_copies": 2,
+    "primeape_copies": 0,
+    "cartridge_level_evolution": {
+      "from": 56,
+      "to": 57,
+      "level": 28
+    },
+    "interpretation": "One Mankey can be developed while the other is retained. This is a prerequisite, not a completed Primeape evolution or direct distinct-species gain.",
+    "gameplay_feasibility_verified": false
+  },
+  "diagnosis": {
+    "observed_encounters": 2,
+    "ball_spends": 1,
+    "observed_any_faint": false,
+    "execution_errors": 0,
+    "reported_capture_survey_present": false,
+    "limitation": "The c99d18ae routed wrapper dropped capture_survey; counts here are independently reconstructed from action-linked saved snapshots. A post-run wrapper fix is ROM-free qualified only and does not rewrite this episode."
+  },
+  "training": {
+    "retained_examples": 65,
+    "successful_examples": 26,
+    "distinct_selected_feature_rows": 55,
+    "new_examples": 1,
+    "model_fitted": true,
+    "model_sha256": "1eae09436364a425145c51693b2214360395cdf742343ea7f0c6d21b21b4e635",
+    "model_record_sha256": "937d55fce0b40faec3f7b1c5cd719b20e757da8bcf77e2cff5989143dae00e9a",
+    "corpus_sha256": "c3e0378052a9bd53789172f3040189e5134b8035a4830fc8f5e3b97e6a8fcad8",
+    "corpus_record_sha256": "c03c7f84a41ec315de0dc91ed4ae990f94e9fa4d9a5d0ca93ff7b46e73da4a94",
+    "prior_rows_retained": true,
+    "retained_native_episodes": 44,
+    "retained_regional_choices": 15,
+    "parent_learning_examples": 0,
+    "unselected_action_targets": 0,
+    "updated_model_has_played": false,
+    "in_sample_only": true
+  },
+  "audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "location_map": 16,
+    "input_ready": true,
+    "battle_state": 0,
+    "prior_inventory_authenticated": true
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0,
+    "counterfactual_targets": 0
+  },
+  "milestone": {
+    "title": "Safe retained acquisition chain",
+    "completed": 3,
+    "total": 3,
+    "phase_three_complete": false
+  },
+  "next_step": "Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset."
+}

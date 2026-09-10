@@ -1,0 +1,141 @@
+{
+  "schema": "pokemon.red.collection-prerequisites-learning.v1",
+  "classification": "productive model-guided exploratory evolution; bounded same-lineage training",
+  "source_commit": "9b0fd3b0a18722059997348af3e384b3a1ec031a",
+  "source_bundle_sha256": "3445bb876356716b0ba9577942402269afda8c621b2c8fc996d67d361f4d787d",
+  "supply_bridge": {
+    "episode_id": "red-collection-prerequisites-20260907-y-causal",
+    "manifest_sha256": "d87041beff1c5fccaf6de06bf7bd2988b92fc13fe12fa8f2994962668f0098aa",
+    "checkpoint_sha256": "dcae6284bf7ce1b175cced7e47ef31b535741a7624fddbf425e9c39d2cb8d2d3",
+    "source_commit": "6f3c94738ebd785596ee5c637a3f4b024cae8619",
+    "selected_kind": "resupply",
+    "selection_mode": "deterministic_safety",
+    "actions": 294,
+    "frames": 13944,
+    "full_restores_before": 7,
+    "full_restores_after": 6,
+    "hyper_potions_retained": 4,
+    "poke_balls_bought": 7,
+    "money_before": 109,
+    "money_after": 209,
+    "new_examples": 0,
+    "model_fitted": false
+  },
+  "episode_id": "red-collection-choice-20260907-z-causal",
+  "manifest_sha256": "2b24dbbbd8da0a5b9b702d163cb2b145b8940822952df32c09a68b7410259dd3",
+  "checkpoint_sha256": "172f4584ed23643ed9aadd76767ac121f70d62dfd564f79e3f2ac145e95dda20",
+  "proposal_record_sha256": "e154207050d108564124b37d064edbda1928ee8e741c44fddf14b8749116efa8",
+  "behavior_model_sha256": "0ad8b42ff07ee3380192535db45bb5f7d13c4a98ce9450b21dd47630fee43beb",
+  "selected_kind": "evolve_species",
+  "selected_probability": 0.343789763280391,
+  "selection_mode": "model_guided_exploration",
+  "verified_success": true,
+  "actions": 1980,
+  "frames": 163082,
+  "evolution": {
+    "source": "Kakuna",
+    "target": "Beedrill",
+    "level_before": 4,
+    "level_after": 10,
+    "source_copy_retained": true,
+    "unique_target_derived_from_cartridge_and_all_box_inventory": true,
+    "multiple_evolution_target_selection_learned": false
+  },
+  "collection": {
+    "living_before": 24,
+    "living_after": 25,
+    "registered_before": 29,
+    "registered_after": 30,
+    "total_specimens": 25,
+    "undeclared_specimen_losses": 0,
+    "butterfree_retained": true
+  },
+  "resources": {
+    "evolution_bag_unchanged": true,
+    "evolution_money_unchanged": true,
+    "money": 209,
+    "capture_items": 7
+  },
+  "training": {
+    "retained_examples": 62,
+    "successful_examples": 25,
+    "distinct_selected_feature_rows": 52,
+    "new_examples": 1,
+    "model_fitted": true,
+    "model_sha256": "bbfa9e701a1022268b996b55f584447ef92800f693aea13fd0afc15b3aae3fc0",
+    "model_record_sha256": "e76ada324a20beb349e1f0f6291e9a20cc2656e7b45fccefbd1fbe1644b35421",
+    "corpus_sha256": "f7681893e4f349c4902e90ad9433d0dd71209361cd5c3638d35fb1ba50b011dd",
+    "corpus_record_sha256": "8b46b227001114407bb0461bcad17ad7f6f679ce0848fb8b75b4e0de01c342fb",
+    "prior_rows_retained": true,
+    "retained_native_episodes": 40,
+    "retained_regional_choices": 12,
+    "original_zero_row_support_included": [
+      "red-collection-prerequisites-20260907-y-causal",
+      "red-owned-precursor-20260907-x-causal"
+    ],
+    "pending_zero_row_support": [],
+    "unselected_action_targets": 0,
+    "source_proposal_fitted": false,
+    "updated_model_has_played": false
+  },
+  "observed_outcome": {
+    "censor_reason": null,
+    "schema": "pokemon.core.living-dex-observed-outcome.v1",
+    "status": "settled",
+    "target_names": [
+      "verified_success",
+      "completion_gain",
+      "dependency_unlock_gain",
+      "action_cost",
+      "frame_cost",
+      "resource_cost",
+      "party_cost",
+      "storage_cost",
+      "irreversible_loss"
+    ],
+    "target_values": [
+      1,
+      0.008333333333333333,
+      0.045454545454545414,
+      0.066,
+      0.05436066666666667,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "read_only_audit": {
+    "restored_exactly": true,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "input_ready": true,
+    "in_battle": false,
+    "independent_specimen_multiset_delta_verified": true
+  },
+  "restore_repair": {
+    "cause": "Checkpoint observer used legacy dose instead of authenticated parent completion dose",
+    "saved_state_changed": false,
+    "saved_hash_changed": false,
+    "hash_with_recorded_parent_dose_matches": true,
+    "legacy_dose_hash_matches": false,
+    "source_commit": "9b0fd3b0a18722059997348af3e384b3a1ec031a"
+  },
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "authority_promotions": 0,
+    "prior_trial_retries": 0,
+    "teacher_fallbacks": 0
+  },
+  "milestone": {
+    "name": "Storage-safe varied collection",
+    "completed": 3,
+    "total": 3,
+    "productive_model_selected_varied_outcome_completed": true,
+    "entire_phase_3_completed": false
+  },
+  "next_step": "Bounded retained-state acquisition chain with actual source-choice authority and duplicate demand; finite supplies, not reset funding."
+}

@@ -222,6 +222,7 @@ class RedSemanticTransportRoute:
     route_source: str = "authenticated_semantic_router"
     profile_direction_steps: int = 0
     curriculum_direction_steps: int = 0
+    prepare_departure: Callable[[], None] | None = None
     _binding_built: bool = field(default=False, init=False, repr=False)
     _executed: bool = field(default=False, init=False, repr=False)
     _verified: bool = field(default=False, init=False, repr=False)
@@ -330,6 +331,12 @@ class RedSemanticTransportRoute:
             )
         self._executed = True
         before = self._checkpoint()
+        if self.prepare_departure is not None:
+            if not self._matches_start(self.traversal_observer.observe()):
+                raise RedRoutedSemanticGoalError("departure preparation lost the route origin")
+            self.prepare_departure()
+            if not self._matches_start(self.traversal_observer.observe()):
+                raise RedRoutedSemanticGoalError("departure preparation changed the route origin")
         route_report = execute_route(
             self.plan,
             self.actions,
@@ -350,6 +357,15 @@ class RedSemanticTransportRoute:
             raise RedRoutedSemanticGoalError(
                 "Red semantic transport executed a different initial plan"
             )
+        travel_captures = [
+            {key: receipt.details[key] for key in (
+                "schema", "species_ref", "captured", "new_registrations", "actions",
+                "frames", "balls_spent", "route_boundary_preserved", "destination_changed",
+                "learned_encounter_choice",
+            ) if key in receipt.details}
+            for receipt in route_report.interruptions
+            if receipt.details.get("schema") == "pokemon.red.registered-travel-capture.v1"
+        ]
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
@@ -365,6 +381,7 @@ class RedSemanticTransportRoute:
                 "semantic_router_authenticated": True,
                 "transport_is_policy_kind": False,
                 "private_route_fields": 0,
+                **({"travel_captures": travel_captures} if travel_captures else {}),
             },
         )
         self._route_report = route_report

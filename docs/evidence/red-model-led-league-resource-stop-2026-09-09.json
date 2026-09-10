@@ -1,0 +1,177 @@
+{
+  "schema": "pokemon.red.model-led-league-resource-stop.v1",
+  "scope": "correlated-development-successor-not-replacement-or-independent-evaluation",
+  "source_commit": "89d03dd5f264c0d4414266e7c0ee6d0e21af6065",
+  "source_bundle_sha256": "a5435700a0b4f39b655eb49d39bcb4bec75d46b118d0fd41a85bc78d9c61ef90",
+  "model_sha256": "d5dd4db2d44a3abef287733a089e1fc91883f17a7d8bd68625cd6e07264d5781",
+  "episode_id": "red-model-led-init-20260909-lance-01-causal",
+  "manifest_sha256": "a9c078c769a60c7d0282655c36239945d430b0259ccef8ce118b6ffa7f984f33",
+  "failure_state_sha256": "a715cf3c484636bfadd7db70af788a843ed691cecbf62bc5f557f4a8d297a273",
+  "forward_plan_sha256": "1da2175584f621944745b0d93d58aedd98e3ce13f101a2d46cc7a3f7f3fe297d",
+  "previous_failure_preserved": "1b2da4702f3f398cd5e90cd300ffbbad9aaadd3841abdc7f078414b5b0a23221",
+  "parent_episode": "red-agatha-resource-coverage-20260909-03-causal",
+  "parent_checkpoint_sha256": "39cd09ebe415e671950219965eaede376d9b70586974de39d41bc976f3371545",
+  "actions": 345,
+  "frames": 31944,
+  "field_items": 1,
+  "authority": {
+    "genuine_learned_choices": 1,
+    "learned_choice": "heal",
+    "forced_singleton_continuations": 1,
+    "forced_continuation": "advance_story",
+    "battle_control": "deterministic-party-controller",
+    "new_fit_controller_choices": 0
+  },
+  "battle_started": true,
+  "initialization_repair_exercised_live": true,
+  "lance_verified": false,
+  "champion_attempted": false,
+  "hall_of_fame_verified": false,
+  "terminal": "stopped",
+  "primary_error": "no healthy offensive matchup remains",
+  "secondary_error": "terminal_checkpoint_unsafe_boundary",
+  "party_preserved": {
+    "fainted": 0,
+    "retained_specimens": 30,
+    "registered_species": 33,
+    "hp": [
+      83,
+      73,
+      71,
+      66,
+      34,
+      8
+    ],
+    "max_hp": [
+      172,
+      118,
+      89,
+      217,
+      39,
+      139
+    ],
+    "levels": [
+      56,
+      55,
+      30,
+      67,
+      13,
+      55
+    ]
+  },
+  "turn_qualification": {
+    "incoming_bounds": [
+      201,
+      297,
+      354,
+      122,
+      999,
+      266
+    ],
+    "incoming_moves": [
+      48,
+      44,
+      36,
+      63
+    ],
+    "incoming_noncritical_bounds": [
+      105,
+      170,
+      185,
+      64,
+      613,
+      139
+    ],
+    "normal_candidates": [],
+    "refusal": {
+      "message": "no supported survival action within the remaining recovery budget",
+      "type": "NoTrainerSurvivalAction"
+    },
+    "scope": "read-only necessary-action qualification; no execution or authority promotion; previous switches must be authenticated before any real continuation",
+    "zero_floor_candidates": [
+      {
+        "defensive_resistance": 0,
+        "has_status": false,
+        "hp_ratio": 0.30414746543778803,
+        "level_fraction": 0.67,
+        "level_margin": 0.07,
+        "mean_pp_fraction": 0.5916666666666667,
+        "offensive_power": 0.18627450980392157,
+        "offensive_type_margin": 0.5,
+        "party_slot": 4,
+        "usable_move_fraction": 1
+      },
+      {
+        "defensive_resistance": 0,
+        "has_status": false,
+        "hp_ratio": 0.48255813953488375,
+        "level_fraction": 0.56,
+        "level_margin": -0.04,
+        "mean_pp_fraction": 0.7333333333333334,
+        "offensive_power": 0.16470588235294115,
+        "offensive_type_margin": 0.5,
+        "party_slot": 1,
+        "usable_move_fraction": 0.75
+      },
+      {
+        "defensive_resistance": -0.5,
+        "has_status": false,
+        "hp_ratio": 0.05755395683453238,
+        "level_fraction": 0.55,
+        "level_margin": -0.05,
+        "mean_pp_fraction": 0.9833333333333334,
+        "offensive_power": 0.03431372549019608,
+        "offensive_type_margin": -0.5,
+        "party_slot": 6,
+        "usable_move_fraction": 0.75
+      }
+    ],
+    "observed_enemy_species_id": 171,
+    "observed_enemy_level": 60,
+    "observed_enemy_hp": 175,
+    "active_party_index": 1,
+    "read_only_actions": 0,
+    "read_only_frames": 0,
+    "critical_risk_authorized": false,
+    "healing_authorized": false
+  },
+  "quarantine": {
+    "actions": 345,
+    "admission": "quarantined-not-for-fitting",
+    "checkpoint_authorized": false,
+    "episode_status": "failed",
+    "excluded_nonexploratory_steps": 1,
+    "failure_state_sha256": "a715cf3c484636bfadd7db70af788a843ed691cecbf62bc5f557f4a8d297a273",
+    "fitting_authorized": false,
+    "frames": 31944,
+    "in_game_loss_inferred": false,
+    "macros": 2,
+    "manifest_sha256": "a9c078c769a60c7d0282655c36239945d430b0259ccef8ce118b6ffa7f984f33",
+    "observed_goal": false,
+    "plan_sha256": "1da2175584f621944745b0d93d58aedd98e3ce13f101a2d46cc7a3f7f3fe297d",
+    "prefix_cost": 0.170358,
+    "recorded_return": [
+      0,
+      0.170358
+    ],
+    "resources": 1,
+    "retry_authorized": false,
+    "sampled_training_rows": 1,
+    "schema": "pokemon.red.forward-quarantine-diagnostic.v1",
+    "terminal": "stopped"
+  },
+  "admitted_checkpoint": false,
+  "model_fitted": false,
+  "new_native_rows": 0,
+  "authority_promotions": 0,
+  "phase4_complete": false,
+  "preparation_correction": "Pair ID exceeded its length limit; shortened after zero claims and zero actions. Source, parent, seeds and budgets unchanged.",
+  "review": {
+    "reviewer": "internal-read-only",
+    "finding": "Cumulative HP depletion plus active Ground immunity; useful reserve PP remains. Zero-item fallback does not qualify this endpoint. Next evaluate earlier damage-aware recovery with an explicit story item budget.",
+    "external_agent_usage_available": false
+  },
+  "no_failed_state_resumed": true,
+  "no_retry_after_controller_input": true,
+  "independent_evaluation": false
+}

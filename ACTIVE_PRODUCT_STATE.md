@@ -9,14 +9,14 @@ they conflict with this page.
 
 ## Product
 
-Build a transferable Pokemon agent that can finish stories and create a living Pokedex across mainline games, versions, trades, and legitimate event inputs.
+Build a transferable Pokemon agent that finishes stories and accumulates one verified registered Pokedex across runs, mainline games, versions, trades and legitimate events.
 
-**Environment role:** Red is the first curriculum and Crystal is the first transfer test; neither title is the product.
+**Environment role:** Red first, then Blue with shared registration credit; a compatible unfamiliar Red modification tests adaptation before Crystal. No single title is the product.
 
 Success means:
 
 - Complete each title's story and supported mechanics under declared learned authority.
-- Acquire, retain, evolve, and trade every legitimately obtainable species required by the living collection contract.
+- Register missing global species through legitimate acquisition and evolution; no level100 or simultaneous living-form quota.
 - Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.
 - Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability.
 
@@ -29,52 +29,49 @@ Not the product:
 
 ## One active lane
 
-**Red bounded player integration V1** (`cross-title-authenticated-scenario-curriculum-v1`)
+**Red shared-registration learning** (`cross-title-authenticated-scenario-curriculum-v1`)
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Terminal checkpoint storage/reader and the truthful saved-run viewer are implemented and locally qualified. Before more supply fitting, resolve the economic representation gap: candidate costs are zero and the current observed target excludes money. Prefer explicit known-cost/reserve quotes alongside learned success and progress, then collect a small prospective train-only contrast batch without relabeling old examples.
+- Next decision: Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Compose title-neutral goal selection with deterministic navigation, battle, capture, party, inventory and recovery skills in bounded multi-turn Red episodes that advance an explicit completion ledger. |
-| Authority now | The unchanged 29-example living-Dex scorer has executed real routed side goals and model-selected acquisition. Its latest four-step hybrid chain retained two needed specimens, one a new living species. Two choices were model-ranked, one was safety and one single-supported. The control gained the same specimens but failed its last search. Independent superiority and efficient resource use remain unproved. |
-| Authority target | Give the goal manager bounded authority to select among supported semantic completion objectives while deterministic skills enforce mechanics and safety. Expand only after fresh Red episodes show verified ledger progress, typed recovery and advantage over deterministic goal ordering. |
-| Transfer test | Use the four disjoint paired Red roots as a descriptive engineering check after fitting, not a statistically powered superiority gate. Grow sustained bounded Red goal/collection competence before the later independent promotion exam. Preserve the shared feature/action projection, then compare Red initialization with the identical zero-initialized learner on separately declared Crystal tasks; unsupported Crystal mechanics remain explicit abstentions, not completion credit. |
-| Cheapest falsifier | Use two short semantic resource contexts with the same supported goals but different reserve deficits and spendable budgets. The prospective projection must distinguish their known costs without title identity or controller effects, preserve old feature/target semantics, and feed only actually executed new train choices to the existing learner. |
-| Time box | 1 session / 4 hours |
+| Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
+| Authority now | 4/4 fresh goals succeeded; 3 actual fits, model51 to54. 57 to58 registrations, 50 specimens retained. Actual costs, partial gains and failed outcomes remain visible. |
+| Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
+| Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
+| Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
+| Time box | 1 session / 2 hours |
 
-### Cumulative cross-family learning outputs
+### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Causal Train Example · train | 111 | 111 |
-| Composition Attempt · development | 6 | 6 |
-| Verified Composition Episode · development | 4 | 4 |
-| Development Episode · development | 29 | 24 |
+| Registered Train Example · train | 54 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
-These totals aggregate several learner heads and historical scenario families; they do not by themselves gate battle-model promotion.
+The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
 Infrastructure, preflights, teacher runs, CI passes, and frozen inputs are not learning
 outputs.
 
 ### Latest session reorientation
 
-**2026-09-06-durable-player-viewer-qualified** · status **closed** · evidence [qualification](docs/evidence/red-player-checkpoint-readonly-qualification-2026-09-06.json)
+**2026-09-10-public-project-reset** · status **active** · evidence [registered train example](docs/evidence/red-collection-continuation-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The prior model-assisted chain retained two needed specimens. Future terminal progress can now be stored with its original lineage, and the viewer keeps real completed choices and costs visible after the live producer closes. |
-| Learning output | Maintenance only: 335 focused checks and a real serializer round trip passed, with zero controller actions, frames, predictions, fits or train rows during qualification. The actual model remains fitted on 29 examples; both earlier diagnostic chains remain terminal. |
-| Authority delta | No new learned authority. Optional end-state retention and its reader unblock a later bounded continuation, but a controller-capable continuation consumer is not implemented. Checkpoints are not new independent roots or fitting examples. |
-| Transfer result | Checkpoint round trips preserve original provenance and require fresh semantic/ledger agreement. This is recovery engineering, not cross-game or independent gameplay evidence. Crystal and sealed Red remain closed. |
-| Blocker | A source audit found candidate resource cost is encoded as zero; resource pressure uses item headroom; the causal cost target measures consumed items, not money spent. More easy shopping examples alone cannot teach economical choices. Old historical runs have no end saves. |
-| Decision | Close the persistence/viewer session. Address only the necessary prospective cost/reserve representation before new supply training, preferably with known-cost quotes rather than a new model architecture. Preserve all old rows and diagnostics; do not silently redefine their targets. |
-| Next session | Build and falsify the smallest versioned, identity-free known-cost/reserve treatment, then use existing selected-outcome collection and fitting for a tiny prospectively declared train batch. Retain negative outcomes, actual behavior probabilities and prior rows. Keep CI in the background. |
-| Next falsifier | Can the player distinguish affordable-but-wasteful restocking from a needed reserve refill using real pre-action facts, while old projections/results remain unchanged and new outcomes count only executed choices? |
-| Stop condition | One bounded session, with actual new learning evidence as the next output. Stop rather than build another broad campaign factory, recapture old ended runs, reinterpret old consumable-only cost labels, fit development diagnostics or fabricate full-support behavior. No Crystal, sealed or full replay. |
+| Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
+| Learning output | No gameplay or fit this session. X remains latest:54 registered-objective examples,58 registrations and50 specimens. |
+| Authority delta | None. User-requested documentation maintenance; model authority and all stage exits unchanged. |
+| Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
+| Blocker | Public entry points accumulated contradictory current reports. Preparation-only profile also measured repeated history-validation cost; no optimization or speedup yet. |
+| Decision | Keep the active project public, replace status dumps with concise factual summaries, preserve history and merge the tested branch. Resume collection afterward. |
+| Next session | Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal. |
+| Next falsifier | A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success. |
+| Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
 

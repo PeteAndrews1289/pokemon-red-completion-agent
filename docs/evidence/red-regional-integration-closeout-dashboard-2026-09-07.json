@@ -1,0 +1,143 @@
+{
+  "schema": "pokemon.red.native-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "scope": "Regional integration closed: 45 to 50 retained examples; one successful Ekans capture and four failures. Latest fit49 to50. No independent advantage.",
+  "session_evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json",
+  "boundaries": {
+    "independent_evaluation": false,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "counterfactual_targets": 0,
+    "authority_promotions": 0
+  },
+  "completed_episode": {
+    "actions": 525,
+    "frames": 29172,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "verified_collection_gain": 1,
+    "episode_id": "red-regional-source-20260907-i-causal"
+  },
+  "final_model_post_fit_gameplay": false,
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "0cd0c7289394630a9b32277779ddffbeb2fc6f9c37a3a006b9e3ef3444948eca",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 40,
+      "feature_version": 2,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 50,
+      "successful_examples": 17,
+      "total_examples": 50,
+      "train_dataset_sha256": "a92c6c102e6edfc55157e544c3cd6fa5f9e642e98436bd7e0162d016d694a2fa",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.00792463124910104,
+      "weighted_mse_before": 0.021989560477753096
+    },
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "5b8ab5af72dd906e0efac56d084a9ae169a7d4142d44aa2370ed90bbadaab368",
+      "file_sha256": "862d1946281bb9d0ab22e6f3dca470cf2466cd361e6d30992386b3268768b9e0",
+      "independent_evaluation": false,
+      "model_sha256": "df9596bce7d257d6e1c6d05f8dba1bb7b1e20d8a67dc2010bd59c35069b69791",
+      "prior_model_sha256": "87772dfad682ca7fbaa112ce98f7728de412fb37828a85232a6de9a3dc6e1e64",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.native-player-model.v1",
+      "settled_examples": 50,
+      "source_bundle_sha256": "9cc0ae1d5d5ad200a7ccd92950890e5dd8c1a001c28dcd7614119428f29dd64a",
+      "source_commit": "b622cc9c6933d3543a2626bb7583660f7fe6b111"
+    },
+    "new_settled_examples": 1,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.09401754481183454,
+        0.000005705418551772504,
+        0.00003875420993477582,
+        0.004898589150509518,
+        0.003688066223490592,
+        0.0010000790886315455,
+        0.0004216323967362016,
+        0.0000012237752567311157,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 50,
+      "total_examples": 50,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.011563510563882853
+    },
+    "regional_source_examples": 5,
+    "schema": "pokemon.red.native-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.061950454746413496,
+        0.0000034763344416000246,
+        0.00003861742806931903,
+        0.004896367841711403,
+        0.003686085543539558,
+        0.00032433794576579755,
+        0.0004217476131846448,
+        5.93788783560727e-7,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 50,
+      "total_examples": 50,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.007924631249101042
+    }
+  },
+  "in_sample_policy_replay": {
+    "independent_evaluation": false,
+    "controller_actions": 0,
+    "choices": [],
+    "performed": false
+  },
+  "limitations": [
+    "One successful destination outcome among five correlated source choices is not an independent win rate or learned advantage.",
+    "I used the southern Route10/Lavender/Saffron/Cerulean path; it did not replay the two previously failed cave exits.",
+    "Global remaining-specimen memory keys conservatively reset after an unrelated acquisition; old traces and fitted failures remain retained.",
+    "The mixed-parent resource-aware runner is locally qualified but has not executed. Only actual native goal outcomes will be fitted in that mode.",
+    "Model50 has not played after fitting. Full Red, living collection and transfer milestones remain open."
+  ]
+}

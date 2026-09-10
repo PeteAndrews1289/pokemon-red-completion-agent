@@ -13,9 +13,11 @@ from __future__ import annotations
 
 import re
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 
+from pokemon_red_completion.capture_support import CaptureSupportSummary
+from pokemon_red_completion.capture_survey import CaptureSurveySummary
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
@@ -39,16 +41,23 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalDecisionAuthority,
     GoalExecutionReport,
     GoalManagerExecutionResult,
+    GoalRecoveryRequired,
     GoalVerification,
     execute_goal_manager_decision,
 )
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryObserver,
 )
+from pokemon_red_completion.goal_search_memory import GoalSearchMemory
+from pokemon_red_completion.storage_preparation import StoragePreparationSummary
 
 
 class BoundedPlayerError(RuntimeError):
     """Raised when the bounded player crosses an authority or evidence boundary."""
+
+
+class _RepeatedRecoveryGoal(BoundedPlayerError):
+    """The actor proposed a prohibited retry before a new decision or input."""
 
 
 _PUBLIC_ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9._:-]{0,127}\Z")
@@ -61,7 +70,9 @@ class BoundedPlayerStopReason(StrEnum):
     DECISION_LIMIT = "decision_limit"
     VERIFIED_FAILURE = "verified_failure"
     FAILURE_CONTEXT_UNCHANGED = "failure_context_unchanged"
+    RECOVERY_GOAL_REPEATED = "recovery_goal_repeated"
     INSUFFICIENT_AVAILABLE_GOALS = "insufficient_available_goals"
+    DECLARED_STOP = "declared_stop"
 
 
 @dataclass(frozen=True, slots=True)
@@ -71,17 +82,22 @@ class BoundedPlayerLimits:
     ``min_available_goals`` is the minimum menu width required to invoke the
     learned or baseline authority.  After at least one genuine choice, an
     exactly-one-option menu may execute as a separately labelled forced bridge.
+    Authenticated saved continuations can explicitly allow that bridge at their
+    first step too; it still never invokes model authority or creates a fit target.
     """
 
     max_decisions: int = 2
     max_replans: int = 1
     min_available_goals: int = 2
+    allow_initial_forced_bridge: bool = False
     max_actions_per_decision: int = 6_000
     max_frames_per_decision: int = 600_000
     max_total_actions: int = 12_000
     max_total_frames: int = 1_200_000
 
     def __post_init__(self) -> None:
+        if type(self.allow_initial_forced_bridge) is not bool:
+            raise BoundedPlayerError("initial forced bridge flag must be boolean")
         for name in (
             "max_decisions",
             "min_available_goals",
@@ -121,6 +137,9 @@ class BoundedPlayerStep:
     collection_before: LivingCollectionCheckpoint
     collection_after: LivingCollectionCheckpoint
     selection_mode: GoalSelectionMode = GoalSelectionMode.AUTHORITY
+    capture_support: CaptureSupportSummary | None = None
+    storage_preparation: StoragePreparationSummary | None = None
+    capture_survey: CaptureSurveySummary | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -140,6 +159,12 @@ class BoundedPlayerStep:
             "selection_mode": self.selection_mode.value,
             "semantic_state_changed": self.semantic_state_changed,
             "status": self.status.value,
+            **({"capture_support": self.capture_support.public_dict()}
+               if self.capture_support is not None else {}),
+            **({"capture_survey": self.capture_survey.public_dict()}
+               if self.capture_survey is not None else {}),
+            **({"storage_preparation": self.storage_preparation.public_dict()}
+               if self.storage_preparation is not None else {}),
         }
 
 
@@ -201,7 +226,7 @@ def _retain_executor_failure(
 ) -> ExecutableGoalBinding:
     """Turn an executor exception into one metered failure for bounded recovery."""
 
-    failed = False
+    failed: GoalFailureReason | None = None
 
     def execute() -> GoalExecutionReport:
         nonlocal failed
@@ -214,7 +239,11 @@ def _retain_executor_failure(
         except Exception as error:
             after = budget_meter.checkpoint()
             _report_executor_failure(error, failure_observer, budget_meter)
-            failed = True
+            failed = (
+                GoalFailureReason.RECOVERY_REQUIRED
+                if isinstance(error, GoalRecoveryRequired)
+                else GoalFailureReason.BINDING_FAILED
+            )
             return GoalExecutionReport(
                 actions_executed=(
                     after.controller_actions - before.controller_actions
@@ -224,18 +253,13 @@ def _retain_executor_failure(
             )
 
     def verify(report: GoalExecutionReport) -> GoalVerification:
-        if failed:
-            return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
+        if failed is not None:
+            return GoalVerification.failed(failed)
         return binding.verify(report)
 
-    return ExecutableGoalBinding(
-        binding_ref=binding.binding_ref,
-        kind=binding.kind,
-        estimated_effort=binding.estimated_effort,
-        estimated_risk=binding.estimated_risk,
-        execute=execute,
-        verify=verify,
-    )
+    # Wrapping execution must preserve every declared policy fact, including
+    # economic quotes and future fields. Rebuilding the dataclass loses them.
+    return replace(binding, execute=execute, verify=verify)
 
 
 def _retaining_binding_set(
@@ -290,6 +314,9 @@ def run_bounded_player_episode(
     completion_satisfied: CompletionPredicate,
     limits: BoundedPlayerLimits | None = None,
     failure_observer: Callable[[BaseException], None] | None = None,
+    search_memory: GoalSearchMemory | None = None,
+    stop_requested: CompletionPredicate | None = None,
+    validate_choice_menu: Callable[[GoalManagerCompositionObservation], None] | None = None,
 ) -> BoundedPlayerResult:
     """Run a few model-led goals with fresh evidence and one bounded replan."""
 
@@ -307,6 +334,10 @@ def run_bounded_player_episode(
         raise TypeError("completion_satisfied must be callable")
     if failure_observer is not None and not callable(failure_observer):
         raise TypeError("failure_observer must be callable")
+    if stop_requested is not None and not callable(stop_requested):
+        raise TypeError("stop_requested must be callable")
+    if validate_choice_menu is not None and not callable(validate_choice_menu):
+        raise TypeError("validate_choice_menu must be callable")
     limits = BoundedPlayerLimits() if limits is None else limits
     if not isinstance(limits, BoundedPlayerLimits):
         raise TypeError("limits must be BoundedPlayerLimits")
@@ -330,6 +361,16 @@ def run_bounded_player_episode(
     replans_used = 0
 
     for decision_index in range(limits.max_decisions):
+        if stop_requested is not None and _completion_without_actions(
+            stop_requested, current, budget_meter,
+        ):
+            trajectory.require_settled()
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=BoundedPlayerStopReason.DECLARED_STOP,
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         available_count = sum(
             opportunity.availability is GoalAvailability.AVAILABLE
             for opportunity in current.binding_set.opportunities
@@ -337,7 +378,7 @@ def run_bounded_player_episode(
         forced_singleton = (
             available_count == 1
             and limits.min_available_goals > 1
-            and bool(steps)
+            and (bool(steps) or limits.allow_initial_forced_bridge)
         )
         if available_count < limits.min_available_goals and not forced_singleton:
             if not steps:
@@ -380,17 +421,39 @@ def run_bounded_player_episode(
             _ForcedSingletonAuthority() if forced_singleton else authority
         )
 
-        execution = execute_goal_manager_decision(
-            situation=current.situation,
-            binding_set=_retaining_binding_set(
-                current.binding_set, budget_meter, failure_observer
-            ),
-            authority=selected_authority,
-            trajectory=trajectory,
-            require_durable_decision=True,
-            selection_guard=_different_goal_guard(failed_kind),
-            selection_mode=selection_mode,
-        )
+        before_selection = budget_meter.checkpoint()
+        before_decision_index = trajectory.next_decision_index
+        if validate_choice_menu is not None:
+            validate_choice_menu(current)
+            if budget_meter.checkpoint() != before_selection:
+                raise BoundedPlayerError("choice menu validation changed state")
+        try:
+            execution = execute_goal_manager_decision(
+                situation=current.situation,
+                binding_set=_retaining_binding_set(
+                    current.binding_set, budget_meter, failure_observer
+                ),
+                authority=selected_authority,
+                trajectory=trajectory,
+                require_durable_decision=True,
+                selection_guard=_different_goal_guard(failed_kind),
+                selection_mode=selection_mode,
+            )
+        except _RepeatedRecoveryGoal:
+            # This guard runs before recording or executing another choice. Do
+            # not hide other authority/evidence errors or replace the actor.
+            trajectory.require_settled()
+            if (
+                budget_meter.checkpoint() != before_selection
+                or trajectory.next_decision_index != before_decision_index
+            ):
+                raise BoundedPlayerError("rejected recovery selection changed state") from None
+            return BoundedPlayerResult(
+                authority_id=authority_id,
+                stop_reason=BoundedPlayerStopReason.RECOVERY_GOAL_REPEATED,
+                steps=tuple(steps),
+                completion_satisfied=False,
+            )
         _require_settled_execution(execution)
         executed_budget = budget_meter.checkpoint()
         actions = executed_budget.controller_actions - last_budget.controller_actions
@@ -437,6 +500,27 @@ def run_bounded_player_episode(
             raise BoundedPlayerError(
                 "successful bounded goal did not change semantic state"
             )
+        if search_memory is not None and actions > 0 and (
+            execution.selected_kind is GoalKind.ACQUIRE_SPECIES
+            and (
+                execution.passed
+                or execution.verification.failure_reason in {
+                    GoalFailureReason.SEARCH_EXHAUSTED,
+                    GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED,
+                }
+            )
+        ):
+            search_memory.record(
+                current.binding_set.require(
+                    question.opportunities[execution.selected_candidate_index].binding_ref
+                ).search_memory_source,
+                current.collection.required_specimens_sha256,
+                exhausted=not execution.passed, actions=actions, frames=frames,
+            )
+            refreshed = _observe_without_actions(observe, budget_meter, executed_budget)
+            if refreshed.collection != after.collection:
+                raise BoundedPlayerError("search memory refresh changed collection")
+            after = refreshed
         steps.append(
             BoundedPlayerStep(
                 decision_ordinal=decision_index + 1,
@@ -453,6 +537,18 @@ def run_bounded_player_episode(
                 collection_before=current.collection,
                 collection_after=after.collection,
                 selection_mode=selection_mode,
+                capture_support=(
+                    None if execution_report is None
+                    else CaptureSupportSummary.from_evidence(execution_report.evidence)
+                ),
+                capture_survey=(
+                    None if execution_report is None
+                    else CaptureSurveySummary.from_evidence(execution_report.evidence)
+                ),
+                storage_preparation=(
+                    None if execution_report is None
+                    else StoragePreparationSummary.from_evidence(execution_report.evidence)
+                ),
             )
         )
         if recovery_attempt:
@@ -549,7 +645,7 @@ def _different_goal_guard(
 ) -> Callable[[object], None]:
     def guard(selection: object) -> None:
         if failed_kind is not None and getattr(selection, "kind", None) is failed_kind:
-            raise BoundedPlayerError(
+            raise _RepeatedRecoveryGoal(
                 "bounded player repeated the failed goal during recovery"
             )
 

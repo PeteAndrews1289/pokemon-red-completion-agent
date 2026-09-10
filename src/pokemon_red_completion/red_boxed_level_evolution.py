@@ -64,8 +64,57 @@ RED_BOXED_LEVEL_EVOLUTION_SCHEMA = "pokemon.red.private-boxed-level-evolution.v1
 RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA = "pokemon.red.boxed-level-evolution-execution-report.v1"
 RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA = "pokemon.red.private-observed-semantic-boundary.v1"
 RED_OBSERVED_SEMANTIC_BOUNDARY_REPORT_SCHEMA = "pokemon.red.observed-semantic-boundary-report.v1"
+RED_NATIVE_STOCK_EVOLUTION_CONTRACT_SCHEMA = (
+    "pokemon.red.native-stock-evolution-contract.v1"
+)
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+
+
+@dataclass(frozen=True, slots=True)
+class RedNativeStockEvolutionContract:
+    """Explicit typed contract for native-stock boxed evolution qualification.
+
+    Validates positive integer source count and zero target count against the
+    actual before ledger, allowing arbitrary positive source multiplicities
+    without scenario design fixtures.
+    """
+
+    source_count: int
+    target_count: int = 0
+
+    def __post_init__(self) -> None:
+        if type(self.source_count) is not int or self.source_count <= 0:  # noqa: E721
+            raise RedBoxedLevelEvolutionError(
+                "native stock contract requires a positive integer source count"
+            )
+        if type(self.target_count) is not int or self.target_count != 0:  # noqa: E721
+            raise RedBoxedLevelEvolutionError(
+                "native stock contract requires a zero target count"
+            )
+
+    def validate_ledger(
+        self,
+        binding: RedDependencySpeciesBinding,
+        before_ledger: DependencySpecimenLedger,
+    ) -> None:
+        if not isinstance(binding, RedDependencySpeciesBinding):
+            raise TypeError("native stock contract needs a species binding")
+        if not isinstance(before_ledger, DependencySpecimenLedger):
+            raise TypeError("native stock contract needs a ledger")
+        actual_source = before_ledger.count(binding.precursor_species_ref)
+        actual_target = before_ledger.count(binding.evolved_species_ref)
+        if actual_source != self.source_count or actual_target != self.target_count:
+            raise RedBoxedLevelEvolutionError(
+                "boxed evolution ledger does not match the native stock contract"
+            )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": RED_NATIVE_STOCK_EVOLUTION_CONTRACT_SCHEMA,
+            "source_count": self.source_count,
+            "target_count": self.target_count,
+        }
 
 
 class RedBoxedLevelEvolutionError(RuntimeError):
@@ -213,9 +262,12 @@ class BoxedLevelEvolutionPlan:
     route_to_pc: SemanticPCBoundaryAccess
     route_to_training: SemanticVenueRouteBinding
     training_binding_sha256: str
+    pc_facing: str | None = None
 
     def __post_init__(self) -> None:
         _require_sha256(self.reset_state_sha256, "boxed evolution reset state")
+        if self.pc_facing not in {None, "up", "down", "left", "right"}:
+            raise RedBoxedLevelEvolutionError("boxed evolution PC facing differs")
         _require_sha256(self.training_binding_sha256, "boxed evolution training binding")
         if not isinstance(self.species_binding, RedDependencySpeciesBinding):
             raise TypeError("boxed evolution needs a species binding")
@@ -294,6 +346,8 @@ class BoxedLevelEvolutionPlan:
                     "pc_boundary_binding_sha256": self.route_to_pc.binding_sha256,
                 }
             )
+        if self.pc_facing is not None:
+            document["pc_facing"] = self.pc_facing
         return canonical_sha256(document)
 
     def public_dict(self) -> dict[str, object]:
@@ -435,7 +489,7 @@ class RedBoxedLevelEvolutionAdapter:
 
     def qualify(
         self,
-        scenario: RedDualCapabilityScenarioSpec,
+        scenario: RedDualCapabilityScenarioSpec | RedNativeStockEvolutionContract,
         before_ledger: DependencySpecimenLedger,
     ) -> BoundRedCapability:
         """Prove the exact box/party/route boundary without controller input."""
@@ -461,7 +515,7 @@ class RedBoxedLevelEvolutionAdapter:
 
     def execute(
         self,
-        scenario: RedDualCapabilityScenarioSpec,
+        scenario: RedDualCapabilityScenarioSpec | RedNativeStockEvolutionContract,
         before_ledger: DependencySpecimenLedger,
     ) -> BoxedLevelEvolutionExecutionReport:
         """Execute the selected title-specific mechanic exactly once."""
@@ -469,6 +523,15 @@ class RedBoxedLevelEvolutionAdapter:
         self._require_ready(scenario, before_ledger)
         action_start = self.actions.actions_executed
         first_access = self._enter_pc()
+
+        if self.plan.pc_facing is not None:
+            from pokemon_red_completion.red_pc_storage import face_pc_boundary
+
+            face_pc_boundary(
+                self.actions,
+                self.reader,  # type: ignore[arg-type]
+                self.plan.pc_facing,  # type: ignore[arg-type]
+            )
 
         open_bills_pc(self.actions, self.reader)  # type: ignore[arg-type]
         deposit = deposit_party_member(
@@ -575,21 +638,27 @@ class RedBoxedLevelEvolutionAdapter:
 
     def _require_ready(
         self,
-        scenario: RedDualCapabilityScenarioSpec,
+        scenario: RedDualCapabilityScenarioSpec | RedNativeStockEvolutionContract,
         before_ledger: DependencySpecimenLedger,
     ) -> None:
-        if not isinstance(scenario, RedDualCapabilityScenarioSpec):
-            raise TypeError("boxed evolution qualification needs a scenario")
+        if not isinstance(
+            scenario, (RedDualCapabilityScenarioSpec, RedNativeStockEvolutionContract)
+        ):
+            raise TypeError("boxed evolution qualification needs a scenario or native contract")
         if not isinstance(before_ledger, DependencySpecimenLedger):
             raise TypeError("boxed evolution qualification needs a ledger")
         binding = self.plan.species_binding
-        if (
-            before_ledger.count(binding.precursor_species_ref) != scenario.before.precursor_count
-            or before_ledger.count(binding.evolved_species_ref) != scenario.before.evolved_count
-        ):
-            raise RedBoxedLevelEvolutionError(
-                "boxed evolution ledger does not implement the scenario"
-            )
+        if isinstance(scenario, RedDualCapabilityScenarioSpec):
+            if (
+                before_ledger.count(binding.precursor_species_ref)
+                != scenario.before.precursor_count
+                or before_ledger.count(binding.evolved_species_ref) != scenario.before.evolved_count
+            ):
+                raise RedBoxedLevelEvolutionError(
+                    "boxed evolution ledger does not implement the scenario"
+                )
+        else:
+            scenario.validate_ledger(binding, before_ledger)
         observed = dependency_specimen_ledger(self.observe_collection())
         if observed != before_ledger:
             raise RedBoxedLevelEvolutionError(
@@ -672,6 +741,7 @@ def _require_sha256(value: str, subject: str) -> None:
 __all__ = [
     "RED_BOXED_LEVEL_EVOLUTION_REPORT_SCHEMA",
     "RED_BOXED_LEVEL_EVOLUTION_SCHEMA",
+    "RED_NATIVE_STOCK_EVOLUTION_CONTRACT_SCHEMA",
     "RED_OBSERVED_SEMANTIC_BOUNDARY_REPORT_SCHEMA",
     "RED_OBSERVED_SEMANTIC_BOUNDARY_SCHEMA",
     "BoundedEvolutionTrainingResult",
@@ -681,5 +751,6 @@ __all__ = [
     "ObservedSemanticBoundaryReport",
     "RedBoxedLevelEvolutionAdapter",
     "RedBoxedLevelEvolutionError",
+    "RedNativeStockEvolutionContract",
     "SemanticPCBoundaryAccess",
 ]

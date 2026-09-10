@@ -1,0 +1,81 @@
+{
+  "actual_control_decisions": 0,
+  "audit_actions": 0,
+  "audit_fits": 0,
+  "audit_frames": 0,
+  "authority": "unqualified-shadow",
+  "batch_record_sha256": "796a85d068d82e824fe7d9ca77c2b23da786f59b3c68963411362aeb85eaa329",
+  "bruno_model_unchanged": true,
+  "censored_examples": 0,
+  "completion_targets": [
+    0,
+    1,
+    1
+  ],
+  "dataset_sha256": "f6676fcfc9a1ce86efff83f883b8880d9a2c19ae63a8894629fa900ea639c56e",
+  "distinct_selected_inputs": 2,
+  "first_context_candidate_estimates": [
+    {
+      "completion": 0.0016773912945710623,
+      "cost": 0.0027627256299082997
+    },
+    {
+      "completion": 0.998244801451531,
+      "cost": 0.1696787423596517
+    }
+  ],
+  "first_publication_identifier_failure_retained": true,
+  "fit_computations": 2,
+  "in_game_loss_inferred": false,
+  "independent_evaluation": false,
+  "model_sha256": "3bf43581a0fda3c0b8e34d60abccb69cbf68bc9f72f834a2a0cc64b970669d97",
+  "native_model_unchanged": true,
+  "observed_targets": [
+    [
+      1,
+      0.16997272222222223
+    ],
+    [
+      1,
+      0.16997272222222223
+    ],
+    [
+      0,
+      0.0024817777777777776
+    ]
+  ],
+  "published_candidates": 1,
+  "record_id": "red-ctrl-fit-a1fa109d6c939b71451f192d5ec49f3977893f961843e9a2386a1b4b2a046762",
+  "record_sha256": "e27e797c676e96d7d3de7184643b6b71ac89cf8018899233d5c3a10ed8a5e2fe",
+  "root_count": 1,
+  "schema": "pokemon.red.agatha-controller-shadow-fit.v1",
+  "settled_examples": 3,
+  "source_bundle_sha256": "4ae64fc88c4156618161c56618693edd5f73e96879b2eb62cc011591f6b93ae2",
+  "source_commit": "a5037afaf319665f47b53fe244d20b51f6aabf42",
+  "training_mse_after": [
+    0.000002944154765445583,
+    8.259301095882027e-8
+  ],
+  "training_mse_before": [
+    0.24987154933470035,
+    0.007009700663403513
+  ],
+  "date": "2026-09-09",
+  "gameplay_collection": {
+    "declared": 4,
+    "attempted": 3,
+    "reached": 2,
+    "controller_stopped": 1,
+    "cancelled_never_claimed": 1,
+    "actions": 848,
+    "frames": 78890,
+    "field_items": 2
+  },
+  "limitations": [
+    "Frozen-controller completion returns, not in-game loss labels or ideal-player strategy.",
+    "Three correlated returns from one initial context; no independent evaluation or calibrated confidence.",
+    "Separate Agatha head remains shadow-only until an explicitly declared training probe; Bruno/native models unchanged.",
+    "First fit calculation could not publish because its artifact identifier was too long. One deterministic recomputation produced one saved candidate; no game attempt repeated."
+  ],
+  "phase4_complete": false
+}

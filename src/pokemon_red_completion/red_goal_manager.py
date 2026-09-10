@@ -11,7 +11,11 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass
-from typing import Protocol
+from typing import TYPE_CHECKING, Protocol
+
+if TYPE_CHECKING:
+    from .red_registration_policy import RedRegistrationPolicy
+    from .registered_checkpoint import RegisteredCollectionCheckpoint
 
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.domain import GameState
@@ -58,6 +62,10 @@ from pokemon_red_completion.red_collection import (
     summarize_red_collection,
 )
 from pokemon_red_completion.red_party import party_observation_from_raw
+from pokemon_red_completion.red_pp_observation import (
+    RedPpResourceObservation,
+    observe_pp_resources,
+)
 
 
 class RedGoalManagerError(RuntimeError):
@@ -120,6 +128,8 @@ class RedGoalObservation:
     recovery_item_count: int
     free_storage_slots: int
     immediate_capture_slots: int
+    pp_restoration: RedPpResourceObservation | None = None
+    registered_checkpoint: RegisteredCollectionCheckpoint | None = None
 
     @property
     def situation(self) -> GoalSituation:
@@ -128,7 +138,7 @@ class RedGoalObservation:
     def public_dict(self) -> dict[str, object]:
         """Return counts and normalized evidence without raw Red identities."""
 
-        return {
+        result: dict[str, object] = {
             "schema": "pokemon.red.goal-observation.v1",
             "story": {
                 "completed": self.evidence.story.completed,
@@ -152,6 +162,18 @@ class RedGoalObservation:
             "private_path_fields": 0,
             "raw_address_fields": 0,
         }
+        if self.pp_restoration is not None:
+            result["schema"] = "pokemon.red.goal-observation.v2"
+            result["pp_restoration"] = self.pp_restoration.public_dict()
+        if self.registered_checkpoint is not None:
+            # Keep the resource/story schema intact for cost reconstruction;
+            # explicit registration facts are provenance, never policy features.
+            return {
+                "schema": "pokemon.red.registered-goal-observation.v1",
+                "semantic_observation": result,
+                "registration": self.registered_checkpoint.public_dict(),
+            }
+        return result
 
 
 @dataclass(slots=True)
@@ -163,8 +185,12 @@ class PokemonRedGoalStateAdapter:
     graph: QuestGraph
     config: RedGoalManagerConfig = RedGoalManagerConfig()
     acquisition_catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
+    include_pp_restoration: bool = False
+    registration_policy: RedRegistrationPolicy | None = None
 
     def observe(self) -> RedGoalObservation:
+        if type(self.include_pp_restoration) is not bool:
+            raise RedGoalManagerError("PP resource observation requires explicit profile opt-in")
         raw = self.reader.read()
         game_state = self.semantic_observer.observe_raw(raw)
         party = party_observation_from_raw(raw)
@@ -254,7 +280,7 @@ class PokemonRedGoalStateAdapter:
                 len(RED_SOLO_COLLECTION_CONTRACT.target_species),
             ),
         )
-        return RedGoalObservation(
+        observation = RedGoalObservation(
             raw=raw,
             game_state=game_state,
             party=party,
@@ -266,7 +292,13 @@ class PokemonRedGoalStateAdapter:
             recovery_item_count=recovery_items,
             free_storage_slots=free_storage,
             immediate_capture_slots=immediate_capture_slots,
+            pp_restoration=observe_pp_resources(raw) if self.include_pp_restoration else None,
         )
+        if self.registration_policy is not None:
+            from .red_registered_observation import project_registered_observation
+
+            return project_registered_observation(observation, self.registration_policy)
+        return observation
 
 
 @dataclass(frozen=True, slots=True)
@@ -368,6 +400,17 @@ class RedStoryGoalBindingProvider:
             )
         objective, skill = executable[0]
         completed_before = self.graph.completed_ids(observation.game_state)
+        budget = getattr(skill, "maximum_full_restores", 0)
+        quote = None
+        if budget:
+            from .goal_resource_quote import GoalResourceQuote
+            from .red_trainer_healing import require_story_recovery_stock
+
+            require_story_recovery_stock(observation.raw, budget)
+            quote = GoalResourceQuote(
+                0, 0, (), available_recovery_units=dict(observation.raw.bag_items or ()).get(16, 0),
+                maximum_recovery_consumption=budget,
+            )
 
         def execute() -> GoalExecutionReport:
             result = self.skills.execute_bounded(skill)
@@ -379,6 +422,10 @@ class RedStoryGoalBindingProvider:
                     "declared_effect_count": (
                         len(skill.expected_facts) + len(skill.additional_effect_facts)
                     ),
+                    **({"story_control": {key: result.evidence[key] for key in (
+                        "battle_controller", "maximum_full_restores", "bag_items_spent",
+                        "learned_battle_authority",
+                    )}} if budget else {}),
                 },
             )
 
@@ -400,6 +447,7 @@ class RedStoryGoalBindingProvider:
                 estimated_risk=_specialist_risk(objective.specialist),
                 execute=execute,
                 verify=verify,
+                resource_quote=quote,
             )
         )
 

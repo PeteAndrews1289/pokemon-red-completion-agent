@@ -28,6 +28,199 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    old, new = derive(before, ('capture-fly', 'observed-local-capture'), object())
+    assert 'observed_local_capture' not in old.providers[0].parameters
+    assert new.providers[0].parameters['observed_local_capture'] is True
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
+def test_travel_capture_transition_preserves_prior_profile_and_requires_registration(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    with pytest.raises(module['PairedRedBoundedPlayerRunError'], match='registered_objective'):
+        derive(before, ('travel-capture',), object())
+    old, new = derive(before, ('capture-fly', 'travel-capture'), object(),
+                      allow_cartridge_sources=True)
+    assert 'travel_capture' not in old.providers[0].parameters
+    assert new.providers[0].parameters['travel_capture'] is True
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
+def test_indoor_departure_is_an_ordered_prospective_profile_transition(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    old, new = derive(before, ('capture-fly', 'indoor-fly-departure'), object())
+    original = next(p for p in old.providers if p.kind is GoalKind.ACQUIRE_SPECIES)
+    enabled = next(p for p in new.providers if p.kind is GoalKind.ACQUIRE_SPECIES)
+    assert original.parameters.get('indoor_fly_departure') is None
+    assert enabled.parameters['indoor_fly_departure'] is True
+    assert old.profile_sha256 != new.profile_sha256
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
+def test_combined_recovery_source_preserves_champion_and_explicit_battle_budget(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    profiles = derive(_supply_transition_profile(), (
+        'cartridge-trainer-story:champion', 'ordinary-trainer-recovery:1',
+        'combined-field-restore',
+    ), object())
+    assert profiles[-1].providers[0].parameters == {
+        'trainer_objective': 'defeat_champion', 'maximum_full_restores': 1,
+        'recovery_controller': 'ordinary-bounded-healing',
+    }
+    assert profiles[-1].providers[1].parameters == {
+        'affordable_single_item': True, 'reserve_last_full_restore': True,
+        'include_pp_fallback': True,
+    }
+
+
+def test_lance_source_argument_reaches_qualified_profile_without_legacy_fallback(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    original = _supply_transition_profile()
+    derived = derive(original, ('cartridge-trainer-story:lance',), object())
+    assert len(derived) == 1
+    assert derived[0].providers[0].parameters == {'trainer_objective': 'defeat_lance'}
+    assert derived[0].providers[1:] == original.providers[1:]
+    champion = derive(original, ('cartridge-trainer-story:champion',), object())
+    assert champion[0].providers[0].parameters == {'trainer_objective': 'defeat_champion'}
+    assert champion[0].providers[1:] == original.providers[1:]
+
+
+@pytest.mark.parametrize("budget", [1, 2])
+@pytest.mark.parametrize('prefix', ['', 'ordinary-'])
+def test_recovery_modifier_requires_and_binds_explicit_story_without_input(
+    monkeypatch, budget, prefix,
+):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    original = _supply_transition_profile()
+    modifier = f'{prefix}trainer-recovery:{budget}'
+    profiles = derive(original, ('cartridge-trainer-story:lance', modifier),
+                      object())
+    expected = {
+        'trainer_objective': 'defeat_lance', 'maximum_full_restores': budget,
+    }
+    if prefix:
+        expected['recovery_controller'] = 'ordinary-bounded-healing'
+    assert profiles[-1].providers[0].parameters == expected
+    assert profiles[-1].providers[1:] == original.providers[1:]
+    with pytest.raises(module['PairedRedBoundedPlayerRunError']):
+        derive(original, (modifier,), object())
+    champion = derive(profiles[-1], ('cartridge-trainer-story:champion',), object())
+    assert 'maximum_full_restores' not in champion[-1].providers[0].parameters
+
+
+@pytest.mark.parametrize("mode", [True, False, None, 1])
+def test_support_recovery_restores_explicit_observer_mode_without_a_training_plan(mode):
+    module = runpy.run_path(str(SCRIPT))
+    header = {"metadata": {
+        "schema": "pokemon.red.forced-recovery-header.v1", "completion_dose": mode,
+    }}
+    if type(mode) is bool:
+        assert module["_checkpoint_completion_dose"](header) is mode
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            module["_checkpoint_completion_dose"](header)
+
+
+@pytest.mark.parametrize("probe_during_observation", [False, True])
+@pytest.mark.parametrize("remaining_mode", [False, True])
+def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
+    monkeypatch, probe_during_observation, remaining_mode,
+):
+    module = runpy.run_path(str(SCRIPT))
+    observe_type = module["_LiveObserver"]
+    namespace = observe_type.__call__.__globals__
+    hard_type = module["HardCompositionActionLimiter"]
+    count_type = module["CountingExecutor"]
+    calls, skill_ports = [], []
+    outer = hard_type(
+        SimpleNamespace(execute=lambda action: calls.append(action)),
+        maximum_actions_per_decision=1, maximum_episode_actions=1,
+    )
+    meter = SimpleNamespace(
+        checkpoint=lambda: outer.attempted_actions,
+        begin_decision_window=outer.begin_decision_window,
+    )
+
+    def player(
+        _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
+        trainer_funding=False,
+        trainer_pending_recovery=False,
+        regional_trainer_funding=False,
+        observed_trainer_funding=False,
+        retain_quantum=None, remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+    ):
+        assert completion_dose is False
+        assert routed_recovery is False
+        assert trainer_funding is False
+        assert trainer_pending_recovery is False
+        assert regional_trainer_funding is False
+        assert observed_trainer_funding is False
+        assert remaining_acquisition_demand is remaining_mode
+        assert level_evolution_acquisitions is remaining_mode
+        assert retain_quantum is None
+        assert isinstance(actions.delegate, hard_type)
+        skill_ports.append(actions)
+
+        class Bridge:
+            last_live_observation = None
+
+            def __call__(self):
+                if probe_during_observation:
+                    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+                        actions.execute("must-not-reach-game")
+                return _observation(storage=9)
+
+        return Bridge()
+
+    monkeypatch.setitem(namespace, "_player_observer", player)
+    observer = observe_type(
+        runtime=object(), actions=count_type(outer), meter=meter,
+        maximum_actions_per_decision=1, remaining_acquisition_demand=remaining_mode,
+        level_evolution_acquisitions=remaining_mode,
+    )
+    if probe_during_observation:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
+            observer()
+        assert calls == []
+        assert outer.attempted_actions == 0
+    else:
+        observer()
+        skill_ports[-1].execute("first")
+        observer()  # a new local guard must not reset the episode total
+        from pokemon_red_completion.goal_manager_composition_qualification import (
+            CompositionActionBudgetExhausted,
+        )
+        with pytest.raises(CompositionActionBudgetExhausted):
+            skill_ports[-1].execute("over-budget")
+        assert calls == ["first"]
+        assert outer.attempted_actions == 1
+
+
 def _call_names() -> tuple[str, ...]:
     tree = ast.parse(SCRIPT.read_text(encoding="utf-8"))
     names: list[str] = []
@@ -109,8 +302,8 @@ def test_runner_uses_shared_player_and_frame_safe_controller_boundary() -> None:
     assert "publish_red_player_checkpoint" in calls
 
 
-@pytest.mark.parametrize("enabled", [False, True])
-def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, enabled):
+@pytest.mark.parametrize("enabled,unsafe", [(False, False), (True, False), (True, True)])
+def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, enabled, unsafe):
     from pokemon_red_completion.bounded_player_episode import (
         BoundedPlayerResult,
         BoundedPlayerStopReason,
@@ -137,6 +330,11 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
             order.append("restore")
 
     def append(stream, record, **kwargs):
+        if unsafe:
+            assert stream == "failure_state" and record == {"diagnostic_only": True}
+            assert kwargs == {"durable": True} and "close" not in order
+            order.append("failure_state")
+            return
         assert stream == "checkpoint" and record == {"captured": True}
         assert kwargs == {"durable": True}
         assert "close" not in order
@@ -147,9 +345,11 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         order.append("trajectory_complete")
         return SimpleNamespace(manifest_sha256="9" * 64)
 
-    writer = SimpleNamespace(append=append, complete=complete, abort=lambda _reason: None)
+    writer = SimpleNamespace(append=append, complete=complete,
+                             abort=lambda _reason: order.append("abort"))
+    headers = []
     sink = SimpleNamespace(
-        write_episode_header=lambda **_kwargs: None,
+        write_episode_header=lambda **kwargs: headers.append(kwargs),
         record_event=lambda _event: None, finalize=lambda: None,
     )
     for name in (
@@ -170,6 +370,18 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         from_state_reader=lambda _reader: None,
     ))
     monkeypatch.setitem(namespace, "run_bounded_player_episode", lambda **_kwargs: result)
+    monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_kwargs:
+        SimpleNamespace(
+            adapter=SimpleNamespace(observe=lambda: SimpleNamespace(
+                input_ready=not unsafe, raw=SimpleNamespace(battle_state=unsafe),
+            )),
+            profile=SimpleNamespace(providers=()),
+            emulator=SimpleNamespace(pressed_buttons=frozenset()),
+        )
+    )
+    monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k:
+        SimpleNamespace(checkpoint=lambda: (0, 0))
+    )
 
     def capture(**kwargs):
         assert "close" not in order and kwargs["result"] is result
@@ -183,6 +395,10 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
 
     monkeypatch.setitem(namespace, "capture_red_player_terminal", capture)
     monkeypatch.setitem(namespace, "publish_red_player_checkpoint", publish)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state",
+        lambda **kwargs: {"diagnostic_only": True},
+    )
     readiness = SimpleNamespace(
         pair_id="checkpoint-wire", decision_limit=4, context_origin="training",
         source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
@@ -193,10 +409,29 @@ def test_checkpoint_is_opt_in_and_durable_before_emulator_closes(monkeypatch, en
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False, save_terminal_checkpoints=enabled,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=enabled,
+        remaining_acquisition_demand=enabled, level_evolution_acquisitions=enabled,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256="a" * 64 if enabled else None,
+        regional_proposal_record_sha256="b" * 64 if enabled else None,
     )
+    if unsafe:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="unsafe_boundary"):
+            run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
+        assert order == ["open", "restore", "failure_state", "close", "abort"]
+        return
     arm = run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
     assert arm.episode is result
+    assert headers[0]["metadata"].get("remaining_acquisition_demand", False) is enabled
+    assert headers[0]["metadata"].get("level_evolution_acquisitions", False) is enabled
+    assert headers[0]["metadata"].get("regional_choice_record_sha256") == (
+        "a" * 64 if enabled else None
+    )
+    if not enabled:
+        assert "regional_choice_record_sha256" not in headers[0]["metadata"]
+        assert "regional_proposal_record_sha256" not in headers[0]["metadata"]
+    else:
+        assert headers[0]["metadata"]["regional_proposal_record_sha256"] == "b" * 64
     assert order == (
         ["open", "restore", "capture", "durable_state", "close", "trajectory_complete", "publish"]
         if enabled else ["open", "restore", "close", "trajectory_complete"]
@@ -305,6 +540,23 @@ def test_challenger_arguments_require_the_complete_calibration_bundle() -> None:
         )
 
 
+@pytest.mark.parametrize("forced,acted,queried,allowed", [
+    (1, 0, 0, True), (0, 0, 0, False), (1, 1, 0, False), (1, 0, 1, False),
+])
+def test_terminal_summary_preserves_forced_only_result_without_fake_prediction(
+    forced, acted, queried, allowed,
+):
+    module = runpy.run_path(str(SCRIPT))
+    check = module["_require_causal_decision_or_forced_bridge"]
+    authority = SimpleNamespace(last_decision=None, decisions=queried)
+    episode = SimpleNamespace(forced_singleton_steps=forced, authority_decisions=acted)
+    if allowed:
+        check(authority, episode)
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="causal_outcome"):
+            check(authority, episode)
+
+
 def test_episode_identity_distinguishes_both_learned_challengers() -> None:
     module = runpy.run_path(str(SCRIPT))
     episode_id = module["_episode_id"]
@@ -325,10 +577,13 @@ def test_policy_identity_never_labels_the_causal_challenger_as_baseline() -> Non
     readiness = SimpleNamespace(
         challenger_arm_id=causal_id,
         model_sha256="b" * 64,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
     )
 
     assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb"
     assert policy_id(readiness, baseline_id) == baseline_id
+    readiness.quote_resource_costs = True
+    assert policy_id(readiness, causal_id) == "living-dex-goal-bbbbbbbbbbbbbbbb-economics-v1"
 
 
 def test_one_to_four_decisions_scale_episode_budgets_and_replans() -> None:
@@ -507,19 +762,91 @@ def test_failed_arm_retains_a_path_safe_private_cause(tmp_path: Path, with_sink:
     assert private_path not in json.dumps(document, default=dict)
 
 
+@pytest.mark.parametrize("value", [None, False, True, 1, "true"])
+def test_pending_trainer_restore_mode_is_explicit_and_strict(value):
+    module = runpy.run_path(str(SCRIPT))
+    read = module["_checkpoint_trainer_pending_recovery"]
+    assert read({"metadata": {"trainer_funding": True}}) is False
+    metadata = {"trainer_funding": True, "trainer_pending_recovery": value}
+    if type(value) is bool:
+        assert read({"metadata": metadata}) is value
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            read({"metadata": metadata})
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+        read({"metadata": {"trainer_funding": False, "trainer_pending_recovery": True}})
+
+
+@pytest.mark.parametrize("value", [None, False, True, 1, "true"])
+def test_regional_trainer_restore_mode_is_explicit_and_strict(value):
+    module = runpy.run_path(str(SCRIPT))
+    read = module["_checkpoint_regional_trainer_funding"]
+    assert read({"metadata": {"trainer_funding": True}}) is False
+    metadata = {"trainer_funding": True, "regional_trainer_funding": value}
+    if type(value) is bool:
+        assert read({"metadata": metadata}) is value
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            read({"metadata": metadata})
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+        read({"metadata": {"regional_trainer_funding": True}})
+
+
 def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypatch):
     module = runpy.run_path(str(SCRIPT))
     factory = module["_player_observer"]
     sentinel = object()
     router = SimpleNamespace(enumerate=lambda _live: sentinel)
-    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", lambda *args: router)
+    received = []
+    def build_router(*args, **kwargs):
+        received.append(kwargs)
+        return router
+    monkeypatch.setitem(factory.__globals__, "RedResourceGoalRouter", build_router)
     monkeypatch.setitem(
-        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: kwargs,
+        factory.__globals__, "RedBoundedPlayerObserver", lambda **kwargs: SimpleNamespace(**kwargs),
     )
     local = factory(object(), object(), None)
-    routed = factory(object(), object(), object())
-    assert local["enumerate_bindings"] is None
-    assert routed["enumerate_bindings"](object()) is sentinel
+    routed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object())
+    assert local.enumerate_bindings is None
+    assert routed.enumerate_bindings(object()) is sentinel
+    factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
+    completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
+                        completion_dose=True, routed_recovery=True, trainer_funding=True,
+                        trainer_pending_recovery=True, regional_trainer_funding=True,
+                        observed_trainer_funding=True)
+    assert completed.collection_projector.__name__ == "living_completion_checkpoint"
+    assert received == [
+        {"quote_resource_costs": False, "prepare_capture_storage": False, "routed_recovery": False,
+         "trainer_funding": False, "trainer_pending_recovery": False,
+         "regional_trainer_funding": False, "observed_trainer_funding": False,
+         "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": True, "prepare_capture_storage": False, "routed_recovery": False,
+         "trainer_funding": False, "trainer_pending_recovery": False,
+         "regional_trainer_funding": False, "observed_trainer_funding": False,
+         "maximum_controller_actions": 6000,
+         "maximum_emulator_frames": 600000},
+        {"quote_resource_costs": False, "prepare_capture_storage": True, "routed_recovery": True,
+         "trainer_funding": True, "trainer_pending_recovery": True,
+         "regional_trainer_funding": True, "observed_trainer_funding": True,
+         "maximum_controller_actions": 30000,
+         "maximum_emulator_frames": 3000000},
+    ]
+
+
+@pytest.mark.parametrize("value", [None, False, True, 1, "true"])
+def test_observed_funding_restore_mode_is_explicit_and_strict(value):
+    module = runpy.run_path(str(SCRIPT))
+    read = module["_checkpoint_observed_trainer_funding"]
+    assert read({"metadata": {"trainer_funding": True}}) is False
+    metadata = {"trainer_funding": True, "observed_trainer_funding": value}
+    if type(value) is bool:
+        assert read({"metadata": metadata}) is value
+    else:
+        with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+            read({"metadata": metadata})
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"]):
+        read({"metadata": {"observed_trainer_funding": True}})
 
 
 def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_path):
@@ -541,7 +868,7 @@ def test_routing_world_rejects_changed_cartridge_before_decode(monkeypatch, tmp_
 @pytest.mark.parametrize("origin", ("training", "development", "unspecified"))
 def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> None:
     module = runpy.run_path(str(SCRIPT))
-    scope = module["_context_scope"](SimpleNamespace(context_origin=origin))
+    scope = module["_context_scope"](SimpleNamespace(context_origin=origin, training_plan=None))
     assert scope == {
         "context_origin": origin,
         "evidence_scope": (
@@ -553,14 +880,21 @@ def test_input_provenance_never_becomes_an_independence_claim(origin: str) -> No
     }
 
 
-def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -> None:
+@pytest.mark.parametrize("retain", [False, True])
+def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch, retain) -> None:
     module = runpy.run_path(str(SCRIPT))
     run_arm = module["_run_arm"]
     namespace = run_arm.__globals__
     events = []
     headers = []
     aborted = []
-    writer = SimpleNamespace(abort=aborted.append)
+    saved, order = [], []
+    def append(stream, record, **kwargs):
+        assert stream == "failure_state" and kwargs == {"durable": True}
+        assert "close" not in order
+        saved.append(record)
+        order.append("saved")
+    writer = SimpleNamespace(abort=aborted.append, append=append)
     sink = SimpleNamespace(
         write_episode_header=lambda **kwargs: headers.append(kwargs),
         record_event=events.append,
@@ -572,6 +906,7 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
             return self
 
         def __exit__(self, *_args):
+            order.append("close")
             return False
 
         def load_state_bytes(self, state):
@@ -600,9 +935,14 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
             raise RuntimeError("provider readiness disappeared")
         except RuntimeError as error:
             kwargs["failure_observer"](error)
+        assert len(saved) == int(retain)
         raise KeyboardInterrupt
 
     monkeypatch.setitem(namespace, "run_bounded_player_episode", player)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state",
+        lambda **kwargs: {"safe_checkpoint": False, "admitted_continuation": False},
+    )
     readiness = SimpleNamespace(
         pair_id="private-failure-wire", decision_limit=4, context_origin="training",
         source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
@@ -614,7 +954,10 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
         profile=SimpleNamespace(profile_sha256="7" * 64),
         private_root=SimpleNamespace(begin_episode=lambda _id: writer),
         challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
-        routed_resource_goals=False, save_terminal_checkpoints=False,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=retain,
+        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256=None,
     )
     with pytest.raises(KeyboardInterrupt):
         run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object())
@@ -626,3 +969,219 @@ def test_live_arm_wires_private_component_failure_before_recovery(monkeypatch) -
     assert events[0].step_index == 7
     assert events[1].payload["private_diagnostic"]["exception_type"] == "KeyboardInterrupt"
     assert aborted == ["paired_arm_failed"]
+    assert order == (["saved", "close"] if retain else ["close"])
+
+
+def _spent_arm_failure_harness(
+    monkeypatch, *, stage, save=True, retention_fault=None, component=False, advance=False,
+):
+    """Exercise the actual arm owner with a fake, spent in-memory game boundary."""
+    from pokemon_red_completion.bounded_player_episode import (
+        BoundedPlayerResult,
+        BoundedPlayerStopReason,
+    )
+
+    module = runpy.run_path(str(SCRIPT))
+    run_arm = module["_run_arm"]
+    namespace = run_arm.__globals__
+    original = ValueError(f"original {stage} failure")
+    order, saved, events = [], [], []
+    observation = _observation(storage=4)
+    result = BoundedPlayerResult(
+        module["CAUSAL_ARM_ID"], BoundedPlayerStopReason.DECISION_LIMIT, (), False,
+    )
+
+    class Emulator:
+        frame_count = 0
+        inputs = 0
+        closed = False
+
+        def __enter__(self):
+            order.append("open")
+            return self
+
+        def __exit__(self, *_args):
+            self.closed = True
+            order.append("close")
+
+        def load_state_bytes(self, state):
+            assert state == b"synthetic-initial-state"
+
+        def spend(self):
+            assert not self.closed
+            self.inputs += 1
+            self.frame_count += 30
+            order.append("input")
+
+    emulator = Emulator()
+
+    def append(stream, document, **kwargs):
+        assert not emulator.closed and kwargs == {"durable": True}
+        if stream == "checkpoint":
+            assert stage == "checkpoint_append"
+            order.append("checkpoint_append_failed")
+            raise original
+        assert stream == "failure_state"
+        if retention_fault == "logging":
+            raise OSError("diagnostic append failed")
+        saved.append(document)
+        order.append("failure_state")
+
+    writer = SimpleNamespace(
+        append=append, abort=lambda _: order.append("abort"),
+        complete=lambda: pytest.fail("failed arm must not complete its trajectory"),
+    )
+    sink = SimpleNamespace(
+        write_episode_header=lambda **_: None, record_event=events.append, finalize=lambda: None,
+    )
+    for name in (
+        "WindowedFrameBudgetController", "PokemonRedStateReader", "FrameSafeExecutor",
+        "HardCompositionActionLimiter", "CountingExecutor", "ViewerGoalTrajectory",
+    ):
+        monkeypatch.setitem(namespace, name, lambda *_a, **_k: SimpleNamespace())
+    monkeypatch.setitem(namespace, "PyBoyAdapter", lambda *_a, **_k: emulator)
+    monkeypatch.setitem(namespace, "EpisodeTrajectorySink", lambda *_a, **_k: sink)
+    monkeypatch.setitem(namespace, "RecordingExecutor", lambda **_: SimpleNamespace(
+        next_step_index=1, recording_failures=(),
+    ))
+    monkeypatch.setitem(namespace, "PokemonRedObservationEncoder", SimpleNamespace(
+        from_state_reader=lambda _: None,
+    ))
+    monkeypatch.setitem(namespace, "build_red_goal_context_runtime", lambda **_: SimpleNamespace())
+    meter = SimpleNamespace(checkpoint=lambda: (emulator.inputs, emulator.frame_count))
+    monkeypatch.setitem(namespace, "CompositionIndependentBudgetMeter", lambda *_a, **_k: meter)
+    monkeypatch.setitem(namespace, "_require_safe_checkpoint_boundary", lambda *_: None)
+
+    class Observer:
+        starting_observation = observation
+
+        def __call__(self):
+            assert emulator.inputs > 0 and not emulator.closed
+            order.append("post_observation")
+            raise original
+
+    monkeypatch.setitem(namespace, "_LiveObserver", lambda **_: Observer())
+
+    def player(**kwargs):
+        emulator.spend()
+        if component:
+            kwargs["failure_observer"](RuntimeError("earlier component failure"))
+            if advance:
+                emulator.spend()
+        if stage == "verifier":
+            order.append("verifier")
+            raise original
+        if stage == "post_observation":
+            kwargs["observe"]()
+        return result
+
+    def capture_terminal(**kwargs):
+        assert not emulator.closed and kwargs["emulator"] is emulator
+        order.append("terminal_capture")
+        if stage == "terminal_capture":
+            raise original
+        assert stage == "checkpoint_append"
+        return {"terminal": True}
+
+    def capture_failure(**kwargs):
+        assert kwargs["emulator"] is emulator and kwargs["meter"] is meter
+        assert not emulator.closed and emulator.inputs > 0
+        order.append("capture_failure")
+        if retention_fault == "capture":
+            raise OSError("diagnostic capture failed")
+        # Return a fresh equal document: de-duplication must not use identity.
+        return {
+            "safe_checkpoint": False, "automatic_resume_authorized": False,
+            "controller_actions": emulator.inputs, "emulator_frames": emulator.frame_count,
+            "state_base64": f"synthetic-state-{emulator.inputs}",
+        }
+
+    monkeypatch.setitem(namespace, "run_bounded_player_episode", player)
+    monkeypatch.setitem(namespace, "capture_red_player_terminal", capture_terminal)
+    monkeypatch.setitem(namespace, "publish_red_player_checkpoint",
+                        lambda *_: pytest.fail("failed arm must not publish a checkpoint"))
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_checkpoint.capture_red_failure_state", capture_failure,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_training_fit.fit_red_player_update",
+        lambda *_a, **_k: pytest.fail("failure retention must not fit a model"),
+    )
+    readiness = SimpleNamespace(
+        pair_id="spent-failure", decision_limit=1, context_origin="training",
+        source_commit="1" * 40, source_bundle_sha256="2" * 64, rom_sha256="3" * 64,
+        model_sha256="4" * 64, rom_path=Path("unused-rom"),
+        capture=SimpleNamespace(
+            state_sha256="5" * 64, envelope_sha256="6" * 64,
+            state_bytes=b"synthetic-initial-state",
+        ),
+        profile=SimpleNamespace(profile_sha256="7" * 64),
+        private_root=SimpleNamespace(begin_episode=lambda _: writer),
+        challenger_arm_id=module["CAUSAL_ARM_ID"], continue_after_progress=True,
+        routed_resource_goals=False, routed_recovery=False, save_terminal_checkpoints=save,
+        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+        quote_resource_costs=False, training_plan=None, continuation=None, completion_dose=False,
+        regional_choice_record_sha256=None,
+    )
+    return SimpleNamespace(
+        run=lambda: run_arm(readiness, arm_id=module["CAUSAL_ARM_ID"], authority=object()),
+        error=original, order=order, saved=saved, emulator=emulator, events=events,
+    )
+
+
+@pytest.mark.parametrize("stage", [
+    "verifier", "post_observation", "terminal_capture", "checkpoint_append",
+])
+def test_spent_arm_failure_retains_current_state_before_emulator_closes(monkeypatch, stage):
+    harness = _spent_arm_failure_harness(monkeypatch, stage=stage)
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert len(harness.saved) == 1
+    assert harness.saved[0]["controller_actions"] == 1
+    assert harness.saved[0]["emulator_frames"] == 30
+    assert harness.saved[0]["safe_checkpoint"] is False
+    assert harness.order.index("input") < harness.order.index("failure_state")
+    assert harness.order.index("failure_state") < harness.order.index("close")
+    assert harness.order[-1] == "abort"
+
+
+@pytest.mark.parametrize("stage", ["verifier", "post_observation"])
+def test_spent_failure_retention_remains_opt_in(monkeypatch, stage):
+    harness = _spent_arm_failure_harness(monkeypatch, stage=stage, save=False)
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert harness.emulator.inputs == 1 and harness.saved == []
+    assert "capture_failure" not in harness.order
+    assert harness.order[-2:] == ["close", "abort"]
+
+
+@pytest.mark.parametrize("retention_fault", ["capture", "logging"])
+def test_retention_failure_notes_but_does_not_replace_original_error(monkeypatch, retention_fault):
+    harness = _spent_arm_failure_harness(
+        monkeypatch, stage="post_observation", retention_fault=retention_fault,
+    )
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert caught.value.__notes__ == ["failure state retention also failed: OSError"]
+    assert harness.saved == []
+    assert harness.order.index("capture_failure") < harness.order.index("close")
+    assert harness.order[-1] == "abort"
+
+
+@pytest.mark.parametrize("advance", [False, True])
+def test_component_snapshot_is_deduplicated_only_when_exact_state_still_matches(
+    monkeypatch, advance,
+):
+    harness = _spent_arm_failure_harness(
+        monkeypatch, stage="post_observation", component=True, advance=advance,
+    )
+    with pytest.raises(ValueError) as caught:
+        harness.run()
+    assert caught.value is harness.error
+    assert len(harness.saved) == (2 if advance else 1)
+    assert [item["controller_actions"] for item in harness.saved] == ([1, 2] if advance else [1])
+    assert harness.order.count("capture_failure") == 2
+    assert harness.order[-2:] == ["close", "abort"]

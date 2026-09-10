@@ -1,0 +1,141 @@
+{
+  "schema": "pokemon.red.resource-recovery-development-result.v1",
+  "session": "2026-09-08-resource-recovery",
+  "status": "recovered",
+  "source_commit": "413684040bf0ef6b039a550622fccc2eb5a08360",
+  "source_bundle_sha256": "91ffddf91217938f9f2fcd3f5347fb2094d138caa8963de56a1eff63d280cefa",
+  "model_sha256": "75408d6f80c8dc3b39c3089ec075bd34b256de65bdd1efbf531099bb8cca8ec3",
+  "model_queries": 0,
+  "new_training_examples": 0,
+  "authority_promotions": 0,
+  "original_evolution_completed": false,
+  "original_choice_retried": false,
+  "checkpoint": {
+    "automatic_resume_authorized": false,
+    "context_origin": "training",
+    "independent_root": false,
+    "kind": "red_bounded_player_checkpoint",
+    "manifest_sha256": "2204914ff793ca5cb597618b2056fb4184ff1ef2fb49c70b989cbf76cb908ae8",
+    "record_id": "rpc-4f716d304e285fe217c894c3c705cc43f3236cbaabf520ba23893dd9ba3894a2",
+    "record_sha256": "215d7b49d7efcd7c1118cd0f5f22e0f358a9c0d0880950fb071efb0afe86f875",
+    "schema": "private-sealed-record-summary-v1",
+    "state_sha256": "66a30beb0aa8780f71a0858789923dc0cd7f4549a439b40f68adc00be2cabe24",
+    "total_bytes": 231007,
+    "training_example": false,
+    "trajectory_manifest_sha256": "4a9328e74b3d1a38c15d22e86e555e292fca0dc9f642b9968b4a00d4d980a77b"
+  },
+  "recovery": {
+    "authority_decisions": 0,
+    "authority_id": "deterministic-failure-recovery",
+    "completion_satisfied": false,
+    "decisions": 0,
+    "failure_origin": {
+      "actions": 55,
+      "episode_id": "red-retained-ekans-center-recovery-20260908",
+      "frames": 1632,
+      "manifest_sha256": "4ff59eeefb7816ba5308d975c1e648ad2214ecabe22698f4fd0baef96a04bf66",
+      "state_sha256": "8d174e04b55f5952e14acfcde0438caffb6ed3a8883543628e730d8b543b16c2"
+    },
+    "independent_root": false,
+    "original_choice_retried": false,
+    "recovery_attempts": 1,
+    "schema": "pokemon.red.forced-failure-recovery-terminal.v1",
+    "status": "durable_terminal",
+    "steps": [],
+    "total_actions": 30,
+    "total_frames": 2160,
+    "training_examples": 0
+  },
+  "before": {
+    "capture_item_count": 2,
+    "collection": {
+      "level_cap": 0,
+      "level_cap_target": 120,
+      "living": 26,
+      "living_target": 120,
+      "registered": 31,
+      "registered_target": 124
+    },
+    "free_storage_slots": 219,
+    "immediate_capture_slots": 18,
+    "input_ready": true,
+    "party_size": 6,
+    "private_path_fields": 0,
+    "raw_address_fields": 0,
+    "recovery_item_count": 17,
+    "schema": "pokemon.red.goal-observation.v1",
+    "situation": {
+      "need_pressures": {
+        "collection_progress": 0.7833333333333333,
+        "control_recovery": 0,
+        "evolution_progress": 0.6818181818181819,
+        "resources": 0.8,
+        "safety": 0,
+        "storage_capacity": 0,
+        "story_progress": 0.16666666666666663,
+        "team_readiness": 0.2666666666666667,
+        "world_knowledge": 0.3306451612903226
+      },
+      "schema": "pokemon.core.goal-situation.v1"
+    },
+    "story": {
+      "completed": 30,
+      "target": 36
+    }
+  },
+  "after": {
+    "capture_item_count": 2,
+    "collection": {
+      "level_cap": 0,
+      "level_cap_target": 120,
+      "living": 26,
+      "living_target": 120,
+      "registered": 31,
+      "registered_target": 124
+    },
+    "free_storage_slots": 219,
+    "immediate_capture_slots": 18,
+    "input_ready": true,
+    "party_size": 6,
+    "private_path_fields": 0,
+    "raw_address_fields": 0,
+    "recovery_item_count": 17,
+    "schema": "pokemon.red.goal-observation.v1",
+    "situation": {
+      "need_pressures": {
+        "collection_progress": 0.7833333333333333,
+        "control_recovery": 0,
+        "evolution_progress": 0.6818181818181819,
+        "resources": 0.8,
+        "safety": 0,
+        "storage_capacity": 0,
+        "story_progress": 0.16666666666666663,
+        "team_readiness": 0.2666666666666667,
+        "world_knowledge": 0.3306451612903226
+      },
+      "schema": "pokemon.core.goal-situation.v1"
+    },
+    "story": {
+      "completed": 30,
+      "target": 36
+    }
+  },
+  "chain": {
+    "original_failure": {
+      "actions": 2751,
+      "frames": 217562,
+      "manifest_sha256": "70101e05aca67e5e6f90f274148bcdeb903e0092162738a53a746d6b4cadcf7f"
+    },
+    "support_attempts": 3,
+    "failed_support_attempts": 2,
+    "total_support_actions": 213,
+    "total_support_frames": 14868,
+    "silent_rewinds": 0,
+    "undeclared_specimen_losses": 0
+  },
+  "limitations": [
+    "Forced deterministic support, not a model-selected goal or fitted example.",
+    "Same-lineage Red development, not independent evaluation or transfer.",
+    "Ekans development and Phase 3 sustained-play exit remain unfinished."
+  ]
+}

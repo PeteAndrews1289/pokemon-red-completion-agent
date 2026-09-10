@@ -9,7 +9,7 @@ meter.  It contains no teacher and performs no model-based selection.
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.goal_manager import (
@@ -78,14 +78,7 @@ def _retain_executor_failure(
             return GoalVerification.failed(GoalFailureReason.BINDING_FAILED)
         return binding.verify(report)
 
-    return ExecutableGoalBinding(
-        binding_ref=binding.binding_ref,
-        kind=binding.kind,
-        estimated_effort=binding.estimated_effort,
-        estimated_risk=binding.estimated_risk,
-        execute=execute,
-        verify=verify,
-    )
+    return replace(binding, execute=execute, verify=verify)
 
 
 def _retaining_binding_set(

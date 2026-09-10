@@ -6,6 +6,7 @@ from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_trainer_sight import (
     TrainerFacing,
     TrainerHeader,
+    static_trainer_sight_zones,
     trainer_headers,
     trainer_sight_zones,
 )
@@ -18,6 +19,38 @@ MAP_HEADER = 0x4100
 OBJECTS = 0x4200
 SCRIPT = 0x4300
 TRAINERS = 0x4400
+
+
+def test_static_inventory_is_map_qualified_and_never_claims_visibility():
+    headers = (TrainerHeader(4, 2, 3, 10, 0), TrainerHeader(7, 2, 1, 19, 0))
+    events = (
+        MapObjectEvent(4, 6, 3, 5, 0xFF, 0xD3, 0x42, 2, 201, 4),
+        MapObjectEvent(7, 6, 9, 2, 0xFF, 0xD0, 0x42, 2, 212, 8),
+    )
+    first, second = static_trainer_sight_zones(headers, events, bytes((0, 4, 0)))
+    assert (first.map_id, first.at, first.trainer_class, first.trainer_set) == (4, (3, 5), 201, 4)
+    assert first.defeated and not first.visible and first.facing is TrainerFacing.RIGHT
+    assert (second.map_id, second.at, second.trainer_class, second.trainer_set) == (
+        7,
+        (9, 2),
+        212,
+        8,
+    )
+    assert not second.defeated and not second.visible and second.lane == ((10, 2),)
+
+
+def test_static_inventory_rejects_unknown_bits_missing_or_duplicate_bindings():
+    header = TrainerHeader(7, 2, 1, 19, 0)
+    event = MapObjectEvent(7, 6, 9, 2, 0xFF, 0xD0, 0x42, 2, 212, 8)
+    for headers, events, flags in (
+        ((header,), (event,), None),
+        ((header,), (event,), b"\x00\x00"),
+        ((header,), (), b"\x00\x00\x00"),
+        ((header, header), (event,), b"\x00\x00\x00"),
+        ((header,), (event, event), b"\x00\x00\x00"),
+    ):
+        with pytest.raises(CartridgeReadError):
+            static_trainer_sight_zones(headers, events, flags)
 
 
 def trainer_cartridge() -> bytearray:
@@ -85,6 +118,38 @@ def test_object_and_header_reads_join_independent_cartridge_structures() -> None
     )
 
 
+@pytest.mark.parametrize("slot,legacy,accurate", [(7, 15, 15), (8, 8, 16), (15, 15, 23)])
+def test_full_trainer_bit_offset_carries_without_changing_legacy_default(
+    monkeypatch, slot, legacy, accurate
+):
+    import pokemon_red_completion.gen1_trainer_sight as sight
+
+    rom = trainer_cartridge()
+    # A literal adjusted event pointer D748 and full bit offset from the header.
+    rom[TRAINERS : TRAINERS + 13] = bytes(
+        (slot, 0x20, 0x48, 0xD7, 0x10, 0x40, 0x20, 0x40, 0x30, 0x40, 0x40, 0x40, 0xFF)
+    )
+    event = MapObjectEvent(0, 6, 5, 7, 0xFF, 0xD3, 0x41, slot, 201, 9)
+    monkeypatch.setattr(sight, "map_object_events", lambda *_: (event,))
+    assert trainer_headers(bytes(rom), {0})[0].event_flag == legacy
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=False)[0].event_flag == legacy
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=True)[0].event_flag == accurate
+
+
+def test_full_event_offset_rejects_carry_beyond_event_region(monkeypatch):
+    import pokemon_red_completion.gen1_trainer_sight as sight
+
+    rom = trainer_cartridge()
+    rom[TRAINERS : TRAINERS + 13] = bytes(
+        (8, 0x20, 0x85, 0xD8, 0x10, 0x40, 0x20, 0x40, 0x30, 0x40, 0x40, 0x40, 0xFF)
+    )
+    event = MapObjectEvent(0, 6, 5, 7, 0xFF, 0xD3, 0x41, 8, 201, 9)
+    monkeypatch.setattr(sight, "map_object_events", lambda *_: (event,))
+    assert trainer_headers(bytes(rom), {0})[0].event_flag == 2544
+    with pytest.raises(CartridgeReadError, match="0 validated"):
+        trainer_headers(bytes(rom), {0}, full_event_offsets=True)
+
+
 def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
     rom = trainer_cartridge()
     for direction_offset in (8, 16, 24):
@@ -93,10 +158,37 @@ def test_scripted_trainer_objects_do_not_require_sight_headers() -> None:
     assert trainer_headers(bytes(rom), {0}) == ()
 
 
+def test_mixed_table_decodes_interaction_row_before_filtering_sight_headers() -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2  # object two is interaction-only, not fixed-facing
+    rom[TRAINERS + 1] = 0  # its valid header has no engage distance
+    assert trainer_headers(bytes(rom), {0}) == (TrainerHeader(0, 3, 4, 19, 0x440C),)
+    assert trainer_headers(bytes(rom), {0}, full_event_offsets=True) == (
+        TrainerHeader(0, 3, 4, 19, 0x440C),
+    )
+
+
+def test_mixed_table_never_silently_drops_a_nonfacing_sight_hazard() -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2
+    with pytest.raises(CartridgeReadError, match="nonzero sight"):
+        trainer_headers(bytes(rom), {0})
+
+
+@pytest.mark.parametrize('offset,value', [(2, 0), (5, 0), (24, 0)])
+def test_mixed_table_still_validates_the_omitted_row_and_sentinel(offset, value) -> None:
+    rom = trainer_cartridge()
+    rom[OBJECTS + 16] = 2
+    rom[TRAINERS + 1] = 0
+    rom[TRAINERS + offset] = value
+    with pytest.raises(CartridgeReadError, match="0 validated"):
+        trainer_headers(bytes(rom), {0})
+
+
 def test_ordinary_facing_interaction_trainer_without_a_header_table_has_no_lane() -> None:
     rom = trainer_cartridge()
     rom[SCRIPT + 4 : SCRIPT + 6] = (0x4500).to_bytes(2, "little")
-    rom[0x4500 : 0x4508] = bytes((0x18, 0x4C, 0x19, 0x4C, 0x69, 0x4C, 0xC9, 0xFA))
+    rom[0x4500:0x4508] = bytes((0x18, 0x4C, 0x19, 0x4C, 0x69, 0x4C, 0xC9, 0xFA))
 
     assert trainer_headers(bytes(rom), {0}) == ()
 

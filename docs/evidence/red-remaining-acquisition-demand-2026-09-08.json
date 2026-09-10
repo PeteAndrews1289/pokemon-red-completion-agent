@@ -1,0 +1,104 @@
+{
+  "schema": "pokemon.red.remaining-acquisition-demand-audit.v1",
+  "status": "engineering_complete_choice_breadth_blocked",
+  "source_commit": "d63858bf64948479d6e765e1de356bc6e40ef86c",
+  "source_bundle_sha256": "6ac1c9c121f652647a0d305e4f020e0ac1f32b66227ce87896f34a42a509d08f",
+  "retained_checkpoint_sha256": "c25d56166a3f586118052c9f6bfd8f047a8a8f52c1b00254165e40d601b77786",
+  "retained_model_sha256": "6d52dcc464415022e1d374387503ae9d47ab0f155bb4904d7748be097d5bcf4f",
+  "classification": "Engineering and action-free saved-state qualification; no new gameplay or fitting.",
+  "mission": "Restore useful model-directed living-collection choices without unnecessary captures or another teacher.",
+  "validation": {
+    "focused_tests_passed": 282,
+    "exhaustive_inventory_cases": 192,
+    "lint": "passed",
+    "changed_source_typecheck_files": 4,
+    "historical_checkpoint_restored_exactly": true,
+    "parent_remaining_demand": false,
+    "prospective_remaining_demand": true
+  },
+  "demand_falsifier": {
+    "species_ref": "pokemon:national:056",
+    "retained_base": 1,
+    "retained_evolved": 1,
+    "old_required_base": 2,
+    "new_required_base": 1,
+    "old_missing": 1,
+    "new_missing": 0
+  },
+  "saved_collection": {
+    "living_species": 26,
+    "registered_species": 31,
+    "total_specimens": 26,
+    "required_specimens_remaining": 94,
+    "healthy_party_members": 6,
+    "capture_items": 4,
+    "currency": 209
+  },
+  "learning": {
+    "settled_examples": 66,
+    "successful_examples": 27,
+    "distinct_selected_feature_rows": 56,
+    "native_episodes": 45,
+    "regional_choices": 15,
+    "new_examples": 0,
+    "new_fits": 0,
+    "prior_inventory_authenticated": true,
+    "final_model_post_fit_gameplay": false
+  },
+  "actual_menu": {
+    "candidate_sources": [
+      "wild:Route24:grass"
+    ],
+    "available_goal_kinds": [
+      "acquire_species"
+    ],
+    "status": "ready_for_forced_bridge",
+    "model_queries": 0,
+    "episode_created": false
+  },
+  "alternative_inventory": {
+    "missing_level_evolution_targets": 8,
+    "surplus_precursors": 0,
+    "canonical_target_methods": "All eight are assigned direct wild sources, omitting their cartridge-confirmed evolution alternatives.",
+    "examples": [
+      {
+        "source": "Pidgey",
+        "target": "Pidgeotto",
+        "evolution_level": 18,
+        "precursor_source": "wild:Route1:grass",
+        "canonical_target_source": "wild:Route14:grass"
+      },
+      {
+        "source": "Rattata",
+        "target": "Raticate",
+        "evolution_level": 20,
+        "precursor_source": "wild:Route1:grass",
+        "canonical_target_source": "wild:Route16:grass"
+      },
+      {
+        "source": "Drowzee",
+        "target": "Hypno",
+        "evolution_level": 26,
+        "precursor_source": "wild:Route11:grass",
+        "canonical_target_source": "wild:CeruleanCave1F:grass"
+      }
+    ],
+    "alternative_execution": "not qualified"
+  },
+  "boundaries": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "new_episodes": 0,
+    "new_outcomes": 0,
+    "retries": 0,
+    "resets": 0,
+    "sealed_red_accesses": 0,
+    "crystal_accesses": 0,
+    "full_replays": 0,
+    "independent_evaluation": false,
+    "authority_promotions": 0
+  },
+  "next": "Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and evolution skills. Expose genuine reachable choices, retain one played outcome and fit; no artificial targets or replay.",
+  "phase": "sustained-red"
+}

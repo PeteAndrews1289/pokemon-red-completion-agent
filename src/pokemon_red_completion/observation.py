@@ -1,12 +1,14 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from enum import IntEnum, IntFlag, StrEnum
 from typing import Protocol, runtime_checkable
 
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.encounters import encounter_log_path, is_wild_encounter
+from pokemon_red_completion.red_battle_catalog import RED_BATTLE_CATALOG
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
 from pokemon_red_completion.route import HALL_OF_FAME_FACT
 
@@ -50,27 +52,42 @@ class RamAddress(IntEnum):
     PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
     ENEMY_DEFENSE_STAGE = 0xCD2F
+    ENEMY_UNMODIFIED_LEVEL = 0xCD23
+    ENEMY_UNMODIFIED_ATTACK = 0xCD26
+    ENEMY_UNMODIFIED_SPECIAL = 0xCD2C
     ENGAGED_TRAINER_CLASS = 0xCD2D
     ENGAGED_TRAINER_SET = 0xCD2E
     SIMULATED_JOYPAD_INDEX = 0xCD38
     MISC_FLAGS = 0xCD60
     JOY_IGNORE = 0xCD6B
     BATTLE_RESULT = 0xCF0B
+    TRAINER_TEXT_SPRITE_INDEX = 0xCF13
     SHOP_SELECTED_ITEM = 0xCF91
     SHOP_QUANTITY = 0xCF96
     WALK_COUNTER = 0xCFC5
     TILE_IN_FRONT_OF_PLAYER = 0xCFC6
+    ENEMY_SPECIES_2 = 0xCFD8
     ENEMY_SPECIES = 0xCFE5
     ENEMY_HP = 0xCFE6
+    ENEMY_STATUS = 0xCFE9
+    ENEMY_TYPE_1 = 0xCFEA
+    ENEMY_TYPE_2 = 0xCFEB
+    ENEMY_MOVES = 0xCFED
     ENEMY_MON_PARTY_POS = 0xCFE8
     ENEMY_LEVEL = 0xCFF3
     ENEMY_MAX_HP = 0xCFF4
+    ENEMY_ATTACK = 0xCFF6
+    ENEMY_SPEED = 0xCFFA
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
+    BATTLE_MON_DEFENSE = 0xD027
+    BATTLE_MON_ATTACK = 0xD025
     TRAINER_CLASS = 0xD031
     IS_IN_BATTLE = 0xD057
     CURRENT_OPPONENT = 0xD059
     ENEMY_BATTLE_STATUS_1 = 0xD067
+    ENEMY_BATTLE_STATUS_3 = 0xD069
+    PLAYER_BATTLE_STATUS_1 = 0xD062
     PLAYER_DISABLED_MOVE = 0xD06D
     GYM_LEADER_NUMBER = 0xD05C
     TRAINER_NUMBER = 0xD05D
@@ -141,18 +158,25 @@ class RamAddress(IntEnum):
     BILLS_HOUSE_SCRIPT = 0xD661
     VERMILION_CITY_SCRIPT = 0xD62A
     SS_ANNE_2F_SCRIPT = 0xD665
+    HALL_OF_FAME_SCRIPT = 0xD64B
+    CHAMPIONS_ROOM_SCRIPT = 0xD64C
+    RIVAL_STARTER = 0xD715
     STATUS_FLAGS_1 = 0xD728
     BEAT_GYM_FLAGS = 0xD72A
+    STATUS_FLAGS_3 = 0xD72D
+    STATUS_FLAGS_4 = 0xD72E
     STATUS_FLAGS_5 = 0xD730
     STATUS_FLAGS_6 = 0xD732
     MOVEMENT_FLAGS = 0xD736
     WALK_BIKE_SURF_STATE = 0xD700
+    TOWN_VISITED_FLAGS = 0xD70B
     LAST_BLACKOUT_MAP = 0xD719
     NPC_TRADE_FLAGS = 0xD737
     VERMILION_GYM_FIRST_LOCK = 0xD743
     VERMILION_GYM_SECOND_LOCK = 0xD744
     EVENT_FLAGS = 0xD747
     SAFARI_STEPS = 0xD70D
+    TRAINER_HEADER_POINTER = 0xDA30
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
     CURRENT_BOX_COUNT = 0xDA80
@@ -238,6 +262,7 @@ class MapId(IntEnum):
     ROCK_TUNNEL_1F = 0x52
     LAVENDER_POKECENTER = 0x8D
     FUCHSIA_POKECENTER = 0x9A
+    FUCHSIA_MART = 0x98
     WARDENS_HOUSE = 0x9B
     FUCHSIA_GYM = 0x9D
     SAFARI_ZONE_GATE = 0x9C
@@ -580,6 +605,7 @@ class EventFlag(IntEnum):
     BEAT_LORELEI = 0x8E1
     BEAT_BRUNO = 0x8E9
     BEAT_AGATHA = 0x8F1
+    BEAT_LANCES_ROOM_TRAINER = 0x8F9
     BEAT_LANCE = 0x8FE
     BEAT_CHAMPION_RIVAL = 0x901
     BEAT_ROCK_TUNNEL_2_TRAINER_0 = 0x9B1
@@ -898,6 +924,61 @@ RED_BOXES_PER_SRAM_BANK = 6
 RED_BOX_SRAM_BASE = 0xA000
 RED_BOX_SRAM_BANKS = (2, 3)
 RED_BOX_CHANGED_MASK = 0x80
+ENEMY_TRANSFORMED_MASK = 0x08
+
+GEN1_INTERNAL_SPECIES_IDS = frozenset(RED_BATTLE_CATALOG.species_ids)
+
+GEN1_TYPE_NAMES_BY_CODE: Mapping[int, str] = {
+    0: "normal",
+    1: "fighting",
+    2: "flying",
+    3: "poison",
+    4: "ground",
+    5: "rock",
+    7: "bug",
+    8: "ghost",
+    20: "fire",
+    21: "water",
+    22: "grass",
+    23: "electric",
+    24: "psychic",
+    25: "ice",
+    26: "dragon",
+}
+GEN1_TYPE_CODES = frozenset(GEN1_TYPE_NAMES_BY_CODE.keys())
+
+
+RED_FLY_TOWN_NAMES = (
+    "PALLET TOWN",
+    "VIRIDIAN CITY",
+    "PEWTER CITY",
+    "CERULEAN CITY",
+    "LAVENDER TOWN",
+    "VERMILION CITY",
+    "CELADON CITY",
+    "FUCHSIA CITY",
+    "CINNABAR ISLAND",
+    "INDIGO PLATEAU",
+    "SAFFRON CITY",
+)
+
+
+@dataclass(frozen=True, slots=True)
+class RedFlyMenuState:
+    """Observed Fly destination, not the START/party menu's stale cursor."""
+
+    available_maps: tuple[int, ...]
+    selected_map: int
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.available_maps, tuple)
+            or any(type(m) is not int or not 0 <= m < 11 for m in self.available_maps)
+            or self.available_maps != tuple(sorted(set(self.available_maps)))
+            or type(self.selected_map) is not int
+            or self.selected_map not in self.available_maps
+        ):
+            raise ValueError("Fly menu requires distinct visited towns and an observed selection")
 
 
 @dataclass(frozen=True, slots=True)
@@ -938,6 +1019,35 @@ class RedCurrentBoxState:
             raise ValueError("box species IDs must be positive integers")
         if any(type(level) is not int or not 1 <= level <= 100 for level in self.levels):
             raise ValueError("box levels must be between 1 and 100")
+
+
+@dataclass(frozen=True, slots=True)
+class RedBoxMoveMember:
+    """Action-free current-box move inventory; not an active battle member."""
+
+    box_slot: int
+    species_id: int
+    level: int
+    moves: tuple[int, ...]
+    pp: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if type(self.box_slot) is not int or not 1 <= self.box_slot <= RED_BOX_CAPACITY:
+            raise ValueError("boxed move inventory slot differs")
+        if type(self.species_id) is not int or not 1 <= self.species_id <= 255:
+            raise ValueError("boxed move inventory species differs")
+        if type(self.level) is not int or not 1 <= self.level <= 100:
+            raise ValueError("boxed move inventory level differs")
+        if (
+            not isinstance(self.moves, tuple)
+            or not isinstance(self.pp, tuple)
+            or len(self.moves) != 4
+            or len(self.pp) != 4
+            or any(type(move) is not int or not 0 <= move <= 165 for move in self.moves)
+            or any(type(pp) is not int or not 0 <= pp <= 63 for pp in self.pp)
+            or any(move == 0 and pp != 0 for move, pp in zip(self.moves, self.pp, strict=True))
+        ):
+            raise ValueError("boxed move inventory moves/PP differ")
 
 
 @dataclass(frozen=True, slots=True)
@@ -1295,6 +1405,17 @@ class InputReadiness:
             and not bool(self.movement_flags & EXITING_DOOR_MOVEMENT_MASK)
             and self.walk_counter == 0
         )
+
+
+@dataclass(frozen=True, slots=True)
+class FinalLeagueScene:
+    """Revision-adapter scene state; no controller ownership or victory inference."""
+
+    map_id: int
+    script_stage: int
+    rival_starter: int
+    queued_movement: int
+    npc_moving: bool
 
 
 class VisibleMapObjectError(ValueError):
@@ -3520,6 +3641,64 @@ class SurgeProgressTracker:
         return state.phase
 
 
+@dataclass(frozen=True, slots=True)
+class TrainerDamageObservation:
+    """Adapter-only inputs for a bounded ordinary incoming attack calculation.
+
+    Defense rows are (current defense, current special, base defense, base special).
+    Reserve rows use party stats; badge boosts are not credited. These are not
+    new model features or a replacement historical snapshot schema.
+    """
+
+    raw: RawGameState
+    moves: tuple[int, ...]
+    enemy_types: tuple[str, ...]
+    enemy_attack: int
+    enemy_special: int
+    enemy_base_attack: int
+    enemy_base_special: int
+    defenses: tuple[tuple[int, int, int, int], ...]
+    party_types: tuple[tuple[str, ...], ...]
+    player_confused: bool = False
+    active_self_hit_stats: tuple[int, int] | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class WildCaptureIdentity:
+    """Privileged wild capture identity snapshot separating original from transformed form."""
+
+    original_species_id: int
+    displayed_species_id: int
+    transformed: bool
+    type_ids: tuple[int, ...]
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.original_species_id) is not int
+            or self.original_species_id not in GEN1_INTERNAL_SPECIES_IDS
+        ):
+            raise ValueError(f"invalid original species identifier: {self.original_species_id}")
+        if (
+            type(self.displayed_species_id) is not int
+            or self.displayed_species_id not in GEN1_INTERNAL_SPECIES_IDS
+        ):
+            raise ValueError(f"invalid displayed species identifier: {self.displayed_species_id}")
+        if not isinstance(self.transformed, bool):
+            raise TypeError("transformed must be a boolean")
+        if (
+            not isinstance(self.type_ids, tuple)
+            or len(self.type_ids) != 2
+            or any(type(t) is not int or t not in GEN1_TYPE_CODES for t in self.type_ids)
+        ):
+            raise ValueError(f"invalid type IDs: {self.type_ids}")
+        if not self.transformed and self.original_species_id != self.displayed_species_id:
+            raise ValueError("nontransformed wild capture identity species mismatch")
+
+    @property
+    def type_names(self) -> tuple[str, ...]:
+        return tuple(dict.fromkeys(GEN1_TYPE_NAMES_BY_CODE[code] for code in self.type_ids))
+
+
 class PokemonRedStateReader:
     def __init__(self, memory: ReadOnlyMemory) -> None:
         self._memory = memory
@@ -3771,6 +3950,253 @@ class PokemonRedStateReader:
             levels=levels,
         )
 
+    def read_enemy_capture_status(self) -> int | None:
+        """Read target status only in a live wild battle; stale RAM is unknown.
+
+        Pinned pret/pokered macros/ram.asm battle_struct: species at offset0,
+        HP at1, party/box position at3, status at4. No existing snapshot field or
+        checkpoint serialization changes.
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        return self._memory.read_u8(RamAddress.ENEMY_STATUS)
+
+    def read_enemy_capture_moves(self) -> tuple[int, ...] | None:
+        """Privileged adapter observation, not inference from species identity.
+
+        Pinned battle_struct stores four move IDs at species+8. Stale field or
+        trainer data is not a wild capture opportunity. Historical snapshots stay unchanged.
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        moves = tuple(self._memory.read_u8(int(RamAddress.ENEMY_MOVES) + i) for i in range(4))
+        if not any(moves) or any(not 0 <= move <= 165 for move in moves):
+            raise SemanticStateError("wild capture target move inventory differs")
+        return moves
+
+    def read_wild_capture_identity(self) -> WildCaptureIdentity | None:
+        """Privileged wild encounter identity separating original from battle form.
+
+        Returns None if not in a live wild encounter or enemy HP is zero or less.
+        Raw RAM addresses stay strictly inside this observation adapter.
+        Uses pret/pokered ram/wram.asm pinned locations:
+        - wEnemyMonSpecies2 at 0xCFD8 (enemy battle struct minus 13)
+        - displayed species at 0xCFE5
+        - live types at 0xCFEA / 0xCFEB
+        - transformed flag at 0xD069 (wEnemyBattleStatus3 bit 3, mask 0x08).
+        """
+        raw = self.read()
+        if raw.battle_state != 1 or raw.enemy_hp is None or raw.enemy_hp <= 0:
+            return None
+        original_species_id = self._memory.read_u8(RamAddress.ENEMY_SPECIES_2)
+        displayed_species_id = self._memory.read_u8(RamAddress.ENEMY_SPECIES)
+        type_1 = self._memory.read_u8(RamAddress.ENEMY_TYPE_1)
+        type_2 = self._memory.read_u8(RamAddress.ENEMY_TYPE_2)
+        status_3 = self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_3)
+        transformed = bool(status_3 & ENEMY_TRANSFORMED_MASK)
+        try:
+            return WildCaptureIdentity(
+                original_species_id=original_species_id,
+                displayed_species_id=displayed_species_id,
+                transformed=transformed,
+                type_ids=(type_1, type_2),
+            )
+        except (ValueError, TypeError) as error:
+            raise SemanticStateError(f"wild capture identity differs: {error}") from error
+
+    def read_trainer_entry_moves(self, expected: RawGameState) -> tuple[int, ...] | None:
+        """Read incoming moves only at the same live trainer MAIN boundary.
+
+        This privileged observation uses the pinned battle_struct move array,
+        not a species learnset or the trainer's previously defeated member.
+        It does not alter historical snapshot schemas or advance the emulator.
+        """
+        before = self.read()
+        if (
+            before != expected
+            or before.battle_state != 2
+            or (before.enemy_hp or 0) <= 0
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
+            return None
+        moves = tuple(self._memory.read_u8(int(RamAddress.ENEMY_MOVES) + i) for i in range(4))
+        if not any(moves) or any(not 0 <= move <= 165 for move in moves):
+            raise SemanticStateError("trainer entry move inventory differs")
+        if (
+            self.read() != before
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
+            raise SemanticStateError("trainer entry observation changed while reading")
+        return moves
+
+    def read_trainer_mirror_switch_ready(self, expected: RawGameState) -> bool:
+        """A fresh send-out clears Mirror Move, but not an already copied move.
+
+        Reject committed multi-turn, recharge/rage or transformed opponents.
+        This qualifies only the incoming switch reply, never an item/attack turn.
+        """
+        moves = self.read_trainer_entry_moves(expected)
+        if moves is None:
+            return False
+        def flags() -> tuple[int, ...]:
+            return tuple(self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i)
+                         for i in range(3))
+        before = flags()
+        if self.read_trainer_entry_moves(expected) != moves or flags() != before:
+            raise SemanticStateError("Mirror Move commitment changed while reading")
+        return not (before[0] & 0x77 or before[1] & 0x60 or before[2] & 0x08)
+
+    def read_trainer_entry_speeds(
+        self, expected: RawGameState,
+    ) -> tuple[int, tuple[int, ...]] | None:
+        """Current enemy speed and conservative post-switch party speeds.
+
+        Pinned party_struct speed offset40 is restored on send-out, before
+        nonnegative badge boosts. Only healthy reserves may use this bound.
+        No species/base-speed or level inference, inputs, or snapshot edits.
+        """
+        before = self.read()
+        if (
+            before != expected or before.battle_state != 2 or (before.enemy_hp or 0) <= 0
+            or type(before.party_count) is not int or not 1 <= before.party_count <= 6
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
+            return None
+        def values() -> tuple[int, tuple[int, ...]]:
+            return self._read_u16_be(RamAddress.ENEMY_SPEED), tuple(
+                self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 40)
+                for index in range(before.party_count or 0)
+            )
+        speeds = values()
+        if not 1 <= speeds[0] <= 1023 or any(not 1 <= speed <= 999 for speed in speeds[1]):
+            raise SemanticStateError("trainer entry speed domain differs")
+        if (self.read() != before or values() != speeds
+                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+            raise SemanticStateError("trainer entry speeds changed while reading")
+        return speeds
+
+    def read_trainer_damage_observation(self, expected: RawGameState) -> TrainerDamageObservation:
+        """Observe real stats and types, including unmodified critical-hit stats.
+
+        Pinned wram.asm stores the enemy's unmodified stats before its stat mods;
+        party_struct stores Defense/Special at offsets38/42. Battle structs store
+        live types at5/6. Reject transformed, seeded, toxic or committed-player
+        states rather than pretending this ordinary-turn model covers them.
+        """
+        moves = self.read_trainer_entry_moves(expected)
+        if moves is None or expected.party_count is None or expected.active_party_index is None:
+            raise SemanticStateError("trainer damage requires an unchanged MAIN boundary")
+        if not 0 <= expected.active_party_index < expected.party_count <= 6:
+            raise SemanticStateError("trainer damage party indices differ")
+        player_flags = tuple(
+            self._memory.read_u8(
+                int(RamAddress.PLAYER_BATTLE_STATUS_1) + i,
+            )
+            for i in range(3)
+        )
+        enemy_flags3 = self._memory.read_u8(RamAddress.ENEMY_BATTLE_STATUS_3)
+        if (
+            player_flags[0] & 0x7F
+            or player_flags[1] & 0xF0
+            or player_flags[2] & 0x09
+            or enemy_flags3 & ENEMY_TRANSFORMED_MASK
+        ):
+            raise SemanticStateError("trainer damage has unsupported volatile mechanics")
+        if self._memory.read_u8(RamAddress.ENEMY_UNMODIFIED_LEVEL) != expected.enemy_level:
+            raise SemanticStateError("trainer damage unmodified opponent level differs")
+
+        def read_types(base: int) -> tuple[str, ...]:
+            try:
+                return tuple(
+                    dict.fromkeys(
+                        GEN1_TYPE_NAMES_BY_CODE[self._memory.read_u8(base + i)] for i in (5, 6)
+                    )
+                )
+            except KeyError as error:
+                raise SemanticStateError("trainer damage has unsupported type bytes") from error
+
+        defenses = []
+        party_types = []
+        for index in range(expected.party_count):
+            base = int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE
+            defense, special = self._read_u16_be(base + 38), self._read_u16_be(base + 42)
+            current_defense, current_special = defense, special
+            if index == expected.active_party_index:
+                current_defense = min(defense, self._read_u16_be(RamAddress.BATTLE_MON_DEFENSE))
+                current_special = min(special, self._read_u16_be(RamAddress.BATTLE_MON_SPECIAL))
+            defenses.append((current_defense, current_special, defense, special))
+            party_types.append(read_types(base))
+        result = TrainerDamageObservation(
+            expected,
+            moves,
+            read_types(int(RamAddress.ENEMY_SPECIES)),
+            self._read_u16_be(RamAddress.ENEMY_ATTACK),
+            self._read_u16_be(RamAddress.ENEMY_SPECIAL),
+            self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_ATTACK),
+            self._read_u16_be(RamAddress.ENEMY_UNMODIFIED_SPECIAL),
+            tuple(defenses),
+            tuple(party_types),
+            bool(player_flags[0] & 0x80),
+            (
+                self._read_u16_be(RamAddress.BATTLE_MON_ATTACK),
+                self._read_u16_be(RamAddress.BATTLE_MON_DEFENSE)
+                * (2 if enemy_flags3 & 0x04 else 1),
+            ),
+        )
+        if (
+            self.read_trainer_entry_moves(expected) != moves
+            or tuple(
+                self._memory.read_u8(int(RamAddress.PLAYER_BATTLE_STATUS_1) + i) for i in range(3)
+            )
+            != player_flags
+            or self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + 2) != enemy_flags3
+        ):
+            raise SemanticStateError("trainer damage boundary changed while reading")
+        return result
+
+    def read_current_box_move_members(self) -> tuple[RedBoxMoveMember, ...]:
+        """Read moves/PP with the already-verified 33-byte boxed structure.
+
+        Pinned box_struct uses moves at8 and PP at29, shared with party_struct.
+        Cross-check membership before and after; never infer usable party HP
+        or a future withdrawal from this storage-only inventory.
+        """
+        before = self.read_current_box_state()
+        members = tuple(
+            RedBoxMoveMember(
+                box_slot=index + 1,
+                species_id=species,
+                level=level,
+                moves=tuple(
+                    self._memory.read_u8(
+                        int(RamAddress.CURRENT_BOX_MONS)
+                        + index * RED_BOX_STRUCT_STRIDE
+                        + PARTY_MOVES_OFFSET
+                        + slot
+                    )
+                    for slot in range(4)
+                ),
+                pp=tuple(
+                    self._memory.read_u8(
+                        int(RamAddress.CURRENT_BOX_MONS)
+                        + index * RED_BOX_STRUCT_STRIDE
+                        + PARTY_PP_OFFSET
+                        + slot
+                    )
+                    & 0x3F
+                    for slot in range(4)
+                ),
+            )
+            for index, (species, level) in enumerate(
+                zip(before.species_ids, before.levels, strict=True)
+            )
+        )
+        if self.read_current_box_state() != before:
+            raise SemanticStateError("current-box move inventory changed during observation")
+        return members
+
     def read_all_box_states(self) -> RedBoxCollectionState:
         """Read all twelve boxes without exposing banked bytes to a planner.
 
@@ -3796,12 +4222,70 @@ class PokemonRedStateReader:
                 storage_initialized=False,
             )
 
+        saved_boxes = [
+            _decode_saved_red_box(index, payload)
+            for index, payload in enumerate(self._read_saved_box_payloads())
+        ]
+        saved_boxes[current_box.box_index] = current_box
+        return RedBoxCollectionState(
+            boxes=tuple(saved_boxes),
+            current_box_index=current_box.box_index,
+            storage_initialized=True,
+        )
+
+    def read_box_move_members(self, box_index: int) -> tuple[RedBoxMoveMember, ...]:
+        """Inventory one box's moves without changing boxes or advancing the game.
+
+        This permits capability discovery (for example an owned Fly holder)
+        without assuming a species knows a move or opening a PC menu. Inactive
+        boxes use the same bank and box checksums as the living collection.
+        Boxed PP does not assert usable party HP or authorize withdrawal.
+        """
+        if type(box_index) is not int or not 0 <= box_index < RED_BOX_LIMIT:
+            raise ValueError("box_index must identify one of Red's twelve boxes")
+        number = self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER)
+        current = self.read_current_box_state()
+        if box_index == current.box_index:
+            result = self.read_current_box_move_members()
+        elif not number & RED_BOX_CHANGED_MASK:
+            result = ()
+        else:
+            payload = self._read_saved_box_payloads()[box_index]
+            box = _decode_saved_red_box(box_index, payload)
+            structures_base = 1 + RED_BOX_CAPACITY + 1
+            result = tuple(
+                RedBoxMoveMember(
+                    box_slot=index + 1,
+                    species_id=species,
+                    level=level,
+                    moves=tuple(
+                        payload[start + PARTY_MOVES_OFFSET : start + PARTY_MOVES_OFFSET + 4]
+                    ),
+                    pp=tuple(
+                        value & 0x3F
+                        for value in payload[start + PARTY_PP_OFFSET : start + PARTY_PP_OFFSET + 4]
+                    ),
+                )
+                for index, (species, level) in enumerate(
+                    zip(box.species_ids, box.levels, strict=True)
+                )
+                for start in (structures_base + index * RED_BOX_STRUCT_STRIDE,)
+            )
+        if (
+            self._memory.read_u8(RamAddress.CURRENT_BOX_NUMBER) != number
+            or self.read_current_box_state() != current
+        ):
+            raise SemanticStateError("box selection changed during move inventory")
+        return result
+
+    def _read_saved_box_payloads(self) -> tuple[bytes, ...]:
+        """Return only checksum-verified saved payloads; callers overlay the live box."""
         if not isinstance(self._memory, ReadOnlyCartridgeRam):
             raise SemanticStateError(
                 "all-box inspection requires the bounded read-only cartridge-RAM port"
             )
 
-        saved_boxes: list[RedCurrentBoxState] = []
+        saved_boxes: list[bytes] = []
         for bank_offset, bank in enumerate(RED_BOX_SRAM_BANKS):
             bank_payload = bytes(
                 self._memory.read_cartridge_ram_u8(
@@ -3825,14 +4309,43 @@ class PokemonRedStateReader:
                 )
                 if _red_box_checksum(payload) != expected_box_checksum:
                     raise SemanticStateError(f"saved box {box_index + 1} failed its checksum")
-                saved_boxes.append(_decode_saved_red_box(box_index, payload))
+                saved_boxes.append(payload)
+        return tuple(saved_boxes)
 
-        saved_boxes[current_box.box_index] = current_box
-        return RedBoxCollectionState(
-            boxes=tuple(saved_boxes),
-            current_box_index=current_box.box_index,
-            storage_initialized=True,
-        )
+    def read_generic_pc_session_active(self) -> bool:
+        """Red's PC-session flag, independent of stale shared menu cursor bytes."""
+        return bool(self._memory.read_u8(RamAddress.MISC_FLAGS) & 0x08)
+
+    def read_fly_destinations(self) -> tuple[int, ...]:
+        """Durable town unlocks; never infer them from badges or quest progress.
+
+        Pinned BuildFlyLocationsList uses the low eleven little-endian bits.
+        wTownVisitedFlag follows wWalkBikeSurfState plus ten reserved bytes.
+        """
+        flags = self._memory.read_u8(RamAddress.TOWN_VISITED_FLAGS)
+        flags |= self._memory.read_u8(int(RamAddress.TOWN_VISITED_FLAGS) + 1) << 8
+        return tuple(index for index in range(11) if flags & (1 << index))
+
+    def read_fly_menu_state(self) -> RedFlyMenuState | None:
+        """Require Fly's 'To' header/arrows and a complete displayed town name.
+
+        The pinned Fly loop keeps selection in a CPU register, not the ordinary
+        menu cursor byte. Read the rendered tile-map name instead. Other town
+        maps, partial redraws and unvisited destinations must not authorize A.
+        """
+        if self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 0:
+            return None
+        row = tuple(self._memory.read_u8(int(RamAddress.TILE_MAP) + i) for i in range(20))
+        # The string is exactly "To". Column2 is town-map background, not a space.
+        if row[:2] != (0x93, 0xAE) or row[18:] != (0xED, 0xEE):
+            return None
+        for map_id, name in enumerate(RED_FLY_TOWN_NAMES):
+            tiles = tuple(0x7F if char == " " else ord(char) - ord("A") + 0x80 for char in name)
+            if row[3:18] == tiles + (0x7F,) * (15 - len(tiles)):
+                available = self.read_fly_destinations()
+                if map_id in available:
+                    return RedFlyMenuState(available, map_id)
+        return None
 
     def read_menu_cursor_state(self) -> MenuCursorState:
         """Translate Red's current linear-menu cursor fields."""
@@ -4063,6 +4576,113 @@ class PokemonRedStateReader:
         ):
             return False
         return self._memory.read_u8(cursor_address) == FILLED_MENU_CURSOR_TILE
+
+    def read_trainer_battle_identity(self) -> tuple[int, int, int, int]:
+        """Read diagnostic identity fields, not a stable in-battle identity.
+
+        Order: current opponent, normalized trainer class, engaged opponent
+        class, engaged set. Engaged fields alias enemy battle stats and are valid
+        only in the field preamble. Use read_active_trainer_identity in battle.
+        """
+        return (
+            self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET),
+        )
+
+    def read_active_trainer_identity(self) -> tuple[int, int, int]:
+        """Stable opponent, normalized class and trainer number; require battle2.
+
+        The field engagement pair aliases enemy Special/stat-modifier storage
+        once combat initializes. wTrainerNo retains the selected party instead.
+        """
+        return (
+            self._memory.read_u8(RamAddress.CURRENT_OPPONENT),
+            self._memory.read_u8(RamAddress.TRAINER_CLASS),
+            self._memory.read_u8(RamAddress.TRAINER_NUMBER),
+        )
+
+    def read_final_league_scene(self) -> FinalLeagueScene:
+        """Read the room-local script, never the ordinary trainer-script alias."""
+        map_id = self._memory.read_u8(RamAddress.CURRENT_MAP)
+        if map_id == MapId.CHAMPIONS_ROOM:
+            address, maximum = RamAddress.CHAMPIONS_ROOM_SCRIPT, 10
+        elif map_id == MapId.HALL_OF_FAME:
+            address, maximum = RamAddress.HALL_OF_FAME_SCRIPT, 3
+        elif map_id == MapId.LANCES_ROOM:
+            # Inspect the next room's initialized stage without executing it.
+            address, maximum = RamAddress.CHAMPIONS_ROOM_SCRIPT, 10
+        else:
+            raise SemanticStateError("final league scene is outside its admitted maps")
+        stage = self._memory.read_u8(address)
+        starter = self._memory.read_u8(RamAddress.RIVAL_STARTER)
+        if not 0 <= stage <= maximum or not 1 <= starter <= 190:
+            raise SemanticStateError("final league scene fields are unavailable")
+        return FinalLeagueScene(
+            map_id, stage, starter,
+            self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
+            bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
+        )
+
+    def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
+        """Recognize the ordinary trainer-start latch before battle mode appears.
+
+        StartTrainerBattle sets wStatusFlags3 bit 6 and initializes wCurOpponent
+        before InitBattle switches wIsInBattle. Movement readiness and text-box
+        absence do not prove settled overworld during that interval. Stale trainer
+        identity alone is never evidence of a pending battle.
+        """
+        if (
+            self._memory.read_u8(RamAddress.IS_IN_BATTLE) != 0
+            or not self._memory.read_u8(RamAddress.STATUS_FLAGS_3) & 0x40
+            or self._memory.read_u8(RamAddress.STATUS_FLAGS_4) & 0x10
+        ):
+            return None
+        opponent = self._memory.read_u8(RamAddress.CURRENT_OPPONENT)
+        engaged = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_CLASS)
+        trainer_set = self._memory.read_u8(RamAddress.ENGAGED_TRAINER_SET)
+        if opponent < 201 or engaged != opponent or trainer_set == 0:
+            return None
+        return opponent, trainer_set
+
+    def read_trainer_dialogue_context(self) -> tuple[int, int]:
+        """Current trainer header and text sprite, not an armed battle identity.
+
+        StoreTrainerHeaderPointer writes HIGH then LOW. DisplayTextID retains
+        its sprite in wSpriteIndex; hTextID is unsuitable because text scrolling
+        aliases it as an arrow-blink counter. Callers must bind this otherwise
+        stale context to a qualified cartridge trigger and visible dialogue.
+        """
+        at = int(RamAddress.TRAINER_HEADER_POINTER)
+        return (
+            self._memory.read_u8(at) * 256 + self._memory.read_u8(at + 1),
+            self._memory.read_u8(RamAddress.TRAINER_TEXT_SPRITE_INDEX),
+        )
+
+    def read_player_facing(self) -> str:
+        """Decode the sprite's settled facing inside the revision adapter."""
+        value = self._memory.read_u8(RamAddress.PLAYER_FACING_DIRECTION)
+        directions = {0: "down", 4: "up", 8: "left", 12: "right"}
+        if value not in directions:
+            raise SemanticStateError("player facing is not a cardinal direction")
+        return directions[value]
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        """Recognize Red's standard text frame, not its language or contents.
+
+        Movement flags alone remain ready while PrintText waits for a button.
+        The pinned 20x18 tile map renders the standard box at rows 12..17;
+        match its full upper border and corners to avoid treating terrain or
+        a lone font tile as dialogue. Absence is not general menu readiness.
+        """
+        start = int(RamAddress.TILE_MAP) + 12 * 20
+        return (
+            tuple(self._memory.read_u8(start + x) for x in range(20))
+            == (0x79, *(0x7A for _ in range(18)), 0x7B)
+            and self._memory.read_u8(start + 5 * 20) == 0x7D
+            and self._memory.read_u8(start + 5 * 20 + 19) == 0x7E
+        )
 
     def read_input_readiness(self) -> InputReadiness:
         return InputReadiness(

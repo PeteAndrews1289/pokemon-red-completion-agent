@@ -1,0 +1,377 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "bf81e532357f001c606d8a17a7772eb009e9c8013690232cf91150fe7bc0b1e7",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 19,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 19,
+      "successful_examples": 11,
+      "total_examples": 19,
+      "train_dataset_sha256": "48b78bfe52ebe9db94daed37fc0dc654b98dd96fd5f94b54221ac9429c21c0e5",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.009863456074441772,
+      "weighted_mse_before": 0.032846030147476446
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "422e8b7662735b463015741caf00c77187bcd5a5014f9ab207e263bdffc1b3a1",
+      "file_sha256": "120ef2c2f34f27594967a887809a4cb51eb80e71e331f0c3332f4a4edecfa2e3",
+      "independent_evaluation": false,
+      "model_sha256": "a62cff769f25281b4330de7219a831dd82da814c0527f53693ef336ccbe9500c",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "fbdd4ff77e77271e89fc6a30841658ee11824a2f66f7698312e9fb4022b32641",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 19,
+      "source_bundle_sha256": "d5f967d81bc05bba282c0f33503d4fbfd8412c5733cb2c4bee5ba69e61d1fa9d",
+      "source_commit": "57d6365e4d5209b0921ad86cb996905949185343"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0799274761246529,
+        5.285536325480032e-06,
+        2.068648916136747e-05,
+        0.0004676130108164237,
+        0.0002730809200494068,
+        0.004802681209251494,
+        0.0031851487485678653,
+        1.9749207585727417e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 19,
+      "total_examples": 19,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009853771884398168
+    },
+    "regional_source_examples": 8,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08026270980451275,
+        5.269732489093048e-06,
+        2.0692988593304445e-05,
+        0.0003427419276620701,
+        0.00019565913449984043,
+        0.004764764727415178,
+        0.0031773040649864526,
+        1.962289817256202e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 19,
+      "total_examples": 19,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.009863456074441772
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-registered-owned-evolution-20260910-f-04-causal",
+    "actions": 12300,
+    "frames": 1022705,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 1,
+    "status": "succeeded"
+  },
+  "current_session_status": "review_complete",
+  "session": {
+    "steps": [
+      {
+        "episode_id": "red-registered-owned-evolution-20260910-f-01-causal",
+        "checkpoint_sha256": "8798186a11cdaae483d3147ee463dc3acde4c326b87a1bac391d049aeeae5313",
+        "manifest_sha256": "9afb92ff538befe246f9660f16bd8d5bd53606e6e67212a4b778dad3e1d96a26",
+        "selected_kind": "evolve_species",
+        "selected_source": "wild:Route15:grass",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "failure_reason": null,
+        "actions": 8890,
+        "frames": 763192,
+        "registered_before": 41,
+        "registered_after": 42,
+        "specimens": 45,
+        "new_registrations": [
+          "pokemon:national:049"
+        ],
+        "eligible_examples": 1,
+        "fit_performed": true,
+        "owned_evolution_inventory": {
+          "checked": [
+            {
+              "available": true,
+              "minimum_level_gains": 3,
+              "transition": "evolution:48:49:31"
+            }
+          ],
+          "checkpoint_sha256": "b084633ab2b71f07f0ecf9caa2786362d40b77e6dd4849029d53a6db9ebd6525",
+          "controller_actions": 0,
+          "emulator_frames": 0,
+          "learned_target_selection": false,
+          "missing_owned_level_objectives": 9,
+          "native_stock_eligible_objectives": 7,
+          "schema": "pokemon.red.owned-evolution-inventory.v1",
+          "selected_transition": "evolution:48:49:31",
+          "selection_authority": "deterministic_minimum_level_gain_shortlist"
+        },
+        "capture_survey": null,
+        "capture_support": null,
+        "resources": {
+          "capture_items_before": 19,
+          "capture_items_after": 19,
+          "money_before": 3503,
+          "money_after": 3503
+        },
+        "new_model_sha256": "ebc34b8ea3c79007b3373b2e48c3ba1d333186ec31f879bd68d5157eb4877a1d"
+      },
+      {
+        "episode_id": "red-registered-owned-evolution-20260910-f-02-causal",
+        "checkpoint_sha256": "8ba2fe05e37164624edb4a69e7e059170da0c64ddcdcdaadc3ef5edb5bccd1f6",
+        "manifest_sha256": "35175e1564103b269df1c62dc4ec73cda2da1c8321e7dbbe93ddc453732295a3",
+        "selected_kind": "acquire_species",
+        "selected_source": "wild:Route15:grass",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "failure_reason": null,
+        "actions": 854,
+        "frames": 36288,
+        "registered_before": 42,
+        "registered_after": 43,
+        "specimens": 46,
+        "new_registrations": [
+          "pokemon:national:132"
+        ],
+        "eligible_examples": 1,
+        "fit_performed": true,
+        "owned_evolution_inventory": {
+          "checked": [
+            {
+              "available": true,
+              "minimum_level_gains": 8,
+              "transition": "evolution:17:18:36"
+            }
+          ],
+          "checkpoint_sha256": "8798186a11cdaae483d3147ee463dc3acde4c326b87a1bac391d049aeeae5313",
+          "controller_actions": 0,
+          "emulator_frames": 0,
+          "learned_target_selection": false,
+          "missing_owned_level_objectives": 8,
+          "native_stock_eligible_objectives": 6,
+          "schema": "pokemon.red.owned-evolution-inventory.v1",
+          "selected_transition": "evolution:17:18:36",
+          "selection_authority": "deterministic_minimum_level_gain_shortlist"
+        },
+        "capture_survey": {
+          "captures": 1,
+          "encounters_seen": 2,
+          "flees": 1,
+          "safety_stopped": false,
+          "search_exhausted": false,
+          "semantic_actions": 14
+        },
+        "capture_support": {
+          "party_preparations": 0,
+          "prepared_asleep": 0,
+          "prepared_full_hp": 1,
+          "prepared_paralyzed": 1,
+          "prepared_throws": 1,
+          "status_attempts": 2,
+          "verified_status_observations": 1
+        },
+        "resources": {
+          "capture_items_before": 19,
+          "capture_items_after": 18,
+          "money_before": 3503,
+          "money_after": 3503
+        },
+        "new_model_sha256": "c0715395307032257705a3ab155432dce88f32d510a0835e17cdb5e975b41b28"
+      },
+      {
+        "episode_id": "red-registered-owned-evolution-20260910-f-03-causal",
+        "checkpoint_sha256": "497fec32839ab6f84dc031d9721a6a5d7af5c7480cd1f2b8d94bc4b822345dc2",
+        "manifest_sha256": "e455b922cbb5cde248664b3f4bf0f5c453b079a8af7fc8cb7c84898c93cc3841",
+        "selected_kind": "acquire_species",
+        "selected_source": "wild:Route15:grass",
+        "selection_scope": "native_goal",
+        "status": "failed",
+        "failure_reason": "search_exhausted",
+        "actions": 232,
+        "frames": 11880,
+        "registered_before": 43,
+        "registered_after": 43,
+        "specimens": 46,
+        "new_registrations": [],
+        "eligible_examples": 1,
+        "fit_performed": true,
+        "owned_evolution_inventory": {
+          "checked": [
+            {
+              "available": true,
+              "minimum_level_gains": 8,
+              "transition": "evolution:17:18:36"
+            }
+          ],
+          "checkpoint_sha256": "8ba2fe05e37164624edb4a69e7e059170da0c64ddcdcdaadc3ef5edb5bccd1f6",
+          "controller_actions": 0,
+          "emulator_frames": 0,
+          "learned_target_selection": false,
+          "missing_owned_level_objectives": 8,
+          "native_stock_eligible_objectives": 6,
+          "schema": "pokemon.red.owned-evolution-inventory.v1",
+          "selected_transition": "evolution:17:18:36",
+          "selection_authority": "deterministic_minimum_level_gain_shortlist"
+        },
+        "capture_survey": {
+          "captures": 0,
+          "encounters_seen": 6,
+          "flees": 6,
+          "safety_stopped": false,
+          "search_exhausted": true,
+          "search_stop_reason": "survey_leg_limit_exceeded",
+          "semantic_actions": 75
+        },
+        "capture_support": null,
+        "resources": {
+          "capture_items_before": 18,
+          "capture_items_after": 18,
+          "money_before": 3503,
+          "money_after": 3503
+        },
+        "new_model_sha256": "fbdd4ff77e77271e89fc6a30841658ee11824a2f66f7698312e9fb4022b32641"
+      },
+      {
+        "episode_id": "red-registered-owned-evolution-20260910-f-04-causal",
+        "checkpoint_sha256": "eb76d092673d50844a181b777a4a3e1f71e67f5c614ceecda435f75139c49746",
+        "manifest_sha256": "998a99b304ab9848d37425a49dbee5c7ee0083adcc5de5fc1ba41a3ff8eebab0",
+        "selected_kind": "evolve_species",
+        "selected_source": "wild:Route15:grass",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "failure_reason": null,
+        "actions": 12300,
+        "frames": 1022705,
+        "registered_before": 43,
+        "registered_after": 44,
+        "specimens": 46,
+        "new_registrations": [
+          "pokemon:national:018"
+        ],
+        "eligible_examples": 1,
+        "fit_performed": true,
+        "owned_evolution_inventory": {
+          "checked": [
+            {
+              "available": true,
+              "minimum_level_gains": 8,
+              "transition": "evolution:17:18:36"
+            }
+          ],
+          "checkpoint_sha256": "497fec32839ab6f84dc031d9721a6a5d7af5c7480cd1f2b8d94bc4b822345dc2",
+          "controller_actions": 0,
+          "emulator_frames": 0,
+          "learned_target_selection": false,
+          "missing_owned_level_objectives": 8,
+          "native_stock_eligible_objectives": 6,
+          "schema": "pokemon.red.owned-evolution-inventory.v1",
+          "selected_transition": "evolution:17:18:36",
+          "selection_authority": "deterministic_minimum_level_gain_shortlist"
+        },
+        "capture_survey": null,
+        "capture_support": null,
+        "resources": {
+          "capture_items_before": 18,
+          "capture_items_after": 18,
+          "money_before": 3503,
+          "money_after": 3503
+        },
+        "new_model_sha256": "a62cff769f25281b4330de7219a831dd82da814c0527f53693ef336ccbe9500c"
+      }
+    ],
+    "completed_steps": 4,
+    "attempted_steps": 4,
+    "fits": 4,
+    "registered_examples_before": 15,
+    "registered_examples_after": 19,
+    "last_verified_registered": 44,
+    "last_verified_specimens": 46,
+    "initial_registered": 41,
+    "failed_attempts_retried": 0,
+    "elapsed_seconds": 919.647,
+    "stop_reason": "step_limit",
+    "source_commit": "57d6365e4d5209b0921ad86cb996905949185343",
+    "latest_fit_belongs_to_session": true,
+    "batches": [
+      {
+        "name": "registered-owned-evolution-20260910-f",
+        "elapsed_seconds": 919.647,
+        "source_commit": "57d6365e4d5209b0921ad86cb996905949185343",
+        "stop_reason": "step_limit"
+      }
+    ],
+    "total_recorded_actions": 22276,
+    "total_recorded_frames": 1834065,
+    "learned_evolution_target_selection": false,
+    "stock_shortlist_is_deterministic": true
+  }
+}

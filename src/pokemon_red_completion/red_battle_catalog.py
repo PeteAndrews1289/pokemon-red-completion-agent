@@ -82,6 +82,83 @@ class PokemonRedBattleCatalog:
         except KeyError as error:
             raise RedBattleCatalogError("unknown Pokémon Red move reference") from error
 
+    def capture_status_effect(self, move_ref: str, /) -> str | None:
+        """Return only pure sleep/paralysis effects, never damaging side effects.
+
+        This adds mechanics metadata without changing historical model features.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        mechanics = self.resolve_move(move_ref)
+        if mechanics.category != "status" or mechanics.power != 0:
+            return None
+        effect = _MOVE_EFFECT_BY_ID[identifier]
+        return {"SLEEP_EFFECT": "sleep", "PARALYZE_EFFECT": "paralysis"}.get(effect)
+
+    def can_end_wild_encounter(self, move_ref: str, /) -> bool:
+        """Escape-effect capability, not a prediction that the move will succeed."""
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        self.resolve_move(move_ref)
+        return _MOVE_EFFECT_BY_ID[identifier] == "SWITCH_AND_TELEPORT_EFFECT"
+
+    def recovery_attack_supported(self, move_ref: str, /) -> bool:
+        """One ordinary attack without recoil, delayed turns or forced repeats."""
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        move = self.resolve_move(move_ref)
+        return bool(move.power > 0 and move.category != "status" and not (
+            move.effect_flags & {"recoil", "charge", "fixed_damage", "ohko", "counter",
+                                 "self_destruct", "trapping", "recharge"}
+        ) and _MOVE_EFFECT_BY_ID[identifier] not in {"THRASH_PETAL_DANCE_EFFECT", "RAGE_EFFECT"})
+
+    def switch_entry_attack_type(self, move_ref: str, /) -> str | None:
+        """Type-screen ordinary damage; refuse indirect or unbounded effects.
+
+        None means a non-damaging move, not a safe turn: sleep, stat changes
+        and other status effects still require observed post-switch handling.
+        This is deliberately not a damage or survival estimate.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        move = self.resolve_move(move_ref)
+        if _MOVE_EFFECT_BY_ID[identifier] in {
+            "METRONOME_EFFECT", "MIRROR_MOVE_EFFECT", "TRANSFORM_EFFECT", "BIDE_EFFECT",
+        } or move.effect_flags & {"fixed_damage", "ohko", "counter", "self_destruct", "trapping"}:
+            raise RedBattleCatalogError("incoming move needs more than an entry type screen")
+        return move.type_name if move.power > 0 and move.category != "status" else None
+
+    def constant_damage_bound(self, move_ref: str, /) -> int | None:
+        """Pinned constant HP loss, not a type multiplier or guaranteed hit.
+
+        core.asm ApplyAttackToPlayerPokemon overwrites damage with20/40 for
+        SonicBoom/Dragon Rage. Other special damage and indirect effects are
+        deliberately unqualified here. Ignoring immunity/misses is conservative.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        self.resolve_move(move_ref)
+        if _MOVE_EFFECT_BY_ID[identifier] != "SPECIAL_DAMAGE_EFFECT":
+            return None
+        return {49: 20, 82: 40}.get(identifier)
+
+    def incoming_fixed_damage_bound(
+        self, move_ref: str, /, *, enemy_level: int | None,
+    ) -> int | None:
+        """Qualified incoming HP loss, separate from the strict type-only API.
+
+        Pinned core.asm ApplyAttackToPlayerPokemon.specialDamage stores the
+        enemy's observed level for Night Shade, without ordinary damage, STAB
+        or critical arithmetic. Misses/immunity never discount this bound.
+        None means unqualified here, not zero damage; callers must still screen
+        ordinary moves and reject unsupported effects. Offensive support is
+        unchanged, and other level/random/special damage remains unqualified.
+        """
+        fixed = self.constant_damage_bound(move_ref)
+        if fixed is not None:
+            return fixed
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        if identifier == 101 and _MOVE_EFFECT_BY_ID[identifier] == "SPECIAL_DAMAGE_EFFECT":
+            if type(enemy_level) is not int or not 1 <= enemy_level <= 100:
+                raise RedBattleCatalogError("Night Shade requires an observed enemy level1..100")
+            return enemy_level
+        return None
+
     def type_effectiveness(
         self,
         attacking_type: str,
@@ -635,6 +712,9 @@ _SPECIES_SOURCE = """\
 190|grass,poison"""
 
 _MOVE_BY_ID = MappingProxyType(_build_moves())
+_MOVE_EFFECT_BY_ID = MappingProxyType({
+    int(row.split("|")[0]): row.split("|")[1] for row in _MOVE_SOURCE.splitlines()
+})
 _SPECIES_BY_ID = MappingProxyType(_build_species())
 
 RED_BATTLE_CATALOG = PokemonRedBattleCatalog()

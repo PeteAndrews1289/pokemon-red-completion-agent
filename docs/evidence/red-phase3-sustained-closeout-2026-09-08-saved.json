@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "verified_at": "2026-09-08 UTC",
+  "location": "Route11 — Electrode30 and spare Drowzee13 retained; saved verified state",
+  "registered_species": 33,
+  "living_species": 28,
+  "specimens": 29,
+  "capture_items": 0,
+  "money": 9,
+  "checkpoint_sha256": "d8151f88177fbe80f722ecc620c89a93fa3069d28333be19367a7230205ad66b",
+  "live": false,
+  "controller_actions": 0
+}

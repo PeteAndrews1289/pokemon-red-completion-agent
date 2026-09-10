@@ -195,6 +195,7 @@ def test_shadow_score_rejects_nonfinite_values() -> None:
 
     class _BadModel:
         model_sha256 = "b" * 64
+        feature_version = 1
 
         def scores(self, menu, utility):  # type: ignore[no-untyped-def]
             values = list(original(menu, utility))

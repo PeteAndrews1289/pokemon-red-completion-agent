@@ -1,0 +1,77 @@
+{
+  "schema": "pokemon.red.agatha-forward-batch-closeout.v1",
+  "date": "2026-09-09",
+  "source_commit": "669cefa319dcabf77ceab2dcd08f65bde1738530",
+  "source_bundle_sha256": "8ad4318708fdb92edc7021184eaaf4220b60390d8c5e93991737d45a7f888096",
+  "forward_plan_sha256": "c453661c68ffc8e888c7f2d034f72d51cd8ea6ba460ca27ed1de0f691e9c3ee2",
+  "declared": 4,
+  "attempted": 3,
+  "reached": 2,
+  "controller_stopped": 1,
+  "cancelled_never_claimed": 1,
+  "actions": 848,
+  "frames": 78890,
+  "field_items": 2,
+  "genuine_choices": 3,
+  "forced_singletons": 2,
+  "successes": [
+    {
+      "manifest_sha256": "5fc4692ccb416c2a987a77a37e2e75b64a30e2b5b22d89997de251f89e6c192b",
+      "actions": 309,
+      "frames": 28609,
+      "field_items": 1,
+      "sequence": [
+        "restore_team",
+        "advance_story"
+      ],
+      "story_selection": "forced_singleton",
+      "specimens_retained": 30
+    },
+    {
+      "manifest_sha256": "23a049c7754c365d4ca6d0ed955bc9000e69a07b17a6e32d0db8601e3ef24c6e",
+      "actions": 309,
+      "frames": 28609,
+      "field_items": 1,
+      "sequence": [
+        "restore_team",
+        "advance_story"
+      ],
+      "story_selection": "forced_singleton",
+      "specimens_retained": 30
+    }
+  ],
+  "failure": {
+    "manifest_sha256": "be895fa81912aed7484a7378bac70bceddc021642da97bdc0dec177908e4e581",
+    "failure_state_sha256": "bf9f151dd9f47ed1b9e87961cce74b81fe48dfb4733b11ab89c3b9ecf51b9a37",
+    "actions": 230,
+    "frames": 21672,
+    "field_items": 0,
+    "selected": "advance_story",
+    "terminal": "stopped",
+    "observed_goal": false,
+    "recorded_return": [
+      0,
+      0.0024817777777777776
+    ],
+    "classification": "unsupported-controller-entry-screen",
+    "move_id": 101,
+    "all_six_party_members_alive": true,
+    "unsafe_checkpoint_rejected": true,
+    "admission": "quarantined-not-for-fitting"
+  },
+  "model_fitted": false,
+  "fit_positive_subset": false,
+  "failed_training_admission": false,
+  "retry_authorized": false,
+  "independent_evaluation": false,
+  "bruno_model_unchanged": true,
+  "native_model82_unchanged": true,
+  "phase4_complete": false,
+  "audit_actions": 0,
+  "audit_frames": 0,
+  "limitations": [
+    "One correlated historical training root; no independent advantage.",
+    "Controller-limited zero return is not proof of losing the battle or that healing is intrinsically optimal.",
+    "The two success episodes are not fitted alone; the fourth declaration is cancelled, not a fabricated outcome."
+  ]
+}

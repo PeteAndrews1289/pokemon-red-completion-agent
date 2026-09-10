@@ -9,6 +9,7 @@ from pokemon_red_completion.living_dex_causal_journal import (
     LivingDexCausalTerminalStatus,
 )
 from pokemon_red_completion.living_dex_option_value import (
+    LIVING_DEX_LEGACY_OPTION_KINDS,
     LivingDexOptionKind,
     LivingDexOutcomeStatus,
 )
@@ -141,7 +142,7 @@ def audit_red_living_dex_targeted_train_readiness(
         terminal_slots=terminal_slots,
         settled_examples=sum(actual.values()),
         setup_censors=setup_censors,
-        settled_by_kind=tuple((kind, actual[kind]) for kind in LivingDexOptionKind),
+        settled_by_kind=tuple((kind, actual[kind]) for kind in LIVING_DEX_LEGACY_OPTION_KINDS),
         settled_root_count=len(roots),
         reasons=tuple(reasons),
     )

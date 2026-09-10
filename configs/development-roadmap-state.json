@@ -1,0 +1,1213 @@
+{
+  "schema": "pokemon.development-roadmap-state.v1",
+  "baseline_id": "red-first-v2-registered",
+  "as_of_session": "2026-09-10-public-project-reset",
+  "current_stage": "red-collection",
+  "stages": {
+    "foundation": {
+      "status": "verified",
+      "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+    },
+    "adaptive-red": {
+      "status": "verified",
+      "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+    },
+    "sustained-red": {
+      "status": "verified",
+      "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
+    },
+    "red-story": {
+      "status": "verified",
+      "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
+    },
+    "red-collection": {
+      "status": "current",
+      "evidence": "docs/evidence/red-collection-continuation-learning-2026-09-10.json"
+    },
+    "red-hack": {
+      "status": "planned",
+      "evidence": null
+    },
+    "crystal": {
+      "status": "planned",
+      "evidence": null
+    },
+    "cross-generation": {
+      "status": "planned",
+      "evidence": null
+    }
+  },
+  "milestone": {
+    "title": "Capture useful encounters during travel",
+    "items": [
+      {
+        "id": "travel-missed-registration-evidence",
+        "label": "Verify missed registration opportunities",
+        "done": true,
+        "evidence": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json"
+      },
+      {
+        "id": "travel-capture-resume-guards",
+        "label": "Qualify capture and route-resume guards",
+        "done": false,
+        "evidence": null
+      },
+      {
+        "id": "travel-capture-learning-result",
+        "label": "Fit a productive model-selected outcome",
+        "done": false,
+        "evidence": null
+      }
+    ]
+  },
+  "reviews": [
+    {
+      "session": "2026-09-06-search-memory",
+      "result": "Memory contract qualified; model remains at 32 examples. No new gameplay or fit.",
+      "deviation": "None from the Red-first sequence. This session was an engineering prerequisite, not learned progress.",
+      "next": "History-aware learner, useful alternatives, then a short measured lesson."
+    },
+    {
+      "session": "2026-09-06-history-aware-learner",
+      "result": "History learner initialized; all 32 old rows preserved. Useful live alternatives still need connecting.",
+      "deviation": "No change to the baseline. Another engineering-only session triggers reorientation: stop feature expansion and connect existing collection skills. History training stays unfinished, so the checklist remains 40%.",
+      "next": "Connect boxed-precursor evolution from the field, then collect and fit a short useful-choice lesson."
+    },
+    {
+      "session": "2026-09-06-native-boxed-evolution",
+      "result": "32 to 35 examples; three real failures retained. Evolution reached/healed at Center but PC routing failed. No collection gain; 2/5 stays unchanged.",
+      "deviation": "One prospectively declared post-fit continuation followed A's saved endpoint; neither episode retried. No baseline or exit criteria changed.",
+      "next": "Qualify the saved Center's PC control/collision boundary, then one complete useful evolution."
+    },
+    {
+      "session": "2026-09-06-center-pc-boundary",
+      "result": "Farewell completion repaired; 11 computed PC steps passed with zero replans. PC opened in a standalone diagnostic. No fit or collection gain; 35 examples and 2/5 unchanged.",
+      "deviation": "Stopped before evolution because audit proved the participation-only trainer cannot fight with the existing capped escort. The bounded engineering session triggers reorientation; no milestone was weakened.",
+      "next": "Bind PC orientation and qualify safe, resumable evolution training without mandatory capped-escort use."
+    },
+    {
+      "session": "2026-09-07-resumable-evolution",
+      "result": "Native PC preparation and no-storage resumption qualified. Final component: four battles, +508 XP, 17 specimens retained; reload verified without input. No completed evolution or fit; model35 and 2/5 unchanged.",
+      "deviation": "Prospectively declared retained-state component continuations exposed venue and move assumptions; one rejected before input. Report serialization failed after gameplay and was reconstructed read-only. No baseline exits changed.",
+      "next": "Measure evolution throughput and bounded feasibility, complete an actual evolution, then resume a model-selected collection lesson."
+    },
+    {
+      "session": "2026-09-07-evolution-completion",
+      "result": "Ponyta level 32 to 35, +9606 XP in about 18 seconds; all 17 specimens retained. Travel failed, then successor stopped on wrong party selection. No evolution or fit; 2/5 unchanged.",
+      "deviation": "One prospectively declared retained-state successor tested local venue continuity but stopped before training. Both attempts closed; no baseline exit changed.",
+      "next": "Verify selected party source and target, complete a bounded evolution, then a model-selected lesson."
+    },
+    {
+      "session": "2026-09-07-party-selection",
+      "result": "Ponyta35 evolved into Rapidash40; all17 specimens retained, living14 to15, registered19 to20. No new model fit or selected outcome; checklist2/5 unchanged.",
+      "deviation": "One prospectively declared successor repaired damaging-PP exhaustion after the timing-fixed continuation stopped. Both diagnostics closed. Private multi-quantum orchestration does not yet qualify a complete model-facing alternative; exits unchanged.",
+      "next": "Connect the existing four-battle evolution callback to a bounded model-facing option with exact completion and honest partial-progress treatment. Then collect and fit a fresh model-selected useful-choice lesson; do not admit diagnostics or add a new trainer."
+    },
+    {
+      "session": "2026-09-07-complete-evolution-learning",
+      "result": "Closed: model35 to45; authentic history effect fitted and productive model-policy evolution completed. Living16/18 specimens. Minimal checklist5/5; not full Red or sustained competence.",
+      "deviation": "Explicit larger completion dose and correlated practice reset from D; F retained, failed B excluded, all eligible failures kept. No stage exit changes or independent evaluation claim.",
+      "next": "Start sustained-play integration: give retained Route11 endpoint a useful reachable next source, then varied multi-goal episodes with model45."
+    },
+    {
+      "session": "2026-09-07-regional-continuation",
+      "result": "In progress: regional A retained17 living/19 specimens. Forced capture succeeded; unsupported fallback exploration failed. Zero model predictions and zero new fit rows; model45 unchanged.",
+      "deviation": "Operator-declared source transition reuses cartridge-derived corridors. The new checklist is an integration substage, not the full sustained-play exit; closed stage2 checklist preserved.",
+      "next": "Connect a useful next source and genuine alternatives from A; no reset or replay."
+    },
+    {
+      "session": "2026-09-07-regional-continuation",
+      "result": "Two new living species retained; collection18/20. Routed supply bought four balls. Five non-exploratory choices excluded; model45 unchanged.",
+      "deviation": "No stage-exit change. Stop repeating exhausted local exploration; qualify cartridge-local availability before pursuing genuine model alternatives.",
+      "next": "Verify C saved-state compatibility and useful candidate choices; continue within the six-hour window."
+    },
+    {
+      "session": "2026-09-07-regional-source-learning",
+      "result": "Two actual source choices fitted45 to47; both search failures retained. E used saved source history and model46. Collection18/20 preserved; zero balls remain.",
+      "deviation": "Choice is hierarchical acquisition-destination authority, not multiple top-level kinds. No stage-exit change or independent advantage. Checklist4/5 only.",
+      "next": "Legitimate resource recovery from E, then varied source outcomes; never reset to regain supplies."
+    },
+    {
+      "session": "2026-09-07-regional-funded-navigation",
+      "result": "F restored10balls; G/H chose two different destinations and both navigation failures fitted47to49. Collection18/20 retained;2709currency. Checklist4/5 remains pending live repair/variation closeout.",
+      "deviation": "Shared destination-door movement was missing from route expectations. Repair uses cartridge semantics, not route coordinates; no stage exit or sampling result changed.",
+      "next": "Verify destination-derived arrivals, then a fresh model49 choice from H. All consumed outcomes remain failures."
+    },
+    {
+      "session": "2026-09-07-regional-resource-goals",
+      "result": "Regional integration closed 5/5: model45 to50, one successful capture and four failures. Living19/21 specimens. New resource-aware checklist starts1/3 with local contract tests, not new gameplay.",
+      "deviation": "J stopped before input because the model preferred resupply. The mixed-parent step will fit only actual native goal outcomes; no duplicate source credit. Full stage exits unchanged.",
+      "next": "Run model50 with regional capture and resupply alternatives, fit its actual goal outcome, then a productive fresh continuation."
+    },
+    {
+      "session": "2026-09-07-regional-resource-goals-closeout",
+      "result": "K model-selected resupply succeeded; L/M source searches failed. Model50 to53,18successful outcomes;19living/21specimens,4balls1109currency. Checklist2/3; productive follow-up remains open.",
+      "deviation": "Stopped after two declared failed post-resupply searches. No consumed retry or stage exit change. Species-listed capture helper is a practical blocker.",
+      "next": "Inspect actual stored catch support and qualify reusable capture preparation; no unchanged ball-only search."
+    },
+    {
+      "session": "2026-09-07-capture-status-closeout",
+      "result": "N selectedRoute10, capturedVoltorb16 and fitted53 to54.20living/22specimens,zero losses. Resource-aware checklist3/3 closed.",
+      "deviation": "Three status attempts,zero verified status successes; all four balls spent. No catch-efficiency claim. Stage exits unchanged.",
+      "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
+    },
+    {
+      "session": "2026-09-07-affordable-continuation",
+      "result": "Affordable-continuation checklist2/3: O purchased five balls and restored helper health, exact save preserved. Both support steps excluded; model54 unchanged.",
+      "deviation": "Narrow resupply maintenance unblocks sustained model collection; no new model credit or baseline exit change.",
+      "next": "Bind affordable ball purchases to actual funds, restore resources/helper health, then continue model54 from N without resetting."
+    },
+    {
+      "session": "2026-09-07-affordable-capture-closeout",
+      "result": "P captured Abra with one ball,21living/23specimens,fit55 retaining all54 earlier rows. Affordable continuation3/3closed.",
+      "deviation": "Escape-aware deterministic preparation was required before the productive source choice; no baseline exit changed.",
+      "next": "Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence."
+    },
+    {
+      "session": "2026-09-07-incremental-learning-cycle",
+      "result": "Incremental inventory/loop82focused tests passed; no live cycle yet. Model55 and P preserved. Checklist1/3.",
+      "deviation": "Replace handwritten per-example assembly with existing authenticated collection/fitting machinery. No change to model authority or stage exits.",
+      "next": "Run the qualified two-step collect/fit/continue cycle from P/model55, retain actual outcomes, then audit the resulting endpoint and viewer evidence."
+    },
+    {
+      "session": "2026-09-07-incremental-cycle-review",
+      "result": "55 to56 retained examples,20successful. Q first search failed after212actions/10236frames; automatic fit preserved all55 prior rows. Second step unclaimed; current bounded checklist2/3, not sustained-play completion.",
+      "deviation": "The declared cycle stopped after its first failed search; the second remained unclaimed. Preserve the two-real-steps criterion as unfinished. Saved-viewer work is maintenance, not model progress.",
+      "next": "Diagnose search throughput from Q's retained trace, then qualify a finite successful-step continuation from the actual model56/save; no Q retry or reset."
+    },
+    {
+      "session": "2026-09-07-incremental-learning-complete",
+      "result": "R completed two real successful linked source choices and automatic fits56to58. All prior rows retained,22successful total. Exact22living/25specimens,1ball109currency. Bounded collect/fit/continue checklist3/3 closed.",
+      "deviation": "Q preserved as a failed first-step cycle. Fresh R used actual Q/model56 and completed both successes. Safe-failure continuation is prospective opt-in, not a retry. Stage exits unchanged.",
+      "next": "Integrate mixed resource, storage and evolution goals from the actual R/model58 save. Only one capture source, one ball and one box slot remain; do not invent alternatives or reset."
+    },
+    {
+      "session": "2026-09-07-mixed-goal-integration",
+      "result": "136 focused checks qualify mixed-goal wiring. Exact R restore with the ordered new objective passed, but evolution remains unavailable and selection deterministic_unsupported. Zero input/frames/new examples; model58 unchanged. Mixed checklist3/5.",
+      "deviation": "Stopped at the declared pre-input falsifier: low-level non-attacking specimens are not supported by the direct trainer. No stage-exit change, fake choice or consumed live attempt.",
+      "next": "Qualify bounded shared-experience development, then a real model-selected mixed goal and retained fit. Preserve R and all25specimens."
+    },
+    {
+      "session": "2026-09-07-shared-experience-learning",
+      "result": "S selected evolution with probability0.1553, developed Abra12 into Kadabra16, retained Abra10/all25specimens, and fitted58to59. Exact23living/28registered. Mixed checklist5/5 closed.",
+      "deviation": "The first real model-selected evolution quantum served as the component falsifier inside the same retained attempt; no separate diagnostic branch/reset or forced demonstration. Stage exits unchanged.",
+      "next": "Continue from S/model59 through legitimate supply support, varied collection objectives and storage composition. Keep support-only episodes out of learning counts; broaden evidence before claiming generalization."
+    },
+    {
+      "session": "2026-09-07-varied-collection",
+      "result": "Storage expanded from 1 to 20 slots; all 25 specimens preserved. Capture failed. The real failure was fitted: 59 to 60 examples, with all earlier data retained. Current milestone: 2/3, not a productive capture.",
+      "deviation": "Stopped on zero balls109currency and no available next goal. Closed mixed5/5 preserved; stage exits unchanged. More fitted rows do not establish better play.",
+      "next": "Restore U/model60; qualify typed capture-item exhaustion and legitimate resource recovery, then cross-box access to retained evolution precursors. Do not repeat an unchanged capture."
+    },
+    {
+      "session": "2026-09-07-resource-recovery",
+      "result": "Cross-box evolution and retained storage costs qualified in145 focused tests; model60 and2/3 unchanged. Live feasibility pending.",
+      "deviation": "Engineering support only; no new learning result or changed stage exit. No new economy subsystem or teacher.",
+      "next": "Inspect exact U/model60. A unique evolution bridge is zero-row support; seek genuine useful choices afterward."
+    },
+    {
+      "session": "2026-09-07-resource-recovery-v",
+      "result": "V retrieved Metapod4 across boxes and preserved25specimens, but failed before XP because recovery did not heal it. Zero learning rows; model60 and2/3 unchanged.",
+      "deviation": "One bounded support attempt, not a new model decision. Preserve its failure; native recovery repair replaces an inherited nurse-facing assumption, not the teacher.",
+      "next": "Inspect V/model60 after whole-party recovery tests, then one actual goal choice with V support retained."
+    },
+    {
+      "session": "2026-09-07-resource-recovery-closeout",
+      "result": "Cross-box retrieval demonstrated; recovery repair passed154 checks. V successor has two game goals but zero model scores; no new play or fit. Model60 and2/3 unchanged.",
+      "deviation": "Stopped before deterministic fallback. The next priority is compatible optional-recovery model coverage, not another support replay; no stage exits changed.",
+      "next": "Version the optional-recovery projection, preserve historical decisions, then one genuine V-successor choice and fit."
+    },
+    {
+      "session": "2026-09-07-optional-recovery-learning",
+      "result": "Recovery v3 preserved historical predictions. W healed Metapod from 5 to 18 HP and fitted outcome 61, preserving 25 specimens and V support. No XP or collection gain.",
+      "deviation": "The actual exploratory choice was healing, not evolution. Kept the productive-collection criterion open:2/3 unchanged. Bounded slow retired-campaign regression and checked active callers separately.",
+      "next": "One bounded productive evolution from W/model61, then genuine automatically enumerated owned-precursor alternatives. No reset, teacher factory or unsupported fallback."
+    },
+    {
+      "session": "2026-09-07-owned-precursor-bridge",
+      "result": "Metapod evolved into Butterfree: +978 XP, 24 living species, all 25 specimens retained. Forced support; model61 unchanged. Only one surplus evolution target remains.",
+      "deviation": "Stopped at the planned inventory falsifier: nine other missing evolution targets require duplicate acquisition. No fake alternatives or new fit.",
+      "next": "Existing reserve-aware supply and duplicate demand must create real acquire/evolve choices; retain X's zero-row support."
+    },
+    {
+      "session": "2026-09-07-collection-prerequisites-learning",
+      "result": "Closed 3/3: model-selected Beedrill evolution retained and fitted, 61 to 62 outcomes. 25 living species/25 specimens, 30 registered; seven balls and 209 currency remain.",
+      "deviation": "Zero balls made resupply mandatory, so Y stayed zero-row support. Parent observer settings repaired after exact hash probe; Z then made the real choice. No baseline exit changed; Phase3 remains current.",
+      "next": "Short retained-state acquisition chain with genuine source-choice authority, duplicate demand, measured resource costs and no resets."
+    },
+    {
+      "session": "2026-09-07-retained-acquisition-safety",
+      "result": "AA selected Route 5 and failed: no capture, Beedrill fainted. All 25 specimens, seven balls and 209 currency retained; model62 to model63, all prior rows preserved. Exact save verified.",
+      "deviation": "Planned2-4-step chain stopped at its first failed skill. Minimal ROM-free search-stop repair added; no retry or live repair claim. Prior3/3 milestone archived intact; new recovery checklist is prospective0/3, not a Phase3 percentage.",
+      "next": "Scoped Flash recovery draft and Codex integration pass 272 targeted ROM-free tests; no live recovery or new fit. Finish capture/PC lead preparation and verify old-save/new-runtime behavior, then legitimately recover AA and let model63 choose a fresh source. Preserve AA; no reset or retry."
+    },
+    {
+      "session": "2026-09-07-safe-capture-integration",
+      "result": "Recovery succeeded163actions/9156frames. Fresh Route24 choice failed safely664actions/36600frames: ten encounters, two Abra throws, no capture. Model63to64, allpriorrows/25specimensretained. Safe-chain2/3.",
+      "deviation": "Stopped on the preregistered failed-search boundary. No reset/retry or easier replacement for productive capture. Flash contributed eight reviewed tests; engineering is now live-qualified but does not close Phase3.",
+      "next": "Continue from the exact healthy Route24/model64 endpoint. Qualify finite, resource-bounded continuation after ordinary no-catch exhaustion using the existing collector, then one or two fresh model-selected attempts; preserve failures and fit only actual choices. No reset, unsafe reserve spending or broad new teacher."
+    },
+    {
+      "session": "2026-09-07-bounded-search-continuation",
+      "result": "Model64 chose Route5, caught a second Mankey12 using one ball, and fitted65 outcomes while retaining all prior rows.26specimens/25living,all6healthy. Safe acquisition3/3closed.",
+      "deviation": "Two-choice maximum ended after one success because only one capture source remained. No fake second choice or replay. Post-run routed-summary omission repaired prospectively; stage exits unchanged.",
+      "next": "Restore the actual Route5/model65 endpoint, bind the owned Mankey-to-Primeape prerequisite through existing completion-dose development, and inspect a mixed acquisition/evolution menu. If genuinely executable, let model65 choose one bounded objective and fit its actual outcome. Do not force another two-source question or reset."
+    },
+    {
+      "session": "2026-09-08-mixed-owned-evolution",
+      "result": "Model65 selected evolution and retained Primeape28 plus Mankey12.26living/26specimens,31registered,no losses.65to66outcomes with all earlier rows. Existing safe acquisition3/3 remains closed; Phase3current.",
+      "deviation": "Post-run audit found static source demand asks for Mankey again after the family is complete. Stop new capture and repair remaining-demand accounting first. Actual successful evolution/fit preserved; no stage exits changed.",
+      "next": "Repair remaining acquisition demand before further play: reserve each retained living target, use surplus precursors toward missing descendants, and avoid requesting Mankey after Mankey plus Primeape coexist. Preserve historical checkpoint semantics and qualify branched/trade chains in ROM-free tests. Then inspect the actual Route11/model66 menu and run one useful bounded choice only if genuine alternatives remain; no reset or synthetic choice."
+    },
+    {
+      "session": "2026-09-08-remaining-acquisition-demand",
+      "result": "Remaining-demand repair verified: Mankey+Primeape closes Route5. 282 tests and exact saved restore pass; no inputs, predictions or fits. Model66/26 living unchanged.",
+      "deviation": "The corrected menu has only Route24 capture. Stopped as declared; single canonical acquisition methods hide eight evolution alternatives. Old safe-acquisition 3/3 archived intact; next checklist prospective 0/3. Stage exits unchanged.",
+      "next": "Qualify cartridge-derived spare-precursor acquisition alternatives using existing capture and level-evolution skills. First expose genuine reachable choices from Route11/model66, then retain one played outcome and fit. Keep completed families closed, historical saves intact and all failures; no forced label, reset, teacher, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-alternative-acquisition",
+      "result": "Four sources admitted instead of one; model66 selectedRoute10. Travel failed on wild battle17 after16resolved interruptions.853actions/52,068frames, no capture, terminal save or fit; checklist2/3.",
+      "deviation": "Failed-skill stop honored. Historical Route11 checkpoint is not this attempt's terminal state. No silent rewind, consumed retry or baseline exit change.",
+      "next": "Qualify safe travel-budget stopping and durable failure/recovery state before another useful capture attempt. The consumed Route10 choice stopped mid-battle without a terminal save; declare any recovery origin explicitly, never silently rewind or retry it. Keep actual failures, base forms and prior model rows; no teacher, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-safe-travel-stop",
+      "result": "Travel now checks interruption budget before new inputs; exact failure state retained as diagnostic only.350tests pass and167,677actual emulator bytes round-trip with0input. Model66/checklist2/3unchanged.",
+      "deviation": "Engineering-only session honored the maintenance time box; no consumed replay, invented label, automatic unsafe recovery or baseline change.",
+      "next": "Decide the next bounded training origin, then run one useful acquisition lesson. The lost Route10 terminal cannot be resumed; a fresh practice branch from the historical Route11 save must be explicitly disclosed, preserve the consumed failure/costs and same lineage, and never replace or resample that assignment. No additional infrastructure expansion, teacher, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-useful-precursor-practice",
+      "result": "Useful acquisition3/3 closed: model66 chose Route4, retained a spare Ekans6 and fitted67 outcomes.27specimens/26living/31registered; two balls209currency. No Arbok yet.",
+      "deviation": "User explicitly authorized one historical Route11 practice restart after lost Route10 terminal. Prior failure853actions/52,068frames preserved separately; same lineage, no independent or uninterrupted-play claim. Stage exits unchanged.",
+      "next": "Continue from the actual Route4/model67 checkpoint. Rebind the cartridge-derived Ekans-to-Arbok level22 objective, preserve one Ekans, and expose evolution beside genuine acquisition/resource alternatives. Run one bounded model-selected goal and fit its actual outcome. Stop on an unsafe or unsupported boundary; no historical reset, teacher replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-retained-ekans-failure",
+      "result": "Model67 chose evolution; Ekans6 to11, no Arbok or fit. Exact failure and six quantum saves retained;27specimens intact. Field/actual-opponent finisher mismatch diagnosed.",
+      "deviation": "The learned goal was useful but its deterministic execution failed. Archive the prior3/3 acquisition checklist; new safe-evolution checklist1/3 is engineering diagnosis, not learned progress. No reset or stage-exit change.",
+      "next": "Qualify the smallest evolution-recovery repair: require resource-valid finisher coverage for the actual encounter set before seeking a battle, and a separately guarded escape when no combat finisher exists. Add adversarial ROM-free loop tests; keep current safety limits. Verify a bounded recovery from the retained exact failure state before any new learned continuation. Never replay the consumed evolution, silently rewind to a quantum save, or fit the unsafe partial as a settled episode."
+    },
+    {
+      "session": "2026-09-08-resource-recovery",
+      "result": "Exact-failure recovery succeeded after two preserved support failures. All27specimens and Ekans11 retained; party HP/status/PP restored. Zero labels; model67 unchanged. Safe-evolution2/3, not Phase3 completion.",
+      "deviation": "Support chain totals213actions/14,868frames without a rewind. Explicit PP restoration extends existing guarded Center control; no new teacher or stage exit changes.",
+      "next": "Run linked native model-selected goals from the authenticated healed checkpoint, retain costs and actual outcomes, fit only eligible labels, and continue from each retained endpoint. Audit at least two three-goal chains across multiple regions and three supported goal kinds against the unchanged Phase 3 exit. No reset, teacher replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-01",
+      "result": "Model67to68 from actual failed evolution: Ekans11to19,27specimens preserved.8899actions/778549frames. Safe terminal retained, Arbok unfinished; checklist2/3 unchanged.",
+      "deviation": "Direct-combat suppression was erased by healing. Collection-only repair retains this evidence and distinguishes ineffective healing from new encounter damage; fixed total safety budgets and stage exits remain unchanged.",
+      "next": "Continue from actual chain01/model68 terminal after qualifying persistent direct-fight suppression and the resource-readiness recovery sentinel. Preserve all failed costs and total safety budgets. Let the model select the next goal, fit its actual outcome, and continue the Phase3 linked-chain plan."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-03",
+      "result": "Model70 has70 fitted outcomes/29successful/60distinct. Chain02 chose healing and succeeded; chain03 chose acquisition but stopped before storage movement because a generic PC menu inherited an irrelevant bag-scroll offset. Ekans19 and all27specimens retained;26living/31registered. No Arbok or Phase3 completion.",
+      "deviation": "Two bounded executor repairs unblock actual retained state; Phase3 exit and living-collection requirement unchanged. Three linked choices alone do not establish sustained useful progress.",
+      "next": "Continue from actual chain03/model70 PC endpoint after qualifying generic PC-session cancellation and computed nurse access. Let the model choose the next goal; preserve prior failures, costs and all earned progress. Complete sustained collection chains before claiming Phase3."
+    },
+    {
+      "session": "2026-09-08-phase3-chain-05",
+      "result": "Model72: 72 fitted outcomes, 30 successful, 62 distinct selected rows. Chain05 completed actual Ekans19-to-Arbok22 evolution, retained a base Ekans and all 27 specimens. Living species 26 to 27; registered 31 to 32. First chain: five model-selected goals, two successes and three failures, 15,327 actions / 1,314,789 frames. Phase3 remains open.",
+      "deviation": "Safe precursor-evolution milestone closes 3/3. Broad sustained-Red stage is unchanged and open. Route10 interruption-cap failure remains part of the first chain; no cap increase or automatic target retry.",
+      "next": "Continue model72 from actual Route11 checkpoint a82bd3b6. Gather a second useful linked collection chain with genuine choices, retained resource costs and recovery. No reset, authority promotion or budget increase. Audit phase coverage after the next three bounded goals."
+    },
+    {
+      "session": "2026-09-08-phase3-sustained-closeout",
+      "result": "Phase3 bounded milestone complete: two linked chains with5and3 genuine model choices, two new living species (Arbok andElectrode),54,971actions/4,913,974frames including all failures/support. Model75:75 fitted outcomes,33successful,65distinct rows.28living/29specimens/33registered; zero losses or observed faints. Same-lineage development, not independent advantage or full Red.",
+      "deviation": "No baseline or exit change. Regional choices count at their actual hierarchy; support and safety-rule steps stay zero-label. Private prospective unique-evolution and cash-only profile exposure is disclosed operator orchestration, not autonomous multi-target planning. Stage4 begins with a bounded funding/event skill, not a full replay.",
+      "next": "From actual Route11/model75, qualify a cartridge-derived ordinary-trainer funding goal: verify reachable uncompleted events, party safety and actual payout, then an affordable ball purchase and fresh model-selected continuation. Four local trainers are unbeaten; zero balls and9currency remain. No full replay, protected-stock sale or authority promotion."
+    },
+    {
+      "session": "2026-09-08-trainer-funding-static-qualification",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
+      "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
+    },
+    {
+      "session": "2026-09-08-trainer-funding-runtime",
+      "result": "Flash draft integrated;619 focused tests pass. One live safety-rule attempt failed before battle after16actions/1068frames. Exact terminal preserved;0earnings/0labels,model75 unchanged. Checklist0/3.",
+      "deviation": "Reoriented after a second engineering/support-only session. Missing income quote repaired; actual transition and older event-bit carry now the only repair scope. No baseline or exit criteria weakened.",
+      "next": "Diagnose the recorded trainer transition from actual 3fe01202, preserve the failed zero-label support, correct full event-offset handling with historical-menu compatibility, then one bounded earning/purchase continuation. No replay, broad catalog or new CI gate."
+    },
+    {
+      "session": "2026-09-08-trainer-transition-repair",
+      "result": "Trainer funding qualified:285 earned,29 specimens retained,0faints;104actions/9541frames include both failed prefixes. Safe recovery checkpoint06982228. Model75 unchanged,0newlabels. Resource-backed checklist1/3.",
+      "deviation": "Armed transition, historical menu and field/battle memory lifetime required scoped repairs. Two failed prefixes remain consumed; active-menu recovery is separately metered zero-label support. No exit criterion changed.",
+      "next": "From safe recovery checkpoint06982228, verify an affordable ball purchase and continue a genuine model-selected collection/evolution goal. Preserve both failed funding prefixes and the zero-label recovery; no rewind, catalog expansion or new CI gate."
+    },
+    {
+      "session": "2026-09-08-earned-supply-continuation",
+      "result": "Finite resource-backed checklist3/3: trainer-funded ball purchase, genuine model-selected HP/PP recovery fitted75to76, singleton Oddish capture adds one specimen.30specimens/28living/33registered; all prior rows/species retained.",
+      "deviation": "Healing rather than capture was the actual learned resource-management choice. The subsequent capture was forced singleton and zero-label. No phase exit or authority promotion changed. Current Route24 menu only heals, so repeated support stops.",
+      "next": "From actual checkpoint4a609569/model76, qualify one bounded reachable trainer-income option beyond the current map and expose a genuine resource/story target choice. Current menu has only healing; do not execute another heal loop, rewind, or expand a teacher."
+    },
+    {
+      "session": "2026-09-08-regional-income",
+      "result": "Adjacent-map income qualified:525 earned,30 specimens retained;219actions/21349frames include the failed intro and its exact-state continuation. Model76 unchanged;0learnedrows. New story-entry checklist1/3.",
+      "deviation": "Bounded funding scope uses adjacent ordinary connections only. Pending latch plus visible dialogue required a small repair; first attempt remains consumed. Prior resource checklist3/3 archived without changing phase exits.",
+      "next": "From checkpoint21445916/model76, qualify an honest story-entry option: safe access to Indigo, current-party and resource readiness, then one bounded Lorelei goal versus real alternatives. Existing chapter assumes a specific lead/moves and exact stock; do not simply enable or replay it. Preserve specimens and all income costs."
+    },
+    {
+      "session": "2026-09-08-story-entry",
+      "result": "Legacy readiness mismatch repaired; stored level55 Cut/Fly holder verified with zero input. Model76/checkpoint21445916 and income-to-story1/3 unchanged.",
+      "deviation": "No-learning alarm reorientation: stop adapting the old chapter. Exact party/stock reconstruction rejected; capability-based PC/Fly preparation selected, not a new stage exit.",
+      "next": "Qualify safe capability retrieval and observed Fly destinations, then generic boss readiness and a genuine model-selected story lesson."
+    },
+    {
+      "session": "2026-09-08-observed-fly",
+      "result": "Indigo Fly unlock verified; observed-destination controller implemented,311 focused tests pass. No live flight, PC retrieval or fit; model76 and income-to-story1/3 unchanged.",
+      "deviation": "No stage-exit change. Another support-only slice leaves the no-learning alarm visible: stop new inventory research and integrate existing operations for the named story lesson.",
+      "next": "Safe boxed-specialist retrieval, one retained-state observed flight, flexible-party boss execution, then genuine story-versus-preparation learning."
+    },
+    {
+      "session": "2026-09-08-field-transport",
+      "result": "Owned specialist retrieved and observed Fly reached Indigo.236actions/19740frames including first stop;30specimens and619currency retained. Model76 unchanged.",
+      "deviation": "One prospective exact-menu successor followed a retained header failure; report serialization loss is disclosed. No baseline exits changed and diagnostics are not training checkpoints.",
+      "next": "Preserve diagnostic lineage/costs in native continuation, qualify flexible-party boss execution, then a genuine story-learning choice. Income-to-story remains1/3."
+    },
+    {
+      "session": "2026-09-08-flexible-trainer-preparation",
+      "result": "177 targeted tests pass; actual Indigo party has five-opponent coverage and a30-step candidate approach. No gameplay, native admission or fit. Model76 and checklist1/3 unchanged.",
+      "deviation": "Another support-only slice triggers reorientation: stop standalone preparation work and integrate the named story lesson. No stage IDs or exits changed.",
+      "next": "Bounded generic boss control plus exact diagnostic-lineage/cost continuation, then a genuine model-selected story outcome and fit."
+    },
+    {
+      "session": "2026-09-08-native-trainer-story",
+      "result": "Imported prior support; two native singleton rehearsals used301actions/27684frames. Three Lorelei opponents defeated; stopped at Jynx after switch damage. Model76 unchanged;30specimens retained.",
+      "deviation": "Entrance drift is retained as failure; a fresh exact-state continuation did not replay it. Battle remains unsafe for ordinary checkpoint admission. No forced label or stage exit change;1/3 checklist remains.",
+      "next": "From exact mid-battle ef23d074, qualify switch-entry risk and explicitly budgeted healing, then a separately recorded bounded recovery. Do not replay entrance or either consumed choice. Genuine story-versus-preparation alternatives and fitting remain open."
+    },
+    {
+      "session": "2026-09-08-switch-entry-screen",
+      "result": "Observed coverage screen rejects the remaining ice-vulnerable reserve at the exact saved Jynx failure.364 focused tests pass; no gameplay, healing, labels or fit.",
+      "deviation": "Bounded maintenance for the story lesson. No-learning alarm remains active; type screening is not survival qualification, and stage exits are unchanged.",
+      "next": "Qualify incoming-turn HP risk and explicitly budgeted healing from exact mid-battle ef23d074, then a separately recorded bounded recovery. Do not expand preparation screens, replay consumed choices, or count support as learning; genuine story-versus-preparation fitting remains next."
+    },
+    {
+      "session": "2026-09-08-budgeted-trainer-recovery",
+      "result": "Jynx defeated with one Full Restore in108actions/9456frames; all six unfainted. Paused at Lapras/Confuse Ray. Collection30/28/33 and model76 unchanged; checklist1/3.",
+      "deviation": "Explicit separate recovery allows survival-budgeted healing and an emergency switch without a forced attack. All prior failures and costs retained; no stage exit weakened and no support labels.",
+      "next": "Qualify confusion-aware turn completion and conservative self-hit/reply risk, then a separately declared successor from retained Lapras state2e9d70ff only. Carry one spent Full Restore and switches[2,4,1]; never replay the Jynx recovery. Then connect genuine story-versus-preparation alternatives and fitting."
+    },
+    {
+      "session": "2026-09-08-confusion-recovery",
+      "result": "Lorelei defeated;57actions/5413frames,5544earned, no additional heal or faint. Collection30/28/33 preserved. Model76 unchanged; income-to-story1/3 pending native choice integration.",
+      "deviation": "Existing no-PP suppressed-turn behavior was already present; qualified it and added narrow confusion bounds instead of another turn engine. No stage exit changed. Live self-hit remains unobserved.",
+      "next": "From completed post-Lorelei checkpoint93c7fef8, qualify genuinely executable story-versus-restoration alternatives in the existing native player, then collect and fit actual model-selected outcomes. A first menu action alone is not option completion; forced singletons remain support. No replay or further simulator expansion."
+    },
+    {
+      "session": "2026-09-08-native-choice-learning",
+      "result": "Model76to77: one genuine readiness choice, Dugtrio12to118HP, one Full Restore.339 focused tests; live layout yields14-step Bruno route.30specimens preserved.",
+      "deviation": "No baseline exits changed. Bruno has not been executed, so income-to-story stays1/3 conservatively. A successful healing lesson is not learned story completion.",
+      "next": "From retained checkpoint11ff52b0 with model77, run one prospectively declared post-fit readiness-versus-Bruno choice. Preserve finite healing stock; inspect whether preparation leads to story progress instead of repeated healing. No replay or new battle simulator."
+    },
+    {
+      "session": "2026-09-09-postfit-readiness",
+      "result": "Model77 to78: Jolteon61 to172 HP; one Full Restore,22 actions /2184 frames.78 outcomes,36 successful,68 distinct. All30 specimens retained.",
+      "deviation": "No stage exits changed; income-to-story remains1/3. Story/access training gap identified. Two necessary heals are not a story victory or proof of reward gaming.",
+      "next": "From retained checkpoint 2d1e3033 and model78, prospectively qualify a generic last-item readiness reserve and an explicitly logged story-coverage curriculum. Preserve historical V4 replay. Seek one actual bounded story outcome; a forced singleton is support, not learned choice, and stays excluded from the current choice-fit pipeline. Do not rerun consumed healing choices or manufacture labels."
+    },
+    {
+      "session": "2026-09-09-bruno-support",
+      "result": "Bruno defeated from audited room endpoint:177 actions/17137 frames;5742 earned; all30 specimens and final Full Restore preserved. Model78 unchanged;zero fit labels.",
+      "deviation": "After retained doorway drift failure(6 actions/300 frames), reviewed safe arrival and declared one current-room continuation. No rollback or guard weakening. Current-room story/readiness earns item2; scripted cross-map arrival remains unqualified. No stage exit changed.",
+      "next": "Before another boss, define prospective curriculum-outcome admission separately from comparative goal-choice evidence, then extend the cartridge-driven trainer integration to Agatha. Start only from retained state0243af84. Preserve scripted-arrival failure and existing V4 labels; no doorway replay, forced-choice fit, full replay or unmeasured reward claim."
+    },
+    {
+      "session": "2026-09-09-story-curriculum",
+      "result": "Prospective singleton-story outcome recording, admission and unit-weight regression qualified; model78/hash and all78 prior outcomes unchanged.358 focused tests pass. Agatha and exact revision-bound entry are implemented but not live-tested. Income-to-story remains2/3.",
+      "deviation": "Added a separate curriculum-outcome stream, not forced-choice labels or retrospective support backfill. Narrow cartridge entry qualification preserves ordinary route-drift rejection. No stage-exit changes.",
+      "next": "Run one prospectively declared V5 Agatha curriculum attempt from retained0243af84/model78. Preserve the actual outcome and all prior rows; fit only authenticated settled experience, then inspect a genuine later choice. No replay, retroactive support admission or full-game run."
+    },
+    {
+      "session": "2026-09-09-agatha-curriculum",
+      "result": "Agatha defeated; one prospective guided outcome fitted,model78 to79. All78 old rows and30 specimens retained. No model-choice authority increase; milestone2/3 stays. Maintenance follow-up: stale battle-module golden expectation reproduced and corrected after source review;52 related tests passed. No new model or save change.",
+      "deviation": "Separate unit-weight curriculum permits truthful outcome learning without fake menus or historical support backfill. Initial report objective label corrected for display from unchanged serialized model; no refit. Lance grammar differs and was refused without input.",
+      "next": "Qualify Lance's distinct entrance script and a genuine story-versus-recovery choice from retained dc12195a/model79. Preserve the one Full Restore, all30 specimens and all79 rows. No Agatha replay, borrowed entrance assumption or full-game run."
+    },
+    {
+      "session": "2026-09-09-lance-dialogue",
+      "result": "Lance reached, then stopped before battle after69 actions/4452 frames. Exact introduction retained; model79 unchanged.520 focused tests qualify the narrow pre-latch dialogue and retained recovery. Phase4 remains incomplete, sub-checklist2/3.",
+      "deviation": "Cartridge text precedes the battle latch, contrary to the initial handoff assumption. Repair is support-only maintenance; no replay, failed-episode fitting or lowered completion gate.",
+      "next": "Continue only from retained Lance introduction a3d29985 after qualifying its pre-latch text. Preserve the failed69-action prefix, final Full Restore and model79; no Agatha rewind or repeated entry. Then expose a useful genuine story choice."
+    },
+    {
+      "session": "2026-09-09-lance-survival",
+      "result": "No new admitted row or fit. Gyarados defeated during deterministic support; model79 unchanged. Retained first Dragonair qualified with zero inputs;136 focused tests pass.",
+      "deviation": "Maintenance only; Phase4 exit and2/3 submilestone remain unchanged. Guided support cannot replace learned story authority.",
+      "next": "One support continuation from exact retained first Dragonair aa40123d; no Gyarados replay or item spend. Then return to a genuine story/resource choice and reorient before the two-hour slice ends."
+    },
+    {
+      "session": "2026-09-09-critical-exposure",
+      "result": "No new admitted row or fit. Four opponents defeated, exact final Dragonite retained, one Full Restore legitimately spent. Model79 unchanged. Risk actor qualified read-only;314 related tests pass.",
+      "deviation": "Explicit support risk mode, not weakened default safety or a changed baseline. No learned progress; risk probability not estimated.",
+      "next": "One atmost2-intent critical-exposure continuation from exact Dragonite3ff8391e. Then reorient on actual model story choices and Champion integration; no lower stage exit."
+    },
+    {
+      "session": "2026-09-09-lance-complete-reorientation",
+      "result": "Lance defeated; all6 alive,30specimens/28living retained. Full chain368actions/32869frames,1FullRestore,1explicit critical-exposure intent. Zero new model queries or fit rows; model79 unchanged.",
+      "deviation": "Supported boss progress is not learned Phase4 completion. Current room has no genuine resource alternative. A separately declared dependent practice branch is permitted by existing short-scenario training policy; no splicing, replenishment or independent-root claim.",
+      "next": "Authenticate one eligible successful post-Lorelei training checkpoint, expose actual model79 story/resource alternatives, then play and fit only a newly admitted observed outcome. Champion adapter follows the learning falsifier."
+    },
+    {
+      "session": "2026-09-09-pp-champion-qualification",
+      "result": "Two completed healing choices,80actions/6960frames,2FullRestores spent in the separate post-Lorelei branch. Model81 retains81rows,39successes and69distinct selected features.",
+      "deviation": "The two choices repeated healing rather than selecting story; no independent coverage or measured improvement. Correction: Lance has1ownedElixir, previously unexposed by the provider; 'no resource alternative' was too broad. PP/Champion work is bounded engineering until played.",
+      "next": "Run one prospectively declared model81 choice from the actual completed Lance checkpoint, exposing owned Elixir restoration and cartridge-qualified Champion entry. Fit only its audited outcome; preserve its actual successor. No reset, forced-choice relabeling, hidden battle-head promotion or full replay."
+    },
+    {
+      "session": "2026-09-09-pp-choice-horizon-reorientation",
+      "result": "Model81 to82 after one genuine Elixir choice:22PP,38actions/3396frames. Later guided Champion stopped at Dragon Rage entry screening with6alive;205actions/14406frames retained, no fit or Champion/HoF.82rows,40successes,69distinct features.",
+      "deviation": "The bounded boss attempt reached its guard stop. Reoriented to a synthetic objective/horizon falsifier instead of another repair cascade. No old weights/targets, stage exits or consumed scopes changed.",
+      "next": "Qualify completion-once within-budget/cumulative-cost diagnostic, then a prospective goal-conditioned trajectory-learning contract. Model-led story submilestone remains2/3; no full replay."
+    },
+    {
+      "session": "2026-09-09-forward-goal-learner",
+      "result": "Separate toy forward-goal learner:8/8 supported new contexts complete efficiently;3 unsupported abstain. Red collector/admission/shadow-fit path tested. Model82,82 real rows and2/3 unchanged.",
+      "deviation": "Separate prospective target replaces neither historical labels nor live authority. Current Champion failure remains retained. Toy evidence is not counted as Red progress; stable phase exits unchanged.",
+      "next": "Collect a prospectively declared bounded Red story/recovery lesson with genuine alternatives and the same frozen continuation, then fit separate forward outcomes and test different contexts before new authority."
+    },
+    {
+      "session": "2026-09-09-red-forward-goal-pilot",
+      "result": "Four real forward returns fitted separate shadow model32fd4144: three Bruno completions, one heal/heal goal failure; all30 specimens retained. Seven genuine choices, one correlated root/two inputs. Native story-learning checklist3/3.",
+      "deviation": "Disclosed historical training resets for a new prospective goal objective, not old-trial retries, Champion continuation or independent tests. Stable Phase4 exit unchanged; shadow estimates are not calibrated authority.",
+      "next": "Inspect changed-resource support, separate the learned first-choice actor from its frozen model82 tail, and qualify a bounded own-decision test. Keep Champion failure and oldmodel82 unchanged."
+    },
+    {
+      "session": "2026-09-09-forward-first-choice-control",
+      "result": "New four-example forward learner chose story over healing from2genuine alternatives and completed Bruno:181actions/17293frames,0fielditems,all30specimens retained. No tail query or new fit. Story checklist3/3;Phase4 open.",
+      "deviation": "The newly declared training probe reused a changed-resource historical endpoint in the same already-observed lineage. Not independent generalization or measured advantage; old82 was shadowed only. First-actor and checkpoint identities independently audited.",
+      "next": "Collect prospective Agatha forward returns from the actual learner-controlled Bruno successor if it has genuine story/recovery alternatives. Keep goal contracts separate; do not relabel the Bruno head or resume a boss-repair cascade."
+    },
+    {
+      "session": "2026-09-09-agatha-forward-stop",
+      "result": "Agatha:3attempted/2reached/1controllerstop,848actions/78890frames/2items. Three genuine first choices and two forced story continuations. Fourth cancelled unclaimed; noAgathafit. Bruno learnercontrol remains real;Phase4 open.",
+      "deviation": "Firstmechanicalexception stoppedcollection. The retained zero is a frozen-controller failure, not an in-game loss. Separate offline quarantine diagnostic shares sampler/goal/prefix checks without relaxing fitting admission.",
+      "next": "Close the Agatha batch without retry or a success-only fit. Audit its known controller-stopped return through the separate non-fitting reader, then decide whether explicit forward-only failure admission supports a useful frozen-controller shadow fit; do not repair bosses or relabel Bruno."
+    },
+    {
+      "session": "2026-09-09-agatha-controller-fit",
+      "result": "Separate Agatha shadow model3bf43581 fitted all3returns:two reached and one known frozen-controller stop. One root,two selected inputs;no native82/Bruno32 change. Two deterministic computations after a publication naming fault produced one saved candidate.",
+      "deviation": "One artifact-name publication fault required deterministic recomputation;two computations/one candidate disclosed. No failed outcome omitted. Only frozen-controller meaning,not ideal-play competence.",
+      "next": "Run one explicitly opted-in Agatha first-choice training probe from the different authenticated post-Bruno02 endpoint, new head first and frozen old82 tail, max2macros. Preserve every terminal; no fit, replay or promotion. Do not begin after10:20UTC."
+    },
+    {
+      "session": "2026-09-09-agatha-control-closeout",
+      "result": "Agatha head chose healing; frozen tail beat Agatha in 335 actions / 31,141 frames / one item. All 30 specimens retained. Two actual first-choice heads now demonstrated; Phase 4 remains open.",
+      "deviation": "Archived the completed 3/3 native-story checklist without changing Phase4's exit. The prepared resource batch is the last small within-Agatha check, not a new gate; afterward return to reusable mechanics and model-led composition. Preparation alone is engineering.",
+      "next": "At most the four prepared old82-sampled Agatha returns and one admissible all-attempt shadow refit, with no replacement cohort. This is not a Phase4 gate: after the bounded result or justified cancellation, return to reusable fixed-damage mechanic support and declared model-led story composition."
+    },
+    {
+      "session": "2026-09-09-resource-fit-fixed-entry",
+      "result": "Seven real returns fitted, including every miss and the prior controller stop. Shared fixed-damage support passes168 focused tests. No model-led Champion/Hall-of-Fame result yet.",
+      "deviation": "Closed the last Agatha coverage check at2/3 without pretending the optional probe passed. Return to reusable mechanics and linked model-led story execution; no new phase gate or per-boss fitting campaign.",
+      "next": "Declare one current-source native82-controlled Lance continuation from the first newly completed Agatha checkpoint, at most two decisions; only after verified Lance completion may one two-decision Champion continuation follow. Retain every cost and failure. No reset, replacement cohort or recursive old-head deployment."
+    },
+    {
+      "session": "2026-09-09-league-initialization-closeout",
+      "result": "Lance stopped before battle after one learned heal; Champion unattempted.217 repair tests pass; live confirmation next.",
+      "deviation": "Closed the two-leg sequence at its first exception. Stable Phase4 and local1/3 checklist remain unchanged; no extra fitting cohort or replacement win.",
+      "next": "Declare one bounded development successor on the repaired controller from an authenticated safe post-Agatha checkpoint; preserve the closed Lance failure, distinguish genuine model choices from forced actions, and require current Lance completion before a conditional Champion leg. No per-boss fit cohort, failed-save resume or same-plan retry."
+    },
+    {
+      "session": "2026-09-09-lance-resource-reorientation",
+      "result": "Repair passed live battle entry; Lance stopped at depleted offensive reserves. All30specimens retained; Champion unattempted.",
+      "deviation": "The separately declared successor preserves the earlier failure. Zero-input damage analysis rejects a late zero-item fallback; next manage resources earlier. Stable phase exits and local1/3 checklist unchanged.",
+      "next": "Integrate explicitly budgeted, damage-aware battle recovery before depletion strands the party. First qualify a multi-turn resource falsifier and real story-call accounting; retain both failed Lance episodes, with no failed-save resume or replacement boss cohort."
+    },
+    {
+      "session": "2026-09-09-proactive-recovery-integration",
+      "result": "Budgeted proactive recovery integrated and tested; no new gameplay, fit or completion. Native82 unchanged.",
+      "deviation": "No baseline or phase-exit change. One focused engineering slice connects existing survival control to story goals, with actual-spend accounting and explicit plan admission.",
+      "next": "Qualify owned stock and real choices, then a bounded correlated Lance/Champion continuation."
+    },
+    {
+      "session": "2026-09-09-ordinary-bounded-healing",
+      "result": "Strict trial stopped before attack;30 specimens retained. Ordinary bounded healing qualified; Phase4 remains open.",
+      "deviation": "Same phase exit. New explicit controller mode keeps historical attack risk; strict profiles preserved. This is engineering, not a fit or completion.",
+      "next": "Lance-only trial, then inspect actual carried state before Champion."
+    },
+    {
+      "session": "2026-09-09-model-selected-lance",
+      "result": "Model chose story and beat Lance:30 specimens,zero medicine/faints. Champion remains; current checklist2/3.",
+      "deviation": "No phase exit change. A real sampled model choice succeeded under disclosed deterministic combat; no independent advantage claim.",
+      "next": "Qualify the actual post-Lance PP/recovery menu and narrow Champion switch mechanics, then run a separately declared bounded continuation from this carried checkpoint. Verify concurrent Champion and Hall-of-Fame facts."
+    },
+    {
+      "session": "2026-09-09-combined-owned-recovery",
+      "result": "Native83 fitted actual Lance victory with all prior rows retained. Later Champion attempt beat3opponents, stopped atGyarados:331actions25998frames3items0faints30specimens.",
+      "deviation": "PP profile replaced HP restoration; combined opt-in restores both offers. Failed episode remains quarantined; no new tactic learner, reset or phase-exit change.",
+      "next": "Use the new combined HP/PP restoration profile in one three-decision native83 continuation from the successful Lance checkpoint, then verify current Champion and Hall-of-Fame evidence."
+    },
+    {
+      "session": "2026-09-09-phase4-complete",
+      "result": "Phase4 verified:current Champion and Hall of Fame,30specimens0faints,652actions39978frames.2genuine recovery choices,1forced story step. Native85 fitted2rows;all prior data retained.",
+      "deviation": "Checkpoint-based hierarchical development, not fresh-game autonomy. Forced Champion excluded; oldfailedattemptsretained. Native85 unplayed and in-sample error slightly worse. Phase4 exit unchanged.",
+      "next": "Phase4 complete. Next session: audit the post-game living collection and legitimate supply, expose useful acquisition/precursor alternatives, then measure a model-selected collection lesson."
+    },
+    {
+      "session": "2026-09-09-phase5-agent-package",
+      "result": "Offline Flash catalog corrected and accepted after Claude review and136 targeted tests. No gameplay or fit; model85 and Phase5 lesson0/3 unchanged.",
+      "deviation": "Engineering-only support session. Stop broad architecture expansion and connect existing skills; baseline exits unchanged.",
+      "next": "Verify retained post-game control and supply; expose two useful executable collection alternatives, then measure one model-selected lesson."
+    },
+    {
+      "session": "2026-09-09-phase5-native-learning",
+      "result": "Native85to87 across2 real outcome fits. Legitimate supply, healing and Spearow capture retained31specimens/29species. Model-selected Route3 capture failed after storage preparation; failure fitted.145 targeted tests passed.",
+      "deviation": "No phase exit changed. Local checklist2/3 measures a failed learned collection attempt, not successful competence. Full current attainability census unfinished; first runtime failure stopped input. No forced/source-proposal labels or independent advantage.",
+      "next": "Diagnose execution-time blocked-cell/interruption history: the exact terminal has a fresh57-step walking plan. Qualify the smallest repair, then a declared native87 collection continuation; no replay or Cut workaround."
+    },
+    {
+      "session": "2026-09-09-automatic-collection-loop",
+      "result": "Four automatic native decisions and fits:87to91. Search, resupply, search, recovery;1561actions/73322frames. Two safe search exhaustions, no runtime failures. All31specimens/29species retained; zero new captures.",
+      "deviation": "Phase5 remains open and its local checklist stays2/3. User requested automatic collection; the existing runner was extended. Safe search exhaustion continuation was declared; no success or phase exit fabricated.",
+      "next": "Broaden useful missing-specimen and evolution-precursor captures to alternate cartridge-declared wild sources, then run another bounded automatic batch. Measure acquisition throughput; no new framework or full replay."
+    },
+    {
+      "session": "2026-09-09-opportunistic-collection",
+      "result": "Four automatic decisions and fits: 91 to 95 examples; 1,494 actions and 95,880 frames. Two useful specimens, zero new living species; 33 specimens and 29 living species retained. No unexpected runtime failures.",
+      "deviation": "No stage-exit change. Existing supported grass sources only; living target census still unfinished.",
+      "next": "Scale to a longer bounded automatic collection run from the retained endpoint; measure useful catches/evolutions per hour and ball/supply costs. Keep current failure stops and inspect missing map/mechanic coverage; no full replay."
+    },
+    {
+      "session": "2026-09-09-extended-collection",
+      "result": "16 automatic steps, 15 model updates: 95 to 110 examples; 4,875 actions and 304,644 frames. 7 useful specimens, 3 new living species; 40 specimens and 32 living species retained. 0 unexpected runtime failures.",
+      "deviation": "No stage-exit change. Existing supported grass sources only; living target census still unfinished.",
+      "next": "Connect existing observed-menu Fly travel to bounded collection/evolution routing; qualify visited-town/Fly-holder prerequisites and destination/resource conservation, then let the model choose a useful evolution or newly reachable capture. Do not repeat the same local-only batch."
+    },
+    {
+      "session": "2026-09-09-collection-fly-access",
+      "result": "1 automatic steps, 1 fits: 110 to 111 examples; 17,523 actions / 1,549,746 frames; last fit settled at 4.4 minutes. 40 specimens and 33 living species retained; 0 failed steps. Model110 chose evolution, flew to the supported training region and evolved Drowzee13 into Hypno26. The next action-free menu had no supported goal; gameplay stopped before step2. Its orchestration exception is preserved, and a typed empty-menu stop is now qualified.",
+      "deviation": "No stage-exit change. Fly access is opt-in and currently evolution-only.",
+      "next": "Extend the qualified Fly transport to useful capture destinations, then a short model111 continuation from Route11. Preserve the useful Drowzee/Hypno pair; broaden generic evolution readiness afterward."
+    },
+    {
+      "session": "2026-09-09-capture-fly-access",
+      "result": "4 automatic steps, 3 fits: 111 to 114 examples; 1,405 actions / 88,200 frames; automatic cycle completed in 14.7 minutes. 42 specimens and 34 living species retained; 1 failed steps. Two model-selected destinations produced Nidoran female and an additional Oddish; a third learned choice restored the team. The last forced capture exhausted its survey without loss and was retained as history, not a training label. Capture Fly travel is demonstrated; supplied encounter tables are not learned habitat discovery.",
+      "deviation": "No stage-exit change. Fly access is opt-in for capture and evolution; location tables remain supplied knowledge.",
+      "next": "Enumerate useful level-evolution objectives from the retained collection and cartridge graph instead of naming each target manually. Qualify a fresh model114 capture/evolution choice; keep failed-search history and all specimens."
+    },
+    {
+      "session": "2026-09-09-shared-registration-scope",
+      "result": "User adopted global caught/owned registration, no level100 or living-form quota. No new gameplay or fit; model114 unchanged.",
+      "deviation": "Explicit baselineV2 replaces the collection objective. Old post-game preparation checklist remains historical2/3; new registration integration checklist starts0/3.",
+      "next": "Implement the private shared ledger and a versioned registered-only runtime contract, then qualify useful missing-registration capture/evolution choices before resuming play."
+    },
+    {
+      "session": "2026-09-09-shared-registration-foundation",
+      "result": "Shared registration memory and registered capture/evolution projections passed 237 targeted tests; no gameplay, live import or fit. Model114 unchanged.",
+      "deviation": "No baseline or exit change. Memory is 1/3 integration items; runtime consumers and a new-objective lesson remain pending.",
+      "next": "Integrate registered V1 into live checkpoint, capture, evolution and reward consumers; authenticate the saved Red endpoint, then qualify one bounded collection lesson."
+    },
+    {
+      "session": "2026-09-09-registered-runtime-binding",
+      "result": "Capture/evolution runtime bindings passed340 targeted tests, including simulated single-copy training; no live input, import or fit. Native114 unchanged.",
+      "deviation": "No baseline change. Memory remains1/3 integration items; live-runtime item is partial because checkpoint and reward consumers still require migration.",
+      "next": "Version registered observer pressures, checkpoints and reward admission; decide old114 compatibility, then authenticate the saved endpoint and run one bounded registered-objective lesson."
+    },
+    {
+      "session": "2026-09-09-registered-learning-bridge",
+      "result": "249 targeted tests passed: registered observation, durable checkpoint, goal-outcome reconstruction and a separate synthetic two-choice fit/reload. No production input, import or fit; native114 unchanged.",
+      "deviation": "No baseline change; integration checklist remains1/3 because the live regional launcher is not migrated. Synthetic fitting is engineering evidence only.",
+      "next": "Wire the registered objective through regional destination outcomes and the live incremental launcher, import the authenticated endpoint, then collect two settled choices and fit the separate scorer."
+    },
+    {
+      "session": "2026-09-09-registered-live-training",
+      "result": "Registered integration3/3: real ledger, three outcomes/two fits, model2 played;39 registrations/43 specimens retained. Model3 not yet played.",
+      "deviation": "Expanded preferred species locations to real cartridge land tables; direct missing evolved forms remain alternatives. Stopped on capture-helper readiness failure. No stage exits changed.",
+      "next": "Diagnose capture-helper readiness at the retained terminal without replaying earlier attempts; qualify recovery, then collect another bounded registered-objective lesson."
+    },
+    {
+      "session": "2026-09-09-capture-helper-recovery",
+      "result": "Registered3 to5 with two fits. Search failed; restoration succeeded. Model5 selectedRoute15 but exhausted balls mid-battle; unfit failure state preserved. Last verified39registrations/43specimens.",
+      "deviation": "Four-step batch stopped after third attempt; fourth unclaimed. No stage-exit change. Helper restoration callback remains test-qualified, not demonstrated by healthy-helper retrieval.",
+      "next": "Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts."
+    },
+    {
+      "session": "2026-09-09-capture-resource-exit",
+      "result": "Recovered both failures; bought 20 balls. Scorer examples 5 to 6. Ditto Transform stopped the next attempt, then recovery succeeded. No new registration: 39 registered / 43 specimens retained.",
+      "deviation": "No milestone redefinition. Added one explicit nearby shop using existing routing; preserved a new failed Transform encounter and separately recovered it. Setup/support is not learning.",
+      "next": "Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture."
+    },
+    {
+      "session": "2026-09-10-transform-capture",
+      "result": "Transform adapter repaired. 1 steps / 1 fits; examples 6 to 7. 1 new registrations; 40 registered / 44 specimens. Bounded training only.",
+      "deviation": "No goal or stage redefinition. Flash drafted mechanics; Codex corrected and verified. No consumed failure replay.",
+      "next": "Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts."
+    },
+    {
+      "session": "2026-09-10-planning-throughput",
+      "result": "5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.",
+      "deviation": "No stage-exit change. Projection-only performance repair; historical objective corpus unchanged.",
+      "next": "The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits."
+    },
+    {
+      "session": "2026-09-10-capture-efficiency",
+      "result": "4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.",
+      "deviation": "No stage-exit change. Added pre-throw diagnostics instead of assuming weakening is safe or failures are ordinary variance.",
+      "next": "Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts."
+    },
+    {
+      "session": "2026-09-10-owned-evolution-options",
+      "result": "4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.",
+      "deviation": "No stage-exit change. Connected existing stock inventory and native evolution to the learning loop; target shortlisting is disclosed deterministic support.",
+      "next": "Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset."
+    },
+    {
+      "session": "2026-09-10-native-stock-overnight",
+      "result": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
+      "deviation": "No stage-exit change. Native-stock checklist3/3; two forced singletons explicitly excluded from fit counts.",
+      "next": "Restore the latest actual endpoint and diagnose why capture alternatives disappeared. Restore genuine supported choices before extending automatic collection; do not count forced singleton evolution as model training. Measure any preparation optimization without bypassing the final controller gate. No consumed replay, resource reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-indoor-collection-options",
+      "result": "Ordinary indoor land encounters now qualify through cartridge tiles and actual land tables; 187 targeted tests, 465-file type check and lint passed. Real-ROM inspection found 1141 eligible static cells in Mt. Moon1F and1078 in Rock Tunnel1F despite zero literal grass. These counts do not establish accessible routes or successful capture. Model21 and47 registered species are unchanged.",
+      "deviation": "Next bounded checklist replaces completed native-stock3/3; stage exits unchanged. No learning count advanced.",
+      "next": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal."
+    },
+    {
+      "session": "2026-09-10-corridor-continuation",
+      "result": "2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.",
+      "deviation": "Checklist3/3 measures real alternatives and model-selected lessons, not completed indoor capture. Continuation repair does not change stage exits.",
+      "next": "Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay."
+    },
+    {
+      "session": "2026-09-10-indoor-departure",
+      "result": "Three retained choices /three fits: Golbat and Raticate registered, then a failed Mansion destination attempt. Model26,51 registrations,46 specimens. Two native evolution choices and one learned regional source choice; capture preparation stopped at a Center before the destination. No indoor capture yet.",
+      "deviation": "None to product or stage exits; indoor departure is maintenance unblocking collection. Stone draft remains unintegrated.",
+      "next": "Compose a verified indoor departure before requalifying the same Fly destination, then continue model26 from its actual terminal. Keep all failed costs and prior registrations; no retry or resource reset. Review the isolated stone-evolution capability without claiming it is live."
+    },
+    {
+      "session": "2026-09-10-observed-local-capture",
+      "result": "One retained failed source choice /one fit: model27,51 registrations,46 specimens. Indoor departure and Fly reached Mansion1F, but closed doors blocked the old capture lane. 214 actions /14568 frames;18 balls and3503 money retained. No indoor capture yet.",
+      "deviation": "No stage-exit change. Observed local terrain adaptation replaces an unreachable same-map patch, not the chosen source. Stone draft stays parked.",
+      "next": "Qualify a reachable encounter patch from actual current-map blocks within the same selected area, then continue model27 from its retained Mansion endpoint. No source substitution, consumed retry or resource reset. Keep stone evolution parked until useful collection resumes."
+    },
+    {
+      "session": "2026-09-10-capture-prerequisites",
+      "result": "One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.",
+      "deviation": "No stage-exit change. Prerequisite screening fixes impossible collection rather than rerunning it. Stone draft stays parked.",
+      "next": "Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished."
+    },
+    {
+      "session": "2026-09-10-supported-collection",
+      "result": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
+      "deviation": "No stage-exit change. Useful indoor capture resumed; no stage-exit change and no claimed learned combat or independent reliability.",
+      "next": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-capture-to-evolution",
+      "result": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
+      "deviation": "No stage-exit change. New capture developed into its next missing registration. No stage-exit change or independent reliability claim.",
+      "next": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated."
+    },
+    {
+      "session": "2026-09-10-status-recovery-audit",
+      "result": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
+      "deviation": "No stage-exit change. Audit prioritizes bounded status recovery; training volume is not learned advantage.",
+      "next": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated."
+    },
+    {
+      "session": "2026-09-10-qualified-status-recovery",
+      "result": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
+      "deviation": "No stage-exit change. Mixed trainer parsing and exact settled-state admission unblocked actual retained play.",
+      "next": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-observed-funding",
+      "result": "Funding execution now requalifies the same trainer against observed terrain before input. 168 focused tests passed. The actual retained state has no safe approach to its quoted trainer; zero-input qualification rejects it. No fresh gameplay or fit: model 38, 53 registrations and 47 specimens remain unchanged.",
+      "deviation": "Same resource/collection lane; no stage-exit or learner-counter change. Live qualification found no safe funding route, so the batch was not launched.",
+      "next": "Version prospective observed-terrain funding eligibility in new decision menus while reconstructing old menus with their recorded flags. Authenticate the actual model 38 endpoint, then run a short fresh learner batch only if a useful executable alternative exists. If none exists, identify the missing departure or puzzle capability; do not repeat a known-impossible choice."
+    },
+    {
+      "session": "2026-09-10-observed-funding-menu",
+      "result": "Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.",
+      "deviation": "Same registration-first lane; observed menu mode preserves historical checkpoint reconstruction.",
+      "next": "Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-purposeful-collection",
+      "result": "3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.",
+      "deviation": "Stage exits unchanged. Four-choice maximum is bounded by time; no replay. Whole-project percentage estimates are withdrawn in favor of explicit gates.",
+      "next": "Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal."
+    },
+    {
+      "session": "2026-09-10-registration-opportunities",
+      "result": "1/3 fresh steps succeeded; 3 actual fits, 44 to 47 registered-objective examples and 55 to 55 registrations. Batch stopped at failed_step_retained_and_fitted; failures and costs are retained.",
+      "deviation": "Stage exits unchanged. Measured preparation; removed only redundant standalone preview. New missed-registration evidence prioritizes reusable travel capture over broad caching. Archived prior indoor checklist3/3; new travel-capture checklist1/3 is diagnostic evidence, not phase completion.",
+      "next": "Diagnose the retained Mansion route without input, then qualify missing-species capture during acquisition travel. Preserve destination, route resumption, party/storage/resource guards and actual outcome attribution. Collect a fresh model47 choice after tests. One-session time box; no consumed retry, reset, broad cache, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-travel-capture-guards",
+      "result": "Capture/resume and route-failure guards: 88 focused tests passed. Zero-input Mansion diagnosis confirmed a route mismatch. Not enabled in gameplay; model47 and55 registrations unchanged.",
+      "deviation": "Engineering-only session; live connection and productive outcome were not reached. Checklist stays1/3 and stage exits unchanged. Reorient on bounded integration, not a broader navigation rewrite.",
+      "next": "Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-travel-capture-runtime",
+      "result": "Koffing retained: 56 registrations /49 specimens. One failed trip fitted model47 to48. Box-prepend verifier corrected prospectively; route-resume milestone remains open.",
+      "deviation": "No stage exits changed. Travel checklist stays1/3: the real catch and fitted failure do not demonstrate a completed capture-and-resume journey.",
+      "next": "Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-travel-resume-learning",
+      "result": "Model51; 57 registrations. Model-selected Koffing-to-Weezing evolution retained both entries. 3/3 goals succeeded; travel-capture/resume check stays open.",
+      "deviation": "No stage exits changed. Followed genuine goal choices rather than forcing the travel-capture test; useful evolution is counted separately from that checklist.",
+      "next": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-collection-continuation",
+      "result": "Model54; 58 registrations. 4/4 fresh goals succeeded; 3 actual fits. Collection and goal outcome remain separate.",
+      "deviation": "No stage exits changed. Actual goal choices and collection gains are counted separately from the still-pending travel-capture/resume test.",
+      "next": "Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-public-project-reset",
+      "result": "Public documentation and handoffs reset without deleting history. No gameplay or fit; model54,58 registrations and all stage exits unchanged.",
+      "deviation": "User-requested presentation maintenance before the next collection batch. Repository remains active/public, not archived. No milestone or learning counter advanced.",
+      "next": "Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal."
+    }
+  ],
+  "closed_milestones": [
+    {
+      "session": "2026-09-07-incremental-learning-complete",
+      "stage": "sustained-red",
+      "title": "Bounded collect / fit / continue",
+      "items": [
+        {
+          "id": "incremental-inventory",
+          "label": "Retained inventory and loop qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-cycle-qualification-2026-09-07.json"
+        },
+        {
+          "id": "two-real-continuations",
+          "label": "Two real linked learning steps",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        },
+        {
+          "id": "saved-cycle-audit",
+          "label": "Saved endpoint and viewer evidence audited",
+          "done": true,
+          "evidence": "docs/evidence/red-incremental-learning-completion-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-complete-evolution-learning",
+      "stage": "adaptive-red",
+      "title": "Useful memory-aware play",
+      "items": [
+        {
+          "id": "saved-loop",
+          "label": "Saved-state learning loop",
+          "done": true,
+          "evidence": "docs/evidence/red-saved-endpoint-learning-result-2026-09-06.json"
+        },
+        {
+          "id": "memory",
+          "label": "Persisted search-history contract",
+          "done": true,
+          "evidence": "docs/evidence/red-search-memory-qualification-2026-09-06.json"
+        },
+        {
+          "id": "history-model",
+          "label": "Model trained to use history",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        },
+        {
+          "id": "alternatives",
+          "label": "Two useful executable alternatives",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        },
+        {
+          "id": "useful-followup",
+          "label": "Productive lesson and follow-up",
+          "done": true,
+          "evidence": "docs/evidence/red-complete-evolution-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-regional-integration-closeout",
+      "stage": "sustained-red",
+      "title": "Regional multi-goal integration",
+      "items": [
+        {
+          "id": "regional-source",
+          "label": "Truthful source continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        },
+        {
+          "id": "regional-gain",
+          "label": "Retained regional collection gain",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-continuation-2026-09-07.json"
+        },
+        {
+          "id": "regional-choices",
+          "label": "Multiple genuine model choices",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
+        },
+        {
+          "id": "regional-fit",
+          "label": "New fit and fresh continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-source-learning-2026-09-07.json"
+        },
+        {
+          "id": "regional-variation",
+          "label": "Variation, costs and interventions",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-integration-closeout-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-capture-status-closeout",
+      "stage": "sustained-red",
+      "title": "Resource-aware regional play",
+      "items": [
+        {
+          "id": "parent-authority",
+          "label": "Parent retains capture/resupply choice",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-resource-goals-qualification-2026-09-07.json"
+        },
+        {
+          "id": "parent-outcome",
+          "label": "Played native goal outcome fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-resource-goals-result-2026-09-07.json"
+        },
+        {
+          "id": "parent-continuation",
+          "label": "Productive post-fit continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-capture-status-result-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-affordable-capture-closeout",
+      "stage": "sustained-red",
+      "title": "Affordable sustained continuation",
+      "items": [
+        {
+          "id": "affordable-quote",
+          "label": "Affordable purchase and exact cost qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-supply-qualification-2026-09-07.json"
+        },
+        {
+          "id": "restored-resources",
+          "label": "Real resources/helper readiness restored",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-continuation-result-2026-09-07.json"
+        },
+        {
+          "id": "productive-affordable-followup",
+          "label": "Fresh productive model continuation",
+          "done": true,
+          "evidence": "docs/evidence/red-affordable-capture-learning-result-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-shared-experience-learning",
+      "stage": "sustained-red",
+      "title": "Mixed collection / evolution learning",
+      "items": [
+        {
+          "id": "ordered-objective",
+          "label": "Future objectives preserve history",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "native-source-cardinality",
+          "label": "Native goals with zero or one source",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "native-retained-fitting",
+          "label": "Actual native outcome inventory qualified",
+          "done": true,
+          "evidence": "docs/evidence/red-mixed-goal-integration-qualification-2026-09-07.json"
+        },
+        {
+          "id": "mixed-execution-feasibility",
+          "label": "Useful mixed goals executable at save",
+          "done": true,
+          "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+        },
+        {
+          "id": "mixed-learned-outcome",
+          "label": "Played mixed choice retained and fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-shared-experience-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-collection-prerequisites-learning",
+      "stage": "sustained-red",
+      "title": "Storage-safe varied collection",
+      "items": [
+        {
+          "id": "legitimate-supply",
+          "label": "Legitimate supply support retained",
+          "done": true,
+          "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        },
+        {
+          "id": "capture-storage",
+          "label": "Storage-safe capture preparation",
+          "done": true,
+          "evidence": "docs/evidence/red-varied-collection-learning-2026-09-07.json"
+        },
+        {
+          "id": "productive-varied-outcome",
+          "label": "Useful varied outcome played and fitted",
+          "done": true,
+          "evidence": "docs/evidence/red-collection-prerequisites-learning-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-07-bounded-search-continuation",
+      "stage": "sustained-red",
+      "title": "Safe retained acquisition chain",
+      "items": [
+        {
+          "id": "retained-party-recovery",
+          "label": "Recover the actual retained party",
+          "done": true,
+          "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        },
+        {
+          "id": "capture-ready-lead",
+          "label": "Qualify safe capture-search preparation",
+          "done": true,
+          "evidence": "docs/evidence/red-safe-capture-integration-2026-09-07.json"
+        },
+        {
+          "id": "productive-source-continuation",
+          "label": "Retain and fit a useful source capture",
+          "done": true,
+          "evidence": "docs/evidence/red-bounded-search-continuation-2026-09-07.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-useful-precursor-practice",
+      "stage": "sustained-red",
+      "title": "Useful post-evolution acquisition choices",
+      "items": [
+        {
+          "id": "alternate-precursor-plan",
+          "label": "Qualify alternative precursor plans",
+          "done": true,
+          "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        },
+        {
+          "id": "actual-alternative-menu",
+          "label": "Expose genuine reachable choices",
+          "done": true,
+          "evidence": "docs/evidence/red-alternative-acquisition-2026-09-08.json"
+        },
+        {
+          "id": "useful-alternative-outcome",
+          "label": "Play, retain and fit a useful outcome",
+          "done": true,
+          "evidence": "docs/evidence/red-useful-precursor-practice-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-phase3-chain-05",
+      "stage": "sustained-red",
+      "title": "Safe acquired-precursor evolution",
+      "items": [
+        {
+          "id": "exact-finisher-failure",
+          "label": "Retain and explain the exact failure",
+          "done": true,
+          "evidence": "docs/evidence/red-retained-ekans-failure-2026-09-08.json"
+        },
+        {
+          "id": "guarded-evolution-recovery",
+          "label": "Qualify encounter-aware recovery",
+          "done": true,
+          "evidence": "docs/evidence/red-resource-recovery-2026-09-08.json"
+        },
+        {
+          "id": "retained-precursor-evolution",
+          "label": "Complete and fit a useful evolution",
+          "done": true,
+          "evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-phase3-sustained-closeout",
+      "stage": "sustained-red",
+      "title": "Repeated sustained collection chains",
+      "items": [
+        {
+          "id": "first-useful-chain",
+          "label": "Retain one varied chain with living gain",
+          "done": true,
+          "evidence": "docs/evidence/red-phase3-chain-05-2026-09-08.json"
+        },
+        {
+          "id": "repeat-useful-chain",
+          "label": "Repeat useful linked collection progress",
+          "done": true,
+          "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
+        },
+        {
+          "id": "phase3-exit-audit",
+          "label": "Audit costs, recovery and phase coverage",
+          "done": true,
+          "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-08-earned-supply-continuation",
+      "stage": "red-story",
+      "title": "Resource-backed story progression",
+      "items": [
+        {
+          "id": "trainer-funding-qualification",
+          "label": "Qualify safe trainer funding from real state",
+          "done": true,
+          "evidence": "docs/evidence/red-trainer-transition-qualification-2026-09-08.json"
+        },
+        {
+          "id": "earned-resource-continuation",
+          "label": "Earn funds, buy supplies, continue collection",
+          "done": true,
+          "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        },
+        {
+          "id": "model-story-choice",
+          "label": "Fit a genuine resource or story-goal choice",
+          "done": true,
+          "evidence": "docs/evidence/red-earned-resource-continuation-2026-09-08.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-09-agatha-control-closeout",
+      "stage": "red-story",
+      "title": "Reachable income to model-led story",
+      "items": [
+        {
+          "id": "regional-income",
+          "label": "Earn funds through safe adjacent-map travel",
+          "done": true,
+          "evidence": "docs/evidence/red-regional-income-qualification-2026-09-08.json"
+        },
+        {
+          "id": "truthful-story-entry",
+          "label": "Qualify current-state story entry and readiness",
+          "done": true,
+          "evidence": "docs/evidence/red-bruno-support-2026-09-09.json"
+        },
+        {
+          "id": "native-story-lesson",
+          "label": "Play and fit a genuine bounded story choice",
+          "done": true,
+          "evidence": "docs/evidence/red-forward-goal-pilot-2026-09-09.json"
+        }
+      ]
+    },
+    {
+      "session": "2026-09-09-resource-fit-fixed-entry",
+      "stage": "red-story",
+      "title": "Resource-aware story decisions",
+      "items": [
+        {
+          "id": "changed-resource-control",
+          "label": "Verify a changed-resource choice",
+          "done": true,
+          "evidence": "docs/evidence/red-agatha-controller-probe-2026-09-09.json"
+        },
+        {
+          "id": "broader-resource-return-fit",
+          "label": "Fit broader real resource returns",
+          "done": true,
+          "evidence": "docs/evidence/red-agatha-resource-coverage-fit-2026-09-09.json"
+        },
+        {
+          "id": "broader-fit-control-probe",
+          "label": "Test the updated first choice",
+          "done": false,
+          "evidence": null
+        }
+      ],
+      "closure": "2/3 verified. Optional updated first-choice probe deferred: no new first-action contrast; repaired controller changes the old contract. No replacement cohort and no Phase4 exit change."
+    },
+    {
+      "session": "2026-09-09-phase4-complete",
+      "stage": "red-story",
+      "title": "Model-led league continuation",
+      "items": [
+        {
+          "id": "fixed-damage-entry",
+          "label": "Qualify shared fixed-damage entry",
+          "done": true,
+          "evidence": "docs/evidence/red-fixed-damage-entry-2026-09-09.json"
+        },
+        {
+          "id": "linked-native-story",
+          "label": "Carry a real model choice forward",
+          "done": true,
+          "evidence": "docs/evidence/red-model-selected-lance-2026-09-09.json"
+        },
+        {
+          "id": "current-champion-hof",
+          "label": "Verify Champion and Hall of Fame",
+          "done": true,
+          "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
+        }
+      ]
+    },
+    {
+      "title": "Restore useful indoor collection choices",
+      "items": [
+        {
+          "id": "indoor-eligibility",
+          "label": "Qualify cave-floor encounter rules",
+          "done": true,
+          "evidence": "docs/evidence/red-indoor-encounter-engineering-2026-09-10.json"
+        },
+        {
+          "id": "indoor-executable-choices",
+          "label": "Verify actual saved-state alternatives",
+          "done": true,
+          "evidence": "docs/evidence/red-registered-indoor-learning-2026-09-10.json"
+        },
+        {
+          "id": "indoor-choice-learning",
+          "label": "Retain and fit a model-selected lesson",
+          "done": true,
+          "evidence": "docs/evidence/red-registered-indoor-learning-2026-09-10.json"
+        }
+      ],
+      "session": "2026-09-10-registration-opportunities",
+      "stage": "red-collection",
+      "closure": "Previously completed indoor eligibility checklist retained unchanged; next work addresses missed encounters during travel."
+    }
+  ]
+}
