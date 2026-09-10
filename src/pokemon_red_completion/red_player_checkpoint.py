@@ -25,7 +25,7 @@ from pokemon_red_completion.goal_manager_context_catalog import (
     parse_goal_manager_context_capture,
 )
 from pokemon_red_completion.goal_search_memory import GoalSearchMemory
-from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
+from pokemon_red_completion.private_artifacts import PrivateArtifactRoot, PrivateEpisodeReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_failure_recovery import (
     RECOVERY_CHECKPOINT_SCHEMA,
@@ -225,11 +225,18 @@ def capture_red_player_terminal(
     }
 
 
-def _join_episode(store: PrivateArtifactRoot, document: Mapping[str, object]) -> str:
+def _join_episode(
+    store: PrivateArtifactRoot,
+    document: Mapping[str, object],
+    *,
+    verified_episode: PrivateEpisodeReader | None = None,
+) -> str:
     episode_id = document.get("episode_id")
     if not isinstance(episode_id, str):
         raise RedPlayerCheckpointError("checkpoint episode identity differs")
-    episode = store.open_episode(episode_id)
+    episode = verified_episode if verified_episode is not None else store.open_episode(episode_id)
+    if not isinstance(episode, PrivateEpisodeReader):
+        raise RedPlayerCheckpointError("checkpoint needs an authenticated episode snapshot")
     captured = list(episode.iter_stream("checkpoint", max_records=1))
     expected_capture = {
         key: value for key, value in document.items() if key != "trajectory_manifest_sha256"
@@ -329,8 +336,15 @@ def open_red_player_checkpoint(
     expected_profile_sha256: str,
     expected_rom_sha256: str,
     expected_context_origin: str,
+    verified_episode: PrivateEpisodeReader | None = None,
 ) -> RedPlayerCheckpoint:
-    """Read only; never load an emulator, change a partition or issue a new claim."""
+    """Read only; never load an emulator, change a partition or issue a new claim.
+
+    A caller that just opened the episode for its header may reuse that immutable,
+    all-stream-verified snapshot for this join. No validation is skipped: its exact
+    checkpoint, header, terminal and manifest must still match the sealed record.
+    This is call-local reuse, not a cache across preparations or controller input.
+    """
     record = store.find_sealed_record(
         checkpoint_record_id(episode_id), expected_kind=CHECKPOINT_KIND
     )
@@ -357,7 +371,9 @@ def open_red_player_checkpoint(
         document.get(key) != value for key, value in expected.items()
     ):
         raise RedPlayerCheckpointError("checkpoint parent or scope differs")
-    if _join_episode(store, document) != document.get("trajectory_manifest_sha256"):
+    if _join_episode(store, document, verified_episode=verified_episode) != document.get(
+        "trajectory_manifest_sha256"
+    ):
         raise RedPlayerCheckpointError("checkpoint trajectory identity differs")
     encoded = document.get("state_base64")
     if not isinstance(encoded, str) or len(encoded) > 4 * ((MAXIMUM_STATE_BYTES + 2) // 3):

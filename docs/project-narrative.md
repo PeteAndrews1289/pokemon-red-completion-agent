@@ -19,8 +19,10 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 ## Results we can show
 
 - Checkpoint-based story integration reached the Champion and Hall of Fame with disclosed deterministic battle execution. The final episode contained two learned recovery choices and a forced boss continuation—not an autonomous fresh-game win. [Story audit](audits/red-phase4-closeout-2026-09-09.md).
-- The latest collection batch caught Onix, reaching59 registered species and51 physical specimens.
+- The preceding collection batch caught Onix, reaching59 registered species and51 physical specimens.
 - Three of four goals succeeded. Both actual destination outcomes—one failed search and one successful capture—were fitted; two safety-driven resupply steps were excluded. The model grew from54 to56 examples. [Collection report](work-sessions/2026-09-10-post-merge-collection.md).
+
+A subsequent [four-goal batch](work-sessions/2026-09-10-preparation-collection.md) added three outcomes—successful model-selected recovery and two failed destination searches—bringing the model to59 examples, but added no registrations. A small preparation repair measured44.8→28.3seconds on the same saved input. The search failures exposed another practical constraint: a64-leg patrol produced only two/four destination encounters. Faster infrastructure and more examples do not by themselves mean better collection.
 
 These are related development experiences, not an independent success rate or evidence of cross-game transfer.
 
