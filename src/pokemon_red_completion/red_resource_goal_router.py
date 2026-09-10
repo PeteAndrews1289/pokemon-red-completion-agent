@@ -9,14 +9,17 @@ never fabricates a destination state or grants a successful outcome.
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
+from functools import partial
 
 from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
     Gen1TraversalObserver,
 )
 from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
+from pokemon_red_completion.gen1_traversal import cut_capabilities
 from pokemon_red_completion.goal_manager import GoalAvailability, GoalKind, GoalUnavailableReason
 from pokemon_red_completion.goal_manager_runtime import (
     ExecutableGoalBinding,
@@ -107,10 +110,13 @@ class RedResourceGoalRouter:
         traversal = Gen1TraversalObserver(
             self.runtime.reader,
             hazard_projector=Gen1TrainerSightProjector(self.world.rom, self.runtime.reader),
+            **({"capability_projector": cut_capabilities} if any(
+                _cut_enabled(spec) for spec in self.runtime.profile.providers
+            ) else {}),
         )
         fresh = FreshRedGoalObservation("0" * 64, observation, traversal.observe())
-        # FrameSafeExecutor has no HM action port. Do not advertise Surf/Cut/
-        # Strength just because the party knows them; walking is the declared scope.
+        # Cut is an explicit prospective option with its own metered action port.
+        # Surf/Strength remain closed even if the party knows them.
         if fresh.traversal.mode != "land":
             return local
         origin = red_living_dex_setup_fresh_observation_sha256(fresh)
@@ -208,7 +214,7 @@ class RedResourceGoalRouter:
                     {
                         "schema": "pokemon.red.resource-goal-router.v1",
                         "profile_sha256": self.runtime.profile.profile_sha256,
-                        "walking_only": True,
+                        "walking_only": not _cut_enabled(spec),
                     }
                 ),
                 plan=plan,
@@ -216,7 +222,8 @@ class RedResourceGoalRouter:
                 traversal_observer=traversal,
                 emulator=self.runtime.emulator,
                 interruption_handler=interruption_handler,
-                replanner=self._replan,
+                replanner=partial(self._replan, allow_cut=_cut_enabled(spec)),
+                field_actions=self.field_actions_for(spec),
                 route_limits=_ROUTE_LIMITS,
                 prepare_departure=lambda: prepare_center_departure(
                     self.actions, self.runtime.reader
@@ -366,7 +373,7 @@ class RedResourceGoalRouter:
                     )
                 except RoutePlanningError:
                     continue
-                if plan.steps and _walking_plan(plan):
+                if plan.steps and _supported_plan(plan, allow_cut=_cut_enabled(spec)):
                     return plan
             return None
         target_map = parameters["map_id"]
@@ -380,22 +387,41 @@ class RedResourceGoalRouter:
             plan = self.world.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
         except RoutePlanningError:
             return None
-        if not plan.steps or not _walking_plan(plan):
+        if not plan.steps or not _supported_plan(plan, allow_cut=_cut_enabled(spec)):
             return None
         return plan
 
-    def _replan(self, request: ReplanRequest) -> RoutePlan:
+    def field_actions_for(self, spec: RedGoalProviderSpec) -> Gen1FieldMovePort | None:
+        """Expand field macros through the same counted/budgeted primitive port."""
+        if not _cut_enabled(spec):
+            return None
+        return Gen1FieldMovePort(
+            self.actions, self.runtime.reader, self.runtime.emulator,
+            cut_block_swaps={swap.before: swap.after for swap in self.world.rules.cut_block_swaps},
+        )
+
+    def _replan(self, request: ReplanRequest, *, allow_cut: bool = False) -> RoutePlan:
         plan = self.world.replanner()(request)
-        if not _walking_plan(plan):
+        if not _supported_plan(plan, allow_cut=allow_cut):
             raise RedResourceGoalRoutingError("resource route requires an unsupported field action")
         return plan
 
 
-def _walking_plan(plan: RoutePlan) -> bool:
+def _cut_enabled(spec: RedGoalProviderSpec) -> bool:
+    return (spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+            and spec.parameters.get("cut_transport") is True)
+
+
+def _supported_plan(plan: RoutePlan, *, allow_cut: bool = False) -> bool:
     return all(
-        step.action_kind is MacroActionKind.MOVE
-        and step.action in _WALK_ACTIONS
+        ((step.action_kind is MacroActionKind.MOVE and step.action in _WALK_ACTIONS)
+         or (allow_cut and step.action_kind is MacroActionKind.FIELD_MOVE
+             and step.action in {"cut:" + direction for direction in _WALK_ACTIONS}))
         and step.source_mode in {None, "land"}
         and step.expected_mode in {None, "land"}
         for step in plan.steps
     )
+
+
+def _walking_plan(plan: RoutePlan) -> bool:
+    return _supported_plan(plan)
