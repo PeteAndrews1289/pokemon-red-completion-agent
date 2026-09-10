@@ -339,6 +339,8 @@ class RedSemanticTransportRoute:
             )
         self._executed = True
         before = self._checkpoint()
+        initial_cuts = len(self.field_actions.cut_receipts) if self.field_actions is not None else 0
+        initial_surfs = len(self.field_actions.receipts) if self.field_actions is not None else 0
         if self.field_actions is not None:
             self.__post_init__()
             if not self._matches_start(self.traversal_observer.observe()):
@@ -394,7 +396,11 @@ class RedSemanticTransportRoute:
                 "transport_is_policy_kind": False,
                 "private_route_fields": 0,
                 **({"travel_captures": travel_captures} if travel_captures else {}),
-                **({"verified_cuts": len(self.field_actions.cut_receipts)}
+                **({"verified_cuts": len(self.field_actions.cut_receipts) - initial_cuts,
+                    "verified_surfs": len(self.field_actions.receipts) - initial_surfs,
+                    "field_moves": {"cuts": len(self.field_actions.cut_receipts) - initial_cuts,
+                                    "surfs": len(self.field_actions.receipts) - initial_surfs,
+                                    "flights": 0}}
                    if self.field_actions is not None else {}),
             },
         )
@@ -446,6 +452,10 @@ class RedSemanticTransportRoute:
                 step.action_kind is MacroActionKind.FIELD_MOVE
                 and step.action.startswith("cut:") for step in self.plan.steps
             ) or "move:cut" in value.capabilities)
+            and (self.field_actions is None or not any(
+                step.action_kind is MacroActionKind.FIELD_MOVE
+                and step.action.startswith("surf:") for step in self.plan.steps
+            ) or "move:surf" in value.capabilities)
         )
 
 

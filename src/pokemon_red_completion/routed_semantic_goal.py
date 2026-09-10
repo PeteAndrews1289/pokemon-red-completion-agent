@@ -432,6 +432,7 @@ class RoutedSemanticGoalComposer:
         actions, frames = _checkpoint_delta(before, after)
         from pokemon_red_completion.capture_support import CaptureSupportSummary
         from pokemon_red_completion.capture_survey import CaptureSurveySummary
+        from pokemon_red_completion.field_move_summary import FieldMoveSummary
         from pokemon_red_completion.storage_preparation import StoragePreparationSummary
 
         capture_support = (
@@ -444,6 +445,12 @@ class RoutedSemanticGoalComposer:
         )
         storage = (None if destination_execution is None
                    else StoragePreparationSummary.from_evidence(destination_execution.evidence))
+        route_fields = FieldMoveSummary.from_evidence(route_execution.evidence)
+        destination_fields = (None if destination_execution is None
+                              else FieldMoveSummary.from_evidence(destination_execution.evidence))
+        fields = ((route_fields or FieldMoveSummary()).plus(
+                    destination_fields or FieldMoveSummary())
+                  if route_fields is not None or destination_fields is not None else None)
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
@@ -468,6 +475,7 @@ class RoutedSemanticGoalComposer:
                 **({"capture_survey": capture_survey.public_dict()}
                    if capture_survey is not None else {}),
                 **({"storage_preparation": storage.public_dict()} if storage is not None else {}),
+                **({"field_moves": fields.public_dict()} if fields is not None else {}),
             },
         )
         self._attempt = _RoutedSemanticAttempt(
