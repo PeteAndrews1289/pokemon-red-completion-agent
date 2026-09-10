@@ -33,7 +33,7 @@ def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_
     monkeypatch.setattr(cycle.source.base, '_prepare', prepare)
     monkeypatch.setattr(cycle, 'load_prior_player_inventory', lambda *_: ((), ()))
     def inspect(_ready, **kwargs):
-        assert kwargs == {'allow_no_choice': True}
+        assert kwargs == {'allow_no_choice': True, 'include_menu': False}
         return object(), (() if stop_after_first and played else (object(), object())), None
     monkeypatch.setattr(cycle.source, 'inspect_sources', inspect)
     def run(actual):

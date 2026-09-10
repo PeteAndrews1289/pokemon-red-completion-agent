@@ -130,8 +130,16 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
     return memory
 
 
-def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) -> tuple[Any, ...]:
-    """Restore the exact parent and enumerate without predictions or controller input."""
+def inspect_sources(
+    ready: base._Readiness, *, allow_no_choice: bool = False, include_menu: bool = True,
+) -> tuple[Any, ...]:
+    """Restore and enumerate; inventory-only callers need no ranking history.
+
+    Actual choice callers retain the default authenticated history projection.
+    Skipping a menu never skips restoring or checking the fresh game state.
+    """
+    if type(include_menu) is not bool:
+        raise ValueError("include_menu must be a boolean")
     if ready.continuation is None or ready.training_plan is None or ready.causal_record is None:
         raise ValueError("regional source choice requires an authenticated train continuation")
     world = base._route_world(ready)
@@ -180,11 +188,10 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
             routed_recovery=ready.routed_recovery,
             prepare_capture_storage=ready.completion_dose,
         )
-        memory = source_search_memory(ready)
         menu = (
             None
-            if allow_no_choice and len(candidates) < 2
-            else regional_acquisition_menu(observed, candidates, memory)
+            if not include_menu or (allow_no_choice and len(candidates) < 2)
+            else regional_acquisition_menu(observed, candidates, source_search_memory(ready))
         )
         if (
             before != emulator.save_state_bytes()

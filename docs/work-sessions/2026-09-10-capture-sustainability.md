@@ -12,3 +12,14 @@
 Starting point: 64 registrations, 54 specimens, 63 examples; Seafoam B3F,
 zero balls, 593 money, capture helper 36/73 HP. These counters change only after
 verified gameplay and an eligible fit. No reset, sealed Red, Crystal or full replay.
+
+## Preparation repair
+
+The cycle's inventory-only inspection no longer rebuilds a ranking history whose
+menu it discards. Actual choice calls retain authenticated history by default;
+both paths still restore and verify the exact state and reject input side effects.
+90 focused inventory, cycle, source-runner and learning tests passed. This is
+maintenance to unblock collection, not new learning or a measured live speedup.
+
+Two initial read-only invocations stopped at clean/published-source checks before
+opening the continuation. No episode, prediction, gameplay or fit was created.

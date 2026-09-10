@@ -216,7 +216,9 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         ):
             raise ValueError("learning cycle source changed")
         assert isinstance(ready.causal_record, RedPlayerModelRecord)
-        _observed, candidates, _menu = source.inspect_sources(ready, allow_no_choice=True)
+        _observed, candidates, _menu = source.inspect_sources(
+            ready, allow_no_choice=True, include_menu=False,
+        )
         regional = True
         if automatic_goals:
             try:
