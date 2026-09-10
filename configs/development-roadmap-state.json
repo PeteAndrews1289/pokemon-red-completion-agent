@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-public-project-reset",
+  "as_of_session": "2026-09-10-post-merge-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-collection-continuation-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-post-merge-collection-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -768,6 +768,12 @@
       "result": "Public documentation and handoffs reset without deleting history. No gameplay or fit; model54,58 registrations and all stage exits unchanged.",
       "deviation": "User-requested presentation maintenance before the next collection batch. Repository remains active/public, not archived. No milestone or learning counter advanced.",
       "next": "Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-post-merge-collection",
+      "result": "3/4 goals succeeded; 2 eligible fits,54 to56 examples. 58 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.",
+      "deviation": "Fresh same-lineage learning after PR236 merge. No stage exits changed; failures retained.",
+      "next": "Continue from the exact Y terminal and latest fitted model, not the old X save. Use actual search/resource outcomes to prioritize the next bounded collection task. Keep preparation optimization measured and small; no replay, reset, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

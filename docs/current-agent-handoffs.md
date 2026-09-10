@@ -5,10 +5,10 @@ Start with the [current operational handoff](../HANDOFF.md) and [role assignment
 ## Current facts
 
 - The goal is a transferable player and one shared registered Pokédex, not a perfect Red script.
-- Active collection model:54 examples; latest saved collection:58 registrations.
+- Active collection model:56 examples; latest saved collection:59 registrations.
 - Goal/destination choices are learned; navigation, battle and other mechanics remain deterministic.
-- Gameplay is paused. The user's latest request is documentation cleanup and GitHub merge.
-- The next gameplay batch has not started. The last verified state is X.
+- Gameplay is paused after four fresh steps. The documentation cleanup merged before this batch.
+- The last verified save is Y04; the latest actual fit is Y03/model56. Preserve both safety-support steps without invented labels.
 
 ## Review questions
 

@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection:58 verified registrations and54 examples under the registered-only learning objective. Earlier objectives and datasets remain historical; their counts are not silently added to this one. Fresh-game autonomous play and independent reliability are not established.
+Current work is Red collection:59 verified registrations and56 examples under the registered-only learning objective. Earlier objectives and datasets remain historical; their counts are not silently added to this one. Fresh-game autonomous play and independent reliability are not established.
 
 ## Next sequence
 
@@ -24,7 +24,7 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-Public documentation cleanup comes first at Pete's request; it is maintenance, not learning. Resume from X/model54 after publication. A preparation-only profile found repeated history validation as a cost; any optimization needs measured benefit and unchanged integrity checks.
+Public documentation cleanup is merged. Y added Onix and fitted both a failed search and a successful destination choice; two safety-driven resupply steps were not fitted. Resume from the final Y save and model56. A preparation-only profile found repeated history validation as a cost; any optimization needs measured benefit and unchanged integrity checks.
 
 Use a short fresh collection batch, not a full replay. Keep any preparation repair within30minutes, then return to outcomes or report the blocker. The travel-capture checklist remains1/3; do not turn that number into a project-completion estimate.
 
@@ -34,4 +34,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-collection-continuation.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-10-post-merge-collection.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)

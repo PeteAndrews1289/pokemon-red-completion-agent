@@ -20,10 +20,10 @@ A useful visual is one actual goal menu beside its selected destination and reta
 
 ## Act3 — Show one result with its denominator
 
-Use [the Clefairy batch](work-sessions/2026-09-10-collection-continuation.md):
-four successful goals, one new registration and three admitted learning examples. One safety-driven resupply step was deliberately not counted as a model lesson.
+Use [the Onix batch](work-sessions/2026-09-10-post-merge-collection.md):
+an unsuccessful first-floor search, real resupply, a successful basement capture and funding. Two destination outcomes were fitted; two safety-driven steps were deliberately not counted as model lessons. Do not claim the first failure caused the later success.
 
-Show58 registrations and54 examples as a dated snapshot. Neither number is a completion percentage or a claim of independent reliability.
+Show59 registrations and56 examples as a dated snapshot. Neither number is a completion percentage or a claim of independent reliability.
 
 The [Champion milestone](audits/red-phase4-closeout-2026-09-09.md) is supporting footage: checkpoint-based integration, deterministic battles and a forced final continuation. Do not call it a model learning an entire game from scratch.
 
