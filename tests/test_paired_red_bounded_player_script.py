@@ -61,6 +61,20 @@ def test_capture_cut_is_an_ordered_prospective_transition(monkeypatch, field):
     assert '--capture-' + field + '-transport' in module['_parser']().format_help()
 
 
+def test_resupply_fly_is_an_ordered_prospective_transition(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _supply_transition_profile()
+    (new,) = derive(before, ("resupply-fly",), object())
+    assert new.providers[:2] == before.providers[:2]
+    assert "fly_transport" not in before.providers[2].parameters
+    assert new.providers[2].parameters["fly_transport"] is True
+    assert new.providers[2].parameters["indoor_fly_departure"] is True
+    assert "--resupply-fly-transport" in module["_parser"]().format_help()
+
+
 def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 

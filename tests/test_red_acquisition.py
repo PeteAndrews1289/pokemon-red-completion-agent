@@ -550,6 +550,25 @@ def test_prospective_patrol_reserves_actions_for_every_permitted_flee():
     assert report.actions_executed == 225
 
 
+def test_area_survey_stops_before_seeking_without_capture_resources():
+    executor = _RouteOneSurveySimulation(())
+    report = run_red_area_survey(
+        "wild:Route1:grass", executor, capture_resources_available=lambda: False,
+    )
+    assert report.capture_items_exhausted and not report.search_exhausted
+    assert not report.passed
+    assert report.encounters_seen == report.captures == report.flees == 0
+
+
+@pytest.mark.parametrize("value", [0, 1, None, "yes"])
+def test_area_survey_rejects_non_boolean_resource_evidence(value):
+    with pytest.raises(TypeError, match="resource check"):
+        run_red_area_survey(
+            "wild:Route1:grass", _RouteOneSurveySimulation(()),
+            capture_resources_available=lambda: value,
+        )
+
+
 def test_area_executor_retries_a_bounded_failed_capture_on_a_fresh_encounter() -> None:
     class _RetryingRouteOneSurvey(_RouteOneSurveySimulation):
         failed_once = False
