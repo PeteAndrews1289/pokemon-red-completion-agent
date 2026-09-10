@@ -1,12 +1,12 @@
-# Current — travel capture component tested; model47 unchanged
+# Current — Koffing retained; model48, 56 registrations
 
-Travel-capture component and route-failure preservation tested: 88 focused tests passed. Static Mansion route differs from observed terrain. Gameplay integration remains unfinished; no new input or fit. Model47, 55 registrations and48 specimens retained.
+Koffing captured during travel: 55 to 56 registrations, 48 to 49 specimens. The destination trip failed verification; its actual outcome was fitted once, 47 to 48 registered-objective examples. No retry or success relabeling.
 
-Next: Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal.
+Next: Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal.
 
-Bounded goal/destination learning with deterministic mechanics; not a new-game autonomous player.
+Bounded destination learning with deterministic mechanics; not a fresh-game autonomous player. Gameplay is stopped.
 
-[Session, limitations and next step](docs/work-sessions/2026-09-10-travel-capture-guards.md). Prior model47 learning outcomes remain [preserved](docs/work-sessions/2026-09-10-registration-opportunities.md).
+[Session, review and evidence](docs/work-sessions/2026-09-10-travel-capture-runtime.md).
 
 ## Prior checkpoints
 

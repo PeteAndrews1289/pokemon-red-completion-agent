@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-travel-capture-guards",
+  "as_of_session": "2026-09-10-travel-capture-runtime",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-travel-capture-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -744,6 +744,12 @@
       "result": "Capture/resume and route-failure guards: 88 focused tests passed. Zero-input Mansion diagnosis confirmed a route mismatch. Not enabled in gameplay; model47 and55 registrations unchanged.",
       "deviation": "Engineering-only session; live connection and productive outcome were not reached. Checklist stays1/3 and stage exits unchanged. Reorient on bounded integration, not a broader navigation rewrite.",
       "next": "Bind travel capture to bounded acquisition-only runtime actions without changing historical profiles. Verify already-satisfied arrival and retained gains on later failure, then collect one fresh model47 choice if executable. One focused session; no new routing framework, consumed retry, reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-travel-capture-runtime",
+      "result": "Koffing retained: 56 registrations /49 specimens. One failed trip fitted model47 to48. Box-prepend verifier corrected prospectively; route-resume milestone remains open.",
+      "deviation": "No stage exits changed. Travel checklist stays1/3: the real catch and fitted failure do not demonstrate a completed capture-and-resume journey.",
+      "next": "Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

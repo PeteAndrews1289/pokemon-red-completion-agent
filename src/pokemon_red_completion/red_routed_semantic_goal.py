@@ -357,6 +357,15 @@ class RedSemanticTransportRoute:
             raise RedRoutedSemanticGoalError(
                 "Red semantic transport executed a different initial plan"
             )
+        travel_captures = [
+            {key: receipt.details[key] for key in (
+                "schema", "species_ref", "captured", "new_registrations", "actions",
+                "frames", "balls_spent", "route_boundary_preserved", "destination_changed",
+                "learned_encounter_choice",
+            ) if key in receipt.details}
+            for receipt in route_report.interruptions
+            if receipt.details.get("schema") == "pokemon.red.registered-travel-capture.v1"
+        ]
         report = GoalExecutionReport(
             actions_executed=actions,
             frames_executed=frames,
@@ -372,6 +381,7 @@ class RedSemanticTransportRoute:
                 "semantic_router_authenticated": True,
                 "transport_is_policy_kind": False,
                 "private_route_fields": 0,
+                **({"travel_captures": travel_captures} if travel_captures else {}),
             },
         )
         self._route_report = route_report

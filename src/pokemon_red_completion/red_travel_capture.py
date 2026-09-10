@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable, Mapping
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Protocol
 
 from .collection import CollectionLocation, CollectionObservation
@@ -189,7 +189,15 @@ class RegisteredTravelCaptureHandler:
             or tuple(final.party_status or ()) != status
         ):
             raise RedTravelCaptureError("travel capture cannot safely resume its boundary")
-        old_stock, new_stock = Counter(before.specimens), Counter(after.specimens)
+        # Red prepends a catch to the active box. Every prior active-box slot
+        # shifts by one; comparing unshifted identities misreports stock loss.
+        old_stock = Counter(
+            replace(item, slot_index=item.slot_index + int(caught))
+            if item.location is CollectionLocation.BOX
+            and item.container_index == before.current_box_index else item
+            for item in before.specimens
+        )
+        new_stock = Counter(after.specimens)
         added = list((new_stock - old_stock).elements())
         expected_boxes = list(before.box_counts)
         expected_boxes[before.current_box_index] += int(caught)
@@ -202,7 +210,7 @@ class RegisteredTravelCaptureHandler:
                 item.species_ref != species
                 or item.location is not CollectionLocation.BOX
                 or item.container_index != before.current_box_index
-                or item.slot_index != before.box_counts[before.current_box_index]
+                or item.slot_index != 0
                 or item.level != raw.enemy_level
                 for item in added
             )

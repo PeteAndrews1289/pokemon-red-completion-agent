@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-capture-guards**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-capture-runtime**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **47 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **48 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-travel-capture-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-travel-capture-runtime
+
+Koffing retained: 56 registrations /49 specimens. One failed trip fitted model47 to48. Box-prepend verifier corrected prospectively; route-resume milestone remains open.
+
+**Deviation:** No stage exits changed. Travel checklist stays1/3: the real catch and fitted failure do not demonstrate a completed capture-and-resume journey.
+
+**Next:** Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal.
 
 ### 2026-09-10-travel-capture-guards
 

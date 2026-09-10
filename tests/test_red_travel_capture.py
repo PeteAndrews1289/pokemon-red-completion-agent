@@ -447,3 +447,51 @@ def test_controller_failure_attaches_route_trace_and_preserves_original_cause():
     assert str(error.value.__cause__) == "interrupted controller"
     assert h.actions == 2 and h.frames == 48  # Dispatched work is not refunded.
     assert h.calls == 1 and h.fallback_calls == 0
+
+
+@pytest.mark.parametrize("fault", [None, "append", "swapped", "level", "other_box", "missing"])
+def test_nonempty_box_capture_requires_prepend_and_preserves_every_old_specimen(fault):
+    h = Harness()
+    party = h.collection.specimens
+    elsewhere = LivingSpecimen(red_species_ref(19), 7, CollectionLocation.BOX, 0, 0)
+    first = LivingSpecimen(red_species_ref(42), 22, CollectionLocation.BOX, 1, 0)
+    second = LivingSpecimen(red_species_ref(75), 25, CollectionLocation.BOX, 1, 1)
+    h.collection = replace(
+        h.collection, specimens=(*party, elsewhere, first, second),
+        owned_species=(
+            h.collection.owned_species | {s.species_ref for s in (elsewhere, first, second)}
+        ),
+        current_box_index=1, box_counts=(1, 2),
+    )
+    before = h.collection
+
+    def game_result():
+        new = LivingSpecimen(h.target, 30, CollectionLocation.BOX, 1, 0)
+        preserved = [elsewhere, replace(first, slot_index=1), replace(second, slot_index=2)]
+        if fault == "append":
+            new = replace(new, slot_index=2)
+            preserved = [elsewhere, first, second]
+        elif fault == "swapped":
+            preserved = [elsewhere, replace(first, slot_index=2), replace(second, slot_index=1)]
+        elif fault == "level":
+            preserved[1] = replace(preserved[1], level=23)
+        elif fault == "other_box":
+            preserved[0] = replace(elsewhere, level=8)
+        elif fault == "missing":
+            preserved.pop()
+        h.collection = replace(
+            before, specimens=(*party, *preserved, new), box_counts=(1, 3),
+            owned_species=before.owned_species | {h.target},
+        )
+
+    h.after_hook = game_result
+    if fault is None:
+        receipt = h.handler.handle(h.start)
+        assert receipt.details["captured"] is True
+        assert receipt.details["new_registrations"] == 1
+        assert h.collection.box_counts == (1, 3)
+        assert h.collection.current_box_index == 1
+    else:
+        with pytest.raises(RedTravelCaptureError, match="collection or ball delta"):
+            h.handler.handle(h.start)
+    assert h.calls == 1 and h.fallback_calls == 0

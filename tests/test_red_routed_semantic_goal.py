@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 
 import pytest
@@ -34,7 +34,7 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedSemanticTransportRoute,
     build_red_routed_semantic_goal_composer,
 )
-from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_executor import InterruptionReceipt, TraversalSnapshot
 from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.routed_semantic_goal import (
     RoutedSemanticGoalError,
@@ -204,6 +204,36 @@ def _destination(
         observe_fresh=observe_fresh,
         provider=provider or _Provider(world, actions),  # type: ignore[arg-type]
     )
+
+
+def test_travel_capture_report_projects_metrics_without_private_route_fields(monkeypatch):
+    import pokemon_red_completion.red_routed_semantic_goal as runtime
+
+    world = _World()
+    actions = CountingExecutor(world)
+    original = runtime.execute_route
+    details = {
+        "schema": "pokemon.red.registered-travel-capture.v1",
+        "species_ref": "pokemon:national:109", "captured": True,
+        "new_registrations": 1, "actions": 12, "frames": 360,
+        "balls_spent": 3, "destination_changed": False,
+        "route_boundary_preserved": True, "learned_encounter_choice": False,
+        "private_route": "must-not-be-exported",
+    }
+
+    def reported_route(*args, **kwargs):
+        result = original(*args, **kwargs)
+        return replace(result, interruptions=(InterruptionReceipt(
+            "wild_battle", 1, (2, 4), details,
+        ),))
+
+    monkeypatch.setattr(runtime, "execute_route", reported_route)
+    binding = _transport(world, actions).route_binding()
+    result = binding.execute()
+    exported = result.evidence["travel_captures"][0]
+    assert exported == {k: v for k, v in details.items() if k != "private_route"}
+    assert "must-not-be-exported" not in json.dumps(dict(result.evidence))
+    assert exported["learned_encounter_choice"] is False
 
 
 def test_red_composition_routes_then_binds_the_real_semantic_goal() -> None:
