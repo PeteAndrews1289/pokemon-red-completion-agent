@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-observed-funding-menu**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-purposeful-collection**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 - [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **40 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **44 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-observed-menu-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-purposeful-collection-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-purposeful-collection
+
+3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.
+
+**Deviation:** Stage exits unchanged. Four-choice maximum is bounded by time; no replay. Whole-project percentage estimates are withdrawn in favor of explicit gates.
+
+**Next:** Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.
 
 ### 2026-09-10-observed-funding-menu
 

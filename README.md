@@ -1,10 +1,12 @@
-# Current — observed menus; model 40, 54 registered
+# Current — Graveler registered; model 44, 55 registered
 
-Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.
+3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.
 
-Next: Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.
+Next: Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.
 
-[Session and evidence](docs/work-sessions/2026-09-10-observed-funding-menu.md).
+Bounded goal/destination learning with deterministic mechanics; not a new-game autonomous player.
+
+[Session, review and evidence](docs/work-sessions/2026-09-10-purposeful-collection.md).
 
 ## Prior checkpoints
 

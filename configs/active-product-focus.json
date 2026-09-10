@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "2 actual fits; no independent or cross-title authority promotion.",
-        "blocker": "No new routing blocker in this batch. One bounded search was exhausted; three balls and1073 money remain. Sustained useful collection is not yet independently established.",
-        "decision": "Continue from the exact retained terminal; no replay or resource reset.",
+        "authority_delta": "4 actual fits; no independent or cross-title authority promotion.",
+        "blocker": "Preparations are slow; search exhaustion remains a measured cost, not a routing crash. No fresh-game autonomy or independent advantage demonstrated.",
+        "decision": "Keep useful collection learning; measure preparation cost before optimizing or expanding architecture.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-observed-menu-learning-2026-09-10.json",
-          "sha256": "c3c4594169b5fde8f65d28beb019b6d258e9fb2d5e8a2e0079b8d83a43cebbd9"
+          "path": "docs/evidence/red-purposeful-collection-learning-2026-09-10.json",
+          "sha256": "fde074cc396e972db8e3450c10456f7987f6bcc705402b69d9e4d0de63608bc9"
         },
-        "learning_output": "Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.",
-        "next_falsifier": "A fresh supported acquisition adds registration without a forced destination or reset.",
-        "next_session_goal": "Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.",
+        "learning_output": "3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.",
+        "next_falsifier": "Any reused preparation must preserve exact fresh-state menus and reject changed checkpoint, ledger, source or mode; the fresh batch must still produce real choices.",
+        "next_session_goal": "Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-observed-funding-menu",
+        "session_id": "2026-09-10-purposeful-collection",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "Observed funding menus authenticated against the actual prior checkpoint. 1/2 new steps succeeded; 2 fits, model 40, 54 registrations and 48 specimens. Batch stop: step_limit. Failed costs remain recorded; singleton mechanics are not learned goal choices.",
+        "current": "3/4 fresh steps succeeded; 4 actual fits, 40 to 44 registered-objective examples and 54 to 55 registrations. Geodude evolved into Graveler through a sampled goal choice. Batch stopped at step_limit; all failed searches and costs are retained.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue a fresh four-choice collection/resource batch from the input-ready model 40 Rock Tunnel checkpoint. Expose legitimate resupply, capture and evolution alternatives as actually available; preserve search costs and shared registrations. No consumed retry, reset, forced destination, sealed evaluation or Crystal.",
+      "next_decision": "Profile the preparation overhead without input, then qualify the smallest safe reuse of unchanged authenticated calculations if a hotspot is confirmed. Time-box that maintenance to 30 minutes and use it to unblock the next fresh four-choice learning batch from model 44. Keep stone evolution isolated; no consumed retry, resource reset, forced source, sealed evaluation, fresh-game replay or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 40,
+        "registered_train_examples": 44,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
