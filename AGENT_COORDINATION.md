@@ -13,7 +13,7 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-PR236's public-documentation repair merged with green required CI. Fresh batch Y caught Onix and fitted two destination outcomes; gameplay is now stopped at Y/model56. Next is a short useful collection continuation, with any preparation repair strictly bounded. No external reviewer was commissioned for this execution-only session.
+PR237 merged with green required CI. A small preparation repair passed integrity regressions and measured44.8→28.3seconds on one saved input. Fresh batch Z added three fits but no registrations: model59/59 registered species, gameplay stopped at Z04. Next inspect the64-leg search cap and implement a bounded prospective search dose if justified, then test fresh choices. No external reviewer was commissioned for this bounded repair and run.
 
 Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
 

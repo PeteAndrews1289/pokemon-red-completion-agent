@@ -25,6 +25,8 @@ an unsuccessful first-floor search, real resupply, a successful basement capture
 
 Show59 registrations and56 examples as a dated snapshot. Neither number is a completion percentage or a claim of independent reliability.
 
+Then contrast [the following batch](work-sessions/2026-09-10-preparation-collection.md): the model reached59 examples, but registration stayed at59. Show successful team recovery and two bounded unsuccessful searches. A measured preparation speedup is an engineering result, not a new learned ability. The next question is whether a larger, still-bounded search makes collection more useful.
+
 The [Champion milestone](audits/red-phase4-closeout-2026-09-09.md) is supporting footage: checkpoint-based integration, deterministic battles and a forced final continuation. Do not call it a model learning an entire game from scratch.
 
 ## Act4 — Keep the failures in the story

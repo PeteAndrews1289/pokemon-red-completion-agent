@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T18:50:58.485736+00:00",
+  "location": "mt_moon_b1f \u00b7 saved, not live",
+  "registered_species": 59,
+  "living_species": 47,
+  "specimens": 51,
+  "capture_items": 4,
+  "money": 138,
+  "checkpoint_sha256": "9773887b5aaafe1369fb1d99443c885036d77350028bd2547e3622496ce5c1a5"
+}

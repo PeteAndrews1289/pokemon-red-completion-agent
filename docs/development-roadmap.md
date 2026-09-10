@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-post-merge-collection**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-preparation-collection**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **56 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **59 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-post-merge-collection-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-preparation-collection-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-preparation-collection
+
+2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** Measured preparation repair followed by four fresh goals, three real fits and no collection gain. No stage exits changed; search failures retained.
+
+**Next:** From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-post-merge-collection
 

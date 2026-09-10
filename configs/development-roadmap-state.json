@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-post-merge-collection",
+  "as_of_session": "2026-09-10-preparation-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-post-merge-collection-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-preparation-collection-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -774,6 +774,12 @@
       "result": "3/4 goals succeeded; 2 eligible fits,54 to56 examples. 58 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.",
       "deviation": "Fresh same-lineage learning after PR236 merge. No stage exits changed; failures retained.",
       "next": "Continue from the exact Y terminal and latest fitted model, not the old X save. Use actual search/resource outcomes to prioritize the next bounded collection task. Keep preparation optimization measured and small; no replay, reset, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-10-preparation-collection",
+      "result": "2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.",
+      "deviation": "Measured preparation repair followed by four fresh goals, three real fits and no collection gain. No stage exits changed; search failures retained.",
+      "next": "From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay."
     }
   ],
   "closed_milestones": [
