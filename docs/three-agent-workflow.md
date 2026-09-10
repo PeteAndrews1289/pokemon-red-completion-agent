@@ -13,6 +13,35 @@ dated audit does not silently reactivate an older assignment.
 
 ## Roles
 
+### Latest loop — September9 resource exit and Transform review
+
+Flash3.8 High supplied three isolated implementation/test drafts and two bounded
+correction passes. Codex integrated capture exhaustion, registered recovery and
+the nearby-shop map identifier after correcting real fixture/API mistakes.
+Original drafts are preserved locally as`e112d248`, `449e6ed7` and`a2a457ae`;
+only reviewed integration is published.249 capture/recovery tests and91 shop/
+profile/router tests passed in separate targeted runs before live execution.
+
+Actual play recovered the old failure, bought20 Great Balls, and fitted one
+new failed-search lesson: registered5 to6. The next attempt exposed Transform
+identity handling; it was excluded and separately recovered, not retried.
+Flash's final80.43-second read-only review identified identity/form and typing
+consumers. Codex accepts the distinction, but rejects blindly crediting original
+species: the cartridge's transformed-capture quirk requires actual received-stock
+verification. The original-identity address still needs qualification.
+
+Latest refreshed quota:71.15%five-hour /88.31%weekly remaining, resets about
+3h33m/47h4m. These are shared Gemini windows, not measured task savings.
+Claude was unused and unqueried; no external task remains running. Drafting
+offloaded work, but correction costs preclude a measured overall-speedup claim.
+
+Next Flash role: isolated Transform adapter/status/capture regression draft only
+after Codex specifies the verified cartridge identity contract. Codex owns the
+contract, integration, mutation checks, recovered-state execution, fit and push.
+Claude may review the final encounter/attribution boundary if a focused second
+opinion adds value; no broad audit is a prerequisite.
+[Results and continuation](work-sessions/2026-09-09-capture-resource-exit.md).
+
 ### Latest implementation loop — September9 capture readiness
 
 One194.97-second Flash3.8 High isolated draft supplied18 new regression cases

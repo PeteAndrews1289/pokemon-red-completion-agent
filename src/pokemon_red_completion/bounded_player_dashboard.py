@@ -46,6 +46,7 @@ from pokemon_red_completion.progress_dashboard import (
 )
 from pokemon_red_completion.red_collection import red_internal_species_number
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.registered_checkpoint import RegisteredCollectionCheckpoint
 
 
 class BoundedPlayerDashboard:
@@ -160,14 +161,24 @@ class BoundedPlayerDashboard:
         if not isinstance(live, RedGoalObservation):
             raise TypeError("viewer requires an existing typed Red observation")
         collection = observation.collection
+        registered = isinstance(collection, RegisteredCollectionCheckpoint)
         self._snapshot = replace(
             self._snapshot,
             run_status="running",
             location=live.game_state.location,
             registered_species=collection.registered_species,
+            collection_target=(
+                len(collection.target_species)
+                if isinstance(collection, RegisteredCollectionCheckpoint) else 151
+            ),
             living_species=collection.living_species,
             level_cap_species=live.evidence.level_collection.completed,
             collection_observed=True,
+            learning_components=tuple(
+                replace(component, name="Registered-Pokédex goal scorer")
+                if registered else component
+                for component in self._snapshot.learning_components
+            ),
             capture_items=live.capture_item_count,
             free_storage_slots=live.free_storage_slots,
             party=tuple(
@@ -194,8 +205,14 @@ class BoundedPlayerDashboard:
             message="Fresh boundary verified. Party and collection reflect this observation.",
         )
         self._events.append(
-            f"Observed: {collection.living_species} living species; "
-            f"{collection.required_specimens_remaining} required specimens remain"
+            (
+                f"Observed: {collection.registered_species} registered species; "
+                f"{collection.required_specimens_remaining} required registrations remain; "
+                f"{collection.retained_captures} physical specimens"
+            ) if registered else (
+                f"Observed: {collection.living_species} living species; "
+                f"{collection.required_specimens_remaining} required specimens remain"
+            )
         )
         self._publish()
 

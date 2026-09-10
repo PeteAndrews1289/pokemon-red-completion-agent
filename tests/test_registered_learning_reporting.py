@@ -46,6 +46,25 @@ def test_recovery_session_reports_last_fit_without_crediting_unsettled_attempt()
     assert session["helper_restore_callback_demonstrated"] is False
 
 
+def test_resource_exit_receipt_keeps_support_and_unsettled_transform_out_of_fit():
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-registered-resource-exit-learning-2026-09-09.json")
+        .read_text()
+    )
+    training, component = _training_projection(receipt)
+    assert (training.samples_before, training.samples_after) == (5, 6)
+    assert component.validation_examples == 0
+    session = receipt["session"]
+    assert session["fits"] == 1
+    assert session["steps"][0]["admitted_examples"] == 0
+    assert sum(row["admitted_examples"] for row in session["steps"]) == 1
+    assert session["failure"]["training_target"] is False
+    assert session["failure"]["safe_checkpoint"] is False
+    assert all(r["recovery"]["training_examples"] == 0 for r in session["recoveries"])
+    assert (session["total_recorded_actions"], session["total_recorded_frames"]) == (2030, 84540)
+    assert session["shop"]["money_before"] - session["shop"]["money_after"] == 12000
+
+
 @pytest.mark.parametrize(
     "mutation", [None, "count", "schema", "objective", "rewards", "weights", "bytes"]
 )

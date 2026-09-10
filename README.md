@@ -1,31 +1,26 @@
-# Current — registered training continued; battle-exit recovery next
+# Current — live resource recovery and model6
 
-Two more actual outcomes were fitted: a failed capture search and successful
-team restoration. The registered-objective model now contains **five examples**,
-separate from the historical114. Model5 reloaded, chose Route15 from two sources
-and played, but exhausted capture balls while still in a wild battle. Its raw
-failure state is preserved; it is not a safe continuation or fitted example.
-The four-step batch stopped after attempt3, leaving attempt4 unclaimed.
+Recovered both actual failed encounters without retry; bought20 Great Balls through the existing routed shop; one real failed-search lesson fitted5 to6. Model6 then selected Route15 and hit the Transform target-identity guard. Final verified39 registrations/43specimens; safe recovered checkpoint. No new registration or independent advantage; historical114 remains separate.
 
-Last verified ledger:39 registrations and43 specimens, unchanged this batch.
-The roughly13-minute batch recorded2,463 actions/141,484 frames including the
-unsettled attempt. These are correlated training outcomes, not independent
-competence. Learned authority remains goals/destinations; execution is deterministic.
-The completed three-item integration milestone is not completion of Red collection.
+The safe purchase cost12,000 currency and preserved the collection. The third
+attempt used576 actions/18,372frames before the capture guard rejected a
+displayed species change during Ditto's Transform. It remains an excluded failed
+attempt, not a sixth-to-seventh example. Both recoveries are support-only.
+The fourth scheduled step was never claimed. The model chooses goals/destinations;
+deterministic game skills still execute movement, battles and captures.
 
-Flash3.8 High supplied isolated readiness tests/diagnostics. Codex corrected and
-integrated the draft, added verified optional helper restoration, and passed218
-focused tests before play. Actual retrieval used a different healthy helper;
-the new restoration callback is test-qualified, not demonstrated by that event.
-Claude was not used. Last Gemini account reading:95.97%five-hour/91.85%weekly
-remaining; not an isolated measure of this task's consumption.
+Flash3.8 High supplied three isolated implementation/test drafts plus two
+correction passes. Codex corrected fixture/API mistakes, reviewed and integrated
+the source, and verified live recovery, supplies and the new fit.249 recovery/
+capture tests and91 shop/profile/router tests passed in their targeted runs,
+not a full-suite claim. A final read-only Flash review examines Transform.
+Historical rewards are not pooled; no Blue, Crystal, full replay or generalization.
 
-Next: qualify escape/recovery after capture-ball exhaustion from the preserved
-failure state, retain costs, restore affordable supplies, then resume model5.
-Do not reset to the earlier successful checkpoint or silently admit this failure.
-No Blue, Crystal, full-game replay, learned combat or generalization claim.
+Next: Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture.
+Then broaden useful collection choices and reduce repeated preparation overhead;
+do not spend another session on general audits or CI-only work.
 
-[Session, evidence and exact next work](docs/work-sessions/2026-09-09-capture-helper-recovery.md).
+[Evidence, audit, exact continuation and agent roles](docs/work-sessions/2026-09-09-capture-resource-exit.md).
 
 ## Historical runtime binding
 

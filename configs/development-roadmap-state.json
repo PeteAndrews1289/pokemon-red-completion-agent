@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-09-capture-helper-recovery",
+  "as_of_session": "2026-09-09-capture-resource-exit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json"
+      "evidence": "docs/evidence/red-registered-resource-exit-learning-2026-09-09.json"
     },
     "red-hack": {
       "status": "planned",
@@ -624,6 +624,12 @@
       "result": "Registered3 to5 with two fits. Search failed; restoration succeeded. Model5 selectedRoute15 but exhausted balls mid-battle; unfit failure state preserved. Last verified39registrations/43specimens.",
       "deviation": "Four-step batch stopped after third attempt; fourth unclaimed. No stage-exit change. Helper restoration callback remains test-qualified, not demonstrated by healthy-helper retrieval.",
       "next": "Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts."
+    },
+    {
+      "session": "2026-09-09-capture-resource-exit",
+      "result": "Recovered both failures; bought 20 balls. Scorer examples 5 to 6. Ditto Transform stopped the next attempt, then recovery succeeded. No new registration: 39 registered / 43 specimens retained.",
+      "deviation": "No milestone redefinition. Added one explicit nearby shop using existing routing; preserved a new failed Transform encounter and separately recovered it. Setup/support is not learning.",
+      "next": "Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture."
     }
   ],
   "closed_milestones": [

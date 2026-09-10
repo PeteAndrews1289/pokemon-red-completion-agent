@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts.
+- Next decision: Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Five registered-objective outcomes, four cumulative fits. Models3 and4 chose capture and restoration; model5 chose Route15 and stopped mid-battle without a fit. Last verified39 registrations/43specimens. Historical114 remains separate; no learned combat or independent advantage. |
+| Authority now | Recovered both actual failed encounters without retry; bought20 Great Balls through the existing routed shop; one real failed-search lesson fitted5 to6. Model6 then selected Route15 and hit the Transform target-identity guard. Final verified39 registrations/43specimens; safe recovered checkpoint. No new registration or independent advantage; historical114 remains separate. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 5 | 12 |
+| Registered Train Example · train | 6 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-09-capture-helper-recovery** · status **active** · evidence [registered train example](docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json)
+**2026-09-09-capture-resource-exit** · status **active** · evidence [registered train example](docs/evidence/red-registered-resource-exit-learning-2026-09-09.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Two new settled outcomes fitted3 to5; search failure and successful restoration. No new registration. Third attempt excluded. |
-| Authority delta | Models3 and4 made real native choices; model5 selected one of two destinations and played. No authority promotion. |
-| Transfer result | Synthetic readiness/status variants passed; no Blue or cross-game execution. |
-| Blocker | Capture balls exhausted in a wild battle. Raw failure state is preserved but is not an admitted continuation or training example. |
-| Decision | Keep the integration milestone closed; repair bounded resource-exhaustion exit, not model architecture. |
-| Next session | Qualify legitimate escape after capture-ball exhaustion from the preserved failure state, retain costs, restore affordable supplies, then resume model5 without replaying consumed attempts. |
-| Next falsifier | A no-balls wild battle reaches a verified field boundary with all actions recorded and no reset or specimen loss. |
+| Learning output | One settled failed search fitted5 to6; forced purchase and both recoveries added zero labels. No new registration. |
+| Authority delta | Models5 and6 chose real destinations; one new outcome fitted. No promotion. |
+| Transfer result | ROM-free recovery/supply variants only; no independent or cross-title evaluation. |
+| Blocker | A legitimate Transform changed displayed species during capture setup; original-encounter identity is not yet separated from battle form. |
+| Decision | Resource exit and registered recovery work live. Stop at the next mechanics boundary; fix encounter identity, not the model architecture. |
+| Next session | Qualify stable original encounter identity across Transform without relaxing party/bag/HP guards; then resume model6 from the recovered state, never replay the consumed capture. |
+| Next falsifier | A transformed opponent retains original encounter identity while unrelated species changes, party changes and bag changes still reject. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
