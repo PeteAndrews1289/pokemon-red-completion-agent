@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-public-project-reset**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-post-merge-collection**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **54 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **56 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-collection-continuation-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-post-merge-collection-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-post-merge-collection
+
+3/4 goals succeeded; 2 eligible fits,54 to56 examples. 58 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** Fresh same-lineage learning after PR236 merge. No stage exits changed; failures retained.
+
+**Next:** Continue from the exact Y terminal and latest fitted model, not the old X save. Use actual search/resource outcomes to prioritize the next bounded collection task. Keep preparation optimization measured and small; no replay, reset, sealed Red or Crystal.
 
 ### 2026-09-10-public-project-reset
 

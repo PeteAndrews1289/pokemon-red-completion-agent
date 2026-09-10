@@ -13,7 +13,7 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-Public documentation repair and merge, at Pete's request. Gameplay is paused at X/model54. The latest Claude feedback was supplied by Pete; no new external review was commissioned in this session.
+PR236's public-documentation repair merged with green required CI. Fresh batch Y caught Onix and fitted two destination outcomes; gameplay is now stopped at Y/model56. Next is a short useful collection continuation, with any preparation repair strictly bounded. No external reviewer was commissioned for this execution-only session.
 
 Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
 
@@ -23,6 +23,6 @@ Not adopted: archiving or privatizing the repository. It remains an active proje
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after any external review. Check service usage if available; otherwise state that it is unavailable. No external quota was checked or consumed by this documentation session.
+Report accepted/rejected findings and reasons after any external review. Check service usage if available; otherwise state that it is unavailable. No external quota was checked or consumed by this collection session.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

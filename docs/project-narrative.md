@@ -19,8 +19,8 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 ## Results we can show
 
 - Checkpoint-based story integration reached the Champion and Hall of Fame with disclosed deterministic battle execution. The final episode contained two learned recovery choices and a forced boss continuation—not an autonomous fresh-game win. [Story audit](audits/red-phase4-closeout-2026-09-09.md).
-- The latest collection batch caught Clefairy, reaching58 registered species and50 physical specimens.
-- Four goals succeeded, but only three qualified as learning examples: the safety-driven resupply step was excluded. The registered-objective model grew from51 to54 examples. [Collection report](work-sessions/2026-09-10-collection-continuation.md).
+- The latest collection batch caught Onix, reaching59 registered species and51 physical specimens.
+- Three of four goals succeeded. Both actual destination outcomes—one failed search and one successful capture—were fitted; two safety-driven resupply steps were excluded. The model grew from54 to56 examples. [Collection report](work-sessions/2026-09-10-post-merge-collection.md).
 
 These are related development experiences, not an independent success rate or evidence of cross-game transfer.
 
