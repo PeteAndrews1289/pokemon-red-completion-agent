@@ -36,6 +36,22 @@ Do not create a new CI workflow or count documentation work as model progress.
 
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.
 
+## Public documentation discipline
+
+The README is a reader-facing introduction, not an agent work log. Keep it under100lines,
+with one title, plain-language capability/limitation statements and explicit AI-assisted
+authorship. Update it only when the public milestone or scope changes; never prepend a
+session report or another “Current” block. Do not use archived publisher scripts that stack
+status banners or overwrite concise documents with historical templates.
+
+Replace the relevant current handoff/roadmap sections in place. Keep current entry points
+under200lines; put detailed measurements in one dated work-session report. Preserve old
+reports in `docs/history/` or Git, clearly labeled historical, with working relative links.
+Current counters belong to the active-state source and evidence, not copied daily logs.
+Run `tests/test_documentation_surface.py` with the existing documentation checks. Never
+weaken its size limits to accommodate another status dump. Documentation and CI are not
+model progress, and an archived report cannot authorize gameplay.
+
 ## User-facing session closeout
 
 After each session, provide a concise outcome-first update: verified work, learning

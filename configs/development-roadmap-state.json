@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-collection-continuation",
+  "as_of_session": "2026-09-10-public-project-reset",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -762,6 +762,12 @@
       "result": "Model54; 58 registrations. 4/4 fresh goals succeeded; 3 actual fits. Collection and goal outcome remain separate.",
       "deviation": "No stage exits changed. Actual goal choices and collection gains are counted separately from the still-pending travel-capture/resume test.",
       "next": "Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-public-project-reset",
+      "result": "Public documentation and handoffs reset without deleting history. No gameplay or fit; model54,58 registrations and all stage exits unchanged.",
+      "deviation": "User-requested presentation maintenance before the next collection batch. Repository remains active/public, not archived. No milestone or learning counter advanced.",
+      "next": "Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

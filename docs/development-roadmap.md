@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-collection-continuation**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-public-project-reset**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-public-project-reset
+
+Public documentation and handoffs reset without deleting history. No gameplay or fit; model54,58 registrations and all stage exits unchanged.
+
+**Deviation:** User-requested presentation maintenance before the next collection batch. Repository remains active/public, not archived. No milestone or learning counter advanced.
+
+**Next:** Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal.
 
 ### 2026-09-10-collection-continuation
 

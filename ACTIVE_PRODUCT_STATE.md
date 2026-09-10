@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
+- Next decision: Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
@@ -59,17 +59,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-collection-continuation** · status **active** · evidence [registered train example](docs/evidence/red-collection-continuation-learning-2026-09-10.json)
+**2026-09-10-public-project-reset** · status **active** · evidence [registered train example](docs/evidence/red-collection-continuation-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 4/4 fresh goals succeeded; 3 actual fits, model51 to54. 57 to58 registrations, 50 specimens retained. Actual costs, partial gains and failed outcomes remain visible. |
-| Authority delta | 3 actual fits; no independent or cross-title authority promotion. |
+| Learning output | No gameplay or fit this session. X remains latest:54 registered-objective examples,58 registrations and50 specimens. |
+| Authority delta | None. User-requested documentation maintenance; model authority and all stage exits unchanged. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Live acquisition travel-capture/resume remains unqualified. Preparation takes substantial time between short lessons; preserve attribution while measuring its cost. |
-| Decision | Count actual goal outcomes and new registration, not an unexercised travel-capture gate. Continue useful collection rather than forcing a specific destination. |
-| Next session | Continue from the exact retained X checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal. |
+| Blocker | Public entry points accumulated contradictory current reports. Preparation-only profile also measured repeated history-validation cost; no optimization or speedup yet. |
+| Decision | Keep the active project public, replace status dumps with concise factual summaries, preserve history and merge the tested branch. Resume collection afterward. |
+| Next session | Complete the requested public-documentation cleanup and merge, then resume a short fresh collection batch from exact X/model54. Keep real goal choices, failed costs and deterministic support distinct. Bound preparation optimization; no consumed retry, reset, full replay, sealed evaluation or Crystal. |
 | Next falsifier | A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

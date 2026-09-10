@@ -97,6 +97,10 @@ capability, fit, gameplay result or blocker changes our position:
 3. Refresh the handoff, next steps and YouTube/project narrative with the same factual result.
    Update this North Star only when requirements, operating rules or the agreed sequence change;
    do not rewrite its goals merely to make a session look successful.
+   Refresh concise summaries in place; do not prepend accumulating “Current” blocks.
+   The public README explains the project to a new reader, not to another agent.
+   Detailed session reports and superseded directions belong in dated history. Keep
+   explicit AI-assisted authorship, working/unfinished distinctions and links to evidence.
 4. Run the existing documentation check. It checks freshness locally; no extra CI workflow,
    mandatory outside audit, timed wakeup or minute-by-minute documentation loop is required.
 
