@@ -1,3 +1,14 @@
+# Current —49 registrations, model23 retained
+
+2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.
+
+Next: Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.
+
+Two genuine native choices were learned; the sampled indoor proposals were not attempted or fitted. No new combat authority or independent generalization result.
+[Audit and next step](work-sessions/2026-09-10-corridor-continuation.md).
+
+## Prior checkpoints
+
 # Current — restore genuine indoor collection choices
 
 Ordinary indoor land encounters now qualify through cartridge tiles and actual land tables; 187 targeted tests, 465-file type check and lint passed. Real-ROM inspection found 1141 eligible static cells in Mt. Moon1F and1078 in Rock Tunnel1F despite zero literal grass. These counts do not establish accessible routes or successful capture. Model21 and47 registered species are unchanged.

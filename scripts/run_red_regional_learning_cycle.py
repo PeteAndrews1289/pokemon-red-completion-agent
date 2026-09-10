@@ -266,6 +266,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                    if evolution_inventory is not None else {}),
             }
         )
+        # Preserve exact preparation with every completed step, even when a
+        # later preflight aborts the aggregate cycle or this outcome failed.
+        source.base._write_exclusive(
+            original.with_name(f"{original.stem}-{ordinal:02d}-step.json"), results[-1]
+        )
         parent = cast(dict[str, Any], outcome["parent_episode"])
         print(
             json.dumps(

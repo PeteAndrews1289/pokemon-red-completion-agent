@@ -1667,11 +1667,18 @@ def _regional_profiles(
             result.append(profile)
             continue
         map_id = int(map_id_for_wild_source(source))
+        excluded = world.object_blockers[map_id]
+        if allow_cartridge_sources:
+            # Match registered source enumeration exactly. A different lane
+            # changes the profile hash even when the native goal was evolution.
+            excluded = frozenset(excluded) | frozenset(
+                world.macro_graph.warp_locations.get(map_id, ())
+            )
         corridor = derive_red_living_dex_wild_corridor(
             RedEncounterSourceTarget(source),
             world.terrain[map_id],
             world.local_graphs[map_id],
-            excluded=world.object_blockers[map_id],
+            excluded=excluded,
             **({"cartridge": world.rom} if allow_cartridge_sources else {}),
         )
         profile = retarget_red_wild_profile(profile, corridor, rom=world.rom)

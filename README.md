@@ -1,3 +1,14 @@
+# Current —49 registrations, model23 retained
+
+2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.
+
+Next: Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.
+
+Two genuine native choices were learned; the sampled indoor proposals were not attempted or fitted. No new combat authority or independent generalization result.
+[Audit and next step](docs/work-sessions/2026-09-10-corridor-continuation.md).
+
+## Prior checkpoints
+
 # Current — native multi-copy evolution verified
 
 4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.

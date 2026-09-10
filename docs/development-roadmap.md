@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-indoor-collection-options**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-corridor-continuation**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Restore useful indoor collection choices: 1/3 acceptance items (33%).**
+**Restore useful indoor collection choices: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Qualify cave-floor encounter rules ([evidence](../docs/evidence/red-indoor-encounter-engineering-2026-09-10.json))
-- [ ] Verify actual saved-state alternatives
-- [ ] Retain and fit a model-selected lesson
+- [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
+- [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **21 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **23 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-native-stock-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-corridor-continuation
+
+2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.
+
+**Deviation:** Checklist3/3 measures real alternatives and model-selected lessons, not completed indoor capture. Continuation repair does not change stage exits.
+
+**Next:** Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.
 
 ### 2026-09-10-indoor-collection-options
 

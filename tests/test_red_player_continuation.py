@@ -563,6 +563,33 @@ def test_regional_builder_rejects_special_capture_rules_before_cartridge(source,
         runner._regional_profiles(object(), (source,), object())
 
 
+@pytest.mark.parametrize("registered", [False, True])
+def test_reconstructed_corridor_matches_registered_warp_safe_enumeration(monkeypatch, registered):
+    from test_red_living_dex_wild_corridor import _graph, _local_discovery_profile, _terrain
+
+    from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
+    from pokemon_red_completion.red_living_dex_wild_corridor import (
+        derive_red_living_dex_wild_corridor,
+        retarget_red_wild_profile,
+    )
+    # The first otherwise-legal lane is a warp. Registration must choose the
+    # second lane, while legacy reconstruction deliberately keeps the old one.
+    world = SimpleNamespace(terrain={13:_terrain()},local_graphs={13:_graph()},
+        object_blockers={13:frozenset()},rom=b"fixture",
+        macro_graph=SimpleNamespace(warp_locations={13:((3,1),)}))
+    monkeypatch.setattr(runner,"_route_world",lambda _:world)
+    original = _local_discovery_profile()
+    actual, = runner._regional_profiles(original,("wild:Route2:grass",),object(),
+        allow_cartridge_sources=registered)
+    assert actual.providers[0].parameters["player_x"] == (4 if registered else 1)
+    corridor = derive_red_living_dex_wild_corridor(RedEncounterSourceTarget("wild:Route2:grass"),
+        world.terrain[13],world.local_graphs[13],
+        excluded={(3,1)} if registered else (),
+        cartridge=b"fixture" if registered else None)
+    expected = retarget_red_wild_profile(original,corridor,rom=b"fixture")
+    assert actual.profile_sha256 == expected.profile_sha256
+
+
 def test_regional_transition_parser_preserves_interleaved_source_supply_order():
     args = runner._parser().parse_args([
         "--pair-id", "parse-only", "--state", "state", "--envelope", "envelope",

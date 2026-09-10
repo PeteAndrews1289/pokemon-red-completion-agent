@@ -168,6 +168,24 @@ def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ances
     assert args.regional_transitions == ["wild:Route24:grass"]
 
 
+def test_completed_step_survives_later_preparation_failure(tmp_path, monkeypatch):
+    args, _, _, played, fits, files = harness(tmp_path, monkeypatch)
+    original = cycle.source.base._prepare
+    def prepare(actual):
+        if actual.pair_id.endswith("-02"):
+            raise ValueError("later checkpoint rejected")
+        return original(actual)
+    monkeypatch.setattr(cycle.source.base,"_prepare",prepare)
+    with pytest.raises(ValueError,match="later checkpoint rejected"):
+        cycle._run(args)
+    assert len(played) == len(fits) == 1
+    step = files[tmp_path / "cycle-01-step.json"]
+    assert step["ordinal"] == 1
+    assert step["outcome"]["episode_id"] == "cycle-fixture-01-causal"
+    assert "model" in step["fit"]
+    assert args.out not in files
+
+
 @pytest.mark.parametrize("value", [True, 1, "yes"])
 def test_owned_options_never_activate_for_legacy_or_nonautomatic_cycle(
     tmp_path, monkeypatch, value,

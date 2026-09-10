@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model-selected Gloom evolution from three Oddish qualified; later singleton Muk/Fearow evolution was not fitted.",
-        "blocker": "Indoor encounter eligibility repaired; live source access and capture remain unverified.",
-        "decision": "Restore genuine capture breadth from cartridge data, then gather actual model-selected outcomes.",
+        "authority_delta": "Two evolution goals chosen with real indoor capture alternatives; proposals not fitted.",
+        "blocker": "Reconstruction omitted warp exclusions for Mansion3F and selected a different adjacent lane.",
+        "decision": "Align reconstruction without weakening checkpoint validation; retain completed steps separately.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-native-stock-learning-2026-09-10.json",
-          "sha256": "2d057d59a86b9f67883edee0ebedcca957ae8cb64b81bd23a497a5699b0cc695"
+          "path": "docs/evidence/red-registered-indoor-learning-2026-09-10.json",
+          "sha256": "2acd353f1b1e2142d6cf6b091e15f71c177ceaa7d8613b9cae3a85701a3910fb"
         },
-        "learning_output": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
-        "next_falsifier": "Authenticated saved-state inspection exposes at least two genuine executable alternatives.",
-        "next_session_goal": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.",
+        "learning_output": "2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.",
+        "next_falsifier": "Actual model23 checkpoint restores without input.",
+        "next_session_goal": "Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-indoor-collection-options",
+        "session_id": "2026-09-10-corridor-continuation",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "Changed-count/reserve/box-position ROM-free checks and one actual three-copy evolution. No title transfer."
+        "transfer_result": "Changed-warp and legacy-versus-registered reconstruction tests; no cross-title result."
       },
       "learned_authority": {
-        "current": "4 fresh steps /2 fits; registered examples19 to21. 3 new registrations; 47 registered /46 specimens. 45,311 actions /3,896,566 frames. Two model choices and two forced singleton steps; no independent reliability or learned combat claim.",
+        "current": "2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Verify current saved-state indoor capture choices with zero controller input, then run a fresh bounded model21 learning cycle from the actual batchG terminal. Retain outcomes and costs; do not count forced singleton mechanics as learned choices. No consumed retry, resource reset, sealed evaluation, full replay or Crystal.",
+      "next_decision": "Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 21,
+        "registered_train_examples": 23,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
