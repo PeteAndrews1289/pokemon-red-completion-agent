@@ -508,6 +508,10 @@ def _wild_provider(
         local_captures = parameters.get("capture_species_numbers")
         return RedAreaSurveyGoalProvider(
             source_id=source_id,
+            search_effort_surcharge=(
+                max(0, _integer(parameters, "maximum_legs") - 64) / 1_000
+                if parameters.get("capture_search_budget") == "bounded-search-v1" else 0.0
+            ),
             required_capture_items=(required_wild_source_items(source_id)
                 if parameters.get("capture_access_requirements") is True else ()),
             area_executor=area,

@@ -253,7 +253,11 @@ class RedResourceGoalRouter:
                 binding_ref=f"red-resource-goal:{origin}:{spec.configuration_sha256}",
                 transport=transport,
                 destination=destination,
-                estimated_effort=min(1.0, 0.36 + len(plan.steps) / 1_000),
+                estimated_effort=min(
+                    1.0, 0.36 + len(plan.steps) / 1_000
+                    + (provider.search_effort_surcharge
+                       if isinstance(provider, RedAreaSurveyGoalProvider) else 0.0),
+                ),
                 estimated_risk=0.18,
                 limits=RoutedSemanticGoalLimits(
                     self.maximum_controller_actions, self.maximum_emulator_frames

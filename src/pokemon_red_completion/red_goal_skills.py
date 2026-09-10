@@ -1330,6 +1330,7 @@ class RedAreaSurveyGoalProvider:
     catalog: RedAcquisitionCatalog = RED_ACQUISITION_CATALOG
     kind: GoalKind = GoalKind.ACQUIRE_SPECIES
     required_capture_items: tuple[ItemId, ...] = ()
+    search_effort_surcharge: float = 0.0
 
     def __post_init__(self) -> None:
         if not isinstance(self.source_id, str) or not self.source_id:
@@ -1338,6 +1339,9 @@ class RedAreaSurveyGoalProvider:
             raise RedGoalSkillError("area-survey boundary must be callable")
         if self.normalize_after_capture is not None and not callable(self.normalize_after_capture):
             raise RedGoalSkillError("area-survey normalizer must be callable")
+        if (type(self.search_effort_surcharge) not in (int, float)
+                or not 0 <= self.search_effort_surcharge <= 1):
+            raise RedGoalSkillError("area-survey search effort surcharge is invalid")
 
     def offer(self, observation: RedGoalObservation) -> RedGoalBindingOffer:
         availability = self.resource_availability(observation)
@@ -1544,7 +1548,9 @@ class RedAreaSurveyGoalProvider:
             ExecutableGoalBinding(
                 binding_ref=f"pokemon.red:acquisition:{self.source_id}",
                 kind=self.kind,
-                estimated_effort=min(1.0, 0.12 * len(survey.missing_species_refs)),
+                estimated_effort=min(
+                    1.0, 0.12 * len(survey.missing_species_refs) + self.search_effort_surcharge,
+                ),
                 estimated_risk=0.18,
                 execute=execute,
                 verify=verify,

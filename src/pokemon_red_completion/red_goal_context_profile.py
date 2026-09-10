@@ -772,6 +772,16 @@ def _parse_parameters(
             required.add("completed_battles")
         local_species = row.get("source_species_numbers")
         capture_species = row.get("capture_species_numbers")
+        if "capture_search_budget" in row:
+            if (
+                mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                or row["capture_search_budget"] != "bounded-search-v1"
+                or _positive_integer(row["maximum_legs"], "survey legs") > 256
+                or _positive_integer(row["maximum_seek_steps"], "seek steps") > 256
+                or _positive_integer(row["maximum_encounters"], "encounter bound") > 32
+            ):
+                raise RedGoalContextProfileError("capture search budget differs")
+            required.add("capture_search_budget")
         if "fly_transport" in row:
             if mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE or (
                 type(row["fly_transport"]) is not bool
@@ -869,6 +879,8 @@ def _parse_parameters(
             parsed["capture_species_numbers"] = capture_species
         if "capture_status_support" in row:
             parsed["capture_status_support"] = row["capture_status_support"]
+        if "capture_search_budget" in row:
+            parsed["capture_search_budget"] = row["capture_search_budget"]
         if "fly_transport" in row:
             parsed["fly_transport"] = row["fly_transport"]
         if "indoor_fly_departure" in row:

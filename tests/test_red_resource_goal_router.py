@@ -324,7 +324,10 @@ def test_local_provider_is_not_replaced_by_transport(fixture):
     assert not _supply(result).binding_ref.startswith("red-resource-goal:")
 
 
-def test_capture_route_uses_same_resources_and_verifies_retained_specimens(fixture):
+@pytest.mark.parametrize("search_surcharge", [0.0, 0.192])
+def test_capture_route_uses_same_resources_and_verifies_retained_specimens(
+    fixture, search_surcharge,
+):
     f = fixture
     f.reader.raw = replace(
         f.reader.raw,
@@ -334,6 +337,7 @@ def test_capture_route_uses_same_resources_and_verifies_retained_specimens(fixtu
     )
     provider = RedAreaSurveyGoalProvider(
         source_id="wild:Route1:grass",
+        search_effort_surcharge=search_surcharge,
         area_executor=_AreaExecutor(f.reader, f.actions),
         actions=f.actions,
         emulator=f.port,
@@ -374,6 +378,9 @@ def test_capture_route_uses_same_resources_and_verifies_retained_specimens(fixtu
     before = f.adapter.observe().collection.collection.living_count
     result = f.router.enumerate(f.adapter.observe())
     assert len(result.bindings) == 1 and result.bindings[0].kind is GoalKind.ACQUIRE_SPECIES
+    assert result.bindings[0].estimated_effort == pytest.approx(
+        0.361 + search_surcharge
+    )
     original_raw = f.reader.raw
     f.reader.raw = replace(original_raw, player_x=2)
     refreshed = f.router.enumerate(f.adapter.observe()).bindings[0]
