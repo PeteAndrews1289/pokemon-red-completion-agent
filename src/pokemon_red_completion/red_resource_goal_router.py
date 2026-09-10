@@ -93,6 +93,7 @@ class RedResourceGoalRouter:
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
+    observed_trainer_funding: bool = False
     prepare_capture_escort: bool = True
     # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
     # and escort preparation enabled without planning unused Center routes.

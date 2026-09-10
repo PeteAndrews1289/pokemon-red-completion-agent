@@ -110,6 +110,32 @@ def test_no_observed_route_does_not_fall_back_to_static(setup):
         funding._observed_funding_target(router, quoted)
 
 
+def test_versioned_menu_omits_unreachable_funding_but_legacy_stays_reproducible(setup):
+    router, _, _, live, _ = setup
+    legacy = funding._candidates(router)
+    assert len(legacy) == 1
+    live.local_graphs[22] = LocalGraph({(1, 0): ()})
+    router.observed_trainer_funding = True
+    assert funding._candidates(router) == ()
+    router.observed_trainer_funding = False
+    assert funding._candidates(router) == legacy
+
+
+def test_versioned_menu_quotes_actual_detour(setup):
+    router, *_ = setup
+    router.observed_trainer_funding = True
+    (offered,) = funding._candidates(router)
+    assert (1, 2) not in [s.expected_at for s in offered.approach.steps]
+
+
+def test_versioned_menu_rejects_wrong_observed_map(setup):
+    router, _, blocks, _, _ = setup
+    router.observed_trainer_funding = True
+    router.runtime.reader.read_current_map_blocks = lambda: replace(blocks, map_id=23)
+    with pytest.raises(funding.RedTrainerFundingError, match="active field"):
+        funding._candidates(router)
+
+
 @pytest.mark.parametrize("damage", ["map", "battle", "changed_raw", "changed_blocks", "malformed"])
 def test_bad_or_changing_observation_fails_closed(setup, damage):
     router, raw, blocks, _, _ = setup

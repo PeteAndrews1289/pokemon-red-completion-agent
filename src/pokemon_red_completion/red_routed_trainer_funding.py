@@ -104,6 +104,7 @@ def active_trainer_funding_candidate(
 def _candidates(
     router: RedResourceGoalRouter, *, world: StrategicScenarioRouteWorld | None = None,
 ) -> tuple[TrainerFundingCandidate, ...]:
+    observed = world is None and getattr(router, "observed_trainer_funding", False)
     world = router.world if world is None else world
     reader, rom = router.runtime.reader, router.world.rom
     raw = reader.read()
@@ -150,6 +151,17 @@ def _candidates(
     start = Gen1TraversalObserver(
         reader, Gen1TrainerSightProjector(rom, reader, full_event_offsets=regional)
     ).observe()
+    if observed:
+        blocks = reader.read_current_map_blocks()
+        if (
+            blocks.map_id != raw.map_id or start.map_id != raw.map_id
+            or start.at != (raw.player_y, raw.player_x)
+            or not start.ready or start.interruption is not None
+        ):
+            raise RedTrainerFundingError("observed funding menu does not match active field")
+        world = world.with_current_blocks(blocks)
+        if reader.read() != raw or reader.read_current_map_blocks() != blocks:
+            raise RedTrainerFundingError("funding menu state changed during terrain projection")
     if regional:
         if raw.event_flags is None:
             return ()

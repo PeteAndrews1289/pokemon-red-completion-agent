@@ -191,7 +191,8 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
     # Observer flags are inherited, not opportunities to revise historical menus.
     for flag in (
         "routed_recovery", "trainer_funding", "trainer_pending_recovery",
-        "regional_trainer_funding", "remaining_acquisition_demand", "level_evolution_acquisitions",
+        "regional_trainer_funding", "observed_trainer_funding",
+        "remaining_acquisition_demand", "level_evolution_acquisitions",
     ):
         if metadata.get(flag, False) != previous.get(flag, False):
             raise RedRecordedSupportError("support changed an inherited observer mode")
