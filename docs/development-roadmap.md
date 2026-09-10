@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-status-recovery-audit**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-qualified-status-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 - [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **36 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **38 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-status-audit-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-qualified-status-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-qualified-status-recovery
+
+Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.
+
+**Deviation:** No stage-exit change. Mixed trainer parsing and exact settled-state admission unblocked actual retained play.
+
+**Next:** Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
 
 ### 2026-09-10-status-recovery-audit
 

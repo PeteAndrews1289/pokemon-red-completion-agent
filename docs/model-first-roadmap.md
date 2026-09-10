@@ -1,3 +1,14 @@
+# Current — qualified recovery; model38/53 registrations
+
+Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.
+
+Next: Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
+
+The learner chooses goals/destinations; deterministic skills execute mechanics. Historical114 remains separate. No learned combat, independent reliability or title-transfer claim.
+[Session, evidence and next steps](work-sessions/2026-09-10-qualified-status-recovery.md).
+
+## Prior checkpoints
+
 # Current — status-recovery audit; model36 retained
 
 Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.

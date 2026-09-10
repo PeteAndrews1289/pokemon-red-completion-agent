@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.
+- Next decision: Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry. |
+| Authority now | Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 36 | 12 |
+| Registered Train Example · train | 38 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-status-recovery-audit** · status **active** · evidence [registered train example](docs/evidence/red-registered-status-audit-learning-2026-09-10.json)
+**2026-09-10-qualified-status-recovery** · status **active** · evidence [registered train example](docs/evidence/red-qualified-status-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry. |
-| Authority delta | One failed destination outcome retained and fitted. No authority promotion or gameplay in this audit. |
-| Transfer result | No independent or cross-title result; same-lineage training outcomes only. |
-| Blocker | Status-changing wild escape currently terminates collection instead of returning a qualified recovery need. |
-| Decision | Repair the smallest reusable recovery boundary; no general rewrite or new mandatory external audit gate. |
-| Next session | Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated. |
-| Next falsifier | A status-only transition is distinguished from unsafe party, location, PP or control changes. |
+| Learning output | Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row. |
+| Authority delta | 2 fitted choices. Deterministic recovery/admission is not additional learned authority. |
+| Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
+| Blocker | Funding used static geometry across an observed closed passage. Party healthy; 53 registrations, six balls and 548 money retained. No registration gain this session. |
+| Decision | Audit the actual route blockage before fresh play; preserve failed costs and avoid broad rewrites or artificial recovery trips. |
+| Next session | Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal. |
+| Next falsifier | The retained-state route diagnosis distinguishes a real occupied or gated cell from a controller timing defect without replaying the consumed choice. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

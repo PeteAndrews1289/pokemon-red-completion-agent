@@ -80,6 +80,49 @@ the original failed costs and produce zero training examples or model decisions.
 The checkpoint reader verifies the byte identity again. Ordinary recovery still
 requires positive actual costs; its contract is not silently relaxed.
 
-Actual admission and next collection remain pending until their explicit results
-are recorded. This capability is maintenance unblocking fresh model37 play from
-the true third-floor terminal, not permission to restore its older Center state.
+P admission subsequently succeeded with byte-identical state and zero actions,
+frames, predictions or fitted examples. Q then continued from that true third-floor
+terminal, not the older Center state. The resulting Q failure is recorded below.
+
+## Authenticated closeout
+
+Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.
+
+Next: Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.
+
+Q stop reason:`failed_step_retained_and_fitted`. Actual per-step results are in [the path-free receipt](../evidence/red-qualified-status-learning-2026-09-10.json). No hardware execution of the new status-degraded branch is claimed unless separately observed.
+
+Status-boundary suite288passed/1skipped. Subsequent mixed-table/admission suite262passed;454source-file type check,lint,registry and documentation checks passed. These suites overlap and are not a full-suite claim.
+
+Flash3.8 High supplied bounded patch criticism; Codex accepted bench-HP validation, rejected blanket destination exclusion and retained conservative replanning. Last service display about11:24UTC:92.23%five-hour remaining(reset~3h8m),80.45%weekly(reset~35h59m). Shared/cached readings do not measure task cost. Claude unused.
+
+Recommended next session:AstraHigh,Fastoff for execution-heavy work; ExtraHigh only for a specific unresolved contract.
+
+## Read-only diagnosis of the remaining route blocker
+
+The exact Q checkpoint was inspected without input, ticking, prediction or fitting.
+No visible object occupied the failed target. The cartridge's default block at
+row 5, column 7 was 14; the actual saved-map block was 95. The static local graph
+offered a rightward edge from row 11, column 14, while the graph built from observed
+blocks correctly omitted it. Funding candidate enumeration passes the static world
+to its planner, unlike the already-qualified observed local capture path.
+
+[Path-free diagnostic](../evidence/red-funding-live-block-diagnostic-2026-09-10.json).
+This identifies the immediate blocked edge; it does not prove a feasible alternate
+funding route or a successful future goal. No retry was performed and no repair is
+claimed by the diagnostic.
+
+Next: time-box a current-map overlay for funding candidate enumeration, with tests
+that closed passages are rejected, open alternate routes preserve trainer identity,
+and malformed or mismatched observations fail closed. Then authenticate the actual
+model 38 checkpoint before a fresh short learner batch. Allow 60–90 minutes for the
+repair, focused tests and first bounded outcome; reassess if no safe route exists.
+Do not increase retries, author a Mansion-specific walk or reset to an older save.
+
+Session totals: three gameplay attempts, one successful healing task, one admitted
+failed funding task and one unfit decoder failure. Two fitted choices increased the
+current-objective corpus from 36 to 38. Registrations stayed at 53; total specimens
+stayed at 47. Recorded gameplay cost was 368 actions and 18,360 frames. The saved
+party is healthy with six balls and 548 money. Gameplay is stopped at closeout.
+The 112 dashboard/roadmap closeout tests passed in addition to the targeted runtime
+suites above. These tests are engineering evidence, not additional learned progress.

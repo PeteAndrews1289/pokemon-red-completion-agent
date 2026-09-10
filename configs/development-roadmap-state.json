@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-status-recovery-audit",
+  "as_of_session": "2026-09-10-qualified-status-recovery",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-status-audit-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-qualified-status-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -708,6 +708,12 @@
       "result": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
       "deviation": "No stage-exit change. Audit prioritizes bounded status recovery; training volume is not learned advantage.",
       "next": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated."
+    },
+    {
+      "session": "2026-09-10-qualified-status-recovery",
+      "result": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
+      "deviation": "No stage-exit change. Mixed trainer parsing and exact settled-state admission unblocked actual retained play.",
+      "next": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

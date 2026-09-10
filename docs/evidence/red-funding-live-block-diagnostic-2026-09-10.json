@@ -1,0 +1,22 @@
+{
+  "schema": "pokemon.red.read-only-route-diagnostic.v1",
+  "authority": "development_diagnostic_only",
+  "episode_id": "red-registered-after-settled-20260910-q-01-causal",
+  "checkpoint_sha256": "fdf97057cf4d5ebae2c6c57439fa1deefdd97b3f78cba7a72d5f93b1d72869a1",
+  "state_sha256": "a7bbe60ab3de9c23b57f00225512174eb7ec417b90c5114134f661d795103548",
+  "map_id": 215,
+  "source_row_column": [11, 14],
+  "failed_target_row_column": [11, 15],
+  "target_occupied_by_visible_object": false,
+  "different_blocks_row_column_static_live": [[5, 7, 14, 95]],
+  "static_neighbor_actions": ["up", "left", "right"],
+  "observed_neighbor_actions": ["up", "left"],
+  "finding": "The attempted right edge exists only in the static layout, not the actual retained map. Funding candidate enumeration currently uses the static world.",
+  "controller_actions": 0,
+  "frames": 0,
+  "predictions": 0,
+  "fits": 0,
+  "state_bytes_unchanged": true,
+  "consumed_choice_retried": false,
+  "repair_implemented": false
+}

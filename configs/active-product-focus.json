@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One failed destination outcome retained and fitted. No authority promotion or gameplay in this audit.",
-        "blocker": "Status-changing wild escape currently terminates collection instead of returning a qualified recovery need.",
-        "decision": "Repair the smallest reusable recovery boundary; no general rewrite or new mandatory external audit gate.",
+        "authority_delta": "2 fitted choices. Deterministic recovery/admission is not additional learned authority.",
+        "blocker": "Funding used static geometry across an observed closed passage. Party healthy; 53 registrations, six balls and 548 money retained. No registration gain this session.",
+        "decision": "Audit the actual route blockage before fresh play; preserve failed costs and avoid broad rewrites or artificial recovery trips.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-status-audit-learning-2026-09-10.json",
-          "sha256": "8d50347c74d046b13f8d3eba91ad1ca3002473e100d9adcc95a92eca15e03e83"
+          "path": "docs/evidence/red-qualified-status-learning-2026-09-10.json",
+          "sha256": "9f39f98619f4fb774ae0134cffdc36110fa61ce63f1366ed0a31df18ed16f482"
         },
-        "learning_output": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
-        "next_falsifier": "A status-only transition is distinguished from unsafe party, location, PP or control changes.",
-        "next_session_goal": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.",
+        "learning_output": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
+        "next_falsifier": "The retained-state route diagnosis distinguishes a real occupied or gated cell from a controller timing defect without replaying the consumed choice.",
+        "next_session_goal": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-status-recovery-audit",
+        "session_id": "2026-09-10-qualified-status-recovery",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "No independent or cross-title result; same-lineage training outcomes only."
+        "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "Model36 retained:53 registrations and47 specimens. Latest Mansion acquisition stopped after238 actions/19596 frames; lead status changed to burn,67/93HP, then returned to field-ready. One failed choice fitted; no new registration or retry.",
+        "current": "Model 38 retained: 53 registrations and 47 specimens. One of two settled steps succeeded; both choices were fitted. No new registrations this session. The prior unfit Mansion3F decoder failure remains preserved (88 actions / 4,164 frames). Its exact state was admitted with zero input, no healing trip and no extra training row.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Qualify bounded degraded-status recovery with preserved escape and party guards, then authenticate model36 and continue a fresh short collection batch from its actual terminal. No consumed retry, resource reset, forced destination, sealed evaluation or Crystal. Keep stone support isolated.",
+      "next_decision": "Qualify observed current-map blocks for trainer-funding routes: the retained state proves the static planner proposed a closed passage. Test closed passages, alternate routes and observation identity, then continue model 38 from its actual checkpoint with a fresh short learner batch. No consumed retry, resource reset, forced source, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 36,
+        "registered_train_examples": 38,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
