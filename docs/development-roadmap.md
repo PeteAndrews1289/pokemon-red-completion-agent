@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-capture-runtime**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-travel-resume-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **48 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **51 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-travel-capture-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-travel-resume-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-travel-resume-learning
+
+Model51; 57 registrations. Model-selected Koffing-to-Weezing evolution retained both entries. 3/3 goals succeeded; travel-capture/resume check stays open.
+
+**Deviation:** No stage exits changed. Followed genuine goal choices rather than forcing the travel-capture test; useful evolution is counted separately from that checklist.
+
+**Next:** Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
 
 ### 2026-09-10-travel-capture-runtime
 

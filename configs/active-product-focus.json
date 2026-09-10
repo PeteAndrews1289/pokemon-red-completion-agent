@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual destination fit; no independent or cross-title authority promotion.",
-        "blocker": "Travel capture is enabled and caught Koffing, but verification stopped the trip before route resumption. The nonempty-box prepend correction is tested prospectively, not replayed.",
-        "decision": "Retain the catch, costs and failed choice. Fix the observed storage-order assumption; return to a fresh bounded choice rather than a broad redesign.",
+        "authority_delta": "3 actual fits; no independent or cross-title authority promotion.",
+        "blocker": "Live acquisition travel-capture/resume remains unqualified. Preparation takes substantial time between short lessons; preserve attribution while measuring its cost.",
+        "decision": "Count actual goal outcomes and new registration, not an unexercised travel-capture gate. Continue useful collection rather than forcing a specific destination.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-travel-capture-learning-2026-09-10.json",
-          "sha256": "2e722fd6de07594cbe90006bd2e177fb2e491d432a0f8f2bae3bfed5109a5bef"
+          "path": "docs/evidence/red-travel-resume-learning-2026-09-10.json",
+          "sha256": "fe99ee8cbde210f783da7234d7ab615ccde4520e7ba50759fa5553b2b403572e"
         },
-        "learning_output": "Koffing captured during travel: 55 to 56 registrations, 48 to 49 specimens. The destination trip failed verification; its actual outcome was fitted once, 47 to 48 registered-objective examples. No retry or success relabeling.",
+        "learning_output": "3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.",
         "next_falsifier": "A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success.",
-        "next_session_goal": "Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal.",
+        "next_session_goal": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-travel-capture-runtime",
+        "session_id": "2026-09-10-travel-resume-learning",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "Koffing captured during travel: 55 to 56 registrations, 48 to 49 specimens. The destination trip failed verification; its actual outcome was fitted once, 47 to 48 registered-objective examples. No retry or success relabeling.",
+        "current": "3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal.",
+      "next_decision": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 48,
+        "registered_train_examples": 51,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

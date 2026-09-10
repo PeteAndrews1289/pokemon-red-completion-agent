@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-travel-capture-runtime",
+  "as_of_session": "2026-09-10-travel-resume-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-travel-capture-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-travel-resume-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -750,6 +750,12 @@
       "result": "Koffing retained: 56 registrations /49 specimens. One failed trip fitted model47 to48. Box-prepend verifier corrected prospectively; route-resume milestone remains open.",
       "deviation": "No stage exits changed. Travel checklist stays1/3: the real catch and fitted failure do not demonstrate a completed capture-and-resume journey.",
       "next": "Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal."
+    },
+    {
+      "session": "2026-09-10-travel-resume-learning",
+      "result": "Model51; 57 registrations. Model-selected Koffing-to-Weezing evolution retained both entries. 3/3 goals succeeded; travel-capture/resume check stays open.",
+      "deviation": "No stage exits changed. Followed genuine goal choices rather than forcing the travel-capture test; useful evolution is counted separately from that checklist.",
+      "next": "Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

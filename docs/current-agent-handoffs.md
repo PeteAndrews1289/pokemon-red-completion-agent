@@ -1,12 +1,12 @@
-# Current — Koffing retained; model48, 56 registrations
+# Current — Weezing registered; model51, 57 registrations
 
-Koffing captured during travel: 55 to 56 registrations, 48 to 49 specimens. The destination trip failed verification; its actual outcome was fitted once, 47 to 48 registered-objective examples. No retry or success relabeling.
+3/3 fresh goals succeeded; 3 actual fits, model48 to51. 56 to57 registrations, 49 specimens retained. The model selected Koffing-to-Weezing evolution; both registrations remain credited.
 
-Next: Continue from the exact retained V checkpoint and model48 under the tested prospective box-prepend fix. Collect a fresh bounded model-selected choice; verify useful travel capture and actual route resumption when encountered, preserving resource costs and partial gains on failure. One focused session; no consumed retry, reset, new routing framework, sealed evaluation or Crystal.
+Next: Continue from the exact retained W checkpoint and latest model with a short fresh goal-choice batch. Prioritize actual missing-registration gains and sustainable resources; let the model choose. Keep the travel-capture/resume live check open until exercised. Time-box any measured preparation-overhead repair; no broad cache framework, consumed retry, reset, sealed evaluation or Crystal.
 
-Bounded destination learning with deterministic mechanics; not a fresh-game autonomous player. Gameplay is stopped.
+Bounded goal/destination learning with deterministic mechanics; not a fresh-game autonomous player. Gameplay is stopped.
 
-[Session, review and evidence](work-sessions/2026-09-10-travel-capture-runtime.md).
+[Session, review and evidence](work-sessions/2026-09-10-travel-resume-learning.md).
 
 ## Prior checkpoints
 
