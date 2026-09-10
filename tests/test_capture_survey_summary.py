@@ -414,6 +414,12 @@ def test_bounded_player_episode_populates_capture_survey_from_execution_report()
                     evidence={
                         **report.evidence,
                         "capture_survey": VALID_STOP_SURVEY,
+                        "capture_support": {
+                            "status_attempts": 1, "verified_status_observations": 1,
+                            "party_preparations": 0, "prepared_throws": 3,
+                            "prepared_asleep": 0, "prepared_paralyzed": 0,
+                            "prepared_full_hp": 3,
+                        },
                         "unrelated_extra": "should_be_ignored",
                     },
                 )
@@ -439,6 +445,9 @@ def test_bounded_player_episode_populates_capture_survey_from_execution_report()
         assert step.capture_survey is not None
         assert step.capture_survey.public_dict() == VALID_STOP_SURVEY
         assert step.public_dict()["capture_survey"] == VALID_STOP_SURVEY
+        assert step.public_dict()['capture_support']['prepared_throws'] == 3
+        assert step.public_dict()['capture_support']['prepared_asleep'] == 0
+        assert step.public_dict()['capture_support']['verified_status_observations'] == 1
 
     # Plain run without survey evidence leaves capture_survey as None
     plain_trajectory, _ = _trajectory()

@@ -41,6 +41,7 @@ class RedCaptureStatusPreparer:
     maximum_attempts: int = 3
     attempts: int = field(default=0, init=False)
     reports: list[dict[str, object]] = field(default_factory=list, init=False)
+    throw_preparations: list[dict[str, object]] = field(default_factory=list, init=False)
     bypassed_for_escape: bool = field(default=False, init=False)
     latched_original_species_id: int | None = field(default=None, init=False)
 
@@ -91,7 +92,7 @@ class RedCaptureStatusPreparer:
             identity = self.reader.read_wild_capture_identity()
             self._require_protected(self.reader.read(), identity, target_hp, party_ids, initial_bag)
             self.bypassed_for_escape = True
-            return True
+            return self._record_throw_preparation()
         for _ in range(self.maximum_attempts - self.attempts):
             raw = self.reader.read()
             if raw.battle_state != 1:
@@ -107,7 +108,7 @@ class RedCaptureStatusPreparer:
             if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
                    for move in current_moves if move):
                 self.bypassed_for_escape = True
-                return True
+                return self._record_throw_preparation()
             status_byte = self.reader.read_enemy_capture_status()
             if status_byte is None:
                 raise RedCaptureStatusError("capture target status is unavailable")
@@ -153,7 +154,7 @@ class RedCaptureStatusPreparer:
                 if any(RED_BATTLE_CATALOG.can_end_wild_encounter(pokemon_red_move_ref(move))
                        for move in post_moves if move):
                     self.bypassed_for_escape = True
-                    return True
+                    return self._record_throw_preparation()
                 post_status_byte = self.reader.read_enemy_capture_status()
                 if post_status_byte is None:
                     raise RedCaptureStatusError("capture target status is unavailable")
@@ -249,6 +250,34 @@ class RedCaptureStatusPreparer:
                 self.reader.read(), self.reader.read_wild_capture_identity(),
                 target_hp, party_ids, initial_bag,
             )
+        return self._record_throw_preparation()
+
+    def _record_throw_preparation(self) -> bool:
+        """Observe after setup/switching; this does not claim an executed throw.
+
+        Status-attempt reports describe the earlier move result. In particular,
+        sleep may expire during a protective switch. Keep the later observation
+        separate so diagnostics cannot inflate attempted or successful moves.
+        No controller action, prediction, reward or policy feature is added.
+        """
+        raw = self.reader.read()
+        status = self.reader.read_enemy_capture_status()
+        identity = self.reader.read_wild_capture_identity()
+        self.throw_preparations.append({
+            "preparation_ordinal": len(self.throw_preparations) + 1,
+            "status_attempts_used": self.attempts,
+            "target_status": decode_status(status).value if status is not None else None,
+            "target_hp": raw.enemy_hp,
+            "target_max_hp": raw.enemy_max_hp,
+            "active_party_slot": (
+                raw.active_party_index + 1 if raw.active_party_index is not None else None
+            ),
+            "original_species_id": identity.original_species_id if identity else None,
+            "displayed_species_id": identity.displayed_species_id if identity else None,
+            "transformed": identity.transformed if identity else None,
+            "escape_setup_bypassed": self.bypassed_for_escape,
+            "throw_executed": False,
+        })
         return True
 
     def _require_protected(

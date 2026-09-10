@@ -1410,6 +1410,9 @@ class RedAreaSurveyGoalProvider:
                 self.catalog,
             )
             status_reports = tuple(getattr(self.area_executor, "capture_status_reports", ()))
+            throw_preparations = tuple(
+                getattr(self.area_executor, "capture_throw_preparations", ())
+            )
             escape_bypasses = getattr(self.area_executor, "capture_escape_bypasses", 0)
             survey_evidence = {
                 "semantic_actions": report.actions_executed,
@@ -1436,6 +1439,8 @@ class RedAreaSurveyGoalProvider:
                     "final_missing": len(report.final_missing_species_refs),
                     "initial_missing_specimens": initial_missing_specimens,
                     "final_missing_specimens": final_survey.missing_specimen_count,
+                    **({"capture_throw_preparations": throw_preparations}
+                       if throw_preparations else {}),
                     **({"capture_status_reports": status_reports, "capture_support": {
                         "status_attempts": len(status_reports),
                         "verified_status_observations": sum(
@@ -1443,7 +1448,20 @@ class RedAreaSurveyGoalProvider:
                         ),
                         "party_preparations": 0,
                         **({"escape_setup_bypasses": escape_bypasses} if escape_bypasses else {}),
-                    }} if status_reports or escape_bypasses else {}),
+                        **({"prepared_throws": len(throw_preparations),
+                            "prepared_asleep": sum(
+                                row.get("target_status") == "sleep" for row in throw_preparations
+                            ),
+                            "prepared_paralyzed": sum(
+                                row.get("target_status") == "paralysis"
+                                for row in throw_preparations
+                            ),
+                            "prepared_full_hp": sum(
+                                type(row.get("target_hp")) is int
+                                and row["target_hp"] == row.get("target_max_hp")
+                                and row["target_hp"] > 0 for row in throw_preparations
+                            )} if throw_preparations else {}),
+                    }} if status_reports or escape_bypasses or throw_preparations else {}),
                 },
             )
 

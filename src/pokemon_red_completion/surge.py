@@ -2285,6 +2285,7 @@ class LiveWildEncounterExecutor:
             raise ValueError("capture status support must be boolean")
         self._capture_status_support = capture_status_support
         self.capture_status_reports: list[dict[str, object]] = []
+        self.capture_throw_preparations: list[dict[str, object]] = []
         self.capture_escape_bypasses = 0
         self._party_reader = PokemonRedPartyReader(emulator)
 
@@ -2343,6 +2344,7 @@ class LiveWildEncounterExecutor:
                 )
             finally:
                 self.capture_status_reports.extend(prepare.reports)
+                self.capture_throw_preparations.extend(prepare.throw_preparations)
                 self.capture_escape_bypasses += int(prepare.bypassed_for_escape)
         policy = _wild_capture_policy(raw.enemy_species_id)
         if raw.enemy_hp is None or raw.enemy_max_hp is None:

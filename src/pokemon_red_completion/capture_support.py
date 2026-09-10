@@ -22,15 +22,25 @@ class CaptureSupportSummary:
     verified_status_observations: int
     party_preparations: int = 0
     escape_setup_bypasses: int = 0
+    prepared_throws: int = 0
+    prepared_asleep: int = 0
+    prepared_paralyzed: int = 0
+    prepared_full_hp: int = 0
 
     def __post_init__(self) -> None:
         if any(type(value) is not int for value in (
             self.status_attempts, self.verified_status_observations, self.party_preparations,
             self.escape_setup_bypasses,
+            self.prepared_throws, self.prepared_asleep, self.prepared_paralyzed,
+            self.prepared_full_hp,
         )) or not (
             0 <= self.verified_status_observations <= self.status_attempts <= 1_000
             and 0 <= self.party_preparations <= 1
             and 0 <= self.escape_setup_bypasses <= 1_000
+            and 0 <= self.prepared_throws <= 1_000
+            and 0 <= self.prepared_asleep <= self.prepared_throws
+            and 0 <= self.prepared_paralyzed <= self.prepared_throws - self.prepared_asleep
+            and 0 <= self.prepared_full_hp <= self.prepared_throws
         ):
             raise ValueError("capture support diagnostic bounds differ")
 
@@ -39,7 +49,12 @@ class CaptureSupportSummary:
                 "verified_status_observations": self.verified_status_observations,
                 "party_preparations": self.party_preparations,
                 **({"escape_setup_bypasses": self.escape_setup_bypasses}
-                   if self.escape_setup_bypasses else {})}
+                   if self.escape_setup_bypasses else {}),
+                **({"prepared_throws": self.prepared_throws,
+                    "prepared_asleep": self.prepared_asleep,
+                    "prepared_paralyzed": self.prepared_paralyzed,
+                    "prepared_full_hp": self.prepared_full_hp}
+                   if self.prepared_throws else {})}
 
     @classmethod
     def from_evidence(cls, evidence: Mapping[str, object]) -> CaptureSupportSummary | None:
@@ -47,12 +62,18 @@ class CaptureSupportSummary:
         if value is None:
             return None
         required = {"status_attempts", "verified_status_observations", "party_preparations"}
+        preparation = {
+            "prepared_throws", "prepared_asleep", "prepared_paralyzed", "prepared_full_hp",
+        }
         if not isinstance(value, Mapping) or not (
-            required <= set(value) <= required | {"escape_setup_bypasses"}
+            required <= set(value) <= required | {"escape_setup_bypasses"} | preparation
+            and (not set(value).intersection(preparation) or preparation <= set(value))
         ) or any(type(item) is not int for item in value.values()):
             raise ValueError("capture support diagnostics differ")
         return cls(value["status_attempts"], value["verified_status_observations"],
-                   value["party_preparations"], value.get("escape_setup_bypasses", 0))
+                   value["party_preparations"], value.get("escape_setup_bypasses", 0),
+                   value.get("prepared_throws", 0), value.get("prepared_asleep", 0),
+                   value.get("prepared_paralyzed", 0), value.get("prepared_full_hp", 0))
 
 
 @dataclass(frozen=True, slots=True)

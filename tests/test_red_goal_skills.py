@@ -595,6 +595,7 @@ def test_area_survey_provider_captures_and_independently_reloads_collection(
     adapter = _adapter(reader)
     area = _AreaExecutor(reader, actions)
     area.capture_escape_bypasses = escape_bypasses
+    area.capture_throw_preparations = [{'target_status': 'healthy', 'throw_executed': False}]
     provider = RedAreaSurveyGoalProvider(
         source_id="wild:Route1:grass",
         area_executor=area,
@@ -615,13 +616,14 @@ def test_area_survey_provider_captures_and_independently_reloads_collection(
     verdict = offer.binding.verify(report)
     assert verdict.status.value == "succeeded"
     assert report.evidence["captures"] >= 2
-    if escape_bypasses:
-        assert report.evidence['capture_support'] == {
+    assert report.evidence['capture_throw_preparations'] == tuple(area.capture_throw_preparations)
+    assert report.evidence['capture_support'] == {
             'status_attempts': 0, 'verified_status_observations': 0,
-            'party_preparations': 0, 'escape_setup_bypasses': 2,
+            'party_preparations': 0,
+            **({'escape_setup_bypasses': 2} if escape_bypasses else {}),
+            'prepared_throws': 1, 'prepared_asleep': 0,
+            'prepared_paralyzed': 0, 'prepared_full_hp': 0,
         }
-    else:
-        assert 'capture_support' not in report.evidence
     assert not summarize_red_area_survey(
         "wild:Route1:grass",
         adapter.observe().collection_observation,
