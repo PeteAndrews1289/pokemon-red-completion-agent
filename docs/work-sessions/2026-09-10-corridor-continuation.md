@@ -1,5 +1,17 @@
 # Resume the exact chosen corridor
 
+## Compatibility correction before resuming
+
+The first exclusion alignment passed local tests but the real zero-input check
+rejected a September7 ancestor: applying a new lane rule to old declarations is
+not backward compatible. No gameplay occurred under that intermediate repair.
+`--wild-source` now preserves the earlier rule. New registered selections append
+an explicit `--warp-safe-wild-source` transition, and each durable step labels its
+continuation rule. The two batchH proposals receive that explicit declaration;
+old ancestors are not reinterpreted. A pure read-only reconstruction matched all
+135 ordered ancestor profile hashes, including the latest actual model23 endpoint.
+This is not itself checkpoint admission; the unchanged full guard still runs.
+
 ## Mission check
 
 - Capability: retain model-selected collection choices across saved-state steps.

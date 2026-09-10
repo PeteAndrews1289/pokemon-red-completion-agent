@@ -627,6 +627,13 @@ def _parser() -> argparse.ArgumentParser:
         help="ordered private profile transition changing only the existing Mart supply skill",
     )
     parser.add_argument(
+        "--warp-safe-wild-source",
+        dest="regional_transitions",
+        action="append",
+        type=lambda value: f"warp-safe:{value}",
+        help="registered corridor transition excluding warps; preserves older source declarations",
+    )
+    parser.add_argument(
         "--discovery-source",
         dest="regional_transitions",
         action="append",
@@ -1477,6 +1484,10 @@ def _regional_profiles(
     )
 
     for source in sources:
+        if isinstance(source, str) and source.startswith("warp-safe:"):
+            source = source.removeprefix("warp-safe:")
+            if not allow_cartridge_sources or not source.startswith("wild:"):
+                raise PairedRedBoundedPlayerRunError("warp_safe_source_requires_registered_wild")
         if isinstance(source, str) and source.startswith("evolution:"):
             _evolution_objective_argument(source.removeprefix("evolution:"))
             continue
@@ -1519,6 +1530,10 @@ def _regional_profiles(
         raise PairedRedBoundedPlayerRunError("regional_profile_world")
     result = []
     for source in sources:
+        warp_safe = isinstance(source, str) and source.startswith("warp-safe:")
+        if warp_safe:
+            assert isinstance(source, str)
+            source = source.removeprefix("warp-safe:")
         if source == "capture-fly":
             from pokemon_red_completion.red_goal_context_profile import bind_capture_fly_profile
 
@@ -1668,7 +1683,7 @@ def _regional_profiles(
             continue
         map_id = int(map_id_for_wild_source(source))
         excluded = world.object_blockers[map_id]
-        if allow_cartridge_sources:
+        if warp_safe:
             # Match registered source enumeration exactly. A different lane
             # changes the profile hash even when the native goal was evolution.
             excluded = frozenset(excluded) | frozenset(

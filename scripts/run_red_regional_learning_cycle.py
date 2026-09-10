@@ -262,6 +262,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "outcome": outcome,
                 "fit": fitted,
                 "selection_scope": "regional_destination" if regional else "native_goal",
+                "continuation_source_rule": "warp_safe_v1" if registered_objective else "legacy",
                 **({"owned_evolution_inventory": evolution_inventory}
                    if evolution_inventory is not None else {}),
             }
@@ -310,7 +311,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if selected is not None:
             current.regional_transitions = [
                 *current.regional_transitions,
-                selected,
+                f"warp-safe:{selected}" if registered_objective else selected,
                 f"discovery:{selected}",
             ]
     summary: dict[str, object] = {

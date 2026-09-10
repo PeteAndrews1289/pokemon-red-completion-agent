@@ -563,8 +563,10 @@ def test_regional_builder_rejects_special_capture_rules_before_cartridge(source,
         runner._regional_profiles(object(), (source,), object())
 
 
-@pytest.mark.parametrize("registered", [False, True])
-def test_reconstructed_corridor_matches_registered_warp_safe_enumeration(monkeypatch, registered):
+@pytest.mark.parametrize("registered,warp_safe", [(False,False),(True,False),(True,True)])
+def test_reconstructed_corridor_matches_registered_warp_safe_enumeration(
+    monkeypatch, registered, warp_safe,
+):
     from test_red_living_dex_wild_corridor import _graph, _local_discovery_profile, _terrain
 
     from pokemon_red_completion.red_living_dex_provider_curriculum import RedEncounterSourceTarget
@@ -579,15 +581,24 @@ def test_reconstructed_corridor_matches_registered_warp_safe_enumeration(monkeyp
         macro_graph=SimpleNamespace(warp_locations={13:((3,1),)}))
     monkeypatch.setattr(runner,"_route_world",lambda _:world)
     original = _local_discovery_profile()
-    actual, = runner._regional_profiles(original,("wild:Route2:grass",),object(),
+    source = "warp-safe:wild:Route2:grass" if warp_safe else "wild:Route2:grass"
+    actual, = runner._regional_profiles(original,(source,),object(),
         allow_cartridge_sources=registered)
-    assert actual.providers[0].parameters["player_x"] == (4 if registered else 1)
+    assert actual.providers[0].parameters["player_x"] == (4 if warp_safe else 1)
     corridor = derive_red_living_dex_wild_corridor(RedEncounterSourceTarget("wild:Route2:grass"),
         world.terrain[13],world.local_graphs[13],
-        excluded={(3,1)} if registered else (),
+        excluded={(3,1)} if warp_safe else (),
         cartridge=b"fixture" if registered else None)
     expected = retarget_red_wild_profile(original,corridor,rom=b"fixture")
     assert actual.profile_sha256 == expected.profile_sha256
+
+
+def test_warp_safe_source_rejects_legacy_or_nonwild_scope_before_world(monkeypatch):
+    monkeypatch.setattr(runner,"_route_world",lambda _:pytest.fail("invalid scope reached world"))
+    for source,registered in (("warp-safe:wild:Route2:grass",False),
+                              ("warp-safe:capture-fly",True)):
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError,match="warp_safe_source"):
+            runner._regional_profiles(object(),(source,),object(),allow_cartridge_sources=registered)
 
 
 def test_regional_transition_parser_preserves_interleaved_source_supply_order():

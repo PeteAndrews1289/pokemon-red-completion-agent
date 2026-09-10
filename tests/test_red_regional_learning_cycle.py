@@ -158,13 +158,14 @@ def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ances
     assert played[0]["regional_transitions"][-1] == "evolution:48:49:31"
     assert played[1]["regional_transitions"] == [
         "wild:Route24:grass", "evolution:48:49:31",
-        "wild:Route5:grass", "discovery:wild:Route5:grass", "evolution:17:18:36",
+        "warp-safe:wild:Route5:grass", "discovery:wild:Route5:grass", "evolution:17:18:36",
     ]
     assert played[1]["continue_from_checkpoint"][-1] == ["cycle-fixture-01-causal", "1" * 64]
     assert result["steps"][0]["owned_evolution_inventory"]["selected_transition"] == (
         "evolution:48:49:31"
     )
     assert all(row["selection_scope"] == "native_goal" for row in result["steps"])
+    assert all(row["continuation_source_rule"] == "warp_safe_v1" for row in result["steps"])
     assert args.regional_transitions == ["wild:Route24:grass"]
 
 

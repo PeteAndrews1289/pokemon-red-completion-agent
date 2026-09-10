@@ -1,5 +1,11 @@
 # Current —49 registrations, model23 retained
 
+Continuation compatibility: old `--wild-source` declarations retain their exact
+historical rule. New registered choices use `--warp-safe-wild-source`; future
+per-step records declare `continuation_source_rule=warp_safe_v1`. The two batchH
+proposals need that explicit rule.135 ordered historical profile hashes matched
+in the read-only check; never bypass the final checkpoint guard or replay H.
+
 2 completed model-selected evolutions /2 fits: Nidorina and Nidorino. Model23,49 registrations,46 specimens. 7741 actions /677718 frames. Step3 stopped before input on a profile-reconstruction mismatch. No indoor capture yet.
 
 Next: Verify exact model23 terminal restoration with matching corridor exclusions, then a fresh bounded continuation. Preserve two completed attempts and their fits. Let the model choose among capture and remaining evolutions; no forced destination, reset or replay.
