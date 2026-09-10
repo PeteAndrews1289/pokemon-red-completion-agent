@@ -196,6 +196,25 @@ def test_unexecuted_destination_does_not_invent_survey_counts() -> None:
     assert "capture_survey" not in binding.execute().evidence
 
 
+def test_ball_exhaustion_preserves_completed_transport_and_failed_destination():
+    survey = {
+        "semantic_actions": 2, "encounters_seen": 1, "captures": 0, "flees": 1,
+        "search_exhausted": False, "safety_stopped": False,
+        "capture_items_exhausted": True,
+    }
+    fields = {"cuts": 0, "surfs": 1, "flights": 1}
+    verdict = GoalVerification.failed(GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED)
+    _, binding, meter, _ = _composer(
+        capture_survey=survey, route_fields=fields, destination_verification=verdict,
+    )
+    report = binding.execute()
+    assert report.evidence["field_moves"] == fields
+    assert report.evidence["capture_survey"] == survey
+    assert report.actions_executed == meter.actions == 5
+    assert report.frames_executed == meter.frames == 50
+    assert binding.verify(report) == verdict
+
+
 def test_malformed_destination_survey_is_not_silently_discarded() -> None:
     _, binding, _, _ = _composer(capture_survey={"private_path": "fixture-private"})
     with pytest.raises(ValueError, match="fields"):

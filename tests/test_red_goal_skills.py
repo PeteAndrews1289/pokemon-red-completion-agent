@@ -720,6 +720,10 @@ def test_area_survey_last_ball_stops_before_another_encounter_and_retains_costs(
     report = binding.execute()
     assert report.actions_executed == 2 and report.frames_executed > 0
     assert report.evidence["capture_survey"]["capture_items_exhausted"] is True
+    from pokemon_red_completion.capture_survey import CaptureSurveySummary
+    diagnostic = CaptureSurveySummary.from_evidence(report.evidence)
+    assert diagnostic is not None
+    assert diagnostic.public_dict() == report.evidence["capture_survey"]
     assert report.evidence["search_exhausted"] is False
     assert report.evidence["encounters_seen"] == 1
     assert report.evidence["captures"] == int(caught)

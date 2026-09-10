@@ -33,3 +33,18 @@ separate overlapping 372-test router/checkpoint/continuation/resource/cycle grou
 passed. Ruff and configured mypy (471 source files) passed. This is not a
 full-suite or live qualification claim. Actual save inspection and gameplay
 results will be recorded below, without changing historical AG02 evidence.
+
+## Pre-input audit correction
+
+The exact AG02 preflight on source1b81c58b offered resupply in4.821seconds,
+with zero inputs, frames or model queries. While the AH batch was reading prior
+source history, Codex found that the strict composed-report parser did not yet
+accept the new resource-stop flag. Preparation was interrupted at that read-only
+history scan, before episode creation or controller input. AH remains preserved
+as an unexecuted declaration; it must not be represented as a played trial.
+
+The parser now accepts and preserves that optional typed flag, rejects coercion
+and conflicting stop states, and preserves old summaries unchanged. A composed
+failure test verifies retained Fly/Surf counts and all transport/destination costs.
+This was a real integration omission missed by the first targeted tests, caught
+before gameplay; the test now consumes actual provider evidence as well.
