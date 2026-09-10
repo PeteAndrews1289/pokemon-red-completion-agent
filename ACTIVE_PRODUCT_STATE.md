@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock.
+- Next decision: Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority now | 2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 61 | 12 |
+| Registered Train Example · train | 63 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-surf-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-surf-access-learning-2026-09-10.json)
+**2026-09-10-supply-transport** · status **active** · evidence [registered train example](docs/evidence/red-supply-collection-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 1 real fits; no independent or cross-title authority promotion. |
+| Learning output | 2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority delta | 2 real fits; no independent or cross-title authority promotion. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Seven executable destinations yielded one actual learned choice, but Power Plant capture exhausted its balls and raised a generic error. The exact terminal is ready; affordable resupply remains transport-blocked. Failed composition lost its completed field summary. |
-| Decision | Preserve Dodrio and the real failed destination lesson. Restore supplies from the actual Power Plant terminal, not the old save; pursue a productive choice without more access infrastructure. |
-| Next session | Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock. |
-| Next falsifier | From exact AG02, qualify affordable resupply through observed indoor/field transport; reject missing holder, permission or stale terminal before input. Preserve spending and route evidence when balls run out, then attempt one productive choice without replaying AG. |
+| Blocker | Travel capture and resumption are now demonstrated: Shellder was caught on1F before the model's B3F destination. One remaining ball failed on Seel; the helper had fallen from73 to36HP during the Shellder encounter. Supplies and capture-support endurance now limit sustained collection. |
+| Decision | Close the bounded travel-capture checklist using the actual Shellder gain, verified continuation and fitted outcome, while keeping the failed Seel destination label. Next improve sustainable supplies/capture support and reduce wasted preparation rather than add more routes. |
+| Next session | Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay. |
+| Next falsifier | From exact AJ01, verify a legitimate supply/funding option and safe capture support before another collection choice. Reject unavailable resources or unsafe helper use without weakening guards. Retain the Shellder gain, failed Seel costs and fresh continuation ancestry; never replay AI/AJ. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

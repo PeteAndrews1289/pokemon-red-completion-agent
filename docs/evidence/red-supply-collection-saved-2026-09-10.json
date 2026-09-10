@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T23:23:13.943266+00:00",
+  "location": "seafoam_islands_b3f \u00b7 saved, not live",
+  "registered_species": 64,
+  "living_species": 50,
+  "specimens": 54,
+  "capture_items": 0,
+  "money": 593,
+  "checkpoint_sha256": "c0e01cb2956b9346195fc8c5e8055f441b0b06a8e407710be789ff2f3b6af89a"
+}

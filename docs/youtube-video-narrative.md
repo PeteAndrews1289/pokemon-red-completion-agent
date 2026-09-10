@@ -23,17 +23,17 @@ A useful visual is one actual goal menu beside its selected destination and reta
 Use [the Onix batch](work-sessions/2026-09-10-post-merge-collection.md):
 an unsuccessful first-floor search, real resupply, a successful basement capture and funding. Two destination outcomes were fitted; two safety-driven steps were deliberately not counted as model lessons. Do not claim the first failure caused the later success.
 
-Show59 registrations and56 examples as a dated snapshot. Neither number is a completion percentage or a claim of independent reliability.
+Show59 registrations and 56 examples as a dated snapshot. Neither number is a completion percentage or a claim of independent reliability.
 
-Then contrast [the following batch](work-sessions/2026-09-10-preparation-collection.md): the model reached59 examples, but registration stayed at59. Show successful team recovery and two bounded unsuccessful searches. A measured preparation speedup is an engineering result, not a new learned ability. The next question is whether a larger, still-bounded search makes collection more useful.
+Then contrast [the following batch](work-sessions/2026-09-10-preparation-collection.md): the model reached59 examples, but registration stayed at 59. Show successful team recovery and two bounded unsuccessful searches. A measured preparation speedup is an engineering result, not a new learned ability. The next question is whether a larger, still-bounded search makes collection more useful.
 
-Follow with [the Paras result](work-sessions/2026-09-10-search-budget.md): a model-selected trip gained a registration, but its arrival summary failed. Show60registrations/60examples alongside the failed goal label. Explain that useful partial progress, successful execution and model improvement are different claims. Flash supplied research leads; Codex corrected factual mistakes before adopting them.
+Follow with [the Paras result](work-sessions/2026-09-10-search-budget.md): a model-selected trip gained a registration, but its arrival summary failed. Show60registrations/60 examples alongside the failed goal label. Explain that useful partial progress, successful execution and model improvement are different claims. Flash supplied research leads; Codex corrected factual mistakes before adopting them.
 
 The [Champion milestone](audits/red-phase4-closeout-2026-09-09.md) is supporting footage: checkpoint-based integration, deterministic battles and a forced final continuation. Do not call it a model learning an entire game from scratch.
 
 ## Act4 — Keep the failures in the story
 
-Show [Paras evolving into Parasect](work-sessions/2026-09-10-owned-evolution-access.md) after an empty-menu transport repair. Display61registrations but still60model examples: the only available goal was forced, so a real collection gain did not become a fake model lesson. Flash helped repair an isolated stone-evolution draft; Codex rejected incorrect mechanics claims, repaired remaining fixtures and kept the draft out of live play.
+Show [Paras evolving into Parasect](work-sessions/2026-09-10-owned-evolution-access.md) after an empty-menu transport repair. Display 61registrations but still60model examples: the only available goal was forced, so a real collection gain did not become a fake model lesson. Flash helped repair an isolated stone-evolution draft; Codex rejected incorrect mechanics claims, repaired remaining fixtures and kept the draft out of live play.
 
 Explain one blocked-route or boxed-capture verification failure and the reusable fix. Keep actual costs visible. Explain why the shared Pokédex records legitimate acquisition once rather than requiring every species at level100.
 
@@ -42,6 +42,8 @@ Follow with [Cut-enabled Route16 access and Doduo](work-sessions/2026-09-10-cut-
 ## Closing — What remains unproved
 
 Use the [Surf-access batch](work-sessions/2026-09-10-surf-collection-access.md) to show the first real menu after forced-only setup: seven destinations, a recorded Power Plant choice and actual arrival. Contrast Dodrio's successful forced evolution with the failed capture after two balls were spent. End the segment at 63 registrations and 61 examples—not a successful capture or proven improvement. The exact saved terminal is ready, although the final streamed snapshot was earlier; disclose that distinction if showing the footage.
+
+Follow with [the supply session](work-sessions/2026-09-10-supply-transport.md): the agent buys two balls, the model chooses healing, and a fresh seven-way destination choice catches Shellder on Seafoam 1F before continuing to B3F. The remaining ball fails against Seel. Display 64 registrations and 63 examples: one new species, two new lessons. Keep the final goal visibly failed alongside the partial gain and safe stop. Explain the correction from a destination-only summary to the full saved result; do not invent a nested travel receipt or replay. The next engineering question is sustainable capture support and supplies, not another route map.
 
 Fresh-game autonomous play, complete collection and transfer to Blue, modified Red or Crystal remain unfinished. The next evidence should show useful decisions beyond the situations used to fit the model.
 

@@ -4,53 +4,55 @@ Updated September 10, 2026. Earlier results remain in dated reports and [history
 
 ## Goal and scope
 
-Build a learned player that completes stories and accumulates one shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock remain separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
+Build a learned player that completes stories and accumulates one shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock stay separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
 
-## Latest verified save: AG02
+## Latest verified save: AJ01
 
-- **63 global/local registrations, 53 specimens, 49 living species**, independently checked from the exact save.
-- AG01 evolved Doduo into Dodrio: 17,950 actions / 1,616,756 frames, one recorded Fly. This forced setup produced no fit.
-- AG02 exposed seven executable destinations. The existing model-plus-exploration policy selected Power Plant and reached it. Both remaining balls were spent without a capture; a later no-balls encounter raised a generic error.
-- The actual failed destination outcome was fitted: **model60 → model61**. This is development experience, not improved independent performance.
-- AG02 used 1,273 actions / 70,285 frames. Total batch: 19,223 actions / 1,687,041 frames, 1,390.502 seconds including preparation.
-- Exact terminal: Power Plant/map83, row19 col17, input-ready, battle0, no pending trainer; **zero balls and 1,638 money**.
-- Gameplay is stopped after the failed second goal. The third goal was never attempted.
-- [Session report](docs/work-sessions/2026-09-10-surf-collection-access.md) · [Outcome evidence](docs/evidence/red-surf-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-surf-access-saved-2026-09-10.json).
+- **64 global/local registrations, 54 specimens, 50 living species**, checked from the exact final save. All 53 prior specimens remain.
+- AI01 exited Power Plant, flew to town and bought two Great Balls for 1,200 money:209 actions/12,588 frames, one verified Fly. Forced supply produced no training row.
+- AI02 offered capture and restoration. The actual model chose restoration and succeeded:153 actions/5,424 frames. That real native choice fitted model61→62. The proposed Seafoam B4F destination was not played or separately fitted.
+- AJ01 was a separately declared extra choice after AI's two-goal batch. The model-plus-exploration policy selected Seafoam B3F among seven destinations. It caught Shellder30 with one ball on Seafoam 1F, resumed travel to B3F, then failed to catch Seel33 with its remaining ball.
+- AJ01 failed with the verified `capture_items_exhausted` reason:565 actions/40,633 frames. Its completed Surf and survey counts survived composition. The actual failed destination outcome fitted model62→63.
+- Total: 927 actions/58,645 frames; combined batch elapsed 1,425.094 seconds including preparation. **One new registration: Shellder.** These are related development outcomes, not independent performance.
+- Exact terminal: Seafoam B3F/map 161,row 9col 12; input-ready,battle 0; zero balls,593 money. Gameplay is stopped.
+- [Session report](docs/work-sessions/2026-09-10-supply-transport.md) · [Outcome evidence](docs/evidence/red-supply-collection-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-supply-collection-saved-2026-09-10.json).
 
 Exact identities:
 
-- Episode: `red-registered-surf-choices-20260910-ag-02-causal`
-- Checkpoint: `445f68aac643a6482f41972ead962d5ba75ef69b0d84b946326c02c41d48d871`
-- Manifest: `74db044a6836694a1e777d3a9338c561034049e8a34c8c81118b9ab094b8e951`
-- State: `d3be0828db030c995aa00013fb31a68029920093f667f0369189fdfa91351840`
-- Model61: `a699c3f740fad9182273140d98cfe0f77827765eb5b73b484dc6730cf13c3476`
-- Corpus: `4b27c0e83c0edfb40c14c2facdfb513d7abe5433344e241b0c8f4b237c8fe0d0`
-- Played source: `282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad`
+- Episode: `red-registered-collection-20260910-aj-01-causal`
+- Checkpoint: `c0e01cb2956b9346195fc8c5e8055f441b0b06a8e407710be789ff2f3b6af89a`
+- Manifest: `1967542465ccfaa4c1fd7a8f1aecb1571d29b8b70cf82148fef4f47cd9f3099e`
+- State: `c2099e7420bc96559a7ba30aa35b5da5fc5c473a31bd501e2b3ba8b0b5490ed5`
+- Model63: `dd47c6e9b329ffbae5882c1908b869d89aa0d8515f2f5e96620100823ea90f74`
+- Corpus: `e647cc1669e0c33ea1c9a7e151c5ef9692559eeefa7aa143f4e32184977a25f9`
+- Played source: `63aa4647bfad022c5a746a3f7892978a495dd2e6`
 
-Preserve all earlier support episodes and costs. AF and AG01 are historical ancestors, not restart points. Never rerun the AG launcher.
+AG02 and AI01/02 are ancestors, not restart points. Never rerun the AI/AJ launchers.
 
-## Repair and limitations
+## What changed and what remains
 
-The first Surf-only projection exposed zero candidates. Diagnosis found eleven unnamed land-encounter maps and two unnamed water maps. Thirteen independent map-ID tests failed before repair. All actual nonempty encounter maps now have adapter names; names do not grant access.
+Mart supply can explicitly opt into the existing indoor-exit/Fly composition. Observed badge, healthy holder, destination, stale-state and shared-budget checks remain. Capture-only Cut/Surf permissions were not generalized to every resource task.
 
-Capture-only Surf is explicitly enabled, requires observed badge/healthy holder/title permission, shares the original primitive budget, and preserves Cut/Strength boundaries. After map repair, seven routes remained preparation-blocked by the injured helper. Legitimate evolution/recovery restored that helper; seven actual destination choices then became executable.
+Ordinary-ball exhaustion now stops between encounters and returns typed evidence. The strict public summary also preserves that flag and completed transport costs. AH preparation was interrupted during read-only historical validation when review caught the initial missing parser support. AH has no created episode or gameplay; its declaration remains preserved.
 
-347 targeted tests passed, plus a separate 127 checkpoint/fit/cycle tests. Ruff and configured mypy passed (471 source files). These are not a full-suite claim. Field counts survive successful composition (AG01 Fly), but AG02's downstream exception prevented its completed route summary from propagating. Do not invent retained Surf counts.
+The travel trace places the helper's HP loss from 73 to 36 during the Shellder encounter; it does not identify the exact damaging move. The later Seel33 remained at 88/88 HP with zero status attempts, and its single ball failed. The helper was already below half health, so the status-support safety guard correctly withheld it. Improve endurance and adequate supplies without lowering those protections.
 
-The last streamed AG02 snapshot was not ready; the exact final checkpoint is ready. Always use the authenticated terminal for continuation decisions. AB's earlier incidental-arrival repair remains unqualified; capture/resume stays 1/3.
+271 focused tests passed; a separate overlapping 372-test router/checkpoint/continuation group passed; the report-parser correction passed 160 tests including actual-provider serialization and composed failure accounting. Ruff, configured mypy(471 files), registry and focus checks passed. No full-suite claim.
+
+The bounded capture/resume checklist is now 3/3: a travel capture, resumed route and fitted positive collection gain are verified. The failed destination retains success target 0 alongside completion gain 1/124. Evidence is the exact save, trace, guarded runtime and fitted row; no nested travel receipt was persisted, and none is invented. The already-satisfied-destination shortcut remains unqualified. This does not complete Phase 5, Red, or prove independent performance; North Star and stage exits are unchanged.
 
 ## Next bounded session
 
-1. Continue from AG02/model61 with all ancestry and capture-Cut/Surf options. Reconstruct AG's transitions in order: its owned Doduo→Dodrio transition plus evolution-Fly/indoor options, AG01 checkpoint, then AG02 checkpoint and selected Power Plant warp-safe/discovery source. The private read-only next-menu script reconstructs these exact arguments.
-2. The exact native preflight offers no goal: resupply resources are available, but transport reports missing capability. Extend the existing supply transport to truthful indoor departure/required field movement; do not weaken capture-only permissions globally.
-3. Qualify one legitimate purchase from the actual terminal, then one productive collection choice. Preserve the failed AG label and costs; no old-save replay.
-4. Return ball exhaustion as a typed bounded outcome and preserve completed transport evidence when the destination stops. An exception must not masquerade as successful capture.
-5. Time box 60–90 minutes. Duplicate unchanged-state route inspections are a measured secondary cost; optimize only where it directly unblocks this loop.
+1. Reconstruct from the private AJ arguments, then append AJ01's checkpoint and its Seafoam B3F warp-safe/discovery profile. Carry model63 and all previous resource/field options, including AI's proposed B4F profile used by its actual restoration.
+2. Inspect capture preparation and the helper's safe fallback. Choose the smallest safe conditioning/party-support repair with a measurable capture benefit; keep target identity, non-KO and party protections.
+3. Qualify sufficient legitimate ball funding from the actual zero-ball/593 money save. Existing Mart transport is implemented, but this exact Seafoam supply journey has not been played.
+4. Attempt one productive model-selected collection outcome. Retain failed costs and stop safely if the concrete repair is falsified; no repeated full-health two-ball batches.
+5. As a small throughput repair, avoid rebuilding source history for inventory-only calls whose returned menu is discarded. Actual policy decisions must still consume authenticated history and fresh observations.
 
-No reset, sealed Red, Crystal, full replay, release or independent-performance claim. Stage exits are unchanged.
+Allow 60–90minutes for this bounded objective, not Red completion. No reset, sealed Red, Crystal, full replay or release.
 
-## External work and publication
+## Ownership and publication
 
-No external agents ran this session; no fresh external quota was queried. Flash's prior stone draft remains isolated at `895b4d6b`, not integrated or live-qualified.
+Codex owns integration. No external agents ran this session; no fresh external quota was queried. Flash's older stone draft remains isolated at`895b4d6b`, not integrated or live-qualified.
 
-PR241 merged as `83038a7b`. Played source is published on `codex/red-surf-choices-20260910` and must remain recoverable. Publish this evidence closeout as one tested batch; ordinary gameplay does not wait on hosted CI.
+PR242 passed CI34537307137 and merged as`0d58f492`. Preserve the played source on`codex/red-supply-transport-20260910`. Publish the current closeout as one tested batch; ordinary gameplay does not wait on hosted CI.
