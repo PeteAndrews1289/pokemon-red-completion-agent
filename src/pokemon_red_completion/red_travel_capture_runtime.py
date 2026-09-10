@@ -184,7 +184,10 @@ class TravelSatisfiedCaptureProvider:
                     "source_satisfied_during_transport": True,
                     "destination_capture_actions": 0,
                     "new_learning_labels": 0,
-                    "capture_survey": {"captures": 0, "encounters_seen": 0, "flees": 0},
+                    "capture_survey": {
+                        "semantic_actions": 0, "captures": 0, "encounters_seen": 0,
+                        "flees": 0, "search_exhausted": False, "safety_stopped": False,
+                    },
                 },
             )
             return report

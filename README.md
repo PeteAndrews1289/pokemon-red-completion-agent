@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest verified collection contains **59 registered species**. The current registered-objective model has **59 training examples**; this is a small development dataset, not a measure of general intelligence.
+- The latest verified collection contains **60 registered species**. The current registered-objective model has **60 training examples**; this is a small development dataset, not a measure of general intelligence.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest collection report](docs/work-sessions/2026-09-10-preparation-collection.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest collection report](docs/work-sessions/2026-09-10-search-budget.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

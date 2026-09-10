@@ -26,6 +26,8 @@ A subsequent [four-goal batch](work-sessions/2026-09-10-preparation-collection.m
 
 These are related development experiences, not an independent success rate or evidence of cross-game transfer.
 
+The next [bounded continuation](work-sessions/2026-09-10-search-budget.md) caught Paras during travel to a model-selected destination:60 registrations and60 examples. The overall goal still failed because the arrival report omitted required diagnostic fields. The catch and failure were both retained; fixing the report did not retroactively turn that run into success. This also does not prove the larger search allowance caused the catch—it occurred during travel.
+
 ## What the failures taught us
 
 Navigation could propose an apparently connected route that was blocked by actual game state. Capture verification could misinterpret the way a new boxed Pokémon shifts existing slots. Resource recovery could be necessary even when its action should not be counted as learned judgment.

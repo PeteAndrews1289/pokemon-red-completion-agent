@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-preparation-collection**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-search-budget**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **59 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **60 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-preparation-collection-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-search-budget-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-search-budget
+
+0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** Prospective search-budget repair and reviewed Flash research, followed by fresh bounded goals. AA preparation stopped before input after a budget interaction was found. No stage exits changed; costs retained.
+
+**Next:** Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-preparation-collection
 

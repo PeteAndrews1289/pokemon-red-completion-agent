@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay.
+- Next decision: Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority now | 0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 59 | 12 |
+| Registered Train Example · train | 60 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,17 +59,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-preparation-collection** · status **active** · evidence [registered train example](docs/evidence/red-preparation-collection-learning-2026-09-10.json)
+**2026-09-10-search-budget** · status **active** · evidence [registered train example](docs/evidence/red-search-budget-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 2/4 goals succeeded; 3 eligible fits,56 to59 examples. 59 to59 registrations; 51 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 3 real fits; no independent or cross-title authority promotion. |
+| Learning output | 0/1 goals succeeded; 1 eligible fits,59 to60 examples. 59 to60 registrations; 52 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority delta | 1 real fits; no independent or cross-title authority promotion. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | No new registration this batch. Both searches hit the64-leg cap after two and four encounters; preparation and training-history validation still dominate short gameplay. |
+| Blocker | Paras was registered, but travel-satisfied arrival omitted required capture-summary fields. The goal remains failed; the small reporting repair is not yet live-qualified. Broader collection and independent performance remain unproved. |
 | Decision | Retain actual goal outcomes and costs; do not force a destination or relabel support as learning. |
-| Next session | From Z04/model59, inspect the64-leg search cap that yielded only two and four destination encounters. Implement a prospectively bounded, source-agnostic search dose if supported by those traces, preserving old profile identities, safety checks and failures; then play fresh choices. Time-box repair to45minutes; no reset, sealed Red, Crystal or full replay. |
+| Next session | Continue from AB01/model60 with Paras retained; never replay AB or restore Z. The travel-satisfied arrival emitted an incomplete capture summary after the catch; its producer/consumer regression is repaired locally, not live-qualified. Run one fresh bounded goal, preserving the failed label and all costs. Then review the existing isolated item-evolution draft for a reusable collection expansion. Allow45-60minutes including audit; no reset, sealed Red, Crystal or full replay. |
 | Next falsifier | A fresh travel capture must preserve shifted active-box identities and resume the actual route; a new registration alone must not turn a failed destination into success. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

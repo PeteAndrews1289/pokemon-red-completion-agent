@@ -27,6 +27,8 @@ Show59 registrations and56 examples as a dated snapshot. Neither number is a com
 
 Then contrast [the following batch](work-sessions/2026-09-10-preparation-collection.md): the model reached59 examples, but registration stayed at59. Show successful team recovery and two bounded unsuccessful searches. A measured preparation speedup is an engineering result, not a new learned ability. The next question is whether a larger, still-bounded search makes collection more useful.
 
+Follow with [the Paras result](work-sessions/2026-09-10-search-budget.md): a model-selected trip gained a registration, but its arrival summary failed. Show60registrations/60examples alongside the failed goal label. Explain that useful partial progress, successful execution and model improvement are different claims. Flash supplied research leads; Codex corrected factual mistakes before adopting them.
+
 The [Champion milestone](audits/red-phase4-closeout-2026-09-09.md) is supporting footage: checkpoint-based integration, deterministic battles and a forced final continuation. Do not call it a model learning an entire game from scratch.
 
 ## Act4 — Keep the failures in the story

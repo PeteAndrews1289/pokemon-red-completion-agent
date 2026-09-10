@@ -689,6 +689,11 @@ def _parser() -> argparse.ArgumentParser:
         help="explicit opt-in to bounded observed non-damaging capture status preparation",
     )
     parser.add_argument(
+        "--capture-search-budget", dest="regional_transitions", action="append_const",
+        const="capture-search-budget",
+        help="prospective up-to160-leg captures; reserves encounter handling within action caps",
+    )
+    parser.add_argument(
         "--affordable-capture-supply",
         dest="regional_transitions",
         action="append_const",
@@ -1537,6 +1542,7 @@ def _regional_profiles(
             or source
             in {
                 "capture-status",
+                "capture-search-budget",
                 "opportunistic-capture",
                 "evolution-fly",
                 "capture-fly",
@@ -1724,6 +1730,16 @@ def _regional_profiles(
             )
 
             profile = bind_red_capture_status_profile(profile)
+            result.append(profile)
+            continue
+        if source == "capture-search-budget":
+            from pokemon_red_completion.red_living_dex_wild_corridor import (
+                bind_red_capture_search_budget_profile,
+            )
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError("search_budget_requires_registered_objective")
+            profile = bind_red_capture_search_budget_profile(profile)
             result.append(profile)
             continue
         if source == "opportunistic-capture":

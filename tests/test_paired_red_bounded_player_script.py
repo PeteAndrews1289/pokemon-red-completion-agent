@@ -28,6 +28,24 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_search_budget_transition_preserves_history_and_requires_registration(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    with pytest.raises(module['PairedRedBoundedPlayerRunError'], match='registered_objective'):
+        derive(before, ('capture-search-budget',), object())
+    old, new = derive(before, ('capture-status', 'capture-search-budget'), object(),
+                      allow_cartridge_sources=True)
+    assert old.providers[0].parameters['maximum_legs'] == 64
+    assert new.providers[0].parameters['maximum_legs'] == 160
+    assert new.providers[0].parameters['capture_status_support'] is True
+    assert derive(before, ('capture-status',), object()) == (old,)
+    parser = module['_parser']()
+    assert '--capture-search-budget' in parser.format_help()
+
+
 def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 

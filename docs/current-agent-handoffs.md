@@ -5,10 +5,10 @@ Start with the [current operational handoff](../HANDOFF.md) and [role assignment
 ## Current facts
 
 - The goal is a transferable player and one shared registered Pokédex, not a perfect Red script.
-- Active collection model:59 examples; latest saved collection:59 registrations.
+- Active collection model:60 examples; latest saved collection:60 registrations.
 - Goal/destination choices are learned; navigation, battle and other mechanics remain deterministic.
-- Gameplay is stopped after Z: two successes, two exhausted searches, three fits and no new registrations. PR237 merged with green required CI.
-- The last verified save and fit are Z04/model59. Preserve all four transitions, including the first nontraining safety step.
+- Gameplay stopped after AB01: Paras was retained, but the goal failed on an incomplete arrival summary. One actual outcome was fitted; no success relabeling. PR238 merged.
+- The last verified save and fit are AB01/model60. Preserve the complete Z history, prospective search-budget transition and AB checkpoint/source. AA stopped during preparation before input and is not reusable.
 
 ## Review questions
 
@@ -16,7 +16,7 @@ Start with the [current operational handoff](../HANDOFF.md) and [role assignment
 2. Are current status and historical results clearly separated?
 3. Does each learning claim correspond to a real played choice, with failures and deterministic support accounted for?
 4. Does the next task produce useful collection experience or unblock it with a bounded repair?
-5. Does a prospective search-budget change preserve historical profiles and all safety limits, rather than rewriting the two failed searches?
+5. Does the corrected arrival report pass the downstream capture-summary contract without inventing destination actions or erasing the failed AB outcome?
 6. Have private game assets and paths stayed outside Git?
 
 Submit focused findings with evidence and a proposed falsifier. Codex makes integration decisions and explains disagreements. Do not run the game, open protected evaluation contexts or edit the shared worktree as part of a review.

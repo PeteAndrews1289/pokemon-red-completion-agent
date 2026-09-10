@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection:59 verified registrations and59 examples under the registered-only learning objective. Earlier objectives and datasets remain historical; their counts are not silently added to this one. Fresh-game autonomous play and independent reliability are not established.
+Current work is Red collection:60 verified registrations and60 examples under the registered-only learning objective. Earlier objectives and datasets remain historical; their counts are not silently added to this one. Fresh-game autonomous play and independent reliability are not established.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-The public cleanup and Onix result are merged. Z fitted a model-selected recovery and two failed searches:56→59 examples, with no new registrations. A small call-local history reuse repair measured44.8→28.3seconds in one preparation comparison; integrity checks remain in place. Resume from Z04/model59, not Y.
+The public cleanup and preparation work are merged. A prospective160-leg search allowance passed budget/history tests. AB then caught Paras during model-selected travel, raising registrations and examples from59to60, but an incomplete arrival summary caused the overall goal to fail. The saved catch is independently verified; the failed label remains unchanged. Resume from AB01/model60, not Z.
 
-Next inspect the64-leg patrol cap: Z's destination surveys saw only two/four encounters before exhausting it. Time-box a source-agnostic, prospective search-budget repair to45minutes, preserve old profile identities and hard safety limits, then test fresh choices. Do not simply repeat identical tiny-search batches or build a general cache. The travel-capture checklist remains1/3; do not turn that number into a project-completion estimate.
+The arrival producer now emits all required diagnostic fields, with a regression through the real consumer. Next test one fresh bounded goal from the retained Paras save; do not replay AB or claim the budget caused this travel catch. Then inspect the existing isolated item-evolution draft before broader NPC-trade/fishing work. Allow45–60minutes including audit. The travel-capture checklist remains1/3 until a complete live result qualifies; do not turn that number into a project-completion estimate.
 
 ## How to stay focused
 
@@ -34,4 +34,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-preparation-collection.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-10-search-budget.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
