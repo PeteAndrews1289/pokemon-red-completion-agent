@@ -41,9 +41,63 @@ passes347tests and configured mypy covers471source files. This is not a full-sui
 or live qualification claim. Additional inspection and execution results follow only
 when observed; the first empty-menu hypothesis and zero-fit facts remain preserved.
 
-## Pending qualification
+## Actual bounded qualification
 
-Inspect the repaired inventory with real preparation requirements. If it exposes a
-usable target, pair it with supported evolution and retain the actual model choice.
-If preparation still blocks collection, identify that component before executing.
-Do not replay AF, reset a save, open sealed Red/Crystal contexts or run a full game.
+The integrated read-only inventory took 225.005 seconds. Seven route bindings
+(Power Plant, Route21 and five Seafoam floors) were removed by capture preparation:
+the status helper had 8/73 HP. This was not seven proven live routes. Badge/holder
+and denied-permission checks remained intact.
+
+One batch allowed at most three goals and 1,800 seconds checked between goals.
+It stopped after the second goal, at 1,390.502 seconds including preparation:
+
+| Goal | Result | Registrations | Learning | Cost |
+|---|---|---|---|---|
+| AG01, Doduo18 → Dodrio31 | Succeeded; exact save and healthy party verified | 62 → 63 | Forced; zero rows | 17,950 actions / 1,616,756 frames |
+| AG02, Power Plant | Arrived; no capture; ball-exhaustion exception | 63 → 63 | One actual seven-way destination outcome fitted | 1,273 actions / 70,285 frames |
+
+The destination policy mixed 25% uniform exploration with 75% model softmax.
+AG02's native parent had one capture goal; the real learned choice was between
+seven destinations. It must not be mislabeled as a learned choice of goal kind.
+Model60 grew to model61, retaining its prior examples. Current coverage is
+31 acquisition, 8 resupply, 12 restoration and 10 evolution examples. These are
+related development outcomes, not independent games or a measured success rate.
+
+AG02 encountered missing Magnemite and later Magneton. Both balls were gone
+when the later capture began; the ordinary capture helper fled and raised
+SurgeChapterError. The generic binding_failed label and actual costs were retained.
+The final streamed snapshot was not input-ready, but the separately authenticated
+checkpoint was: Power Plant, battle0, no pending trainer, zero balls, 1,638 money,
+63 registrations and all 53 specimens. No replay, reset, sealed test or Crystal ran.
+
+AG01 retained a completed Fly count. AG02's destination exception prevented the
+completed transport summary from propagating; no retained Surf count is claimed.
+This narrows the reporting repair: preserve completed work across downstream stops.
+
+## Reorientation and next step
+
+The next read-only native menu has no goal. Resupply resource checks pass, but
+its transport is unavailable. Existing indoor/Fly composition is collection-scoped;
+do not silently give a capture-only Surf permission to all resource providers.
+First qualify a truthful supply journey from AG02, then attempt productive collection.
+Return ordinary ball exhaustion as a typed bounded stop with complete diagnostics.
+Preserve all prior labels and use the actual spent-inventory save.
+
+Repeated inspection of the unchanged save is a material planning cost: the first
+goal did not begin input for roughly ten minutes. Avoid a new broad routing project;
+remove duplicate work only after preserving observation/source identity and live rebinding.
+Allow 60–90 minutes for supply access and one fresh choice, not full Red completion.
+Capture/resume remains 1/3 and independent performance remains unproved.
+
+## Verification and publication
+
+In addition to the 347 targeted tests, a separate 127 checkpoint/fit/cycle tests
+passed. Ruff, configured mypy, registry regeneration/check and pre-run document/focus
+checks passed. The closeout group passed 179 documentation/focus/roadmap/dashboard
+tests; document, public-artifact and registry checks passed. The regenerated roadmap
+was visually inspected. No full-suite pass is implied. Played source is 282bb30b;
+PR241 had merged before this branch.
+No external agents ran and no fresh external usage reading was requested.
+
+Recommendation: Astra High, Fast off for the next bounded supply integration and
+outcome audit. Increasing reasoning effort does not remove emulator/planning runtime.

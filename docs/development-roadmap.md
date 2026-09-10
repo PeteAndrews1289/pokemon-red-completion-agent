@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-cut-collection-access**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-surf-collection-access**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [ ] Qualify capture and route-resume guards
 - [ ] Fit a productive model-selected outcome
 
-Current model: **60 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **61 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-cut-access-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-surf-access-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-surf-collection-access
+
+1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** The initial Surf-only hypothesis exposed zero candidates. Missing encounter-map identities and capture preparation were separated before a bounded evolution-to-collection attempt; no failed labels changed.
+
+**Next:** Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock.
 
 ### 2026-09-10-cut-collection-access
 

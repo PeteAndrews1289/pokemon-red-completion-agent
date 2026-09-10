@@ -46,7 +46,9 @@ The [Cut-access session](work-sessions/2026-09-10-cut-collection-access.md) turn
 
 ## What comes next
 
-Sustain useful collection, close real mechanic gaps, evaluate on separate situations and broaden model authority. Then integrate Blue's shared registration, test a compatible unfamiliar Red modification and investigate Crystal transfer.
+The [next access session](work-sessions/2026-09-10-surf-collection-access.md) found that eleven unnamed encounter maps had silently disappeared from the inventory. Restoring those names and explicit Surf access was not enough: the capture helper was injured. Legitimate recovery during Doduo's evolution unlocked seven real destinations. The policy selected Power Plant, arrived and spent its last two balls without a catch. The save retained 63 registrations; the failed choice brought the model to 61 examples. The new bottleneck was affordable resupply from an interior. This is the distinction between opening choices, executing them reliably and demonstrating better judgment.
+
+Sustain useful collection by connecting that supply journey and handling exhaustion cleanly; then evaluate on separate situations and broaden model authority. Blue's shared registration, an unfamiliar compatible Red modification and Crystal transfer remain later stages.
 
 The unresolved question is not whether code can finish Red. It is how much useful decision-making the model has learned—and whether that knowledge survives a different situation.
 

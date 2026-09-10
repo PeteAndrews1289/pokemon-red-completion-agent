@@ -44,7 +44,7 @@ The source-level boundaries prevent accidental misuse; Python interfaces are not
 
 Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
 
-The active registered-objective model has60 examples from related development states. Those are not60 independent games. In-sample fit quality and a successful collection batch cannot establish generalization.
+The active registered-objective model has 61 examples from related development states. Those are not 61 independent games. In-sample fit quality and a successful collection batch cannot establish generalization.
 
 Champion and Hall-of-Fame evidence exists for checkpoint-based hierarchical story integration. It does not prove that the present collection model can start from the title screen and independently complete the game.
 

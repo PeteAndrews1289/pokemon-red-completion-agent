@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest verified collection contains **62 registered species**. The current registered-objective model has **60 training examples**; this is a small development dataset, not a measure of general intelligence. The latest capture added a registration, not a new training example.
+- The latest verified collection contains **63 registered species**. The current registered-objective model has **61 training examples**—a small development dataset, not a measure of general intelligence. The latest batch added Dodrio through forced evolution and fitted one failed model-selected trip to the Power Plant.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest collection report](docs/work-sessions/2026-09-10-cut-collection-access.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest collection report](docs/work-sessions/2026-09-10-surf-collection-access.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

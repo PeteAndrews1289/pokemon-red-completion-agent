@@ -1,0 +1,340 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "195eb3798fbdaa5d16d4760d6a9a673b48663fb5f4f87f1b1c515742a208f87d",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 61,
+      "feature_version": 3,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 61,
+      "successful_examples": 37,
+      "total_examples": 61,
+      "train_dataset_sha256": "ac935e877a192e18c3068edfdcaa440782904c98d685079353a3de27343d447e",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012841629117890895,
+      "weighted_mse_before": 0.0333207869669458
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "4b27c0e83c0edfb40c14c2facdfb513d7abe5433344e241b0c8f4b237c8fe0d0",
+      "file_sha256": "9a5d9bce6b79f77c00852551d0bfcfeca427e949e51739f1cf5a874f69555373",
+      "independent_evaluation": false,
+      "model_sha256": "a699c3f740fad9182273140d98cfe0f77827765eb5b73b484dc6730cf13c3476",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "260efe95e444c5035283a613442f84da2528ea1ad9b8c95a17c997fa881ecb0c",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 61,
+      "source_bundle_sha256": "e44aa062ba5f01c984556a6e64adaf562ca497e9ce6e11a2c1deac96489ba636",
+      "source_commit": "282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0956841961793743,
+        6.827713014970665e-06,
+        5.5756399839594515e-06,
+        0.0014715627129865524,
+        0.0011453552202762688,
+        0.01679696456439106,
+        0.0020792150652473394,
+        2.61457359278653e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 61,
+      "total_examples": 61,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.013021367963207471
+    },
+    "regional_source_examples": 24,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.0943606044872566,
+        6.70429805296686e-06,
+        5.587340484608263e-06,
+        0.0014730809824597588,
+        0.0011468687219208114,
+        0.01654574666676302,
+        0.0020334926135876954,
+        2.5769504926322813e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 61,
+      "total_examples": 61,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012841629117890899
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-registered-surf-choices-20260910-ag-02-causal",
+    "actions": 1273,
+    "frames": 70285,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 0,
+    "status": "failed"
+  },
+  "session": {
+    "steps": [
+      {
+        "actions": 17950,
+        "available_goal_count": 1,
+        "behavior_policy_id": null,
+        "capture_survey": null,
+        "checkpoint_sha256": "a4decbd25989265ffe976831ebd83c3ff95d83f3a396ab317bbd0e3bb2b5e6dd",
+        "cut_transport_reports": [],
+        "destination_candidate_count": 0,
+        "eligible_examples": 0,
+        "episode_id": "red-registered-surf-choices-20260910-ag-01-causal",
+        "exploration_mix": 0,
+        "failure_reason": null,
+        "field_moves": {
+          "cuts": 0,
+          "flights": 1,
+          "surfs": 0
+        },
+        "fit_performed": false,
+        "frames": 1616756,
+        "manifest_sha256": "c76c920f734216f27c8f12887e4d601268538fb8b3c966d09b0ade3cc499ee48",
+        "new_registrations": [
+          "pokemon:national:085"
+        ],
+        "proposed_source": null,
+        "registered_after": 63,
+        "registered_before": 62,
+        "sampled_native_goal": false,
+        "selected_kind": "evolve_species",
+        "selected_source": null,
+        "selection_mode": "forced_singleton",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "travel_capture_receipts": [],
+        "source_commit": "282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad",
+        "observed_wild_battle_starts_count": 241
+      },
+      {
+        "actions": 1273,
+        "available_goal_count": 1,
+        "behavior_policy_id": null,
+        "capture_survey": null,
+        "checkpoint_sha256": "445f68aac643a6482f41972ead962d5ba75ef69b0d84b946326c02c41d48d871",
+        "cut_transport_reports": [],
+        "destination_candidate_count": 7,
+        "eligible_examples": 1,
+        "episode_id": "red-registered-surf-choices-20260910-ag-02-causal",
+        "exploration_mix": 0,
+        "failure_reason": "binding_failed",
+        "field_moves": null,
+        "fit_performed": true,
+        "frames": 70285,
+        "manifest_sha256": "74db044a6836694a1e777d3a9338c561034049e8a34c8c81118b9ab094b8e951",
+        "new_registrations": [],
+        "proposed_source": null,
+        "registered_after": 63,
+        "registered_before": 63,
+        "sampled_native_goal": false,
+        "selected_kind": "acquire_species",
+        "selected_source": "wild:PowerPlant:grass",
+        "selection_mode": "forced_singleton",
+        "selection_scope": "regional_destination",
+        "status": "failed",
+        "travel_capture_receipts": [],
+        "source_commit": "282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad",
+        "observed_wild_battle_starts_count": 13
+      }
+    ],
+    "attempted_steps": 2,
+    "completed_steps": 1,
+    "fits": 1,
+    "registered_examples_before": 60,
+    "registered_examples_after": 61,
+    "initial_registered": 62,
+    "last_verified_registered": 63,
+    "last_verified_specimens": 53,
+    "source_commit": "282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad",
+    "elapsed_seconds": 1390.502,
+    "stop_reason": "failed_step_retained_and_fitted",
+    "latest_fit_belongs_to_session": true,
+    "failed_attempts_retried": 0,
+    "total_recorded_actions": 19223,
+    "total_recorded_frames": 1687041,
+    "forced_singleton_parent_steps": 2,
+    "model_selected_goal_steps": 0,
+    "deterministic_support_steps": 1,
+    "sampled_destination_choices": 1,
+    "terminal_observation": {
+      "source": "exact_authenticated_checkpoint_read",
+      "state_sha256": "d3be0828db030c995aa00013fb31a68029920093f667f0369189fdfa91351840",
+      "input_ready": true,
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "collection_verified_from_saved_state": true
+    },
+    "corpus_coverage": {
+      "acquire": {
+        "rows": 31,
+        "successes": 8
+      },
+      "evolve": {
+        "rows": 10,
+        "successes": 10
+      },
+      "restore": {
+        "rows": 12,
+        "successes": 12
+      },
+      "resupply": {
+        "rows": 8,
+        "successes": 7
+      }
+    },
+    "fresh_game_autonomy": false,
+    "policy_sampling": "25 percent uniform exploration mixed with75 percent model softmax; deterministic safety support is not fitted.",
+    "mechanics": "Deterministic navigation, capture and evolution execution; only actual multi-option choices are learned.",
+    "access_qualification": {
+      "initial_surf_projection_sources": 0,
+      "repaired_route_bindings": 7,
+      "executable_before_recovery": 0,
+      "mechanic": "cut-and-surf",
+      "read_only_actions": 0,
+      "boundary": "Seven candidates were rejected by actual capture preparation; route feasibility is not live qualification."
+    },
+    "stone_stock_inventory": [
+      {
+        "in_bag": 0,
+        "item_id": 10,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 35,
+        "target": 36
+      },
+      {
+        "in_bag": 0,
+        "item_id": 32,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 58,
+        "target": 59
+      },
+      {
+        "in_bag": 0,
+        "item_id": 33,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 25,
+        "target": 26
+      },
+      {
+        "in_bag": 0,
+        "item_id": 10,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 39,
+        "target": 40
+      },
+      {
+        "in_bag": 0,
+        "item_id": 10,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 33,
+        "target": 34
+      },
+      {
+        "in_bag": 0,
+        "item_id": 10,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 30,
+        "target": 31
+      },
+      {
+        "in_bag": 0,
+        "item_id": 47,
+        "party_slots": [],
+        "precursors": 1,
+        "source": 44,
+        "target": 45
+      }
+    ],
+    "component_failure": {
+      "exception_type": "SurgeChapterError",
+      "reason": "ordinary capture balls exhausted before a subsequent capture attempt",
+      "failed_capture_target": "pokemon:national:081",
+      "subsequent_no_balls_target": "pokemon:national:082",
+      "completed_transport_summary_retained": false,
+      "last_streamed_readiness": false,
+      "exact_saved_readiness": true
+    },
+    "next_menu_inspection": {
+      "status": "no_available_goal",
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "resupply_resource_available": true,
+      "resupply_unavailable_reason": "missing_capability"
+    }
+  }
+}

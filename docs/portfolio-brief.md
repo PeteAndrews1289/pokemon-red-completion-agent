@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 62 verified registered species and 60 examples in the current collection-learning dataset. The latest Cut-enabled Doduo capture was a forced goal, not a new model lesson.
+- 63 verified registered species and 61 examples in the current collection-learning dataset. The latest batch added Dodrio through forced evolution and fitted an actual failed choice among seven destinations; it did not establish independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current collection](work-sessions/2026-09-10-cut-collection-access.md).
+[Evidence for the current collection](work-sessions/2026-09-10-surf-collection-access.md).
 
 ## My role and the stack
 
