@@ -476,6 +476,23 @@ def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalCont
     ))
 
 
+def bind_dig_recovery_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt future field recovery into legal escape; preserve every other skill."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.FIELD_RESTORE:
+            parameters["dig_recovery"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("Dig recovery requires field restoration")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Explicit cash-only affordability transition, preserving all other skills."""
     providers = []
@@ -694,6 +711,10 @@ def _parse_parameters(
     value: object,
 ) -> dict[str, object]:
     row = dict(_mapping(value, "provider parameters"))
+    if mechanic is RedGoalMechanic.FIELD_RESTORE and "dig_recovery" in row:
+        if row.pop("dig_recovery") is not True:
+            raise RedGoalContextProfileError("Dig recovery requires explicit opt-in")
+        return {**_parse_parameters(mechanic, row), "dig_recovery": True}
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
         if not row:
             return row

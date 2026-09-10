@@ -630,6 +630,10 @@ def _parser() -> argparse.ArgumentParser:
         const="resupply-fly", help="opt future Mart supply into observed indoor exit and Fly",
     )
     parser.add_argument(
+        "--dig-recovery", dest="regional_transitions", action="append_const",
+        const="dig-recovery", help="opt future recovery into observed legal Dig escape",
+    )
+    parser.add_argument(
         "--capture-surf-transport", dest="regional_transitions", action="append_const",
         const="capture-surf", help="opt future capture routes into observed Surf access",
     )
@@ -1564,6 +1568,7 @@ def _regional_profiles(
                 "capture-cut",
                 "capture-surf",
                 "resupply-fly",
+                "dig-recovery",
                 "indoor-fly-departure",
                 "observed-local-capture",
                 "travel-capture",
@@ -1606,6 +1611,12 @@ def _regional_profiles(
             from pokemon_red_completion.red_goal_context_profile import bind_resupply_fly_profile
 
             profile = bind_resupply_fly_profile(profile)
+            result.append(profile)
+            continue
+        if source == "dig-recovery":
+            from pokemon_red_completion.red_goal_context_profile import bind_dig_recovery_profile
+
+            profile = bind_dig_recovery_profile(profile)
             result.append(profile)
             continue
         if source == "capture-surf":

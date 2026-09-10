@@ -4974,6 +4974,10 @@ class PokemonRedStateReader:
 
         return self._memory.read_u8(RamAddress.LAST_BLACKOUT_MAP)
 
+    def read_current_map_tileset(self) -> int:
+        """Observed tileset for legal field escape; not a policy feature."""
+        return self._memory.read_u8(RamAddress.CURRENT_MAP_TILESET)
+
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""
         controls = self.read_input_readiness()

@@ -266,7 +266,12 @@ def bind_routed_center_recovery(
             if plan is not None and _walking_plan(plan):
                 routes.append(plan)
         if not routes:
-            return bindings
+            from pokemon_red_completion.red_dig_recovery import bind_dig_recovery
+
+            return bind_dig_recovery(
+                router, bindings, observation, start, prepare_escort=prepare_escort,
+                require_pp_restore=require_pp_restore,
+            )
         route = min(routes, key=lambda r: (len(r.steps), r.terminal_map))
         if len(route.steps) == 0 and not at_boundary:
             return bindings
