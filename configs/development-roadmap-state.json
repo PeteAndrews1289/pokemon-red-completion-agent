@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-capture-prerequisites",
+  "as_of_session": "2026-09-10-supported-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-capture-access-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-registered-supported-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -690,6 +690,12 @@
       "result": "One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.",
       "deviation": "No stage-exit change. Prerequisite screening fixes impossible collection rather than rerunning it. Stone draft stays parked.",
       "next": "Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished."
+    },
+    {
+      "session": "2026-09-10-supported-collection",
+      "result": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
+      "deviation": "No stage-exit change. Useful indoor capture resumed; no stage-exit change and no claimed learned combat or independent reliability.",
+      "next": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal."
     }
   ],
   "closed_milestones": [

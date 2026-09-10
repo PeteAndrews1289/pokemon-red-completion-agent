@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-capture-prerequisites**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-supported-collection**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Verify actual saved-state alternatives ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 - [x] Retain and fit a model-selected lesson ([evidence](../docs/evidence/red-registered-indoor-learning-2026-09-10.json))
 
-Current model: **28 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **31 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-capture-access-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-supported-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-supported-collection
+
+Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.
+
+**Deviation:** No stage-exit change. Useful indoor capture resumed; no stage-exit change and no claimed learned combat or independent reliability.
+
+**Next:** Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.
 
 ### 2026-09-10-capture-prerequisites
 

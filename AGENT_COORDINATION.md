@@ -1,3 +1,14 @@
+# Current —52 registrations, model31 retained
+
+Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.
+
+Next: Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.
+
+The actor chooses goals and destinations; deterministic skills still execute mechanics. Historical114 remains separate. No learned combat, independent reliability or transfer claim.
+[Session and next step](docs/work-sessions/2026-09-10-supported-collection.md).
+
+## Prior checkpoints
+
 # Current —51 registrations, model28 retained
 
 One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.

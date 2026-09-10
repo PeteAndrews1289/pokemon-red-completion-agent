@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-10T09:49:54.332446+00:00",
+  "location": "Fuchsia Mart \u00b7 saved, not live",
+  "registered_species": 52,
+  "living_species": 43,
+  "specimens": 47,
+  "capture_items": 5,
+  "money": 248,
+  "checkpoint_sha256": "6e811ed288d0a76f21baf99807dbd0f3f80961cf7cb0be429bb0ab7f14cbeba2"
+}

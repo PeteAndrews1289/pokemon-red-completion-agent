@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One failed regional choice fitted once; routing reached Tower3F but a missing item made capture impossible.",
-        "blocker": "Missing Silph Scope was not screened before Tower capture;18 balls spent without a possible success.",
-        "decision": "Add prospective capture prerequisites plus an irreversible throw guard; preserve all costs.",
+        "authority_delta": "Three actual choices fitted: indoor capture, healing and resupply. Forced safety supply excluded.",
+        "blocker": "Low remaining funds and incomplete item/puzzle support limit sustained collection.",
+        "decision": "Continue the working collector from actual resources; keep unqualified stone draft isolated.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-capture-access-learning-2026-09-10.json",
-          "sha256": "e3c0d49a9cc942bf2bbd77b93d0276800bf617323c75339518dbdbed9aac7937"
+          "path": "docs/evidence/red-registered-supported-learning-2026-09-10.json",
+          "sha256": "d34b47869d7c321ff5b6be1025ccbd7647bd558d77d23cdc216f6569c3ab7875"
         },
-        "learning_output": "One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.",
-        "next_falsifier": "Tower with balls but no Scope is unavailable; impossible throws issue no input.",
-        "next_session_goal": "Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished.",
+        "learning_output": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
+        "next_falsifier": "Actual retained endpoint offers supported collection or legitimate recovery without invented resources.",
+        "next_session_goal": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-capture-prerequisites",
+        "session_id": "2026-09-10-supported-collection",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Actual latest checkpoint restores with zero input; no independent or cross-title result."
       },
       "learned_authority": {
-        "current": "One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration.",
+        "current": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished.",
+      "next_decision": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 28,
+        "registered_train_examples": 31,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

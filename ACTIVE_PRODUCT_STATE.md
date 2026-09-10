@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished.
+- Next decision: Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration. |
+| Authority now | Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 28 | 12 |
+| Registered Train Example · train | 31 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-capture-prerequisites** · status **active** · evidence [registered train example](docs/evidence/red-registered-capture-access-learning-2026-09-10.json)
+**2026-09-10-supported-collection** · status **active** · evidence [registered train example](docs/evidence/red-registered-supported-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | One retained failed source choice /one fit: model28,51 registrations,46 specimens. The actor reached Tower3F without Silph Scope and spent18 balls on uncatchable ghosts. 1071 actions /85140 frames retained;0 balls and3503 money remain. No new registration. |
-| Authority delta | One failed regional choice fitted once; routing reached Tower3F but a missing item made capture impossible. |
+| Learning output | Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted. |
+| Authority delta | Three actual choices fitted: indoor capture, healing and resupply. Forced safety supply excluded. |
 | Transfer result | Actual latest checkpoint restores with zero input; no independent or cross-title result. |
-| Blocker | Missing Silph Scope was not screened before Tower capture;18 balls spent without a possible success. |
-| Decision | Add prospective capture prerequisites plus an irreversible throw guard; preserve all costs. |
-| Next session | Publish prospective capture prerequisites and final throw guard, authenticate model28, then use legitimate resupply and fresh supported collection choices. No resource reset, consumed retry or forced destination. Item withdrawal and general puzzle solving remain unfinished. |
-| Next falsifier | Tower with balls but no Scope is unavailable; impossible throws issue no input. |
+| Blocker | Low remaining funds and incomplete item/puzzle support limit sustained collection. |
+| Decision | Continue the working collector from actual resources; keep unqualified stone draft isolated. |
+| Next session | Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal. |
+| Next falsifier | Actual retained endpoint offers supported collection or legitimate recovery without invented resources. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
