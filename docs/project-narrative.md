@@ -19,18 +19,18 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 ## Results we can show
 
 - Checkpoint-based story integration reached the Champion and Hall of Fame with disclosed deterministic battle execution. The final episode contained two learned recovery choices and a forced boss continuation—not an autonomous fresh-game win. [Story audit](audits/red-phase4-closeout-2026-09-09.md).
-- The preceding collection batch caught Onix, reaching59 registered species and51 physical specimens.
-- Three of four goals succeeded. Both actual destination outcomes—one failed search and one successful capture—were fitted; two safety-driven resupply steps were excluded. The model grew from54 to56 examples. [Collection report](work-sessions/2026-09-10-post-merge-collection.md).
+- The preceding collection batch caught Onix, reaching59 registered species and 51 physical specimens.
+- Three of four goals succeeded. Both actual destination outcomes—one failed search and one successful capture—were fitted; two safety-driven resupply steps were excluded. The model grew from 54 to 56 examples. [Collection report](work-sessions/2026-09-10-post-merge-collection.md).
 
-A subsequent [four-goal batch](work-sessions/2026-09-10-preparation-collection.md) added three outcomes—successful model-selected recovery and two failed destination searches—bringing the model to59 examples, but added no registrations. A small preparation repair measured44.8→28.3seconds on the same saved input. The search failures exposed another practical constraint: a64-leg patrol produced only two/four destination encounters. Faster infrastructure and more examples do not by themselves mean better collection.
+A subsequent [four-goal batch](work-sessions/2026-09-10-preparation-collection.md) added three outcomes—successful model-selected recovery and two failed destination searches—bringing the model to 59 examples, but added no registrations. A small preparation repair measured44.8→28.3 seconds on the same saved input. The search failures exposed another practical constraint: a64-leg patrol produced only two/four destination encounters. Faster infrastructure and more examples do not by themselves mean better collection.
 
 These are related development experiences, not an independent success rate or evidence of cross-game transfer.
 
-The next [bounded continuation](work-sessions/2026-09-10-search-budget.md) caught Paras during travel to a model-selected destination:60 registrations and60 examples. The overall goal still failed because the arrival report omitted required diagnostic fields. The catch and failure were both retained; fixing the report did not retroactively turn that run into success. This also does not prove the larger search allowance caused the catch—it occurred during travel.
+The next [bounded continuation](work-sessions/2026-09-10-search-budget.md) caught Paras during travel to a model-selected destination:60 registrations and 60 examples. The overall goal still failed because the arrival report omitted required diagnostic fields. The catch and failure were both retained; fixing the report did not retroactively turn that run into success. This also does not prove the larger search allowance caused the catch—it occurred during travel.
 
 ## What the failures taught us
 
-The [next session](work-sessions/2026-09-10-owned-evolution-access.md) exposed an empty goal menu: newly proposed evolutions had lost their transport settings. Restoring existing Fly/indoor access let the system retrieve and train Paras8→Parasect24, reaching61registrations. The model stayed at60examples because this was the only available goal. That distinction matters: extending usable mechanics can unlock future learning without being learning itself. The next bottleneck is access/resources, not more searches in already-cleared areas.
+The [next session](work-sessions/2026-09-10-owned-evolution-access.md) exposed an empty goal menu: newly proposed evolutions had lost their transport settings. Restoring existing Fly/indoor access let the system retrieve and train Paras8→Parasect24, reaching61registrations. The model stayed at 60 examples because this was the only available goal. That distinction matters: extending usable mechanics can unlock future learning without being learning itself. The next bottleneck is access/resources, not more searches in already-cleared areas.
 
 Navigation could propose an apparently connected route that was blocked by actual game state. Capture verification could misinterpret the way a new boxed Pokémon shifts existing slots. Resource recovery could be necessary even when its action should not be counted as learned judgment.
 
@@ -48,7 +48,9 @@ The [Cut-access session](work-sessions/2026-09-10-cut-collection-access.md) turn
 
 The [next access session](work-sessions/2026-09-10-surf-collection-access.md) found that eleven unnamed encounter maps had silently disappeared from the inventory. Restoring those names and explicit Surf access was not enough: the capture helper was injured. Legitimate recovery during Doduo's evolution unlocked seven real destinations. The policy selected Power Plant, arrived and spent its last two balls without a catch. The save retained 63 registrations; the failed choice brought the model to 61 examples. The new bottleneck was affordable resupply from an interior. This is the distinction between opening choices, executing them reliably and demonstrating better judgment.
 
-Sustain useful collection by connecting that supply journey and handling exhaustion cleanly; then evaluate on separate situations and broaden model authority. Blue's shared registration, an unfamiliar compatible Red modification and Crystal transfer remain later stages.
+The [supply session](work-sessions/2026-09-10-supply-transport.md) completed that journey and verified a clean exhaustion stop. The model then chose healing, and a separate destination choice caught Shellder on the way to Seafoam B3F and resumed travel. The remaining ball failed against Seel. Model examples rose from 61 to 63 and registrations from 63 to 64. A preliminary reading of the destination-only zero-capture summary missed Shellder; reconciling the exact save, travel trace and fitted gain corrected that before publication. The destination still failed: useful partial progress is not a reason to rewrite its outcome. Capture-support endurance and adequate supplies remain the next bottlenecks.
+
+Improve safe capture preparation and adequate supplies before a larger collection batch; then evaluate on separate situations and broaden model authority. Blue's shared registration, an unfamiliar compatible Red modification and Crystal transfer remain later stages.
 
 The unresolved question is not whether code can finish Red. It is how much useful decision-making the model has learned—and whether that knowledge survives a different situation.
 

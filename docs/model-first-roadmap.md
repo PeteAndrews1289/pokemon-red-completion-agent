@@ -8,12 +8,12 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection: 63 verified registrations and 61 examples under the registered-only learning objective. The latest batch added Dodrio through forced evolution and fitted an actual failed choice among seven destinations. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+Current work is Red collection: 64 verified registrations and 63 examples under the registered-only learning objective. Supply access, travel capture/resumption and a safe ball-exhaustion stop are now live-qualified. The latest session fitted successful model-selected healing and a failed destination choice with a real Shellder registration gained along the way. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
 
 ## Next sequence
 
 1. **Sustain useful collection.** Let the model choose missing-species acquisition, supported evolution, supplies and recovery. Keep actual costs and failed searches.
-2. **Remove demonstrated mechanic gaps.** Qualify incidental capture plus route resumption and add missing acquisition/evolution mechanisms as real collection outcomes require them.
+2. **Remove demonstrated mechanic gaps.** Build on the qualified incidental capture/resumption path, improve capture-support endurance, and add missing acquisition/evolution mechanisms as real collection outcomes require them.
 3. **Measure learner value.** Compare with appropriate baselines on genuinely separate situations before claiming better planning, reliable new-seed play or greater authority.
 4. **Broaden Red coverage and fresh-run sequencing.** Collect all declared reachable registrations and account for unsupported or externally dependent entries.
 5. **Integrate Blue/shared memory.** Reuse global registration credit without fabricating local flags or transferable specimens.
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-PR241 merged. AG01's forced evolution was followed by a genuine seven-way choice. AG02 reached Power Plant but failed after spending both remaining balls; that failed outcome produced model61. The exact terminal is input-ready with 63 registrations, 53 specimens and 1,638 money. The downstream exception lost the completed route's field summary. AB's incidental-arrival repair still lacks live qualification.
+PR242 merged after green CI. AI completed legitimate resupply and a model-selected restoration. AJ chose Seafoam B3F among seven destinations, caught Shellder on 1F, resumed travel and failed to catch Seel at B3F. Its typed exhaustion stop retained completed Surf, spending and a safe checkpoint. Model61 grew to model63; registrations grew from 63 to 64.
 
-Resume from AG02/model61 with complete ancestry, capture-Cut/Surf and the selected Power Plant source. The read-only menu confirms affordable resupply is blocked by transport capability. Connect truthful indoor departure/field transport to the existing supply routine, then attempt one productive collection choice. Return ball exhaustion as a bounded typed outcome and preserve completed-route diagnostics. Allow 60–90 minutes; repeated unchanged-state route inspection is a secondary optimization, not a new infrastructure campaign. Stone procurement remains unfinished. Capture/resume stays 1/3, not a project-completion percentage.
+Resume only from AJ01/model63: Seafoam B3F, 54 specimens, zero balls and 593 money. Prioritize capture-support endurance and adequate legitimate supplies before another collection choice. The helper lost health during Shellder's encounter; Seel later remained at full HP with no status attempts because the helper was already below its safety threshold. Do not lower that protection. A small planned optimization can avoid rebuilding search history for inventory-only calls that discard their menu, while retaining full history for actual policy choices. Allow 60–90 minutes. The bounded capture/resume checklist is 3/3, supported by an actual resumed capture and a fitted positive gain, not a successful final Seel goal. Stone procurement and the already-satisfied-destination shortcut remain unfinished; Phase 5 and Red are not complete.
 
 ## How to stay focused
 
@@ -34,4 +34,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-surf-collection-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-10-supply-transport.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)

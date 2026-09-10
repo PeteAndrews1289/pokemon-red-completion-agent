@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-surf-collection-access**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-supply-transport**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Capture useful encounters during travel: 1/3 acceptance items (33%).**
+**Capture useful encounters during travel: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Verify missed registration opportunities ([evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json))
-- [ ] Qualify capture and route-resume guards
-- [ ] Fit a productive model-selected outcome
+- [x] Qualify capture and route-resume guards ([evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json))
+- [x] Fit a productive model-selected outcome ([evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json))
 
-Current model: **61 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **63 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-surf-access-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-supply-transport
+
+2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** AH preparation stopped before inputs for a reporting-schema correction. AI completed supply and model-selected healing, so one separately declared AJ choice continued its save. AJ caught Shellder in transit, resumed to B3F and failed on Seel. A preliminary zero-gain interpretation of the destination-only survey was corrected against the full checkpoint before publication. Stage exits are unchanged.
+
+**Next:** Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-surf-collection-access
 

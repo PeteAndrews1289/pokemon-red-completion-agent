@@ -1,5 +1,17 @@
 # Roadmap baseline and deviations
 
+## September 10 — qualify travel capture without relabeling the failed destination
+
+The [supply session](work-sessions/2026-09-10-supply-transport.md) closes the existing
+travel-capture checklist at 3/3 without changing its IDs or criteria. A model-selected
+journey caught Shellder, resumed to Seafoam B3F and fitted the actual positive gain.
+The later Seel goal remains failed with its resource costs retained. Exact save,
+trace and fitted-row reconciliation corrected a preliminary destination-only
+zero-capture interpretation before publication. No nested travel receipt is claimed.
+Phase 5 remains current; the already-satisfied-destination shortcut is unqualified.
+Next prioritize adequate legitimate supplies and capture-support endurance, plus
+a small inventory-only preparation optimization if it saves measured time.
+
 ## September 10 — make the current checklist reflect missed travel captures
 
 The indoor-eligibility checklist remains completed 3/3, with its original IDs,
