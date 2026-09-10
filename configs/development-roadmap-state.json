@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-supply-transport",
+  "as_of_session": "2026-09-10-capture-sustainability",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Capture useful encounters during travel",
+    "title": "Recover resources for collection",
     "items": [
       {
-        "id": "travel-missed-registration-evidence",
-        "label": "Verify missed registration opportunities",
+        "id": "sustainable-resource-diagnosis",
+        "label": "Verify the exact resource dead end",
         "done": true,
-        "evidence": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json"
+        "evidence": "docs/evidence/red-capture-sustainability-audit-2026-09-10.json"
       },
       {
-        "id": "travel-capture-resume-guards",
-        "label": "Qualify capture and route-resume guards",
-        "done": true,
-        "evidence": "docs/evidence/red-supply-collection-learning-2026-09-10.json"
+        "id": "sustainable-escape-recovery",
+        "label": "Qualify safe escape and recovery",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "travel-capture-learning-result",
-        "label": "Fit a productive model-selected outcome",
-        "done": true,
-        "evidence": "docs/evidence/red-supply-collection-learning-2026-09-10.json"
+        "id": "sustainable-funded-learning",
+        "label": "Retain a funded collection lesson",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -321,7 +321,7 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
     },
@@ -810,6 +810,12 @@
       "result": "2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate.",
       "deviation": "AH preparation stopped before inputs for a reporting-schema correction. AI completed supply and model-selected healing, so one separately declared AJ choice continued its save. AJ caught Shellder in transit, resumed to B3F and failed on Seel. A preliminary zero-gain interpretation of the destination-only survey was corrected against the full checkpoint before publication. Stage exits are unchanged.",
       "next": "Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay."
+    },
+    {
+      "session": "2026-09-10-capture-sustainability",
+      "result": "Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.",
+      "deviation": "Stopped before gameplay at the declared no-resource-offer falsifier. Existing Dig is not yet integrated with collection recovery. No prior failure, stage exit or counter changed.",
+      "next": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run."
     }
   ],
   "closed_milestones": [
@@ -1250,6 +1256,32 @@
       "session": "2026-09-10-registration-opportunities",
       "stage": "red-collection",
       "closure": "Previously completed indoor eligibility checklist retained unchanged; next work addresses missed encounters during travel."
+    },
+    {
+      "title": "Capture useful encounters during travel",
+      "items": [
+        {
+          "id": "travel-missed-registration-evidence",
+          "label": "Verify missed registration opportunities",
+          "done": true,
+          "evidence": "docs/evidence/red-registration-opportunities-learning-2026-09-10.json"
+        },
+        {
+          "id": "travel-capture-resume-guards",
+          "label": "Qualify capture and route-resume guards",
+          "done": true,
+          "evidence": "docs/evidence/red-supply-collection-learning-2026-09-10.json"
+        },
+        {
+          "id": "travel-capture-learning-result",
+          "label": "Fit a productive model-selected outcome",
+          "done": true,
+          "evidence": "docs/evidence/red-supply-collection-learning-2026-09-10.json"
+        }
+      ],
+      "session": "2026-09-10-capture-sustainability",
+      "stage": "red-collection",
+      "closure": "Travel capture/resumption completed 3/3 with Shellder; retained unchanged. Next checklist addresses sustainable resource recovery."
     }
   ]
 }

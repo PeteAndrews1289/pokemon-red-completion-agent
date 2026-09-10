@@ -41,15 +41,22 @@ The travel trace places the helper's HP loss from 73 to 36 during the Shellder e
 
 The bounded capture/resume checklist is now 3/3: a travel capture, resumed route and fitted positive collection gain are verified. The failed destination retains success target 0 alongside completion gain 1/124. Evidence is the exact save, trace, guarded runtime and fitted row; no nested travel receipt was persisted, and none is invented. The already-satisfied-destination shortcut remains unqualified. This does not complete Phase 5, Red, or prove independent performance; North Star and stage exits are unchanged.
 
+## Latest engineering session: resource recovery
+
+The [sustainability audit](docs/work-sessions/2026-09-10-capture-sustainability.md) made no controller inputs or fits. Exact AJ01 exposes only explore, zero regional acquisition candidates and no feasible Center-entry route through the current planner. The Mart requires at least 600 money; AJ01 has 593. Local/adjacent trainer funding cannot supply an offer here.
+
+Inventory-only inspection now skips unused ranking history; actual decisions still authenticate it. 157 focused/regression tests passed. The new inventory took 4.859 seconds, with no before/after speedup claim.
+
+Read-only escape facts: map 161, tileset 17 (allowed), living Dig holder in slot 2, healing anchor map 7. Existing bounded field-Dig mechanics are in the existing chapter adapter (module `blaine.py`); they are not yet a collection recovery binding. The next task is reuse and verification, not a Seafoam-specific route. No escape was executed.
+
 ## Next bounded session
 
-1. Reconstruct from the private AJ arguments, then append AJ01's checkpoint and its Seafoam B3F warp-safe/discovery profile. Carry model63 and all previous resource/field options, including AI's proposed B4F profile used by its actual restoration.
-2. Inspect capture preparation and the helper's safe fallback. Choose the smallest safe conditioning/party-support repair with a measurable capture benefit; keep target identity, non-KO and party protections.
-3. Qualify sufficient legitimate ball funding from the actual zero-ball/593 money save. Existing Mart transport is implemented, but this exact Seafoam supply journey has not been played.
-4. Attempt one productive model-selected collection outcome. Retain failed costs and stop safely if the concrete repair is falsified; no repeated full-health two-ball batches.
-5. As a small throughput repair, avoid rebuilding source history for inventory-only calls whose returned menu is discarded. Actual policy decisions must still consume authenticated history and fresh observations.
+1. Continue from exact AJ01/model63; reconstruct ancestry with the private AK inspection helper. Its preflight identity created no episode. Never replay AI/AJ.
+2. Qualify a semantic escape-and-heal recovery offer using observed Dig eligibility and healing anchor. Reuse existing mechanics; preserve party, inventory, PP and registrations; reject a stale destination or unsafe exit.
+3. Reobserve after escape, then select legitimate funding/recovery opportunities. Require adequate supply before another acquisition; do not sell protected assets or invent money.
+4. Retain one fresh bounded execution and exact terminal. Funded model-selected collection follows only if executable; no pure explore loop while empty of balls.
 
-Allow 60–90minutes for this bounded objective, not Red completion. No reset, sealed Red, Crystal, full replay or release.
+Allow 60–90 minutes for escape/recovery qualification; funding and collection may need a follow-up. The completed travel-capture checklist remains historical 3/3. The new resource-recovery checklist is 1/3 (diagnosis only), not a phase percentage. No reset, sealed Red, Crystal, full replay or release.
 
 ## Ownership and publication
 

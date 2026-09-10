@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-supply-transport**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-capture-sustainability**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Capture useful encounters during travel: 3/3 acceptance items (100%).**
+**Recover resources for collection: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify missed registration opportunities ([evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json))
-- [x] Qualify capture and route-resume guards ([evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json))
-- [x] Fit a productive model-selected outcome ([evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json))
+- [x] Verify the exact resource dead end ([evidence](../docs/evidence/red-capture-sustainability-audit-2026-09-10.json))
+- [ ] Qualify safe escape and recovery
+- [ ] Retain a funded collection lesson
 
 Current model: **63 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-capture-sustainability
+
+Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.
+
+**Deviation:** Stopped before gameplay at the declared no-resource-offer falsifier. Existing Dig is not yet integrated with collection recovery. No prior failure, stage exit or counter changed.
+
+**Next:** From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.
 
 ### 2026-09-10-supply-transport
 

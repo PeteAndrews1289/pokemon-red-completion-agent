@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-PR242 merged after green CI. AI completed legitimate resupply and a model-selected restoration. AJ chose Seafoam B3F among seven destinations, caught Shellder on 1F, resumed travel and failed to catch Seel at B3F. Its typed exhaustion stop retained completed Surf, spending and a safe checkpoint. Model61 grew to model63; registrations grew from 63 to 64.
+AJ01/model63 remains the latest played save: 64 registrations, 54 specimens, zero balls and 593 money. The [sustainability audit](work-sessions/2026-09-10-capture-sustainability.md) found only explore executable and no regional acquisition candidates. No new input or fit occurred. Inventory-only preparation now skips unused ranking history; actual choices keep it.
 
-Resume only from AJ01/model63: Seafoam B3F, 54 specimens, zero balls and 593 money. Prioritize capture-support endurance and adequate legitimate supplies before another collection choice. The helper lost health during Shellder's encounter; Seel later remained at full HP with no status attempts because the helper was already below its safety threshold. Do not lower that protection. A small planned optimization can avoid rebuilding search history for inventory-only calls that discard their menu, while retaining full history for actual policy choices. Allow 60–90 minutes. The bounded capture/resume checklist is 3/3, supported by an actual resumed capture and a fitted positive gain, not a successful final Seel goal. Stone procurement and the already-satisfied-destination shortcut remain unfinished; Phase 5 and Red are not complete.
+Prioritize a bounded escape/recovery composition using existing Dig mechanics. Read-only facts confirm a living holder, allowed terrain and a retained healing anchor, but collection recovery does not expose that skill. Verify the exit and free healing before legitimate funding and another collection choice. Allow 60–90 minutes for this integration; collection may require a follow-up. Preserve the completed travel-capture checklist at 3/3; the next resource-recovery checklist starts 1/3, diagnosis only. Phase 5 remains current.
 
 ## How to stay focused
 

@@ -55,3 +55,5 @@ Improve safe capture preparation and adequate supplies before a larger collectio
 The unresolved question is not whether code can finish Red. It is how much useful decision-making the model has learned—and whether that knowledge survives a different situation.
 
 [Roadmap](model-first-roadmap.md) · [Full historical narrative](history/project-narrative-through-2026-09-10.md)
+
+The [sustainability check](work-sessions/2026-09-10-capture-sustainability.md) stopped before wasting another run: no balls, insufficient cash and no recovery/funding offer. A faster inventory was useful engineering, not learning. The party already knows Dig and the cave permits it; the missing piece is connecting that known mechanic to collection recovery. This is a composition gap, not proof the model learned to escape.

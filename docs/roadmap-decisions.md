@@ -1,5 +1,15 @@
 # Roadmap baseline and deviations
 
+## September 10 — advance from travel capture to sustainable resources
+
+Preserve the completed travel-capture checklist at 3/3 in closed milestones. The
+[sustainability audit](work-sessions/2026-09-10-capture-sustainability.md) found no
+resource or recovery offer at the exact retained save. The new local checklist
+tracks diagnosed resources (done), safe escape/recovery (planned), and a funded
+collection lesson (planned). Its 1/3 is not Phase 5 progress. No stage exits,
+learning counters or failed outcomes changed. Prefer reusing existing Dig mechanics
+over cave-specific route orchestration; no further explore-only run is useful here.
+
 ## September 10 — qualify travel capture without relabeling the failed destination
 
 The [supply session](work-sessions/2026-09-10-supply-transport.md) closes the existing

@@ -50,3 +50,5 @@ Fresh-game autonomous play, complete collection and transfer to Blue, modified R
 Credit Pete's product direction and validation, along with Codex, Claude and Antigravity's AI-assisted implementation/review contributions. Do not suggest every line was manually authored.
 
 [Project narrative](project-narrative.md) · [Previous editorial notes](history/video-narrative-through-2026-09-10.md)
+
+For the [sustainability follow-up](work-sessions/2026-09-10-capture-sustainability.md), freeze the counters at 64 registrations and 63 examples. Show the only offered goal, explore, next to zero balls; no gameplay was launched. Then illustrate the proposed reuse of existing Dig mechanics for recovery. Label this as diagnosed and planned, not an executed escape or learned ability.

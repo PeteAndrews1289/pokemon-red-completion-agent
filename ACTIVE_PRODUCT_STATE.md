@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.
+- Next decision: From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-supply-transport** · status **active** · evidence [registered train example](docs/evidence/red-supply-collection-learning-2026-09-10.json)
+**2026-09-10-capture-sustainability** · status **active** · evidence [falsification](docs/evidence/red-capture-sustainability-audit-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 2 real fits; no independent or cross-title authority promotion. |
+| Learning output | Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits. |
+| Authority delta | No fit, gameplay or authority change this session. |
 | Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Travel capture and resumption are now demonstrated: Shellder was caught on1F before the model's B3F destination. One remaining ball failed on Seel; the helper had fallen from73 to36HP during the Shellder encounter. Supplies and capture-support endurance now limit sustained collection. |
-| Decision | Close the bounded travel-capture checklist using the actual Shellder gain, verified continuation and fitted outcome, while keeping the failed Seel destination label. Next improve sustainable supplies/capture support and reduce wasted preparation rather than add more routes. |
-| Next session | Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay. |
-| Next falsifier | From exact AJ01, verify a legitimate supply/funding option and safe capture support before another collection choice. Reject unavailable resources or unsafe helper use without weakening guards. Retain the Shellder gain, failed Seel costs and fresh continuation ancestry; never replay AI/AJ. |
+| Blocker | AJ01 has zero balls and 593 money. Existing supply/funding/recovery offers are unavailable; the menu exposes only explore. Read-only inspection confirms a living Dig holder and legal escape terrain with a retained healing anchor, but collection recovery does not compose that mechanic. |
+| Decision | Stop the unproductive explore-only continuation. Reuse existing Dig mechanics behind a guarded recovery binding instead of adding a cave walkthrough. Inventory-only history omission is tested; actual policy history remains authenticated. |
+| Next session | From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run. |
+| Next falsifier | Offer a bounded escape-and-heal goal from exact AJ01 without input; reject missing holder, invalid terrain, stale healing anchor or unsafe terminal. Then one retained execution, not a replay. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -23,3 +23,5 @@ Start with the [operational handoff](../HANDOFF.md) and [role assignments](../AG
 Review only; do not play the game, open protected contexts or edit the shared worktree. Submit concrete defects and the shortest falsifier. Codex owns integration decisions and explains disagreements.
 
 [Previous handoffs](history/agent-handoffs-through-2026-09-10.md)
+
+Latest engineering follow-up: [sustainability audit](work-sessions/2026-09-10-capture-sustainability.md). No input or fit; only explore available. Reuse existing Dig mechanics for a verified escape/recovery binding before funding another collection attempt. Reviewer focus: stale healing anchors, inventory/party preservation and no source-history bypass during actual policy choice.

@@ -33,19 +33,19 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "2 real fits; no independent or cross-title authority promotion.",
-        "blocker": "Travel capture and resumption are now demonstrated: Shellder was caught on1F before the model's B3F destination. One remaining ball failed on Seel; the helper had fallen from73 to36HP during the Shellder encounter. Supplies and capture-support endurance now limit sustained collection.",
-        "decision": "Close the bounded travel-capture checklist using the actual Shellder gain, verified continuation and fitted outcome, while keeping the failed Seel destination label. Next improve sustainable supplies/capture support and reduce wasted preparation rather than add more routes.",
+        "authority_delta": "No fit, gameplay or authority change this session.",
+        "blocker": "AJ01 has zero balls and 593 money. Existing supply/funding/recovery offers are unavailable; the menu exposes only explore. Read-only inspection confirms a living Dig holder and legal escape terrain with a retained healing anchor, but collection recovery does not compose that mechanic.",
+        "decision": "Stop the unproductive explore-only continuation. Reuse existing Dig mechanics behind a guarded recovery binding instead of adding a cave walkthrough. Inventory-only history omission is tested; actual policy history remains authenticated.",
         "evidence": {
-          "kind": "registered_train_example",
-          "path": "docs/evidence/red-supply-collection-learning-2026-09-10.json",
-          "sha256": "e939303f22d8894c9f2ab6da2a782e489d84f4e969cfc272d020ed8de29747dd"
+          "kind": "falsification",
+          "path": "docs/evidence/red-capture-sustainability-audit-2026-09-10.json",
+          "sha256": "7056831375dfdac689ded69a3331491410853d32aaaf56a29128a73320ae8dba"
         },
-        "learning_output": "2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate.",
-        "next_falsifier": "From exact AJ01, verify a legitimate supply/funding option and safe capture support before another collection choice. Reject unavailable resources or unsafe helper use without weakening guards. Retain the Shellder gain, failed Seel costs and fresh continuation ancestry; never replay AI/AJ.",
-        "next_session_goal": "Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.",
+        "learning_output": "Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.",
+        "next_falsifier": "Offer a bounded escape-and-heal goal from exact AJ01 without input; reject missing holder, invalid terrain, stale healing anchor or unsafe terminal. Then one retained execution, not a replay.",
+        "next_session_goal": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-supply-transport",
+        "session_id": "2026-09-10-capture-sustainability",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.",
+      "next_decision": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
