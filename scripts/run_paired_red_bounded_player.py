@@ -691,7 +691,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--capture-search-budget", dest="regional_transitions", action="append_const",
         const="capture-search-budget",
-        help="prospective up-to256-leg captures; preserves action/encounter and safety caps",
+        help="prospective up-to160-leg captures; reserves encounter handling within action caps",
     )
     parser.add_argument(
         "--affordable-capture-supply",

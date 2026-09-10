@@ -42,7 +42,7 @@ RED_LIVING_DEX_WILD_CORRIDOR_SCHEMA = (
 
 
 def bind_red_capture_search_budget_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
-    """Opt future captures into up to256legs; all other existing caps survive.
+    """Opt future captures into up to160legs; all other existing caps survive.
 
     The explicit marker carries this allowance through destination enumeration.
     Legacy derived corridors and checkpoint profiles retain their64-leg default.
@@ -54,7 +54,15 @@ def bind_red_capture_search_budget_profile(profile: RedGoalContextProfile) -> Re
         assert isinstance(parameters, dict)
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
             parameters["capture_search_budget"] = "bounded-search-v1"
-            parameters["maximum_legs"] = 256
+            # One encounter can consume a non-displacing seek plus a flee.
+            # Leave room for both for every permitted encounter and terminal
+            # exhaustion; use an even number so ordinary exhaustion ends home.
+            actions, encounters = parameters["maximum_seek_steps"], parameters["maximum_encounters"]
+            assert isinstance(actions, int) and isinstance(encounters, int)
+            legs = min(160, actions - 2 * encounters - 2)
+            if legs < 2:
+                raise RedLivingDexWildCorridorError("search budget has no safe patrol allowance")
+            parameters["maximum_legs"] = legs - legs % 2
             found = True
         providers.append((spec.kind, spec.mechanic, parameters))
     if not found:
@@ -193,7 +201,7 @@ def retarget_red_wild_profile(
             derived = corridor.profile_parameters()
             if parameters.get("capture_search_budget") == "bounded-search-v1":
                 derived["capture_search_budget"] = "bounded-search-v1"
-                derived["maximum_legs"] = 256
+                derived["maximum_legs"] = 160
             # Location changes cannot silently increase the old survey budget.
             for key in ("maximum_legs", "maximum_seek_steps", "maximum_encounters"):
                 old_bound, new_bound = parameters[key], derived[key]

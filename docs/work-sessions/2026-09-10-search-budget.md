@@ -15,9 +15,9 @@ Flash3.8High is researching encounter mechanics and ranking collection-mechanic 
 
 ## Engineering qualification
 
-An explicit prospective capture-profile transition allows up to256patrol legs, instead of the historical64. The256semantic-action and32encounter caps, one-capture quota, party-health checks and outer action/frame limits are unchanged. Retargeted candidate profiles retain the opted-in allowance; discovery/development and historical profiles do not change. A disclosed effort surcharge makes the additional patrol allowance visible in local and routed offers; actual costs remain the fitted outcomes.
+An explicit prospective capture-profile transition allows up to160patrol legs, instead of the historical64. The256semantic-action and32encounter caps, one-capture quota, party-health checks and outer action/frame limits are unchanged. Retargeted candidate profiles retain the opted-in allowance; discovery/development and historical profiles do not change. A disclosed effort surcharge makes the additional patrol allowance visible in local and routed offers; actual costs remain the fitted outcomes.
 
-487targeted tests pass across12files, including malformed bounds, history preservation, retargeting, provider wiring, cost offers, checkpoint joins and learning-cycle behavior. This is not a full-suite result. Full configured type checking covers470source files.
+The first256-leg implementation had a budget interaction missed by its initial487targeted tests: a non-displacing encounter seek and flee each consume semantic actions. Codex stopped preparation AA before controller input and retained its declaration without retry. The corrected160-leg allowance reserves encounter-handling actions, rounds tighter allowances to an even return-to-origin patrol and rejects impossible budgets. A new regression exercises32flees plus160legs and verifies a clean exhausted-search report at225actions, not a semantic-limit exception. Full configured type checking covers470source files; targeted tests are not a full-suite result.
 
 ## Flash review and adjudication
 
@@ -25,7 +25,7 @@ Flash3.8High completed a read-only research report after source-read permission 
 
 Accepted: separate encounter frequency, species-slot likelihood and capture success; preserve old profile identities; give low-yield searches a larger finite opportunity; inspect stone evolution and NPC trades as reusable collection expansions.
 
-Deferred: automatic rate-proportional512-leg dosing. The smaller256-leg opt-in fits the existing semantic-action cap and can be falsified without adding a rate decoder or changing more limits.
+Deferred: automatic rate-proportional512-leg dosing. The smaller160-leg opt-in fits the existing semantic-action cap with encounter handling reserved and can be falsified without adding a rate decoder or changing more limits.
 
 Rejected/corrected: Clefairy occupies two B2F slots, not only the final slot ([map data](https://raw.githubusercontent.com/pret/pokered/master/data/wild/maps/MtMoonB2F.asm), [slot weights](https://raw.githubusercontent.com/pret/pokered/master/data/wild/probabilities.asm)). The claimed universal three-step post-battle cooldown was not verified and is not used. Crystal's `transfer_protocol.py` specifies model-transfer evaluation, not a working Time Capsule/link-trade executor. Blue/link capability would not itself supply an event-only species. Suggested registration gains are estimates, not verified additions or an exact current-save inventory analysis.
 

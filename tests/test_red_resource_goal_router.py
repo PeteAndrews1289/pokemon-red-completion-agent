@@ -324,7 +324,7 @@ def test_local_provider_is_not_replaced_by_transport(fixture):
     assert not _supply(result).binding_ref.startswith("red-resource-goal:")
 
 
-@pytest.mark.parametrize("search_surcharge", [0.0, 0.192])
+@pytest.mark.parametrize("search_surcharge", [0.0, 0.096])
 def test_capture_route_uses_same_resources_and_verifies_retained_specimens(
     fixture, search_surcharge,
 ):

@@ -447,7 +447,8 @@ def test_wild_goal_context_binds_one_capture_quantum(
         parameters["capture_species_numbers"] = (16, 21)
     if extended_search:
         parameters["capture_search_budget"] = "bounded-search-v1"
-        parameters["maximum_legs"] = 256
+        parameters["maximum_legs"] = 160
+        parameters["maximum_seek_steps"] = 256
     _wild_provider(
         SimpleNamespace(emulator=object(), reader=object(), adapter=object(),
                         registration_policy=None,
@@ -461,13 +462,14 @@ def test_wild_goal_context_binds_one_capture_quantum(
     )
 
     assert captured["catalog"].remaining_demand is remaining_demand
-    assert captured["search_effort_surcharge"] == (0.192 if extended_search else 0.0)
-    assert executor_args["max_legs"] == (256 if extended_search else 8)
+    assert captured["search_effort_surcharge"] == (0.096 if extended_search else 0.0)
+    assert executor_args["max_legs"] == (160 if extended_search else 8)
     assert captured["catalog"].level_evolution_edges == level_edges
     policy = captured["policy"]
     assert isinstance(policy, RedAreaExecutionPolicy)
     assert policy.capture_quota == 1
-    assert policy.max_actions == 64 and policy.max_encounters == 16
+    assert policy.max_actions == (256 if extended_search else 64)
+    assert policy.max_encounters == 16
     assert policy.capture_in_requirement_order is (not opportunistic)
     assert captured["catalog"].wild_source_species == (
         (("wild:Route1:grass", (red_species_ref(16), red_species_ref(21))),)

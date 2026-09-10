@@ -39,7 +39,7 @@ def test_search_budget_transition_preserves_history_and_requires_registration(mo
     old, new = derive(before, ('capture-status', 'capture-search-budget'), object(),
                       allow_cartridge_sources=True)
     assert old.providers[0].parameters['maximum_legs'] == 64
-    assert new.providers[0].parameters['maximum_legs'] == 256
+    assert new.providers[0].parameters['maximum_legs'] == 160
     assert new.providers[0].parameters['capture_status_support'] is True
     assert derive(before, ('capture-status',), object()) == (old,)
     parser = module['_parser']()

@@ -773,12 +773,15 @@ def _parse_parameters(
         local_species = row.get("source_species_numbers")
         capture_species = row.get("capture_species_numbers")
         if "capture_search_budget" in row:
+            search_legs = _positive_integer(row.get("maximum_legs"), "survey legs")
+            search_actions = _positive_integer(row.get("maximum_seek_steps"), "seek steps")
+            search_encounters = _positive_integer(row.get("maximum_encounters"), "encounter bound")
             if (
                 mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
                 or row["capture_search_budget"] != "bounded-search-v1"
-                or _positive_integer(row["maximum_legs"], "survey legs") > 256
-                or _positive_integer(row["maximum_seek_steps"], "seek steps") > 256
-                or _positive_integer(row["maximum_encounters"], "encounter bound") > 32
+                or search_legs > 160 or search_legs % 2 != 0
+                or search_actions > 256 or search_encounters > 32
+                or search_legs + 2 * search_encounters + 2 > search_actions
             ):
                 raise RedGoalContextProfileError("capture search budget differs")
             required.add("capture_search_budget")
