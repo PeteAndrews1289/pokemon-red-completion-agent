@@ -124,6 +124,29 @@ def test_transform_session_credits_only_the_completed_venonat_choice():
         assert profile["status"] == "time_box_reached"
 
 
+def test_throughput_threshold_does_not_claim_productive_collection():
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-registered-throughput-learning-2026-09-10.json").read_text()
+    )
+    training, component = _training_projection(receipt)
+    assert (training.samples_before, training.samples_after) == (11, 12)
+    assert training.successful_examples == 5
+    assert component.validation_examples == 0
+    session = receipt["session"]
+    assert (session["completed_steps"], session["fits"]) == (5, 5)
+    assert (session["total_recorded_actions"], session["total_recorded_frames"]) == (1529, 93564)
+    assert [row["status"] for row in session["steps"]] == [
+        "succeeded", "failed", "failed", "succeeded", "failed",
+    ]
+    assert session["last_verified_registered"] == 40
+    assert sum(len(row["new_registrations"]) for row in session["steps"]) == 0
+    assert session["steps"][-1]["resources"]["capture_items_after"] == 0
+    assert session["review"]["threshold_met"] is True
+    assert session["review"]["full_collection_complete"] is False
+    assert session["review"]["automatic_capture_resume_ready"] is False
+    assert session["review"]["remaining_required_registrations"] == 84
+
+
 @pytest.mark.parametrize("key", ["historical_rewards_reused", "parameter_warm_start"])
 def test_registered_dashboard_rejects_mixed_objective_claim(key):
     receipt = json.loads(RECEIPT.read_text())

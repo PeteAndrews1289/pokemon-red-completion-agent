@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-transform-capture**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-planning-throughput**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 - [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
 
-Current model: **7 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **12 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-transform-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-throughput-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-planning-throughput
+
+5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.
+
+**Deviation:** No stage-exit change. Projection-only performance repair; historical objective corpus unchanged.
+
+**Next:** The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits.
 
 ### 2026-09-10-transform-capture
 

@@ -1,3 +1,24 @@
+# Current — measured planning and registered model12
+
+5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.
+
+Warp-safe tile projection now shares unchanged immutable exits. Synthetic function
+timing improved7.47x; actual unprofiled preparation completed in73.81 seconds with
+two destinations. These are different measurements, not a whole-cycle speedup claim.
+The model chooses goals/destinations; deterministic skills still control mechanics.
+Historical114 remains separate. Gameplay is stopped at the retained checkpoint.
+
+Next: The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits.
+
+Codex owns integration, execution, fitting and publication. Flash High reviewed the
+bounded projection algorithm and can draft the next isolated mechanics/test change.
+No broad architecture rewrite is requested. Claude was not used. Latest Flash quota
+snapshot:62.15% five-hour /86.91% weekly remaining; not a measured session token cost.
+
+[Session, evidence and continuation](work-sessions/2026-09-10-planning-throughput.md).
+
+## Historical checkpoints below — superseded where inconsistent
+
 # Current — Transform repair and registered model7
 
 1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat.

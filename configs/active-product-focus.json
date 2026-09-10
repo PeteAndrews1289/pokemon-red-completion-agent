@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Fresh learned choices drove actual play and new fits; no authority promotion.",
-        "blocker": "Unused Center offers removed, but the second read-only profile still reached its90-second limit in source enumeration. Remaining route search and checkpoint verification need a bounded throughput repair.",
-        "decision": "Continue the existing registered learner, with focused mechanics repairs rather than new architecture.",
+        "authority_delta": "Fresh bounded model-selected outcomes; no new combat authority.",
+        "blocker": "Five fitted steps added no registrations. Balls exhausted; last snapshot has no active battle but input_ready false. Support-success utility may dominate novelty; this is a review finding, not proven cause.",
+        "decision": "Twelve-row review reached; stop scaling the same narrow loop and improve useful collection yield.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-transform-learning-2026-09-10.json",
-          "sha256": "afe3c51b4faa4bf183475a696b307006893aad15cb3e52b325034cfc5815adaa"
+          "path": "docs/evidence/red-registered-throughput-learning-2026-09-10.json",
+          "sha256": "e6cdbee94976df3a92ef13599bcf30c2df4f11484d182aba115a982cb9b66476"
         },
-        "learning_output": "1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat.",
-        "next_falsifier": "A useful new choice improves verified registration while preserving existing credit and physical stock.",
-        "next_session_goal": "Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.",
+        "learning_output": "5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.",
+        "next_falsifier": "A fresh useful choice produces verified registration or an honest settled failure.",
+        "next_session_goal": "The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-transform-capture",
+        "session_id": "2026-09-10-planning-throughput",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "ROM-free Transform/Conversion variants only; no cross-title or held-out evaluation."
+        "transfer_result": "ROM-free varied warp maps; no cross-title evaluation."
       },
       "learned_authority": {
-        "current": "1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat.",
+        "current": "5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.",
+      "next_decision": "The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 7,
+        "registered_train_examples": 12,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

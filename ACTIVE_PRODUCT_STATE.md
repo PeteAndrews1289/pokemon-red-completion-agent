@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts.
+- Next decision: The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat. |
+| Authority now | 5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 7 | 12 |
+| Registered Train Example · train | 12 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-transform-capture** · status **active** · evidence [registered train example](docs/evidence/red-registered-transform-learning-2026-09-10.json)
+**2026-09-10-planning-throughput** · status **active** · evidence [registered train example](docs/evidence/red-registered-throughput-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 1 completed steps, 1 fits: registered examples 6 to 7. 1 new registrations; 40 registered / 44 specimens retained. 415 actions / 32,160 frames. Bounded development learning, not independent evaluation or learned combat. |
-| Authority delta | Fresh learned choices drove actual play and new fits; no authority promotion. |
-| Transfer result | ROM-free Transform/Conversion variants only; no cross-title or held-out evaluation. |
-| Blocker | Unused Center offers removed, but the second read-only profile still reached its90-second limit in source enumeration. Remaining route search and checkpoint verification need a bounded throughput repair. |
-| Decision | Continue the existing registered learner, with focused mechanics repairs rather than new architecture. |
-| Next session | Reduce remaining route-search and checkpoint-verification overhead with a bounded, measured repair; unused Center offers are now omitted from capture-only menus. Then continue model7 from the saved Venonat checkpoint. Broaden useful missing-registration and evolution alternatives. Preserve actual failed searches and never replay consumed attempts. |
-| Next falsifier | A useful new choice improves verified registration while preserving existing credit and physical stock. |
+| Learning output | 5 fresh steps / 5 fits; registered examples7 to12. 0 new registrations; 40 registered /44 specimens retained. 1,529 actions /93,564 frames. Bounded development learning, not independent reliability or learned combat. |
+| Authority delta | Fresh bounded model-selected outcomes; no new combat authority. |
+| Transfer result | ROM-free varied warp maps; no cross-title evaluation. |
+| Blocker | Five fitted steps added no registrations. Balls exhausted; last snapshot has no active battle but input_ready false. Support-success utility may dominate novelty; this is a review finding, not proven cause. |
+| Decision | Twelve-row review reached; stop scaling the same narrow loop and improve useful collection yield. |
+| Next session | The twelve-example review threshold is met, but collection yield is inadequate. Verify and settle the retained control boundary, then resupply through legitimate play. Test registered-goal utility balance, search duration and safe capture preparation before another larger batch; broaden capture/evolution coverage. Keep all existing outcomes; no retries, resets or retrospective reward edits. |
+| Next falsifier | A fresh useful choice produces verified registration or an honest settled failure. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
