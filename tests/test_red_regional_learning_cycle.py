@@ -128,6 +128,57 @@ def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monk
     assert len(played) == 2
 
 
+def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ancestry(
+    tmp_path, monkeypatch,
+):
+    import inspect_red_owned_evolution as owned
+
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = args.owned_evolution_objectives = True
+    original_prepare = cycle.source.base._prepare
+
+    def prepare(actual):
+        result = original_prepare(actual)
+        result.registration_policy = object()
+        return result
+
+    monkeypatch.setattr(cycle.source.base, "_prepare", prepare)
+    monkeypatch.setattr(cycle, "fit_incremental_registered_results",
+                        cycle.fit_incremental_regional_result)
+    monkeypatch.setattr(cycle.goal, "_run", cycle.source._run)
+    monkeypatch.setattr(cycle.source.base, "_action_free_preflight", lambda ready: {
+        "status": "ready", "available_goal_kinds": ["acquire_species", "evolve_species"],
+    })
+    transitions = iter(["evolution:48:49:31", "evolution:17:18:36"])
+    monkeypatch.setattr(owned, "inspect_owned_evolution", lambda ready: {
+        "selected_transition": next(transitions), "controller_actions": 0,
+    })
+    result = cycle._run(args)
+    assert len(played) == len(fits) == 2
+    assert played[0]["regional_transitions"][-1] == "evolution:48:49:31"
+    assert played[1]["regional_transitions"] == [
+        "wild:Route24:grass", "evolution:48:49:31",
+        "wild:Route5:grass", "discovery:wild:Route5:grass", "evolution:17:18:36",
+    ]
+    assert played[1]["continue_from_checkpoint"][-1] == ["cycle-fixture-01-causal", "1" * 64]
+    assert result["steps"][0]["owned_evolution_inventory"]["selected_transition"] == (
+        "evolution:48:49:31"
+    )
+    assert all(row["selection_scope"] == "native_goal" for row in result["steps"])
+    assert args.regional_transitions == ["wild:Route24:grass"]
+
+
+@pytest.mark.parametrize("value", [True, 1, "yes"])
+def test_owned_options_never_activate_for_legacy_or_nonautomatic_cycle(
+    tmp_path, monkeypatch, value,
+):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.owned_evolution_objectives = value
+    with pytest.raises(ValueError, match="automatic registered"):
+        cycle._run(args)
+    assert not played and not fits
+
+
 def test_failed_choice_is_fitted_once_then_stops(tmp_path, monkeypatch):
     args, _, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
     result = cycle._run(args)

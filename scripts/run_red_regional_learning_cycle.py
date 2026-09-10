@@ -48,6 +48,10 @@ def _parser() -> argparse.ArgumentParser:
         help="Choose native tasks and capture destinations; fit real outcomes.",
     )
     parser.add_argument(
+        "--owned-evolution-objectives", action="store_true",
+        help="Offer stock-derived native level evolutions alongside automatic capture goals.",
+    )
+    parser.add_argument(
         "--behavior-model-record", nargs=2, action="append", default=[], metavar=("SHA256", "PATH")
     )
     return parser
@@ -149,6 +153,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
     # Fail before controller input if any retained behavior model is unavailable.
     registered_objective = getattr(initial, "registration_policy", None) is not None
+    owned_evolutions = getattr(args, "owned_evolution_objectives", False)
+    if type(owned_evolutions) is not bool or (
+        owned_evolutions and (not automatic_goals or not registered_objective)
+    ):
+        raise ValueError("owned evolution objectives require automatic registered goals")
     if not registered_objective or initial.causal_record.objective:
         load_prior_player_inventory(initial.private_root, initial.causal_record, resolve)
     current = argparse.Namespace(**vars(args))
@@ -164,6 +173,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         current.training_seed = args.training_seed + ordinal - 1
         current.out = original.with_name(f"{original.stem}-{ordinal:02d}-parent.json")
         ready = source.base._prepare(current)
+        evolution_inventory = None
+        if owned_evolutions:
+            from inspect_red_owned_evolution import inspect_owned_evolution
+
+            evolution_inventory = inspect_owned_evolution(ready)
+            transition = evolution_inventory["selected_transition"]
+            if transition is not None:
+                current.regional_transitions = [*current.regional_transitions, transition]
+                ready = source.base._prepare(current)
         if (
             ready.source_commit != initial.source_commit
             or ready.source_bundle_sha256 != initial.source_bundle_sha256
@@ -244,6 +262,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
                 "outcome": outcome,
                 "fit": fitted,
                 "selection_scope": "regional_destination" if regional else "native_goal",
+                **({"owned_evolution_inventory": evolution_inventory}
+                   if evolution_inventory is not None else {}),
             }
         )
         parent = cast(dict[str, Any], outcome["parent_episode"])
@@ -309,6 +329,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "automatic_retry": False,
         "continue_after_search_exhaustion": continue_search,
         "automatic_goals": automatic_goals,
+        "owned_evolution_objectives": owned_evolutions,
         "pending_support_episode_ids": [row["episode_id"] for row in pending_support],
         "sealed_red_accesses": 0,
         "crystal_accesses": 0,
