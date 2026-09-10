@@ -34,24 +34,24 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "0 real fits; no independent or cross-title authority promotion.",
-        "blocker": "An empty goal menu exposed lost evolution transport access; prospective Fly/indoor access is repaired. Stone acquisition and broader resource/traversal mechanics remain incomplete. Forced skills are not new learner outcomes; independent performance remains unproved.",
+        "blocker": "Cut access is connected; this singleton qualification does not establish learned destination choice. Broader acquisition mechanics, reserves and independent performance remain incomplete.",
         "decision": "Reorient after zero new fitted choices: broaden executable access, not repeated searches or forced support. Preserve actual costs and registrations without inventing learning.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-evolution-access-learning-2026-09-10.json",
-          "sha256": "b495babe3db02638967cb501087ffc1d57a926a668a252707481ce58c43034f8"
+          "path": "docs/evidence/red-cut-access-learning-2026-09-10.json",
+          "sha256": "6e20758dda07534a852280585607e468d79c7e03dbede7e4fbe75d08e002522d"
         },
-        "learning_output": "2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
-        "next_falsifier": "An observed Cut-capable party must expose and execute one newly reachable route; removing the required move or badge must reject it before input. Preserve actual costs, checkpoints and failure labels.",
-        "next_session_goal": "Continue from AE01/model60 with Parasect retained and ordered evolution/Fly/indoor transitions. Qualify one generic Cut-enabled collection route using observed capabilities and the existing field-move executor; start with read-only feasibility and blocked-access tests. Expose real destination choices, not repeated forced support. Allow 45-90 minutes for first-access qualification. No reset, sealed Red, Crystal or full replay; stone procurement remains separate.",
+        "learning_output": "1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate.",
+        "next_falsifier": "Observed Surf access must expose a real acquisition alternative alongside owned evolution; missing badge, move or water permission must reject unsafe access. No fit without an actual multi-option decision.",
+        "next_session_goal": "Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-owned-evolution-access",
+        "session_id": "2026-09-10-cut-collection-access",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
       },
       "learned_authority": {
-        "current": "2/2 goals succeeded; 0 eligible fits,60 to60 examples. 60 to61 registrations; 52 specimens retained. Failed costs and deterministic support remain separate.",
+        "current": "1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from AE01/model60 with Parasect retained and ordered evolution/Fly/indoor transitions. Qualify one generic Cut-enabled collection route using observed capabilities and the existing field-move executor; start with read-only feasibility and blocked-access tests. Expose real destination choices, not repeated forced support. Allow 45-90 minutes for first-access qualification. No reset, sealed Red, Crystal or full replay; stone procurement remains separate.",
+      "next_decision": "Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

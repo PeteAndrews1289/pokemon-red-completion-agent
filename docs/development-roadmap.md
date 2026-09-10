@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-owned-evolution-access**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-cut-collection-access**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-evolution-access-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-cut-access-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-cut-collection-access
+
+1/1 goals succeeded; 0 eligible fits,60 to60 examples. 61 to62 registrations; 53 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** The read-only Cut falsifier exposed Route16. Prospective profile and shared-meter field execution were tested before one fresh bounded attempt; no historical profile, source or failed label changed.
+
+**Next:** Continue from AF01/model60 with Doduo retained and the capture-Cut/source transitions. Qualify observed Surf access to expose a new acquisition alongside owned evolution, then fit a real multi-option choice. Check two remaining balls and funding first; retain field receipts and measure planning cost. Allow 60-90 minutes for one access/choice qualification, not full collection. No reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-owned-evolution-access
 

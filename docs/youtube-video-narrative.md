@@ -37,6 +37,8 @@ Show [Paras evolving into Parasect](work-sessions/2026-09-10-owned-evolution-acc
 
 Explain one blocked-route or boxed-capture verification failure and the reusable fix. Keep actual costs visible. Explain why the shared Pokédex records legitimate acquisition once rather than requiring every species at level100.
 
+Follow with [Cut-enabled Route16 access and Doduo](work-sessions/2026-09-10-cut-collection-access.md). Show 62 registrations, 53 specimens and still 60 examples. A newly working mechanic is useful, but a forced goal is not a learned decision. Illustrate the crossing from the recorded trace and disclose that the higher-level field receipt was not retained; do not imply a fresh replay.
+
 ## Closing — What remains unproved
 
 Fresh-game autonomous play, complete collection and transfer to Blue, modified Red or Crystal remain unfinished. The next evidence should show useful decisions beyond the situations used to fit the model.

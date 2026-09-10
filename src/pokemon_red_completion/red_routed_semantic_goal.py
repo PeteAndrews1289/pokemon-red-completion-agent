@@ -15,7 +15,9 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
 from pokemon_red_completion.goal_manager import (
     GoalFailureReason,
     GoalKind,
@@ -223,6 +225,7 @@ class RedSemanticTransportRoute:
     profile_direction_steps: int = 0
     curriculum_direction_steps: int = 0
     prepare_departure: Callable[[], None] | None = None
+    field_actions: Gen1FieldMovePort | None = None
     _binding_built: bool = field(default=False, init=False, repr=False)
     _executed: bool = field(default=False, init=False, repr=False)
     _verified: bool = field(default=False, init=False, repr=False)
@@ -252,6 +255,11 @@ class RedSemanticTransportRoute:
             )
         if not isinstance(self.actions, CountingExecutor):
             raise TypeError("Red semantic transport needs a CountingExecutor")
+        if self.field_actions is not None and (
+            not isinstance(self.field_actions, Gen1FieldMovePort)
+            or self.field_actions.delegate is not self.actions
+        ):
+            raise RedRoutedSemanticGoalError("field actions must share the controller meter")
         if not callable(getattr(self.traversal_observer, "observe", None)):
             raise TypeError("Red semantic transport needs a traversal observer")
         _read_counter(self.emulator.frame_count, "emulator frame")
@@ -331,6 +339,10 @@ class RedSemanticTransportRoute:
             )
         self._executed = True
         before = self._checkpoint()
+        if self.field_actions is not None:
+            self.__post_init__()
+            if not self._matches_start(self.traversal_observer.observe()):
+                raise RedRoutedSemanticGoalError("field transport origin or capability changed")
         if self.prepare_departure is not None:
             if not self._matches_start(self.traversal_observer.observe()):
                 raise RedRoutedSemanticGoalError("departure preparation lost the route origin")
@@ -339,7 +351,7 @@ class RedSemanticTransportRoute:
                 raise RedRoutedSemanticGoalError("departure preparation changed the route origin")
         route_report = execute_route(
             self.plan,
-            self.actions,
+            self.field_actions if self.field_actions is not None else self.actions,
             self.traversal_observer,
             interruption_handler=self.interruption_handler,
             replanner=self.replanner,
@@ -382,6 +394,8 @@ class RedSemanticTransportRoute:
                 "transport_is_policy_kind": False,
                 "private_route_fields": 0,
                 **({"travel_captures": travel_captures} if travel_captures else {}),
+                **({"verified_cuts": len(self.field_actions.cut_receipts)}
+                   if self.field_actions is not None else {}),
             },
         )
         self._route_report = route_report
@@ -428,6 +442,10 @@ class RedSemanticTransportRoute:
             and value.mode == self.plan.start_mode
             and value.ready
             and value.interruption is None
+            and (self.field_actions is None or not any(
+                step.action_kind is MacroActionKind.FIELD_MOVE
+                and step.action.startswith("cut:") for step in self.plan.steps
+            ) or "move:cut" in value.capabilities)
         )
 
 

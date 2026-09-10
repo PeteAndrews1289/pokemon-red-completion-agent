@@ -1,55 +1,53 @@
 # Current development handoff
 
-Updated September10,2026. Older results remain in dated reports and [history](docs/history/handoff-through-2026-09-10.md).
+Updated September 10, 2026. Older results remain in dated reports and [history](docs/history/handoff-through-2026-09-10.md).
 
 ## Goal and scope
 
-Build a learned player that completes stories and accumulates a shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock stay separate. No level100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
+Build a learned player that completes stories and accumulates a shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock stay separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
 
-## Latest verified save: AE01
+## Latest verified save: AF01
 
-- Paras8→Parasect24 completed through the existing bounded training skill.
-- **61 global/local registrations,52 physical specimens,48 living species**, independently verified.
-- **Model60 unchanged: zero new fitted choices.** AC healing and AE evolution were forced singleton goals.
-- AC:80actions/5,316frames. AE:16,826actions/1,464,245frames. Combined16,906actions/1,469,561frames; no lost specimen or reset.
-- Route11/map22,row6col0, input-ready, outside battle, no pending trainer; three capture items/138money. Gameplay stopped.
-- AD had no executable goal and no gameplay. AE completed one of at most two goals, then stopped at another empty menu.
-- [Session report](docs/work-sessions/2026-09-10-owned-evolution-access.md) · [Evidence](docs/evidence/red-evolution-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-evolution-access-saved-2026-09-10.json).
+- Cut-enabled acquisition reached Route 16 and caught Doduo.
+- **62 global/local registrations, 53 specimens, 49 living species**, independently verified.
+- **Model60 unchanged: zero new fitted choices.** One available capture goal meant forced singleton authority.
+- One successful goal: **480 actions / 26,868 frames**; one encounter, one capture, paralysis support, one ball spent.
+- Route16/map27, row5 col35; input-ready, outside battle, no pending trainer. Two capture balls and 138 money remain.
+- The batch stopped at its one-goal limit after 392.530 seconds including preparation. Gameplay is stopped.
+- [Session report](docs/work-sessions/2026-09-10-cut-collection-access.md) · [Outcome evidence](docs/evidence/red-cut-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-cut-access-saved-2026-09-10.json).
 
 Exact identities:
 
-- Episode: `red-registered-evolution-access-20260910-ae-01-causal`
-- Checkpoint: `2f433f99febc8fa3a2be399539b29bd202f3ffc6e21be0cb70fe3a87f99a4a96`
-- Manifest: `28bd491424992aaaa57602cfcc21505fcf1e46038184a37e08449022f1654198`
-- State: `93e4539fa70fd6eac97a8e8deb2d5c09495a8a789bd5191a916792c53126b113`
+- Episode: `red-registered-cut-access-20260910-af-01-causal`
+- Checkpoint: `ac8cb149fc869c166f4ab1ede83b95bcc6e22e56ca5e08ebc6723fccee1caece`
+- Manifest: `978ff7ac7cc9c2bf6bd9f351ae6a6441591a631567085eab05684ebc10f0df99`
+- State: `68fe0eed489f8eccb20237a5e79d04864b9bfe66b43c459f2bde71cfc9b776fd`
 - Model60: `260efe95e444c5035283a613442f84da2528ea1ad9b8c95a17c997fa881ecb0c`
 - Corpus: `3ac77782801f56728484b6ea7926ffd48985e7d5757eadfdc8d9c80db3d2b8b3`
-- Played source: `f7cc883bec3e0e96d911e156d2a4c098c643c05c`
+- Played source: `14116b475ee6325d307bf2ccb2bcf17b61985b1e`
 
-The latest fit still belongs to AB. Preserve unfitted AC/AE support artifacts and costs. Full arguments and audits remain private.
+The latest fit still belongs to AB. Preserve unfitted AC/AE/AF support artifacts and costs. Full arguments and audits remain private.
 
-## Repair and limitations
+## Repair and qualification
 
-New owned-evolution proposals dropped transport settings. A read-only AC-state probe exposed Paras evolution by enabling existing Fly/indoor access. The new `--owned-evolution-fly-transport` option applies the same settings during admission and execution, retaining ordered transitions for future ancestry. Historical profile construction is unchanged.250targeted tests passed; configured mypy covered470source files.
+A read-only AE comparison found no walking acquisition but one Cut-enabled source. The prospective `--capture-cut-transport` transition preserves old profiles and survives source retargeting. Navigation uses observed Cut capability and the existing field-move port; expanded inputs share the original action/frame budgets. Surf and Strength remain unavailable through this option.
 
-AE initially refused unpublished source before private admission or input. The unchanged declaration resumed once after publication; no played/claimed trial was retried. Push tested development source before the next declaration; CI is not a development-play dependency.
+430 targeted tests passed at closeout, including documentation checks. A separate overlapping group of 83 route/capture tests also passed; do not add overlapping counts. Configured mypy covered 470 source files. These are not a full-suite claim.
 
-The earlier travel-arrival summary repair is still not live-qualified: this session exercised evolution, not incidental capture. AB remains failed. Capture/resume remains1/3, not a project percentage.
+The primitive trace shows blocked movement, a field-menu sequence, then movement through the cartridge tree. The higher-level Cut receipt was not persisted, and a final-map comparison showed no remaining changed blocks. Do not fabricate a retained receipt or infer the reset cause. Preserve field receipts prospectively. The earlier incidental-arrival reporting repair remains unqualified by this destination capture; AB remains failed and capture/resume stays 1/3.
 
 ## Next bounded session
 
-1. Start from AE01/model60. Inherit AE's declaration; append its selected `evolution:46:47:24`, then `evolution-fly` and `indoor-fly-departure`, then the AE checkpoint. Keep the owned-evolution Fly opt-in. AE recorded no selected/proposed capture source.
-2. Reorient after zero new learning examples: broaden executable mechanics, not empty-menu or cleared-source loops.
-3. Qualify one generic Cut-enabled collection route using the existing field-move executor and observed HM/badge capabilities. Begin with read-only feasibility and changed-party/blocked-access tests. Do not merely relax walking-only guards or hand-route a species.
-4. Expose real destination alternatives; fit only eligible actual outcomes. Estimate45–90minutes for first-access qualification, not full collection.
-5. Stone evolution remains isolated. Seven missing stone targets have precursors, but no stones are carried; reserves, procurement and boxed access still need verification.
+1. Start from AF01/model60, never replay AF or restore AE. Inherit AF's complete declaration and append the AF checkpoint, then `warp-safe-wild-source wild:Route16:grass` and `discovery-source wild:Route16:grass`, as prior source continuations do. Retain the existing capture-Cut flag. AF proposed that source; it did not sample among multiple destinations.
+2. Check current resources and stock. Only two capture balls remain; establish legitimate funding before a long acquisition loop.
+3. Qualify one observed Surf acquisition path using the existing field executor, with missing-badge/holder and blocked-water tests. Pair a genuinely new acquisition option with supported owned evolution so the learner has real alternatives.
+4. Persist higher-level field receipts and measure preparation overhead while integrating that path. Do not start a separate broad infrastructure campaign.
+5. Allow 60–90 minutes for one access/choice qualification, not full collection or independent reliability.
 
 No full replay, sealed Red, Crystal, consumed retry, release or independent-performance claim. No stage exit changed.
 
 ## External work and publication
 
-Flash3.8High completed a read-only audit and two-file isolated draft repair. Codex corrected three remaining fixtures and lint;40draft tests pass. Local draft commit`895b4d6b` is **not merged or live-qualified**. Move-learning admission, real menus, native provider and stone procurement remain unfinished.
+No external agents were dispatched in this session; no fresh Flash or Claude quota was queried. Flash's earlier isolated stone draft remains at local commit `895b4d6b`, with 40 tests passing after Codex corrections, **not integrated or live-qualified**. Its procurement, move-learning admission and native-provider work remain incomplete.
 
-Accepted: wrong mocked IDs, incomplete guards and missing integration. Rejected: blanket no-move-learning and mandatory Pokédex-modal claims after primary-source checks. See the session adjudication.
-
-Refreshed Gemini-group allowance:85.74%five-hour/78.00%weekly remaining around20:08UTC; shared counters, not per-task usage. Both Flash tasks stopped; Claude unused. PR239 merged as`72b0c0d4` after green CI.
+PR240 passed CI and merged as `8abdc7ab`. Played source `14116b47` is separately published and must remain recoverable. Publish this closeout as one tested batch; CI is not a dependency for ordinary development gameplay.

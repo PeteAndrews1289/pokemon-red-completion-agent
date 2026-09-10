@@ -9,7 +9,7 @@ owns destination execution, verification and total resource accounting.
 from __future__ import annotations
 
 from dataclasses import replace
-from functools import lru_cache
+from functools import lru_cache, partial
 from typing import TYPE_CHECKING
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
@@ -96,7 +96,11 @@ def bind_collection_fly(
     their historical walking-only behavior. No controller actions occur here.
     """
     from pokemon_red_completion.observation import MapId
-    from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS, _walking_plan
+    from pokemon_red_completion.red_resource_goal_router import (
+        _ROUTE_LIMITS,
+        _cut_enabled,
+        _supported_plan,
+    )
     from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
     from pokemon_red_completion.red_travel_capture_runtime import (
         bind_travel_capture_destination,
@@ -181,7 +185,7 @@ def bind_collection_fly(
             plan = router.world.plan_feasible_to_map(projected, target, goal_at=goal_at)
         except RoutePlanningError:
             continue
-        if plan.steps and _walking_plan(plan):
+        if plan.steps and _supported_plan(plan, allow_cut=_cut_enabled(spec)):
             chosen = town, projected, plan
             break
     if chosen is None:
@@ -253,7 +257,8 @@ def bind_collection_fly(
             traversal_observer=traversal,
             emulator=runtime.emulator,
             interruption_handler=travel_handler,
-            replanner=router._replan,
+            replanner=partial(router._replan, allow_cut=_cut_enabled(spec)),
+            field_actions=router.field_actions_for(spec) if _cut_enabled(spec) else None,
             route_limits=_ROUTE_LIMITS,
         )
         walking = walk.route_binding()

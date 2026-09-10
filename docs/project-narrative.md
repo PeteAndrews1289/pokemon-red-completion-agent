@@ -42,6 +42,8 @@ Pete defines the objective, observes gameplay, challenges priorities and directs
 
 Pete also challenged the repository's presentation: thousands of lines of accumulated status reports made the work difficult to understand. In September2026, public summaries were rewritten and detailed reports moved to historical archives. Documentation repair is not a learning milestone.
 
+The [Cut-access session](work-sessions/2026-09-10-cut-collection-access.md) turned an unavailable area into a successful Doduo capture: 62 registrations, but still 60 examples. The engineering worked; only one goal was available. The audit also found that primitive inputs survived while the higher-level field receipt did not. Next expose real alternatives and preserve that diagnostic detail, rather than call every new registration a smarter model.
+
 ## What comes next
 
 Sustain useful collection, close real mechanic gaps, evaluate on separate situations and broaden model authority. Then integrate Blue's shared registration, test a compatible unfamiliar Red modification and investigate Crystal transfer.

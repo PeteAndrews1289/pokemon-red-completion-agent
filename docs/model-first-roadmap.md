@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection:61 verified registrations and60 examples under the registered-only learning objective. Parasect was added through a forced evolution goal, not a new model choice. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+Current work is Red collection: 62 verified registrations and 60 examples under the registered-only learning objective. Doduo was added through a forced Cut-enabled capture goal, not a new model choice. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-PR239 merged. AC healed the retained party; an empty menu exposed lost evolution-transport settings. A prospective Fly/indoor opt-in qualified Paras8→Parasect24, retaining61registrations and52specimens at AE01. Model60 is unchanged because both played goals were forced singletons. No reset or success relabeling; AB's arrival-report repair still lacks live capture qualification.
+PR240 merged. AF01 reached Route16 and caught Doduo: 62 registrations and 53 specimens retained. Model60 is unchanged because capture was the sole available goal. The recorded tree crossing supports access; a higher-level field receipt was not persisted. AB's incidental-arrival repair still lacks live qualification.
 
-Resume from AE01/model60 with its evolution and Fly/indoor transitions. Reorient after a zero-fit session: qualify one reusable Cut-enabled collection route with the existing field-move executor, observed capabilities and hard budgets, then expose real destination alternatives. Do not simply relax walking-only guards. Allow45–90minutes for first-access qualification. Stone procurement and the isolated item-evolution draft remain unfinished. Capture/resume stays1/3, not a project-completion percentage.
+Resume from AF01/model60 with complete ancestry, capture-Cut and the proposed Route16 source. Two consecutive zero-fit sessions make genuine alternatives the priority: qualify observed Surf acquisition alongside owned evolution, check funding/two remaining balls, retain field receipts and measure planning overhead. Allow 60–90 minutes for one access/choice qualification, not full collection. Stone procurement remains unfinished. Capture/resume stays 1/3, not a project-completion percentage.
 
 ## How to stay focused
 
@@ -34,4 +34,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-owned-evolution-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-10-cut-collection-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
