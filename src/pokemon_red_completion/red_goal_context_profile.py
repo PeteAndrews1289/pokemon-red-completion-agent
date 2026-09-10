@@ -205,6 +205,23 @@ def bind_capture_access_requirements_profile(
     ))
 
 
+def bind_travel_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Prospective capture during acquisition travel; old menus remain unchanged."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
+            parameters["travel_capture"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("travel capture needs a capture objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_observed_local_capture_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Opt current-map capture into observed reachable lanes, preserving old profiles."""
     providers = []
@@ -769,6 +786,11 @@ def _parse_parameters(
             ):
                 raise RedGoalContextProfileError("indoor departure requires capture Fly transport")
             required.add("indoor_fly_departure")
+        if "travel_capture" in row:
+            if (mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+                    or type(row["travel_capture"]) is not bool):
+                raise RedGoalContextProfileError("travel capture must be a capture boolean")
+            required.add("travel_capture")
         if "observed_local_capture" in row:
             if (
                 mechanic is not RedGoalMechanic.WILD_CORRIDOR_CAPTURE
@@ -851,6 +873,8 @@ def _parse_parameters(
             parsed["fly_transport"] = row["fly_transport"]
         if "indoor_fly_departure" in row:
             parsed["indoor_fly_departure"] = row["indoor_fly_departure"]
+        if "travel_capture" in row:
+            parsed["travel_capture"] = row["travel_capture"]
         if "observed_local_capture" in row:
             parsed["observed_local_capture"] = row["observed_local_capture"]
         if "capture_access_requirements" in row:

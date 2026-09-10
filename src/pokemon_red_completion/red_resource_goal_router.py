@@ -196,6 +196,11 @@ class RedResourceGoalRouter:
                 interruption_handler = guarded_collection_route_handler(
                     self.actions, self.runtime.reader, route_name="guarded resource-goal transport",
                 )
+            from pokemon_red_completion.red_travel_capture_runtime import (
+                bind_travel_capture_destination,
+                bind_travel_capture_handler,
+            )
+            interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
             transport = RedSemanticTransportRoute(
                 binding_ref=f"red-resource-route:{spec.configuration_sha256}",
                 origin_observation_sha256=origin,
@@ -235,6 +240,9 @@ class RedResourceGoalRouter:
                 destination_provider = EscortPreparedCaptureProvider(
                     provider, self.runtime, self.actions,
                 )
+            destination_provider = bind_travel_capture_destination(
+                self, spec, destination_provider, provider, observation, [interruption_handler],
+            )
             destination = RedFreshGoalDestinationBinder(
                 kind=spec.kind,
                 boundary=transport.terminal_boundary,

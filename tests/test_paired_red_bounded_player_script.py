@@ -41,6 +41,22 @@ def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
     assert derive(before, ('capture-fly',), object()) == (old,)
 
 
+def test_travel_capture_transition_preserves_prior_profile_and_requires_registration(monkeypatch):
+    from test_red_living_dex_wild_corridor import _local_discovery_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module['_regional_profiles']
+    monkeypatch.setitem(derive.__globals__, '_route_world', lambda _: object())
+    before = _local_discovery_profile()
+    with pytest.raises(module['PairedRedBoundedPlayerRunError'], match='registered_objective'):
+        derive(before, ('travel-capture',), object())
+    old, new = derive(before, ('capture-fly', 'travel-capture'), object(),
+                      allow_cartridge_sources=True)
+    assert 'travel_capture' not in old.providers[0].parameters
+    assert new.providers[0].parameters['travel_capture'] is True
+    assert derive(before, ('capture-fly',), object()) == (old,)
+
+
 def test_indoor_departure_is_an_ordered_prospective_profile_transition(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
 

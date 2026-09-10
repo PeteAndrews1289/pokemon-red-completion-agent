@@ -163,6 +163,8 @@ def bind_indoor_collection_departure(
     meter = RedRoutedSemanticBudgetMeter(actions, runtime.emulator)
     started: list[RoutedSemanticBudgetCheckpoint] = []
 
+    from pokemon_red_completion.red_travel_capture_runtime import bind_travel_capture_handler
+
     transport = RedSemanticTransportRoute(
         binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
         origin_observation_sha256=origin,
@@ -176,8 +178,10 @@ def bind_indoor_collection_departure(
         actions=actions,
         traversal_observer=traversal,
         emulator=runtime.emulator,
-        interruption_handler=guarded_collection_route_handler(
-            actions, reader, route_name="indoor collection departure"
+        interruption_handler=bind_travel_capture_handler(
+            router, spec, guarded_collection_route_handler(
+                actions, reader, route_name="indoor collection departure",
+            ),
         ),
         replanner=router._replan,
         route_limits=_ROUTE_LIMITS,

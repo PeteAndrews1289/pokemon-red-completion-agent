@@ -85,6 +85,7 @@ class RegisteredTravelCaptureHandler:
     maximum_capture_frames: int = 120_000
     attempted: bool = field(default=False, init=False)
     receipts: list[dict[str, object]] = field(default_factory=list, init=False)
+    verified_collection: CollectionObservation | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         for value in (self.maximum_capture_actions, self.maximum_capture_frames):
@@ -225,6 +226,7 @@ class RegisteredTravelCaptureHandler:
             "destination_changed": False,
             "learned_encounter_choice": False,
         }
+        self.verified_collection = after
         self.receipts.append(detail)
         return InterruptionReceipt(
             kind="wild_battle",

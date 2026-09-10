@@ -44,6 +44,50 @@ class RecordingController:
         return 0xA5
 
 
+def test_nested_frame_deadlines_do_not_reset_or_widen_outer_limits():
+    raw = RecordingController()
+    controller = WindowedFrameBudgetController(
+        raw, maximum_frames_per_window=100, maximum_total_frames=100,
+    )
+    controller.tick(7)
+    with controller.limit_additional_frames(5):
+        controller.tick(3)
+        controller.begin_window()
+        with controller.limit_additional_frames(50):
+            controller.tick(2)
+            with pytest.raises(ControllerFrameBudgetExhausted):
+                controller.tick(1)
+        assert raw.frame_count == 12
+    controller.tick(1)
+    assert raw.frame_count == 13
+    assert controller.frames_executed == 13
+
+
+def test_nested_frame_deadline_restores_scope_after_exception_without_refund():
+    raw = RecordingController()
+    controller = WindowedFrameBudgetController(
+        raw, maximum_frames_per_window=6, maximum_total_frames=6,
+    )
+    with pytest.raises(RuntimeError, match="capture failed"), controller.limit_additional_frames(2):
+        controller.tick(2)
+        raise RuntimeError("capture failed")
+    controller.tick(4)
+    with pytest.raises(ControllerFrameBudgetExhausted), controller.limit_additional_frames(100):
+        controller.tick(1)
+    assert raw.frame_count == 6
+
+
+@pytest.mark.parametrize("limit", [0, -1, True, 1.5])
+def test_nested_frame_deadline_rejects_invalid_limits(limit):
+    raw = RecordingController()
+    controller = WindowedFrameBudgetController(
+        raw, maximum_frames_per_window=10, maximum_total_frames=10,
+    )
+    with pytest.raises(ValueError), controller.limit_additional_frames(limit):
+        pytest.fail("invalid scope entered")
+    assert raw.frame_count == 0
+
+
 def test_executor_applies_declared_press_and_release_timing() -> None:
     controller = RecordingController()
     executor = FrameSafeExecutor(

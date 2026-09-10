@@ -608,6 +608,10 @@ def _parser() -> argparse.ArgumentParser:
         help="prospective item prerequisites for capture destinations",
     )
     parser.add_argument(
+        "--travel-capture", dest="regional_transitions", action="append_const",
+        const="travel-capture", help="prospective registered capture during acquisition travel",
+    )
+    parser.add_argument(
         "--observed-local-capture",
         dest="regional_transitions",
         action="append_const",
@@ -1538,6 +1542,7 @@ def _regional_profiles(
                 "capture-fly",
                 "indoor-fly-departure",
                 "observed-local-capture",
+                "travel-capture",
                 "capture-access-requirements",
                 "affordable-capture-supply",
                 "cartridge-trainer-story",
@@ -1593,6 +1598,14 @@ def _regional_profiles(
             )
 
             profile = bind_capture_access_requirements_profile(profile)
+            result.append(profile)
+            continue
+        if source == "travel-capture":
+            from pokemon_red_completion.red_goal_context_profile import bind_travel_capture_profile
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError("travel_capture_requires_registered_objective")
+            profile = bind_travel_capture_profile(profile)
             result.append(profile)
             continue
         if source == "observed-local-capture":

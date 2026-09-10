@@ -98,6 +98,13 @@ def bind_collection_fly(
     from pokemon_red_completion.observation import MapId
     from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS, _walking_plan
     from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
+    from pokemon_red_completion.red_travel_capture_runtime import (
+        bind_travel_capture_destination,
+        bind_travel_capture_handler,
+    )
+    from pokemon_red_completion.route_executor import InterruptionHandler
+
+    travel_handlers: list[InterruptionHandler] = []
 
     if (
         spec.mechanic not in {
@@ -228,6 +235,10 @@ def bind_collection_fly(
             or after_fly.emulator_frames - before.emulator_frames >= router.maximum_emulator_frames
         ):
             raise Gen1FieldMoveError("Fly exhausted the collection transport budget")
+        travel_handler = bind_travel_capture_handler(router, spec, guarded_collection_route_handler(
+            actions, reader, route_name="collection Fly onward walk",
+        ))
+        travel_handlers.append(travel_handler)
         walk = RedSemanticTransportRoute(
             binding_ref="red-collection-fly-walk:" + spec.configuration_sha256,
             origin_observation_sha256=actual.observation_sha256,
@@ -241,9 +252,7 @@ def bind_collection_fly(
             actions=actions,
             traversal_observer=traversal,
             emulator=runtime.emulator,
-            interruption_handler=guarded_collection_route_handler(
-                actions, reader, route_name="collection Fly onward walk"
-            ),
+            interruption_handler=travel_handler,
             replanner=router._replan,
             route_limits=_ROUTE_LIMITS,
         )
@@ -285,6 +294,9 @@ def bind_collection_fly(
         from pokemon_red_completion.red_capture_preparation import EscortPreparedCaptureProvider
 
         destination_provider = EscortPreparedCaptureProvider(provider, runtime, actions)
+    destination_provider = bind_travel_capture_destination(
+        router, spec, destination_provider, provider, fresh.observation, travel_handlers,
+    )
     binding = RoutedSemanticGoalComposer(
         binding_ref="red-collection-fly-goal:" + origin + ":" + spec.configuration_sha256,
         destination_kind=spec.kind,

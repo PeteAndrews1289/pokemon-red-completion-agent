@@ -179,6 +179,8 @@ def retarget_red_wild_profile(
                 derived["fly_transport"] = parameters["fly_transport"]
             if "indoor_fly_departure" in parameters:
                 derived["indoor_fly_departure"] = parameters["indoor_fly_departure"]
+            if "travel_capture" in parameters:
+                derived["travel_capture"] = parameters["travel_capture"]
             if "observed_local_capture" in parameters:
                 derived["observed_local_capture"] = parameters["observed_local_capture"]
             if "capture_access_requirements" in parameters:
