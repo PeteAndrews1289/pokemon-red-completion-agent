@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Three actual choices fitted: indoor capture, healing and resupply. Forced safety supply excluded.",
+        "authority_delta": "Four actual choices fitted: new evolution, trainer income, ball purchase and needed healing.",
         "blocker": "Low remaining funds and incomplete item/puzzle support limit sustained collection.",
         "decision": "Continue the working collector from actual resources; keep unqualified stone draft isolated.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-supported-learning-2026-09-10.json",
-          "sha256": "d34b47869d7c321ff5b6be1025ccbd7647bd558d77d23cdc216f6569c3ab7875"
+          "path": "docs/evidence/red-registered-evolution-income-learning-2026-09-10.json",
+          "sha256": "79b1447c3d5845c74ee3e5ad405370368aa0783f4a66d58354e088f9f64d8041"
         },
-        "learning_output": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
+        "learning_output": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
         "next_falsifier": "Actual retained endpoint offers supported collection or legitimate recovery without invented resources.",
-        "next_session_goal": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.",
+        "next_session_goal": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-supported-collection",
+        "session_id": "2026-09-10-capture-to-evolution",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Actual latest checkpoint restores with zero input; no independent or cross-title result."
       },
       "learned_authority": {
-        "current": "Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.",
+        "current": "Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Authenticate model31 at its actual Mart endpoint and continue supported collection/evolution with legitimate resource recovery. Keep incomplete stone support isolated; no consumed retry, resource reset, sealed evaluation or Crystal.",
+      "next_decision": "Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 31,
+        "registered_train_examples": 35,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

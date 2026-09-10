@@ -1,3 +1,14 @@
+# Current —53 registrations, model35 retained
+
+Four successful fitted choices: model35,53 registrations,47 specimens. The model chose Machop-to-Machoke evolution, earned900 money, bought one ball and healed real damage. 17180 actions /1428520 frames;6 balls and548 money retained. No reset or duplicate trial.
+
+Next: Authenticate model35 and continue up to8 bounded steps/40minutes of supported collection, evolution and lawful resource recovery. No forced destination, consumed retry, resource reset, sealed evaluation or Crystal. Keep unqualified stone support isolated.
+
+The actor chooses goals and destinations; deterministic skills still execute mechanics. Historical114 remains separate. No learned combat, independent reliability or transfer claim.
+[Session and next step](work-sessions/2026-09-10-capture-to-evolution.md).
+
+## Prior checkpoints
+
 # Current —52 registrations, model31 retained
 
 Four successful steps /three fitted choices: model31,52 registrations,47 specimens. Legitimate supplies, model-selected Machop capture in RockTunnelB1F, healing and resupply. 2272 actions /93109 frames;5 balls and248 money retained. Forced recovery was not fitted.
