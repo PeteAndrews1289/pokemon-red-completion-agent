@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Fresh observed outcomes only; capture preparation remains deterministic.",
-        "blocker": "Collection yield and broader capture/evolution coverage remain unqualified.",
-        "decision": "Resource recovery verified; inspect actual pre-throw condition before changing tactics.",
+        "authority_delta": "Stock-derived evolution is offered alongside capture; the model chooses goal kinds, while target shortlisting and mechanics remain deterministic.",
+        "blocker": "Native three-plus-copy evolution and broader mechanics remain unsupported; no independent generalization claim.",
+        "decision": "Retain the verified stock-derived evolution and capture loop; broaden the specific remaining mechanic boundary rather than add manual species routes.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json",
-          "sha256": "e37350c84197a023ce4d28b4edb5008cb6ebfd541de92cd7956b07eaab354cef"
+          "path": "docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json",
+          "sha256": "00ec0014d76c60b897da261a5488aa125575578cdfe38ca96400b05f56de6022"
         },
-        "learning_output": "4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.",
+        "learning_output": "4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.",
         "next_falsifier": "A useful option produces verified novelty or a diagnosed settled failure.",
-        "next_session_goal": "Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts.",
+        "next_session_goal": "Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-capture-efficiency",
+        "session_id": "2026-09-10-owned-evolution-options",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "ROM-free status-expiration and observation-persistence tests; no title transfer."
+        "transfer_result": "ROM-free changed stock, registration, reserve, level-cap and continuation tests; no title transfer."
       },
       "learned_authority": {
-        "current": "4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.",
+        "current": "4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts.",
+      "next_decision": "Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 15,
+        "registered_train_examples": 19,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

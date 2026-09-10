@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts.
+- Next decision: Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat. |
+| Authority now | 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 15 | 12 |
+| Registered Train Example · train | 19 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,17 +59,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-capture-efficiency** · status **active** · evidence [registered train example](docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json)
+**2026-09-10-owned-evolution-options** · status **active** · evidence [registered train example](docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat. |
-| Authority delta | Fresh observed outcomes only; capture preparation remains deterministic. |
-| Transfer result | ROM-free status-expiration and observation-persistence tests; no title transfer. |
-| Blocker | Collection yield and broader capture/evolution coverage remain unqualified. |
-| Decision | Resource recovery verified; inspect actual pre-throw condition before changing tactics. |
-| Next session | Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts. |
+| Learning output | 4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat. |
+| Authority delta | Stock-derived evolution is offered alongside capture; the model chooses goal kinds, while target shortlisting and mechanics remain deterministic. |
+| Transfer result | ROM-free changed stock, registration, reserve, level-cap and continuation tests; no title transfer. |
+| Blocker | Native three-plus-copy evolution and broader mechanics remain unsupported; no independent generalization claim. |
+| Decision | Retain the verified stock-derived evolution and capture loop; broaden the specific remaining mechanic boundary rather than add manual species routes. |
+| Next session | Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset. |
 | Next falsifier | A useful option produces verified novelty or a diagnosed settled failure. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

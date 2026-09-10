@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-capture-efficiency**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-owned-evolution-options**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Connect shared registered completion: 3/3 acceptance items (100%).**
+**Broaden owned-evolution coverage: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify shared registration memory ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
-- [x] Migrate collection and evolution goals ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
-- [x] Measure a registered-objective lesson ([evidence](../docs/evidence/red-registered-live-learning-2026-09-09.json))
+- [ ] Qualify native three-plus-copy stock
+- [ ] Verify reserves and unchanged legacy guards
+- [ ] Retain a model-selected expanded-stock lesson
 
-Current model: **15 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **19 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-owned-evolution-options
+
+4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.
+
+**Deviation:** No stage-exit change. Connected existing stock inventory and native evolution to the learning loop; target shortlisting is disclosed deterministic support.
+
+**Next:** Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.
 
 ### 2026-09-10-capture-efficiency
 

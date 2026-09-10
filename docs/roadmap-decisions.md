@@ -1,5 +1,23 @@
 # Roadmap baseline and deviations
 
+## September10 — advance the completed integration checklist
+
+Shared-registration integration completed its three acceptance items: memory,
+runtime migration and a registered-objective lesson. Its [original evidence](
+evidence/red-registered-live-learning-2026-09-09.json) remains unchanged. The
+[owned-evolution session](work-sessions/2026-09-10-owned-evolution-options.md)
+then produced four fresh fits and three new registrations through capture and
+evolution, with one failed search retained.
+
+Advance the current infographic checklist to **broader owned-evolution coverage**:
+explicit native stock qualification, reserve/legacy safety tests, and one verified
+model-selected expanded-stock lesson. These new items begin0/3; that percentage
+describes only the new checklist. Phase5 remains current, its exit criterion and
+the long-term roadmap remain unchanged, and no completed work is discarded.
+This prevents the old integration checklist's100% from implying collection or
+phase completion. Multi-copy support and learned evolution-target ranking are
+not claimed as completed.
+
 ## September9 — explicit registered-only scope revision
 
 Pete replaced simultaneous living-form completion and level100 grinding with

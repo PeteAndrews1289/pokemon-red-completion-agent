@@ -1,3 +1,25 @@
+# Current — model-directed capture and owned evolution
+
+4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.
+
+The loop derives missing level evolutions from actual party/box stock and the cartridge
+rules, qualifies native execution without input, then offers evolution beside capture.
+The model chose and completed Venonat-to-Venomoth, retained its original registration,
+and subsequently captured Ditto. No simultaneous living-form or arbitrary level quota
+was restored. Target shortlisting and controller mechanics remain deterministic.
+
+Next: Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset.
+
+Codex owns integration, execution and outcome verification. Flash drafted the isolated
+priority helper/tests; Codex corrected the fixture, removed unused aliases and added
+runtime/continuation guards. A separate read-only review concerns the historical
+one/two-copy adapter limitation; no proposed extension is counted as implemented.
+Claude was not used. No held-out reliability, new combat authority or title transfer is claimed.
+
+[Session, actual outcomes and continuation](work-sessions/2026-09-10-owned-evolution-options.md).
+
+## Historical checkpoints below — superseded where inconsistent
+
 # Current — resource recovery and capture diagnostics
 
 4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.

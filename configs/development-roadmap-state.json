@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-capture-efficiency",
+  "as_of_session": "2026-09-10-owned-evolution-options",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-capture-efficiency-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-registered-owned-evolution-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Connect shared registered completion",
+    "title": "Broaden owned-evolution coverage",
     "items": [
       {
-        "id": "registered-ledger",
-        "label": "Verify shared registration memory",
-        "done": true,
-        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
+        "id": "native-stock-contract",
+        "label": "Qualify native three-plus-copy stock",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "registered-runtime",
-        "label": "Migrate collection and evolution goals",
-        "done": true,
-        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
+        "id": "native-stock-safety",
+        "label": "Verify reserves and unchanged legacy guards",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "registered-lesson",
-        "label": "Measure a registered-objective lesson",
-        "done": true,
-        "evidence": "docs/evidence/red-registered-live-learning-2026-09-09.json"
+        "id": "native-stock-lesson",
+        "label": "Retain a model-selected expanded-stock lesson",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -648,6 +648,12 @@
       "result": "4 fresh steps /3 fits; registered examples12 to15. 1 new registrations; 41 registered /45 specimens. 1,316 actions /58,824 frames. Bounded development learning, not independent reliability or learned combat.",
       "deviation": "No stage-exit change. Added pre-throw diagnostics instead of assuming weakening is safe or failures are ordinary variance.",
       "next": "Expose useful capture and evolution alternatives from actual stock and the cartridge graph, then run a short model15 continuation with measured costs. Keep pre-throw diagnostics and the utility review; do not force weakening, alter historical rewards or replay consumed attempts."
+    },
+    {
+      "session": "2026-09-10-owned-evolution-options",
+      "result": "4 fresh steps /4 fits; registered examples15 to19. 3 new registrations; 44 registered /46 specimens. 22,276 actions /1,834,065 frames. Bounded development learning, not independent reliability or learned combat.",
+      "deviation": "No stage-exit change. Connected existing stock inventory and native evolution to the learning loop; target shortlisting is disclosed deterministic support.",
+      "next": "Use the verified capture/evolution loop to broaden native evolution beyond the old one/two-copy experiment adapter. Retain the latest actual checkpoint and fit, expose real supported alternatives, and compare measured collection yield and costs. No historical reward relabeling, consumed replay, Crystal execution or full-game reset."
     }
   ],
   "closed_milestones": [
