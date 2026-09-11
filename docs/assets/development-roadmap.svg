@@ -7,7 +7,7 @@
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a registered Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">68 goal-value examples  /  Checkpoint-based Red story: verified</text>
+<text x="50" y="215" class="small">69 goal-value examples  /  Checkpoint-based Red story: verified</text>
 <rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Make useful earning and spending choices</text>
@@ -92,9 +92,9 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-11-funding-route-failure</text>
-<text x="50" y="1767" class="body">AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new</text>
-<text x="50" y="1792" class="body">registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one</text>
-<text x="50" y="1817" class="body">GreatBall,full HP;64registrations/54specimens unchanged.</text>
+<text x="50" y="1732" class="small muted">2026-09-11-collection-resource-exhaustion</text>
+<text x="50" y="1767" class="body">AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration.</text>
+<text x="50" y="1792" class="body">It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples.</text>
+<text x="50" y="1817" class="body">Cash568,64registrations and54specimens remain; party HP costs are retained.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

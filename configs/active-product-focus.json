@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One actual negative funding-choice outcome fitted; no successful income, collection gain or authority promotion.",
-        "blocker": "AU failed on a remote outdoor obstacle. Current-map observation now finds a different route, but its completion is unverified.",
-        "decision": "Use the already-qualified changed-state route with the new model; no new route patch or earlier restore.",
+        "authority_delta": "One additional actual negative acquisition outcome fitted; no collection gain or authority promotion.",
+        "blocker": "No balls remain at the retained cave endpoint. Funding was offered but not selected; its corrected route remains untested.",
+        "decision": "Qualify resources from the actual cave state before another collection attempt.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-funding-route-failure-learning-2026-09-11.json",
-          "sha256": "2d118bf1ab024ea0af0cb06d732479fcec72450e37f6406c310adc1ad8e7746a"
+          "path": "docs/evidence/red-collection-resource-exhaustion-2026-09-11.json",
+          "sha256": "b18e67d7d41100a55e82448357280f34c28f530360c7b6c31b100277db75924e"
         },
-        "learning_output": "AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.",
-        "next_falsifier": "A changed-state candidate must not reuse the exact failed outdoor edge.",
-        "next_session_goal": "Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.",
+        "learning_output": "AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.",
+        "next_falsifier": "No legitimate replenishment/recovery option from the retained endpoint.",
+        "next_session_goal": "Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-funding-route-failure",
+        "session_id": "2026-09-11-collection-resource-exhaustion",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.",
+        "current": "AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.",
+      "next_decision": "Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 68,
+        "registered_train_examples": 69,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

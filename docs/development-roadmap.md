@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funding-route-failure**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-collection-resource-exhaustion**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json))
 - [ ] Turn replenishment into new registration
 
-Current model: **68 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **69 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-collection-resource-exhaustion-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-collection-resource-exhaustion
+
+AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
+
+**Deviation:** Resource checklist remains1/3. The next failed collection outcome adds feedback, not useful earning competence or registration progress.
+
+**Next:** Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
 
 ### 2026-09-11-funding-route-failure
 

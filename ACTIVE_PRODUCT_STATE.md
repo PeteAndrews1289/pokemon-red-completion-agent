@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
+- Next decision: Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged. |
+| Authority now | AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 68 | 12 |
+| Registered Train Example · train | 69 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-funding-route-failure** · status **active** · evidence [registered train example](docs/evidence/red-funding-route-failure-learning-2026-09-11.json)
+**2026-09-11-collection-resource-exhaustion** · status **active** · evidence [registered train example](docs/evidence/red-collection-resource-exhaustion-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged. |
-| Authority delta | One actual negative funding-choice outcome fitted; no successful income, collection gain or authority promotion. |
+| Learning output | AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained. |
+| Authority delta | One additional actual negative acquisition outcome fitted; no collection gain or authority promotion. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | AU failed on a remote outdoor obstacle. Current-map observation now finds a different route, but its completion is unverified. |
-| Decision | Use the already-qualified changed-state route with the new model; no new route patch or earlier restore. |
-| Next session | Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs. |
-| Next falsifier | A changed-state candidate must not reuse the exact failed outdoor edge. |
+| Blocker | No balls remain at the retained cave endpoint. Funding was offered but not selected; its corrected route remains untested. |
+| Decision | Qualify resources from the actual cave state before another collection attempt. |
+| Next session | Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success. |
+| Next falsifier | No legitimate replenishment/recovery option from the retained endpoint. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

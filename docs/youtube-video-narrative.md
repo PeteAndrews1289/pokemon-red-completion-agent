@@ -93,3 +93,10 @@ funding, leaving the shop, then stopping at a blocked outdoor movement. Caption:
 zero income,one retained failed outcome,67→68 examples. The safety stop protects
 the save; the refit does not mean the system learned a successful earning strategy.
 Continue from that outdoor position, never edit away the failure by replaying the shop.
+
+
+In [the next collection attempt](work-sessions/2026-09-11-collection-resource-exhaustion.md), show the learner
+choosing acquisition over funding, traveling to Seafoam, and using its final ball
+without a new registration. Caption:68→69 actual examples;64registrations unchanged.
+Learning from a failure is real feedback, but not yet evidence of successful learning.
+The save keeps the spent ball and HP cost; the next task is legitimate replenishment.

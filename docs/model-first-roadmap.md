@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
+AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
 
-Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
+Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
 
 Previous funded-lesson checklist3/3 is archived. Current checklist1/3 retains a negative resource-choice fit; distinct earn/buy options and new registration remain unverified. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 

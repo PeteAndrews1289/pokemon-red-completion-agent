@@ -2,8 +2,8 @@
 
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and [roles](../AGENT_COORDINATION.md).
 
-AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
+AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
 
-Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
+Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
 
 Flash's core draft and new declared-Mart helper/tests are complete and integrated with Codex repairs.240focused tests pass; no new game result yet. Claude's contract review is adjudicated in the [core report](work-sessions/2026-09-11-resource-variant-core.md). No external task remains running. Codex owns read-only qualification and exact AT continuation. No duplicate broad audits; private files stay inaccessible to external agents.

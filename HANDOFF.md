@@ -4,46 +4,43 @@ Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_S
 and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
 and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AU01
+## Latest verified endpoint: AV01
 
-AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
+AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
 
-- Episode: `red-mart-funding-20260911-au-01-causal`
-- Checkpoint: `6370f173681deb9734a0c9909e3cf1a1e5a608ea3bf23c3fdbf8954f6ddb042a`
-- Manifest: `70ac71eec1db7b5c68a62c58623c294bd42ccbe9adc6d8733d846b5871d91c08`
-- State: `09b1593b9000f1c57def0a8e4fadacd89def4d706cc3c6fa1269da0777814f7e`
-- Played source: `02a7099e5a5dc52856218114e4b6803ec0fbcac3`
-- Current model: `172304eccc87c3e967405f8a6c6c9a92a301edc445a72c006420ba1e9810e993`
-- Model file: `9bae3e49fdbd7a311e1872ba18017d275dfcebef36bc0d944307dd4fed25cbe0`
-- Corpus: `41ffb043dbabc72e21b28a5566776f676f3a8d48c885c815844907142ba7f7b6`
+- Episode: `red-outdoor-continuation-20260911-av-01-causal`
+- Checkpoint: `b8234668caf56f7de02e08a3a71fae0e26b96004d63fc1804ead147e5a395a40`
+- Manifest: `072e2e527726e01bbd1fae939da99292eccc02d87a289ca364d0dc31eabe1fc0`
+- State: `bffe0c165b720d5695b58cf22d48985f74f6ae34bc6f48d9f5ac1a5c542306d6`
+- Played source: `4dd0b6a4b6ccbffe28310d608a265af5d3ff54b3`
+- Current model: `1cb6c73a1f5459ccc77a6129d3a49ef25d0f539f301750cc6e50ab9c46e75dd5`
+- Model file: `398efe1738888aef59828542bc2bcedbf409c914cb705205a81b3e5e8ef5618a`
+- Corpus: `a16965d22934713b0be263c04343149b45fc7fc369fe8c4c8dfe940fed01af07`
 
-Map7,row12,column13,input-ready,battle0; HP249/118/146/88/92/73.
-The eight-attempt movement guard stopped right at this position. No trainer battle,
-income, ball expenditure or specimen loss. All failed actions remain in the journal.
-The three-goal AU batch stopped after one in520.673seconds; AU is consumed.
-The exact terminal and replay were independently audited without controller input.
+Map162,row9,column8,input-ready,battle0; HP239/118/146/88/92/37.
+The three-goal batch stopped after one in533.832seconds; AV is consumed.
+Audit reopened the exact saved state and verified journal admission with zero input.
+The runtime reports binding_failed; no component exception stream was present.
+The ball expenditure and failed registration are verified; do not invent a more
+specific exception. AU's corrected funding route was not executed: acquisition won.
 
 ## Next bounded work
 
-Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
+Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
 
-Use private `inspect_au_outdoor_corrected_20260911.arguments()` as a builder only.
-It retains AT and AU plus the actual `warp-safe:wild:SeafoamIslandsB2F:grass` and
-matching discovery profile selected in AU's regional proposal. That source was a
-binding proposal, not a fitted destination outcome: funding was actually selected.
-The first AU inspection omitted those transitions and failed checkpoint/profile
-admission without gameplay. Its separate corrected inspection preserves the error
-and exact ancestry; never weaken the guard to admit a guessed profile.
+Private `inspect_av_resources_20260911.arguments()` is the current builder.
+It appends actual AV and its warp-safe/discovery SeafoamB4F source transitions to
+the existing AU lineage. Its main is a one-time action-free qualification, not play.
+Qualification completed without input: no funding candidate, but one ready
+RESTORE_TEAM bridge exists. Use that legitimate recovery from AV before seeking
+supplies; a forced bridge is zero-label support. Never rerun a consumed main.
+The source proposal itself was not fitted: the actual native goal outcome was.
 
-The corrected action-free result finds one122-step funding route from the current
-Fuchsia observation. It starts down and avoids the exact failed edge, without a
-code change. That is route qualification, not execution success. No
-arbitrary expanded map radius, HMs, full replay, sealed Red or Crystal.
-
-Resource checklist1/3: an actual negative resource-choice fit exists. Distinct
-earn/buy offers and a new registration after replenishment remain unverified.
-This is not successful money-making or generalization. Gameplay stopped.
-Overnight cutoff07:07EDT. [AU report](docs/work-sessions/2026-09-11-funding-route-failure.md).
+Resource checklist remains1/3 from AU's negative funding-choice fit.
+Earn/buy alternatives and new registration after replenishment remain unverified.
+Gameplay is stopped; the next bounded recovery is qualified, not yet successful.
+Overnight cutoff07:07EDT.
+[AV report](docs/work-sessions/2026-09-11-collection-resource-exhaustion.md).
 
 ## Engineering and external review
 
