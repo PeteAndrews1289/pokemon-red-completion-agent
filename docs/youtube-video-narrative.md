@@ -131,3 +131,5 @@ The next engineering question is supply endurance, not how to hide that failure.
 
 
 For [the earn-buy-Staryu sequence](work-sessions/2026-09-11-resource-cycle-and-staryu.md), show the actual choice reversal: earn315 at1,053money, then buy two balls at1,368. The source model chooses SeafoamB2F from six areas. Staryu is registered during travel, but the full survey fails with zero balls left. Display68registrations and82examples together with the failed label; do not edit this into a clean success montage.
+
+Then show [the faster BQ sequence](work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md) as a compact three-beat payoff: the model chooses to earn700, chooses to spend600 on one ball and receives a six-source regional menu. Be explicit that SeafoamB4F scored highest while a declared25% exploration policy sampled SeafoamB1F. Cut to Surf travel, paralysis support and the verified Horsea registration. End the beat on69registrations,90fitted examples,543money and three balls. The model chose the goals and source; deterministic skills still performed the buttons, routing and capture.

@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Two native economy outcomes and one regional destination outcome were fitted. One durable registration was gained; no authority promotion or evaluation occurred.",
-        "blocker": "The authenticated BK save has168money and zero balls. Legitimate trainer income must restore useful capture stock before another acquisition.",
-        "decision": "Preserve BI's partial gain and failed label. BK authenticated the source ancestry and restored the team without a training label; continue from that exact save.",
+        "authority_delta": "Three actual outcomes were fitted: model-selected earning, model-selected purchasing and one six-way regional source choice. Horsea was registered; no authority promotion or independent evaluation occurred.",
+        "blocker": "A fresh regional inventory still scans51 cartridge encounter maps and measured252.24seconds. It now runs once per step, but dominates the learning loop's wall time.",
+        "decision": "Retain BQ's complete earn-buy-capture sequence and exact terminal resources. Optimize only cartridge-static route/source work while recomputing live feasibility before the next bounded collection episode.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json",
-          "sha256": "36b32a60a13eee6748b941f4dea51f79a3522c2a0531b8bf9948ffd59d40a048"
+          "path": "docs/evidence/red-bq-horsea-learning-2026-09-11.json",
+          "sha256": "09bfd4e6afa260d391dd9bddbd3e2130951278c365bc49a7e46abc4dbde2258c"
         },
-        "learning_output": "After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.",
-        "next_falsifier": "The retained failed endpoint cannot authenticate safely, or available income cannot restore useful capture stock without a reset.",
-        "next_session_goal": "Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.",
+        "learning_output": "BQ completed all three bounded steps: the model chose to earn700, then spend600 on one ball, then explored SeafoamB1F from six regional sources. Deterministic mechanics used Surf and paralysis support to register Horsea. The audited model advanced87 to90examples and the collection68 to69registrations, ending with543money, three balls and a full-HP party.",
+        "next_falsifier": "Caching cartridge-static source data changes the candidate menu, ordering or hash, or stale route information bypasses a live blocker or resource requirement.",
+        "next_session_goal": "Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. First reduce the remaining51-source route-inventory cost without caching live feasibility; then resume bounded model-selected acquisition or evolution. Do not replay BQ, enter Crystal, or claim fresh-game autonomy.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-resource-cycle-and-staryu",
+        "session_id": "2026-09-11-horsea-capture-and-loop-speedup",
         "status": "active",
-        "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
+        "stop_condition": "No stale route reuse, hidden retry, invented candidate, lost terminal cost or deterministic support counted as learned authority.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.",
+        "current": "BQ completed three actual fitted choices: earn700, buy one ball for600 and select one of six regional sources. The explored SeafoamB1F route registered Horsea; model90 and all retained resources were independently audited.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.",
+      "next_decision": "Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. Reduce cartridge-static route-inventory cost while preserving fresh live feasibility, then resume bounded model-selected collection. Do not replay BQ or claim fresh-game autonomy.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 82,
+        "registered_train_examples": 90,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

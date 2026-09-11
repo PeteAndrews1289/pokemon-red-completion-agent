@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-cycle-and-staryu**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-horsea-capture-and-loop-speedup**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Make useful earning and spending choices: 3/3 acceptance items (100%).**
+**Sustain collection without duplicate planning: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Preserve distinct earn and buy options ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
-- [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
-- [x] Turn replenishment into new registration ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
+- [x] Reuse authenticated step readiness ([evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json))
+- [x] Reuse one regional inventory per step ([evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json))
+- [ ] Reduce fresh 51-source route scan
 
-Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **90 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-horsea-capture-and-loop-speedup
+
+Two execution-path repairs removed duplicate authenticated preparation and duplicate regional inventory within each bounded step. BQ then completed three fitted choices: earn700, buy one ball for600 and select one of six regional sources. Exploration chose SeafoamB1F, where deterministic mechanics registered Horsea. Model87 to90; registrations68 to69; ending543money, three balls and full party HP.
+
+**Deviation:** No stage exit or authority promotion. The loop now performs one full preparation/inventory pass instead of two, but a fresh51-source route scan still measured252.24seconds and remains the main engineering bottleneck. BQ is bounded development, not fresh-game autonomy or independent evaluation.
+
+**Next:** Continue from audited BQ03/model90 at SeafoamB1F. Cache or precompute only cartridge-static source work while recomputing live blockers and resources; prove identical candidate menus and hashes, then resume bounded collection. No BQ replay, Crystal run or autonomy claim.
 
 ### 2026-09-11-resource-cycle-and-staryu
 

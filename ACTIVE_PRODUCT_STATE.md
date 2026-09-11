@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
+- Next decision: Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. Reduce cartridge-static route-inventory cost while preserving fresh live feasibility, then resume bounded model-selected collection. Do not replay BQ or claim fresh-game autonomy.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations. |
+| Authority now | BQ completed three actual fitted choices: earn700, buy one ball for600 and select one of six regional sources. The explored SeafoamB1F route registered Horsea; model90 and all retained resources were independently audited. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 82 | 12 |
+| Registered Train Example · train | 90 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-resource-cycle-and-staryu** · status **active** · evidence [registered train example](docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json)
+**2026-09-11-horsea-capture-and-loop-speedup** · status **active** · evidence [registered train example](docs/evidence/red-bq-horsea-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations. |
-| Authority delta | Two native economy outcomes and one regional destination outcome were fitted. One durable registration was gained; no authority promotion or evaluation occurred. |
+| Learning output | BQ completed all three bounded steps: the model chose to earn700, then spend600 on one ball, then explored SeafoamB1F from six regional sources. Deterministic mechanics used Surf and paralysis support to register Horsea. The audited model advanced87 to90examples and the collection68 to69registrations, ending with543money, three balls and a full-HP party. |
+| Authority delta | Three actual outcomes were fitted: model-selected earning, model-selected purchasing and one six-way regional source choice. Horsea was registered; no authority promotion or independent evaluation occurred. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | The authenticated BK save has168money and zero balls. Legitimate trainer income must restore useful capture stock before another acquisition. |
-| Decision | Preserve BI's partial gain and failed label. BK authenticated the source ancestry and restored the team without a training label; continue from that exact save. |
-| Next session | Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice. |
-| Next falsifier | The retained failed endpoint cannot authenticate safely, or available income cannot restore useful capture stock without a reset. |
-| Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
+| Blocker | A fresh regional inventory still scans51 cartridge encounter maps and measured252.24seconds. It now runs once per step, but dominates the learning loop's wall time. |
+| Decision | Retain BQ's complete earn-buy-capture sequence and exact terminal resources. Optimize only cartridge-static route/source work while recomputing live feasibility before the next bounded collection episode. |
+| Next session | Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. First reduce the remaining51-source route-inventory cost without caching live feasibility; then resume bounded model-selected acquisition or evolution. Do not replay BQ, enter Crystal, or claim fresh-game autonomy. |
+| Next falsifier | Caching cartridge-static source data changes the candidate menu, ordering or hash, or stale route information bypasses a live blocker or resource requirement. |
+| Stop condition | No stale route reuse, hidden retry, invented candidate, lost terminal cost or deterministic support counted as learned authority. |
 
 ### Stop conditions
 

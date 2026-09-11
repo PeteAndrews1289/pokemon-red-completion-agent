@@ -2,35 +2,35 @@
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest verified endpoint: BK01/model82
+## Latest verified endpoint: BQ03/model90
 
-After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
+BQ completed three consecutive model-facing decisions. The model chose to earn700, then spend600 on one ball, then choose among six regional acquisition sources. Its declared exploration policy sampled SeafoamB1F, where deterministic mechanics used Surf and verified paralysis support to register Horsea. All three outcomes succeeded and were fitted:87→90examples and68→69registrations.
 
-- Episode: `red-collection-20260911-bk-01-causal`
-- Checkpoint: `3d5172c602f6b634136e9c7f43321a66389e67d7e1c6b47cb960dd59e41e621f`
-- Manifest: `f25d3e29fdb409c190d9c469739af0d1dcecba498f31cf180b6442d27fa584bc`
-- State: `720f30e3f82e00bb01ec768944cf11a17a0b1c2cca6fe1a651a622e7f8c2cb75`
-- Played source: `d272ad06bf4428a9bf978f7cde68398b35c80017`
-- Model: `a19062fcd123788e92aafc6b2e2242aec9c8d4fc1a5d6a217a5f174113e08feb`
-- Model file: `aa80080fb9c042c92d419dfa0e9ec94d5699586b57eb61787fcf0a909d598542`
-- Corpus: `403c23cb8a2f039d631999515b4bc69ca060b02b21d62ad194ffcaf0bf9fc286`
+- Episode: `red-collection-20260911-bq-03-causal`
+- Checkpoint: `8bd9694358be28c07db2a33788010fc94f8e3330cb4391afa3fe526081b61f80`
+- Manifest: `b5a08451c50245d30bb63b06c02e595551171c1327829b8f18b6fcd80a5cf453`
+- State: `8f8019e053e929d090087efe60a10f6e605105795abe0b06d87df81976616fa8`
+- Played source: `a137457345e74edf3ace74a6f9af5426c04b5780`
+- Model: `b5df2b4e73be7255de8d6c4c18c05198fd79144df80cacc514e01b5a1fee2f37`
+- Model file: `7eeec8c2874fe1c2cdae9019aa108c8f11a84863b2e910cf4ba45ec6d60ee461`
+- Corpus: `2c7aea2d21a4e1288bc54c55c316c068d6150577eb858a69916c45c641aa2668`
 
-Vermilion Center map89,row3,column3,input-ready,battle0;168money,zero balls. HP120/118/150/90/249/73.68local/global registrations,57specimens,53living species,56required registrations remain. BK01 used46actions/3,732frames, restored the team through a forced singleton, and produced no prediction, label or fit. Model82 is unchanged.
+SeafoamB1F map159,row9,column9,input-ready,battle0;543money,three balls. HP249/118/150/90/120/73.69local/global registrations,58specimens,54living species,55required registrations remain. BQ used1,018actions/60,805frames across three successful steps in1,143.875seconds. No retry, teacher fallback, sealed evaluation, Crystal access or full-game replay occurred.
 
-BI01 selected trainer income over a one-ball purchase at1,053money and earned315. BI02 then selected a two-ball purchase over another270-income option at1,368money, spending1,200. BI03 selected SeafoamB2F from six regional sources. Travel registered Staryu; the destination survey saw four further encounters, fled all four and exhausted the remaining capture stock. The full goal is failed (`world_state_diverged`), not rewritten as success. All three actual choices were fitted:79→82examples.
+BQ01 selected earning and increased cash443→1,143. BQ02 selected a one-ball purchase, changing cash1,143→543 and capture stock3→4. BQ03 ranked six regional sources; SeafoamB4F scored highest, while the declared25% exploration policy sampled SeafoamB1F. The regional choice was committed before input. Travel and capture mechanics registered national#116 Horsea and consumed one ball. All three actual outcomes were fitted.
 
 ## Continuation state
 
-BJ was a declaration-only failed preflight: ordinary continuation omitted BI03's selected-source ancestry and failed before controller input or prediction. Do not rerun BJ. BK added only `warp-safe:wild:SeafoamIslandsB2F:grass` and `discovery:wild:SeafoamIslandsB2F:grass`, authenticated BI, and completed one deterministic recovery. Its attempted second preflight stopped because documentation edits made the worktree dirty; no second prediction or gameplay occurred. Do not rerun BK. Continue from the audited BK01 checkpoint under a fresh identity after publishing the clean documentation state.
+Continue only from audited BQ03/model90. Reconstruction must preserve the complete selected-source ancestry: the prior BP continuation plus BQ01 `warp-safe`/`discovery` PowerPlant, BQ02 PowerPlant again, and BQ03 `warp-safe`/`discovery` SeafoamB1F, in executed order. Do not replay BQ or silently deduplicate those transitions.
 
-Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
+The next engineering task is input-free: reduce the fresh regional inventory cost while preserving live feasibility. A measured BQ readiness pass authenticated226 continuation episodes in39.135seconds but spent252.24seconds enumerating the regional inventory. Commits `caf87d4f` and `a1374573` already remove duplicate readiness and inventory within one step. Cache or precompute only cartridge-static work; party, inventory, blockers and route feasibility must remain live.
+
+After proving an identical candidate menu/order/hash, continue from SeafoamB1F with543money, three balls and full party HP through another bounded model-selected acquisition or evolution. No Crystal execution, sealed Red evaluation, BQ retry or fresh-game autonomy claim.
 
 ## Engineering and review
 
-Published commit `d272ad06bf4428a9bf978f7cde68398b35c80017` permits a same-boundary wild encounter while facing a funding trainer to be fled once and reverified. It does not forgive coordinate drift or retry BF02. Focused funding/failure/continuation tests passed locally; CI is informative but not a training dependency.
+Published commits `caf87d4f` and `a1374573` make the aggregate cycle pass one authenticated readiness object and one immutable regional inventory into its child runner. Focused tests verify one ancestry authentication and one inventory enumeration per prepared episode. A broad local run reached7,371passed/4skipped/1expected failure before it was intentionally stopped; three stale registry failures were regenerated and the39 registry tests then passed. The final focused set passed67 tests. CI remains informative, not a training dependency.
 
-BF01 forced Dewgong's registration,66→67, without a label. BF02 failed when a facing input triggered a wild battle; its consumed failure remains. BG recovered deterministically with zero model decisions. BH produced two selected economic/recovery outcomes,77→79. BI produced the three outcomes above. No full-game replay, sealed evaluation, Crystal run or authority promotion occurred.
+The current learner ranks high-level goals and regional sources. Deterministic code still executes routes, menus, battles, captures and recovery. It has not demonstrated fresh-game autonomy, arbitrary-seed reliability, independent learned advantage, complete Red collection, ROM-hack competence or transfer.
 
-The current learner ranks high-level goals and regional sources. Deterministic code still executes routes, menus, battles, captures and recovery. It has not demonstrated fresh-game autonomy, arbitrary-seed reliability, independent learned advantage, complete Red collection, or transfer.
-
-[Latest report](docs/work-sessions/2026-09-11-resource-cycle-and-staryu.md). Recommend **Sol High** for continuation and failure analysis; use Astra High only for a milestone architecture audit.
+[Latest report](docs/work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md). Recommend **Sol High** for continuation and performance work; use Astra High only for a milestone architecture audit.
