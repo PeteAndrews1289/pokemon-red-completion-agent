@@ -19,6 +19,7 @@ from pokemon_red_completion.goal_manager_trajectory import GoalManagerTrajectory
 from pokemon_red_completion.goal_search_memory import GoalSearchHistory
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOutcomeStatus,
+    upgrade_option_value_model_for_economy,
     upgrade_option_value_model_for_optional_recovery,
     upgrade_option_value_model_for_search_history,
 )
@@ -36,7 +37,7 @@ from pokemon_red_completion.trajectory import SparseEvent
 from pokemon_red_completion.trajectory_io import EpisodeTrajectorySink
 
 
-def _plan(model):
+def _plan(model, *, declaration_version=None):
     return RedPlayerTrainingPlan(
         {
             "schema": TRAINING_PLAN_SCHEMA,
@@ -46,7 +47,8 @@ def _plan(model):
             "decision_limit": 4,
             "root_lineage_id": "goal-root-1",
             "model_sha256": model.model_sha256,
-            "behavior_policy_id": exploration_policy_id(model.feature_version),
+            "behavior_policy_id": exploration_policy_id(
+                model.feature_version if declaration_version is None else declaration_version),
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": "2" * 64,
             "context_id": "3" * 64,
@@ -104,6 +106,8 @@ def _episode(
     consumption_quote=False,
     registration_observations=None,
     repeat_registered_choice=False,
+    economy_supply=None,
+    after_selection=None,
 ):
     store, _ = _store_and_registry(tmp_path)
     base, recorder, _ = _observer()
@@ -112,8 +116,10 @@ def _episode(
         model = upgrade_option_value_model_for_search_history(model)
     if optional_recovery:
         model = upgrade_option_value_model_for_optional_recovery(model)
+    if economy_supply is not None:
+        model = upgrade_option_value_model_for_economy(model)
     policy = ExploringLivingDexGoalPolicy(model, seed=17)
-    plan = _plan(policy.model)
+    plan = _plan(policy.model, declaration_version=3 if economy_supply is not None else None)
     if plan_transform is not None:
         plan = plan_transform(store, plan)
     if acquire_only:
@@ -205,6 +211,9 @@ def _episode(
         )
     if safety:
         source = replace(source, situation=replace(source.situation, resource_pressure=0.99))
+    if economy_supply is not None:
+        assert registration_observations is not None
+        source = replace(source, situation=registration_observations[0].situation)
     facts = [_facts(source)]
     if pp_restoration:
         facts[0].update(schema="pokemon.red.goal-observation.v2", pp_restoration={
@@ -230,6 +239,7 @@ def _episode(
         maximum_frames=plan.maximum_frames,
         curriculum_contract=plan.document.get("curriculum_contract"),
         registration_binding_sha256=plan.document.get("registration_binding_sha256"),
+        economy_supply=economy_supply,
     )
     question = trajectory.ordered_question(source.situation, source.opportunities)
     if forced_story:
@@ -241,6 +251,8 @@ def _episode(
         assert policy.decisions == 0
     else:
         selected = policy.select(question)
+        if after_selection is not None:
+            after_selection(trajectory)
         pending = trajectory.record_selection(
             question, selected.selected_index, behavior_policy=policy.selection_metadata()
         )
@@ -273,6 +285,13 @@ def _episode(
     trajectory.record_outcome(pending, status=status, failure_reason=reason)
     if repeat_registered_choice:
         assert registration_observations is not None
+        if economy_supply is not None:
+            observed = registration_observations[1]
+            source = replace(source, situation=observed.situation, opportunities=tuple(
+                replace(op, resource_quote=replace(op.resource_quote,
+                    available_funds=observed.raw.player_money))
+                if op.resource_quote is not None else op for op in source.opportunities
+            ))
         question = trajectory.ordered_question(source.situation, source.opportunities)
         selected = policy.select(question)
         pending = trajectory.record_selection(

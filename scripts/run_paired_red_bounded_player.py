@@ -552,6 +552,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--training-seed", type=int, default=None)
     parser.add_argument("--registered-ledger", type=Path, default=None)
     parser.add_argument("--registration-session", default=None)
+    parser.add_argument("--economy-training", action="store_true",
+                        help="Opt in to recorded cash outcomes with a feature-v4 model.")
     parser.add_argument("--registration-run-id", default=None)
     parser.add_argument(
         "--remaining-acquisition-demand",
@@ -1064,7 +1066,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             args.training_catalog, subject="training_catalog", rom_path=rom_path
         )
         training_plan = declare_red_player_training(
-            feature_version=causal_record.model.feature_version if causal_record is not None else 1,
+            feature_version=(min(3, causal_record.model.feature_version)
+                if causal_record is not None and getattr(args, "economy_training", False)
+                else causal_record.model.feature_version if causal_record is not None else 1),
             repository_root=PROJECT_ROOT,
             catalog_path=catalog_path,
             expected_catalog_sha256=args.expected_training_catalog_sha256,
@@ -1206,7 +1210,28 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         forward_resource_budget=getattr(args, "forward_resource_budget", None),
     )
     _forward_goal_plan(readiness)  # Validate the opt-in before any execution claim.
-    return _prepare_registration(readiness, args)
+    readiness = _prepare_registration(readiness, args)
+    if getattr(args, "economy_training", False):
+        from pokemon_red_completion.living_dex_player_exploration import (
+            ECONOMY_EXPLORATION_POLICY_ID,
+        )
+        from pokemon_red_completion.red_player_economy import supply_from_profile
+        from pokemon_red_completion.red_player_training_plan import (
+            ECONOMY_TRAINING_PLAN_SCHEMA,
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+        )
+
+        if (readiness.training_plan is None
+                or readiness.training_plan.document["schema"] != REGISTERED_TRAINING_PLAN_SCHEMA
+                or readiness.causal_record is None
+                or readiness.causal_record.model.feature_version != 4):
+            raise ValueError("economy training requires a registered continuation and v4 model")
+        supply = supply_from_profile(readiness.profile)
+        readiness = replace(readiness, training_plan=RedPlayerTrainingPlan({
+            **readiness.training_plan.document, "schema": ECONOMY_TRAINING_PLAN_SCHEMA,
+            "behavior_policy_id": ECONOMY_EXPLORATION_POLICY_ID, **supply.plan_fields(),
+        }))
+    return readiness
 
 
 def _registered_runtime(
@@ -2044,6 +2069,7 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import (
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     )
 
@@ -2078,6 +2104,7 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     return parsed.document["schema"] in {
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     }
 
@@ -2692,6 +2719,21 @@ def _run_arm(
             )
             if forward is not None:
                 training_kwargs["forward"] = forward
+            if readiness.training_plan is not None:
+                from pokemon_red_completion.red_player_training_plan import (
+                    ECONOMY_TRAINING_PLAN_SCHEMA,
+                )
+
+                if readiness.training_plan.document["schema"] == ECONOMY_TRAINING_PLAN_SCHEMA:
+                    from pokemon_red_completion.red_player_economy import (
+                        PlayerEconomySupply,
+                        supply_from_profile,
+                    )
+
+                    supply = PlayerEconomySupply.from_plan(readiness.training_plan.document)
+                    if supply != supply_from_profile(runtime.profile):
+                        raise ValueError("live supply profile differs from economy declaration")
+                    training_kwargs["economy_supply"] = supply
             if readiness.continuation is not None and not readiness.continuation_root_lineage_id:
                 raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(

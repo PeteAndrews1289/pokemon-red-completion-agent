@@ -16,6 +16,7 @@ from pokemon_red_completion.living_dex_option_value import (
     evaluate_living_dex_option_value,
     fit_living_dex_option_value,
     living_dex_option_train_dataset_sha256,
+    upgrade_option_value_model_for_economy,
     upgrade_option_value_model_for_optional_recovery,
     upgrade_option_value_model_for_search_history,
 )
@@ -187,7 +188,9 @@ def fit_red_player_update(
         rows, feature_version=feature_version, curriculum_examples=curriculum
     )
     baseline_model = (
-        upgrade_option_value_model_for_optional_recovery(prior.model)
+        upgrade_option_value_model_for_economy(prior.model)
+        if feature_version == 4
+        else upgrade_option_value_model_for_optional_recovery(prior.model)
         if feature_version == 3
         else upgrade_option_value_model_for_search_history(prior.model)
         if feature_version == 2
@@ -304,13 +307,18 @@ def _bootstrap_red_player_features(
     source_commit: str,
     source_bundle_sha256: str,
     optional_recovery: bool,
+    economy: bool = False,
 ) -> dict[str, object]:
-    allowed_versions = (1, 2) if optional_recovery else (1,)
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    allowed_versions = (3,) if economy else (1, 2) if optional_recovery else (1,)
     if (
         not isinstance(prior, RedPlayerModelRecord)
         or prior.model.feature_version not in allowed_versions
     ):
         raise ValueError("bootstrap requires a legacy native player record")
+    if economy and prior.objective != REGISTERED_OBJECTIVE:
+        raise ValueError("economy bootstrap requires the registered objective")
     if (
         re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
@@ -338,12 +346,14 @@ def _bootstrap_red_player_features(
     ):
         raise ValueError("history bootstrap corpus differs from retained model")
     model = (
-        upgrade_option_value_model_for_optional_recovery(prior.model)
+        upgrade_option_value_model_for_economy(prior.model)
+        if economy
+        else upgrade_option_value_model_for_optional_recovery(prior.model)
         if optional_recovery
         else upgrade_option_value_model_for_search_history(prior.model)
     )
     document = {
-        "schema": PLAYER_MODEL_SCHEMA,
+        "schema": REGISTERED_PLAYER_MODEL_SCHEMA if economy else PLAYER_MODEL_SCHEMA,
         "authority": "bounded_development_only",
         "model": model.to_dict(),
         "model_sha256": model.model_sha256,
@@ -352,9 +362,11 @@ def _bootstrap_red_player_features(
         "corpus_sha256": prior.corpus_sha256,
         "prior_model_sha256": prior.model.model_sha256,
         "retained_example_sha256": list(hashes),
+        **({"objective": REGISTERED_OBJECTIVE} if economy else {}),
     }
     record = store.publish_sealed_record(
-        f"rp-model-{model.model_sha256}", kind="red_player_model", record=document
+        f"{'rpr' if economy else 'rp'}-model-{model.model_sha256}",
+        kind="red_player_model", record=document
     )
     loaded = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=model.model_sha256
@@ -371,7 +383,15 @@ def _bootstrap_red_player_features(
         "history_effect_learned": False,
         "authority_promotions": 0,
     }
-    if optional_recovery:
+    if economy:
+        report.update({
+            "schema": "pokemon.red.economy-bootstrap.v1",
+            "initialization": "retained-head-with-zero-economy-coefficients",
+            "economy_effect_learned": False,
+        })
+        del report["unknown_history_examples"]
+        del report["history_effect_learned"]
+    elif optional_recovery:
         report.update(
             {
                 "schema": "pokemon.red.optional-recovery-bootstrap.v1",
@@ -382,3 +402,18 @@ def _bootstrap_red_player_features(
         del report["unknown_history_examples"]
         del report["history_effect_learned"]
     return report
+
+
+def bootstrap_red_player_economy(
+    store: PrivateArtifactRoot, *, prior: RedPlayerModelRecord,
+    source_commit: str, source_bundle_sha256: str,
+) -> dict[str, object]:
+    """Preserve registered history while enabling prospective cash observations.
+
+    The six new inputs have zero weights and the economy head is absent. This
+    creates no new examples or learned income effect; it is not model fitting.
+    """
+    return _bootstrap_red_player_features(
+        store, prior=prior, source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256, optional_recovery=False, economy=True,
+    )

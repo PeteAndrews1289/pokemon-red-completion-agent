@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass, field, replace
 
@@ -54,6 +55,9 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
     """
 
     seed: int = 0
+    prepare_selection: Callable[[GoalManagerQuestion], None] | None = field(
+        default=None, repr=False, compare=False,
+    )
     _rng: random.Random = field(init=False, repr=False)
     _metadata: dict[str, object] | None = field(default=None, init=False, repr=False)
     training_eligible: bool = field(default=False, init=False)
@@ -67,6 +71,8 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
         self._rng = random.Random(self.seed)
 
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
+        if self.prepare_selection is not None:
+            self.prepare_selection(question)
         if any(
             question.opportunities[index].kind is GoalKind.RESUPPLY
             and question.opportunities[index].resource_quote is None
