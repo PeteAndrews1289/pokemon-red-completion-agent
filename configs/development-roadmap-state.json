@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-economy-agent-integration",
+  "as_of_session": "2026-09-11-economy-objective-loop",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -834,6 +834,12 @@
       "result": "Flash draft/correction integrated after Codex review:258targeted tests; prospective economy features and supply budget only. No gameplay or fit;65examples/64registrations unchanged.",
       "deviation": "Use external subscriptions for bounded implementation and review. Cash metadata is not an economy objective; keep activation off until explicit targets and runtime replay connect.",
       "next": "Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-11-economy-objective-loop",
+      "result": "183 focused tests pass for explicit economy objectives and native policy score integration. No live gameplay or checkpoint fitting;65examples/64registrations unchanged.",
+      "deviation": "Flash draft plus one correction required Codex repairs; useful bounded delegation, not demonstrated net usage savings. No stage exit or mission change.",
+      "next": "Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

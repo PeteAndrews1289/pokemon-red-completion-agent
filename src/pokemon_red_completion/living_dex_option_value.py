@@ -44,6 +44,11 @@ LIVING_DEX_OPTION_FIT_SCHEMA = "pokemon.core.living-dex-option-value-fit.v1"
 LIVING_DEX_OPTION_EVALUATION_SCHEMA = "pokemon.core.living-dex-option-value-evaluation.v1"
 LIVING_DEX_OPTION_OBJECTIVE = "selected-arm-capped-ips-multioutcome-ridge-v1"
 LIVING_DEX_OPTION_NORMALIZATION = "pokemon.core.living-dex-option-normalization.v1"
+LIVING_DEX_ECONOMY_HEAD_SCHEMA = "pokemon.core.living-dex-economy-head.v1"
+LIVING_DEX_ECONOMY_NORMALIZATION = "pokemon.core.living-dex-economy-normalization.v1"
+LIVING_DEX_ECONOMY_OBJECTIVE = "selected-arm-capped-ips-economy-ridge-v1"
+LIVING_DEX_ECONOMY_OUTCOME_NAMES = ("useful_liquidity_gain", "cash_loss")
+LIVING_DEX_ECONOMY_EVIDENCE_SCHEMA = "pokemon.core.living-dex-economy-evidence.v1"
 
 DEFAULT_OPTION_VALUE_RIDGE = 0.25
 DEFAULT_MAX_IMPORTANCE_WEIGHT = 4.0
@@ -931,6 +936,419 @@ class LivingDexOptionUtility:
         return benefit - cost
 
 
+def _validate_numeric_vector(
+    raw: object,
+    expected_len: int,
+    *,
+    subject: str,
+    positive_only: bool = False,
+) -> NDArray[np.float64]:
+    if isinstance(raw, np.ndarray):
+        if raw.dtype.kind == "b" or raw.dtype.kind not in ("f", "i"):
+            raise LivingDexOptionValueError(f"{subject} must be numeric")
+        if raw.shape != (expected_len,):
+            raise LivingDexOptionValueError(f"{subject} wrong shape")
+        arr = raw.astype(np.float64, copy=False)
+        if not np.all(np.isfinite(arr)):
+            raise LivingDexOptionValueError(f"{subject} contains nonfinite values")
+        if positive_only and np.any(arr <= 0.0):
+            raise LivingDexOptionValueError(f"{subject} must be positive")
+        return arr
+    if not isinstance(raw, (list, tuple)) or len(raw) != expected_len:
+        raise LivingDexOptionValueError(f"{subject} wrong shape")
+    for item in raw:
+        if isinstance(item, bool) or not isinstance(item, (int, float)):
+            raise LivingDexOptionValueError(f"{subject} contains nonnumeric cells")
+        val = float(item)
+        if not math.isfinite(val):
+            raise LivingDexOptionValueError(f"{subject} contains nonfinite values")
+        if positive_only and val <= 0.0:
+            raise LivingDexOptionValueError(f"{subject} must be positive")
+    return np.asarray(raw, dtype=np.float64)
+
+
+def _validate_numeric_matrix(
+    raw: object,
+    expected_shape: tuple[int, int],
+    *,
+    subject: str,
+) -> NDArray[np.float64]:
+    rows, cols = expected_shape
+    if isinstance(raw, np.ndarray):
+        if raw.dtype.kind == "b" or raw.dtype.kind not in ("f", "i"):
+            raise LivingDexOptionValueError(f"{subject} must be numeric")
+        if raw.shape != (rows, cols):
+            raise LivingDexOptionValueError(f"{subject} wrong shape")
+        arr = raw.astype(np.float64, copy=False)
+        if not np.all(np.isfinite(arr)):
+            raise LivingDexOptionValueError(f"{subject} contains nonfinite values")
+        return arr
+    if not isinstance(raw, (list, tuple)) or len(raw) != rows:
+        raise LivingDexOptionValueError(f"{subject} wrong shape")
+    for row in raw:
+        if not isinstance(row, (list, tuple)) or len(row) != cols:
+            raise LivingDexOptionValueError(f"{subject} wrong shape")
+        for item in row:
+            if isinstance(item, bool) or not isinstance(item, (int, float)):
+                raise LivingDexOptionValueError(f"{subject} contains nonnumeric cells")
+            if not math.isfinite(float(item)):
+                raise LivingDexOptionValueError(f"{subject} contains nonfinite values")
+    return np.asarray(raw, dtype=np.float64)
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexPredictedEconomyOutcome:
+    useful_liquidity_gain: float
+    cash_loss: float
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "useful_liquidity_gain",
+            _unit_interval(
+                self.useful_liquidity_gain, subject="predicted useful_liquidity_gain"
+            ),
+        )
+        object.__setattr__(
+            self,
+            "cash_loss",
+            _unit_interval(self.cash_loss, subject="predicted cash_loss"),
+        )
+
+    def vector(self) -> tuple[float, float]:
+        return (self.useful_liquidity_gain, self.cash_loss)
+
+
+@dataclass(frozen=True, slots=True)
+class LivingDexEconomyHead:
+    """Two-output linear value head for useful liquidity gain and cash loss."""
+
+    coefficients: NDArray[np.float64]
+    intercept: NDArray[np.float64]
+    feature_mean: NDArray[np.float64]
+    feature_scale: NDArray[np.float64]
+    evidence_digest: str
+    qualified_examples: int
+    ridge: float
+    maximum_importance_weight: float
+    useful_liquidity_gain_weight: float = 1.0
+    cash_loss_weight: float = 1.0
+    schema: str = LIVING_DEX_ECONOMY_HEAD_SCHEMA
+    normalization: str = LIVING_DEX_ECONOMY_NORMALIZATION
+    objective: str = LIVING_DEX_ECONOMY_OBJECTIVE
+
+    def __post_init__(self) -> None:
+        if self.schema != LIVING_DEX_ECONOMY_HEAD_SCHEMA:
+            raise LivingDexOptionValueError("living-Dex economy head schema differs")
+        if self.normalization != LIVING_DEX_ECONOMY_NORMALIZATION:
+            raise LivingDexOptionValueError("living-Dex economy head normalization differs")
+        if self.objective != LIVING_DEX_ECONOMY_OBJECTIVE:
+            raise LivingDexOptionValueError("living-Dex economy head objective differs")
+        width = len(option_feature_names(4))
+        targets = len(LIVING_DEX_ECONOMY_OUTCOME_NAMES)
+        coefficients = _validate_numeric_matrix(
+            self.coefficients, (width, targets), subject="coefficients"
+        )
+        intercept = _validate_numeric_vector(
+            self.intercept, targets, subject="intercept"
+        )
+        mean = _validate_numeric_vector(
+            self.feature_mean, width, subject="feature_mean"
+        )
+        scale = _validate_numeric_vector(
+            self.feature_scale, width, subject="feature_scale", positive_only=True
+        )
+        if (
+            not isinstance(self.evidence_digest, str)
+            or _SHA256.fullmatch(self.evidence_digest) is None
+        ):
+            raise LivingDexOptionValueError("living-Dex economy head evidence digest differs")
+        if type(self.qualified_examples) is not int or self.qualified_examples < 2:  # noqa: E721
+            raise LivingDexOptionValueError(
+                "living-Dex economy head qualified examples must be an integer >= 2"
+            )
+        object.__setattr__(self, "ridge", _positive_finite(self.ridge, subject="ridge"))
+        cap = _positive_finite(
+            self.maximum_importance_weight,
+            subject="maximum importance weight",
+        )
+        if cap < 1.0:
+            raise LivingDexOptionValueError("maximum importance weight must be at least one")
+        object.__setattr__(self, "maximum_importance_weight", cap)
+        if (
+            isinstance(self.useful_liquidity_gain_weight, bool)
+            or not isinstance(self.useful_liquidity_gain_weight, (int, float))
+            or float(self.useful_liquidity_gain_weight) != 1.0
+        ):
+            raise LivingDexOptionValueError(
+                "useful_liquidity_gain_weight must be 1.0 for this schema"
+            )
+        if (
+            isinstance(self.cash_loss_weight, bool)
+            or not isinstance(self.cash_loss_weight, (int, float))
+            or float(self.cash_loss_weight) != 1.0
+        ):
+            raise LivingDexOptionValueError(
+                "cash_loss_weight must be 1.0 for this schema"
+            )
+        object.__setattr__(self, "useful_liquidity_gain_weight", 1.0)
+        object.__setattr__(self, "cash_loss_weight", 1.0)
+        for name, value in (
+            ("coefficients", coefficients),
+            ("intercept", intercept),
+            ("feature_mean", mean),
+            ("feature_scale", scale),
+        ):
+            detached = value.copy()
+            detached.setflags(write=False)
+            object.__setattr__(self, name, detached)
+
+    def predict_candidate(
+        self,
+        context: LivingDexOptionContext,
+        candidate: LivingDexOptionCandidate,
+    ) -> LivingDexPredictedEconomyOutcome:
+        if not isinstance(context, LivingDexOptionContext):
+            raise TypeError("context must be a LivingDexOptionContext")
+        if not isinstance(candidate, LivingDexOptionCandidate):
+            raise TypeError("candidate must be a LivingDexOptionCandidate")
+        if context.economy_snapshot is None or context.target_cash is None:
+            raise LivingDexOptionValueError(
+                "living-Dex economy prediction requires economy context"
+            )
+        vector = np.asarray(
+            candidate.vector(context, feature_version=4), dtype=np.float64
+        )
+        normalized = (vector - self.feature_mean) / self.feature_scale
+        raw = self.intercept + normalized @ self.coefficients
+        clipped = np.clip(raw, 0.0, 1.0)
+        return LivingDexPredictedEconomyOutcome(
+            useful_liquidity_gain=float(clipped[0]),
+            cash_loss=float(clipped[1]),
+        )
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "cash_loss_weight": self.cash_loss_weight,
+            "coefficients": self.coefficients.tolist(),
+            "evidence_digest": self.evidence_digest,
+            "feature_mean": self.feature_mean.tolist(),
+            "feature_names": list(option_feature_names(4)),
+            "feature_scale": self.feature_scale.tolist(),
+            "intercept": self.intercept.tolist(),
+            "maximum_importance_weight": self.maximum_importance_weight,
+            "normalization": self.normalization,
+            "objective": self.objective,
+            "outcome_names": list(LIVING_DEX_ECONOMY_OUTCOME_NAMES),
+            "qualified_examples": self.qualified_examples,
+            "ridge": self.ridge,
+            "schema": self.schema,
+            "useful_liquidity_gain_weight": self.useful_liquidity_gain_weight,
+        }
+
+    @classmethod
+    def from_dict(cls, value: Mapping[str, object]) -> LivingDexEconomyHead:
+        if not isinstance(value, Mapping):
+            raise LivingDexOptionValueError("living-Dex economy head document differs")
+        expected_keys = {
+            "cash_loss_weight",
+            "coefficients",
+            "evidence_digest",
+            "feature_mean",
+            "feature_names",
+            "feature_scale",
+            "intercept",
+            "maximum_importance_weight",
+            "normalization",
+            "objective",
+            "outcome_names",
+            "qualified_examples",
+            "ridge",
+            "schema",
+            "useful_liquidity_gain_weight",
+        }
+        if set(value) != expected_keys:
+            raise LivingDexOptionValueError("living-Dex economy head document differs")
+        feature_names = value.get("feature_names")
+        outcome_names = value.get("outcome_names")
+        evidence_digest = value.get("evidence_digest")
+        qualified_examples = value.get("qualified_examples")
+        ridge = value.get("ridge")
+        maximum_importance_weight = value.get("maximum_importance_weight")
+        useful_weight = value.get("useful_liquidity_gain_weight")
+        cash_weight = value.get("cash_loss_weight")
+
+        if (
+            value.get("schema") != LIVING_DEX_ECONOMY_HEAD_SCHEMA
+            or value.get("normalization") != LIVING_DEX_ECONOMY_NORMALIZATION
+            or value.get("objective") != LIVING_DEX_ECONOMY_OBJECTIVE
+            or not isinstance(feature_names, list)
+            or tuple(feature_names) != option_feature_names(4)
+            or not isinstance(outcome_names, list)
+            or tuple(outcome_names) != LIVING_DEX_ECONOMY_OUTCOME_NAMES
+            or not isinstance(evidence_digest, str)
+            or _SHA256.fullmatch(evidence_digest) is None
+            or type(qualified_examples) is not int  # noqa: E721
+            or qualified_examples < 2
+            or isinstance(ridge, bool)
+            or not isinstance(ridge, (int, float))
+            or isinstance(maximum_importance_weight, bool)
+            or not isinstance(maximum_importance_weight, (int, float))
+            or isinstance(useful_weight, bool)
+            or not isinstance(useful_weight, (int, float))
+            or float(useful_weight) != 1.0
+            or isinstance(cash_weight, bool)
+            or not isinstance(cash_weight, (int, float))
+            or float(cash_weight) != 1.0
+        ):
+            raise LivingDexOptionValueError("living-Dex economy head schema differs")
+        width = len(option_feature_names(4))
+        targets = len(LIVING_DEX_ECONOMY_OUTCOME_NAMES)
+        coefficients = _validate_numeric_matrix(
+            value.get("coefficients"), (width, targets), subject="coefficients"
+        )
+        intercept = _validate_numeric_vector(
+            value.get("intercept"), targets, subject="intercept"
+        )
+        feature_mean = _validate_numeric_vector(
+            value.get("feature_mean"), width, subject="feature_mean"
+        )
+        feature_scale = _validate_numeric_vector(
+            value.get("feature_scale"), width, subject="feature_scale", positive_only=True
+        )
+        return cls(
+            coefficients=coefficients,
+            intercept=intercept,
+            feature_mean=feature_mean,
+            feature_scale=feature_scale,
+            evidence_digest=evidence_digest,
+            qualified_examples=qualified_examples,
+            ridge=float(ridge),
+            maximum_importance_weight=float(maximum_importance_weight),
+            useful_liquidity_gain_weight=1.0,
+            cash_loss_weight=1.0,
+        )
+
+
+def qualified_economy_rows(
+    rows: Iterable[object],
+) -> tuple[LivingDexObservedArmExample, ...]:
+    result: list[LivingDexObservedArmExample] = []
+    for row in rows:
+        if not isinstance(row, LivingDexObservedArmExample):
+            continue
+        if row.partition != "train":
+            continue
+        if row.outcome.status is not LivingDexOutcomeStatus.SETTLED:
+            continue
+        if row.outcome.economy is None or not isinstance(row.outcome.economy, EconomyOutcome):
+            continue
+        ctx = row.menu.context
+        if ctx.economy_snapshot is None or ctx.target_cash is None:
+            continue
+        if len(row.menu.available_indices) < 2:
+            continue
+        result.append(row)
+    return tuple(result)
+
+
+def fit_living_dex_economy_head(
+    examples: Iterable[LivingDexObservedArmExample],
+    *,
+    ridge: float = DEFAULT_OPTION_VALUE_RIDGE,
+    maximum_importance_weight: float = DEFAULT_MAX_IMPORTANCE_WEIGHT,
+    useful_liquidity_gain_weight: float = 1.0,
+    cash_loss_weight: float = 1.0,
+) -> LivingDexEconomyHead:
+    ridge_value = _positive_finite(ridge, subject="ridge")
+    cap = _positive_finite(
+        maximum_importance_weight,
+        subject="maximum importance weight",
+    )
+    if cap < 1.0:
+        raise LivingDexOptionValueError("maximum importance weight must be at least one")
+    if (
+        isinstance(useful_liquidity_gain_weight, bool)
+        or not isinstance(useful_liquidity_gain_weight, (int, float))
+        or float(useful_liquidity_gain_weight) != 1.0
+    ):
+        raise LivingDexOptionValueError(
+            "useful_liquidity_gain_weight must be 1.0 for this schema"
+        )
+    if (
+        isinstance(cash_loss_weight, bool)
+        or not isinstance(cash_loss_weight, (int, float))
+        or float(cash_loss_weight) != 1.0
+    ):
+        raise LivingDexOptionValueError("cash_loss_weight must be 1.0 for this schema")
+    validated = _validated_examples(examples, expected_partition="train")
+    qualified = qualified_economy_rows(validated)
+    if len(qualified) < 2:
+        raise LivingDexOptionValueError(
+            "living-Dex economy head fit needs at least two qualified examples"
+        )
+    sorted_rows = tuple(
+        sorted(
+            qualified,
+            key=lambda row: row.decision_sha256,
+        )
+    )
+    features = np.asarray(
+        [
+            row.menu.candidate_vector(row.selected_candidate_index, feature_version=4)
+            for row in sorted_rows
+        ],
+        dtype=np.float64,
+    )
+    targets_list: list[tuple[float, float]] = []
+    for row in sorted_rows:
+        econ = row.outcome.economy
+        if econ is None or not isinstance(econ, EconomyOutcome):
+            raise LivingDexOptionValueError("qualified economy row missing EconomyOutcome")
+        targets_list.append((econ.useful_liquidity_gain, econ.cash_loss))
+    targets = np.asarray(targets_list, dtype=np.float64)
+
+    weights = np.asarray(
+        [row.importance_weight(cap) for row in sorted_rows],
+        dtype=np.float64,
+    )
+    mean = np.average(features, axis=0, weights=weights)
+    centered = features - mean
+    scale = np.sqrt(np.average(centered**2, axis=0, weights=weights))
+    scale[scale == 0.0] = 1.0
+    normalized = (features - mean) / scale
+    design = np.column_stack((np.ones(len(sorted_rows), dtype=np.float64), normalized))
+    penalty = np.eye(design.shape[1], dtype=np.float64)
+    penalty[0, 0] = 0.0
+    weighted_design = design * weights[:, np.newaxis]
+    left = design.T @ weighted_design + ridge_value * penalty
+    right = design.T @ (weights[:, np.newaxis] * targets)
+    try:
+        parameters = cast(NDArray[np.float64], np.linalg.solve(left, right))
+    except np.linalg.LinAlgError:
+        raise LivingDexOptionValueError("living-Dex economy head fit is singular") from None
+    intercept = parameters[0]
+    coefficients = parameters[1:]
+    evidence_digest = canonical_sha256(
+        {
+            "rows": [row.public_dict() for row in sorted_rows],
+            "schema": LIVING_DEX_ECONOMY_EVIDENCE_SCHEMA,
+        }
+    )
+    return LivingDexEconomyHead(
+        coefficients=coefficients,
+        intercept=intercept,
+        feature_mean=mean,
+        feature_scale=scale,
+        evidence_digest=evidence_digest,
+        qualified_examples=len(sorted_rows),
+        ridge=ridge_value,
+        maximum_importance_weight=cap,
+        useful_liquidity_gain_weight=1.0,
+        cash_loss_weight=1.0,
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class LivingDexOptionValueModel:
     """Multi-outcome linear value model fitted only on selected arms."""
@@ -946,6 +1364,7 @@ class LivingDexOptionValueModel:
     maximum_importance_weight: float
     feature_version: int = 1
     objective: str = LIVING_DEX_OPTION_OBJECTIVE
+    economy_head: LivingDexEconomyHead | None = None
 
     def __post_init__(self) -> None:
         if self.objective not in {
@@ -1002,6 +1421,19 @@ class LivingDexOptionValueModel:
             detached = value.copy()
             detached.setflags(write=False)
             object.__setattr__(self, name, detached)
+        if self.economy_head is not None:
+            if self.feature_version != 4:
+                raise LivingDexOptionValueError(
+                    "only feature_version 4 can carry an economy head"
+                )
+            if not isinstance(self.economy_head, LivingDexEconomyHead):
+                raise LivingDexOptionValueError(
+                    "economy_head must be a LivingDexEconomyHead"
+                )
+            if self.economy_head.qualified_examples > self.settled_examples:
+                raise LivingDexOptionValueError(
+                    "living-Dex economy head qualified examples exceed settled examples"
+                )
 
     @property
     def model_sha256(self) -> str:
@@ -1023,6 +1455,21 @@ class LivingDexOptionValueModel:
         raw = self.intercept + normalized @ self.coefficients
         return LivingDexPredictedOutcome.from_vector(np.clip(raw, 0.0, 1.0).tolist())
 
+    def predict_economy_candidate(
+        self,
+        context: LivingDexOptionContext,
+        candidate: LivingDexOptionCandidate,
+    ) -> LivingDexPredictedEconomyOutcome | None:
+        if not isinstance(context, LivingDexOptionContext):
+            raise TypeError("context must be a LivingDexOptionContext")
+        if not isinstance(candidate, LivingDexOptionCandidate):
+            raise TypeError("candidate must be a LivingDexOptionCandidate")
+        if self.economy_head is None or self.feature_version != 4:
+            return None
+        if context.economy_snapshot is None or context.target_cash is None:
+            return None
+        return self.economy_head.predict_candidate(context, candidate)
+
     def scores(
         self,
         menu: LivingDexOptionMenu,
@@ -1032,12 +1479,21 @@ class LivingDexOptionValueModel:
             raise TypeError("menu must be a LivingDexOptionMenu")
         if not isinstance(utility, LivingDexOptionUtility):
             raise TypeError("utility must be a LivingDexOptionUtility")
-        return tuple(
-            utility.score(self.predict_candidate(menu.context, candidate))
-            if index in menu.available_indices
-            else None
-            for index, candidate in enumerate(menu.candidates)
-        )
+        result: list[float | None] = []
+        for index, candidate in enumerate(menu.candidates):
+            if index not in menu.available_indices:
+                result.append(None)
+                continue
+            base = utility.score(self.predict_candidate(menu.context, candidate))
+            if self.economy_head is not None:
+                econ = self.predict_economy_candidate(menu.context, candidate)
+                if econ is not None:
+                    base += (
+                        self.economy_head.useful_liquidity_gain_weight * econ.useful_liquidity_gain
+                        - self.economy_head.cash_loss_weight * econ.cash_loss
+                    )
+            result.append(base)
+        return tuple(result)
 
     def select(self, menu: LivingDexOptionMenu, utility: LivingDexOptionUtility) -> int:
         values = self.scores(menu, utility)
@@ -1051,7 +1507,7 @@ class LivingDexOptionValueModel:
         return max(menu.available_indices, key=key)
 
     def to_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "censored_examples": self.censored_examples,
             "coefficients": self.coefficients.tolist(),
             "feature_mean": self.feature_mean.tolist(),
@@ -1075,10 +1531,26 @@ class LivingDexOptionValueModel:
             "settled_examples": self.settled_examples,
             "train_dataset_sha256": self.train_dataset_sha256,
         }
+        if self.economy_head is not None:
+            result["economy_head"] = self.economy_head.to_dict()
+        return result
 
     @classmethod
     def from_dict(cls, value: Mapping[str, object]) -> LivingDexOptionValueModel:
-        if not isinstance(value, Mapping) or set(value) != {
+        if not isinstance(value, Mapping):
+            raise LivingDexOptionValueError("living-Dex model document differs")
+        version = next(
+            (
+                v
+                for v in (1, 2, 3, 4)
+                if value.get("schema") == f"pokemon.core.living-dex-option-value-model.v{v}"
+            ),
+            1,
+        )
+        has_economy_head = "economy_head" in value
+        if has_economy_head and version != 4:
+            raise LivingDexOptionValueError("only feature_version 4 can carry an economy head")
+        expected_keys = {
             "censored_examples",
             "coefficients",
             "feature_mean",
@@ -1093,7 +1565,10 @@ class LivingDexOptionValueModel:
             "schema",
             "settled_examples",
             "train_dataset_sha256",
-        }:
+        }
+        if has_economy_head:
+            expected_keys = expected_keys | {"economy_head"}
+        if set(value) != expected_keys:
             raise LivingDexOptionValueError("living-Dex model document differs")
         feature_names = value.get("feature_names")
         outcome_names = value.get("outcome_names")
@@ -1102,14 +1577,6 @@ class LivingDexOptionValueModel:
         censored_examples = value.get("censored_examples")
         ridge = value.get("ridge")
         maximum_importance_weight = value.get("maximum_importance_weight")
-        version = next(
-            (
-                v
-                for v in (1, 2, 3, 4)
-                if value.get("schema") == f"pokemon.core.living-dex-option-value-model.v{v}"
-            ),
-            1,
-        )
         if (
             value.get("schema")
             != (
@@ -1141,6 +1608,16 @@ class LivingDexOptionValueModel:
             or not isinstance(maximum_importance_weight, (int, float))
         ):
             raise LivingDexOptionValueError("living-Dex model schema differs")
+        economy_head: LivingDexEconomyHead | None = None
+        if has_economy_head:
+            economy_head_val = value.get("economy_head")
+            if not isinstance(economy_head_val, Mapping):
+                raise LivingDexOptionValueError("living-Dex economy head document differs")
+            economy_head = LivingDexEconomyHead.from_dict(economy_head_val)
+            if economy_head.qualified_examples > cast(int, settled_examples):
+                raise LivingDexOptionValueError(
+                    "living-Dex economy head qualified examples exceed settled examples"
+                )
         try:
             return cls(
                 coefficients=np.asarray(value["coefficients"], dtype=np.float64),
@@ -1154,6 +1631,7 @@ class LivingDexOptionValueModel:
                 maximum_importance_weight=float(maximum_importance_weight),
                 feature_version=version,
                 objective=str(value["objective"]),
+                economy_head=economy_head,
             )
         except (KeyError, TypeError, ValueError):
             raise LivingDexOptionValueError("living-Dex model document is invalid") from None
@@ -1171,6 +1649,7 @@ class LivingDexOptionValueFitReport:
     weighted_mse_after: float
     feature_version: int = 1
     objective: str = LIVING_DEX_OPTION_OBJECTIVE
+    economy_qualified_examples: int | None = None
 
     def public_dict(self) -> dict[str, object]:
         result: dict[str, object] = {
@@ -1191,6 +1670,8 @@ class LivingDexOptionValueFitReport:
         if self.feature_version >= 2:
             result["feature_version"] = self.feature_version
             result["missing_history"] = "unknown_not_unattempted"
+        if self.economy_qualified_examples is not None and self.economy_qualified_examples > 0:
+            result["economy_qualified_examples"] = self.economy_qualified_examples
         return result
 
 
@@ -1413,6 +1894,14 @@ def fit_living_dex_option_value(
     predictions = np.clip(intercept + normalized @ coefficients, 0.0, 1.0)
     before = _weighted_mse(targets, np.broadcast_to(baseline, targets.shape), weights)
     after = _weighted_mse(targets, predictions, weights)
+    economy_head: LivingDexEconomyHead | None = None
+    qualified_econ_rows = qualified_economy_rows(rows)
+    if feature_version == 4 and len(qualified_econ_rows) >= 2:
+        economy_head = fit_living_dex_economy_head(
+            rows,
+            ridge=ridge_value,
+            maximum_importance_weight=cap,
+        )
     model = LivingDexOptionValueModel(
         coefficients=coefficients,
         intercept=intercept,
@@ -1429,6 +1918,7 @@ def fit_living_dex_option_value(
             if curriculum
             else LIVING_DEX_OPTION_OBJECTIVE
         ),
+        economy_head=economy_head,
     )
     report = LivingDexOptionValueFitReport(
         train_dataset_sha256=dataset_sha256,
@@ -1441,6 +1931,11 @@ def fit_living_dex_option_value(
         weighted_mse_after=after,
         feature_version=feature_version,
         objective=model.objective,
+        economy_qualified_examples=(
+            len(qualified_econ_rows)
+            if feature_version == 4 and len(qualified_econ_rows) > 0
+            else None
+        ),
     )
     return LivingDexOptionValueFit(model, report)
 
@@ -1562,11 +2057,17 @@ def _weighted_mse(
 __all__ = [
     "DEFAULT_MAX_IMPORTANCE_WEIGHT",
     "DEFAULT_OPTION_VALUE_RIDGE",
+    "LIVING_DEX_ECONOMY_EVIDENCE_SCHEMA",
+    "LIVING_DEX_ECONOMY_HEAD_SCHEMA",
+    "LIVING_DEX_ECONOMY_NORMALIZATION",
+    "LIVING_DEX_ECONOMY_OBJECTIVE",
+    "LIVING_DEX_ECONOMY_OUTCOME_NAMES",
     "LIVING_DEX_OPTION_FEATURE_NAMES",
     "LIVING_DEX_OPTION_NORMALIZATION",
     "LIVING_DEX_OPTION_OBJECTIVE",
     "LIVING_DEX_OPTION_OUTCOME_NAMES",
     "LivingDexCensorReason",
+    "LivingDexEconomyHead",
     "LivingDexObservedArmExample",
     "LivingDexObservedOutcome",
     "LivingDexOptionAvailability",
@@ -1583,12 +2084,15 @@ __all__ = [
     "LivingDexOptionValueFitReport",
     "LivingDexOptionValueModel",
     "LivingDexOutcomeStatus",
+    "LivingDexPredictedEconomyOutcome",
     "LivingDexPredictedOutcome",
     "evaluate_living_dex_option_value",
+    "fit_living_dex_economy_head",
     "fit_living_dex_option_value",
     "living_dex_option_train_dataset_sha256",
     "living_dex_option_features_from_semantic_facts",
     "living_dex_option_context_from_goal_situation",
+    "qualified_economy_rows",
     "uniform_behavior_probabilities",
     "upgrade_option_value_model_for_economy",
 ]

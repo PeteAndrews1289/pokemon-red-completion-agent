@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-economy-agent-integration**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-economy-objective-loop**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-economy-objective-loop
+
+183 focused tests pass for explicit economy objectives and native policy score integration. No live gameplay or checkpoint fitting;65examples/64registrations unchanged.
+
+**Deviation:** Flash draft plus one correction required Codex repairs; useful bounded delegation, not demonstrated net usage savings. No stage exit or mission change.
+
+**Next:** Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.
 
 ### 2026-09-10-economy-agent-integration
 

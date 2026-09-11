@@ -47,6 +47,8 @@ Follow with [the supply session](work-sessions/2026-09-10-supply-transport.md): 
 
 For the [income audit](work-sessions/2026-09-10-renewable-funding.md), explain Pete's question: can the agent recognize that it needs money and choose how to earn it? The audit showed money was absent from learning feedback. In the [delegated follow-up](work-sessions/2026-09-10-economy-agent-integration.md), Flash drafts the integration, Claude challenges the budget, and Codex catches the distinction between cash metadata and an actual training target. Show the tested extension as engineering, not trained behaviour; no income or fit occurred. The next test must connect measured funding benefit with time, item and party costs. Blastoise73's roster coverage is not proof of survival or a profitable solo.
 
+For the [objective follow-up](work-sessions/2026-09-11-economy-objective-loop.md), show two synthetic scenarios with identical non-money outcomes: earning actually pays in one and does not in the other. The model's funding preference changes. Label this prominently as an algorithm test, not live game footage or successful League income. Explain that Flash supplied a draft, but independent tests and Codex repairs were still necessary; a flat rounded quota display does not establish zero cost.
+
 Fresh-game autonomous play, complete collection and transfer to Blue, modified Red or Crystal remain unfinished. The next evidence should show useful decisions beyond the situations used to fit the model.
 
 Credit Pete's product direction and validation, along with Codex, Claude and Antigravity's AI-assisted implementation/review contributions. Do not suggest every line was manually authored.

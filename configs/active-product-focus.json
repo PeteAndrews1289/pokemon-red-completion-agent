@@ -33,19 +33,19 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None: prospective feature/codec work only; cash metadata is not a learning target and live activation remains off.",
-        "blocker": "No balls and593 money. Economy objective and runtime/replay connection remain unfinished; forced income is not a learned choice.",
-        "decision": "Use isolated Flash implementation with Codex verification and bounded Claude review; prioritize measured income feedback and useful supply budgets.",
+        "authority_delta": "Economy predictions now contribute to the existing goal-policy scores in synthetic tests; live model65 remains unchanged.",
+        "blocker": "Zero balls and 593 money. Authenticated runtime/replay connection and real income outcomes remain unfinished.",
+        "decision": "Retain bounded Flash drafts with one correction pass and independent verification; net Codex usage savings remain unproven.",
         "evidence": {
           "kind": "registered_train_example",
           "path": "docs/evidence/red-dig-recovery-learning-2026-09-10.json",
           "sha256": "21950c19fde470995e3b86bac2853e143ca20a27d3665e5c93968aa5372efdbf"
         },
-        "learning_output": "No gameplay, fit or registration. Reviewed opt-in economy features/codecs and real-supply budget passed258targeted tests. AM01/model65 and64 registrations unchanged; actual economy learning remains unactivated.",
-        "next_falsifier": "Old model outputs stay fixed; changing measured cash must change explicit economy targets without invented labels or item identity leakage.",
-        "next_session_goal": "Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.",
+        "learning_output": "183 focused tests pass: measured cash changes economy predictions and exploration probabilities; missing historical evidence is masked. No gameplay, actual checkpoint fit or registration;65examples/64registrations unchanged.",
+        "next_falsifier": "Replay must reconstruct the exact cash context before selection and measured endpoints before fitting, while preserving historical journals.",
+        "next_session_goal": "Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-economy-agent-integration",
+        "session_id": "2026-09-11-economy-objective-loop",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.",
+      "next_decision": "Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

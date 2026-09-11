@@ -6,13 +6,14 @@ with positive conditional income quotes. Safety gates (recovery, critical party,
 storage) remain deterministic and non-bypassable.
 
 CRITICAL HONEST BOUNDARY:
-- EconomyOutcome is currently attached metadata on LivingDexObservedOutcome;
-  target_vector and utility still ignore it.
+- The nine legacy targets remain unchanged. Feature-v4 fitting can learn a
+  separate masked liquidity-gain/cash-loss head from measured EconomyOutcome
+  evidence and contribute its predictions to existing goal utility.
 - This prospective bridge does NOT claim to be an operational income learner yet.
 - Live activation remains strictly off; no mapping of cash gain to completion_gain
   or dependency_unlock_gain.
-- Explicit economy objectives/targets, masked historical missing evidence, and
-  runtime/journal activation belong in the next slice.
+- Runtime/journal activation remains the next slice; synthetic objective tests
+  are not evidence of an actual Red income fit.
 - declared_useful_supply_budget is a prospective budget helper, NOT runtime
   authority (runtime budgets are independently derived in red_capture_funding_budget.py).
 - Explicit shortfall * income interaction is retained in economy_features because

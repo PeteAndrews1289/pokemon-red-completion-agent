@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.
+- Next decision: Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-economy-agent-integration** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+**2026-09-11-economy-objective-loop** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | No gameplay, fit or registration. Reviewed opt-in economy features/codecs and real-supply budget passed258targeted tests. AM01/model65 and64 registrations unchanged; actual economy learning remains unactivated. |
-| Authority delta | None: prospective feature/codec work only; cash metadata is not a learning target and live activation remains off. |
+| Learning output | 183 focused tests pass: measured cash changes economy predictions and exploration probabilities; missing historical evidence is masked. No gameplay, actual checkpoint fit or registration;65examples/64registrations unchanged. |
+| Authority delta | Economy predictions now contribute to the existing goal-policy scores in synthetic tests; live model65 remains unchanged. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | No balls and593 money. Economy objective and runtime/replay connection remain unfinished; forced income is not a learned choice. |
-| Decision | Use isolated Flash implementation with Codex verification and bounded Claude review; prioritize measured income feedback and useful supply budgets. |
-| Next session | Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal. |
-| Next falsifier | Old model outputs stay fixed; changing measured cash must change explicit economy targets without invented labels or item identity leakage. |
+| Blocker | Zero balls and 593 money. Authenticated runtime/replay connection and real income outcomes remain unfinished. |
+| Decision | Retain bounded Flash drafts with one correction pass and independent verification; net Codex usage savings remain unproven. |
+| Next session | Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal. |
+| Next falsifier | Replay must reconstruct the exact cash context before selection and measured endpoints before fitting, while preserving historical journals. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions
