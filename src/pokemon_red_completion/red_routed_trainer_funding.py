@@ -41,14 +41,14 @@ from .red_goal_skills import (
     RedMartResupplyGoalProvider,
     prepare_center_departure,
 )
-from .red_pc_storage import face_pc_boundary
+from .red_pc_storage import ActionExecutor, RedPCStorageError, face_pc_boundary
 from .red_regional_trainer_funding import (
     funding_scope,
     regional_trainer_funding_candidates,
 )
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
 from .red_trainer_funding import TrainerFundingCandidate, local_trainer_funding_candidates
-from .route_executor import execute_route
+from .route_executor import InterruptionReceipt, execute_route
 from .route_plan import RoutePlan
 
 if TYPE_CHECKING:
@@ -59,6 +59,59 @@ if TYPE_CHECKING:
 
 class RedTrainerFundingError(RuntimeError):
     """A trainer income opportunity or its retained state is no longer valid."""
+
+
+def _face_trainer_boundary(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    direction: str,
+) -> InterruptionReceipt | None:
+    """Face an adjacent trainer, settling one wild encounter caused by the turn.
+
+    Gen I may roll a grass encounter while a blocked directional input merely
+    turns the player toward an occupied trainer tile.  The walking route has
+    already ended at that point, so its interruption handler cannot own this
+    final input.  Preserve the exact interaction square, flee once through the
+    ordinary bounded mechanic, and prove that the intended facing survived.
+    """
+
+    before = reader.read()
+    try:
+        face_pc_boundary(actions, reader, direction)
+    except RedPCStorageError as error:
+        interruption = Gen1TraversalObserver(reader).observe()
+        if (
+            interruption.interruption != "wild_battle"
+            or interruption.map_id != before.map_id
+            or interruption.at != (before.player_y, before.player_x)
+        ):
+            raise RedTrainerFundingError(
+                "trainer facing failed outside an unchanged wild interruption"
+            ) from error
+        receipt = Gen1WildFleeHandler(
+            actions,
+            reader,
+            maximum_flees=1,
+            stabilization_frames=180,
+            route_name="ordinary trainer funding facing",
+        ).handle(interruption)
+        after = reader.read()
+        if (
+            receipt.kind != "wild_battle"
+            or receipt.resumed_map != before.map_id
+            or receipt.resumed_at != (before.player_y, before.player_x)
+            or (after.map_id, after.player_y, after.player_x)
+            != (before.map_id, before.player_y, before.player_x)
+            or after.battle_state != 0
+            or not reader.read_input_readiness().ready
+            or reader.read_bottom_dialogue_box_visible()
+            or reader.read_player_facing() != direction
+        ):
+            raise RedTrainerFundingError(
+                "wild interruption did not restore the trainer interaction boundary"
+            ) from error
+        return receipt
+    return None
 
 
 def _funding_flights_enabled(router: RedResourceGoalRouter) -> bool:
@@ -507,8 +560,12 @@ def bind_local_trainer_funding(
                 raise RedTrainerFundingError("trainer funding approach failed")
         guard._require_preserved_living_slots(runtime.reader.read())
         require_target()
+        facing_interruption = None
         if pending_identity is None:
-            face_pc_boundary(actions, runtime.reader, target.interaction_facing.value)
+            facing_interruption = _face_trainer_boundary(
+                actions, runtime.reader, target.interaction_facing.value
+            )
+            require_target()
         from .red_trainer_funding_battle import run_prepared_trainer_funding
 
         receipt = run_prepared_trainer_funding(
@@ -536,6 +593,18 @@ def bind_local_trainer_funding(
                 "balls_purchased": 0,
                 **({"funding_transport": {"verified_flights": 1}}
                    if selected_flight is not None else {}),
+                **(
+                    {
+                        "funding_facing_interruption": {
+                            "kind": facing_interruption.kind,
+                            "resumed_map": facing_interruption.resumed_map,
+                            "resumed_at": list(facing_interruption.resumed_at),
+                            "details": dict(facing_interruption.details),
+                        }
+                    }
+                    if facing_interruption is not None
+                    else {}
+                ),
             },
         )
         return completed_report

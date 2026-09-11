@@ -274,6 +274,93 @@ def test_execution_uses_requalified_approach_not_stale_quoted_plan(monkeypatch):
     assert "observed_route" in calls
 
 
+def test_trainer_facing_settles_one_same_boundary_wild_interruption(monkeypatch):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    reader = router.runtime.reader
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+
+    def interrupted_face(*_args):
+        calls.append("face")
+        state.raw = replace(state.raw, battle_state=1)
+        raise funding.RedPCStorageError("PC facing did not preserve its bound position")
+
+    class Observer:
+        def observe(self):
+            assert state.raw.battle_state == 1
+            return SimpleNamespace(
+                interruption="wild_battle",
+                map_id=state.raw.map_id,
+                at=(state.raw.player_y, state.raw.player_x),
+            )
+
+    class Flee:
+        def __init__(self, _actions, _reader, **kwargs):
+            self.kwargs = kwargs
+
+        def handle(self, interruption):
+            assert self.kwargs == {
+                "maximum_flees": 1,
+                "stabilization_frames": 180,
+                "route_name": "ordinary trainer funding facing",
+            }
+            calls.append("flee")
+            state.raw = replace(state.raw, battle_state=0)
+            return funding.InterruptionReceipt(
+                "wild_battle", interruption.map_id, interruption.at, {"verified": True}
+            )
+
+    monkeypatch.setattr(funding, "face_pc_boundary", interrupted_face)
+    monkeypatch.setattr(funding, "Gen1TraversalObserver", lambda *_: Observer())
+    monkeypatch.setattr(funding, "Gen1WildFleeHandler", Flee)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+
+    report = bound.execute()
+
+    assert calls == ["escort", "route", "face", "flee", "battle"]
+    assert report.evidence["funding_facing_interruption"] == {
+        "kind": "wild_battle",
+        "resumed_map": target.trainer.map_id,
+        "resumed_at": [10, 36],
+        "details": {"verified": True},
+    }
+    assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
+def test_trainer_facing_never_recovers_wild_interruption_after_position_drift(monkeypatch):
+    router, state, _target, bindings, calls = fixture(monkeypatch)
+
+    def interrupted_face(*_args):
+        calls.append("face")
+        state.raw = replace(state.raw, player_y=9, battle_state=1)
+        raise funding.RedPCStorageError("PC facing did not preserve its bound position")
+
+    class Observer:
+        def observe(self):
+            return SimpleNamespace(
+                interruption="wild_battle",
+                map_id=state.raw.map_id,
+                at=(state.raw.player_y, state.raw.player_x),
+            )
+
+    monkeypatch.setattr(funding, "face_pc_boundary", interrupted_face)
+    monkeypatch.setattr(funding, "Gen1TraversalObserver", lambda *_: Observer())
+
+    class Flee:
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def handle(self, _interruption):
+            pytest.fail("drifted encounter must not be controlled")
+
+    monkeypatch.setattr(funding, "Gen1WildFleeHandler", Flee)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+
+    with pytest.raises(funding.RedTrainerFundingError, match="unchanged wild interruption"):
+        bound.execute()
+
+    assert calls == ["escort", "route", "face"]
+
+
 @pytest.mark.parametrize(
     "damage", [None, "static", "live_identity", "live_facing", "not_visible", "not_opted_in"]
 )
