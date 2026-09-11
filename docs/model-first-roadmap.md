@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
+AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed.
 
-Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
+Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels.
 
 Previous funded-lesson checklist3/3 is archived. Current checklist1/3 retains a negative resource-choice fit; distinct earn/buy options and new registration remain unverified. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 

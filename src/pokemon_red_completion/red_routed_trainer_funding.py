@@ -234,8 +234,10 @@ def _candidates(
             zones,
             inventoried_maps=maps,
             indoor_exit_map=indoor_exit,
-            **({"static_blockers": {m: world.object_blockers[m] for m in maps}}
-               if _funding_flights_enabled(router) else {}),
+            static_blockers=(
+                {m: world.object_blockers[m] for m in maps}
+                if _funding_flights_enabled(router) else None
+            ),
         )
     return local_trainer_funding_candidates(rom, world, start, zones)
 
@@ -331,7 +333,9 @@ def bind_local_trainer_funding(
         if router.trainer_pending_recovery
         else None
     )
-    quoted = [(candidate, None) for candidate in _candidates(router)]
+    quoted: list[tuple[TrainerFundingCandidate, FundingFlyCandidate | None]] = [
+        (candidate, None) for candidate in _candidates(router)
+    ]
     if _funding_flights_enabled(router):
         from .red_funding_fly import funding_fly_candidates
 

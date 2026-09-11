@@ -4,11 +4,11 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Latest engineering beat: [income access](work-sessions/2026-09-11-funding-fly-integration.md).
-Show the difference between an empty local action menu and93 unpaid trainer quotes
-elsewhere. Explain that Fly and route verification must connect those facts before
-the model can earn money there. Label this as tested integration, not live income;
-70examples and64registrations remain unchanged.
+Latest verified beat: [flight-assisted income](work-sessions/2026-09-11-flight-income-result.md).
+An empty local menu did not mean the world had no money:93 unpaid trainer quotes
+existed elsewhere. The integrated skill flew to Lavender, reached a Route8 trainer
+and earned1680. Show the actual113-to1793cash change, with unchanged70examples and
+64registrations. Explain why a successful forced support step is not learned judgment.
 
 “I wanted a model that could play Pokémon—not just repeat a walkthrough. Getting code to finish Red turned out to be different from teaching a model useful decisions.”
 

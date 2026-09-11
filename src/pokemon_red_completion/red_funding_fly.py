@@ -15,6 +15,7 @@ from pokemon_red_completion.gen1_cartridge import CartridgeReadError
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
 from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
 from pokemon_red_completion.gen1_trainer_sight import (
+    TrainerSightZone,
     static_trainer_sight_zones,
     trainer_headers,
 )
@@ -163,7 +164,7 @@ def funding_fly_candidates(
         if any(m not in local_graphs for m in scope_maps):
             continue
 
-        zones = []
+        zones: list[TrainerSightZone] = []
         for map_id in sorted(scope_maps):
             headers = trainer_headers(rom, {map_id}, full_event_offsets=True)
             events = map_object_events(rom, {map_id})

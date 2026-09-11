@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funding-fly-integration**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-flight-income-result**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-flight-income-result
+
+AY verified Fly-to-Lavender and Route8 trainer income:113actions/9565frames, cash113 to1793, unchanged HP and64registrations. One forced support goal, zero eligible examples/fit; model70 retained. Read-only terminal audit passed.
+
+**Deviation:** Resource checklist stays1/3: income access is working but useful earn/buy learning and new registration remain unproved. No stage exits changed. Three CI typing errors repaired without relaxing checks.
+
+**Next:** Continue actual AY01 through bounded resource choices toward another model-selected collection outcome; retain costs and fit only eligible choices.
 
 ### 2026-09-11-funding-fly-integration
 

@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Latest overnight result: AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## The question
 
@@ -12,8 +12,10 @@ no new learning is claimed. Declared-Mart departure subsequently worked, but one
 ball still failed. The [next inspection](work-sessions/2026-09-11-funding-fly-integration.md)
 found93 unpaid outdoor trainer quotes and a usable Fly carrier: income was not
 globally exhausted, access was too narrow. Flash drafted a small candidate planner;
-Codex repaired and connected it.240focused tests are engineering evidence, not a
-new payout or capture. The next test is actual flight-assisted funding.
+Codex repaired and connected it. The [actual AY test](work-sessions/2026-09-11-flight-income-result.md)
+then flew to Lavender, reached an unpaid Route8 trainer and earned1680. This is
+verified resource access, not learned money management: the only goal was forced,
+so no training label was created. Spending those funds on useful collection is next.
 
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
 
