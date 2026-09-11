@@ -4638,6 +4638,13 @@ class PokemonRedStateReader:
             bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )
 
+    def read_rival_starter(self) -> int:
+        """Read the persistent rival starter selector outside room-local scripts."""
+        starter = self._memory.read_u8(RamAddress.RIVAL_STARTER)
+        if not 1 <= starter <= 190:
+            raise SemanticStateError("rival starter is unavailable")
+        return starter
+
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
         """Recognize the ordinary trainer-start latch before battle mode appears.
 
