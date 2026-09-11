@@ -90,6 +90,57 @@ def test_resupply_transition_keeps_all_other_skills_and_contract():
     )
 
 
+def test_resource_choice_opt_in_keeps_existing_skills_and_reserves():
+    from pokemon_red_completion.red_goal_context_profile import bind_resource_choice_profile
+
+    before = bind_affordable_ball_supply_profile(_supply_transition_profile())
+    after = bind_resource_choice_profile(before)
+    assert after.profile_sha256 != before.profile_sha256
+    assert after.manager_config == before.manager_config
+    assert after.providers[:2] == before.providers[:2]
+    expected = dict(before.providers[2].parameters, resource_choice_variants=True)
+    assert after.providers[2].parameters == expected
+    assert bind_resource_choice_profile(after) == after
+    with pytest.raises(RedGoalContextProfileError, match="affordable"):
+        bind_resource_choice_profile(_supply_transition_profile())
+
+
+@pytest.mark.parametrize("flag", [True, False, 1, "true"])
+def test_resource_choice_profile_flag_is_explicit_and_boolean(flag):
+    before = bind_affordable_ball_supply_profile(_supply_transition_profile())
+    # Build real canonical input; opt-in does not relax the fixed reserve contract.
+    payload = json.loads(build_red_goal_context_profile_payload(
+        profile_id=before.profile_id,
+        providers=tuple((s.kind, s.mechanic, {
+            **s.parameters, "purchases": [dict(p) for p in s.parameters["purchases"]],
+            "resource_choice_variants": flag,
+        } if s.kind is GoalKind.RESUPPLY else dict(s.parameters)) for s in before.providers),
+    )) if type(flag) is bool else None
+    if payload is None:
+        with pytest.raises(RedGoalContextProfileError, match="bool"):
+            build_red_goal_context_profile_payload(
+                profile_id=before.profile_id,
+                providers=tuple((s.kind, s.mechanic, {
+                    **s.parameters, "purchases": [dict(p) for p in s.parameters["purchases"]],
+                    "resource_choice_variants": flag,
+                } if s.kind is GoalKind.RESUPPLY else dict(s.parameters))
+                    for s in before.providers),
+            )
+        return
+    custom = parse_red_goal_context_profile(
+        (json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode(),
+    )
+    from pokemon_red_completion.red_goal_context_profile import bind_resource_choice_profile
+
+    assert custom.providers[2].parameters["resource_choice_variants"] is flag
+    assert bind_resource_choice_profile(custom).manager_config == before.manager_config
+    payload["manager_config"]["desired_capture_items"] = 7
+    with pytest.raises(RedGoalContextProfileError, match="fixed Red contract"):
+        parse_red_goal_context_profile(
+            (json.dumps(payload, sort_keys=True, separators=(",", ":")) + "\n").encode(),
+        )
+
+
 @pytest.mark.parametrize("flag", [True, False, 1, "yes"])
 def test_indoor_funding_flag_is_explicit_and_supply_scoped(flag):
     params = {

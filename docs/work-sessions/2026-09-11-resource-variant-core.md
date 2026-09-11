@@ -34,12 +34,22 @@ Flash quota at01:09EDT:45.69%five-hour and68.46%weekly remaining, refreshing in 
 1h4m and18h13m. Claude quota unavailable. These are account-wide readings; drafting
 moved onto another subscription, but net Codex usage savings have not been measured.
 
+## Runtime connection follow-up
+
+The explicit Red profile transition is now implemented. It keeps an affordable
+purchase, adds only a qualified trainer earning offer when the existing reserve
+budget has a cash shortfall, and preserves the flag through full bounded execution.
+Tests exposed another real integration boundary: composition requires all nine
+goal kinds. It still does, allowing exactly one additional RESUPPLY only in the
+new mode. Both options survive that mask and the failure-retention wrapper.
+254 focused tests pass. No actual new gameplay or fit yet.
+
 ## Next boundary
 
-No real Red enumerator enables this mode yet. Connect an explicit profile option
-that retains an affordable purchase alongside qualified earning, including all
-binding wrappers; test changed cash, inventory and trainer availability. Then try
-one bounded choice from the actual AS02 endpoint, never an earlier reset.
+Explicit profile activation is ready for a bounded real test. Changed cash, stock,
+missing trainers, fainted-party exclusions, legacy defaults, quote separation and
+runtime recording are covered by ROM-free tests. Try one bounded choice from the
+actual AS02 endpoint with its existing model, never an earlier reset.
 
 Actual totals remain67 fitted examples,64 registrations and54 specimens. Latest
 save:Route18,1168money,no balls,full HP. Gameplay stopped; resource checklist0/3.

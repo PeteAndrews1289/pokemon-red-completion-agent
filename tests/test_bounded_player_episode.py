@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import pytest
 
@@ -317,6 +317,53 @@ def test_menu_validation_is_action_free_and_callable(fault):
             validate_choice_menu=validate if fault == "acts" else False,
         )
     assert authority.calls == trajectory.next_decision_index == 0
+
+
+@pytest.mark.parametrize("earn", [False, True])
+def test_resource_variants_survive_bounded_player_and_failure_wrapping(earn):
+    from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
+
+    trajectory, sink = _trajectory()
+    original_observe, meter, state = _observer(fail_first=False)
+
+    def observe():
+        original = original_observe()
+        skill = original.binding_set.bindings[0]
+        buy = replace(skill, binding_ref="private:buy", kind=GoalKind.RESUPPLY,
+                      resource_quote=GoalResourceQuote(
+                          600, 200, (GoalResourceReserve("capture", 0, 5, 1),),
+                      ))
+        income = replace(skill, binding_ref="private:earn", kind=GoalKind.RESUPPLY,
+                         resource_quote=GoalResourceQuote(600, 0, (), expected_income=500))
+        masked = tuple(replace(
+            item, availability=GoalAvailability.UNAVAILABLE,
+            unavailable_reason=GoalUnavailableReason.MISSING_RESOURCE,
+            estimated_effort=None, estimated_risk=None,
+        ) for item in original.binding_set.opportunities if item.kind is not GoalKind.RESUPPLY)
+        return replace(original, binding_set=GoalBindingSet(
+            (*masked, buy.opportunity, income.opportunity), (buy, income),
+            allow_resource_variants=True,
+        ))
+
+    class Select:
+        def select(self, question):
+            assert question.allow_resource_variants
+            return next(index for index, item in enumerate(question.opportunities)
+                        if item.resource_quote is not None
+                        and (item.resource_quote.expected_income > 0) is earn)
+
+    result = run_bounded_player_episode(
+        observe=observe, authority=Select(), authority_id="resource-variant-unit-test",
+        trajectory=trajectory, budget_meter=meter,
+        completion_satisfied=lambda _: False,
+        limits=BoundedPlayerLimits(max_decisions=1, max_replans=0),
+    )
+    assert result.stop_reason is BoundedPlayerStopReason.DECISION_LIMIT
+    assert len(result.steps) == 1
+    assert result.steps[0].status.value == "succeeded"
+    assert result.steps[0].selection_mode is GoalSelectionMode.AUTHORITY
+    assert state["actions"] == 5 and state["frames"] == 50
+    assert len(sink.decisions) == len(sink.events) == 1
 
 
 def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:

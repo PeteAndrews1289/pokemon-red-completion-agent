@@ -22,7 +22,7 @@ from .gen1_trainer_sight import (
 )
 from .gen1_traversal import map_object_events
 from .global_router import MacroPath
-from .goal_manager import GoalFailureReason, GoalKind
+from .goal_manager import GoalAvailability, GoalFailureReason, GoalKind
 from .goal_manager_runtime import (
     ExecutableGoalBinding,
     GoalBindingSet,
@@ -226,8 +226,19 @@ def bind_local_trainer_funding(
     bindings: GoalBindingSet,
     observation: RedGoalObservation,
 ) -> GoalBindingSet:
-    """Replace only an unavailable cash-only Mart option; preserve all alternatives."""
-    if any(b.kind is GoalKind.RESUPPLY for b in bindings.bindings):
+    """Retain purchases; an explicit reserve mode may add a separate earning offer."""
+    variants = any(
+        s.kind is GoalKind.RESUPPLY and s.parameters.get("resource_choice_variants") is True
+        for s in router.runtime.profile.providers
+    )
+    purchases = tuple(b for b in bindings.bindings if b.kind is GoalKind.RESUPPLY)
+    if bindings.allow_resource_variants or (purchases and not variants):
+        return bindings
+    if purchases and (
+        len(purchases) != 1 or purchases[0].resource_quote is None
+        or purchases[0].resource_quote.purchase_cost <= 0
+        or purchases[0].resource_quote.expected_income != 0
+    ):
         return bindings
     if not any(s.kind is GoalKind.RESUPPLY for s in router.runtime.profile.providers):
         return bindings
@@ -241,13 +252,25 @@ def bind_local_trainer_funding(
         or raw.battle_state != 0
         or not observation.input_ready
         or raw.player_money is None
-        or not 0 <= raw.player_money < provider.purchases[0].unit_price
+        or raw.player_money < 0
         or raw.event_flags is None
         or raw.bag_items is None
         or not raw.party_hp
         or len(raw.party_hp) != observation.party.size
         or any(hp <= 0 for hp in raw.party_hp)
     ):
+        return bindings
+    if variants:
+        from .red_capture_funding_budget import red_capture_funding_budget
+
+        budget = red_capture_funding_budget(observation, provider)
+        if budget is None or budget.shortfall == 0:
+            return bindings
+        if purchases:
+            assert purchases[0].resource_quote is not None
+            if purchases[0].resource_quote.available_funds != raw.player_money:
+                return bindings
+    elif raw.player_money >= provider.purchases[0].unit_price:
         return bindings
     try:
         escort = plan_capture_lead(observation.party)
@@ -264,6 +287,7 @@ def bind_local_trainer_funding(
         for c in _candidates(router)
         if level >= max(m.level for m in c.quote.party) + 10
         and c.quote.expected_money_after(raw.player_money) >= provider.purchases[0].unit_price
+        and c.quote.expected_money_after(raw.player_money) > raw.player_money
         and (
             pending_identity is None
             or (
@@ -502,9 +526,13 @@ def bind_local_trainer_funding(
         verify=verify,
     )
     return GoalBindingSet(
-        tuple(
+        (tuple(
+            o for o in bindings.opportunities
+            if o.kind is not GoalKind.RESUPPLY or o.availability is GoalAvailability.AVAILABLE
+        ) + (binding.opportunity,)) if purchases else tuple(
             binding.opportunity if o.kind is GoalKind.RESUPPLY else o
             for o in bindings.opportunities
         ),
         (*bindings.bindings, binding),
+        allow_resource_variants=bool(purchases),
     )

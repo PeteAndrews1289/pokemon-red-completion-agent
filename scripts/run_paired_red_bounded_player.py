@@ -723,6 +723,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
     parser.add_argument(
+        "--resource-choice-variants", dest="regional_transitions", action="append_const",
+        const="resource-choice-variants",
+        help="explicit useful-reserve earning choice beside an affordable capture purchase",
+    )
+    parser.add_argument(
         "--context-origin",
         choices=("training", "development", "unspecified"),
         default="unspecified",
@@ -1599,6 +1604,7 @@ def _regional_profiles(
                 "travel-capture",
                 "capture-access-requirements",
                 "affordable-capture-supply",
+                "resource-choice-variants",
                 "cartridge-trainer-story",
                 "cartridge-trainer-story:bruno",
                 "cartridge-trainer-story:agatha",
@@ -1794,6 +1800,16 @@ def _regional_profiles(
             )
 
             profile = bind_affordable_ball_supply_profile(profile)
+            result.append(profile)
+            continue
+        if source == "resource-choice-variants":
+            from pokemon_red_completion.red_goal_context_profile import bind_resource_choice_profile
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "resource_variants_require_registered_objective",
+                )
+            profile = bind_resource_choice_profile(profile)
             result.append(profile)
             continue
         if source == "capture-status":

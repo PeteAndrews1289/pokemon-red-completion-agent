@@ -189,6 +189,59 @@ def test_explicit_indoor_support_settles_before_party_preparation(monkeypatch):
     assert report.actions_executed > 0
 
 
+def resource_choice_fixture(monkeypatch, *, money=400, stock=0, enabled=True):
+    from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
+
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    bag = ((int(ItemId.POKE_BALL), stock),) if stock else ()
+    state.raw = replace(state.raw, player_money=money, bag_items=bag)
+    state.capture_item_count = stock
+    provider = router.runtime.provider_for(GoalKind.RESUPPLY, router.actions)
+    provider.adapter.config = SimpleNamespace(desired_capture_items=5)
+    router.runtime.profile.providers[0].parameters["resource_choice_variants"] = enabled
+    buy = ExecutableGoalBinding(
+        "affordable-buy", GoalKind.RESUPPLY, 0.1, 0.05,
+        lambda: GoalExecutionReport(0, 0, {}), lambda _: GoalVerification.succeeded(),
+        resource_quote=GoalResourceQuote(money, 200, (
+            GoalResourceReserve("capture", stock, 5, 1),
+        )),
+    )
+    other = bindings.bindings[0]
+    return router, state, target, GoalBindingSet(
+        (buy.opportunity, other.opportunity), (buy, other),
+    ), calls
+
+
+@pytest.mark.parametrize("money", [200, 400, 999])
+def test_reserve_shortfall_keeps_affordable_purchase_and_adds_income(monkeypatch, money):
+    router, state, _, original, calls = resource_choice_fixture(monkeypatch, money=money)
+    offered = funding.bind_local_trainer_funding(router, original, state)
+    assert offered.allow_resource_variants
+    assert offered.bindings[:2] == original.bindings
+    assert offered.opportunities[:2] == original.opportunities
+    assert len(offered.bindings) == 3
+    assert offered.bindings[2].resource_quote.expected_income == 1050
+    assert offered.bindings[2].resource_quote.available_funds == money
+    assert offered.bindings[0].resource_quote.purchase_cost == 200
+    assert funding.bind_local_trainer_funding(router, offered, state) is offered
+    assert calls == []
+    assert router.actions.actions_executed == router.runtime.emulator.frame_count == 0
+
+
+@pytest.mark.parametrize("case", ["legacy", "funded", "stocked", "no_trainer", "fainted"])
+def test_resource_variants_do_not_invent_unneeded_or_unsafe_income(monkeypatch, case):
+    router, state, _, original, calls = resource_choice_fixture(
+        monkeypatch, money=1000 if case == "funded" else 400,
+        stock=5 if case == "stocked" else 0, enabled=case != "legacy",
+    )
+    if case == "no_trainer":
+        monkeypatch.setattr(funding, "_candidates", lambda _: ())
+    if case == "fainted":
+        state.raw = replace(state.raw, party_hp=(0,))
+    assert funding.bind_local_trainer_funding(router, original, state) is original
+    assert calls == []
+
+
 def test_observed_route_rejection_stops_before_escort_or_input(monkeypatch):
     router, state, _, bindings, calls = fixture(monkeypatch)
 

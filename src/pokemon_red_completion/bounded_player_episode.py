@@ -277,6 +277,7 @@ def _retaining_binding_set(
             _retain_executor_failure(binding, budget_meter, failure_observer)
             for binding in binding_set.bindings
         ),
+        allow_resource_variants=binding_set.allow_resource_variants,
     )
 
 
@@ -401,6 +402,7 @@ def run_bounded_player_episode(
         question = trajectory.ordered_question(
             current.situation,
             current.binding_set.opportunities,
+            allow_resource_variants=current.binding_set.allow_resource_variants,
         )
         if len(question.available_indices) != available_count:
             raise BoundedPlayerError(

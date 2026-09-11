@@ -27,13 +27,15 @@ HP249/118/146/88/92/73, full.1168money and no balls. Gameplay stopped.
 
 ## Next bounded work
 
-The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
+The explicit Red profile/runtime connection now passes254focused tests. Qualify one actual choice from AS02 with model67 using the prospective resource-choice-variants transition. Preserve affordable purchases and all prior costs; no reset or consumed retry.
 
 Flash's core draft and one correction are complete. Codex integrated the selected
 core, repaired fixtures and typing, and connected ordered recording/replay and
 bounded-player mode propagation.194focused tests, full mypy and Ruff pass.
 Old policy schemas remain unchanged; only explicit opt-in emits v4. Real Red
-earn/buy enumeration is NOT enabled yet. The five older rejected funding files
+enumeration now has a default-off profile transition; it has not played yet.
+The complete nine-kind mask allows exactly one extra RESUPPLY only in this mode.
+The five older rejected funding files
 remain isolated. See [review](docs/work-sessions/2026-09-11-resource-variant-core.md).
 
 Continue from private `run_as_recovery_20260911.arguments()` only as a builder;

@@ -28,6 +28,26 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_resource_choice_transition_requires_registered_and_affordable_supply(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _supply_transition_profile()
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, ("resource-choice-variants",), object())
+    old, new = derive(
+        before, ("affordable-capture-supply", "resource-choice-variants"), object(),
+        allow_cartridge_sources=True,
+    )
+    assert "resource_choice_variants" not in old.providers[2].parameters
+    assert new.providers[2].parameters["resource_choice_variants"] is True
+    assert new.providers[:2] == old.providers[:2]
+    assert new.manager_config == old.manager_config
+    assert "--resource-choice-variants" in module["_parser"]().format_help()
+
+
 def test_search_budget_transition_preserves_history_and_requires_registration(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
     module = runpy.run_path(str(SCRIPT))
