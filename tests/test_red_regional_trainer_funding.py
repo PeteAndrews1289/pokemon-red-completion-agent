@@ -120,6 +120,23 @@ def test_step_bound_and_defeated_target(region):
     assert candidates((world, start, tuple(replace(t, defeated=True) for t in trainers))) == ()
 
 
+@pytest.mark.parametrize("trainer_class", [0, 200, 247, 255, True])
+def test_scripted_encounters_are_not_ordinary_income_candidates(
+    region, monkeypatch, trainer_class
+):
+    world, start, trainers = region
+    scripted = replace(trainers[1], trainer_class=trainer_class)
+    calls = []
+
+    def quote(*args):
+        calls.append(args)
+        raise AssertionError("scripted encounter was quoted as ordinary income")
+
+    monkeypatch.setattr(funding, "trainer_party_quote", quote)
+    assert candidates((world, start, (scripted,))) == ()
+    assert calls == []
+
+
 @pytest.mark.parametrize(
     "edge_changes",
     [

@@ -125,6 +125,13 @@ def regional_trainer_funding_candidates(
     for trainer in trainers:
         if trainer.defeated:
             continue
+        # The cartridge trainer bit also marks scripted encounters such as
+        # stationary legendaries.  They remain reserved bodies/sight lanes
+        # above, but they are not ordinary payout candidates and their script
+        # identifiers do not index the trainer-party table.  Do not let one
+        # such object make an otherwise healthy post-action observation fail.
+        if type(trainer.trainer_class) is not int or not 201 <= trainer.trainer_class <= 246:
+            continue
         quote = trainer_party_quote(rom, trainer.trainer_class, trainer.trainer_set)
         approaches = []
         for facing in TrainerFacing:
