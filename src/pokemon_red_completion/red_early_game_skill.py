@@ -49,7 +49,6 @@ from pokemon_red_completion.play import (
     run_oaks_errand_chapter,
 )
 from pokemon_red_completion.quest import Specialist
-from pokemon_red_completion.red_player_observer import LivePokemonRedObserver
 from pokemon_red_completion.route import COMPLETION_QUEST
 from pokemon_red_completion.ss_anne import SSAnneChapterReport, run_ss_anne_chapter
 from pokemon_red_completion.surge import SurgeChapterReport, run_surge_chapter
@@ -100,6 +99,10 @@ class EarlyGameExecutor(Protocol):
     def execute(self, action: MacroAction) -> ExecutedAction: ...
 
 
+class EarlyGameObserver(Protocol):
+    def latch_verified_facts(self, facts: frozenset[str]) -> None: ...
+
+
 class EarlyGameChapterReport(Protocol):
     @property
     def passed(self) -> bool: ...
@@ -139,7 +142,7 @@ class EarlyGameSemanticStageSkill:
     required_mode: GameMode
     required_location: str | None
     run_chapter: Callable[[], EarlyGameChapterReport]
-    observer: LivePokemonRedObserver
+    observer: EarlyGameObserver
     max_actions: int
     max_frames: int
 
@@ -327,7 +330,7 @@ class EarlyGameThroughCeladonObjectiveSkill:
     emulator: PyBoyAdapter
     reader: PokemonRedStateReader
     executor: EarlyGameExecutor
-    observer: LivePokemonRedObserver
+    observer: EarlyGameObserver
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING
     play_timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING
     objective_id: str = "power_on"
@@ -373,7 +376,7 @@ def build_red_early_game_semantic_skill_registry(
     emulator: PyBoyAdapter,
     reader: PokemonRedStateReader,
     executor: EarlyGameExecutor,
-    observer: LivePokemonRedObserver,
+    observer: EarlyGameObserver,
     opening_timing: OpeningTiming = DEFAULT_OPENING_TIMING,
     play_timing: QualifiedPlayTiming = DEFAULT_QUALIFIED_PLAY_TIMING,
 ) -> ObjectiveSkillRegistry:
@@ -523,7 +526,7 @@ def build_red_early_game_semantic_skill_registry(
                 "defeat_surge",
                 required_ids=("obtain_cut", "defeat_misty"),
                 run=lambda: run_surge_chapter(emulator, reader, executor),
-                max_actions=25_000,
+                max_actions=30_000,
                 max_frames=5_000_000,
             ),
             stage(

@@ -13,6 +13,7 @@ from pokemon_red_completion.actions import (
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.objective_skills import (
     ObjectiveSkillAvailability,
+    ObjectiveSkillError,
     ObjectiveSkillExecution,
     ObjectiveSkillRegistry,
 )
@@ -298,8 +299,22 @@ def test_portable_loop_enforces_composite_skill_execution_bounds() -> None:
         objective_skills=ObjectiveSkillRegistry((skill,)),
     )
 
-    with pytest.raises(PlayerLoopError, match="action bound"):
+    with pytest.raises(
+        PlayerLoopError,
+        match=r"objective skill first exceeded its declared action bound: 3>2",
+    ):
         loop.step()
+
+
+def test_objective_skill_registry_reports_frame_bound_with_identity() -> None:
+    world = _World(GameState(GameMode.OVERWORLD), [])
+    skill = _CompositeSkill(world, max_frames=29)
+
+    with pytest.raises(
+        ObjectiveSkillError,
+        match=r"objective skill first exceeded its declared frame bound: 30>29",
+    ):
+        ObjectiveSkillRegistry.execute_bounded(skill)
 
 
 @dataclass

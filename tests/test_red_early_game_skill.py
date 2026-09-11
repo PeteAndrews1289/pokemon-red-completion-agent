@@ -258,6 +258,9 @@ def test_semantic_stage_registry_exposes_resumable_boundaries_without_route_labe
     assert tuple(skill.objective_id for skill in registry.skills()) == (
         EARLY_GAME_STAGE_OBJECTIVE_IDS
     )
+    defeat_surge = registry.get("defeat_surge")
+    assert defeat_surge is not None
+    assert defeat_surge.max_actions == 30_000
     power_on = registry.get("power_on")
     assert power_on is not None
     assert power_on.availability(GameState(GameMode.BOOTING)).executable

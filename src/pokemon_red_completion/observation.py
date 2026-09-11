@@ -5769,6 +5769,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CERULEAN_TRASHED_HOUSE: "cerulean_trashed_house",
         MapId.CERULEAN_POKECENTER: "cerulean_pokecenter",
         MapId.CERULEAN_GYM: "cerulean_gym",
+        MapId.VERMILION_GYM: "vermilion_gym",
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",

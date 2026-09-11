@@ -5,9 +5,13 @@ from dataclasses import replace
 from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.player_loop import PlayerStepKind, PlayerStepResult
 from pokemon_red_completion.red_fresh_start_conductor import (
+    CELADON_JOIN_AUTOMATIC_OBJECTIVE_IDS,
+    CELADON_JOIN_SELECTED_STAGE_IDS,
+    CELADON_JOIN_VERIFIED_OBJECTIVE_IDS,
     FIRST_BADGE_AUTOMATIC_OBJECTIVE_IDS,
     FIRST_BADGE_SELECTED_STAGE_IDS,
     FIRST_BADGE_VERIFIED_OBJECTIVE_IDS,
+    FreshCeladonJoinReport,
     FreshFirstBadgeReport,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
@@ -84,6 +88,61 @@ def test_first_badge_report_fails_on_authority_inflation_or_missing_badge() -> N
         report,
         objective_policy={**report.objective_policy, "branching_decisions": 1},
     ).passed
+
+
+def _celadon_report() -> FreshCeladonJoinReport:
+    facts = frozenset(
+        fact
+        for objective_id in CELADON_JOIN_VERIFIED_OBJECTIVE_IDS
+        for fact in COMPLETION_QUEST.objective(objective_id).completion_facts
+    )
+    steps = tuple(
+        PlayerStepResult(
+            kind=PlayerStepKind.SKILL_COMPLETED,
+            objective_id=objective_id,
+            skill_actions_executed=10,
+            skill_frames_executed=100,
+        )
+        for objective_id in CELADON_JOIN_SELECTED_STAGE_IDS
+    )
+    return FreshCeladonJoinReport(
+        steps=steps,
+        terminal_state=GameState(GameMode.OVERWORLD, facts, location="celadon_pokecenter"),
+        loop={"actions_executed": 70, "decisions": 7, "objectives_completed": 7},
+        observer={"verified_objectives": list(CELADON_JOIN_VERIFIED_OBJECTIVE_IDS)},
+        objective_policy={
+            "branching_decisions": 0,
+            "expected_answer_labels_supplied": 0,
+            "fixed_dispatch_decisions": 0,
+            "learned_choice_decisions": 7,
+            "route_dispatch_mode": "model_selected_specialists",
+            "selected_decisions": 7,
+            "singleton_decisions": 7,
+        },
+        selected_objective_ids=CELADON_JOIN_SELECTED_STAGE_IDS,
+        automatic_objective_ids=CELADON_JOIN_AUTOMATIC_OBJECTIVE_IDS,
+        midgame_executable_objective_ids=("clear_rocket_hideout", "reach_saffron"),
+        source_checkpoint_id="red-first-badge-v1",
+        ranker_training_status="integration_only_unlearned",
+        actions_executed=70,
+        frames_executed=700,
+        controller_released=True,
+    )
+
+
+def test_celadon_join_report_requires_exact_stages_and_midgame_acceptance() -> None:
+    report = _celadon_report()
+
+    assert report.passed
+    public = report.public_dict()
+    assert public["objective_policy"]["integration_only_decisions"] == 7
+    assert "learned_choice_decisions" not in public["objective_policy"]
+    assert public["midgame_executable_objective_ids"] == [
+        "clear_rocket_hideout",
+        "reach_saffron",
+    ]
+    assert not replace(report, midgame_executable_objective_ids=()).passed
+    assert not replace(report, automatic_objective_ids=()).passed
     assert not replace(
         report,
         automatic_objective_ids=("begin_adventure", "choose_starter"),

@@ -566,6 +566,10 @@ def test_celadon_center_has_public_location_and_objective_fact() -> None:
     assert "location:celadon_city" in semantic_facts(raw)
 
 
+def test_vermilion_gym_has_public_chapter_boundary_location() -> None:
+    assert location_label(MapId.VERMILION_GYM) == "vermilion_gym"
+
+
 def test_gold_teeth_have_a_semantic_skill_affordance_fact() -> None:
     raw = replace(_raw(map_id=MapId.FUCHSIA_POKECENTER), bag_item_ids=(ItemId.GOLD_TEETH,))
 
