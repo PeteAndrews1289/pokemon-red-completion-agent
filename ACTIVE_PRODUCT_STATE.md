@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
+- Next decision: Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. |
+| Authority now | AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-resource-variant-core** · status **active** · evidence [registered train example](docs/evidence/red-recovery-funding-learning-2026-09-11.json)
+**2026-09-11-resource-choice-runtime** · status **active** · evidence [registered train example](docs/evidence/red-recovery-funding-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. |
-| Authority delta | One genuine native recovery example fitted; forced725income supplies no label, no authority promotion. |
+| Learning output | AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged. |
+| Authority delta | No new learned choice or fit. The actual menu was a forced purchase, not earn versus buy. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | 1168cash permits one GreatBall; the current menu hides further earning whenever a purchase is affordable. |
-| Decision | Core qualified in194focused tests; next connect default-off Red runtime offers. No new game outcome or fit in this engineering session. |
-| Next session | The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry. |
-| Next falsifier | Both legitimate earn and buy offers must survive, execute separately, and preserve old single-kind replay. |
+| Blocker | Latest Mart state has a4832-money supply shortfall but zero funding candidates; current exit support covers known Centers only. |
+| Decision | Keep AT spending. Test only explicit declared-Mart departure; do not expand arbitrary routes or replay AS02. |
+| Next session | Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry. |
+| Next falsifier | A mismatched shop, missing outside observation or unsafe state must never advertise departure. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -1,14 +1,14 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Latest overnight result: AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## The question
 
 The [resource-choice core](work-sessions/2026-09-11-resource-variant-core.md) addresses
 another difference between a working script and useful learning: an affordable
 single ball should not hide the option of earning a practical reserve. Flash drafted
-the representation; Codex repaired and tested execution/replay. Real activation is
-next, so this changes no gameplay or learning total.
+the representation; Codex repaired and tested execution/replay. The first actual test still exposed only a purchase. That spending is retained;
+no new learning is claimed. Declared-Mart departure is the next access gap.
 
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
 

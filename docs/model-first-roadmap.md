@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
+AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.
 
-The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
+Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
 
 Previous funded-lesson checklist3/3 is archived. Next checklist0/3 tests distinct earn/buy options, actual resource learning and new registration. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 

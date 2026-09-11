@@ -90,6 +90,51 @@ def test_resupply_transition_keeps_all_other_skills_and_contract():
     )
 
 
+def _indoor_supply_profile(**overrides):
+    before = bind_affordable_ball_supply_profile(_supply_transition_profile())
+    params = dict(before.providers[2].parameters)
+    params["purchases"] = [dict(p) for p in params["purchases"]]
+    params.update(indoor_funding_departure=True, **overrides)
+    return parse_red_goal_context_profile(_payload(
+        *(_provider(s.kind, s.mechanic, dict(s.parameters)) for s in before.providers[:2]),
+        _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
+    ))
+
+
+def test_mart_funding_transition_is_explicit_and_only_changes_supply():
+    from pokemon_red_completion.red_goal_context_profile import bind_mart_funding_departure_profile
+
+    before = _indoor_supply_profile()
+    after = bind_mart_funding_departure_profile(before)
+    assert "mart_funding_departure" not in before.providers[2].parameters
+    assert after.providers[2].parameters == dict(before.providers[2].parameters,
+                                                mart_funding_departure=True)
+    assert before.providers[:2] == after.providers[:2]
+    assert before.manager_config == after.manager_config
+    assert before.profile_sha256 != after.profile_sha256
+    assert bind_mart_funding_departure_profile(after) == after
+    with pytest.raises(RedGoalContextProfileError, match="indoor funding"):
+        bind_mart_funding_departure_profile(
+            bind_affordable_ball_supply_profile(_supply_transition_profile()))
+
+
+@pytest.mark.parametrize("flag", [1, "true", None])
+def test_mart_funding_profile_rejects_nonboolean_flag(flag):
+    with pytest.raises(RedGoalContextProfileError, match="bool"):
+        _indoor_supply_profile(mart_funding_departure=flag)
+
+
+def test_mart_funding_profile_requires_existing_indoor_mode():
+    before = _indoor_supply_profile(mart_funding_departure=True)
+    params = dict(before.providers[2].parameters)
+    params["purchases"] = [dict(p) for p in params["purchases"]]
+    params["indoor_funding_departure"] = False
+    with pytest.raises(RedGoalContextProfileError, match="indoor funding"):
+        parse_red_goal_context_profile(_payload(
+            _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params),
+        ))
+
+
 def test_resource_choice_opt_in_keeps_existing_skills_and_reserves():
     from pokemon_red_completion.red_goal_context_profile import bind_resource_choice_profile
 

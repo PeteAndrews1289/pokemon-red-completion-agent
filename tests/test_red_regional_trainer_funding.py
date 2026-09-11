@@ -180,6 +180,55 @@ def indoor_region(region):
     return world, replace(start, map_id=154, last_outside_map=22), trainers
 
 
+@pytest.mark.parametrize("mode", ["enabled", "disabled", "different_mart", "outside_missing"])
+def test_real_runtime_passes_only_explicit_declared_mart_exit(region, monkeypatch, mode):
+    from test_red_goal_context_profile import _indoor_supply_profile
+
+    import pokemon_red_completion.red_routed_trainer_funding as runtime_funding
+
+    world, start, trainers = indoor_region(region)
+    world.local_graphs[152] = world.local_graphs.pop(154)
+    world.macro_graph = replace(world.macro_graph, edges={
+        **{m: e for m, e in world.macro_graph.edges.items() if m != 154},
+        152: world.macro_graph.edges[154],
+    })
+    world.rom = b"test"
+    start = replace(start, map_id=152,
+                    last_outside_map=None if mode == "outside_missing" else 22)
+    profile = _indoor_supply_profile(
+        map_id=40 if mode == "different_mart" else 152,
+        mart_funding_departure=mode != "disabled",
+    )
+    raw = SimpleNamespace(map_id=152, event_flags=bytes(320))
+    reader = SimpleNamespace(read=lambda: raw, read_current_map_objects=lambda: (),
+                             read_pending_trainer_battle_identity=lambda: None)
+    monkeypatch.setattr(runtime_funding, "trainer_headers", lambda *_a, **_k: ())
+    monkeypatch.setattr(runtime_funding, "map_object_events", lambda *_a: ())
+    monkeypatch.setattr(runtime_funding, "trainer_sight_zones", lambda *_a: ())
+    monkeypatch.setattr(runtime_funding, "Gen1TrainerSightProjector", lambda *_a, **_k: None)
+    monkeypatch.setattr(runtime_funding, "Gen1TraversalObserver",
+                        lambda *_a: SimpleNamespace(observe=lambda: start))
+    # Preserve actual candidate routing and map inventory; only cartridge reads are fixtures.
+    monkeypatch.setattr(runtime_funding, "static_trainer_sight_zones", lambda *_a: ())
+    def map_events(_rom, maps):
+        return tuple(t for t in trainers if t.map_id in maps)
+    monkeypatch.setattr(runtime_funding, "map_object_events", map_events)
+    monkeypatch.setattr(runtime_funding, "static_trainer_sight_zones",
+                        lambda _headers, events, _flags: events)
+    router = SimpleNamespace(world=world, regional_trainer_funding=True,
+        observed_trainer_funding=False, trainer_pending_recovery=False,
+        runtime=SimpleNamespace(reader=reader, profile=profile))
+    result = runtime_funding._candidates(router)
+    if mode == "enabled":
+        assert len(result) == 1
+        assert result[0].approach.macro_path.maps == (152, 22, 23)
+        assert result[0].approach.terminal_at == (2, 3)
+        assert [s.kind for s in result[0].approach.steps if s.kind != "walk"] == [
+            "warp", "connection"]
+    else:
+        assert result == ()
+
+
 def test_opted_indoor_route_crosses_one_exit_then_real_connection(region):
     world, start, trainers = indoor_region(region)
     (candidate,) = funding.regional_trainer_funding_candidates(

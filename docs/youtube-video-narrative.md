@@ -79,3 +79,10 @@ returns to the Center and then a forced trainer-income skill earns725. Show66→
 examples for recovery, not the income. With1168money, the current menu only buys
 one GreatBall and hides earning more; explain why preserving a real economic choice
 is the next engineering task, not already a trained money-making strategy.
+
+
+For [the first resource-choice runtime test](work-sessions/2026-09-11-resource-choice-runtime.md), show the
+honest difference between a tested menu mechanism and an actual choice: only buying
+was available. Display600 spent,one ball,zero new examples. The latest model remains67.
+The missing funding exit becomes a small engineering task; do not edit this into a
+successful money-strategy lesson. Keep the failed capture and prior costs visible.

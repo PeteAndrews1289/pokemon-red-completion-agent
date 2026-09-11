@@ -538,6 +538,30 @@ def bind_resource_choice_profile(profile: RedGoalContextProfile) -> RedGoalConte
     return changed
 
 
+def bind_mart_funding_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Prospectively allow only the declared Mart's observed outdoor funding exit."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if (parameters.get("affordable_ball_purchase") is not True
+                    or parameters.get("indoor_funding_departure") is not True):
+                raise RedGoalContextProfileError("Mart funding requires existing indoor funding")
+            parameters["mart_funding_departure"] = True
+            found = True
+        providers.append({"kind": spec.kind.value, "mechanic": spec.mechanic.value,
+                          "parameters": parameters})
+    if not found:
+        raise RedGoalContextProfileError("Mart funding requires an existing Mart skill")
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config), "providers": providers,
+    }))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
 def build_acquisition_replanning_profile_payload(
     profile: RedGoalContextProfile,
     *,
@@ -1021,13 +1045,13 @@ def _parse_parameters(
             | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
             | {key for key in (
                 "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-                "resource_choice_variants",
+                "resource_choice_variants", "mart_funding_departure",
             ) if key in row},
         )
         transport_fields: dict[str, object] = {}
         for key in (
             "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-            "resource_choice_variants",
+            "resource_choice_variants", "mart_funding_departure",
         ):
             if key in row:
                 if type(row[key]) is not bool:
@@ -1037,6 +1061,11 @@ def _parse_parameters(
             raise RedGoalContextProfileError("Mart indoor departure requires Fly transport")
         if "indoor_funding_departure" in row and row.get("affordable_ball_purchase") is not True:
             raise RedGoalContextProfileError("indoor funding requires affordable capture supply")
+        if row.get("mart_funding_departure") is True and (
+            row.get("indoor_funding_departure") is not True
+            or row.get("affordable_ball_purchase") is not True
+        ):
+            raise RedGoalContextProfileError("Mart funding requires existing indoor funding")
         if row.get("resource_choice_variants") is True and (
             row.get("affordable_ball_purchase") is not True
         ):

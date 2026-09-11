@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-resource-variant-core",
+  "as_of_session": "2026-09-11-resource-choice-runtime",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -870,6 +870,12 @@
       "result": "Default-off earn/buy core integrated after Flash draft, Codex repairs and Claude contract review.194focused tests pass; ordered execution/replay and positive learned probabilities qualified with synthetic fixtures.67examples and64registrations unchanged; gameplay stopped.",
       "deviation": "No stage exit changed. Runtime/profile enumeration is not enabled; useful resource checklist remains0/3. Older rejected funding draft not integrated.",
       "next": "Connect explicit Red profile/router opt-in and preserve both legitimate offers. Then qualify one actual resource choice from AS02 with model67, retaining all costs and no reset."
+    },
+    {
+      "session": "2026-09-11-resource-choice-runtime",
+      "result": "AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.",
+      "deviation": "Runtime connected but actual economic alternatives absent; checklist remains0/3. No stage exit or objective changed.",
+      "next": "Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry."
     }
   ],
   "closed_milestones": [

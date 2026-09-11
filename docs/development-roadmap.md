@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-variant-core**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-choice-runtime**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-resource-choice-runtime
+
+AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.
+
+**Deviation:** Runtime connected but actual economic alternatives absent; checklist remains0/3. No stage exit or objective changed.
+
+**Next:** Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
 
 ### 2026-09-11-resource-variant-core
 

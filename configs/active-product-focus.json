@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One genuine native recovery example fitted; forced725income supplies no label, no authority promotion.",
-        "blocker": "1168cash permits one GreatBall; the current menu hides further earning whenever a purchase is affordable.",
-        "decision": "Core qualified in194focused tests; next connect default-off Red runtime offers. No new game outcome or fit in this engineering session.",
+        "authority_delta": "No new learned choice or fit. The actual menu was a forced purchase, not earn versus buy.",
+        "blocker": "Latest Mart state has a4832-money supply shortfall but zero funding candidates; current exit support covers known Centers only.",
+        "decision": "Keep AT spending. Test only explicit declared-Mart departure; do not expand arbitrary routes or replay AS02.",
         "evidence": {
           "kind": "registered_train_example",
           "path": "docs/evidence/red-recovery-funding-learning-2026-09-11.json",
           "sha256": "1afdc3de086bf5181fb13f52e4067c90890893d324cc2465edd093b9486d793b"
         },
-        "learning_output": "AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.",
-        "next_falsifier": "Both legitimate earn and buy offers must survive, execute separately, and preserve old single-kind replay.",
-        "next_session_goal": "The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.",
+        "learning_output": "AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.",
+        "next_falsifier": "A mismatched shop, missing outside observation or unsafe state must never advertise departure.",
+        "next_session_goal": "Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-resource-variant-core",
+        "session_id": "2026-09-11-resource-choice-runtime",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.",
+        "current": "AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.",
+      "next_decision": "Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

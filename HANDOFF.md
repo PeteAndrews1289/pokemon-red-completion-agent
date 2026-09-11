@@ -4,48 +4,50 @@ Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_S
 and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
 and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AS02
+## Latest verified endpoint: AT01
 
-AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
+AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.
 
-AS01 used46actions/3732frames for model-selected recovery. AS02 used139actions/
-9709frames for finite trainer income. Both exact terminal saves were independently
-read and journals replayed without controller input. The learned outcome is recovery,
-not a learned trainer choice. AR's failed capture and all its spending remain intact.
+- Episode: `red-resource-choice-20260911-at-01-causal`
+- Checkpoint: `e91b2743e8bdf3a3b79999775d2771a15f4ac0f2aa8367c89c3fd6548d97f0a4`
+- Manifest: `de4b602bf6f4d59d0d41a76012af5676f016a4f5aa8cdc7fe15a69534b189461`
+- State: `3aad30234495b429346c31af3b7b73d881e43c60332176e734056b22b1c8cdd2`
+- Played source: `1f12ffd3e4b22c57a911915131a7ad786747e1ec`
+- Model: `5887a2406551e233509e0b2a401cc9257c9ae1c9054ba887ef3f808ed8c1852a`
 
-- Latest episode: `red-post-capture-recovery-20260911-as-02-causal`
-- Checkpoint: `7be590d9b20581c0a74afa52b2b028de98b2ff81716c8bd4ffa095da2c3b3022`
-- Manifest: `dd0a96a3856b36e030f39473d1236cac0c3d103ed77fceb8a800dc3daf1d3683`
-- State: `53d3f79ef29bb19ac331f35faefac166d91cb43288ac2c43f336bd305c3e801e`
-- Model from AS01: `5887a2406551e233509e0b2a401cc9257c9ae1c9054ba887ef3f808ed8c1852a`
-- Model file SHA: `d193e073389a01298b834e6789d4396b6ea8667de5db78a4a8c9c49b7b8c953b`
-- Corpus: `294f4cf62a582828ca7ef3ef69d5cb28fb319e413d476b086e25802a70c2f37c`
-- Played source: `8275415950cfca1a071d6a6bb16f48def1f0031f`
-
-Terminal Route18/map29,row12/column36,input-ready,battle0.
-HP249/118/146/88/92/73, full.1168money and no balls. Gameplay stopped.
+Map152,row5,column2,input-ready,battle0. HP249/118/146/88/92/73.
+The one GreatBall and600 spent are retained. AT is consumed; AS02 is historical.
+AS01's recovery remains the latest fit, bringing66 to67. Trainer income and AT's
+purchase supply no labels. No registration gain or independent advantage claimed.
 
 ## Next bounded work
 
-The explicit Red profile/runtime connection now passes254focused tests. Qualify one actual choice from AS02 with model67 using the prospective resource-choice-variants transition. Preserve affordable purchases and all prior costs; no reset or consumed retry.
+Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
 
-Flash's core draft and one correction are complete. Codex integrated the selected
-core, repaired fixtures and typing, and connected ordered recording/replay and
-bounded-player mode propagation.194focused tests, full mypy and Ruff pass.
-Old policy schemas remain unchanged; only explicit opt-in emits v4. Real Red
-enumeration now has a default-off profile transition; it has not played yet.
-The complete nine-kind mask allows exactly one extra RESUPPLY only in this mode.
-The five older rejected funding files
-remain isolated. See [review](docs/work-sessions/2026-09-11-resource-variant-core.md).
+The resource-choice runtime passed254focused tests, but AT's actual preflight
+offered only RESUPPLY. A later read-only inspection of current AT confirmed the
+flagTrue, target5400/shortfall4832 and zero funding candidates inside the Mart.
+It did not establish why the earlier outdoor AS02 menu lacked earning. Trying
+to reconstruct AS02 through the current continuation admission correctly failed
+the durable-ledger rollback guard, with no gameplay. Do not bypass it.
 
-Continue from private `run_as_recovery_20260911.arguments()` only as a builder;
-append both actual AS endpoints and use AS01 model67. Never rerun any consumed
-main. Preserve all behavior-model declarations and regional source settings.
-The overnight hard cutoff is07:07EDT; no sealed Red, Crystal or full replay.
+Flash completed the isolated eligibility/helper draft in206seconds;42tests passed
+independently. Codex corrected a fictional purchase fixture and authentication
+wording, added the default-off profile transition and runtime caller, and tested
+the real bounded graph path.240focused tests and full mypy478sources pass.
+Existing graph bounds, occupied squares, trainer hazards and observed outside-map
+requirements stay intact. No arbitrary buildings, HMs or radius growth. Next is
+one read-only AT qualification; reorient if no legitimate candidate exists.
+Do not invent choices or fit forced support. Flash quota refreshed01:54EDT:
+42.99%five-hour/68.01%weekly, resets about24minutes/17h33m. Claude not reused.
 
-Prior resource checklist3/3 is archived unchanged. New checklist0/3:
-distinct executable earn/buy options, actual resource-choice lesson, then new
-registration after replenishment. This is not a new stage or changed final goal.
+Build from private `run_at_resource_choice_20260911.arguments()` without calling
+its consumed main; append actual AT01/checkpoint and retain model67. Fresh identities
+only. Overnight cutoff07:07EDT; no sealed Red, Crystal or full replay.
+
+Resource checklist0/3: actual earn/buy options, actual resource lesson, then new
+registration. Synthetic tests alone do not complete its first item.
+[AT audit](docs/work-sessions/2026-09-11-resource-choice-runtime.md).
 
 ## Engineering and external review
 

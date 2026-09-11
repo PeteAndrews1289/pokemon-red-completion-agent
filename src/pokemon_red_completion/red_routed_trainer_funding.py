@@ -173,6 +173,10 @@ def _candidates(
             start.last_outside_map if _indoor_funding_enabled(router)
             and raw.map_id in _POKEMON_CENTER_MAPS else None
         )
+        if indoor_exit is None:
+            from .red_declared_funding_departure import declared_mart_funding_exit
+
+            indoor_exit = declared_mart_funding_exit(router.runtime.profile, start)
         maps = funding_scope(world.macro_graph, start, indoor_exit_map=indoor_exit)
         for map_id in sorted(maps - {raw.map_id}):
             zones += static_trainer_sight_zones(

@@ -28,6 +28,24 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_mart_funding_transition_is_prospective_and_registered_only(monkeypatch):
+    from test_red_goal_context_profile import _indoor_supply_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _indoor_supply_profile()
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, ("mart-funding-departure",), object())
+    (after,) = derive(before, ("mart-funding-departure",), object(),
+                      allow_cartridge_sources=True)
+    assert "mart_funding_departure" not in before.providers[2].parameters
+    assert after.providers[2].parameters["mart_funding_departure"] is True
+    assert after.providers[:2] == before.providers[:2]
+    assert after.manager_config == before.manager_config
+    assert "--mart-funding-departure" in module["_parser"]().format_help()
+
+
 def test_resource_choice_transition_requires_registered_and_affordable_supply(monkeypatch):
     from test_red_goal_context_profile import _supply_transition_profile
 
