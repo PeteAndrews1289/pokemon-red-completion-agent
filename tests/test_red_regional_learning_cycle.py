@@ -30,17 +30,21 @@ def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_
             model_sha256=actual.expected_living_dex_model_sha256,
             output_path=actual.out, source_commit='e'*40, source_bundle_sha256='f'*64,
             private_root=object(), rom_path=tmp_path/'rom.gb',
-            invocation=deepcopy(vars(actual)))
+            invocation=deepcopy(vars(actual)), inventory_calls=0)
     monkeypatch.setattr(cycle.source.base, '_prepare', prepare)
     monkeypatch.setattr(
         cycle.source.base, '_new_external_output', lambda path, **_: path,
     )
     monkeypatch.setattr(cycle, 'load_prior_player_inventory', lambda *_: ((), ()))
     def inspect(_ready, **kwargs):
-        assert kwargs == {'allow_no_choice': True, 'include_menu': False}
-        return object(), (() if stop_after_first and played else (object(), object())), None
+        assert kwargs == {'allow_no_choice': True, 'include_menu': True}
+        _ready.inventory_calls += 1
+        assert _ready.inventory_calls == 1  # inventory is reused by the child runner
+        candidates = () if stop_after_first and played else (object(), object())
+        return object(), candidates, (object() if candidates else None)
     monkeypatch.setattr(cycle.source, 'inspect_sources', inspect)
-    def run(ready):
+    def run(ready, *, inspected):
+        assert inspected[0] is not None and inspected[1]
         actual = argparse.Namespace(**ready.invocation)
         if any(row['pair_id'] == actual.pair_id for row in played):
             raise ValueError('episode already consumed')
@@ -236,8 +240,8 @@ def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(
 ):
     args, records, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
     original = cycle.source._run_prepared
-    def exhausted(ready):
-        result = original(ready)
+    def exhausted(ready, **kwargs):
+        result = original(ready, **kwargs)
         result['parent_episode']['steps'][0].update(
             failure_reason='search_exhausted', semantic_state_changed=resource_state_changed,
             collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
@@ -289,8 +293,8 @@ def test_status_replanning_is_opt_in_and_uses_actual_saved_model(tmp_path, monke
     })
     original = cycle.source._run_prepared
 
-    def degraded(ready):
-        result = original(ready)
+    def degraded(ready, **kwargs):
+        result = original(ready, **kwargs)
         result['parent_episode']['steps'][0].update(
             failure_reason='recovery_required', semantic_state_changed=True,
             collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
@@ -399,8 +403,8 @@ def test_automatic_cycle_switches_native_goal_to_destination_and_carries_fit(tmp
         ['restore_party', 'acquire_species'] if not played else ['acquire_species'],
     })
     run = cycle.source._run_prepared
-    def native(ready):
-        result = run(ready)
+    def native(ready, **kwargs):
+        result = run(ready, **kwargs)
         result['proposed_source'] = result.pop('selected_source')
         return result
     monkeypatch.setattr(cycle.goal, '_run_prepared', native)
@@ -426,8 +430,8 @@ def test_automatic_support_advances_save_without_inventing_a_fit(tmp_path, monke
         'status': 'ready_for_forced_bridge', 'available_goal_kinds': ['resupply'],
     })
     run = cycle.source._run_prepared
-    def native(ready):
-        result = run(ready)
+    def native(ready, **kwargs):
+        result = run(ready, **kwargs)
         result['proposed_source'] = None
         del result['selected_source']
         return result

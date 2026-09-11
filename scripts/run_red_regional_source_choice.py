@@ -215,7 +215,11 @@ def _require_capture_parent(preflight: dict[str, Any]) -> None:
         raise ValueError("regional parent would override or duplicate the source choice")
 
 
-def _run_prepared(ready: base._Readiness) -> dict[str, object]:
+def _run_prepared(
+    ready: base._Readiness,
+    *,
+    inspected: tuple[Any, ...] | None = None,
+) -> dict[str, object]:
     """Execute one source choice from the caller's authenticated readiness.
 
     This keeps the preparation snapshot call-local: inventory and commitment use
@@ -229,8 +233,10 @@ def _run_prepared(ready: base._Readiness) -> dict[str, object]:
     choice_id = regional_choice_record_id(episode_id)
     if ready.private_root.find_sealed_record(choice_id, expected_kind=REGIONAL_CHOICE_KIND):
         raise ValueError("regional choice identity already consumed; never resample")
-    observed, candidates, menu = inspect_sources(ready)
+    observed, candidates, menu = inspected if inspected is not None else inspect_sources(ready)
     require_source_attempt_ready(observed)
+    if menu is None or len(candidates) < 2:
+        raise ValueError("regional pilot needs an inspected genuine source choice")
     selection = sample_regional_acquisition(
         ready.causal_record.model,
         menu,

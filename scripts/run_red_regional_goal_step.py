@@ -27,7 +27,11 @@ from pokemon_red_completion.red_regional_goal_proposal import (
 )
 
 
-def _run_prepared(ready: source.base._Readiness) -> dict[str, object]:
+def _run_prepared(
+    ready: source.base._Readiness,
+    *,
+    inspected: tuple[Any, ...] | None = None,
+) -> dict[str, object]:
     """Execute one native goal from the caller's authenticated readiness."""
     if (
         ready.decision_limit != 1
@@ -40,7 +44,11 @@ def _run_prepared(ready: source.base._Readiness) -> dict[str, object]:
     proposal_id = regional_proposal_record_id(episode_id)
     if ready.private_root.find_sealed_record(proposal_id, expected_kind=REGIONAL_PROPOSAL_KIND):
         raise ValueError("regional goal proposal already consumed; never resample")
-    observed, candidates, menu = source.inspect_sources(ready, allow_no_choice=True)
+    observed, candidates, menu = (
+        inspected
+        if inspected is not None
+        else source.inspect_sources(ready, allow_no_choice=True)
+    )
     selection = None
     if len(candidates) >= 2:
         selection = source.sample_regional_acquisition(

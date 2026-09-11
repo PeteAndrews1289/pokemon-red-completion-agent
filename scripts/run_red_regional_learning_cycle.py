@@ -226,8 +226,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         ):
             raise ValueError("learning cycle source changed")
         assert isinstance(ready.causal_record, RedPlayerModelRecord)
-        _observed, candidates, _menu = source.inspect_sources(
-            ready, allow_no_choice=True, include_menu=False,
+        observed, candidates, menu = source.inspect_sources(
+            ready, allow_no_choice=True, include_menu=True,
         )
         regional = True
         if automatic_goals:
@@ -261,7 +261,12 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             stop = "time_limit_before_next_step"
             break
         # Existing runner records the actual sampled source before any input.
-        outcome = source._run_prepared(ready) if regional else goal._run_prepared(ready)
+        inspected = (observed, candidates, menu)
+        outcome = (
+            source._run_prepared(ready, inspected=inspected)
+            if regional
+            else goal._run_prepared(ready, inspected=inspected)
+        )
         source.base._write_exclusive(
             original.with_name(f"{original.stem}-{ordinal:02d}-source.json"),
             outcome,
