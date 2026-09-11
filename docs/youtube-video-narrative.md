@@ -67,3 +67,10 @@ seven genuine destinations and Seafoam B1F arrival. All three throws fail; keep 
 visible. The failed outcome is fitted:65→66 examples,64 registrations unchanged.
 Explain that training happened without proving improved performance. Deterministic
 support and mechanics remain distinct from the learned destination selection.
+
+
+In [the recovery follow-up](work-sessions/2026-09-11-recovery-funding-followup.md), the model chooses recovery,
+returns to the Center and then a forced trainer-income skill earns725. Show66→67
+examples for recovery, not the income. With1168money, the current menu only buys
+one GreatBall and hides earning more; explain why preserving a real economic choice
+is the next engineering task, not already a trained money-making strategy.

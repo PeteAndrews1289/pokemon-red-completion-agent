@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,11 +24,11 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
-Resource checklist3/3: funded lesson retained, not sustainable capture demonstrated. The failed attempt consumed all supplies; Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Previous funded-lesson checklist3/3 is archived. Next checklist0/3 tests distinct earn/buy options, actual resource learning and new registration. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## How to stay focused
 

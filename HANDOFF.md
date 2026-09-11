@@ -4,44 +4,46 @@ Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_S
 and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
 and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AR01
+## Latest verified endpoint: AS02
 
-AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-The selection was25% uniform exploration plus75% model softmax. One regional
-choice is replay-verified; its deterministic singleton parent supplies no duplicate
-label. All65 prior examples remain. This is a genuine update from failed experience,
-not proof of improvement or learned economic judgment.
+AS01 used46actions/3732frames for model-selected recovery. AS02 used139actions/
+9709frames for finite trainer income. Both exact terminal saves were independently
+read and journals replayed without controller input. The learned outcome is recovery,
+not a learned trainer choice. AR's failed capture and all its spending remain intact.
 
-- Episode: `red-funded-learning-20260911-ar-01-causal`
-- Checkpoint: `b737ba15322d71898369ba60b888ffd2800dc7241a91be404aab55c474bac12d`
-- Manifest: `234a4cad2782bad6c35c502585385181df8eff925390c58e35cd65dcacf4986f`
-- State: `df87846e3ed33e8f24bd4baf0e095343df972e531613c777dfed540dd1a8c167`
-- Model: `2c8da5d0d84560129846b0fd0c25ef7ca1f0cfff2de92654658860a613e53f7d`
-- Model file SHA: `cfc8c0f3293ac2eab6c36f229279d362730a60f080531f728c9559cc59150de0`
-- Corpus: `f0ce6225d95ab5af3d27261cdf8b69af6f0ecac84cfcca57e111c0ab120e1478`
-- Played source: `94b7a758daa85fa89e28e778237ba1a6a2f76fa9`
+- Latest episode: `red-post-capture-recovery-20260911-as-02-causal`
+- Checkpoint: `7be590d9b20581c0a74afa52b2b028de98b2ff81716c8bd4ffa095da2c3b3022`
+- Manifest: `dd0a96a3856b36e030f39473d1236cac0c3d103ed77fceb8a800dc3daf1d3683`
+- State: `53d3f79ef29bb19ac331f35faefac166d91cb43288ac2c43f336bd305c3e801e`
+- Model from AS01: `5887a2406551e233509e0b2a401cc9257c9ae1c9054ba887ef3f808ed8c1852a`
+- Model file SHA: `d193e073389a01298b834e6789d4396b6ea8667de5db78a4a8c9c49b7b8c953b`
+- Corpus: `294f4cf62a582828ca7ef3ef69d5cb28fb319e413d476b086e25802a70c2f37c`
+- Played source: `8275415950cfca1a071d6a6bb16f48def1f0031f`
 
-Terminal Seafoam B1F/map159,row9/column9,input-ready,battle0.
-HP244/118/146/88/92/56; the lead leveled during travel, so do not call all HP full.
-Three balls were spent on the same99/99HP wild target. No capture occurred.
-The precise preparation/status explanation remains under audit, not an assumed bug.
-Gameplay stopped. Never restore AQ or earlier saves to erase AR's costs.
+Terminal Route18/map29,row12/column36,input-ready,battle0.
+HP249/118/146/88/92/73, full.1168money and no balls. Gameplay stopped.
 
 ## Next bounded work
 
-Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
-Use private `run_ar_collection_20260911.arguments()` only as an argument builder;
-never rerun its consumed main. Append AR's endpoint; set the new model record and
-hash above; preserve the regional source's transport/discovery settings and all
-behavior-model inventory. Fresh output identity only. Inspect native offers first.
-Budget45–90minutes including preparation; stop on unsafe admission or unsupported
-mechanic. The overnight sequence ends07:07EDT, September11, without extension.
+Flash is drafting only the resource-variant representation/binding core and tests
+in its isolated worktree; the five older rejected funding files remain untouched.
+Default behavior, old policy bytes, feature width and ordinary safety must remain
+unchanged. No live activation or gameplay from this draft. Codex reviews; Claude
+may audit the actual small diff after tests, not before every routine action.
+Timebox15minutes draft plus30minutes review; reassess if it needs broader changes.
 
-The resource checklist is3/3 because a funded lesson was retained. Red collection
-is NOT complete: sustainable supplies, capture efficiency, independent advantage
-and fresh-game autonomy remain unfinished. No sealed Red, Crystal or full replay.
+Continue from private `run_as_recovery_20260911.arguments()` only as a builder;
+append both actual AS endpoints and use AS01 model67. Never rerun any consumed
+main. Preserve all behavior-model declarations and regional source settings.
+The overnight hard cutoff is07:07EDT; no sealed Red, Crystal or full replay.
+
+Prior resource checklist3/3 is archived unchanged. New checklist0/3:
+distinct executable earn/buy options, actual resource-choice lesson, then new
+registration after replenishment. This is not a new stage or changed final goal.
 
 ## Engineering and external review
 
@@ -62,5 +64,5 @@ After the capture review, Flash displayed54.14%five-hour/70.81%weekly remaining
 at00:30EDT (resets about1h42m/18h51m). These are account-wide readings, not isolated
 task savings. Claude quota unavailable. No proven net subscription savings.
 
-[Result](docs/evidence/red-funded-collection-learning-2026-09-11.json) · [Report](docs/work-sessions/2026-09-11-funded-collection-overnight.md).
+[Result](docs/evidence/red-recovery-funding-learning-2026-09-11.json) · [Report](docs/work-sessions/2026-09-11-recovery-funding-followup.md).
 PR243 remains publication lane. Recommend Astra High, Fast off for background work.

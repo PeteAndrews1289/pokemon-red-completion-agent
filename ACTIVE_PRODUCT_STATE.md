@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+- Next decision: Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls. |
+| Authority now | AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 66 | 12 |
+| Registered Train Example · train | 67 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-funded-collection-overnight** · status **active** · evidence [registered train example](docs/evidence/red-funded-collection-learning-2026-09-11.json)
+**2026-09-11-recovery-funding-followup** · status **active** · evidence [registered train example](docs/evidence/red-recovery-funding-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls. |
-| Authority delta | One additional actual seven-way destination outcome fitted; no authority promotion or independent performance result. |
+| Learning output | AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged. |
+| Authority delta | One genuine native recovery example fitted; forced725income supplies no label, no authority promotion. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Balls exhausted without registration gain; funded learning works but sustainable capture does not yet. |
-| Decision | Close the funded-lesson checklist, not the collection stage. Recover from the exact failed terminal and inspect capture efficiency before repeating. |
-| Next session | Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal. |
-| Next falsifier | Can existing recovery preserve the latest costs and restore useful resources? Does capture preparation avoid unnecessary full-HP throws when safe weakening exists? |
+| Blocker | 1168cash permits one GreatBall; the current menu hides further earning whenever a purchase is affordable. |
+| Decision | Default-off resource-variant core first; stop if historical semantics or safety cannot be preserved within the timebox. |
+| Next session | Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry. |
+| Next falsifier | Both legitimate earn and buy offers must survive, execute separately, and preserve old single-kind replay. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -13,11 +13,11 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
-Flash reserve draft rejected and preserved in isolation; capture review completed, with mandatory-weakening and guessed-odds claims rejected. Claude review completed. See [handoff](HANDOFF.md) for findings and quotas. No standing reviewer gate.
+Flash reserve draft remains rejected; its completed capture review repeated a known limitation. Flash now owns a bounded default-off resource-variant core draft and tests; Codex handles independent integration. Claude may audit the finished small diff. See [handoff](HANDOFF.md) for findings and quotas. No standing reviewer gate.
 
 ## Reviewer brief
 

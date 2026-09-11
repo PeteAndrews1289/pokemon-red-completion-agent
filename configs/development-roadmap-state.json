@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-funded-collection-overnight",
+  "as_of_session": "2026-09-11-recovery-funding-followup",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-funded-collection-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-recovery-funding-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,25 +38,25 @@
     }
   },
   "milestone": {
-    "title": "Recover resources for collection",
+    "title": "Make useful earning and spending choices",
     "items": [
       {
-        "id": "sustainable-resource-diagnosis",
-        "label": "Verify the exact resource dead end",
-        "done": true,
-        "evidence": "docs/evidence/red-capture-sustainability-audit-2026-09-10.json"
+        "id": "resource-variant-executable-options",
+        "label": "Preserve distinct earn and buy options",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "sustainable-escape-recovery",
-        "label": "Qualify safe escape and recovery",
-        "done": true,
-        "evidence": "docs/evidence/red-dig-recovery-learning-2026-09-10.json"
+        "id": "resource-variant-observed-learning",
+        "label": "Fit an actual resource-choice outcome",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "sustainable-funded-learning",
-        "label": "Retain a funded collection lesson",
-        "done": true,
-        "evidence": "docs/evidence/red-funded-collection-learning-2026-09-11.json"
+        "id": "resource-reserve-collection-yield",
+        "label": "Turn replenishment into new registration",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -858,6 +858,12 @@
       "result": "AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.",
       "deviation": "Resource checklist3/3 means one funded lesson retained, including failure; it does not mean sustainable capture or stage completion.",
       "next": "Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-11-recovery-funding-followup",
+      "result": "AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.",
+      "deviation": "Closed prior funded-lesson checklist without claiming sustainability; next checklist tests useful resource choice and collection yield.",
+      "next": "Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry."
     }
   ],
   "closed_milestones": [
@@ -1324,6 +1330,32 @@
       "session": "2026-09-10-capture-sustainability",
       "stage": "red-collection",
       "closure": "Travel capture/resumption completed 3/3 with Shellder; retained unchanged. Next checklist addresses sustainable resource recovery."
+    },
+    {
+      "title": "Recover resources for collection",
+      "items": [
+        {
+          "id": "sustainable-resource-diagnosis",
+          "label": "Verify the exact resource dead end",
+          "done": true,
+          "evidence": "docs/evidence/red-capture-sustainability-audit-2026-09-10.json"
+        },
+        {
+          "id": "sustainable-escape-recovery",
+          "label": "Qualify safe escape and recovery",
+          "done": true,
+          "evidence": "docs/evidence/red-dig-recovery-learning-2026-09-10.json"
+        },
+        {
+          "id": "sustainable-funded-learning",
+          "label": "Retain a funded collection lesson",
+          "done": true,
+          "evidence": "docs/evidence/red-funded-collection-learning-2026-09-11.json"
+        }
+      ],
+      "session": "2026-09-11-recovery-funding-followup",
+      "stage": "red-collection",
+      "closure": "3/3 retained funded lesson, including failure; not a sustainable capture or whole-stage completion claim."
     }
   ]
 }

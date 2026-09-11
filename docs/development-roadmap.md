@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funded-collection-overnight**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-recovery-funding-followup**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Recover resources for collection: 3/3 acceptance items (100%).**
+**Make useful earning and spending choices: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify the exact resource dead end ([evidence](../docs/evidence/red-capture-sustainability-audit-2026-09-10.json))
-- [x] Qualify safe escape and recovery ([evidence](../docs/evidence/red-dig-recovery-learning-2026-09-10.json))
-- [x] Retain a funded collection lesson ([evidence](../docs/evidence/red-funded-collection-learning-2026-09-11.json))
+- [ ] Preserve distinct earn and buy options
+- [ ] Fit an actual resource-choice outcome
+- [ ] Turn replenishment into new registration
 
-Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-funded-collection-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-recovery-funding-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-recovery-funding-followup
+
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
+
+**Deviation:** Closed prior funded-lesson checklist without claiming sustainability; next checklist tests useful resource choice and collection yield.
+
+**Next:** Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
 ### 2026-09-11-funded-collection-overnight
 

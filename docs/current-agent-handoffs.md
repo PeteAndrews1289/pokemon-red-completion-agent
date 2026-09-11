@@ -2,8 +2,8 @@
 
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and [roles](../AGENT_COORDINATION.md).
 
-AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
 
-Flash: inspect conservative capture preparation and safe weakening, read-only public code, not the unrelated rejected reserve draft. Codex: exact terminal recovery, verification and publication. Claude: selective follow-up only if an actual contested design requires it; no broad repeat audit. No private inputs for external reviewers.
+Flash: draft explicit default-off resource variants and discriminating tests only. Codex reviews compatibility and actual binding semantics. Claude may review the finished small diff; no more capture-path reviews or broad audits. Private files stay inaccessible to external agents.
