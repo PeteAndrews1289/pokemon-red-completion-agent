@@ -731,6 +731,13 @@ def _parser() -> argparse.ArgumentParser:
         help="explicit useful-reserve earning choice beside an affordable capture purchase",
     )
     parser.add_argument(
+        "--composable-trainer-funding",
+        dest="regional_transitions",
+        action="append_const",
+        const="composable-trainer-funding",
+        help="allow multiple finite trainer payouts to compose toward a capture reserve",
+    )
+    parser.add_argument(
         "--mart-funding-departure", dest="regional_transitions", action="append_const",
         const="mart-funding-departure",
         help="explicit observed exit from the declared Mart for bounded trainer funding",
@@ -1618,6 +1625,7 @@ def _regional_profiles(
                 "capture-access-requirements",
                 "affordable-capture-supply",
                 "resource-choice-variants",
+                "composable-trainer-funding",
                 "mart-funding-departure",
                 "funding-fly",
                 "cartridge-trainer-story",
@@ -1825,6 +1833,18 @@ def _regional_profiles(
                     "resource_variants_require_registered_objective",
                 )
             profile = bind_resource_choice_profile(profile)
+            result.append(profile)
+            continue
+        if source == "composable-trainer-funding":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_composable_trainer_funding_profile,
+            )
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "composable_funding_requires_registered_objective",
+                )
+            profile = bind_composable_trainer_funding_profile(profile)
             result.append(profile)
             continue
         if source == "funding-fly":

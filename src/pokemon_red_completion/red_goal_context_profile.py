@@ -538,6 +538,43 @@ def bind_resource_choice_profile(profile: RedGoalContextProfile) -> RedGoalConte
     return changed
 
 
+def bind_composable_trainer_funding_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
+    """Allow several finite trainer payouts to compose toward one reserve."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if (
+                parameters.get("affordable_ball_purchase") is not True
+                or parameters.get("resource_choice_variants") is not True
+            ):
+                raise RedGoalContextProfileError(
+                    "composable trainer funding requires resource-choice supply"
+                )
+            parameters["composable_trainer_funding"] = True
+            found = True
+        providers.append({
+            "kind": spec.kind.value,
+            "mechanic": spec.mechanic.value,
+            "parameters": parameters,
+        })
+    if not found:
+        raise RedGoalContextProfileError(
+            "composable trainer funding requires an existing Mart skill"
+        )
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+        "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config),
+        "providers": providers,
+    }))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
 def bind_mart_funding_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Prospectively allow only the declared Mart's observed outdoor funding exit."""
     providers = []
@@ -1068,13 +1105,15 @@ def _parse_parameters(
             | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
             | {key for key in (
                 "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-                "resource_choice_variants", "mart_funding_departure", "funding_fly_transport",
+                "resource_choice_variants", "composable_trainer_funding",
+                "mart_funding_departure", "funding_fly_transport",
             ) if key in row},
         )
         transport_fields: dict[str, object] = {}
         for key in (
             "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
-            "resource_choice_variants", "mart_funding_departure", "funding_fly_transport",
+            "resource_choice_variants", "composable_trainer_funding",
+            "mart_funding_departure", "funding_fly_transport",
         ):
             if key in row:
                 if type(row[key]) is not bool:
@@ -1097,6 +1136,13 @@ def _parse_parameters(
             row.get("affordable_ball_purchase") is not True
         ):
             raise RedGoalContextProfileError("resource variants require affordable supply")
+        if row.get("composable_trainer_funding") is True and (
+            row.get("affordable_ball_purchase") is not True
+            or row.get("resource_choice_variants") is not True
+        ):
+            raise RedGoalContextProfileError(
+                "composable trainer funding requires resource-choice supply"
+            )
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
             raise RedGoalContextProfileError("Mart purchases must be a non-empty list")

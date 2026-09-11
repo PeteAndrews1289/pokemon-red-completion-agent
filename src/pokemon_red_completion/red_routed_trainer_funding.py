@@ -335,6 +335,11 @@ def bind_local_trainer_funding(
         s.kind is GoalKind.RESUPPLY and s.parameters.get("resource_choice_variants") is True
         for s in router.runtime.profile.providers
     )
+    composable_income = any(
+        s.kind is GoalKind.RESUPPLY
+        and s.parameters.get("composable_trainer_funding") is True
+        for s in router.runtime.profile.providers
+    )
     purchases = tuple(b for b in bindings.bindings if b.kind is GoalKind.RESUPPLY)
     if bindings.allow_resource_variants or (purchases and not variants):
         return bindings
@@ -403,6 +408,11 @@ def bind_local_trainer_funding(
         # collectively cover the shortfall.  The active reserve budget above
         # proves that income is needed; this guard requires each selected
         # battle to make irreversible positive progress toward it.
+        and (
+            composable_income
+            or c.quote.expected_money_after(raw.player_money)
+            >= provider.purchases[0].unit_price
+        )
         and c.quote.expected_money_after(raw.player_money) > raw.player_money
         and (
             pending_identity is None

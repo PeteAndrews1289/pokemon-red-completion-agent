@@ -242,6 +242,13 @@ def test_reserve_shortfall_can_compose_partial_trainer_income(monkeypatch):
     )
     monkeypatch.setattr(funding, "_candidates", lambda _: (partial,))
 
+    # Historical profiles retain the old one-payout affordability contract,
+    # allowing their saved semantic states to authenticate under new source.
+    assert funding.bind_local_trainer_funding(router, original, state) is original
+    router.runtime.profile.providers[0].parameters[
+        "composable_trainer_funding"
+    ] = True
+
     offered = funding.bind_local_trainer_funding(router, original, state)
 
     assert not calls

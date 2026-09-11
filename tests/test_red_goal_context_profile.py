@@ -150,6 +150,30 @@ def test_resource_choice_opt_in_keeps_existing_skills_and_reserves():
         bind_resource_choice_profile(_supply_transition_profile())
 
 
+def test_composable_trainer_funding_is_a_separate_prospective_transition():
+    from pokemon_red_completion.red_goal_context_profile import (
+        bind_composable_trainer_funding_profile,
+        bind_resource_choice_profile,
+    )
+
+    before = bind_resource_choice_profile(
+        bind_affordable_ball_supply_profile(_supply_transition_profile())
+    )
+    after = bind_composable_trainer_funding_profile(before)
+    assert after.providers[2].parameters == dict(
+        before.providers[2].parameters,
+        composable_trainer_funding=True,
+    )
+    assert before.profile_sha256 != after.profile_sha256
+    assert after.providers[:2] == before.providers[:2]
+    assert after.manager_config == before.manager_config
+    assert bind_composable_trainer_funding_profile(after) == after
+    with pytest.raises(RedGoalContextProfileError, match="resource-choice"):
+        bind_composable_trainer_funding_profile(
+            bind_affordable_ball_supply_profile(_supply_transition_profile())
+        )
+
+
 def test_funding_fly_is_separate_explicit_supply_transition():
     from pokemon_red_completion.red_goal_context_profile import bind_funding_fly_profile
 
