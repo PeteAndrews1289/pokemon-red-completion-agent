@@ -2,32 +2,32 @@
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest verified endpoint: BB01
+## Latest verified endpoint: BC01
 
-BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
+BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.
 
-- Episode: `red-collection-20260911-bb-01-causal`
-- Checkpoint: `d0ad1b0d38db05971af6fa147758a78c6a1abcb59d0c64ce0a825204f6a83a89`
-- Manifest: `287cbcc0d1cfeffbafd7b0a4fef072236f0956ce71b254c27f1fe2d0f277f219`
-- State: `4a082536b6684ee255b1c4e3899aeef160a3e4b485771d195524680231564b3d`
-- Played source: `767ba9a03d49cd202a995b7b7fd21c315d7de2f2`
-- Model: `4988b114c0c5935708aa911e4aca9b50bf19e23ee6a5e6947cdaad283207c595`
-- Model file: `6f101835738ccdc2729d8982f810092e136bf76518abc2a1b1e9e209aaca64a5`
-- Corpus: `03c256b7bb34de170547168ebdd9ff9461019d23a937c2fa493f3b0188396f2d`
+- Episode: red-recovery-20260911-bc-01-causal
+- Checkpoint: 1e6421d7523d411e05fe2bb72fc24cac72357b74393de5e36bbb0ec64772743a
+- Manifest: f5578fbdeed180ac12e961059fb56339bce210a419e1b0d1e35bfbb65568a257
+- State: 78dd93a86bd93fbb529ba3b12514b58b7c932da2cc5608e566000b05a20f5799
+- Played source: 7b11002c9beaddc4a10c97550d4f788d3eac3853
+- Model: 0ac5462825c82b4dfc31a6cbad1787d833ca6c07dfbb812f4fa16c0ccebb4d90
+- Model file: 95fafeec7edb3bb33eec8e6e6669fbb4248068a1996ac9bb1547468bd5f0198b
+- Corpus: a4171f93bff8ec28ef4fb3362bcdf815d49faf6c77a0a88f4ad278a83303ae9d
 
-Seafoam1F192,row9,column10,input-ready,battle0;333money,zero balls. HP246/118/146/88/92/62.66local/global registrations,56specimens,52living species,58required registrations remain.
-BB:370actions/26892frames in536.081seconds. Zero-input audit verified saved flags, stock, model and corpus. [Report](docs/work-sessions/2026-09-11-seel-partial-result.md).
+FuchsiaCenter154,row3,column3,input-ready,battle0;333money,zero balls. HP249/118/146/88/92/73.66local/global registrations,56specimens,52living species,58required registrations remain.
+BC:46actions/3732frames in259.691seconds. Zero-input audit verified saved flags, stock, model and corpus. [Report](docs/work-sessions/2026-09-11-cave-recovery.md).
 
 ## Next bounded work
 
-Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
+Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
 
-BB gameplay and batch audit completed; do not rerun either. Successor starts from run_bb_collection_20260911.arguments() ONLY, appends actual BB01, preserves its selected-source warp_safe_v1 transition and installs model76. Inspect processes/outputs before launching. Detailed binding cause is unproven; exhausted arrival resources are a source-supported hypothesis.
+BC gameplay and audit completed; do not rerun either. Successor starts from run_bc_recovery_20260911.arguments() ONLY, appends actual BC01 and installs model77. BC had no proposed/selected regional source, so add no source transition. Inspect current processes/outputs before launching.
 
-## Mission position and reviewers
+## Review and engineering
 
-AZresource checklist remains3/3; Red collection active.76examples include37acquisition rows with9successes, not an independent success-rate estimate. No fresh-game autonomy or transfer claim.
+Flash correctly identified discarded typed destination-unavailable reasons. Codex added a strict optional path-free summary from actual offer through composite and bounded step. Goal status/reason, rewards, model features, counts and legacy absent-field shapes stay unchanged. No arbitrary travel-evidence forwarding or synthetic capture survey. Historical BB reason remains generic.
 
-Flash is auditing the public reporting/recovery boundary read-only. First call empty due to ListDir denial; one correction running. No private input or gameplay delegated. Earlier integrated Fly draft remains useful; Claude was not reused. Refresh Gemini quota after review; last dated03:18EDT reading92.02%five-hour/68.41%weekly remaining is not current. Claude quota unavailable.
+Reject Flash's Seel-in-Route19 inference: observed Seel was in Seafoam1F. Reject an absorbing-dead-end implication: the actual party already had living Dig and its enabled recovery now succeeded. Flash's isolated implementation call failed authentication before any work; the code is Codex-authored. No agent remains running. CLI needs sign-in before another Flash task; usage windows unavailable while Mac UI is locked. Claude unused/quota unavailable.
 
-CI34577545668 passed;767ba9a0 CI34579388776 was pending at08:36UTC. No executable change in this closeout. Recommend Astra High, Fast off: verify reusable recovery and useful play, not new architecture.
+AZ resource checklist remains3/3; Red collection active.77examples include37acquisition/9successes and18recovery/18successes; related outcomes, not independent performance. No fresh-game autonomy or transfer claim. Recommend Astra High, Fast off for actual resource/collection continuations.

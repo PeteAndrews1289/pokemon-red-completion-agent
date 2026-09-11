@@ -131,6 +131,7 @@ def _observer(
     exhaust_budget: bool = False,
     singleton_after_first: bool = False,
     binding_failure: bool = False,
+    destination_reason: str | None = None,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -190,7 +191,9 @@ def _observer(
                 return GoalExecutionReport(
                     4 if mismatched_report else 5,
                     50,
-                    {"fail": fail_first and before == 0},
+                    {"fail": fail_first and before == 0,
+                     **({"destination_unavailable": {"reason": destination_reason}}
+                        if before == 0 and destination_reason is not None else {})},
                 )
 
             def verify(report: GoalExecutionReport) -> GoalVerification:
@@ -393,6 +396,26 @@ def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     public = json.dumps(result.public_dict(), sort_keys=True)
     assert "private:red" not in public
     assert "bounded-player-root" not in public
+
+
+@pytest.mark.parametrize("reason", ["missing_resource", "storage_blocked"])
+def test_actual_bounded_step_preserves_destination_reason_without_relabeling(reason):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(destination_reason=reason)
+    result = run_bounded_player_episode(
+        observe=observe, authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1", trajectory=trajectory,
+        budget_meter=meter, completion_satisfied=_complete,
+    )
+    first, recovery = result.public_dict()["steps"]
+    assert first["destination_unavailable"] == {"reason": reason}
+    assert first["status"] == "failed"
+    assert first["failure_reason"] == "outcome_not_verified"
+    assert first["actions_executed"] == 5 and first["frames_executed"] == 50
+    assert "destination_unavailable" not in recovery
+    assert recovery["status"] == "succeeded"
+    assert len(sink.decisions) == len(sink.events) == 2
+    assert state["actions"] == 10 and state["frames"] == 100
 
 
 def test_unchanged_failed_context_stops_without_repeating_input() -> None:

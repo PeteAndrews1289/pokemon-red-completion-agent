@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "One selected six-way destination outcome fitted. Forced native parent adds no target; no promotion or independent advantage.",
-        "blocker": "All balls spent; acquisition failed despite a new Seel. Detailed fresh-binding disposition is not retained in the step summary.",
-        "decision": "Keep partial credit, goal failure and costs separate; inspect the smallest reusable reporting/recovery boundary.",
+        "authority_delta": "One actual native recovery outcome fitted. No destination label, new promotion or independent advantage.",
+        "blocker": "The team is healed but capture stock is empty; legitimate money/supply choices must support the next collection attempt.",
+        "decision": "Reuse the proven recovery and existing resource choices. Preserve typed future destination-unavailable diagnostics without changing failed goals or labels.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-seel-partial-learning-2026-09-11.json",
-          "sha256": "64ee98eaae3cb1708ebda3e99c73875688e68cc9520e4f820e2827195675a769"
+          "path": "docs/evidence/red-cave-recovery-learning-2026-09-11.json",
+          "sha256": "b33a345496a1371344de741854fd094eaf1022f1b3613aa6ac5e21aba78d2015"
         },
-        "learning_output": "BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.",
-        "next_falsifier": "Can actual interior-state recovery expose useful goals without restoring resources or hiding the failed acquisition?",
-        "next_session_goal": "Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.",
+        "learning_output": "BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.",
+        "next_falsifier": "Can actual resource choices turn the recovered endpoint into another useful registration without hidden restores?",
+        "next_session_goal": "Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-seel-partial-result",
+        "session_id": "2026-09-11-cave-recovery",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.",
+        "current": "BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.",
+      "next_decision": "Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 76,
+        "registered_train_examples": 77,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

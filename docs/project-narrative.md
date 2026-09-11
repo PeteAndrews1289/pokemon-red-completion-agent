@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. [Report](work-sessions/2026-09-11-seel-partial-result.md).
+Latest overnight result: BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. [Report](work-sessions/2026-09-11-cave-recovery.md).
 
 ## The question
 

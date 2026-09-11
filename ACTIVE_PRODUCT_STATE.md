@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
+- Next decision: Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. |
+| Authority now | BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 76 | 12 |
+| Registered Train Example · train | 77 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-seel-partial-result** · status **active** · evidence [registered train example](docs/evidence/red-seel-partial-learning-2026-09-11.json)
+**2026-09-11-cave-recovery** · status **active** · evidence [registered train example](docs/evidence/red-cave-recovery-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. |
-| Authority delta | One selected six-way destination outcome fitted. Forced native parent adds no target; no promotion or independent advantage. |
+| Learning output | BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. |
+| Authority delta | One actual native recovery outcome fitted. No destination label, new promotion or independent advantage. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | All balls spent; acquisition failed despite a new Seel. Detailed fresh-binding disposition is not retained in the step summary. |
-| Decision | Keep partial credit, goal failure and costs separate; inspect the smallest reusable reporting/recovery boundary. |
-| Next session | Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff. |
-| Next falsifier | Can actual interior-state recovery expose useful goals without restoring resources or hiding the failed acquisition? |
+| Blocker | The team is healed but capture stock is empty; legitimate money/supply choices must support the next collection attempt. |
+| Decision | Reuse the proven recovery and existing resource choices. Preserve typed future destination-unavailable diagnostics without changing failed goals or labels. |
+| Next session | Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination. |
+| Next falsifier | Can actual resource choices turn the recovered endpoint into another useful registration without hidden restores? |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

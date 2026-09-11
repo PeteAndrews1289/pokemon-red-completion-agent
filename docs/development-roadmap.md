@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-seel-partial-result**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-cave-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 - [x] Turn replenishment into new registration ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 
-Current model: **76 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **77 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-seel-partial-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-cave-recovery-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-cave-recovery
+
+BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.
+
+**Deviation:** No stage-exit change. Flash identified diagnostic loss, but actual recovery refutes an absorbing-dead-end claim. Codex added optional typed diagnostics only; past outcomes unchanged.
+
+**Next:** Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
 
 ### 2026-09-11-seel-partial-result
 

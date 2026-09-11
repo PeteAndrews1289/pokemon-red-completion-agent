@@ -4,7 +4,7 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-The [latest attempt](work-sessions/2026-09-11-seel-partial-result.md) did choose Seafoam1F and caught Seel:66registrations and76training examples. The full acquisition nevertheless failed after all three balls were spent. Show the catch and failure together; no retroactive success. Gameplay is stopped for retained-state recovery.
+The [preceding attempt](work-sessions/2026-09-11-seel-partial-result.md) did choose Seafoam1F and caught Seel:66registrations and76training examples. The full acquisition nevertheless failed after all three balls were spent. Show the catch and failure together; no retroactive success. The [next recovery](work-sessions/2026-09-11-cave-recovery.md) was model-selected from three options and succeeded: escape the cave, heal, preserve all costs.77examples, still66registrations. It disproves a dead-end claim without erasing the failed acquisition.
 
 Latest verified beat: [flight-assisted income](work-sessions/2026-09-11-flight-income-result.md).
 An empty local menu did not mean the world had no money:93 unpaid trainer quotes
