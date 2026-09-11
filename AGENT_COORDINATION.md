@@ -13,13 +13,11 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-AO01's forced funding step succeeded: +850 money,123 actions/7,825 frames, all six party members at full HP. Gameplay stopped on Route18 with1,443 money, zero balls,64 registrations and65 examples. No fit or authority gain. Continue AO01 for supplies and one genuine collection choice; no renewable-income claim. See [current handoff](HANDOFF.md).
+AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
 
-Previous Flash/Claude contributions remain reviewed historical work. Codex alone completed this bounded indoor-funding repair and actual verification;301 targeted tests passed. No external call or fresh quota measurement this session. External review is optional, not a standing gate; net usage savings remain unproven. [Current session](docs/work-sessions/2026-09-11-economy-live-qualification.md).
+Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
 
-Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
-
-Not adopted: archiving or privatizing the repository. It remains an active project; honest scope, readable evidence and clear AI-assisted authorship are the appropriate presentation.
+Flash reserve draft rejected and preserved in isolation; capture review completed, with mandatory-weakening and guessed-odds claims rejected. Claude review completed. See [handoff](HANDOFF.md) for findings and quotas. No standing reviewer gate.
 
 ## Reviewer brief
 

@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection: 64 registrations and 65 registered-objective examples. Latest AO01 funding succeeded (+850 money) under one forced support goal; no new training example. Gameplay stopped safely on Route18 with full party HP,1,443 money and zero balls. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,11 +24,11 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-The previous Dig recovery is preserved. The latest actual continuation left Fuchsia Center and earned850 from a Route18 trainer in123 actions/7,825 frames. It was a singleton support step, not learned earning.
+AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
 
-Continue exact AO01 with the same initialized v4 model and economy-training. Purchase affordable supplies using existing transport, then retain one genuinely model-selected collection outcome. Keep support excluded from fits; preserve actual failures and costs. [Funding qualification](work-sessions/2026-09-11-economy-live-qualification.md). Budget45–90minutes for a bounded continuation, not guaranteed collection or renewable income. No replay, reset, sealed Red, Crystal or full run.
+Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
 
-The resource-recovery checklist stays2/3 until a funded collection lesson is retained. No stage exit or North Star requirement changed. [Latest handoff](../HANDOFF.md).
+Resource checklist3/3: funded lesson retained, not sustainable capture demonstrated. The failed attempt consumed all supplies; Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## How to stay focused
 

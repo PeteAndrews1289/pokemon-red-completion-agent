@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-economy-live-qualification**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funded-collection-overnight**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Recover resources for collection: 2/3 acceptance items (67%).**
+**Recover resources for collection: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Verify the exact resource dead end ([evidence](../docs/evidence/red-capture-sustainability-audit-2026-09-10.json))
 - [x] Qualify safe escape and recovery ([evidence](../docs/evidence/red-dig-recovery-learning-2026-09-10.json))
-- [ ] Retain a funded collection lesson
+- [x] Retain a funded collection lesson ([evidence](../docs/evidence/red-funded-collection-learning-2026-09-11.json))
 
-Current model: **65 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **66 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-funded-collection-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-funded-collection-overnight
+
+AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+
+**Deviation:** Resource checklist3/3 means one funded lesson retained, including failure; it does not mean sustainable capture or stage completion.
+
+**Next:** Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
 
 ### 2026-09-11-economy-live-qualification
 

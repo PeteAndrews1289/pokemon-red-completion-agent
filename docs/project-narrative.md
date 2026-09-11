@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest live result: [the funding qualification](work-sessions/2026-09-11-economy-live-qualification.md) left the Center and earned850 from a Route18 trainer. Cash rose593→1443; all party HP,64 registrations and54 specimens were preserved. This was the sole available goal, so it remained deterministic support and did not increase the model's65 examples. Next connect these actual proceeds to a useful collection lesson; renewable income and learned earning remain unproven.
+Latest overnight result: AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## The question
 

@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No authority gain: one forced singleton support goal, zero eligible examples and no fit.",
-        "blocker": "Zero balls, but1443money now permits supplies. Renewable income and model-selected reserve management remain unfinished.",
-        "decision": "Stop repairing the now-qualified Center funding exit. Turn actual funds into a bounded collection lesson; no broad audit or economy redesign.",
+        "authority_delta": "One additional actual seven-way destination outcome fitted; no authority promotion or independent performance result.",
+        "blocker": "Balls exhausted without registration gain; funded learning works but sustainable capture does not yet.",
+        "decision": "Close the funded-lesson checklist, not the collection stage. Recover from the exact failed terminal and inspect capture efficiency before repeating.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-dig-recovery-learning-2026-09-10.json",
-          "sha256": "21950c19fde470995e3b86bac2853e143ca20a27d3665e5c93968aa5372efdbf"
+          "path": "docs/evidence/red-funded-collection-learning-2026-09-11.json",
+          "sha256": "64d68a5c8e8526e493d28074c61ece72e04ec133cd053b0b7a68be08e15505a6"
         },
-        "learning_output": "AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.",
-        "next_falsifier": "An affordable supply purchase must lead to a real selectable collection goal; preserve costs and any failed search.",
-        "next_session_goal": "Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal.",
+        "learning_output": "AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.",
+        "next_falsifier": "Can existing recovery preserve the latest costs and restore useful resources? Does capture preparation avoid unnecessary full-HP throws when safe weakening exists?",
+        "next_session_goal": "Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-economy-live-qualification",
+        "session_id": "2026-09-11-funded-collection-overnight",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.",
+        "current": "AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal.",
+      "next_decision": "Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 65,
+        "registered_train_examples": 66,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

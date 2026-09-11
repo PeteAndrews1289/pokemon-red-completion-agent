@@ -60,3 +60,10 @@ For the [recovery chapter](work-sessions/2026-09-10-dig-recovery.md), show the u
 The [runtime connection](work-sessions/2026-09-11-economy-runtime-connection.md) makes the next question testable: does a funding choice actually improve the resources available for collection? Show observation → choice → measured outcome → replay as an engineering explanation, not new gameplay footage. The actual 65-example model was initialized with the new inputs without changing its old predictions. No income, new example or fit was produced; the economy head has yet to learn from real outcomes.
 
 Follow with [the live funding qualification](work-sessions/2026-09-11-economy-live-qualification.md): the Center exit connects to a real Route18 trainer and cash rises593→1443. Display +850 money,123 actions and7,825 frames, with all party HP full. Label it deterministic singleton support:64 registrations and65 examples unchanged. This is not League income or learned economic judgment; the next scene should show the proceeds enabling a real collection choice.
+
+
+For [the funded lesson](work-sessions/2026-09-11-funded-collection-overnight.md), show three purchased balls,
+seven genuine destinations and Seafoam B1F arrival. All three throws fail; keep that
+visible. The failed outcome is fitted:65→66 examples,64 registrations unchanged.
+Explain that training happened without proving improved performance. Deterministic
+support and mechanics remain distinct from the learned destination selection.

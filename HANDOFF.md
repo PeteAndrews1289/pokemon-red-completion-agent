@@ -1,52 +1,66 @@
 # Current development handoff
 
-Updated September 11, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Historical outcomes remain in dated reports and Git.
+Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md)
+and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
+and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Goal
+## Latest verified endpoint: AR01
 
-A learned player that completes stories and accumulates a shared registered Pokédex across games. Red first; global credit, local flags and physical stock stay separate. No level-100 or simultaneous-living-form requirement. Deterministic mechanics are disclosed; fresh-game autonomy and transfer are unproven.
+AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
 
-## Latest verified save: AO01
+The selection was25% uniform exploration plus75% model softmax. One regional
+choice is replay-verified; its deterministic singleton parent supplies no duplicate
+label. All65 prior examples remain. This is a genuine update from failed experience,
+not proof of improvement or learned economic judgment.
 
-The explicit Center-exit funding attempt succeeded: Fuchsia Center to a Route18 trainer, 123 actions and 7,825 frames, cash593→1443 (+850). All six party members remain at full HP; 64 registrations and54 specimens are preserved. Zero balls remain.
+- Episode: `red-funded-learning-20260911-ar-01-causal`
+- Checkpoint: `b737ba15322d71898369ba60b888ffd2800dc7241a91be404aab55c474bac12d`
+- Manifest: `234a4cad2782bad6c35c502585385181df8eff925390c58e35cd65dcacf4986f`
+- State: `df87846e3ed33e8f24bd4baf0e095343df972e531613c777dfed540dd1a8c167`
+- Model: `2c8da5d0d84560129846b0fd0c25ef7ca1f0cfff2de92654658860a613e53f7d`
+- Model file SHA: `cfc8c0f3293ac2eab6c36f229279d362730a60f080531f728c9559cc59150de0`
+- Corpus: `f0ce6225d95ab5af3d27261cdf8b69af6f0ecac84cfcca57e111c0ab120e1478`
+- Played source: `94b7a758daa85fa89e28e778237ba1a6a2f76fa9`
 
-It was the only available goal: one forced RESUPPLY step, zero authority decisions, zero eligible examples and zero fits. The model remains at65 examples. This is a qualified finite-income skill, not learned funding judgment or renewable League income.
+Terminal Seafoam B1F/map159,row9/column9,input-ready,battle0.
+HP244/118/146/88/92/56; the lead leveled during travel, so do not call all HP full.
+Three balls were spent on the same99/99HP wild target. No capture occurred.
+The precise preparation/status explanation remains under audit, not an assumed bug.
+Gameplay stopped. Never restore AQ or earlier saves to erase AR's costs.
 
-[Session report](docs/work-sessions/2026-09-11-economy-live-qualification.md) · [Verified result](docs/evidence/red-income-qualification-2026-09-11.json).
+## Next bounded work
 
-Exact identities:
+Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
 
-- Episode: `red-income-20260911-ao-01-causal`
-- Checkpoint: `45ee2764806c3a781aa0633f7e8b7d814c04b4aefc3af28990e6de1fac58f992`
-- Manifest: `3f78764816affb38a9ff1f158780b7aaedf649d41e8cd360484b18269eb92c72`
-- State: `86f8ab56968dbe0502c805425b15f0a8e2095270e2c6245221972f5d74b944ba`
-- Model: `6cd88d0f3acb08ae66e72b18cf0e3bad0edefeedc58a7c128653aa144b837e92`
-- Model file SHA: `4af393c341cdc715672fd0f1476fffbd7202d3c30bf14d02d8dfbb099151efbd`
-- Corpus: `9f9a3a86a9315d8f702468468aff32c492b9e0de7a2f0e92a6322858471b7997`
-- Played source: `dfb3d2963c1be9760f2fcfd1fdf1ef7084fa62d3`
+Use private `run_ar_collection_20260911.arguments()` only as an argument builder;
+never rerun its consumed main. Append AR's endpoint; set the new model record and
+hash above; preserve the regional source's transport/discovery settings and all
+behavior-model inventory. Fresh output identity only. Inspect native offers first.
+Budget45–90minutes including preparation; stop on unsafe admission or unsupported
+mechanic. The overnight sequence ends07:07EDT, September11, without extension.
 
-Terminal: Route18/map29, row14/column40; input-ready, battle0, no pending trainer. Party HP244/118/146/88/92/73, all full. Gameplay stopped.
+The resource checklist is3/3 because a funded lesson was retained. Red collection
+is NOT complete: sustainable supplies, capture efficiency, independent advantage
+and fresh-game autonomy remain unfinished. No sealed Red, Crystal or full replay.
 
-## What changed
+## Engineering and external review
 
-Read-only AM inspection found no native goal, but a computed five-step Center exit and five outdoor trainer candidates. The opt-in supply-profile field `indoor_funding_departure` extends funding only through the observed Center exit and immediate outdoor connections. It preserves trainer sight reservations, target checks and existing route/battle bounds. Historical profiles remain unchanged.
+AP bought two GreatBalls and AQ bought a third; both are zero-label support.
+AQ had two menu entries but deterministic resource safety chose the purchase.
+CI fixture repair passed129 focused tests; hosted34557735877 is green.
 
-301 targeted tests passed across funding, profiles, indoor transport, economy replay and the native runner. Ruff and configured mypy (477 source files) passed. The real native journal reopens with zero eligible examples, as expected; terminal state verification used no input. No full-suite pass is claimed.
+Flash's five-file reserve draft stays isolated:89 tests passed,1failed, and it
+incorrectly replaces a valid purchase with earning. Its variant design also misses
+kind-indexed consumers. Do not integrate it. The narrow capture review completed:
+status mode skips legacy weakening, but this is an explicit non-damaging contract,
+not a newly proved defect. Its guessed catch odds and mandatory weakening were
+rejected. The same limitation was already reviewed September10; no repeat audit.
+Claude Opus4.8 High completed its review: finite-income/no-fake-learning cautions
+accepted; Route18-local-only requirement rejected because regional travel exists.
 
-The previous zero-weight v4 initialization preserves all65 examples and has no learned economy head. [Initialization report](docs/work-sessions/2026-09-11-economy-runtime-connection.md). Previous AM recovery remains historical evidence; do not restore it to erase AO's trainer defeat or costs.
+After the capture review, Flash displayed54.14%five-hour/70.81%weekly remaining
+at00:30EDT (resets about1h42m/18h51m). These are account-wide readings, not isolated
+task savings. Claude quota unavailable. No proven net subscription savings.
 
-## Next bounded session
-
-Continue exact AO01 with this same v4 model and explicit economy-training. Reconstruct the previous argument chain using the private `run_ao_income_20260911.arguments()` function, append AO's actual episode/checkpoint above, and choose a fresh output/episode identity. Never rerun its main entry point. Preserve the opted-in supply profile and existing behavior-model inventory.
-
-Use existing transport to purchase affordable supplies, then attempt one genuine model-selected missing-species goal. Keep AO and any purchase as zero-label support and fit only eligible actual outcomes, including failures. Budget45–90minutes for a small continuation including preparation; this does not guarantee a catch or sustainable income.
-
-Funding currently triggers below one ball's price, not at a model-chosen useful reserve. Ordinary trainers are finite. Renewable League/Pay Day support and model-selected earning remain unfinished; do not call this solved economics.
-
-Resource-recovery checklist stays2/3 until a funded collection lesson is retained. No full replay, sealed Red, Crystal, resets or consumed retries.
-
-## Ownership and publication
-
-Codex implemented and verified this bounded runtime repair; no external agent was called. Previous reviewed Flash economy work is reused. External quota readings and net savings are unavailable for this session; no savings percentage is claimed. Flash's older stone draft remains isolated at `895b4d6b`.
-
-PR243 holds the executable change and closeout. Batch documentation publication; do not wait for hosted CI to perform ordinary development. PR242 previously merged as `0d58f492`.
+[Result](docs/evidence/red-funded-collection-learning-2026-09-11.json) · [Report](docs/work-sessions/2026-09-11-funded-collection-overnight.md).
+PR243 remains publication lane. Recommend Astra High, Fast off for background work.

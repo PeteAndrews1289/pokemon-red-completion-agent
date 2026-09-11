@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-economy-live-qualification",
+  "as_of_session": "2026-09-11-funded-collection-overnight",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-dig-recovery-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-funded-collection-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -55,8 +55,8 @@
       {
         "id": "sustainable-funded-learning",
         "label": "Retain a funded collection lesson",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-funded-collection-learning-2026-09-11.json"
       }
     ]
   },
@@ -852,6 +852,12 @@
       "result": "AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.",
       "deviation": "Qualified finite trainer income through explicit observed Center exit, rather than unqualified League rematch. No learned earning claim; funded collection checklist remains2/3.",
       "next": "Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-11-funded-collection-overnight",
+      "result": "AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.",
+      "deviation": "Resource checklist3/3 means one funded lesson retained, including failure; it does not mean sustainable capture or stage completion.",
+      "next": "Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [
