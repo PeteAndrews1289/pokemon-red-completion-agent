@@ -139,7 +139,11 @@ def main(argv: list[str] | None = None) -> int:
     rom_path = resolve_rom_path(args.rom)
 
     try:
-        with PyBoyAdapter(rom_path, watch=args.watch, speed=args.speed) as emulator:
+        with PyBoyAdapter(
+            rom_path,
+            watch=args.watch,
+            speed=args.speed if args.watch else None,
+        ) as emulator:
             report = run_fresh_first_badge_conductor(
                 rom_path,
                 objective_model=objective_model,

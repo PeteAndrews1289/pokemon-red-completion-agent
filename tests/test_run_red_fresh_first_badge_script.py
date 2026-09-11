@@ -41,6 +41,9 @@ def test_runner_authenticates_source_model_and_saved_capture() -> None:
     ):
         assert required in calls
 
+    source = SCRIPT.read_text(encoding="utf-8")
+    assert "speed=args.speed if args.watch else None" in source
+
 
 def test_neutral_ranker_is_explicitly_unlearned_and_schema_compatible() -> None:
     module = runpy.run_path(str(SCRIPT))
@@ -70,4 +73,3 @@ def test_private_outputs_must_be_new_and_outside_repository(tmp_path: Path) -> N
         require_output(parser, outside)
     with pytest.raises(SystemExit):
         require_output(parser, PROJECT_ROOT / "private.state")
-

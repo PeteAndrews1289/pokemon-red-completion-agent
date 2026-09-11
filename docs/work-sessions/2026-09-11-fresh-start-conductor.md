@@ -59,3 +59,8 @@ Publish the engineering source, execute one bounded neutral-integration rehearsa
 power, retain the authenticated first-badge state, and then prove that the next semantic stage
 (`reach_cerulean`) is available after reload. That proves a resumable join; it does not train or
 evaluate the goal-value learner.
+
+The first published-run invocation failed before emulator startup because the runner supplied a
+display-speed option to a headless adapter. It created no controller input or output capture. The
+repair passes `None` in headless mode and preserves the requested multiplier only for visible
+runs; this development invocation is repeatable and does not consume an experimental case.
