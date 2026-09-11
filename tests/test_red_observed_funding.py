@@ -75,7 +75,7 @@ def setup(monkeypatch):
     )
     router = SimpleNamespace(
         world=world,
-        runtime=SimpleNamespace(reader=reader),
+        runtime=SimpleNamespace(reader=reader, profile=SimpleNamespace(providers=())),
         regional_trainer_funding=True,
         trainer_pending_recovery=False,
     )
