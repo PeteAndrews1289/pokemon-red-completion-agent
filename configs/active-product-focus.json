@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Two actual native outcomes fitted; regional proposal was not an executed destination or label. No promotion or independent advantage.",
-        "blocker": "No acquisition was attempted in this batch because the parent chose recovery. Actual supplies and a healed team are ready for the next bounded choice.",
-        "decision": "Retain the model choice without forcing collection or relabeling the unexecuted destination. Continue once from the actual healed endpoint; avoid new architecture.",
+        "authority_delta": "One selected six-way destination outcome fitted. Forced native parent adds no target; no promotion or independent advantage.",
+        "blocker": "All balls spent; acquisition failed despite a new Seel. Detailed fresh-binding disposition is not retained in the step summary.",
+        "decision": "Keep partial credit, goal failure and costs separate; inspect the smallest reusable reporting/recovery boundary.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-collection-replenishment-2026-09-11.json",
-          "sha256": "6496e5cb28f094d64f715227f1f7962937de243c9d6e495d9814308c52077f6c"
+          "path": "docs/evidence/red-seel-partial-learning-2026-09-11.json",
+          "sha256": "64ee98eaae3cb1708ebda3e99c73875688e68cc9520e4f820e2827195675a769"
         },
-        "learning_output": "BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.",
-        "next_falsifier": "Can the next actual funded continuation produce useful collection without erased costs or a hand-picked destination?",
-        "next_session_goal": "Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.",
+        "learning_output": "BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.",
+        "next_falsifier": "Can actual interior-state recovery expose useful goals without restoring resources or hiding the failed acquisition?",
+        "next_session_goal": "Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-collection-replenishment",
+        "session_id": "2026-09-11-seel-partial-result",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.",
+        "current": "BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.",
+      "next_decision": "Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 75,
+        "registered_train_examples": 76,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

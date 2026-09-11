@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Latest overnight result: BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. [Report](work-sessions/2026-09-11-seel-partial-result.md).
 
 ## The question
 

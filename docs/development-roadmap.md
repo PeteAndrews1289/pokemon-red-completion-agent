@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-collection-replenishment**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-seel-partial-result**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 - [x] Turn replenishment into new registration ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 
-Current model: **75 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **76 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-collection-replenishment-2026-09-11.json)
+[Current evidence](../docs/evidence/red-seel-partial-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-seel-partial-result
+
+BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
+
+**Deviation:** No stage-exit change. Resource checklist3/3 remains tied to AZ. BB is failed despite partial registration gain.
+
+**Next:** Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
 
 ### 2026-09-11-collection-replenishment
 

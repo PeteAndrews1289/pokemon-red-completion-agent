@@ -13,11 +13,11 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.
+BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
 
-Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.
+Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
 
-Flash's funding review and isolated Fly planner/tests are complete. Codex repaired and integrated the draft; AY now verifies actual flight-assisted income. No external task remains running and no fresh broad audit is needed. Claude was not reused. See [handoff](HANDOFF.md).
+Flash is auditing routed capture failure observability and interior recovery read-only. The first call returned empty after a denied directory read; one corrected call is running. No private inputs or gameplay delegated. Earlier funding work remains integrated; Claude was not reused.
 
 ## Reviewer brief
 

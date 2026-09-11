@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.
+BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
 
-Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.
+Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
 
 The resource-choice checklist is now3/3: distinct earning/purchase options, actual selected-outcome fitting and a new registration. This closes that bounded checklist, not Red collection. Repeat useful play before claiming sustainability or independent reliability. [Latest result](work-sessions/2026-09-11-funded-capture-result.md).
 

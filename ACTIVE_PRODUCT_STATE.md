@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.
+- Next decision: Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred. |
+| Authority now | BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 75 | 12 |
+| Registered Train Example · train | 76 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-collection-replenishment** · status **active** · evidence [registered train example](docs/evidence/red-collection-replenishment-2026-09-11.json)
+**2026-09-11-seel-partial-result** · status **active** · evidence [registered train example](docs/evidence/red-seel-partial-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred. |
-| Authority delta | Two actual native outcomes fitted; regional proposal was not an executed destination or label. No promotion or independent advantage. |
+| Learning output | BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained. |
+| Authority delta | One selected six-way destination outcome fitted. Forced native parent adds no target; no promotion or independent advantage. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | No acquisition was attempted in this batch because the parent chose recovery. Actual supplies and a healed team are ready for the next bounded choice. |
-| Decision | Retain the model choice without forcing collection or relabeling the unexecuted destination. Continue once from the actual healed endpoint; avoid new architecture. |
-| Next session | Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff. |
-| Next falsifier | Can the next actual funded continuation produce useful collection without erased costs or a hand-picked destination? |
+| Blocker | All balls spent; acquisition failed despite a new Seel. Detailed fresh-binding disposition is not retained in the step summary. |
+| Decision | Keep partial credit, goal failure and costs separate; inspect the smallest reusable reporting/recovery boundary. |
+| Next session | Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff. |
+| Next falsifier | Can actual interior-state recovery expose useful goals without restoring resources or hiding the failed acquisition? |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

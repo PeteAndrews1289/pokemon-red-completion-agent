@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-collection-replenishment",
+  "as_of_session": "2026-09-11-seel-partial-result",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-collection-replenishment-2026-09-11.json"
+      "evidence": "docs/evidence/red-seel-partial-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -918,6 +918,12 @@
       "result": "BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.",
       "deviation": "The prior resource-choice checklist remains completed3/3 on AZ evidence. BA adds useful supplies and two selected outcomes, not a new capture or phase exit.",
       "next": "Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff."
+    },
+    {
+      "session": "2026-09-11-seel-partial-result",
+      "result": "BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.",
+      "deviation": "No stage-exit change. Resource checklist3/3 remains tied to AZ. BB is failed despite partial registration gain.",
+      "next": "Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff."
     }
   ],
   "closed_milestones": [

@@ -1,59 +1,33 @@
 # Current development handoff
 
-Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md)
-and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Goal: learned play and a
-shared registered Pokédex; global credit, local flags and physical stock differ.
+Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest verified endpoint: BA03
+## Latest verified endpoint: BB01
 
-BA earned1540 as forced support, then the model bought3GreatBalls and selected
-recovery instead of the offered acquisition. All3goals succeeded; only the two
-native choices were fitted:73→75examples. Registrations65/specimens55 unchanged.
-The Seafoam first-floor proposal was not an attempted or fitted destination.
+BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
 
-- Episode: `red-collection-20260911-ba-03-causal`
-- Checkpoint: `b8ff370cb3cd4292a024da83740cdb38d831200e0d71bfc863df92eeda5b68c9`
-- Manifest: `805fe9ad87a23dad8ce55f04dc2e8ebaa06c774fca83643ddb4dceff30fbea02`
-- State: `ff36a21687b284a0d5afb946d5ccfa2a694be4df8e8a37181fda624d1e97df25`
-- Played source: `4ce6c9560511e9497dea6f2eede6ed9d15c69027`
-- Model: `9343948f2a4675bc6bbff212a7a0166b2a41c7076c7dc45daafe5efeca37e39a`
-- Model file: `1168ad7dacc14b760e7ede255a37a27e7dfe0ee5bc5fdafe4ad40207ff4ca6a3`
-- Corpus: `74c370a9564ad52574837a8051c4d0b157327baf8afecd919066c938a29b0af6`
+- Episode: `red-collection-20260911-bb-01-causal`
+- Checkpoint: `d0ad1b0d38db05971af6fa147758a78c6a1abcb59d0c64ce0a825204f6a83a89`
+- Manifest: `287cbcc0d1cfeffbafd7b0a4fef072236f0956ce71b254c27f1fe2d0f277f219`
+- State: `4a082536b6684ee255b1c4e3899aeef160a3e4b485771d195524680231564b3d`
+- Played source: `767ba9a03d49cd202a995b7b7fd21c315d7de2f2`
+- Model: `4988b114c0c5935708aa911e4aca9b50bf19e23ee6a5e6947cdaad283207c595`
+- Model file: `6f101835738ccdc2729d8982f810092e136bf76518abc2a1b1e9e209aaca64a5`
+- Corpus: `03c256b7bb34de170547168ebdd9ff9461019d23a937c2fa493f3b0188396f2d`
 
-FuchsiaCenter154,row3,column3,input-ready,battle0;333money,3GreatBalls.
-HP249/118/146/88/92/73.65local/global registrations,55specimens,51living species,
-59required registrations remain. No costs or failed searches were erased.
-BA:461actions/25225frames in957.452seconds; read-only audits verified the native
-choices, final owned flags/party/box inventory, model and corpus.
-[Result](docs/work-sessions/2026-09-11-collection-replenishment.md).
+Seafoam1F192,row9,column10,input-ready,battle0;333money,zero balls. HP246/118/146/88/92/62.66local/global registrations,56specimens,52living species,58required registrations remain.
+BB:370actions/26892frames in536.081seconds. Zero-input audit verified saved flags, stock, model and corpus. [Report](docs/work-sessions/2026-09-11-seel-partial-result.md).
 
 ## Next bounded work
 
-Continue BA03/model75 with its purchased balls and healed team. Let the model
-choose a useful acquisition/evolution without forcing a destination. At most3goals
-or30minutes; preserve any failure and stop. Overnight cutoff remains07:07EDT.
-No full replay, sealed Red, Crystal, previous-main retry or old-state restoration.
+Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
 
-The builder starts from run_ba_collection_20260911.arguments() ONLY, appends all
-three BA checkpoints, preserves the declared BA03 proposed-source profile
-transition using warp_safe_v1, and installs model75. A profile proposal is not
-visited-location or acquisition credit. All BA processes/audits completed;
-inspect the current next process and outputs before launching anything.
+BB gameplay and batch audit completed; do not rerun either. Successor starts from run_bb_collection_20260911.arguments() ONLY, appends actual BB01, preserves its selected-source warp_safe_v1 transition and installs model76. Inspect processes/outputs before launching. Detailed binding cause is unproven; exhausted arrival resources are a source-supported hypothesis.
 
-## Mission position and engineering
+## Mission position and reviewers
 
-AZ's prior productive sequence caught Tangela and closed the resource-choice
-checklist3/3. BA did not add a registration; Red collection remains active.
-75examples include36acquisition rows with9successes. More fits do not establish
-independent performance, reliable collection or full-game autonomy.
+AZresource checklist remains3/3; Red collection active.76examples include37acquisition rows with9successes, not an independent success-rate estimate. No fresh-game autonomy or transfer claim.
 
-Flash's earlier isolated income-access draft was repaired and integrated by
-Codex; no new external task was needed for BA. All external tasks have finished.
-Do not sweep in the incompatible older reserve draft. Claude was not reused.
-Last observed Gemini quota03:18EDT:92.02%five-hour/68.41%weekly remaining;
-these are dated account-wide readings. Claude quota is unavailable.
+Flash is auditing the public reporting/recovery boundary read-only. First call empty due to ListDir denial; one correction running. No private input or gameplay delegated. Earlier integrated Fly draft remains useful; Claude was not reused. Refresh Gemini quota after review; last dated03:18EDT reading92.02%five-hour/68.41%weekly remaining is not current. Claude quota unavailable.
 
-Executable typing repair5dd6e2a8 passed hosted CI34575608031. Publication4ce6c956
-uses the same executable bundle; its CI34577545668 was pending at08:17UTC.
-Batch tested publication rather than rerunning unchanged CI. Recommend Astra High,
-Fast off: verify useful bounded play before adding architecture or review overhead.
+CI34577545668 passed;767ba9a0 CI34579388776 was pending at08:36UTC. No executable change in this closeout. Recommend Astra High, Fast off: verify reusable recovery and useful play, not new architecture.
