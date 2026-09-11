@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest audited result: after catching Horsea, the model selected evolution and registered Seadra. It then chose to earn550, buy one capture item for600 and restore its injured party. All four outcomes were fitted: model90→94 and collection69→70 registrations, ending with493money, four capture items and an input-ready party. [Report](work-sessions/2026-09-11-seadra-and-prerequisite-learning.md).
+Latest audited result: the model chose SeafoamB3F from six regions and caught Slowpoke, chose recovery, then selected evolution and registered Slowbro. All three outcomes were fitted: model94→97 and collection70→72 registrations, ending with493money, three capture items and an input-ready party. [Report](work-sessions/2026-09-11-slowpoke-slowbro-learning.md).
 
 ## The question
 
@@ -36,7 +36,7 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 
 ## Results we can show
 
-- The latest continuation turned the newly caught Horsea into Seadra, then completed three prerequisite decisions without retry: earn, buy and heal. Four actual outcomes were fitted. The model reached94examples and the collection70registrations. [Seadra and prerequisite report](work-sessions/2026-09-11-seadra-and-prerequisite-learning.md).
+- The latest continuation completed a catch→recover→evolve chain without retry. Slowpoke and Slowbro were verified from retained saves; three actual outcomes were fitted. The model reached97examples and the collection72registrations. [Slowpoke and Slowbro report](work-sessions/2026-09-11-slowpoke-slowbro-learning.md).
 
 - Checkpoint-based story integration reached the Champion and Hall of Fame with disclosed deterministic battle execution. The final episode contained two learned recovery choices and a forced boss continuation—not an autonomous fresh-game win. [Story audit](audits/red-phase4-closeout-2026-09-09.md).
 - The preceding collection batch caught Onix, reaching59 registered species and 51 physical specimens.

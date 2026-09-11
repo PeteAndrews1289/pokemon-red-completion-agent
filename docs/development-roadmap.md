@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-seadra-and-prerequisite-learning**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-slowpoke-slowbro-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Continue registered collection from retained state: 2/3 acceptance items (67%).**
+**Broaden registered collection beyond one chain: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Catch and evolve one new species line ([evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json))
-- [x] Learn earning, purchasing and recovery ([evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json))
-- [ ] Add another registration from the retained endpoint
+- [x] Register a catch from a learned regional choice ([evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json))
+- [x] Register the caught species' learned evolution ([evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json))
+- [ ] Register a species outside the Seafoam/water chain
 
-Current model: **94 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **97 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-slowpoke-slowbro-learning
+
+BT completed a model-directed catch-recover-evolve chain: six-way SeafoamB3F choice caught Slowpoke, recovery restored it, and evolution registered Slowbro. Model94 to97; registrations70 to72; final493money and three capture items. Read-only audit verified all terminals and retained artifacts.
+
+**Deviation:** No stage exit or authority promotion. The sequence is productive but concentrated in Seafoam/water species; Slowbro evolution also cost16066actions and1369123frames, so efficiency is not established.
+
+**Next:** Continue from audited BT03/model97 and seek a registration outside the Seafoam/water chain through a model-selected acquisition or owned evolution. Preserve all costs and failures; no retained-step replay, Crystal run or autonomy claim.
 
 ### 2026-09-11-seadra-and-prerequisite-learning
 

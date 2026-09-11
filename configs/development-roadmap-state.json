@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-seadra-and-prerequisite-learning",
+  "as_of_session": "2026-09-11-slowpoke-slowbro-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Continue registered collection from retained state",
+    "title": "Broaden registered collection beyond one chain",
     "items": [
       {
-        "id": "catch-evolve-chain",
-        "label": "Catch and evolve one new species line",
+        "id": "learned-regional-capture",
+        "label": "Register a catch from a learned regional choice",
         "done": true,
-        "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
+        "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
       },
       {
-        "id": "learn-prerequisite-sequence",
-        "label": "Learn earning, purchasing and recovery",
+        "id": "learned-caught-species-evolution",
+        "label": "Register the caught species' learned evolution",
         "done": true,
-        "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
+        "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
       },
       {
-        "id": "next-retained-registration",
-        "label": "Add another registration from the retained endpoint",
+        "id": "different-family-registration",
+        "label": "Register a species outside the Seafoam/water chain",
         "done": false,
         "evidence": null
       }
@@ -948,9 +948,40 @@
       "result": "BR and BS completed four successful model-directed outcomes: evolve Horsea into Seadra, earn550, buy one capture item and restore the party. Model90 to94; registrations69 to70; final493money and four capture items. A read-only audit verified every terminal, resource, model and corpus hash.",
       "deviation": "No stage exit or authority promotion. Route-plan sharing preserved the exact regional menu but improved the measured scan only4.2percent. Indistinguishable regional identities are now excluded from source-choice training instead of receiving fake labels.",
       "next": "Continue from audited BS03/model94 and prioritize another verified model-selected acquisition or useful evolution. Keep the safe scan refactor, but do not spend another session optimizing it. No retained-step replay, Crystal run or autonomy claim."
+    },
+    {
+      "session": "2026-09-11-slowpoke-slowbro-learning",
+      "result": "BT completed a model-directed catch-recover-evolve chain: six-way SeafoamB3F choice caught Slowpoke, recovery restored it, and evolution registered Slowbro. Model94 to97; registrations70 to72; final493money and three capture items. Read-only audit verified all terminals and retained artifacts.",
+      "deviation": "No stage exit or authority promotion. The sequence is productive but concentrated in Seafoam/water species; Slowbro evolution also cost16066actions and1369123frames, so efficiency is not established.",
+      "next": "Continue from audited BT03/model97 and seek a registration outside the Seafoam/water chain through a model-selected acquisition or owned evolution. Preserve all costs and failures; no retained-step replay, Crystal run or autonomy claim."
     }
   ],
   "closed_milestones": [
+    {
+      "session": "2026-09-11-slowpoke-slowbro-learning",
+      "stage": "red-collection",
+      "title": "Continue registered collection from retained state",
+      "items": [
+        {
+          "id": "catch-evolve-chain",
+          "label": "Catch and evolve one new species line",
+          "done": true,
+          "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        },
+        {
+          "id": "learn-prerequisite-sequence",
+          "label": "Learn earning, purchasing and recovery",
+          "done": true,
+          "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
+        },
+        {
+          "id": "next-retained-registration",
+          "label": "Add another registration from the retained endpoint",
+          "done": true,
+          "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        }
+      ]
+    },
     {
       "session": "2026-09-07-incremental-learning-complete",
       "stage": "sustained-red",

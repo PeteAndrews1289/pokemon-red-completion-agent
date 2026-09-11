@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from audited BS03/model94 at SeafoamB4F with493money, four capture items and restored party HP. Seek another bounded model-selected registration; do not replay retained steps or claim fresh-game autonomy.
+- Next decision: Continue from audited BT03/model97 on Route22 with493money and three capture items. Seek a model-selected registration outside the Seafoam/water chain; do not replay retained steps or claim fresh-game autonomy.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | The learner caught Horsea, selected its evolution into Seadra, then selected earning, purchasing and recovery. Model94,70registrations and all retained resources were independently audited. |
+| Authority now | The learner selected SeafoamB3F, caught Slowpoke, selected recovery and evolved Slowpoke into Slowbro. Model97,72registrations and all retained resources were independently audited. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 94 | 12 |
+| Registered Train Example · train | 97 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-seadra-and-prerequisite-learning** · status **active** · evidence [registered train example](docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json)
+**2026-09-11-slowpoke-slowbro-learning** · status **active** · evidence [registered train example](docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BR and BS completed four bounded model-directed steps: evolve Horsea into Seadra, earn550, buy one capture item for600, and restore the party. The audited model advanced90 to94examples and the collection69 to70registrations, ending with493money and four capture items. |
-| Authority delta | Four actual outcomes were fitted: model-selected Horsea evolution, earning, purchasing and party recovery. Seadra was registered; no authority promotion or independent evaluation occurred. |
+| Learning output | BT completed three bounded model-directed steps: choose SeafoamB3F and catch Slowpoke, restore the party, then evolve Slowpoke into Slowbro. The audited model advanced94 to97examples and the collection70 to72registrations, ending with493money and three capture items. |
+| Authority delta | Three actual outcomes were fitted: a six-way regional destination, party recovery and Slowpoke evolution. Slowpoke and Slowbro were registered; no authority promotion or independent evaluation occurred. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | The fresh regional inventory still takes about four minutes. Safe route-plan sharing preserved the exact menu but improved the measured scan only4.2percent, so it is no longer the active task. |
-| Decision | Retain the complete catch-to-evolution chain and BS prerequisite sequence. Prioritize another model-selected registration rather than more infrastructure optimization. |
-| Next session | Continue from audited BS03/model94 at SeafoamB4F with493money, four capture items and restored party HP. Seek another bounded model-selected acquisition or useful evolution and retain its actual outcome. Do not replay retained steps, enter Crystal, or claim fresh-game autonomy. |
-| Next falsifier | The next bounded continuation cannot expose or execute a useful acquisition/evolution from the retained resources, or it loses a registration, specimen, resource cost or durable terminal. |
+| Blocker | The current evidence is concentrated in Seafoam and water-species chains. The next result must broaden the encounter or evolution family rather than repeat the easiest local pattern. |
+| Decision | Retain the complete Slowpoke catch-recover-evolve chain and diversify the next registration beyond Seafoam/water species. |
+| Next session | Continue from audited BT03/model97 on Route22 with493money, three capture items and the retained party. Seek a bounded model-selected registration from another encounter family or an owned non-water evolution. Do not replay retained steps, enter Crystal, or claim fresh-game autonomy. |
+| Next falsifier | The retained model cannot expose or execute a useful non-Seafoam acquisition/evolution, or it loses a registration, specimen, resource cost or durable terminal. |
 | Stop condition | No hidden retry, invented choice, lost terminal cost or deterministic support counted as learned authority; stop if the retained state cannot expose a useful executable goal. |
 
 ### Stop conditions
