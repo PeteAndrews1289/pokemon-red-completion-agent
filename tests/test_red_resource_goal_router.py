@@ -280,6 +280,26 @@ def test_routed_kind_filter_skips_unrelated_transport_but_keeps_local_menu(fixtu
             f.router.enumerate_routed_kinds(f.adapter.observe(), invalid)
 
 
+def test_inventory_route_cache_reuses_identical_success_and_failure_queries(fixture):
+    f = fixture
+    f.router.route_plan_cache = {}
+    first = f.router.enumerate(f.adapter.observe())
+    second = f.router.enumerate(f.adapter.observe())
+    assert _supply(first).policy_dict() == _supply(second).policy_dict()
+    assert len(f.world.plans) == 1
+
+    f.router.route_plan_cache.clear()
+    f.world.plans.clear()
+    f.world.fail = True
+    assert _supply(f.router.enumerate(f.adapter.observe())).unavailable_reason is (
+        GoalUnavailableReason.MISSING_CAPABILITY
+    )
+    assert _supply(f.router.enumerate(f.adapter.observe())).unavailable_reason is (
+        GoalUnavailableReason.MISSING_CAPABILITY
+    )
+    assert len(f.world.plans) == 1
+
+
 def test_remote_supply_uses_actual_route_and_fresh_mart_then_disappears(fixture):
     f = fixture
     before = f.port.frame_count

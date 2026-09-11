@@ -106,6 +106,7 @@ def enumerate_red_regional_acquisitions(
         # matter once those preferred routes are exhausted or gated.
         sources = sorted(set(sources) | set(cartridge_grass_sources(world.rom)))
     candidates = []
+    route_plan_cache = {}
     for source in sources:
         try:
             map_id = int(map_id_for_wild_source(source))
@@ -143,6 +144,7 @@ def enumerate_red_regional_acquisitions(
             routed_recovery=routed_recovery,
             prepare_capture_storage=prepare_capture_storage,
             include_recovery_offers=False,
+            route_plan_cache=route_plan_cache,
         ).enumerate_routed_kinds(
             observation,
             frozenset({GoalKind.ACQUIRE_SPECIES}),
@@ -156,6 +158,9 @@ def enumerate_red_regional_acquisitions(
             candidates.append(RedRegionalAcquisitionCandidate(source, profile, bindings[0]))
     if before != (actions.actions_executed, runtime.emulator.frame_count):
         raise ValueError("regional source enumeration changed the game")
+    # Returned bindings already hold their selected plans. Do not retain the
+    # shared lookup for execution, rebinds or the next live observation.
+    route_plan_cache.clear()
     candidates.sort(key=lambda candidate: (candidate.binding.estimated_effort, candidate.source_id))
     return tuple(candidates[:MAXIMUM_SOURCE_CANDIDATES])
 

@@ -31,6 +31,9 @@ class Router:
     def _replan(self, _request):
         raise AssertionError('not needed by this bounded transport')
 
+    def plan_feasible_to_map(self, *args, **kwargs):
+        return self.world.plan_feasible_to_map(*args, **kwargs)
+
 
 def unavailable():
     from pokemon_red_completion.goal_manager import (

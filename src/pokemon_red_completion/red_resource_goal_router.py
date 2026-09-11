@@ -8,7 +8,7 @@ never fabricates a destination state or grants a successful outcome.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import partial
 
 from pokemon_red_completion.actions import MacroActionKind
@@ -53,6 +53,7 @@ from pokemon_red_completion.route_executor import (
     InterruptionHandler,
     ReplanRequest,
     RouteExecutionLimits,
+    TraversalSnapshot,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalLimits
@@ -107,6 +108,11 @@ class RedResourceGoalRouter:
     # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
     # and escort preparation enabled without planning unused Center routes.
     include_recovery_offers: bool = True
+    # Shared only during one action-free candidate inventory. It is explicitly
+    # cleared before returning so a later live observation cannot inherit it.
+    route_plan_cache: dict[
+        tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
+    ] | None = field(default=None, repr=False, compare=False)
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
         """Enumerate every local and routable goal in the active profile."""
@@ -402,13 +408,38 @@ class RedResourceGoalRouter:
 
         return replace(binding, resource_quote=quote, execute=execute)
 
+    def plan_feasible_to_map(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        """Reuse an identical route query only inside one frozen inventory pass."""
+        cache = self.route_plan_cache
+        if cache is None:
+            return self.world.plan_feasible_to_map(start, goal_map, goal_at=goal_at)
+        key = (start, goal_map, goal_at)
+        if key in cache:
+            cached = cache[key]
+            if isinstance(cached, str):
+                raise RoutePlanningError(cached)
+            return cached
+        try:
+            plan = self.world.plan_feasible_to_map(start, goal_map, goal_at=goal_at)
+        except RoutePlanningError as error:
+            cache[key] = str(error)
+            raise
+        cache[key] = plan
+        return plan
+
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
         if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
             # Known mechanic entry boundaries, connected by the cartridge router.
             for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
                 try:
-                    plan = self.world.plan_feasible_to_map(
+                    plan = self.plan_feasible_to_map(
                         fresh.traversal,
                         int(center),
                         goal_at=(3, 3),
@@ -428,7 +459,7 @@ class RedResourceGoalRouter:
         if (fresh.traversal.map_id, fresh.traversal.at) == (target_map, (y, x)):
             return None
         try:
-            plan = self.world.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
+            plan = self.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
         except RoutePlanningError:
             return None
         if not plan.steps or not _supported_plan(
