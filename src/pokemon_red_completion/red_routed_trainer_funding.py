@@ -36,10 +36,14 @@ from .red_capture_lead import RedCaptureLeadError, plan_capture_lead
 from .red_capture_preparation import prepare_capture_escort
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
-from .red_goal_skills import RedMartResupplyGoalProvider
+from .red_goal_skills import (
+    _POKEMON_CENTER_MAPS,
+    RedMartResupplyGoalProvider,
+    prepare_center_departure,
+)
 from .red_pc_storage import face_pc_boundary
 from .red_regional_trainer_funding import (
-    connected_funding_maps,
+    funding_scope,
     regional_trainer_funding_candidates,
 )
 from .red_routed_recovery import RecoveryRouteInterruptionHandler
@@ -165,7 +169,11 @@ def _candidates(
     if regional:
         if raw.event_flags is None:
             return ()
-        maps = connected_funding_maps(world.macro_graph, raw.map_id)
+        indoor_exit = (
+            start.last_outside_map if _indoor_funding_enabled(router)
+            and raw.map_id in _POKEMON_CENTER_MAPS else None
+        )
+        maps = funding_scope(world.macro_graph, start, indoor_exit_map=indoor_exit)
         for map_id in sorted(maps - {raw.map_id}):
             zones += static_trainer_sight_zones(
                 trainer_headers(rom, {map_id}, full_event_offsets=True),
@@ -178,8 +186,17 @@ def _candidates(
             start,
             zones,
             inventoried_maps=maps,
+            indoor_exit_map=indoor_exit,
         )
     return local_trainer_funding_candidates(rom, world, start, zones)
+
+
+def _indoor_funding_enabled(router: RedResourceGoalRouter) -> bool:
+    return any(
+        spec.kind is GoalKind.RESUPPLY
+        and spec.parameters.get("indoor_funding_departure") is True
+        for spec in router.runtime.profile.providers
+    )
 
 
 def _observed_funding_target(
@@ -363,6 +380,8 @@ def bind_local_trainer_funding(
         if pending_identity is None:
             target = _observed_funding_target(router, target)
             require_target(before_departure=True)
+            if _indoor_funding_enabled(router):
+                prepare_center_departure(actions, runtime.reader)
             prepare_capture_escort(runtime, actions)
         prepared_raw = runtime.reader.read()
         final_party_species = tuple(prepared_raw.party_species_ids or ())

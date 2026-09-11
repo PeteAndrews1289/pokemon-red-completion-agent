@@ -994,16 +994,20 @@ def _parse_parameters(
                 "purchases",
             } | ({"funding_sale"} if "funding_sale" in row else set())
             | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
-            | {key for key in ("fly_transport", "indoor_fly_departure") if key in row},
+            | {key for key in (
+                "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
+            ) if key in row},
         )
         transport_fields: dict[str, object] = {}
-        for key in ("fly_transport", "indoor_fly_departure"):
+        for key in ("fly_transport", "indoor_fly_departure", "indoor_funding_departure"):
             if key in row:
                 if type(row[key]) is not bool:
                     raise RedGoalContextProfileError("Mart transport flags must be bools")
                 transport_fields[key] = row[key]
         if "indoor_fly_departure" in row and row.get("fly_transport") is not True:
             raise RedGoalContextProfileError("Mart indoor departure requires Fly transport")
+        if "indoor_funding_departure" in row and row.get("affordable_ball_purchase") is not True:
+            raise RedGoalContextProfileError("indoor funding requires affordable capture supply")
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
             raise RedGoalContextProfileError("Mart purchases must be a non-empty list")

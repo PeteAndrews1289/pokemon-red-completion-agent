@@ -90,6 +90,30 @@ def test_resupply_transition_keeps_all_other_skills_and_contract():
     )
 
 
+@pytest.mark.parametrize("flag", [True, False, 1, "yes"])
+def test_indoor_funding_flag_is_explicit_and_supply_scoped(flag):
+    params = {
+        "map_id": int(MapId.CERULEAN_MART), "player_x": 2, "player_y": 5,
+        "interaction_direction": "left", "affordable_ball_purchase": True,
+        "indoor_funding_departure": flag,
+        "purchases": [{"absolute_index": 0, "item_id": int(ItemId.POKE_BALL),
+                       "quantity": 10, "unit_price": 200}],
+    }
+    def payload():
+        return _payload(_provider(GoalKind.ADVANCE_STORY, RedGoalMechanic.MIDGAME_STORY),
+                        _provider(GoalKind.RESTORE_TEAM, RedGoalMechanic.FIELD_RESTORE),
+                        _provider(GoalKind.RESUPPLY, RedGoalMechanic.MART_RESUPPLY, params))
+    if type(flag) is not bool:
+        with pytest.raises(RedGoalContextProfileError, match="bool"):
+            parse_red_goal_context_profile(payload())
+        return
+    parsed = parse_red_goal_context_profile(payload())
+    assert parsed.providers[2].parameters["indoor_funding_departure"] is flag
+    params["affordable_ball_purchase"] = False
+    with pytest.raises(RedGoalContextProfileError, match="affordable"):
+        parse_red_goal_context_profile(payload())
+
+
 @pytest.mark.parametrize("damage", ["not_boolean", "non_ball", "mixed", "hidden_sale"])
 def test_affordable_supply_profile_rejects_ambiguous_or_hidden_funding(damage):
     parameters = {

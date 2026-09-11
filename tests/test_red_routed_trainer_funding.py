@@ -99,7 +99,9 @@ def fixture(monkeypatch):
         emulator=emulator,
         adapter=SimpleNamespace(observe=lambda: state),
         provider_for=lambda *_: provider,
-        profile=SimpleNamespace(providers=(SimpleNamespace(kind=GoalKind.RESUPPLY),)),
+        profile=SimpleNamespace(providers=(
+            SimpleNamespace(kind=GoalKind.RESUPPLY, parameters={}),
+        )),
     )
     router = SimpleNamespace(
         runtime=runtime,
@@ -173,6 +175,18 @@ def fixture(monkeypatch):
     )
     bindings = GoalBindingSet((unavailable, alternate.opportunity), (alternate,))
     return router, state, target, bindings, calls
+
+
+def test_explicit_indoor_support_settles_before_party_preparation(monkeypatch):
+    router, state, _, bindings, calls = fixture(monkeypatch)
+    assert not funding._indoor_funding_enabled(router)
+    router.runtime.profile.providers[0].parameters["indoor_funding_departure"] = True
+    assert funding._indoor_funding_enabled(router)
+    monkeypatch.setattr(funding, "prepare_center_departure", lambda *_: calls.append("departure"))
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    report = bound.execute()
+    assert calls.index("departure") < calls.index("escort") < calls.index("route")
+    assert report.actions_executed > 0
 
 
 def test_observed_route_rejection_stops_before_escort_or_input(monkeypatch):
