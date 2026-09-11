@@ -48,6 +48,9 @@ FIRST_BADGE_VERIFIED_OBJECTIVE_IDS = (
 )
 FIRST_BADGE_FACT = "badge:boulder"
 FIRST_BADGE_MAX_STEPS = len(FIRST_BADGE_SELECTED_STAGE_IDS)
+RANKER_TRAINING_STATUSES = frozenset(
+    {"authenticated_learned", "integration_only_unlearned"}
+)
 
 
 class FreshStartConductorError(RuntimeError):
@@ -67,6 +70,7 @@ class FreshFirstBadgeReport:
     objective_policy: dict[str, object]
     selected_objective_ids: tuple[str, ...]
     automatic_objective_ids: tuple[str, ...]
+    ranker_training_status: str
     initial_wait_frames: int
     actions_executed: int
     frames_executed: int
@@ -78,6 +82,7 @@ class FreshFirstBadgeReport:
         policy = self.objective_policy
         return (
             FIRST_BADGE_FACT in self.terminal_state.facts
+            and self.ranker_training_status in RANKER_TRAINING_STATUSES
             and set(FIRST_BADGE_VERIFIED_OBJECTIVE_IDS).issubset(completed)
             and self.selected_objective_ids == FIRST_BADGE_SELECTED_STAGE_IDS
             and self.automatic_objective_ids == FIRST_BADGE_AUTOMATIC_OBJECTIVE_IDS
@@ -93,6 +98,10 @@ class FreshFirstBadgeReport:
         )
 
     def public_dict(self) -> dict[str, object]:
+        policy = dict(self.objective_policy)
+        if self.ranker_training_status == "integration_only_unlearned":
+            integration_decisions = policy.pop("learned_choice_decisions", 0)
+            policy["integration_only_decisions"] = integration_decisions
         return {
             "actions_executed": self.actions_executed,
             "assistance": {
@@ -100,6 +109,7 @@ class FreshFirstBadgeReport:
                 "expected_route_labels": 0,
                 "fixed_objective_dispatches": 0,
                 "human_input": False,
+                "ranker_training_status": self.ranker_training_status,
                 "save_state_loaded": False,
                 "teacher_objective_choices": 0,
             },
@@ -110,7 +120,12 @@ class FreshFirstBadgeReport:
                 "verified_objective_ids": list(FIRST_BADGE_VERIFIED_OBJECTIVE_IDS),
             },
             "claim": (
-                "An objective ranker selected three semantic singleton stages; "
+                (
+                    "An authenticated learned objective ranker"
+                    if self.ranker_training_status == "authenticated_learned"
+                    else "An explicitly unlearned integration ranker"
+                )
+                + " selected three semantic singleton stages; "
                 "bounded deterministic skills executed opening, errand, travel, training, "
                 "and battle mechanics to a verified first-badge boundary."
             ),
@@ -126,7 +141,7 @@ class FreshFirstBadgeReport:
                 "not_cross_title_transfer",
             ],
             "loop": self.loop,
-            "objective_policy": self.objective_policy,
+            "objective_policy": policy,
             "observer": self.observer,
             "schema": "pokemon-red-fresh-first-badge-conductor-v1",
             "selected_objective_ids": list(self.selected_objective_ids),
@@ -144,6 +159,7 @@ def run_fresh_first_badge_conductor(
     rom_path: str | Path,
     *,
     objective_model: ObjectiveRanker,
+    ranker_training_status: str,
     objective_confidence_threshold: float = 0.0,
     initial_wait_frames: int = 0,
     watch: bool = False,
@@ -152,6 +168,8 @@ def run_fresh_first_badge_conductor(
 ) -> FreshFirstBadgeReport:
     """Run three semantic selections and stop immediately after verified Brock."""
 
+    if ranker_training_status not in RANKER_TRAINING_STATUSES:
+        raise ValueError("ranker_training_status is unsupported")
     if type(initial_wait_frames) is not int or not 0 <= initial_wait_frames <= 255:  # noqa: E721
         raise ValueError("initial_wait_frames must be an integer from zero through 255")
     emulator_context = (
@@ -238,6 +256,7 @@ def run_fresh_first_badge_conductor(
             objective_policy=objective_policy.public_dict(),
             selected_objective_ids=selected,
             automatic_objective_ids=automatic,
+            ranker_training_status=ranker_training_status,
             initial_wait_frames=initial_wait_frames,
             actions_executed=loop.actions_executed,
             frames_executed=emulator.frame_count - start_frames,

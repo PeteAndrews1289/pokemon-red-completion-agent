@@ -147,6 +147,11 @@ def main(argv: list[str] | None = None) -> int:
             report = run_fresh_first_badge_conductor(
                 rom_path,
                 objective_model=objective_model,
+                ranker_training_status=(
+                    "authenticated_learned"
+                    if model_identity["learned"] is True
+                    else "integration_only_unlearned"
+                ),
                 initial_wait_frames=args.initial_wait_frames,
                 _emulator=emulator,
             )

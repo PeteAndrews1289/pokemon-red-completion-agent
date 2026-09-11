@@ -37,12 +37,14 @@ def _report() -> FreshFirstBadgeReport:
             "branching_decisions": 0,
             "expected_answer_labels_supplied": 0,
             "fixed_dispatch_decisions": 0,
+            "learned_choice_decisions": 3,
             "route_dispatch_mode": "model_selected_specialists",
             "selected_decisions": 3,
             "singleton_decisions": 3,
         },
         selected_objective_ids=FIRST_BADGE_SELECTED_STAGE_IDS,
         automatic_objective_ids=FIRST_BADGE_AUTOMATIC_OBJECTIVE_IDS,
+        ranker_training_status="integration_only_unlearned",
         initial_wait_frames=0,
         actions_executed=30,
         frames_executed=300,
@@ -66,6 +68,12 @@ def test_first_badge_report_separates_model_dispatch_from_automatic_mechanics() 
         "defeat_brock",
     ]
     assert public["assistance"]["deterministic_mechanics"] is True
+    assert public["assistance"]["ranker_training_status"] == (
+        "integration_only_unlearned"
+    )
+    assert public["objective_policy"]["integration_only_decisions"] == 3
+    assert "learned_choice_decisions" not in public["objective_policy"]
+    assert public["claim"].startswith("An explicitly unlearned integration ranker")
     assert "not_objective_ranking_competence" in public["limitations"]
 
 
@@ -88,4 +96,3 @@ def test_first_badge_report_fails_on_authority_inflation_or_missing_badge() -> N
             location="pewter_gym",
         ),
     ).passed
-

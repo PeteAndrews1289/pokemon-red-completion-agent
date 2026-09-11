@@ -64,3 +64,9 @@ The first published-run invocation failed before emulator startup because the ru
 display-speed option to a headless adapter. It created no controller input or output capture. The
 repair passes `None` in headless mode and preserves the requested multiplier only for visible
 runs; this development invocation is repeatable and does not consume an experimental case.
+
+The first successful capture also exposed a telemetry wording issue before public evidence was
+written: the generic model policy called neutral-ranker selections `learned_choice_decisions`.
+The conductor now requires an explicit ranker training status and renames that count to
+`integration_only_decisions` for the unlearned mode. The already authenticated state remains a
+valid private diagnostic, but the final published-source capture will use the corrected report.
