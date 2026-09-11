@@ -114,6 +114,12 @@ def test_red_adapter_composes_story_collection_party_resources_and_storage() -> 
     observer = _Observer()
     observed = PokemonRedGoalStateAdapter(_Reader(), observer, _graph()).observe()
 
+    legacy = observed.public_dict()
+    assert observed.economy_snapshot() is None  # fixture has no observed money
+    funded = replace(observed, raw=replace(observed.raw, player_money=593))
+    assert funded.economy_snapshot().cash == 593
+    assert funded.public_dict() == legacy  # prospective seam does not relabel history
+
     assert observed.party.species_ids() == (0x1C,)
     assert observed.evidence.story.completed == 1
     assert observed.evidence.story.target == 2

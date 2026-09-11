@@ -45,6 +45,8 @@ Use the [Surf-access batch](work-sessions/2026-09-10-surf-collection-access.md) 
 
 Follow with [the supply session](work-sessions/2026-09-10-supply-transport.md): the agent buys two balls, the model chooses healing, and a fresh seven-way destination choice catches Shellder on Seafoam 1F before continuing to B3F. The remaining ball fails against Seel. Display 64 registrations and 63 examples: one new species, two new lessons. Keep the final goal visibly failed alongside the partial gain and safe stop. Explain the correction from a destination-only summary to the full saved result; do not invent a nested travel receipt or replay. The next engineering question is sustainable capture support and supplies, not another route map.
 
+For the [income audit](work-sessions/2026-09-10-renewable-funding.md), explain Pete's question: can the agent recognize that it needs money and choose how to earn it? The audit showed money was absent from learning feedback. Show the new accounting contract as engineering, not a trained behaviour; no income or fit occurred. The planned test compares actual funding benefit with time, item and party costs. Blastoise73's readiness is a hypothesis for League rematches, not proof of a profitable solo.
+
 Fresh-game autonomous play, complete collection and transfer to Blue, modified Red or Crystal remain unfinished. The next evidence should show useful decisions beyond the situations used to fit the model.
 
 Credit Pete's product direction and validation, along with Codex, Claude and Antigravity's AI-assisted implementation/review contributions. Do not suggest every line was manually authored.

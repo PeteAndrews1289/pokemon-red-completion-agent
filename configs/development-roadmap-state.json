@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-dig-recovery",
+  "as_of_session": "2026-09-10-renewable-funding",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -822,6 +822,12 @@
       "result": "Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.",
       "deviation": "AL sampled exploration despite higher recovery value; its failure was retained. AM continued AL/model64 with the next seed and succeeded. No resampling, stage-exit or objective change.",
       "next": "Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run."
+    },
+    {
+      "session": "2026-09-10-renewable-funding",
+      "result": "Prospective economy facts/features tested; no controller input, fit or registration. Model65/64 registrations unchanged.",
+      "deviation": "User prioritizes renewable income. Audit found cash missing from current learning; repair that boundary without changing historical targets or phase exits.",
+      "next": "Connect explicit earning choices and measured economy outcomes, then one bounded League-income trial. Pay Day needs TM/holder setup."
     }
   ],
   "closed_milestones": [

@@ -10,8 +10,8 @@ The model chooses goals under a disclosed exploration policy; deterministic mech
 
 ## Next work and useful review
 
-Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal.
 
-Review the smallest reusable Center-departure/income composition, actual resource affordability and preservation of party/stock. Check whether failed exploration feedback is used without claiming independent improvement. No forced support may become an invented model-choice label.
+Review the new prospective economy-observation module and its opt-in Red observation seam. Next connect versioned earning features/outcomes without changing historical fits, then qualify bounded League access and actual net proceeds. Pay Day needs TM/holder setup. No forced support may become an invented model-choice label.
 
-No external agent ran or had fresh quota queried this session. Flash's older isolated stone draft remains unintegrated. Review-only by default; do not execute gameplay or edit the shared worktree. Codex owns integration and explains accepted/rejected findings. [Session evidence](work-sessions/2026-09-10-dig-recovery.md).
+A native read-only reviewer found the missing cash signal and caught a legacy API/schema collision, now repaired. Bag-shape and direct-outcome checks were accepted. No external service or quota query was used. Flash's older isolated stone draft remains unintegrated. Review-only by default; do not execute gameplay or edit the shared worktree. Codex owns integration and explains accepted/rejected findings. [Session evidence](work-sessions/2026-09-10-renewable-funding.md).

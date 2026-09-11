@@ -28,6 +28,10 @@ Exact identities:
 
 [Session report](docs/work-sessions/2026-09-10-dig-recovery.md) · [Learning evidence](docs/evidence/red-dig-recovery-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-dig-recovery-saved-2026-09-10.json).
 
+## Prospective income work
+
+Read-only AM inventory reconfirmed Blastoise73/full HP, 593 money, zero balls, no Pay Day holder and no TM16 in the bag. TM16 availability elsewhere is unknown. New economy observations/features retain net cash and per-item bag changes without altering model65 or historical serialization. They are not yet wired to fitting or live earning. No gameplay, fit or registration this session. [Funding session](docs/work-sessions/2026-09-10-renewable-funding.md).
+
 ## Mechanics and checks
 
 Explicit ordered Dig recovery leaves historical profiles unchanged. Only allowed terrain, a living first Dig holder and a known healing anchor qualify. Execution rechecks stale state, bounds escape inputs, verifies the cartridge-derived landing and unchanged party/resources, then freshly binds ordinary Center recovery. No Seafoam walkthrough was added.
@@ -36,7 +40,7 @@ Explicit ordered Dig recovery leaves historical profiles unchanged. Only allowed
 
 ## Next bounded session
 
-Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal.
 
 Private helper `inspect_an_funding_20260910.arguments()` reconstructs exact AM ancestry without launching gameplay. AN was read-only and created no episode. Its first inspection raised the explicit empty-menu exception; the normalized follow-up confirmed zero native goals and zero regional candidates. Never rerun AL/AM or restore AJ to regain resources.
 
@@ -44,6 +48,6 @@ The current resource-recovery checklist is 2/3, not a phase or Red percentage. F
 
 ## Ownership and publication
 
-Codex owns integration. No external agents ran or had fresh quota checks this session. Flash's older stone draft remains isolated at `895b4d6b`, not integrated or live-qualified. External reviews are optional bounded help, not a standing gate.
+Codex owns integration. A native read-only reviewer identified the learning-signal gap and verified accounting boundaries; accepted fixes include legacy API preservation and malformed-evidence checks. Claude/Flash were not used and external quotas were not queried. Flash's older stone draft remains isolated at `895b4d6b`, not integrated or live-qualified. External reviews are optional bounded help, not a standing gate.
 
 PR243 contains the supply/escape integration; preserve played `8125e9b4`. PR242 previously merged as `0d58f492`. Batch closeout publication after local checks; ordinary development gameplay does not wait on hosted CI.

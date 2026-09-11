@@ -16,6 +16,7 @@ from typing import TYPE_CHECKING, Protocol
 if TYPE_CHECKING:
     from .red_registration_policy import RedRegistrationPolicy
     from .registered_checkpoint import RegisteredCollectionCheckpoint
+    from .resource_economy_observation import EconomySnapshot
 
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.domain import GameState
@@ -134,6 +135,12 @@ class RedGoalObservation:
     @property
     def situation(self) -> GoalSituation:
         return self.evidence.situation()
+
+    def economy_snapshot(self) -> EconomySnapshot | None:
+        """Opt-in prospective cash evidence; historical serialization stays exact."""
+        from .red_resource_economy import red_economy_snapshot
+
+        return red_economy_snapshot(self.raw)
 
     def public_dict(self) -> dict[str, object]:
         """Return counts and normalized evidence without raw Red identities."""

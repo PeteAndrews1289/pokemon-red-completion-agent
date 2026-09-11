@@ -92,9 +92,7 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-10-dig-recovery</text>
-<text x="50" y="1767" class="body">Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration</text>
-<text x="50" y="1792" class="body">failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens</text>
-<text x="50" y="1817" class="body">preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.</text>
+<text x="50" y="1732" class="small muted">2026-09-10-renewable-funding</text>
+<text x="50" y="1767" class="body">Prospective economy facts/features tested; no controller input, fit or registration. Model65/64 registrations unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

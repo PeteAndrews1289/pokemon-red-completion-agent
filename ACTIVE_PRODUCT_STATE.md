@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+- Next decision: Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-dig-recovery** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+**2026-09-10-renewable-funding** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center. |
-| Authority delta | Two actual sampled native outcomes fitted; no authority promotion or independent result. |
+| Learning output | No new gameplay, fit or registration. AM01 inspection confirms level73 Blastoise/full party HP and no known Pay Day holder. Model65 and64 registrations remain unchanged. |
+| Authority delta | None: prospective economy observations/features only; current model and historical targets unchanged. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Recovery works. At the healed Center, zero balls and593 money leave no executable goal or regional acquisition. |
-| Decision | Close escape/recovery at2/3; prioritize bounded indoor departure and legitimate income, not another empty exploration loop. |
-| Next session | Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run. |
-| Next falsifier | Exact healed AM01 exposes a safe departure/funding path without inputs, invented money or protected-stock loss. |
+| Blocker | No balls and593 money. Current learner omits cash/income and forced RESUPPLY is not a learned earning choice. |
+| Decision | Prioritize renewable income and explicit economy feedback. Qualify League access first; Pay Day needs TM/holder setup. |
+| Next session | Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal. |
+| Next falsifier | Distinct income/shortfall offers must remain distinguishable; a bounded League trial must retain net cash, bag, time and party costs without forced-choice learning credit. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

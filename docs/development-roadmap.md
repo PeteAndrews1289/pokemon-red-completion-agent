@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-dig-recovery**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-renewable-funding**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-renewable-funding
+
+Prospective economy facts/features tested; no controller input, fit or registration. Model65/64 registrations unchanged.
+
+**Deviation:** User prioritizes renewable income. Audit found cash missing from current learning; repair that boundary without changing historical targets or phase exits.
+
+**Next:** Connect explicit earning choices and measured economy outcomes, then one bounded League-income trial. Pay Day needs TM/holder setup.
 
 ### 2026-09-10-dig-recovery
 
