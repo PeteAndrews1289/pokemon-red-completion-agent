@@ -46,6 +46,8 @@ from pokemon_red_completion.red_living_dex_wild_corridor import (
     retarget_red_wild_profile,
 )
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
+from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_plan import RoutePlan
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 SOURCE_CHOICE_POLICY = "living-dex-regional-source-softmax-v1"
@@ -106,7 +108,9 @@ def enumerate_red_regional_acquisitions(
         # matter once those preferred routes are exhausted or gated.
         sources = sorted(set(sources) | set(cartridge_grass_sources(world.rom)))
     candidates = []
-    route_plan_cache = {}
+    route_plan_cache: dict[
+        tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
+    ] = {}
     for source in sources:
         try:
             map_id = int(map_id_for_wild_source(source))
