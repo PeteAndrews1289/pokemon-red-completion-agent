@@ -1,7 +1,7 @@
 # Fresh-lineage Celadon join
 
-Status: engineering gate passed; published-source capture pending. This is resumability and
-composition evidence, not a learning result.
+Status: complete. The published-source capture and zero-input reload passed. This is resumability
+and composition evidence, not a learning result.
 
 ## Mission check
 
@@ -37,7 +37,23 @@ were involved.
 
 ## Next action
 
-Publish the tested engineering source, execute the authenticated private runner once from the
-existing first-badge capture, retain and reread a new Celadon state/envelope pair, then publish
-only path-free hashes and aggregate evidence. If that passes, mark the fresh-start milestone
-complete and return immediately to measured model99 collection learning.
+Return immediately to the actual BV/model99 collection lineage for one bounded multi-option goal
+sequence. Fit only the selected eligible outcomes, preserve every cost and failure, and prioritize
+a new registration or useful evolution. Do not add another story-infrastructure session first.
+
+## Published-source result
+
+Source `b1567c08cf1d3477d0524600eacda6a48faa4361` resumed the authenticated
+`red-first-badge-v1` checkpoint and reached Celadon Center in42,584actions and2,244,209frames.
+It selected the exact seven intended semantic stages, recorded Misty as an automatic chapter
+effect, used zero expected labels, fixed dispatches, teacher choices or replans, and released all
+controller input.
+
+The runner retained and reread a private `red-fresh-celadon-v1` state/envelope pair with fourteen
+verified objectives. A separate read-only reload advanced zero frames and used zero inputs, then
+confirmed that both `clear_rocket_hideout` and `reach_saffron` are executable through the existing
+midgame registry. The path-free public evidence is recorded in
+[the result](../evidence/red-fresh-celadon-join-2026-09-11.json).
+
+Model99,73 registrations and every learning/authority/transfer counter remain unchanged. This
+closes the3/3 fresh-start checklist, not Red, fresh-game autonomy or learned objective ranking.

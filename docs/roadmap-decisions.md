@@ -1,5 +1,24 @@
 # Roadmap baseline and deviations
 
+## September 11 — close the fresh-start join and return to learning
+
+The [Celadon join](work-sessions/2026-09-11-fresh-celadon-join.md) closes the
+three-item fresh-start checklist. The authenticated post-Brock state resumed through seven
+semantic stages, retained a fourteen-objective Celadon checkpoint and was accepted by the
+independently existing Rocket Hideout and Saffron skills.
+
+This changes the immediate work order, not the stage exit: return now to the actual BV/model99
+collection lineage and require a measured multi-option outcome. The join used an explicitly
+unlearned ranker over singleton menus, so it adds no training example, authority promotion,
+registration or transfer result. Another story-infrastructure-only session would violate the
+anti-drift intent. No full replay, Crystal execution or autonomy claim is opened.
+
+The completed fresh-start checklist moves to closed milestones without discarding its evidence.
+The new current checklist is **measured model99 collection continuation**: authenticated learner
+lineage (already verified), one fresh multi-option outcome, and one productive missing-species
+registration or evolution. Its1/3 status prevents a completed integration checklist from looking
+like completed collection or completed Red.
+
 ## September 11 — close endpoint diversity and prioritize fresh-start sequencing
 
 The [Power Plant session](work-sessions/2026-09-11-power-plant-diversification.md)

@@ -1,10 +1,11 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest integration result: a published-source Red session progressed from clean power to Brock in
-2,945actions/221,538frames and retained an authenticated checkpoint. Reload exposed the next
-Cerulean stage without input. This is deliberately **not** presented as learning: an explicitly
-unlearned ranker traversed three singleton menus while deterministic chapters executed mechanics.
-Model99 and73 registrations are unchanged. [Report](work-sessions/2026-09-11-fresh-start-conductor.md).
+Latest integration result: the authenticated fresh Red lineage now reaches Celadon. The
+post-Brock continuation traversed seven semantic stages in42,584actions/2,244,209frames, retained
+fourteen verified objectives and reloaded without input into two executable existing midgame
+skills. This is deliberately **not** presented as learning: an explicitly unlearned ranker saw
+only singleton menus while deterministic chapters executed mechanics. Model99 and73 registrations
+are unchanged. [Report](work-sessions/2026-09-11-fresh-celadon-join.md).
 
 Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting
 model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant.

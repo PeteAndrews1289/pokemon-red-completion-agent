@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-fresh-start-conductor",
+  "as_of_session": "2026-09-11-fresh-celadon-join",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Fresh-start Red conductor",
+    "title": "Measured model99 collection continuation",
     "items": [
       {
-        "id": "fresh-start-semantic-goals",
-        "label": "Expose semantic goals from a fresh game",
+        "id": "model99-lineage-ready",
+        "label": "Authenticate the retained model99 learner lineage",
         "done": true,
-        "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
+        "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
       },
       {
-        "id": "fresh-first-badge-checkpoint",
-        "label": "Retain one bounded first-badge checkpoint",
-        "done": true,
-        "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
+        "id": "fresh-model99-multi-option-outcome",
+        "label": "Retain one fresh multi-option model99 outcome",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "fresh-midgame-handoff",
-        "label": "Join the fresh save to existing midgame skills",
+        "id": "productive-model99-followup",
+        "label": "Register or evolve a useful missing species",
         "done": false,
         "evidence": null
       }
@@ -966,9 +966,40 @@
       "result": "Published-source Red reached Brock from clean power in2945actions/221538frames and retained an authenticated six-objective checkpoint. Reload advanced zero frames, used zero inputs and exposed reach_cerulean as executable. The explicitly unlearned integration ranker made three singleton dispatches; model99 and73 registrations are unchanged.",
       "deviation": "This is a fresh-start and resumability integration result, not learned objective competence or autonomous play. One pre-emulator CLI failure and one telemetry wording repair were retained in the session report; neither created input or a learning result.",
       "next": "Execute the bounded checkpoint continuation through Cerulean and Celadon, retain the next authenticated handoff, and prove the existing midgame skill registry accepts the fresh lineage. Then return immediately to measured model99 collection learning."
+    },
+    {
+      "session": "2026-09-11-fresh-celadon-join",
+      "result": "Published-source Red resumed the authenticated first-badge state through seven semantic stages in42584actions/2244209frames, retained fourteen verified objectives at Celadon Center, and exposed clear_rocket_hideout plus reach_saffron through the existing midgame registry. Model99 and73 registrations are unchanged.",
+      "deviation": "The fresh-start checklist is3/3, but this remains integration rather than learning: the ranker was explicitly unlearned, every menu was a singleton and deterministic chapters executed the controls. A narrow Surge bound adjustment and missing Vermilion Gym location label were verified before publication.",
+      "next": "Return immediately to the actual BV/model99 collection lineage for one bounded multi-option goal sequence. Fit only actual eligible outcomes and seek another registration or useful evolution; no additional story-infrastructure session, full replay or Crystal execution."
     }
   ],
   "closed_milestones": [
+    {
+      "session": "2026-09-11-fresh-celadon-join",
+      "stage": "red-collection",
+      "title": "Fresh-start Red conductor",
+      "items": [
+        {
+          "id": "fresh-start-semantic-goals",
+          "label": "Expose semantic goals from a fresh game",
+          "done": true,
+          "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
+        },
+        {
+          "id": "fresh-first-badge-checkpoint",
+          "label": "Retain one bounded first-badge checkpoint",
+          "done": true,
+          "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
+        },
+        {
+          "id": "fresh-midgame-handoff",
+          "label": "Join the fresh save to existing midgame skills",
+          "done": true,
+          "evidence": "docs/evidence/red-fresh-celadon-join-2026-09-11.json"
+        }
+      ]
+    },
     {
       "session": "2026-09-11-power-plant-diversification",
       "stage": "red-collection",

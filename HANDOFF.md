@@ -24,27 +24,28 @@ Do not continue from the failed BU03 episode directly. Reconstruct through BU01 
 
 The diversification milestone is closed: a model-selected acquisition produced a non-Seafoam/non-water registration through generic mechanics, although its outcome remained failed. Do not spend the next session accumulating more late-game endpoint examples by default.
 
-## Fresh-start checkpoint: post-Brock
+## Fresh-start checkpoint: Celadon midgame join
 
-Source `df03423d14e622f7f6c677633e42120c100cd677` produced a new private authenticated
-`red-first-badge-v1` checkpoint from clean power in2,945actions and221,538frames. It verifies
-power-on, starter/adventure, Pokedex, Pewter and Brock. A read-only reload advanced zero frames,
-used zero inputs and exposed `reach_cerulean` as the next executable semantic stage.
+Source `b1567c08cf1d3477d0524600eacda6a48faa4361` resumed the authenticated first-badge
+checkpoint through Cerulean, Bill/Misty, Vermilion, Cut, Surge, Lavender and Celadon in
+42,584actions and2,244,209frames. The new private `red-fresh-celadon-v1` checkpoint verifies
+fourteen objectives. A read-only reload advanced zero frames, used zero inputs and exposed both
+`clear_rocket_hideout` and `reach_saffron` through the existing midgame registry.
 
-This was an integration result, not learning. The ranker was explicitly unlearned, every menu was
-a singleton and deterministic chapters executed the controls. Model99,73 registrations and all
+This was an integration result, not learning. The ranker was explicitly unlearned, all seven menus
+were singletons and deterministic chapters executed the controls. Model99,73 registrations and all
 learner counters are unchanged. The historical objective model's public hashes survive, but its
 private artifact directory was not found; never reconstruct or relabel it from public scores.
 
 ## Next product milestone
 
-Continue the authenticated post-Brock state through the existing Cerulean-to-Celadon semantic
-stages, retain a second checkpoint and prove the existing midgame registry accepts the fresh
-lineage. Then return immediately to measured model99 collection learning. Do not call singleton
-dispatch learned planning or perform a full replay.
+The fresh-start checklist is complete. Return immediately to the actual BV/model99 collection
+lineage for at most three useful goals or thirty minutes. Require a genuine multi-option menu,
+retain every cost and failure, and fit only the selected eligible outcome. Prioritize a new
+registration or useful evolution; do not add another story-infrastructure session first.
 
 Fresh-game autonomy, arbitrary-seed reliability, complete Red collection, learned low-level combat, ROM-hack competence and cross-title transfer remain unproved. Crystal stays on the backburner until Red has a credible fresh-start sequence.
 
-[Latest report](docs/work-sessions/2026-09-11-fresh-start-conductor.md). Recommend **Sol High,
-standard speed** for the bounded continuation; use Astra High only for an architecture or
-promotion audit.
+[Latest report](docs/work-sessions/2026-09-11-fresh-celadon-join.md). Recommend **Sol High,
+standard speed** for the measured collection continuation; use Astra High only for an architecture
+or promotion audit.

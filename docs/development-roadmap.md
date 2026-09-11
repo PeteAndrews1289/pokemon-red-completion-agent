@@ -3,18 +3,18 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-fresh-start-conductor**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-fresh-celadon-join**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Fresh-start Red conductor: 2/3 acceptance items (67%).**
+**Measured model99 collection continuation: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Expose semantic goals from a fresh game ([evidence](../docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json))
-- [x] Retain one bounded first-badge checkpoint ([evidence](../docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json))
-- [ ] Join the fresh save to existing midgame skills
+- [x] Authenticate the retained model99 learner lineage ([evidence](../docs/evidence/red-power-plant-diversification-2026-09-11.json))
+- [ ] Retain one fresh multi-option model99 outcome
+- [ ] Register or evolve a useful missing species
 
 Current model: **99 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-fresh-celadon-join
+
+Published-source Red resumed the authenticated first-badge state through seven semantic stages in42584actions/2244209frames, retained fourteen verified objectives at Celadon Center, and exposed clear_rocket_hideout plus reach_saffron through the existing midgame registry. Model99 and73 registrations are unchanged.
+
+**Deviation:** The fresh-start checklist is3/3, but this remains integration rather than learning: the ranker was explicitly unlearned, every menu was a singleton and deterministic chapters executed the controls. A narrow Surge bound adjustment and missing Vermilion Gym location label were verified before publication.
+
+**Next:** Return immediately to the actual BV/model99 collection lineage for one bounded multi-option goal sequence. Fit only actual eligible outcomes and seek another registration or useful evolution; no additional story-infrastructure session, full replay or Crystal execution.
 
 ### 2026-09-11-fresh-start-conductor
 

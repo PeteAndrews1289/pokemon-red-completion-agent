@@ -4,12 +4,13 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: [fresh power to Brock](work-sessions/2026-09-11-fresh-start-conductor.md).
-Show the game booting, receiving the starter and Pokedex, then reaching Brock and saving a durable
-checkpoint. Overlay2,945actions,221,538frames and the zero-input reload that exposes Cerulean next.
-State the caveat on screen: the ranker was unlearned, all three goal menus were singletons and
-deterministic code executed the mechanics. This demonstrates a working fresh-start handoff, not a
-model that has learned the opening.
+Newest systems beat: [fresh lineage to Celadon](work-sessions/2026-09-11-fresh-celadon-join.md).
+Begin with the game booting, receiving the starter and Pokedex, reaching Brock, then resume the
+authenticated checkpoint through Cerulean, Vermilion, Surge and Lavender to Celadon. Overlay the
+post-Brock42,584actions/2,244,209frames and the zero-input reload that exposes Rocket Hideout plus
+Saffron through existing midgame skills. State the caveat on screen: the ranker was unlearned, all
+goal menus were singletons and deterministic code executed the mechanics. This demonstrates a
+working authenticated composition seam, not a model that learned the opening or story.
 
 Newest verified beat: [Power Plant diversification](work-sessions/2026-09-11-power-plant-diversification.md). Show the model selecting two income goals, then acquisition from four available goals. Generic mechanics register Magnemite, but the post-action observer crashes on a stationary scripted encounter. Keep the outcome marked failed and unfit; then show the separately metered46-action recovery retaining73 registrations and model99. This is a strong visual explanation of why progress, successful outcomes and training labels are different.
 

@@ -1,0 +1,96 @@
+{
+  "schema": "pokemon-red-fresh-celadon-join-result-v1",
+  "status": "complete",
+  "recorded_on": "2026-09-11",
+  "source": {
+    "git_commit": "b1567c08cf1d3477d0524600eacda6a48faa4361",
+    "published_before_execution": true,
+    "worktree_dirty_before_execution": false
+  },
+  "ranker": {
+    "artifact_authenticated": false,
+    "kind": "integration_only_zero_weight_ranker",
+    "learned": false,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "1e72fef6b13b5b31ca86867292e0bccf3196ea639f1045cf11e93b3a7dc0b59b"
+  },
+  "execution": {
+    "actions_executed": 42584,
+    "frames_executed": 2244209,
+    "human_input": false,
+    "save_state_loaded": true,
+    "controller_released": true,
+    "replans": 0,
+    "selected_semantic_stages": [
+      "reach_cerulean",
+      "help_bill",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_surge",
+      "reach_lavender",
+      "reach_celadon"
+    ],
+    "automatic_objective_effects": [
+      "defeat_misty"
+    ],
+    "singleton_decisions": 7,
+    "branching_decisions": 0,
+    "integration_only_decisions": 7,
+    "expected_answer_labels_supplied": 0,
+    "fixed_dispatch_decisions": 0,
+    "teacher_objective_choices": 0
+  },
+  "checkpoint": {
+    "checkpoint_id": "red-fresh-celadon-v1",
+    "checkpoint_label": "Fresh lineage at the Celadon midgame boundary",
+    "state_sha256": "ae8b55ad07a742992be4c953f0622848b8515acf530cb2b527d26755bfb6b148",
+    "envelope_sha256": "494e958f4899ca06e3343478326f545a42a8d3e66e45b5e805fe38a238e9864b",
+    "report_sha256": "24e23399939f236b17aed77def8f80b7eec829f457e5fefa74fc45f4b4102f0a",
+    "private_rom_derived_files_published": false,
+    "verified_objective_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock",
+      "reach_cerulean",
+      "help_bill",
+      "defeat_misty",
+      "reach_vermilion",
+      "obtain_cut",
+      "defeat_surge",
+      "reach_lavender",
+      "reach_celadon"
+    ]
+  },
+  "resume_check": {
+    "status": "ok",
+    "location": "celadon_pokecenter",
+    "next_executable_objective_ids": [
+      "clear_rocket_hideout",
+      "reach_saffron"
+    ],
+    "actions_executed": 0,
+    "frames_advanced": 0,
+    "controller_released": true
+  },
+  "counter_delta": {
+    "registered_train_examples": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0,
+    "new_registrations": 0
+  },
+  "claim": "A published-source authenticated post-Brock Red state resumed through seven semantic stage dispatches to Celadon and was accepted by the existing midgame skill registry.",
+  "limitations": [
+    "the_ranker_was_explicitly_unlearned",
+    "all_policy_menus_were_singletons",
+    "deterministic_code_executed_navigation_training_battle_and_story_mechanics",
+    "not_objective_ranking_competence",
+    "not_fresh_game_autonomy",
+    "not_arbitrary_seed_reliability",
+    "not_full_red_completion",
+    "not_cross_title_transfer"
+  ]
+}
