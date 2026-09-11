@@ -13,9 +13,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center. The economy runtime connection is now implemented and tested; use the initialized v4 record in HANDOFF.md with exact AM01. Verify opt-in readiness, then qualify one bounded legitimate income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. No full replay, sealed Red or Crystal.
+AO01's forced funding step succeeded: +850 money,123 actions/7,825 frames, all six party members at full HP. Gameplay stopped on Route18 with1,443 money, zero balls,64 registrations and65 examples. No fit or authority gain. Continue AO01 for supplies and one genuine collection choice; no renewable-income claim. See [current handoff](HANDOFF.md).
 
-For the user's usage-conservation request, Flash3.8 High completed scoped implementation and correction in an isolated checkout. Claude's supply-derived budget finding was accepted. Both jobs are finished. Codex subsequently connected the reviewed economy objective to native recording/replay and authenticated zero-weight v4 initialization: 314 targeted tests, no gameplay or actual fit. No external calls this session; prior quota readings are historical. Flash's prior stone draft remains isolated at895b4d6b. See the [current session](docs/work-sessions/2026-09-11-economy-runtime-connection.md). External review is not a standing gate and net usage savings remain unproven.
+Previous Flash/Claude contributions remain reviewed historical work. Codex alone completed this bounded indoor-funding repair and actual verification;301 targeted tests passed. No external call or fresh quota measurement this session. External review is optional, not a standing gate; net usage savings remain unproven. [Current session](docs/work-sessions/2026-09-11-economy-live-qualification.md).
 
 Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
 

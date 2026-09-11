@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-economy-runtime-connection",
+  "as_of_session": "2026-09-11-economy-live-qualification",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -846,6 +846,12 @@
       "result": "Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.",
       "deviation": "Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.",
       "next": "Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-11-economy-live-qualification",
+      "result": "AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.",
+      "deviation": "Qualified finite trainer income through explicit observed Center exit, rather than unqualified League rematch. No learned earning claim; funded collection checklist remains2/3.",
+      "next": "Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

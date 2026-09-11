@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-economy-runtime-connection**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-economy-live-qualification**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-economy-live-qualification
+
+AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.
+
+**Deviation:** Qualified finite trainer income through explicit observed Center exit, rather than unqualified League rematch. No learned earning claim; funded collection checklist remains2/3.
+
+**Next:** Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal.
 
 ### 2026-09-11-economy-runtime-connection
 

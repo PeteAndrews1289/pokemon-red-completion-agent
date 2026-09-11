@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest engineering result: the [economy runtime connection](work-sessions/2026-09-11-economy-runtime-connection.md) records the money situation before a choice and reconstructs it during training replay. The actual model was initialized with the new inputs while preserving its 65 examples; no game moves or new fit occurred. This prepares it to learn from real earning outcomes, but does not demonstrate that it can earn money yet. The saved collection remains at 64 registrations, with 593 money and no balls.
+Latest live result: [the funding qualification](work-sessions/2026-09-11-economy-live-qualification.md) left the Center and earned850 from a Route18 trainer. Cash rose593→1443; all party HP,64 registrations and54 specimens were preserved. This was the sole available goal, so it remained deterministic support and did not increase the model's65 examples. Next connect these actual proceeds to a useful collection lesson; renewable income and learned earning remain unproven.
 
 ## The question
 

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal.
+- Next decision: Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center. |
+| Authority now | AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-economy-runtime-connection** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+**2026-09-11-economy-live-qualification** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Recorder/replay/update passed 314 targeted tests. Actual zero-weight v4 initialization preserved 65 examples and 64 registrations; no new game outcome or fit. |
-| Authority delta | Opt-in software supports measured earning preferences; initialized v4 has no learned economy head and has not played. |
+| Learning output | AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18. |
+| Authority delta | No authority gain: one forced singleton support goal, zero eligible examples and no fit. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Zero balls and 593 money. Actual Center departure, income availability and net proceeds remain unqualified. |
-| Decision | Retain bounded Flash drafts with one correction pass and independent verification; net Codex usage savings remain unproven. |
-| Next session | Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal. |
-| Next falsifier | The exact saved endpoint must expose a legitimate bounded income attempt; record actual costs and proceeds without substituting expected rewards. |
+| Blocker | Zero balls, but1443money now permits supplies. Renewable income and model-selected reserve management remain unfinished. |
+| Decision | Stop repairing the now-qualified Center funding exit. Turn actual funds into a bounded collection lesson; no broad audit or economy redesign. |
+| Next session | Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal. |
+| Next falsifier | An affordable supply purchase must lead to a real selectable collection goal; preserve costs and any failed search. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection: 64 verified registrations and 65 examples under the registered-only learning objective. Supply access, travel capture/resumption and a safe ball-exhaustion stop are now live-qualified. Earlier travel added Shellder. The latest session fitted failed exploration and successful Dig-to-Center recovery, with no new registrations. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+Current work is Red collection: 64 registrations and 65 registered-objective examples. Latest AO01 funding succeeded (+850 money) under one forced support goal; no new training example. Gameplay stopped safely on Route18 with full party HP,1,443 money and zero balls. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,11 +24,11 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
+The previous Dig recovery is preserved. The latest actual continuation left Fuchsia Center and earned850 from a Route18 trainer in123 actions/7,825 frames. It was a singleton support step, not learned earning.
 
-Continue exact AM01, not AJ or AL, with the initialized v4 model in HANDOFF.md. The [runtime connection](work-sessions/2026-09-11-economy-runtime-connection.md) records fresh cash context before selection and independently replays versioned evidence; 314 targeted tests pass. The actual initialization preserves all 65 examples and adds no fit or gameplay. Next verify the opt-in plan/supply contract without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs and protected stock; exclude forced support from fits. Do not repeat the objective design or count synthetic fitting as gameplay. No replay, reset, sealed Red, Crystal or full run.
+Continue exact AO01 with the same initialized v4 model and economy-training. Purchase affordable supplies using existing transport, then retain one genuinely model-selected collection outcome. Keep support excluded from fits; preserve actual failures and costs. [Funding qualification](work-sessions/2026-09-11-economy-live-qualification.md). Budget45–90minutes for a bounded continuation, not guaranteed collection or renewable income. No replay, reset, sealed Red, Crystal or full run.
 
-The resource-recovery checklist is 2/3; funding/collection remains open. No stage exits or North Star requirements changed. [Latest report](work-sessions/2026-09-10-dig-recovery.md).
+The resource-recovery checklist stays2/3 until a funded collection lesson is retained. No stage exit or North Star requirement changed. [Latest handoff](../HANDOFF.md).
 
 ## How to stay focused
 
