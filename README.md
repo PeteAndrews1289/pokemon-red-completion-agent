@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest retained collection contains **73 registered species**. The registered-objective model has **99 training examples**. It selected income twice, then selected acquisition that registered Magnemite at Power Plant. That acquisition later failed in post-action observation and stayed unfit; a separate deterministic recovery preserved the exact result. These are bounded development results, not independent full-game competence.
+- The latest retained collection contains **75 registered species**. The registered-objective model has **103 training examples**. A zero-input cartridge-derived audit found no unused ordinary trainer income and qualified the exact current save for a bounded Elite Four rematch worth **¥29,799 gross**. The rematch has not run, and survival or net profit is not yet proved. These are bounded development results, not independent full-game competence.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest collection report](docs/work-sessions/2026-09-11-power-plant-diversification.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest collection and funding report](docs/work-sessions/2026-09-11-model103-collection-and-league-funding.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

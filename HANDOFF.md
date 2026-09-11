@@ -2,27 +2,25 @@
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest retained endpoint: BV recovery / model99
+## Latest retained endpoint: BZ recovery / model103
 
-BU began from audited BT03/model97. The model selected two ordinary-trainer income goals, increasing cash493→748→1093 and fitting both outcomes. It then selected acquisition from four available high-level goals; deterministic regional planning proposed Power Plant and the generic capture machinery registered national#081 Magnemite.
+The retained learner continued from model99 through four actual multi-option outcomes: two income decisions, a capture-item purchase and an evolution. Model103 is now the active bounded-development head. Collection advanced from73 to75 registrations across the continuation.
 
-The acquisition did **not** finish successfully. Its post-action observer treated a stationary scripted encounter as an ordinary payout trainer and raised. BU03 remains failed and unfit after1,562actions/99,216frames. Commit `e5fda02a` keeps such objects reserved for navigation while excluding non-ordinary classes from trainer-income candidates.
+The latest BZ acquisition succeeded in1,106actions/63,948frames and added one registration. A44-action/3,588-frame recovery then restored the party. Both menus were forced singletons, so neither step was fitted or counted as learned judgment.
 
-A separate bounded deterministic recovery preserved the exact failed state and returned to Vermilion Center in46actions/3,732frames. It made zero model decisions, created zero examples and did not retry BU03.
+The exact input-ready Vermilion Center save has75 registrations,57 living species,61 specimens,49 required Red registrations remaining,553money and zero capture items. Party HP is118/154/120/253/131/73; the workhorse is level75. Box capacity is not the blocker.
 
-- Recovery episode: `red-registered-recovery-20260911-bv`
-- Checkpoint record: `8e95b2325381e716eedcb16bb38026200344bd42b87f10e8a98f32f566cf42f9`
-- State: `02017547d37c3ac935ad5df94b6ffb2c66bfbd950518296de21e2b4c6177b0c0`
-- Recovery source: `e5fda02ab9deb7511a7140e6197d33674364c207`
-- Model: `e985527fa13680b8f45a99cb1cacedc11e05241b46a3f4dd414a7acaee542612`
-
-Vermilion Center, input-ready and battle-free;1093money, zero capture items. Party HP131/118/150/120/253/73.73 local/global registrations,60specimens,56living species and51required Red registrations remain.
+- Acquisition episode: `red-collection-20260911-bz-01-causal`
+- Recovery episode: `red-collection-20260911-bz-02-causal`
+- Collection source: `1e5ce72b15d9be077781b2bfe02f4afd572694ee`
+- Qualification source: `617115d6faa0227819a4ea112940bd6f5dac0daf`
+- Model: `59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843`
 
 ## Continuation state
 
-Do not continue from the failed BU03 episode directly. Reconstruct through BU01 and BU02, bind the retained failed source `wild:PowerPlant:grass`, then append the BV recovery checkpoint. Model99 is the active learned head; the recovery checkpoint is support-only and has `automatic_resume_authorized=false`.
+Reconstruct through the retained BZ ancestry. Do not retry the failed BX02 search. Model103 is the active learned head; BZ01/BZ02 are support-only and must not be retroactively fitted.
 
-The diversification milestone is closed: a model-selected acquisition produced a non-Seafoam/non-water registration through generic mechanics, although its outcome remained failed. Do not spend the next session accumulating more late-game endpoint examples by default.
+The resource frontier is now explicit. A zero-input audit found zero regional capture candidates and zero unused ordinary trainer payouts. The exact save qualified for a five-battle Elite Four rematch: five steps to a legal Fly launch, Indigo destination9,21 steps to Lorelei and29,799 expected gross payout. No rematch input has been sent; survival, net profit and post-credits recovery remain unproved.
 
 ## Fresh-start checkpoint: Celadon midgame join
 
@@ -39,13 +37,14 @@ private artifact directory was not found; never reconstruct or relabel it from p
 
 ## Next product milestone
 
-The fresh-start checklist is complete. Return immediately to the actual BV/model99 collection
-lineage for at most three useful goals or thirty minutes. Require a genuine multi-option menu,
-retain every cost and failure, and fit only the selected eligible outcome. Prioritize a new
-registration or useful evolution; do not add another story-infrastructure session first.
+Build one bounded League-rematch rehearsal by composing the existing Center exit, Fly, Indigo
+navigation, Elite Four and Champion skills. Start from an exact checkpoint copy, verify every
+payout and preserve partial money, bag and party state on failure. Do not retry a failed rehearsal
+or fit forced mechanics. If it reaches a stable post-game state with positive net purchasing
+power, buy a practical ball reserve and return immediately to model-selected collection.
 
 Fresh-game autonomy, arbitrary-seed reliability, complete Red collection, learned low-level combat, ROM-hack competence and cross-title transfer remain unproved. Crystal stays on the backburner until Red has a credible fresh-start sequence.
 
-[Latest report](docs/work-sessions/2026-09-11-fresh-celadon-join.md). Recommend **Sol High,
-standard speed** for the measured collection continuation; use Astra High only for an architecture
-or promotion audit.
+[Latest report](docs/work-sessions/2026-09-11-model103-collection-and-league-funding.md). Recommend
+**Sol High, standard speed** for executor implementation and rehearsal; use Astra High only for an
+architecture or promotion audit.

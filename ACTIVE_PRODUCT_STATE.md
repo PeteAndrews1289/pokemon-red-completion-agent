@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Resume the authenticated BV/model99 collection lineage and retain a real multi-option outcome; fit only the actual selected eligible result and seek another useful registration or evolution.
+- Next decision: Implement and rehearse one bounded Elite Four rematch from the exact qualified model103 checkpoint, then use any verified net proceeds to restore capture supply and resume model-selected collection.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Resume one semantic Red player from clean power through authenticated story checkpoints without exposing controller routes to the policy. |
-| Authority now | The learner remains at99 fitted examples and73 registrations. The fresh lineage used an explicitly unlearned ranker and added no authority; it proves authenticated semantic composition from clean power through Celadon and into the existing midgame registry. |
+| Reusable capability | Sustain model-directed Red registration after finite ordinary income is exhausted, without confusing deterministic mechanics with learned choices. |
+| Authority now | The bounded-development learner has103 fitted examples and75 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | From the authenticated model99 late-game endpoint, expose a real multi-option collection, evolution, recovery, purchase, or income menu and retain the selected outcome without a fixed dispatch. |
+| Cheapest falsifier | The exact qualified model103 save cannot complete one bounded Elite Four rematch and return to an input-ready post-game state with positive net capture purchasing power. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 99 | 12 |
+| Registered Train Example · train | 103 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-fresh-celadon-join** · status **active** · evidence [qualification](docs/evidence/red-fresh-celadon-join-2026-09-11.json)
+**2026-09-11-model103-league-readiness** · status **active** · evidence [qualification](docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The authenticated fresh lineage now composes from clean power through Celadon into the existing midgame registry. This removes a major integration gap, but learned goal selection remains the product-leading work. |
-| Learning output | None. The published-source continuation completed 42584 actions and 2244209 frames, extended the authenticated lineage from six to fourteen verified objectives, and retained a Celadon checkpoint accepted by two existing midgame skills. Model99 and73 registrations are unchanged. |
-| Authority delta | Zero. An explicitly unlearned integration ranker selected seven singleton stages; deterministic mechanics completed them. No learned example, fit, promotion or evaluation was created. |
+| Product alignment | Renewable income is required for an autonomous collector to recover from arbitrarily poor capture luck. Qualifying the current save for a repeatable League source directly removes the resource dead end blocking further model-selected registration. |
+| Learning output | Four real multi-option outcomes advanced model99 to103. Collection advanced from73 to75 registrations. The last two useful steps were forced singletons, correctly excluded from fitting. A zero-input audit then proved ordinary trainer income exhausted and qualified an exact29,799-gross League rematch. |
+| Authority delta | Four actual multi-option outcomes advanced the registered-objective learner from99 to103 fitted examples. The latest acquisition and recovery were deterministic singletons and added no learned authority. |
 | Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | The fresh lineage now joins the existing midgame registry, but it has not demonstrated learned ranking or a continuous autonomous run. The immediate anti-drift requirement is a measured model99 collection outcome from the retained late-game learner endpoint. |
-| Decision | Accept the authenticated Celadon handoff as completing the fresh-start integration milestone. Return immediately to bounded model99 collection learning; do not add another story-infrastructure session before a measured learner result. |
-| Next session | Resume the actual BV/model99 collection lineage for at most three useful goals or thirty minutes, fit only actual eligible outcomes, and seek a new registration or useful evolution. No additional story-infrastructure session, full replay or Crystal execution. |
-| Next falsifier | The authenticated model99 endpoint cannot produce and settle a real multi-option useful goal without fixed dispatch, route identity leakage, erased costs or a repeated retained step. |
-| Stop condition | Stop on a fixed policy-visible input walkthrough, coordinate-bearing policy features, hidden teacher choice, unauthenticated resume, deterministic support counted as learned authority, a repeated retained step or another session without a measured learner result. |
+| Blocker | Collection reached75 registrations but stopped with zero capture items,553money and zero unused ordinary trainer payouts. The exact save qualifies for a29,799-gross League rematch, but survival, post-credits recovery and net purchasing power are not yet proved. |
+| Decision | Treat finite trainer income as exhausted and build the smallest bounded League-rematch executor from existing skills. Rehearse once on an exact checkpoint copy; if it settles safely, buy a practical ball reserve and return immediately to model-selected collection. |
+| Next session | Compose one bounded League-rematch rehearsal from the current checkpoint copy, verify all five payouts and post-credits recovery, and stop on any divergence without retry. Do not expose it as a learned choice or begin Crystal. |
+| Next falsifier | The exact model103 checkpoint cannot survive the five qualified League battles and reach a stable post-game state within a declared action/frame bound while preserving honest money, bag and party costs. |
+| Stop condition | Stop on a changed starting checkpoint, failed preflight, unexpected opponent or payout, party wipe, exhausted action/frame bound, non-input-ready terminal, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
 
 ### Stop conditions
 

@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-fresh-celadon-join**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-league-readiness**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Measured model99 collection continuation: 1/3 acceptance items (33%).**
+**Renewable Red collection economy: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Authenticate the retained model99 learner lineage ([evidence](../docs/evidence/red-power-plant-diversification-2026-09-11.json))
-- [ ] Retain one fresh multi-option model99 outcome
-- [ ] Register or evolve a useful missing species
+- [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
+- [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
+- [ ] Execute one bounded rematch and restore capture supply
 
-Current model: **99 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-power-plant-diversification-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-model103-league-readiness
+
+Four real multi-option outcomes advanced model99 to103 and collection advanced73 to75 registrations. The final acquisition and recovery were forced singletons and stayed unfit. A zero-input audit proved ordinary trainer income exhausted and qualified the exact save for a five-battle League rematch worth29799 gross.
+
+**Deviation:** No authority promotion or stage exit. The learner made measurable progress before reaching a legitimate resource dead end. League qualification establishes route, roster, coverage and gross payout only; execution, survival, post-credits recovery and net profit remain unproved.
+
+**Next:** Compose one bounded League-rematch executor from existing skills and rehearse it on an exact checkpoint copy. Preserve all partial money, bag and party costs; stop without retry on divergence. If stable, restore capture supply and resume model-selected collection.
 
 ### 2026-09-11-fresh-celadon-join
 

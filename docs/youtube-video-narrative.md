@@ -4,6 +4,8 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
+Newest systems beat: [model103 and the renewable-income frontier](work-sessions/2026-09-11-model103-collection-and-league-funding.md). Show the counter moving from99 to103 examples and73 to75 registrations, then the empty goal menu at zero balls and553money. Overlay the zero-input League qualification:5 exit steps,21 Indigo steps, five cartridge-derived opponents and29,799 gross. State the caveat on screen: the rematch has not run, so survival and net profit are not yet results. This turns an apparent dead end into a precise, testable next capability without pretending qualification is execution.
+
 Newest systems beat: [fresh lineage to Celadon](work-sessions/2026-09-11-fresh-celadon-join.md).
 Begin with the game booting, receiving the starter and Pokedex, reaching Brock, then resume the
 authenticated checkpoint through Cerulean, Vermilion, Surge and Lavender to Celadon. Overlay the

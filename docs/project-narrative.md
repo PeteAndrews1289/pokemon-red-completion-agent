@@ -1,11 +1,11 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest integration result: the authenticated fresh Red lineage now reaches Celadon. The
-post-Brock continuation traversed seven semantic stages in42,584actions/2,244,209frames, retained
-fourteen verified objectives and reloaded without input into two executable existing midgame
-skills. This is deliberately **not** presented as learning: an explicitly unlearned ranker saw
-only singleton menus while deterministic chapters executed mechanics. Model99 and73 registrations
-are unchanged. [Report](work-sessions/2026-09-11-fresh-celadon-join.md).
+Latest result: four actual multi-option outcomes advanced the registered-objective learner from
+model99 to103, while collection advanced from73 to75 registrations. The latest acquisition and
+recovery were forced singletons, so they correctly added no learned examples. Collection then
+stopped at zero capture items and zero unused ordinary trainer payouts. A zero-input cartridge
+qualifier proved the exact save is ready for a bounded League rematch worth29,799 gross; the
+rematch, survival and net profit remain unproved. [Report](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting
 model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant.

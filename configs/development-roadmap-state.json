@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-fresh-celadon-join",
+  "as_of_session": "2026-09-11-model103-league-readiness",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
+      "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Measured model99 collection continuation",
+    "title": "Renewable Red collection economy",
     "items": [
       {
-        "id": "model99-lineage-ready",
-        "label": "Authenticate the retained model99 learner lineage",
+        "id": "finite-funding-exhaustion",
+        "label": "Prove ordinary trainer income is exhausted",
         "done": true,
-        "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
+        "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
       },
       {
-        "id": "fresh-model99-multi-option-outcome",
-        "label": "Retain one fresh multi-option model99 outcome",
-        "done": false,
-        "evidence": null
+        "id": "league-funding-qualification",
+        "label": "Qualify exact League route and gross payout",
+        "done": true,
+        "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
       },
       {
-        "id": "productive-model99-followup",
-        "label": "Register or evolve a useful missing species",
+        "id": "league-funded-capture-supply",
+        "label": "Execute one bounded rematch and restore capture supply",
         "done": false,
         "evidence": null
       }
@@ -972,6 +972,12 @@
       "result": "Published-source Red resumed the authenticated first-badge state through seven semantic stages in42584actions/2244209frames, retained fourteen verified objectives at Celadon Center, and exposed clear_rocket_hideout plus reach_saffron through the existing midgame registry. Model99 and73 registrations are unchanged.",
       "deviation": "The fresh-start checklist is3/3, but this remains integration rather than learning: the ranker was explicitly unlearned, every menu was a singleton and deterministic chapters executed the controls. A narrow Surge bound adjustment and missing Vermilion Gym location label were verified before publication.",
       "next": "Return immediately to the actual BV/model99 collection lineage for one bounded multi-option goal sequence. Fit only actual eligible outcomes and seek another registration or useful evolution; no additional story-infrastructure session, full replay or Crystal execution."
+    },
+    {
+      "session": "2026-09-11-model103-league-readiness",
+      "result": "Four real multi-option outcomes advanced model99 to103 and collection advanced73 to75 registrations. The final acquisition and recovery were forced singletons and stayed unfit. A zero-input audit proved ordinary trainer income exhausted and qualified the exact save for a five-battle League rematch worth29799 gross.",
+      "deviation": "No authority promotion or stage exit. The learner made measurable progress before reaching a legitimate resource dead end. League qualification establishes route, roster, coverage and gross payout only; execution, survival, post-credits recovery and net profit remain unproved.",
+      "next": "Compose one bounded League-rematch executor from existing skills and rehearse it on an exact checkpoint copy. Preserve all partial money, bag and party costs; stop without retry on divergence. If stable, restore capture supply and resume model-selected collection."
     }
   ],
   "closed_milestones": [
@@ -1487,6 +1493,32 @@
       "session": "2026-09-10-registration-opportunities",
       "stage": "red-collection",
       "closure": "Previously completed indoor eligibility checklist retained unchanged; next work addresses missed encounters during travel."
+    },
+    {
+      "title": "Measured model99 collection continuation",
+      "items": [
+        {
+          "id": "model99-lineage-ready",
+          "label": "Authenticate the retained model99 learner lineage",
+          "done": true,
+          "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
+        },
+        {
+          "id": "fresh-model99-multi-option-outcome",
+          "label": "Retain one fresh multi-option model99 outcome",
+          "done": true,
+          "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
+        },
+        {
+          "id": "productive-model99-followup",
+          "label": "Register or evolve a useful missing species",
+          "done": true,
+          "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
+        }
+      ],
+      "session": "2026-09-11-model103-league-readiness",
+      "stage": "red-collection",
+      "closure": "The learner retained four fresh multi-option outcomes, advanced from model99 to103 and collection advanced from73 to75 registrations. The next checklist addresses renewable income after finite ordinary trainers are exhausted."
     },
     {
       "title": "Capture useful encounters during travel",

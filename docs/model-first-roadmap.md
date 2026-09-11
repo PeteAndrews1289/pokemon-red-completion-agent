@@ -8,18 +8,18 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-The retained Red loop still has99 fitted examples and73 registrations. Separately, a published-source
-fresh-start lineage now reaches Celadon through two authenticated checkpoints. The post-Brock
-continuation took42,584actions/2,244,209frames and a zero-input reload exposed both Rocket Hideout
-and Saffron through the existing midgame registry. The ranker was explicitly unlearned and all
-menus were singletons, so no model authority changed. Fresh-game autonomy and independent
-reliability remain unproven.
+The retained Red loop now has103 fitted examples and75 registrations. Four fresh multi-option
+outcomes advanced the learner; the latest singleton acquisition and recovery advanced collection
+without being mislabeled as learning. Collection then stopped honestly at zero capture items,
+553money and zero unused ordinary trainer payouts. A zero-input qualifier proved that the exact
+save can reach a five-battle League rematch worth29,799 gross. The rematch has not run, so survival,
+net profit, post-credits recovery, fresh-game autonomy and independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Resume broad Red collection now.** From the actual BV/model99 lineage, let the model choose
-   missing-species acquisition, supported evolution, supplies and recovery. Keep actual costs and
-   failed searches; the next session must produce a measured learner outcome.
+1. **Restore renewable capture funding.** Compose one bounded Elite Four rematch from existing
+   skills, rehearse from an exact model103 checkpoint copy and prove a stable post-game return with
+   honest net proceeds. Then buy a practical ball reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
    session.
@@ -32,13 +32,13 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-The late-game retained endpoint is BV recovery/model99:73 registrations,60 specimens,1093money and a restored party. BU03 registered Magnemite but remains a failed, unfit acquisition; do not retry or relabel it.
+The retained endpoint is BZ recovery/model103:75 registrations,61 specimens,553money, zero capture
+items and a restored party. Do not retry the failed BX02 search or fit the forced BZ steps.
 
-The fresh-start checklist is now complete: the authenticated Celadon state reloads without input
-and the existing midgame registry accepts it. The next session should return to BV/model99 for at
-most three useful goals or thirty minutes, require a genuine multi-option choice, and fit only the
-actual eligible outcome. One more engineering-only session triggers the anti-drift alarm. No full
-replay, Crystal execution or autonomy claim. [Latest result](work-sessions/2026-09-11-fresh-celadon-join.md).
+The next session is one bounded League-rematch executor and checkpoint-copy rehearsal. Stop on
+any unexpected opponent/payout, wipe, exceeded bound or non-input-ready terminal. Preserve every
+incurred cost and partial gain. This directly unlocks further collection; no full replay, Crystal
+execution or autonomy claim. [Latest result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 ## How to stay focused
 
@@ -46,4 +46,4 @@ Each work session names a reusable capability, model-controlled choice, transfer
 
 Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
 
-[Latest collection report](work-sessions/2026-09-10-supply-transport.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+[Latest collection report](work-sessions/2026-09-11-model103-collection-and-league-funding.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
