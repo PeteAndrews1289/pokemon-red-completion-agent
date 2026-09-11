@@ -4,50 +4,46 @@ Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_S
 and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
 and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AT01
+## Latest verified endpoint: AU01
 
-AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.
+AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
 
-- Episode: `red-resource-choice-20260911-at-01-causal`
-- Checkpoint: `e91b2743e8bdf3a3b79999775d2771a15f4ac0f2aa8367c89c3fd6548d97f0a4`
-- Manifest: `de4b602bf6f4d59d0d41a76012af5676f016a4f5aa8cdc7fe15a69534b189461`
-- State: `3aad30234495b429346c31af3b7b73d881e43c60332176e734056b22b1c8cdd2`
-- Played source: `1f12ffd3e4b22c57a911915131a7ad786747e1ec`
-- Model: `5887a2406551e233509e0b2a401cc9257c9ae1c9054ba887ef3f808ed8c1852a`
+- Episode: `red-mart-funding-20260911-au-01-causal`
+- Checkpoint: `6370f173681deb9734a0c9909e3cf1a1e5a608ea3bf23c3fdbf8954f6ddb042a`
+- Manifest: `70ac71eec1db7b5c68a62c58623c294bd42ccbe9adc6d8733d846b5871d91c08`
+- State: `09b1593b9000f1c57def0a8e4fadacd89def4d706cc3c6fa1269da0777814f7e`
+- Played source: `02a7099e5a5dc52856218114e4b6803ec0fbcac3`
+- Current model: `172304eccc87c3e967405f8a6c6c9a92a301edc445a72c006420ba1e9810e993`
+- Model file: `9bae3e49fdbd7a311e1872ba18017d275dfcebef36bc0d944307dd4fed25cbe0`
+- Corpus: `41ffb043dbabc72e21b28a5566776f676f3a8d48c885c815844907142ba7f7b6`
 
-Map152,row5,column2,input-ready,battle0. HP249/118/146/88/92/73.
-The one GreatBall and600 spent are retained. AT is consumed; AS02 is historical.
-AS01's recovery remains the latest fit, bringing66 to67. Trainer income and AT's
-purchase supply no labels. No registration gain or independent advantage claimed.
+Map7,row12,column13,input-ready,battle0; HP249/118/146/88/92/73.
+The eight-attempt movement guard stopped right at this position. No trainer battle,
+income, ball expenditure or specimen loss. All failed actions remain in the journal.
+The three-goal AU batch stopped after one in520.673seconds; AU is consumed.
+The exact terminal and replay were independently audited without controller input.
 
 ## Next bounded work
 
-Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
+Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
 
-The resource-choice runtime passed254focused tests, but AT's actual preflight
-offered only RESUPPLY. A later read-only inspection of current AT confirmed the
-flagTrue, target5400/shortfall4832 and zero funding candidates inside the Mart.
-It did not establish why the earlier outdoor AS02 menu lacked earning. Trying
-to reconstruct AS02 through the current continuation admission correctly failed
-the durable-ledger rollback guard, with no gameplay. Do not bypass it.
+Use private `inspect_au_outdoor_corrected_20260911.arguments()` as a builder only.
+It retains AT and AU plus the actual `warp-safe:wild:SeafoamIslandsB2F:grass` and
+matching discovery profile selected in AU's regional proposal. That source was a
+binding proposal, not a fitted destination outcome: funding was actually selected.
+The first AU inspection omitted those transitions and failed checkpoint/profile
+admission without gameplay. Its separate corrected inspection preserves the error
+and exact ancestry; never weaken the guard to admit a guessed profile.
 
-Flash completed the isolated eligibility/helper draft in206seconds;42tests passed
-independently. Codex corrected a fictional purchase fixture and authentication
-wording, added the default-off profile transition and runtime caller, and tested
-the real bounded graph path.240focused tests and full mypy478sources pass.
-Existing graph bounds, occupied squares, trainer hazards and observed outside-map
-requirements stay intact. No arbitrary buildings, HMs or radius growth. Next is
-one read-only AT qualification; reorient if no legitimate candidate exists.
-Do not invent choices or fit forced support. Flash quota refreshed01:54EDT:
-42.99%five-hour/68.01%weekly, resets about24minutes/17h33m. Claude not reused.
+The corrected action-free result finds one122-step funding route from the current
+Fuchsia observation. It starts down and avoids the exact failed edge, without a
+code change. That is route qualification, not execution success. No
+arbitrary expanded map radius, HMs, full replay, sealed Red or Crystal.
 
-Build from private `run_at_resource_choice_20260911.arguments()` without calling
-its consumed main; append actual AT01/checkpoint and retain model67. Fresh identities
-only. Overnight cutoff07:07EDT; no sealed Red, Crystal or full replay.
-
-Resource checklist0/3: actual earn/buy options, actual resource lesson, then new
-registration. Synthetic tests alone do not complete its first item.
-[AT audit](docs/work-sessions/2026-09-11-resource-choice-runtime.md).
+Resource checklist1/3: an actual negative resource-choice fit exists. Distinct
+earn/buy offers and a new registration after replenishment remain unverified.
+This is not successful money-making or generalization. Gameplay stopped.
+Overnight cutoff07:07EDT. [AU report](docs/work-sessions/2026-09-11-funding-route-failure.md).
 
 ## Engineering and external review
 

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-resource-choice-runtime",
+  "as_of_session": "2026-09-11-funding-route-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-recovery-funding-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-funding-route-failure-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -49,8 +49,8 @@
       {
         "id": "resource-variant-observed-learning",
         "label": "Fit an actual resource-choice outcome",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-funding-route-failure-learning-2026-09-11.json"
       },
       {
         "id": "resource-reserve-collection-yield",
@@ -876,6 +876,12 @@
       "result": "AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.",
       "deviation": "Runtime connected but actual economic alternatives absent; checklist remains0/3. No stage exit or objective changed.",
       "next": "Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry."
+    },
+    {
+      "session": "2026-09-11-funding-route-failure",
+      "result": "AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.",
+      "deviation": "1/3 useful-resource checklist: actual negative resource-choice fit. Earn/buy alternatives and new registration remain unverified; no stage exit changed.",
+      "next": "Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs."
     }
   ],
   "closed_milestones": [

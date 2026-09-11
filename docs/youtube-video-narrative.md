@@ -86,3 +86,10 @@ honest difference between a tested menu mechanism and an actual choice: only buy
 was available. Display600 spent,one ball,zero new examples. The latest model remains67.
 The missing funding exit becomes a small engineering task; do not edit this into a
 successful money-strategy lesson. Keep the failed capture and prior costs visible.
+
+
+In [the funding approach](work-sessions/2026-09-11-funding-route-failure.md), show the model choosing
+funding, leaving the shop, then stopping at a blocked outdoor movement. Caption:
+zero income,one retained failed outcome,67→68 examples. The safety stop protects
+the save; the refit does not mean the system learned a successful earning strategy.
+Continue from that outdoor position, never edit away the failure by replaying the shop.

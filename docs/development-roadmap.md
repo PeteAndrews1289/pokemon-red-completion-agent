@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-choice-runtime**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funding-route-failure**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Make useful earning and spending choices: 0/3 acceptance items (0%).**
+**Make useful earning and spending choices: 1/3 acceptance items (33%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [ ] Preserve distinct earn and buy options
-- [ ] Fit an actual resource-choice outcome
+- [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json))
 - [ ] Turn replenishment into new registration
 
-Current model: **67 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **68 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-recovery-funding-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-funding-route-failure
+
+AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
+
+**Deviation:** 1/3 useful-resource checklist: actual negative resource-choice fit. Earn/buy alternatives and new registration remain unverified; no stage exit changed.
+
+**Next:** Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
 
 ### 2026-09-11-resource-choice-runtime
 
