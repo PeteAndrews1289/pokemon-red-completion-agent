@@ -68,10 +68,12 @@ _MECHANICS = frozenset(
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
     }
 )
+_MAX_ROUTE_FLEES = 16
+_MAX_ROUTE_TRAINER_BATTLES = 8
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
-    max_interruptions=16,
+    max_interruptions=_MAX_ROUTE_FLEES + _MAX_ROUTE_TRAINER_BATTLES,
     max_replans=8,
     replan_after_unchanged=2,
     retry_wait_frames=24,
@@ -197,8 +199,8 @@ class RedResourceGoalRouter:
                     opportunities[index] = flight.opportunity
                 continue
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
-                self.actions, self.runtime.reader, maximum_flees=16,
-                maximum_trainer_battles=8, stabilization_frames=180,
+                self.actions, self.runtime.reader, maximum_flees=_MAX_ROUTE_FLEES,
+                maximum_trainer_battles=_MAX_ROUTE_TRAINER_BATTLES, stabilization_frames=180,
                 route_name="bounded resource-goal transport",
             )
             if self.routed_recovery:

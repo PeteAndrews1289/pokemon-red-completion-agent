@@ -182,6 +182,14 @@ def _supply(bindings):
     return next(item for item in bindings.opportunities if item.kind is GoalKind.RESUPPLY)
 
 
+def test_route_limit_covers_every_declared_handler_interruption() -> None:
+    assert routing._MAX_ROUTE_FLEES == 16
+    assert routing._MAX_ROUTE_TRAINER_BATTLES == 8
+    assert routing._ROUTE_LIMITS.max_interruptions == (
+        routing._MAX_ROUTE_FLEES + routing._MAX_ROUTE_TRAINER_BATTLES
+    )
+
+
 @pytest.mark.parametrize("include_offers", [None, False])
 def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
     fixture, monkeypatch, include_offers,
