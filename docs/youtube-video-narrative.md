@@ -128,3 +128,6 @@ the agent can heal, earn money, buy a ball and reach a missing species, yet stil
 fail at sustainable collection. Show the cash568→713→113 and the failed Tangela
 throw.70examples is learning data, not70successful decisions; registrations stayed64.
 The next engineering question is supply endurance, not how to hide that failure.
+
+
+For [the earn-buy-Staryu sequence](work-sessions/2026-09-11-resource-cycle-and-staryu.md), show the actual choice reversal: earn315 at1,053money, then buy two balls at1,368. The source model chooses SeafoamB2F from six areas. Staryu is registered during travel, but the full survey fails with zero balls left. Display68registrations and82examples together with the failed label; do not edit this into a clean success montage.

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
+- Next decision: Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. |
+| Authority now | After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 77 | 12 |
+| Registered Train Example · train | 82 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-cave-recovery** · status **active** · evidence [registered train example](docs/evidence/red-cave-recovery-learning-2026-09-11.json)
+**2026-09-11-resource-cycle-and-staryu** · status **active** · evidence [registered train example](docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. |
-| Authority delta | One actual native recovery outcome fitted. No destination label, new promotion or independent advantage. |
+| Learning output | After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations. |
+| Authority delta | Two native economy outcomes and one regional destination outcome were fitted. One durable registration was gained; no authority promotion or evaluation occurred. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | GitHub authentication became unavailable: local code/tests/BC77 evidence are committed, but push failed. BD stopped at the publication preflight with no gameplay or prediction. Flash draft also required sign-in. The Mac is locked; overnight continuation is paused rather than polling credentials. |
-| Decision | Keep local work and actual BC01 intact. No publication bypass, credential workaround, BD retry or restored supplies. Resume after the user restores normal authentication. |
-| Next session | Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs. |
-| Next falsifier | Can actual resource choices turn the recovered endpoint into another useful registration without hidden restores? |
+| Blocker | The authenticated BK save has168money and zero balls. Legitimate trainer income must restore useful capture stock before another acquisition. |
+| Decision | Preserve BI's partial gain and failed label. BK authenticated the source ancestry and restored the team without a training label; continue from that exact save. |
+| Next session | Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice. |
+| Next falsifier | The retained failed endpoint cannot authenticate safely, or available income cannot restore useful capture stock without a reset. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

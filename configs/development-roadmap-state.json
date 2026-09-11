@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-cave-recovery",
+  "as_of_session": "2026-09-11-resource-cycle-and-staryu",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-cave-recovery-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -930,6 +930,12 @@
       "result": "BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.",
       "deviation": "No stage-exit change. Flash identified diagnostic loss, but actual recovery refutes an absorbing-dead-end claim. Codex added optional typed diagnostics only; past outcomes unchanged. Publication later blocked by authentication; no gameplay retried. Overnight follow-up paused.",
       "next": "Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs."
+    },
+    {
+      "session": "2026-09-11-resource-cycle-and-staryu",
+      "result": "After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.",
+      "deviation": "No stage exit changed. The learner made a useful earn-then-buy sequence and a source choice; the resulting acquisition remains failed despite real partial gain.",
+      "next": "Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice."
     }
   ],
   "closed_milestones": [

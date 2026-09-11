@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-cave-recovery**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-cycle-and-staryu**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 - [x] Turn replenishment into new registration ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 
-Current model: **77 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **82 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-cave-recovery-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-resource-cycle-staryu-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-resource-cycle-and-staryu
+
+After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
+
+**Deviation:** No stage exit changed. The learner made a useful earn-then-buy sequence and a source choice; the resulting acquisition remains failed despite real partial gain.
+
+**Next:** Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
 
 ### 2026-09-11-cave-recovery
 

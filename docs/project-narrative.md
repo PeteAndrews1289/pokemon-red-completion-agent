@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. [Report](work-sessions/2026-09-11-cave-recovery.md).
+Latest audited result: After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations. [Report](work-sessions/2026-09-11-resource-cycle-and-staryu.md).
 
 ## The question
 

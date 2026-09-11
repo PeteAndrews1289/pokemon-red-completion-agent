@@ -2,36 +2,35 @@
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest verified endpoint: BC01
+## Latest verified endpoint: BK01/model82
 
-BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.
+After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
 
-- Episode: red-recovery-20260911-bc-01-causal
-- Checkpoint: 1e6421d7523d411e05fe2bb72fc24cac72357b74393de5e36bbb0ec64772743a
-- Manifest: f5578fbdeed180ac12e961059fb56339bce210a419e1b0d1e35bfbb65568a257
-- State: 78dd93a86bd93fbb529ba3b12514b58b7c932da2cc5608e566000b05a20f5799
-- Played source: 7b11002c9beaddc4a10c97550d4f788d3eac3853
-- Model: 0ac5462825c82b4dfc31a6cbad1787d833ca6c07dfbb812f4fa16c0ccebb4d90
-- Model file: 95fafeec7edb3bb33eec8e6e6669fbb4248068a1996ac9bb1547468bd5f0198b
-- Corpus: a4171f93bff8ec28ef4fb3362bcdf815d49faf6c77a0a88f4ad278a83303ae9d
+- Episode: `red-collection-20260911-bk-01-causal`
+- Checkpoint: `3d5172c602f6b634136e9c7f43321a66389e67d7e1c6b47cb960dd59e41e621f`
+- Manifest: `f25d3e29fdb409c190d9c469739af0d1dcecba498f31cf180b6442d27fa584bc`
+- State: `720f30e3f82e00bb01ec768944cf11a17a0b1c2cca6fe1a651a622e7f8c2cb75`
+- Played source: `d272ad06bf4428a9bf978f7cde68398b35c80017`
+- Model: `a19062fcd123788e92aafc6b2e2242aec9c8d4fc1a5d6a217a5f174113e08feb`
+- Model file: `aa80080fb9c042c92d419dfa0e9ec94d5699586b57eb61787fcf0a909d598542`
+- Corpus: `403c23cb8a2f039d631999515b4bc69ca060b02b21d62ad194ffcaf0bf9fc286`
 
-FuchsiaCenter154,row3,column3,input-ready,battle0;333money,zero balls. HP249/118/146/88/92/73.66local/global registrations,56specimens,52living species,58required registrations remain.
-BC:46actions/3732frames in259.691seconds. Zero-input audit verified saved flags, stock, model and corpus. [Report](docs/work-sessions/2026-09-11-cave-recovery.md).
+Vermilion Center map89,row3,column3,input-ready,battle0;168money,zero balls. HP120/118/150/90/249/73.68local/global registrations,57specimens,53living species,56required registrations remain. BK01 used46actions/3,732frames, restored the team through a forced singleton, and produced no prediction, label or fit. Model82 is unchanged.
 
-## Publication and overnight pause
+BI01 selected trainer income over a one-ball purchase at1,053money and earned315. BI02 then selected a two-ball purchase over another270-income option at1,368money, spending1,200. BI03 selected SeafoamB2F from six regional sources. Travel registered Staryu; the destination survey saw four further encounters, fled all four and exhausted the remaining capture stock. The full goal is failed (`world_state_diverged`), not rewritten as success. All three actual choices were fitted:79→82examples.
 
-Local executable commit734d4375 passed276focused tests and mypy480. Push failed because GitHub authentication is unavailable; do not claim it is published. BD created only its private declaration, then failed the published-source preflight before prediction/input. No episode or fit exists. Never rerun that declaration; a future BE must begin from actual BC01. The overnight follow-up is being paused because the Mac is locked and Flash also needs sign-in.
+## Continuation state
 
-## Next bounded work
+BJ was a declaration-only failed preflight: ordinary continuation omitted BI03's selected-source ancestry and failed before controller input or prediction. Do not rerun BJ. BK added only `warp-safe:wild:SeafoamIslandsB2F:grass` and `discovery:wild:SeafoamIslandsB2F:grass`, authenticated BI, and completed one deterministic recovery. Its attempted second preflight stopped because documentation edits made the worktree dirty; no second prediction or gameplay occurred. Do not rerun BK. Continue from the audited BK01 checkpoint under a fresh identity after publishing the clean documentation state.
 
-Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
+Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
 
-BC gameplay and audit completed; do not rerun either. Successor starts from run_bc_recovery_20260911.arguments() ONLY, appends actual BC01 and installs model77. BC had no proposed/selected regional source, so add no source transition. Inspect current processes/outputs before launching.
+## Engineering and review
 
-## Review and engineering
+Published commit `d272ad06bf4428a9bf978f7cde68398b35c80017` permits a same-boundary wild encounter while facing a funding trainer to be fled once and reverified. It does not forgive coordinate drift or retry BF02. Focused funding/failure/continuation tests passed locally; CI is informative but not a training dependency.
 
-Flash correctly identified discarded typed destination-unavailable reasons. Codex added a strict optional path-free summary from actual offer through composite and bounded step. Goal status/reason, rewards, model features, counts and legacy absent-field shapes stay unchanged. No arbitrary travel-evidence forwarding or synthetic capture survey. Historical BB reason remains generic.
+BF01 forced Dewgong's registration,66→67, without a label. BF02 failed when a facing input triggered a wild battle; its consumed failure remains. BG recovered deterministically with zero model decisions. BH produced two selected economic/recovery outcomes,77→79. BI produced the three outcomes above. No full-game replay, sealed evaluation, Crystal run or authority promotion occurred.
 
-Reject Flash's Seel-in-Route19 inference: observed Seel was in Seafoam1F. Reject an absorbing-dead-end implication: the actual party already had living Dig and its enabled recovery now succeeded. Flash's isolated implementation call failed authentication before any work; the code is Codex-authored. No agent remains running. CLI needs sign-in before another Flash task; usage windows unavailable while Mac UI is locked. Claude unused/quota unavailable.
+The current learner ranks high-level goals and regional sources. Deterministic code still executes routes, menus, battles, captures and recovery. It has not demonstrated fresh-game autonomy, arbitrary-seed reliability, independent learned advantage, complete Red collection, or transfer.
 
-AZ resource checklist remains3/3; Red collection active.77examples include37acquisition/9successes and18recovery/18successes; related outcomes, not independent performance. No fresh-game autonomy or transfer claim. Recommend Astra High, Fast off for actual resource/collection continuations.
+[Latest report](docs/work-sessions/2026-09-11-resource-cycle-and-staryu.md). Recommend **Sol High** for continuation and failure analysis; use Astra High only for a milestone architecture audit.

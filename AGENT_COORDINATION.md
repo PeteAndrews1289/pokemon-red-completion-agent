@@ -13,9 +13,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.
+After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
 
-Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
+Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
 
 Flash completed the read-only diagnostic review. Codex accepted loss of typed unavailability, rejected the unsupported encounter location/dead-end claims, and implemented the minimal reporting fix. The separate Flash draft failed authentication before work; no agent is running. Current external quota unavailable; Claude unused.
 
