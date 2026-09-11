@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Two native choices and one regional destination outcome fitted; no authority promotion or independent advantage claim.",
-        "blocker": "The useful resource-choice checklist passed once, but supplies are exhausted again and repeated productive collection remains unproved.",
-        "decision": "Close the3/3resource-choice checklist without closing Red collection. Continue the working bounded loop rather than adding another funding framework.",
+        "authority_delta": "Two actual native outcomes fitted; regional proposal was not an executed destination or label. No promotion or independent advantage.",
+        "blocker": "No acquisition was attempted in this batch because the parent chose recovery. Actual supplies and a healed team are ready for the next bounded choice.",
+        "decision": "Retain the model choice without forcing collection or relabeling the unexecuted destination. Continue once from the actual healed endpoint; avoid new architecture.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-funded-capture-learning-2026-09-11.json",
-          "sha256": "388f7a558fbb971c94638f28ad59e98254da853007c3871cfcde111e0602c2cb"
+          "path": "docs/evidence/red-collection-replenishment-2026-09-11.json",
+          "sha256": "6496e5cb28f094d64f715227f1f7962937de243c9d6e495d9814308c52077f6c"
         },
-        "learning_output": "AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.",
+        "learning_output": "BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.",
         "next_falsifier": "Can the next actual funded continuation produce useful collection without erased costs or a hand-picked destination?",
-        "next_session_goal": "Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.",
+        "next_session_goal": "Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-funded-capture-result",
+        "session_id": "2026-09-11-collection-replenishment",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.",
+        "current": "BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.",
+      "next_decision": "Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 73,
+        "registered_train_examples": 75,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

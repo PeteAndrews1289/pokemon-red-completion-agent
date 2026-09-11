@@ -16,6 +16,12 @@ Tangela. Use the recorded three-option/two-option/seven-destination menus, not
 illustrative fake choices. The result is73examples and65registrations; the resource
 checklist is complete but sustained collection remains unproved.
 
+The [next batch](work-sessions/2026-09-11-collection-replenishment.md) is a useful
+counterpoint: income, a three-ball purchase, then model-selected recovery rather
+than capture.75examples, still65registrations. Do not show the proposed Seafoam
+destination as an executed search. This is why training volume and collection
+progress are tracked separately.
+
 “I wanted a model that could play Pokémon—not just repeat a walkthrough. Getting code to finish Red turned out to be different from teaching a model useful decisions.”
 
 Show the actual dashboard. Label saved footage as recorded and live footage as live. Do not loop an old frame sequence and present it as current learning.
