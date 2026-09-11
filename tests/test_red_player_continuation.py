@@ -13,6 +13,11 @@ from pokemon_red_completion.red_player_checkpoint import (
     capture_red_player_terminal,
     publish_red_player_checkpoint,
 )
+from pokemon_red_completion.red_regional_goal_proposal import (
+    REGIONAL_PROPOSAL_KIND,
+    REGIONAL_PROPOSAL_SCHEMA,
+    regional_proposal_record_id,
+)
 
 case = checkpoint_case
 
@@ -446,6 +451,95 @@ def test_regional_chain_preserves_restore_profile_and_rejects_history_rollback(c
     assert revisited.restore_profile is readiness.profile
     assert revisited.profile is readiness.profile
     assert len(revisited.continuation_chain) == 3
+
+
+def test_dynamic_proposal_profile_authenticates_saved_native_goal(case):
+    import json
+
+    from test_goal_resource_quote import _supply_model
+    from test_red_player_training import _plan
+    from test_red_regional_acquisition import _candidate
+
+    from pokemon_red_completion.red_goal_context_profile import (
+        _thaw,
+        build_red_goal_context_profile_payload,
+    )
+
+    store, arguments, _ = case
+    readiness = _readiness(store, arguments)
+    profile = _candidate("wild:Route11:grass").profile
+    assert profile.profile_sha256 != readiness.profile.profile_sha256
+    parent_plan = {
+        **_plan(_supply_model()).document,
+        "profile_sha256": profile.profile_sha256,
+    }
+    proposal = store.publish_sealed_record(
+        regional_proposal_record_id(arguments["episode_id"]),
+        kind=REGIONAL_PROPOSAL_KIND,
+        record={
+            "schema": REGIONAL_PROPOSAL_SCHEMA,
+            "episode_id": arguments["episode_id"],
+            "source_proposal_fitted": False,
+            "controller_input_before_commit": False,
+            "parent_overridden": False,
+            "independent_evaluation": False,
+            "profile_sha256": profile.profile_sha256,
+            "parent_plan": parent_plan,
+            "profile": json.loads(
+                build_red_goal_context_profile_payload(
+                    profile_id=profile.profile_id,
+                    providers=tuple(
+                        (spec.kind, spec.mechanic, _thaw(spec.parameters))
+                        for spec in profile.providers
+                    ),
+                )
+            ),
+        },
+    )
+    document = capture_red_player_terminal(
+        **{**arguments, "profile_sha256": profile.profile_sha256}
+    )
+    _complete(
+        store,
+        document,
+        alter_header={
+            "split": {
+                "partition": "train",
+                "root_lineage_id": "original-training-root",
+            },
+            "regional_proposal_record_sha256": proposal.summary.record_sha256,
+            "player_training_plan": parent_plan,
+        },
+    )
+    checkpoint = publish_red_player_checkpoint(store, document)
+    resumed = runner._continue_readiness(
+        readiness, ((arguments["episode_id"], checkpoint["record_sha256"]),)
+    )
+    assert resumed.restore_profile.profile_sha256 == profile.profile_sha256
+    assert resumed.profile.profile_sha256 == profile.profile_sha256
+
+    next_profile = _candidate("wild:Route12:grass").profile
+    arguments["emulator"].state = b"after-dynamic-profile"
+    next_document = capture_red_player_terminal(
+        **{
+            **arguments,
+            "parent": resumed.capture,
+            "episode_id": "after-dynamic-proposal",
+            "profile_sha256": next_profile.profile_sha256,
+        }
+    )
+    _complete(store, next_document, alter_header=runner._continuation_header(resumed))
+    next_checkpoint = publish_red_player_checkpoint(store, next_document)
+    continued = runner._continue_readiness(
+        readiness,
+        (
+            (arguments["episode_id"], checkpoint["record_sha256"]),
+            ("after-dynamic-proposal", next_checkpoint["record_sha256"]),
+        ),
+        regional_profiles=(next_profile,),
+    )
+    assert continued.restore_profile.profile_sha256 == next_profile.profile_sha256
+    assert continued.profile.profile_sha256 == next_profile.profile_sha256
 
 
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])

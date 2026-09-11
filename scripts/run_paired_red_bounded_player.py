@@ -145,6 +145,9 @@ from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
     continue_red_player_training,
     declare_red_player_training,
 )
+from pokemon_red_completion.red_regional_goal_proposal import (  # noqa: E402
+    load_regional_proposal_profile,
+)
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
 from pokemon_red_completion.red_trajectory import (  # noqa: E402
     PokemonRedObservationEncoder,
@@ -1938,20 +1941,50 @@ def _continue_readiness(
         episode = readiness.private_root.open_episode(episode_id)
         header = episode.read_header()
         metadata = header.get("metadata")
+        proposal_profile = None
         if isinstance(metadata, Mapping):
+            proposal_sha256 = metadata.get("regional_proposal_record_sha256")
+            if proposal_sha256 is not None:
+                if not isinstance(proposal_sha256, str):
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    )
+                parent_plan = metadata.get("player_training_plan")
+                if not isinstance(parent_plan, Mapping):
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    )
+                try:
+                    proposal_profile = load_regional_proposal_profile(
+                        readiness.private_root,
+                        episode_id,
+                        proposal_sha256,
+                        expected_parent_plan=parent_plan,
+                    )
+                except ValueError as error:
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    ) from error
+                if metadata.get("profile_sha256") != proposal_profile.profile_sha256:
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_profile"
+                    )
             matches = [
                 index
                 for index, candidate in enumerate(admitted_profiles)
                 if metadata.get("profile_sha256") == candidate.profile_sha256
             ]
             forward = [index for index in matches if index >= profile_index]
-            if matches and not forward:
-                raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
             if forward:
-                # Explicitly declared revisits are valid; an undeclared rollback
-                # is not. Repeated hashes must match the remaining ordered suffix.
+                # Static transitions still advance monotonically. A profile
+                # committed in this episode's proposal is an explicit
+                # transition and need not occupy the static transition list.
                 profile_index = forward[0]
                 readiness = replace(readiness, profile=admitted_profiles[profile_index])
+            elif proposal_profile is not None:
+                readiness = replace(readiness, profile=proposal_profile)
+            elif matches:
+                raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
         checkpoint = open_red_player_checkpoint(
             readiness.private_root,
             episode_id=episode_id,

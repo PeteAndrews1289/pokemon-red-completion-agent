@@ -15,6 +15,7 @@ from pokemon_red_completion.red_player_training_dataset import load_red_player_t
 from pokemon_red_completion.red_regional_goal_proposal import (
     REGIONAL_PROPOSAL_KIND,
     REGIONAL_PROPOSAL_SCHEMA,
+    load_regional_proposal_profile,
     regional_proposal_record_id,
     regional_proposal_seed,
     regional_proposal_source_effort,
@@ -33,6 +34,8 @@ def recorded(tmp_path, *, kind="resupply", omit_header=False):
                 "episode_id": "goal-episode-1",
                 "source_proposal_fitted": False,
                 "controller_input_before_commit": False,
+                "parent_overridden": False,
+                "independent_evaluation": False,
                 "profile_sha256": plan.document["profile_sha256"],
                 "parent_plan": dict(plan.document),
                 "selected_source": "wild:Route11:grass",
@@ -94,6 +97,28 @@ def test_supply_parent_adds_native_row_but_no_capture_attempt_or_extra_row(tmp_p
         behavior_model=model,
     )
     assert len(dataset.examples) == 1
+
+
+def test_exact_sealed_proposal_profile_can_be_restored(tmp_path):
+    store, _terminal, plan, *_ = recorded(tmp_path)
+    proposal = store.find_sealed_record(
+        regional_proposal_record_id("goal-episode-1"),
+        expected_kind=REGIONAL_PROPOSAL_KIND,
+    )
+    profile = load_regional_proposal_profile(
+        store,
+        "goal-episode-1",
+        proposal.summary.record_sha256,
+        expected_parent_plan=plan.document,
+    )
+    assert profile.profile_sha256 == plan.document["profile_sha256"]
+    with pytest.raises(ValueError, match="absent or changed"):
+        load_regional_proposal_profile(
+            store,
+            "goal-episode-1",
+            "0" * 64,
+            expected_parent_plan=plan.document,
+        )
 
 
 def test_actual_capture_parent_preserves_failed_source_effort(tmp_path):

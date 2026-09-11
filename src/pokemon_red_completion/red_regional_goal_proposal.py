@@ -7,11 +7,15 @@ source-search effort; resupply/recovery contributes no source attempt or target.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping
 
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
+from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalContextProfile,
+    parse_red_goal_context_profile,
+)
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 
 REGIONAL_PROPOSAL_SCHEMA = "pokemon.red.regional-goal-proposal.v1"
@@ -36,6 +40,62 @@ def regional_proposal_seed(training_seed: int) -> int:
         ),
         16,
     )
+
+
+def load_regional_proposal_profile(
+    store: PrivateArtifactRoot,
+    episode_id: str,
+    expected_record_sha256: str,
+    *,
+    expected_parent_plan: Mapping[str, object],
+) -> RedGoalContextProfile:
+    """Load the exact pre-input profile sealed into a regional goal proposal.
+
+    Native support choices can finish under a dynamically retargeted profile
+    even when no regional source was selected.  A later continuation must
+    authenticate that executed profile rather than reconstruct it from a newer
+    collection state.
+    """
+    record = store.find_sealed_record(
+        regional_proposal_record_id(episode_id),
+        expected_kind=REGIONAL_PROPOSAL_KIND,
+    )
+    if record is None or record.summary.record_sha256 != expected_record_sha256:
+        raise ValueError("regional proposal record is absent or changed")
+    document = record.read()
+    if not isinstance(document, Mapping):
+        raise ValueError("regional proposal profile binding differs")
+    parent_plan = document.get("parent_plan")
+    if (
+        document.get("schema") != REGIONAL_PROPOSAL_SCHEMA
+        or document.get("episode_id") != episode_id
+        or document.get("source_proposal_fitted") is not False
+        or document.get("controller_input_before_commit") is not False
+        or document.get("parent_overridden") is not False
+        or document.get("independent_evaluation") is not False
+        or not isinstance(parent_plan, dict)
+        or parent_plan != expected_parent_plan
+        or parent_plan.get("profile_sha256") != document.get("profile_sha256")
+        or not isinstance(document.get("profile"), dict)
+    ):
+        raise ValueError("regional proposal profile binding differs")
+    try:
+        payload = (
+            json.dumps(
+                document["profile"],
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=True,
+                allow_nan=False,
+            )
+            + "\n"
+        ).encode("ascii")
+        profile = parse_red_goal_context_profile(payload)
+    except (KeyError, TypeError, UnicodeError, ValueError) as error:
+        raise ValueError("regional proposal profile differs") from error
+    if profile.profile_sha256 != document["profile_sha256"]:
+        raise ValueError("regional proposal profile differs")
+    return profile
 
 
 def regional_proposal_source_effort(
