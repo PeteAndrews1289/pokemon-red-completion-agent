@@ -267,6 +267,19 @@ def test_legacy_router_keeps_quotes_absent(fixture):
     assert "resource_quote" not in supply.policy_dict()
 
 
+def test_routed_kind_filter_skips_unrelated_transport_but_keeps_local_menu(fixture):
+    f = fixture
+    result = f.router.enumerate_routed_kinds(
+        f.adapter.observe(), frozenset({GoalKind.ACQUIRE_SPECIES})
+    )
+    assert not f.world.plans
+    assert _supply(result).unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert f.actions.actions_executed == 0
+    for invalid in (set(), frozenset(), frozenset({"acquire"})):
+        with pytest.raises(TypeError, match="GoalKind frozenset"):
+            f.router.enumerate_routed_kinds(f.adapter.observe(), invalid)
+
+
 def test_remote_supply_uses_actual_route_and_fresh_mart_then_disappears(fixture):
     f = fixture
     before = f.port.frame_count

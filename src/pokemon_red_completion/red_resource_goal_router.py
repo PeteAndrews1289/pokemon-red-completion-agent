@@ -109,6 +109,36 @@ class RedResourceGoalRouter:
     include_recovery_offers: bool = True
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
+        """Enumerate every local and routable goal in the active profile."""
+        return self._enumerate(observation, routed_kinds=None)
+
+    def enumerate_routed_kinds(
+        self,
+        observation: RedGoalObservation,
+        routed_kinds: frozenset[GoalKind],
+    ) -> GoalBindingSet:
+        """Route only requested kinds while preserving the complete local menu.
+
+        Regional source comparison needs one acquisition binding from each
+        retargeted profile. Planning unrelated Mart, recovery or evolution
+        transports cannot change that binding, but used to dominate inventory
+        latency. Live provider availability, traversal capabilities and the
+        acquisition route are still recomputed for every source.
+        """
+        if (
+            not isinstance(routed_kinds, frozenset)
+            or not routed_kinds
+            or any(not isinstance(kind, GoalKind) for kind in routed_kinds)
+        ):
+            raise TypeError("routed goal kinds must be a non-empty GoalKind frozenset")
+        return self._enumerate(observation, routed_kinds=routed_kinds)
+
+    def _enumerate(
+        self,
+        observation: RedGoalObservation,
+        *,
+        routed_kinds: frozenset[GoalKind] | None,
+    ) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
         local = self.runtime.enumerator(self.actions).enumerate(observation)
         if observation.raw.battle_state or not observation.input_ready:
@@ -158,6 +188,8 @@ class RedResourceGoalRouter:
             )
         opportunities = list(local.opportunities)
         for index, opportunity in enumerate(opportunities):
+            if routed_kinds is not None and opportunity.kind not in routed_kinds:
+                continue
             spec = specs.get(opportunity.kind)
             if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
                 # Never reinstate the static, unreachable patch as a fallback.

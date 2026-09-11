@@ -143,7 +143,10 @@ def enumerate_red_regional_acquisitions(
             routed_recovery=routed_recovery,
             prepare_capture_storage=prepare_capture_storage,
             include_recovery_offers=False,
-        ).enumerate(observation)
+        ).enumerate_routed_kinds(
+            observation,
+            frozenset({GoalKind.ACQUIRE_SPECIES}),
+        )
         bindings = [
             binding for binding in routed.bindings if binding.kind is GoalKind.ACQUIRE_SPECIES
         ]

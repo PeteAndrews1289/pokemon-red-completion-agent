@@ -165,7 +165,8 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
             assert kw["routed_recovery"] is True
             self.profile = runtime.profile
 
-        def enumerate(self, observation):
+        def enumerate_routed_kinds(self, observation, routed_kinds):
+            assert routed_kinds == frozenset({GoalKind.ACQUIRE_SPECIES})
             return SimpleNamespace(
                 bindings=(next(i.binding for i in items if i.profile == self.profile),)
             )
@@ -193,11 +194,12 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     )
     assert [item.source_id for item in result] == [items[1].source_id, items[0].source_id]
 
-    def moving(self, observation):
+    def moving(self, observation, routed_kinds):
+        assert routed_kinds == frozenset({GoalKind.ACQUIRE_SPECIES})
         runtime.emulator.frame_count += 1
         return SimpleNamespace(bindings=())
 
-    monkeypatch.setattr(Router, "enumerate", moving)
+    monkeypatch.setattr(Router, "enumerate_routed_kinds", moving)
     with pytest.raises(ValueError, match="changed the game"):
         regional.enumerate_red_regional_acquisitions(
             runtime,
