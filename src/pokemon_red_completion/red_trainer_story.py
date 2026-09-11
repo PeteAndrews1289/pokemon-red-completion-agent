@@ -235,7 +235,7 @@ class RedCartridgeLoreleiSkill:
             )
 
             arrival = trainer_room_arrival(world.rom, int(target_map), raw.event_flags)
-            self._arrival_steps = arrival.steps if is_lance else 0
+            self._arrival_steps = arrival.steps
             world = replace(world, macro_graph=with_scripted_trainer_arrival(
                 world.macro_graph, arrival,
             ))

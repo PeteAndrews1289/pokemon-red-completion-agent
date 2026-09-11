@@ -9,21 +9,23 @@ evidence.  Credits and the postgame reset are intentionally a separate boundary.
 from __future__ import annotations
 
 from collections import Counter
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, NoReturn
 
 from .actions import MacroAction, MacroActionKind
 from .executor import CountingExecutor, FrameSafeExecutor, WindowedFrameBudgetController
 from .gen1_field_moves import Gen1FieldMovePort, Gen1FlyReceipt
 from .gen1_route_runtime import Gen1TraversalObserver
+from .gen1_scripted_arrival import trainer_room_arrival
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
-from .observation import RED_FLY_TOWN_NAMES, EventFlag, event_flag_is_set
+from .observation import RED_FLY_TOWN_NAMES, EventFlag, MapId, event_flag_is_set
 from .red_champion_story import RedCartridgeChampionSkill
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_league_funding import (
     RedLeagueFundingQualification,
     qualify_red_league_funding,
 )
+from .red_resource_goal_router import _ROUTE_LIMITS
 from .red_trainer_story import RedCartridgeLoreleiSkill
 from .referee import CompletionReferee
 from .route_executor import execute_route
@@ -296,6 +298,18 @@ def execute_red_league_funding(
     starting_party = before.raw.party_species_ids
     starting_ledger = dependency_specimen_ledger(before.collection_observation)
     starting_frames = runtime.emulator.frame_count
+    if before.raw.event_flags is None:
+        raise RedLeagueFundingExecutionError("League funding lost its bound event flags")
+    league_arrival = trainer_room_arrival(
+        world.rom, int(MapId.LORELEIS_ROOM), before.raw.event_flags,
+    )
+    entry_limits = replace(
+        _ROUTE_LIMITS,
+        transition_settle_frames=max(
+            _ROUTE_LIMITS.transition_settle_frames,
+            league_arrival.steps * 24 + 120,
+        ),
+    )
 
     frame_limiter = WindowedFrameBudgetController(
         runtime.emulator,
@@ -367,6 +381,7 @@ def execute_red_league_funding(
             qualification.entry_plan,
             bounded_actions,
             Gen1TraversalObserver(runtime.reader),
+            limits=entry_limits,
             replanner=world.replanner(),
         )
         if not entry.passed:

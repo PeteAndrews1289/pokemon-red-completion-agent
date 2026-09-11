@@ -98,17 +98,26 @@ def _actions(runtime):
     return CountingExecutor(FrameSafeExecutor(runtime.emulator))
 
 
+@pytest.fixture(autouse=True)
+def _scripted_arrival(monkeypatch):
+    monkeypatch.setattr(
+        execution, "trainer_room_arrival", lambda *args: SimpleNamespace(steps=6),
+    )
+
+
 def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     qualification = _qualification()
     runtime, observed = _runtime()
     actions = _actions(runtime)
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
-    monkeypatch.setattr(
-        execution,
-        "execute_route",
-        lambda *args, **kwargs: SimpleNamespace(passed=True),
-    )
+    routes = []
+
+    def route(plan, *args, **kwargs):
+        routes.append((plan, kwargs.get("limits")))
+        return SimpleNamespace(passed=True)
+
+    monkeypatch.setattr(execution, "execute_route", route)
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
 
     class Port:
@@ -146,6 +155,9 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     assert [row.objective_id for row in result.battles] == [
         quote.objective_id for quote in qualification.battles
     ]
+    assert routes[0] == (qualification.exit_plan, None)
+    assert routes[1][0] is qualification.entry_plan
+    assert routes[1][1].transition_settle_frames >= 6 * 24 + 120
 
 
 def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypatch):
