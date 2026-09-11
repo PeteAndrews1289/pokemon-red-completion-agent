@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funded-search-reorientation**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funding-fly-integration**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-funding-fly-integration
+
+Flight-assisted ordinary-income integration passes240 focused tests after a bounded Flash draft and Codex repairs. Zero-input inspection found93 unpaid outdoor trainers and usable Fly; these are not routed victories. Model70 and64registrations unchanged; gameplay stopped.
+
+**Deviation:** Choose the smaller access repair before a League-rematch subsystem. Preserve resource checklist1/3 and all stage exits; no support or tests counted as learning.
+
+**Next:** Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
 
 ### 2026-09-11-funded-search-reorientation
 

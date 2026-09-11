@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
+- Next decision: Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
 
 ### Mandatory mission check
 
@@ -59,7 +59,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-funded-search-reorientation** · status **active** · evidence [registered train example](docs/evidence/red-funded-search-reorientation-2026-09-11.json)
+**2026-09-11-funding-fly-integration** · status **active** · evidence [registered train example](docs/evidence/red-funded-search-reorientation-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -67,9 +67,9 @@ outputs.
 | Learning output | AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens. |
 | Authority delta | One actual seven-way destination outcome fitted; support remains deterministic and no authority promotion occurred. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Finite income bought only one ball, which failed to capture missing Tangela. Repeating one-ball searches is not practical collection competence. |
-| Decision | Reorient on resource sufficiency before more collection; review existing funding and bounded rematch components. |
-| Next session | Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection. |
+| Blocker | Current land-only funding exposes no option despite93 unpaid outdoor trainer quotes. Flight-assisted funding passes240 focused tests but is not yet live-qualified; supplies and registrations are unchanged. |
+| Decision | Qualify the smaller Fly-to-existing-income integration before building a League-rematch subsystem. Engineering is not earned money or a new training example. |
+| Next session | Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels. |
 | Next falsifier | A proposed funding option cannot retain a practical reserve or depends on unsupported mechanics. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

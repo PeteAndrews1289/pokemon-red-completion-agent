@@ -8,7 +8,12 @@ The [resource-choice core](work-sessions/2026-09-11-resource-variant-core.md) ad
 another difference between a working script and useful learning: an affordable
 single ball should not hide the option of earning a practical reserve. Flash drafted
 the representation; Codex repaired and tested execution/replay. The first actual test still exposed only a purchase. That spending is retained;
-no new learning is claimed. Declared-Mart departure is the next access gap.
+no new learning is claimed. Declared-Mart departure subsequently worked, but one
+ball still failed. The [next inspection](work-sessions/2026-09-11-funding-fly-integration.md)
+found93 unpaid outdoor trainer quotes and a usable Fly carrier: income was not
+globally exhausted, access was too narrow. Flash drafted a small candidate planner;
+Codex repaired and connected it.240focused tests are engineering evidence, not a
+new payout or capture. The next test is actual flight-assisted funding.
 
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
 

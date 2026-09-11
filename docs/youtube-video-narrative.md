@@ -4,6 +4,12 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
+Latest engineering beat: [income access](work-sessions/2026-09-11-funding-fly-integration.md).
+Show the difference between an empty local action menu and93 unpaid trainer quotes
+elsewhere. Explain that Fly and route verification must connect those facts before
+the model can earn money there. Label this as tested integration, not live income;
+70examples and64registrations remain unchanged.
+
 “I wanted a model that could play Pokémon—not just repeat a walkthrough. Getting code to finish Red turned out to be different from teaching a model useful decisions.”
 
 Show the actual dashboard. Label saved footage as recorded and live footage as live. Do not loop an old frame sequence and present it as current learning.

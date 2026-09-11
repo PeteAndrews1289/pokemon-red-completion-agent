@@ -52,6 +52,7 @@ def regional_trainer_funding_candidates(
     inventoried_maps: frozenset[int],
     maximum_steps: int = 256,
     indoor_exit_map: int | None = None,
+    static_blockers: Mapping[int, frozenset[tuple[int, int]]] | None = None,
 ) -> tuple[TrainerFundingCandidate, ...]:
     """Route only through inventoried maps, reserving bodies and all sight lanes.
 
@@ -68,8 +69,15 @@ def regional_trainer_funding_candidates(
         raise ValueError("regional funding contains duplicate trainer identities")
     if not start.ready or start.interruption is not None or start.mode != "land":
         return ()
-    blocked: dict[int, frozenset[tuple[int, int]]] = {m: frozenset() for m in maps}
-    blocked[start.map_id] = start.occupied | frozenset(h.at for h in start.hazards)
+    if static_blockers is not None and (
+        set(static_blockers) != maps
+        or any(not isinstance(points, frozenset) for points in static_blockers.values())
+    ):
+        raise ValueError("regional funding requires complete static object inventory")
+    blocked: dict[int, frozenset[tuple[int, int]]] = {
+        m: static_blockers[m] if static_blockers is not None else frozenset() for m in maps
+    }
+    blocked[start.map_id] |= start.occupied | frozenset(h.at for h in start.hazards)
     for trainer in trainers:
         blocked[trainer.map_id] |= {trainer.at}
         if trainer.active:

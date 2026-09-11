@@ -15,9 +15,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
 
-Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
+Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
 
-Flash's older reserve draft remains rejected. Its resource core and new declared-Mart helper/tests are integrated with Codex repairs;240focused tests pass. Claude's contract review is adjudicated. Codex owns the next read-only qualification and measured continuation. A new bounded Flash read-only funding review is active; earlier tasks are complete. See [handoff](HANDOFF.md); no standing reviewer gate.
+Flash's funding review and isolated Fly planner/tests are complete. Codex rejected the legacy-only League rewrite, repaired static-object coverage and test isolation, and integrated profile/runtime/CLI support.240focused tests pass; live qualification is next. Claude was not reused. No external task remains running; no standing reviewer gate. See [handoff](HANDOFF.md).
 
 ## Reviewer brief
 

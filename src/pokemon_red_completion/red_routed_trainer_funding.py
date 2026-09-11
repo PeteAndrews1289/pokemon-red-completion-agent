@@ -52,12 +52,55 @@ from .route_executor import execute_route
 from .route_plan import RoutePlan
 
 if TYPE_CHECKING:
+    from .red_funding_fly import FundingFlyCandidate
     from .red_resource_goal_router import RedResourceGoalRouter
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
 class RedTrainerFundingError(RuntimeError):
     """A trainer income opportunity or its retained state is no longer valid."""
+
+
+def _funding_flights_enabled(router: RedResourceGoalRouter) -> bool:
+    return getattr(router, "regional_trainer_funding", False) and any(
+        spec.kind is GoalKind.RESUPPLY and spec.parameters.get("funding_fly_transport") is True
+        for spec in router.runtime.profile.providers
+    )
+
+
+def _execute_funding_flight(
+    router: RedResourceGoalRouter, selected: FundingFlyCandidate,
+) -> None:
+    """Recheck a frozen destination, then verify its landing before any onward walk."""
+    from .actions import MacroAction, MacroActionKind
+    from .gen1_field_moves import Gen1FieldMovePort
+    from .goal_manager_composition_qualification import HardCompositionActionLimiter
+    from .observation import RED_FLY_TOWN_NAMES, OverworldMovementMode
+    from .red_funding_fly import funding_fly_candidates
+
+    if selected not in funding_fly_candidates(router):
+        raise RedTrainerFundingError("funding flight quote changed before input")
+    actions = HardCompositionActionLimiter(
+        router.actions,
+        maximum_actions_per_decision=min(256, router.maximum_controller_actions),
+        maximum_episode_actions=min(256, router.maximum_controller_actions),
+    )
+    runtime = router.runtime
+    port = Gen1FieldMovePort(actions, runtime.reader, runtime.emulator)
+    port.execute(MacroAction(
+        MacroActionKind.FIELD_MOVE,
+        "fly:" + RED_FLY_TOWN_NAMES[selected.town].lower().replace(" ", "_"),
+    ))
+    current = runtime.adapter.observe()
+    if (
+        len(port.fly_receipts) != 1 or not current.input_ready or current.raw.battle_state != 0
+        or (current.raw.map_id, current.raw.player_y, current.raw.player_x)
+        != (selected.town, *selected.landing)
+        or runtime.reader.read_overworld_movement_mode() is not OverworldMovementMode.WALKING
+        or runtime.reader.read_bottom_dialogue_box_visible()
+        or runtime.reader.read_pending_trainer_battle_identity() is not None
+    ):
+        raise RedTrainerFundingError("funding Fly landing differs; no onward route permitted")
 
 
 def active_trainer_funding_candidate(
@@ -191,6 +234,8 @@ def _candidates(
             zones,
             inventoried_maps=maps,
             indoor_exit_map=indoor_exit,
+            **({"static_blockers": {m: world.object_blockers[m] for m in maps}}
+               if _funding_flights_enabled(router) else {}),
         )
     return local_trainer_funding_candidates(rom, world, start, zones)
 
@@ -286,9 +331,14 @@ def bind_local_trainer_funding(
         if router.trainer_pending_recovery
         else None
     )
+    quoted = [(candidate, None) for candidate in _candidates(router)]
+    if _funding_flights_enabled(router):
+        from .red_funding_fly import funding_fly_candidates
+
+        quoted.extend((flight.target, flight) for flight in funding_fly_candidates(router))
     candidates = tuple(
-        c
-        for c in _candidates(router)
+        (c, flight)
+        for c, flight in quoted
         if level >= max(m.level for m in c.quote.party) + 10
         and c.quote.expected_money_after(raw.player_money) >= provider.purchases[0].unit_price
         and c.quote.expected_money_after(raw.player_money) > raw.player_money
@@ -307,10 +357,13 @@ def bind_local_trainer_funding(
         return bindings
     # Skill-internal selection, not learned trainer selection. The model's
     # prospective choice is whether to pursue funding versus another goal.
-    target = max(
+    target, selected_flight = max(
         candidates,
-        key=lambda c: (
-            c.quote.expected_victory_money / (len(c.approach.steps) + 10 * len(c.quote.party))
+        key=lambda pair: (
+            pair[0].quote.expected_victory_money / (
+                len(pair[0].approach.steps) + 10 * len(pair[0].quote.party)
+                + (32 if pair[1] is not None else 0)
+            )
         ),
     )
     runtime, actions = router.runtime, router.actions
@@ -406,6 +459,8 @@ def bind_local_trainer_funding(
         if runtime.reader.read_pending_trainer_battle_identity() != pending_identity:
             raise RedTrainerFundingError("pending trainer transition changed before input")
         if pending_identity is None:
+            if selected_flight is not None:
+                _execute_funding_flight(router, selected_flight)
             target = _observed_funding_target(router, target)
             require_target(before_departure=True)
             if _indoor_funding_enabled(router):
@@ -475,6 +530,8 @@ def bind_local_trainer_funding(
                 },
                 "finite_income": True,
                 "balls_purchased": 0,
+                **({"funding_transport": {"verified_flights": 1}}
+                   if selected_flight is not None else {}),
             },
         )
         return completed_report
@@ -515,6 +572,8 @@ def bind_local_trainer_funding(
                 "money": before_money,
                 "quote": asdict(target.quote),
                 "origin": original_at,
+                **({"fly_town": selected_flight.town, "fly_landing": selected_flight.landing}
+                   if selected_flight is not None else {}),
             }
         ),
         kind=GoalKind.RESUPPLY,
@@ -524,7 +583,8 @@ def bind_local_trainer_funding(
             (),
             expected_income=target.quote.expected_money_after(before_money) - before_money,
         ),
-        estimated_effort=min(1.0, 0.15 + len(target.approach.steps) / 256),
+        estimated_effort=min(1.0, 0.15 + len(target.approach.steps) / 256
+                             + (0.2 if selected_flight is not None else 0)),
         estimated_risk=0.15,
         execute=execute,
         verify=verify,

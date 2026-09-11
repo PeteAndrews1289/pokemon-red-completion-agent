@@ -29,16 +29,20 @@ choice/outcome trace and model/corpus. No unselected target or new species credi
 
 ## Next bounded work
 
-Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
+Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
 
 Current lineage builder starts with run_ax_funded_collection_20260911.arguments()
 ONLY, then appends all three actual AX checkpoints. AX01/02 source is null;
 AX03 selected wild:Route21:grass, with warp-safe/discovery transitions. Preserve
 model70 and the exact consumed regional choice. Never rerun any previous main.
 
-Flash3.8 High is reviewing existing funding and bounded League-component reuse
-read-only; no permission for gameplay or active-checkout edits. Inspect its persisted
-result before dispatching more work. Codex owns evidence and the next decision.
+Flash3.8 High finished its review and a separate isolated two-file Fly planner/test
+draft. Codex rejected its legacy-only League rewrite and integrated the smaller
+flight-access seam with repairs.240focused tests pass; no flight or payout yet.
+The current save has93 unpaid outdoor trainer quotes and a usable Fly carrier;
+quotes are not routed availability. All external tasks have finished.
+Gemini03:18EDT:92.02%five-hour/68.41%weekly remaining; resets3h55m/16h4m.
+Claude was not reused; quota unavailable. [Integration](docs/work-sessions/2026-09-11-funding-fly-integration.md).
 Resource checklist remains1/3. Gameplay stopped; no more one-ball loops by default.
 Overnight cutoff07:07EDT. [Report](docs/work-sessions/2026-09-11-funded-search-reorientation.md).
 
