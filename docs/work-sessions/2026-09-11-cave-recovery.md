@@ -16,6 +16,10 @@ Integrated checks passed:276focused tests spanning diagnostics, bounded executio
 
 ## Next step
 
-Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
+Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
 
 Resource checklist remains3/3 on AZ; no stage exit changed. Recommendation: Astra High, Fast off. Reuse existing mechanics and assess actual collection yield before more architecture.
+
+## Publication interruption
+
+The verified code was committed locally as734d4375. GitHub authentication then failed, so the push did not complete. The next BD preflight stopped before prediction/controller input because this source was not published. No new gameplay or fit occurred; BC01 remains the actual endpoint. The overnight follow-up is paused for normal authentication recovery, not bypassed. Flash also needs sign-in before further delegated work.

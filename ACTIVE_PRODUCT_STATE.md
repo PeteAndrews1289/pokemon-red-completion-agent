@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
+- Next decision: Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
 
 ### Mandatory mission check
 
@@ -67,9 +67,9 @@ outputs.
 | Learning output | BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success. |
 | Authority delta | One actual native recovery outcome fitted. No destination label, new promotion or independent advantage. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | The team is healed but capture stock is empty; legitimate money/supply choices must support the next collection attempt. |
-| Decision | Reuse the proven recovery and existing resource choices. Preserve typed future destination-unavailable diagnostics without changing failed goals or labels. |
-| Next session | Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination. |
+| Blocker | GitHub authentication became unavailable: local code/tests/BC77 evidence are committed, but push failed. BD stopped at the publication preflight with no gameplay or prediction. Flash draft also required sign-in. The Mac is locked; overnight continuation is paused rather than polling credentials. |
+| Decision | Keep local work and actual BC01 intact. No publication bypass, credential workaround, BD retry or restored supplies. Resume after the user restores normal authentication. |
+| Next session | Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs. |
 | Next falsifier | Can actual resource choices turn the recovered endpoint into another useful registration without hidden restores? |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

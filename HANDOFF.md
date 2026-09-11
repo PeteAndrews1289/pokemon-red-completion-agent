@@ -18,9 +18,13 @@ BC selected recovery from three actual options, escaped Seafoam and healed at Fu
 FuchsiaCenter154,row3,column3,input-ready,battle0;333money,zero balls. HP249/118/146/88/92/73.66local/global registrations,56specimens,52living species,58required registrations remain.
 BC:46actions/3732frames in259.691seconds. Zero-input audit verified saved flags, stock, model and corpus. [Report](docs/work-sessions/2026-09-11-cave-recovery.md).
 
+## Publication and overnight pause
+
+Local executable commit734d4375 passed276focused tests and mypy480. Push failed because GitHub authentication is unavailable; do not claim it is published. BD created only its private declaration, then failed the published-source preflight before prediction/input. No episode or fit exists. Never rerun that declaration; a future BE must begin from actual BC01. The overnight follow-up is being paused because the Mac is locked and Flash also needs sign-in.
+
 ## Next bounded work
 
-Continue from actual BC01/model77 with legitimate earning/purchase/evolution alternatives, then useful collection. At most3goals/30minutes within the overnight cutoff; retain failures and fit only actual selected outcomes. No rewind, consumed retry or forced collection destination.
+Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
 
 BC gameplay and audit completed; do not rerun either. Successor starts from run_bc_recovery_20260911.arguments() ONLY, appends actual BC01 and installs model77. BC had no proposed/selected regional source, so add no source transition. Inspect current processes/outputs before launching.
 
