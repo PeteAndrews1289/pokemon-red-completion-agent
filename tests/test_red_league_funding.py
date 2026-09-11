@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from types import SimpleNamespace
 
 import pytest
@@ -46,6 +46,22 @@ def _party() -> PartyObservation:
     )
 
 
+@dataclass(frozen=True)
+class _World:
+    local_graphs: object
+    object_blockers: object
+    macro_graph: str
+    exit_plan: object
+    entry_plan: object
+
+    def plan_feasible_to_map(self, start, target):
+        if target == 5:
+            assert self.macro_graph == "raw"
+            return self.exit_plan
+        assert target == 245 and self.macro_graph == "scripted-lorelei-arrival"
+        return self.entry_plan
+
+
 @pytest.fixture
 def qualified(monkeypatch):
     room_quotes = iter((_quote(1, 100), _quote(2, 200), _quote(3, 300), _quote(4, 400)))
@@ -59,6 +75,12 @@ def qualified(monkeypatch):
     monkeypatch.setattr(league, "_require_party_coverage", lambda *args: None)
     monkeypatch.setattr(league, "fly_menu_indices", lambda raw: (0, 9))
     monkeypatch.setattr(league, "red_fly_landings", lambda rom: ((9, (6, 9)),))
+    monkeypatch.setattr(league, "trainer_room_arrival", lambda *args: "lorelei-arrival")
+    monkeypatch.setattr(
+        league,
+        "with_scripted_trainer_arrival",
+        lambda graph, arrival: "scripted-lorelei-arrival",
+    )
     start = TraversalSnapshot(89, (3, 3), True, mode="land", last_outside_map=5)
     monkeypatch.setattr(
         league,
@@ -68,10 +90,12 @@ def qualified(monkeypatch):
     monkeypatch.setattr(league, "_walking_plan", lambda plan: True)
     exit_plan = SimpleNamespace(steps=("out",), terminal_map=5, terminal_at=(11, 14))
     entry_plan = SimpleNamespace(steps=("in", "up"), terminal_map=108, terminal_at=(2, 5))
-    world = SimpleNamespace(
-        local_graphs={9: SimpleNamespace(edges={(6, 9): ()})},
-        object_blockers={9: frozenset()},
-        plan_feasible_to_map=lambda start, target: exit_plan if target == 5 else entry_plan,
+    world = _World(
+        {9: SimpleNamespace(edges={(6, 9): ()})},
+        {9: frozenset()},
+        "raw",
+        exit_plan,
+        entry_plan,
     )
     raw = RawGameState(
         game_started=True,

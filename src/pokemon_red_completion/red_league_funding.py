@@ -13,6 +13,7 @@ from dataclasses import dataclass, replace
 from .gen1_champion_script import champion_script_binding
 from .gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
 from .gen1_route_runtime import Gen1TraversalObserver
+from .gen1_scripted_arrival import trainer_room_arrival, with_scripted_trainer_arrival
 from .gen1_trainer_parties import TrainerPartyQuote, trainer_party_quote
 from .gen1_trainer_sight import static_trainer_sight_zones, trainer_headers
 from .gen1_traversal import map_object_events
@@ -219,8 +220,13 @@ def qualify_red_league_funding(
         occupied=world.object_blockers[_INDIGO_TOWN],
         hazards=(),
     )
+    arrival = trainer_room_arrival(rom, int(MapId.LORELEIS_ROOM), raw.event_flags)
+    entry_world = replace(
+        world,
+        macro_graph=with_scripted_trainer_arrival(world.macro_graph, arrival),
+    )
     try:
-        entry = world.plan_feasible_to_map(indigo, int(MapId.LORELEIS_ROOM))
+        entry = entry_world.plan_feasible_to_map(indigo, int(MapId.LORELEIS_ROOM))
     except RoutePlanningError as error:
         raise RedLeagueFundingError("no bounded route from Indigo landing to Lorelei") from error
     if not entry.steps or not _walking_plan(entry):
