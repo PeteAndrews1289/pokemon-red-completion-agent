@@ -9,8 +9,10 @@ from pokemon_red_completion.play import QUALIFIED_OBJECTIVE_SEQUENCE
 from pokemon_red_completion.red_early_game_skill import (
     EARLY_GAME_AUTOMATIC_OBJECTIVE_IDS,
     EARLY_GAME_OBJECTIVE_IDS,
+    EARLY_GAME_STAGE_OBJECTIVE_IDS,
     EARLY_GAME_VERIFIED_FACTS,
     EarlyGameThroughCeladonObjectiveSkill,
+    build_red_early_game_semantic_skill_registry,
     run_early_game_composite,
 )
 from pokemon_red_completion.route import COMPLETION_QUEST
@@ -33,7 +35,15 @@ class _Observer:
     latched: frozenset[str] = frozenset()
 
     def latch_verified_facts(self, facts: frozenset[str]) -> None:
-        self.latched = facts
+        self.latched = self.latched.union(facts)
+
+
+@dataclass
+class _Reader:
+    level: int = 6
+
+    def read(self):
+        return SimpleNamespace(first_party_level=self.level)
 
 
 def test_early_game_composite_declares_one_dispatch_and_every_automatic_objective() -> None:
@@ -203,3 +213,110 @@ def test_early_game_composite_runs_the_frozen_chapters_once_and_unions_evidence(
     assert report.passed
     assert report.verified_facts == EARLY_GAME_VERIFIED_FACTS
     assert report.public_dict()["automatic_objectives"] == 13
+
+
+def test_semantic_stage_registry_exposes_resumable_boundaries_without_route_labels(
+    monkeypatch,
+) -> None:
+    observer = _Observer()
+    report = SimpleNamespace(
+        passed=True,
+        actions_executed=7,
+        frames_executed=70,
+        rival_evidence=object(),
+        saw_trainer_battle=True,
+        public_dict=lambda: {"status": "ok"},
+    )
+    for function_name in (
+        "run_opening_chapter",
+        "run_oaks_errand_chapter",
+        "run_pewter_chapter",
+        "run_cerulean_chapter",
+        "run_cascade_chapter",
+        "run_vermilion_chapter",
+        "run_ss_anne_chapter",
+        "run_surge_chapter",
+        "run_lavender_chapter",
+        "run_celadon_chapter",
+    ):
+        monkeypatch.setattr(
+            f"pokemon_red_completion.red_early_game_skill.{function_name}",
+            lambda *args, **kwargs: report,
+        )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_early_game_skill.is_rival_victory_verified",
+        lambda *args, **kwargs: True,
+    )
+    registry = build_red_early_game_semantic_skill_registry(
+        "private.gb",
+        emulator=_Emulator(),  # type: ignore[arg-type]
+        reader=_Reader(),  # type: ignore[arg-type]
+        executor=_Executor(),  # type: ignore[arg-type]
+        observer=observer,  # type: ignore[arg-type]
+    )
+
+    assert tuple(skill.objective_id for skill in registry.skills()) == (
+        EARLY_GAME_STAGE_OBJECTIVE_IDS
+    )
+    power_on = registry.get("power_on")
+    assert power_on is not None
+    assert power_on.availability(GameState(GameMode.BOOTING)).executable
+    opening = power_on.execute()
+    assert opening.evidence["selected_objective_id"] == "power_on"
+    assert opening.evidence["automatic_objective_ids"] == [
+        "begin_adventure",
+        "choose_starter",
+    ]
+
+    starter_facts = frozenset(
+        fact
+        for objective_id in ("power_on", "begin_adventure", "choose_starter")
+        for fact in COMPLETION_QUEST.objective(objective_id).completion_facts
+    )
+    receive_pokedex = registry.get("receive_pokedex")
+    assert receive_pokedex is not None
+    assert not receive_pokedex.availability(
+        GameState(GameMode.OVERWORLD, starter_facts, location="pallet_town")
+    ).executable
+    assert receive_pokedex.availability(
+        GameState(GameMode.OVERWORLD, starter_facts, location="oaks_lab")
+    ).executable
+    receive_pokedex.execute()
+
+    pokedex_facts = starter_facts.union(
+        COMPLETION_QUEST.objective("receive_pokedex").completion_facts
+    )
+    reach_pewter = registry.get("reach_pewter")
+    assert reach_pewter is not None
+    assert reach_pewter.availability(
+        GameState(GameMode.OVERWORLD, pokedex_facts, location="oaks_lab")
+    ).executable
+    first_badge = reach_pewter.execute()
+    assert first_badge.evidence["automatic_objective_ids"] == ["defeat_brock"]
+    assert observer.latched.issuperset(
+        COMPLETION_QUEST.objective("defeat_brock").completion_facts
+    )
+
+
+def test_semantic_stage_rejects_missing_or_out_of_order_prerequisites() -> None:
+    registry = build_red_early_game_semantic_skill_registry(
+        "private.gb",
+        emulator=_Emulator(),  # type: ignore[arg-type]
+        reader=_Reader(),  # type: ignore[arg-type]
+        executor=_Executor(),  # type: ignore[arg-type]
+        observer=_Observer(),  # type: ignore[arg-type]
+    )
+    receive_pokedex = registry.get("receive_pokedex")
+    reach_pewter = registry.get("reach_pewter")
+    assert receive_pokedex is not None and reach_pewter is not None
+
+    assert not receive_pokedex.availability(
+        GameState(GameMode.OVERWORLD, location="oaks_lab")
+    ).executable
+    assert not reach_pewter.availability(
+        GameState(
+            GameMode.OVERWORLD,
+            COMPLETION_QUEST.objective("receive_pokedex").completion_facts,
+            location="pallet_town",
+        )
+    ).executable
