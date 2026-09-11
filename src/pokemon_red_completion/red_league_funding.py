@@ -152,6 +152,8 @@ def qualify_red_league_funding(
         or raw.map_id is None
         or raw.player_y is None
         or raw.player_x is None
+        or type(raw.player_money) is not int  # noqa: E721
+        or not 0 <= raw.player_money <= 999_999
         or raw.battle_state != 0
         or not observation.input_ready
         or "story:victory_road_cleared" not in observation.game_state.facts
@@ -162,6 +164,7 @@ def qualify_red_league_funding(
                 EventFlag.BEAT_BRUNO,
                 EventFlag.BEAT_AGATHA,
                 EventFlag.BEAT_LANCES_ROOM_TRAINER,
+                EventFlag.BEAT_LANCE,
                 EventFlag.BEAT_CHAMPION_RIVAL,
             )
         )
@@ -239,6 +242,8 @@ def qualify_red_league_funding(
             (*[row[0] for row in _ROOMS], "defeat_champion"), quotes, strict=True,
         )
     )
+    if raw.player_money + sum(battle.expected_money for battle in battles) > 999_999:
+        raise RedLeagueFundingError("save lacks money headroom for the quoted League gross")
     return RedLeagueFundingQualification(exit_plan, _INDIGO_TOWN, landing, entry, battles)
 
 

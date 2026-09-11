@@ -33,7 +33,7 @@ from .gen1_trainer_sight import (
 from .gen1_traversal import map_object_events
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
 from .objective_skills import ObjectiveSkillAvailability, ObjectiveSkillExecution
-from .observation import CurrentMapBlocks, EventFlag, MapId
+from .observation import CurrentMapBlocks, EventFlag, MapId, RawGameState, event_flag_is_set
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
@@ -55,6 +55,38 @@ if TYPE_CHECKING:
 
 class RedTrainerStoryError(RuntimeError):
     """The declared story target or its safe execution boundary changed."""
+
+
+_REMATCH_EVENTS = {
+    "defeat_lorelei": (None, (EventFlag.BEAT_LORELEI,)),
+    "defeat_bruno": (EventFlag.BEAT_LORELEI, (EventFlag.BEAT_BRUNO,)),
+    "defeat_agatha": (EventFlag.BEAT_BRUNO, (EventFlag.BEAT_AGATHA,)),
+    "defeat_lance": (
+        EventFlag.BEAT_AGATHA,
+        (EventFlag.BEAT_LANCES_ROOM_TRAINER, EventFlag.BEAT_LANCE),
+    ),
+}
+
+
+def _live_rematch_boundary(raw: RawGameState, objective_id: str) -> bool:
+    """Use current cartridge flags rather than the observer's durable history."""
+    if raw.event_flags is None:
+        return False
+    prerequisite, targets = _REMATCH_EVENTS[objective_id]
+    return (
+        (prerequisite is None or event_flag_is_set(raw.event_flags, prerequisite))
+        and not any(event_flag_is_set(raw.event_flags, target) for target in targets)
+    )
+
+
+def _live_rematch_completed(raw: RawGameState, objective_id: str) -> bool:
+    if raw.event_flags is None:
+        return False
+    prerequisite, targets = _REMATCH_EVENTS[objective_id]
+    return (
+        (prerequisite is None or event_flag_is_set(raw.event_flags, prerequisite))
+        and all(event_flag_is_set(raw.event_flags, target) for target in targets)
+    )
 
 
 def _before_scripted_interaction(
@@ -92,6 +124,7 @@ class RedCartridgeLoreleiSkill:
     objective_id: str = "defeat_lorelei"
     maximum_full_restores: int = 0
     recovery_controller: str = "critical-inclusive"
+    rematch: bool = False
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
         default=frozenset({"league:lorelei_defeated"}), init=False,
@@ -107,12 +140,15 @@ class RedCartridgeLoreleiSkill:
     _claimed: bool = field(default=False, init=False)
     _prepared_budget: int | None = field(default=None, init=False)
     _prepared_controller: str = field(default="critical-inclusive", init=False)
+    _prepared_rematch: bool = field(default=False, init=False)
     _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
     _arrival_steps: int = field(default=0, init=False)
     _scripted_triggers: tuple[tuple[int, int], ...] = field(default=(), init=False)
 
     def __post_init__(self) -> None:
+        if type(self.rematch) is not bool:  # noqa: E721
+            raise RedTrainerStoryError("rematch must be a boolean")
         if self.objective_id not in {
             "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
         }:
@@ -160,11 +196,21 @@ class RedCartridgeLoreleiSkill:
             target_map, target_event = MapId.LANCES_ROOM, EventFlag.BEAT_LANCES_ROOM_TRAINER
             required_fact = "league:agatha_defeated"
             entry_maps = {MapId.AGATHAS_ROOM, MapId.LANCES_ROOM}
+        historical_boundary = (
+            required_fact in observation.game_state.facts
+            and not self.expected_facts.intersection(observation.game_state.facts)
+        )
+        rematch_boundary = (
+            _live_rematch_boundary(raw, self.objective_id)
+            and (
+                self.objective_id != "defeat_lorelei"
+                or "story:victory_road_cleared" in observation.game_state.facts
+            )
+        )
         if (
             not observation.input_ready or raw.battle_state != 0
             or raw.map_id not in entry_maps
-            or required_fact not in observation.game_state.facts
-            or self.expected_facts.intersection(observation.game_state.facts)
+            or not (rematch_boundary if self.rematch else historical_boundary)
             or raw.event_flags is None
             or self.runtime.reader.read_bottom_dialogue_box_visible()
         ):
@@ -241,6 +287,7 @@ class RedCartridgeLoreleiSkill:
         self._prepared = prepared
         self._prepared_budget = self.maximum_full_restores
         self._prepared_controller = self.recovery_controller
+        self._prepared_rematch = self.rematch
         return ObjectiveSkillAvailability(
             True, "Bounded cartridge trainer with observed party control.",
         )
@@ -254,7 +301,8 @@ class RedCartridgeLoreleiSkill:
         before, target, preparation = self._prepared
         if (self.runtime.adapter.observe() != before or battle_policy_override_active()
                 or self._prepared_budget != self.maximum_full_restores
-                or self._prepared_controller != self.recovery_controller):
+                or self._prepared_controller != self.recovery_controller
+                or self._prepared_rematch != self.rematch):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
         if self._prepared_blocks is not None and (
             self.runtime.reader.read_current_map_blocks() != self._prepared_blocks
@@ -417,11 +465,15 @@ class RedCartridgeLoreleiSkill:
             if self.maximum_full_restores else before.raw.bag_items
         )
         after = self.runtime.adapter.observe()
+        event_verified = (
+            _live_rematch_boundary(before.raw, self.objective_id)
+            and _live_rematch_completed(after.raw, self.objective_id)
+        ) if self.rematch else self.expected_facts.issubset(after.game_state.facts)
         if (
             not after.input_ready or after.raw.battle_state
             or dependency_specimen_ledger(after.collection_observation)
             != dependency_specimen_ledger(before.collection_observation)
-            or not self.expected_facts.issubset(after.game_state.facts)
+            or not event_verified
             or after.raw.badge_bits != before.raw.badge_bits
             or after.raw.bag_items != expected_bag
         ):
@@ -430,6 +482,7 @@ class RedCartridgeLoreleiSkill:
             self.actions.actions_executed - start_actions,
             self.runtime.emulator.frame_count - start_frames,
             {"authority": "deterministic-trainer-controls", "story_event_verified": True,
+             "rematch": self.rematch,
              "route_steps": len(target.approach.steps), "switches": len(controller.switches),
              "moves_selected": controller.moves_selected, "victory_money": receipt.payout,
              "bag_items_spent": spent, "learned_battle_authority": False,

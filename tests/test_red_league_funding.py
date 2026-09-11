@@ -79,6 +79,7 @@ def qualified(monkeypatch):
         player_y=3,
         player_x=3,
         battle_state=0,
+        player_money=500,
         badge_bits=int(Badge.THUNDER),
         event_flags=bytes(320),
         party_count=1,
@@ -137,11 +138,19 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
     }
 
 
-def test_qualification_rejects_a_partially_consumed_league(qualified):
+@pytest.mark.parametrize("consumed", [EventFlag.BEAT_LORELEI, EventFlag.BEAT_LANCE])
+def test_qualification_rejects_a_partially_consumed_league(qualified, consumed):
     observation, reader, world = qualified
     flags = bytearray(observation.raw.event_flags)
-    flag = int(EventFlag.BEAT_LORELEI)
+    flag = int(consumed)
     flags[flag // 8] |= 1 << (flag % 8)
     observation.raw = replace(observation.raw, event_flags=bytes(flags))
     with pytest.raises(league.RedLeagueFundingError, match="fresh postgame"):
+        league.qualify_red_league_funding(b"rom", observation, reader, world)
+
+
+def test_qualification_rejects_nominal_income_that_would_hit_the_money_cap(qualified):
+    observation, reader, world = qualified
+    observation.raw = replace(observation.raw, player_money=999_000)
+    with pytest.raises(league.RedLeagueFundingError, match="money headroom"):
         league.qualify_red_league_funding(b"rom", observation, reader, world)
