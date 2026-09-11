@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.
+- Next decision: Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-economy-objective-loop** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+**2026-09-11-economy-runtime-connection** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 183 focused tests pass: measured cash changes economy predictions and exploration probabilities; missing historical evidence is masked. No gameplay, actual checkpoint fit or registration;65examples/64registrations unchanged. |
-| Authority delta | Economy predictions now contribute to the existing goal-policy scores in synthetic tests; live model65 remains unchanged. |
+| Learning output | Recorder/replay/update passed 314 targeted tests. Actual zero-weight v4 initialization preserved 65 examples and 64 registrations; no new game outcome or fit. |
+| Authority delta | Opt-in software supports measured earning preferences; initialized v4 has no learned economy head and has not played. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Zero balls and 593 money. Authenticated runtime/replay connection and real income outcomes remain unfinished. |
+| Blocker | Zero balls and 593 money. Actual Center departure, income availability and net proceeds remain unqualified. |
 | Decision | Retain bounded Flash drafts with one correction pass and independent verification; net Codex usage savings remain unproven. |
-| Next session | Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal. |
-| Next falsifier | Replay must reconstruct the exact cash context before selection and measured endpoints before fitting, while preserving historical journals. |
+| Next session | Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal. |
+| Next falsifier | The exact saved endpoint must expose a legitimate bounded income attempt; record actual costs and proceeds without substituting expected rewards. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

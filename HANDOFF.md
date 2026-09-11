@@ -1,6 +1,6 @@
 # Current development handoff
 
-Updated September 10, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Older outcomes remain in dated reports and Git.
+Updated September 11, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Older outcomes remain in dated reports and Git.
 
 ## Goal
 
@@ -30,7 +30,7 @@ Exact identities:
 
 ## Prospective income work
 
-AM remains Blastoise73/full HP, 593 money, zero balls, no Pay Day holder and no TM16 in the bag; availability elsewhere is unknown. The optional v4 economy head now learns measured useful cash gain/loss and changes native policy probabilities in synthetic tests. Missing historical cash is excluded, not labeled zero; old model formats remain unchanged. Flash drafted the head and tests, then Codex reviewed and repaired them:183focused tests pass. Runtime evidence/replay is not connected yet, so there is no new live fit, income or registration. [Objective and delegation review](docs/work-sessions/2026-09-11-economy-objective-loop.md).
+AM remains Blastoise73/full HP,593 money,zero balls. The opt-in economy recorder/replay/update path is connected and314targeted tests pass. An actual v4 initialization now exists: `6cd88d0f3acb08ae66e72b18cf0e3bad0edefeedc58a7c128653aa144b837e92`, file SHA `4af393c341cdc715672fd0f1476fffbd7202d3c30bf14d02d8dfbb099151efbd`. It preserves model65's corpus and old predictions, has no economy head, and adds zero examples/fits/actions. It has not played a goal. [Session](docs/work-sessions/2026-09-11-economy-runtime-connection.md) · [Initialization](docs/evidence/red-economy-initialization-2026-09-11.json).
 
 ## Mechanics and checks
 
@@ -40,7 +40,7 @@ Explicit ordered Dig recovery leaves historical profiles unchanged. Only allowed
 
 ## Next bounded session
 
-Continue AM01/model65. Refresh supply-derived cash context before each selection; version the training plan/event and replay the same context before probabilities, then authenticate measured outcomes. The objective math is implemented; do not redesign it or count synthetic tests as live learning. Next qualify one bounded League-income attempt, retaining costs and excluding forced support. The roster screen is not proof of a solo or profit. No full replay, sealed Red or Crystal.
+Continue exact AM01 with initialized v4 model `6cd88d0f…837e92` and explicit `--economy-training`. Verify plan/supply readiness without input, then qualify legitimate Center departure and one bounded income attempt using existing mechanics. The software connection is implemented; do not repeat it. Budget60–120minutes for qualification/attempt, not guaranteed profit. Retain costs, exclude forced support from fits, and do not treat opening roster quotes as solo proof. No full replay, sealed Red or Crystal.
 
 Private helper `inspect_an_funding_20260910.arguments()` reconstructs exact AM ancestry without launching gameplay. AN was read-only and created no episode. Its first inspection raised the explicit empty-menu exception; the normalized follow-up confirmed zero native goals and zero regional candidates. Never rerun AL/AM or restore AJ to regain resources.
 
@@ -48,6 +48,6 @@ The current resource-recovery checklist is 2/3, not a phase or Red percentage. F
 
 ## Ownership and publication
 
-Codex owns integration and evidence checks. Flash completed one objective draft and one correction; the isolated draft `3cb31309` is not itself qualified. Codex repaired fixtures and preserved legacy parsing before integration. Quota readings and review burden are in the session report; net savings remain unproven. Claude was not invoked this session. The older stone draft remains isolated at `895b4d6b`. External review is optional help, not a standing gate.
+Codex completed the recorder/replay integration and authenticated initialization. No external agent was called this session; the earlier reviewed Flash objective is reused, not redrafted. Net delegation savings remain unproven. Flash's older stone draft remains isolated at `895b4d6b`. External review is optional help, not a standing gate.
 
 PR243 contains the supply/escape integration; preserve played `8125e9b4`. PR242 previously merged as `0d58f492`. Batch closeout publication after local checks; ordinary development gameplay does not wait on hosted CI.

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-economy-objective-loop",
+  "as_of_session": "2026-09-11-economy-runtime-connection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -840,6 +840,12 @@
       "result": "183 focused tests pass for explicit economy objectives and native policy score integration. No live gameplay or checkpoint fitting;65examples/64registrations unchanged.",
       "deviation": "Flash draft plus one correction required Codex repairs; useful bounded delegation, not demonstrated net usage savings. No stage exit or mission change.",
       "next": "Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal."
+    },
+    {
+      "session": "2026-09-11-economy-runtime-connection",
+      "result": "Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.",
+      "deviation": "Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.",
+      "next": "Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal."
     }
   ],
   "closed_milestones": [

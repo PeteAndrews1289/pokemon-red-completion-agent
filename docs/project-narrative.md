@@ -1,5 +1,7 @@
 # Project story: from finishing Red to learning useful choices
 
+Latest engineering result: the [economy runtime connection](work-sessions/2026-09-11-economy-runtime-connection.md) records the money situation before a choice and reconstructs it during training replay. The actual model was initialized with the new inputs while preserving its 65 examples; no game moves or new fit occurred. This prepares it to learn from real earning outcomes, but does not demonstrate that it can earn money yet. The saved collection remains at 64 registrations, with 593 money and no balls.
+
 ## The question
 
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
