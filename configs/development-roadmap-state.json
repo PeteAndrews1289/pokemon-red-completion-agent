@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-horsea-capture-and-loop-speedup",
+  "as_of_session": "2026-09-11-seadra-and-prerequisite-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-bq-horsea-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Sustain collection without duplicate planning",
+    "title": "Continue registered collection from retained state",
     "items": [
       {
-        "id": "single-authenticated-readiness",
-        "label": "Reuse authenticated step readiness",
+        "id": "catch-evolve-chain",
+        "label": "Catch and evolve one new species line",
         "done": true,
-        "evidence": "docs/evidence/red-bq-horsea-learning-2026-09-11.json"
+        "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
       },
       {
-        "id": "single-regional-inventory",
-        "label": "Reuse one regional inventory per step",
+        "id": "learn-prerequisite-sequence",
+        "label": "Learn earning, purchasing and recovery",
         "done": true,
-        "evidence": "docs/evidence/red-bq-horsea-learning-2026-09-11.json"
+        "evidence": "docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json"
       },
       {
-        "id": "fast-live-route-inventory",
-        "label": "Reduce fresh 51-source route scan",
+        "id": "next-retained-registration",
+        "label": "Add another registration from the retained endpoint",
         "done": false,
         "evidence": null
       }
@@ -942,6 +942,12 @@
       "result": "Two execution-path repairs removed duplicate authenticated preparation and duplicate regional inventory within each bounded step. BQ then completed three fitted choices: earn700, buy one ball for600 and select one of six regional sources. Exploration chose SeafoamB1F, where deterministic mechanics registered Horsea. Model87 to90; registrations68 to69; ending543money, three balls and full party HP.",
       "deviation": "No stage exit or authority promotion. The loop now performs one full preparation/inventory pass instead of two, but a fresh51-source route scan still measured252.24seconds and remains the main engineering bottleneck. BQ is bounded development, not fresh-game autonomy or independent evaluation.",
       "next": "Continue from audited BQ03/model90 at SeafoamB1F. Cache or precompute only cartridge-static source work while recomputing live blockers and resources; prove identical candidate menus and hashes, then resume bounded collection. No BQ replay, Crystal run or autonomy claim."
+    },
+    {
+      "session": "2026-09-11-seadra-and-prerequisite-learning",
+      "result": "BR and BS completed four successful model-directed outcomes: evolve Horsea into Seadra, earn550, buy one capture item and restore the party. Model90 to94; registrations69 to70; final493money and four capture items. A read-only audit verified every terminal, resource, model and corpus hash.",
+      "deviation": "No stage exit or authority promotion. Route-plan sharing preserved the exact regional menu but improved the measured scan only4.2percent. Indistinguishable regional identities are now excluded from source-choice training instead of receiving fake labels.",
+      "next": "Continue from audited BS03/model94 and prioritize another verified model-selected acquisition or useful evolution. Keep the safe scan refactor, but do not spend another session optimizing it. No retained-step replay, Crystal run or autonomy claim."
     }
   ],
   "closed_milestones": [

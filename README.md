@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest audited collection contains **69 registered species**. The registered-objective model has **90 training examples**. In the latest three-step sequence it chose to earn money, chose to buy one ball, selected among six acquisition areas and registered Horsea at SeafoamB1F. All three outcomes were fitted. These are bounded development results, not independent full-game competence.
+- The latest audited collection contains **70 registered species**. The registered-objective model has **94 training examples**. It caught Horsea, then selected evolution and registered Seadra; its next learned sequence earned money, bought a capture item and restored the party. These are bounded development results, not independent full-game competence.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest collection report](docs/work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest collection report](docs/work-sessions/2026-09-11-seadra-and-prerequisite-learning.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

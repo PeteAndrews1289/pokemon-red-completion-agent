@@ -4,6 +4,8 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
+Latest verified beat: [catch, evolve, prepare](work-sessions/2026-09-11-seadra-and-prerequisite-learning.md). Show Horsea becoming Seadra, then the model choosing to earn550, buy one capture item and restore the party. Display70 registrations and94 fitted examples. The regional proposals were deliberately excluded from source-choice training because their title-neutral feature rows were identical; this is a useful visual for the difference between an identity and a learnable distinction.
+
 The [preceding attempt](work-sessions/2026-09-11-seel-partial-result.md) did choose Seafoam1F and caught Seel:66registrations and76training examples. The full acquisition nevertheless failed after all three balls were spent. Show the catch and failure together; no retroactive success. The [next recovery](work-sessions/2026-09-11-cave-recovery.md) was model-selected from three options and succeeded: escape the cave, heal, preserve all costs.77examples, still66registrations. It disproves a dead-end claim without erasing the failed acquisition. Subsequent gameplay paused when publication authentication became unavailable; do not present the paused dashboard as a live run.
 
 Latest verified beat: [flight-assisted income](work-sessions/2026-09-11-flight-income-result.md).

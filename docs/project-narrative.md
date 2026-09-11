@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest audited result: BQ completed a three-step economic and collection sequence. The model chose to earn700, chose to buy one ball for600, then chose among six regional sources. Its declared exploration policy sampled SeafoamB1F, where deterministic mechanics registered Horsea. All three outcomes were fitted: model87→90 and collection68→69 registrations, ending with543money, three balls and full party HP. [Report](work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md).
+Latest audited result: after catching Horsea, the model selected evolution and registered Seadra. It then chose to earn550, buy one capture item for600 and restore its injured party. All four outcomes were fitted: model90→94 and collection69→70 registrations, ending with493money, four capture items and an input-ready party. [Report](work-sessions/2026-09-11-seadra-and-prerequisite-learning.md).
 
 ## The question
 
@@ -36,7 +36,7 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 
 ## Results we can show
 
-- The latest bounded cycle completed three model-facing decisions without retry: earn, buy and regional acquisition. Horsea was verified from the retained terminal save. The loop also stopped recomputing the same authenticated readiness and regional inventory inside a single step; the remaining live inventory scan, not checkpoint authentication, is now the measured bottleneck. [Horsea and loop-speed report](work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md).
+- The latest continuation turned the newly caught Horsea into Seadra, then completed three prerequisite decisions without retry: earn, buy and heal. Four actual outcomes were fitted. The model reached94examples and the collection70registrations. [Seadra and prerequisite report](work-sessions/2026-09-11-seadra-and-prerequisite-learning.md).
 
 - Checkpoint-based story integration reached the Champion and Hall of Fame with disclosed deterministic battle execution. The final episode contained two learned recovery choices and a forced boss continuation—not an autonomous fresh-game win. [Story audit](audits/red-phase4-closeout-2026-09-09.md).
 - The preceding collection batch caught Onix, reaching59 registered species and 51 physical specimens.

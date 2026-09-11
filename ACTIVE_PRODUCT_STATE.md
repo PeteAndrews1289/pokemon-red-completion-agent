@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. Reduce cartridge-static route-inventory cost while preserving fresh live feasibility, then resume bounded model-selected collection. Do not replay BQ or claim fresh-game autonomy.
+- Next decision: Continue from audited BS03/model94 at SeafoamB4F with493money, four capture items and restored party HP. Seek another bounded model-selected registration; do not replay retained steps or claim fresh-game autonomy.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | BQ completed three actual fitted choices: earn700, buy one ball for600 and select one of six regional sources. The explored SeafoamB1F route registered Horsea; model90 and all retained resources were independently audited. |
+| Authority now | The learner caught Horsea, selected its evolution into Seadra, then selected earning, purchasing and recovery. Model94,70registrations and all retained resources were independently audited. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 90 | 12 |
+| Registered Train Example · train | 94 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-horsea-capture-and-loop-speedup** · status **active** · evidence [registered train example](docs/evidence/red-bq-horsea-learning-2026-09-11.json)
+**2026-09-11-seadra-and-prerequisite-learning** · status **active** · evidence [registered train example](docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BQ completed all three bounded steps: the model chose to earn700, then spend600 on one ball, then explored SeafoamB1F from six regional sources. Deterministic mechanics used Surf and paralysis support to register Horsea. The audited model advanced87 to90examples and the collection68 to69registrations, ending with543money, three balls and a full-HP party. |
-| Authority delta | Three actual outcomes were fitted: model-selected earning, model-selected purchasing and one six-way regional source choice. Horsea was registered; no authority promotion or independent evaluation occurred. |
+| Learning output | BR and BS completed four bounded model-directed steps: evolve Horsea into Seadra, earn550, buy one capture item for600, and restore the party. The audited model advanced90 to94examples and the collection69 to70registrations, ending with493money and four capture items. |
+| Authority delta | Four actual outcomes were fitted: model-selected Horsea evolution, earning, purchasing and party recovery. Seadra was registered; no authority promotion or independent evaluation occurred. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | A fresh regional inventory still scans51 cartridge encounter maps and measured252.24seconds. It now runs once per step, but dominates the learning loop's wall time. |
-| Decision | Retain BQ's complete earn-buy-capture sequence and exact terminal resources. Optimize only cartridge-static route/source work while recomputing live feasibility before the next bounded collection episode. |
-| Next session | Continue from audited BQ03/model90 at SeafoamB1F with543money, three balls and full party HP. First reduce the remaining51-source route-inventory cost without caching live feasibility; then resume bounded model-selected acquisition or evolution. Do not replay BQ, enter Crystal, or claim fresh-game autonomy. |
-| Next falsifier | Caching cartridge-static source data changes the candidate menu, ordering or hash, or stale route information bypasses a live blocker or resource requirement. |
-| Stop condition | No stale route reuse, hidden retry, invented candidate, lost terminal cost or deterministic support counted as learned authority. |
+| Blocker | The fresh regional inventory still takes about four minutes. Safe route-plan sharing preserved the exact menu but improved the measured scan only4.2percent, so it is no longer the active task. |
+| Decision | Retain the complete catch-to-evolution chain and BS prerequisite sequence. Prioritize another model-selected registration rather than more infrastructure optimization. |
+| Next session | Continue from audited BS03/model94 at SeafoamB4F with493money, four capture items and restored party HP. Seek another bounded model-selected acquisition or useful evolution and retain its actual outcome. Do not replay retained steps, enter Crystal, or claim fresh-game autonomy. |
+| Next falsifier | The next bounded continuation cannot expose or execute a useful acquisition/evolution from the retained resources, or it loses a registration, specimen, resource cost or durable terminal. |
+| Stop condition | No hidden retry, invented choice, lost terminal cost or deterministic support counted as learned authority; stop if the retained state cannot expose a useful executable goal. |
 
 ### Stop conditions
 

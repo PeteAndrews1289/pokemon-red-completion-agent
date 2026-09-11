@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-horsea-capture-and-loop-speedup**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-seadra-and-prerequisite-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Sustain collection without duplicate planning: 2/3 acceptance items (67%).**
+**Continue registered collection from retained state: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Reuse authenticated step readiness ([evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json))
-- [x] Reuse one regional inventory per step ([evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json))
-- [ ] Reduce fresh 51-source route scan
+- [x] Catch and evolve one new species line ([evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json))
+- [x] Learn earning, purchasing and recovery ([evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json))
+- [ ] Add another registration from the retained endpoint
 
-Current model: **90 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **94 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-bq-horsea-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-seadra-prerequisite-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-seadra-and-prerequisite-learning
+
+BR and BS completed four successful model-directed outcomes: evolve Horsea into Seadra, earn550, buy one capture item and restore the party. Model90 to94; registrations69 to70; final493money and four capture items. A read-only audit verified every terminal, resource, model and corpus hash.
+
+**Deviation:** No stage exit or authority promotion. Route-plan sharing preserved the exact regional menu but improved the measured scan only4.2percent. Indistinguishable regional identities are now excluded from source-choice training instead of receiving fake labels.
+
+**Next:** Continue from audited BS03/model94 and prioritize another verified model-selected acquisition or useful evolution. Keep the safe scan refactor, but do not spend another session optimizing it. No retained-step replay, Crystal run or autonomy claim.
 
 ### 2026-09-11-horsea-capture-and-loop-speedup
 

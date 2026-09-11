@@ -2,35 +2,35 @@
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
 
-## Latest verified endpoint: BQ03/model90
+## Latest verified endpoint: BS03/model94
 
-BQ completed three consecutive model-facing decisions. The model chose to earn700, then spend600 on one ball, then choose among six regional acquisition sources. Its declared exploration policy sampled SeafoamB1F, where deterministic mechanics used Surf and verified paralysis support to register Horsea. All three outcomes succeeded and were fitted:87→90examples and68→69registrations.
+BR01 continued from the audited Horsea endpoint. The model selected evolution and deterministic mechanics trained Horsea into Seadra, advancing69→70registrations and90→91examples. BS then completed three more model-facing decisions: earn550, buy one capture item for600, and restore the injured party. All three outcomes succeeded and were fitted, advancing91→94examples.
 
-- Episode: `red-collection-20260911-bq-03-causal`
-- Checkpoint: `8bd9694358be28c07db2a33788010fc94f8e3330cb4391afa3fe526081b61f80`
-- Manifest: `b5a08451c50245d30bb63b06c02e595551171c1327829b8f18b6fcd80a5cf453`
-- State: `8f8019e053e929d090087efe60a10f6e605105795abe0b06d87df81976616fa8`
-- Played source: `a137457345e74edf3ace74a6f9af5426c04b5780`
-- Model: `b5df2b4e73be7255de8d6c4c18c05198fd79144df80cacc514e01b5a1fee2f37`
-- Model file: `7eeec8c2874fe1c2cdae9019aa108c8f11a84863b2e910cf4ba45ec6d60ee461`
-- Corpus: `2c7aea2d21a4e1288bc54c55c316c068d6150577eb858a69916c45c641aa2668`
+- Episode: `red-collection-20260911-bs-03-causal`
+- Checkpoint: `d1f93b41db0faaa1cdd01af342aa6b92dfdcc1bee01302d62e08a4cf1d8c3c87`
+- Manifest: `938e4a2fe34b387c4cfb404c310e5c1e530092b36451eeac79e0280de32362f7`
+- State: `e2f0221f8467caa5465ae73d5400bb59b5de439965a6055dc2c786140fbaaa05`
+- Played source: `782f811cdcef79406a3f1382b2dabe25cba84338`
+- Model: `d065d38230b92adcdf0a5e8d674d1de96b5a170737ed86e2310aeb0fd8d9d5fc`
+- Model file: `dd836a978e8af20faaedaff9b2def1fabfbacd4c98ff1eda910d30d45be1f4a5`
+- Corpus: `285d85c49f597d7d1cbaf1be90d5129e5afe85dfce2d9e96e013d12c97f71bc5`
 
-SeafoamB1F map159,row9,column9,input-ready,battle0;543money,three balls. HP249/118/150/90/120/73.69local/global registrations,58specimens,54living species,55required registrations remain. BQ used1,018actions/60,805frames across three successful steps in1,143.875seconds. No retry, teacher fallback, sealed evaluation, Crystal access or full-game replay occurred.
+SeafoamB4F map154,row3,column3,input-ready,battle0;493money,four capture items. HP88/118/150/90/120/249.70local/global registrations,58specimens,54living species,54required registrations remain. BR+BS used4,827actions/397,860frames across four successful steps. No retry, teacher fallback, sealed evaluation, Crystal access or full-game replay occurred.
 
-BQ01 selected earning and increased cash443→1,143. BQ02 selected a one-ball purchase, changing cash1,143→543 and capture stock3→4. BQ03 ranked six regional sources; SeafoamB4F scored highest, while the declared25% exploration policy sampled SeafoamB1F. The regional choice was committed before input. Travel and capture mechanics registered national#116 Horsea and consumed one ball. All three actual outcomes were fitted.
+BR01 selected evolution and registered national#117 Seadra from the retained Horsea. BS01 earned550, BS02 bought one capture item for600, and BS03 restored the party. The regional proposals in BS were not fitted because all six destinations had identical title-neutral feature rows; the learned parent policy still owned each actual high-level goal.
 
 ## Continuation state
 
-Continue only from audited BQ03/model90. Reconstruction must preserve the complete selected-source ancestry: the prior BP continuation plus BQ01 `warp-safe`/`discovery` PowerPlant, BQ02 PowerPlant again, and BQ03 `warp-safe`/`discovery` SeafoamB1F, in executed order. Do not replay BQ or silently deduplicate those transitions.
+Continue only from audited BS03/model94. Reconstruction must preserve BQ, BR01 and all three BS transitions in executed order. Do not replay or silently deduplicate any retained transition.
 
-The next engineering task is input-free: reduce the fresh regional inventory cost while preserving live feasibility. A measured BQ readiness pass authenticated226 continuation episodes in39.135seconds but spent252.24seconds enumerating the regional inventory. Commits `caf87d4f` and `a1374573` already remove duplicate readiness and inventory within one step. Cache or precompute only cartridge-static work; party, inventory, blockers and route feasibility must remain live.
+Route-plan sharing preserved the exact six-source order and menu hash, but improved the exact inventory only257.442→246.736seconds. Keep the safe refactor; do not spend another session chasing this 4.2% gain.
 
-After proving an identical candidate menu/order/hash, continue from SeafoamB1F with543money, three balls and full party HP through another bounded model-selected acquisition or evolution. No Crystal execution, sealed Red evaluation, BQ retry or fresh-game autonomy claim.
+Continue from SeafoamB4F with493money, four capture items and the restored party. Seek another bounded model-selected acquisition or useful evolution; the next acceptance result is a new verified registration, not another infrastructure-only optimization. No Crystal execution, sealed Red evaluation or fresh-game autonomy claim.
 
 ## Engineering and review
 
-Published commits `caf87d4f` and `a1374573` make the aggregate cycle pass one authenticated readiness object and one immutable regional inventory into its child runner. Focused tests verify one ancestry authentication and one inventory enumeration per prepared episode. A broad local run reached7,371passed/4skipped/1expected failure before it was intentionally stopped; three stale registry failures were regenerated and the39 registry tests then passed. The final focused set passed67 tests. CI remains informative, not a training dependency.
+Commits `41edcbb5`, `bf291a38` and `782f811c` narrow acquisition routing, share route plans inside one inventory and prevent indistinguishable regional identities from becoming fake training labels. The final focused and registry runs passed345 tests before gameplay. CI remains informative, not a training dependency.
 
 The current learner ranks high-level goals and regional sources. Deterministic code still executes routes, menus, battles, captures and recovery. It has not demonstrated fresh-game autonomy, arbitrary-seed reliability, independent learned advantage, complete Red collection, ROM-hack competence or transfer.
 
-[Latest report](docs/work-sessions/2026-09-11-horsea-capture-and-loop-speedup.md). Recommend **Sol High** for continuation and performance work; use Astra High only for a milestone architecture audit.
+[Latest report](docs/work-sessions/2026-09-11-seadra-and-prerequisite-learning.md). Recommend **Sol High** for routine continuation; use Astra High only for a milestone architecture audit.
