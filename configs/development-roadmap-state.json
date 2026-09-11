@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-10-capture-sustainability",
+  "as_of_session": "2026-09-10-dig-recovery",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-supply-collection-learning-2026-09-10.json"
+      "evidence": "docs/evidence/red-dig-recovery-learning-2026-09-10.json"
     },
     "red-hack": {
       "status": "planned",
@@ -49,8 +49,8 @@
       {
         "id": "sustainable-escape-recovery",
         "label": "Qualify safe escape and recovery",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-dig-recovery-learning-2026-09-10.json"
       },
       {
         "id": "sustainable-funded-learning",
@@ -321,7 +321,7 @@
     },
     {
       "session": "2026-09-08-trainer-funding-static-qualification",
-      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8–28 steps;255–1050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
+      "result": "Engineering-only: cartridge-derived parties and rewards plus four static, sight-avoiding trainer approaches (8\u201328 steps;255\u20131050currency).133 focused tests pass. Model75,28living/29specimens,zero balls and9currency unchanged; zero input, earnings, predictions or fit rows.",
       "deviation": "No stage exit or checklist promotion. This first Phase4 engineering session adds zero learning output; next session must prioritize runtime qualification, not another inventory layer.",
       "next": "Implement bounded prepared-lead interaction with exact trainer identity, defeated-event and money-delta settlement; then earn funds and purchase balls from actual d8151f88/model75. Fit only a genuine selected outcome. No further inventory-only session."
     },
@@ -816,6 +816,12 @@
       "result": "Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.",
       "deviation": "Stopped before gameplay at the declared no-resource-offer falsifier. Existing Dig is not yet integrated with collection recovery. No prior failure, stage exit or counter changed.",
       "next": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run."
+    },
+    {
+      "session": "2026-09-10-dig-recovery",
+      "result": "Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.",
+      "deviation": "AL sampled exploration despite higher recovery value; its failure was retained. AM continued AL/model64 with the next seed and succeeded. No resampling, stage-exit or objective change.",
+      "next": "Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run."
     }
   ],
   "closed_milestones": [

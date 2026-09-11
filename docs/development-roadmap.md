@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-capture-sustainability**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-dig-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Recover resources for collection: 1/3 acceptance items (33%).**
+**Recover resources for collection: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Verify the exact resource dead end ([evidence](../docs/evidence/red-capture-sustainability-audit-2026-09-10.json))
-- [ ] Qualify safe escape and recovery
+- [x] Qualify safe escape and recovery ([evidence](../docs/evidence/red-dig-recovery-learning-2026-09-10.json))
 - [ ] Retain a funded collection lesson
 
-Current model: **63 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **65 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-supply-collection-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-10-dig-recovery
+
+Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
+
+**Deviation:** AL sampled exploration despite higher recovery value; its failure was retained. AM continued AL/model64 with the next seed and succeeded. No resampling, stage-exit or objective change.
+
+**Next:** Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
 
 ### 2026-09-10-capture-sustainability
 

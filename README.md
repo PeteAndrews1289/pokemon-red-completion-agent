@@ -7,7 +7,7 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest verified collection contains **64 registered species**. The current registered-objective model has **63 training examples**—a small development dataset, not a measure of general intelligence. The latest session restored supplies, learned from a healing choice and caught Shellder during a model-selected journey. Its later Seel capture failed; that failure and the partial collection gain are both retained.
+- The latest verified collection contains **64 registered species**. The registered-objective model has **65 training examples**—a small development dataset, not a measure of general intelligence. It has learned from real acquisition, evolution and resource choices, including failures. Most recently, a chosen recovery goal escaped a cave and healed at a Center; adequate funding and continued collection remain unfinished.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 

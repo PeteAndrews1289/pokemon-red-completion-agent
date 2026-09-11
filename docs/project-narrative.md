@@ -56,4 +56,4 @@ The unresolved question is not whether code can finish Red. It is how much usefu
 
 [Roadmap](model-first-roadmap.md) · [Full historical narrative](history/project-narrative-through-2026-09-10.md)
 
-The [sustainability check](work-sessions/2026-09-10-capture-sustainability.md) stopped before wasting another run: no balls, insufficient cash and no recovery/funding offer. A faster inventory was useful engineering, not learning. The party already knows Dig and the cave permits it; the missing piece is connecting that known mechanic to collection recovery. This is a composition gap, not proof the model learned to escape.
+The [recovery session](work-sessions/2026-09-10-dig-recovery.md) connected existing Dig mechanics to collection recovery. The learner first sampled exploration, failed, and fitted that outcome; its next sampled choice escaped Seafoam and healed at Fuchsia Center. Examples rose from 63 to 65 while registrations stayed at 64. This is useful feedback and successful composition, not independent proof of smarter play. The next bottleneck is leaving the healed Center for legitimate income: zero balls and 593 money still prevent collection.

@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection: 64 verified registrations and 63 examples under the registered-only learning objective. Supply access, travel capture/resumption and a safe ball-exhaustion stop are now live-qualified. The latest session fitted successful model-selected healing and a failed destination choice with a real Shellder registration gained along the way. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+Current work is Red collection: 64 verified registrations and 65 examples under the registered-only learning objective. Supply access, travel capture/resumption and a safe ball-exhaustion stop are now live-qualified. Earlier travel added Shellder. The latest session fitted failed exploration and successful Dig-to-Center recovery, with no new registrations. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
 
 ## Next sequence
 
@@ -24,9 +24,11 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AJ01/model63 remains the latest played save: 64 registrations, 54 specimens, zero balls and 593 money. The [sustainability audit](work-sessions/2026-09-10-capture-sustainability.md) found only explore executable and no regional acquisition candidates. No new input or fit occurred. Inventory-only preparation now skips unused ranking history; actual choices keep it.
+Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
 
-Prioritize a bounded escape/recovery composition using existing Dig mechanics. Read-only facts confirm a living holder, allowed terrain and a retained healing anchor, but collection recovery does not expose that skill. Verify the exit and free healing before legitimate funding and another collection choice. Allow 60–90 minutes for this integration; collection may require a follow-up. Preserve the completed travel-capture checklist at 3/3; the next resource-recovery checklist starts 1/3, diagnosis only. Phase 5 remains current.
+Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+
+The resource-recovery checklist is 2/3; funding/collection remains open. No stage exits or North Star requirements changed. [Latest report](work-sessions/2026-09-10-dig-recovery.md).
 
 ## How to stay focused
 

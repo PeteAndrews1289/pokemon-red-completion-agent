@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.
+- Next decision: Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate. |
+| Authority now | Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 63 | 12 |
+| Registered Train Example · train | 65 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-capture-sustainability** · status **active** · evidence [falsification](docs/evidence/red-capture-sustainability-audit-2026-09-10.json)
+**2026-09-10-dig-recovery** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits. |
-| Authority delta | No fit, gameplay or authority change this session. |
-| Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | AJ01 has zero balls and 593 money. Existing supply/funding/recovery offers are unavailable; the menu exposes only explore. Read-only inspection confirms a living Dig holder and legal escape terrain with a retained healing anchor, but collection recovery does not compose that mechanic. |
-| Decision | Stop the unproductive explore-only continuation. Reuse existing Dig mechanics behind a guarded recovery binding instead of adding a cave walkthrough. Inventory-only history omission is tested; actual policy history remains authenticated. |
-| Next session | From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run. |
-| Next falsifier | Offer a bounded escape-and-heal goal from exact AJ01 without input; reject missing holder, invalid terrain, stale healing anchor or unsafe terminal. Then one retained execution, not a replay. |
+| Learning output | Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center. |
+| Authority delta | Two actual sampled native outcomes fitted; no authority promotion or independent result. |
+| Transfer result | Related development choices only; no held-out or cross-title performance claim. |
+| Blocker | Recovery works. At the healed Center, zero balls and593 money leave no executable goal or regional acquisition. |
+| Decision | Close escape/recovery at2/3; prioritize bounded indoor departure and legitimate income, not another empty exploration loop. |
+| Next session | Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run. |
+| Next falsifier | Exact healed AM01 exposes a safe departure/funding path without inputs, invented money or protected-stock loss. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

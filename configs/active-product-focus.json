@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No fit, gameplay or authority change this session.",
-        "blocker": "AJ01 has zero balls and 593 money. Existing supply/funding/recovery offers are unavailable; the menu exposes only explore. Read-only inspection confirms a living Dig holder and legal escape terrain with a retained healing anchor, but collection recovery does not compose that mechanic.",
-        "decision": "Stop the unproductive explore-only continuation. Reuse existing Dig mechanics behind a guarded recovery binding instead of adding a cave walkthrough. Inventory-only history omission is tested; actual policy history remains authenticated.",
+        "authority_delta": "Two actual sampled native outcomes fitted; no authority promotion or independent result.",
+        "blocker": "Recovery works. At the healed Center, zero balls and593 money leave no executable goal or regional acquisition.",
+        "decision": "Close escape/recovery at2/3; prioritize bounded indoor departure and legitimate income, not another empty exploration loop.",
         "evidence": {
-          "kind": "falsification",
-          "path": "docs/evidence/red-capture-sustainability-audit-2026-09-10.json",
-          "sha256": "7056831375dfdac689ded69a3331491410853d32aaaf56a29128a73320ae8dba"
+          "kind": "registered_train_example",
+          "path": "docs/evidence/red-dig-recovery-learning-2026-09-10.json",
+          "sha256": "21950c19fde470995e3b86bac2853e143ca20a27d3665e5c93968aa5372efdbf"
         },
-        "learning_output": "Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.",
-        "next_falsifier": "Offer a bounded escape-and-heal goal from exact AJ01 without input; reject missing holder, invalid terrain, stale healing anchor or unsafe terminal. Then one retained execution, not a replay.",
-        "next_session_goal": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.",
+        "learning_output": "Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.",
+        "next_falsifier": "Exact healed AM01 exposes a safe departure/funding path without inputs, invented money or protected-stock loss.",
+        "next_session_goal": "Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-10-capture-sustainability",
+        "session_id": "2026-09-10-dig-recovery",
         "status": "active",
         "stop_condition": "No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing.",
-        "transfer_result": "No independent or cross-title result; same-lineage outcomes remain development only."
+        "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate.",
+        "current": "Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.",
+      "next_decision": "Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 63,
+        "registered_train_examples": 65,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

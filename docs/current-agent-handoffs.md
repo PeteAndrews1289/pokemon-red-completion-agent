@@ -1,27 +1,17 @@
 # Reviewer handoff
 
-Start with the [operational handoff](../HANDOFF.md) and [role assignments](../AGENT_COORDINATION.md). They are the current agent entry points; old reports cannot authorize work.
+Read [the operational handoff](../HANDOFF.md) and [role assignments](../AGENT_COORDINATION.md).
 
 ## Current facts
 
-- Goal: a transferable player and one shared registered Pokédex, not a fixed Red walkthrough.
-- Latest exact save: AJ01, Seafoam B3F; 64 registrations, 54 specimens, input-ready, zero balls and 593 money.
-- Model63 contains 63 related development examples. Goal/destination choices are learned; game mechanics remain deterministic.
-- AI completed forced supply and learned restoration. AJ chose Seafoam B3F among seven destinations, caught Shellder on the way and resumed travel. Its later failed Seel capture produced the second new training example, retaining failure and positive partial gain separately. The bounded capture/resume checklist is 3/3, not Red completion.
-- Gameplay is stopped. Effective capture preparation and adequate legitimate supplies are the next priority.
-- Mart indoor/Fly access and typed ordinary-ball exhaustion are live-qualified. AJ retained its completed Surf,565 actions and 40,633 frames.
-- No external agents ran this session. Flash's older stone draft remains isolated.
+Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
 
-## Focused review questions
+The model chooses goals under a disclosed exploration policy; deterministic mechanics execute them. AM01 is the only next continuation, with 65 examples, 64 registrations, 54 specimens, zero balls and 593 money. Shared registration remains distinct from local owned flags and physical stock. Gameplay is stopped.
 
-1. Why does the existing capture preparation fall back to a full-health target with no status attempt, and what is the smallest safe improvement?
-2. Can sufficient legitimate supplies be obtained from AJ01 without replay, inventing funds or selling protected resources?
-3. Does the next fit correspond to a real played choice, with deterministic setup excluded?
-4. Can redundant unchanged-state route inspection be removed without reusing stale observations or live executor bindings?
-5. Are the public README, roadmap and learning claims readable and consistent with evidence?
+## Next work and useful review
 
-Review only; do not play the game, open protected contexts or edit the shared worktree. Submit concrete defects and the shortest falsifier. Codex owns integration decisions and explains disagreements.
+Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
 
-[Previous handoffs](history/agent-handoffs-through-2026-09-10.md)
+Review the smallest reusable Center-departure/income composition, actual resource affordability and preservation of party/stock. Check whether failed exploration feedback is used without claiming independent improvement. No forced support may become an invented model-choice label.
 
-Latest engineering follow-up: [sustainability audit](work-sessions/2026-09-10-capture-sustainability.md). No input or fit; only explore available. Reuse existing Dig mechanics for a verified escape/recovery binding before funding another collection attempt. Reviewer focus: stale healing anchors, inventory/party preservation and no source-history bypass during actual policy choice.
+No external agent ran or had fresh quota queried this session. Flash's older isolated stone draft remains unintegrated. Review-only by default; do not execute gameplay or edit the shared worktree. Codex owns integration and explains accepted/rejected findings. [Session evidence](work-sessions/2026-09-10-dig-recovery.md).

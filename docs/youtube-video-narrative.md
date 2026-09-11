@@ -51,4 +51,4 @@ Credit Pete's product direction and validation, along with Codex, Claude and Ant
 
 [Project narrative](project-narrative.md) · [Previous editorial notes](history/video-narrative-through-2026-09-10.md)
 
-For the [sustainability follow-up](work-sessions/2026-09-10-capture-sustainability.md), freeze the counters at 64 registrations and 63 examples. Show the only offered goal, explore, next to zero balls; no gameplay was launched. Then illustrate the proposed reuse of existing Dig mechanics for recovery. Label this as diagnosed and planned, not an executed escape or learned ability.
+For the [recovery chapter](work-sessions/2026-09-10-dig-recovery.md), show the unsuccessful exploration honestly, then Seafoam→Fuchsia→Center from the actual next run. Caption: two fitted choices, 63→65 examples, 64 registrations unchanged. Parasect healing from 36 to 73 HP makes the benefit visible. Label the model as choosing the goal while deterministic code executes Dig and healing. End with the unresolved supply problem: zero balls, 593 money; no claim of autonomous full-game competence.
