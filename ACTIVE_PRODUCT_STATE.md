@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Begin the fresh-start Red conductor: connect new-game initialization and semantic early-story goals, then retain one bounded first-badge checkpoint without a fixed walkthrough or autonomy claim.
+- Next decision: Execute the authenticated post-Brock-to-Celadon continuation and prove the fresh save joins the existing midgame skill registry; then return to measured model99 collection learning.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | The learner has99 fitted examples. It selected income twice, then selected acquisition that registered Magnemite at Power Plant; a separately metered deterministic recovery retained73 registrations without fitting the failed acquisition. |
+| Reusable capability | Resume one semantic Red player from clean power through authenticated story checkpoints without exposing controller routes to the policy. |
+| Authority now | The learner remains at99 fitted examples and73 registrations. The fresh-start checkpoint used an explicitly unlearned ranker and added no authority; it only proves that the semantic player can reach and resume after Brock. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
+| Cheapest falsifier | Reload the authenticated post-Brock state without input and require the next semantic Cerulean skill to be executable from its observed boundary. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-power-plant-diversification** · status **active** · evidence [registered train example](docs/evidence/red-power-plant-diversification-2026-09-11.json)
+**2026-09-11-fresh-start-conductor** · status **active** · evidence [qualification](docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | BU fitted two model-selected income outcomes, increasing cash493 to1093 and model97 to99. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure; the failed choice stayed unfit. Deterministic recovery preserved73 registrations and60 specimens. |
-| Authority delta | Two model-selected income outcomes were fitted. A third model-selected acquisition registered Magnemite through generic Power Plant machinery, but its observer failure remained unfit. No authority promotion or independent evaluation occurred. |
-| Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | The retained endpoint now demonstrates diverse bounded decisions, but there is still no conductor that can begin from a fresh game and carry one save through early, middle and late story gates. |
-| Decision | Close the diversity checklist and prioritize fresh-start Red sequencing before adding more retained-endpoint collection examples. |
-| Next session | Connect title-screen/new-game initialization and early-story semantic goals to the existing runtime. Target one bounded fresh-save rehearsal through a stable first-badge checkpoint; no manual walkthrough labels, Crystal execution or autonomy claim. |
-| Next falsifier | A fresh save cannot expose semantic early-game goals without a fixed button walkthrough, or cannot retain a stable first-badge checkpoint that joins the existing state and recovery contracts. |
-| Stop condition | Stop on a fixed input walkthrough, coordinate-bearing policy labels, hidden teacher choice, lost fresh-save provenance or deterministic support counted as learned authority. |
+| Product alignment | The fresh-start conductor now creates a reusable authenticated story handoff; it is infrastructure for one continuous Red player, not a new walkthrough claim or substitute for learning. |
+| Learning output | None. The published-source run completed 2945 actions and 221538 frames, retained six verified objectives, and created a private authenticated first-badge checkpoint. Model99 and73 registrations are unchanged. |
+| Authority delta | Zero. An explicitly unlearned integration ranker selected three singleton stages; deterministic mechanics completed them. No learned example, fit, promotion or evaluation was created. |
+| Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
+| Blocker | The authenticated post-Brock state exposes the next Cerulean skill, but that loaded-state continuation has not executed through the Celadon-to-midgame join. The historical objective-model directory is also missing even though its public hashes survive. |
+| Decision | Accept the semantic fresh-start interface and retained first-badge checkpoint as integration milestones, then execute the bounded post-Brock-to-Celadon join before returning to model99 collection learning. |
+| Next session | Execute the bounded loaded-state continuation through Cerulean and Celadon, retain the next authenticated handoff, and prove the existing midgame registry accepts it. Then resume measured model99 collection learning; no full replay or autonomy claim. |
+| Next falsifier | The loaded first-badge checkpoint cannot execute reach_cerulean and subsequent semantic stages to the existing Celadon midgame boundary without hidden route choice or lost provenance. |
+| Stop condition | Stop on a fixed policy-visible input walkthrough, coordinate-bearing policy features, hidden teacher choice, unauthenticated resume, deterministic support counted as learned authority or another session without a measured learner result after the join. |
 
 ### Stop conditions
 

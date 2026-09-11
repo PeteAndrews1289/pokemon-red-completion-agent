@@ -3,17 +3,17 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-power-plant-diversification**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-fresh-start-conductor**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Fresh-start Red conductor: 0/3 acceptance items (0%).**
+**Fresh-start Red conductor: 2/3 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Expose semantic goals from a fresh game
-- [ ] Retain one bounded first-badge checkpoint
+- [x] Expose semantic goals from a fresh game ([evidence](../docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json))
+- [x] Retain one bounded first-badge checkpoint ([evidence](../docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json))
 - [ ] Join the fresh save to existing midgame skills
 
 Current model: **99 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-fresh-start-conductor
+
+Published-source Red reached Brock from clean power in2945actions/221538frames and retained an authenticated six-objective checkpoint. Reload advanced zero frames, used zero inputs and exposed reach_cerulean as executable. The explicitly unlearned integration ranker made three singleton dispatches; model99 and73 registrations are unchanged.
+
+**Deviation:** This is a fresh-start and resumability integration result, not learned objective competence or autonomous play. One pre-emulator CLI failure and one telemetry wording repair were retained in the session report; neither created input or a learning result.
+
+**Next:** Execute the bounded checkpoint continuation through Cerulean and Celadon, retain the next authenticated handoff, and prove the existing midgame skill registry accepts the fresh lineage. Then return immediately to measured model99 collection learning.
 
 ### 2026-09-11-power-plant-diversification
 

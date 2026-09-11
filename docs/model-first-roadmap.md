@@ -8,12 +8,19 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-The retained Red loop now has99 fitted examples and73 registrations. Its latest sequence selected income twice and then acquisition; generic mechanics registered Magnemite at Power Plant. The acquisition later failed in post-action observation and stayed unfit, while deterministic recovery preserved the exact registration. This closes the immediate diversity check. Fresh-game autonomy and independent reliability remain unproven.
+The retained Red loop still has99 fitted examples and73 registrations. Separately, a published-source
+fresh-start integration reached Brock in2,945actions/221,538frames and retained an authenticated
+six-objective checkpoint. Reload exposed `reach_cerulean` with zero input or frame advance. The
+ranker was explicitly unlearned and all three menus were singletons, so no model authority changed.
+Fresh-game autonomy and independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Build the fresh-start Red conductor.** Connect new-game initialization and semantic early-story goals without turning the policy into a fixed button walkthrough.
-2. **Retain early/mid/late handoffs.** Carry one fresh save through a first-badge checkpoint and into the existing story, recovery and collection skills.
+1. **Complete the fresh-start Red join.** The clean-power conductor and first-badge checkpoint now
+   work; execute the authenticated post-Brock continuation through Celadon and prove the existing
+   midgame registry accepts it.
+2. **Retain early/mid/late handoffs.** Carry the same fresh lineage into the existing story,
+   recovery and collection skills.
 3. **Resume broad Red collection.** Let the model choose missing-species acquisition, supported evolution, supplies and recovery. Keep actual costs and failed searches.
 4. **Measure learner value.** Compare with appropriate baselines on genuinely separate situations before claiming better planning, reliable new-seed play or greater authority.
 5. **Integrate Blue/shared memory.** Reuse global registration credit without fabricating local flags or transferable specimens.
@@ -26,7 +33,10 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 The late-game retained endpoint is BV recovery/model99:73 registrations,60 specimens,1093money and a restored party. BU03 registered Magnemite but remains a failed, unfit acquisition; do not retry or relabel it.
 
-The next session should connect title-screen/new-game initialization and semantic early-story goals, then attempt one bounded fresh-save rehearsal through a stable first-badge checkpoint. No manual action labels, Crystal execution or autonomy claim. [Latest result](work-sessions/2026-09-11-power-plant-diversification.md).
+The next session should execute the authenticated first-badge checkpoint through the bounded
+Cerulean-to-Celadon stages, retain that handoff and test midgame acceptance. Then return to a
+measured model99 collection choice; one more engineering-only session triggers the anti-drift
+alarm. No full replay, Crystal execution or autonomy claim. [Latest result](work-sessions/2026-09-11-fresh-start-conductor.md).
 
 ## How to stay focused
 

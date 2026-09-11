@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-power-plant-diversification",
+  "as_of_session": "2026-09-11-fresh-start-conductor",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -43,14 +43,14 @@
       {
         "id": "fresh-start-semantic-goals",
         "label": "Expose semantic goals from a fresh game",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
       },
       {
         "id": "fresh-first-badge-checkpoint",
         "label": "Retain one bounded first-badge checkpoint",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-fresh-first-badge-conductor-2026-09-11.json"
       },
       {
         "id": "fresh-midgame-handoff",
@@ -960,6 +960,12 @@
       "result": "BU fitted two model-selected income outcomes, model97 to99 and money493 to1093. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure. The failed choice stayed unfit; deterministic recovery retained73 registrations,56 living species and60 specimens.",
       "deviation": "The requested non-Seafoam/non-water transfer test succeeded at the registration level but not as a successful outcome. A scripted encounter shared the cartridge trainer bit and crashed payout inventory; the narrow repair and46-action support recovery preserved the exact failure rather than retrying or relabeling it.",
       "next": "Close retained-endpoint diversity and begin the fresh-start Red conductor: semantic new-game goals, one bounded first-badge checkpoint and a join to existing midgame skills. No fixed input walkthrough, Crystal execution or autonomy claim."
+    },
+    {
+      "session": "2026-09-11-fresh-start-conductor",
+      "result": "Published-source Red reached Brock from clean power in2945actions/221538frames and retained an authenticated six-objective checkpoint. Reload advanced zero frames, used zero inputs and exposed reach_cerulean as executable. The explicitly unlearned integration ranker made three singleton dispatches; model99 and73 registrations are unchanged.",
+      "deviation": "This is a fresh-start and resumability integration result, not learned objective competence or autonomous play. One pre-emulator CLI failure and one telemetry wording repair were retained in the session report; neither created input or a learning result.",
+      "next": "Execute the bounded checkpoint continuation through Cerulean and Celadon, retain the next authenticated handoff, and prove the existing midgame skill registry accepts the fresh lineage. Then return immediately to measured model99 collection learning."
     }
   ],
   "closed_milestones": [

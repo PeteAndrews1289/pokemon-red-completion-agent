@@ -1,6 +1,15 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest retained result: the model chose income twice, raising cash493→1093 and fitting model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant. A post-action observer error left that third outcome failed and unfit; deterministic recovery preserved73 registrations and60 specimens without retry. [Report](work-sessions/2026-09-11-power-plant-diversification.md).
+Latest integration result: a published-source Red session progressed from clean power to Brock in
+2,945actions/221,538frames and retained an authenticated checkpoint. Reload exposed the next
+Cerulean stage without input. This is deliberately **not** presented as learning: an explicitly
+unlearned ranker traversed three singleton menus while deterministic chapters executed mechanics.
+Model99 and73 registrations are unchanged. [Report](work-sessions/2026-09-11-fresh-start-conductor.md).
+
+Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting
+model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant.
+A post-action observer error left that third outcome failed and unfit; deterministic recovery
+preserved73 registrations and60 specimens without retry. [Report](work-sessions/2026-09-11-power-plant-diversification.md).
 
 ## The question
 

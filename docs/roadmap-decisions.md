@@ -589,3 +589,11 @@ Champion qualification is separate. See the
 ## September10 — indoor choices after native stock completion
 
 The native-stock checklist closed3/3 with model21 and47 registrations. Read-only inspection then found no capture alternatives despite18 capture items and healthy party members. The next checklist measures indoor eligibility, actual alternatives and a learned lesson; permanent stage exits do not change. Ordinary cave floors were incorrectly excluded by a literal-grass test. Prioritize this specific coverage repair over speculative preparation optimizations.
+## September 11 — accept fresh-start plumbing, keep learning claims at zero
+
+The clean-power conductor reached Brock and retained an authenticated checkpoint. Its reload
+exposed the next Cerulean skill without input, so semantic fresh-start goals and the first-badge
+handoff are complete. The integration ranker was explicitly unlearned and every menu was a
+singleton; model99 and all learning counters remain unchanged. The next bounded task is the
+post-Brock-to-Celadon join, followed immediately by measured model99 collection learning. This
+prevents fresh-start plumbing from becoming another long substitute for learner outcomes.

@@ -1,7 +1,7 @@
 # Fresh-start Red conductor
 
-Status: engineering gate passed; bounded gameplay rehearsal pending publication of the source.
-No fresh gameplay or learning result is claimed yet.
+Status: complete. Fresh-start integration and authenticated first-badge handoff passed. No learning
+result or authority promotion is claimed.
 
 ## Mission check
 
@@ -70,3 +70,16 @@ written: the generic model policy called neutral-ranker selections `learned_choi
 The conductor now requires an explicit ranker training status and renames that count to
 `integration_only_decisions` for the unlearned mode. The already authenticated state remains a
 valid private diagnostic, but the final published-source capture will use the corrected report.
+
+## Published-source result
+
+Source `df03423d14e622f7f6c677633e42120c100cd677` ran from clean power to Brock in
+2,945actions and221,538frames. It selected `power_on`, `receive_pokedex` and `reach_pewter`;
+starter/adventure and Brock remained declared automatic chapter effects. There were zero expected
+labels, fixed dispatches, teacher objective choices or replans. The runner authenticated a private
+six-objective state/envelope pair and released every controller input.
+
+A separate read-only reload authenticated the same state, advanced zero frames, executed zero
+actions and exposed `reach_cerulean` as executable from Pewter Gym. This completes two of the
+three current milestone items: semantic fresh-start goals and a retained first-badge checkpoint.
+The Celadon-to-midgame join remains open.

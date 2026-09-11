@@ -4,6 +4,13 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
+Newest systems beat: [fresh power to Brock](work-sessions/2026-09-11-fresh-start-conductor.md).
+Show the game booting, receiving the starter and Pokedex, then reaching Brock and saving a durable
+checkpoint. Overlay2,945actions,221,538frames and the zero-input reload that exposes Cerulean next.
+State the caveat on screen: the ranker was unlearned, all three goal menus were singletons and
+deterministic code executed the mechanics. This demonstrates a working fresh-start handoff, not a
+model that has learned the opening.
+
 Newest verified beat: [Power Plant diversification](work-sessions/2026-09-11-power-plant-diversification.md). Show the model selecting two income goals, then acquisition from four available goals. Generic mechanics register Magnemite, but the post-action observer crashes on a stationary scripted encounter. Keep the outcome marked failed and unfit; then show the separately metered46-action recovery retaining73 registrations and model99. This is a strong visual explanation of why progress, successful outcomes and training labels are different.
 
 Newest verified beat: [Slowpoke to Slowbro](work-sessions/2026-09-11-slowpoke-slowbro-learning.md). Show the six-region score menu, the selected Seafoam B3F capture, the recovery choice and the long evolution training sequence. Display72 registrations and97 fitted examples. Keep the16,066-action evolution cost visible; it is evidence of a working chain, not efficient mastery.
