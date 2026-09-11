@@ -397,7 +397,12 @@ def bind_local_trainer_funding(
         (c, flight)
         for c, flight in quoted
         if level >= max(m.level for m in c.quote.party) + 10
-        and c.quote.expected_money_after(raw.player_money) >= provider.purchases[0].unit_price
+        # Finite trainer rewards may need to compose before even one ball is
+        # affordable.  Requiring every individual payout to cross the shop
+        # threshold creates a deadlock when several safe, undefeated trainers
+        # collectively cover the shortfall.  The active reserve budget above
+        # proves that income is needed; this guard requires each selected
+        # battle to make irreversible positive progress toward it.
         and c.quote.expected_money_after(raw.player_money) > raw.player_money
         and (
             pending_identity is None

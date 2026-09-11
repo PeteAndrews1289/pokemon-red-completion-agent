@@ -228,6 +228,30 @@ def test_reserve_shortfall_keeps_affordable_purchase_and_adds_income(monkeypatch
     assert router.actions.actions_executed == router.runtime.emulator.frame_count == 0
 
 
+def test_reserve_shortfall_can_compose_partial_trainer_income(monkeypatch):
+    router, state, target, original, calls = fixture(monkeypatch)
+    router.runtime.profile.providers[0].parameters["resource_choice_variants"] = True
+    provider = router.runtime.provider_for(GoalKind.RESUPPLY, router.actions)
+    provider.adapter.config = SimpleNamespace(desired_capture_items=5)
+    state.capture_item_count = 0
+    # 9 + 160 remains below this Mart's 200-unit ball price.  The battle is
+    # still useful because a later finite reward can compose with this one.
+    partial = replace(
+        target,
+        quote=replace(target.quote, expected_victory_money=160),
+    )
+    monkeypatch.setattr(funding, "_candidates", lambda _: (partial,))
+
+    offered = funding.bind_local_trainer_funding(router, original, state)
+
+    assert not calls
+    assert offered.bindings[0] is original.bindings[0]
+    assert offered.bindings[1].kind is GoalKind.RESUPPLY
+    assert offered.bindings[1].resource_quote.available_funds == 9
+    assert offered.bindings[1].resource_quote.expected_income == 160
+    assert offered.bindings[1].resource_quote.purchase_cost == 0
+
+
 @pytest.mark.parametrize("case", ["legacy", "funded", "stocked", "no_trainer", "fainted"])
 def test_resource_variants_do_not_invent_unneeded_or_unsafe_income(monkeypatch, case):
     router, state, _, original, calls = resource_choice_fixture(
