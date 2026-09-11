@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## September 11 — close endpoint diversity and prioritize fresh-start sequencing
+
+The [Power Plant session](work-sessions/2026-09-11-power-plant-diversification.md)
+closes the three-item diversity checklist. A model-selected acquisition used the
+same generic regional/capture machinery to register Magnemite outside the
+Seafoam/water chain. Its later observer failure remains failed and unfit; a
+separate deterministic recovery preserved the exact registration without retry.
+
+Additional examples from the same late-game lineage now have lower product value
+than connecting the existing skills into a fresh game. The current milestone is
+therefore **fresh-start Red conductor**: semantic new-game goals, a retained
+first-badge checkpoint and a join to existing midgame skills. This changes the
+order of open Red work, not the Red-collection stage exit, evidence standard or
+long-term Blue/modified-Red/Crystal sequence. No fresh-game competence is claimed.
+
 ## September 10 — advance from travel capture to sustainable resources
 
 Preserve the completed travel-capture checklist at 3/3 in closed milestones. The

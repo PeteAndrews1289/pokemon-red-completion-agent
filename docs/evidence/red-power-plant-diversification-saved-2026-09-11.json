@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-11T19:29:37Z",
+  "location": "Vermilion Pokecenter · saved, not live",
+  "registered_species": 73,
+  "living_species": 56,
+  "specimens": 60,
+  "capture_items": 0,
+  "money": 1093,
+  "checkpoint_sha256": "8e95b2325381e716eedcb16bb38026200344bd42b87f10e8a98f32f566cf42f9"
+}

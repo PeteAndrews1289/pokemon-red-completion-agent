@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Three actual outcomes were fitted: a six-way regional destination, party recovery and Slowpoke evolution. Slowpoke and Slowbro were registered; no authority promotion or independent evaluation occurred.",
-        "blocker": "The current evidence is concentrated in Seafoam and water-species chains. The next result must broaden the encounter or evolution family rather than repeat the easiest local pattern.",
-        "decision": "Retain the complete Slowpoke catch-recover-evolve chain and diversify the next registration beyond Seafoam/water species.",
+        "authority_delta": "Two model-selected income outcomes were fitted. A third model-selected acquisition registered Magnemite through generic Power Plant machinery, but its observer failure remained unfit. No authority promotion or independent evaluation occurred.",
+        "blocker": "The retained endpoint now demonstrates diverse bounded decisions, but there is still no conductor that can begin from a fresh game and carry one save through early, middle and late story gates.",
+        "decision": "Close the diversity checklist and prioritize fresh-start Red sequencing before adding more retained-endpoint collection examples.",
         "evidence": {
           "kind": "registered_train_example",
-          "path": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json",
-          "sha256": "9618ceaec722d9f0b15922591748b9f36bb1a3431a0d5f6e28aa10b4ad12007c"
+          "path": "docs/evidence/red-power-plant-diversification-2026-09-11.json",
+          "sha256": "2289e95e3458f4800bd2d66c95d3ac81696fddf2a443dc865358b6243de80300"
         },
-        "learning_output": "BT completed three bounded model-directed steps: choose SeafoamB3F and catch Slowpoke, restore the party, then evolve Slowpoke into Slowbro. The audited model advanced94 to97examples and the collection70 to72registrations, ending with493money and three capture items.",
-        "next_falsifier": "The retained model cannot expose or execute a useful non-Seafoam acquisition/evolution, or it loses a registration, specimen, resource cost or durable terminal.",
-        "next_session_goal": "Continue from audited BT03/model97 on Route22 with493money, three capture items and the retained party. Seek a bounded model-selected registration from another encounter family or an owned non-water evolution. Do not replay retained steps, enter Crystal, or claim fresh-game autonomy.",
+        "learning_output": "BU fitted two model-selected income outcomes, increasing cash493 to1093 and model97 to99. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure; the failed choice stayed unfit. Deterministic recovery preserved73 registrations and60 specimens.",
+        "next_falsifier": "A fresh save cannot expose semantic early-game goals without a fixed button walkthrough, or cannot retain a stable first-badge checkpoint that joins the existing state and recovery contracts.",
+        "next_session_goal": "Connect title-screen/new-game initialization and early-story semantic goals to the existing runtime. Target one bounded fresh-save rehearsal through a stable first-badge checkpoint; no manual walkthrough labels, Crystal execution or autonomy claim.",
         "product_alignment": "User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements.",
-        "session_id": "2026-09-11-slowpoke-slowbro-learning",
+        "session_id": "2026-09-11-power-plant-diversification",
         "status": "active",
-        "stop_condition": "No hidden retry, invented choice, lost terminal cost or deterministic support counted as learned authority; stop if the retained state cannot expose a useful executable goal.",
+        "stop_condition": "Stop on a fixed input walkthrough, coordinate-bearing policy labels, hidden teacher choice, lost fresh-save provenance or deterministic support counted as learned authority.",
         "transfer_result": "Related development choices only; no held-out or cross-title performance claim."
       },
       "learned_authority": {
-        "current": "The learner selected SeafoamB3F, caught Slowpoke, selected recovery and evolved Slowpoke into Slowbro. Model97,72registrations and all retained resources were independently audited.",
+        "current": "The learner has99 fitted examples. It selected income twice, then selected acquisition that registered Magnemite at Power Plant; a separately metered deterministic recovery retained73 registrations without fitting the failed acquisition.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Continue from audited BT03/model97 on Route22 with493money and three capture items. Seek a model-selected registration outside the Seafoam/water chain; do not replay retained steps or claim fresh-game autonomy.",
+      "next_decision": "Begin the fresh-start Red conductor: connect new-game initialization and semantic early-story goals, then retain one bounded first-badge checkpoint without a fixed walkthrough or autonomy claim.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -227,7 +227,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 97,
+        "registered_train_examples": 99,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

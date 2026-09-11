@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest audited result: the model chose SeafoamB3F from six regions and caught Slowpoke, chose recovery, then selected evolution and registered Slowbro. All three outcomes were fitted: model94→97 and collection70→72 registrations, ending with493money, three capture items and an input-ready party. [Report](work-sessions/2026-09-11-slowpoke-slowbro-learning.md).
+Latest retained result: the model chose income twice, raising cash493→1093 and fitting model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant. A post-action observer error left that third outcome failed and unfit; deterministic recovery preserved73 registrations and60 specimens without retry. [Report](work-sessions/2026-09-11-power-plant-diversification.md).
 
 ## The question
 
@@ -35,6 +35,8 @@ Red is a manageable first environment, but a fixed walkthrough is not the desire
 **Collection became registration-first.** Pete removed the level-100 and simultaneous-living-form requirements. Once a species is legitimately registered, later runs should not repeat its evolution solely to earn the same global credit. Global registration, local owned flags and physical inventory remain separate.
 
 ## Results we can show
+
+- The latest sequence diversified beyond the Seafoam/water chain. Two income choices were fitted; a model-selected Power Plant acquisition registered Magnemite but remained failed after its observer crashed. A46-action support recovery retained the result without manufacturing a successful label. Model99,73 registrations. [Power Plant report](work-sessions/2026-09-11-power-plant-diversification.md).
 
 - The latest continuation completed a catch→recover→evolve chain without retry. Slowpoke and Slowbro were verified from retained saves; three actual outcomes were fitted. The model reached97examples and the collection72registrations. [Slowpoke and Slowbro report](work-sessions/2026-09-11-slowpoke-slowbro-learning.md).
 

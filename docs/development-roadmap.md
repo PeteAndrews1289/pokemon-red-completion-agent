@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-slowpoke-slowbro-learning**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-power-plant-diversification**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden registered collection beyond one chain: 2/3 acceptance items (67%).**
+**Fresh-start Red conductor: 0/3 acceptance items (0%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Register a catch from a learned regional choice ([evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json))
-- [x] Register the caught species' learned evolution ([evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json))
-- [ ] Register a species outside the Seafoam/water chain
+- [ ] Expose semantic goals from a fresh game
+- [ ] Retain one bounded first-badge checkpoint
+- [ ] Join the fresh save to existing midgame skills
 
-Current model: **97 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **99 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json)
+[Current evidence](../docs/evidence/red-power-plant-diversification-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-power-plant-diversification
+
+BU fitted two model-selected income outcomes, model97 to99 and money493 to1093. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure. The failed choice stayed unfit; deterministic recovery retained73 registrations,56 living species and60 specimens.
+
+**Deviation:** The requested non-Seafoam/non-water transfer test succeeded at the registration level but not as a successful outcome. A scripted encounter shared the cartridge trainer bit and crashed payout inventory; the narrow repair and46-action support recovery preserved the exact failure rather than retrying or relabeling it.
+
+**Next:** Close retained-endpoint diversity and begin the fresh-start Red conductor: semantic new-game goals, one bounded first-badge checkpoint and a join to existing midgame skills. No fixed input walkthrough, Crystal execution or autonomy claim.
 
 ### 2026-09-11-slowpoke-slowbro-learning
 

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-slowpoke-slowbro-learning",
+  "as_of_session": "2026-09-11-power-plant-diversification",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+      "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,23 +38,23 @@
     }
   },
   "milestone": {
-    "title": "Broaden registered collection beyond one chain",
+    "title": "Fresh-start Red conductor",
     "items": [
       {
-        "id": "learned-regional-capture",
-        "label": "Register a catch from a learned regional choice",
-        "done": true,
-        "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        "id": "fresh-start-semantic-goals",
+        "label": "Expose semantic goals from a fresh game",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "learned-caught-species-evolution",
-        "label": "Register the caught species' learned evolution",
-        "done": true,
-        "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        "id": "fresh-first-badge-checkpoint",
+        "label": "Retain one bounded first-badge checkpoint",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "different-family-registration",
-        "label": "Register a species outside the Seafoam/water chain",
+        "id": "fresh-midgame-handoff",
+        "label": "Join the fresh save to existing midgame skills",
         "done": false,
         "evidence": null
       }
@@ -954,9 +954,40 @@
       "result": "BT completed a model-directed catch-recover-evolve chain: six-way SeafoamB3F choice caught Slowpoke, recovery restored it, and evolution registered Slowbro. Model94 to97; registrations70 to72; final493money and three capture items. Read-only audit verified all terminals and retained artifacts.",
       "deviation": "No stage exit or authority promotion. The sequence is productive but concentrated in Seafoam/water species; Slowbro evolution also cost16066actions and1369123frames, so efficiency is not established.",
       "next": "Continue from audited BT03/model97 and seek a registration outside the Seafoam/water chain through a model-selected acquisition or owned evolution. Preserve all costs and failures; no retained-step replay, Crystal run or autonomy claim."
+    },
+    {
+      "session": "2026-09-11-power-plant-diversification",
+      "result": "BU fitted two model-selected income outcomes, model97 to99 and money493 to1093. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure. The failed choice stayed unfit; deterministic recovery retained73 registrations,56 living species and60 specimens.",
+      "deviation": "The requested non-Seafoam/non-water transfer test succeeded at the registration level but not as a successful outcome. A scripted encounter shared the cartridge trainer bit and crashed payout inventory; the narrow repair and46-action support recovery preserved the exact failure rather than retrying or relabeling it.",
+      "next": "Close retained-endpoint diversity and begin the fresh-start Red conductor: semantic new-game goals, one bounded first-badge checkpoint and a join to existing midgame skills. No fixed input walkthrough, Crystal execution or autonomy claim."
     }
   ],
   "closed_milestones": [
+    {
+      "session": "2026-09-11-power-plant-diversification",
+      "stage": "red-collection",
+      "title": "Broaden registered collection beyond one chain",
+      "items": [
+        {
+          "id": "learned-regional-capture",
+          "label": "Register a catch from a learned regional choice",
+          "done": true,
+          "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        },
+        {
+          "id": "learned-caught-species-evolution",
+          "label": "Register the caught species' learned evolution",
+          "done": true,
+          "evidence": "docs/evidence/red-slowpoke-slowbro-learning-2026-09-11.json"
+        },
+        {
+          "id": "different-family-registration",
+          "label": "Register a species outside the Seafoam/water chain",
+          "done": true,
+          "evidence": "docs/evidence/red-power-plant-diversification-2026-09-11.json"
+        }
+      ]
+    },
     {
       "session": "2026-09-11-slowpoke-slowbro-learning",
       "stage": "red-collection",
