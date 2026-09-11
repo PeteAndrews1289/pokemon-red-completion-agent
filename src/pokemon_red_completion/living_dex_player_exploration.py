@@ -25,14 +25,17 @@ from pokemon_red_completion.living_dex_goal_policy import (
 EXPLORATION_POLICY_ID = "living-dex-player-supported-menu-v2"
 LEGACY_RECOVERY_EXPLORATION_POLICY_ID = "living-dex-player-optional-recovery-v3"
 RECOVERY_EXPLORATION_POLICY_ID = "living-dex-player-optional-recovery-v4"
+ECONOMY_EXPLORATION_POLICY_ID = "living-dex-player-economy-v1"
 DETERMINISTIC_POLICY_ID = "living-dex-player-nontraining-v1"
 
 
 def exploration_policy_id(
     feature_version: int, *, legacy_restoration_preference: bool = False,
 ) -> str:
-    if type(feature_version) is not int or feature_version not in (1, 2, 3):
+    if type(feature_version) is not int or feature_version not in (1, 2, 3, 4):
         raise ValueError("exploration feature version differs")
+    if feature_version == 4:
+        return ECONOMY_EXPLORATION_POLICY_ID
     if feature_version == 3:
         return (LEGACY_RECOVERY_EXPLORATION_POLICY_ID if legacy_restoration_preference
                 else RECOVERY_EXPLORATION_POLICY_ID)

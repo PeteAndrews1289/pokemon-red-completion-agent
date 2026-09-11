@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal.
+- Next decision: Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.
 
 ### Mandatory mission check
 
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-renewable-funding** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
+**2026-09-10-economy-agent-integration** · status **active** · evidence [registered train example](docs/evidence/red-dig-recovery-learning-2026-09-10.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | No new gameplay, fit or registration. AM01 inspection confirms level73 Blastoise/full party HP and no known Pay Day holder. Model65 and64 registrations remain unchanged. |
-| Authority delta | None: prospective economy observations/features only; current model and historical targets unchanged. |
+| Learning output | No gameplay, fit or registration. Reviewed opt-in economy features/codecs and real-supply budget passed258targeted tests. AM01/model65 and64 registrations unchanged; actual economy learning remains unactivated. |
+| Authority delta | None: prospective feature/codec work only; cash metadata is not a learning target and live activation remains off. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | No balls and593 money. Current learner omits cash/income and forced RESUPPLY is not a learned earning choice. |
-| Decision | Prioritize renewable income and explicit economy feedback. Qualify League access first; Pay Day needs TM/holder setup. |
-| Next session | Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal. |
-| Next falsifier | Distinct income/shortfall offers must remain distinguishable; a bounded League trial must retain net cash, bag, time and party costs without forced-choice learning credit. |
+| Blocker | No balls and593 money. Economy objective and runtime/replay connection remain unfinished; forced income is not a learned choice. |
+| Decision | Use isolated Flash implementation with Codex verification and bounded Claude review; prioritize measured income feedback and useful supply budgets. |
+| Next session | Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal. |
+| Next falsifier | Old model outputs stay fixed; changing measured cash must change explicit economy targets without invented labels or item identity leakage. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

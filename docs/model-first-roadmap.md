@@ -26,7 +26,7 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
 
-Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+Continue exact AM01/model65, not AJ or AL. The [delegated economy session](work-sessions/2026-09-10-economy-agent-integration.md) separates prospective input/recording support from the missing learning objective. Connect actual useful cash gain/loss to versioned targets, with historical missing evidence masked, then qualify reusable Center departure and one bounded League-income attempt. Derive the cash target from missing supplies; retain costs and protected stock; exclude forced support from fits. Budget two bounded sessions for learning connection and live qualification, not full collection. No replay, reset, sealed Red, Crystal or full run.
 
 The resource-recovery checklist is 2/3; funding/collection remains open. No stage exits or North Star requirements changed. [Latest report](work-sessions/2026-09-10-dig-recovery.md).
 

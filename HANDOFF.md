@@ -30,7 +30,7 @@ Exact identities:
 
 ## Prospective income work
 
-Read-only AM inventory reconfirmed Blastoise73/full HP, 593 money, zero balls, no Pay Day holder and no TM16 in the bag. TM16 availability elsewhere is unknown. New economy observations/features retain net cash and per-item bag changes without altering model65 or historical serialization. They are not yet wired to fitting or live earning. No gameplay, fit or registration this session. [Funding session](docs/work-sessions/2026-09-10-renewable-funding.md).
+Read-only AM inventory reconfirmed Blastoise73/full HP, 593 money, zero balls, no Pay Day holder and no TM16 in the bag. TM16 availability elsewhere is unknown. Flash's opt-in feature/codec draft and correction pass are integrated after Codex repairs:258targeted tests pass. Claude's review motivated a supply-derived funding budget. Cash outcomes still need explicit learning targets and runtime connection; do not call attached metadata a trained income policy. Policy serialization omits item identity; old model outputs remain fixed. No gameplay, fit or registration this session. [Delegated session](docs/work-sessions/2026-09-10-economy-agent-integration.md).
 
 ## Mechanics and checks
 
@@ -40,7 +40,7 @@ Explicit ordered Dig recovery leaves historical profiles unchanged. Only allowed
 
 ## Next bounded session
 
-Continue AM01/model65. Connect prospective economy facts to explicit earning choices, then qualify one bounded League-income attempt with measured costs. Exclude forced support from fits and preserve old rows. Pay Day is a fallback pending TM/holder setup. Budget 1-2 sessions for this boundary, not Red completion; no full replay, sealed Red or Crystal.
+Continue AM01/model65. Connect explicit cash-gain/loss targets and replayed observations; historical missing evidence is not zero. Qualify one bounded League-income attempt with measured costs. The roster screen favors Blastoise for three opening matchups and Dugtrio for Agatha, not a proven solo. Exclude forced support from fits. Budget two bounded sessions for learning connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.
 
 Private helper `inspect_an_funding_20260910.arguments()` reconstructs exact AM ancestry without launching gameplay. AN was read-only and created no episode. Its first inspection raised the explicit empty-menu exception; the normalized follow-up confirmed zero native goals and zero regional candidates. Never rerun AL/AM or restore AJ to regain resources.
 
