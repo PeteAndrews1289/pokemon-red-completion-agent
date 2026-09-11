@@ -69,7 +69,12 @@ _MECHANICS = frozenset(
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
     }
 )
-_MAX_ROUTE_FLEES = 16
+# Resource routes also perform bounded encounter search.  Sixteen exits is a
+# reasonable transport guard but too small for a five-percent missing encounter:
+# a healthy route can exhaust it before the ordinary search budget has a fair
+# chance to produce its target.  This remains finite and is covered by the route's
+# independent action/frame bounds.
+_MAX_ROUTE_FLEES = 128
 _MAX_ROUTE_TRAINER_BATTLES = 8
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
@@ -246,7 +251,10 @@ class RedResourceGoalRouter:
                     guarded_collection_route_handler,
                 )
                 interruption_handler = guarded_collection_route_handler(
-                    self.actions, self.runtime.reader, route_name="guarded resource-goal transport",
+                    self.actions,
+                    self.runtime.reader,
+                    route_name="guarded resource-goal transport",
+                    maximum_flees=_MAX_ROUTE_FLEES,
                 )
             from pokemon_red_completion.red_travel_capture_runtime import (
                 bind_travel_capture_destination,

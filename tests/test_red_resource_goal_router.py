@@ -183,7 +183,7 @@ def _supply(bindings):
 
 
 def test_route_limit_covers_every_declared_handler_interruption() -> None:
-    assert routing._MAX_ROUTE_FLEES == 16
+    assert routing._MAX_ROUTE_FLEES == 128
     assert routing._MAX_ROUTE_TRAINER_BATTLES == 8
     assert routing._ROUTE_LIMITS.max_interruptions == (
         routing._MAX_ROUTE_FLEES + routing._MAX_ROUTE_TRAINER_BATTLES
@@ -211,6 +211,7 @@ def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
 
     def guard(*args, **kwargs):
         calls.append("guard")
+        assert kwargs["maximum_flees"] == routing._MAX_ROUTE_FLEES
         return object()
 
     monkeypatch.setattr(

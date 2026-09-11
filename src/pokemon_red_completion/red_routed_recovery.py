@@ -61,7 +61,11 @@ class RedRoutedRecoveryError(RuntimeError):
 
 
 def guarded_collection_route_handler(
-    actions: RouteActionPort, reader: PokemonRedStateReader, *, route_name: str,
+    actions: RouteActionPort,
+    reader: PokemonRedStateReader,
+    *,
+    route_name: str,
+    maximum_flees: int = 16,
 ) -> RecoveryRouteInterruptionHandler:
     """Bind protected living slots from the actual prepared party, not old indices."""
     raw = reader.read()
@@ -69,6 +73,7 @@ def guarded_collection_route_handler(
         actions, reader,
         post_prep_species=tuple(raw.party_species_ids or ()),
         post_prep_living_slots=tuple(i for i, hp in enumerate(raw.party_hp or ()) if hp > 0),
+        maximum_flees=maximum_flees,
         route_name=route_name,
     )
 
