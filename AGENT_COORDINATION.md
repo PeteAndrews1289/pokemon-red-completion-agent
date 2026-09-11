@@ -13,11 +13,11 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
+AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
 
-Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
+Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
 
-Flash's older reserve draft remains rejected. Its resource core and new declared-Mart helper/tests are integrated with Codex repairs;240focused tests pass. Claude's contract review is adjudicated. Codex owns the next read-only qualification and measured continuation. Both external tasks are complete; see [handoff](HANDOFF.md) for findings and refreshed quota. No standing reviewer gate.
+Flash's older reserve draft remains rejected. Its resource core and new declared-Mart helper/tests are integrated with Codex repairs;240focused tests pass. Claude's contract review is adjudicated. Codex owns the next read-only qualification and measured continuation. A new bounded Flash read-only funding review is active; earlier tasks are complete. See [handoff](HANDOFF.md); no standing reviewer gate.
 
 ## Reviewer brief
 

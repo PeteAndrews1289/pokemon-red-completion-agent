@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-collection-resource-exhaustion**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funded-search-reorientation**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json))
 - [ ] Turn replenishment into new registration
 
-Current model: **69 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **70 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-collection-resource-exhaustion-2026-09-11.json)
+[Current evidence](../docs/evidence/red-funded-search-reorientation-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-funded-search-reorientation
+
+AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
+
+**Deviation:** Resource checklist remains1/3. Reorient before another one-ball search; actual funding/purchase support is not learned earning or new registration.
+
+**Next:** Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
 
 ### 2026-09-11-collection-resource-exhaustion
 

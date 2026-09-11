@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,9 +24,9 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
+AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
 
-Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
+Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
 
 Previous funded-lesson checklist3/3 is archived. Current checklist1/3 retains a negative resource-choice fit; distinct earn/buy options and new registration remain unverified. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 

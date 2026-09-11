@@ -4,43 +4,43 @@ Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_S
 and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
 and shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AV01
+## Latest verified endpoint: AX03
 
-AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
+AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
 
-- Episode: `red-outdoor-continuation-20260911-av-01-causal`
-- Checkpoint: `b8234668caf56f7de02e08a3a71fae0e26b96004d63fc1804ead147e5a395a40`
-- Manifest: `072e2e527726e01bbd1fae939da99292eccc02d87a289ca364d0dc31eabe1fc0`
-- State: `bffe0c165b720d5695b58cf22d48985f74f6ae34bc6f48d9f5ac1a5c542306d6`
-- Played source: `4dd0b6a4b6ccbffe28310d608a265af5d3ff54b3`
-- Current model: `1cb6c73a1f5459ccc77a6129d3a49ef25d0f539f301750cc6e50ab9c46e75dd5`
-- Model file: `398efe1738888aef59828542bc2bcedbf409c914cb705205a81b3e5e8ef5618a`
-- Corpus: `a16965d22934713b0be263c04343149b45fc7fc369fe8c4c8dfe940fed01af07`
+- Episode: `red-funded-collection-20260911-ax-03-causal`
+- Checkpoint: `7c6afea60fe4d8638532bef47b7631e1055370590eb16b5f6ef6e1f4de4dd212`
+- Manifest: `0ccfc266c5e19a56cde08d9b46dcced1ac8dc4da665d49d615df1aeb9f0eff58`
+- State: `e0cd2971977922fb951d88e1bf8537c88da70df8ab9c0fdee7a409799563fe13`
+- Played source: `d8eac1955a5dc22fe1c674f6e8e2dc8ba2499150`
+- Current model: `2a64cea4e6e5f66b3dce4def65438806118ea4f3702a9bbc845133826aeb8687`
+- Model file: `6993d7a3b6238a0f87df0770241664a4082fcbc12077295e9f5afd674d9c65ed`
+- Corpus: `9242162440dfaeab4353b8a005a413dd1595b5f4e81953a58eab4f2d27166172`
 
-Map162,row9,column8,input-ready,battle0; HP239/118/146/88/92/37.
-The three-goal batch stopped after one in533.832seconds; AV is consumed.
-Audit reopened the exact saved state and verified journal admission with zero input.
-The runtime reports binding_failed; no component exception stream was present.
-The ball expenditure and failed registration are verified; do not invent a more
-specific exception. AU's corrected funding route was not executed: acquisition won.
+Map32,row9,column11,input-ready,battle0; HP242/118/146/88/92/59.
+AW recovery46actions/3732frames, zero examples. AX funding101actions/7933frames
+earned145; purchase130actions/5556frames spent600. Both were zero-label support.
+AX03 used232actions/18156frames; failure is capture_items_exhausted. It observed
+missing Tangela30, paralyzed it and threw at full HP. One ball was not enough.
+AX total463actions/31645frames in753.134seconds; all three steps retained.
+The seven-way regional choice was fitted; the forced native acquisition was not.
+The audit verified the exact terminal, local owned flags, physical inventory,
+choice/outcome trace and model/corpus. No unselected target or new species credit.
 
 ## Next bounded work
 
-Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
+Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
 
-Private `inspect_av_resources_20260911.arguments()` is the current builder.
-It appends actual AV and its warp-safe/discovery SeafoamB4F source transitions to
-the existing AU lineage. Its main is a one-time action-free qualification, not play.
-Qualification completed without input: no funding candidate, but one ready
-RESTORE_TEAM bridge exists. Use that legitimate recovery from AV before seeking
-supplies; a forced bridge is zero-label support. Never rerun a consumed main.
-The source proposal itself was not fitted: the actual native goal outcome was.
+Current lineage builder starts with run_ax_funded_collection_20260911.arguments()
+ONLY, then appends all three actual AX checkpoints. AX01/02 source is null;
+AX03 selected wild:Route21:grass, with warp-safe/discovery transitions. Preserve
+model70 and the exact consumed regional choice. Never rerun any previous main.
 
-Resource checklist remains1/3 from AU's negative funding-choice fit.
-Earn/buy alternatives and new registration after replenishment remain unverified.
-Gameplay is stopped; the next bounded recovery is qualified, not yet successful.
-Overnight cutoff07:07EDT.
-[AV report](docs/work-sessions/2026-09-11-collection-resource-exhaustion.md).
+Flash3.8 High is reviewing existing funding and bounded League-component reuse
+read-only; no permission for gameplay or active-checkout edits. Inspect its persisted
+result before dispatching more work. Codex owns evidence and the next decision.
+Resource checklist remains1/3. Gameplay stopped; no more one-ball loops by default.
+Overnight cutoff07:07EDT. [Report](docs/work-sessions/2026-09-11-funded-search-reorientation.md).
 
 ## Engineering and external review
 

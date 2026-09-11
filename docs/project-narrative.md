@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Latest overnight result: AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## The question
 

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-collection-resource-exhaustion",
+  "as_of_session": "2026-09-11-funded-search-reorientation",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-collection-resource-exhaustion-2026-09-11.json"
+      "evidence": "docs/evidence/red-funded-search-reorientation-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -888,6 +888,12 @@
       "result": "AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.",
       "deviation": "Resource checklist remains1/3. The next failed collection outcome adds feedback, not useful earning competence or registration progress.",
       "next": "Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success."
+    },
+    {
+      "session": "2026-09-11-funded-search-reorientation",
+      "result": "AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.",
+      "deviation": "Resource checklist remains1/3. Reorient before another one-ball search; actual funding/purchase support is not learned earning or new registration.",
+      "next": "Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection."
     }
   ],
   "closed_milestones": [

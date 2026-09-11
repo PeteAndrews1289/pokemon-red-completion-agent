@@ -100,3 +100,10 @@ choosing acquisition over funding, traveling to Seafoam, and using its final bal
 without a new registration. Caption:68→69 actual examples;64registrations unchanged.
 Learning from a failure is real feedback, but not yet evidence of successful learning.
 The save keeps the spent ball and HP cost; the next task is legitimate replenishment.
+
+
+[The funded search](work-sessions/2026-09-11-funded-search-reorientation.md) demonstrates a useful distinction:
+the agent can heal, earn money, buy a ball and reach a missing species, yet still
+fail at sustainable collection. Show the cash568→713→113 and the failed Tangela
+throw.70examples is learning data, not70successful decisions; registrations stayed64.
+The next engineering question is supply endurance, not how to hide that failure.
