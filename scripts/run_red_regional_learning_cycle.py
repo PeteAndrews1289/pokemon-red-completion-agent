@@ -253,7 +253,11 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             }:
                 stop = "no_executable_collection_or_support_goal"
                 break
-            regional = kinds in ([], ["acquire_species"]) and len(candidates) >= 2
+            regional = (
+                kinds in ([], ["acquire_species"])
+                and len(candidates) >= 2
+                and menu is not None
+            )
         elif len(candidates) < 2:
             stop = "no_genuine_source_choice"
             break

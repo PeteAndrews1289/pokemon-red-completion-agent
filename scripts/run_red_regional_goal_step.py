@@ -50,7 +50,7 @@ def _run_prepared(
         else source.inspect_sources(ready, allow_no_choice=True)
     )
     selection = None
-    if len(candidates) >= 2:
+    if len(candidates) >= 2 and menu is not None:
         selection = source.sample_regional_acquisition(
             ready.causal_record.model,
             menu,
@@ -100,7 +100,15 @@ def _run_prepared(
             "selected_source": selected.source_id if selected is not None else None,
             "source_mode": "sampled"
             if selection is not None
-            else ("unique_binding" if selected is not None else "no_source"),
+            else (
+                "unique_binding"
+                if len(candidates) == 1
+                else (
+                    "deterministic_undifferentiated"
+                    if selected is not None
+                    else "no_source"
+                )
+            ),
             "before": observed.public_dict(),
             "menu": menu.policy_dict() if menu is not None else None,
             "selection": selection,

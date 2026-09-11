@@ -188,11 +188,19 @@ def inspect_sources(
             routed_recovery=ready.routed_recovery,
             prepare_capture_storage=ready.completion_dose,
         )
-        menu = (
-            None
-            if not include_menu or (allow_no_choice and len(candidates) < 2)
-            else regional_acquisition_menu(observed, candidates, source_search_memory(ready))
-        )
+        menu = None
+        if include_menu and not (allow_no_choice and len(candidates) < 2):
+            try:
+                menu = regional_acquisition_menu(
+                    observed, candidates, source_search_memory(ready)
+                )
+            except ValueError as error:
+                if not (
+                    allow_no_choice
+                    and str(error)
+                    == "regional candidates have no distinguishable semantic features"
+                ):
+                    raise
         if (
             before != emulator.save_state_bytes()
             or frame != emulator.frame_count

@@ -114,6 +114,49 @@ def test_empty_old_source_does_not_hide_new_executable_regional_choices(tmp_path
     assert result["stop_reason"] == "step_limit"
 
 
+def test_indistinguishable_sources_defer_to_native_goal_without_fake_source_label(
+    tmp_path, monkeypatch,
+):
+    args, _, _, played, fits, _ = harness(tmp_path, monkeypatch)
+    args.automatic_goals = True
+    monkeypatch.setattr(cycle.source.base, "_action_free_preflight", lambda _ready: {
+        "status": "ready",
+        "available_goal_kinds": ["acquire_species", "evolve_species"],
+    })
+    original_inspect = cycle.source.inspect_sources
+
+    def inspect(ready, **kwargs):
+        observed, candidates, _menu = original_inspect(ready, **kwargs)
+        return observed, candidates, None
+
+    monkeypatch.setattr(cycle.source, "inspect_sources", inspect)
+    monkeypatch.setattr(cycle.goal, "_run_prepared", cycle.source._run_prepared)
+    monkeypatch.setattr(cycle, "fit_incremental_goal_results",
+                        cycle.fit_incremental_regional_result)
+    monkeypatch.setattr(
+        cycle.source,
+        "_run_prepared",
+        lambda *_a, **_k: pytest.fail("source policy must not label an indistinguishable menu"),
+    )
+
+    # Install a separate native runner after the source-policy trap.
+    def native(ready, *, inspected):
+        assert inspected[2] is None and len(inspected[1]) == 2
+        actual = argparse.Namespace(**ready.invocation)
+        played.append(deepcopy(vars(actual)))
+        return {
+            "episode_id": f"{actual.pair_id}-causal",
+            "checkpoint_sha256": str(len(played)) * 64,
+            "proposed_source": "wild:Route5:grass",
+            "parent_episode": {"steps": [{"status": "succeeded"}]},
+        }
+
+    monkeypatch.setattr(cycle.goal, "_run_prepared", native)
+    result = cycle._run(args)
+    assert len(played) == len(fits) == 2
+    assert all(row["selection_scope"] == "native_goal" for row in result["steps"])
+
+
 def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monkeypatch):
     args, records, prepared, played, fits, files = harness(tmp_path, monkeypatch)
     result = cycle._run(args)
