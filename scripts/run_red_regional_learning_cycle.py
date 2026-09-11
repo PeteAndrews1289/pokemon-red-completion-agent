@@ -136,11 +136,19 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise ValueError("automatic goal declaration must be boolean")
     if continue_status and not automatic_goals:
         raise ValueError("status continuation requires native recovery choices")
-    initial = source.base._prepare(args)
+    # Prepare the first episode directly.  The older implementation prepared an
+    # otherwise unused aggregate identity, prepared episode 1 again, and then its
+    # child runner prepared episode 1 a third time.  No controller input separates
+    # those snapshots, so one authenticated readiness is the stronger binding.
+    original = args.out.resolve()
+    first = argparse.Namespace(**vars(args))
+    first.pair_id = f"{args.pair_id}-01"
+    first.training_seed = args.training_seed
+    first.out = original.with_name(f"{original.stem}-01-parent.json")
+    initial = source.base._prepare(first)
     if initial.continuation is None or not isinstance(initial.causal_record, RedPlayerModelRecord):
         raise ValueError("learning cycle requires a retained native model and saved endpoint")
-    if initial.output_path.exists():
-        raise ValueError("learning cycle output exists; do not replay")
+    original = source.base._new_external_output(original, rom_path=initial.rom_path)
     overrides: dict[str, BehaviorRecord] = {}
     for expected, path in args.behavior_model_record:
         if expected in overrides:
@@ -181,8 +189,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise ValueError("owned evolution objectives require automatic registered goals")
     if not registered_objective or initial.causal_record.objective:
         load_prior_player_inventory(initial.private_root, initial.causal_record, resolve)
-    current = argparse.Namespace(**vars(args))
-    original = initial.output_path
+    current = first
     results: list[dict[str, object]] = []
     pending_support: list[dict[str, object]] = []
     stop = "step_limit"
@@ -190,10 +197,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         if deadline_reached():
             stop = "time_limit_before_next_step"
             break
-        current.pair_id = f"{args.pair_id}-{ordinal:02d}"
-        current.training_seed = args.training_seed + ordinal - 1
-        current.out = original.with_name(f"{original.stem}-{ordinal:02d}-parent.json")
-        ready = source.base._prepare(current)
+        if ordinal == 1:
+            ready = initial
+        else:
+            current.pair_id = f"{args.pair_id}-{ordinal:02d}"
+            current.training_seed = args.training_seed + ordinal - 1
+            current.out = original.with_name(f"{original.stem}-{ordinal:02d}-parent.json")
+            ready = source.base._prepare(current)
         evolution_inventory = None
         if owned_evolutions:
             from inspect_red_owned_evolution import inspect_owned_evolution
@@ -251,7 +261,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             stop = "time_limit_before_next_step"
             break
         # Existing runner records the actual sampled source before any input.
-        outcome = source._run(current) if regional else goal._run(current)
+        outcome = source._run_prepared(ready) if regional else goal._run_prepared(ready)
         source.base._write_exclusive(
             original.with_name(f"{original.stem}-{ordinal:02d}-source.json"),
             outcome,

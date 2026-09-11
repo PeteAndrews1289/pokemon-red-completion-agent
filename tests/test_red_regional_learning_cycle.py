@@ -29,21 +29,26 @@ def harness(tmp_path, monkeypatch, *, failed=False, fit_fails=False, stop_after_
             causal_record=by_sha[actual.expected_living_dex_model_sha256],
             model_sha256=actual.expected_living_dex_model_sha256,
             output_path=actual.out, source_commit='e'*40, source_bundle_sha256='f'*64,
-            private_root=object())
+            private_root=object(), rom_path=tmp_path/'rom.gb',
+            invocation=deepcopy(vars(actual)))
     monkeypatch.setattr(cycle.source.base, '_prepare', prepare)
+    monkeypatch.setattr(
+        cycle.source.base, '_new_external_output', lambda path, **_: path,
+    )
     monkeypatch.setattr(cycle, 'load_prior_player_inventory', lambda *_: ((), ()))
     def inspect(_ready, **kwargs):
         assert kwargs == {'allow_no_choice': True, 'include_menu': False}
         return object(), (() if stop_after_first and played else (object(), object())), None
     monkeypatch.setattr(cycle.source, 'inspect_sources', inspect)
-    def run(actual):
+    def run(ready):
+        actual = argparse.Namespace(**ready.invocation)
         if any(row['pair_id'] == actual.pair_id for row in played):
             raise ValueError('episode already consumed')
         played.append(deepcopy(vars(actual)))
         return {'episode_id': f'{actual.pair_id}-causal',
             'checkpoint_sha256': str(len(played))*64, 'selected_source': 'wild:Route5:grass',
             'parent_episode': {'steps': [{'status': 'failed' if failed else 'succeeded'}]}}
-    monkeypatch.setattr(cycle.source, '_run', run)
+    monkeypatch.setattr(cycle.source, '_run_prepared', run)
     def fit(_store, **kwargs):
         fits.append(kwargs)
         if fit_fails:
@@ -106,9 +111,13 @@ def test_empty_old_source_does_not_hide_new_executable_regional_choices(tmp_path
 
 
 def test_second_choice_uses_first_real_endpoint_and_updated_model(tmp_path, monkeypatch):
-    args, records, _, played, fits, files = harness(tmp_path, monkeypatch)
+    args, records, prepared, played, fits, files = harness(tmp_path, monkeypatch)
     result = cycle._run(args)
     assert len(played) == len(fits) == len(result['steps']) == 2
+    assert [row['pair_id'] for row in prepared] == [
+        'cycle-fixture-01', 'cycle-fixture-02',
+    ]
+    assert len(prepared) == len(played)  # exactly one ancestry authentication per play
     assert played[1]['expected_living_dex_model_sha256'] == records[1].model.model_sha256
     assert fits[1]['prior'] is records[1]
     assert played[1]['continue_from_checkpoint'] == [
@@ -147,7 +156,7 @@ def test_owned_evolution_transition_precedes_choice_and_persists_in_actual_ances
     monkeypatch.setattr(cycle.source.base, "_prepare", prepare)
     monkeypatch.setattr(cycle, "fit_incremental_registered_results",
                         cycle.fit_incremental_regional_result)
-    monkeypatch.setattr(cycle.goal, "_run", cycle.source._run)
+    monkeypatch.setattr(cycle.goal, "_run_prepared", cycle.source._run_prepared)
     monkeypatch.setattr(cycle.source.base, "_action_free_preflight", lambda ready: {
         "status": "ready", "available_goal_kinds": ["acquire_species", "evolve_species"],
     })
@@ -226,16 +235,16 @@ def test_opt_in_safe_search_failure_replans_from_actual_model_and_save(
     tmp_path, monkeypatch, resource_state_changed,
 ):
     args, records, _, played, fits, _ = harness(tmp_path, monkeypatch, failed=True)
-    original = cycle.source._run
-    def exhausted(actual):
-        result = original(actual)
+    original = cycle.source._run_prepared
+    def exhausted(ready):
+        result = original(ready)
         result['parent_episode']['steps'][0].update(
             failure_reason='search_exhausted', semantic_state_changed=resource_state_changed,
             collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
             collection_after={'living_species': 21, 'undeclared_specimen_losses': 0},
         )
         return result
-    monkeypatch.setattr(cycle.source, '_run', exhausted)
+    monkeypatch.setattr(cycle.source, '_run_prepared', exhausted)
     args.continue_after_search_exhaustion = True
     result = cycle._run(args)
     assert len(played) == len(fits) == 2
@@ -278,10 +287,10 @@ def test_status_replanning_is_opt_in_and_uses_actual_saved_model(tmp_path, monke
     monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
         'status': 'ready', 'available_goal_kinds': ['acquire_species'],
     })
-    original = cycle.source._run
+    original = cycle.source._run_prepared
 
-    def degraded(actual):
-        result = original(actual)
+    def degraded(ready):
+        result = original(ready)
         result['parent_episode']['steps'][0].update(
             failure_reason='recovery_required', semantic_state_changed=True,
             collection_before={'living_species': 21, 'undeclared_specimen_losses': 0},
@@ -289,7 +298,7 @@ def test_status_replanning_is_opt_in_and_uses_actual_saved_model(tmp_path, monke
         )
         return result
 
-    monkeypatch.setattr(cycle.source, '_run', degraded)
+    monkeypatch.setattr(cycle.source, '_run_prepared', degraded)
     result = cycle._run(args)
     assert len(played) == len(fits) == (2 if enabled else 1)
     assert result['automatic_retry'] is False
@@ -389,12 +398,12 @@ def test_automatic_cycle_switches_native_goal_to_destination_and_carries_fit(tmp
         'status': 'ready', 'available_goal_kinds':
         ['restore_party', 'acquire_species'] if not played else ['acquire_species'],
     })
-    run = cycle.source._run
-    def native(actual):
-        result = run(actual)
+    run = cycle.source._run_prepared
+    def native(ready):
+        result = run(ready)
         result['proposed_source'] = result.pop('selected_source')
         return result
-    monkeypatch.setattr(cycle.goal, '_run', native)
+    monkeypatch.setattr(cycle.goal, '_run_prepared', native)
     def native_fit(store, *, results, **kw):
         assert len(results) == 1 and 'proposed_source' in results[0]
         return cycle.fit_incremental_regional_result(store, result=results[0], **kw)
@@ -416,13 +425,13 @@ def test_automatic_support_advances_save_without_inventing_a_fit(tmp_path, monke
     monkeypatch.setattr(cycle.source.base, '_action_free_preflight', lambda _: {
         'status': 'ready_for_forced_bridge', 'available_goal_kinds': ['resupply'],
     })
-    run = cycle.source._run
-    def native(actual):
-        result = run(actual)
+    run = cycle.source._run_prepared
+    def native(ready):
+        result = run(ready)
         result['proposed_source'] = None
         del result['selected_source']
         return result
-    monkeypatch.setattr(cycle.goal, '_run', native)
+    monkeypatch.setattr(cycle.goal, '_run_prepared', native)
     batches = []
     def fit(_store, *, results, **kw):
         batches.append(results)

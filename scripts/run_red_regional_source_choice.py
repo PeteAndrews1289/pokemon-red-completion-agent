@@ -215,8 +215,13 @@ def _require_capture_parent(preflight: dict[str, Any]) -> None:
         raise ValueError("regional parent would override or duplicate the source choice")
 
 
-def _run(args: argparse.Namespace) -> dict[str, object]:
-    ready = base._prepare(args)
+def _run_prepared(ready: base._Readiness) -> dict[str, object]:
+    """Execute one source choice from the caller's authenticated readiness.
+
+    This keeps the preparation snapshot call-local: inventory and commitment use
+    the same immutable ancestry that was authenticated immediately before them.
+    It avoids reparsing that entire ancestry a second time before controller input.
+    """
     if ready.decision_limit != 1 or not ready.save_terminal_checkpoints:
         raise ValueError("regional pilot requires one saved bounded acquisition")
     assert ready.training_plan is not None and ready.causal_record is not None
@@ -414,6 +419,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_fitted": False,
         "independent_evaluation": False,
     }
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    return _run_prepared(base._prepare(args))
 
 
 def main(argv: list[str] | None = None) -> int:

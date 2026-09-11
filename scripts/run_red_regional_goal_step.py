@@ -27,8 +27,8 @@ from pokemon_red_completion.red_regional_goal_proposal import (
 )
 
 
-def _run(args: argparse.Namespace) -> dict[str, object]:
-    ready = source.base._prepare(args)
+def _run_prepared(ready: source.base._Readiness) -> dict[str, object]:
+    """Execute one native goal from the caller's authenticated readiness."""
     if (
         ready.decision_limit != 1
         or not ready.save_terminal_checkpoints
@@ -156,6 +156,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_fitted": False,
         "independent_evaluation": False,
     }
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    return _run_prepared(source.base._prepare(args))
 
 
 def main(argv: list[str] | None = None) -> int:
