@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-flight-income-result",
+  "as_of_session": "2026-09-11-funded-capture-result",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-funded-search-reorientation-2026-09-11.json"
+      "evidence": "docs/evidence/red-funded-capture-learning-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -43,20 +43,20 @@
       {
         "id": "resource-variant-executable-options",
         "label": "Preserve distinct earn and buy options",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-funded-capture-learning-2026-09-11.json"
       },
       {
         "id": "resource-variant-observed-learning",
         "label": "Fit an actual resource-choice outcome",
         "done": true,
-        "evidence": "docs/evidence/red-funding-route-failure-learning-2026-09-11.json"
+        "evidence": "docs/evidence/red-funded-capture-learning-2026-09-11.json"
       },
       {
         "id": "resource-reserve-collection-yield",
         "label": "Turn replenishment into new registration",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-funded-capture-learning-2026-09-11.json"
       }
     ]
   },
@@ -906,6 +906,12 @@
       "result": "AY verified Fly-to-Lavender and Route8 trainer income:113actions/9565frames, cash113 to1793, unchanged HP and64registrations. One forced support goal, zero eligible examples/fit; model70 retained. Read-only terminal audit passed.",
       "deviation": "Resource checklist stays1/3: income access is working but useful earn/buy learning and new registration remain unproved. No stage exits changed. Three CI typing errors repaired without relaxing checks.",
       "next": "Continue actual AY01 through bounded resource choices toward another model-selected collection outcome; retain costs and fit only eligible choices."
+    },
+    {
+      "session": "2026-09-11-funded-capture-result",
+      "result": "AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.",
+      "deviation": "The unchanged resource checklist is now3/3: real earn/buy options, selected outcome fitting and a new registration. This is not phase completion, independent advantage or sustainable income. Earlier failed attempts remain retained.",
+      "next": "Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes."
     }
   ],
   "closed_milestones": [

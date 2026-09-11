@@ -1,6 +1,6 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest overnight result: AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
+Latest overnight result: AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage. [Report](work-sessions/2026-09-11-funded-collection-overnight.md).
 
 ## The question
 
@@ -15,7 +15,10 @@ globally exhausted, access was too narrow. Flash drafted a small candidate plann
 Codex repaired and connected it. The [actual AY test](work-sessions/2026-09-11-flight-income-result.md)
 then flew to Lavender, reached an unpaid Route8 trainer and earned1680. This is
 verified resource access, not learned money management: the only goal was forced,
-so no training label was created. Spending those funds on useful collection is next.
+so no training label was created. The [AZ sequence](work-sessions/2026-09-11-funded-capture-result.md)
+then exposed a real earn-versus-buy choice: the model bought two balls and chose
+Route21, where it caught Tangela. Three actual outcomes were fitted, reaching73
+examples and65registrations. This is one productive sequence, not proof of reliability.
 
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
 

@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-flight-income-result**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-funded-capture-result**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Make useful earning and spending choices: 1/3 acceptance items (33%).**
+**Make useful earning and spending choices: 3/3 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [ ] Preserve distinct earn and buy options
-- [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funding-route-failure-learning-2026-09-11.json))
-- [ ] Turn replenishment into new registration
+- [x] Preserve distinct earn and buy options ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
+- [x] Fit an actual resource-choice outcome ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
+- [x] Turn replenishment into new registration ([evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json))
 
-Current model: **70 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **73 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-funded-search-reorientation-2026-09-11.json)
+[Current evidence](../docs/evidence/red-funded-capture-learning-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-funded-capture-result
+
+AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.
+
+**Deviation:** The unchanged resource checklist is now3/3: real earn/buy options, selected outcome fitting and a new registration. This is not phase completion, independent advantage or sustainable income. Earlier failed attempts remain retained.
+
+**Next:** Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.
 
 ### 2026-09-11-flight-income-result
 

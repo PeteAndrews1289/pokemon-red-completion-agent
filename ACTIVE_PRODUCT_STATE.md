@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels.
+- Next decision: Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. |
+| Authority now | AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
@@ -50,7 +50,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 70 | 12 |
+| Registered Train Example · train | 73 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-flight-income-result** · status **active** · evidence [registered train example](docs/evidence/red-funded-search-reorientation-2026-09-11.json)
+**2026-09-11-funded-capture-result** · status **active** · evidence [registered train example](docs/evidence/red-funded-capture-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. |
-| Authority delta | One actual seven-way destination outcome fitted; support remains deterministic and no authority promotion occurred. |
+| Learning output | AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage. |
+| Authority delta | Two native choices and one regional destination outcome fitted; no authority promotion or independent advantage claim. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
-| Blocker | Flight-assisted income succeeded, but the new funds have not yet produced supplies or a new registration. A CI typing failure was isolated to three annotations/call signatures; no runtime failure occurred. |
-| Decision | Use the verified finite-income access for the next bounded collection sequence. Forced support is not learned money management. |
-| Next session | Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels. |
-| Next falsifier | A proposed funding option cannot retain a practical reserve or depends on unsupported mechanics. |
+| Blocker | The useful resource-choice checklist passed once, but supplies are exhausted again and repeated productive collection remains unproved. |
+| Decision | Close the3/3resource-choice checklist without closing Red collection. Continue the working bounded loop rather than adding another funding framework. |
+| Next session | Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes. |
+| Next falsifier | Can the next actual funded continuation produce useful collection without erased costs or a hand-picked destination? |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 
 ### Stop conditions

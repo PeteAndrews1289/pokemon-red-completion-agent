@@ -1,69 +1,65 @@
 # Current development handoff
 
 Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md)
-and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Current goal: learned play
-and shared registered Pokédex; global credit, local flags and physical stock differ.
+and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Goal: learned play and a
+shared registered Pokédex; global credit, local flags and physical stock differ.
 
-## Latest verified endpoint: AY01
+## Latest verified endpoint: AZ03
 
-AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed.
+AZ completed all three model-selected goals: recovery, buying two GreatBalls instead
+of earning more money, then a seven-way Route21 choice that caught Tangela.
+Audited examples70→73, registrations64→65, physical specimens54→55.
+The unchanged resource-choice checklist is3/3, not the collection phase or project.
 
-- Episode: `red-flight-income-20260911-ay-01-causal`
-- Checkpoint: `f72b61726a484465c754bf28dc40ed5dfa892d378e100cbca2812fcb0d3fe977`
-- Manifest: `2c8d8711b6cc71e0984407d6e867758fc92aab5ef2aad591c334f9666440e358`
-- State: `e14f1c8dc74f9ef191641b917ee150041ae560d057f28ebdea9ae54f90ee8362`
-- Played source: `1da40c3a85fbbce052d778e50366d5cc607129fa`
-- Current model: `2a64cea4e6e5f66b3dce4def65438806118ea4f3702a9bbc845133826aeb8687`
-- Model file: `6993d7a3b6238a0f87df0770241664a4082fcbc12077295e9f5afd674d9c65ed`
-- Corpus: `9242162440dfaeab4353b8a005a413dd1595b5f4e81953a58eab4f2d27166172`
+- Episode: `red-funded-collection-20260911-az-03-causal`
+- Checkpoint: `0591de231606da33cf9ba217009c2c0a06e21b0a159aea20e207041202786dc0`
+- Manifest: `d90a5790653e9043b772db8b3f0c82cf02ce1eac27f99c8df423ebc9e6dd5627`
+- State: `52765a95dc06c5937f6eaf2866d5aed81285b130416f3df7b7e2e9d9ea59a4ab`
+- Played source: `5dd6e2a8bbc36af0da0eda6a4cb0e9731a7fa785`
+- Model: `0bcab0cba2ad0753009e2d97216fbfd0d955c47d44857244b459513b76352c68`
+- Model file: `cce09e3aa78048e2a4a7a6486ed0db39eddbd671e0b3f6fa6fbeab3e2867eb5a`
+- Corpus: `b1a221f77b052746d2b8cdd6b40d88b380e208b748299932bff78939dc70e4fd`
 
-Map19,row13,column47,input-ready,battle0; HP242/118/146/88/92/59.
-AY completed113actions/9565frames in172.527seconds. Read-only terminal audit
-authenticated the save, unchanged model, zero eligible examples and actual1793cash.
-The earlier AX03 failed Tangela search remains retained and fitted; its spent ball
-is not restored. All future work starts after AY's actual travel and paid trainer.
+Route21,map32,row9,column11,input-ready,battle0;593money,no balls.
+HP246/118/146/88/92/69;65local/global registrations,55specimens,51living species,
+59required registrations remain. All actual spending and prior failures are retained.
+
+AZ01 selected healing from3options,56actions/3096frames, one example.
+AZ02 selected purchase from two distinct resupply offers:1200for2balls versus
+unexecuted1540income.140actions/8076frames, one example; no counterfactual label.
+AZ03 selected Route21 from7destinations,290actions/23880frames, one regional
+example. Its forced native capture is not a duplicate label. Tangela28 was caught;
+both balls were spent. Total486actions/35052frames in1005.468seconds.
+
+Read-only native audits and the full batch audit verified choices, exact terminal,
+local owned flags, physical stock, model/corpus and all three fits. No independent
+advantage, renewable-income or fresh-game autonomy claim.
+[Result and evidence](docs/work-sessions/2026-09-11-funded-capture-result.md).
 
 ## Next bounded work
 
-Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels.
+Continue from actual AZ03/model73 through legitimate replenishment and another
+model-selected missing-registration goal. Do not substitute a hand-picked target.
+At most3goals/30minutes per continuation, stop on failure and retain its terminal.
+The overnight block still ends07:07EDT; no full replay, sealed Red or Crystal.
 
-Current lineage builder uses run_ay_flight_income_20260911.arguments() ONLY,
-then appends AY01's actual episode/checkpoint. It retains AX01/02/03 and the
-funding-fly profile transition. AY has no selected regional source. Preserve
-model70; never rerun any previous main or restore AX03 to erase AY.
-
-Flash3.8 High finished its review and a separate isolated two-file Fly planner/test
-draft. Codex rejected its legacy-only League rewrite and integrated the smaller
-flight-access seam with repairs.240focused tests pass; AY verified actual income.
-The current save has93 unpaid outdoor trainer quotes and a usable Fly carrier;
-quotes are not routed availability. All external tasks have finished.
-Gemini03:18EDT:92.02%five-hour/68.41%weekly remaining; resets3h55m/16h4m.
-Claude was not reused; quota unavailable. [Integration](docs/work-sessions/2026-09-11-funding-fly-integration.md).
-Resource checklist remains1/3. AY stopped safely; next is funded collection.
-CI34574394770 failed three typing checks; targeted type repairs preserve behavior.
-See [actual result](docs/work-sessions/2026-09-11-flight-income-result.md).
-Overnight cutoff07:07EDT. [Report](docs/work-sessions/2026-09-11-funded-search-reorientation.md).
+The lineage builder uses run_az_funded_collection_20260911.arguments() ONLY,
+appends all three AZ checkpoints, adds the actual AZ03 selected-source
+warp-safe/discovery transitions, and installs model73. Never rerun an old main.
+All AZ processes/audits completed; inspect actual next process before launching.
 
 ## Engineering and external review
 
-AP bought two GreatBalls and AQ bought a third; both are zero-label support.
-AQ had two menu entries but deterministic resource safety chose the purchase.
-CI fixture repair passed129 focused tests; hosted34557735877 is green.
+AY previously earned1680 through actual Fly-to-Lavender/Route8 funding. That forced
+support supplied zero labels. Flash drafted the isolated planner; Codex repaired
+static-object coverage, tests and integration. No external task remains running.
+The larger incompatible reserve draft remains isolated and must not be swept in.
 
-Flash's five-file reserve draft stays isolated:89 tests passed,1failed, and it
-incorrectly replaces a valid purchase with earning. Its variant design also misses
-kind-indexed consumers. Do not integrate it. The narrow capture review completed:
-status mode skips legacy weakening, but this is an explicit non-damaging contract,
-not a newly proved defect. Its guessed catch odds and mandatory weakening were
-rejected. The same limitation was already reviewed September10; no repeat audit.
-Claude Opus4.8 High completed its review: finite-income/no-fake-learning cautions
-accepted; Route18-local-only requirement rejected because regional travel exists.
+CI34574394770 failed three typing checks; repaired in5dd6e2a8. Local240code tests,
+124documentation tests and type checking479source files pass. Hosted34575608031
+is green for5dd6e2a8. Batch publication; no repeated unchanged CI reruns.
 
-After the core work, Flash displayed45.69%five-hour/68.46%weekly remaining
-at01:09EDT (resets about1h4m/18h13m). These are account-wide readings, not isolated
-task savings. Claude completed the contract review; quota unavailable. Its replay
-and semantic-tie concerns are covered; v4 itself declares opt-in, without a second
-redundant payload flag. No proven net subscription savings.
-
-[Result](docs/evidence/red-recovery-funding-learning-2026-09-11.json) · [Report](docs/work-sessions/2026-09-11-recovery-funding-followup.md).
-PR243 remains publication lane. Recommend Astra High, Fast off for background work.
+Last observed Gemini quota03:18EDT:92.02%five-hour/68.41%weekly remaining,
+resets3h55m/16h4m. Dated account-wide readings, not current or isolated savings.
+Claude was not reused; quota unavailable. [Adjudication](docs/work-sessions/2026-09-11-funding-fly-integration.md).
+Recommend Astra High, Fast off: bounded outcomes and verification, not new architecture.

@@ -8,7 +8,7 @@ The [development infographic](development-roadmap.md) shows the complete sequenc
 
 The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
 
-Current work is Red collection. AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed. Fresh-game autonomy and independent reliability are unproven.
+Current work is Red collection. AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage. Fresh-game autonomy and independent reliability are unproven.
 
 ## Next sequence
 
@@ -24,11 +24,11 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed.
+AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.
 
-Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels.
+Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.
 
-Previous funded-lesson checklist3/3 is archived. Current checklist1/3 retains a negative resource-choice fit; distinct earn/buy options and new registration remain unverified. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
+The resource-choice checklist is now3/3: distinct earning/purchase options, actual selected-outcome fitting and a new registration. This closes that bounded checklist, not Red collection. Repeat useful play before claiming sustainability or independent reliability. [Latest result](work-sessions/2026-09-11-funded-capture-result.md).
 
 ## How to stay focused
 

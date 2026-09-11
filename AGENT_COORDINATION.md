@@ -13,9 +13,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-AY flew to Lavender, reached an unpaid Route8 trainer and earned1680. Its retained save has1793money,no balls,64registrations/54specimens and unchanged party HP. This was one forced support goal:0eligible examples, no fit. Model70 still includes the earlier failed seven-way Route21 choice; no learned advantage is claimed.
+AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.
 
-Continue from actual AY01/model70 into a bounded resource-and-collection sequence. Expose available earn/buy alternatives honestly, preserve all travel and battle costs, and fit only actual eligible model-selected outcomes. No rewind, League replay or support labels.
+Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.
 
 Flash's funding review and isolated Fly planner/tests are complete. Codex repaired and integrated the draft; AY now verifies actual flight-assisted income. No external task remains running and no fresh broad audit is needed. Claude was not reused. See [handoff](HANDOFF.md).
 

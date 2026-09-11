@@ -10,6 +10,12 @@ existed elsewhere. The integrated skill flew to Lavender, reached a Route8 train
 and earned1680. Show the actual113-to1793cash change, with unchanged70examples and
 64registrations. Explain why a successful forced support step is not learned judgment.
 
+Then show the [actual funded capture sequence](work-sessions/2026-09-11-funded-capture-result.md):
+heal, choose buying two balls over earning more, then select Route21 and catch
+Tangela. Use the recorded three-option/two-option/seven-destination menus, not
+illustrative fake choices. The result is73examples and65registrations; the resource
+checklist is complete but sustained collection remains unproved.
+
 “I wanted a model that could play Pokémon—not just repeat a walkthrough. Getting code to finish Red turned out to be different from teaching a model useful decisions.”
 
 Show the actual dashboard. Label saved footage as recorded and live footage as live. Do not loop an old frame sequence and present it as current learning.
@@ -22,8 +28,9 @@ Explain why a deterministic teacher helps establish observation, controls and ve
 
 Use the [earn-versus-buy core](work-sessions/2026-09-11-resource-variant-core.md)
 as an engineering diagram: two distinct offers, one selected binding, one retained
-outcome. Label this synthetic qualification until the real runtime is activated;
-do not illustrate it with unrelated footage and imply learned money management.
+outcome. AZ02 now provides one actual runtime purchase-versus-income decision;
+only its selected purchase outcome was fitted. Do not present that single example
+as mastery of money management or independent performance.
 
 Show the loop: observe, choose a goal, execute a skill, verify the outcome, save and learn. Compare model-selected goals with deterministic movement and combat. Explain that coding assistants develop the system; they are not the trained player.
 
