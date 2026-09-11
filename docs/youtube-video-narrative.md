@@ -14,6 +14,11 @@ Explain why a deterministic teacher helps establish observation, controls and ve
 
 ## Act2 — Make the choices real
 
+Use the [earn-versus-buy core](work-sessions/2026-09-11-resource-variant-core.md)
+as an engineering diagram: two distinct offers, one selected binding, one retained
+outcome. Label this synthetic qualification until the real runtime is activated;
+do not illustrate it with unrelated footage and imply learned money management.
+
 Show the loop: observe, choose a goal, execute a skill, verify the outcome, save and learn. Compare model-selected goals with deterministic movement and combat. Explain that coding assistants develop the system; they are not the trained player.
 
 A useful visual is one actual goal menu beside its selected destination and retained outcome—not a wall of experiment terminology.

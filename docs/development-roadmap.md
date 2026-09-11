@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-recovery-funding-followup**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-resource-variant-core**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-resource-variant-core
+
+Default-off earn/buy core integrated after Flash draft, Codex repairs and Claude contract review.194focused tests pass; ordered execution/replay and positive learned probabilities qualified with synthetic fixtures.67examples and64registrations unchanged; gameplay stopped.
+
+**Deviation:** No stage exit changed. Runtime/profile enumeration is not enabled; useful resource checklist remains0/3. Older rejected funding draft not integrated.
+
+**Next:** Connect explicit Red profile/router opt-in and preserve both legitimate offers. Then qualify one actual resource choice from AS02 with model67, retaining all costs and no reset.
 
 ### 2026-09-11-recovery-funding-followup
 

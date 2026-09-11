@@ -16,12 +16,20 @@ from pokemon_red_completion.goal_manager import (
     GoalSelectionMode,
     GoalSituation,
 )
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalBindingSet,
+    GoalExecutionReport,
+    GoalVerification,
+    execute_goal_manager_decision,
+)
 from pokemon_red_completion.goal_manager_trajectory import (
     GoalManagerTrajectoryError,
     GoalManagerTrajectoryObserver,
     load_goal_manager_episode,
     ordered_goal_manager_question,
 )
+from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
 from pokemon_red_completion.trajectory import (
     InMemoryTrajectorySink,
     RecordingExecutor,
@@ -189,6 +197,55 @@ def test_choice_is_written_before_execution_and_strictly_reloads() -> None:
     assert dataset.examples[0].teacher_choice_target == selected
     assert dataset.examples[0].question.policy_input == question.policy_input
     assert dataset.public_summary()["private_binding_fields"] == 0
+
+
+@pytest.mark.parametrize("earn", [False, True])
+def test_resource_variants_execute_and_replay_the_selected_offer(earn: bool) -> None:
+    observer, _recorder, sink = _observer()
+    executed: list[str] = []
+
+    def binding(name: str, quote: GoalResourceQuote) -> ExecutableGoalBinding:
+        def execute() -> GoalExecutionReport:
+            assert len(sink.decisions) == 1
+            executed.append(name)
+            return GoalExecutionReport(2, 120, {"synthetic": True})
+
+        return ExecutableGoalBinding(
+            binding_ref=f"private:{name}", kind=GoalKind.RESUPPLY,
+            estimated_effort=0.2, estimated_risk=0.1,
+            resource_quote=quote, execute=execute,
+            verify=lambda report: GoalVerification.succeeded(),
+        )
+
+    buy = binding("buy", GoalResourceQuote(
+        1200, 600, (GoalResourceReserve("capture", 0, 3, 1),),
+    ))
+    income = binding("earn", GoalResourceQuote(1200, 0, (), expected_income=725))
+    bindings = GoalBindingSet(
+        (buy.opportunity, income.opportunity), (buy, income),
+        allow_resource_variants=True,
+    )
+
+    class SelectOffer:
+        def select(self, question):  # type: ignore[no-untyped-def]
+            assert question.allow_resource_variants
+            return next(index for index, item in enumerate(question.opportunities)
+                        if (item.resource_quote.expected_income > 0) is earn)
+
+    result = execute_goal_manager_decision(
+        situation=_situation(), binding_set=bindings,
+        authority=SelectOffer(), trajectory=observer,
+    )
+    assert result.passed
+    assert executed == ["earn" if earn else "buy"]
+    observer.require_settled()
+    example = load_goal_manager_episode(_reader_from_sink(sink)).examples[0]
+    assert example.question.allow_resource_variants
+    assert example.question.policy_input["schema"] == "pokemon.core.goal-manager-input.v4"
+    selected = example.question.opportunities[example.selected_candidate_index]
+    assert selected.resource_quote.expected_income == (725 if earn else 0)
+    assert selected.resource_quote.purchase_cost == (0 if earn else 600)
+    assert "private:" not in json.dumps(sink.decisions[0].to_dict())
 
 
 @pytest.mark.parametrize(

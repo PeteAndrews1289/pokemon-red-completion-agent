@@ -15,9 +15,9 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
+The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
 
-Flash reserve draft remains rejected; its completed capture review repeated a known limitation. Flash now owns a bounded default-off resource-variant core draft and tests; Codex handles independent integration. Claude may audit the finished small diff. See [handoff](HANDOFF.md) for findings and quotas. No standing reviewer gate.
+Flash's older reserve draft remains rejected. Its narrow resource-variant draft is integrated with Codex repairs and downstream tests; Claude's contract review is adjudicated. Codex now owns real runtime activation and measured continuation. See [handoff](HANDOFF.md) for findings and quotas. No standing reviewer gate.
 
 ## Reviewer brief
 

@@ -81,6 +81,7 @@ def ordered_goal_manager_question(
     decision_index: int,
     situation: GoalSituation,
     opportunities: tuple[GoalOpportunity, ...],
+    allow_resource_variants: bool = False,
 ) -> GoalManagerQuestion:
     """Order candidates from a source assignment nonce, never from a label."""
 
@@ -97,6 +98,7 @@ def ordered_goal_manager_question(
     return GoalManagerQuestion(
         situation=situation,
         opportunities=tuple(sorted(opportunities, key=order_key)),
+        allow_resource_variants=allow_resource_variants,
     )
 
 
@@ -274,6 +276,8 @@ class GoalManagerTrajectoryObserver:
         self,
         situation: GoalSituation,
         opportunities: tuple[GoalOpportunity, ...],
+        *,
+        allow_resource_variants: bool = False,
     ) -> GoalManagerQuestion:
         """Expose the exact candidate order before either teacher or model acts."""
 
@@ -284,6 +288,7 @@ class GoalManagerTrajectoryObserver:
             decision_index=self._next_decision_index,
             situation=situation,
             opportunities=opportunities,
+            allow_resource_variants=allow_resource_variants,
         )
 
     def record_selection(
@@ -303,6 +308,7 @@ class GoalManagerTrajectoryObserver:
             decision_index=self._next_decision_index,
             situation=question.situation,
             opportunities=question.opportunities,
+            allow_resource_variants=question.allow_resource_variants,
         )
         if expected.opportunities != question.opportunities:
             raise GoalManagerTrajectoryError(

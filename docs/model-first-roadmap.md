@@ -26,7 +26,7 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
 
-Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
+The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
 
 Previous funded-lesson checklist3/3 is archived. Next checklist0/3 tests distinct earn/buy options, actual resource learning and new registration. Red collection remains current. [Overnight report](work-sessions/2026-09-11-funded-collection-overnight.md).
 

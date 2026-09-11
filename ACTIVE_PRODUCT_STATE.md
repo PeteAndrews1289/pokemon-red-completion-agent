@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
+- Next decision: The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
 
 ### Mandatory mission check
 
@@ -59,7 +59,7 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-recovery-funding-followup** · status **active** · evidence [registered train example](docs/evidence/red-recovery-funding-learning-2026-09-11.json)
+**2026-09-11-resource-variant-core** · status **active** · evidence [registered train example](docs/evidence/red-recovery-funding-learning-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
@@ -68,8 +68,8 @@ outputs.
 | Authority delta | One genuine native recovery example fitted; forced725income supplies no label, no authority promotion. |
 | Transfer result | Related development choices only; no held-out or cross-title performance claim. |
 | Blocker | 1168cash permits one GreatBall; the current menu hides further earning whenever a purchase is affordable. |
-| Decision | Default-off resource-variant core first; stop if historical semantics or safety cannot be preserved within the timebox. |
-| Next session | Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry. |
+| Decision | Core qualified in194focused tests; next connect default-off Red runtime offers. No new game outcome or fit in this engineering session. |
+| Next session | The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry. |
 | Next falsifier | Both legitimate earn and buy offers must survive, execute separately, and preserve old single-kind replay. |
 | Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
 

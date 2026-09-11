@@ -27,14 +27,14 @@ HP249/118/146/88/92/73, full.1168money and no balls. Gameplay stopped.
 
 ## Next bounded work
 
-Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
+The default-off earn/buy core now passes recorded execution, replay and learned-probability tests. Connect the explicit runtime/profile option without removing affordable purchases, then qualify one real choice from AS02 with model67. Preserve all prior costs; no reset or consumed retry.
 
-Flash is drafting only the resource-variant representation/binding core and tests
-in its isolated worktree; the five older rejected funding files remain untouched.
-Default behavior, old policy bytes, feature width and ordinary safety must remain
-unchanged. No live activation or gameplay from this draft. Codex reviews; Claude
-may audit the actual small diff after tests, not before every routine action.
-Timebox15minutes draft plus30minutes review; reassess if it needs broader changes.
+Flash's core draft and one correction are complete. Codex integrated the selected
+core, repaired fixtures and typing, and connected ordered recording/replay and
+bounded-player mode propagation.194focused tests, full mypy and Ruff pass.
+Old policy schemas remain unchanged; only explicit opt-in emits v4. Real Red
+earn/buy enumeration is NOT enabled yet. The five older rejected funding files
+remain isolated. See [review](docs/work-sessions/2026-09-11-resource-variant-core.md).
 
 Continue from private `run_as_recovery_20260911.arguments()` only as a builder;
 append both actual AS endpoints and use AS01 model67. Never rerun any consumed
@@ -60,9 +60,11 @@ rejected. The same limitation was already reviewed September10; no repeat audit.
 Claude Opus4.8 High completed its review: finite-income/no-fake-learning cautions
 accepted; Route18-local-only requirement rejected because regional travel exists.
 
-After the capture review, Flash displayed54.14%five-hour/70.81%weekly remaining
-at00:30EDT (resets about1h42m/18h51m). These are account-wide readings, not isolated
-task savings. Claude quota unavailable. No proven net subscription savings.
+After the core work, Flash displayed45.69%five-hour/68.46%weekly remaining
+at01:09EDT (resets about1h4m/18h13m). These are account-wide readings, not isolated
+task savings. Claude completed the contract review; quota unavailable. Its replay
+and semantic-tie concerns are covered; v4 itself declares opt-in, without a second
+redundant payload flag. No proven net subscription savings.
 
 [Result](docs/evidence/red-recovery-funding-learning-2026-09-11.json) · [Report](docs/work-sessions/2026-09-11-recovery-funding-followup.md).
 PR243 remains publication lane. Recommend Astra High, Fast off for background work.

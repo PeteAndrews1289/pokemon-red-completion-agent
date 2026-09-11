@@ -4,6 +4,12 @@ Latest overnight result: AS01 chose safe recovery from two native options and ad
 
 ## The question
 
+The [resource-choice core](work-sessions/2026-09-11-resource-variant-core.md) addresses
+another difference between a working script and useful learning: an affordable
+single ball should not hide the option of earning a practical reserve. Flash drafted
+the representation; Codex repaired and tested execution/replay. Real activation is
+next, so this changes no gameplay or learning total.
+
 Can a model learn to play Pokémon well enough to finish its story, seek out missing species and carry useful knowledge into another game?
 
 Red is a manageable first environment, but a fixed walkthrough is not the desired product. The long-term objective is one verified registered Pokédex across games, with explicit version, trade and event dependencies.
