@@ -3,20 +3,21 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-confusion-attack-drop-qualification**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-funded-model104-collection**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Renewable Red collection economy: 2/3 acceptance items (67%).**
+**Remaining Red acquisition families: 2/4 acceptance items (50%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json))
+- [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
+- [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
+- [ ] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
+- [ ] Fit a productive model-selected acquisition-family outcome
 
-Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +69,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +96,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-funded-model104-collection
+
+A guarded zero-label support bridge restored19 capture balls. The continuation caught Psyduck as a forced singleton, then model103 chose evolve_species from three goals and completed Golduck. Registrations advanced75to77 and the learner fitted103to104 before a clean no-executable-goal stop.
+
+**Deviation:** The practical funding detour closed through a disclosed controlled blackout and resupply rather than a completed League rematch. The support import retains authenticated receipt and state hashes but no action trace, so it remains support-only and contributes no learning claim.
+
+**Next:** Inventory the model104 checkpoint's physical prerequisites and expose one catalog-driven acquisition family. Require an action-free useful menu before bounded play; reject species-specific routing and defer Blue and Crystal.
 
 ### 2026-09-11-model103-confusion-attack-drop-qualification
 

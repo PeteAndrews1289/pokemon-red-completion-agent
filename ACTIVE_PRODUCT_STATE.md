@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run one separately identified development successor after exact-source green CI; finish the funding cycle and resume model-selected collection, or preserve its first new falsifier and reassess the League route.
+- Next decision: Select and implement the first reusable acquisition-family provider from the model104 terminal, then require it to produce a useful action-free menu before any bounded gameplay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Complete a repeatable, net-positive League funding cycle with cartridge-generic survival handling so model-directed Red registration can recover from exhausted finite income. |
-| Authority now | The bounded-development learner has103 fitted examples and75 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
+| Reusable capability | Expose catalog-driven non-grass and special acquisition goals so model104 can continue Red registration after ordinary grass and owned level-evolution options are exhausted. |
+| Authority now | The bounded-development learner has104 fitted examples and77 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A separately identified development successor still cannot complete the supplied League cycle safely, or its post-credits net proceeds cannot restore practical capture stock. |
+| Cheapest falsifier | After one acquisition family is added, the exact model104 checkpoint still exposes no useful executable goal, or execution requires a species-specific route exception. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 103 | 12 |
+| Registered Train Example · train | 104 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-model103-confusion-attack-drop-qualification** · status **closed** · evidence [qualification](docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json)
+**2026-09-12-funded-model104-collection** · status **closed** · evidence [model fit](docs/evidence/red-model104-funded-collection-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Renewable income remains required for sustained autonomous capture. The generic compound-status repair closes the retained terminal without changing learned authority and returns the next session directly to the funding-and-collection loop. |
-| Learning output | No learning or registration delta. The generic mechanics repair passed375 focused tests and a zero-input retained-state check: the active member has241 HP, a165-HP worst commitment and a qualified attack decision. |
-| Authority delta | None. This was deterministic battle-safety engineering and a zero-input diagnostic; model103 remains at103 fitted examples and no battle authority was promoted. |
-| Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | The compound confusion-plus-Attack-drop boundary is now qualified, but the full supplied League cycle and post-credits capture replenishment remain unverified. The exact two failed attempts remain consumed and cannot retry. |
-| Decision | Accept the cartridge-generic 999-Attack confusion bound after independent review corrected a narrower unsound proposal. Await green CI, then use a separately identified development successor; do not retry either consumed attempt or generalize support to Defense, Speed, Special, Accuracy or Evasion drops. |
-| Next session | After exact-source CI is green, bind one new development successor from the unchanged model103 checkpoint. If it completes, recover, buy practical capture stock and return immediately to model-selected registration; stop on the first new unsupported mechanic or resource failure. |
-| Next falsifier | A fresh development successor cannot safely complete the League and retain positive capture purchasing power despite the supplied plan and qualified mechanics. |
-| Stop condition | Do not start gameplay before exact-source green CI. Stop on the first unsupported commitment, unsafe HP bound, unexpected inventory or payout, wipe, consumed-identity reuse, boss-specific exception, or learned-authority overclaim. |
+| Product alignment | Practical funding is restored and the loop returned immediately to collection. The next bottleneck is reusable acquisition breadth needed for the remaining Red registrations and later title adapters. |
+| Learning output | The funded continuation registered Psyduck and Golduck, advancing75 to77 registrations. The three-option evolution outcome fitted the registered-objective learner from model103 to model104; the forced capture remained unfitted. |
+| Authority delta | One genuine three-option high-level decision selected evolve_species and completed Psyduck to Golduck. Deterministic mechanics retained control; the preceding Seafoam capture was a forced singleton and added no label. |
+| Transfer result | The catalog-driven acquisition boundary is intended for later adapters, but this Red result is not a held-out modification, Blue or cross-title transfer result. |
+| Blocker | The exact model104 terminal has no executable native goal because the current regional layer exposes ordinary grass and owned level evolutions only. Forty-seven Red registrations remain across nine acquisition families. |
+| Decision | Close the immediate funding detour through the disclosed controlled-blackout and resupply support bridge; do not require another League rematch before collection. Build generic acquisition-family providers, starting from exact physical prerequisites, without hand-routing individual species. |
+| Next session | Inventory exact physical prerequisites at model104, implement one catalog-driven non-grass or special acquisition family, verify an action-free multi-option menu, then run one bounded model lesson only if the provider remains generic. |
+| Next falsifier | One generic acquisition-family provider cannot expose a useful candidate from the model104 checkpoint without a species-specific route exception. |
+| Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, or any move into Blue or Crystal. |
 
 ### Stop conditions
 

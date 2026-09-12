@@ -1,5 +1,22 @@
 # Roadmap baseline and deviations
 
+## September 12 — end the funding detour and broaden acquisition families
+
+The [funded model104 continuation](work-sessions/2026-09-12-funded-model104-collection.md)
+restored practical capture stock through a disclosed support-only bridge, caught Psyduck as a
+forced singleton and then fitted a genuine three-option evolution decision that registered
+Golduck. The retained endpoint advances from75 to77 registrations and model103 to model104.
+
+This changes the immediate milestone from renewable funding to **remaining Red acquisition
+families**. A completed League rematch is no longer a prerequisite for the next collection lesson:
+the incomplete League proceeds, controlled blackout and resupply already restored practical stock.
+The evidence limitation remains explicit because the support wrappers retain authenticated hashes
+but no action trace and contribute zero training examples.
+
+The next provider must be catalog-driven by method and physical prerequisite. Handwritten routes
+for the47 remaining species, Crystal work and another League replay are out of scope. The Red stage
+remains current; no stage exit, transfer result or low-level authority is claimed.
+
 ## September 11 — close the fresh-start join and return to learning
 
 The [Celadon join](work-sessions/2026-09-11-fresh-celadon-join.md) closes the

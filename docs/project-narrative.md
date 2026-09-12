@@ -1,25 +1,17 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest result: four actual multi-option outcomes advanced the registered-objective learner from
-model99 to103, while collection advanced from73 to75 registrations. The latest acquisition and
-recovery were forced singletons, so they correctly added no learned examples. Collection then
-stopped at zero capture items and zero unused ordinary trainer payouts. A zero-input cartridge
-qualifier identified a bounded League rematch worth29,799 gross. Execution then verified four
-fights and23,364 income before stopping at Champion's final Venusaur with cumulative HP and Ice PP
-depleted. A supplied successor executed its exact shop transaction but stopped during Lorelei
-because Clamp lacked a generic incoming forced-repeat bound. Both failures were retained without
-retry. The generic repair then crossed the Clamp stop in a green-CI development successor, which
-stopped on a separate confusion-plus-damaging-debuff safety gap before Lorelei completed. None of
-these support attempts changed the model. A subsequent action-free mechanics repair classified the
-actual effect as Attack-down and conservatively bounded any same-turn Attack reset at the cartridge
-maximum of999; a retained-state check now exposes a safe attack without advancing a frame. This is
-meaningful resource and safety evidence, not a completed
-renewable economy. [Report](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
+Latest result: practical resupply returned the project to collection, rather than extending the
+League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an
+explicitly support-only evidence bridge. The next automatic loop caught Psyduck at Seafoam as a
+forced singleton, then exposed three high-level goals. Model103 chose evolution and deterministic
+skills completed Psyduck to Golduck. That real selected outcome fitted model104. The retained state
+now has77 registrations,58 living species,62 specimens and47 required Red registrations remaining.
 
-Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting
-model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant.
-A post-action observer error left that third outcome failed and unfit; deterministic recovery
-preserved73 registrations and60 specimens without retry. [Report](work-sessions/2026-09-11-power-plant-diversification.md).
+The loop stopped cleanly when it could expose no next native goal. This is useful product evidence:
+ordinary grass sources and already-owned level evolutions are exhausted, while the cartridge
+catalog still identifies fishing, water, Safari, static, trade, prize, fossil, gift and item-
+evolution work. The next task is a reusable acquisition-family layer, not another species route and
+not Crystal. [Report](work-sessions/2026-09-12-funded-model104-collection.md).
 
 ## The question
 

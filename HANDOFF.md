@@ -1,88 +1,87 @@
 # Current development handoff
 
-Updated September11,2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Shared registrations, local flags and physical stock stay separate.
+Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). The North Star has not changed: build a
+transferable hierarchical Pokémon player that finishes stories and contributes legitimate
+registrations to one shared Pokédex across games.
 
-## Latest retained endpoint: BZ recovery / model103
+## Latest retained endpoint: funded collection / model104
 
-The retained learner continued from model99 through four actual multi-option outcomes: two income decisions, a capture-item purchase and an evolution. Model103 is now the active bounded-development head. Collection advanced from73 to75 registrations across the continuation.
+The latest durable Red endpoint is `red-collection-20260912-ca-02-causal`, checkpoint record
+`22781d9d1983d8adbbeb3d5b6ae12765d2ec21cd6a00b980586cb2516be4add6`.
 
-The latest BZ acquisition succeeded in1,106actions/63,948frames and added one registration. A44-action/3,588-frame recovery then restored the party. Both menus were forced singletons, so neither step was fitted or counted as learned judgment.
+- Registered-objective model: **104 settled examples**
+- Model SHA-256: `4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2`
+- Collection: **77 registered / 58 living species / 62 specimens**
+- Required Red registrations remaining: **47**
+- Latest model-controlled result: chose `evolve_species` from three goals and completed Psyduck
+  to Golduck in 16,628 actions / 1,538,894 frames
+- Stop: `no_executable_native_goal`
 
-The exact input-ready Vermilion Center save has75 registrations,57 living species,61 specimens,49 required Red registrations remaining,553money and zero capture items. Party HP is118/154/120/253/131/73; the workhorse is level75. Box capacity is not the blocker.
+The preceding Seafoam step captured Psyduck in 1,112 actions / 67,704 frames after 14 encounters.
+It was the sole regional candidate, so it was a forced singleton and was not fitted.
 
-- Acquisition episode: `red-collection-20260911-bz-01-causal`
-- Recovery episode: `red-collection-20260911-bz-02-causal`
-- Collection source: `1e5ce72b15d9be077781b2bfe02f4afd572694ee`
-- Qualification source: `617115d6faa0227819a4ea112940bd6f5dac0daf`
-- Model: `59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843`
+## Funding and support boundary
 
-## Continuation and League funding state
+The immediate resource dead end is closed in practice. A controlled blackout retained half of the
+money earned during the incomplete League sequence, healed the party and enabled deterministic
+resupply of 19 capture balls. The support chain totals 2,556 historical actions / 232,774 frames.
+Its registered import sent zero input, advanced zero frames and created zero training examples.
 
-Reconstruct through the retained BZ ancestry. Do not retry the failed BX02 search. Model103 is the active learned head; BZ01/BZ02 are support-only and must not be retroactively fitted.
+The retained support wrappers authenticate declarations, claims, results, source commits and state
+transitions, but do not contain an action trace. Public code therefore gives them a separate
+`registered recorded support` type and may not represent them as native traced play or learned
+authority. The successful import checkpoint is
+`a3ba144e9a897b7bd32246985523059d0a7d126cba446e9edc74d8b3d01b2565`.
 
-The resource frontier is now explicit. A zero-input audit found zero regional capture candidates
-and zero unused ordinary trainer payouts. The exact save qualified for a five-battle Elite Four
-rematch worth29,799 gross. The bounded rehearsal then verified Lorelei, Bruno, Agatha and Lance,
-including exact payouts, and raised money from553 to23,917 without spending an item or fainting a
-party member. Across all retained attempts it used1,482 actions and133,282 frames.
+Do not repeat the League rematch merely to strengthen this support history. The next product
+constraint is acquisition breadth.
 
-Champion reached its final Venusaur before stopping. The level77 Blastoise had88/261 HP, no Ice
-Beam PP and nine Surf PP; Venusaur had127/189 HP. No remaining member passed the observed matchup
-gate. Preserve that terminal as diagnostic evidence and do not retry it. This falsifies independent
-per-fight coverage as a whole-cycle resource guarantee. It does not erase the four verified payouts.
+## Current blocker and next gate
 
-A prospectively supplied successor at source `4e4d733514f3b3364122e8caa34d825328d35abc`
-then sold2,825 of battle items, bought one3,000 Full Restore and entered with378money. It stopped
-safely during Lorelei after274 actions/23,484 frames and zero completed battles because Cloyster's
-Clamp had no qualified incoming forced-repeat bound. All six party members remained alive. The
-transaction is verified; the supply plan's whole-cycle value is not. The exact attempt is consumed
-and may not retry. Model103,75 registrations,57 living species and61 specimens remain unchanged.
+The regional candidate layer currently exposes ordinary grass sources and already-owned level
+evolutions. Both are exhausted at this exact save. The cartridge-derived catalog still accounts
+for all 47 missing registrations:
 
-## Fresh-start checkpoint: Celadon midgame join
+| Method | Missing registrations |
+| --- | ---: |
+| evolution | 14 |
+| ordinary wild/water | 8 |
+| fishing | 7 |
+| Safari | 6 |
+| static encounter | 4 |
+| in-game trade | 3 |
+| prize | 2 |
+| fossil | 2 |
+| gift | 1 |
 
-Source `b1567c08cf1d3477d0524600eacda6a48faa4361` resumed the authenticated first-badge
-checkpoint through Cerulean, Bill/Misty, Vermilion, Cut, Surge, Lavender and Celadon in
-42,584actions and2,244,209frames. The new private `red-fresh-celadon-v1` checkpoint verifies
-fourteen objectives. A read-only reload advanced zero frames, used zero inputs and exposed both
-`clear_rocket_hideout` and `reach_saffron` through the existing midgame registry.
+The next session must inspect the exact model104 physical prerequisites, then expose one acquisition
+family through a catalog-driven provider. Candidate identity, reachability, inventory and one-shot
+state must remain separate. An action-free inventory must show a useful menu before gameplay.
 
-This was an integration result, not learning. The ranker was explicitly unlearned, all seven menus
-were singletons and deterministic chapters executed the controls. Model99,73 registrations and all
-learner counters are unchanged. The historical objective model's public hashes survive, but its
-private artifact directory was not found; never reconstruct or relabel it from public scores.
+Start with the acquisition family that has real prerequisites already present and the least new
+mechanical surface. Do not assume fishing is best until the exact save confirms rods, moves,
+positions and stock. Do not write 47 species-specific routes.
 
-## Next product milestone
+## Authority and claim boundary
 
-The cartridge-generic incoming trapping commitment is published at `ca41d4873433136628c3bbe5745e473d4f7971d5`.
-A zero-input reload of the retained Lorelei terminal computed bounds80/250/160/495/150/351 and
-authorized the253-HP active workhorse to attack against an80-HP commitment. Use a separately
-labeled repeatable development successor toward a full net-positive League cycle; never retry the
-consumed supplied identity.
+The learned model chooses high-level goals and destinations in bounded development episodes.
+Deterministic, tested skills still execute navigation, menus, combat, capture and evolution. The
+latest successful three-option evolution added one authentic selected-arm outcome; it is not an
+independent evaluation or a promotion to low-level control.
 
-That successor ran once under green CI at source `4d883152ccba4b3c0a84150c7de5e5e4e1f1efd9`.
-It crossed the Clamp stop, spent two attack PP, reduced Cloyster124→61 HP and ended with the active
-workhorse at241 HP. It then stopped because the workhorse was confused while Cloyster still had a
-damaging stat-reduction move; that compound same-turn bound is not qualified. The run used298
-actions/25,812 frames, retained all six party members and completed zero battles. Do not retry it.
+Fresh-game autonomy, arbitrary-seed reliability, full Red registration, unfamiliar-ROM competence,
+learned battle control and transfer to Blue or Crystal remain unproved. Crystal stays deferred.
 
-The compound boundary is now qualified generically at source
-`c277ab8af8a5e0ac3dcb8b41648b54459f3486be`. Aurora Beam lowers Attack; it is not a generic
-"debuff." The survival model permits only Attack reductions while already confused and uses the
-cartridge-wide999 Attack cap because a reachable burn-plus-badge-glitch sequence disproved the
-initially proposed live-Attack bound. Defense, Speed, Special, Accuracy and Evasion reductions
-still fail closed. No Lorelei or move-ID exception was added.
+## Session discipline
 
-A zero-input reload of the retained terminal computed bounds165/250/160/495/150/351. The active
-member has241 HP and the controller selected attack against its165-HP commitment; zero frames and
-zero inputs were used. This closes the engineering falsifier, not Lorelei or the funding cycle.
-After exact-source CI is green, use a separately identified development successor from the
-unchanged model103 checkpoint; neither consumed League attempt may retry. On a later verified
-Champion plus Hall of Fame, complete
-postcredits recovery, buy a practical ball reserve and return immediately to model-selected
-collection. Do not fit deterministic League support or begin Crystal.
+1. Name the reusable capability and cheapest falsifier before editing.
+2. Spend most effort on executable data/scenarios and measured model outcomes.
+3. One focused test batch; one CI check after a meaningful commit. No CI-only loop.
+4. Stop on species-specific routing, coordinate-bearing policy features, forced outcomes described
+   as learning, unsupported physical prerequisites or consumed-state replay.
+5. Reorient after the first bounded result or falsifier and update this file in place.
 
-Fresh-game autonomy, arbitrary-seed reliability, complete Red collection, learned low-level combat, ROM-hack competence and cross-title transfer remain unproved. Crystal stays on the backburner until Red has a credible fresh-start sequence.
-
-[Latest report](docs/work-sessions/2026-09-11-model103-collection-and-league-funding.md). Recommend
-**Sol High, standard speed** for executor implementation and rehearsal; use Astra High only for an
-architecture or promotion audit.
+[Latest report](docs/work-sessions/2026-09-12-funded-model104-collection.md). Recommended model:
+**Sol High, standard speed** for implementation. Use Astra High/Max only for architecture or
+authority-promotion review.

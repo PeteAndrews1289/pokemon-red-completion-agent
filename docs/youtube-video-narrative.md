@@ -4,7 +4,24 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: [model103 and the renewable-income frontier](work-sessions/2026-09-11-model103-collection-and-league-funding.md). Show the counter moving from99 to103 examples and73 to75 registrations, then the empty goal menu at zero balls and553money. Cut to the first League rehearsal: four exact victories and23,364 earned before the honest stop at Champion's final Venusaur. Then show the supplied successor's exact shop transaction followed by its safe Lorelei stop when Clamp exposed a missing five-turn damage commitment. Caption it clearly: zero battles completed, zero model or collection delta, all six party members alive. Then show the repaired successor crossing Clamp, damaging Cloyster and stopping on the next distinct compound-status guard. Follow with the engineering correction: both initial reviewers thought observed Attack was enough, but a burned/badge-glitch counterexample showed it could be recalculated upward. The final generic bound uses Red's999 stat cap, still refuses non-Attack drops, and selects a safe retained-state attack at zero frames. Present this as a guardrail repair—not a completed League run or new model lesson. The lesson is that reusable safety mechanics and cumulative resource planning both matter; do not present any partial run as renewable funding complete.
+Newest systems beat: [funded model104 collection](work-sessions/2026-09-12-funded-model104-collection.md).
+Open on the real progression: **75 → 77 registered species** and **103 → 104 settled examples**.
+Show Seafoam search footage with the labels “forced objective” and “not training,” then cut to the
+three-goal menu where the model selects evolution. Follow the long training sequence with the
+verified Psyduck-to-Golduck registration. The clean empty-menu stop is the hook for the next act:
+the agent has exhausted grass and owned level evolution, but the cartridge catalog still knows47
+missing registrations across nine acquisition families.
+
+Use a short flashback for the money story. The incomplete League run earned enough cash; a
+controlled blackout retained half, healed the party and enabled19 capture balls. Caption the
+support boundary clearly: authenticated receipt/state chain, no retained action trace, zero model
+labels. The point is not that the League was solved. The point is that the resource detour ended and
+the system returned to a genuine model decision.
+
+The current engineering question is visually simple: can one catalog-driven planner expose
+fishing, Safari, static, trade, gift, prize, fossil and item-evolution opportunities without a
+handwritten route for every Pokémon? That makes the next milestone legible to a nontechnical
+viewer and connects directly to the eventual multi-game Pokédex.
 
 Newest systems beat: [fresh lineage to Celadon](work-sessions/2026-09-11-fresh-celadon-join.md).
 Begin with the game booting, receiving the starter and Pokedex, reaching Brock, then resume the

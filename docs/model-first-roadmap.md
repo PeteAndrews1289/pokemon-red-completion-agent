@@ -1,63 +1,56 @@
 # Model-first development roadmap
 
-The product is a model that plays Pokémon and accumulates a shared, verified Pokédex across games—not a fixed Red walkthrough. See the [mission](../MISSION.md) for the permanent goal.
-
-The [development infographic](development-roadmap.md) shows the complete sequence and fixed exit criteria. The [active state](../ACTIVE_PRODUCT_STATE.md) owns current counters; [the handoff](../HANDOFF.md) owns the latest saved endpoint. This page explains priorities rather than duplicating every session.
+The product is a model that plays Pokémon and accumulates a shared, verified Pokédex across games,
+not a fixed Red walkthrough. The [mission](../MISSION.md) and [North Star](../NORTH_STAR.md) are
+stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision and the
+[development infographic](development-roadmap.md) owns the current checklist.
 
 ## Where we are
 
-The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
+The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
+and incremental fitting loop works. The current registered-objective model contains **104 settled
+examples**. Its retained save has **77 registered species**, **58 living species**, **62 specimens**
+and **47 required Red registrations remaining**.
 
-The retained Red loop now has103 fitted examples and75 registrations. Four fresh multi-option
-outcomes advanced the learner; the latest singleton acquisition and recovery advanced collection
-without being mislabeled as learning. Collection then stopped honestly at zero capture items,
-553money and zero unused ordinary trainer payouts. A bounded League rehearsal verified four fights
-and23,364 income, reaching Champion's final opponent with all six party members alive. A supplied
-successor then executed its exact shop plan but stopped at Lorelei's Cloyster because Clamp lacked
-a qualified incoming forced-repeat bound. A trapping-qualified development successor crossed that
-stop and reduced Cloyster to61 HP, then stopped on an unqualified confusion-plus-damaging-debuff
-state. A generic, action-free repair now bounds an Attack drop with the cartridge-wide999 Attack
-cap while every other stat-drop class still abstains; the retained terminal exposes a safe attack
-at zero frames. Neither successor completed a battle or changed a model or collection counter.
-Champion/Hall of Fame,
-postcredits recovery, fresh-game autonomy and
-independent reliability remain unproven.
+Practical capture funding was restored through an explicitly support-only controlled-blackout and
+resupply bridge. The next gameplay cycle caught Psyduck as a forced singleton; the learned model
+then chose evolution from a three-goal menu and completed Golduck. The loop stopped cleanly because
+the current candidate layer has exhausted ordinary grass sources and owned level evolutions.
+
+This is bounded development progress. It is not a fresh-game autonomous player, independent
+reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** Generic Gen-I trapping and confused Attack-drop bounds
-   now pass the retained decision seams. After exact-source green CI, use one separately identified
-   development successor. Then prove one complete rematch, stable post-game return and honest net proceeds; buy a practical
-   ball reserve and resume model-selected collection.
-2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
-   midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
-   session.
-3. **Measure learner value.** Compare with appropriate baselines on genuinely separate situations before claiming better planning, reliable new-seed play or greater authority.
-4. **Integrate Blue/shared memory.** Reuse global registration credit without fabricating local flags or transferable specimens.
-5. **Test a compatible unfamiliar Red modification, then Crystal.** Report initial performance and adaptation separately. Semantic interfaces make reuse possible; they do not prove transfer.
-6. **Extend to later titles.** Add adapters and mechanics only when measured reuse supports the expansion.
-
-These priorities do not change the [baseline's stage exits](../configs/development-roadmap-baseline-v2.json).
+1. **Broaden Red acquisition methods.** Read exact physical prerequisites from the model104 save.
+   Add catalog-driven providers by acquisition family—water/fishing, item evolution, Safari,
+   static, trade, gift/prize/fossil—without species-specific policy routes.
+2. **Resume model-directed collection.** Require a useful action-free menu, execute one bounded
+   selected goal, retain its real outcome and fit it. Keep forced support outside training.
+3. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
+   dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
+   reset or hand-script the target.
+4. **Measure fresh-game composition.** Connect the already authenticated story checkpoints to the
+   same model-facing vocabulary, then test increasingly long Red segments without hidden choices.
+5. **Test an unfamiliar compatible Red modification.** Freeze the Red policy and measure initial
+   competence separately from adaptation. This is the first meaningful portability test.
+6. **Integrate Blue and shared memory.** Reuse global registrations while keeping local flags,
+   owned specimens and version-only availability truthful.
+7. **Adapt to Crystal, then later titles.** Add genuinely new mechanics through adapters and
+   measure what transferred rather than assuming it.
 
 ## Immediate session boundary
 
-The retained collection endpoint remains BZ recovery/model103:75 registrations,61 specimens,
-553money, zero capture items and a restored party. The League diagnostic additionally preserves
-four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
-failed BX02 search, the League attempts or the forced BZ steps.
+Inventory the exact model104 checkpoint without input. Pick the cheapest generic acquisition
+family supported by its actual rods, moves, inventory, access flags and location. Implement the
+provider and verify a multi-option menu before any gameplay. Stop if the design needs a named-
+species route, leaks coordinates into policy features or cannot represent one-shot availability.
 
-The generic forced-repeat repair passed its live boundary, and the next action-free mechanics
-repair established a conservative bound for confusion plus an Attack reduction. The retained
-terminal now selects an attack with241 HP against a165-HP commitment. Do not retry either consumed
-attempt. After exact-source green CI, use one separately identified development successor. Stop on
-any unsupported mechanic, boss-specific exception, unexpected payout, wipe, exceeded bound or
-non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
-result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
+[Latest evidence](evidence/red-model104-funded-collection-2026-09-12.json) · [Latest report](work-sessions/2026-09-12-funded-model104-collection.md)
 
 ## How to stay focused
 
-Each work session names a reusable capability, model-controlled choice, transfer test, cheapest falsifier, time box and stop condition. Evidence and tests support progress; they are not substitutes for played learning results.
-
-Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
-
-[Latest collection report](work-sessions/2026-09-11-model103-collection-and-league-funding.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+Every session names one reusable capability, one model-controlled decision, one cheapest falsifier,
+one time box and one stop condition. Data collection and executable scenarios take priority over
+process. CI runs once after a meaningful verified change; documentation is updated after measured
+progress, not instead of it.
