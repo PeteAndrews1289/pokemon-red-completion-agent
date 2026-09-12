@@ -166,10 +166,11 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
                 "maximum_opponent_level": level,
                 "recovery_controller": (
                     "damage-bounded-zero-item" if name in {"lorelei", "bruno", "agatha"}
-                    else "critical-inclusive" if name == "lance"
+                    else "bounded-critical-risk" if name == "lance"
                     else "ordinary-bounded-healing"
                 ),
                 "maximum_full_restores": 1 if name == "champion" else 0,
+                "maximum_critical_exposures": 2 if name == "lance" else 0,
             }
             for name, money, level in (
                 ("lorelei", 100, 51),
@@ -186,6 +187,33 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "net_profit_proven": False,
         "rematch_executed": False,
     }
+
+
+@pytest.mark.parametrize(
+    "objective,controller,restores,risks",
+    [
+        ("defeat_lorelei", "bounded-critical-risk", 0, 2),
+        ("defeat_lance", "bounded-critical-risk", 0, 1),
+        ("defeat_lance", "bounded-critical-risk", 1, 2),
+        ("defeat_lance", "damage-bounded-zero-item", 0, 2),
+        ("defeat_champion", "ordinary-bounded-healing", 0, 0),
+        ("defeat_champion", "damage-bounded-zero-item", 1, 0),
+    ],
+)
+def test_quoted_controller_authority_cannot_be_malformed(
+    objective, controller, restores, risks,
+):
+    with pytest.raises(ValueError, match="controller contract"):
+        league.RedLeagueBattleQuote(
+            objective,
+            201,
+            1,
+            5_000,
+            65,
+            controller,
+            restores,
+            risks,
+        )
 
 
 @pytest.mark.parametrize("consumed", [EventFlag.BEAT_LORELEI, EventFlag.BEAT_LANCE])

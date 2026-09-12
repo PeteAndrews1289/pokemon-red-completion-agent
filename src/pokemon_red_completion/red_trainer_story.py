@@ -33,7 +33,14 @@ from .gen1_trainer_sight import (
 from .gen1_traversal import map_object_events
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
 from .objective_skills import ObjectiveSkillAvailability, ObjectiveSkillExecution
-from .observation import CurrentMapBlocks, EventFlag, MapId, RawGameState, event_flag_is_set
+from .observation import (
+    CurrentMapBlocks,
+    EventFlag,
+    MapId,
+    PokemonRedStateReader,
+    RawGameState,
+    event_flag_is_set,
+)
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
@@ -44,6 +51,7 @@ from .red_trainer_funding import TrainerFundingCandidate
 from .red_trainer_funding_battle import run_prepared_trainer_funding
 from .red_trainer_healing import bag_after_full_restores, require_story_recovery_stock
 from .red_trainer_party import RedTrainerPartyPlan, plan_trainer_party, prepare_trainer_lead
+from .red_trainer_risk import RedTrainerRiskController
 from .red_trainer_survival import RedTrainerSurvivalController
 from .route_executor import execute_route
 from .route_plan import RoutePlan, RoutePlanningError
@@ -123,6 +131,7 @@ class RedCartridgeLoreleiSkill:
     world: StrategicScenarioRouteWorld | None
     objective_id: str = "defeat_lorelei"
     maximum_full_restores: int = 0
+    maximum_critical_exposures: int = 0
     recovery_controller: str = "critical-inclusive"
     rematch: bool = False
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
@@ -139,7 +148,9 @@ class RedCartridgeLoreleiSkill:
     )
     _claimed: bool = field(default=False, init=False)
     _prepared_budget: int | None = field(default=None, init=False)
+    _prepared_risk_budget: int | None = field(default=None, init=False)
     _prepared_controller: str = field(default="critical-inclusive", init=False)
+    _prepared_objective_id: str | None = field(default=None, init=False)
     _prepared_rematch: bool = field(default=False, init=False)
     _prepared_world: StrategicScenarioRouteWorld | None = field(default=None, init=False)
     _prepared_blocks: CurrentMapBlocks | None = field(default=None, init=False)
@@ -153,12 +164,33 @@ class RedCartridgeLoreleiSkill:
             "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
         }:
             raise RedTrainerStoryError("unsupported cartridge story objective")
+        self._require_controller_contract()
         if self.objective_id == "defeat_bruno":
             self.expected_facts = frozenset({"league:bruno_defeated"})
         elif self.objective_id == "defeat_agatha":
             self.expected_facts = frozenset({"league:agatha_defeated"})
         elif self.objective_id == "defeat_lance":
             self.expected_facts = frozenset({"league:lance_defeated"})
+
+    def _require_controller_contract(self) -> None:
+        risk_contract = (
+            self.objective_id == "defeat_lance"
+            and self.recovery_controller == "bounded-critical-risk"
+            and self.maximum_critical_exposures == 2
+            and self.maximum_full_restores == 0
+        )
+        if (
+            type(self.maximum_critical_exposures) is not int
+            or (
+                self.recovery_controller == "bounded-critical-risk"
+                and not risk_contract
+            )
+            or (
+                self.recovery_controller != "bounded-critical-risk"
+                and self.maximum_critical_exposures != 0
+            )
+        ):
+            raise RedTrainerStoryError("critical-risk controller budget differs")
 
     def _quote(self, trainer_class: int, trainer_set: int) -> TrainerPartyQuote:
         assert self.world is not None
@@ -173,10 +205,12 @@ class RedCartridgeLoreleiSkill:
 
         if self.world is None or battle_policy_override_active():
             raise RedTrainerStoryError("cartridge world or fixed battle authority unavailable")
+        self._require_controller_contract()
         observation = self.runtime.adapter.observe()
         raw = observation.raw
         if self.recovery_controller not in {
             "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
+            "bounded-critical-risk",
         }:
             raise RedTrainerStoryError("unsupported recovery controller")
         require_story_recovery_stock(raw, self.maximum_full_restores)
@@ -251,7 +285,9 @@ class RedCartridgeLoreleiSkill:
         quote = self._quote(trainer.trainer_class, trainer.trainer_set)
         preparation = (
             plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0)
-            if self.recovery_controller == "damage-bounded-zero-item"
+            if self.recovery_controller in {
+                "damage-bounded-zero-item", "bounded-critical-risk",
+            }
             else plan_trainer_party(observation.party, quote)
         )
         start = Gen1TraversalObserver(self.runtime.reader, Gen1TrainerSightProjector(
@@ -279,6 +315,8 @@ class RedCartridgeLoreleiSkill:
     def availability(self, state: GameState) -> ObjectiveSkillAvailability:
         self._prepared = None
         self._prepared_budget = None
+        self._prepared_risk_budget = None
+        self._prepared_objective_id = None
         self._prepared_world, self._prepared_blocks = None, None
         self._arrival_steps = 0
         self._scripted_triggers = ()
@@ -292,22 +330,51 @@ class RedCartridgeLoreleiSkill:
             return ObjectiveSkillAvailability(False, "Story observation changed during planning.")
         self._prepared = prepared
         self._prepared_budget = self.maximum_full_restores
+        self._prepared_risk_budget = self.maximum_critical_exposures
         self._prepared_controller = self.recovery_controller
+        self._prepared_objective_id = self.objective_id
         self._prepared_rematch = self.rematch
         return ObjectiveSkillAvailability(
             True, "Bounded cartridge trainer with observed party control.",
         )
+
+    def _battle_controller(
+        self, reader: PokemonRedStateReader,
+    ) -> RedTrainerSurvivalController | RedTrainerPartyController:
+        if self.recovery_controller == "bounded-critical-risk":
+            return RedTrainerRiskController(
+                reader,
+                self.runtime.emulator,
+                (),
+                0,
+                maximum_critical_exposures=self.maximum_critical_exposures,
+            )
+        if self.maximum_full_restores and self.recovery_controller == "ordinary-bounded-healing":
+            return RedTrainerPartyController(
+                reader, self.runtime.emulator, maximum_full_restores=self.maximum_full_restores,
+            )
+        if (
+            self.maximum_full_restores
+            or self.recovery_controller == "damage-bounded-zero-item"
+        ):
+            return RedTrainerSurvivalController(
+                reader, self.runtime.emulator, (), self.maximum_full_restores,
+            )
+        return RedTrainerPartyController(reader, self.runtime.emulator)
 
     def execute(self) -> ObjectiveSkillExecution:
         from .red_resource_goal_router import _ROUTE_LIMITS
 
         if self._claimed or self._prepared is None:
             raise RedTrainerStoryError("story requires a fresh unconsumed availability binding")
+        self._require_controller_contract()
         self._claimed = True
         before, target, preparation = self._prepared
         if (self.runtime.adapter.observe() != before or battle_policy_override_active()
                 or self._prepared_budget != self.maximum_full_restores
+                or self._prepared_risk_budget != self.maximum_critical_exposures
                 or self._prepared_controller != self.recovery_controller
+                or self._prepared_objective_id != self.objective_id
                 or self._prepared_rematch != self.rematch):
             raise RedTrainerStoryError("story origin or battle authority changed before input")
         if self._prepared_blocks is not None and (
@@ -435,20 +502,7 @@ class RedCartridgeLoreleiSkill:
         require_target()
         if not self._scripted_triggers:
             face_pc_boundary(actions, reader, target.interaction_facing.value)
-        controller = (
-            RedTrainerSurvivalController(
-                reader, self.runtime.emulator, (), self.maximum_full_restores,
-            ) if (
-                self.maximum_full_restores
-                or self.recovery_controller == "damage-bounded-zero-item"
-            ) else RedTrainerPartyController(
-                reader, self.runtime.emulator,
-            )
-        )
-        if self.maximum_full_restores and self.recovery_controller == "ordinary-bounded-healing":
-            controller = RedTrainerPartyController(
-                reader, self.runtime.emulator, maximum_full_restores=self.maximum_full_restores,
-            )
+        controller = self._battle_controller(reader)
         receipt = run_prepared_trainer_funding(
             reader, actions, target=target, validate_target=require_target,
             move_slot_policy=guard._safe_trainer_move,
@@ -496,7 +550,14 @@ class RedCartridgeLoreleiSkill:
              "moves_selected": controller.moves_selected, "victory_money": receipt.payout,
              "bag_items_spent": spent, "learned_battle_authority": False,
              "maximum_full_restores": self.maximum_full_restores,
+             "maximum_critical_exposures": self.maximum_critical_exposures,
+             "critical_exposures_claimed": getattr(
+                 controller, "critical_exposures_claimed", 0,
+             ),
              "battle_controller": (
+                 "bounded-critical-risk"
+                 if self.recovery_controller == "bounded-critical-risk"
+                 else
                  "ordinary-bounded-healing"
                  if self.maximum_full_restores
                  and self.recovery_controller == "ordinary-bounded-healing"

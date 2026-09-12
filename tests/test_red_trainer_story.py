@@ -158,6 +158,56 @@ def test_changed_prepared_controller_refuses_without_input(fixture):
     assert not inputs
 
 
+def test_lance_risk_contract_builds_the_explicit_two_intent_controller():
+    reader = SimpleNamespace()
+    skill = story.RedCartridgeLoreleiSkill(
+        SimpleNamespace(emulator=object()),
+        CountingExecutor(object()),
+        None,
+        objective_id="defeat_lance",
+        recovery_controller="bounded-critical-risk",
+        maximum_critical_exposures=2,
+    )
+    controller = skill._battle_controller(reader)
+    assert isinstance(controller, story.RedTrainerRiskController)
+    assert controller.maximum_critical_exposures == 2
+    assert controller.maximum_full_restores == 0
+
+
+@pytest.mark.parametrize(
+    "objective,mode,risk_budget,restore_budget",
+    [
+        ("defeat_lorelei", "bounded-critical-risk", 2, 0),
+        ("defeat_lance", "bounded-critical-risk", 1, 0),
+        ("defeat_lance", "bounded-critical-risk", 2, 1),
+        ("defeat_lance", "damage-bounded-zero-item", 2, 0),
+    ],
+)
+def test_critical_risk_authority_is_narrowly_bound_to_lance(
+    objective, mode, risk_budget, restore_budget,
+):
+    with pytest.raises(story.RedTrainerStoryError, match="risk controller budget"):
+        story.RedCartridgeLoreleiSkill(
+            SimpleNamespace(),
+            CountingExecutor(object()),
+            None,
+            objective_id=objective,
+            recovery_controller=mode,
+            maximum_critical_exposures=risk_budget,
+            maximum_full_restores=restore_budget,
+        )
+
+
+def test_mutated_risk_contract_refuses_during_availability_without_input(fixture):
+    skill, _, inputs, observe, _ = fixture
+    skill.recovery_controller = "bounded-critical-risk"
+    skill.maximum_critical_exposures = 2
+    available = skill.availability(observe().game_state)
+    assert not available.executable
+    assert "critical-risk controller budget" in available.reason
+    assert not inputs
+
+
 def test_changed_prepared_rematch_mode_refuses_without_input(fixture):
     skill, _, inputs, observe, _ = fixture
     assert skill.availability(observe().game_state).executable
@@ -642,6 +692,8 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert result.evidence["learned_battle_authority"] is False
         assert result.evidence['bag_items_spent'] == recovery_budget
         assert result.evidence['maximum_full_restores'] == recovery_budget
+        assert result.evidence['maximum_critical_exposures'] == 0
+        assert result.evidence['critical_exposures_claimed'] == 0
     count = len(inputs)
     with pytest.raises(story.RedTrainerStoryError, match="unconsumed"):
         skill.execute()

@@ -7,11 +7,12 @@ import pytest
 import pokemon_red_completion.red_league_funding_execution as execution
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
 from pokemon_red_completion.gen1_field_moves import Gen1FlyReceipt
-from pokemon_red_completion.observation import EventFlag
+from pokemon_red_completion.observation import EventFlag, ItemId
 from pokemon_red_completion.red_league_funding import (
     RedLeagueBattleQuote,
     RedLeagueFundingQualification,
     RedLeagueSupplyPlan,
+    RedLeagueSupplySale,
 )
 
 
@@ -189,6 +190,81 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     assert routes[2][1].transition_settle_frames >= 6 * 24 + 120
 
 
+def test_nonempty_supply_faces_clerk_before_any_irreversible_sale(monkeypatch):
+    qualification = _qualification()
+    qualification = RedLeagueFundingQualification(
+        qualification.exit_plan,
+        qualification.fly_town,
+        qualification.fly_landing,
+        RedLeagueSupplyPlan(
+            qualification.supply.route,
+            (
+                RedLeagueSupplySale(ItemId.X_SPECIAL, 8, 175),
+                RedLeagueSupplySale(ItemId.X_ACCURACY, 3, 475),
+            ),
+            1,
+        ),
+        qualification.entry_plan,
+        qualification.battles,
+        qualification.supported_attack_pp,
+        qualification.opponent_attack_demands,
+    )
+    runtime, _ = _runtime()
+    actions = _actions(runtime)
+    events = []
+
+    monkeypatch.setattr(
+        execution,
+        "face_pc_boundary",
+        lambda actual_actions, reader, direction: events.append(
+            ("face", actual_actions is actions, reader is runtime.reader, direction)
+        ),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_sell_bag_stack",
+        lambda actual_actions, emulator, item, quantity: events.append(
+            ("sell", item, quantity)
+        ),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_close_menus",
+        lambda *args: events.append(("close",)),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_indigo_buy_entry_action",
+        lambda offset: execution.MacroAction(execution.MacroActionKind.CONFIRM, str(offset)),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_pulse",
+        lambda actual_actions, kind, value=None, frames=None: events.append(
+            ("pulse", kind, value, frames)
+        ),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_select_cursor",
+        lambda *args: events.append(("select",)),
+    )
+    monkeypatch.setattr(
+        execution,
+        "_buy_mart_item",
+        lambda *args, **kwargs: events.append(("buy", kwargs["item"], kwargs["quantity"])),
+    )
+
+    execution._execute_supply(runtime, actions, qualification)
+
+    assert events[0] == ("face", True, True, "left")
+    assert [event[:3] for event in events if event[0] == "sell"] == [
+        ("sell", ItemId.X_SPECIAL, 8),
+        ("sell", ItemId.X_ACCURACY, 3),
+    ]
+    assert ("buy", ItemId.FULL_RESTORE, 1) in events
+
+
 def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypatch):
     qualification = _qualification()
     runtime, observed = _runtime()
@@ -334,8 +410,17 @@ def test_execution_allows_historical_facts_when_current_cycle_requalifies(monkey
     assert result.observed_gross_income == 1_500
 
 
-@pytest.mark.parametrize("objective", ["defeat_lorelei", "defeat_champion"])
-def test_run_battle_always_uses_current_cycle_rematch_mode(monkeypatch, objective):
+@pytest.mark.parametrize(
+    "objective,controller,risk_budget",
+    [
+        ("defeat_lorelei", "damage-bounded-zero-item", 0),
+        ("defeat_lance", "bounded-critical-risk", 2),
+        ("defeat_champion", "damage-bounded-zero-item", 0),
+    ],
+)
+def test_run_battle_forwards_exact_controller_budgets(
+    monkeypatch, objective, controller, risk_budget,
+):
     runtime, _ = _runtime()
     actions = CountingExecutor(_Delegate())
     seen = []
@@ -352,24 +437,79 @@ def test_run_battle_always_uses_current_cycle_rematch_mode(monkeypatch, objectiv
             return SimpleNamespace(
                 actions_executed=0,
                 frames_executed=0,
-                evidence={"bag_items_spent": 0},
+                evidence={
+                    "bag_items_spent": 0,
+                    "maximum_critical_exposures": risk_budget,
+                    "critical_exposures_claimed": 1 if risk_budget else 0,
+                },
             )
 
     if objective == "defeat_champion":
         monkeypatch.setattr(execution, "RedCartridgeChampionSkill", Skill)
     else:
         monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
-    execution._run_battle(
-        runtime, actions, object(), objective, 100, "damage-bounded-zero-item", 0,
+    result = execution._run_battle(
+        runtime, actions, object(), objective, 100, controller, 0, risk_budget,
     )
     expected = {
-        "recovery_controller": "damage-bounded-zero-item",
+        "recovery_controller": controller,
         "maximum_full_restores": 0,
         "rematch": True,
     }
     if objective != "defeat_champion":
-        expected["objective_id"] = "defeat_lorelei"
+        expected["objective_id"] = objective
+        expected["maximum_critical_exposures"] = risk_budget
     assert seen == [expected]
+    assert result.critical_exposures_claimed == (1 if risk_budget else 0)
+    assert result.public_dict()["critical_exposures_claimed"] == (
+        1 if risk_budget else 0
+    )
+
+
+def test_run_battle_rejects_risk_receipt_beyond_bound(monkeypatch):
+    runtime, _ = _runtime()
+    actions = CountingExecutor(_Delegate())
+
+    class Skill:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def availability(self, state):
+            return SimpleNamespace(executable=True)
+
+        def execute(self):
+            runtime.adapter.observe().raw.player_money += 100
+            return SimpleNamespace(
+                actions_executed=0,
+                frames_executed=0,
+                evidence={
+                    "bag_items_spent": 0,
+                    "maximum_critical_exposures": 2,
+                    "critical_exposures_claimed": 3,
+                },
+            )
+
+    monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
+    with pytest.raises(execution.RedLeagueFundingExecutionError, match="accounting differs"):
+        execution._run_battle(
+            runtime, actions, object(), "defeat_lance", 100,
+            "bounded-critical-risk", 0, 2,
+        )
+
+
+def test_run_battle_rejects_champion_critical_risk_before_skill_construction():
+    runtime, _ = _runtime()
+    with pytest.raises(execution.RedLeagueFundingExecutionError, match="does not support"):
+        execution._run_battle(
+            runtime,
+            CountingExecutor(_Delegate()),
+            object(),
+            "defeat_champion",
+            100,
+            "bounded-critical-risk",
+            0,
+            2,
+        )
 
 
 def test_frame_boundary_failure_retains_structured_progress(monkeypatch):

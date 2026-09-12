@@ -45,6 +45,27 @@ class RedLeagueBattleQuote:
     maximum_opponent_level: int
     recovery_controller: str = "damage-bounded-zero-item"
     maximum_full_restores: int = 0
+    maximum_critical_exposures: int = 0
+
+    def __post_init__(self) -> None:
+        risk = self.recovery_controller == "bounded-critical-risk"
+        healing = self.recovery_controller == "ordinary-bounded-healing"
+        if (
+            self.recovery_controller not in {
+                "damage-bounded-zero-item", "bounded-critical-risk",
+                "ordinary-bounded-healing",
+            }
+            or type(self.maximum_full_restores) is not int
+            or type(self.maximum_critical_exposures) is not int
+            or (risk and (
+                self.objective_id != "defeat_lance"
+                or self.maximum_critical_exposures != 2
+                or self.maximum_full_restores != 0
+            ))
+            or (not risk and self.maximum_critical_exposures != 0)
+            or (healing != (self.maximum_full_restores == 1))
+        ):
+            raise ValueError("League battle controller contract differs")
 
 
 @dataclass(frozen=True, slots=True)
@@ -150,6 +171,7 @@ class RedLeagueFundingQualification:
                     "maximum_opponent_level": battle.maximum_opponent_level,
                     "recovery_controller": battle.recovery_controller,
                     "maximum_full_restores": battle.maximum_full_restores,
+                    "maximum_critical_exposures": battle.maximum_critical_exposures,
                 }
                 for battle in self.battles
             ],
@@ -222,6 +244,7 @@ def _battle_quote(
     *,
     recovery_controller: str,
     maximum_full_restores: int,
+    maximum_critical_exposures: int = 0,
 ) -> RedLeagueBattleQuote:
     return RedLeagueBattleQuote(
         objective_id=objective_id,
@@ -231,6 +254,7 @@ def _battle_quote(
         maximum_opponent_level=max(member.level for member in quote.party),
         recovery_controller=recovery_controller,
         maximum_full_restores=maximum_full_restores,
+        maximum_critical_exposures=maximum_critical_exposures,
     )
 
 
@@ -510,10 +534,11 @@ def qualify_red_league_funding(
             quote,
             recovery_controller=(
                 "damage-bounded-zero-item" if index < 3
-                else "critical-inclusive" if objective == "defeat_lance"
+                else "bounded-critical-risk" if objective == "defeat_lance"
                 else "ordinary-bounded-healing"
             ),
             maximum_full_restores=1 if objective == "defeat_champion" else 0,
+            maximum_critical_exposures=2 if objective == "defeat_lance" else 0,
         )
         for index, (objective, quote) in enumerate(zip(objectives, quotes, strict=True))
     )

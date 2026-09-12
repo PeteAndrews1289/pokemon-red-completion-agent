@@ -27,6 +27,7 @@ from .red_league_funding import (
     RedLeagueFundingQualification,
     qualify_red_league_funding,
 )
+from .red_pc_storage import face_pc_boundary
 from .red_resource_goal_router import _ROUTE_LIMITS
 from .red_trainer_story import RedCartridgeLoreleiSkill
 from .referee import CompletionReferee
@@ -85,6 +86,7 @@ class RedLeagueFundingBattleResult:
     actions: int
     frames: int
     full_restores_spent: int = 0
+    critical_exposures_claimed: int = 0
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -95,6 +97,7 @@ class RedLeagueFundingBattleResult:
             "actions": self.actions,
             "frames": self.frames,
             "full_restores_spent": self.full_restores_spent,
+            "critical_exposures_claimed": self.critical_exposures_claimed,
         }
 
 
@@ -234,6 +237,7 @@ def _run_battle(
     expected_money: int,
     recovery_controller: str,
     maximum_full_restores: int,
+    maximum_critical_exposures: int = 0,
 ) -> RedLeagueFundingBattleResult:
     before_money = _money(runtime)
     before_actions = actions.actions_executed
@@ -243,6 +247,10 @@ def _run_battle(
     )
     skill: RedCartridgeChampionSkill | RedCartridgeLoreleiSkill
     if objective_id == "defeat_champion":
+        if maximum_critical_exposures:
+            raise RedLeagueFundingExecutionError(
+                "Champion battle does not support a critical-exposure budget"
+            )
         skill = RedCartridgeChampionSkill(
             runtime,
             actions,
@@ -259,6 +267,7 @@ def _run_battle(
             objective_id=objective_id,
             recovery_controller=recovery_controller,
             maximum_full_restores=maximum_full_restores,
+            maximum_critical_exposures=maximum_critical_exposures,
             rematch=True,
         )
     availability = skill.availability(runtime.adapter.observe().game_state)
@@ -272,12 +281,17 @@ def _run_battle(
         int(ItemId.FULL_RESTORE), 0,
     )
     spent = before_restores - after_restores
+    critical_claimed = report.evidence.get("critical_exposures_claimed", 0)
     if (
         after_money - before_money != expected_money
         or report.actions_executed != actions.actions_executed - before_actions
         or report.frames_executed != runtime.emulator.frame_count - before_frames
         or not 0 <= spent <= maximum_full_restores
         or report.evidence.get("bag_items_spent") != spent
+        or report.evidence.get("maximum_critical_exposures", 0)
+        != maximum_critical_exposures
+        or type(critical_claimed) is not int
+        or not 0 <= critical_claimed <= maximum_critical_exposures
     ):
         raise RedLeagueFundingExecutionError(
             f"{objective_id} payout or execution accounting differs"
@@ -290,6 +304,7 @@ def _run_battle(
         report.actions_executed,
         report.frames_executed,
         spent,
+        critical_claimed,
     )
 
 
@@ -322,6 +337,10 @@ def _execute_supply(
     quantity = qualification.supply.full_restores_purchased
     if not sales and not quantity:
         return
+    # The route binds the clerk-adjacent coordinate, not the player's facing.
+    # Establish and verify the exact interaction direction before the first
+    # irreversible sale input.
+    face_pc_boundary(actions, runtime.reader, "left")
     for index, sale in enumerate(sales):
         _sell_bag_stack(
             actions,
@@ -553,6 +572,7 @@ def execute_red_league_funding(
                     quote.expected_money,
                     quote.recovery_controller,
                     quote.maximum_full_restores,
+                    quote.maximum_critical_exposures,
                 )
             )
         except Exception as error:
