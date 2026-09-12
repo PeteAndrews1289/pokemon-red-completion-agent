@@ -100,7 +100,7 @@
   "collection": {
     "starting_registered_species": 80,
     "ending_registered_species": 81,
-    "ending_living_species": 60,
+    "ending_living_species": 61,
     "ending_specimens": 65,
     "required_red_registrations_remaining": 43
   },

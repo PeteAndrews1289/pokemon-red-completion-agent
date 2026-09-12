@@ -21,7 +21,7 @@ captured one missing species. The Pokédex verifier observed **80→81 registrat
 - Controller actions: **802**
 - Emulator frames: **54,384**
 - Captures: **1**
-- Living species: **60**
+- Living species: **61**
 - Physical specimens: **65**
 - Teacher labels: **0**
 

@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "model_fit",
           "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
-          "sha256": "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
+          "sha256": "518ddb4c4ca225ee029a62abe6378f783ec4222bc43ab8906b263a8d63f14c5d"
         },
         "learning_output": "The model-directed fishing attempt added one lower-trust measured training row: model105 to model106 with all 105 prior examples retained. It binds the eight-option sample, 802-action/54,384-frame result and80-to-81 registration transition while carrying zero teacher labels and no independent-evaluation authority.",
         "next_falsifier": "After removing the completed destination from demand, model106 cannot expose two useful executable alternatives, or another selected destination cannot settle within the existing bounded route/cast/capture contract.",
@@ -224,7 +224,7 @@
           {
             "kind": "model_fit",
             "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
-            "sha256": "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
+            "sha256": "518ddb4c4ca225ee029a62abe6378f783ec4222bc43ab8906b263a8d63f14c5d"
           }
         ],
         "model_fits": 12,

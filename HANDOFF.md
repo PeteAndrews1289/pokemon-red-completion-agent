@@ -9,7 +9,7 @@ registrations to one shared Pokédex across games.
 
 The current restart is `red-model106-fishing-measured-terminal-v2-20260912`, checkpoint record
 SHA-256 `2571f6c85fd2bfdbddec7945bbed386c62018f9326de54454f34b97216286595`.
-It reopens the exact earned terminal with **81 registered species / 60 living species / 65
+It reopens the exact earned terminal with **81 registered species / 61 living species / 65
 specimens** and model106.
 
 - Registered-objective model: **106 settled examples**

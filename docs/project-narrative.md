@@ -4,7 +4,7 @@ Latest systems beat: fishing now completes the full development learning loop. F
 80-registration state, cartridge data exposed 33 productive fishing maps; nine were physically
 executable and eight became anonymous semantic candidates. Model105 sampled one destination. Generic
 routing handled three interruptions, then 11 Super Rod casts produced two encounters: the agent fled
-one already-covered species and captured one missing species. The result is **81 registrations, 60
+one already-covered species and captured one missing species. The result is **81 registrations, 61
 living species and 65 specimens**.
 
 The 802-action /54,384-frame outcome became one explicitly lower-trust training row, producing

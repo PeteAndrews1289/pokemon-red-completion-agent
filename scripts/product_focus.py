@@ -163,7 +163,7 @@ _MODEL106_MEASURED_FISHING_RESULT_PATH = (
     "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
 )
 _MODEL106_MEASURED_FISHING_RESULT_SHA256 = (
-    "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
+    "518ddb4c4ca225ee029a62abe6378f783ec4222bc43ab8906b263a8d63f14c5d"
 )
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
@@ -1514,6 +1514,7 @@ def _validate_model106_measured_fishing_projection(
         "teacher_labels": 0,
         "authority_promotions": 0,
         "independent_evaluation": False,
+        "living_species_after": 61,
         "action_trace_available": False,
         "observer_controller_actions": 0,
         "observer_emulator_frames": 0,

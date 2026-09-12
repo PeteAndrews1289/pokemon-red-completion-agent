@@ -14,6 +14,7 @@
   "fitted_training_examples": 106,
   "flees": 1,
   "independent_evaluation": false,
+  "living_species_after": 61,
   "measured_fit_receipt_sha256": "c05736fc8d6be63a50236db1044a4f4e8c7d483855920e7569cad55db335caa9",
   "measured_segments_sha256": "6913858ba01d3c7047ccd7fb0cf4a16dbf5f4b451a234770bfd11ffee4aec08a",
   "menu_sha256": "9cd51af39794c8436f21d12ec3b920ed31e285a485f5c7b42c8c212043b266ac",
