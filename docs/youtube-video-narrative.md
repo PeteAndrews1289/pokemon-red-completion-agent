@@ -4,19 +4,26 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: a four-way Safari choice that reaches a real capture and becomes model105.
-Show the cartridge-derived menu as four anonymous area cards, model104 sampling one with zero
-teacher labels, and that same choice controlling a paid visit. Then show the generic patrol's final
-tally: 12 encounters, 11 flees, one missing registration retained; 79→80 registrations and 63→64
-specimens. Keep the caption **model chose the area; deterministic mechanics controlled movement and
-capture**.
+Newest systems beat: **the first full fishing learning loop**. Show 33 cartridge-derived productive
+maps narrowing to nine executable destinations and eight anonymous option cards. Model105 selects
+one card with zero teacher labels. Cut to the computed route handling three wild interruptions, then
+the actual fishing tally: 11 casts, nine misses, two encounters, one deliberate flee and one missing
+registration. Overlay **80→81 registered / model105→106 / 106 examples**.
 
-The capability harness retained exact states and aggregate counters but not the normal per-action
-training journal. Make that limitation part of the story: a strict adapter recomputed the choice,
-verified the state chain and outcome, retained all 104 old rows and admitted one explicitly
-lower-trust training row. Show **105 examples / training only / not evaluation**. The four preserved
-integration failures—step-counter width, encounter handoff, two-column command observation and
-post-throw settlement—are the engineering path to the successful continuation, not erased retries.
+Then show the exact terminal reopening as a durable checkpoint with zero publication inputs. Caption
+the division of labor plainly: **the model chose the destination; deterministic skills routed,
+fished and captured; the Pokédex verifier judged the outcome**. Do not edit the success into a policy
+quality claim. The scores favored a long one-target route over a near higher-yield option, so the
+honest hook is that the loop can now learn from a questionable decision.
+
+Retain the trust caveat on screen: the capability receipt has aggregate counters and exact state
+hashes but no per-action journal. It is training only, not evaluation, and grants no authority
+promotion. [Session](work-sessions/2026-09-12-model106-measured-fishing-capture.md).
+
+The preceding Safari beat remains useful context: model104 chose one of four anonymous areas,
+reached a real capture and became model105. Its four preserved integration failures—step-counter
+width, encounter handoff, two-column command observation and post-throw settlement—show the
+engineering path rather than erased retries.
 
 Newest systems beat: [fossil and owned evolution](work-sessions/2026-09-12-fossil-owned-evolution.md).
 Open on the real progression: **77 → 79 registered species**, with model104 deliberately unchanged.

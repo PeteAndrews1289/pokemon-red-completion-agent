@@ -1,17 +1,24 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest systems beat: Safari became a genuine four-destination model decision rather than a named
-species route—and the result now contributes one honest training example. From the 79-registration
-checkpoint, model104 selected one identity-free cartridge area. Generic transport, one paid
-admission, terrain-derived patrol and an observed two-column Safari command controller retained one
-missing registration: 80 registrations, 60 living species and 64 specimens. The successful patrol
-saw 12 encounters, 11 flees and one capture.
+Latest systems beat: fishing now completes the full development learning loop. From the
+80-registration state, cartridge data exposed 33 productive fishing maps; nine were physically
+executable and eight became anonymous semantic candidates. Model105 sampled one destination. Generic
+routing handled three interruptions, then 11 Super Rod casts produced two encounters: the agent fled
+one already-covered species and captured one missing species. The result is **81 registrations, 60
+living species and 65 specimens**.
 
-The capability harness retained exact states and aggregate costs but not its standard per-action
-journal. Instead of pretending otherwise, the project introduced a lower-trust measured-choice
-type. It recomputed the original model choice, verified the five-segment state chain and collection
-transition, and permanently marked the row training-only and ineligible for evaluation or authority
-promotion. All 104 prior rows remained, producing model105 with 105 examples. [Evidence](evidence/red-model105-measured-safari-fit-2026-09-12.json).
+The 802-action /54,384-frame outcome became one explicitly lower-trust training row, producing
+model106 with 106 retained examples. A zero-input publication then reopened the exact 81-registration
+terminal as a durable model106 checkpoint. The architecture was extended to preserve alternating
+learned collection outcomes and deterministic support steps without relabeling support as learning.
+This is the first end-to-end fishing example of observe alternatives → model choice → generic
+execution → verified Pokédex gain → fit → restart. It is not independent evaluation or proof of a
+good policy: the model preferred a long one-target route over a much nearer higher-yield option.
+[Evidence](evidence/red-model106-measured-fishing-capture-2026-09-12.json).
+
+The prior Safari result established the same honest measured-choice boundary at80 registrations and
+model105. Its missing action journal remains disclosed; neither Safari nor fishing can promote
+authority on its own.
 
 Latest result: practical resupply returned the project to collection, rather than extending the
 League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an

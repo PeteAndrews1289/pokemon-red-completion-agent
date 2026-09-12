@@ -3,23 +3,23 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model105-measured-safari-fit**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model106-measured-fishing-capture**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden Red acquisition families: 6/6 acceptance items (100%).**
+**Repeat model-directed Red collection: 4/6 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
-- [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
-- [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
-- [x] Qualify exact item-evolution prerequisites ([evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json))
-- [x] Expose one generic Safari acquisition goal ([evidence](../docs/evidence/red-model104-safari-outcome-2026-09-12.json))
-- [x] Fit a productive model-selected acquisition-family outcome ([evidence](../docs/evidence/red-model105-measured-safari-fit-2026-09-12.json))
+- [x] Publish the 81-registration state as a durable model106 restart ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Build a multi-destination fishing menu without map or species identities ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [ ] Collect varied destination outcomes from the earned model106 state
+- [ ] Expose a useful choice across more than one acquisition family
 
-Current model: **105 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **106 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -71,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model105-measured-safari-fit-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -99,13 +99,21 @@ Already-credited lines need no redundant grind unless useful for the current run
 
 ## Session reviews
 
+### 2026-09-12-model106-measured-fishing-capture
+
+Model105 sampled one of eight identity-free fishing destinations. Generic routing handled three interruptions; 11 casts produced two encounters, one deliberate flee and one missing registration. The80-to-81 outcome added one lower-trust row, model105 became model106 with 106 retained examples, and the exact terminal reopened as a zero-input checkpoint.
+
+**Deviation:** The observed success does not prove that the destination ranking is good: model105 preferred a long one-target route over a near four-target route. The attempt has no action journal, remains training-only, and produced no evaluation or authority promotion. The restart trust boundary was extended only to authenticate alternating measured acquisition and deterministic support steps.
+
+**Next:** Rebuild the remaining action-free fishing menu from the 81-registration model106 restart, collect another genuine bounded destination outcome, and preserve success or failure. Seek varied strategic costs before claiming a useful fishing policy; no named-species route, full replay or Crystal execution.
+
 ### 2026-09-12-model105-measured-safari-fit
 
 The typed measured-choice adapter replayed model104's committed four-area sample, verified the five-state chain and79to80 registered transition, and admitted exactly one training-only row. Model105 has105 examples and retains all104 prior row hashes; the import observer sent zero input and advanced zero frames.
 
 **Deviation:** The source harness lacks a per-action journal, so the new row is permanently marked training-only, action-trace unavailable, independent-evaluation false and authority-promotion ineligible. Antigravity Flash drafted the broad path; Codex hardened and adjudicated it. No Crystal, full replay or new gameplay occurred.
 
-**Next:** Preserve the80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites.
+**Next:** Preserve the 80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites.
 
 ### 2026-09-12-safari-live-outcome
 

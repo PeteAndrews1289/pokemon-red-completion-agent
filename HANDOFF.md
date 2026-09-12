@@ -5,7 +5,39 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest measured endpoint: Safari capture / model105
+## Latest measured endpoint: fishing capture / model106
+
+The current restart is `red-model106-fishing-measured-terminal-v2-20260912`, checkpoint record
+SHA-256 `2571f6c85fd2bfdbddec7945bbed386c62018f9326de54454f34b97216286595`.
+It reopens the exact earned terminal with **81 registered species / 60 living species / 65
+specimens** and model106.
+
+- Registered-objective model: **106 settled examples**
+- Model SHA-256: `3c62e6241e7dfe430a1d14591d3496ab136a59797af2bf388eb2b5aa867c1d59`
+- Latest live chain: model105 sampled one of eight anonymous fishing destinations; generic routing
+  handled three interruptions, then 11 Super Rod casts produced two encounters, one intentional
+  flee and one missing registration
+- Measured cost: **802 actions / 54,384 frames**
+- Teacher labels: **0**
+- Publication cost: **0 actions / 0 frames**
+
+The fitted fishing row remains lower trust than a native action-journal episode: training only,
+not independent evaluation and not authority-promotion eligible. The model selected a long,
+single-target route even though a much nearer candidate had more productive slots; the success is
+useful data, not evidence that its ranking is already good.
+
+The restart boundary now authenticates alternating measured acquisition and deterministic support
+steps. This is necessary for the repeated collection loop: choose a strategic destination, execute
+generic skills, verify a registration, fit the result, perform any zero-label support, and continue
+from the earned state. Generic support-on-support and measured-on-measured chains remain rejected.
+
+Next: restore model106 action-free, rebuild the remaining fishing inventory and collect one more
+genuine bounded destination outcome. Do not add named-species routes, replay consumed attempts or
+move into Crystal.
+
+[Latest report](docs/work-sessions/2026-09-12-model106-measured-fishing-capture.md) · [Latest evidence](docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json)
+
+## Prior measured endpoint: Safari capture / model105
 
 The latest standard registered-player checkpoint remains
 `red-collection-20260912-cg-owned-evolution-01-causal`, record SHA-256
@@ -112,6 +144,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Latest report](docs/work-sessions/2026-09-12-model105-measured-safari-fit.md) · [Latest evidence](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json). Recommended model:
+[Prior report](docs/work-sessions/2026-09-12-model105-measured-safari-fit.md) · [Prior evidence](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json). Recommended model:
 **Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.

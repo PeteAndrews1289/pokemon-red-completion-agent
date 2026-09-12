@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Preserve the80-registration terminal through the ordinary restart path, then expose item procurement and fishing as physically executable identity-free alternatives for model105.
+- Next decision: Use the 81-registration model106 restart to collect another varied model-selected fishing outcome, then decide whether fishing has enough diversity or the next learning menu should mix acquisition families.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Preserve the 80-registration Red terminal and expose the next useful generic acquisition-family choice to model105. |
-| Authority now | The bounded-development learner has105 fitted examples, including one explicitly lower-trust measured Safari choice. Its latest measured Red state has80 registrations but is not yet restartable through the ordinary player path. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed. |
+| Reusable capability | Repeat model-directed, cartridge-derived Red collection from a durable 81-registration model106 restart. |
+| Authority now | The bounded-development learner has 106 fitted examples, including lower-trust measured Safari and fishing choices. Its latest Red state has81 registrations and is published as a durable model106 restart. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | An action-free restore cannot expose at least two physically executable, identity-free item-procurement or fishing alternatives from the retained terminal. |
+| Cheapest falsifier | The model106 restart cannot produce another physically executable identity-free menu with at least two useful remaining acquisition alternatives. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 105 | 12 |
+| Registered Train Example · train | 106 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-model105-measured-safari-fit** · status **active** · evidence [model fit](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json)
+**2026-09-12-model106-measured-fishing-capture** · status **active** · evidence [model fit](docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The system now learns from one model-directed special-acquisition result without concealing weaker provenance. The next work resumes actual generic collection, which directly reduces Red's remaining44 registrations and exercises planning reusable beyond Safari. |
-| Learning output | The exact Safari result added one training-only measured choice: model104to105 with all104 prior row hashes retained. The fitted row authenticates the sampled choice, state chain, aggregate costs and79to80 registration transition while explicitly carrying no action trace, evaluation or promotion authority. |
-| Authority delta | Model104's committed four-area Safari choice and productive registered outcome now contribute one explicit development-measured training row. Model105 has105 settled examples and all104 prior rows; deterministic code still executes transport, menus, combat and capture. No authority promotion occurred. |
-| Transfer result | The typed measured-choice boundary, cartridge-derived candidate rows and registered-objective ledger are reusable architecture. This one Red training row is not an unseen seed, modified-ROM, Blue or cross-title transfer result. |
-| Blocker | The 80-registration Safari terminal is not yet an ordinary traced-player restart point, and the next physically executable generic family menu has not been demonstrated. The measured Safari row cannot be used for independent evaluation. |
-| Decision | Preserve or import the 80-registration terminal through the normal restart boundary, then expose at least two identity-free item-procurement or fishing alternatives and let model105 make the next bounded choice. Do not return to species-specific routing or broaden into Crystal. |
-| Next session | Bind the 80-registration terminal to the ordinary restart path, construct the next item-procurement/fishing menu action-free, and execute at most one bounded model105 choice after verifying physical feasibility. |
-| Next falsifier | The retained terminal cannot be authenticated as a reusable restart point, or its exact resources cannot produce two meaningful generic acquisition-family alternatives without a named-species route. |
+| Product alignment | This is the first complete learned high-level collection loop through fishing: observe alternatives, sample with the fitted model, execute generic navigation and capture skills, verify shared Pokedex progress, fit the result and continue from the earned state. It is a direct building block for repeated completion across versions. |
+| Learning output | The model-directed fishing attempt added one lower-trust measured training row: model105 to model106 with all 105 prior examples retained. It binds the eight-option sample, 802-action/54,384-frame result and80-to-81 registration transition while carrying zero teacher labels and no independent-evaluation authority. |
+| Authority delta | Model105 selected one of eight identity-free fishing destinations and the live route, fishing and capture chain registered one missing species. The training-only outcome was fitted into model106 with 106 settled examples, and its 81-registration terminal is now a durable zero-input restart. No evaluation or authority promotion occurred. |
+| Transfer result | The alternating measured/support restart chain and identity-free fishing policy are reusable architecture. This one Red outcome is still same-lineage development, not an unseen seed, modified-ROM, Blue or cross-title transfer result. |
+| Blocker | One successful fishing destination is not enough to demonstrate a useful acquisition policy. The learned scores favored a long, low-yield destination over a much nearer higher-yield option, so model106 needs varied measured destination outcomes before its preferences can be trusted. |
+| Decision | Restore the published81-registration model106 checkpoint action-free, rebuild the remaining cartridge-derived fishing menu, and collect another genuine bounded destination outcome. Prefer strategic diversity and observed costs; do not add named-species routes or move into Crystal. |
+| Next session | Reopen the 81-registration model106 restart without input, rebuild the remaining fishing inventory, let model106 choose one bounded destination, and retain success or failure as the next honest lesson. |
+| Next falsifier | After removing the completed destination from demand, model106 cannot expose two useful executable alternatives, or another selected destination cannot settle within the existing bounded route/cast/capture contract. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **30**.
+Current evidence entries: **31**.

@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Preserve the 80-registration Red terminal and expose the next useful generic acquisition-family choice to model105.",
-      "cheapest_falsifier": "An action-free restore cannot expose at least two physically executable, identity-free item-procurement or fishing alternatives from the retained terminal.",
+      "capability": "Repeat model-directed, cartridge-derived Red collection from a durable 81-registration model106 restart.",
+      "cheapest_falsifier": "The model106 restart cannot produce another physically executable identity-free menu with at least two useful remaining acquisition alternatives.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model104's committed four-area Safari choice and productive registered outcome now contribute one explicit development-measured training row. Model105 has105 settled examples and all104 prior rows; deterministic code still executes transport, menus, combat and capture. No authority promotion occurred.",
-        "blocker": "The 80-registration Safari terminal is not yet an ordinary traced-player restart point, and the next physically executable generic family menu has not been demonstrated. The measured Safari row cannot be used for independent evaluation.",
-        "decision": "Preserve or import the 80-registration terminal through the normal restart boundary, then expose at least two identity-free item-procurement or fishing alternatives and let model105 make the next bounded choice. Do not return to species-specific routing or broaden into Crystal.",
+        "authority_delta": "Model105 selected one of eight identity-free fishing destinations and the live route, fishing and capture chain registered one missing species. The training-only outcome was fitted into model106 with 106 settled examples, and its 81-registration terminal is now a durable zero-input restart. No evaluation or authority promotion occurred.",
+        "blocker": "One successful fishing destination is not enough to demonstrate a useful acquisition policy. The learned scores favored a long, low-yield destination over a much nearer higher-yield option, so model106 needs varied measured destination outcomes before its preferences can be trusted.",
+        "decision": "Restore the published81-registration model106 checkpoint action-free, rebuild the remaining cartridge-derived fishing menu, and collect another genuine bounded destination outcome. Prefer strategic diversity and observed costs; do not add named-species routes or move into Crystal.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json",
-          "sha256": "144ed61a91319e8e8ed74bc9b00b14e4ee718dbf53ee6f38ec574be1ad786701"
+          "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
+          "sha256": "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
         },
-        "learning_output": "The exact Safari result added one training-only measured choice: model104to105 with all104 prior row hashes retained. The fitted row authenticates the sampled choice, state chain, aggregate costs and79to80 registration transition while explicitly carrying no action trace, evaluation or promotion authority.",
-        "next_falsifier": "The retained terminal cannot be authenticated as a reusable restart point, or its exact resources cannot produce two meaningful generic acquisition-family alternatives without a named-species route.",
-        "next_session_goal": "Bind the 80-registration terminal to the ordinary restart path, construct the next item-procurement/fishing menu action-free, and execute at most one bounded model105 choice after verifying physical feasibility.",
-        "product_alignment": "The system now learns from one model-directed special-acquisition result without concealing weaker provenance. The next work resumes actual generic collection, which directly reduces Red's remaining44 registrations and exercises planning reusable beyond Safari.",
-        "session_id": "2026-09-12-model105-measured-safari-fit",
+        "learning_output": "The model-directed fishing attempt added one lower-trust measured training row: model105 to model106 with all 105 prior examples retained. It binds the eight-option sample, 802-action/54,384-frame result and80-to-81 registration transition while carrying zero teacher labels and no independent-evaluation authority.",
+        "next_falsifier": "After removing the completed destination from demand, model106 cannot expose two useful executable alternatives, or another selected destination cannot settle within the existing bounded route/cast/capture contract.",
+        "next_session_goal": "Reopen the 81-registration model106 restart without input, rebuild the remaining fishing inventory, let model106 choose one bounded destination, and retain success or failure as the next honest lesson.",
+        "product_alignment": "This is the first complete learned high-level collection loop through fishing: observe alternatives, sample with the fitted model, execute generic navigation and capture skills, verify shared Pokedex progress, fit the result and continue from the earned state. It is a direct building block for repeated completion across versions.",
+        "session_id": "2026-09-12-model106-measured-fishing-capture",
         "status": "active",
         "stop_condition": "Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal.",
-        "transfer_result": "The typed measured-choice boundary, cartridge-derived candidate rows and registered-objective ledger are reusable architecture. This one Red training row is not an unseen seed, modified-ROM, Blue or cross-title transfer result."
+        "transfer_result": "The alternating measured/support restart chain and identity-free fishing policy are reusable architecture. This one Red outcome is still same-lineage development, not an unseen seed, modified-ROM, Blue or cross-title transfer result."
       },
       "learned_authority": {
-        "current": "The bounded-development learner has105 fitted examples, including one explicitly lower-trust measured Safari choice. Its latest measured Red state has80 registrations but is not yet restartable through the ordinary player path. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed.",
+        "current": "The bounded-development learner has 106 fitted examples, including lower-trust measured Safari and fishing choices. Its latest Red state has81 registrations and is published as a durable model106 restart. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Preserve the80-registration terminal through the ordinary restart path, then expose item procurement and fishing as physically executable identity-free alternatives for model105.",
+      "next_decision": "Use the 81-registration model106 restart to collect another varied model-selected fishing outcome, then decide whether fishing has enough diversity or the next learning menu should mix acquisition families.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -220,14 +220,19 @@
             "kind": "verified_outcome_example",
             "path": "docs/evidence/red-repeatable-living-dex-development-supplement-results-v1-2026-09-05.json",
             "sha256": "8b3805700bc88d4cfb77695222139dd1da642e4fbe88363a55c4d5bed0d60c3b"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
+            "sha256": "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
           }
         ],
-        "model_fits": 11,
+        "model_fits": 12,
         "outcome_questions": {
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 105,
+        "registered_train_examples": 106,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

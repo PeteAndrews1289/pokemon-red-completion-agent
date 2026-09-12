@@ -159,13 +159,19 @@ _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_PATH = (
 _REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT_SHA256 = (
     "5ee7494d1562b31620820548f73e8e9e5d612122dd1ade70e9a24a7a1c35ee60"
 )
+_MODEL106_MEASURED_FISHING_RESULT_PATH = (
+    "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
+)
+_MODEL106_MEASURED_FISHING_RESULT_SHA256 = (
+    "4354b0ed27e128fc9964fd7ffe8fa250fc436806d0a7d80091fca96a2a9841d5"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
     "causal_train_examples": 111,
     "composition_attempts": 6,
     "development_episode_attempts": 29,
-    "model_fits": 11,
+    "model_fits": 12,
     "outcome_questions": {"development": 61, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -1080,7 +1086,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 13:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 14:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1429,6 +1435,30 @@ def _validate_projected_counters(
             "repeatable living-Dex supplement evidence is invalid"
         )
     _validate_repeatable_living_dex_supplement_projection(supplement)
+    fishing_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 13],
+        subject="projected measured fishing evidence",
+    )
+    if fishing_evidence != {
+        "kind": "model_fit",
+        "path": _MODEL106_MEASURED_FISHING_RESULT_PATH,
+        "sha256": _MODEL106_MEASURED_FISHING_RESULT_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    fishing_path = (root / _MODEL106_MEASURED_FISHING_RESULT_PATH).resolve()
+    try:
+        fishing = json.loads(
+            fishing_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError("measured fishing evidence is invalid") from None
+    if not isinstance(fishing, Mapping):
+        raise ProductFocusError("measured fishing evidence is invalid")
+    _validate_model106_measured_fishing_projection(fishing)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1466,6 +1496,73 @@ def _validate_registered_counter(progress: Mapping[str, object], root: Path) -> 
             raise ValueError("registered projection differs")
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise ProductFocusError("registered learning counter lacks matching evidence") from error
+
+
+def _validate_model106_measured_fishing_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project one measured fishing success without implying evaluation authority."""
+
+    expected = {
+        "schema": "pokemon.red.model-selected-fishing-capture-evidence.v1",
+        "status": "fitted_training_only_outcome_and_published_restart",
+        "model_fitted": True,
+        "fitted_training_examples": 106,
+        "registered_species_before": 80,
+        "registered_species_after": 81,
+        "captures": 1,
+        "teacher_labels": 0,
+        "authority_promotions": 0,
+        "independent_evaluation": False,
+        "action_trace_available": False,
+        "observer_controller_actions": 0,
+        "observer_emulator_frames": 0,
+        "publication_controller_actions": 0,
+        "publication_emulator_frames": 0,
+        "private_coordinate_fields": 0,
+        "private_map_fields": 0,
+        "private_species_fields": 0,
+        "durable_restart_published": True,
+        "source_commit": "43a17c005f97300e021017a6dc788ab745425410",
+        "source_bundle_sha256": (
+            "8ae18d034aa797a6d8d36e1db7669866dd973686b792d6ffda13a87f87b24826"
+        ),
+        "model_sha256": (
+            "3c62e6241e7dfe430a1d14591d3496ab136a59797af2bf388eb2b5aa867c1d59"
+        ),
+        "parent_model_sha256": (
+            "00e1ae35eb296caa3956f5f766f6a10f4410ee026c1c58bb030e1d0c4d466bae"
+        ),
+        "checkpoint_record_sha256": (
+            "2571f6c85fd2bfdbddec7945bbed386c62018f9326de54454f34b97216286595"
+        ),
+        "terminal_state_sha256": (
+            "1ba390e680d64b9e7498f1da7349129c2de75520303d1f129798fec924cf3da8"
+        ),
+    }
+    observed = {key: receipt.get(key) for key in expected}
+    if observed != expected:
+        raise ProductFocusError("measured fishing projection differs")
+    if (
+        _count(receipt, "registered_species_after", subject="measured fishing evidence")
+        - _count(receipt, "registered_species_before", subject="measured fishing evidence")
+        != 1
+        or _count(
+            receipt, "controller_actions_observed", subject="measured fishing evidence"
+        )
+        != 802
+        or _count(
+            receipt, "emulator_frames_observed", subject="measured fishing evidence"
+        )
+        != 54384
+        or _count(
+            receipt, "selected_candidate_index", subject="measured fishing evidence"
+        )
+        != 5
+        or _count(receipt, "candidate_count", subject="measured fishing evidence")
+        != 8
+    ):
+        raise ProductFocusError("measured fishing outcome projection differs")
 
 
 def _validate_repeatable_living_dex_first_two_projection(

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-model105-measured-safari-fit",
+  "as_of_session": "2026-09-12-model106-measured-fishing-capture",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json"
+      "evidence": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,43 +38,43 @@
     }
   },
   "milestone": {
-    "title": "Broaden Red acquisition families",
+    "title": "Repeat model-directed Red collection",
     "items": [
       {
-        "id": "practical-capture-funding",
-        "label": "Restore practical capture funding without fabricating learning",
+        "id": "durable-model106-restart",
+        "label": "Publish the 81-registration state as a durable model106 restart",
         "done": true,
-        "evidence": "docs/evidence/red-model104-funded-collection-2026-09-12.json"
+        "evidence": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
       },
       {
-        "id": "ordinary-grass-frontier",
-        "label": "Close the ordinary-grass and owned-level frontier",
+        "id": "identity-free-fishing-menu",
+        "label": "Build a multi-destination fishing menu without map or species identities",
         "done": true,
-        "evidence": "docs/evidence/red-model104-funded-collection-2026-09-12.json"
+        "evidence": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
       },
       {
-        "id": "catalog-driven-special-acquisition",
-        "label": "Expose one generic non-grass or special acquisition family",
+        "id": "model-selected-fishing-execution",
+        "label": "Route, fish and selectively capture from the model's chosen destination",
         "done": true,
-        "evidence": "docs/evidence/red-fossil-owned-evolution-2026-09-12.json"
+        "evidence": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
       },
       {
-        "id": "item-evolution-prerequisites",
-        "label": "Qualify exact item-evolution prerequisites",
+        "id": "measured-fishing-fit",
+        "label": "Fit the verified fishing outcome without promoting its trust tier",
         "done": true,
-        "evidence": "docs/evidence/red-item-evolution-prerequisites-2026-09-12.json"
+        "evidence": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
       },
       {
-        "id": "generic-safari-acquisition",
-        "label": "Expose one generic Safari acquisition goal",
-        "done": true,
-        "evidence": "docs/evidence/red-model104-safari-outcome-2026-09-12.json"
+        "id": "diversified-fishing-outcomes",
+        "label": "Collect varied destination outcomes from the earned model106 state",
+        "done": false,
+        "evidence": null
       },
       {
-        "id": "resume-model-directed-collection",
-        "label": "Fit a productive model-selected acquisition-family outcome",
-        "done": true,
-        "evidence": "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json"
+        "id": "mixed-acquisition-family-choice",
+        "label": "Expose a useful choice across more than one acquisition family",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -1055,7 +1055,13 @@
       "session": "2026-09-12-model105-measured-safari-fit",
       "result": "The typed measured-choice adapter replayed model104's committed four-area sample, verified the five-state chain and79to80 registered transition, and admitted exactly one training-only row. Model105 has105 examples and retains all104 prior row hashes; the import observer sent zero input and advanced zero frames.",
       "deviation": "The source harness lacks a per-action journal, so the new row is permanently marked training-only, action-trace unavailable, independent-evaluation false and authority-promotion ineligible. Antigravity Flash drafted the broad path; Codex hardened and adjudicated it. No Crystal, full replay or new gameplay occurred.",
-      "next": "Preserve the80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites."
+      "next": "Preserve the 80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites."
+    },
+    {
+      "session": "2026-09-12-model106-measured-fishing-capture",
+      "result": "Model105 sampled one of eight identity-free fishing destinations. Generic routing handled three interruptions; 11 casts produced two encounters, one deliberate flee and one missing registration. The80-to-81 outcome added one lower-trust row, model105 became model106 with 106 retained examples, and the exact terminal reopened as a zero-input checkpoint.",
+      "deviation": "The observed success does not prove that the destination ranking is good: model105 preferred a long one-target route over a near four-target route. The attempt has no action journal, remains training-only, and produced no evaluation or authority promotion. The restart trust boundary was extended only to authenticate alternating measured acquisition and deterministic support steps.",
+      "next": "Rebuild the remaining action-free fishing menu from the 81-registration model106 restart, collect another genuine bounded destination outcome, and preserve success or failure. Seek varied strategic costs before claiming a useful fishing policy; no named-species route, full replay or Crystal execution."
     }
   ],
   "closed_milestones": [

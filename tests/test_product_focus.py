@@ -19,6 +19,7 @@ from product_focus import (  # noqa: E402
     _validate_battle_cycle_projection,
     _validate_calibration_player_partial_projection,
     _validate_calibration_player_recovery_projection,
+    _validate_model106_measured_fishing_projection,
     _validate_paired_bounded_player_projection,
     _validate_repeatable_living_dex_calibration_audit_projection,
     _validate_repeatable_living_dex_first_two_projection,
@@ -77,6 +78,10 @@ REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT = (
     PROJECT_ROOT
     / "docs/evidence"
     / "red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json"
+)
+MODEL106_MEASURED_FISHING_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -377,9 +382,9 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Registered Train Example · train", 105, 12),)
+    assert focus_scorecard(state) == (("Registered Train Example · train", 106, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
-    assert state.progress["model_fits"] == 11
+    assert state.progress["model_fits"] == 12
     assert state.progress["composition_attempts"] == 6
     assert state.progress["unseen_comparisons"] == 9
     assert state.progress["development_episode_attempts"] == 29
@@ -393,6 +398,30 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "fitted_training_examples",
+        "registered_species_after",
+        "controller_actions_observed",
+        "teacher_labels",
+        "authority_promotions",
+        "independent_evaluation",
+        "durable_restart_published",
+        "model_sha256",
+    ),
+)
+def test_measured_fishing_projection_rejects_claim_drift(field: str) -> None:
+    receipt = json.loads(MODEL106_MEASURED_FISHING_RESULT.read_text(encoding="ascii"))
+    _validate_model106_measured_fishing_projection(receipt)
+
+    changed = deepcopy(receipt)
+    value = changed[field]
+    changed[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="measured fishing"):
+        _validate_model106_measured_fishing_projection(changed)
 
 
 def test_paired_player_projection_rejects_counter_or_arm_drift() -> None:
@@ -1707,7 +1736,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     # Only actual new-objective outcomes advance this separate counter.
-    assert rows == ("Registered Train Example · train: 105/12",)
+    assert rows == ("Registered Train Example · train: 106/12",)
 
 
 @pytest.mark.parametrize("goal", [
