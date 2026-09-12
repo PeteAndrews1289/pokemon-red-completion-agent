@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build generic Safari capture on the existing traversal, require a useful action-free menu, then run one bounded admission and retain its real outcome.
+- Next decision: Join the exact endpoint to the tested Safari admission and selected-area patrol, then retain one model-selected outcome before broadening another acquisition family.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Expose one generic Safari acquisition goal from the exact 79-registration Red save, using cartridge encounter data and Safari resources rather than a species route. |
+| Reusable capability | Turn a model-selected, cartridge-derived Safari area into one retained Red acquisition outcome without a species route. |
 | Authority now | The bounded-development learner has104 fitted examples and79 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. The latest fossil and evolution results were forced support, not new learned authority. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A 500-money Safari admission from the exact save cannot expose and retain any of the six missing Safari registrations through a bounded generic encounter loop. |
+| Cheapest falsifier | The exact checkpoint cannot authenticate transport, pay one admission, reach the sampled area and preserve one bounded generic encounter outcome. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-item-evolution-prerequisites** · status **closed** · evidence [qualification](docs/evidence/red-item-evolution-prerequisites-2026-09-12.json)
+**2026-09-12-safari-capability-preflight** · status **active** · evidence [qualification](docs/evidence/red-safari-capability-preflight-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The action-free check prevented a funding detour: Safari can generate collection outcomes immediately and exercises a reusable acquisition mechanic, while all nine item-evolution candidates remain recorded for later resource planning. |
-| Learning output | No new model examples were created. Omanyte and Omastar advanced registration from77 to79; Omanyte added one living specimen and Omastar evolved that specimen in place. The fossil executor is now qualified through an authenticated retained recovery. |
-| Authority delta | The fossil recovery and Omanyte-to-Omastar continuation added two registrations but no learned authority. Both were single-option deterministic support; model104 and all 104 settled examples remain unchanged. |
-| Transfer result | The catalog-driven acquisition boundary is intended for later adapters, but this Red result is not a held-out modification, Blue or cross-title transfer result. |
-| Blocker | Nine owned item-evolution precursors exist, but the exact save has zero stones,558money versus a2100 shop price and no party Pay Day. Safari is immediately affordable at500, has six missing registrations and supplies its own balls, but the existing traversal flees encounters rather than capturing them. |
-| Decision | Defer stone procurement instead of reopening the League-income detour. Build a generic Safari capture provider on the tested traversal, derive targets from cartridge encounter data and stop after one bounded admission or retained failure. |
-| Next session | Implement and test generic Safari encounter capture on the existing qualified traversal; expose one truthful action-free acquisition goal, then run at most one bounded admission from the exact checkpoint. |
-| Next falsifier | A generic one-admission Safari loop cannot identify missing encountered species, throw Safari Balls and retain a verified registration without a species-specific route. |
+| Product alignment | Safari adds a reusable cartridge-derived acquisition family and a genuine model destination choice. Its outcome directly advances or trains shared-registration planning; no named-species route or new title is needed. |
+| Learning output | No new model examples were created. The exact zero-input preflight exposed four distinct areas covering six missing registrations; model104 sampled candidate1 with zero teacher labels, actions or frames. Model104 and79 registrations are unchanged. |
+| Authority delta | Model104 made one action-free identity-free choice among four real Safari areas. Deterministic code now inventories the cartridge, handles Safari capture and verifies one paid selected-area admission. No gameplay, outcome, fitted example or authority promotion occurred. |
+| Transfer result | The cartridge-catalog and identity-free area-choice boundary is intended for later adapters, but this Red preflight is not a held-out modification, Blue or cross-title transfer result. |
+| Blocker | The exact retained endpoint is not yet joined to the stable Fuchsia Center boundary, and the selected area still needs a bounded generic patrol. The model's sampled lower-yield feature profile must be executed honestly rather than replaced by a deterministic higher-yield choice. |
+| Decision | Authenticate the exact endpoint-to-Fuchsia join, bind one generic local patrol to the already sampled area and execute one admission. Preserve the observed result once; fit only if the existing learning contract admits it. |
+| Next session | Connect authenticated transport and a generic selected-area patrol, then execute exactly one bounded model-selected Safari admission and retain its real outcome. |
+| Next falsifier | The sampled Safari area cannot produce any readable retained outcome before the admission, step, encounter or ball bound closes. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions

@@ -41,6 +41,17 @@ now one qualified acquisition-family provider; the next product constraint is br
 
 ## Current blocker and next gate
 
+The Safari candidate layer is now implemented. Cartridge data produces four productive areas that
+jointly cover six missing registrations. The exact model104 checkpoint selected candidate1 from an
+identity-free four-way menu with zero controller actions, frames or teacher labels. The bounded
+capture mechanic and a one-admission selected-area contract are tested. This is action-free
+selection and engineering support, not a retained gameplay outcome or new learned authority.
+
+The remaining gate is narrow: authenticate transport from the exact endpoint to Fuchsia Center,
+join the selected area to a generic local patrol and execute one admission. Preserve the actual
+capture, flee, exhaustion or failure once. The model's sampled profile has four productive slots
+rather than five; this is useful training evidence, not a reason to override the choice.
+
 The regional candidate layer currently exposes ordinary grass/water sources and already-owned
 level evolutions. Both are exhausted at this exact save. The cartridge-derived catalog still
 accounts for all 45 missing registrations:
@@ -61,10 +72,9 @@ The exact action-free inventory found nine owned missing stone-evolution precurs
 stones, ₽558 against the ₽2,100 shop price and no party member with Pay Day. Those candidates are
 preserved for later resource planning; item evolution is not the cheapest executable next gameplay.
 
-Safari is the next gate: admission costs ₽500, the save can pay it, the zone supplies its own balls
-and six missing registrations remain there. Existing tested traversal currently flees from every
-encounter. Generalize that mechanic into a catalog-driven capture provider; do not add six named
-species routes.
+The stone candidates remain deferred. After one Safari outcome, fit only if the ordinary observed-
+arm contract admits it, then broaden item procurement and fishing through the same reusable
+candidate vocabulary. Do not add six named Safari species routes.
 
 ## Authority and claim boundary
 
@@ -86,6 +96,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Latest report](docs/work-sessions/2026-09-12-fossil-owned-evolution.md) · [Latest prerequisite evidence](docs/evidence/red-item-evolution-prerequisites-2026-09-12.json). Recommended model:
+[Latest report](docs/work-sessions/2026-09-12-safari-capability-preflight.md) · [Latest evidence](docs/evidence/red-safari-capability-preflight-2026-09-12.json). Recommended model:
 **Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.

@@ -17,17 +17,20 @@ resupply bridge. The next gameplay cycle caught Psyduck as a forced singleton; t
 then chose evolution from a three-goal menu and completed Golduck. The loop stopped cleanly because
 the previous candidate layer exhausted ordinary grass sources and owned level evolutions. A generic
 fossil provider has since revived Omanyte, and the automatic evolution inventory completed Omastar.
-Both were forced singletons, so model104 remains unchanged.
+Both were forced singletons, so model104 remains unchanged. Safari is now the first new
+multi-destination family: the cartridge produced four area offers covering six missing
+registrations, and an exact zero-input restore let model104 select among identity-free feature
+rows. The capture and admission mechanics are tested, but the selected area has not been played and
+no Safari outcome has been fitted.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Broaden Red acquisition methods.** Fossil revival is qualified. Item-evolution inventory found
-   nine owned candidates but no stones and insufficient funds, so implement immediately affordable
-   Safari capture next. Follow with item procurement, water/fishing, static, trade, gifts and
-   prizes—without species-specific policy routes.
+1. **Complete one Safari outcome.** Authenticate the retained endpoint-to-Fuchsia join, enter the
+   already selected area and run one generic bounded patrol. Retain success, failure or exhaustion
+   exactly once; never substitute the deterministic higher-yield area for the model's sample.
 2. **Resume model-directed collection.** Require a useful action-free menu, execute one bounded
    selected goal, retain its real outcome and fit it. Keep forced support outside training.
 3. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
@@ -44,12 +47,12 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Build generic Safari capture on the existing qualified traversal. Missing targets must come from
-the cartridge encounter catalog; Safari Balls, the500 admission cost and storage must be observed.
-Verify one action-free goal before one bounded admission. Stop if the design needs a named-species
-route, leaks coordinates into policy features or cannot preserve a failed admission honestly.
+Join the exact retained endpoint to the stable Fuchsia Center boundary and the already sampled
+Safari area. Missing targets come from the cartridge catalog; policy features contain neither map
+nor species identity. Run one admission only after the join and local patrol pass action-free
+checks. Stop if the result cannot preserve payment, balls, captures and failures honestly.
 
-[Latest prerequisite evidence](evidence/red-item-evolution-prerequisites-2026-09-12.json) · [Latest gameplay report](work-sessions/2026-09-12-fossil-owned-evolution.md)
+[Latest preflight evidence](evidence/red-safari-capability-preflight-2026-09-12.json) · [Latest session](work-sessions/2026-09-12-safari-capability-preflight.md)
 
 ## How to stay focused
 

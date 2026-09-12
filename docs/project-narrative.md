@@ -1,5 +1,13 @@
 # Project story: from finishing Red to learning useful choices
 
+Latest systems beat: Safari is now a genuine four-destination model decision rather than a named
+species route. From the exact 79-registration checkpoint, cartridge tables expose four areas that
+jointly contain six missing registrations. Model104 selected one identity-free area profile without
+input or teacher labels. Deterministic code can handle bounded Safari capture and verify a paid
+selected-area admission, but the choice has not been executed and no new lesson exists yet. Most
+interestingly, the current model preferred the lower-yield feature family; the next retained outcome
+can correct that weakness instead of hiding it. [Evidence](evidence/red-safari-capability-preflight-2026-09-12.json).
+
 Latest result: practical resupply returned the project to collection, rather than extending the
 League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an
 explicitly support-only evidence bridge. The next automatic loop caught Psyduck at Seafoam as a

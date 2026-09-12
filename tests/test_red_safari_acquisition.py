@@ -18,7 +18,9 @@ from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_safari_acquisition import (
     LiveSafariAreaExecutor,
+    RedSafariAdmissionReport,
     RedSafariZoneOffer,
+    red_safari_admission_route,
     red_safari_area_menu,
     red_safari_zone_offers,
     select_red_safari_area,
@@ -164,6 +166,49 @@ def test_safari_area_menu_rejects_singleton_and_unfunded_choices() -> None:
             available_money=499,
             free_storage_slots=4,
         )
+
+
+def test_safari_admission_routes_are_area_level_support_not_species_routes() -> None:
+    center = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        tuple((22, 30) for _ in range(10)),
+        (30,),
+    )
+    east = RedSafariZoneOffer(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        tuple((25, 47) for _ in range(10)),
+        (47,),
+    )
+
+    assert red_safari_admission_route(center) == ()
+    assert len(red_safari_admission_route(east)) == 29
+    with pytest.raises(TypeError, match="one cartridge offer"):
+        red_safari_admission_route(object())  # type: ignore[arg-type]
+
+
+def test_safari_admission_report_requires_exact_fee_counters_and_terminal() -> None:
+    report = RedSafariAdmissionReport(
+        selected_source_id="wild:SafariZoneEast:grass",
+        selected_map_id=int(MapId.SAFARI_ZONE_EAST),
+        selected_position=(0, 23),
+        route_steps=29,
+        encounters_fled=1,
+        money_before=558,
+        money_after=58,
+        safari_steps_remaining=472,
+        safari_balls_remaining=30,
+        actions_executed=100,
+        frames_executed=10_000,
+        controller_released=True,
+    )
+
+    assert report.passed
+    assert report.public_dict()["private_map_fields"] == 0
+    assert not replace(report, money_after=59).passed
+    assert not replace(report, safari_balls_remaining=29).passed
+    assert not replace(report, selected_position=(1, 23)).passed
 
 
 class _SafariSimulation:

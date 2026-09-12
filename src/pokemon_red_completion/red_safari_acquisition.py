@@ -40,6 +40,17 @@ from pokemon_red_completion.red_collection import (
     red_species_ref,
 )
 from pokemon_red_completion.red_party import PokemonRedPartyReader
+from pokemon_red_completion.safari import (
+    CENTER_TO_EAST,
+    CENTER_TO_GATE,
+    DEFAULT_SAFARI_TIMING,
+    EAST_TO_NORTH,
+    NORTH_TO_WEST,
+    SafariTiming,
+    _balls,
+    _money,
+    _move,
+)
 
 SAFARI_ZONE_SOURCES: tuple[tuple[str, MapId], ...] = (
     ("wild:SafariZoneCenter:grass", MapId.SAFARI_ZONE_CENTER),
@@ -116,6 +127,157 @@ class RedSafariZoneOffer:
             "private_source_fields": 0,
             "raw_teacher_direction_steps": 0,
         }
+
+
+@dataclass(frozen=True, slots=True)
+class RedSafariAdmissionReport:
+    """Verified arrival in one selected area after exactly one paid admission."""
+
+    selected_source_id: str
+    selected_map_id: int
+    selected_position: tuple[int, int]
+    route_steps: int
+    encounters_fled: int
+    money_before: int
+    money_after: int
+    safari_steps_remaining: int
+    safari_balls_remaining: int
+    actions_executed: int
+    frames_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        expected = _SAFARI_AREA_TERMINALS.get(self.selected_source_id)
+        return (
+            expected is not None
+            and expected[0] == self.selected_map_id
+            and expected[1] == self.selected_position
+            and expected[2] == self.safari_steps_remaining
+            and self.money_before - self.money_after == SAFARI_ADMISSION_COST
+            and self.safari_balls_remaining == 30
+            and self.actions_executed > 0
+            and self.frames_executed > 0
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "single_admission": self.money_before - self.money_after == SAFARI_ADMISSION_COST,
+            "route_steps": self.route_steps,
+            "encounters_fled": self.encounters_fled,
+            "safari_steps_remaining": self.safari_steps_remaining,
+            "safari_balls_remaining": self.safari_balls_remaining,
+            "actions_executed": self.actions_executed,
+            "frames_executed": self.frames_executed,
+            "private_map_fields": 0,
+            "private_source_fields": 0,
+            "raw_teacher_direction_steps": 0,
+        }
+
+
+_SAFARI_AREA_ROUTES: dict[str, tuple[str, ...]] = {
+    "wild:SafariZoneCenter:grass": (),
+    "wild:SafariZoneEast:grass": CENTER_TO_EAST,
+    "wild:SafariZoneNorth:grass": CENTER_TO_EAST + EAST_TO_NORTH,
+    "wild:SafariZoneWest:grass": CENTER_TO_EAST + EAST_TO_NORTH + NORTH_TO_WEST,
+}
+_SAFARI_AREA_TERMINALS: dict[str, tuple[int, tuple[int, int], int]] = {
+    "wild:SafariZoneCenter:grass": (int(MapId.SAFARI_ZONE_CENTER), (15, 25), 500),
+    "wild:SafariZoneEast:grass": (int(MapId.SAFARI_ZONE_EAST), (0, 23), 472),
+    "wild:SafariZoneNorth:grass": (int(MapId.SAFARI_ZONE_NORTH), (39, 31), 376),
+    "wild:SafariZoneWest:grass": (int(MapId.SAFARI_ZONE_WEST), (21, 0), 238),
+}
+
+
+def red_safari_admission_route(offer: RedSafariZoneOffer) -> tuple[str, ...]:
+    """Return the already-qualified Red area route; it is never a policy feature."""
+
+    if not isinstance(offer, RedSafariZoneOffer):
+        raise TypeError("Safari admission route needs one cartridge offer")
+    return _SAFARI_AREA_ROUTES[offer.source_id]
+
+
+def enter_red_safari_area(
+    emulator: SafariControlPort,
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    offer: RedSafariZoneOffer,
+    *,
+    timing: SafariTiming = DEFAULT_SAFARI_TIMING,
+) -> RedSafariAdmissionReport:
+    """Pay once and reach the already-selected area from Fuchsia's stable center."""
+
+    before = reader.read()
+    if (
+        before.map_id != MapId.FUCHSIA_POKECENTER
+        or (before.player_x, before.player_y) != (3, 3)
+        or before.battle_state
+        or _money(emulator) < SAFARI_ADMISSION_COST
+    ):
+        raise RedAreaExecutionError(
+            "Safari admission lacks the stable funded Fuchsia boundary",
+            reason_code="safari_admission_boundary_invalid",
+        )
+    start_actions = actions.actions_executed
+    start_frames = emulator.frame_count
+    money_before = _money(emulator)
+    encounters = _move(actions, reader, emulator, CENTER_TO_GATE, timing, "Safari gate")
+    gate = reader.read()
+    if gate.map_id != MapId.SAFARI_ZONE_GATE or (gate.player_x, gate.player_y) != (3, 5):
+        raise RedAreaExecutionError(
+            "Safari admission route missed the gate",
+            reason_code="safari_gate_route_failed",
+        )
+    _move(actions, reader, emulator, ("up", "up", "up"), timing, "Safari clerk")
+    for _ in range(timing.dialogue_pulses):
+        admitted = reader.read()
+        if admitted.map_id == MapId.SAFARI_ZONE_CENTER:
+            break
+        actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.wait_frames))
+    else:
+        raise RedAreaExecutionError(
+            "Safari clerk did not admit the player",
+            reason_code="safari_admission_dialogue_failed",
+        )
+    if money_before - _money(emulator) != SAFARI_ADMISSION_COST or _balls(emulator) != 30:
+        raise RedAreaExecutionError(
+            "Safari admission fee or ball grant differs",
+            reason_code="safari_admission_resources_changed",
+        )
+    route = red_safari_admission_route(offer)
+    encounters += _move(actions, reader, emulator, route, timing, "selected Safari area")
+    final = reader.read()
+    expected_map, expected_position, expected_steps = _SAFARI_AREA_TERMINALS[offer.source_id]
+    report = RedSafariAdmissionReport(
+        offer.source_id,
+        -1 if final.map_id is None else int(final.map_id),
+        (
+            -1 if final.player_x is None else int(final.player_x),
+            -1 if final.player_y is None else int(final.player_y),
+        ),
+        len(route),
+        encounters,
+        money_before,
+        _money(emulator),
+        emulator.read_u8(RamAddress.SAFARI_STEPS),
+        _balls(emulator),
+        actions.actions_executed - start_actions,
+        emulator.frame_count - start_frames,
+        not emulator.pressed_buttons,
+    )
+    if (final.map_id, (final.player_x, final.player_y), report.safari_steps_remaining) != (
+        expected_map,
+        expected_position,
+        expected_steps,
+    ) or not report.passed:
+        raise RedAreaExecutionError(
+            "Safari selected-area arrival failed its postconditions",
+            reason_code="safari_area_arrival_failed",
+        )
+    return report
 
 
 def red_safari_zone_offers(
@@ -510,12 +672,15 @@ class LiveSafariAreaExecutor:
 
 __all__ = [
     "LiveSafariAreaExecutor",
+    "RedSafariAdmissionReport",
     "RedSafariAreaChoice",
     "RedSafariZoneOffer",
     "SAFARI_ADMISSION_COST",
     "SAFARI_AREA_CHOICE_POLICY",
     "SAFARI_ZONE_SOURCES",
     "red_safari_area_menu",
+    "red_safari_admission_route",
     "red_safari_zone_offers",
     "select_red_safari_area",
+    "enter_red_safari_area",
 ]

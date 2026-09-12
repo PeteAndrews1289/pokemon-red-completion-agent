@@ -3,20 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-item-evolution-prerequisites**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-safari-capability-preflight**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden Red acquisition families: 4/6 acceptance items (67%).**
+**Broaden Red acquisition families: 5/6 acceptance items (83%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
 - [x] Qualify exact item-evolution prerequisites ([evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json))
-- [ ] Expose one generic Safari acquisition goal
+- [x] Expose one generic Safari acquisition goal ([evidence](../docs/evidence/red-safari-capability-preflight-2026-09-12.json))
 - [ ] Fit a productive model-selected acquisition-family outcome
 
 Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -71,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json)
+[Current evidence](../docs/evidence/red-safari-capability-preflight-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -98,6 +98,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-safari-capability-preflight
+
+Cartridge data exposed four productive Safari areas covering six missing registrations. Model104 selected one identity-free area profile in an exact zero-input restore; capture and single-admission mechanics are tested. No gameplay, registration, fit or authority promotion occurred.
+
+**Deviation:** The model currently scores the two four-productive-slot profiles above the two five-slot profiles. Preserve that weakness as a real falsifier; do not override its sampled choice with the higher-yield deterministic answer.
+
+**Next:** Authenticate transport from the exact endpoint to Fuchsia Center, join the selected area to one generic bounded patrol and execute one model-selected admission. Retain the observed result once and fit only if eligible.
 
 ### 2026-09-12-item-evolution-prerequisites
 

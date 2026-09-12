@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-item-evolution-prerequisites",
+  "as_of_session": "2026-09-12-safari-capability-preflight",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-item-evolution-prerequisites-2026-09-12.json"
+      "evidence": "docs/evidence/red-safari-capability-preflight-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -67,8 +67,8 @@
       {
         "id": "generic-safari-acquisition",
         "label": "Expose one generic Safari acquisition goal",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-safari-capability-preflight-2026-09-12.json"
       },
       {
         "id": "resume-model-directed-collection",
@@ -1038,6 +1038,12 @@
       "result": "A zero-input restore found nine owned missing stone-evolution candidates, but zero held stones,558money against the2100 shop price and no party Pay Day. Item evolution is not the cheapest executable next gameplay. Model104 and79 registrations are unchanged.",
       "deviation": "The roadmap pivots before implementation rather than fabricating availability or reopening the League-income detour. Safari costs500, supplies its own balls and has six missing registrations; existing traversal is retained but its encounter behavior must be generalized from flee to capture.",
       "next": "Implement a generic Safari capture provider from cartridge encounter tables and tested traversal. Require an action-free executable goal, then one bounded admission with no species-specific route or forced result called learning."
+    },
+    {
+      "session": "2026-09-12-safari-capability-preflight",
+      "result": "Cartridge data exposed four productive Safari areas covering six missing registrations. Model104 selected one identity-free area profile in an exact zero-input restore; capture and single-admission mechanics are tested. No gameplay, registration, fit or authority promotion occurred.",
+      "deviation": "The model currently scores the two four-productive-slot profiles above the two five-slot profiles. Preserve that weakness as a real falsifier; do not override its sampled choice with the higher-yield deterministic answer.",
+      "next": "Authenticate transport from the exact endpoint to Fuchsia Center, join the selected area to one generic bounded patrol and execute one model-selected admission. Retain the observed result once and fit only if eligible."
     }
   ],
   "closed_milestones": [
