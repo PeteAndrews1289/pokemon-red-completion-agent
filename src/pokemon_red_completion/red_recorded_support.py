@@ -333,6 +333,10 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
         and parent_schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
     )
+    measured_after_registered_support = (
+        schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+    )
     if (
         (
             parent_schema
@@ -342,6 +346,7 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
                 REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
             }
             and not measured_restart_parent
+            and not measured_after_registered_support
         )
         or parent_episode.manifest_sha256 != origin.get("manifest_sha256")
         or parent.get("trajectory_manifest_sha256") != parent_episode.manifest_sha256
@@ -350,13 +355,15 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         ]
     ):
         raise RedRecordedSupportError("support requires its original completed native predecessor")
-    if measured_restart_parent:
-        # A measured terminal is an authenticated zero-input restart around one
-        # already-completed native predecessor. Permit exactly one subsequent
-        # registered support import, after rechecking the measured join itself.
-        # Generic support-on-support chains remain forbidden.
+    if measured_restart_parent or measured_after_registered_support:
+        # Permit an alternating measured/support lineage after recursively
+        # authenticating every prior join. Generic support-on-support and
+        # measured-on-measured chains remain forbidden.
         require_recorded_support_origin(store, parent)
-    if is_measured and parent.get("schema") != REGISTERED_PLAYER_CHECKPOINT_SCHEMA:
+    if is_measured and parent.get("schema") not in {
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
+        REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+    }:
         raise RedRecordedSupportError("measured terminal requires a native registered predecessor")
     for key, original in (
         ("original_state_sha256", "state_sha256"),
