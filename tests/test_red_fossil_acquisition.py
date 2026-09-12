@@ -19,6 +19,7 @@ from pokemon_red_completion.goal_manager_runtime import (
 )
 from pokemon_red_completion.observation import (
     EVENT_FLAG_BYTES,
+    CurrentMapObject,
     EventFlag,
     ItemId,
     MapId,
@@ -32,6 +33,7 @@ from pokemon_red_completion.red_fossil_acquisition import (
     RedFossilExecution,
     RedFossilGoalProvider,
     RedFossilPhase,
+    RedRoutedFossilRevival,
     available_red_fossil_targets,
     bind_available_fossil_acquisition,
     fossil_target_by_item,
@@ -69,6 +71,11 @@ class _Reader:
         self.box = RedCurrentBoxState(0, (7, 8), (10, 11))
         self.pending = (0, 0)
         self.reads = 0
+        self.facing = "up"
+        self.objects = (
+            CurrentMapObject(1, 0x20, (2, 5), 1, 24),
+            CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+        )
 
     def read(self) -> RawGameState:
         self.reads += 1
@@ -90,7 +97,10 @@ class _Reader:
         return False
 
     def read_player_facing(self) -> str:
-        return "up"
+        return self.facing
+
+    def read_current_map_objects(self) -> tuple[CurrentMapObject, ...]:
+        return self.objects
 
 
 def test_fossil_constants_match_pinned_cartridge_layout() -> None:
@@ -237,3 +247,49 @@ def test_fossil_provider_verifies_new_registration_and_retained_specimen() -> No
     assert verdict.status.value == "succeeded"
     assert report.evidence["national_dex_number"] == 138
     assert report.evidence["species_specific_route_steps"] == 0
+
+
+def test_fossil_interaction_replans_to_roaming_scientists_live_position(
+    monkeypatch,
+) -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_LAB_FOSSIL_ROOM,
+        player_y=3,
+        player_x=5,
+    )
+    # This is the exact live race caught by CB: the scientist moved right,
+    # leaving the formerly blocked (2, 5) square open.
+    reader.objects = (
+        CurrentMapObject(1, 0x20, (2, 6), 1, 24),
+        CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+    )
+
+    class Actions:
+        actions_executed = 0
+
+        def execute(self, action):
+            pytest.fail(f"should route before sending a facing input: {action}")
+
+    routed = []
+
+    def approach(self, _actions, _observer, scientist_at):
+        routed.append(scientist_at)
+        reader.raw = replace(reader.raw, player_x=6)
+        return 1
+
+    monkeypatch.setattr(RedRoutedFossilRevival, "_route_to_scientist", approach)
+    executor = RedRoutedFossilRevival(
+        Actions(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        SimpleNamespace(),  # type: ignore[arg-type]
+    )
+
+    assert executor._position_and_face_scientist(  # noqa: SLF001
+        SimpleNamespace(),  # type: ignore[arg-type]
+        SimpleNamespace(),  # type: ignore[arg-type]
+    ) == 1
+    assert routed == [(2, 6)]
+    assert (reader.raw.player_y, reader.raw.player_x) == (3, 6)

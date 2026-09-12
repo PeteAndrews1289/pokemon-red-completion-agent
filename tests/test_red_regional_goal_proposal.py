@@ -22,7 +22,14 @@ from pokemon_red_completion.red_regional_goal_proposal import (
 )
 
 
-def recorded(tmp_path, *, kind="resupply", omit_header=False):
+def recorded(
+    tmp_path,
+    *,
+    kind="resupply",
+    omit_header=False,
+    selected_source="wild:Route11:grass",
+    source_mode="sampled",
+):
     profile = _candidate("wild:Route11:grass").profile
 
     def declare(store, plan, _model):
@@ -38,7 +45,8 @@ def recorded(tmp_path, *, kind="resupply", omit_header=False):
                 "independent_evaluation": False,
                 "profile_sha256": plan.document["profile_sha256"],
                 "parent_plan": dict(plan.document),
-                "selected_source": "wild:Route11:grass",
+                "selected_source": selected_source,
+                "source_mode": source_mode,
                 "profile": json.loads(
                     build_red_goal_context_profile_payload(
                         profile_id=profile.profile_id,
@@ -126,6 +134,23 @@ def test_actual_capture_parent_preserves_failed_source_effort(tmp_path):
     assert regional_proposal_source_effort(
         store, "goal-episode-1", terminal.summary.record_sha256
     ) == ("wild:Route11:grass", "f" * 64, True, 7, 420)
+
+
+def test_native_nonencounter_acquisition_has_no_capture_source_effort(tmp_path):
+    store, terminal, *_ = recorded(
+        tmp_path,
+        kind="acquire_species",
+        selected_source=None,
+        source_mode="no_source",
+    )
+    assert (
+        regional_proposal_source_effort(
+            store,
+            "goal-episode-1",
+            terminal.summary.record_sha256,
+        )
+        is None
+    )
 
 
 def test_uncommitted_proposal_cannot_become_source_memory(tmp_path):

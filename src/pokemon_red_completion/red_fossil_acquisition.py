@@ -26,6 +26,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalVerification,
 )
 from pokemon_red_completion.observation import (
+    CurrentMapObject,
     EventFlag,
     ItemId,
     MapId,
@@ -61,6 +62,8 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import (
 CINNABAR_FOSSIL_SCIENTIST_YX = (3, 5)
 CINNABAR_ISLAND_MAP_ID = int(MapId.CINNABAR_ISLAND)
 FOSSIL_ROOM_MAP_ID = int(MapId.CINNABAR_LAB_FOSSIL_ROOM)
+FOSSIL_SCIENTIST_SPRITE_INDEX = 1
+FOSSIL_SCIENTIST_PICTURE_ID = 0x20
 FOSSIL_REVIVAL_LEVEL = 30
 FOSSIL_ITEMS = frozenset(
     {int(ItemId.DOME_FOSSIL), int(ItemId.HELIX_FOSSIL), int(ItemId.OLD_AMBER)}
@@ -109,6 +112,19 @@ RED_FOSSIL_TARGETS = (
 )
 
 
+def _adjacent_facing(
+    player_at: tuple[int, int],
+    target_at: tuple[int, int],
+) -> str | None:
+    delta = target_at[0] - player_at[0], target_at[1] - player_at[1]
+    return {
+        (-1, 0): "up",
+        (1, 0): "down",
+        (0, -1): "left",
+        (0, 1): "right",
+    }.get(delta)
+
+
 class RedFossilStateReader(Protocol):
     def read(self) -> RawGameState: ...
 
@@ -123,6 +139,8 @@ class RedFossilStateReader(Protocol):
     def read_bottom_dialogue_box_visible(self) -> bool: ...
 
     def read_player_facing(self) -> str: ...
+
+    def read_current_map_objects(self) -> tuple[CurrentMapObject, ...]: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,6 +259,7 @@ def available_red_fossil_targets(
 class RedFossilTiming:
     wait_frames: int = 180
     maximum_dialogue_pulses: int = 20
+    maximum_npc_replans: int = 12
     maximum_controller_actions: int = 512
     maximum_emulator_frames: int = 180_000
 
@@ -248,6 +267,7 @@ class RedFossilTiming:
         for name in (
             "wait_frames",
             "maximum_dialogue_pulses",
+            "maximum_npc_replans",
             "maximum_controller_actions",
             "maximum_emulator_frames",
         ):
@@ -334,12 +354,15 @@ class RedRoutedFossilRevival:
             field_actions,
             observer,
             FOSSIL_ROOM_MAP_ID,
-            goal_at=CINNABAR_FOSSIL_SCIENTIST_YX,
         )
         current = observe_red_fossil(self.reader, target)
         if current.phase is RedFossilPhase.READY_TO_SUBMIT:
-            self._face_scientist()
-            self._advance_until(target, RedFossilPhase.WAITING_FOR_OUTSIDE)
+            route_steps += self._advance_scientist_until(
+                field_actions,
+                observer,
+                target,
+                RedFossilPhase.WAITING_FOR_OUTSIDE,
+            )
             self._settle_dialogue()
             current = observe_red_fossil(self.reader, target)
         refresh_steps = 0
@@ -352,12 +375,15 @@ class RedRoutedFossilRevival:
                 field_actions,
                 observer,
                 FOSSIL_ROOM_MAP_ID,
-                goal_at=CINNABAR_FOSSIL_SCIENTIST_YX,
             )
             current = observe_red_fossil(self.reader, target)
         if current.phase is RedFossilPhase.READY_TO_COLLECT:
-            self._face_scientist()
-            self._advance_until(target, RedFossilPhase.COMPLETE)
+            refresh_steps += self._advance_scientist_until(
+                field_actions,
+                observer,
+                target,
+                RedFossilPhase.COMPLETE,
+            )
             self._settle_dialogue()
         final = observe_red_fossil(self.reader, target)
         result = RedFossilExecution(
@@ -435,7 +461,7 @@ class RedRoutedFossilRevival:
         goal_at: tuple[int, int] | None = None,
     ) -> int:
         start = observer.observe()
-        if (start.map_id, start.at) == (destination_map, goal_at):
+        if start.map_id == destination_map and (goal_at is None or start.at == goal_at):
             return 0
         try:
             plan = self.world.plan_feasible_to_map(start, destination_map, goal_at=goal_at)
@@ -456,29 +482,129 @@ class RedRoutedFossilRevival:
             raise RedFossilAcquisitionError("fossil route did not reach its declared boundary")
         return len(report.executed_steps)
 
-    def _face_scientist(self) -> None:
-        raw = self.reader.read()
-        if (
-            raw.map_id != FOSSIL_ROOM_MAP_ID
-            or (raw.player_y, raw.player_x) != CINNABAR_FOSSIL_SCIENTIST_YX
-            or raw.battle_state
-        ):
-            raise RedFossilAcquisitionError("scientist interaction boundary differs")
-        if self.reader.read_player_facing() != "up":
-            before = (raw.map_id, raw.player_y, raw.player_x)
-            self._pulse(MacroActionKind.MOVE, "up")
-            after = self.reader.read()
-            if (after.map_id, after.player_y, after.player_x) != before:
-                raise RedFossilAcquisitionError("scientist-facing input moved the player")
-        if self.reader.read_player_facing() != "up":
-            raise RedFossilAcquisitionError("scientist-facing direction was not observed")
+    def _scientist(self) -> CurrentMapObject:
+        matches = tuple(
+            item
+            for item in self.reader.read_current_map_objects()
+            if item.sprite_index == FOSSIL_SCIENTIST_SPRITE_INDEX
+            and item.picture_id == FOSSIL_SCIENTIST_PICTURE_ID
+        )
+        if len(matches) != 1 or not matches[0].visible:
+            raise RedFossilAcquisitionError("fossil scientist is not uniquely visible")
+        return matches[0]
 
-    def _advance_until(self, target: RedFossilTarget, phase: RedFossilPhase) -> None:
-        self._pulse(MacroActionKind.INTERACT)
-        for _ in range(self.timing.maximum_dialogue_pulses):
-            if observe_red_fossil(self.reader, target).phase is phase:
-                return
-            self._pulse(MacroActionKind.CONFIRM)
+    def _route_to_scientist(
+        self,
+        actions: Gen1FieldMovePort,
+        observer: Gen1TraversalObserver,
+        scientist_at: tuple[int, int],
+    ) -> int:
+        current = observer.observe()
+        candidates = (
+            (scientist_at[0] + 1, scientist_at[1]),
+            (scientist_at[0], scientist_at[1] - 1),
+            (scientist_at[0], scientist_at[1] + 1),
+            (scientist_at[0] - 1, scientist_at[1]),
+        )
+        plans = []
+        for order, candidate in enumerate(candidates):
+            if candidate in current.occupied:
+                continue
+            try:
+                plan = self.world.plan_feasible_to_map(
+                    current,
+                    FOSSIL_ROOM_MAP_ID,
+                    goal_at=candidate,
+                )
+            except RoutePlanningError:
+                continue
+            if _supported_plan(plan, allow_cut=True, allow_surf=True):
+                plans.append((plan.cost, len(plan.steps), order, plan))
+        if not plans:
+            raise RedFossilAcquisitionError("no live route reaches the fossil scientist")
+        plan = min(plans, key=lambda row: row[:3])[3]
+        report = execute_route(
+            plan,
+            actions,
+            observer,
+            replanner=self.world.replanner(),
+            limits=self.route_limits,
+        )
+        if not report.passed:
+            raise RedFossilAcquisitionError("live scientist approach did not settle")
+        return len(report.executed_steps)
+
+    def _position_and_face_scientist(
+        self,
+        actions: Gen1FieldMovePort,
+        observer: Gen1TraversalObserver,
+    ) -> int:
+        route_steps = 0
+        for _ in range(self.timing.maximum_npc_replans):
+            raw = self.reader.read()
+            if (
+                raw.map_id != FOSSIL_ROOM_MAP_ID
+                or raw.player_y is None
+                or raw.player_x is None
+                or raw.battle_state
+                or not bool(getattr(self.reader.read_input_readiness(), "ready", False))
+            ):
+                raise RedFossilAcquisitionError("scientist interaction boundary differs")
+            player = (raw.player_y, raw.player_x)
+            scientist = self._scientist()
+            facing = _adjacent_facing(player, scientist.at)
+            if facing is None:
+                route_steps += self._route_to_scientist(actions, observer, scientist.at)
+                continue
+            if self.reader.read_player_facing() != facing:
+                self._pulse(MacroActionKind.MOVE, facing)
+                after = self.reader.read()
+                if (
+                    after.map_id != FOSSIL_ROOM_MAP_ID
+                    or after.player_y is None
+                    or after.player_x is None
+                    or after.battle_state
+                ):
+                    raise RedFossilAcquisitionError("scientist-facing input left the boundary")
+                # The scientist may move between observation and input. Moving
+                # into the vacated tile is a recoverable race, not proof that
+                # the route or mechanic failed.
+                if (after.player_y, after.player_x) != player:
+                    continue
+            latest = self.reader.read()
+            if latest.player_y is None or latest.player_x is None:
+                raise RedFossilAcquisitionError("scientist-facing position is unavailable")
+            latest_facing = _adjacent_facing(
+                (latest.player_y, latest.player_x),
+                self._scientist().at,
+            )
+            if latest_facing is not None and self.reader.read_player_facing() == latest_facing:
+                return route_steps
+        raise RedFossilAcquisitionError("fossil scientist did not hold an interaction boundary")
+
+    def _advance_scientist_until(
+        self,
+        actions: Gen1FieldMovePort,
+        observer: Gen1TraversalObserver,
+        target: RedFossilTarget,
+        phase: RedFossilPhase,
+    ) -> int:
+        route_steps = 0
+        for _ in range(self.timing.maximum_npc_replans):
+            route_steps += self._position_and_face_scientist(actions, observer)
+            self._pulse(MacroActionKind.INTERACT)
+            dialogue_started = False
+            for _ in range(self.timing.maximum_dialogue_pulses):
+                if observe_red_fossil(self.reader, target).phase is phase:
+                    return route_steps
+                if not self.reader.read_bottom_dialogue_box_visible():
+                    if dialogue_started:
+                        raise RedFossilAcquisitionError(
+                            f"fossil dialogue ended before {phase.value}"
+                        )
+                    break
+                dialogue_started = True
+                self._pulse(MacroActionKind.CONFIRM)
         raise RedFossilAcquisitionError(f"fossil dialogue did not reach {phase.value}")
 
     def _settle_dialogue(self) -> None:

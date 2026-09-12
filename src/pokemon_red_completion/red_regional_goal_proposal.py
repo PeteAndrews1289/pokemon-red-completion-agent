@@ -145,6 +145,10 @@ def regional_proposal_source_effort(
     if step["selected_kind"] != "acquire_species":
         return None
     source = document.get("selected_source")
+    if source is None and document.get("source_mode") == "no_source":
+        # Acquisition families such as fossils can occupy the native
+        # acquire_species slot without selecting or attempting a wild source.
+        return None
     if not isinstance(source, str) or not source.startswith("wild:"):
         raise ValueError("regional proposal lacks its capture source")
     profile = parse_red_goal_context_profile(
