@@ -1,6 +1,9 @@
-# Model103 collection continuation and renewable League funding
+# Model103 collection continuation and League funding rehearsal
 
-The retained Red learner advanced from model99 to model103 and from73 to75 registered species. It then reached a real resource boundary: zero capture items,553money and no remaining ordinary trainer payouts. A new read-only qualifier proved that this exact post-game save can reach the League rematch and that the cartridge-derived gross payout is29,799. The rematch itself has not run.
+The retained Red learner advanced from model99 to model103 and from73 to75 registered species. It
+then reached a real resource boundary: zero capture items,553money and no remaining ordinary
+trainer payouts. A read-only qualifier identified a29,799-gross League rematch. The bounded
+rehearsal verified four fights and23,364 income before stopping at Champion's final Venusaur.
 
 [Path-free evidence](../evidence/red-model103-collection-and-league-readiness-2026-09-11.json).
 
@@ -32,16 +35,44 @@ The new qualifier reads the exact cartridge and save state without pressing a bu
 - current-party offensive coverage against all five fights;
 - cartridge-derived payouts of5,544,5,742,5,940,6,138 and6,435, for29,799 gross.
 
-The result is `ready_for_bounded_executor`, not “renewable economy complete.” It does not yet prove survival, net profit, post-credits recovery or a return to the Mart.
+The qualification was sufficient to start execution but not sufficient to predict a whole-cycle
+finish. It checked each roster against the initial party independently and did not reserve
+cumulative health or PP for later opponents.
+
+## Rehearsal result
+
+The retained sequence verified exact cartridge payouts for Lorelei(5,544), Bruno(5,742),
+Agatha(5,940) and Lance(6,138). Money rose from553 to23,917, no item was spent and no party member
+fainted. Two narrowly bounded critical-risk intents were needed late in Lance; both succeeded and
+are permanently consumed. Across the retained sequence,1,482 actions and133,282 frames executed.
+
+Champion reached its sixth and final opponent. At the stop, level77 Blastoise had88/261 HP and
+move PP20/10/0/9 for Submission, Strength, Ice Beam and Surf. Level65 Venusaur had127/189 HP. No
+remaining party member met the current health, level and offensive-coverage gate. The failure was
+retained and not retried. Champion, Hall of Fame, postcredits recovery and capture purchasing power
+remain unverified.
+
+[Public rehearsal evidence](../evidence/red-model103-league-rehearsal-2026-09-11.json).
 
 ## Decision and next falsifier
 
-Implement one bounded rematch executor by composing the already-tested Fly, navigation, Elite Four and Champion skills. Rehearse it on an exact checkpoint copy, preserve any partial money/bag/party state on failure and never convert forced mechanics into a learned label. The first useful falsifier is simple: the exact qualified save cannot complete all five fights and return to an input-ready post-game state within declared action/frame bounds.
+Preserve the current failures as diagnostics; do not brute-force them. Add prospective pre-League
+provisioning and cumulative resource qualification. A newly bound plan must price its supplies,
+reserve priced healing and usable late-fight coverage for the saved Champion variant, and retain honest item costs.
+The next falsifier is whether that supplied run still fails to verify Champion plus Hall of Fame
+and retain positive purchasing power.
 
-If the rehearsal settles safely, buy a practical ball reserve and return immediately to model-selected collection. Pay Day remains a later diversification option; it is not the cheapest first route because the current save does not hold the TM or a prepared user.
+If the supplied rehearsal settles safely, complete postcredits recovery, buy a practical ball
+reserve and return immediately to model-selected collection. Pay Day remains a later income
+diversification option, not the current repair.
 
 ## Honest scope
 
-This session demonstrates continued collection progress, four additional fitted development examples and an exact renewable-income candidate. It does not demonstrate an autonomous full-game run, complete Red registration, independent reliability, transfer to a ROM hack or another title, or learned low-level control.
+This session demonstrates continued collection progress, four additional fitted development
+examples from the preceding learner loop, four verified League payouts and a concrete cumulative
+resource failure. The League work added no training example, registration or learned battle
+authority. It does not demonstrate a renewable economy, autonomous full-game run, complete Red
+registration, independent reliability, ROM-hack competence, cross-title transfer or learned
+low-level control.
 
 Recommended execution model: **Sol High, standard speed**. Use Astra High only if the rematch introduces a promotion or architecture decision.

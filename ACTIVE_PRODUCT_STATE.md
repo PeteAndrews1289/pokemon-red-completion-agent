@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Implement and rehearse one bounded Elite Four rematch from the exact qualified model103 checkpoint, then use any verified net proceeds to restore capture supply and resume model-selected collection.
+- Next decision: Implement prospective pre-League healing/PP provisioning and a cumulative resource gate, then bind one new supplied rematch and use verified net proceeds to restore capture supply before model-selected collection resumes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Sustain model-directed Red registration after finite ordinary income is exhausted, without confusing deterministic mechanics with learned choices. |
+| Reusable capability | Provision cumulative healing and move PP before repeatable League funding so model-directed Red registration can recover from exhausted finite income. |
 | Authority now | The bounded-development learner has103 fitted examples and75 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact qualified model103 save cannot complete one bounded Elite Four rematch and return to an input-ready post-game state with positive net capture purchasing power. |
+| Cheapest falsifier | A prospectively supplied League rematch still cannot preserve enough healing and usable coverage PP to defeat Champion, verify Hall of Fame and retain positive capture purchasing power. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-model103-league-readiness** · status **active** · evidence [qualification](docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json)
+**2026-09-11-model103-league-rehearsal** · status **active** · evidence [development episode](docs/evidence/red-model103-league-rehearsal-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Renewable income is required for an autonomous collector to recover from arbitrarily poor capture luck. Qualifying the current save for a repeatable League source directly removes the resource dead end blocking further model-selected registration. |
-| Learning output | Four real multi-option outcomes advanced model99 to103. Collection advanced from73 to75 registrations. The last two useful steps were forced singletons, correctly excluded from fitting. A zero-input audit then proved ordinary trainer income exhausted and qualified an exact29,799-gross League rematch. |
-| Authority delta | Four actual multi-option outcomes advanced the registered-objective learner from99 to103 fitted examples. The latest acquisition and recovery were deterministic singletons and added no learned authority. |
+| Product alignment | Renewable income remains required for autonomous capture under poor luck. The four verified payouts prove the source is real; supply-aware qualification is the smallest repair that turns it from partial income into a repeatable collection resource. |
+| Learning output | No learning or registration delta. The deterministic support path verified four exact League payouts,23364 income and arrival at Champion's final opponent in1482 actions/133282 frames. It falsified independent per-fight coverage as a sufficient whole-cycle qualification. |
+| Authority delta | None. The League rehearsal used deterministic navigation and battle support only; model103 remains at103 fitted examples and no battle authority was promoted. |
 | Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | Collection reached75 registrations but stopped with zero capture items,553money and zero unused ordinary trainer payouts. The exact save qualifies for a29,799-gross League rematch, but survival, post-credits recovery and net purchasing power are not yet proved. |
-| Decision | Treat finite trainer income as exhausted and build the smallest bounded League-rematch executor from existing skills. Rehearse once on an exact checkpoint copy; if it settles safely, buy a practical ball reserve and return immediately to model-selected collection. |
-| Next session | Compose one bounded League-rematch rehearsal from the current checkpoint copy, verify all five payouts and post-credits recovery, and stop on any divergence without retry. Do not expose it as a learned choice or begin Crystal. |
-| Next falsifier | The exact model103 checkpoint cannot survive the five qualified League battles and reach a stable post-game state within a declared action/frame bound while preserving honest money, bag and party costs. |
-| Stop condition | Stop on a changed starting checkpoint, failed preflight, unexpected opponent or payout, party wipe, exhausted action/frame bound, non-input-ready terminal, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
+| Blocker | The exact model103 save earned four League payouts and reached Champion's final Venusaur, but cumulative HP depletion and the loss of its strongest coverage left no qualified offensive matchup. The run stopped with23917money, all six party members alive and no items spent; Champion/Hall-of-Fame and postcredits recovery remain unproved. |
+| Decision | Preserve the failed retained Champion state as diagnostic evidence and stop brute-force continuations. Add prospective pre-League supply and cumulative PP qualification, then run one newly bound supplied rematch; on success, recover, buy capture items and resume model-selected registration. |
+| Next session | Implement prospective League supply and cumulative-resource qualification, including a priced Full Restore reserve and usable late-fight coverage. Bind one fresh supplied rehearsal; do not retry the retained failures, fit forced support or begin Crystal. |
+| Next falsifier | A supplied rematch cannot retain enough healing and usable coverage PP to defeat the final Champion roster, verify concurrent Champion/Hall-of-Fame evidence and preserve positive capture purchasing power. |
+| Stop condition | Stop on a changed supply plan, missing cumulative PP reserve, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
 
 ### Stop conditions
 

@@ -16,11 +16,20 @@ The exact input-ready Vermilion Center save has75 registrations,57 living specie
 - Qualification source: `617115d6faa0227819a4ea112940bd6f5dac0daf`
 - Model: `59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843`
 
-## Continuation state
+## Continuation and League rehearsal state
 
 Reconstruct through the retained BZ ancestry. Do not retry the failed BX02 search. Model103 is the active learned head; BZ01/BZ02 are support-only and must not be retroactively fitted.
 
-The resource frontier is now explicit. A zero-input audit found zero regional capture candidates and zero unused ordinary trainer payouts. The exact save qualified for a five-battle Elite Four rematch: five steps to a legal Fly launch, Indigo destination9,21 steps to Lorelei and29,799 expected gross payout. No rematch input has been sent; survival, net profit and post-credits recovery remain unproved.
+The resource frontier is now explicit. A zero-input audit found zero regional capture candidates
+and zero unused ordinary trainer payouts. The exact save qualified for a five-battle Elite Four
+rematch worth29,799 gross. The bounded rehearsal then verified Lorelei, Bruno, Agatha and Lance,
+including exact payouts, and raised money from553 to23,917 without spending an item or fainting a
+party member. Across all retained attempts it used1,482 actions and133,282 frames.
+
+Champion reached its final Venusaur before stopping. The level77 Blastoise had88/261 HP, no Ice
+Beam PP and nine Surf PP; Venusaur had127/189 HP. No remaining member passed the observed matchup
+gate. Preserve that terminal as diagnostic evidence and do not retry it. This falsifies independent
+per-fight coverage as a whole-cycle resource guarantee. It does not erase the four verified payouts.
 
 ## Fresh-start checkpoint: Celadon midgame join
 
@@ -37,11 +46,11 @@ private artifact directory was not found; never reconstruct or relabel it from p
 
 ## Next product milestone
 
-Build one bounded League-rematch rehearsal by composing the existing Center exit, Fly, Indigo
-navigation, Elite Four and Champion skills. Start from an exact checkpoint copy, verify every
-payout and preserve partial money, bag and party state on failure. Do not retry a failed rehearsal
-or fit forced mechanics. If it reaches a stable post-game state with positive net purchasing
-power, buy a practical ball reserve and return immediately to model-selected collection.
+Add prospective pre-League provisioning and cumulative HP/PP qualification. The plan must reserve
+priced Full Restores and usable late-fight coverage for the cartridge-derived Champion variant, bind those supplies
+before entry and preserve their exact cost. Then run one new supplied rematch. On verified Champion
+plus Hall of Fame, complete postcredits recovery, buy a practical ball reserve and return
+immediately to model-selected collection. Do not brute-force or relabel the retained failures.
 
 Fresh-game autonomy, arbitrary-seed reliability, complete Red collection, learned low-level combat, ROM-hack competence and cross-title transfer remain unproved. Crystal stays on the backburner until Red has a credible fresh-start sequence.
 

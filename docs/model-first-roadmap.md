@@ -11,15 +11,17 @@ The observation/control/verification loop works. Model-selected goals have produ
 The retained Red loop now has103 fitted examples and75 registrations. Four fresh multi-option
 outcomes advanced the learner; the latest singleton acquisition and recovery advanced collection
 without being mislabeled as learning. Collection then stopped honestly at zero capture items,
-553money and zero unused ordinary trainer payouts. A zero-input qualifier proved that the exact
-save can reach a five-battle League rematch worth29,799 gross. The rematch has not run, so survival,
-net profit, post-credits recovery, fresh-game autonomy and independent reliability remain unproven.
+553money and zero unused ordinary trainer payouts. A bounded League rehearsal verified four fights
+and23,364 income, reaching Champion's final opponent with all six party members alive. It then
+stopped because cumulative HP depletion and loss of its strongest coverage left no qualified move.
+Champion/Hall of Fame, postcredits
+recovery, fresh-game autonomy and independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** Compose one bounded Elite Four rematch from existing
-   skills, rehearse from an exact model103 checkpoint copy and prove a stable post-game return with
-   honest net proceeds. Then buy a practical ball reserve and resume model-selected collection.
+1. **Restore renewable capture funding.** Provision priced Full Restores and cumulative usable
+   coverage before League entry, then prove one complete rematch, stable post-game return and honest
+   net proceeds. Buy a practical ball reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
    session.
@@ -32,13 +34,15 @@ These priorities do not change the [baseline's stage exits](../configs/developme
 
 ## Immediate session boundary
 
-The retained endpoint is BZ recovery/model103:75 registrations,61 specimens,553money, zero capture
-items and a restored party. Do not retry the failed BX02 search or fit the forced BZ steps.
+The retained collection endpoint remains BZ recovery/model103:75 registrations,61 specimens,
+553money, zero capture items and a restored party. The League diagnostic additionally preserves
+four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
+failed BX02 search, the League attempts or the forced BZ steps.
 
-The next session is one bounded League-rematch executor and checkpoint-copy rehearsal. Stop on
-any unexpected opponent/payout, wipe, exceeded bound or non-input-ready terminal. Preserve every
-incurred cost and partial gain. This directly unlocks further collection; no full replay, Crystal
-execution or autonomy claim. [Latest result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
+The next session implements a prospective supply plan and cumulative resource gate, then binds one
+new supplied rematch. Stop on a missing PP reserve, unpriced supply cost, unexpected payout, wipe,
+exceeded bound or non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
+result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 ## How to stay focused
 

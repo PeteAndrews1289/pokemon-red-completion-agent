@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-league-readiness**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-league-rehearsal**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -14,7 +14,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
 - [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [ ] Execute one bounded rematch and restore capture supply
+- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-league-rehearsal-2026-09-11.json))
 
 Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model103-league-rehearsal-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-model103-league-rehearsal
+
+The exact model103 save verified Lorelei, Bruno, Agatha and Lance, earning23364 with no items spent or party faints. Champion reached its final Venusaur before cumulative HP and Ice PP exhausted every qualified matchup. All retained attempts total1482actions/133282frames; model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. Two explicit critical-risk intents were consumed and every failure terminal was preserved. The result falsifies independent per-fight coverage as sufficient whole-cycle qualification; it does not justify brute-force retries or a renewable-funding claim.
+
+**Next:** Implement prospective pre-League healing and cumulative PP provisioning, including a priced Full Restore reserve and usable late-fight coverage. Bind one new supplied rematch, then on verified Champion/Hall of Fame recover, buy capture stock and resume model-selected collection.
 
 ### 2026-09-11-model103-league-readiness
 

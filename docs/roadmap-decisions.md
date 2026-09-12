@@ -594,6 +594,18 @@ deviation (or none), and next step. Refresh again within a long session after a 
 fit, gameplay result, capability or blocker changes the project position. No heartbeat or
 minute-by-minute rewrites are needed. Missing new learning is a fact to show, not a reason to
 move the goalposts.
+
+## September 11 — League execution falsifies independent per-fight coverage
+
+The exact model103 save completed Lorelei, Bruno, Agatha and Lance for23,364 verified income, then
+stopped at Champion's final Venusaur with all six party members alive but insufficient current HP
+and its strongest remaining coverage. Two separately bounded critical-risk intents were consumed; no item, model example or
+registration changed. Preserve every failed terminal and do not brute-force it.
+
+The Red-first stage order and exit criteria do not change. Replace the insufficient assumption
+that five independent coverage checks imply a complete rematch with prospective pre-League supply
+and cumulative-resource qualification. The next falsifier is one newly bound supplied rematch that
+still cannot verify Champion plus Hall of Fame and retain positive capture purchasing power.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure

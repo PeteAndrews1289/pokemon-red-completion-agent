@@ -19,7 +19,7 @@
 <text x="705" y="386" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="386" class="body">Qualify exact League route and gross payout</text>
 <text x="705" y="430" class="small" style="fill:#8594ad">NEXT</text>
-<text x="778" y="430" class="body">Execute one bounded rematch and restore capture supply</text>
+<text x="778" y="430" class="body">Supply, complete rematch and restore capture stock</text>
 <rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>
 <rect x="80" y="577" width="840" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
@@ -92,9 +92,9 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-11-model103-league-readiness</text>
-<text x="50" y="1767" class="body">Four real multi-option outcomes advanced model99 to103 and collection advanced73 to75 registrations. The final acquisition</text>
-<text x="50" y="1792" class="body">and recovery were forced singletons and stayed unfit. A zero-input audit proved ordinary trainer income exhausted and</text>
-<text x="50" y="1817" class="body">qualified the exact save for a five-battle League rematch worth29799 gross.</text>
+<text x="50" y="1732" class="small muted">2026-09-11-model103-league-rehearsal</text>
+<text x="50" y="1767" class="body">The exact model103 save verified Lorelei, Bruno, Agatha and Lance, earning23364 with no items spent or party faints. Champion</text>
+<text x="50" y="1792" class="body">reached its final Venusaur before cumulative HP and Ice PP exhausted every qualified matchup. All retained attempts</text>
+<text x="50" y="1817" class="body">total1482actions/133282frames; model103 and75 registrations are unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

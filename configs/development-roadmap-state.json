@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-model103-league-readiness",
+  "as_of_session": "2026-09-11-model103-league-rehearsal",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json"
+      "evidence": "docs/evidence/red-model103-league-rehearsal-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -54,9 +54,9 @@
       },
       {
         "id": "league-funded-capture-supply",
-        "label": "Execute one bounded rematch and restore capture supply",
+        "label": "Supply, complete rematch and restore capture stock",
         "done": false,
-        "evidence": null
+        "evidence": "docs/evidence/red-model103-league-rehearsal-2026-09-11.json"
       }
     ]
   },
@@ -978,6 +978,12 @@
       "result": "Four real multi-option outcomes advanced model99 to103 and collection advanced73 to75 registrations. The final acquisition and recovery were forced singletons and stayed unfit. A zero-input audit proved ordinary trainer income exhausted and qualified the exact save for a five-battle League rematch worth29799 gross.",
       "deviation": "No authority promotion or stage exit. The learner made measurable progress before reaching a legitimate resource dead end. League qualification establishes route, roster, coverage and gross payout only; execution, survival, post-credits recovery and net profit remain unproved.",
       "next": "Compose one bounded League-rematch executor from existing skills and rehearse it on an exact checkpoint copy. Preserve all partial money, bag and party costs; stop without retry on divergence. If stable, restore capture supply and resume model-selected collection."
+    },
+    {
+      "session": "2026-09-11-model103-league-rehearsal",
+      "result": "The exact model103 save verified Lorelei, Bruno, Agatha and Lance, earning23364 with no items spent or party faints. Champion reached its final Venusaur before cumulative HP and Ice PP exhausted every qualified matchup. All retained attempts total1482actions/133282frames; model103 and75 registrations are unchanged.",
+      "deviation": "No stage exit or authority promotion. Two explicit critical-risk intents were consumed and every failure terminal was preserved. The result falsifies independent per-fight coverage as sufficient whole-cycle qualification; it does not justify brute-force retries or a renewable-funding claim.",
+      "next": "Implement prospective pre-League healing and cumulative PP provisioning, including a priced Full Restore reserve and usable late-fight coverage. Bind one new supplied rematch, then on verified Champion/Hall of Fame recover, buy capture stock and resume model-selected collection."
     }
   ],
   "closed_milestones": [
