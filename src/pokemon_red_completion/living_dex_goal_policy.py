@@ -79,6 +79,27 @@ _OPTION_BY_GOAL = {
     GoalKind.EXPLORE: LivingDexOptionKind.EXPLORE,
 }
 
+
+def living_dex_option_kind_for_goal(
+    kind: GoalKind,
+    *,
+    feature_version: int,
+) -> LivingDexOptionKind | None:
+    """Return the portable option kind supported by one semantic goal.
+
+    Keeping this projection public lets opt-in live menus reuse the exact same
+    goal-to-feature contract as :class:`LivingDexGoalShadowPolicy` instead of
+    copying a second mapping beside it.
+    """
+
+    if not isinstance(kind, GoalKind):
+        raise TypeError("kind must be a GoalKind")
+    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4}:
+        raise LivingDexGoalPolicyError("living-Dex feature version differs")
+    if kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
+        return LivingDexOptionKind.RESTORE
+    return _OPTION_BY_GOAL.get(kind)
+
 # Benefits dominate routine cost, while irreversible loss is as important as
 # verified success.  These weights are fixed policy governance, not fitted
 # parameters and not tuned on development outcomes.
@@ -132,9 +153,10 @@ def project_living_dex_goal_candidate(
     if type(index) is not int or index not in question.available_indices:
         raise LivingDexGoalPolicyError("projected goal is unavailable")
     opportunity = question.opportunities[index]
-    option_kind = _OPTION_BY_GOAL.get(opportunity.kind)
-    if opportunity.kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
-        option_kind = LivingDexOptionKind.RESTORE
+    option_kind = living_dex_option_kind_for_goal(
+        opportunity.kind,
+        feature_version=feature_version,
+    )
     if option_kind is None:
         return None
     if opportunity.estimated_effort is None or opportunity.estimated_risk is None:
@@ -512,5 +534,6 @@ __all__ = [
     "LivingDexGoalShadowDecision",
     "LivingDexGoalShadowPolicy",
     "economy_offer_from_opportunity",
+    "living_dex_option_kind_for_goal",
     "project_living_dex_goal_candidate",
 ]
