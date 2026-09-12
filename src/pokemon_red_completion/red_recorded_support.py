@@ -471,12 +471,14 @@ def _require_measured_terminal_binding(
 ) -> None:
     """Join a restart state to the exact measured row and fitted successor."""
 
+    from .red_collection import red_species_ref
     from .red_development_measured_choice import (
         DEVELOPMENT_MEASURED_CHOICE_KIND,
         RedDevelopmentMeasuredChoice,
         development_measured_choice_record_id,
     )
     from .red_player_model import RedPlayerModelRecord, load_player_goal_model_record_bytes
+    from .red_registration_session import registration_row
     from .registered_collection import REGISTERED_OBJECTIVE
 
     binding = _mapping(terminal.get("measured_choice"))
@@ -529,6 +531,34 @@ def _require_measured_terminal_binding(
         or choice.training_only is not True
     ):
         raise RedRecordedSupportError("measured terminal choice transition differs")
+    try:
+        parent_registration = registration_row(parent.get("registration_observation"))
+        terminal_registration = registration_row(document.get("registration_observation"))
+    except (TypeError, ValueError) as error:
+        raise RedRecordedSupportError("measured terminal registration row differs") from error
+    expected_owned = {
+        number
+        for number in range(1, 152)
+        if red_species_ref(number) in set(new_collection.get("local_species", ()))
+    }
+    expected_physical = {
+        number: count
+        for species, count in new_collection.get("specimen_counts", ())
+        for number in range(1, 152)
+        if species == red_species_ref(number)
+    }
+    if (
+        terminal_registration.run_id != parent_registration.run_id
+        or terminal_registration.game_id != parent_registration.game_id
+        or terminal_registration.adapter_id != parent_registration.adapter_id
+        or terminal_registration.cartridge_sha256 != document.get("rom_sha256")
+        or terminal_registration.cartridge_sha256 != parent_registration.cartridge_sha256
+        or terminal_registration.sequence != parent_registration.sequence + 1
+        or terminal_registration.snapshot_sha256 != document.get("state_sha256")
+        or terminal_registration.owned != expected_owned
+        or dict(terminal_registration.physical_counts) != expected_physical
+    ):
+        raise RedRecordedSupportError("measured terminal registration row differs")
     if len(segments) != len(choice.segments):
         raise RedRecordedSupportError("measured terminal segment inventory differs")
     for imported, measured in zip(segments, choice.segments, strict=True):

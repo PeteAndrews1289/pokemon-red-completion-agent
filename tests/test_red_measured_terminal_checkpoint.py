@@ -21,6 +21,7 @@ from pokemon_red_completion.captured_progress import CapturedProgressEnvelope
 from pokemon_red_completion.goal_manager_composition_runtime import CompositionBudgetCheckpoint
 from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manager_context_capture
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_collection import RED_COLLECTION_GAME_ID
 from pokemon_red_completion.red_development_measured_choice import (
     RedDevelopmentMeasuredSegment,
     publish_development_measured_choice,
@@ -41,6 +42,7 @@ from pokemon_red_completion.red_recorded_support import (
     RedRegisteredMeasuredTerminalResult,
 )
 from pokemon_red_completion.registered_checkpoint import RegisteredCollectionCheckpoint
+from pokemon_red_completion.registration_memory import RegistrationObservation
 
 
 class _State:
@@ -62,6 +64,25 @@ class _ZeroMeter:
 def _registered_observation(document):
     checkpoint = RegisteredCollectionCheckpoint.from_public(document)
     return replace(_observation(storage=4), collection=checkpoint)
+
+
+def _registration_row(collection, state_sha256, sequence):
+    owned = frozenset(int(species.rsplit(":", 1)[1]) for species in collection["local_species"])
+    physical = {
+        int(species.rsplit(":", 1)[1]): count
+        for species, count in collection["specimen_counts"]
+    }
+    return RegistrationObservation(
+        run_id="test-run",
+        game_id=RED_COLLECTION_GAME_ID,
+        adapter_id="red-registration-v1",
+        cartridge_sha256="6" * 64,
+        snapshot_sha256=state_sha256,
+        sequence=sequence,
+        seen=owned,
+        owned=owned,
+        physical_counts=physical,
+    ).document()
 
 
 def _write_measured_episode(store, document, segment, *, extra_stream=None):
@@ -140,6 +161,9 @@ def _measured_checkpoint_case(tmp_path, monkeypatch):
         source_commit="8" * 40,
         source_bundle_sha256="9" * 64,
         context_origin="training",
+    )
+    parent_document["registration_observation"] = _registration_row(
+        parent_document["collection"], parent_document["state_sha256"], 5
     )
     _complete(
         store,
@@ -262,6 +286,9 @@ def _measured_checkpoint_case(tmp_path, monkeypatch):
         source_bundle_sha256="b" * 64,
         context_origin="training",
     )
+    document["registration_observation"] = _registration_row(
+        document["collection"], document["state_sha256"], 6
+    )
     return store, original_parent, parent_checkpoint, document, support_segment, terminal_state
 
 
@@ -357,6 +384,7 @@ def test_measured_terminal_contract_cannot_be_captured_as_legacy_collection(
         "cost",
         "segment",
         "receipt",
+        "registration",
         "decisions",
     ],
 )
@@ -383,6 +411,8 @@ def test_measured_terminal_restart_rejects_broken_evidence_chain(
         segment["audit"]["frames"] += 1
     elif fault == "receipt":
         segment["plan"]["retained_result_sha256"] = "f" * 64
+    elif fault == "registration":
+        document["registration_observation"]["sequence"] += 1
     _write_measured_episode(
         store,
         document,
