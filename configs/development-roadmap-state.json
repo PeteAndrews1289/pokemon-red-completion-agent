@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-model103-supplied-league-failure",
+  "as_of_session": "2026-09-11-model103-trapping-qualified-league-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model103-supplied-league-failure-2026-09-11.json"
+      "evidence": "docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -56,7 +56,7 @@
         "id": "league-funded-capture-supply",
         "label": "Supply, complete rematch and restore capture stock",
         "done": false,
-        "evidence": "docs/evidence/red-model103-supplied-league-failure-2026-09-11.json"
+        "evidence": "docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json"
       }
     ]
   },
@@ -990,6 +990,12 @@
       "result": "The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. The generic repair passed a zero-input retained-terminal check and authorized the253-HP workhorse against an80-HP commitment. Model103 and75 registrations are unchanged.",
       "deviation": "No stage exit or authority promotion. The consumed attempt is not retried. The narrow repair covers all four cartridge trapping moves only inside the full incoming-damage commitment; the type-only screen and outgoing recovery attack remain closed.",
       "next": "Use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle."
+    },
+    {
+      "session": "2026-09-11-model103-trapping-qualified-league-failure",
+      "result": "The green-CI successor crossed the prior Clamp stop and reduced Cloyster124to61HP, then stopped after298actions/25812frames while the active member was confused because an available damaging stat-reduction move made same-turn self-hit risk unqualified. All six party members remain alive; model103 and75 registrations are unchanged.",
+      "deviation": "No stage exit or authority promotion. The consumed successor is not retried and the live loop stopped at its declared unsupported-mechanics condition. Another boss-specific exception is prohibited.",
+      "next": "Use pinned cartridge order and live stats to qualify or reject one generic confusion-plus-damaging-debuff commitment. Require focused tests and a zero-input retained-terminal decision before any new gameplay."
     }
   ],
   "closed_milestones": [

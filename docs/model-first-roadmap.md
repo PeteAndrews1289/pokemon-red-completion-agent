@@ -14,16 +14,18 @@ without being mislabeled as learning. Collection then stopped honestly at zero c
 553money and zero unused ordinary trainer payouts. A bounded League rehearsal verified four fights
 and23,364 income, reaching Champion's final opponent with all six party members alive. A supplied
 successor then executed its exact shop plan but stopped at Lorelei's Cloyster because Clamp lacked
-a qualified incoming forced-repeat bound. The latter completed zero battles and changed no model
-or collection counter. Champion/Hall of Fame, postcredits recovery, fresh-game autonomy and
+a qualified incoming forced-repeat bound. A trapping-qualified development successor crossed that
+stop and reduced Cloyster to61 HP, then stopped on an unqualified confusion-plus-damaging-debuff
+state. Neither completed a battle or changed a model or collection counter. Champion/Hall of Fame,
+postcredits recovery, fresh-game autonomy and
 independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** The generic Gen-I trapping bound and zero-input retained
-   terminal qualification now pass. Run a separate repeatable development successor and prove one
-   complete rematch, stable post-game return and honest net proceeds; then buy a practical ball
-   reserve and resume model-selected collection.
+1. **Restore renewable capture funding.** The generic Gen-I trapping bound passed live control.
+   Qualify or reject the newly observed compound confusion/stat-reduction commitment without input.
+   Then prove one complete rematch, stable post-game return and honest net proceeds; buy a practical
+   ball reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
    session.
@@ -41,10 +43,11 @@ The retained collection endpoint remains BZ recovery/model103:75 registrations,6
 four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
 failed BX02 search, the League attempts or the forced BZ steps.
 
-The generic forced-repeat damage repair is published and its zero-input terminal qualification
-authorizes an attack at the retained Lorelei boundary. The next live run must use a new repeatable
-development identity, not retry the consumed supplied attempt. Stop on another unsupported
-commitment, unexpected payout, wipe, exceeded bound or
+The generic forced-repeat repair passed its live boundary, but its one development successor
+stopped on compound confusion plus a possible damaging stat reduction. The next session is
+read-only mechanics analysis and a retained-terminal decision test. Do not retry either consumed
+attempt. Stop if a conservative generic bound cannot be established, or on any boss-specific
+exception, unexpected payout, wipe, exceeded bound or
 non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
 result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 

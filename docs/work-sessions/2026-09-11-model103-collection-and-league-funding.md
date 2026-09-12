@@ -81,12 +81,27 @@ of80/250/160/495/150/351. With253 HP, the active workhorse qualified to attack a
 bound. The check sent no input and advanced zero frames. This validates the repaired decision seam;
 it does not convert the consumed attempt into a success or prove the rest of the League.
 
+## Trapping-qualified development successor
+
+One separately labeled successor ran from the unchanged clean model103 checkpoint at published
+source `4d883152ccba4b3c0a84150c7de5e5e4e1f1efd9` under green GitHub CI run34668075588. It crossed the
+previous Clamp stop: the active workhorse used two attack PP, moved from253 to241 HP and reduced
+Cloyster from124 to61 HP. The run then encountered a different compound state. The workhorse was
+confused while Cloyster still exposed Aurora Beam, whose damaging defense-side effect can change
+subsequent self-hit risk. The safety model refused that combination.
+
+The successor stopped after298 actions and25,812 frames, with378money, all six party members alive
+and zero battles complete. It produced no training example, model update or registration. Its
+exact identity is consumed without retry. [Evidence](../evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json).
+
 ## Decision and next falsifier
 
-Preserve both consumed failures as diagnostics; do not brute-force or relabel them. The generic
-repair and retained-terminal qualification now pass. Run a separately labeled repeatable
-development successor. The next falsifier is another unmodeled commitment before a complete
-League cycle.
+Preserve all consumed failures as diagnostics; do not brute-force or relabel them. The trapping
+repair passed live control, so do not reopen it. The next bounded question is whether pinned
+cartridge order and live stats can conservatively qualify confusion plus a damaging stat reduction
+without a Lorelei-specific exception. Test the retained terminal with zero input before any new
+gameplay. If the generic bound cannot establish a safe action, abandon this funding route and
+compare another legitimate income strategy.
 
 If the supplied rehearsal settles safely, complete postcredits recovery, buy a practical ball
 reserve and return immediately to model-selected collection. Pay Day remains a later income

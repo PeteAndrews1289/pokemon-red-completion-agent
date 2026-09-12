@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-supplied-league-failure**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-trapping-qualified-league-failure**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -14,7 +14,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
 - [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-supplied-league-failure-2026-09-11.json))
+- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json))
 
 Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model103-supplied-league-failure-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-model103-trapping-qualified-league-failure
+
+The green-CI successor crossed the prior Clamp stop and reduced Cloyster124to61HP, then stopped after298actions/25812frames while the active member was confused because an available damaging stat-reduction move made same-turn self-hit risk unqualified. All six party members remain alive; model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. The consumed successor is not retried and the live loop stopped at its declared unsupported-mechanics condition. Another boss-specific exception is prohibited.
+
+**Next:** Use pinned cartridge order and live stats to qualify or reject one generic confusion-plus-damaging-debuff commitment. Require focused tests and a zero-input retained-terminal decision before any new gameplay.
 
 ### 2026-09-11-model103-supplied-league-failure
 

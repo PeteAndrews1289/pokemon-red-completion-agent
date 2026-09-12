@@ -57,7 +57,17 @@ The cartridge-generic incoming trapping commitment is published at `ca41d4873433
 A zero-input reload of the retained Lorelei terminal computed bounds80/250/160/495/150/351 and
 authorized the253-HP active workhorse to attack against an80-HP commitment. Use a separately
 labeled repeatable development successor toward a full net-positive League cycle; never retry the
-consumed supplied identity. On verified Champion plus Hall of Fame, complete
+consumed supplied identity.
+
+That successor ran once under green CI at source `4d883152ccba4b3c0a84150c7de5e5e4e1f1efd9`.
+It crossed the Clamp stop, spent two attack PP, reduced Cloyster124→61 HP and ended with the active
+workhorse at241 HP. It then stopped because the workhorse was confused while Cloyster still had a
+damaging stat-reduction move; that compound same-turn bound is not qualified. The run used298
+actions/25,812 frames, retained all six party members and completed zero battles. Do not retry it.
+
+Next, derive or reject one generic compound confusion/stat-reduction bound from pinned cartridge
+order and live stats, then validate the retained terminal without input. On a later verified
+Champion plus Hall of Fame, complete
 postcredits recovery, buy a practical ball reserve and return immediately to model-selected
 collection. Do not fit deterministic League support or begin Crystal.
 

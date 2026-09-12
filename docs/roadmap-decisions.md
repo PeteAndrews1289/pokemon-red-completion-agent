@@ -624,6 +624,12 @@ successor so experiment formalism does not again delay the product loop.
 That zero-input retained-terminal check passed at source `ca41d4873433136628c3bbe5745e473d4f7971d5`:
 the active workhorse had253 HP against an80-HP computed commitment and the controller authorized an
 attack without advancing a frame. This closes the local mechanics falsifier, not the League cycle.
+
+The separately labeled green-CI successor crossed that stop and reduced Cloyster to61 HP, then
+stopped with the active member confused while a damaging stat-reduction move remained available.
+Preserve the298-action terminal and do not retry. The next work is one generic cartridge-pinned
+compound bound and zero-input retained-terminal test. A Lorelei-specific exception or another live
+attempt before that test would violate the anti-drift stop.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure

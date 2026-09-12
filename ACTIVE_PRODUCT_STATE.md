@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run a separate repeatable development successor from the published trapping-qualified source toward a verified net-positive funding cycle before model-selected collection resumes.
+- Next decision: Qualify the compound confusion-plus-damaging-debuff commitment generically and action-free before considering another development successor; then finish the funding cycle or abandon this route and return to a different legitimate income strategy.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The bounded-development learner has103 fitted examples and75 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | After the generic trapping bound passes a zero-input terminal qualification, a separately labeled development successor still cannot clear Lorelei or exposes another unmodeled battle commitment. |
+| Cheapest falsifier | Pinned cartridge mechanics cannot produce a conservative confusion-plus-damaging-debuff commitment without species-specific exceptions, or the repaired controller still has no safe action at the retained Lorelei terminal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-model103-supplied-league-failure** · status **active** · evidence [development episode](docs/evidence/red-model103-supplied-league-failure-2026-09-11.json)
+**2026-09-11-model103-trapping-qualified-league-failure** · status **active** · evidence [development episode](docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Renewable income remains required for sustained autonomous capture. Supporting a cartridge-generic forced-move mechanic improves reusable battle safety; it is worthwhile only if it promptly returns the system to the funding-and-collection loop. |
-| Learning output | No learning or registration delta. The deterministic support path executed the planned2825 sale proceeds and3000 Full Restore purchase, then stopped at Lorelei after274 actions and23484 frames. The repaired retained-terminal check then authorized an attack with zero actions or frames. |
+| Learning output | No learning or registration delta. The deterministic successor executed298 actions and25812 frames, preserved all six party members, crossed the prior trapping stop and reduced Cloyster to61 HP before the separate compound-status guard stopped it. |
 | Authority delta | None. The supplied run used deterministic navigation, shopping and battle support only; model103 remains at103 fitted examples and no battle authority was promoted. |
 | Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | The supplied attempt is consumed after its Lorelei Clamp stop. The generic repair now passes a zero-input check on that retained terminal, but a complete net-positive League cycle and restored capture stock remain unverified. |
-| Decision | Preserve the consumed supplied attempt without retry. The generic incoming-damage commitment now qualifies all four Gen-I trapping attacks while the stricter type-only and outgoing-attack boundaries remain closed. Use a separately labeled development successor rather than another sealed-style retry. |
-| Next session | Bind and run one repeatable development successor from the repaired source toward a complete League funding cycle. Do not retry the consumed supplied identity, fit deterministic League support or begin Crystal. |
-| Next falsifier | A separate development successor reveals another unsupported battle commitment before verifying a complete net-positive League cycle. |
-| Stop condition | Stop on another unsupported battle commitment, changed supply accounting, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
+| Blocker | The trapping-qualified development successor crossed the prior Clamp stop and damaged Cloyster, then stopped while the active member was confused because the enemy still had a damaging stat-reduction move available. The compound same-turn survival bound remains unqualified. |
+| Decision | Preserve the consumed successor without retry and stop the live loop. Qualify confusion plus a damaging stat reduction generically from pinned cartridge mechanics, or reject the approach if no conservative bound can preserve strict HP safety. Do not add a Lorelei-specific exception. |
+| Next session | Audit the exact confusion and damaging-debuff order, stats and badge interactions; implement only a generic conservative bound with a retained-terminal zero-input test. Do not retry either League attempt, fit deterministic support or begin Crystal. |
+| Next falsifier | A cartridge-pinned compound confusion/stat-reduction bound cannot be made conservative, or it yields no safe action on the retained zero-input diagnostic. |
+| Stop condition | Stop if the compound order cannot be bounded generically, the retained terminal has no strictly safe action, another live attempt would precede green tests, or any proposal requires a Lorelei-specific exception, hidden retry or learned-authority overclaim. |
 
 ### Stop conditions
 
