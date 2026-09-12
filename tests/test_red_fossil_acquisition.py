@@ -27,6 +27,7 @@ from pokemon_red_completion.observation import (
     RawGameState,
     RedCurrentBoxState,
     RedPokedexState,
+    SemanticStateError,
 )
 from pokemon_red_completion.red_fossil_acquisition import (
     RED_FOSSIL_TARGETS,
@@ -459,3 +460,71 @@ def test_fossil_scientist_remains_routable_outside_the_viewport() -> None:
 
     assert scientist.at == (2, 5)
     assert not scientist.visible
+
+
+def test_fossil_dialogue_settles_before_observing_box_state() -> None:
+    target = fossil_target_by_item(int(ItemId.HELIX_FOSSIL))
+
+    class TransitionalReader(_Reader):
+        def __init__(self) -> None:
+            super().__init__()
+            self.dialogue = False
+            self.raw = replace(
+                self.raw,
+                map_id=MapId.CINNABAR_LAB_FOSSIL_ROOM,
+                player_y=3,
+                player_x=5,
+            )
+
+        def read_bottom_dialogue_box_visible(self) -> bool:
+            return self.dialogue
+
+        def read_current_box_state(self) -> RedCurrentBoxState:
+            if self.dialogue:
+                raise SemanticStateError("box insertion is still in progress")
+            return super().read_current_box_state()
+
+    reader = TransitionalReader()
+
+    class Actions:
+        def __init__(self) -> None:
+            self.actions_executed = 0
+            self.actions = []
+
+        def execute(self, action):
+            self.actions_executed += 1
+            self.actions.append(action)
+            if action.kind is MacroActionKind.INTERACT:
+                reader.dialogue = True
+            elif action.kind is MacroActionKind.CONFIRM:
+                reader.dialogue = False
+                reader.owned = frozenset({target.national_dex_number})
+                reader.raw = replace(reader.raw, bag_items=(), bag_item_ids=())
+                reader.box = RedCurrentBoxState(
+                    reader.box.box_index,
+                    (*reader.box.species_ids, target.internal_species_id),
+                    (*reader.box.levels, 30),
+                )
+
+    actions = Actions()
+    executor = RedRoutedFossilRevival(
+        actions,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        SimpleNamespace(),  # type: ignore[arg-type]
+    )
+
+    route_steps = executor._advance_scientist_until(  # noqa: SLF001
+        SimpleNamespace(),  # type: ignore[arg-type]
+        SimpleNamespace(),  # type: ignore[arg-type]
+        target,
+        RedFossilPhase.COMPLETE,
+    )
+
+    assert route_steps == 0
+    assert [action.kind for action in actions.actions] == [
+        MacroActionKind.INTERACT,
+        MacroActionKind.WAIT,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+    ]

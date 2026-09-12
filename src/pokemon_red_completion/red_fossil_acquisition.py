@@ -686,16 +686,21 @@ class RedRoutedFossilRevival:
             self._pulse(MacroActionKind.INTERACT)
             dialogue_started = False
             for _ in range(self.timing.maximum_dialogue_pulses):
+                if self.reader.read_bottom_dialogue_box_visible():
+                    # Fossil handover writes the box's species index before it
+                    # finishes shifting the full Pokémon structures.  Reading
+                    # collection state while dialogue is still visible can
+                    # therefore observe a legitimate but non-atomic RAM write.
+                    dialogue_started = True
+                    self._pulse(MacroActionKind.CONFIRM)
+                    continue
                 if observe_red_fossil(self.reader, target).phase is phase:
                     return route_steps
-                if not self.reader.read_bottom_dialogue_box_visible():
-                    if dialogue_started:
-                        raise RedFossilAcquisitionError(
-                            f"fossil dialogue ended before {phase.value}"
-                        )
-                    break
-                dialogue_started = True
-                self._pulse(MacroActionKind.CONFIRM)
+                if dialogue_started:
+                    raise RedFossilAcquisitionError(
+                        f"fossil dialogue ended before {phase.value}"
+                    )
+                break
         raise RedFossilAcquisitionError(f"fossil dialogue did not reach {phase.value}")
 
     def _settle_dialogue(self) -> None:
