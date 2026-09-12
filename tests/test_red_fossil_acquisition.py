@@ -440,3 +440,22 @@ def test_fossil_route_recovers_one_verified_transient_off_graph_square() -> None
     assert [(action.kind, action.value) for action in actions.actions] == [
         (MacroActionKind.MOVE, "down")
     ]
+
+
+def test_fossil_scientist_remains_routable_outside_the_viewport() -> None:
+    reader = _Reader()
+    reader.objects = (
+        CurrentMapObject(1, 0x20, (2, 5), 1, 0xFF),
+        CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+    )
+    executor = RedRoutedFossilRevival(
+        SimpleNamespace(),  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        SimpleNamespace(),  # type: ignore[arg-type]
+    )
+
+    scientist = executor._scientist()  # noqa: SLF001
+
+    assert scientist.at == (2, 5)
+    assert not scientist.visible

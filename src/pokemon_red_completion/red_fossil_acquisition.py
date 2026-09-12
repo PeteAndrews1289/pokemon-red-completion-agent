@@ -560,8 +560,12 @@ class RedRoutedFossilRevival:
             if item.sprite_index == FOSSIL_SCIENTIST_SPRITE_INDEX
             and item.picture_id == FOSSIL_SCIENTIST_PICTURE_ID
         )
-        if len(matches) != 1 or not matches[0].visible:
-            raise RedFossilAcquisitionError("fossil scientist is not uniquely visible")
+        # ``CurrentMapObject`` is map-wide: image_index 0xFF means merely that
+        # the object is outside the current viewport, not that the object is
+        # absent.  Its toggle-present identity and coordinates remain valid
+        # inputs to cartridge routing.
+        if len(matches) != 1:
+            raise RedFossilAcquisitionError("fossil scientist is not uniquely present")
         return matches[0]
 
     def _route_to_scientist(
