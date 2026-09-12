@@ -337,6 +337,10 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
         and parent_schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
     )
+    measured_after_measured = (
+        schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+    )
     if (
         (
             parent_schema
@@ -347,6 +351,7 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
             }
             and not measured_restart_parent
             and not measured_after_registered_support
+            and not measured_after_measured
         )
         or parent_episode.manifest_sha256 != origin.get("manifest_sha256")
         or parent.get("trajectory_manifest_sha256") != parent_episode.manifest_sha256
@@ -355,14 +360,21 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         ]
     ):
         raise RedRecordedSupportError("support requires its original completed native predecessor")
-    if measured_restart_parent or measured_after_registered_support:
-        # Permit an alternating measured/support lineage after recursively
-        # authenticating every prior join. Generic support-on-support and
-        # measured-on-measured chains remain forbidden.
+    if (
+        measured_restart_parent
+        or measured_after_registered_support
+        or measured_after_measured
+    ):
+        # Authenticate every derived predecessor before accepting another
+        # zero-input join. Consecutive measured terminals are required when a
+        # model makes another choice directly from its last measured state;
+        # the exact choice, state transition, and fitted successor are checked
+        # below. Generic support-on-support chains remain forbidden.
         require_recorded_support_origin(store, parent)
     if is_measured and parent.get("schema") not in {
         REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
         REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
     }:
         raise RedRecordedSupportError("measured terminal requires a native registered predecessor")
     for key, original in (

@@ -11,6 +11,7 @@ from test_paired_red_bounded_player_script import _observation
 from test_red_development_measured_choice import (
     _bootstrap_registered_model,
     _valid_choice,
+    _valid_failed_fishing_choice,
 )
 from test_red_player_checkpoint import _complete
 
@@ -336,6 +337,187 @@ def test_measured_terminal_restart_roundtrip_is_zero_input_and_lower_trust(tmp_p
     )
     assert opened.capture.state_bytes == terminal_state
     assert opened.collection == document["collection"]
+
+
+def test_measured_failure_can_directly_follow_an_authenticated_measured_terminal(
+    tmp_path, monkeypatch
+):
+    (
+        store,
+        _,
+        native_parent,
+        measured,
+        measured_segment,
+        _,
+        prior_model,
+    ) = _measured_checkpoint_case(tmp_path, monkeypatch)
+    _write_measured_episode(store, measured, measured_segment)
+    measured_summary = publish_red_player_checkpoint(store, measured)
+    measured_checkpoint = open_red_player_checkpoint(
+        store,
+        episode_id=measured["episode_id"],
+        expected_record_sha256=measured_summary["record_sha256"],
+        original_parent=native_parent.capture,
+        expected_profile_sha256="5" * 64,
+        expected_rom_sha256="6" * 64,
+        expected_context_origin="training",
+    )
+    behavior_record = store.find_sealed_record(
+        f"rpr-model-{measured['model_sha256']}", expected_kind="red_player_model"
+    )
+    assert behavior_record is not None
+    behavior = load_player_goal_model_record_bytes(
+        behavior_record.read_bytes(), expected_model_sha256=measured["model_sha256"]
+    )
+    failed = _valid_failed_fishing_choice(
+        tmp_path / "consecutive", model_sha256=measured["model_sha256"], behavior=behavior.model
+    )
+    parent_state_sha256 = measured["state_sha256"]
+    terminal_state = b"consecutive-measured-failure-terminal"
+    terminal_state_sha256 = hashlib.sha256(terminal_state).hexdigest()
+    declaration = {
+        **failed.selection_declaration,
+        "parent_episode": measured["episode_id"],
+        "parent_checkpoint_sha256": measured_summary["record_sha256"],
+        "parent_state_sha256": parent_state_sha256,
+    }
+    segment = replace(
+        failed.segments[0],
+        pair_id="consecutive-measured-failure",
+        declaration_sha256=canonical_sha256(declaration),
+        parent_state_sha256=parent_state_sha256,
+        terminal_state_sha256=terminal_state_sha256,
+    )
+    before = deepcopy(failed.before_observation)
+    before["registration"] = measured["collection"]
+    before["semantic_observation"]["collection"]["registered"] = measured[
+        "collection"
+    ]["registered_species"]
+    after = deepcopy(before)
+    outcome = red_registered_outcome_from_observations(
+        before,
+        after,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=False,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    failed = replace(
+        failed,
+        choice_id="consecutive-measured-failure",
+        parent_episode_id=measured["episode_id"],
+        parent_checkpoint_sha256=measured_summary["record_sha256"],
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        before_observation=before,
+        after_observation=after,
+        before_observation_sha256=canonical_sha256(before),
+        after_observation_sha256=canonical_sha256(after),
+        parent_state_sha256=parent_state_sha256,
+        terminal_state_sha256=terminal_state_sha256,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+    )
+    measured_input = publish_development_measured_choice(store, failed, behavior)
+
+    def resolve(expected):
+        if expected == prior_model.model.model_sha256:
+            return prior_model
+        record = store.find_sealed_record(
+            f"rpr-model-{expected}", expected_kind="red_player_model"
+        )
+        assert record is not None
+        return load_player_goal_model_record_bytes(
+            record.read_bytes(), expected_model_sha256=expected
+        )
+
+    fit = fit_incremental_measured_choice(
+        store,
+        prior=behavior,
+        measured_choice=measured_input,
+        resolve=resolve,
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+    )
+    successor_sha = fit["model"]["model_sha256"]
+    support_segment = {
+        "schema": VERIFIED_SUPPORT_SEGMENT_SCHEMA,
+        "plan": {
+            "parent_state_sha256": parent_state_sha256,
+            "parent_episode": measured["episode_id"],
+            "parent_checkpoint_sha256": measured_summary["record_sha256"],
+            "diagnostic_only": True,
+            "fit_admission": False,
+            "action_trace_available": False,
+            "source_commit": "a" * 40,
+            "maximum_actions": 30_000,
+            "maximum_frames": 3_000_000,
+            "retained_declaration_sha256": segment.declaration_sha256,
+            "retained_claim_sha256": segment.claim_sha256,
+            "retained_result_sha256": segment.result_sha256,
+        },
+        "state_base64": base64.urlsafe_b64encode(terminal_state).decode("ascii"),
+        "audit": {
+            "state_sha256": terminal_state_sha256,
+            "audit_actions": 0,
+            "audit_frames": 0,
+            "actions": segment.controller_actions,
+            "frames": segment.emulator_frames,
+            "retry_authorized": False,
+            "training_examples": 0,
+            "status": segment.status,
+        },
+    }
+    result = RedRegisteredMeasuredTerminalResult(
+        measured["episode_id"],
+        measured_summary["record_sha256"],
+        measured_summary["trajectory_manifest_sha256"],
+        canonical_sha256([support_segment]),
+        segment.controller_actions,
+        segment.emulator_frames,
+        failed.choice_id,
+        measured_input.record_sha256,
+        behavior.model.model_sha256,
+        successor_sha,
+    )
+    document = capture_red_player_terminal(
+        emulator=_State(terminal_state),
+        meter=_ZeroMeter(),
+        observe=lambda: _registered_observation(measured["collection"]),
+        parent=measured_checkpoint.capture,
+        result=result,
+        episode_id="consecutive-measured-failure-terminal",
+        profile_sha256="5" * 64,
+        rom_sha256="6" * 64,
+        model_sha256=successor_sha,
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+        context_origin="training",
+    )
+    document["registration_observation"] = _registration_row(
+        document["collection"], document["state_sha256"], 7
+    )
+    _write_measured_episode(store, document, support_segment)
+    summary = publish_red_player_checkpoint(store, document)
+    opened = open_red_player_checkpoint(
+        store,
+        episode_id=document["episode_id"],
+        expected_record_sha256=summary["record_sha256"],
+        original_parent=measured_checkpoint.capture,
+        expected_profile_sha256="5" * 64,
+        expected_rom_sha256="6" * 64,
+        expected_context_origin="training",
+    )
+    assert opened.capture.state_bytes == terminal_state
+    assert opened.collection == measured["collection"]
 
 
 def test_measured_terminal_can_anchor_one_later_registered_support_import(tmp_path, monkeypatch):
