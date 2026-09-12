@@ -176,6 +176,8 @@ class RamAddress(IntEnum):
     VERMILION_GYM_SECOND_LOCK = 0xD744
     EVENT_FLAGS = 0xD747
     SAFARI_STEPS = 0xD70D
+    FOSSIL_ITEM = 0xD70F
+    FOSSIL_MON = 0xD710
     TRAINER_HEADER_POINTER = 0xDA30
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
@@ -309,6 +311,10 @@ class MapId(IntEnum):
     SEAFOAM_ISLANDS_1F = 0xC0
     POKEMON_MANSION_1F = 0xA5
     CINNABAR_GYM = 0xA6
+    CINNABAR_LAB = 0xA7
+    CINNABAR_LAB_TRADE_ROOM = 0xA8
+    CINNABAR_LAB_METRONOME_ROOM = 0xA9
+    CINNABAR_LAB_FOSSIL_ROOM = 0xAA
     CINNABAR_POKECENTER = 0xAB
     CINNABAR_MART = 0xAC
     ROCKET_HIDEOUT_B1F = 0xC7
@@ -544,6 +550,9 @@ class EventFlag(IntEnum):
     CINNABAR_GYM_GATE_4_UNLOCKED = 0x2AC
     CINNABAR_GYM_GATE_5_UNLOCKED = 0x2AD
     CINNABAR_GYM_GATE_6_UNLOCKED = 0x2AE
+    GAVE_FOSSIL_TO_LAB = 0x2E0
+    LAB_STILL_REVIVING_FOSSIL = 0x2E1
+    LAB_HANDING_OVER_FOSSIL_MON = 0x2E2
     GOT_TM46 = 0x360
     DEFEATED_FIGHTING_DOJO = 0x350
     BEAT_KARATE_MASTER = 0x351
@@ -657,6 +666,7 @@ class ItemId(IntEnum):
     THUNDER_STONE = 0x21
     SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
+    OLD_AMBER = 0x1F
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
@@ -3882,6 +3892,18 @@ class PokemonRedStateReader:
             self._record_encounter(raw)
         return raw
 
+    def read_fossil_reviver_identity(self) -> tuple[int, int]:
+        """Return the cartridge-retained fossil item and resulting internal species.
+
+        These bytes are meaningful only while the lab hand-over event is set;
+        callers must bind them to that independently observed event state.
+        """
+
+        return (
+            self._memory.read_u8(RamAddress.FOSSIL_ITEM),
+            self._memory.read_u8(RamAddress.FOSSIL_MON),
+        )
+
     def _record_encounter(self, raw: RawGameState) -> None:
         """Append one newly seen encounter to the harvest log.
 
@@ -5739,6 +5761,10 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CELADON_CITY: "celadon_city",
         MapId.FUCHSIA_CITY: "fuchsia_city",
         MapId.CINNABAR_ISLAND: "cinnabar_island",
+        MapId.CINNABAR_LAB: "cinnabar_lab",
+        MapId.CINNABAR_LAB_TRADE_ROOM: "cinnabar_lab_trade_room",
+        MapId.CINNABAR_LAB_METRONOME_ROOM: "cinnabar_lab_metronome_room",
+        MapId.CINNABAR_LAB_FOSSIL_ROOM: "cinnabar_lab_fossil_room",
         MapId.CINNABAR_POKECENTER: "cinnabar_pokecenter",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
@@ -5845,6 +5871,10 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.WARDENS_HOUSE: "location:fuchsia_city",
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
+        MapId.CINNABAR_LAB: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_TRADE_ROOM: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_METRONOME_ROOM: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_FOSSIL_ROOM: "location:cinnabar_island",
         MapId.CINNABAR_POKECENTER: "location:cinnabar_island",
         MapId.CINNABAR_MART: "location:cinnabar_island",
         MapId.CINNABAR_GYM: "location:cinnabar_island",

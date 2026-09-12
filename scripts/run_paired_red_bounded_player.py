@@ -230,6 +230,8 @@ class _Readiness:
     restore_remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
     restore_level_evolution_acquisitions: bool = False
+    fossil_acquisitions: bool = False
+    restore_fossil_acquisitions: bool = False
     forward_story_objective: str | None = None
     forward_resource_budget: int | None = None
     registration_policy: Any = None
@@ -299,6 +301,7 @@ class _LiveObserver:
     retain_quantum: Callable[[], None] | None = None
     remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
+    fossil_acquisitions: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -328,6 +331,11 @@ class _LiveObserver:
             observed_trainer_funding=self.observed_trainer_funding,
             remaining_acquisition_demand=self.remaining_acquisition_demand,
             level_evolution_acquisitions=self.level_evolution_acquisitions,
+            **(
+                {"fossil_acquisitions": True}
+                if self.fossil_acquisitions
+                else {}
+            ),
             retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
@@ -357,6 +365,7 @@ def _player_observer(
     observed_trainer_funding: bool = False,
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
+    fossil_acquisitions: bool = False,
     retain_quantum: Callable[[], None] | None = None,
     forward_story_only: bool = False,
 ) -> RedBoundedPlayerObserver:
@@ -388,6 +397,10 @@ def _player_observer(
         )
     elif getattr(runtime, "level_evolution_acquisition_edges", ()):
         runtime = replace(runtime, level_evolution_acquisition_edges=())
+    if type(fossil_acquisitions) is not bool or (
+        fossil_acquisitions and (not remaining_acquisition_demand or world is None)
+    ):
+        raise PairedRedBoundedPlayerRunError("fossil_acquisitions_scope")
     if world is not None and any(
         s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
     ):
@@ -419,12 +432,43 @@ def _player_observer(
         )
     )
 
-    def enumerate_forward(observation: Any) -> Any:
+    def enumerate_all(observation: Any) -> Any:
         bindings = (
             runtime.enumerator(actions).enumerate(observation)
             if router is None
             else router.enumerate(observation)
         )
+        if fossil_acquisitions:
+            from pokemon_red_completion.red_fossil_acquisition import (
+                RedFossilGoalProvider,
+                RedRoutedFossilRevival,
+                available_red_fossil_targets,
+                bind_available_fossil_acquisition,
+            )
+
+            targets = available_red_fossil_targets(runtime.reader)
+            if len(targets) > 1:
+                raise PairedRedBoundedPlayerRunError("ambiguous_fossil_acquisition")
+            binding = None
+            if targets:
+                assert world is not None
+                skill = RedRoutedFossilRevival(
+                    actions,
+                    runtime.reader,
+                    runtime.emulator,
+                    world,
+                )
+                binding = RedFossilGoalProvider(
+                    targets[0],
+                    runtime.adapter,
+                    runtime.reader,
+                    skill,
+                ).binding(observation)
+            bindings = bind_available_fossil_acquisition(bindings, binding)
+        return bindings
+
+    def enumerate_forward(observation: Any) -> Any:
+        bindings = enumerate_all(observation)
         _require_forward_binding_scope(bindings, runtime.profile)
         return bindings
 
@@ -434,9 +478,9 @@ def _player_observer(
         enumerate_bindings=(
             enumerate_forward
             if forward_story_only
+            else enumerate_all
+            if router is not None or fossil_acquisitions
             else None
-            if router is None
-            else router.enumerate
         ),
         registered_objective=getattr(runtime, "registration_policy", None) is not None,
     )
@@ -567,6 +611,11 @@ def _parser() -> argparse.ArgumentParser:
         "--level-evolution-acquisitions",
         action="store_true",
         help="offer spare-precursor captures using cartridge level rules and actual living stock",
+    )
+    parser.add_argument(
+        "--fossil-acquisitions",
+        action="store_true",
+        help="offer an observed held fossil through the reusable Cinnabar revival mechanic",
     )
     parser.add_argument(
         "--routed-recovery",
@@ -940,6 +989,15 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         and (not remaining_acquisition_demand or not getattr(args, "routed_resource_goals", False))
     ):
         raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_scope")
+    fossil_acquisitions = getattr(args, "fossil_acquisitions", False)
+    if type(fossil_acquisitions) is not bool or (
+        fossil_acquisitions
+        and (
+            not remaining_acquisition_demand
+            or not getattr(args, "routed_resource_goals", False)
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("fossil_acquisitions_scope")
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
         routed_recovery
@@ -1129,6 +1187,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         observed_trainer_funding=observed_trainer_funding,
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
+        fossil_acquisitions=fossil_acquisitions,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -2053,6 +2112,7 @@ def _continue_readiness(
             restore_observed_trainer_funding=_checkpoint_observed_trainer_funding(header),
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
+            restore_fossil_acquisitions=_checkpoint_fossil_acquisitions(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
@@ -2073,6 +2133,8 @@ def _continue_readiness(
             and not readiness.remaining_acquisition_demand
         ):
             raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_rollback")
+        if readiness.restore_fossil_acquisitions and not readiness.fossil_acquisitions:
+            raise PairedRedBoundedPlayerRunError("fossil_acquisitions_rollback")
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
@@ -2105,6 +2167,20 @@ def _checkpoint_remaining_acquisition_demand(header: Mapping[str, object]) -> bo
     enabled = metadata.get("remaining_acquisition_demand", False)
     if type(enabled) is not bool:
         raise PairedRedBoundedPlayerRunError("continuation_parent_remaining_acquisition_demand")
+    return enabled
+
+
+def _checkpoint_fossil_acquisitions(header: Mapping[str, object]) -> bool:
+    """Preserve explicit fossil capability across continued checkpoints."""
+
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("fossil_acquisitions", False)
+    if type(enabled) is not bool or (
+        enabled and not _checkpoint_remaining_acquisition_demand(header)
+    ):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_fossil_acquisitions")
     return enabled
 
 
@@ -2264,6 +2340,11 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         level_evolution_acquisitions=getattr(
             readiness,
             "restore_level_evolution_acquisitions",
+            False,
+        ),
+        fossil_acquisitions=getattr(
+            readiness,
+            "restore_fossil_acquisitions",
             False,
         ),
     )
@@ -2474,6 +2555,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             observed_trainer_funding=getattr(readiness, "observed_trainer_funding", False),
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
+            fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
             forward_story_only=getattr(readiness, "forward_story_objective", None) is not None,
         )
         # Preview the same prospective history as the actor. Historical restore
@@ -2670,6 +2752,11 @@ def _run_arm(
                     if readiness.level_evolution_acquisitions
                     else {}
                 ),
+                **(
+                    {"fossil_acquisitions": True}
+                    if getattr(readiness, "fossil_acquisitions", False)
+                    else {}
+                ),
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -2756,6 +2843,7 @@ def _run_arm(
                 observed_trainer_funding=getattr(readiness, "observed_trainer_funding", False),
                 remaining_acquisition_demand=readiness.remaining_acquisition_demand,
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
+                fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             if forward_probe is not None:
