@@ -9,6 +9,21 @@ from typing import cast
 
 import pytest
 from test_living_dex_option_value import _menu
+from test_red_live_option_menu import (
+    _binding as _live_binding,
+)
+from test_red_live_option_menu import (
+    _fishing_candidate as _live_fishing_candidate,
+)
+from test_red_live_option_menu import (
+    _model as _live_model,
+)
+from test_red_live_option_menu import (
+    _ordinary_bindings as _live_ordinary_bindings,
+)
+from test_red_live_option_menu import (
+    _situation as _live_situation,
+)
 from test_red_player_training import _episode
 from test_registered_learning_bridge import observations
 from test_registered_runtime_binding import bound_fixture
@@ -24,6 +39,7 @@ from pokemon_red_completion.red_development_measured_choice import (
     DEVELOPMENT_MEASURED_CHOICE_KIND,
     DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
     DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2,
+    DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3,
     DEVELOPMENT_MEASURED_RESULT_SCHEMA,
     RedDevelopmentMeasuredChoice,
     RedDevelopmentMeasuredChoiceInput,
@@ -33,7 +49,15 @@ from pokemon_red_completion.red_development_measured_choice import (
     load_red_development_measured_choice_example,
     publish_development_measured_choice,
 )
+from pokemon_red_completion.red_economy_learning import red_registered_economy_outcome
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
+from pokemon_red_completion.red_live_option_menu import (
+    RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_MIXED_OPTION_POLICY,
+    build_red_live_option_set,
+    select_red_live_option,
+    supplemental_live_option,
+)
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_incremental_fit import (
     fit_incremental_measured_choice,
@@ -52,6 +76,7 @@ from pokemon_red_completion.red_player_training_plan import (
 from pokemon_red_completion.red_registered_observation import project_registered_observation
 from pokemon_red_completion.red_registered_outcome import red_registered_outcome_from_observations
 from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 
 def _model_sha(fit_dict: Mapping[str, object]) -> str:
@@ -277,6 +302,120 @@ def _valid_failed_fishing_choice(
     )
 
 
+def _valid_mixed_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+    before, _after = _safari_observations(tmp_path)
+    calls: list[str] = []
+    fishing = _live_binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    economy = EconomySnapshot(58, (("red-item-004", 6),))
+    options = build_red_live_option_set(
+        situation=_live_situation(resources=0.4),
+        binding_set=_live_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(
+                fishing,
+                _live_fishing_candidate("provider-row", travel=0.2),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="9" * 64,
+        economy_snapshot=economy,
+        target_cash=2400,
+    )
+    model = _live_model()
+    seed = 0
+    while True:
+        selected = select_red_live_option(
+            model,
+            options,
+            seed=seed,
+            allow_earning_exploration=True,
+        )
+        if selected.selected_binding.kind is GoalKind.RESTORE_TEAM:
+            break
+        seed += 1
+    declaration = {
+        "schema": RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "parent_checkpoint_sha256": "d" * 64,
+        "parent_state_sha256": "2" * 64,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": options.menu.policy_sha256,
+        "model_sha256": model.model_sha256,
+        "selected_candidate_index": selected.selected_candidate_index,
+        "selected_option_kind": "restore",
+        "selection_seed": seed,
+        "behavior_probabilities": list(selected.probabilities),
+        "maximum_frames": 500_000,
+        "retry_authorized": False,
+        "teacher_labels": 0,
+    }
+    segment = RedDevelopmentMeasuredSegment(
+        pair_id="model108-mixed-restore-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+        claim_sha256="b" * 64,
+        result_sha256="c" * 64,
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        controller_actions=83,
+        emulator_frames=3900,
+        status="retained_success",
+    )
+    outcome = red_registered_economy_outcome(
+        before,
+        before,
+        selected_kind=GoalKind.RESTORE_TEAM,
+        succeeded=True,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+        before_economy=economy,
+        after_economy=economy,
+        target_cash=2400,
+    )
+    return RedDevelopmentMeasuredChoice(
+        choice_id="model108-mixed-restore-20260912",
+        parent_episode_id="model108-mixed-parent",
+        parent_checkpoint_sha256="d" * 64,
+        menu=options.menu,
+        selected_candidate_index=selected.selected_candidate_index,
+        behavior_probabilities=selected.probabilities,
+        scores=selected.scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        model_sha256=model.model_sha256,
+        before_observation=before,
+        after_observation=before,
+        before_observation_sha256=canonical_sha256(before),
+        after_observation_sha256=canonical_sha256(before),
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        observer_source_commit="e" * 40,
+        observer_source_bundle_sha256="f" * 64,
+        selected_goal_kind=GoalKind.RESTORE_TEAM,
+        before_economy=economy,
+        after_economy=economy,
+        target_cash=2400,
+        policy_id=RED_LIVE_MIXED_OPTION_POLICY,
+    )
+
+
 def _bind_parent(store, choice, behavior):
     record = store.publish_sealed_record(
         checkpoint_record_id(choice.parent_episode_id),
@@ -383,7 +522,8 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
 
     # Deserialization round-trip
     restored = RedDevelopmentMeasuredChoice.from_public(pub)
-    assert restored == choice
+    assert restored.public_dict() == pub
+    assert restored.record_sha256 == choice.record_sha256
     assert restored.decision_sha256 == choice.decision_sha256
 
     # Arm conversion
@@ -406,6 +546,53 @@ def test_fishing_measured_choice_roundtrip(tmp_path):
     assert restored.independent_evaluation is False
     assert restored.authority_promotion_eligible is False
     assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+def test_mixed_restore_choice_roundtrip_retains_economy_and_exact_propensity(tmp_path):
+    choice = _valid_mixed_restore_choice(tmp_path)
+    document = choice.public_dict()
+    restored = RedDevelopmentMeasuredChoice.from_public(document)
+    arm = restored.to_observed_arm_example()
+
+    assert document["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+    assert document["policy_id"] == RED_LIVE_MIXED_OPTION_POLICY
+    assert document["selected_goal_kind"] == GoalKind.RESTORE_TEAM.value
+    assert restored.public_dict() == document
+    assert restored.record_sha256 == choice.record_sha256
+    assert arm.outcome.verified_success is True
+    assert arm.outcome.completion_gain == 0.0
+    assert arm.outcome.economy is not None
+    assert arm.outcome.economy.cash_delta == 0
+    assert arm.importance_weight(4.0) == 4.0
+    assert arm.selected_probability == choice.behavior_probabilities[
+        choice.selected_candidate_index
+    ]
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_frames", 500_001),
+        ("menu_file_sha256", "not-a-hash"),
+        ("parent_checkpoint_sha256", "0" * 64),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+        ("selected_option_kind", "acquire"),
+    ),
+)
+def test_mixed_restore_declaration_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_mixed_restore_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration[key] = value
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration|selected goal kind"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 def test_failed_fishing_choice_is_a_settled_v2_training_target(tmp_path):

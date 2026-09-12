@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import random
 
 import numpy as np
 import pytest
@@ -39,7 +40,9 @@ from pokemon_red_completion.red_live_option_menu import (
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 
-def _situation(*, resources: float = 0.9, safety: float = 0.1) -> GoalSituation:
+def _situation(
+    *, resources: float = 0.9, safety: float = 0.1, storage: float = 0.2
+) -> GoalSituation:
     return GoalSituation(
         story_pressure=0.0,
         collection_pressure=0.8,
@@ -47,7 +50,7 @@ def _situation(*, resources: float = 0.9, safety: float = 0.1) -> GoalSituation:
         evolution_pressure=0.3,
         safety_pressure=safety,
         resource_pressure=resources,
-        storage_pressure=0.2,
+        storage_pressure=storage,
         recovery_pressure=0.0,
         exploration_pressure=0.5,
     )
@@ -320,3 +323,126 @@ def test_supplement_kind_must_match_its_executor() -> None:
             economy_snapshot=EconomySnapshot(58, ()),
             target_cash=400,
         )
+
+
+def test_full_storage_without_relief_masks_all_acquisition_candidates() -> None:
+    calls: list[str] = []
+    fishing = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    options = build_red_live_option_set(
+        situation=_situation(storage=1.0),
+        binding_set=_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(
+                fishing,
+                _fishing_candidate("provider-row", travel=0.2),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="b" * 64,
+        economy_snapshot=EconomySnapshot(58, ()),
+        target_cash=400,
+    )
+
+    assert calls == []
+    assert {
+        item.features.kind for item in options.menu.candidates
+    } == {LivingDexOptionKind.RESUPPLY, LivingDexOptionKind.RESTORE}
+
+
+def test_critical_storage_with_relief_forces_manage_storage() -> None:
+    calls: list[str] = []
+    ordinary = _ordinary_bindings(calls)
+    manage = _binding(
+        GoalKind.MANAGE_STORAGE,
+        binding_ref="private:red:manage-storage",
+        calls=calls,
+    )
+    bindings = GoalBindingSet(
+        tuple(
+            manage.opportunity if item.kind is GoalKind.MANAGE_STORAGE else item
+            for item in ordinary.opportunities
+        ),
+        (*ordinary.bindings, manage),
+    )
+    options = build_red_live_option_set(
+        situation=_situation(storage=1.0),
+        binding_set=bindings,
+        supplements=(),
+        model_feature_version=4,
+        ordering_seed_sha256="b" * 64,
+        economy_snapshot=EconomySnapshot(58, ()),
+        target_cash=400,
+    )
+
+    choice = select_red_live_option(_model(), options, seed=7)
+
+    assert choice.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
+    assert choice.selected_binding.kind is GoalKind.MANAGE_STORAGE
+    assert calls == []
+
+
+def test_critical_party_forces_restore_without_model_authority() -> None:
+    calls: list[str] = []
+    options = build_red_live_option_set(
+        situation=_situation(resources=0.1, safety=1.0),
+        binding_set=_ordinary_bindings(calls),
+        supplements=(),
+        model_feature_version=4,
+        ordering_seed_sha256="b" * 64,
+        economy_snapshot=EconomySnapshot(400, ()),
+        target_cash=400,
+    )
+
+    choice = select_red_live_option(_model(), options, seed=7)
+
+    assert choice.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
+    assert choice.selected_binding.kind is GoalKind.RESTORE_TEAM
+    assert all(value is None for value in choice.scores)
+    assert calls == []
+
+
+def test_model_exploration_restore_probability_replays_exactly() -> None:
+    calls: list[str] = []
+    options = _mixed(calls)
+    model = _model()
+    seed = next(
+        candidate_seed
+        for candidate_seed in range(1000)
+        if options.bindings[
+            random.Random(candidate_seed).choices(
+                range(len(options.bindings)),
+                weights=select_red_live_option(
+                    model,
+                    options,
+                    seed=candidate_seed,
+                    allow_earning_exploration=True,
+                ).probabilities,
+                k=1,
+            )[0]
+        ].kind
+        is GoalKind.RESTORE_TEAM
+    )
+
+    first = select_red_live_option(
+        model,
+        options,
+        seed=seed,
+        allow_earning_exploration=True,
+    )
+    replay = select_red_live_option(
+        model,
+        options,
+        seed=seed,
+        allow_earning_exploration=True,
+    )
+
+    assert first.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION
+    assert first.selected_binding.kind is GoalKind.RESTORE_TEAM
+    assert replay.probabilities == first.probabilities
+    assert replay.selected_candidate_index == first.selected_candidate_index
+    assert first.probabilities[first.selected_candidate_index] > 0.0
+    assert calls == []

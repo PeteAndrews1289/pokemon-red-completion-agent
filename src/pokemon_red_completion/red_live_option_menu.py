@@ -44,6 +44,10 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+RED_LIVE_MIXED_OPTION_POLICY = "red-live-mixed-option-v1"
+RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model108-mixed-live-execution-plan.v1"
+)
 
 
 class RedLiveOptionMenuError(ValueError):
@@ -209,6 +213,7 @@ class RedLiveOptionChoice:
             "menu_sha256": self.options.menu.policy_sha256,
             "mode": self.mode.value,
             "model_sha256": self.model_sha256,
+            "policy_id": RED_LIVE_MIXED_OPTION_POLICY,
             "private_binding_fields": 0,
             "private_path_fields": 0,
             "probabilities": list(self.probabilities),
@@ -229,6 +234,7 @@ def build_red_live_option_set(
     ordering_seed_sha256: str,
     economy_snapshot: EconomySnapshot | None = None,
     target_cash: int | None = None,
+    safety: CompletionFirstGoalTeacher | None = None,
 ) -> RedLiveOptionSet:
     """Compose ordinary goals and concrete mechanisms into one model menu."""
 
@@ -249,6 +255,10 @@ def build_red_live_option_set(
         raise RedLiveOptionMenuError("mixed live menu ordering seed differs")
     if (economy_snapshot is None) != (target_cash is None):
         raise RedLiveOptionMenuError("mixed live menu economy context is incomplete")
+    if safety is None:
+        safety = CompletionFirstGoalTeacher()
+    if not isinstance(safety, CompletionFirstGoalTeacher):
+        raise TypeError("mixed live menu needs a safety policy")
 
     question = binding_set.question(situation)
     if any(
@@ -258,9 +268,18 @@ def build_red_live_option_set(
         raise RedLiveOptionMenuError(
             "control recovery must remain outside learned mixed-family authority"
         )
+    available_kinds = {
+        question.opportunities[index].kind for index in question.available_indices
+    }
+    mask_acquisitions = (
+        situation.storage_pressure >= safety.storage_gate
+        and GoalKind.MANAGE_STORAGE not in available_kinds
+    )
     rows: list[tuple[ExecutableGoalBinding, LivingDexOptionCandidate, bool]] = []
     for index in question.available_indices:
         opportunity = question.opportunities[index]
+        if mask_acquisitions and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
+            continue
         candidate = project_living_dex_goal_candidate(
             question,
             index,
@@ -272,6 +291,8 @@ def build_red_live_option_set(
         rows.append((binding_set.require(opportunity.binding_ref), candidate, True))
 
     for supplement in supplements:
+        if mask_acquisitions and supplement.binding.kind is GoalKind.ACQUIRE_SPECIES:
+            continue
         expected_kind = living_dex_option_kind_for_goal(
             supplement.binding.kind,
             feature_version=model_feature_version,
@@ -468,6 +489,8 @@ def supplemental_live_option(
 
 
 __all__ = [
+    "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_MIXED_OPTION_POLICY",
     "RedLiveOptionChoice",
     "RedLiveOptionMenuError",
     "RedLiveOptionSelectionMode",

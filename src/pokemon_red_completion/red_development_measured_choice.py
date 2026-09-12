@@ -18,7 +18,10 @@ from dataclasses import dataclass
 from typing import cast
 
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.living_dex_goal_policy import DEFAULT_LIVING_DEX_GOAL_UTILITY
+from pokemon_red_completion.living_dex_goal_policy import (
+    DEFAULT_LIVING_DEX_GOAL_UTILITY,
+    living_dex_option_kind_for_goal,
+)
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexObservedArmExample,
     LivingDexObservedOutcome,
@@ -28,8 +31,14 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.living_dex_policy_codec import restore_living_dex_policy_menu
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_economy_learning import red_registered_economy_outcome
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
+from pokemon_red_completion.red_live_option_menu import (
+    RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_MIXED_OPTION_POLICY,
+)
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+from pokemon_red_completion.red_player_economy import restore_snapshot, snapshot_document
 from pokemon_red_completion.red_player_model import RedPlayerModelRecord
 from pokemon_red_completion.red_registered_observation import REGISTERED_OBSERVATION_SCHEMA
 from pokemon_red_completion.red_registered_outcome import red_registered_outcome_from_observations
@@ -39,9 +48,11 @@ from pokemon_red_completion.registered_checkpoint import (
     require_registered_transition,
 )
 from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 DEVELOPMENT_MEASURED_CHOICE_SCHEMA = "pokemon.red.development-measured-choice.v1"
 DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2 = "pokemon.red.development-measured-choice.v2"
+DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3 = "pokemon.red.development-measured-choice.v3"
 DEVELOPMENT_MEASURED_SEGMENT_SCHEMA = "pokemon.red.development-measured-segment.v1"
 DEVELOPMENT_MEASURED_CHOICE_KIND = "red_development_measured_choice"
 DEVELOPMENT_MEASURED_RESULT_SCHEMA = "pokemon.red.development-measured-choice-result.v1"
@@ -96,6 +107,13 @@ _CHOICE_KEYS_V1 = {
     "trust_tier",
 }
 _CHOICE_KEYS_V2 = _CHOICE_KEYS_V1 | {"succeeded"}
+_CHOICE_KEYS_V3 = _CHOICE_KEYS_V1 | {
+    "after_economy",
+    "before_economy",
+    "selected_goal_kind",
+    "succeeded",
+    "target_cash",
+}
 
 
 def development_measured_choice_record_id(choice_id: str) -> str:
@@ -155,6 +173,7 @@ def _validate_selection_declaration(
     parent_state_sha256: str,
     menu_sha256: str,
     model_sha256: str,
+    behavior_probabilities: tuple[float, ...],
     selection_seed: int,
     selected_candidate_index: int,
     first_segment_pair_id: str,
@@ -236,6 +255,39 @@ def _validate_selection_declaration(
             or declaration.get("maximum_frames") != 2_000_000
             or declaration.get("teacher_labels") != 0
             or _SHA256.fullmatch(str(declaration.get("menu_file_sha256"))) is None
+        )
+    elif policy_id == RED_LIVE_MIXED_OPTION_POLICY:
+        expected_keys = {
+            "behavior_probabilities",
+            "maximum_frames",
+            "menu_file_sha256",
+            "menu_sha256",
+            "model_sha256",
+            "parent_checkpoint_sha256",
+            "parent_state_sha256",
+            "retry_authorized",
+            "schema",
+            "selected_candidate_index",
+            "selected_option_kind",
+            "selection_seed",
+            "source_bundle_sha256",
+            "source_commit",
+            "teacher_labels",
+        }
+        mismatch = (
+            set(declaration) != expected_keys
+            or declaration.get("schema")
+            != RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA
+            or declaration.get("parent_checkpoint_sha256")
+            != parent_checkpoint_sha256
+            or declaration.get("parent_state_sha256") != parent_state_sha256
+            or declaration.get("selection_seed") != selection_seed
+            or declaration.get("retry_authorized") is not False
+            or declaration.get("maximum_frames") != 500_000
+            or declaration.get("teacher_labels") != 0
+            or _SHA256.fullmatch(str(declaration.get("menu_file_sha256"))) is None
+            or declaration.get("behavior_probabilities")
+            != list(behavior_probabilities)
         )
     else:
         raise ValueError("measured choice policy differs")
@@ -397,6 +449,10 @@ class RedDevelopmentMeasuredChoice:
     observer_source_commit: str
     observer_source_bundle_sha256: str
     succeeded: bool = True
+    selected_goal_kind: GoalKind = GoalKind.ACQUIRE_SPECIES
+    before_economy: EconomySnapshot | None = None
+    after_economy: EconomySnapshot | None = None
+    target_cash: int | None = None
     policy_id: str = SAFARI_AREA_CHOICE_POLICY
     normalization_contract: str = DEVELOPMENT_MEASURED_NORMALIZATION
     maximum_actions: int = DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
@@ -413,6 +469,8 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("measured choice identity differs")
         if type(self.succeeded) is not bool:  # noqa: E721
             raise ValueError("measured choice success status differs")
+        if not isinstance(self.selected_goal_kind, GoalKind):
+            raise ValueError("measured choice selected goal kind differs")
         if not isinstance(self.parent_episode_id, str) or not self.parent_episode_id:
             raise ValueError("measured choice parent episode differs")
         _sha256(self.parent_checkpoint_sha256, subject="parent checkpoint hash")
@@ -459,6 +517,22 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("measured choice scores differ")
         _integer(self.selection_seed, subject="selection seed")
         _sha256(self.model_sha256, subject="model hash")
+        if not isinstance(self.selection_declaration, Mapping):
+            raise ValueError("measured choice pre-input declaration differs")
+        if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
+            selected_option_kind = self.menu.candidates[
+                self.selected_candidate_index
+            ].features.kind
+            if (
+                living_dex_option_kind_for_goal(
+                    self.selected_goal_kind,
+                    feature_version=self.menu.feature_version,
+                )
+                is not selected_option_kind
+                or self.selection_declaration.get("selected_option_kind")
+                != selected_option_kind.value
+            ):
+                raise ValueError("measured choice selected goal kind differs")
         if (
             not self.segments
             or len(self.segments) > 16
@@ -467,8 +541,6 @@ class RedDevelopmentMeasuredChoice:
             )
         ):
             raise ValueError("measured choice segment inventory differs")
-        if not isinstance(self.selection_declaration, Mapping):
-            raise ValueError("measured choice pre-input declaration differs")
         _validate_selection_declaration(
             self.selection_declaration,
             policy_id=self.policy_id,
@@ -477,6 +549,7 @@ class RedDevelopmentMeasuredChoice:
             parent_state_sha256=self.parent_state_sha256,
             menu_sha256=self.menu.policy_sha256,
             model_sha256=self.model_sha256,
+            behavior_probabilities=self.behavior_probabilities,
             selection_seed=self.selection_seed,
             selected_candidate_index=self.selected_candidate_index,
             first_segment_pair_id=self.segments[0].pair_id,
@@ -555,6 +628,31 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("measured choice fixed normalization differs")
         if not isinstance(self.resource_costs, Mapping):
             raise ValueError("measured choice resource costs differ")
+        economy_fields = (self.before_economy, self.after_economy, self.target_cash)
+        if any(value is not None for value in economy_fields):
+            if (
+                not isinstance(self.before_economy, EconomySnapshot)
+                or not isinstance(self.after_economy, EconomySnapshot)
+                or type(self.target_cash) is not int
+                or self.target_cash < 0
+                or self.menu.feature_version != 4
+                or self.menu.context.economy_snapshot is None
+                or self.menu.context.economy_snapshot.cash
+                != self.before_economy.cash
+                or self.menu.context.target_cash != self.target_cash
+            ):
+                raise ValueError("measured choice economy evidence differs")
+            snapshot_document(self.before_economy)
+            snapshot_document(self.after_economy)
+        elif self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
+            raise ValueError("mixed measured choice requires economy evidence")
+        if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY and (
+            self.selection_declaration.get("source_commit")
+            != self.observer_source_commit
+            or self.selection_declaration.get("source_bundle_sha256")
+            != self.observer_source_bundle_sha256
+        ):
+            raise ValueError("mixed measured choice observer source differs")
         _git_commit(self.observer_source_commit, subject="observer source commit")
         _sha256(self.observer_source_bundle_sha256, subject="observer source bundle")
         if (
@@ -574,7 +672,7 @@ class RedDevelopmentMeasuredChoice:
         require_registered_transition(
             old,
             new,
-            selected_kind=GoalKind.ACQUIRE_SPECIES,
+            selected_kind=self.selected_goal_kind,
             require_selected_goal_progress=self.succeeded,
         )
         outcome = self._observed_outcome()
@@ -588,10 +686,25 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("measured choice resource costs differ from observations")
 
     def _observed_outcome(self) -> LivingDexObservedOutcome:
+        if self.before_economy is not None:
+            assert self.after_economy is not None and self.target_cash is not None
+            return red_registered_economy_outcome(
+                self.before_observation,
+                self.after_observation,
+                selected_kind=self.selected_goal_kind,
+                succeeded=self.succeeded,
+                actions=self.controller_actions,
+                frames=self.emulator_frames,
+                maximum_actions=self.maximum_actions,
+                maximum_frames=self.maximum_frames,
+                before_economy=self.before_economy,
+                after_economy=self.after_economy,
+                target_cash=self.target_cash,
+            )
         return red_registered_outcome_from_observations(
             self.before_observation,
             self.after_observation,
-            selected_kind=GoalKind.ACQUIRE_SPECIES,
+            selected_kind=self.selected_goal_kind,
             succeeded=self.succeeded,
             actions=self.controller_actions,
             frames=self.emulator_frames,
@@ -613,6 +726,8 @@ class RedDevelopmentMeasuredChoice:
 
     @property
     def schema(self) -> str:
+        if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
+            return DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
         return (
             DEVELOPMENT_MEASURED_CHOICE_SCHEMA
             if self.succeeded
@@ -665,6 +780,14 @@ class RedDevelopmentMeasuredChoice:
         }
         if not self.succeeded:
             document["succeeded"] = False
+        if self.schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3:
+            document.update(
+                after_economy=snapshot_document(self.after_economy),
+                before_economy=snapshot_document(self.before_economy),
+                selected_goal_kind=self.selected_goal_kind.value,
+                succeeded=self.succeeded,
+                target_cash=self.target_cash,
+            )
         return document
 
     @classmethod
@@ -678,6 +801,11 @@ class RedDevelopmentMeasuredChoice:
             if document.get("succeeded") is not False:
                 raise ValueError("measured choice success status differs")
             succeeded = False
+        elif schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3:
+            expected_keys = _CHOICE_KEYS_V3
+            if type(document.get("succeeded")) is not bool:
+                raise ValueError("measured choice success status differs")
+            succeeded = cast(bool, document.get("succeeded"))
         else:
             raise ValueError("measured choice declaration differs")
         if set(document) != expected_keys:
@@ -761,6 +889,26 @@ class RedDevelopmentMeasuredChoice:
                 subject="observer source bundle",
             ),
             succeeded=cast(bool, succeeded),
+            selected_goal_kind=(
+                GoalKind(_text(document, "selected_goal_kind"))
+                if schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+                else GoalKind.ACQUIRE_SPECIES
+            ),
+            before_economy=(
+                restore_snapshot(document.get("before_economy"))
+                if schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+                else None
+            ),
+            after_economy=(
+                restore_snapshot(document.get("after_economy"))
+                if schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+                else None
+            ),
+            target_cash=(
+                _integer(document.get("target_cash"), subject="target cash")
+                if schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+                else None
+            ),
             policy_id=_text(document, "policy_id"),
             normalization_contract=_text(document, "normalization_contract"),
             maximum_actions=_integer(
