@@ -41,6 +41,8 @@ from pokemon_red_completion.red_fossil_acquisition import (
     fossil_target_by_item,
     observe_red_fossil,
 )
+from pokemon_red_completion.route_executor import TraversalSnapshot
+from pokemon_red_completion.route_plan import RoutePlanningError
 
 
 def _events(*flags: EventFlag) -> bytes:
@@ -390,3 +392,51 @@ def test_fossil_interaction_polls_when_scientist_is_behind_counter(
     ) == 0
     assert len(actions.actions) == 1
     assert actions.actions[0].repeat == 24
+
+
+def test_fossil_route_recovers_one_verified_transient_off_graph_square() -> None:
+    state = [TraversalSnapshot(170, (2, 5), True)]
+
+    class Observer:
+        def observe(self):
+            return state[0]
+
+    class World:
+        def plan_feasible_to_map(self, start, _destination_map, *, goal_at=None):
+            assert goal_at is None
+            if start.at == (3, 5):
+                return SimpleNamespace(cost=23, steps=())
+            raise RoutePlanningError("off graph")
+
+    class Actions:
+        actions_executed = 0
+
+        def __init__(self) -> None:
+            self.actions = []
+
+        def execute(self, action):
+            self.actions.append(action)
+            assert action.kind is MacroActionKind.MOVE
+            assert action.value == "down"
+            state[0] = replace(state[0], at=(3, 5))
+
+    actions = Actions()
+    executor = RedRoutedFossilRevival(
+        actions,  # type: ignore[arg-type]
+        _Reader(),  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        World(),  # type: ignore[arg-type]
+    )
+
+    executor._recover_to_routable_neighbor(  # noqa: SLF001
+        actions,  # type: ignore[arg-type]
+        Observer(),  # type: ignore[arg-type]
+        8,
+        goal_at=None,
+        original_error=RoutePlanningError("off graph"),
+    )
+
+    assert state[0].at == (3, 5)
+    assert [(action.kind, action.value) for action in actions.actions] == [
+        (MacroActionKind.MOVE, "down")
+    ]

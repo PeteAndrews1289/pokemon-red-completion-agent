@@ -9,7 +9,7 @@ does not encode a route for Omanyte, Kabuto, or Aerodactyl individually.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from enum import StrEnum
 from functools import partial
 from typing import Protocol
@@ -468,9 +468,24 @@ class RedRoutedFossilRevival:
         try:
             plan = self.world.plan_feasible_to_map(start, destination_map, goal_at=goal_at)
         except RoutePlanningError as error:
-            raise RedFossilAcquisitionError(
-                "no cartridge route reaches the fossil boundary"
-            ) from error
+            self._recover_to_routable_neighbor(
+                actions,
+                observer,
+                destination_map,
+                goal_at=goal_at,
+                original_error=error,
+            )
+            start = observer.observe()
+            try:
+                plan = self.world.plan_feasible_to_map(
+                    start,
+                    destination_map,
+                    goal_at=goal_at,
+                )
+            except RoutePlanningError as retry_error:
+                raise RedFossilAcquisitionError(
+                    "no cartridge route reaches the fossil boundary"
+                ) from retry_error
         if not _supported_plan(plan, allow_cut=True, allow_surf=True):
             raise RedFossilAcquisitionError("fossil route needs an unsupported field mechanic")
         report = execute_route(
@@ -483,6 +498,60 @@ class RedRoutedFossilRevival:
         if not report.passed:
             raise RedFossilAcquisitionError("fossil route did not reach its declared boundary")
         return len(report.executed_steps)
+
+    def _recover_to_routable_neighbor(
+        self,
+        actions: Gen1FieldMovePort,
+        observer: Gen1TraversalObserver,
+        destination_map: int,
+        *,
+        goal_at: tuple[int, int] | None,
+        original_error: RoutePlanningError,
+    ) -> None:
+        """Leave one transient off-graph square using a verified local move."""
+
+        current = observer.observe()
+        if not current.ready:
+            raise RedFossilAcquisitionError(
+                "no cartridge route reaches the fossil boundary"
+            ) from original_error
+        directions = (
+            ("down", (1, 0)),
+            ("up", (-1, 0)),
+            ("right", (0, 1)),
+            ("left", (0, -1)),
+        )
+        candidates = []
+        for order, (direction, (delta_y, delta_x)) in enumerate(directions):
+            candidate = (current.at[0] + delta_y, current.at[1] + delta_x)
+            if candidate in current.occupied:
+                continue
+            projected = replace(current, at=candidate)
+            try:
+                plan = self.world.plan_feasible_to_map(
+                    projected,
+                    destination_map,
+                    goal_at=goal_at,
+                )
+            except RoutePlanningError:
+                continue
+            if _supported_plan(plan, allow_cut=True, allow_surf=True):
+                candidates.append((plan.cost, len(plan.steps), order, direction, candidate))
+        if not candidates:
+            raise RedFossilAcquisitionError(
+                "no cartridge route reaches the fossil boundary"
+            ) from original_error
+        _, _, _, direction, expected = min(candidates, key=lambda row: row[:3])
+        actions.execute(MacroAction(MacroActionKind.MOVE, direction))
+        settled = observer.observe()
+        if (
+            settled.map_id != current.map_id
+            or settled.at != expected
+            or not settled.ready
+        ):
+            raise RedFossilAcquisitionError(
+                "local fossil route recovery did not reach its predicted tile"
+            ) from original_error
 
     def _scientist(self) -> CurrentMapObject:
         matches = tuple(
