@@ -31,7 +31,7 @@ from pokemon_red_completion.red_safari_acquisition import (
     relocate_red_safari_origin_to_fuchsia_center,
     select_red_safari_area,
 )
-from pokemon_red_completion.safari import SafariChapterError, SafariTiming, _move
+from pokemon_red_completion.safari import SafariChapterError, SafariTiming, _move, _steps
 
 
 def _collection(*numbers: int) -> CollectionObservation:
@@ -223,6 +223,18 @@ def test_safari_admission_report_requires_exact_fee_counters_and_terminal() -> N
     assert not replace(report, money_after=59).passed
     assert not replace(report, safari_balls_remaining=29).passed
     assert not replace(report, selected_position=(1, 23)).passed
+
+
+def test_safari_steps_are_read_as_one_two_byte_counter() -> None:
+    class Memory:
+        @staticmethod
+        def read_u8(address: int) -> int:
+            return {
+                int(RamAddress.SAFARI_STEPS): 0x01,
+                int(RamAddress.SAFARI_STEPS) + 1: 0xD8,
+            }.get(address, 0)
+
+    assert _steps(Memory()) == 472  # type: ignore[arg-type]
 
 
 class _TransportSimulation:

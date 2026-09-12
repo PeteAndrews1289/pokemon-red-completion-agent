@@ -60,6 +60,7 @@ from pokemon_red_completion.safari import (
     _money,
     _move,
     _pulse,
+    _steps,
 )
 
 SAFARI_ZONE_SOURCES: tuple[tuple[str, MapId], ...] = (
@@ -599,7 +600,7 @@ def enter_red_safari_area(
         encounters,
         money_before,
         _money(emulator),
-        emulator.read_u8(RamAddress.SAFARI_STEPS),
+        _steps(emulator),
         _balls(emulator),
         actions.actions_executed - start_actions,
         emulator.frame_count - start_frames,
