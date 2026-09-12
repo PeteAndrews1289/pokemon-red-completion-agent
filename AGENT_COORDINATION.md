@@ -13,16 +13,26 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
+Model104 selected one of four identity-free, cartridge-derived Safari areas and the retained execution
+registered one missing species. The development-measured adapter authenticated the original sample,
+five-segment state chain, aggregate costs and79to80 collection transition, then admitted exactly one
+training-only row. Model105 has105 examples and retains all104 prior row hashes. The new row has no
+action trace and is ineligible for independent evaluation or authority promotion.
 
-Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
+Continue from the measured 80-registration terminal. First bind it to the ordinary restart path,
+then require an action-free menu with at least two physically executable item-procurement or fishing
+alternatives. Let model105 control at most one bounded attempt. Do not add named-species routes,
+retry the Safari choice, reset resources or move into Crystal.
 
-Flash completed the read-only diagnostic review. Codex accepted loss of typed unavailability, rejected the unsupported encounter location/dead-end claims, and implemented the minimal reporting fix. The separate Flash draft failed authentication before work; no agent is running. Current external quota unavailable; Claude unused.
+Flash worked through `agy` on an isolated branch and drafted the broad measured-choice path. Codex
+found and repaired weak probability replay, permissive schemas, unverified segment continuity and
+resource-cost trust before integration. Claude's CLI session was logged out, so no Claude audit is
+claimed. No external agent is currently required for the next ordinary implementation pass.
 
 ## Reviewer brief
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-10-renewable-funding.md) for limitations and adjudication.
+Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-12-model105-measured-safari-fit.md) for limitations and adjudication.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

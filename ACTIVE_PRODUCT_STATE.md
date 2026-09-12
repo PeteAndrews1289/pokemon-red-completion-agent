@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Admit or reject the exact measured Safari outcome through an explicit trust-tier adapter, preserve the80-registration terminal, then broaden item procurement and fishing without named-species routes.
+- Next decision: Preserve the80-registration terminal through the ordinary restart path, then expose item procurement and fishing as physically executable identity-free alternatives for model105.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Turn a model-selected, cartridge-derived Safari area into one retained Red acquisition outcome without a species route. |
-| Authority now | The bounded-development learner has104 fitted examples. Its latest measured Red state has80 registrations after one model-selected Safari area produced a capture; deterministic code still executes navigation, combat, capture and menus. The Safari outcome is not fitted yet. No independent full-game competence is claimed. |
+| Reusable capability | Preserve the 80-registration Red terminal and expose the next useful generic acquisition-family choice to model105. |
+| Authority now | The bounded-development learner has105 fitted examples, including one explicitly lower-trust measured Safari choice. Its latest measured Red state has80 registrations. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact checkpoint cannot authenticate transport, pay one admission, reach the sampled area and preserve one bounded generic encounter outcome. |
+| Cheapest falsifier | An action-free restore cannot expose at least two physically executable, identity-free item-procurement or fishing alternatives from the retained terminal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 104 | 12 |
+| Registered Train Example · train | 105 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-safari-live-outcome** · status **active** · evidence [qualification](docs/evidence/red-model104-safari-outcome-2026-09-12.json)
+**2026-09-12-model105-measured-safari-fit** · status **active** · evidence [model fit](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Safari now demonstrates a reusable cartridge-derived acquisition family and a genuine model destination choice producing one registration. The next work converts measured gameplay into honest learning data rather than adding more species routes. |
-| Learning output | The live attempt advanced79to80 registrations and63to64 specimens. It added zero eligible fitted examples, so model104 remains unchanged. The result is measured development evidence pending an explicit trust-tier adapter. |
-| Authority delta | Model104 made one identity-free choice among four real Safari areas and that choice controlled one paid live attempt. Deterministic code executed transport, admission, terrain-derived patrol and observed capture commands. One missing registration was retained, but no fitted example or authority promotion occurred. |
-| Transfer result | Cartridge-derived inventory, terrain patrol and identity-free area choice are reusable adapter boundaries. This single Red outcome is not an unseen seed, modified-ROM, Blue or cross-title transfer result. |
-| Blocker | The productive Safari harness retained exact state hashes and aggregate counters but not the standard per-action player journal. The result cannot be called a native traced training row until an explicit development-measured trust tier authenticates it. |
-| Decision | Implement a typed development-measured Safari outcome adapter, replay the committed selection and reconstruct its registered before/after outcome. Fit model105 only if all104 prior rows are retained and the missing trace is explicit; otherwise keep model104 and preserve the capture as support. |
-| Next session | Implement and mutation-test the measured-harness outcome adapter and retained-corpus path, then admit this exact Safari result once or reject it closed before broadening item procurement and fishing. |
-| Next falsifier | The committed Safari menu, model sample and registered before/after transition cannot be reconstructed without inventing a per-action trace or discarding a prior model104 row. |
+| Product alignment | The system now learns from one model-directed special-acquisition result without concealing weaker provenance. The next work resumes actual generic collection, which directly reduces Red's remaining44 registrations and exercises planning reusable beyond Safari. |
+| Learning output | The exact Safari result added one training-only measured choice: model104to105 with all104 prior row hashes retained. The fitted row authenticates the sampled choice, state chain, aggregate costs and79to80 registration transition while explicitly carrying no action trace, evaluation or promotion authority. |
+| Authority delta | Model104's committed four-area Safari choice and productive registered outcome now contribute one explicit development-measured training row. Model105 has105 settled examples and all104 prior rows; deterministic code still executes transport, menus, combat and capture. No authority promotion occurred. |
+| Transfer result | The typed measured-choice boundary, cartridge-derived candidate rows and registered-objective ledger are reusable architecture. This one Red training row is not an unseen seed, modified-ROM, Blue or cross-title transfer result. |
+| Blocker | The 80-registration Safari terminal is not yet an ordinary traced-player restart point, and the next physically executable generic family menu has not been demonstrated. The measured Safari row cannot be used for independent evaluation. |
+| Decision | Preserve or import the 80-registration terminal through the normal restart boundary, then expose at least two identity-free item-procurement or fishing alternatives and let model105 make the next bounded choice. Do not return to species-specific routing or broaden into Crystal. |
+| Next session | Bind the 80-registration terminal to the ordinary restart path, construct the next item-procurement/fishing menu action-free, and execute at most one bounded model105 choice after verifying physical feasibility. |
+| Next falsifier | The retained terminal cannot be authenticated as a reusable restart point, or its exact resources cannot produce two meaningful generic acquisition-family alternatives without a named-species route. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions

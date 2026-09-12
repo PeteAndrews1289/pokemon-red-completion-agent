@@ -1,17 +1,17 @@
 # Project story: from finishing Red to learning useful choices
 
 Latest systems beat: Safari became a genuine four-destination model decision rather than a named
-species route—and the choice was played. From the 79-registration checkpoint, model104 selected one
-identity-free cartridge area. Generic transport, one paid admission, terrain-derived patrol and an
-observed two-column Safari command controller then retained one missing registration. The measured
-state is now 80 registrations, 60 living species and 64 specimens. The successful patrol saw 12
-encounters, 11 flees and one capture. [Evidence](evidence/red-model104-safari-outcome-2026-09-12.json).
+species route—and the result now contributes one honest training example. From the 79-registration
+checkpoint, model104 selected one identity-free cartridge area. Generic transport, one paid
+admission, terrain-derived patrol and an observed two-column Safari command controller retained one
+missing registration: 80 registrations, 60 living species and 64 specimens. The successful patrol
+saw 12 encounters, 11 flees and one capture.
 
-The result also exposed an important data-engineering distinction. The new capability harness
-retained exact state hashes and aggregate action/frame counters, but not the standard per-action
-episode journal. The capture is factual; model104 has not yet learned from it. The next step is an
-explicit lower-trust development adapter—not retroactive wording that pretends the trace exists—then
-a model105 fit only if the committed choice and before/after outcome replay exactly.
+The capability harness retained exact states and aggregate costs but not its standard per-action
+journal. Instead of pretending otherwise, the project introduced a lower-trust measured-choice
+type. It recomputed the original model choice, verified the five-segment state chain and collection
+transition, and permanently marked the row training-only and ineligible for evaluation or authority
+promotion. All 104 prior rows remained, producing model105 with 105 examples. [Evidence](evidence/red-model105-measured-safari-fit-2026-09-12.json).
 
 Latest result: practical resupply returned the project to collection, rather than extending the
 League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an

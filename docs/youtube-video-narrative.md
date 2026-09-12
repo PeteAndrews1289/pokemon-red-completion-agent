@@ -4,18 +4,19 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: a four-way Safari choice that reaches a real capture. Show the cartridge-
-derived menu as four anonymous area cards, model104 sampling one with zero teacher labels, and that
-same choice controlling a paid visit. Then show the generic patrol's final tally: 12 encounters, 11
-flees, one missing registration retained; 79→80 registrations and 63→64 specimens. Keep the caption
-**model chose the area; deterministic mechanics controlled movement and capture**.
+Newest systems beat: a four-way Safari choice that reaches a real capture and becomes model105.
+Show the cartridge-derived menu as four anonymous area cards, model104 sampling one with zero
+teacher labels, and that same choice controlling a paid visit. Then show the generic patrol's final
+tally: 12 encounters, 11 flees, one missing registration retained; 79→80 registrations and 63→64
+specimens. Keep the caption **model chose the area; deterministic mechanics controlled movement and
+capture**.
 
-Do not call this model105 yet. The capability harness retained exact states and aggregate counters
-but not the normal per-action training journal. That makes a strong next beat: the gameplay result
-is real while the learning claim waits for a declared trust-tier adapter. Show the four preserved
+The capability harness retained exact states and aggregate counters but not the normal per-action
+training journal. Make that limitation part of the story: a strict adapter recomputed the choice,
+verified the state chain and outcome, retained all 104 old rows and admitted one explicitly
+lower-trust training row. Show **105 examples / training only / not evaluation**. The four preserved
 integration failures—step-counter width, encounter handoff, two-column command observation and
-post-throw settlement—as the engineering path to the successful continuation, not as four retries
-that were erased.
+post-throw settlement—are the engineering path to the successful continuation, not erased retries.
 
 Newest systems beat: [fossil and owned evolution](work-sessions/2026-09-12-fossil-owned-evolution.md).
 Open on the real progression: **77 → 79 registered species**, with model104 deliberately unchanged.
@@ -37,10 +38,9 @@ support boundary clearly: authenticated receipt/state chain, no retained action 
 labels. The point is not that the League was solved. The point is that the resource detour ended and
 the system returned to a genuine model decision.
 
-The current engineering question is visually simple: can the existing Safari traversal stop
-fleeing automatically, recognize a missing encountered species and spend Safari Balls to retain
-it—without a named-species route? Later planners still need to expose item evolution, fishing,
-static, trade, gift and prize opportunities without a
+The next engineering question is visually simple: can model105 resume from the retained terminal
+and choose between useful, physically executable item-procurement or fishing alternatives—without a
+named-species route? Later planners still need to expose static, trade, gift and prize opportunities without a
 handwritten route for every Pokémon? That makes the next milestone legible to a nontechnical
 viewer and connects directly to the eventual multi-game Pokédex.
 

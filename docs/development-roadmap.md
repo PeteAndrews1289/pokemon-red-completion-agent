@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-safari-live-outcome**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model105-measured-safari-fit**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden Red acquisition families: 5/6 acceptance items (83%).**
+**Broaden Red acquisition families: 6/6 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
@@ -17,9 +17,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
 - [x] Qualify exact item-evolution prerequisites ([evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json))
 - [x] Expose one generic Safari acquisition goal ([evidence](../docs/evidence/red-model104-safari-outcome-2026-09-12.json))
-- [ ] Fit a productive model-selected acquisition-family outcome
+- [x] Fit a productive model-selected acquisition-family outcome ([evidence](../docs/evidence/red-model105-measured-safari-fit-2026-09-12.json))
 
-Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **105 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -71,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model104-safari-outcome-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model105-measured-safari-fit-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -98,6 +98,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model105-measured-safari-fit
+
+The typed measured-choice adapter replayed model104's committed four-area sample, verified the five-state chain and79to80 registered transition, and admitted exactly one training-only row. Model105 has105 examples and retains all104 prior row hashes; the import observer sent zero input and advanced zero frames.
+
+**Deviation:** The source harness lacks a per-action journal, so the new row is permanently marked training-only, action-trace unavailable, independent-evaluation false and authority-promotion ineligible. Antigravity Flash drafted the broad path; Codex hardened and adjudicated it. No Crystal, full replay or new gameplay occurred.
+
+**Next:** Preserve the80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites.
 
 ### 2026-09-12-safari-live-outcome
 

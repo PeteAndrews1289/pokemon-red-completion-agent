@@ -5,24 +5,25 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest measured endpoint: Safari capture / model104
+## Latest measured endpoint: Safari capture / model105
 
 The latest standard registered-player checkpoint remains
 `red-collection-20260912-cg-owned-evolution-01-causal`, record SHA-256
 `ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677`. A later private Safari
 capability chain retains a measured terminal state SHA-256
-`9f33ca2de0f87fc469896e014b3a3774e902ede46f58237127be6570382ab4d6`, but it has not yet been
-imported as a standard traced player checkpoint.
+`9f33ca2de0f87fc469896e014b3a3774e902ede46f58237127be6570382ab4d6`. It supplied one explicit
+development-measured training row but has not yet been imported as a standard traced-player
+checkpoint.
 
-- Registered-objective model: **104 settled examples**
-- Model SHA-256: `4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2`
+- Registered-objective model: **105 settled examples**
+- Model SHA-256: `00e1ae35eb296caa3956f5f766f6a10f4410ee026c1c58bb030e1d0c4d466bae`
 - Latest measured collection: **80 registered / 60 living species / 64 specimens**
 - Required Red registrations remaining: **44**
 - Latest collection result: one model-selected Safari area produced a retained missing registration
   after a generic cartridge-derived patrol; the successful patrol saw 12 encounters, 11 flees and
   one capture
-- Latest learning result: unchanged model104; the Safari harness has not yet been admitted as a
-  typed fitted example
+- Latest learning result: model104→105 through one training-only measured-choice row; all 104 prior
+  row hashes remain present
 
 The prior three-option learned result remains Psyduck-to-Golduck. The fossil transaction needed a
 bounded retained-state recovery because the game had entered its nickname editor before writing the
@@ -56,11 +57,16 @@ Four failed continuation identities remain preserved: full step-counter reading,
 two-column command observation and post-throw settlement were each repaired without replaying the
 admission or resampling the model. These are now generic tested mechanics.
 
-The next gate is no longer Safari movement. The capability harness retained exact state hashes and
-aggregate counters but not the normal per-action episode journal. Implement a declared
-development-measured trust tier, replay the committed selection and reconstruct its registered
-before/after outcome. Fit model105 only if that adapter admits the record while retaining all 104
-prior rows. Otherwise keep model104 and treat the 80-registration state as zero-row support.
+The measured-choice gate is closed. The adapter recomputed model104's scores and sampled choice,
+verified the exact declaration/claim/result chain, checked every parent/terminal state transition,
+reconstructed the 79→80 registration and 63→64 specimen outcome with zero controller input, and
+admitted exactly one row. Model105's corpus SHA-256 is
+`28722d391b5f1aff8dfc9733a7357f006f17f554b7457d9264047ffedc8e9f0d`.
+
+The row is permanently lower trust than a native episode: no action trace, training only, no
+independent evaluation and no authority promotion. The next gate is to preserve the 80-registration
+terminal through the ordinary restart path and expose at least two physically executable,
+identity-free item-procurement or fishing alternatives for model105.
 
 The ordinary regional candidate layer and already-owned level evolutions were exhausted at the
 standard 79-registration checkpoint. After the Safari result, 44 Red registrations remain. Rebuild
@@ -83,17 +89,16 @@ The exact action-free inventory found nine owned missing stone-evolution precurs
 stones, ₽558 against the ₽2,100 shop price and no party member with Pay Day. Those candidates are
 preserved for later resource planning; item evolution is not the cheapest executable next gameplay.
 
-The stone candidates remain deferred. Admit the Safari outcome only through an explicit trust-tier
-contract, then broaden item procurement and fishing through the same reusable candidate vocabulary.
-Do not add named Safari species routes.
+The stone candidates remain deferred. Broaden item procurement and fishing through the same
+reusable candidate vocabulary. Do not add named Safari or fishing species routes.
 
 ## Authority and claim boundary
 
 The learned model chooses high-level goals and destinations in bounded development episodes.
 Deterministic, tested skills still execute navigation, menus, combat, capture and evolution. The
-earlier successful three-option Golduck evolution added one authentic selected-arm outcome. The
-later Omanyte and Omastar results added none; they are not an independent evaluation or a promotion
-to low-level control.
+latest Safari row teaches the result of one selected area, but its missing action trace makes it
+ineligible for evaluation or promotion. The earlier successful three-option Golduck evolution is a
+native selected-arm outcome; Omanyte and Omastar were forced and added none.
 
 Fresh-game autonomy, arbitrary-seed reliability, full Red registration, unfamiliar-ROM competence,
 learned battle control and transfer to Blue or Crystal remain unproved. Crystal stays deferred.
@@ -107,6 +112,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Latest report](docs/work-sessions/2026-09-12-safari-live-outcome.md) · [Latest evidence](docs/evidence/red-model104-safari-outcome-2026-09-12.json). Recommended model:
+[Latest report](docs/work-sessions/2026-09-12-model105-measured-safari-fit.md) · [Latest evidence](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json). Recommended model:
 **Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.

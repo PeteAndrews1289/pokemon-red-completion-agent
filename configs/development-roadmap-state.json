@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-safari-live-outcome",
+  "as_of_session": "2026-09-12-model105-measured-safari-fit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model104-safari-outcome-2026-09-12.json"
+      "evidence": "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -73,8 +73,8 @@
       {
         "id": "resume-model-directed-collection",
         "label": "Fit a productive model-selected acquisition-family outcome",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json"
       }
     ]
   },
@@ -1050,6 +1050,12 @@
       "result": "Model104's four-way Safari area choice controlled one paid attempt. Generic transport, admission, terrain patrol and observed commands retained one missing registration:79to80 registered,59to60 living and63to64 specimens. The final patrol saw12 encounters,11 flees and1 capture. Model104 remains unchanged.",
       "deviation": "Four consumed integration failures were resumed from exact retained states rather than retried. The capability harness has aggregate counters and exact state hashes but lacks the normal per-action player journal, so the useful outcome is measured evidence rather than a fitted native row.",
       "next": "Implement a development-measured outcome trust tier and retained-corpus adapter. Admit this exact row once only if selection replay, registered transition, aggregate costs and all104 prior rows verify; otherwise preserve it as zero-row support. Then broaden item procurement and fishing."
+    },
+    {
+      "session": "2026-09-12-model105-measured-safari-fit",
+      "result": "The typed measured-choice adapter replayed model104's committed four-area sample, verified the five-state chain and79to80 registered transition, and admitted exactly one training-only row. Model105 has105 examples and retains all104 prior row hashes; the import observer sent zero input and advanced zero frames.",
+      "deviation": "The source harness lacks a per-action journal, so the new row is permanently marked training-only, action-trace unavailable, independent-evaluation false and authority-promotion ineligible. Antigravity Flash drafted the broad path; Codex hardened and adjudicated it. No Crystal, full replay or new gameplay occurred.",
+      "next": "Preserve the80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites."
     }
   ],
   "closed_milestones": [
