@@ -867,6 +867,31 @@ class LiveSafariPatrol:
         self._entered = True
         self._at_first = at == self._plan.first_at
 
+    def resume_from_endpoint(self) -> None:
+        """Restore patrol phase from a retained controllable overworld endpoint."""
+
+        if self._entered:
+            raise RedAreaExecutionError(
+                "Safari patrol was already entered before endpoint recovery",
+                reason_code="safari_patrol_recovery_repeated",
+            )
+        raw = self._reader.read()
+        at = (raw.player_y, raw.player_x)
+        if (
+            raw.map_id != self._plan.map_id
+            or raw.battle_state
+            or at not in {self._plan.first_at, self._plan.second_at}
+            or not self._reader.read_input_readiness().ready
+            or _balls(self._emulator) <= 0
+            or not raw.party_species_ids
+        ):
+            raise RedAreaExecutionError(
+                "Safari patrol recovery lacks a retained controllable endpoint",
+                reason_code="safari_patrol_recovery_boundary_invalid",
+            )
+        self._entered = True
+        self._at_first = at == self._plan.first_at
+
     def seek_step(self) -> None:
         if not self._entered:
             raise RedAreaExecutionError(
@@ -1016,7 +1041,8 @@ class LiveSafariAreaExecutor:
         throws = 0
         while throws < self._maximum_throws and self.encountered_species_ref() is not None:
             before_balls = self._balls()
-            self._select_ball()
+            if not self._select_ball():
+                break
             spent = self._settle_throw(before_balls)
             if spent:
                 throws += 1
@@ -1081,12 +1107,14 @@ class LiveSafariAreaExecutor:
     def safari_balls_available(self) -> bool:
         return self._balls() > 0
 
-    def _select_ball(self) -> None:
+    def _select_ball(self) -> bool:
         # Red stores Safari's row in wCurrentMenuItem and its column in
         # wTopMenuItemX.  Wait for that live signature instead of sending a
         # blind B/up/left sequence while encounter text still owns input.
         for _ in range(self._settle_pulses):
             raw = self._reader.read()
+            if not raw.battle_state:
+                return False
             menu = self._reader.read_battle_menu_state(raw)
             if menu.phase is not BattleMenuPhase.MAIN:
                 self._pulse(MacroActionKind.CANCEL)
@@ -1099,7 +1127,7 @@ class LiveSafariAreaExecutor:
                 )
             if selected == 0:
                 self._pulse(MacroActionKind.CONFIRM, frames=360)
-                return
+                return True
             direction = "left" if selected >= 2 else "up"
             expected = selected - 2 if selected >= 2 else 0
             self._pulse(MacroActionKind.MOVE, direction)
@@ -1131,7 +1159,11 @@ class LiveSafariAreaExecutor:
             raw = self._reader.read()
             if not raw.battle_state:
                 return spent
-            if spent and 0 <= self._emulator.read_u8(RamAddress.CURRENT_MENU_ITEM) <= 3:
+            if (
+                spent
+                and self._reader.read_battle_menu_state(raw).phase
+                is BattleMenuPhase.MAIN
+            ):
                 return True
             self._pulse(MacroActionKind.CANCEL)
         if not spent:

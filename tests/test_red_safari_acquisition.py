@@ -603,14 +603,48 @@ def test_live_safari_patrol_recovery_rejects_nonendpoint_battle() -> None:
     assert error.value.reason_code == "safari_patrol_recovery_boundary_invalid"
 
 
+def test_live_safari_patrol_resumes_from_retained_overworld_endpoint() -> None:
+    simulation = _PatrolSimulation()
+    simulation.raw = replace(simulation.raw, player_x=1, player_y=1, battle_state=0)
+    plan = RedSafariPatrolPlan(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        (2, 0),
+        ("right",),
+        (2, 1),
+        (1, 1),
+        2,
+        "up",
+        "down",
+    )
+    patrol = LiveSafariPatrol(
+        simulation,
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        plan,
+    )
+
+    patrol.resume_from_endpoint()
+    patrol.seek_step()
+
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (2, 1)
+
+
 class _SafariSimulation:
-    def __init__(self, *, capture_on_throw: bool, menu_ready: bool = True) -> None:
+    def __init__(
+        self,
+        *,
+        capture_on_throw: bool,
+        menu_ready: bool = True,
+        flee_on_throw: bool = False,
+    ) -> None:
         self.frame_count = 0
         self.pressed_buttons: frozenset[str] = frozenset()
         self.balls = 3
         self.cursor = 0
         self.capture_on_throw = capture_on_throw
         self.menu_ready = menu_ready
+        self.flee_on_throw = flee_on_throw
         self.captured = False
         self.raw = RawGameState(
             game_started=True,
@@ -659,6 +693,8 @@ class _SafariSimulation:
                 if self.capture_on_throw:
                     self.captured = True
                     self.collection = _collection(9, 30)
+                    self.raw = replace(self.raw, battle_state=0, enemy_species_id=None)
+                elif self.flee_on_throw:
                     self.raw = replace(self.raw, battle_state=0, enemy_species_id=None)
             elif self.cursor == 3:
                 self.raw = replace(self.raw, battle_state=0, enemy_species_id=None)
@@ -723,6 +759,14 @@ def test_live_safari_failed_throw_flees_and_returns_false() -> None:
     assert simulation.balls == 2
     assert simulation.raw.battle_state == 0
     assert simulation.collection == _collection(9)
+
+
+def test_live_safari_natural_flee_after_throw_is_a_settled_failed_capture() -> None:
+    simulation = _SafariSimulation(capture_on_throw=False, flee_on_throw=True)
+
+    assert not _live(simulation, maximum_throws=8).capture_encounter(red_species_ref(30))
+    assert simulation.balls == 2
+    assert simulation.raw.battle_state == 0
 
 
 def test_live_safari_refuses_wrong_area_and_box_switch() -> None:
