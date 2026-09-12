@@ -11,6 +11,7 @@ from pokemon_red_completion.observation import EventFlag
 from pokemon_red_completion.red_league_funding import (
     RedLeagueBattleQuote,
     RedLeagueFundingQualification,
+    RedLeagueSupplyPlan,
 )
 
 
@@ -39,6 +40,11 @@ def _qualification() -> RedLeagueFundingQualification:
         exit_plan=SimpleNamespace(steps=("out",)),
         fly_town=9,
         fly_landing=(6, 9),
+        supply=RedLeagueSupplyPlan(
+            route=SimpleNamespace(steps=("shop",)),
+            sales=(),
+            full_restores_purchased=0,
+        ),
         entry_plan=SimpleNamespace(steps=("in", "up")),
         battles=tuple(
             RedLeagueBattleQuote(objective, 201, index, payout, 50 + index)
@@ -53,6 +59,8 @@ def _qualification() -> RedLeagueFundingQualification:
                 start=1,
             )
         ),
+        supported_attack_pp=50,
+        opponent_attack_demands=26,
     )
 
 
@@ -68,16 +76,22 @@ def _runtime():
     ):
         flags[int(flag) // 8] |= 1 << (int(flag) % 8)
     raw = SimpleNamespace(
+        map_id=89,
         player_money=500,
         bag_items=((1, 2),),
         badge_bits=255,
         party_species_ids=(28, 64),
+        party_hp=(200, 180),
+        party_pp=((10, 10, 10, 10), (10, 10, 10, 10)),
+        party_status=(0, 0),
         event_flags=bytes(flags),
         player_y=3,
         player_x=3,
+        battle_state=0,
     )
     observed = SimpleNamespace(
         raw=raw,
+        input_ready=True,
         game_state=SimpleNamespace(facts=frozenset()),
         collection_observation=SimpleNamespace(),
     )
@@ -98,6 +112,16 @@ def _actions(runtime):
     return CountingExecutor(FrameSafeExecutor(runtime.emulator))
 
 
+def _route_success(observed, qualification):
+    def route(plan, *args, **kwargs):
+        if plan is qualification.supply.route:
+            observed.raw.map_id = 174
+            observed.raw.player_y, observed.raw.player_x = (5, 2)
+        return SimpleNamespace(passed=True)
+
+    return route
+
+
 @pytest.fixture(autouse=True)
 def _scripted_arrival(monkeypatch):
     monkeypatch.setattr(
@@ -115,6 +139,9 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
 
     def route(plan, *args, **kwargs):
         routes.append((plan, kwargs.get("limits")))
+        if plan is qualification.supply.route:
+            observed.raw.map_id = 174
+            observed.raw.player_y, observed.raw.player_x = (5, 2)
         return SimpleNamespace(passed=True)
 
     monkeypatch.setattr(execution, "execute_route", route)
@@ -125,6 +152,7 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
             pass
 
         def execute(self, action):
+            observed.raw.map_id = 9
             observed.raw.player_y, observed.raw.player_x = qualification.fly_landing
             return Gen1FlyReceipt(5, 9, 0, 0, (9,))
 
@@ -136,7 +164,7 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
         lambda: SimpleNamespace(inspect=lambda state: SimpleNamespace(complete=True)),
     )
 
-    def run_battle(runtime, actions, world, objective_id, expected_money):
+    def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
         before = runtime.adapter.observe().raw.player_money
         runtime.adapter.observe().raw.player_money += expected_money
         if objective_id == "defeat_champion":
@@ -156,8 +184,9 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
         quote.objective_id for quote in qualification.battles
     ]
     assert routes[0] == (qualification.exit_plan, None)
-    assert routes[1][0] is qualification.entry_plan
-    assert routes[1][1].transition_settle_frames >= 6 * 24 + 120
+    assert routes[1] == (qualification.supply.route, None)
+    assert routes[2][0] is qualification.entry_plan
+    assert routes[2][1].transition_settle_frames >= 6 * 24 + 120
 
 
 def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypatch):
@@ -167,9 +196,7 @@ def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypa
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
     monkeypatch.setattr(
-        execution,
-        "execute_route",
-        lambda *args, **kwargs: SimpleNamespace(passed=True),
+        execution, "execute_route", _route_success(observed, qualification),
     )
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
 
@@ -178,6 +205,7 @@ def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypa
             pass
 
         def execute(self, action):
+            observed.raw.map_id = 9
             observed.raw.player_y, observed.raw.player_x = qualification.fly_landing
             return Gen1FlyReceipt(5, 9, 0, 0, (9,))
 
@@ -186,7 +214,7 @@ def test_execution_attaches_partial_progress_after_irreversible_battles(monkeypa
 
     calls = 0
 
-    def run_battle(runtime, actions, world, objective_id, expected_money):
+    def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
         nonlocal calls
         calls += 1
         if calls == 3:
@@ -221,8 +249,11 @@ def test_execution_requalifies_before_any_input(monkeypatch):
         qualification.exit_plan,
         8,
         qualification.fly_landing,
+        qualification.supply,
         qualification.entry_plan,
         qualification.battles,
+        qualification.supported_attack_pp,
+        qualification.opponent_attack_demands,
     )
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: changed)
     with pytest.raises(execution.RedLeagueFundingExecutionError, match="changed before input"):
@@ -267,7 +298,7 @@ def test_execution_allows_historical_facts_when_current_cycle_requalifies(monkey
     observed.game_state.facts = frozenset({"league:lorelei_defeated"})
     actions = _actions(runtime)
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
-    monkeypatch.setattr(execution, "execute_route", lambda *a, **k: SimpleNamespace(passed=True))
+    monkeypatch.setattr(execution, "execute_route", _route_success(observed, qualification))
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
     monkeypatch.setattr(execution, "dependency_specimen_ledger", lambda *args: ("same",))
     monkeypatch.setattr(
@@ -286,7 +317,7 @@ def test_execution_allows_historical_facts_when_current_cycle_requalifies(monkey
 
     monkeypatch.setattr(execution, "Gen1FieldMovePort", Port)
 
-    def run_battle(runtime, actions, world, objective_id, expected_money):
+    def run_battle(runtime, actions, world, objective_id, expected_money, *policy):
         before = runtime.adapter.observe().raw.player_money
         runtime.adapter.observe().raw.player_money += expected_money
         return execution.RedLeagueFundingBattleResult(
@@ -318,15 +349,22 @@ def test_run_battle_always_uses_current_cycle_rematch_mode(monkeypatch, objectiv
 
         def execute(self):
             runtime.adapter.observe().raw.player_money += 100
-            return SimpleNamespace(actions_executed=0, frames_executed=0)
+            return SimpleNamespace(
+                actions_executed=0,
+                frames_executed=0,
+                evidence={"bag_items_spent": 0},
+            )
 
     if objective == "defeat_champion":
         monkeypatch.setattr(execution, "RedCartridgeChampionSkill", Skill)
     else:
         monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
-    execution._run_battle(runtime, actions, object(), objective, 100)
+    execution._run_battle(
+        runtime, actions, object(), objective, 100, "damage-bounded-zero-item", 0,
+    )
     expected = {
         "recovery_controller": "damage-bounded-zero-item",
+        "maximum_full_restores": 0,
         "rematch": True,
     }
     if objective != "defeat_champion":
@@ -369,7 +407,7 @@ def test_progress_survives_a_reader_failure_while_reporting_the_original_fault(m
     actions = _actions(runtime)
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
-    monkeypatch.setattr(execution, "execute_route", lambda *a, **k: SimpleNamespace(passed=True))
+    monkeypatch.setattr(execution, "execute_route", _route_success(observed, qualification))
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
     monkeypatch.setattr(execution, "dependency_specimen_ledger", lambda *args: ("same",))
 
@@ -403,7 +441,7 @@ def test_terminal_observation_failure_retains_all_five_completed_battles(monkeyp
     actions = _actions(runtime)
     world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
     monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
-    monkeypatch.setattr(execution, "execute_route", lambda *a, **k: SimpleNamespace(passed=True))
+    monkeypatch.setattr(execution, "execute_route", _route_success(observed, qualification))
     monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
     monkeypatch.setattr(execution, "dependency_specimen_ledger", lambda *args: ("same",))
 
@@ -418,7 +456,7 @@ def test_terminal_observation_failure_retains_all_five_completed_battles(monkeyp
     monkeypatch.setattr(execution, "Gen1FieldMovePort", Port)
     calls = 0
 
-    def battle(runtime, actions, world, objective_id, expected_money):
+    def battle(runtime, actions, world, objective_id, expected_money, *policy):
         nonlocal calls
         calls += 1
         before = observed.raw.player_money

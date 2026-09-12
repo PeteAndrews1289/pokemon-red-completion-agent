@@ -18,7 +18,9 @@ from .gen1_field_moves import Gen1FieldMovePort, Gen1FlyReceipt
 from .gen1_route_runtime import Gen1TraversalObserver
 from .gen1_scripted_arrival import trainer_room_arrival
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
-from .observation import RED_FLY_TOWN_NAMES, EventFlag, MapId, event_flag_is_set
+from .hideout import DEFAULT_HIDEOUT_TIMING
+from .lavender import DEFAULT_LAVENDER_TIMING, _buy_mart_item, _close_menus
+from .observation import RED_FLY_TOWN_NAMES, EventFlag, ItemId, MapId, event_flag_is_set
 from .red_champion_story import RedCartridgeChampionSkill
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_league_funding import (
@@ -29,6 +31,7 @@ from .red_resource_goal_router import _ROUTE_LIMITS
 from .red_trainer_story import RedCartridgeLoreleiSkill
 from .referee import CompletionReferee
 from .route_executor import execute_route
+from .victory_road import _indigo_buy_entry_action, _pulse, _select_cursor, _sell_bag_stack
 
 if TYPE_CHECKING:
     from .red_goal_context import RedGoalContextRuntime
@@ -81,6 +84,7 @@ class RedLeagueFundingBattleResult:
     expected_money: int
     actions: int
     frames: int
+    full_restores_spent: int = 0
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -90,6 +94,7 @@ class RedLeagueFundingBattleResult:
             "expected_money": self.expected_money,
             "actions": self.actions,
             "frames": self.frames,
+            "full_restores_spent": self.full_restores_spent,
         }
 
 
@@ -108,7 +113,7 @@ class RedLeagueFundingProgress:
             "phase": self.phase,
             "starting_money": self.starting_money,
             "observed_money": self.observed_money,
-            "observed_gross_income": self.observed_money - self.starting_money,
+            "observed_cash_delta": self.observed_money - self.starting_money,
             "actions_attempted": self.actions_attempted,
             "frames": self.frames,
             "completed_battles": [battle.public_dict() for battle in self.completed_battles],
@@ -141,19 +146,32 @@ class RedLeagueFundingExecution:
     exit_steps: int
     fly_destination: int
     battles: tuple[RedLeagueFundingBattleResult, ...]
+    sale_proceeds: int
+    purchase_cost: int
+    full_restores_purchased: int
+    full_restores_spent: int
 
     @property
     def observed_gross_income(self) -> int:
+        return sum(battle.money_after - battle.money_before for battle in self.battles)
+
+    @property
+    def observed_net_income(self) -> int:
         return self.ending_money - self.starting_money
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.repeatable-league-funding-execution.v1",
+            "schema": "pokemon.red.repeatable-league-funding-execution.v2",
             "status": "hall_of_fame_verified_postgame_reset_pending",
             "starting_money": self.starting_money,
             "ending_money": self.ending_money,
             "expected_gross_income": self.expected_gross_income,
             "observed_gross_income": self.observed_gross_income,
+            "observed_net_income": self.observed_net_income,
+            "sale_proceeds": self.sale_proceeds,
+            "purchase_cost": self.purchase_cost,
+            "full_restores_purchased": self.full_restores_purchased,
+            "full_restores_spent": self.full_restores_spent,
             "actions": self.actions,
             "frames": self.frames,
             "exit_steps": self.exit_steps,
@@ -214,17 +232,23 @@ def _run_battle(
     world: StrategicScenarioRouteWorld,
     objective_id: str,
     expected_money: int,
+    recovery_controller: str,
+    maximum_full_restores: int,
 ) -> RedLeagueFundingBattleResult:
     before_money = _money(runtime)
     before_actions = actions.actions_executed
     before_frames = runtime.emulator.frame_count
+    before_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
+        int(ItemId.FULL_RESTORE), 0,
+    )
     skill: RedCartridgeChampionSkill | RedCartridgeLoreleiSkill
     if objective_id == "defeat_champion":
         skill = RedCartridgeChampionSkill(
             runtime,
             actions,
             world,
-            recovery_controller="damage-bounded-zero-item",
+            recovery_controller=recovery_controller,
+            maximum_full_restores=maximum_full_restores,
             rematch=True,
         )
     else:
@@ -233,7 +257,8 @@ def _run_battle(
             actions,
             world,
             objective_id=objective_id,
-            recovery_controller="damage-bounded-zero-item",
+            recovery_controller=recovery_controller,
+            maximum_full_restores=maximum_full_restores,
             rematch=True,
         )
     availability = skill.availability(runtime.adapter.observe().game_state)
@@ -243,10 +268,16 @@ def _run_battle(
         )
     report = skill.execute()
     after_money = _money(runtime)
+    after_restores = dict(runtime.adapter.observe().raw.bag_items or ()).get(
+        int(ItemId.FULL_RESTORE), 0,
+    )
+    spent = before_restores - after_restores
     if (
         after_money - before_money != expected_money
         or report.actions_executed != actions.actions_executed - before_actions
         or report.frames_executed != runtime.emulator.frame_count - before_frames
+        or not 0 <= spent <= maximum_full_restores
+        or report.evidence.get("bag_items_spent") != spent
     ):
         raise RedLeagueFundingExecutionError(
             f"{objective_id} payout or execution accounting differs"
@@ -258,7 +289,63 @@ def _run_battle(
         expected_money,
         report.actions_executed,
         report.frames_executed,
+        spent,
     )
+
+
+def _bag_after_supply(
+    starting: tuple[tuple[int, int], ...],
+    qualification: RedLeagueFundingQualification,
+) -> tuple[tuple[int, int], ...]:
+    quantities = dict(starting)
+    order = [item for item, _ in starting]
+    for sale in qualification.supply.sales:
+        quantities[int(sale.item)] -= sale.quantity
+    restore = int(ItemId.FULL_RESTORE)
+    if qualification.supply.full_restores_purchased:
+        quantities[restore] = (
+            quantities.get(restore, 0) + qualification.supply.full_restores_purchased
+        )
+        if restore not in order:
+            order.append(restore)
+    return tuple((item, quantities[item]) for item in order if quantities[item] > 0)
+
+
+def _execute_supply(
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    qualification: RedLeagueFundingQualification,
+) -> None:
+    """Execute only the frozen Indigo sale and Full Restore purchase."""
+
+    sales = qualification.supply.sales
+    quantity = qualification.supply.full_restores_purchased
+    if not sales and not quantity:
+        return
+    for index, sale in enumerate(sales):
+        _sell_bag_stack(
+            actions,
+            runtime.emulator,
+            sale.item,
+            sale.quantity,
+        )
+        if index + 1 < len(sales):
+            _close_menus(actions, runtime.reader, DEFAULT_LAVENDER_TIMING)
+    _pulse(actions, _indigo_buy_entry_action(1 if sales else 0))
+    _select_cursor(actions, runtime.emulator, 0, DEFAULT_HIDEOUT_TIMING)
+    _pulse(actions, MacroActionKind.CONFIRM)
+    if quantity:
+        before = dict(runtime.reader.read().bag_items or ()).get(int(ItemId.FULL_RESTORE), 0)
+        _buy_mart_item(
+            actions,
+            runtime.emulator,
+            DEFAULT_LAVENDER_TIMING,
+            absolute_index=2,
+            item=ItemId.FULL_RESTORE,
+            quantity=quantity,
+            target_bag_quantity=before + quantity,
+        )
+    _close_menus(actions, runtime.reader, DEFAULT_LAVENDER_TIMING)
 
 
 def execute_red_league_funding(
@@ -301,8 +388,14 @@ def execute_red_league_funding(
         raise RedLeagueFundingExecutionError("League funding starts with pressed controls")
     starting_money = _money(runtime)
     starting_bag = before.raw.bag_items
+    if starting_bag is None:
+        raise RedLeagueFundingExecutionError("League funding lacks its bound bag")
     starting_badges = before.raw.badge_bits
     starting_party = before.raw.party_species_ids
+    starting_party_hp = before.raw.party_hp
+    starting_party_pp = before.raw.party_pp
+    starting_party_status = before.raw.party_status
+    starting_events = before.raw.event_flags
     starting_ledger = dependency_specimen_ledger(before.collection_observation)
     starting_frames = runtime.emulator.frame_count
     if before.raw.event_flags is None:
@@ -384,6 +477,55 @@ def execute_red_league_funding(
     except Exception as error:
         fail("fly", "League funding Fly raised", error)
     try:
+        supply_route = execute_route(
+            qualification.supply.route,
+            bounded_actions,
+            Gen1TraversalObserver(runtime.reader),
+            replanner=world.replanner(),
+        )
+        if not supply_route.passed:
+            fail("supply_route", "League funding supply route failed")
+        supply_boundary = runtime.adapter.observe()
+        if (
+            supply_boundary.raw.map_id != MapId.INDIGO_PLATEAU_LOBBY
+            or (supply_boundary.raw.player_y, supply_boundary.raw.player_x) != (5, 2)
+            or supply_boundary.raw.battle_state
+            or not supply_boundary.input_ready
+            or supply_boundary.raw.player_money != starting_money
+            or supply_boundary.raw.bag_items != starting_bag
+            or supply_boundary.raw.party_species_ids != starting_party
+            or supply_boundary.raw.party_hp != starting_party_hp
+            or supply_boundary.raw.party_pp != starting_party_pp
+            or supply_boundary.raw.party_status != starting_party_status
+            or supply_boundary.raw.badge_bits != starting_badges
+            or supply_boundary.raw.event_flags != starting_events
+            or dependency_specimen_ledger(supply_boundary.collection_observation)
+            != starting_ledger
+        ):
+            fail("supply_route", "League funding supply route changed its bound state")
+        _execute_supply(runtime, bounded_actions, qualification)
+        supplied = runtime.adapter.observe()
+        if (
+            supplied.raw.bag_items != _bag_after_supply(starting_bag, qualification)
+            or supplied.raw.player_money
+            != starting_money + qualification.supply.sale_proceeds
+            - qualification.supply.purchase_cost
+            or supplied.raw.party_species_ids != starting_party
+            or supplied.raw.party_hp != starting_party_hp
+            or supplied.raw.party_pp != starting_party_pp
+            or supplied.raw.party_status != starting_party_status
+            or supplied.raw.badge_bits != starting_badges
+            or supplied.raw.event_flags != starting_events
+            or dependency_specimen_ledger(supplied.collection_observation) != starting_ledger
+        ):
+            fail("supply", "League funding supply accounting changed")
+    except RedLeagueFundingExecutionError as error:
+        if error.progress is not None:
+            raise
+        fail("supply", error.reason, error)
+    except Exception as error:
+        fail("supply", "League funding supply raised", error)
+    try:
         entry = execute_route(
             qualification.entry_plan,
             bounded_actions,
@@ -409,6 +551,8 @@ def execute_red_league_funding(
                     world,
                     quote.objective_id,
                     quote.expected_money,
+                    quote.recovery_controller,
+                    quote.maximum_full_restores,
                 )
             )
         except Exception as error:
@@ -435,16 +579,29 @@ def execute_red_league_funding(
             fail("terminal", "League funding terminal lacks current-cycle cartridge events")
         if runtime.emulator.pressed_buttons:
             fail("terminal", "League funding terminal retained pressed controls")
-        if after.raw.bag_items != starting_bag:
-            fail("terminal", "League funding terminal changed the protected bag")
+        restore_spent = sum(result.full_restores_spent for result in results)
+        if restore_spent > sum(
+            quote.maximum_full_restores for quote in qualification.battles
+        ):
+            fail("terminal", "League funding exceeded its campaign recovery budget")
+        supplied_bag = _bag_after_supply(starting_bag, qualification)
+        expected_bag = tuple(
+            (item, remaining)
+            for item, quantity in supplied_bag
+            if (remaining := quantity - (
+                restore_spent if item == int(ItemId.FULL_RESTORE) else 0
+            )) > 0
+        )
+        if after.raw.bag_items != expected_bag:
+            fail("terminal", "League funding terminal bag differs from supplied use")
         if after.raw.badge_bits != starting_badges:
             fail("terminal", "League funding terminal changed badges")
         if Counter(after.raw.party_species_ids or ()) != Counter(starting_party or ()):
             fail("terminal", "League funding terminal changed party membership")
         if dependency_specimen_ledger(after.collection_observation) != starting_ledger:
             fail("terminal", "League funding terminal changed the specimen ledger")
-        if ending_money != starting_money + qualification.expected_gross_income:
-            fail("terminal", "League funding terminal money differs from quoted gross")
+        if ending_money != starting_money + qualification.expected_net_income:
+            fail("terminal", "League funding terminal money differs from quoted net")
         if frames > maximum_frames:
             fail("terminal", "League funding terminal exceeded its frame bound")
         return RedLeagueFundingExecution(
@@ -456,6 +613,10 @@ def execute_red_league_funding(
             0 if qualification.exit_plan is None else len(qualification.exit_plan.steps),
             qualification.fly_town,
             tuple(results),
+            qualification.supply.sale_proceeds,
+            qualification.supply.purchase_cost,
+            qualification.supply.full_restores_purchased,
+            restore_spent,
         )
     except RedLeagueFundingExecutionError as error:
         if error.progress is not None:
