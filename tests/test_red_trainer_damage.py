@@ -214,10 +214,24 @@ def test_leer_is_not_damage_immunity_and_live_lowered_defense_changes_next_turn(
     assert incoming_damage_bounds(observation((51, 0, 0, 0))) == (35, 18)
 
 
-@pytest.mark.parametrize('move', [28, 43, 45, 51, 94])
-def test_confusion_and_stat_drop_compound_turn_remains_unqualified(move):
-    with pytest.raises(TrainerDamageError, match='confusion with incoming stat reduction'):
+@pytest.mark.parametrize('move', [28, 39, 43, 51, 61, 81, 94, 103, 108, 132, 134, 145, 148])
+def test_confusion_and_non_attack_stat_drop_compound_turn_remains_unqualified(move):
+    with pytest.raises(TrainerDamageError, match='incoming non-attack stat reduction'):
         incoming_damage_bounds(confused_observation((move, 63, 0, 0), player_confused=True))
+
+
+def test_confusion_and_attack_drop_use_cartridge_attack_cap():
+    # Aurora Beam direct critical maximum is84 in this fixture. A stat drop can
+    # recalculate a repeatedly burn-halved Attack, so self-hit uses the global
+    # stat cap: floor(22*40*(999//4)/(100//4)/50)+2 =177.
+    aurora = confused_observation((62, 0, 0, 0), player_confused=True)
+    assert incoming_damage_bounds(aurora) == (261, 84)
+    # Pure Growl contributes no direct damage but can precede the same self-hit.
+    assert incoming_damage_bounds(
+        confused_observation((45, 0, 0, 0), player_confused=True)
+    ) == (177, 0)
+    # Preserve a larger already-observed value rather than silently normalizing it.
+    assert incoming_damage_bounds(replace(aurora, active_self_hit_stats=(1023, 100))) == (265, 84)
 
 
 class Memory:

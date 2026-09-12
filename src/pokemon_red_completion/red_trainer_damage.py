@@ -92,6 +92,7 @@ def incoming_damage_bounds(
         raise TrainerDamageError("incoming damage move inventory is incomplete")
     result = [0] * raw.party_count
     confusion_possible = observation.player_confused
+    confusion_attack_reset_possible = False
     for move_id in observation.moves:
         if not move_id:
             continue
@@ -99,9 +100,18 @@ def incoming_damage_bounds(
         move = RED_BATTLE_CATALOG.resolve_move(ref)
         fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=raw.enemy_level)
         if "debuff" in move.effect_flags and observation.player_confused:
-            # A faster stat drop (including a damaging side effect) can change
-            # self-hit damage and reapply badge boosts within this same turn.
-            raise TrainerDamageError("confusion with incoming stat reduction is not qualified")
+            # A faster stat drop can precede the player's confusion check and
+            # reapplies Gen-I badge boosts. Defense-down can shrink the self-hit
+            # divisor; other non-Attack drops can raise live Attack without
+            # recalculating it, so those cases still abstain. Attack-down is
+            # narrower: it cannot lower Defense, and any recalculated/boosted
+            # Attack is capped at 999. Use that global cap below because burn
+            # reapplication can make the pre-turn live Attack non-monotonic.
+            if RED_BATTLE_CATALOG.stat_reduction_target(ref) != "attack":
+                raise TrainerDamageError(
+                    "confusion with incoming non-attack stat reduction is not qualified"
+                )
+            confusion_attack_reset_possible = True
         if fixed is not None or (
             move.power == 0 and move.category == "status"
             and (move.effect_flags in (
@@ -177,6 +187,8 @@ def incoming_damage_bounds(
         ):
             raise TrainerDamageError("confusion requires observed active stats and level")
         attack, defense = observation.active_self_hit_stats
+        if confusion_attack_reset_possible:
+            attack = max(attack, 999)
         result[active] += ordinary_damage_upper(
             level=raw.party_levels[active],
             power=40,

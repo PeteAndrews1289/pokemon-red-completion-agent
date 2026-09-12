@@ -80,6 +80,21 @@ def test_known_effect_and_priority_flags_match_red_battle_core() -> None:
     assert RED_BATTLE_CATALOG.resolve_move(_move(136)).effect_flags == frozenset({"recoil"})
 
 
+@pytest.mark.parametrize(
+    "target,moves",
+    [
+        ("attack", (45, 62)),
+        ("defense", (39, 43, 51, 103)),
+        ("speed", (61, 81, 132, 145)),
+        ("special", (94,)),
+        ("accuracy", (28, 108, 134, 148)),
+    ],
+)
+def test_stat_reduction_target_is_derived_from_pinned_effect(target, moves):
+    assert all(RED_BATTLE_CATALOG.stat_reduction_target(_move(move)) == target for move in moves)
+    assert RED_BATTLE_CATALOG.stat_reduction_target(_move(33)) is None
+
+
 def test_species_types_match_internal_red_species_references() -> None:
     assert RED_BATTLE_CATALOG.resolve_species(_species(177)).types == ("water",)
     assert RED_BATTLE_CATALOG.resolve_species(_species(180)).types == ("fire", "flying")
