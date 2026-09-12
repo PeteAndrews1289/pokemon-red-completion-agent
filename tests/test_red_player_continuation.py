@@ -580,7 +580,8 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
                         trainer_funding=False, trainer_pending_recovery=False,
                         regional_trainer_funding=False,
                         observed_trainer_funding=False,
-                        remaining_acquisition_demand=False, level_evolution_acquisitions=False):
+                        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+                        fossil_acquisitions=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
         assert trainer_funding is False
@@ -589,6 +590,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
         assert observed_trainer_funding is False
         assert remaining_acquisition_demand is False  # Never use successor mode for old restore.
         assert level_evolution_acquisitions is False
+        assert fossil_acquisitions is False
         return observe
 
     monkeypatch.setattr(runner, "_player_observer", player_observer)
