@@ -19,12 +19,9 @@ from typing import Protocol
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.executor import CountingExecutor
-from pokemon_red_completion.fly_resource import (
-    EmulatorState,
-    FuchsiaFlyArrivalReport,
-    relocate_cinnabar_to_fuchsia_by_fly,
-)
+from pokemon_red_completion.fly_resource import EmulatorState
 from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.living_dex_goal_policy import DEFAULT_LIVING_DEX_GOAL_UTILITY
 from pokemon_red_completion.living_dex_option_value import (
@@ -192,9 +189,15 @@ class RedSafariAdmissionReport:
 
 @dataclass(frozen=True, slots=True)
 class RedSafariTransportReport:
-    """Verified story-neutral transport from Cinnabar to the Safari origin."""
+    """Verified story-neutral transport from any qualified field origin."""
 
-    fly: FuchsiaFlyArrivalReport
+    initial_map_id: int
+    initial_position: tuple[int, int]
+    landing_map_id: int
+    landing_position: tuple[int, int]
+    party_species_before: tuple[int, ...]
+    party_species_after: tuple[int, ...]
+    verified_fly_receipts: int
     final_map_id: int
     final_position: tuple[int, int]
     money_before: int
@@ -206,11 +209,17 @@ class RedSafariTransportReport:
     @property
     def passed(self) -> bool:
         return (
-            self.fly.passed
+            0 <= self.initial_map_id <= 0x24
+            and self.initial_map_id != int(MapId.FUCHSIA_CITY)
+            and self.landing_map_id == int(MapId.FUCHSIA_CITY)
+            and self.landing_position == (19, 28)
+            and bool(self.party_species_before)
+            and self.party_species_after == self.party_species_before
+            and self.verified_fly_receipts == 1
             and self.final_map_id == int(MapId.FUCHSIA_POKECENTER)
             and self.final_position == (3, 3)
             and self.money_after == self.money_before
-            and self.actions_executed > self.fly.actions_executed
+            and self.actions_executed > 0
             and self.frames_executed > 0
             and self.controller_released
         )
@@ -218,7 +227,13 @@ class RedSafariTransportReport:
     def public_dict(self) -> dict[str, object]:
         return {
             "status": "ok" if self.passed else "failed",
-            "story_neutral_fly": self.fly.passed,
+            "story_neutral_fly": (
+                self.landing_map_id == int(MapId.FUCHSIA_CITY)
+                and self.landing_position == (19, 28)
+                and self.verified_fly_receipts == 1
+            ),
+            "exact_party_preserved": self.party_species_after == self.party_species_before,
+            "verified_fly_receipts": self.verified_fly_receipts,
             "stable_fuchsia_center": (
                 self.final_map_id == int(MapId.FUCHSIA_POKECENTER)
                 and self.final_position == (3, 3)
@@ -422,15 +437,33 @@ def relocate_red_safari_origin_to_fuchsia_center(
     *,
     timing: SafariTiming = DEFAULT_SAFARI_TIMING,
 ) -> RedSafariTransportReport:
-    """Reuse qualified Fly, then enter the stable Fuchsia Center boundary."""
+    """Fly from the observed qualified field, then enter Fuchsia's stable Center."""
 
     start_actions = actions.actions_executed
     start_frames = emulator.frame_count
     money_before = _money(emulator)
-    fly = relocate_cinnabar_to_fuchsia_by_fly(emulator, reader, actions)
-    if not fly.passed:
+    initial = reader.read()
+    initial_position = (
+        -1 if initial.player_x is None else int(initial.player_x),
+        -1 if initial.player_y is None else int(initial.player_y),
+    )
+    party_species = tuple(initial.party_species_ids or ())
+    if initial.map_id is None or not party_species:
         raise RedAreaExecutionError(
-            "Safari transport Fly failed its existing contract",
+            "Safari transport lacks a complete outdoor party boundary",
+            reason_code="safari_transport_boundary_invalid",
+        )
+    field_moves = Gen1FieldMovePort(actions, reader, emulator)
+    field_moves.execute(MacroAction(MacroActionKind.FIELD_MOVE, "fly:fuchsia_city"))
+    landing = reader.read()
+    if (
+        landing.map_id != MapId.FUCHSIA_CITY
+        or (landing.player_x, landing.player_y) != (19, 28)
+        or tuple(landing.party_species_ids or ()) != party_species
+        or len(field_moves.fly_receipts) != 1
+    ):
+        raise RedAreaExecutionError(
+            "Safari transport Fly missed its cartridge-qualified landing",
             reason_code="safari_transport_fly_failed",
         )
     _move(
@@ -440,10 +473,20 @@ def relocate_red_safari_origin_to_fuchsia_center(
         ("up",) * 5,
         timing,
         "Fuchsia Fly landing to Center",
+        expected_party_species_ids=party_species,
     )
     final = reader.read()
     report = RedSafariTransportReport(
-        fly,
+        int(initial.map_id),
+        initial_position,
+        -1 if landing.map_id is None else int(landing.map_id),
+        (
+            -1 if landing.player_x is None else int(landing.player_x),
+            -1 if landing.player_y is None else int(landing.player_y),
+        ),
+        party_species,
+        tuple(final.party_species_ids or ()),
+        len(field_moves.fly_receipts),
         -1 if final.map_id is None else int(final.map_id),
         (
             -1 if final.player_x is None else int(final.player_x),
@@ -487,14 +530,36 @@ def enter_red_safari_area(
     start_actions = actions.actions_executed
     start_frames = emulator.frame_count
     money_before = _money(emulator)
-    encounters = _move(actions, reader, emulator, CENTER_TO_GATE, timing, "Safari gate")
+    party_species = tuple(before.party_species_ids or ())
+    if not party_species:
+        raise RedAreaExecutionError(
+            "Safari admission lacks a complete party observation",
+            reason_code="safari_admission_party_invalid",
+        )
+    encounters = _move(
+        actions,
+        reader,
+        emulator,
+        CENTER_TO_GATE,
+        timing,
+        "Safari gate",
+        expected_party_species_ids=party_species,
+    )
     gate = reader.read()
     if gate.map_id != MapId.SAFARI_ZONE_GATE or (gate.player_x, gate.player_y) != (3, 5):
         raise RedAreaExecutionError(
             "Safari admission route missed the gate",
             reason_code="safari_gate_route_failed",
         )
-    _move(actions, reader, emulator, ("up", "up", "up"), timing, "Safari clerk")
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("up", "up", "up"),
+        timing,
+        "Safari clerk",
+        expected_party_species_ids=party_species,
+    )
     for _ in range(timing.dialogue_pulses):
         admitted = reader.read()
         if admitted.map_id == MapId.SAFARI_ZONE_CENTER:
@@ -512,7 +577,15 @@ def enter_red_safari_area(
             reason_code="safari_admission_resources_changed",
         )
     route = red_safari_admission_route(offer)
-    encounters += _move(actions, reader, emulator, route, timing, "selected Safari area")
+    encounters += _move(
+        actions,
+        reader,
+        emulator,
+        route,
+        timing,
+        "selected Safari area",
+        expected_party_species_ids=party_species,
+    )
     final = reader.read()
     expected_map, expected_position, expected_steps = _SAFARI_AREA_TERMINALS[offer.source_id]
     report = RedSafariAdmissionReport(
@@ -730,10 +803,12 @@ class LiveSafariPatrol:
                 reason_code="safari_patrol_approach_repeated",
             )
         raw = self._reader.read()
+        party_species = tuple(raw.party_species_ids or ())
         if (
             raw.map_id != self._plan.map_id
             or (raw.player_y, raw.player_x) != self._plan.start_at
             or raw.battle_state
+            or not party_species
         ):
             raise RedAreaExecutionError(
                 "Safari patrol approach lacks its selected-area boundary",
@@ -746,6 +821,7 @@ class LiveSafariPatrol:
             self._plan.approach_directions,
             self._timing,
             "Safari encounter lane",
+            expected_party_species_ids=party_species,
         )
         final = self._reader.read()
         if (

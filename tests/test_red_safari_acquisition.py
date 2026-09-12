@@ -28,8 +28,10 @@ from pokemon_red_completion.red_safari_acquisition import (
     red_safari_admission_route,
     red_safari_area_menu,
     red_safari_zone_offers,
+    relocate_red_safari_origin_to_fuchsia_center,
     select_red_safari_area,
 )
+from pokemon_red_completion.safari import SafariChapterError, SafariTiming, _move
 
 
 def _collection(*numbers: int) -> CollectionObservation:
@@ -223,6 +225,150 @@ def test_safari_admission_report_requires_exact_fee_counters_and_terminal() -> N
     assert not replace(report, selected_position=(1, 23)).passed
 
 
+class _TransportSimulation:
+    def __init__(self, *, mutate_party: bool = False) -> None:
+        self.frame_count = 0
+        self.pressed_buttons: frozenset[str] = frozenset()
+        self.mutate_party = mutate_party
+        self.city_moves = 0
+        party = (99, 64, 120, 118, 28, 128)
+        self.raw = RawGameState(
+            game_started=True,
+            map_id=MapId.ROUTE_11,
+            player_x=0,
+            player_y=6,
+            party_count=len(party),
+            battle_state=0,
+            party_species_ids=party,
+        )
+
+    def read_u8(self, address: int) -> int:
+        money = {
+            int(RamAddress.PLAYER_MONEY): 0x00,
+            int(RamAddress.PLAYER_MONEY) + 1: 0x05,
+            int(RamAddress.PLAYER_MONEY) + 2: 0x58,
+        }
+        if address == int(RamAddress.SAFARI_BALLS):
+            return 0
+        return money.get(address, 0)
+
+    def execute(self, action: MacroAction) -> None:
+        if action.kind is MacroActionKind.WAIT:
+            self.frame_count += action.repeat
+            return
+        if action.kind is not MacroActionKind.MOVE or self.raw.map_id != MapId.FUCHSIA_CITY:
+            return
+        self.city_moves += 1
+        if self.city_moves == 5:
+            party = self.raw.party_species_ids
+            if self.mutate_party:
+                party = (*tuple(party or ())[:-1], 1)
+            self.raw = replace(
+                self.raw,
+                map_id=MapId.FUCHSIA_POKECENTER,
+                player_x=3,
+                player_y=3,
+                party_species_ids=party,
+            )
+        else:
+            self.raw = replace(self.raw, player_y=int(self.raw.player_y or 0) - 1)
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_input_readiness(self) -> SimpleNamespace:
+        return SimpleNamespace(ready=True)
+
+
+class _TransportFieldMoves:
+    landing = (19, 28)
+
+    def __init__(self, delegate: CountingExecutor, reader: object, memory: object) -> None:
+        del reader, memory
+        self.delegate = delegate
+        self.simulation = delegate.delegate
+        self.fly_receipts: list[object] = []
+
+    def execute(self, action: MacroAction) -> object:
+        assert action == MacroAction(MacroActionKind.FIELD_MOVE, "fly:fuchsia_city")
+        self.delegate.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+        self.simulation.raw = replace(  # type: ignore[attr-defined]
+            self.simulation.raw,  # type: ignore[attr-defined]
+            map_id=MapId.FUCHSIA_CITY,
+            player_x=self.landing[0],
+            player_y=self.landing[1],
+        )
+        receipt = object()
+        self.fly_receipts.append(receipt)
+        return receipt
+
+
+def test_safari_transport_flies_from_current_field_and_preserves_full_party(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import pokemon_red_completion.red_safari_acquisition as acquisition
+
+    simulation = _TransportSimulation()
+    monkeypatch.setattr(acquisition, "Gen1FieldMovePort", _TransportFieldMoves)
+
+    report = relocate_red_safari_origin_to_fuchsia_center(
+        simulation,  # type: ignore[arg-type]
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+
+    assert report.passed
+    assert report.initial_map_id == int(MapId.ROUTE_11)
+    assert report.landing_position == (19, 28)
+    assert report.party_species_before == (99, 64, 120, 118, 28, 128)
+    assert report.party_species_after == report.party_species_before
+    assert report.public_dict()["private_map_fields"] == 0
+
+
+def test_safari_transport_rejects_wrong_fly_landing(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import pokemon_red_completion.red_safari_acquisition as acquisition
+
+    class WrongLanding(_TransportFieldMoves):
+        landing = (18, 28)
+
+    simulation = _TransportSimulation()
+    monkeypatch.setattr(acquisition, "Gen1FieldMovePort", WrongLanding)
+
+    with pytest.raises(RedAreaExecutionError) as error:
+        relocate_red_safari_origin_to_fuchsia_center(
+            simulation,  # type: ignore[arg-type]
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            timing=SafariTiming(wait_frames=1, movement_frames=1),
+        )
+    assert error.value.reason_code == "safari_transport_fly_failed"
+
+
+def test_safari_walk_exact_party_guard_accepts_growth_but_rejects_mutation() -> None:
+    simulation = _TransportSimulation(mutate_party=True)
+    simulation.raw = replace(
+        simulation.raw,
+        map_id=MapId.FUCHSIA_CITY,
+        player_x=19,
+        player_y=28,
+    )
+    expected = tuple(simulation.raw.party_species_ids or ())
+
+    with pytest.raises(SafariChapterError, match="changed party"):
+        _move(
+            CountingExecutor(simulation),
+            simulation,  # type: ignore[arg-type]
+            simulation,  # type: ignore[arg-type]
+            ("up",) * 5,
+            SafariTiming(wait_frames=1, movement_frames=1),
+            "evolved-party walk",
+            expected_party_species_ids=expected,
+        )
+
+
 def test_safari_patrol_is_derived_from_reachable_reversible_grass() -> None:
     grid = tuple(tuple(True for _ in range(4)) for _ in range(4))
     grass = tuple(
@@ -269,7 +415,7 @@ def test_safari_patrol_is_derived_from_reachable_reversible_grass() -> None:
 class _PatrolSimulation:
     def __init__(self) -> None:
         self.frame_count = 0
-        self.pressed_buttons = frozenset()
+        self.pressed_buttons: frozenset[str] = frozenset()
         self.raw = RawGameState(
             True,
             MapId.SAFARI_ZONE_EAST,
@@ -343,7 +489,7 @@ def test_live_safari_patrol_enters_once_then_oscillates_without_fleeing() -> Non
 class _SafariSimulation:
     def __init__(self, *, capture_on_throw: bool) -> None:
         self.frame_count = 0
-        self.pressed_buttons = frozenset()
+        self.pressed_buttons: frozenset[str] = frozenset()
         self.balls = 3
         self.cursor = 0
         self.capture_on_throw = capture_on_throw
