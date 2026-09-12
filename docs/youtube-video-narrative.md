@@ -4,26 +4,13 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: **a mixed goal decision, then a real storage bottleneck**. Show model108 choosing
-healing from six live candidates, the verified transition becoming model109, and the next screen
-where Box 4 is full despite 180 free slots elsewhere. Then show the agent travel to a PC and switch
-to Box 5, restoring capture capacity from 0 to20. Overlay **82 registrations / 109 examples**.
+Newest systems beat: **a mixed goal decision, then a real storage bottleneck**. Show model108 choosing healing from six live candidates, the verified transition becoming model109, and Box 4 becoming full despite 180 free slots elsewhere. Then show the agent travel to a PC and switch to Box 5, restoring capture capacity from 0 to20. Overlay **82 registrations / 109 examples**.
 
-Keep the authorship boundary visible: the model chose the healing goal; deterministic skills healed,
-routed and operated the PC; postcondition code verified the state. Storage was forced safety support
-and added no training row. Also show the reporting failure honestly: the state was saved, but exact
-action/frame counts were lost after a wrong-layer field lookup. The attempt was not replayed; a
-zero-input audit verified the terminal and the project charged the full declared bounds instead of
-inventing precision. This is a strong reliability story, not a claim of full autonomy.
+Keep the authorship boundary visible: the model chose healing; deterministic skills healed, routed and operated the PC; postcondition code verified the state. Storage was forced safety support and added no training row. Show the reporting failure honestly: the state was saved, but exact costs were lost after a wrong-layer field lookup. The attempt was not replayed; a zero-input audit verified the terminal and the project charged the full declared bounds instead of inventing precision. This is a reliability story, not full autonomy.
 
 [Session](work-sessions/2026-09-12-model109-mixed-and-storage.md).
 
-Newest systems beat: **failure → update → different choice → capture**. Show model106 selecting one
-of eight anonymous fishing destinations and stopping at a route input-readiness boundary after92
-actions. Keep the failed label visible. Then show the separate six-action dialogue recovery marked
-"deterministic support / zero training rows." Model107 rebuilds eight cards, selects a different
-one, and the generic route/fishing/capture chain records one new species after five casts. Overlay
-**81→82 registered / model106→107→108 / 108 examples**.
+Newest systems beat: **failure → update → different choice → capture**. Show model106 selecting one of eight anonymous fishing destinations and stopping at a route input-readiness boundary after92 actions. Keep the failed label visible. Then show the separate six-action dialogue recovery marked "deterministic support / zero training rows." Model107 selects a different card, and the generic chain records one new species after five casts. Overlay **81→82 registered / model106→107→108 / 108 examples**.
 
 Then show the exact terminal reopening as a durable checkpoint with zero publication inputs. Caption
 the division of labor plainly: **the model chose the destination; deterministic skills routed,
