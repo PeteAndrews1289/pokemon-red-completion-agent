@@ -22,6 +22,10 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_development_measured_choice import (
+    RedDevelopmentMeasuredChoiceInput,
+    load_red_development_measured_choice_example,
+)
 from pokemon_red_completion.red_player_model import (
     PLAYER_MODEL_SCHEMA,
     REGISTERED_PLAYER_MODEL_SCHEMA,
@@ -52,6 +56,7 @@ def fit_red_player_update(
     source_commit: str,
     source_bundle_sha256: str,
     regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
+    measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...] = (),
     registered_objective: bool = False,
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
@@ -63,9 +68,14 @@ def fit_red_player_update(
     prior parameters provide behavior/comparison only, and later registered updates
     must retain their own prior rows. Regional labels require the matching
     explicit objective schema and reconstruct their actual terminal outcome.
+    Measured choices without an action trace are training-only and survive all fits.
     """
-    if not episodes or len({item.episode_id for item in episodes}) != len(episodes):
+    if (not episodes and not measured_choices) or len(
+        {item.episode_id for item in episodes}
+    ) != len(episodes):
         raise ValueError("native training episode inventory differs")
+    if len({item.choice_id for item in measured_choices}) != len(measured_choices):
+        raise ValueError("measured training choice inventory is duplicated")
     if (
         re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
@@ -109,7 +119,57 @@ def fit_red_player_update(
         for item in regional_choices
     )
     curriculum = tuple(row for dataset in datasets for row in dataset.curriculum_examples)
-    rows = (*base, *(row for dataset in datasets for row in dataset.examples), *regional_rows)
+    prior_measured: list[RedDevelopmentMeasuredChoiceInput] = []
+    if isinstance(prior, RedPlayerModelRecord):
+        corpus_rec = store.find_sealed_record(
+            f"rp-corpus-{prior.corpus_sha256}", expected_kind="red_player_training_corpus"
+        )
+        if corpus_rec is not None:
+            corpus_data = corpus_rec.read()
+            measured_list = corpus_data.get("measured_choices", [])
+            if isinstance(measured_list, list):
+                for raw_item in measured_list:
+                    item_dict = cast(Mapping[str, object], raw_item)
+                    cid = cast(str, item_dict["choice_id"])
+                    if cid not in {m.choice_id for m in measured_choices}:
+                        b_sha = cast(str, item_dict["behavior_model_sha256"])
+                        b_rec: LivingDexGoalModelRecord | RedPlayerModelRecord
+                        if prior.model.model_sha256 == b_sha:
+                            b_rec = prior
+                        else:
+                            m_rec = store.find_sealed_record(
+                                f"rpr-model-{b_sha}", expected_kind="red_player_model"
+                            )
+                            if m_rec is None:
+                                m_rec = store.find_sealed_record(
+                                    f"rp-model-{b_sha}", expected_kind="red_player_model"
+                                )
+                            if m_rec is not None:
+                                b_rec = load_player_goal_model_record_bytes(
+                                    m_rec.read_bytes(), expected_model_sha256=b_sha
+                                )
+                            else:
+                                raise ValueError(
+                                    f"cannot resolve prior measured choice behavior model {b_sha}"
+                                )
+                        prior_measured.append(
+                            RedDevelopmentMeasuredChoiceInput(
+                                cid, cast(str, item_dict["record_sha256"]), b_rec
+                            )
+                        )
+    all_measured_choices = (*prior_measured, *measured_choices)
+    measured_rows = tuple(
+        load_red_development_measured_choice_example(store, item, objective=objective)
+        for item in all_measured_choices
+    )
+    if any(row.partition != "train" for row in measured_rows):
+        raise ValueError("measured choices must be training-only")
+    rows = (
+        *base,
+        *(row for dataset in datasets for row in dataset.examples),
+        *regional_rows,
+        *measured_rows,
+    )
     hashes = tuple(
         sorted(
             [canonical_sha256(row.public_dict()) for row in rows]
@@ -174,6 +234,16 @@ def fit_red_player_update(
                 "behavior_model_sha256": item.behavior_record.model.model_sha256,
             }
             for item in regional_choices
+        ]
+        corpus_sha = canonical_sha256(corpus)
+    if all_measured_choices:
+        corpus["measured_choices"] = [
+            {
+                "choice_id": item.choice_id,
+                "record_sha256": item.record_sha256,
+                "behavior_model_sha256": item.behavior_record.model.model_sha256,
+            }
+            for item in all_measured_choices
         ]
         corpus_sha = canonical_sha256(corpus)
     corpus_record = store.publish_sealed_record(
@@ -259,6 +329,7 @@ def fit_red_player_update(
             else {}
         ),
         **({"regional_source_examples": len(regional_rows)} if regional_choices else {}),
+        **({"measured_source_examples": len(measured_rows)} if all_measured_choices else {}),
     }
 
 

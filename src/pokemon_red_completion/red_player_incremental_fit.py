@@ -12,6 +12,11 @@ from collections.abc import Callable, Mapping
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_development_measured_choice import (
+    DEVELOPMENT_MEASURED_RESULT_SCHEMA,
+    RedDevelopmentMeasuredChoiceInput,
+    load_red_development_measured_choice_example,
+)
 from pokemon_red_completion.red_player_model import RedPlayerModelRecord
 from pokemon_red_completion.red_player_training_dataset import load_red_player_training_episode
 from pokemon_red_completion.red_player_training_fit import (
@@ -24,6 +29,28 @@ from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
 
 BehaviorRecord = LivingDexGoalModelRecord | RedPlayerModelRecord
 BehaviorResolver = Callable[[str], BehaviorRecord]
+
+
+class PriorPlayerInventory(
+    tuple[tuple[RedPlayerEpisodeInput, ...], tuple[RedRegionalChoiceInput, ...]]
+):
+    """Authenticated prior player inventory preserving episodes, regional and measured choices."""
+
+    episodes: tuple[RedPlayerEpisodeInput, ...]
+    regional_choices: tuple[RedRegionalChoiceInput, ...]
+    measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...]
+
+    def __new__(
+        cls,
+        episodes: tuple[RedPlayerEpisodeInput, ...],
+        regional_choices: tuple[RedRegionalChoiceInput, ...],
+        measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...] = (),
+    ) -> PriorPlayerInventory:
+        obj = super().__new__(cls, (episodes, regional_choices))
+        obj.episodes = episodes
+        obj.regional_choices = regional_choices
+        obj.measured_choices = measured_choices
+        return obj
 
 
 def _mapping(value: object) -> Mapping[str, object]:
@@ -43,7 +70,7 @@ def load_prior_player_inventory(
     store: PrivateArtifactRoot,
     prior: RedPlayerModelRecord,
     resolve: BehaviorResolver,
-) -> tuple[tuple[RedPlayerEpisodeInput, ...], tuple[RedRegionalChoiceInput, ...]]:
+) -> PriorPlayerInventory:
     """Read only the prior's explicit episode/model inventory; never scan roots."""
     record = store.find_sealed_record(
         f"rp-corpus-{prior.corpus_sha256}",
@@ -74,7 +101,13 @@ def load_prior_player_inventory(
 
     native = corpus.get("episodes")
     regional = corpus.get("regional_choices", [])
-    if not isinstance(native, list) or not isinstance(regional, list) or not native:
+    measured_rows = corpus.get("measured_choices", [])
+    if (
+        not isinstance(native, list)
+        or not isinstance(regional, list)
+        or not isinstance(measured_rows, list)
+        or not native
+    ):
         raise ValueError("prior player episode inventory differs")
     episodes = []
     for item in native:
@@ -106,11 +139,23 @@ def load_prior_player_inventory(
                 behavior(row),
             )
         )
-    if len({item.episode_id for item in episodes}) != len(episodes) or len(
-        {item.episode_id for item in choices}
-    ) != len(choices):
-        raise ValueError("prior player inventory repeats an episode")
-    return tuple(episodes), tuple(choices)
+    measured = []
+    for item in measured_rows:
+        row = _mapping(item)
+        measured.append(
+            RedDevelopmentMeasuredChoiceInput(
+                _text(row, "choice_id"),
+                _text(row, "record_sha256"),
+                behavior(row),
+            )
+        )
+    if (
+        len({item.episode_id for item in episodes}) != len(episodes)
+        or len({item.episode_id for item in choices}) != len(choices)
+        or len({item.choice_id for item in measured}) != len(measured)
+    ):
+        raise ValueError("prior player inventory repeats an episode or choice")
+    return PriorPlayerInventory(tuple(episodes), tuple(choices), tuple(measured))
 
 
 def fit_incremental_regional_result(
@@ -133,7 +178,9 @@ def fit_incremental_regional_result(
         or result.get("independent_evaluation") is not False
     ):
         raise ValueError("incremental source result scope differs")
-    episodes, choices = load_prior_player_inventory(store, prior, resolve)
+    inventory = load_prior_player_inventory(store, prior, resolve)
+    episodes, choices = inventory
+    prior_measured = getattr(inventory, "measured_choices", ())
     episode_id = _text(result, "episode_id")
     prior_ids = {item.episode_id for item in episodes} | {item.episode_id for item in choices}
     if episode_id in prior_ids:
@@ -155,6 +202,7 @@ def fit_incremental_regional_result(
         prior=prior,
         episodes=(*episodes, episode),
         regional_choices=(*choices, choice),
+        measured_choices=prior_measured,
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
     )
@@ -176,20 +224,27 @@ def fit_incremental_registered_results(
     source_commit: str,
     source_bundle_sha256: str,
 ) -> dict[str, object]:
-    """Accumulate two actual choices before bootstrapping the separate objective.
+    """Accumulate choices or measured outcomes before bootstrapping or updating.
 
-    Native support and genuine regional choices share a corpus, never duplicate
-    the same played action. Historical living-Dex rows stay archived, not pooled.
+    Native support, genuine regional choices, and measured outcomes share a
+    corpus, never duplicate the same played action. Historical living-Dex rows
+    stay archived, not pooled.
     """
     from .red_regional_choice_learning import load_red_regional_choice_example
 
     if not results or prior.objective not in (None, REGISTERED_OBJECTIVE):
         raise ValueError("registered incremental inventory differs")
-    episodes, choices = (
-        load_prior_player_inventory(store, prior, resolve) if prior.objective else ((), ())
+    inventory = (
+        load_prior_player_inventory(store, prior, resolve) if prior.objective else None
     )
-    seen = {item.episode_id for item in episodes} | {item.episode_id for item in choices}
-    added, regional = [], []
+    if inventory is not None:
+        episodes, choices = inventory
+        prior_measured = getattr(inventory, "measured_choices", ())
+    else:
+        episodes, choices, prior_measured = (), (), ()
+    seen_episodes = {item.episode_id for item in episodes} | {item.episode_id for item in choices}
+    seen_choices = {item.choice_id for item in prior_measured}
+    added, regional, new_measured = [], [], []
     expected_rows = 0
     for result in results:
         if (
@@ -198,10 +253,37 @@ def fit_incremental_registered_results(
             or result.get("independent_evaluation") is not False
         ):
             raise ValueError("registered result objective or behavior differs")
+        schema = result.get("schema")
+        if schema == DEVELOPMENT_MEASURED_RESULT_SCHEMA:
+            if (
+                result.get("action_trace_available") is not False
+                or result.get("authority_promotion_eligible") is not False
+                or type(result.get("teacher_labels")) is not int
+                or result.get("teacher_labels") != 0
+                or type(result.get("eligible_examples")) is not int
+                or result.get("eligible_examples") != 1
+            ):
+                raise ValueError("registered measured choice trust flags or scope differ")
+            choice_id = _text(result, "choice_id")
+            if choice_id in seen_choices:
+                raise ValueError("registered measured choice was already included")
+            seen_choices.add(choice_id)
+            meas_choice = RedDevelopmentMeasuredChoiceInput(
+                choice_id,
+                _text(result, "record_sha256"),
+                prior,
+            )
+            row = load_red_development_measured_choice_example(
+                store, meas_choice, objective=REGISTERED_OBJECTIVE
+            )
+            expected_rows += int(row.outcome.target_vector is not None)
+            new_measured.append(meas_choice)
+            continue
+
         episode_id = _text(result, "episode_id")
-        if episode_id in seen:
+        if episode_id in seen_episodes:
             raise ValueError("registered outcome was already included")
-        seen.add(episode_id)
+        seen_episodes.add(episode_id)
         reader = store.open_episode(episode_id)
         if reader.manifest_sha256 != result.get("manifest_sha256"):
             raise ValueError("registered result manifest differs")
@@ -216,7 +298,7 @@ def fit_incremental_registered_results(
         )
         if dataset.objective != REGISTERED_OBJECTIVE or dataset.curriculum_examples:
             raise ValueError("registered incremental dataset scope differs")
-        if result.get("schema") == "pokemon.red.regional-acquisition-result.v1":
+        if schema == "pokemon.red.regional-acquisition-result.v1":
             if (
                 dataset.examples
                 or result.get("parent_learning_examples") != 0
@@ -230,10 +312,12 @@ def fit_incremental_registered_results(
                 _text(result, "outcome_record_sha256"),
                 prior,
             )
-            row = load_red_regional_choice_example(store, choice, objective=REGISTERED_OBJECTIVE)
-            expected_rows += int(row.outcome.target_vector is not None)
+            reg_row = load_red_regional_choice_example(
+                store, choice, objective=REGISTERED_OBJECTIVE
+            )
+            expected_rows += int(reg_row.outcome.target_vector is not None)
             regional.append(choice)
-        elif result.get("schema") == "pokemon.red.regional-goal-step-result.v1":
+        elif schema == "pokemon.red.regional-goal-step-result.v1":
             if (
                 metadata.get("regional_choice_record_sha256") is not None
                 or type(result.get("eligible_examples")) is not int
@@ -262,6 +346,7 @@ def fit_incremental_registered_results(
         prior=prior,
         episodes=(*episodes, *added),
         regional_choices=(*choices, *regional),
+        measured_choices=(*prior_measured, *new_measured),
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
         registered_objective=True,
@@ -291,7 +376,9 @@ def fit_incremental_goal_results(
     """
     if not results:
         raise ValueError("incremental goals require completed episode results")
-    episodes, choices = load_prior_player_inventory(store, prior, resolve)
+    inventory = load_prior_player_inventory(store, prior, resolve)
+    episodes, choices = inventory
+    prior_measured = getattr(inventory, "measured_choices", ())
     seen = {item.episode_id for item in episodes} | {item.episode_id for item in choices}
     added = []
     expected_rows = 0
@@ -351,6 +438,7 @@ def fit_incremental_goal_results(
         prior=prior,
         episodes=(*episodes, *added),
         regional_choices=choices,
+        measured_choices=prior_measured,
         source_commit=source_commit,
         source_bundle_sha256=source_bundle_sha256,
     )
@@ -361,4 +449,45 @@ def fit_incremental_goal_results(
         != prior.model.settled_examples + expected_rows
     ):
         raise ValueError("incremental native fitter returned an unexpected inventory")
+    return fitted
+
+
+def fit_incremental_measured_choice(
+    store: PrivateArtifactRoot,
+    *,
+    prior: RedPlayerModelRecord,
+    measured_choice: RedDevelopmentMeasuredChoiceInput,
+    resolve: BehaviorResolver,
+    source_commit: str,
+    source_bundle_sha256: str,
+) -> dict[str, object]:
+    """Incorporate a single authenticated measured choice into the registered model."""
+    if prior.objective != REGISTERED_OBJECTIVE:
+        raise ValueError("measured choice requires a registered-player prior model")
+    inventory = load_prior_player_inventory(store, prior, resolve)
+    episodes, choices = inventory
+    prior_measured = getattr(inventory, "measured_choices", ())
+    if measured_choice.choice_id in {m.choice_id for m in prior_measured}:
+        raise ValueError("measured choice was already included in prior inventory")
+    row = load_red_development_measured_choice_example(
+        store, measured_choice, objective=REGISTERED_OBJECTIVE
+    )
+    expected_rows = int(row.outcome.target_vector is not None)
+    fitted = fit_red_player_update(
+        store,
+        prior=prior,
+        episodes=episodes,
+        regional_choices=choices,
+        measured_choices=(*prior_measured, measured_choice),
+        source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256,
+        registered_objective=True,
+    )
+    if (
+        fitted.get("new_settled_examples") != expected_rows
+        or fitted.get("prior_rows_retained") is not True
+        or _mapping(fitted["model"]).get("settled_examples")
+        != prior.model.settled_examples + expected_rows
+    ):
+        raise ValueError("incremental measured fitter returned an unexpected inventory")
     return fitted
