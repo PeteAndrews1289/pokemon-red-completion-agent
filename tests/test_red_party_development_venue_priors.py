@@ -755,7 +755,7 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     # scene handoff. Default settlement remains unchanged (dedicated regression
     # test); this contract fingerprints the whole module, including that opt-in.
     assert contract.battle_timing_sha256 == (
-        "22eade5c06c7f2ba267ce58ca8f7da1feb755f96897a28196a22c3660cc05d75"
+        "5d16989f2bf05f3c24709013dcb352ce8e32f9aee6e304b60fd35c2649e1ec63"
     )
     assert contract.accounting_sha256 == (
         "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"
