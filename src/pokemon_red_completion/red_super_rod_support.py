@@ -39,6 +39,8 @@ SUPER_ROD_STANCE_YX = (3, 2)
 SUPER_ROD_FACING = "down"
 SAFARI_GATE_MAP_ID = int(MapId.SAFARI_ZONE_GATE)
 SAFARI_CENTER_MAP_ID = int(MapId.SAFARI_ZONE_CENTER)
+SAFARI_CENTER_EXIT_SOURCE_YX = (25, 15)
+SAFARI_GATE_ENTRY_YX = (0, 4)
 SAFARI_EXIT_SETTLE_LIMIT = 16
 SAFARI_EXIT_WAIT_REPEATS = 6
 
@@ -406,12 +408,27 @@ class RedRoutedSuperRodSupport:
 
     def execute(self) -> RedRoutedSuperRodSupportResult:
         initial = observe_red_super_rod_support(self.reader)
+        initial_raw = self.reader.read()
+        safari_exit_used = _event_is_set(
+            initial_raw.event_flags,
+            EventFlag.IN_SAFARI_ZONE,
+        )
+        recovering_gate_transition = (
+            safari_exit_used
+            and initial.map_id == SAFARI_GATE_MAP_ID
+            and initial.player_yx == SAFARI_CENTER_EXIT_SOURCE_YX
+            and not initial.in_battle
+            and not initial.dialogue_visible
+            and not initial.input_ready
+        )
         if (
             initial.acquired
             or initial.in_battle
-            or not initial.input_ready
-            or initial.dialogue_visible
             or initial.bag_slots >= MAX_BAG_ITEMS
+            or (
+                not recovering_gate_transition
+                and (not initial.input_ready or initial.dialogue_visible)
+            )
         ):
             raise RedSuperRodSupportError("routed Super Rod support is unavailable")
         before_actions = self.actions.actions_executed
@@ -442,44 +459,32 @@ class RedRoutedSuperRodSupport:
             stabilization_frames=180,
             route_name="Super Rod support transport",
         )
-        try:
-            plan = self.world.plan_feasible_to_map(
-                observer.observe(),
-                SUPER_ROD_HOUSE_MAP_ID,
-                goal_at=SUPER_ROD_STANCE_YX,
-            )
-        except RoutePlanningError as error:
-            raise RedSuperRodSupportError(
-                "no cartridge route reaches the Super Rod boundary"
-            ) from error
-        if not plan.steps or not _supported_plan(plan, allow_cut=True, allow_surf=True):
-            raise RedSuperRodSupportError("Super Rod route needs unsupported transport")
         safari_exit = _SafariExitReceipt(0, 0, 0)
-        safari_exit_used = _event_is_set(
-            self.reader.read().event_flags,
-            EventFlag.IN_SAFARI_ZONE,
-        )
-        if safari_exit_used:
+        if recovering_gate_transition:
+            self._settle_active_safari_gate(initial_raw)
+            plan = self._plan_to_super_rod(
+                observer,
+                unavailable="no cartridge route reaches the Super Rod after Safari exit",
+                unsupported="post-Safari Super Rod route needs unsupported transport",
+            )
+        else:
+            plan = self._plan_to_super_rod(
+                observer,
+                unavailable="no cartridge route reaches the Super Rod boundary",
+                unsupported="Super Rod route needs unsupported transport",
+            )
+        if safari_exit_used and not recovering_gate_transition:
             safari_exit = self._leave_active_safari(
                 plan,
                 field_actions,
                 observer,
                 interruptions,
             )
-            try:
-                plan = self.world.plan_feasible_to_map(
-                    observer.observe(),
-                    SUPER_ROD_HOUSE_MAP_ID,
-                    goal_at=SUPER_ROD_STANCE_YX,
-                )
-            except RoutePlanningError as error:
-                raise RedSuperRodSupportError(
-                    "no cartridge route reaches the Super Rod after Safari exit"
-                ) from error
-            if not plan.steps or not _supported_plan(plan, allow_cut=True, allow_surf=True):
-                raise RedSuperRodSupportError(
-                    "post-Safari Super Rod route needs unsupported transport"
-                )
+            plan = self._plan_to_super_rod(
+                observer,
+                unavailable="no cartridge route reaches the Super Rod after Safari exit",
+                unsupported="post-Safari Super Rod route needs unsupported transport",
+            )
         report = execute_route(
             plan,
             field_actions,
@@ -535,6 +540,25 @@ class RedRoutedSuperRodSupport:
             actions=actions,
             frames=frames,
         )
+
+    def _plan_to_super_rod(
+        self,
+        observer: Gen1TraversalObserver,
+        *,
+        unavailable: str,
+        unsupported: str,
+    ) -> RoutePlan:
+        try:
+            plan = self.world.plan_feasible_to_map(
+                observer.observe(),
+                SUPER_ROD_HOUSE_MAP_ID,
+                goal_at=SUPER_ROD_STANCE_YX,
+            )
+        except RoutePlanningError as error:
+            raise RedSuperRodSupportError(unavailable) from error
+        if not plan.steps or not _supported_plan(plan, allow_cut=True, allow_surf=True):
+            raise RedSuperRodSupportError(unsupported)
+        return plan
 
     def _leave_active_safari(
         self,
@@ -597,26 +621,67 @@ class RedRoutedSuperRodSupport:
         self.actions.execute(
             MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS)
         )
+        self._settle_active_safari_gate(before_exit, expected_at=transition.expected_at)
+        return _SafariExitReceipt(
+            route_steps=len(report.executed_steps) + 1,
+            route_replans=len(report.replans),
+            route_interruptions=len(report.interruptions),
+        )
+
+    def _settle_active_safari_gate(
+        self,
+        before_exit: RawGameState,
+        *,
+        expected_at: tuple[int, int] = SAFARI_GATE_ENTRY_YX,
+    ) -> None:
+        """Settle the gate prompt, including a retained mid-warp terminal.
+
+        Red writes the destination map id before replacing the source-room player
+        coordinates.  While movement remains busy and no dialogue is visible,
+        that one exact stale coordinate pair is a valid transition state rather
+        than evidence of route divergence.
+        """
+
+        if (
+            before_exit.player_y is None
+            or before_exit.player_x is None
+            or before_exit.battle_state != 0
+            or not _event_is_set(before_exit.event_flags, EventFlag.IN_SAFARI_ZONE)
+            or _event_is_set(before_exit.event_flags, EventFlag.SAFARI_GAME_OVER)
+        ):
+            raise RedSuperRodSupportError("Safari exit recovery source is invalid")
+        stale_at = (before_exit.player_y, before_exit.player_x)
+        if stale_at != SAFARI_CENTER_EXIT_SOURCE_YX:
+            raise RedSuperRodSupportError("Safari exit source coordinate is invalid")
         for _ in range(SAFARI_EXIT_SETTLE_LIMIT + 1):
             current = self.reader.read()
             _require_safari_exit_transition(before_exit, current)
-            if (
-                current.map_id != SAFARI_GATE_MAP_ID
-                or current.player_x != transition.expected_at[1]
-                or current.player_y is None
-                or not transition.expected_at[0] <= current.player_y <= 3
-                or current.battle_state != 0
-            ):
-                raise RedSuperRodSupportError("Safari exit left its gate boundary")
+            if current.player_y is None or current.player_x is None:
+                raise RedSuperRodSupportError("Safari exit lost player coordinates")
             active = _event_is_set(current.event_flags, EventFlag.IN_SAFARI_ZONE)
             ready = self.reader.read_input_readiness().ready
             dialogue = self.reader.read_bottom_dialogue_box_visible()
+            at = (current.player_y, current.player_x)
+            in_gate_corridor = (
+                current.map_id == SAFARI_GATE_MAP_ID
+                and current.player_x == expected_at[1]
+                and expected_at[0] <= current.player_y <= 3
+            )
+            retained_mid_warp = (
+                current.map_id == SAFARI_GATE_MAP_ID
+                and at == stale_at
+                and active
+                and not ready
+                and not dialogue
+            )
+            if current.battle_state != 0 or not (in_gate_corridor or retained_mid_warp):
+                raise RedSuperRodSupportError("Safari exit left its gate boundary")
             if not active and ready and not dialogue:
-                return _SafariExitReceipt(
-                    route_steps=len(report.executed_steps) + 1,
-                    route_replans=len(report.replans),
-                    route_interruptions=len(report.interruptions),
-                )
+                if not in_gate_corridor:
+                    raise RedSuperRodSupportError(
+                        "Safari exit settled outside its gate corridor"
+                    )
+                return
             if dialogue:
                 if active:
                     cursor = self.reader.read_menu_cursor_state()

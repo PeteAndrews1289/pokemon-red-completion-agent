@@ -69,6 +69,7 @@ class _Reader:
         self.ready = True
         self.facing = "down"
         self.dialogue = False
+        self.menu = MenuCursorState(0, 0, 0, 0, 0)
 
     def read(self):
         return self.raw
@@ -81,6 +82,9 @@ class _Reader:
 
     def read_bottom_dialogue_box_visible(self):
         return self.dialogue
+
+    def read_menu_cursor_state(self):
+        return self.menu
 
 
 class _Emulator:
@@ -419,10 +423,15 @@ def test_active_safari_exit_selects_yes_and_settles_before_onward_route(monkeypa
                 reader.raw = replace(
                     reader.raw,
                     map_id=int(MapId.SAFARI_ZONE_GATE),
-                    player_y=0,
-                    player_x=4,
                 )
                 reader.ready = False
+                reader.dialogue = False
+            elif (
+                action.kind is MacroActionKind.WAIT
+                and reader.raw.map_id == int(MapId.SAFARI_ZONE_GATE)
+                and (reader.raw.player_y, reader.raw.player_x) == (25, 15)
+            ):
+                reader.raw = replace(reader.raw, player_y=0, player_x=4)
                 reader.dialogue = True
             elif action.kind is MacroActionKind.MOVE and action.value == "up":
                 reader.menu = replace(reader.menu, selected_visible_index=0)
@@ -487,3 +496,114 @@ def test_active_safari_exit_selects_yes_and_settles_before_onward_route(monkeypa
         False,
     ) == reader.raw.event_flags
     assert reader.ready and not reader.dialogue
+
+
+def test_retained_mid_warp_gate_state_settles_without_replaying_route():
+    import pokemon_red_completion.red_super_rod_support as runtime
+
+    flags = _with_event(bytes(320), EventFlag.IN_SAFARI_ZONE, True)
+    reader = _Reader(
+        _raw(
+            map_id=int(MapId.SAFARI_ZONE_GATE),
+            player_y=25,
+            player_x=15,
+            event_flags=flags,
+        )
+    )
+    reader.ready = False
+    reader.dialogue = False
+    reader.menu = MenuCursorState(0, 0, 1, 15, 8)
+    emulator = _Emulator()
+
+    class Actions:
+        def __init__(self):
+            self.kinds = []
+
+        def execute(self, action):
+            self.kinds.append((action.kind, action.value))
+            emulator.frame_count += 24
+            if action.kind is MacroActionKind.WAIT:
+                reader.raw = replace(reader.raw, player_y=0, player_x=4)
+                reader.dialogue = True
+            elif action.kind is MacroActionKind.CONFIRM and reader.dialogue:
+                active = _with_event(
+                    reader.raw.event_flags,
+                    EventFlag.IN_SAFARI_ZONE,
+                    False,
+                )
+                if active != reader.raw.event_flags:
+                    reader.raw = replace(reader.raw, event_flags=active)
+                else:
+                    reader.raw = replace(reader.raw, player_y=3)
+                    reader.ready = True
+                    reader.dialogue = False
+
+    delegate = Actions()
+    support = runtime.RedRoutedSuperRodSupport(
+        CountingExecutor(delegate),
+        reader,
+        emulator,
+        SimpleNamespace(),
+    )
+    support._settle_active_safari_gate(reader.raw)
+
+    assert delegate.kinds == [
+        (MacroActionKind.WAIT, None),
+        (MacroActionKind.CONFIRM, None),
+        (MacroActionKind.CONFIRM, None),
+    ]
+    assert (reader.raw.map_id, reader.raw.player_y, reader.raw.player_x) == (
+        int(MapId.SAFARI_ZONE_GATE),
+        3,
+        4,
+    )
+    assert _with_event(
+        reader.raw.event_flags,
+        EventFlag.IN_SAFARI_ZONE,
+        False,
+    ) == reader.raw.event_flags
+    assert reader.ready and not reader.dialogue
+
+
+def test_routed_executor_resumes_retained_gate_before_planning(monkeypatch):
+    import pokemon_red_completion.red_super_rod_support as runtime
+
+    flags = _with_event(bytes(320), EventFlag.IN_SAFARI_ZONE, True)
+    reader = _Reader(
+        _raw(
+            map_id=int(MapId.SAFARI_ZONE_GATE),
+            player_y=25,
+            player_x=15,
+            event_flags=flags,
+        )
+    )
+    reader.ready = False
+    reader.dialogue = False
+    emulator = _Emulator()
+    _runtime, world = _patch_routed_dependencies(monkeypatch, reader)
+    delegate = _RoutedGiftActions(reader, emulator, acquire_on=3, settle_on=4)
+
+    settled = []
+
+    def settle(self, before_exit, *, expected_at=(0, 4)):
+        settled.append((before_exit.map_id, before_exit.player_y, before_exit.player_x))
+        reader.raw = replace(
+            reader.raw,
+            player_y=3,
+            player_x=4,
+            event_flags=_with_event(
+                reader.raw.event_flags,
+                EventFlag.IN_SAFARI_ZONE,
+                False,
+            ),
+        )
+        reader.ready = True
+
+    monkeypatch.setattr(runtime.RedRoutedSuperRodSupport, "_settle_active_safari_gate", settle)
+    result = runtime.RedRoutedSuperRodSupport(
+        CountingExecutor(delegate), reader, emulator, world
+    ).execute()
+
+    assert settled == [(int(MapId.SAFARI_ZONE_GATE), 25, 15)]
+    assert result.safari_exit_used
+    assert result.route_steps == 1
