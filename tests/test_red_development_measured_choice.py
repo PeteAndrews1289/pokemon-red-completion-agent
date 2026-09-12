@@ -14,18 +14,25 @@ from test_registered_learning_bridge import observations
 from test_registered_runtime_binding import bound_fixture
 
 from pokemon_red_completion.collection import CollectionLocation, LivingSpecimen
+from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import GoalManagerCompositionError
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
 from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_development_measured_choice import (
+    DEVELOPMENT_MEASURED_CHOICE_KIND,
     DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
     DEVELOPMENT_MEASURED_RESULT_SCHEMA,
     RedDevelopmentMeasuredChoice,
+    RedDevelopmentMeasuredChoiceInput,
+    RedDevelopmentMeasuredSegment,
+    _replay_behavior,
+    development_measured_choice_record_id,
     load_red_development_measured_choice_example,
     publish_development_measured_choice,
 )
+from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_incremental_fit import (
     fit_incremental_measured_choice,
     fit_incremental_registered_results,
@@ -41,6 +48,7 @@ from pokemon_red_completion.red_player_training_plan import (
     RedPlayerTrainingPlan,
 )
 from pokemon_red_completion.red_registered_observation import project_registered_observation
+from pokemon_red_completion.red_registered_outcome import red_registered_outcome_from_observations
 from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
 
 
@@ -77,27 +85,120 @@ def _safari_observations(tmp_path: Path):
     return pb, pa
 
 
-def _valid_choice(tmp_path: Path, *, model_sha256: str = "1" * 64) -> RedDevelopmentMeasuredChoice:
+def _valid_choice(
+    tmp_path: Path,
+    *,
+    model_sha256: str = "1" * 64,
+    behavior=None,
+) -> RedDevelopmentMeasuredChoice:
     from pokemon_red_completion.living_dex_policy_codec import restore_living_dex_policy_menu
 
     pb, pa = _safari_observations(tmp_path)
     menu = restore_living_dex_policy_menu(_menu("safari").policy_dict())
+    seed = 1
+    if behavior is None:
+        scores = (0.0, 0.0, 0.0, None)
+        probabilities = (0.6, 0.3, 0.1, 0.0)
+        assert random.Random(seed).choices(range(4), weights=probabilities, k=1)[0] == 0
+    else:
+        scores, probabilities, selected = _replay_behavior(behavior, menu, seed=seed)
+        while selected != 0:
+            seed += 1
+            scores, probabilities, selected = _replay_behavior(behavior, menu, seed=seed)
+    declaration = {
+        "schema": "pokemon.red.private-safari-outcome-declaration.v1",
+        "pair_id": "safari-segment-1",
+        "parent_checkpoint_sha256": "d" * 64,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "model_sha256": model_sha256,
+        "menu_sha256": menu.policy_sha256,
+        "seed": seed,
+        "selected_candidate_index": 0,
+        "maximum_semantic_actions": 300,
+        "maximum_encounters": 40,
+        "capture_quota": 1,
+        "retry_allowed": False,
+    }
+    segment = RedDevelopmentMeasuredSegment(
+        pair_id="safari-segment-1",
+        declaration_sha256=canonical_sha256(declaration),
+        claim_sha256="b" * 64,
+        result_sha256="c" * 64,
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        controller_actions=150,
+        emulator_frames=2400,
+        status="retained_success",
+    )
+    outcome = red_registered_outcome_from_observations(
+        pb,
+        pa,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=True,
+        actions=150,
+        frames=2400,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
     return RedDevelopmentMeasuredChoice(
         choice_id="safari-choice-kangaskhan",
+        parent_episode_id="measured-safari-parent",
+        parent_checkpoint_sha256="d" * 64,
         menu=menu,
         selected_candidate_index=0,
-        behavior_probabilities=(0.6, 0.3, 0.1, 0.0),
+        behavior_probabilities=probabilities,
+        scores=scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
         model_sha256=model_sha256,
         before_observation=pb,
         after_observation=pa,
+        before_observation_sha256=canonical_sha256(pb),
+        after_observation_sha256=canonical_sha256(pa),
         parent_state_sha256="2" * 64,
         terminal_state_sha256="3" * 64,
-        segments_sha256="4" * 64,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
         controller_actions=150,
         emulator_frames=2400,
-        resource_costs={"safari_balls_used": 5, "money_spent": 500},
-        maximum_actions=30_000,
-        maximum_frames=3_000_000,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        observer_source_commit="e" * 40,
+        observer_source_bundle_sha256="f" * 64,
+    )
+
+
+def _bind_parent(store, choice, behavior):
+    record = store.publish_sealed_record(
+        checkpoint_record_id(choice.parent_episode_id),
+        kind=CHECKPOINT_KIND,
+        record={
+            "state_sha256": choice.parent_state_sha256,
+            "model_sha256": behavior.model.model_sha256,
+            "collection": choice.before_observation["registration"],
+        },
+    )
+    declaration = {
+        **choice.selection_declaration,
+        "parent_checkpoint_sha256": record.summary.record_sha256,
+    }
+    segment = replace(
+        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    segments = (segment, *choice.segments[1:])
+    return replace(
+        choice,
+        parent_checkpoint_sha256=record.summary.record_sha256,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=segments,
+        segments_sha256=canonical_sha256([item.public_dict() for item in segments]),
     )
 
 
@@ -170,7 +271,12 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert pub["training_only"] is True
     assert pub["controller_actions"] == 150
     assert pub["emulator_frames"] == 2400
-    assert pub["resource_costs"] == {"safari_balls_used": 5, "money_spent": 500}
+    assert pub["resource_costs"] == {
+        "irreversible_loss": 0.0,
+        "party_cost": 0.0,
+        "resource_cost": 0.5,
+        "storage_cost": 0.0,
+    }
 
     # Deserialization round-trip
     restored = RedDevelopmentMeasuredChoice.from_public(pub)
@@ -192,13 +298,13 @@ def test_adversarial_model_identity_tampering(tmp_path):
 
     # Corrupt model sha (non-hex, wrong length)
     for bad_sha in ["not-a-hash", "0" * 63, "0" * 65, "G" * 64]:
-        with pytest.raises(ValueError, match="model_sha256 must be a 64-character lowercase"):
+        with pytest.raises(ValueError, match="model hash differs"):
             replace(choice, model_sha256=bad_sha)
 
     # Deserializer rejecting bad model_sha256
     doc = choice.public_dict()
     doc["model_sha256"] = "bad"
-    with pytest.raises(ValueError, match="model_sha256"):
+    with pytest.raises(ValueError, match="model hash differs"):
         RedDevelopmentMeasuredChoice.from_public(doc)
 
 
@@ -217,7 +323,7 @@ def test_adversarial_menu_tampering(tmp_path):
         RedDevelopmentMeasuredChoice.from_public(doc_single)
 
     # Selecting unavailable candidate
-    with pytest.raises(ValueError, match="selected candidate is unavailable"):
+    with pytest.raises(ValueError, match="selected candidate differs"):
         replace(choice, selected_candidate_index=3)
 
 
@@ -226,45 +332,34 @@ def test_adversarial_sample_selection_tampering(tmp_path):
 
     # Selected index out of bounds or unavailable
     for bad_idx in [-1, 4, 10]:
-        with pytest.raises(ValueError, match="selected candidate is unavailable"):
+        with pytest.raises(ValueError, match="selected candidate differs"):
             replace(choice, selected_candidate_index=bad_idx)
 
     # Selected index as boolean
-    with pytest.raises(ValueError, match="selected candidate is unavailable"):
+    with pytest.raises(ValueError, match="selected candidate differs"):
         replace(choice, selected_candidate_index=True)
 
     # Non-integer in serialized format
     doc = choice.public_dict()
     doc["selected_candidate_index"] = "0"
-    match_msg = "selected candidate is unavailable|selected_candidate_index must be an integer"
+    match_msg = "selected candidate differs"
     with pytest.raises(ValueError, match=match_msg):
         RedDevelopmentMeasuredChoice.from_public(doc)
 
     # Behavior probabilities length mismatch
-    with pytest.raises(ValueError, match="probability length differs"):
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
         replace(choice, behavior_probabilities=(0.5, 0.5))
 
     # Probabilities not summing to 1.0
-    with pytest.raises(ValueError, match="must sum to 1.0"):
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
         replace(choice, behavior_probabilities=(0.5, 0.3, 0.1, 0.2))
 
     # Negative probability
-    with pytest.raises(ValueError, match="must be non-negative"):
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
         replace(choice, behavior_probabilities=(1.1, -0.1, 0.0, 0.0))
 
-    # Selection seed replay mismatch:
-    # Deterministic sampling from RNG with seed must reproduce selected_candidate_index
-    rng_seed = 12345
-    rng = random.Random(rng_seed)
-    expected_sample = rng.choices(
-        range(len(choice.menu.candidates)), weights=choice.behavior_probabilities, k=1
-    )[0]
-    mismatched_index = (expected_sample + 1) % len(choice.menu.candidates)
-    # Available candidate that does not match seed's draw
-    if mismatched_index in choice.menu.available_indices:
-        seed_err = "selection seed does not replay the recorded selection"
-        with pytest.raises(ValueError, match=seed_err):
-            replace(choice, selected_candidate_index=mismatched_index, selection_seed=rng_seed)
+    with pytest.raises(ValueError, match="selection seed differs"):
+        replace(choice, selection_seed=-1)
 
 
 def test_adversarial_state_hashes_tampering(tmp_path):
@@ -272,15 +367,15 @@ def test_adversarial_state_hashes_tampering(tmp_path):
 
     # Invalid hex hashes
     for bad_hash in ["invalid", "x" * 64, "0" * 63]:
-        with pytest.raises(ValueError, match="parent_state_sha256"):
+        with pytest.raises(ValueError, match="parent state hash differs"):
             replace(choice, parent_state_sha256=bad_hash)
-        with pytest.raises(ValueError, match="terminal_state_sha256"):
+        with pytest.raises(ValueError, match="terminal state hash differs"):
             replace(choice, terminal_state_sha256=bad_hash)
-        with pytest.raises(ValueError, match="segments_sha256"):
+        with pytest.raises(ValueError, match="segment inventory hash differs"):
             replace(choice, segments_sha256=bad_hash)
 
-    # Parent state equal to terminal state
-    with pytest.raises(ValueError, match="parent and terminal state hashes must differ"):
+    # Parent state cannot disagree with the first retained segment.
+    with pytest.raises(ValueError, match="segment endpoints differ"):
         replace(choice, parent_state_sha256=choice.terminal_state_sha256)
 
 
@@ -302,14 +397,18 @@ def test_adversarial_outcome_and_observation_tampering(tmp_path):
     # Lost specimen / regressed credit
     # Replace after with before so no acquisition occurred
     with pytest.raises(GoalManagerCompositionError, match="no physical acquisition"):
-        replace(choice, after_observation=choice.before_observation)
+        replace(
+            choice,
+            after_observation=choice.before_observation,
+            after_observation_sha256=choice.before_observation_sha256,
+        )
 
 
 def test_adversarial_costs_tampering(tmp_path):
     choice = _valid_choice(tmp_path)
 
     # Actions <= 0
-    act_err = "controller actions must be positive integer within bounds"
+    act_err = "aggregate action count differs"
     with pytest.raises(ValueError, match=act_err):
         replace(choice, controller_actions=0)
     with pytest.raises(ValueError, match=act_err):
@@ -319,21 +418,21 @@ def test_adversarial_costs_tampering(tmp_path):
     with pytest.raises(ValueError, match=act_err):
         replace(choice, controller_actions=True)
 
-    # Actions > maximum_actions
-    with pytest.raises(ValueError, match=act_err):
+    # Actions > the fixed maximum also disagrees with the segment census.
+    with pytest.raises(ValueError, match="aggregate costs differ from segments"):
         replace(choice, controller_actions=30_001)
 
     # Frames < 0
-    frames_err = "emulator frames must be non-negative integer within bounds"
+    frames_err = "aggregate frame count differs"
     with pytest.raises(ValueError, match=frames_err):
         replace(choice, emulator_frames=-1)
 
     # Frames > maximum_frames
-    with pytest.raises(ValueError, match=frames_err):
+    with pytest.raises(ValueError, match="aggregate costs differ from segments"):
         replace(choice, emulator_frames=3_000_001)
 
     # Negative resource costs
-    with pytest.raises(ValueError, match="resource costs must be non-negative"):
+    with pytest.raises(ValueError, match="resource costs differ from observations"):
         replace(choice, resource_costs={"balls": -1})
 
 
@@ -348,26 +447,29 @@ def test_adversarial_trust_flags_tampering(tmp_path):
     ]:
         doc = choice.public_dict()
         doc[flag] = True
-        with pytest.raises(ValueError, match=f"{flag} must be false"):
+        with pytest.raises(ValueError, match="trust boundary differs"):
             RedDevelopmentMeasuredChoice.from_public(doc)
 
     doc_t = choice.public_dict()
     doc_t["teacher_labels"] = 1
-    with pytest.raises(ValueError, match="teacher_labels must be 0"):
+    with pytest.raises(ValueError, match="trust boundary differs"):
         RedDevelopmentMeasuredChoice.from_public(doc_t)
 
     doc_tr = choice.public_dict()
     doc_tr["training_only"] = False
-    with pytest.raises(ValueError, match="training_only must be true"):
+    with pytest.raises(ValueError, match="trust boundary differs"):
         RedDevelopmentMeasuredChoice.from_public(doc_tr)
 
 
 def test_publish_and_load_measured_choice(tmp_path, monkeypatch):
     store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
-    choice = _valid_choice(tmp_path, model_sha256=model_a.model.model_sha256)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
 
     # Mismatched behavior record rejected on publish
-    with pytest.raises(ValueError, match="choice model sha256 does not match"):
+    with pytest.raises(ValueError, match="behavior model differs"):
         publish_development_measured_choice(store, choice, prior)
 
     # Successful publish
@@ -383,13 +485,68 @@ def test_publish_and_load_measured_choice(tmp_path, monkeypatch):
     assert arm.decision_sha256 == choice.decision_sha256
 
     # Load with non-registered objective rejected
-    with pytest.raises(ValueError, match="development measured choice objective differs"):
+    with pytest.raises(ValueError, match="requires the registered training objective"):
         load_red_development_measured_choice_example(store, meas_input, objective="other")
+
+
+@pytest.mark.parametrize("fault", ["probabilities", "scores", "seed"])
+def test_loader_replays_behavior_from_model_not_self_reported_values(
+    tmp_path, monkeypatch, fault
+):
+    store, _, _, model = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model.model.model_sha256, behavior=model.model
+    )
+    choice = _bind_parent(store, choice, model)
+    document = choice.public_dict()
+    if fault == "probabilities":
+        probabilities = document["behavior_probabilities"]
+        probabilities[0] += 0.01
+        probabilities[1] -= 0.01
+    elif fault == "scores":
+        document["scores"][0] += 0.01
+    else:
+        seed = 0
+        while _replay_behavior(model.model, choice.menu, seed=seed)[2] == 0:
+            seed += 1
+        document["selection_seed"] = seed
+        document["selection_declaration"]["seed"] = seed
+        declaration_sha = canonical_sha256(document["selection_declaration"])
+        document["selection_declaration_sha256"] = declaration_sha
+        document["segments"][0]["declaration_sha256"] = declaration_sha
+        document["segments_sha256"] = canonical_sha256(document["segments"])
+    sealed = store.publish_sealed_record(
+        development_measured_choice_record_id(choice.choice_id),
+        kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
+        record=document,
+    )
+    item = RedDevelopmentMeasuredChoiceInput(
+        choice.choice_id, sealed.summary.record_sha256, model
+    )
+    with pytest.raises(ValueError, match="behavior selection does not replay"):
+        load_red_development_measured_choice_example(
+            store, item, objective=REGISTERED_OBJECTIVE
+        )
+
+
+def test_serialized_choice_rejects_extra_keys_and_changed_outcome(tmp_path):
+    choice = _valid_choice(tmp_path)
+    document = choice.public_dict()
+    document["unexpected"] = True
+    with pytest.raises(ValueError, match="declaration differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+    document = choice.public_dict()
+    document["observed_outcome"]["target_values"][3] = 0.0
+    with pytest.raises(ValueError, match="observed outcome differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 def test_fit_red_player_update_with_measured_choice(tmp_path, monkeypatch):
     store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
-    choice = _valid_choice(tmp_path, model_sha256=model_a.model.model_sha256)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
     meas_input = publish_development_measured_choice(store, choice, model_a)
 
     fit_b = fit_red_player_update(
@@ -428,7 +585,10 @@ def test_subsequent_fit_retention_preserves_measured_choice_and_all_prior_rows(
     tmp_path, monkeypatch
 ):
     store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
-    choice_1 = _valid_choice(tmp_path, model_sha256=model_a.model.model_sha256)
+    choice_1 = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice_1 = _bind_parent(store, choice_1, model_a)
     meas_input_1 = publish_development_measured_choice(store, choice_1, model_a)
 
     # Fit Model B with choice 1
@@ -469,21 +629,58 @@ def test_subsequent_fit_retention_preserves_measured_choice_and_all_prior_rows(
         ),
     )
     pa2 = project_registered_observation(a2, pol).public_dict()
-    choice_2 = RedDevelopmentMeasuredChoice(
-        choice_id="safari-choice-tauros",
-        menu=_menu("safari"),
-        selected_candidate_index=0,
-        behavior_probabilities=(0.6, 0.3, 0.1, 0.0),
-        model_sha256=model_b.model.model_sha256,
-        before_observation=pb,
-        after_observation=pa2,
-        parent_state_sha256="5" * 64,
-        terminal_state_sha256="6" * 64,
-        segments_sha256="7" * 64,
+    outcome_2 = red_registered_outcome_from_observations(
+        pb,
+        pa2,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=True,
+        actions=120,
+        frames=1800,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    choice_2 = _valid_choice(
+        tmp_path, model_sha256=model_b.model.model_sha256, behavior=model_b.model
+    )
+    declaration_2 = {
+        **choice_2.selection_declaration,
+        "pair_id": "safari-segment-2",
+    }
+    segment_2 = RedDevelopmentMeasuredSegment(
+        pair_id="safari-segment-2",
+        declaration_sha256=canonical_sha256(declaration_2),
+        claim_sha256="5" * 64,
+        result_sha256="6" * 64,
+        parent_state_sha256="7" * 64,
+        terminal_state_sha256="8" * 64,
         controller_actions=120,
         emulator_frames=1800,
-        resource_costs={"safari_balls_used": 6, "money_spent": 500},
+        status="retained_success",
     )
+    choice_2 = replace(
+        choice_2,
+        choice_id="safari-choice-tauros",
+        parent_episode_id="measured-safari-parent-2",
+        selection_declaration=declaration_2,
+        selection_declaration_sha256=canonical_sha256(declaration_2),
+        before_observation=pb,
+        after_observation=pa2,
+        before_observation_sha256=canonical_sha256(pb),
+        after_observation_sha256=canonical_sha256(pa2),
+        parent_state_sha256="7" * 64,
+        terminal_state_sha256="8" * 64,
+        segments=(segment_2,),
+        segments_sha256=canonical_sha256([segment_2.public_dict()]),
+        controller_actions=120,
+        emulator_frames=1800,
+        resource_costs={
+            "irreversible_loss": outcome_2.irreversible_loss,
+            "party_cost": outcome_2.party_cost,
+            "resource_cost": outcome_2.resource_cost,
+            "storage_cost": outcome_2.storage_cost,
+        },
+    )
+    choice_2 = _bind_parent(store, choice_2, model_b)
     meas_input_2 = publish_development_measured_choice(store, choice_2, model_b)
 
     # Fit Model C passing ONLY meas_input_2! Choice 1 is NOT passed explicitly!
@@ -527,7 +724,10 @@ def test_subsequent_fit_retention_preserves_measured_choice_and_all_prior_rows(
 
 def test_incremental_measured_choice_and_registered_results(tmp_path, monkeypatch):
     store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
-    choice = _valid_choice(tmp_path, model_sha256=model_a.model.model_sha256)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
     meas_input = publish_development_measured_choice(store, choice, model_a)
 
     resolver = {

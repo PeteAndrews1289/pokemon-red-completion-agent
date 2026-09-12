@@ -119,44 +119,86 @@ def fit_red_player_update(
         for item in regional_choices
     )
     curriculum = tuple(row for dataset in datasets for row in dataset.curriculum_examples)
+    if measured_choices and not registered_objective:
+        raise ValueError("measured choices require the registered training objective")
+    incoming_measured = {item.choice_id: item for item in measured_choices}
     prior_measured: list[RedDevelopmentMeasuredChoiceInput] = []
-    if isinstance(prior, RedPlayerModelRecord):
+    prior_measured_ids: set[str] = set()
+    if prior_registered:
+        assert isinstance(prior, RedPlayerModelRecord)
         corpus_rec = store.find_sealed_record(
             f"rp-corpus-{prior.corpus_sha256}", expected_kind="red_player_training_corpus"
         )
-        if corpus_rec is not None:
-            corpus_data = corpus_rec.read()
-            measured_list = corpus_data.get("measured_choices", [])
-            if isinstance(measured_list, list):
-                for raw_item in measured_list:
-                    item_dict = cast(Mapping[str, object], raw_item)
-                    cid = cast(str, item_dict["choice_id"])
-                    if cid not in {m.choice_id for m in measured_choices}:
-                        b_sha = cast(str, item_dict["behavior_model_sha256"])
-                        b_rec: LivingDexGoalModelRecord | RedPlayerModelRecord
-                        if prior.model.model_sha256 == b_sha:
-                            b_rec = prior
-                        else:
-                            m_rec = store.find_sealed_record(
-                                f"rpr-model-{b_sha}", expected_kind="red_player_model"
-                            )
-                            if m_rec is None:
-                                m_rec = store.find_sealed_record(
-                                    f"rp-model-{b_sha}", expected_kind="red_player_model"
-                                )
-                            if m_rec is not None:
-                                b_rec = load_player_goal_model_record_bytes(
-                                    m_rec.read_bytes(), expected_model_sha256=b_sha
-                                )
-                            else:
-                                raise ValueError(
-                                    f"cannot resolve prior measured choice behavior model {b_sha}"
-                                )
-                        prior_measured.append(
-                            RedDevelopmentMeasuredChoiceInput(
-                                cid, cast(str, item_dict["record_sha256"]), b_rec
-                            )
-                        )
+        if corpus_rec is None:
+            raise ValueError("prior registered corpus is missing")
+        corpus_data = corpus_rec.read()
+        if (
+            canonical_sha256(corpus_data) != prior.corpus_sha256
+            or corpus_data.get("schema") != "pokemon.red.registered-player-corpus.v1"
+            or corpus_data.get("objective") != REGISTERED_OBJECTIVE
+            or corpus_data.get("independent_evaluation") is not False
+        ):
+            raise ValueError("prior registered corpus binding differs")
+        measured_list = corpus_data.get("measured_choices", [])
+        if not isinstance(measured_list, list):
+            raise ValueError("prior measured choice inventory differs")
+        if bool(measured_list) != (
+            corpus_data.get("measured_choice_contract")
+            == {
+                "action_trace_available": False,
+                "authority_promotion_eligible": False,
+                "independent_evaluation": False,
+                "training_only": True,
+                "trust_tier": "development_measured_without_action_trace",
+            }
+        ):
+            raise ValueError("prior measured choice trust contract differs")
+        for raw_item in measured_list:
+            if not isinstance(raw_item, Mapping) or set(raw_item) != {
+                "choice_id",
+                "record_sha256",
+                "behavior_model_sha256",
+            }:
+                raise ValueError("prior measured choice inventory differs")
+            cid = raw_item.get("choice_id")
+            record_sha = raw_item.get("record_sha256")
+            behavior_sha = raw_item.get("behavior_model_sha256")
+            if (
+                not isinstance(cid, str)
+                or not cid
+                or cid in prior_measured_ids
+                or not isinstance(record_sha, str)
+                or re.fullmatch(r"[0-9a-f]{64}", record_sha) is None
+                or not isinstance(behavior_sha, str)
+                or re.fullmatch(r"[0-9a-f]{64}", behavior_sha) is None
+            ):
+                raise ValueError("prior measured choice inventory differs")
+            prior_measured_ids.add(cid)
+            incoming = incoming_measured.get(cid)
+            if incoming is not None:
+                if (
+                    incoming.record_sha256 != record_sha
+                    or incoming.behavior_record.model.model_sha256 != behavior_sha
+                ):
+                    raise ValueError("prior measured choice cannot be replaced")
+                continue
+            if prior.model.model_sha256 == behavior_sha:
+                behavior_record = prior
+            else:
+                model_record = store.find_sealed_record(
+                    f"rpr-model-{behavior_sha}", expected_kind="red_player_model"
+                )
+                if model_record is None:
+                    raise ValueError("prior measured choice behavior model is missing")
+                loaded_behavior = load_player_goal_model_record_bytes(
+                    model_record.read_bytes(), expected_model_sha256=behavior_sha
+                )
+                if not isinstance(loaded_behavior, RedPlayerModelRecord):
+                    raise ValueError("measured choice behavior model is not registered")
+                behavior_record = loaded_behavior
+            prior_measured.append(
+                RedDevelopmentMeasuredChoiceInput(cid, record_sha, behavior_record)
+            )
     all_measured_choices = (*prior_measured, *measured_choices)
     measured_rows = tuple(
         load_red_development_measured_choice_example(store, item, objective=objective)
@@ -193,7 +235,7 @@ def fit_red_player_update(
         raise ValueError("native training has no additional settled experience")
     if registered_objective and settled_count < 2:
         raise ValueError("registered fitting needs two settled choices before publication")
-    corpus = {
+    corpus: dict[str, object] = {
         "schema": (
             "pokemon.red.registered-player-corpus.v1"
             if registered_objective
@@ -245,6 +287,13 @@ def fit_red_player_update(
             }
             for item in all_measured_choices
         ]
+        corpus["measured_choice_contract"] = {
+            "action_trace_available": False,
+            "authority_promotion_eligible": False,
+            "independent_evaluation": False,
+            "training_only": True,
+            "trust_tier": "development_measured_without_action_trace",
+        }
         corpus_sha = canonical_sha256(corpus)
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
@@ -329,7 +378,19 @@ def fit_red_player_update(
             else {}
         ),
         **({"regional_source_examples": len(regional_rows)} if regional_choices else {}),
-        **({"measured_source_examples": len(measured_rows)} if all_measured_choices else {}),
+        **(
+            {
+                "measured_source_examples": len(measured_rows),
+                "new_measured_source_examples": len(
+                    {item.choice_id for item in all_measured_choices} - prior_measured_ids
+                ),
+                "measured_evidence_action_trace_available": False,
+                "measured_evidence_authority_promotions": 0,
+                "measured_evidence_independent_evaluations": 0,
+            }
+            if all_measured_choices
+            else {}
+        ),
     }
 
 

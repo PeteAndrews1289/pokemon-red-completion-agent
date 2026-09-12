@@ -102,6 +102,7 @@ def load_prior_player_inventory(
     native = corpus.get("episodes")
     regional = corpus.get("regional_choices", [])
     measured_rows = corpus.get("measured_choices", [])
+    measured_contract = corpus.get("measured_choice_contract")
     if (
         not isinstance(native, list)
         or not isinstance(regional, list)
@@ -109,6 +110,17 @@ def load_prior_player_inventory(
         or not native
     ):
         raise ValueError("prior player episode inventory differs")
+    if bool(measured_rows) != (
+        measured_contract
+        == {
+            "action_trace_available": False,
+            "authority_promotion_eligible": False,
+            "independent_evaluation": False,
+            "training_only": True,
+            "trust_tier": "development_measured_without_action_trace",
+        }
+    ):
+        raise ValueError("prior measured choice trust contract differs")
     episodes = []
     for item in native:
         row = _mapping(item)
@@ -142,11 +154,16 @@ def load_prior_player_inventory(
     measured = []
     for item in measured_rows:
         row = _mapping(item)
+        if set(row) != {"choice_id", "record_sha256", "behavior_model_sha256"}:
+            raise ValueError("prior measured choice inventory differs")
+        measured_behavior = behavior(row)
+        if not isinstance(measured_behavior, RedPlayerModelRecord):
+            raise ValueError("prior measured choice behavior is not registered")
         measured.append(
             RedDevelopmentMeasuredChoiceInput(
                 _text(row, "choice_id"),
                 _text(row, "record_sha256"),
-                behavior(row),
+                measured_behavior,
             )
         )
     if (
