@@ -285,6 +285,12 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         or {"decisions", "executions"}.intersection(episode.stream_names)
     ):
         raise RedRecordedSupportError("support import changed partition or invented gameplay")
+    if schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA and (
+        not isinstance(previous.get("registration_session_record_id"), str)
+        or metadata.get("registration_session_record_id")
+        != previous.get("registration_session_record_id")
+    ):
+        raise RedRecordedSupportError("registered support session binding differs")
     split = _mapping(metadata.get("split"))
     if split.get("partition") != "train" or not isinstance(split.get("root_lineage_id"), str):
         raise RedRecordedSupportError("support requires an explicit training lineage")
