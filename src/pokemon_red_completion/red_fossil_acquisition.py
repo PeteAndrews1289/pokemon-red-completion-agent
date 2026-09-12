@@ -12,7 +12,7 @@ from collections.abc import Mapping
 from dataclasses import dataclass, replace
 from enum import StrEnum
 from functools import partial
-from typing import Protocol
+from typing import Protocol, cast
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
@@ -31,6 +31,7 @@ from pokemon_red_completion.observation import (
     ItemId,
     MapId,
     PokemonRedStateReader,
+    ReadOnlyMemory,
     RawGameState,
     RedCurrentBoxState,
     RedPokedexState,
@@ -416,7 +417,7 @@ class RedRoutedFossilRevival:
             self.reader,
             capability_projector=partial(
                 collection_field_capabilities,
-                self.emulator,
+                cast(ReadOnlyMemory, self.emulator),
                 allow_cut=True,
                 allow_surf=True,
             ),
