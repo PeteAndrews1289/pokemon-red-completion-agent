@@ -328,13 +328,21 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         raise RedRecordedSupportError("support predecessor checkpoint differs")
     parent = record.read()
     parent_episode = store.open_episode(parent_id)
+    parent_schema = parent.get("schema")
+    measured_restart_parent = (
+        schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+    )
     if (
-        parent.get("schema")
-        in {
-            SUPPORT_CHECKPOINT_SCHEMA,
-            REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
-            REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
-        }
+        (
+            parent_schema
+            in {
+                SUPPORT_CHECKPOINT_SCHEMA,
+                REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+                REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
+            }
+            and not measured_restart_parent
+        )
         or parent_episode.manifest_sha256 != origin.get("manifest_sha256")
         or parent.get("trajectory_manifest_sha256") != parent_episode.manifest_sha256
         or list(parent_episode.iter_stream("checkpoint")) != [
@@ -342,6 +350,12 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         ]
     ):
         raise RedRecordedSupportError("support requires its original completed native predecessor")
+    if measured_restart_parent:
+        # A measured terminal is an authenticated zero-input restart around one
+        # already-completed native predecessor. Permit exactly one subsequent
+        # registered support import, after rechecking the measured join itself.
+        # Generic support-on-support chains remain forbidden.
+        require_recorded_support_origin(store, parent)
     if is_measured and parent.get("schema") != REGISTERED_PLAYER_CHECKPOINT_SCHEMA:
         raise RedRecordedSupportError("measured terminal requires a native registered predecessor")
     for key, original in (

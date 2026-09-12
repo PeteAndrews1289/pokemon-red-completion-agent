@@ -37,9 +37,11 @@ from pokemon_red_completion.red_player_training_fit import fit_red_player_update
 from pokemon_red_completion.red_recorded_support import (
     REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
     REGISTERED_MEASURED_HEADER_SCHEMA,
+    REGISTERED_SUPPORT_HEADER_SCHEMA,
     VERIFIED_SUPPORT_SEGMENT_SCHEMA,
     RedRecordedSupportError,
     RedRegisteredMeasuredTerminalResult,
+    RedRegisteredRecordedSupportResult,
 )
 from pokemon_red_completion.registered_checkpoint import RegisteredCollectionCheckpoint
 from pokemon_red_completion.registration_memory import RegistrationObservation
@@ -319,6 +321,129 @@ def test_measured_terminal_restart_roundtrip_is_zero_input_and_lower_trust(
     )
     assert opened.capture.state_bytes == terminal_state
     assert opened.collection == document["collection"]
+
+
+def test_measured_terminal_can_anchor_one_later_registered_support_import(
+    tmp_path, monkeypatch
+):
+    store, _, native_parent, measured, measured_segment, _ = _measured_checkpoint_case(
+        tmp_path, monkeypatch
+    )
+    _write_measured_episode(store, measured, measured_segment)
+    measured_summary = publish_red_player_checkpoint(store, measured)
+    measured_checkpoint = open_red_player_checkpoint(
+        store,
+        episode_id=measured["episode_id"],
+        expected_record_sha256=measured_summary["record_sha256"],
+        original_parent=native_parent.capture,
+        expected_profile_sha256="5" * 64,
+        expected_rom_sha256="6" * 64,
+        expected_context_origin="training",
+    )
+
+    terminal_state = b"post-measured-native-support"
+    support_segment = {
+        "schema": VERIFIED_SUPPORT_SEGMENT_SCHEMA,
+        "plan": {
+            "parent_state_sha256": measured["state_sha256"],
+            "parent_episode": measured["episode_id"],
+            "parent_checkpoint_sha256": measured_summary["record_sha256"],
+            "diagnostic_only": True,
+            "fit_admission": False,
+            "action_trace_available": False,
+            "source_commit": "a" * 40,
+            "maximum_actions": 500,
+            "maximum_frames": 50_000,
+            "retained_declaration_sha256": "1" * 64,
+            "retained_claim_sha256": "2" * 64,
+            "retained_result_sha256": "3" * 64,
+        },
+        "state_base64": base64.urlsafe_b64encode(terminal_state).decode("ascii"),
+        "audit": {
+            "state_sha256": hashlib.sha256(terminal_state).hexdigest(),
+            "audit_actions": 0,
+            "audit_frames": 0,
+            "actions": 410,
+            "frames": 42_000,
+            "retry_authorized": False,
+            "training_examples": 0,
+            "status": "verified_super_rod_received",
+        },
+    }
+    result = RedRegisteredRecordedSupportResult(
+        measured["episode_id"],
+        measured_summary["record_sha256"],
+        measured_summary["trajectory_manifest_sha256"],
+        canonical_sha256([support_segment]),
+        410,
+        42_000,
+    )
+    observation = _registered_observation(measured["collection"])
+    document = capture_red_player_terminal(
+        emulator=_State(terminal_state),
+        meter=_ZeroMeter(),
+        observe=lambda: observation,
+        parent=measured_checkpoint.capture,
+        result=result,
+        episode_id="post-measured-support",
+        profile_sha256="5" * 64,
+        rom_sha256="6" * 64,
+        model_sha256=measured["model_sha256"],
+        source_commit="a" * 40,
+        source_bundle_sha256="b" * 64,
+        context_origin="training",
+    )
+    document["registration_observation"] = _registration_row(
+        document["collection"], document["state_sha256"], 7
+    )
+    metadata = {
+        name: document[key]
+        for name, key in (
+            ("state_sha256", "original_state_sha256"),
+            ("envelope_sha256", "original_envelope_sha256"),
+            ("profile_sha256", "profile_sha256"),
+            ("rom_sha256", "rom_sha256"),
+            ("model_sha256", "model_sha256"),
+            ("source_commit", "source_commit"),
+            ("source_bundle_sha256", "source_bundle_sha256"),
+            ("context_origin", "context_origin"),
+        )
+    }
+    metadata.update(
+        schema=REGISTERED_SUPPORT_HEADER_SCHEMA,
+        training_eligible=False,
+        split={"partition": "train", "root_lineage_id": "measured-root"},
+        registration_session_record_id="registered-session",
+    )
+    writer = store.begin_episode(document["episode_id"])
+    writer.append("episode", {"episode_id": document["episode_id"], "metadata": metadata})
+    writer.append("checkpoint", document, durable=True)
+    writer.append("recorded_support", support_segment)
+    writer.append(
+        "events",
+        {
+            "kind": "terminal",
+            "payload": {
+                "status": "complete",
+                "bounded_player": document["terminal_result"],
+            },
+        },
+        durable=True,
+    )
+    writer.complete()
+    summary = publish_red_player_checkpoint(store, document)
+    opened = open_red_player_checkpoint(
+        store,
+        episode_id=document["episode_id"],
+        expected_record_sha256=summary["record_sha256"],
+        original_parent=measured_checkpoint.capture,
+        expected_profile_sha256="5" * 64,
+        expected_rom_sha256="6" * 64,
+        expected_context_origin="training",
+    )
+    assert opened.capture.state_bytes == terminal_state
+    assert opened.collection == measured["collection"]
+    assert document["terminal_result"]["training_examples"] == 0
 
 
 def test_measured_terminal_contract_cannot_be_captured_as_legacy_collection(
