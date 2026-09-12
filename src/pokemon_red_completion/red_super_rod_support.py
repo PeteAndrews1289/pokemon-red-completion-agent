@@ -1,8 +1,9 @@
 """Verified, non-learning acquisition of Red's free Super Rod.
 
 The Super Rod is a one-time cartridge prerequisite, not a strategic model
-choice and not a Mart purchase.  This module owns only the final adjacent NPC
-interaction.  Cartridge-derived routing remains outside this boundary.
+choice and not a Mart purchase.  This module composes cartridge-derived routing,
+an exact active-Safari exit boundary when needed, and the final NPC gift while
+publishing no route identity or learner label.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ from .gen1_route_runtime import Gen1RouteInterruptionHandler, Gen1TraversalObser
 from .gen1_trainer_sight import Gen1TrainerSightProjector
 from .observation import (
     MAX_BAG_ITEMS,
+    EventFlag,
     InputReadiness,
     ItemId,
     MapId,
@@ -27,7 +29,7 @@ from .observation import (
 )
 from .red_resource_goal_router import _supported_plan, collection_field_capabilities
 from .route_executor import RouteExecutionLimits, execute_route
-from .route_plan import RoutePlanningError
+from .route_plan import RoutePlan, RoutePlanningError
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 SUPER_ROD_STATUS_MASK = 1 << 5
@@ -35,6 +37,10 @@ SUPER_ROD_HOUSE_MAP_ID = int(MapId.ROUTE_12_SUPER_ROD_HOUSE)
 SUPER_ROD_NPC_YX = (4, 2)
 SUPER_ROD_STANCE_YX = (3, 2)
 SUPER_ROD_FACING = "down"
+SAFARI_GATE_MAP_ID = int(MapId.SAFARI_ZONE_GATE)
+SAFARI_CENTER_MAP_ID = int(MapId.SAFARI_ZONE_CENTER)
+SAFARI_EXIT_SETTLE_LIMIT = 16
+SAFARI_EXIT_WAIT_REPEATS = 6
 
 
 class RedSuperRodSupportError(RuntimeError):
@@ -272,12 +278,73 @@ SUPER_ROD_ROUTE_LIMITS = RouteExecutionLimits(
 )
 
 
+def _event_is_set(flags: bytes | None, event: EventFlag) -> bool:
+    if flags is None:
+        raise RedSuperRodSupportError("Safari exit lost event observation")
+    byte_index, bit_index = divmod(int(event), 8)
+    if byte_index >= len(flags):
+        raise RedSuperRodSupportError("Safari exit event observation is truncated")
+    return bool(flags[byte_index] & (1 << bit_index))
+
+
+def _events_with_safari_exit_cleared(flags: bytes) -> bytes:
+    result = bytearray(flags)
+    for event in (EventFlag.SAFARI_GAME_OVER, EventFlag.IN_SAFARI_ZONE):
+        byte_index, bit_index = divmod(int(event), 8)
+        result[byte_index] &= ~(1 << bit_index)
+    return bytes(result)
+
+
+def _safari_exit_protected_state(raw: RawGameState) -> tuple[object, ...]:
+    return (
+        raw.game_started,
+        raw.battle_state,
+        raw.badge_bits,
+        raw.status_flags_1,
+        raw.party_count,
+        raw.party_species_ids,
+        raw.party_levels,
+        raw.party_hp,
+        raw.party_max_hp,
+        raw.party_status,
+        raw.party_moves,
+        raw.party_pp,
+        raw.player_money,
+        raw.bag_items,
+    )
+
+
+def _require_safari_exit_transition(
+    initial: RawGameState,
+    current: RawGameState,
+) -> None:
+    if _safari_exit_protected_state(current) != _safari_exit_protected_state(initial):
+        raise RedSuperRodSupportError("Safari exit changed protected game state")
+    if initial.event_flags is None or current.event_flags is None:
+        raise RedSuperRodSupportError("Safari exit lost event observation")
+    allowed = {
+        initial.event_flags,
+        _events_with_safari_exit_cleared(initial.event_flags),
+    }
+    if current.event_flags not in allowed:
+        raise RedSuperRodSupportError("Safari exit changed unrelated story events")
+
+
+@dataclass(frozen=True, slots=True)
+class _SafariExitReceipt:
+    route_steps: int
+    route_replans: int
+    route_interruptions: int
+
+
+
 @dataclass(frozen=True, slots=True)
 class RedRoutedSuperRodSupportResult:
     gift: RedSuperRodSupportResult
     route_steps: int
     route_replans: int
     route_interruptions: int
+    safari_exit_used: bool
     facing_action_used: bool
     actions: int
     frames: int
@@ -289,6 +356,7 @@ class RedRoutedSuperRodSupportResult:
             or type(self.route_replans) is not int
             or type(self.route_interruptions) is not int
             or min(self.route_steps, self.route_replans, self.route_interruptions) < 0
+            or type(self.safari_exit_used) is not bool
             or type(self.facing_action_used) is not bool
             or type(self.actions) is not int
             or type(self.frames) is not int
@@ -305,6 +373,7 @@ class RedRoutedSuperRodSupportResult:
             "route_steps": self.route_steps,
             "route_replans": self.route_replans,
             "route_interruptions": self.route_interruptions,
+            "safari_exit_used": self.safari_exit_used,
             "facing_action_used": self.facing_action_used,
             "actions": self.actions,
             "frames": self.frames,
@@ -365,6 +434,14 @@ class RedRoutedSuperRodSupport:
                 allow_surf=True,
             ),
         )
+        interruptions = Gen1RouteInterruptionHandler(
+            self.actions,
+            self.reader,
+            maximum_flees=128,
+            maximum_trainer_battles=8,
+            stabilization_frames=180,
+            route_name="Super Rod support transport",
+        )
         try:
             plan = self.world.plan_feasible_to_map(
                 observer.observe(),
@@ -377,14 +454,32 @@ class RedRoutedSuperRodSupport:
             ) from error
         if not plan.steps or not _supported_plan(plan, allow_cut=True, allow_surf=True):
             raise RedSuperRodSupportError("Super Rod route needs unsupported transport")
-        interruptions = Gen1RouteInterruptionHandler(
-            self.actions,
-            self.reader,
-            maximum_flees=128,
-            maximum_trainer_battles=8,
-            stabilization_frames=180,
-            route_name="Super Rod support transport",
+        safari_exit = _SafariExitReceipt(0, 0, 0)
+        safari_exit_used = _event_is_set(
+            self.reader.read().event_flags,
+            EventFlag.IN_SAFARI_ZONE,
         )
+        if safari_exit_used:
+            safari_exit = self._leave_active_safari(
+                plan,
+                field_actions,
+                observer,
+                interruptions,
+            )
+            try:
+                plan = self.world.plan_feasible_to_map(
+                    observer.observe(),
+                    SUPER_ROD_HOUSE_MAP_ID,
+                    goal_at=SUPER_ROD_STANCE_YX,
+                )
+            except RoutePlanningError as error:
+                raise RedSuperRodSupportError(
+                    "no cartridge route reaches the Super Rod after Safari exit"
+                ) from error
+            if not plan.steps or not _supported_plan(plan, allow_cut=True, allow_surf=True):
+                raise RedSuperRodSupportError(
+                    "post-Safari Super Rod route needs unsupported transport"
+                )
         report = execute_route(
             plan,
             field_actions,
@@ -430,10 +525,125 @@ class RedRoutedSuperRodSupport:
             raise RedSuperRodSupportError("routed Super Rod support exceeded its budget")
         return RedRoutedSuperRodSupportResult(
             gift=gift,
-            route_steps=len(report.executed_steps),
-            route_replans=len(report.replans),
-            route_interruptions=len(report.interruptions),
+            route_steps=safari_exit.route_steps + len(report.executed_steps),
+            route_replans=safari_exit.route_replans + len(report.replans),
+            route_interruptions=(
+                safari_exit.route_interruptions + len(report.interruptions)
+            ),
+            safari_exit_used=safari_exit_used,
             facing_action_used=facing_action_used,
             actions=actions,
             frames=frames,
         )
+
+    def _leave_active_safari(
+        self,
+        onward_plan: RoutePlan,
+        field_actions: Gen1FieldMovePort,
+        observer: Gen1TraversalObserver,
+        interruptions: Gen1RouteInterruptionHandler,
+    ) -> _SafariExitReceipt:
+        """Accept Red's observed leave-early prompt before ordinary routing.
+
+        The cartridge script presents a two-row Yes/No choice after the warp
+        into the gate, then clears the active-session event and walks the
+        player down.  The route planner may propose that warp, but generic
+        readiness cannot dismiss the script; this title adapter owns only that
+        exact support boundary.
+        """
+
+        transitions = tuple(
+            step
+            for step in onward_plan.steps
+            if step.source_map == SAFARI_CENTER_MAP_ID
+            and step.expected_map == SAFARI_GATE_MAP_ID
+            and not step.stays_on_map
+        )
+        if len(transitions) != 1:
+            raise RedSuperRodSupportError("Safari exit route has no unique gate transition")
+        transition = transitions[0]
+        try:
+            prefix = self.world.plan_feasible_to_map(
+                observer.observe(),
+                transition.source_map,
+                goal_at=transition.source_at,
+            )
+        except RoutePlanningError as error:
+            raise RedSuperRodSupportError("Safari exit source is unreachable") from error
+        if prefix.steps and not _supported_plan(prefix, allow_cut=True, allow_surf=True):
+            raise RedSuperRodSupportError("Safari exit prefix needs unsupported transport")
+        report = execute_route(
+            prefix,
+            field_actions,
+            observer,
+            interruption_handler=interruptions,
+            replanner=self.world.replanner(),
+            limits=self.route_limits,
+        )
+        if not report.passed:
+            raise RedSuperRodSupportError("Safari exit prefix missed its terminal boundary")
+        before_exit = self.reader.read()
+        if (
+            before_exit.map_id != transition.source_map
+            or (before_exit.player_y, before_exit.player_x) != transition.source_at
+            or before_exit.battle_state != 0
+            or not self.reader.read_input_readiness().ready
+            or not _event_is_set(before_exit.event_flags, EventFlag.IN_SAFARI_ZONE)
+            or _event_is_set(before_exit.event_flags, EventFlag.SAFARI_GAME_OVER)
+        ):
+            raise RedSuperRodSupportError("Safari exit source changed before input")
+
+        field_actions.execute(transition.macro_action)
+        self.actions.execute(
+            MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS)
+        )
+        for _ in range(SAFARI_EXIT_SETTLE_LIMIT + 1):
+            current = self.reader.read()
+            _require_safari_exit_transition(before_exit, current)
+            if (
+                current.map_id != SAFARI_GATE_MAP_ID
+                or current.player_x != transition.expected_at[1]
+                or current.player_y is None
+                or not transition.expected_at[0] <= current.player_y <= 3
+                or current.battle_state != 0
+            ):
+                raise RedSuperRodSupportError("Safari exit left its gate boundary")
+            active = _event_is_set(current.event_flags, EventFlag.IN_SAFARI_ZONE)
+            ready = self.reader.read_input_readiness().ready
+            dialogue = self.reader.read_bottom_dialogue_box_visible()
+            if not active and ready and not dialogue:
+                return _SafariExitReceipt(
+                    route_steps=len(report.executed_steps) + 1,
+                    route_replans=len(report.replans),
+                    route_interruptions=len(report.interruptions),
+                )
+            if dialogue:
+                if active:
+                    cursor = self.reader.read_menu_cursor_state()
+                    if (
+                        cursor.scroll_offset != 0
+                        or cursor.maximum_visible_index != 1
+                        or cursor.selected_visible_index not in {0, 1}
+                    ):
+                        raise RedSuperRodSupportError(
+                            "Safari exit did not expose its bounded Yes/No choice"
+                        )
+                    if cursor.selected_visible_index == 1:
+                        self.actions.execute(
+                            MacroAction(MacroActionKind.MOVE, "up")
+                        )
+                        selected = self.reader.read_menu_cursor_state()
+                        if (
+                            selected.scroll_offset != 0
+                            or selected.maximum_visible_index != 1
+                            or selected.selected_visible_index != 0
+                        ):
+                            raise RedSuperRodSupportError(
+                                "Safari exit did not acknowledge the Yes selection"
+                            )
+                self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
+            else:
+                self.actions.execute(
+                    MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS)
+                )
+        raise RedSuperRodSupportError("Safari exit did not settle within its bound")

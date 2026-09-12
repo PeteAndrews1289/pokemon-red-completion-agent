@@ -3,12 +3,14 @@ from types import SimpleNamespace
 
 import pytest
 
-from pokemon_red_completion.actions import MacroActionKind
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.observation import (
+    EventFlag,
     InputReadiness,
     ItemId,
     MapId,
+    MenuCursorState,
     RawGameState,
 )
 from pokemon_red_completion.red_super_rod_support import (
@@ -26,6 +28,16 @@ from pokemon_red_completion.red_super_rod_support import (
 from pokemon_red_completion.route_executor import TraversalSnapshot
 
 
+def _with_event(flags: bytes, event: EventFlag, enabled: bool) -> bytes:
+    result = bytearray(flags)
+    byte_index, bit_index = divmod(int(event), 8)
+    if enabled:
+        result[byte_index] |= 1 << bit_index
+    else:
+        result[byte_index] &= ~(1 << bit_index)
+    return bytes(result)
+
+
 def _raw(**changes) -> RawGameState:
     base = RawGameState(
         game_started=True,
@@ -37,7 +49,7 @@ def _raw(**changes) -> RawGameState:
         badge_bits=0xFF,
         bag_item_ids=(3,),
         bag_items=((3, 12),),
-        event_flags=b"events",
+        event_flags=bytes(320),
         party_species_ids=(9, 25),
         party_levels=(70, 30),
         party_hp=(200, 80),
@@ -242,7 +254,9 @@ def test_routed_receipt_keeps_support_out_of_learning_and_hides_coordinates():
         reader,
         emulator,
     ).execute()
-    result = RedRoutedSuperRodSupportResult(gift, 384, 1, 2, True, 410, 42_000)
+    result = RedRoutedSuperRodSupportResult(
+        gift, 384, 1, 2, False, True, 410, 42_000
+    )
     public = result.public_dict()
     assert public["training_examples"] == 0
     assert public["learned_goal_authority"] is False
@@ -262,6 +276,7 @@ def test_routed_receipt_rejects_invalid_accounting(mutation):
         "route_steps": 384,
         "route_replans": 0,
         "route_interruptions": 0,
+        "safari_exit_used": False,
         "facing_action_used": False,
         "actions": 410,
         "frames": 42_000,
@@ -355,3 +370,120 @@ def test_routed_executor_rejects_unsupported_route_before_input(monkeypatch):
             CountingExecutor(delegate), reader, emulator, world
         ).execute()
     assert delegate.count == 0 and emulator.frame_count == 0
+
+
+def test_active_safari_exit_selects_yes_and_settles_before_onward_route(monkeypatch):
+    import pokemon_red_completion.red_super_rod_support as runtime
+
+    flags = _with_event(bytes(320), EventFlag.IN_SAFARI_ZONE, True)
+    reader = _Reader(
+        _raw(
+            map_id=int(MapId.SAFARI_ZONE_WEST),
+            player_y=24,
+            player_x=14,
+            event_flags=flags,
+        )
+    )
+    reader.menu = MenuCursorState(1, 0, 1, 14, 7)
+    emulator = _Emulator()
+
+    transition = SimpleNamespace(
+        source_map=int(MapId.SAFARI_ZONE_CENTER),
+        source_at=(25, 15),
+        expected_map=int(MapId.SAFARI_ZONE_GATE),
+        expected_at=(0, 4),
+        stays_on_map=False,
+        macro_action=MacroAction(MacroActionKind.MOVE, "down"),
+    )
+    onward = SimpleNamespace(steps=(transition,))
+    prefix = SimpleNamespace(steps=(object(), object()))
+    report = SimpleNamespace(
+        passed=True,
+        executed_steps=(object(), object()),
+        replans=(object(),),
+        interruptions=(object(), object()),
+    )
+
+    class Actions:
+        def __init__(self):
+            self.kinds = []
+
+        def execute(self, action):
+            self.kinds.append((action.kind, action.value))
+            emulator.frame_count += 24
+            if (
+                action.kind is MacroActionKind.MOVE
+                and action.value == "down"
+                and reader.raw.map_id == int(MapId.SAFARI_ZONE_CENTER)
+            ):
+                reader.raw = replace(
+                    reader.raw,
+                    map_id=int(MapId.SAFARI_ZONE_GATE),
+                    player_y=0,
+                    player_x=4,
+                )
+                reader.ready = False
+                reader.dialogue = True
+            elif action.kind is MacroActionKind.MOVE and action.value == "up":
+                reader.menu = replace(reader.menu, selected_visible_index=0)
+            elif action.kind is MacroActionKind.CONFIRM and reader.dialogue:
+                active = _with_event(
+                    reader.raw.event_flags,
+                    EventFlag.IN_SAFARI_ZONE,
+                    False,
+                )
+                if active != reader.raw.event_flags:
+                    reader.raw = replace(reader.raw, event_flags=active)
+                else:
+                    reader.raw = replace(reader.raw, player_y=3)
+                    reader.ready = True
+                    reader.dialogue = False
+
+    def read_menu_cursor_state():
+        return reader.menu
+
+    reader.read_menu_cursor_state = read_menu_cursor_state
+    delegate = Actions()
+    actions = CountingExecutor(delegate)
+    world = SimpleNamespace(
+        plan_feasible_to_map=lambda *args, **kwargs: prefix,
+        replanner=lambda: object(),
+    )
+    monkeypatch.setattr(runtime, "_supported_plan", lambda *args, **kwargs: True)
+
+    def execute_route(*args, **kwargs):
+        reader.raw = replace(
+            reader.raw,
+            map_id=int(MapId.SAFARI_ZONE_CENTER),
+            player_y=25,
+            player_x=15,
+        )
+        return report
+
+    monkeypatch.setattr(runtime, "execute_route", execute_route)
+    support = RedRoutedSuperRodSupport(actions, reader, emulator, world)
+    receipt = support._leave_active_safari(
+        onward,
+        actions,
+        SimpleNamespace(observe=lambda: TraversalSnapshot(0, (0, 0), True)),
+        object(),
+    )
+
+    assert receipt.route_steps == 3
+    assert receipt.route_replans == 1
+    assert receipt.route_interruptions == 2
+    assert delegate.kinds == [
+        (MacroActionKind.MOVE, "down"),
+        (MacroActionKind.WAIT, None),
+        (MacroActionKind.MOVE, "up"),
+        (MacroActionKind.CONFIRM, None),
+        (MacroActionKind.CONFIRM, None),
+    ]
+    assert reader.raw.map_id == int(MapId.SAFARI_ZONE_GATE)
+    assert (reader.raw.player_y, reader.raw.player_x) == (3, 4)
+    assert _with_event(
+        reader.raw.event_flags,
+        EventFlag.IN_SAFARI_ZONE,
+        False,
+    ) == reader.raw.event_flags
+    assert reader.ready and not reader.dialogue
