@@ -366,6 +366,7 @@ def _player_observer(
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
     fossil_acquisitions: bool = False,
+    routed_storage_relief: bool = False,
     retain_quantum: Callable[[], None] | None = None,
     forward_story_only: bool = False,
 ) -> RedBoundedPlayerObserver:
@@ -422,6 +423,7 @@ def _player_observer(
             world,
             quote_resource_costs=quote_resource_costs,
             prepare_capture_storage=completion_dose,
+            routed_storage_relief=routed_storage_relief,
             routed_recovery=routed_recovery,
             trainer_funding=trainer_funding,
             trainer_pending_recovery=trainer_pending_recovery,

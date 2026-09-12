@@ -104,6 +104,7 @@ class RedResourceGoalRouter:
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
     prepare_capture_storage: bool = False
+    routed_storage_relief: bool = False
     routed_recovery: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
@@ -335,6 +336,11 @@ class RedResourceGoalRouter:
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
         result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        if self.routed_storage_relief:
+            from pokemon_red_completion.red_routed_storage_relief import (
+                bind_routed_storage_relief,
+            )
+            result = bind_routed_storage_relief(self, result, observation)
         if self.prepare_capture_storage:
             from pokemon_red_completion.red_routed_capture_storage import (
                 bind_capture_storage_support,

@@ -942,17 +942,20 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
                         observed_trainer_funding=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
-        {"quote_resource_costs": False, "prepare_capture_storage": False, "routed_recovery": False,
+        {"quote_resource_costs": False, "prepare_capture_storage": False,
+         "routed_storage_relief": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
          "regional_trainer_funding": False, "observed_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": True, "prepare_capture_storage": False, "routed_recovery": False,
+        {"quote_resource_costs": True, "prepare_capture_storage": False,
+         "routed_storage_relief": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
          "regional_trainer_funding": False, "observed_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": False, "prepare_capture_storage": True, "routed_recovery": True,
+        {"quote_resource_costs": False, "prepare_capture_storage": True,
+         "routed_storage_relief": False, "routed_recovery": True,
          "trainer_funding": True, "trainer_pending_recovery": True,
          "regional_trainer_funding": True, "observed_trainer_funding": True,
          "maximum_controller_actions": 30000,
