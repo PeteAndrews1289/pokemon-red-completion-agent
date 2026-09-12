@@ -347,7 +347,10 @@ class RedAcquiredSuperRodDialogueSettlement:
                 )
             if self.actions.actions_executed - before_actions >= self.maximum_confirm_pulses:
                 break
-            self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
+            # A can close the final text box and immediately re-trigger the NPC
+            # while the player remains facing him. B advances/dismisses dialogue
+            # but cannot start a new interaction at the field boundary.
+            self.actions.execute(MacroAction(MacroActionKind.CANCEL))
         raise RedSuperRodSupportError("acquired Super Rod dialogue exceeded its confirmation bound")
 
     def _frame_count(self) -> int:

@@ -171,7 +171,7 @@ def test_acquired_gift_dialogue_settles_without_regranting_item():
             self.count = 0
 
         def execute(self, action):
-            assert action.kind is MacroActionKind.CONFIRM
+            assert action.kind is MacroActionKind.CANCEL
             self.count += 1
             emulator.frame_count += 24
             if self.count == 2:
