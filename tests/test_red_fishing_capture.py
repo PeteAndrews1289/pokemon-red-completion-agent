@@ -14,8 +14,10 @@ from pokemon_red_completion.red_fishing_capture import (
 )
 
 
-def _result(outcome: FishingCastOutcome) -> FishingCastResult:
-    return FishingCastResult(outcome, RodKind.SUPER, 2, 180)
+def _result(
+    outcome: FishingCastOutcome, rod: RodKind = RodKind.SUPER
+) -> FishingCastResult:
+    return FishingCastResult(outcome, rod, 2, 180)
 
 
 def _offer() -> RedFishingDestinationOffer:
@@ -40,6 +42,7 @@ class _Port:
     registration_drift: bool = False
     active: int | None = None
     map_id: int = 23
+    rod: RodKind = RodKind.SUPER
 
     def registered_species_numbers(self) -> frozenset[int]:
         return self.registered
@@ -51,7 +54,7 @@ class _Port:
         outcome, self.active = self.outcomes.pop(0)
         if self.registration_drift:
             self.registered |= {150}
-        return _result(outcome)
+        return _result(outcome, self.rod)
 
     def encountered_species_number(self) -> int | None:
         return self.active
@@ -150,6 +153,14 @@ def test_fishing_capture_rejects_wrong_selected_map():
                 registration_drift=True,
             ),
             "no-bite",
+        ),
+        (
+            _Port(
+                frozenset({129}),
+                [(FishingCastOutcome.NO_BITE, None)],
+                rod=RodKind.OLD,
+            ),
+            "another rod",
         ),
     ],
 )

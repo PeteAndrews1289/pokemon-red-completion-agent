@@ -99,6 +99,30 @@ def test_menu_requires_two_executable_distinguishable_destinations():
             maximum_route_steps=100,
             free_storage_slots=40,
         )
+    with pytest.raises(ValueError, match="length|distinct"):
+        fishing.red_fishing_destination_menu(
+            _context(),
+            offers,
+            route_steps=(12,),
+            maximum_route_steps=100,
+            free_storage_slots=40,
+        )
+    with pytest.raises(ValueError, match="bound"):
+        fishing.red_fishing_destination_menu(
+            _context(),
+            offers,
+            route_steps=(12, 101),
+            maximum_route_steps=100,
+            free_storage_slots=40,
+        )
+    with pytest.raises(ValueError, match="storage"):
+        fishing.red_fishing_destination_menu(
+            _context(),
+            offers,
+            route_steps=(12, 60),
+            maximum_route_steps=100,
+            free_storage_slots=0,
+        )
 
 
 class _Model:
@@ -129,3 +153,23 @@ def test_selection_is_seeded_and_public_receipt_hides_bindings():
     assert public["teacher_labels"] == 0
     assert public["private_map_fields"] == 0
     assert "fishing-map-private" not in str(public)
+
+
+def test_selection_rejects_legacy_model_and_invalid_scores():
+    offers = (_offer(23, (116, 116)), _offer(24, (117, 118)))
+    menu = fishing.red_fishing_destination_menu(
+        _context(),
+        offers,
+        route_steps=(12, 60),
+        maximum_route_steps=100,
+        free_storage_slots=40,
+    )
+    legacy = _Model()
+    legacy.feature_version = 0
+    with pytest.raises(ValueError, match="feature version"):
+        fishing.select_red_fishing_destination(legacy, menu, offers, seed=7)
+
+    invalid = _Model()
+    invalid.scores = lambda _menu, _utility: (float("nan"), 1.0)
+    with pytest.raises(ValueError, match="invalid scores"):
+        fishing.select_red_fishing_destination(invalid, menu, offers, seed=7)
