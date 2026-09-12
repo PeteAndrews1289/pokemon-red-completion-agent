@@ -2009,6 +2009,7 @@ def _continue_readiness(
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
+    terminal_model_sha256: object = None
     admitted_profiles = tuple(
         p
         for p in (readiness.profile, expanded_profile, execution_profile, *regional_profiles)
@@ -2024,6 +2025,7 @@ def _continue_readiness(
         metadata = header.get("metadata")
         proposal_profile = None
         if isinstance(metadata, Mapping):
+            terminal_model_sha256 = metadata.get("model_sha256")
             proposal_sha256 = metadata.get("regional_proposal_record_sha256")
             if proposal_sha256 is not None:
                 if not isinstance(proposal_sha256, str):
@@ -2119,6 +2121,8 @@ def _continue_readiness(
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
+        if terminal_model_sha256 != readiness.model_sha256:
+            raise PairedRedBoundedPlayerRunError("continuation_terminal_model")
         if readiness.restore_regional_trainer_funding and not readiness.regional_trainer_funding:
             raise PairedRedBoundedPlayerRunError("regional_trainer_funding_rollback")
         if readiness.restore_observed_trainer_funding and not readiness.observed_trainer_funding:

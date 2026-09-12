@@ -143,7 +143,8 @@ def _readiness(store, arguments):
         rom_sha256=arguments["rom_sha256"], capture=arguments["parent"],
         profile=SimpleNamespace(profile_sha256=arguments["profile_sha256"]),
         challenger_arm_id=runner.CAUSAL_ARM_ID, legacy_model=None, causal_record=None,
-        calibration_record=None, model_file_sha256="3" * 64, model_sha256="4" * 64,
+        calibration_record=None, model_file_sha256="3" * 64,
+        model_sha256=arguments["model_sha256"],
         decision_limit=4, private_root=store, output_path=Path("unused-output"),
         protected_paths=(), context_origin="training", save_terminal_checkpoints=True,
     )
@@ -174,6 +175,14 @@ def test_continuation_changes_state_not_lineage_or_partition(case):
         "independent_root": False, "training_eligible": False,
     }
     continued.continuation.require_restored_observation(case[2])
+
+
+def test_continuation_requires_the_active_model_to_match_the_terminal(case):
+    readiness, ancestor = _completed(case)
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError, match="continuation_terminal_model"
+    ):
+        runner._continue_readiness(replace(readiness, model_sha256="4" * 64), (ancestor,))
 
 
 def test_continuation_opens_each_ancestor_once_and_revalidates_on_next_call(case, monkeypatch):
