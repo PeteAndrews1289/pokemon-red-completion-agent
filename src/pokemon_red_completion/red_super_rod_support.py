@@ -43,6 +43,8 @@ SAFARI_CENTER_EXIT_SOURCE_YX = (25, 15)
 SAFARI_GATE_ENTRY_YX = (0, 4)
 SAFARI_EXIT_SETTLE_LIMIT = 16
 SAFARI_EXIT_WAIT_REPEATS = 6
+SAFARI_AUTOWALK_SETTLE_LIMIT = 32
+SAFARI_AUTOWALK_WAIT_REPEATS = 24
 
 
 class RedSuperRodSupportError(RuntimeError):
@@ -113,10 +115,7 @@ def observe_red_super_rod_support(
         raise RedSuperRodSupportError("Super Rod support observation is incomplete")
     inventory = dict(raw.bag_items)
     if len(inventory) != len(raw.bag_items) or any(
-        type(item) is not int
-        or type(quantity) is not int
-        or not 0 <= item <= 0xFF
-        or quantity <= 0
+        type(item) is not int or type(quantity) is not int or not 0 <= item <= 0xFF or quantity <= 0
         for item, quantity in raw.bag_items
     ):
         raise RedSuperRodSupportError("Super Rod support bag is malformed")
@@ -339,7 +338,6 @@ class _SafariExitReceipt:
     route_interruptions: int
 
 
-
 @dataclass(frozen=True, slots=True)
 class RedRoutedSuperRodSupportResult:
     gift: RedSuperRodSupportResult
@@ -409,24 +407,39 @@ class RedRoutedSuperRodSupport:
     def execute(self) -> RedRoutedSuperRodSupportResult:
         initial = observe_red_super_rod_support(self.reader)
         initial_raw = self.reader.read()
-        safari_exit_used = _event_is_set(
+        safari_active = _event_is_set(
             initial_raw.event_flags,
             EventFlag.IN_SAFARI_ZONE,
         )
+        safari_game_over = _event_is_set(
+            initial_raw.event_flags,
+            EventFlag.SAFARI_GAME_OVER,
+        )
         recovering_gate_transition = (
-            safari_exit_used
+            safari_active
             and initial.map_id == SAFARI_GATE_MAP_ID
             and initial.player_yx == SAFARI_CENTER_EXIT_SOURCE_YX
             and not initial.in_battle
             and not initial.dialogue_visible
             and not initial.input_ready
         )
+        recovering_gate_autowalk = (
+            not safari_active
+            and not safari_game_over
+            and initial.map_id == SAFARI_GATE_MAP_ID
+            and initial.player_yx[1] == SAFARI_GATE_ENTRY_YX[1]
+            and SAFARI_GATE_ENTRY_YX[0] <= initial.player_yx[0] <= 3
+            and not initial.in_battle
+            and not initial.dialogue_visible
+            and not initial.input_ready
+        )
+        safari_exit_used = safari_active or recovering_gate_autowalk
         if (
             initial.acquired
             or initial.in_battle
             or initial.bag_slots >= MAX_BAG_ITEMS
             or (
-                not recovering_gate_transition
+                not (recovering_gate_transition or recovering_gate_autowalk)
                 and (not initial.input_ready or initial.dialogue_visible)
             )
         ):
@@ -437,9 +450,7 @@ class RedRoutedSuperRodSupport:
             self.actions,
             self.reader,
             self.emulator,
-            cut_block_swaps={
-                swap.before: swap.after for swap in self.world.rules.cut_block_swaps
-            },
+            cut_block_swaps={swap.before: swap.after for swap in self.world.rules.cut_block_swaps},
         )
         observer = Gen1TraversalObserver(
             self.reader,
@@ -467,13 +478,20 @@ class RedRoutedSuperRodSupport:
                 unavailable="no cartridge route reaches the Super Rod after Safari exit",
                 unsupported="post-Safari Super Rod route needs unsupported transport",
             )
+        elif recovering_gate_autowalk:
+            self._settle_post_safari_gate_autowalk(initial_raw)
+            plan = self._plan_to_super_rod(
+                observer,
+                unavailable="no cartridge route reaches the Super Rod after Safari exit",
+                unsupported="post-Safari Super Rod route needs unsupported transport",
+            )
         else:
             plan = self._plan_to_super_rod(
                 observer,
                 unavailable="no cartridge route reaches the Super Rod boundary",
                 unsupported="Super Rod route needs unsupported transport",
             )
-        if safari_exit_used and not recovering_gate_transition:
+        if safari_exit_used and not (recovering_gate_transition or recovering_gate_autowalk):
             safari_exit = self._leave_active_safari(
                 plan,
                 field_actions,
@@ -532,9 +550,7 @@ class RedRoutedSuperRodSupport:
             gift=gift,
             route_steps=safari_exit.route_steps + len(report.executed_steps),
             route_replans=safari_exit.route_replans + len(report.replans),
-            route_interruptions=(
-                safari_exit.route_interruptions + len(report.interruptions)
-            ),
+            route_interruptions=(safari_exit.route_interruptions + len(report.interruptions)),
             safari_exit_used=safari_exit_used,
             facing_action_used=facing_action_used,
             actions=actions,
@@ -618,9 +634,7 @@ class RedRoutedSuperRodSupport:
             raise RedSuperRodSupportError("Safari exit source changed before input")
 
         field_actions.execute(transition.macro_action)
-        self.actions.execute(
-            MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS)
-        )
+        self.actions.execute(MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS))
         self._settle_active_safari_gate(before_exit, expected_at=transition.expected_at)
         return _SafariExitReceipt(
             route_steps=len(report.executed_steps) + 1,
@@ -678,9 +692,7 @@ class RedRoutedSuperRodSupport:
                 raise RedSuperRodSupportError("Safari exit left its gate boundary")
             if not active and ready and not dialogue:
                 if not in_gate_corridor:
-                    raise RedSuperRodSupportError(
-                        "Safari exit settled outside its gate corridor"
-                    )
+                    raise RedSuperRodSupportError("Safari exit settled outside its gate corridor")
                 return
             if dialogue:
                 if active:
@@ -694,9 +706,7 @@ class RedRoutedSuperRodSupport:
                             "Safari exit did not expose its bounded Yes/No choice"
                         )
                     if cursor.selected_visible_index == 1:
-                        self.actions.execute(
-                            MacroAction(MacroActionKind.MOVE, "up")
-                        )
+                        self.actions.execute(MacroAction(MacroActionKind.MOVE, "up"))
                         selected = self.reader.read_menu_cursor_state()
                         if (
                             selected.scroll_offset != 0
@@ -712,3 +722,53 @@ class RedRoutedSuperRodSupport:
                     MacroAction(MacroActionKind.WAIT, repeat=SAFARI_EXIT_WAIT_REPEATS)
                 )
         raise RedSuperRodSupportError("Safari exit did not settle within its bound")
+
+    def _settle_post_safari_gate_autowalk(self, initial: RawGameState) -> None:
+        """Wait out the gate's retained scripted walk after its event cleared."""
+
+        if (
+            initial.map_id != SAFARI_GATE_MAP_ID
+            or initial.player_y is None
+            or initial.player_x != SAFARI_GATE_ENTRY_YX[1]
+            or not SAFARI_GATE_ENTRY_YX[0] <= initial.player_y <= 3
+            or initial.battle_state != 0
+            or _event_is_set(initial.event_flags, EventFlag.IN_SAFARI_ZONE)
+            or _event_is_set(initial.event_flags, EventFlag.SAFARI_GAME_OVER)
+            or self.reader.read_input_readiness().ready
+            or self.reader.read_bottom_dialogue_box_visible()
+        ):
+            raise RedSuperRodSupportError("post-Safari gate autowalk source is invalid")
+        initial_y = initial.player_y
+        for _ in range(SAFARI_AUTOWALK_SETTLE_LIMIT + 1):
+            current = self.reader.read()
+            _require_safari_exit_transition(initial, current)
+            if current.player_y is None or current.player_x is None:
+                raise RedSuperRodSupportError("post-Safari gate autowalk lost coordinates")
+            ready = self.reader.read_input_readiness().ready
+            dialogue = self.reader.read_bottom_dialogue_box_visible()
+            in_corridor = (
+                current.map_id == SAFARI_GATE_MAP_ID
+                and current.player_x == SAFARI_GATE_ENTRY_YX[1]
+                and initial_y <= current.player_y <= 3
+            )
+            if (
+                current.battle_state != 0
+                or not in_corridor
+                or dialogue
+                or _event_is_set(current.event_flags, EventFlag.IN_SAFARI_ZONE)
+                or _event_is_set(current.event_flags, EventFlag.SAFARI_GAME_OVER)
+            ):
+                raise RedSuperRodSupportError("post-Safari gate autowalk left its boundary")
+            if ready:
+                if current.player_y != 3:
+                    raise RedSuperRodSupportError(
+                        "post-Safari gate autowalk settled at the wrong tile"
+                    )
+                return
+            self.actions.execute(
+                MacroAction(
+                    MacroActionKind.WAIT,
+                    repeat=SAFARI_AUTOWALK_WAIT_REPEATS,
+                )
+            )
+        raise RedSuperRodSupportError("post-Safari gate autowalk did not settle within its bound")
