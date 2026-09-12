@@ -9,8 +9,9 @@ Open on the real progression: **77 → 79 registered species**, with model104 de
 Show the Cinnabar fossil transaction, including the nickname screen that exposed a real storage
 timing boundary, then Omanyte becoming Omastar through the cartridge-derived evolution inventory.
 Keep the labels “forced objective” and “not training” visible: this is two registrations and one
-reusable mechanic, not two model lessons. The hook for the next act is 45 missing registrations and
-an item-evolution family with several already-owned precursors.
+reusable mechanic, not two model lessons. The hook for the next act is an action-free resource
+decision: nine stone-evolution precursors exist, but no stones and only558money. Rather than reopen
+the League detour, the agent can afford one500-money Safari visit with six missing targets.
 
 Then flash back to [funded model104 collection](work-sessions/2026-09-12-funded-model104-collection.md):
 75 → 77 registrations and 103 → 104 settled examples. Contrast the forced Psyduck capture with the
@@ -23,8 +24,10 @@ support boundary clearly: authenticated receipt/state chain, no retained action 
 labels. The point is not that the League was solved. The point is that the resource detour ended and
 the system returned to a genuine model decision.
 
-The current engineering question is visually simple: can catalog-driven planners expose item
-evolution, fishing, Safari, static, trade, gift and prize opportunities without a
+The current engineering question is visually simple: can the existing Safari traversal stop
+fleeing automatically, recognize a missing encountered species and spend Safari Balls to retain
+it—without a named-species route? Later planners still need to expose item evolution, fishing,
+static, trade, gift and prize opportunities without a
 handwritten route for every Pokémon? That makes the next milestone legible to a nontechnical
 viewer and connects directly to the eventual multi-game Pokédex.
 

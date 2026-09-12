@@ -24,10 +24,10 @@ reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Broaden Red acquisition methods.** Fossil revival is qualified. Read exact physical
-   prerequisites from the 79-registration save and implement item evolution next, followed by
-   catalog-driven providers for water/fishing, Safari, static, trade, gift and prizes—without
-   species-specific policy routes.
+1. **Broaden Red acquisition methods.** Fossil revival is qualified. Item-evolution inventory found
+   nine owned candidates but no stones and insufficient funds, so implement immediately affordable
+   Safari capture next. Follow with item procurement, water/fishing, static, trade, gifts and
+   prizes—without species-specific policy routes.
 2. **Resume model-directed collection.** Require a useful action-free menu, execute one bounded
    selected goal, retain its real outcome and fit it. Keep forced support outside training.
 3. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
@@ -44,12 +44,12 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Inventory the exact model104 checkpoint without input. Derive item-evolution candidates from owned
-precursors, cartridge requirements, held stones and truthful procurement access. Implement the
-provider and verify a useful menu before any gameplay. Stop if the design needs a named-species
-route, leaks coordinates into policy features or cannot represent finite-item availability.
+Build generic Safari capture on the existing qualified traversal. Missing targets must come from
+the cartridge encounter catalog; Safari Balls, the500 admission cost and storage must be observed.
+Verify one action-free goal before one bounded admission. Stop if the design needs a named-species
+route, leaks coordinates into policy features or cannot preserve a failed admission honestly.
 
-[Latest evidence](evidence/red-fossil-owned-evolution-2026-09-12.json) · [Latest report](work-sessions/2026-09-12-fossil-owned-evolution.md)
+[Latest prerequisite evidence](evidence/red-item-evolution-prerequisites-2026-09-12.json) · [Latest gameplay report](work-sessions/2026-09-12-fossil-owned-evolution.md)
 
 ## How to stay focused
 

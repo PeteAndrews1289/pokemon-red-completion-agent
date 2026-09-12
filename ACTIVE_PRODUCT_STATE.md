@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build the generic item-evolution provider from exact checkpoint inventory and cartridge requirements, then require a useful action-free menu before any bounded gameplay.
+- Next decision: Build generic Safari capture on the existing traversal, require a useful action-free menu, then run one bounded admission and retain its real outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Expose catalog-driven item-evolution and other acquisition families so model104 can continue Red registration after ordinary grass, fossil and owned level-evolution options are exhausted. |
+| Reusable capability | Expose one generic Safari acquisition goal from the exact 79-registration Red save, using cartridge encounter data and Safari resources rather than a species route. |
 | Authority now | The bounded-development learner has104 fitted examples and79 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. The latest fossil and evolution results were forced support, not new learned authority. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact 79-registration checkpoint has no executable item-evolution candidate, or execution requires a species-specific route or policy feature. |
+| Cheapest falsifier | A 500-money Safari admission from the exact save cannot expose and retain any of the six missing Safari registrations through a bounded generic encounter loop. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-fossil-owned-evolution** · status **closed** · evidence [qualification](docs/evidence/red-fossil-owned-evolution-2026-09-12.json)
+**2026-09-12-item-evolution-prerequisites** · status **closed** · evidence [qualification](docs/evidence/red-item-evolution-prerequisites-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session added a reusable acquisition family and immediately consumed its generic downstream evolution. Item evolution is the cheapest next family because it reuses owned specimens and advances the shared registration objective without manual species routes. |
+| Product alignment | The action-free check prevented a funding detour: Safari can generate collection outcomes immediately and exercises a reusable acquisition mechanic, while all nine item-evolution candidates remain recorded for later resource planning. |
 | Learning output | No new model examples were created. Omanyte and Omastar advanced registration from77 to79; Omanyte added one living specimen and Omastar evolved that specimen in place. The fossil executor is now qualified through an authenticated retained recovery. |
 | Authority delta | The fossil recovery and Omanyte-to-Omastar continuation added two registrations but no learned authority. Both were single-option deterministic support; model104 and all 104 settled examples remain unchanged. |
 | Transfer result | The catalog-driven acquisition boundary is intended for later adapters, but this Red result is not a held-out modification, Blue or cross-title transfer result. |
-| Blocker | The exact 79-registration model104 terminal has no ordinary regional or owned level-evolution goal. Forty-five Red registrations remain across nine acquisition families; item evolutions have several already-owned precursors but require exact inventory and procurement support. |
-| Decision | Treat the fossil family as qualified and move directly to a generic item-evolution provider driven by cartridge requirements, physical inventory and truthful procurement. Do not route individual species or move into another game. |
-| Next session | Inventory stones, owned precursors and procurement access at the 79-registration checkpoint; implement and test a generic item-evolution provider; expose a truthful action-free menu before any gameplay. |
-| Next falsifier | The exact checkpoint has no executable item-evolution candidate, or a provider cannot operate from cartridge requirements without a species-specific route or policy feature. |
+| Blocker | Nine owned item-evolution precursors exist, but the exact save has zero stones,558money versus a2100 shop price and no party Pay Day. Safari is immediately affordable at500, has six missing registrations and supplies its own balls, but the existing traversal flees encounters rather than capturing them. |
+| Decision | Defer stone procurement instead of reopening the League-income detour. Build a generic Safari capture provider on the tested traversal, derive targets from cartridge encounter data and stop after one bounded admission or retained failure. |
+| Next session | Implement and test generic Safari encounter capture on the existing qualified traversal; expose one truthful action-free acquisition goal, then run at most one bounded admission from the exact checkpoint. |
+| Next falsifier | A generic one-admission Safari loop cannot identify missing encountered species, throw Safari Balls and retain a verified registration without a species-specific route. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions

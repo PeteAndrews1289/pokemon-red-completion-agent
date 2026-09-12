@@ -8,9 +8,10 @@ required Red registrations remaining. The generic fossil provider registered Oma
 owned-evolution planner then completed Omastar. Both were singletons and added no training label, so
 the learner remains at 104 settled examples.
 
-Review the next item-evolution work for genericity, honest physical prerequisites and procurement,
-hidden species/route identity and deterministic support counted as learning. The fossil recovery is
-authenticated retained support and must remain a zero-label result.
+The exact item-evolution inventory found nine owned candidates but no stones, only558money and no
+party Pay Day. Review the next Safari work for generic missing-species detection, Safari-ball
+accounting, encounter termination and route identity leakage. The fossil recovery remains
+authenticated zero-label support; a forced Safari singleton must also remain unfitted.
 
 Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
 useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's

@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-fossil-owned-evolution",
+  "as_of_session": "2026-09-12-item-evolution-prerequisites",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-fossil-owned-evolution-2026-09-12.json"
+      "evidence": "docs/evidence/red-item-evolution-prerequisites-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -59,8 +59,14 @@
         "evidence": "docs/evidence/red-fossil-owned-evolution-2026-09-12.json"
       },
       {
-        "id": "generic-item-evolution",
-        "label": "Expose generic item evolutions from exact prerequisites",
+        "id": "item-evolution-prerequisites",
+        "label": "Qualify exact item-evolution prerequisites",
+        "done": true,
+        "evidence": "docs/evidence/red-item-evolution-prerequisites-2026-09-12.json"
+      },
+      {
+        "id": "generic-safari-acquisition",
+        "label": "Expose one generic Safari acquisition goal",
         "done": false,
         "evidence": null
       },
@@ -1026,6 +1032,12 @@
       "result": "The generic fossil provider retained Omanyte and the automatic owned-evolution inventory completed Omastar. Registrations advanced77to79, living species58to59 and specimens62to63. Both goals were forced singletons, so model104 and its104 examples are unchanged.",
       "deviation": "An interrupted fossil transaction required bounded authenticated recovery after the game entered its nickname screen. No original choice was retried, and the repaired executor now completes nickname and storage settlement atomically. No Crystal, Blue, full replay or model fit occurred.",
       "next": "Read exact stone inventory, owned precursors and procurement access from the retained endpoint. Implement a generic item-evolution provider and require a useful action-free menu before gameplay; fishing is the next family if item procurement is not executable."
+    },
+    {
+      "session": "2026-09-12-item-evolution-prerequisites",
+      "result": "A zero-input restore found nine owned missing stone-evolution candidates, but zero held stones,558money against the2100 shop price and no party Pay Day. Item evolution is not the cheapest executable next gameplay. Model104 and79 registrations are unchanged.",
+      "deviation": "The roadmap pivots before implementation rather than fabricating availability or reopening the League-income detour. Safari costs500, supplies its own balls and has six missing registrations; existing traversal is retained but its encounter behavior must be generalized from flee to capture.",
+      "next": "Implement a generic Safari capture provider from cartridge encounter tables and tested traversal. Require an action-free executable goal, then one bounded admission with no species-specific route or forced result called learning."
     }
   ],
   "closed_milestones": [

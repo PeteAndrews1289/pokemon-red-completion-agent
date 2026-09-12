@@ -3,19 +3,20 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-fossil-owned-evolution**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-item-evolution-prerequisites**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden Red acquisition families: 3/5 acceptance items (60%).**
+**Broaden Red acquisition families: 4/6 acceptance items (67%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
-- [ ] Expose generic item evolutions from exact prerequisites
+- [x] Qualify exact item-evolution prerequisites ([evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json))
+- [ ] Expose one generic Safari acquisition goal
 - [ ] Fit a productive model-selected acquisition-family outcome
 
 Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -70,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json)
+[Current evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -97,6 +98,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-item-evolution-prerequisites
+
+A zero-input restore found nine owned missing stone-evolution candidates, but zero held stones,558money against the2100 shop price and no party Pay Day. Item evolution is not the cheapest executable next gameplay. Model104 and79 registrations are unchanged.
+
+**Deviation:** The roadmap pivots before implementation rather than fabricating availability or reopening the League-income detour. Safari costs500, supplies its own balls and has six missing registrations; existing traversal is retained but its encounter behavior must be generalized from flee to capture.
+
+**Next:** Implement a generic Safari capture provider from cartridge encounter tables and tested traversal. Require an action-free executable goal, then one bounded admission with no species-specific route or forced result called learning.
 
 ### 2026-09-12-fossil-owned-evolution
 

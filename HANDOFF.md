@@ -57,14 +57,14 @@ accounts for all 45 missing registrations:
 | fossil | 1 |
 | gift | 1 |
 
-The next session must inspect exact item inventory, owned precursors and stone procurement access,
-then expose item evolution through a catalog-driven provider. Candidate identity, reachability,
-inventory and one-shot state must remain separate. An action-free inventory must show a useful
-menu before gameplay.
+The exact action-free inventory found nine owned missing stone-evolution precursors, but no held
+stones, ₽558 against the ₽2,100 shop price and no party member with Pay Day. Those candidates are
+preserved for later resource planning; item evolution is not the cheapest executable next gameplay.
 
-Start with item evolution because several missing targets have already-owned precursors. Do not
-assume a stone is present until the exact save proves it, and do not write species-specific routes.
-Fishing is the next likely family if item procurement is not physically executable.
+Safari is the next gate: admission costs ₽500, the save can pay it, the zone supplies its own balls
+and six missing registrations remain there. Existing tested traversal currently flees from every
+encounter. Generalize that mechanic into a catalog-driven capture provider; do not add six named
+species routes.
 
 ## Authority and claim boundary
 
@@ -86,6 +86,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Latest report](docs/work-sessions/2026-09-12-fossil-owned-evolution.md). Recommended model:
+[Latest report](docs/work-sessions/2026-09-12-fossil-owned-evolution.md) · [Latest prerequisite evidence](docs/evidence/red-item-evolution-prerequisites-2026-09-12.json). Recommended model:
 **Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.
