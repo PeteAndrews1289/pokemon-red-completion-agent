@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Select and implement the first reusable acquisition-family provider from the model104 terminal, then require it to produce a useful action-free menu before any bounded gameplay.
+- Next decision: Build the generic item-evolution provider from exact checkpoint inventory and cartridge requirements, then require a useful action-free menu before any bounded gameplay.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Expose catalog-driven non-grass and special acquisition goals so model104 can continue Red registration after ordinary grass and owned level-evolution options are exhausted. |
-| Authority now | The bounded-development learner has104 fitted examples and77 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
+| Reusable capability | Expose catalog-driven item-evolution and other acquisition families so model104 can continue Red registration after ordinary grass, fossil and owned level-evolution options are exhausted. |
+| Authority now | The bounded-development learner has104 fitted examples and79 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. The latest fossil and evolution results were forced support, not new learned authority. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | After one acquisition family is added, the exact model104 checkpoint still exposes no useful executable goal, or execution requires a species-specific route exception. |
+| Cheapest falsifier | The exact 79-registration checkpoint has no executable item-evolution candidate, or execution requires a species-specific route or policy feature. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-funded-model104-collection** · status **closed** · evidence [model fit](docs/evidence/red-model104-funded-collection-2026-09-12.json)
+**2026-09-12-fossil-owned-evolution** · status **closed** · evidence [qualification](docs/evidence/red-fossil-owned-evolution-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Practical funding is restored and the loop returned immediately to collection. The next bottleneck is reusable acquisition breadth needed for the remaining Red registrations and later title adapters. |
-| Learning output | The funded continuation registered Psyduck and Golduck, advancing75 to77 registrations. The three-option evolution outcome fitted the registered-objective learner from model103 to model104; the forced capture remained unfitted. |
-| Authority delta | One genuine three-option high-level decision selected evolve_species and completed Psyduck to Golduck. Deterministic mechanics retained control; the preceding Seafoam capture was a forced singleton and added no label. |
+| Product alignment | The session added a reusable acquisition family and immediately consumed its generic downstream evolution. Item evolution is the cheapest next family because it reuses owned specimens and advances the shared registration objective without manual species routes. |
+| Learning output | No new model examples were created. Omanyte and Omastar advanced registration from77 to79; Omanyte added one living specimen and Omastar evolved that specimen in place. The fossil executor is now qualified through an authenticated retained recovery. |
+| Authority delta | The fossil recovery and Omanyte-to-Omastar continuation added two registrations but no learned authority. Both were single-option deterministic support; model104 and all 104 settled examples remain unchanged. |
 | Transfer result | The catalog-driven acquisition boundary is intended for later adapters, but this Red result is not a held-out modification, Blue or cross-title transfer result. |
-| Blocker | The exact model104 terminal has no executable native goal because the current regional layer exposes ordinary grass and owned level evolutions only. Forty-seven Red registrations remain across nine acquisition families. |
-| Decision | Close the immediate funding detour through the disclosed controlled-blackout and resupply support bridge; do not require another League rematch before collection. Build generic acquisition-family providers, starting from exact physical prerequisites, without hand-routing individual species. |
-| Next session | Inventory exact physical prerequisites at model104, implement one catalog-driven non-grass or special acquisition family, verify an action-free multi-option menu, then run one bounded model lesson only if the provider remains generic. |
-| Next falsifier | One generic acquisition-family provider cannot expose a useful candidate from the model104 checkpoint without a species-specific route exception. |
-| Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, or any move into Blue or Crystal. |
+| Blocker | The exact 79-registration model104 terminal has no ordinary regional or owned level-evolution goal. Forty-five Red registrations remain across nine acquisition families; item evolutions have several already-owned precursors but require exact inventory and procurement support. |
+| Decision | Treat the fossil family as qualified and move directly to a generic item-evolution provider driven by cartridge requirements, physical inventory and truthful procurement. Do not route individual species or move into another game. |
+| Next session | Inventory stones, owned precursors and procurement access at the 79-registration checkpoint; implement and test a generic item-evolution provider; expose a truthful action-free menu before any gameplay. |
+| Next falsifier | The exact checkpoint has no executable item-evolution candidate, or a provider cannot operate from cartridge requirements without a species-specific route or policy feature. |
+| Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions
 

@@ -9,22 +9,25 @@ stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision
 
 The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
 and incremental fitting loop works. The current registered-objective model contains **104 settled
-examples**. Its retained save has **77 registered species**, **58 living species**, **62 specimens**
-and **47 required Red registrations remaining**.
+examples**. Its retained save has **79 registered species**, **59 living species**, **63 specimens**
+and **45 required Red registrations remaining**.
 
 Practical capture funding was restored through an explicitly support-only controlled-blackout and
 resupply bridge. The next gameplay cycle caught Psyduck as a forced singleton; the learned model
 then chose evolution from a three-goal menu and completed Golduck. The loop stopped cleanly because
-the current candidate layer has exhausted ordinary grass sources and owned level evolutions.
+the previous candidate layer exhausted ordinary grass sources and owned level evolutions. A generic
+fossil provider has since revived Omanyte, and the automatic evolution inventory completed Omastar.
+Both were forced singletons, so model104 remains unchanged.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Broaden Red acquisition methods.** Read exact physical prerequisites from the model104 save.
-   Add catalog-driven providers by acquisition family—water/fishing, item evolution, Safari,
-   static, trade, gift/prize/fossil—without species-specific policy routes.
+1. **Broaden Red acquisition methods.** Fossil revival is qualified. Read exact physical
+   prerequisites from the 79-registration save and implement item evolution next, followed by
+   catalog-driven providers for water/fishing, Safari, static, trade, gift and prizes—without
+   species-specific policy routes.
 2. **Resume model-directed collection.** Require a useful action-free menu, execute one bounded
    selected goal, retain its real outcome and fit it. Keep forced support outside training.
 3. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
@@ -41,12 +44,12 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Inventory the exact model104 checkpoint without input. Pick the cheapest generic acquisition
-family supported by its actual rods, moves, inventory, access flags and location. Implement the
-provider and verify a multi-option menu before any gameplay. Stop if the design needs a named-
-species route, leaks coordinates into policy features or cannot represent one-shot availability.
+Inventory the exact model104 checkpoint without input. Derive item-evolution candidates from owned
+precursors, cartridge requirements, held stones and truthful procurement access. Implement the
+provider and verify a useful menu before any gameplay. Stop if the design needs a named-species
+route, leaks coordinates into policy features or cannot represent finite-item availability.
 
-[Latest evidence](evidence/red-model104-funded-collection-2026-09-12.json) · [Latest report](work-sessions/2026-09-12-funded-model104-collection.md)
+[Latest evidence](evidence/red-fossil-owned-evolution-2026-09-12.json) · [Latest report](work-sessions/2026-09-12-fossil-owned-evolution.md)
 
 ## How to stay focused
 

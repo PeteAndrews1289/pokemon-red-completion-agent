@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest retained collection contains **77 registered species**. The registered-objective model has **104 settled examples**. Practical resupply restored 19 capture balls; the next loop caught Psyduck, then the model chose evolution from three goals and completed Golduck. It stopped cleanly when ordinary grass and owned level-evolution candidates were exhausted. These are bounded development results, not independent full-game competence.
+- The latest retained collection contains **79 registered species**. The registered-objective model has **104 settled examples**. After the learned Golduck result, generic fossil revival added Omanyte and the cartridge-derived evolution planner completed Omastar. Both latest goals were singletons, so they added collection capability but no model labels. These are bounded development results, not independent full-game competence.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest funded collection report](docs/work-sessions/2026-09-12-funded-model104-collection.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest collection report](docs/work-sessions/2026-09-12-fossil-owned-evolution.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

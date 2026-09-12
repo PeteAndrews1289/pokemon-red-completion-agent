@@ -3,18 +3,19 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-funded-model104-collection**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-fossil-owned-evolution**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Remaining Red acquisition families: 2/4 acceptance items (50%).**
+**Broaden Red acquisition families: 3/5 acceptance items (60%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Restore practical capture funding without fabricating learning ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
-- [ ] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
+- [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
+- [ ] Expose generic item evolutions from exact prerequisites
 - [ ] Fit a productive model-selected acquisition-family outcome
 
 Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -69,7 +70,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json)
+[Current evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -96,6 +97,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-fossil-owned-evolution
+
+The generic fossil provider retained Omanyte and the automatic owned-evolution inventory completed Omastar. Registrations advanced77to79, living species58to59 and specimens62to63. Both goals were forced singletons, so model104 and its104 examples are unchanged.
+
+**Deviation:** An interrupted fossil transaction required bounded authenticated recovery after the game entered its nickname screen. No original choice was retried, and the repaired executor now completes nickname and storage settlement atomically. No Crystal, Blue, full replay or model fit occurred.
+
+**Next:** Read exact stone inventory, owned precursors and procurement access from the retained endpoint. Implement a generic item-evolution provider and require a useful action-free menu before gameplay; fishing is the next family if item procurement is not executable.
 
 ### 2026-09-12-funded-model104-collection
 

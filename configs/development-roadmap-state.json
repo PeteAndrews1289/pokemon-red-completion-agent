@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-funded-model104-collection",
+  "as_of_session": "2026-09-12-fossil-owned-evolution",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model104-funded-collection-2026-09-12.json"
+      "evidence": "docs/evidence/red-fossil-owned-evolution-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -38,7 +38,7 @@
     }
   },
   "milestone": {
-    "title": "Remaining Red acquisition families",
+    "title": "Broaden Red acquisition families",
     "items": [
       {
         "id": "practical-capture-funding",
@@ -55,8 +55,14 @@
       {
         "id": "catalog-driven-special-acquisition",
         "label": "Expose one generic non-grass or special acquisition family",
+        "done": true,
+        "evidence": "docs/evidence/red-fossil-owned-evolution-2026-09-12.json"
+      },
+      {
+        "id": "generic-item-evolution",
+        "label": "Expose generic item evolutions from exact prerequisites",
         "done": false,
-        "evidence": "docs/evidence/red-model104-funded-collection-2026-09-12.json"
+        "evidence": null
       },
       {
         "id": "resume-model-directed-collection",
@@ -1014,6 +1020,12 @@
       "result": "A guarded zero-label support bridge restored19 capture balls. The continuation caught Psyduck as a forced singleton, then model103 chose evolve_species from three goals and completed Golduck. Registrations advanced75to77 and the learner fitted103to104 before a clean no-executable-goal stop.",
       "deviation": "The practical funding detour closed through a disclosed controlled blackout and resupply rather than a completed League rematch. The support import retains authenticated receipt and state hashes but no action trace, so it remains support-only and contributes no learning claim.",
       "next": "Inventory the model104 checkpoint's physical prerequisites and expose one catalog-driven acquisition family. Require an action-free useful menu before bounded play; reject species-specific routing and defer Blue and Crystal."
+    },
+    {
+      "session": "2026-09-12-fossil-owned-evolution",
+      "result": "The generic fossil provider retained Omanyte and the automatic owned-evolution inventory completed Omastar. Registrations advanced77to79, living species58to59 and specimens62to63. Both goals were forced singletons, so model104 and its104 examples are unchanged.",
+      "deviation": "An interrupted fossil transaction required bounded authenticated recovery after the game entered its nickname screen. No original choice was retried, and the repaired executor now completes nickname and storage settlement atomically. No Crystal, Blue, full replay or model fit occurred.",
+      "next": "Read exact stone inventory, owned precursors and procurement access from the retained endpoint. Implement a generic item-evolution provider and require a useful action-free menu before gameplay; fishing is the next family if item procurement is not executable."
     }
   ],
   "closed_milestones": [

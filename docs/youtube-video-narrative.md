@@ -4,13 +4,18 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: [funded model104 collection](work-sessions/2026-09-12-funded-model104-collection.md).
-Open on the real progression: **75 → 77 registered species** and **103 → 104 settled examples**.
-Show Seafoam search footage with the labels “forced objective” and “not training,” then cut to the
-three-goal menu where the model selects evolution. Follow the long training sequence with the
-verified Psyduck-to-Golduck registration. The clean empty-menu stop is the hook for the next act:
-the agent has exhausted grass and owned level evolution, but the cartridge catalog still knows47
-missing registrations across nine acquisition families.
+Newest systems beat: [fossil and owned evolution](work-sessions/2026-09-12-fossil-owned-evolution.md).
+Open on the real progression: **77 → 79 registered species**, with model104 deliberately unchanged.
+Show the Cinnabar fossil transaction, including the nickname screen that exposed a real storage
+timing boundary, then Omanyte becoming Omastar through the cartridge-derived evolution inventory.
+Keep the labels “forced objective” and “not training” visible: this is two registrations and one
+reusable mechanic, not two model lessons. The hook for the next act is 45 missing registrations and
+an item-evolution family with several already-owned precursors.
+
+Then flash back to [funded model104 collection](work-sessions/2026-09-12-funded-model104-collection.md):
+75 → 77 registrations and 103 → 104 settled examples. Contrast the forced Psyduck capture with the
+three-goal menu where the model selected Psyduck-to-Golduck. This is the clearest current visual of
+the difference between deterministic capability and learned judgment.
 
 Use a short flashback for the money story. The incomplete League run earned enough cash; a
 controlled blackout retained half, healed the party and enabled19 capture balls. Caption the
@@ -18,8 +23,8 @@ support boundary clearly: authenticated receipt/state chain, no retained action 
 labels. The point is not that the League was solved. The point is that the resource detour ended and
 the system returned to a genuine model decision.
 
-The current engineering question is visually simple: can one catalog-driven planner expose
-fishing, Safari, static, trade, gift, prize, fossil and item-evolution opportunities without a
+The current engineering question is visually simple: can catalog-driven planners expose item
+evolution, fishing, Safari, static, trade, gift and prize opportunities without a
 handwritten route for every Pokémon? That makes the next milestone legible to a nontechnical
 viewer and connects directly to the eventual multi-game Pokédex.
 

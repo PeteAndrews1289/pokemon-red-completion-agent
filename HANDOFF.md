@@ -5,21 +5,23 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest retained endpoint: funded collection / model104
+## Latest retained endpoint: fossil and owned evolution / model104
 
-The latest durable Red endpoint is `red-collection-20260912-ca-02-causal`, checkpoint record
-`22781d9d1983d8adbbeb3d5b6ae12765d2ec21cd6a00b980586cb2516be4add6`.
+The latest durable Red endpoint is `red-collection-20260912-cg-owned-evolution-01-causal`, checkpoint
+record SHA-256 `ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677`.
 
 - Registered-objective model: **104 settled examples**
 - Model SHA-256: `4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2`
-- Collection: **77 registered / 58 living species / 62 specimens**
-- Required Red registrations remaining: **47**
-- Latest model-controlled result: chose `evolve_species` from three goals and completed Psyduck
-  to Golduck in 16,628 actions / 1,538,894 frames
-- Stop: `no_executable_native_goal`
+- Collection: **79 registered / 59 living species / 63 specimens**
+- Required Red registrations remaining: **45**
+- Latest collection result: the generic fossil flow added Omanyte, then the cartridge-derived owned
+  evolution planner completed Omastar in 27,215 actions / 2,293,481 frames
+- Latest learning result: unchanged model104; both latest goals were forced singletons and added no
+  fitted examples
 
-The preceding Seafoam step captured Psyduck in 1,112 actions / 67,704 frames after 14 encounters.
-It was the sole regional candidate, so it was a forced singleton and was not fitted.
+The prior three-option learned result remains Psyduck-to-Golduck. The fossil transaction needed a
+bounded retained-state recovery because the game had entered its nickname editor before writing the
+full box structure. The original fossil choice was not retried.
 
 ## Funding and support boundary
 
@@ -34,41 +36,43 @@ transitions, but do not contain an action trace. Public code therefore gives the
 authority. The successful import checkpoint is
 `a3ba144e9a897b7bd32246985523059d0a7d126cba446e9edc74d8b3d01b2565`.
 
-Do not repeat the League rematch merely to strengthen this support history. The next product
-constraint is acquisition breadth.
+Do not repeat the League rematch merely to strengthen this support history. Fossil acquisition is
+now one qualified acquisition-family provider; the next product constraint is broader acquisition.
 
 ## Current blocker and next gate
 
-The regional candidate layer currently exposes ordinary grass sources and already-owned level
-evolutions. Both are exhausted at this exact save. The cartridge-derived catalog still accounts
-for all 47 missing registrations:
+The regional candidate layer currently exposes ordinary grass/water sources and already-owned
+level evolutions. Both are exhausted at this exact save. The cartridge-derived catalog still
+accounts for all 45 missing registrations:
 
 | Method | Missing registrations |
 | --- | ---: |
-| evolution | 14 |
+| evolution | 13 |
 | ordinary wild/water | 8 |
 | fishing | 7 |
 | Safari | 6 |
 | static encounter | 4 |
 | in-game trade | 3 |
 | prize | 2 |
-| fossil | 2 |
+| fossil | 1 |
 | gift | 1 |
 
-The next session must inspect the exact model104 physical prerequisites, then expose one acquisition
-family through a catalog-driven provider. Candidate identity, reachability, inventory and one-shot
-state must remain separate. An action-free inventory must show a useful menu before gameplay.
+The next session must inspect exact item inventory, owned precursors and stone procurement access,
+then expose item evolution through a catalog-driven provider. Candidate identity, reachability,
+inventory and one-shot state must remain separate. An action-free inventory must show a useful
+menu before gameplay.
 
-Start with the acquisition family that has real prerequisites already present and the least new
-mechanical surface. Do not assume fishing is best until the exact save confirms rods, moves,
-positions and stock. Do not write 47 species-specific routes.
+Start with item evolution because several missing targets have already-owned precursors. Do not
+assume a stone is present until the exact save proves it, and do not write species-specific routes.
+Fishing is the next likely family if item procurement is not physically executable.
 
 ## Authority and claim boundary
 
 The learned model chooses high-level goals and destinations in bounded development episodes.
 Deterministic, tested skills still execute navigation, menus, combat, capture and evolution. The
-latest successful three-option evolution added one authentic selected-arm outcome; it is not an
-independent evaluation or a promotion to low-level control.
+earlier successful three-option Golduck evolution added one authentic selected-arm outcome. The
+later Omanyte and Omastar results added none; they are not an independent evaluation or a promotion
+to low-level control.
 
 Fresh-game autonomy, arbitrary-seed reliability, full Red registration, unfamiliar-ROM competence,
 learned battle control and transfer to Blue or Crystal remain unproved. Crystal stays deferred.
@@ -82,6 +86,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Latest report](docs/work-sessions/2026-09-12-funded-model104-collection.md). Recommended model:
-**Sol High, standard speed** for implementation. Use Astra High/Max only for architecture or
+[Latest report](docs/work-sessions/2026-09-12-fossil-owned-evolution.md). Recommended model:
+**Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.
