@@ -12,14 +12,19 @@ from pokemon_red_completion.collection import (
     LivingSpecimen,
 )
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionContext
+from pokemon_red_completion.local_router import LocalEdge, LocalGraph
 from pokemon_red_completion.observation import MapId, RamAddress, RawGameState
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_safari_acquisition import (
     LiveSafariAreaExecutor,
+    LiveSafariPatrol,
     RedSafariAdmissionReport,
+    RedSafariPatrolPlan,
     RedSafariZoneOffer,
+    derive_red_safari_patrol,
     red_safari_admission_route,
     red_safari_area_menu,
     red_safari_zone_offers,
@@ -181,9 +186,16 @@ def test_safari_admission_routes_are_area_level_support_not_species_routes() -> 
         tuple((25, 47) for _ in range(10)),
         (47,),
     )
+    west = RedSafariZoneOffer(
+        "wild:SafariZoneWest:grass",
+        int(MapId.SAFARI_ZONE_WEST),
+        tuple((25, 47) for _ in range(10)),
+        (47,),
+    )
 
     assert red_safari_admission_route(center) == ()
     assert len(red_safari_admission_route(east)) == 29
+    assert len(red_safari_admission_route(west)) == 179
     with pytest.raises(TypeError, match="one cartridge offer"):
         red_safari_admission_route(object())  # type: ignore[arg-type]
 
@@ -209,6 +221,123 @@ def test_safari_admission_report_requires_exact_fee_counters_and_terminal() -> N
     assert not replace(report, money_after=59).passed
     assert not replace(report, safari_balls_remaining=29).passed
     assert not replace(report, selected_position=(1, 23)).passed
+
+
+def test_safari_patrol_is_derived_from_reachable_reversible_grass() -> None:
+    grid = tuple(tuple(True for _ in range(4)) for _ in range(4))
+    grass = tuple(
+        tuple((y, x) in {(1, 1), (2, 1)} for x in range(4)) for y in range(4)
+    )
+    terrain = Terrain(
+        int(MapId.SAFARI_ZONE_EAST),
+        0,
+        grid,
+        grass,
+        tuple(tuple(False for _ in range(4)) for _ in range(4)),
+        tuple(tuple(0 for _ in range(4)) for _ in range(4)),
+    )
+    graph = LocalGraph(
+        {
+            (2, 0): (LocalEdge((2, 1), "right"),),
+            (2, 1): (LocalEdge((2, 0), "left"), LocalEdge((1, 1), "up")),
+            (1, 1): (LocalEdge((2, 1), "down"),),
+        }
+    )
+    offer = RedSafariZoneOffer(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        tuple((25, 47) for _ in range(10)),
+        (47,),
+    )
+
+    plan = derive_red_safari_patrol(offer, terrain, graph, start_at=(2, 0))
+
+    assert plan.approach_directions == ("right",)
+    assert plan.first_at == (2, 1)
+    assert plan.second_at == (1, 1)
+    assert plan.forward_direction == "up"
+    assert plan.public_dict()["private_coordinate_fields"] == 0
+    assert derive_red_safari_patrol(
+        offer,
+        terrain,
+        graph,
+        start_at=(2, 0),
+        excluded={(2, 0)},
+    ) == plan
+
+
+class _PatrolSimulation:
+    def __init__(self) -> None:
+        self.frame_count = 0
+        self.pressed_buttons = frozenset()
+        self.raw = RawGameState(
+            True,
+            MapId.SAFARI_ZONE_EAST,
+            0,
+            2,
+            3,
+            0,
+            party_species_ids=(0x1C, 0x40, 0x3B),
+        )
+
+    def read_u8(self, address: int) -> int:
+        return 30 if address == int(RamAddress.SAFARI_BALLS) else 0
+
+    def execute(self, action: MacroAction) -> None:
+        if action.kind is MacroActionKind.WAIT:
+            self.frame_count += action.repeat
+        elif action.kind is MacroActionKind.MOVE:
+            dx, dy = {
+                "up": (0, -1),
+                "down": (0, 1),
+                "left": (-1, 0),
+                "right": (1, 0),
+            }[str(action.value)]
+            self.raw = replace(
+                self.raw,
+                player_x=int(self.raw.player_x or 0) + dx,
+                player_y=int(self.raw.player_y or 0) + dy,
+            )
+
+    def read(self) -> RawGameState:
+        return self.raw
+
+    def read_input_readiness(self) -> SimpleNamespace:
+        return SimpleNamespace(ready=True)
+
+
+def test_live_safari_patrol_enters_once_then_oscillates_without_fleeing() -> None:
+    simulation = _PatrolSimulation()
+    actions = CountingExecutor(simulation)
+    plan = RedSafariPatrolPlan(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        (2, 0),
+        ("right",),
+        (2, 1),
+        (1, 1),
+        2,
+        "up",
+        "down",
+    )
+    patrol = LiveSafariPatrol(
+        simulation,
+        actions,
+        simulation,  # type: ignore[arg-type]
+        plan,
+    )
+
+    with pytest.raises(RedAreaExecutionError) as not_entered:
+        patrol.seek_step()
+    assert not_entered.value.reason_code == "safari_patrol_not_entered"
+    assert patrol.enter() == 0
+    patrol.seek_step()
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (1, 1)
+    patrol.seek_step()
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (2, 1)
+    with pytest.raises(RedAreaExecutionError) as repeated:
+        patrol.enter()
+    assert repeated.value.reason_code == "safari_patrol_approach_repeated"
 
 
 class _SafariSimulation:

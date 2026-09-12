@@ -19,7 +19,13 @@ from typing import Protocol
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.fly_resource import (
+    EmulatorState,
+    FuchsiaFlyArrivalReport,
+    relocate_cinnabar_to_fuchsia_by_fly,
+)
 from pokemon_red_completion.gen1_cartridge import internal_to_dex, wild_tables
+from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.living_dex_goal_policy import DEFAULT_LIVING_DEX_GOAL_UTILITY
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
@@ -29,6 +35,13 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionKind,
     LivingDexOptionMenu,
     LivingDexOptionValueModel,
+)
+from pokemon_red_completion.local_router import (
+    Coordinate,
+    LocalGraph,
+    LocalRouterError,
+    find_local_path,
+    without_coordinates,
 )
 from pokemon_red_completion.observation import MapId, PokemonRedStateReader, RamAddress
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
@@ -45,11 +58,11 @@ from pokemon_red_completion.safari import (
     CENTER_TO_GATE,
     DEFAULT_SAFARI_TIMING,
     EAST_TO_NORTH,
-    NORTH_TO_WEST,
     SafariTiming,
     _balls,
     _money,
     _move,
+    _pulse,
 )
 
 SAFARI_ZONE_SOURCES: tuple[tuple[str, MapId], ...] = (
@@ -177,17 +190,116 @@ class RedSafariAdmissionReport:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedSafariTransportReport:
+    """Verified story-neutral transport from Cinnabar to the Safari origin."""
+
+    fly: FuchsiaFlyArrivalReport
+    final_map_id: int
+    final_position: tuple[int, int]
+    money_before: int
+    money_after: int
+    actions_executed: int
+    frames_executed: int
+    controller_released: bool
+
+    @property
+    def passed(self) -> bool:
+        return (
+            self.fly.passed
+            and self.final_map_id == int(MapId.FUCHSIA_POKECENTER)
+            and self.final_position == (3, 3)
+            and self.money_after == self.money_before
+            and self.actions_executed > self.fly.actions_executed
+            and self.frames_executed > 0
+            and self.controller_released
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "status": "ok" if self.passed else "failed",
+            "story_neutral_fly": self.fly.passed,
+            "stable_fuchsia_center": (
+                self.final_map_id == int(MapId.FUCHSIA_POKECENTER)
+                and self.final_position == (3, 3)
+            ),
+            "money_spent": self.money_before - self.money_after,
+            "actions_executed": self.actions_executed,
+            "frames_executed": self.frames_executed,
+            "private_coordinate_fields": 0,
+            "private_map_fields": 0,
+            "raw_teacher_direction_steps": 0,
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class RedSafariPatrolPlan:
+    """One cartridge-derived approach to a reversible two-tile encounter lane."""
+
+    source_id: str
+    map_id: int
+    start_at: Coordinate
+    approach_directions: tuple[str, ...]
+    first_at: Coordinate
+    second_at: Coordinate
+    encounter_tile_count: int
+    forward_direction: str
+    backward_direction: str
+
+    def __post_init__(self) -> None:
+        if (self.source_id, MapId(self.map_id)) not in SAFARI_ZONE_SOURCES:
+            raise ValueError("Safari patrol source and map do not match")
+        opposite = {"up": "down", "down": "up", "left": "right", "right": "left"}
+        if (
+            self.forward_direction not in opposite
+            or self.backward_direction != opposite[self.forward_direction]
+            or self.encounter_tile_count not in {1, 2}
+            or not self.approach_directions
+            or any(direction not in opposite for direction in self.approach_directions)
+        ):
+            raise ValueError("Safari patrol directions are invalid")
+        dy = self.second_at[0] - self.first_at[0]
+        dx = self.second_at[1] - self.first_at[1]
+        expected = {
+            "up": (-1, 0),
+            "down": (1, 0),
+            "left": (0, -1),
+            "right": (0, 1),
+        }[self.forward_direction]
+        if (dy, dx) != expected:
+            raise ValueError("Safari patrol endpoints differ from its direction")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "cartridge_derived": True,
+            "approach_steps": len(self.approach_directions),
+            "bidirectional_walk_edges": 2,
+            "encounter_tiles": self.encounter_tile_count,
+            "provider_local_direction_steps": 1,
+            "private_coordinate_fields": 0,
+            "private_map_fields": 0,
+            "private_source_fields": 0,
+            "raw_teacher_direction_steps": 0,
+        }
+
+
+_NORTH_TO_WEST_ENCOUNTER_SHELF = tuple(
+    {"U": "up", "D": "down", "L": "left", "R": "right"}[step]
+    for step in "ULLULLLLLLLLLLLLUUUUULLLUULLLLDDDDLLDDDDDDDLLLLLLLDDD"
+)
 _SAFARI_AREA_ROUTES: dict[str, tuple[str, ...]] = {
     "wild:SafariZoneCenter:grass": (),
     "wild:SafariZoneEast:grass": CENTER_TO_EAST,
     "wild:SafariZoneNorth:grass": CENTER_TO_EAST + EAST_TO_NORTH,
-    "wild:SafariZoneWest:grass": CENTER_TO_EAST + EAST_TO_NORTH + NORTH_TO_WEST,
+    "wild:SafariZoneWest:grass": (
+        CENTER_TO_EAST + EAST_TO_NORTH + _NORTH_TO_WEST_ENCOUNTER_SHELF
+    ),
 }
 _SAFARI_AREA_TERMINALS: dict[str, tuple[int, tuple[int, int], int]] = {
     "wild:SafariZoneCenter:grass": (int(MapId.SAFARI_ZONE_CENTER), (15, 25), 500),
     "wild:SafariZoneEast:grass": (int(MapId.SAFARI_ZONE_EAST), (0, 23), 472),
     "wild:SafariZoneNorth:grass": (int(MapId.SAFARI_ZONE_NORTH), (39, 31), 376),
-    "wild:SafariZoneWest:grass": (int(MapId.SAFARI_ZONE_WEST), (21, 0), 238),
+    "wild:SafariZoneWest:grass": (int(MapId.SAFARI_ZONE_WEST), (27, 0), 324),
 }
 
 
@@ -197,6 +309,158 @@ def red_safari_admission_route(offer: RedSafariZoneOffer) -> tuple[str, ...]:
     if not isinstance(offer, RedSafariZoneOffer):
         raise TypeError("Safari admission route needs one cartridge offer")
     return _SAFARI_AREA_ROUTES[offer.source_id]
+
+
+def derive_red_safari_patrol(
+    offer: RedSafariZoneOffer,
+    terrain: Terrain,
+    graph: LocalGraph,
+    *,
+    start_at: Coordinate,
+    excluded: Collection[Coordinate] = (),
+) -> RedSafariPatrolPlan:
+    """Find the nearest reachable reversible pair of encounter tiles."""
+
+    if terrain.map_id != offer.map_id:
+        raise ValueError("Safari patrol terrain differs from its offer")
+    if not isinstance(graph, LocalGraph):
+        raise TypeError("Safari patrol needs a local traversal graph")
+    # The area entry is itself a warp coordinate. It must remain a legal
+    # departure square while every other warp stays unavailable as a patrol
+    # endpoint or transit shortcut.
+    blocked = frozenset(excluded) - {start_at}
+    available = without_coordinates(graph, blocked)
+    directions = (
+        ("down", "up", (1, 0)),
+        ("right", "left", (0, 1)),
+    )
+    candidates: list[
+        tuple[int, Coordinate, Coordinate, tuple[str, ...], str, str]
+    ] = []
+    for y in range(terrain.height):
+        for x in range(terrain.width):
+            first = (y, x)
+            if first in blocked:
+                continue
+            for forward, backward, (dy, dx) in directions:
+                second = (y + dy, x + dx)
+                if (
+                    second in blocked
+                    or not 0 <= second[0] < terrain.height
+                    or not 0 <= second[1] < terrain.width
+                    or not (terrain.grass[y][x] or terrain.grass[second[0]][second[1]])
+                    or not _plain_safari_walk(available, first, second, forward)
+                    or not _plain_safari_walk(available, second, first, backward)
+                ):
+                    continue
+                for approach_at, other_at, outbound, inbound in (
+                    (first, second, forward, backward),
+                    (second, first, backward, forward),
+                ):
+                    try:
+                        path = find_local_path(
+                            available,
+                            start_at,
+                            approach_at,
+                            start_mode="land",
+                            goal_mode="land",
+                        )
+                    except LocalRouterError:
+                        continue
+                    path_directions = tuple(edge.action for edge in path.edges)
+                    if not path_directions:
+                        # A one-step approach gives execution an independently
+                        # checked boundary before the first patrol transition.
+                        continue
+                    candidates.append(
+                        (
+                            len(path.edges),
+                            approach_at,
+                            other_at,
+                            path_directions,
+                            outbound,
+                            inbound,
+                        )
+                    )
+    if not candidates:
+        raise ValueError("Safari area has no reachable reversible encounter lane")
+    _, first, second, approach, forward, backward = min(candidates)
+    return RedSafariPatrolPlan(
+        offer.source_id,
+        offer.map_id,
+        start_at,
+        approach,
+        first,
+        second,
+        int(terrain.grass[first[0]][first[1]]) + int(terrain.grass[second[0]][second[1]]),
+        forward,
+        backward,
+    )
+
+
+def _plain_safari_walk(
+    graph: LocalGraph,
+    source: Coordinate,
+    target: Coordinate,
+    direction: str,
+) -> bool:
+    return any(
+        edge.target == target
+        and edge.action_kind is MacroActionKind.MOVE
+        and edge.action == direction
+        and edge.permits_mode("land")
+        and edge.next_mode("land") == "land"
+        and not edge.requirements
+        for edge in graph.neighbors(source)
+    )
+
+
+def relocate_red_safari_origin_to_fuchsia_center(
+    emulator: EmulatorState,
+    actions: CountingExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    timing: SafariTiming = DEFAULT_SAFARI_TIMING,
+) -> RedSafariTransportReport:
+    """Reuse qualified Fly, then enter the stable Fuchsia Center boundary."""
+
+    start_actions = actions.actions_executed
+    start_frames = emulator.frame_count
+    money_before = _money(emulator)
+    fly = relocate_cinnabar_to_fuchsia_by_fly(emulator, reader, actions)
+    if not fly.passed:
+        raise RedAreaExecutionError(
+            "Safari transport Fly failed its existing contract",
+            reason_code="safari_transport_fly_failed",
+        )
+    _move(
+        actions,
+        reader,
+        emulator,
+        ("up",) * 5,
+        timing,
+        "Fuchsia Fly landing to Center",
+    )
+    final = reader.read()
+    report = RedSafariTransportReport(
+        fly,
+        -1 if final.map_id is None else int(final.map_id),
+        (
+            -1 if final.player_x is None else int(final.player_x),
+            -1 if final.player_y is None else int(final.player_y),
+        ),
+        money_before,
+        _money(emulator),
+        actions.actions_executed - start_actions,
+        emulator.frame_count - start_frames,
+        not emulator.pressed_buttons,
+    )
+    if not report.passed:
+        raise RedAreaExecutionError(
+            "Safari transport missed its stable Fuchsia Center boundary",
+            reason_code="safari_transport_center_failed",
+        )
+    return report
 
 
 def enter_red_safari_area(
@@ -437,6 +701,115 @@ def select_red_safari_area(
     )
 
 
+class LiveSafariPatrol:
+    """Execute one derived two-tile patrol without consuming encounters."""
+
+    def __init__(
+        self,
+        emulator: SafariControlPort,
+        actions: CountingExecutor,
+        reader: PokemonRedStateReader,
+        plan: RedSafariPatrolPlan,
+        *,
+        timing: SafariTiming = DEFAULT_SAFARI_TIMING,
+    ) -> None:
+        if not isinstance(plan, RedSafariPatrolPlan):
+            raise TypeError("Safari patrol needs a derived plan")
+        self._emulator = emulator
+        self._actions = actions
+        self._reader = reader
+        self._plan = plan
+        self._timing = timing
+        self._entered = False
+        self._at_first = True
+
+    def enter(self) -> int:
+        if self._entered:
+            raise RedAreaExecutionError(
+                "Safari patrol approach was already executed",
+                reason_code="safari_patrol_approach_repeated",
+            )
+        raw = self._reader.read()
+        if (
+            raw.map_id != self._plan.map_id
+            or (raw.player_y, raw.player_x) != self._plan.start_at
+            or raw.battle_state
+        ):
+            raise RedAreaExecutionError(
+                "Safari patrol approach lacks its selected-area boundary",
+                reason_code="safari_patrol_boundary_invalid",
+            )
+        encounters = _move(
+            self._actions,
+            self._reader,
+            self._emulator,
+            self._plan.approach_directions,
+            self._timing,
+            "Safari encounter lane",
+        )
+        final = self._reader.read()
+        if (
+            final.map_id != self._plan.map_id
+            or (final.player_y, final.player_x) != self._plan.first_at
+            or final.battle_state
+            or _balls(self._emulator) <= 0
+        ):
+            raise RedAreaExecutionError(
+                "Safari patrol approach missed its encounter lane",
+                reason_code="safari_patrol_approach_failed",
+            )
+        self._entered = True
+        return encounters
+
+    def seek_step(self) -> None:
+        if not self._entered:
+            raise RedAreaExecutionError(
+                "Safari patrol must enter its lane before seeking",
+                reason_code="safari_patrol_not_entered",
+            )
+        before = self._reader.read()
+        expected_at = self._plan.first_at if self._at_first else self._plan.second_at
+        target_at = self._plan.second_at if self._at_first else self._plan.first_at
+        direction = (
+            self._plan.forward_direction if self._at_first else self._plan.backward_direction
+        )
+        if (
+            before.map_id != self._plan.map_id
+            or (before.player_y, before.player_x) != expected_at
+            or before.battle_state
+            or _balls(self._emulator) <= 0
+        ):
+            raise RedAreaExecutionError(
+                "Safari patrol step lacks its expected endpoint",
+                reason_code="safari_patrol_endpoint_changed",
+            )
+        for _ in range(self._timing.movement_retries):
+            _pulse(
+                self._actions,
+                MacroActionKind.MOVE,
+                direction,
+                frames=self._timing.movement_frames,
+            )
+            after = self._reader.read()
+            if after.map_id != self._plan.map_id:
+                raise RedAreaExecutionError(
+                    "Safari patrol step left its selected area",
+                    reason_code="safari_patrol_left_area",
+                )
+            if (after.player_y, after.player_x) == target_at:
+                self._at_first = not self._at_first
+                return
+            if after.battle_state:
+                raise RedAreaExecutionError(
+                    "Safari encounter began before the player reached the derived endpoint",
+                    reason_code="safari_patrol_encounter_position_changed",
+                )
+        raise RedAreaExecutionError(
+            "Safari patrol step did not traverse its reversible edge",
+            reason_code="safari_patrol_step_blocked",
+        )
+
+
 class LiveSafariAreaExecutor:
     """Implement the reusable area port for one already-admitted Safari area."""
 
@@ -672,15 +1045,20 @@ class LiveSafariAreaExecutor:
 
 __all__ = [
     "LiveSafariAreaExecutor",
+    "LiveSafariPatrol",
     "RedSafariAdmissionReport",
     "RedSafariAreaChoice",
+    "RedSafariPatrolPlan",
+    "RedSafariTransportReport",
     "RedSafariZoneOffer",
     "SAFARI_ADMISSION_COST",
     "SAFARI_AREA_CHOICE_POLICY",
     "SAFARI_ZONE_SOURCES",
+    "derive_red_safari_patrol",
+    "enter_red_safari_area",
     "red_safari_area_menu",
     "red_safari_admission_route",
     "red_safari_zone_offers",
+    "relocate_red_safari_origin_to_fuchsia_center",
     "select_red_safari_area",
-    "enter_red_safari_area",
 ]
