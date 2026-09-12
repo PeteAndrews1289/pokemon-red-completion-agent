@@ -437,6 +437,7 @@ class _PatrolSimulation:
             0,
             party_species_ids=(0x1C, 0x40, 0x3B),
         )
+        self.encounter_on_move = False
 
     def read_u8(self, address: int) -> int:
         return 30 if address == int(RamAddress.SAFARI_BALLS) else 0
@@ -445,6 +446,10 @@ class _PatrolSimulation:
         if action.kind is MacroActionKind.WAIT:
             self.frame_count += action.repeat
         elif action.kind is MacroActionKind.MOVE:
+            if self.encounter_on_move:
+                self.encounter_on_move = False
+                self.raw = replace(self.raw, battle_state=1)
+                return
             dx, dy = {
                 "up": (0, -1),
                 "down": (0, 1),
@@ -496,6 +501,100 @@ def test_live_safari_patrol_enters_once_then_oscillates_without_fleeing() -> Non
     with pytest.raises(RedAreaExecutionError) as repeated:
         patrol.enter()
     assert repeated.value.reason_code == "safari_patrol_approach_repeated"
+
+
+def test_live_safari_patrol_hands_pre_displacement_encounter_to_battle_mechanic() -> None:
+    simulation = _PatrolSimulation()
+    actions = CountingExecutor(simulation)
+    plan = RedSafariPatrolPlan(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        (2, 0),
+        ("right",),
+        (2, 1),
+        (1, 1),
+        2,
+        "up",
+        "down",
+    )
+    patrol = LiveSafariPatrol(
+        simulation,
+        actions,
+        simulation,  # type: ignore[arg-type]
+        plan,
+    )
+    patrol.enter()
+    simulation.encounter_on_move = True
+
+    patrol.seek_step()
+
+    assert simulation.raw.battle_state == 1
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (2, 1)
+    simulation.raw = replace(simulation.raw, battle_state=0)
+    patrol.seek_step()
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (1, 1)
+
+
+def test_live_safari_patrol_resumes_from_retained_endpoint_encounter() -> None:
+    simulation = _PatrolSimulation()
+    simulation.raw = replace(
+        simulation.raw,
+        player_x=1,
+        player_y=2,
+        battle_state=1,
+    )
+    plan = RedSafariPatrolPlan(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        (2, 0),
+        ("right",),
+        (2, 1),
+        (1, 1),
+        2,
+        "up",
+        "down",
+    )
+    patrol = LiveSafariPatrol(
+        simulation,
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        plan,
+    )
+
+    patrol.resume_from_encounter()
+    simulation.raw = replace(simulation.raw, battle_state=0)
+    patrol.seek_step()
+
+    assert (simulation.raw.player_y, simulation.raw.player_x) == (1, 1)
+    with pytest.raises(RedAreaExecutionError) as repeated:
+        patrol.resume_from_encounter()
+    assert repeated.value.reason_code == "safari_patrol_recovery_repeated"
+
+
+def test_live_safari_patrol_recovery_rejects_nonendpoint_battle() -> None:
+    simulation = _PatrolSimulation()
+    simulation.raw = replace(simulation.raw, player_x=3, player_y=3, battle_state=1)
+    plan = RedSafariPatrolPlan(
+        "wild:SafariZoneEast:grass",
+        int(MapId.SAFARI_ZONE_EAST),
+        (2, 0),
+        ("right",),
+        (2, 1),
+        (1, 1),
+        2,
+        "up",
+        "down",
+    )
+    patrol = LiveSafariPatrol(
+        simulation,
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        plan,
+    )
+
+    with pytest.raises(RedAreaExecutionError) as error:
+        patrol.resume_from_encounter()
+    assert error.value.reason_code == "safari_patrol_recovery_boundary_invalid"
 
 
 class _SafariSimulation:

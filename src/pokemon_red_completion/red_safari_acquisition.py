@@ -838,6 +838,30 @@ class LiveSafariPatrol:
         self._entered = True
         return encounters
 
+    def resume_from_encounter(self) -> None:
+        """Restore patrol phase from a retained battle at either derived endpoint."""
+
+        if self._entered:
+            raise RedAreaExecutionError(
+                "Safari patrol was already entered before encounter recovery",
+                reason_code="safari_patrol_recovery_repeated",
+            )
+        raw = self._reader.read()
+        at = (raw.player_y, raw.player_x)
+        if (
+            raw.map_id != self._plan.map_id
+            or raw.battle_state != 1
+            or at not in {self._plan.first_at, self._plan.second_at}
+            or _balls(self._emulator) <= 0
+            or not raw.party_species_ids
+        ):
+            raise RedAreaExecutionError(
+                "Safari patrol recovery lacks a retained endpoint encounter",
+                reason_code="safari_patrol_recovery_boundary_invalid",
+            )
+        self._entered = True
+        self._at_first = at == self._plan.first_at
+
     def seek_step(self) -> None:
         if not self._entered:
             raise RedAreaExecutionError(
@@ -877,10 +901,12 @@ class LiveSafariPatrol:
                 self._at_first = not self._at_first
                 return
             if after.battle_state:
-                raise RedAreaExecutionError(
-                    "Safari encounter began before the player reached the derived endpoint",
-                    reason_code="safari_patrol_encounter_position_changed",
-                )
+                # A random encounter can take control before the overworld
+                # coordinate acknowledges this pulse.  That is the patrol's
+                # successful handoff to the battle mechanic, not a blocked
+                # traversal.  Keep the current endpoint so a failed capture
+                # can resume the same reversible edge after battle cleanup.
+                return
         raise RedAreaExecutionError(
             "Safari patrol step did not traverse its reversible edge",
             reason_code="safari_patrol_step_blocked",
