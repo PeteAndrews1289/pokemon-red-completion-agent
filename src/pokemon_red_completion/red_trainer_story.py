@@ -175,7 +175,9 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("cartridge world or fixed battle authority unavailable")
         observation = self.runtime.adapter.observe()
         raw = observation.raw
-        if self.recovery_controller not in {"critical-inclusive", "ordinary-bounded-healing"}:
+        if self.recovery_controller not in {
+            "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
+        }:
             raise RedTrainerStoryError("unsupported recovery controller")
         require_story_recovery_stock(raw, self.maximum_full_restores)
         is_bruno = self.objective_id == "defeat_bruno"
@@ -247,7 +249,11 @@ class RedCartridgeLoreleiSkill:
             raise RedTrainerStoryError("story trainer is not one undefeated interaction target")
         trainer = matches[0]
         quote = self._quote(trainer.trainer_class, trainer.trainer_set)
-        preparation = plan_trainer_party(observation.party, quote)
+        preparation = (
+            plan_trainer_party(observation.party, quote, minimum_hp_ratio=0.0)
+            if self.recovery_controller == "damage-bounded-zero-item"
+            else plan_trainer_party(observation.party, quote)
+        )
         start = Gen1TraversalObserver(self.runtime.reader, Gen1TrainerSightProjector(
             world.rom, self.runtime.reader, full_event_offsets=True,
         )).observe()
@@ -432,7 +438,10 @@ class RedCartridgeLoreleiSkill:
         controller = (
             RedTrainerSurvivalController(
                 reader, self.runtime.emulator, (), self.maximum_full_restores,
-            ) if self.maximum_full_restores else RedTrainerPartyController(
+            ) if (
+                self.maximum_full_restores
+                or self.recovery_controller == "damage-bounded-zero-item"
+            ) else RedTrainerPartyController(
                 reader, self.runtime.emulator,
             )
         )

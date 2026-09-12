@@ -220,13 +220,20 @@ def _run_battle(
     before_frames = runtime.emulator.frame_count
     skill: RedCartridgeChampionSkill | RedCartridgeLoreleiSkill
     if objective_id == "defeat_champion":
-        skill = RedCartridgeChampionSkill(runtime, actions, world, rematch=True)
+        skill = RedCartridgeChampionSkill(
+            runtime,
+            actions,
+            world,
+            recovery_controller="damage-bounded-zero-item",
+            rematch=True,
+        )
     else:
         skill = RedCartridgeLoreleiSkill(
             runtime,
             actions,
             world,
             objective_id=objective_id,
+            recovery_controller="damage-bounded-zero-item",
             rematch=True,
         )
     availability = skill.availability(runtime.adapter.observe().game_state)

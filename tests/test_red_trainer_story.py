@@ -550,6 +550,7 @@ def test_stale_selected_story_refuses_before_input(fixture):
 @pytest.mark.parametrize("rematch", [False, True])
 @pytest.mark.parametrize("recovery_budget,mode", [
     (0, 'critical-inclusive'), (1, 'critical-inclusive'), (2, 'critical-inclusive'),
+    (0, 'damage-bounded-zero-item'),
     (1, 'ordinary-bounded-healing'), (2, 'ordinary-bounded-healing'),
 ])
 def test_selected_story_composes_existing_operators_and_verifies_result(
@@ -594,7 +595,8 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert battle_runner_override.__self__.maximum_switches == 6
         controller = battle_runner_override.__self__
         assert isinstance(controller, story.RedTrainerSurvivalController) is (
-            bool(recovery_budget) and mode == 'critical-inclusive'
+            (bool(recovery_budget) and mode == 'critical-inclusive')
+            or mode == 'damage-bounded-zero-item'
         )
         assert _kwargs['maximum_full_restores'] == recovery_budget
         assert _kwargs['prospective_story_recovery'] is bool(recovery_budget)

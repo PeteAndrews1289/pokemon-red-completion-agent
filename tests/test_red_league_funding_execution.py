@@ -325,11 +325,13 @@ def test_run_battle_always_uses_current_cycle_rematch_mode(monkeypatch, objectiv
     else:
         monkeypatch.setattr(execution, "RedCartridgeLoreleiSkill", Skill)
     execution._run_battle(runtime, actions, object(), objective, 100)
-    assert seen == (
-        [{"rematch": True}]
-        if objective == "defeat_champion"
-        else [{"objective_id": "defeat_lorelei", "rematch": True}]
-    )
+    expected = {
+        "recovery_controller": "damage-bounded-zero-item",
+        "rematch": True,
+    }
+    if objective != "defeat_champion":
+        expected["objective_id"] = "defeat_lorelei"
+    assert seen == [expected]
 
 
 def test_frame_boundary_failure_retains_structured_progress(monkeypatch):

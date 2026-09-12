@@ -111,7 +111,9 @@ class RedCartridgeChampionSkill:
         if self.world is None or battle_policy_override_active():
             raise RedChampionStoryError("cartridge world or fixed battle authority unavailable")
         before = self.runtime.adapter.observe()
-        if self.recovery_controller not in {"critical-inclusive", "ordinary-bounded-healing"}:
+        if self.recovery_controller not in {
+            "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
+        }:
             raise RedChampionStoryError("unsupported recovery controller")
         require_story_recovery_stock(before.raw, self.maximum_full_restores)
         reader = self.runtime.reader
@@ -141,7 +143,11 @@ class RedCartridgeChampionSkill:
         ):
             raise RedChampionStoryError("final-story event is mismatched or already consumed")
         quote = trainer_party_quote(self.world.rom, script.opponent, script.trainer_set)
-        party = plan_trainer_party(before.party, quote)
+        party = (
+            plan_trainer_party(before.party, quote, minimum_hp_ratio=0.0)
+            if self.recovery_controller == "damage-bounded-zero-item"
+            else plan_trainer_party(before.party, quote)
+        )
         blocks = reader.read_current_map_blocks()
         if blocks.map_id != before.raw.map_id:
             raise RedChampionStoryError("field map changed during terrain observation")
@@ -273,7 +279,10 @@ class RedCartridgeChampionSkill:
 
         controller = (
             RedTrainerSurvivalController(reader, runtime.emulator, (), self.maximum_full_restores)
-            if self.maximum_full_restores else RedTrainerPartyController(reader, runtime.emulator)
+            if (
+                self.maximum_full_restores
+                or self.recovery_controller == "damage-bounded-zero-item"
+            ) else RedTrainerPartyController(reader, runtime.emulator)
         )
 
         if self.maximum_full_restores and self.recovery_controller == "ordinary-bounded-healing":
