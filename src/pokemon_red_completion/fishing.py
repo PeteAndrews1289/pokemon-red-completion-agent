@@ -345,6 +345,13 @@ class FishingCastExecutor:
     timing: FishingTiming = field(default_factory=FishingTiming)
     _internal_actions_count: int = field(default=0, init=False)
 
+    _START_MENU_ORIGIN = (11, 0)
+    _START_MENU_MAXIMUM = 6
+    _BAG_MENU_ORIGIN = (4, 1)
+    _BAG_MENU_MAXIMUM = 3
+    _ITEM_SUBMENU_ORIGIN = (11, 8)
+    _ITEM_SUBMENU_MAXIMUM = 1
+
     def __post_init__(self) -> None:
         if not isinstance(self.timing, FishingTiming):
             raise TypeError(
@@ -439,8 +446,16 @@ class FishingCastExecutor:
         for _ in range(self.timing.max_menu_moves):
             try:
                 cursor = self.reader.read_menu_cursor_state()
-            except Exception as error:
-                raise FishingCastError("unknown UI during Start menu navigation") from error
+            except Exception:
+                raise FishingCastError(
+                    "unknown UI during Start menu navigation"
+                ) from None
+            self._require_menu_geometry(
+                cursor,
+                origin=self._START_MENU_ORIGIN,
+                maximum=self._START_MENU_MAXIMUM,
+                label="Start",
+            )
             if cursor.selected_visible_index == item_row:
                 break
             direction = "down" if cursor.selected_visible_index < item_row else "up"
@@ -454,8 +469,14 @@ class FishingCastExecutor:
         for _ in range(self.timing.max_menu_moves):
             try:
                 cursor = self.reader.read_menu_cursor_state()
-            except Exception as error:
-                raise FishingCastError("unknown UI during bag menu navigation") from error
+            except Exception:
+                raise FishingCastError("unknown UI during bag menu navigation") from None
+            self._require_menu_geometry(
+                cursor,
+                origin=self._BAG_MENU_ORIGIN,
+                maximum=min(self._BAG_MENU_MAXIMUM, len(bag_items)),
+                label="Bag",
+            )
             curr_index = cursor.selected_absolute_index
             if curr_index == bag_index:
                 break
@@ -471,8 +492,16 @@ class FishingCastExecutor:
         for _ in range(self.timing.max_menu_moves):
             try:
                 cursor = self.reader.read_menu_cursor_state()
-            except Exception as error:
-                raise FishingCastError("unknown UI during item submenu navigation") from error
+            except Exception:
+                raise FishingCastError(
+                    "unknown UI during item submenu navigation"
+                ) from None
+            self._require_menu_geometry(
+                cursor,
+                origin=self._ITEM_SUBMENU_ORIGIN,
+                maximum=self._ITEM_SUBMENU_MAXIMUM,
+                label="item submenu",
+            )
             if cursor.selected_visible_index == use_row:
                 break
             self._pulse(MacroActionKind.MOVE, "up", frames=self.timing.cursor_wait_frames)
@@ -483,6 +512,8 @@ class FishingCastExecutor:
         self._pulse(MacroActionKind.CONFIRM, frames=self.timing.menu_wait_frames)
 
         # 6. Settlement: distinguish wild encounter from no-bite dialogue
+        saw_fishing_dialogue = False
+        stable_field_observations = 0
         for pulse in range(self.timing.max_settle_pulses + 1):
             current = self.reader.read()
             _require_protected_state(initial, current)
@@ -495,10 +526,24 @@ class FishingCastExecutor:
                     frames=self._frame_count(before_frames),
                     facing_action_used=facing_action_used,
                 )
-            elif current.battle_state == 0:
+            if current.battle_state == 0:
                 dialogue_visible = self.reader.read_bottom_dialogue_box_visible()
                 input_ready = self.reader.read_input_readiness().ready
-                if not dialogue_visible and input_ready:
+                if dialogue_visible:
+                    saw_fishing_dialogue = True
+                    stable_field_observations = 0
+                    if pulse < self.timing.max_settle_pulses:
+                        self._pulse(
+                            MacroActionKind.CONFIRM,
+                            frames=self.timing.dialogue_wait_frames,
+                        )
+                    continue
+                if saw_fishing_dialogue and input_ready:
+                    stable_field_observations += 1
+                    if stable_field_observations < 2:
+                        if pulse < self.timing.max_settle_pulses:
+                            self._wait(self.timing.dialogue_wait_frames)
+                        continue
                     return FishingCastResult(
                         outcome=FishingCastOutcome.NO_BITE,
                         rod_kind=chosen_rod,
@@ -506,11 +551,9 @@ class FishingCastExecutor:
                         frames=self._frame_count(before_frames),
                         facing_action_used=facing_action_used,
                     )
+                stable_field_observations = 0
                 if pulse < self.timing.max_settle_pulses:
-                    self._pulse(
-                        MacroActionKind.CONFIRM,
-                        frames=self.timing.dialogue_wait_frames,
-                    )
+                    self._wait(self.timing.dialogue_wait_frames)
             else:
                 raise FishingCastError(
                     f"fishing cast encountered unexpected battle state: {current.battle_state}"
@@ -518,9 +561,26 @@ class FishingCastExecutor:
 
         raise FishingCastError("fishing cast dialogue did not settle within bounded pulses")
 
+    @staticmethod
+    def _require_menu_geometry(
+        cursor: MenuCursorState,
+        *,
+        origin: tuple[int, int],
+        maximum: int,
+        label: str,
+    ) -> None:
+        if (
+            (cursor.top_x, cursor.top_y) != origin
+            or cursor.maximum_visible_index != maximum
+        ):
+            raise FishingCastError(f"{label} menu geometry is not authenticated")
+
     def _send_action(self, action: MacroAction) -> None:
         self._internal_actions_count += 1
         self.actions.execute(action)
+
+    def _wait(self, frames: int) -> None:
+        self._send_action(MacroAction(MacroActionKind.WAIT, repeat=frames))
 
     def _pulse(
         self,
@@ -571,4 +631,3 @@ def execute_fishing_cast(
         timing=timing or FishingTiming(),
     )
     return executor.execute(stance, rod=rod)
-

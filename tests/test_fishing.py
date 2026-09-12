@@ -715,9 +715,11 @@ class _FishingSimulation:
         self.bag_cursor = 0
         self.submenu_cursor = 0
         self.settle_pulses = 0
+        self.settle_waits = 0
         self.dialogue_box_visible = initial_dialogue_visible
         self.actions_executed = 0
         self.recorded_actions: list[MacroAction] = []
+        self.recorded_stages: list[str] = []
 
         self.fail_start_menu = fail_start_menu
         self.fail_bag_menu = fail_bag_menu
@@ -762,7 +764,7 @@ class _FishingSimulation:
             return MenuCursorState(
                 selected_visible_index=visible_idx,
                 scroll_offset=scroll_off,
-                maximum_visible_index=3,
+                maximum_visible_index=min(3, len(self.raw.bag_items or ())),
                 top_x=4,
                 top_y=1,
             )
@@ -781,6 +783,7 @@ class _FishingSimulation:
     def execute(self, action: MacroAction) -> object:
         self.actions_executed += 1
         self.recorded_actions.append(action)
+        self.recorded_stages.append(self.stage)
         if (
             self.emulator is not None
             and action.kind is MacroActionKind.WAIT
@@ -837,6 +840,9 @@ class _FishingSimulation:
                         )
                     elif self.outcome_mode == "wild_encounter_immediate":
                         self.raw = replace(self.raw, battle_state=1)
+                    elif self.outcome_mode == "delayed_dialogue":
+                        self.dialogue_box_visible = False
+                        self.input_ready = False
                     else:
                         self.dialogue_box_visible = True
             elif self.stage == "settlement":
@@ -851,6 +857,14 @@ class _FishingSimulation:
                     elif self.settle_pulses >= self.dialogue_settle_delay:
                         self.dialogue_box_visible = False
                         self.input_ready = True
+        elif action.kind is MacroActionKind.WAIT and self.stage == "settlement":
+            self.settle_waits += 1
+            if (
+                self.outcome_mode == "delayed_dialogue"
+                and self.settle_pulses == 0
+                and self.settle_waits >= 2
+            ):
+                self.dialogue_box_visible = True
         return action
 
 
@@ -933,6 +947,29 @@ def test_fishing_cast_wild_encounter_delayed() -> None:
 
     assert result.outcome is FishingCastOutcome.WILD_ENCOUNTER
     assert sim.settle_pulses == 2
+
+
+def test_fishing_cast_waits_for_observed_dialogue_before_any_settlement_confirm() -> None:
+    sim = _FishingSimulation(initial_facing="down", outcome_mode="delayed_dialogue")
+    stance = ShorelineStance(at=(1, 10), direction=Direction.DOWN, water_at=(2, 10))
+
+    result = FishingCastExecutor(actions=sim, reader=sim).execute(stance)
+
+    assert result.outcome is FishingCastOutcome.NO_BITE
+    submenu_confirmation = next(
+        index
+        for index, action in enumerate(sim.recorded_actions)
+        if action.kind is MacroActionKind.CONFIRM
+        and sim.recorded_stages[index] == "item_submenu"
+    )
+    settlement = sim.recorded_actions[submenu_confirmation + 1 :]
+    first_confirm = next(
+        index for index, action in enumerate(settlement) if action.kind is MacroActionKind.CONFIRM
+    )
+    assert first_confirm >= 2
+    assert all(
+        action.kind is MacroActionKind.WAIT for action in settlement[:first_confirm]
+    )
 
 
 def test_fishing_cast_explicit_rod_selection() -> None:
@@ -1125,7 +1162,6 @@ def test_menu_navigation_failures() -> None:
             reader=sim2,
             timing=FishingTiming(max_menu_moves=5),
         ).execute(stance)
-
     # Bag menu cursor read fails (unknown UI)
     sim3 = _FishingSimulation(fail_bag_menu=True)
     with pytest.raises(FishingCastError, match="unknown UI during bag menu navigation"):
@@ -1153,6 +1189,24 @@ def test_menu_navigation_failures() -> None:
             reader=sim6,
             timing=FishingTiming(max_menu_moves=5),
         ).execute(stance)
+
+
+@pytest.mark.parametrize("stage", ["start_menu", "bag_menu", "item_submenu"])
+def test_menu_geometry_must_authenticate_each_menu_before_input(stage: str) -> None:
+    sim = _FishingSimulation()
+    original = sim.read_menu_cursor_state
+
+    def wrong_geometry() -> MenuCursorState:
+        cursor = original()
+        if sim.stage == stage:
+            return replace(cursor, top_x=cursor.top_x + 1)
+        return cursor
+
+    sim.read_menu_cursor_state = wrong_geometry  # type: ignore[method-assign]
+    stance = ShorelineStance(at=(1, 10), direction=Direction.DOWN, water_at=(2, 10))
+
+    with pytest.raises(FishingCastError, match="menu geometry is not authenticated"):
+        FishingCastExecutor(actions=sim, reader=sim).execute(stance)
 
 
 # ---------------------------------------------------------------------------
@@ -1286,5 +1340,3 @@ def test_actions_executed_internal_fallback() -> None:
 
     assert result.outcome is FishingCastOutcome.NO_BITE
     assert result.actions > 0
-
-
