@@ -561,8 +561,19 @@ def execute_red_league_funding(
     except Exception as error:
         fail("league_entry", "League funding entry route raised", error)
 
+    remaining_full_restores = qualification.maximum_campaign_full_restores
     for quote in qualification.battles:
         try:
+            battle_restore_budget = min(
+                quote.maximum_full_restores,
+                remaining_full_restores,
+            )
+            recovery_controller = quote.recovery_controller
+            if (
+                recovery_controller == "ordinary-bounded-healing"
+                and not battle_restore_budget
+            ):
+                recovery_controller = "damage-bounded-zero-item"
             results.append(
                 _run_battle(
                     runtime,
@@ -570,11 +581,12 @@ def execute_red_league_funding(
                     world,
                     quote.objective_id,
                     quote.expected_money,
-                    quote.recovery_controller,
-                    quote.maximum_full_restores,
+                    recovery_controller,
+                    battle_restore_budget,
                     quote.maximum_critical_exposures,
                 )
             )
+            remaining_full_restores -= results[-1].full_restores_spent
         except Exception as error:
             fail("battle:" + quote.objective_id, quote.objective_id + " failed", error)
     try:
@@ -600,9 +612,7 @@ def execute_red_league_funding(
         if runtime.emulator.pressed_buttons:
             fail("terminal", "League funding terminal retained pressed controls")
         restore_spent = sum(result.full_restores_spent for result in results)
-        if restore_spent > sum(
-            quote.maximum_full_restores for quote in qualification.battles
-        ):
+        if restore_spent > qualification.maximum_campaign_full_restores:
             fail("terminal", "League funding exceeded its campaign recovery budget")
         supplied_bag = _bag_after_supply(starting_bag, qualification)
         expected_bag = tuple(

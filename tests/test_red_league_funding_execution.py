@@ -190,6 +190,112 @@ def test_execution_composes_five_quoted_battles_without_training(monkeypatch):
     assert routes[2][1].transition_settle_frames >= 6 * 24 + 120
 
 
+def test_execution_allocates_one_restore_to_first_qualified_need(monkeypatch):
+    base = _qualification()
+    battles = tuple(
+        RedLeagueBattleQuote(
+            quote.objective_id,
+            quote.trainer_class,
+            quote.trainer_set,
+            quote.expected_money,
+            quote.maximum_opponent_level,
+            recovery_controller=(
+                "bounded-critical-risk"
+                if quote.objective_id == "defeat_lance"
+                else "ordinary-bounded-healing"
+            ),
+            maximum_full_restores=(
+                0 if quote.objective_id == "defeat_lance" else 1
+            ),
+            maximum_critical_exposures=(
+                2 if quote.objective_id == "defeat_lance" else 0
+            ),
+        )
+        for quote in base.battles
+    )
+    qualification = RedLeagueFundingQualification(
+        base.exit_plan,
+        base.fly_town,
+        base.fly_landing,
+        base.supply,
+        base.entry_plan,
+        battles,
+        base.supported_attack_pp,
+        base.opponent_attack_demands,
+    )
+    runtime, observed = _runtime()
+    observed.raw.bag_items = (
+        *observed.raw.bag_items,
+        (int(ItemId.FULL_RESTORE), 1),
+    )
+    actions = _actions(runtime)
+    world = SimpleNamespace(rom=b"rom", replanner=lambda: object())
+    monkeypatch.setattr(execution, "qualify_red_league_funding", lambda *args: qualification)
+    monkeypatch.setattr(execution, "execute_route", _route_success(observed, qualification))
+    monkeypatch.setattr(execution, "Gen1TraversalObserver", lambda *args: object())
+    monkeypatch.setattr(execution, "dependency_specimen_ledger", lambda *args: ("same",))
+    monkeypatch.setattr(
+        execution,
+        "CompletionReferee",
+        lambda: SimpleNamespace(inspect=lambda state: SimpleNamespace(complete=True)),
+    )
+
+    class Port:
+        def __init__(self, *args):
+            pass
+
+        def execute(self, action):
+            observed.raw.map_id = 9
+            observed.raw.player_y, observed.raw.player_x = qualification.fly_landing
+            return Gen1FlyReceipt(5, 9, 0, 0, (9,))
+
+    monkeypatch.setattr(execution, "Gen1FieldMovePort", Port)
+    policies = []
+
+    def run_battle(
+        runtime, actions, world, objective_id, expected_money,
+        recovery_controller, maximum_full_restores, maximum_critical_exposures,
+    ):
+        policies.append(
+            (objective_id, recovery_controller, maximum_full_restores,
+             maximum_critical_exposures)
+        )
+        before = observed.raw.player_money
+        observed.raw.player_money += expected_money
+        spent = int(objective_id == "defeat_lorelei")
+        if spent:
+            observed.raw.bag_items = tuple(
+                row for row in observed.raw.bag_items
+                if row[0] != int(ItemId.FULL_RESTORE)
+            )
+        if objective_id == "defeat_champion":
+            observed.raw.party_species_ids = (64, 28)
+        return execution.RedLeagueFundingBattleResult(
+            objective_id,
+            before,
+            before + expected_money,
+            expected_money,
+            0,
+            0,
+            spent,
+            0,
+        )
+
+    monkeypatch.setattr(execution, "_run_battle", run_battle)
+    result = execution.execute_red_league_funding(
+        runtime, actions, world, _binding(runtime, qualification),
+    )
+
+    assert policies == [
+        ("defeat_lorelei", "ordinary-bounded-healing", 1, 0),
+        ("defeat_bruno", "damage-bounded-zero-item", 0, 0),
+        ("defeat_agatha", "damage-bounded-zero-item", 0, 0),
+        ("defeat_lance", "bounded-critical-risk", 0, 2),
+        ("defeat_champion", "damage-bounded-zero-item", 0, 0),
+    ]
+    assert result.full_restores_spent == 1
+
+
 def test_nonempty_supply_faces_clerk_before_any_irreversible_sale(monkeypatch):
     qualification = _qualification()
     qualification = RedLeagueFundingQualification(

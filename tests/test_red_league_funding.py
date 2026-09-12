@@ -143,7 +143,7 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "defeat_champion",
     ]
     assert result.public_dict() == {
-        "schema": "pokemon.red.repeatable-league-funding-qualification.v2",
+        "schema": "pokemon.red.repeatable-league-funding-qualification.v3",
         "status": "ready_for_bounded_executor",
         "exit_steps": 1,
         "fly_town": 9,
@@ -165,11 +165,10 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
                 "expected_money": money,
                 "maximum_opponent_level": level,
                 "recovery_controller": (
-                    "damage-bounded-zero-item" if name in {"lorelei", "bruno", "agatha"}
-                    else "bounded-critical-risk" if name == "lance"
+                    "bounded-critical-risk" if name == "lance"
                     else "ordinary-bounded-healing"
                 ),
-                "maximum_full_restores": 1 if name == "champion" else 0,
+                "maximum_full_restores": 0 if name == "lance" else 1,
                 "maximum_critical_exposures": 2 if name == "lance" else 0,
             }
             for name, money, level in (
@@ -183,6 +182,7 @@ def test_qualification_proves_transport_and_five_cartridge_payouts(qualified):
         "controller_actions": 0,
         "emulator_frames": 0,
         "cumulative_recovery_reserved": 1,
+        "recovery_allocation": "first-qualified-need-within-campaign-cap",
         "survival_proven": False,
         "net_profit_proven": False,
         "rematch_executed": False,

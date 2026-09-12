@@ -138,9 +138,14 @@ class RedLeagueFundingQualification:
     def expected_net_income(self) -> int:
         return self.expected_gross_income + self.supply.sale_proceeds - self.supply.purchase_cost
 
+    @property
+    def maximum_campaign_full_restores(self) -> int:
+        """One shared reserve may settle the first qualified mandatory need."""
+        return max((battle.maximum_full_restores for battle in self.battles), default=0)
+
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.repeatable-league-funding-qualification.v2",
+            "schema": "pokemon.red.repeatable-league-funding-qualification.v3",
             "status": "ready_for_bounded_executor",
             "exit_steps": 0 if self.exit_plan is None else len(self.exit_plan.steps),
             "fly_town": self.fly_town,
@@ -177,9 +182,8 @@ class RedLeagueFundingQualification:
             ],
             "controller_actions": 0,
             "emulator_frames": 0,
-            "cumulative_recovery_reserved": sum(
-                battle.maximum_full_restores for battle in self.battles
-            ),
+            "cumulative_recovery_reserved": self.maximum_campaign_full_restores,
+            "recovery_allocation": "first-qualified-need-within-campaign-cap",
             "survival_proven": False,
             "net_profit_proven": False,
             "rematch_executed": False,
@@ -533,11 +537,11 @@ def qualify_red_league_funding(
             objective,
             quote,
             recovery_controller=(
-                "damage-bounded-zero-item" if index < 3
-                else "bounded-critical-risk" if objective == "defeat_lance"
+                "bounded-critical-risk"
+                if objective == "defeat_lance"
                 else "ordinary-bounded-healing"
             ),
-            maximum_full_restores=1 if objective == "defeat_champion" else 0,
+            maximum_full_restores=0 if objective == "defeat_lance" else 1,
             maximum_critical_exposures=2 if objective == "defeat_lance" else 0,
         )
         for index, (objective, quote) in enumerate(zip(objectives, quotes, strict=True))
