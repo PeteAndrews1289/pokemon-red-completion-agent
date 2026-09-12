@@ -1,5 +1,17 @@
 # Project story: from finishing Red to learning useful choices
 
+Latest systems beat: model109 selected one of four anonymous fishing destinations. Generic routing,
+fishing and capture added registration83 after542 actions,31,464 frames and five casts; the measured
+success produced model110. From the rebuilt four-way menu, model110 then chose a longer destination
+whose route met a scripted dialogue outside the runner's declared capability after435 actions and
+14,832 frames. That consumed attempt remained failed and produced model111 rather than being retried
+or patched into a success.
+
+The durable endpoint now has83 registrations,63 living species,67 specimens and111 training-only
+examples. It is an honest online loop—choice, gain, fit, next choice, failure, fit—not proof that the
+policy is good or that it can play from a fresh game. The next task is generic control recovery and
+route-capability qualification, not a named-species route. [Evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json).
+
 Latest systems beat: model108 chose healing from a live six-candidate menu that crossed goal
 families. The verified83-action outcome became row109. The next state exposed a practical
 collection problem: active Box4 was full even though180 slots elsewhere were free. A new semantic

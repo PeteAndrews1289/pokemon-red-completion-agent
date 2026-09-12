@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 80 verified registered species and 105 settled examples in the current collection-learning dataset. The latest model-selected Safari area produced one missing registration; its outcome was admitted through an explicit training-only trust tier because the original harness lacked a per-action journal. This does not establish independent improvement.
+- 83 verified registered species and 111 settled examples in the current collection-learning dataset. The latest loop retained both a model-selected fishing capture and the next model-selected route failure. Both are training-only, same-lineage outcomes and do not establish independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-12-model105-measured-safari-fit.md).
+[Evidence for the current model](work-sessions/2026-09-12-model111-fishing-learning-loop.md).
 
 ## My role and the stack
 

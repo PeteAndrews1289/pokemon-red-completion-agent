@@ -5,36 +5,38 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest measured endpoint: mixed goals and storage relief / model109
+## Latest measured endpoint: capture, failure and online update / model111
 
-The current restart is `red-model109-storage-relief-reconstructed-terminal-20260912`, checkpoint
-record SHA-256 `90163f2776eae82544941ea0907d1cac39804883ee51608fba6e7e12bd6dbbd5`.
-It reopens **82 registered species / 62 living species / 66 specimens**, with 20 immediate capture
-slots and model109.
+The current restart is `red-model111-fishing-measured-failure-terminal-20260912`, checkpoint record
+SHA-256 `7b70cb03508650d47863159b16c49d2985bd6fea07553e5bc4defddb2bb3380c`.
+It reopens **83 registered species / 63 living species / 67 specimens** at the exact retained
+scripted-dialogue interruption, with model111.
 
-- Registered-objective model: **109 settled examples**
-- Model SHA-256: `726171e67b5c914f1e870b70f2f8992e55b5189117adce96dc4182c84bfa23af`
-- Learned lesson: model108 selected `restore_team` from six live mixed-family candidates at
-  probability **0.236989**; 83 actions / 3,900 frames verified the outcome and produced model109
-- Deterministic support: the next state had a full active box despite 180 free slots elsewhere; a
-  semantic routed storage goal changed Box 4 to Box 5 and immediate capacity 0→20
-- Collection, bag and cash were preserved; teacher labels, evaluation accesses and promotions: **0**
+- Registered-objective model: **111 settled examples**, 76 successful
+- Model SHA-256: `2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9`
+- First lesson: model109 sampled candidate 1 from four anonymous fishing destinations at
+  probability **0.087610**; 542 actions / 31,464 frames / five casts added registration83
+- Second lesson: model110 sampled candidate 3 from a rebuilt four-way menu at probability
+  **0.292434**; after 435 actions / 14,832 frames its route met an unsupported scripted dialogue
+- The second attempt is a retained failure with no retry. Both outcomes added one row; teacher
+  labels, independent evaluations and authority promotions remained **0**
 
-The storage support step completed, but its private reporter failed after saving the terminal. It
-was not replayed. A zero-input reconstruction verified both endpoints. Exact execution meter totals
-are unavailable, so the checkpoint conservatively charges the full declared 30,000-action and
-3,000,000-frame bounds. Do not present those bounds as observed cost.
+The model111 checkpoint published and reopened before its private summary writer raised a
+module-alias error. The sealed record was inspected and the missing summary reconstructed without
+republication or game input. This is a reporter-only failure, not a missing checkpoint.
 
-The reusable split is now explicit: the model ranks high-level goal candidates; deterministic Red
-adapters route, heal and operate the PC; typed postconditions decide whether the observed result is
-eligible for training. Storage relief added no model row.
+The reusable split remains explicit: the model ranks identity-free destination features;
+deterministic Red adapters route, fish and capture; typed postconditions retain success or failure.
+The successful registration is real, but the next route exposed a capability-advertising defect:
+the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
 
-Next: reopen this 20-slot checkpoint action-free, expose the broadest useful acquisition menu,
-execute one bounded model109 choice, retain success or failure and fit model110 only from eligible
-evidence. Keep cross-acquisition-family coverage open until multiple acquisition mechanics are
-simultaneously executable.
+Next: first make destination eligibility consult the executor's declared interruption capability.
+Then recover ordinary input control from this exact terminal as zero-label support, rebuild the
+model111 menu action-free and execute at most one fresh committed choice. Stop on a route-specific
+patch, a forced-only menu or any move into Blue/Crystal. Mixed acquisition-family coverage remains
+open.
 
-[Latest report](docs/work-sessions/2026-09-12-model109-mixed-and-storage.md) · [Latest evidence](docs/evidence/red-model109-mixed-and-storage-2026-09-12.json)
+[Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 
 ## Prior measured endpoint: Safari capture / model105
 

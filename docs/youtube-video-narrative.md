@@ -4,23 +4,21 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: **a mixed goal decision, then a real storage bottleneck**. Show model108 choosing healing from six live candidates, the verified transition becoming model109, and Box 4 becoming full despite 180 free slots elsewhere. Then show the agent travel to a PC and switch to Box 5, restoring capture capacity from 0 to20. Overlay **82 registrations / 109 examples**.
+Newest systems beat: **capture → update → new choice → honest failure**. Show model109 choosing one
+of four anonymous fishing destinations, then the Pokédex changing82→83 after five casts. Overlay
+**542 actions /31,464 frames / model110**. Rebuild the four-card menu and show model110 selecting a
+longer route, then stopping at an unsupported scripted dialogue after435 actions rather than
+silently pressing through it. The failure becomes row111; it is not retried or relabeled.
 
-Keep the authorship boundary visible: the model chose healing; deterministic skills healed, routed and operated the PC; postcondition code verified the state. Storage was forced safety support and added no training row. Show the reporting failure honestly: the state was saved, but exact costs were lost after a wrong-layer field lookup. The attempt was not replayed; a zero-input audit verified the terminal and the project charged the full declared bounds instead of inventing precision. This is a reliability story, not full autonomy.
+Caption the division of labor plainly: **the model ranks identity-free destination features;
+deterministic skills route, fish and capture; postconditions judge the outcome**. Show the exact
+failure terminal reopening as a durable model111 checkpoint. Overlay **83 registrations /111
+training-only examples /0 teacher labels /0 authority promotions**.
 
-[Session](work-sessions/2026-09-12-model109-mixed-and-storage.md).
-
-Newest systems beat: **failure → update → different choice → capture**. Show model106 selecting one of eight anonymous fishing destinations and stopping at a route input-readiness boundary after92 actions. Keep the failed label visible. Then show the separate six-action dialogue recovery marked "deterministic support / zero training rows." Model107 selects a different card, and the generic chain records one new species after five casts. Overlay **81→82 registered / model106→107→108 / 108 examples**.
-
-Then show the exact terminal reopening as a durable checkpoint with zero publication inputs. Caption
-the division of labor plainly: **the model chose the destination; deterministic skills routed,
-fished and captured; the Pokédex verifier judged the outcome**. The honest hook is not that the
-model has mastered fishing; it is that a real failure was retained, changed the learned corpus and
-the system continued from earned state to a different success without rewriting history.
-
-Retain the trust caveat on screen: the capability receipt has aggregate counters and exact state
-hashes but no per-action journal. It is training only, not evaluation, and grants no authority
-promotion. [Session](work-sessions/2026-09-12-model108-adaptive-fishing-loop.md).
+The hook is not that the model has mastered Pokémon. It is that the same online system preserves a
+real gain and the next real failure, learns from both, and keeps the environment state honest. The
+next scene is generic dialogue recovery and route-capability qualification—not a handcrafted
+Magikarp route. [Session](work-sessions/2026-09-12-model111-fishing-learning-loop.md).
 
 The preceding Safari beat remains useful context: model104 chose one of four anonymous areas,
 reached a real capture and became model105. Its four preserved integration failures—step-counter

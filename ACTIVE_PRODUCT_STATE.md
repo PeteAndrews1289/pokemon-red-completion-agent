@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Use the storage-relieved 82-registration model109 restart to expose the broadest honest acquisition menu, collect one bounded model-selected outcome, and fit model110 only if the observed result is eligible.
+- Next decision: Repair the identity-free route capability gate before rebuilding the model111 menu, then recover control without learning credit and allow one supported fresh choice.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose among mixed high-level Red goals, preserve the measured outcome, and recover capture capacity through semantic routed storage management. |
-| Authority now | The bounded-development learner has 109 fitted examples, including a verified mixed-family restore choice. Its latest Red state has 82 registrations and a durable model109 restart with 20 immediate capture slots. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
+| Reusable capability | Choose among identity-free Red acquisition destinations, retain both collection gains and route failures, and continue from authenticated fitted-model checkpoints. |
+| Authority now | The bounded-development learner has111 fitted examples. Its latest Red state has83 registrations,63 living species and67 specimens in a durable model111 restart at a recoverable scripted-dialogue interruption. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The storage-relieved model109 restart cannot expose at least two useful acquisition candidates or its selected goal cannot settle under the existing bounded executor contract. |
+| Cheapest falsifier | The model111 failure checkpoint cannot recover ordinary input control through the existing generic dialogue support, or its rebuilt menu repeats an ineligible route as if the failure were a success. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 109 | 12 |
+| Registered Train Example · train | 111 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-model109-mixed-and-storage** · status **active** · evidence [model fit](docs/evidence/red-model109-mixed-and-storage-2026-09-12.json)
+**2026-09-12-model111-fishing-learning-loop** · status **active** · evidence [model fit](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner has now crossed goal families and the runtime can recover an authentic collection bottleneck without confusing support with learning. This advances reusable collection composition, but remains same-lineage Red development rather than a complete player or transfer result. |
-| Learning output | One verified mixed-family restore choice added one training-only row and produced model109 with 109 settled examples. Routed storage relief was a deterministic singleton support step with zero labels and zero fit rows. Teacher labels, independent evaluation and promotions remained zero. |
-| Authority delta | Model108 selected restore_team from a real mixed-family menu and the verified outcome produced model109 with 109 settled examples. A subsequent full-active-box condition was handled as deterministic zero-label support: routed storage relief changed Box4 to Box5 and immediate capture capacity 0 to 20 without changing the model, collection or cash. |
-| Transfer result | The semantic manage_storage goal, capacity observation and preservation verifier are transferable concepts; Red PC navigation and menu controls remain adapter code. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | Capture capacity is restored, but the next learned acquisition menu has not yet been rebuilt from the new terminal. The storage reporter also lost exact action and frame totals after saving the successful terminal; the attempt was not replayed and its full declared bounds are charged. |
-| Decision | Reopen the storage-relieved model109 checkpoint action-free, expose the broadest honest acquisition menu, execute one bounded model-selected choice and fit model110 only from an eligible observed outcome. |
-| Next session | Reopen the 20-slot model109 restart without input, build the broadest honest acquisition menu, and let the model control one bounded choice. Retain success or failure and stop if the menu collapses to forced support. |
-| Next falsifier | Model109 exposes fewer than two useful acquisition candidates after storage relief, or its selected goal cannot settle without a species-specific patch. |
+| Product alignment | The loop now demonstrates the intended online pattern--choose, gain a registration, fit, choose again, retain failure and fit--while preserving the earned state. It advances adaptive collection judgment but remains same-lineage Red training, not fresh-game autonomy or transfer. |
+| Learning output | Two four-way fishing choices added two training-only rows: one verified registration gain and one retained route failure. Model109 became model111 with111 settled examples and registration count rose82to83. Teacher labels, independent evaluation and promotions remained zero. |
+| Authority delta | Model109 selected one of four anonymous fishing destinations and added registration83; model110 then selected another four-way destination whose route stopped at an unsupported scripted dialogue. Both observed outcomes were retained, producing model111 with111 settled examples. No authority promotion occurred. |
+| Transfer result | The destination policy uses identity-free value, cost and risk features, while fishing, route and dialogue controls remain Red adapters. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
+| Blocker | The latest model111 restart is intentionally at the consumed failure terminal, in a scripted-dialogue interruption. Generic control recovery must reopen it before another acquisition choice. Fishing remains the only executable acquisition family in the current inventory, so mixed acquisition-family learning is still open. |
+| Decision | Make route advertisement consult the executor's declared interruption capability, then recover the authenticated model111 terminal as zero-label support, rebuild the menu and test one useful next choice. |
+| Next session | Gate destination eligibility on declared interruption capability before rebuilding the menu; then recover the model111 terminal without a label and execute at most one newly committed choice. |
+| Next falsifier | The model111 failure checkpoint cannot regain control through generic dialogue recovery, or the next menu cannot distinguish useful executable options from the route shape that just failed. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions

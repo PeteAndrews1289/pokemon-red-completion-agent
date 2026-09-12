@@ -391,7 +391,7 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Registered Train Example · train", 109, 12),)
+    assert focus_scorecard(state) == (("Registered Train Example · train", 111, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
     assert state.progress["model_fits"] == 14
     assert state.progress["composition_attempts"] == 6
@@ -1802,7 +1802,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     # Only actual new-objective outcomes advance this separate counter.
-    assert rows == ("Registered Train Example · train: 109/12",)
+    assert rows == ("Registered Train Example · train: 111/12",)
 
 
 @pytest.mark.parametrize("goal", [
