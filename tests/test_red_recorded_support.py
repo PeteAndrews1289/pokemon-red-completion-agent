@@ -17,6 +17,7 @@ from pokemon_red_completion.red_player_checkpoint import (
 )
 from pokemon_red_completion.red_recorded_support import (
     SUPPORT_HEADER_SCHEMA,
+    VERIFIED_SUPPORT_SEGMENT_SCHEMA,
     RedRecordedSupportError,
     RedRecordedSupportResult,
     support_costs,
@@ -43,6 +44,65 @@ def _segment(parent, state, count, delta):
         "result": None,  # Preserve an incomplete original report, never invent success.
         "trace": trace,
     }
+
+
+def _verified_segment(parent, state, count=3, frames=72):
+    return {
+        "schema": VERIFIED_SUPPORT_SEGMENT_SCHEMA,
+        "plan": {
+            "parent_state_sha256": parent,
+            "diagnostic_only": True,
+            "fit_admission": False,
+            "action_trace_available": False,
+            "source_commit": "e" * 40,
+            "maximum_actions": 9,
+            "maximum_frames": 900,
+            "retained_declaration_sha256": "a" * 64,
+            "retained_claim_sha256": "b" * 64,
+            "retained_result_sha256": "c" * 64,
+        },
+        "state_base64": base64.urlsafe_b64encode(state).decode(),
+        "audit": {
+            "state_sha256": hashlib.sha256(state).hexdigest(),
+            "audit_actions": 0,
+            "audit_frames": 0,
+            "actions": count,
+            "frames": frames,
+            "retry_authorized": False,
+            "training_examples": 0,
+            "status": "failed_retained_no_retry",
+        },
+    }
+
+
+@pytest.mark.parametrize(
+    "fault",
+    [None, "gap", "receipt", "state", "budget", "retry", "training"],
+)
+def test_verified_receipt_support_is_hash_chained_but_never_a_training_trace(fault):
+    first = _verified_segment("a" * 64, b"first")
+    second = _verified_segment(first["audit"]["state_sha256"], b"second", 2, 41)
+    if fault == "gap":
+        second["plan"]["parent_state_sha256"] = "b" * 64
+    elif fault == "receipt":
+        second["plan"]["retained_claim_sha256"] = "short"
+    elif fault == "state":
+        second["state_base64"] = base64.urlsafe_b64encode(b"changed").decode()
+    elif fault == "budget":
+        second["plan"]["maximum_actions"] = 1
+    elif fault == "retry":
+        second["audit"]["retry_authorized"] = True
+    elif fault == "training":
+        second["audit"]["training_examples"] = 1
+    if fault:
+        with pytest.raises(RedRecordedSupportError):
+            support_costs([first, second], "a" * 64)
+    else:
+        assert support_costs([first, second], "a" * 64) == (
+            5,
+            113,
+            hashlib.sha256(b"second").hexdigest(),
+        )
 
 
 @pytest.mark.parametrize("fault", [None, "gap", "frame", "count", "truncated", "state",

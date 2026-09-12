@@ -58,11 +58,13 @@ def validate_terminal_registration(
         REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
         REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
     )
+    from .red_recorded_support import REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
     from .registered_checkpoint import RegisteredCollectionCheckpoint
 
     if terminal.get("schema") not in {
         REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
         REGISTERED_RECOVERY_CHECKPOINT_SCHEMA,
+        REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
     }:
         raise ValueError("registered terminal schema differs")
     checkpoint = RegisteredCollectionCheckpoint.from_public(terminal["collection"])
