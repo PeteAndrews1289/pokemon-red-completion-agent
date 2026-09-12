@@ -469,6 +469,7 @@ def test_fossil_dialogue_settles_before_observing_box_state() -> None:
         def __init__(self) -> None:
             super().__init__()
             self.dialogue = False
+            self.nickname_prompt = False
             self.raw = replace(
                 self.raw,
                 map_id=MapId.CINNABAR_LAB_FOSSIL_ROOM,
@@ -496,9 +497,14 @@ def test_fossil_dialogue_settles_before_observing_box_state() -> None:
             self.actions.append(action)
             if action.kind is MacroActionKind.INTERACT:
                 reader.dialogue = True
-            elif action.kind is MacroActionKind.CONFIRM:
-                reader.dialogue = False
+            elif action.kind is MacroActionKind.CONFIRM and not reader.nickname_prompt:
+                # GivePokemon sets the owned bit before SendNewMonToBox asks
+                # for a nickname.  Its box structures are not consistent yet.
                 reader.owned = frozenset({target.national_dex_number})
+                reader.nickname_prompt = True
+            elif action.kind is MacroActionKind.CANCEL and reader.nickname_prompt:
+                reader.dialogue = False
+                reader.nickname_prompt = False
                 reader.raw = replace(reader.raw, bag_items=(), bag_item_ids=())
                 reader.box = RedCurrentBoxState(
                     reader.box.box_index,
@@ -526,5 +532,7 @@ def test_fossil_dialogue_settles_before_observing_box_state() -> None:
         MacroActionKind.INTERACT,
         MacroActionKind.WAIT,
         MacroActionKind.CONFIRM,
+        MacroActionKind.WAIT,
+        MacroActionKind.CANCEL,
         MacroActionKind.WAIT,
     ]

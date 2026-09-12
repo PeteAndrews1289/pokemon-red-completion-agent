@@ -688,11 +688,19 @@ class RedRoutedFossilRevival:
             for _ in range(self.timing.maximum_dialogue_pulses):
                 if self.reader.read_bottom_dialogue_box_visible():
                     # Fossil handover writes the box's species index before it
-                    # finishes shifting the full Pokémon structures.  Reading
-                    # collection state while dialogue is still visible can
-                    # therefore observe a legitimate but non-atomic RAM write.
+                    # asks about a nickname and only then shifts/writes the full
+                    # Pokémon structures.  Once the target's Pokédex bit is set,
+                    # B both declines that two-option prompt and avoids entering
+                    # the naming screen.  Reading collection state before that
+                    # transition completes would observe legitimate non-atomic
+                    # RAM, not a corrupt box.
                     dialogue_started = True
-                    self._pulse(MacroActionKind.CONFIRM)
+                    owned = target.national_dex_number in (
+                        self.reader.read_pokedex_state().owned_species
+                    )
+                    self._pulse(
+                        MacroActionKind.CANCEL if owned else MacroActionKind.CONFIRM
+                    )
                     continue
                 if observe_red_fossil(self.reader, target).phase is phase:
                     return route_steps
