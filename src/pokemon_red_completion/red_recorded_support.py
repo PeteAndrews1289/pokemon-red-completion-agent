@@ -287,7 +287,10 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         raise RedRecordedSupportError("support import changed partition or invented gameplay")
     if schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA and (
         not isinstance(previous.get("registration_session_record_id"), str)
-        or metadata.get("registration_session_record_id")
+        or metadata.get(
+            "registration_session_record_id",
+            previous.get("registration_session_record_id"),
+        )
         != previous.get("registration_session_record_id")
     ):
         raise RedRecordedSupportError("registered support session binding differs")

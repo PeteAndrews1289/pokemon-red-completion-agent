@@ -2040,7 +2040,10 @@ def _continue_readiness(
             continuation=checkpoint,
             restore_registration_record_id=cast(
                 str | None,
-                cast(Mapping[str, object], metadata).get("registration_session_record_id"),
+                cast(Mapping[str, object], metadata).get(
+                    "registration_session_record_id",
+                    readiness.restore_registration_record_id,
+                ),
             ),
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
