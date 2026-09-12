@@ -107,6 +107,11 @@ def test_composable_funding_transition_is_prospective_and_registered_only(monkey
     assert "--composable-trainer-funding" in module["_parser"]().format_help()
 
 
+def test_routed_storage_relief_is_an_explicit_runner_option() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    assert "--routed-storage-relief" in module["_parser"]().format_help()
+
+
 def test_search_budget_transition_preserves_history_and_requires_registration(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
     module = runpy.run_path(str(SCRIPT))
@@ -294,6 +299,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
 
     def player(
         _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
+        routed_storage_relief=False,
         trainer_funding=False,
         trainer_pending_recovery=False,
         regional_trainer_funding=False,
@@ -302,6 +308,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
     ):
         assert completion_dose is False
         assert routed_recovery is False
+        assert routed_storage_relief is True
         assert trainer_funding is False
         assert trainer_pending_recovery is False
         assert regional_trainer_funding is False
@@ -327,7 +334,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
     observer = observe_type(
         runtime=object(), actions=count_type(outer), meter=meter,
         maximum_actions_per_decision=1, remaining_acquisition_demand=remaining_mode,
-        level_evolution_acquisitions=remaining_mode,
+        level_evolution_acquisitions=remaining_mode, routed_storage_relief=True,
     )
     if probe_during_observation:
         with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
@@ -937,7 +944,8 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     assert routed.enumerate_bindings(object()) is sentinel
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
     completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
-                        completion_dose=True, routed_recovery=True, trainer_funding=True,
+                        completion_dose=True, routed_recovery=True,
+                        routed_storage_relief=True, trainer_funding=True,
                         trainer_pending_recovery=True, regional_trainer_funding=True,
                         observed_trainer_funding=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
@@ -955,7 +963,7 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
         {"quote_resource_costs": False, "prepare_capture_storage": True,
-         "routed_storage_relief": False, "routed_recovery": True,
+         "routed_storage_relief": True, "routed_recovery": True,
          "trainer_funding": True, "trainer_pending_recovery": True,
          "regional_trainer_funding": True, "observed_trainer_funding": True,
          "maximum_controller_actions": 30000,

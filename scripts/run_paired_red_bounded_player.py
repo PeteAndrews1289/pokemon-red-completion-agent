@@ -214,12 +214,14 @@ class _Readiness:
     restore_profile: RedGoalContextProfile | None = None
     restore_completion_dose: bool = False
     restore_routed_recovery: bool = False
+    restore_routed_storage_relief: bool = False
     restore_trainer_funding: bool = False
     restore_trainer_pending_recovery: bool = False
     restore_regional_trainer_funding: bool = False
     restore_observed_trainer_funding: bool = False
     completion_dose: bool = False
     routed_recovery: bool = False
+    routed_storage_relief: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
@@ -294,6 +296,7 @@ class _LiveObserver:
     search_memory: GoalSearchMemory | None = None
     completion_dose: bool = False
     routed_recovery: bool = False
+    routed_storage_relief: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
@@ -325,6 +328,11 @@ class _LiveObserver:
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
             routed_recovery=self.routed_recovery,
+            **(
+                {"routed_storage_relief": True}
+                if self.routed_storage_relief
+                else {}
+            ),
             trainer_funding=self.trainer_funding,
             trainer_pending_recovery=self.trainer_pending_recovery,
             regional_trainer_funding=self.regional_trainer_funding,
@@ -625,6 +633,11 @@ def _parser() -> argparse.ArgumentParser:
         "--routed-recovery",
         action="store_true",
         help="enable guarded walking-to-Center recovery after verified continuation restore",
+    )
+    parser.add_argument(
+        "--routed-storage-relief",
+        action="store_true",
+        help="offer guarded PC box switching when the active capture box is full",
     )
     parser.add_argument(
         "--trainer-funding",
@@ -1008,6 +1021,12 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
+    routed_storage_relief = getattr(args, "routed_storage_relief", False)
+    if type(routed_storage_relief) is not bool or (
+        routed_storage_relief
+        and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
+    ):
+        raise PairedRedBoundedPlayerRunError("routed_storage_relief_scope")
     trainer_funding = getattr(args, "trainer_funding", False)
     regional_trainer_funding = getattr(args, "regional_trainer_funding", False)
     if type(regional_trainer_funding) is not bool or (
@@ -1185,6 +1204,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         training_plan=training_plan,
         completion_dose=completion_dose,
         routed_recovery=routed_recovery,
+        routed_storage_relief=routed_storage_relief,
         trainer_funding=trainer_funding,
         trainer_pending_recovery=trainer_pending_recovery,
         regional_trainer_funding=regional_trainer_funding,
@@ -2112,6 +2132,7 @@ def _continue_readiness(
             ),
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
+            restore_routed_storage_relief=_checkpoint_routed_storage_relief(header),
             restore_trainer_funding=_checkpoint_trainer_funding(header),
             restore_trainer_pending_recovery=_checkpoint_trainer_pending_recovery(header),
             restore_regional_trainer_funding=_checkpoint_regional_trainer_funding(header),
@@ -2143,6 +2164,11 @@ def _continue_readiness(
             raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_rollback")
         if readiness.restore_fossil_acquisitions and not readiness.fossil_acquisitions:
             raise PairedRedBoundedPlayerRunError("fossil_acquisitions_rollback")
+        if (
+            readiness.restore_routed_storage_relief
+            and not readiness.routed_storage_relief
+        ):
+            raise PairedRedBoundedPlayerRunError("routed_storage_relief_rollback")
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
@@ -2200,6 +2226,19 @@ def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
     enabled = metadata.get("routed_recovery", False)
     if type(enabled) is not bool:
         raise PairedRedBoundedPlayerRunError("continuation_parent_routed_recovery")
+    return enabled
+
+
+def _checkpoint_routed_storage_relief(header: Mapping[str, object]) -> bool:
+    """Preserve explicit full-box recovery across continued checkpoints."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("routed_storage_relief", False)
+    if type(enabled) is not bool:
+        raise PairedRedBoundedPlayerRunError(
+            "continuation_parent_routed_storage_relief"
+        )
     return enabled
 
 
@@ -2336,6 +2375,9 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         readiness.quote_resource_costs,
         completion_dose=getattr(readiness, "restore_completion_dose", False),
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
+        routed_storage_relief=getattr(
+            readiness, "restore_routed_storage_relief", False
+        ),
         trainer_funding=getattr(readiness, "restore_trainer_funding", False),
         trainer_pending_recovery=getattr(readiness, "restore_trainer_pending_recovery", False),
         regional_trainer_funding=getattr(readiness, "restore_regional_trainer_funding", False),
@@ -2557,6 +2599,7 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             readiness.quote_resource_costs,
             completion_dose=readiness.completion_dose,
             routed_recovery=readiness.routed_recovery,
+            routed_storage_relief=getattr(readiness, "routed_storage_relief", False),
             trainer_funding=getattr(readiness, "trainer_funding", False),
             trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
             regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
@@ -2746,6 +2789,11 @@ def _run_arm(
                 ),
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
+                **(
+                    {"routed_storage_relief": True}
+                    if getattr(readiness, "routed_storage_relief", False)
+                    else {}
+                ),
                 "trainer_funding": getattr(readiness, "trainer_funding", False),
                 "trainer_pending_recovery": getattr(readiness, "trainer_pending_recovery", False),
                 "regional_trainer_funding": getattr(readiness, "regional_trainer_funding", False),
@@ -2845,6 +2893,9 @@ def _run_arm(
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
                 routed_recovery=readiness.routed_recovery,
+                routed_storage_relief=getattr(
+                    readiness, "routed_storage_relief", False
+                ),
                 trainer_funding=getattr(readiness, "trainer_funding", False),
                 trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
                 regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),

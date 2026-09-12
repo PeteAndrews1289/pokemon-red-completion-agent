@@ -55,7 +55,8 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
             feature_version=1 if history_mode == "legacy" else 3,
         )),
         profile=None, quote_resource_costs=True, completion_dose=True,
-        routed_recovery=True, pair_id="preview", challenger_arm_id="test",
+        routed_recovery=True, routed_storage_relief=True,
+        pair_id="preview", challenger_arm_id="test",
         remaining_acquisition_demand=True, level_evolution_acquisitions=True,
         trainer_funding=True, trainer_pending_recovery=True,
         regional_trainer_funding=True,
@@ -86,6 +87,7 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
     monkeypatch.setattr(runner, "PokemonRedStateReader", lambda _controller: None)
     observer = SimpleNamespace(search_memory="not wired")
     def preview_observer(*_args, **kwargs):
+        assert kwargs["routed_storage_relief"] is True
         assert kwargs["remaining_acquisition_demand"] is True
         assert kwargs["level_evolution_acquisitions"] is True
         assert kwargs["trainer_funding"] is True
@@ -235,6 +237,37 @@ def test_recovery_restore_mode_is_taken_from_recorded_parent_not_successor(case,
     )
     assert resumed.restore_routed_recovery is parent_mode
     assert resumed.routed_recovery is not parent_mode
+
+
+@pytest.mark.parametrize("parent_mode", [False, True])
+def test_storage_relief_restores_parent_mode_and_forbids_rollback(case, parent_mode):
+    store, arguments, _observation = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document, alter_header={
+        "split": {"partition": "train", "root_lineage_id": "original-training-root"},
+        **({"routed_storage_relief": True} if parent_mode else {}),
+    })
+    record = publish_red_player_checkpoint(store, document)
+    ready = replace(_readiness(store, arguments), routed_storage_relief=True)
+    chain = ((arguments["episode_id"], record["record_sha256"]),)
+    resumed = runner._continue_readiness(ready, chain)
+    assert resumed.restore_routed_storage_relief is parent_mode
+    assert resumed.routed_storage_relief is True
+    if parent_mode:
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="storage_relief_rollback"):
+            runner._continue_readiness(replace(ready, routed_storage_relief=False), chain)
+
+
+@pytest.mark.parametrize("value", [None, 0, "true", []])
+def test_storage_relief_checkpoint_mode_is_strict(value):
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="parent_routed_storage"):
+        runner._checkpoint_routed_storage_relief({
+            "metadata": {"routed_storage_relief": value},
+        })
+
+
+def test_old_checkpoint_does_not_gain_storage_relief():
+    assert runner._checkpoint_routed_storage_relief({"metadata": {}}) is False
 
 
 @pytest.mark.parametrize("partition", ["development", "validation", "test", "unassigned"])
@@ -586,6 +619,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", runtime)
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
     def player_observer(*_args, completion_dose=False, routed_recovery=False,
+                        routed_storage_relief=False,
                         trainer_funding=False, trainer_pending_recovery=False,
                         regional_trainer_funding=False,
                         observed_trainer_funding=False,
@@ -593,6 +627,7 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
                         fossil_acquisitions=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
+        assert routed_storage_relief is False
         assert trainer_funding is False
         assert trainer_pending_recovery is False
         assert regional_trainer_funding is False
@@ -636,6 +671,34 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
     )
 
     def source(*_a, **_k):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
+        runner._prepare(args)
+
+
+@pytest.mark.parametrize("chain,routed", [([], True), ([('old', 'a' * 64)], False)])
+def test_storage_relief_requires_a_routed_continuation_before_source(chain, routed):
+    args = SimpleNamespace(
+        pair_id="storage-relief-scope", continue_from_checkpoint=chain,
+        train_player=False, context_origin="training", save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID, routed_storage_relief=True,
+        routed_resource_goals=routed,
+    )
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="storage_relief_scope"):
+        runner._prepare(args)
+
+
+def test_valid_storage_relief_scope_reaches_source_check(monkeypatch):
+    args = SimpleNamespace(
+        pair_id="storage-relief-scope", continue_from_checkpoint=[("old", "a" * 64)],
+        train_player=False, context_origin="training", save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID, routed_storage_relief=True,
+        routed_resource_goals=True,
+    )
+
+    def source(*_args, **_kwargs):
         raise RuntimeError("source verification reached")
 
     monkeypatch.setattr(runner, "detect_source_identity", source)
