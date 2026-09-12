@@ -16,15 +16,18 @@ and23,364 income, reaching Champion's final opponent with all six party members 
 successor then executed its exact shop plan but stopped at Lorelei's Cloyster because Clamp lacked
 a qualified incoming forced-repeat bound. A trapping-qualified development successor crossed that
 stop and reduced Cloyster to61 HP, then stopped on an unqualified confusion-plus-damaging-debuff
-state. Neither completed a battle or changed a model or collection counter. Champion/Hall of Fame,
+state. A generic, action-free repair now bounds an Attack drop with the cartridge-wide999 Attack
+cap while every other stat-drop class still abstains; the retained terminal exposes a safe attack
+at zero frames. Neither successor completed a battle or changed a model or collection counter.
+Champion/Hall of Fame,
 postcredits recovery, fresh-game autonomy and
 independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** The generic Gen-I trapping bound passed live control.
-   Qualify or reject the newly observed compound confusion/stat-reduction commitment without input.
-   Then prove one complete rematch, stable post-game return and honest net proceeds; buy a practical
+1. **Restore renewable capture funding.** Generic Gen-I trapping and confused Attack-drop bounds
+   now pass the retained decision seams. After exact-source green CI, use one separately identified
+   development successor. Then prove one complete rematch, stable post-game return and honest net proceeds; buy a practical
    ball reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
@@ -43,11 +46,11 @@ The retained collection endpoint remains BZ recovery/model103:75 registrations,6
 four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
 failed BX02 search, the League attempts or the forced BZ steps.
 
-The generic forced-repeat repair passed its live boundary, but its one development successor
-stopped on compound confusion plus a possible damaging stat reduction. The next session is
-read-only mechanics analysis and a retained-terminal decision test. Do not retry either consumed
-attempt. Stop if a conservative generic bound cannot be established, or on any boss-specific
-exception, unexpected payout, wipe, exceeded bound or
+The generic forced-repeat repair passed its live boundary, and the next action-free mechanics
+repair established a conservative bound for confusion plus an Attack reduction. The retained
+terminal now selects an attack with241 HP against a165-HP commitment. Do not retry either consumed
+attempt. After exact-source green CI, use one separately identified development successor. Stop on
+any unsupported mechanic, boss-specific exception, unexpected payout, wipe, exceeded bound or
 non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
 result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 

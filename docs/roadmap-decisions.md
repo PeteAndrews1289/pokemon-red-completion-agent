@@ -630,6 +630,22 @@ stopped with the active member confused while a damaging stat-reduction move rem
 Preserve the298-action terminal and do not retry. The next work is one generic cartridge-pinned
 compound bound and zero-input retained-terminal test. A Lorelei-specific exception or another live
 attempt before that test would violate the anti-drift stop.
+
+## September 11 — qualify confused Attack drops with a global cap
+
+Pinned cartridge order confirmed that an enemy Aurora Beam can deal damage, lower the player's
+Attack and then precede the slower player's confusion check. The first proposed bound reused the
+observed live Attack, but a reachable burned-plus-badge-glitch sequence showed that Aurora Beam can
+recalculate Attack above that observed value. That proposal was rejected before implementation;
+both independent reviewers accepted the counterexample.
+
+The generic repair classifies the stat named by the move effect. Only Attack reduction is admitted
+while already confused, and self-hit uses Red's hard999 Attack cap with observed Defense. Defense,
+Speed, Special, Accuracy and Evasion reductions remain closed. The retained terminal then computed
+165/250/160/495/150/351 with zero input and selected attack for the241-HP active member. This closes
+the compound mechanics falsifier without advancing model103, collection, or battle authority.
+Await exact-source green CI before one separately identified development successor; never retry
+either consumed League attempt.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure

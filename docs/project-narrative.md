@@ -10,7 +10,10 @@ depleted. A supplied successor executed its exact shop transaction but stopped d
 because Clamp lacked a generic incoming forced-repeat bound. Both failures were retained without
 retry. The generic repair then crossed the Clamp stop in a green-CI development successor, which
 stopped on a separate confusion-plus-damaging-debuff safety gap before Lorelei completed. None of
-these support attempts changed the model. This is meaningful resource and safety evidence, not a completed
+these support attempts changed the model. A subsequent action-free mechanics repair classified the
+actual effect as Attack-down and conservatively bounded any same-turn Attack reset at the cartridge
+maximum of999; a retained-state check now exposes a safe attack without advancing a frame. This is
+meaningful resource and safety evidence, not a completed
 renewable economy. [Report](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-trapping-qualified-league-failure**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-confusion-attack-drop-qualification**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -14,7 +14,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
 - [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json))
+- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json))
 
 Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-model103-confusion-attack-drop-qualification
+
+The generic confusion-plus-Attack-drop bound passed375 focused tests. A zero-input retained-state check computed bounds165/250/160/495/150/351 and selected attack for the241-HP active member against its165-HP commitment. Model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit, gameplay, fit or authority promotion. An initial observed-Attack proposal was rejected after a reachable burn-plus-badge-glitch counterexample; the implementation uses the cartridge-wide999 Attack cap and still refuses every non-Attack stat drop.
+
+**Next:** Await exact-source green CI, then bind one separately identified development successor from the unchanged model103 checkpoint. Stop on the first new unsupported mechanic or resource failure; after verified net-positive funding, restore capture stock and resume model-selected registration immediately.
 
 ### 2026-09-11-model103-trapping-qualified-league-failure
 

@@ -65,8 +65,18 @@ workhorse at241 HP. It then stopped because the workhorse was confused while Clo
 damaging stat-reduction move; that compound same-turn bound is not qualified. The run used298
 actions/25,812 frames, retained all six party members and completed zero battles. Do not retry it.
 
-Next, derive or reject one generic compound confusion/stat-reduction bound from pinned cartridge
-order and live stats, then validate the retained terminal without input. On a later verified
+The compound boundary is now qualified generically at source
+`c277ab8af8a5e0ac3dcb8b41648b54459f3486be`. Aurora Beam lowers Attack; it is not a generic
+"debuff." The survival model permits only Attack reductions while already confused and uses the
+cartridge-wide999 Attack cap because a reachable burn-plus-badge-glitch sequence disproved the
+initially proposed live-Attack bound. Defense, Speed, Special, Accuracy and Evasion reductions
+still fail closed. No Lorelei or move-ID exception was added.
+
+A zero-input reload of the retained terminal computed bounds165/250/160/495/150/351. The active
+member has241 HP and the controller selected attack against its165-HP commitment; zero frames and
+zero inputs were used. This closes the engineering falsifier, not Lorelei or the funding cycle.
+After exact-source CI is green, use a separately identified development successor from the
+unchanged model103 checkpoint; neither consumed League attempt may retry. On a later verified
 Champion plus Hall of Fame, complete
 postcredits recovery, buy a practical ball reserve and return immediately to model-selected
 collection. Do not fit deterministic League support or begin Crystal.

@@ -28,26 +28,26 @@
       "status": "retired"
     },
     {
-      "capability": "Complete a repeatable, net-positive League funding cycle with generic survival handling for forced multi-turn attacks so model-directed Red registration can recover from exhausted finite income.",
-      "cheapest_falsifier": "Pinned cartridge mechanics cannot produce a conservative confusion-plus-damaging-debuff commitment without species-specific exceptions, or the repaired controller still has no safe action at the retained Lorelei terminal.",
+      "capability": "Complete a repeatable, net-positive League funding cycle with cartridge-generic survival handling so model-directed Red registration can recover from exhausted finite income.",
+      "cheapest_falsifier": "A separately identified development successor still cannot complete the supplied League cycle safely, or its post-credits net proceeds cannot restore practical capture stock.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The supplied run used deterministic navigation, shopping and battle support only; model103 remains at103 fitted examples and no battle authority was promoted.",
-        "blocker": "The trapping-qualified development successor crossed the prior Clamp stop and damaged Cloyster, then stopped while the active member was confused because the enemy still had a damaging stat-reduction move available. The compound same-turn survival bound remains unqualified.",
-        "decision": "Preserve the consumed successor without retry and stop the live loop. Qualify confusion plus a damaging stat reduction generically from pinned cartridge mechanics, or reject the approach if no conservative bound can preserve strict HP safety. Do not add a Lorelei-specific exception.",
+        "authority_delta": "None. This was deterministic battle-safety engineering and a zero-input diagnostic; model103 remains at103 fitted examples and no battle authority was promoted.",
+        "blocker": "The compound confusion-plus-Attack-drop boundary is now qualified, but the full supplied League cycle and post-credits capture replenishment remain unverified. The exact two failed attempts remain consumed and cannot retry.",
+        "decision": "Accept the cartridge-generic 999-Attack confusion bound after independent review corrected a narrower unsound proposal. Await green CI, then use a separately identified development successor; do not retry either consumed attempt or generalize support to Defense, Speed, Special, Accuracy or Evasion drops.",
         "evidence": {
-          "kind": "development_episode",
-          "path": "docs/evidence/red-model103-trapping-qualified-league-failure-2026-09-11.json",
-          "sha256": "ed863e7815c8714062e583975bb4798da38c4a8b6f1880ef6286b2e3a309decf"
+          "kind": "qualification",
+          "path": "docs/evidence/red-model103-confusion-attack-drop-qualification-2026-09-11.json",
+          "sha256": "614b0dcf91fd912cd881dce50c1a36386fa7e3cce92ce35bc86b1660b607bddc"
         },
-        "learning_output": "No learning or registration delta. The deterministic successor executed298 actions and25812 frames, preserved all six party members, crossed the prior trapping stop and reduced Cloyster to61 HP before the separate compound-status guard stopped it.",
-        "next_falsifier": "A cartridge-pinned compound confusion/stat-reduction bound cannot be made conservative, or it yields no safe action on the retained zero-input diagnostic.",
-        "next_session_goal": "Audit the exact confusion and damaging-debuff order, stats and badge interactions; implement only a generic conservative bound with a retained-terminal zero-input test. Do not retry either League attempt, fit deterministic support or begin Crystal.",
-        "product_alignment": "Renewable income remains required for sustained autonomous capture. Supporting a cartridge-generic forced-move mechanic improves reusable battle safety; it is worthwhile only if it promptly returns the system to the funding-and-collection loop.",
-        "session_id": "2026-09-11-model103-trapping-qualified-league-failure",
-        "status": "active",
-        "stop_condition": "Stop if the compound order cannot be bounded generically, the retained terminal has no strictly safe action, another live attempt would precede green tests, or any proposal requires a Lorelei-specific exception, hidden retry or learned-authority overclaim.",
+        "learning_output": "No learning or registration delta. The generic mechanics repair passed375 focused tests and a zero-input retained-state check: the active member has241 HP, a165-HP worst commitment and a qualified attack decision.",
+        "next_falsifier": "A fresh development successor cannot safely complete the League and retain positive capture purchasing power despite the supplied plan and qualified mechanics.",
+        "next_session_goal": "After exact-source CI is green, bind one new development successor from the unchanged model103 checkpoint. If it completes, recover, buy practical capture stock and return immediately to model-selected registration; stop on the first new unsupported mechanic or resource failure.",
+        "product_alignment": "Renewable income remains required for sustained autonomous capture. The generic compound-status repair closes the retained terminal without changing learned authority and returns the next session directly to the funding-and-collection loop.",
+        "session_id": "2026-09-11-model103-confusion-attack-drop-qualification",
+        "status": "closed",
+        "stop_condition": "Do not start gameplay before exact-source green CI. Stop on the first unsupported commitment, unsafe HP bound, unexpected inventory or payout, wipe, consumed-identity reuse, boss-specific exception, or learned-authority overclaim.",
         "transfer_result": "ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists."
       },
       "learned_authority": {
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Qualify the compound confusion-plus-damaging-debuff commitment generically and action-free before considering another development successor; then finish the funding cycle or abandon this route and return to a different legitimate income strategy.",
+      "next_decision": "Run one separately identified development successor after exact-source green CI; finish the funding cycle and resume model-selected collection, or preserve its first new falsifier and reassess the League route.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

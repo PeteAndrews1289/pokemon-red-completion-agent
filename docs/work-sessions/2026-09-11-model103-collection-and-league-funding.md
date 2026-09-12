@@ -87,7 +87,7 @@ One separately labeled successor ran from the unchanged clean model103 checkpoin
 source `4d883152ccba4b3c0a84150c7de5e5e4e1f1efd9` under green GitHub CI run34668075588. It crossed the
 previous Clamp stop: the active workhorse used two attack PP, moved from253 to241 HP and reduced
 Cloyster from124 to61 HP. The run then encountered a different compound state. The workhorse was
-confused while Cloyster still exposed Aurora Beam, whose damaging defense-side effect can change
+confused while Cloyster still exposed Aurora Beam, whose damaging Attack-down side effect can change
 subsequent self-hit risk. The safety model refused that combination.
 
 The successor stopped after298 actions and25,812 frames, with378money, all six party members alive
@@ -97,15 +97,35 @@ exact identity is consumed without retry. [Evidence](../evidence/red-model103-tr
 ## Decision and next falsifier
 
 Preserve all consumed failures as diagnostics; do not brute-force or relabel them. The trapping
-repair passed live control, so do not reopen it. The next bounded question is whether pinned
-cartridge order and live stats can conservatively qualify confusion plus a damaging stat reduction
-without a Lorelei-specific exception. Test the retained terminal with zero input before any new
-gameplay. If the generic bound cannot establish a safe action, abandon this funding route and
-compare another legitimate income strategy.
+repair passed live control, so do not reopen it. The compound Attack-drop bound described below
+also passed its action-free retained-state gate. After exact-source green CI, the next falsifier is
+a separately identified development successor that still cannot complete the supplied League cycle
+or retain positive capture purchasing power. Neither consumed League attempt may retry.
 
 If the supplied rehearsal settles safely, complete postcredits recovery, buy a practical ball
 reserve and return immediately to model-selected collection. Pay Day remains a later income
 diversification option, not the current repair.
+
+## Compound-status qualification
+
+Pinned cartridge mechanics show that Aurora Beam applies direct damage before its probabilistic
+Attack reduction. If Cloyster moves first, the player's later confusion check sees the resulting
+live stats. The initial proposal—to reuse observed Attack—was rejected after a reachable Gen-I
+counterexample: unrelated stat drops can repeatedly reapply both badge boosts and burn's Attack
+halving, while a later Attack drop recalculates from the unmodified stat and can raise Attack above
+the pre-turn observation.
+
+The implemented generic bound therefore classifies the affected stat and admits only Attack-down
+effects while the player is already confused. It uses the cartridge-wide999 Attack cap and observed
+Defense; every Defense, Speed, Special, Accuracy or Evasion reduction still abstains. There is no
+move-ID, Cloyster or Lorelei exception. Focused verification passed375 tests, full typing covered483
+source files, and lint/public/document checks passed.
+
+A zero-input reload of the retained terminal computed per-member commitments of
+165/250/160/495/150/351. The active member had241 HP and the controller selected attack against its
+165-HP bound. Emulator frames remained zero. This qualifies a separately identified development
+successor after exact-source green CI; it does not execute or retry either consumed attempt, finish
+Lorelei, create a learning row or change the75 registrations.
 
 ## Honest scope
 
