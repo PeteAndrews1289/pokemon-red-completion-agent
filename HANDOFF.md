@@ -5,37 +5,41 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest measured endpoint: fishing capture / model106
+## Latest measured endpoint: adaptive fishing loop / model108
 
-The current restart is `red-model106-fishing-measured-terminal-v2-20260912`, checkpoint record
-SHA-256 `2571f6c85fd2bfdbddec7945bbed386c62018f9326de54454f34b97216286595`.
-It reopens the exact earned terminal with **81 registered species / 61 living species / 65
-specimens** and model106.
+The current restart is `red-model108-fishing-measured-terminal-20260912`, checkpoint record SHA-256
+`33657a3d87e716309d1fdbea2066079401249e0ff3aaed864c232807e76414ba`. It reopens the exact earned
+terminal with **82 registered species / 62 living species / 66 specimens** and model108.
 
-- Registered-objective model: **106 settled examples**
-- Model SHA-256: `3c62e6241e7dfe430a1d14591d3496ab136a59797af2bf388eb2b5aa867c1d59`
-- Latest live chain: model105 sampled one of eight anonymous fishing destinations; generic routing
-  handled three interruptions, then 11 Super Rod casts produced two encounters, one intentional
-  flee and one missing registration
-- Measured cost: **802 actions / 54,384 frames**
-- Teacher labels: **0**
-- Publication cost: **0 actions / 0 frames**
+- Registered-objective model: **108 settled examples**
+- Model SHA-256: `50ef6eae8e461ad6cf125c0e1858640c10f2bc27d6985a570e31c5bb1cb5e600`
+- First new lesson: model106 selected candidate0 from eight anonymous fishing destinations; the
+  route stopped at an input-readiness boundary after **92 actions / 2,592 frames** and the failed
+  outcome became row107
+- Support: three bounded CANCEL pulses restored field input in **6 actions / 432 frames**; this was
+  deterministic support with zero training examples
+- Successor lesson: model107 rebuilt eight alternatives, selected candidate6 and the generic route,
+  fishing and capture chain added one registration in **1,101 actions / 57,132 frames**, producing
+  model108
+- Teacher labels, evaluation accesses and authority promotions: **0**
 
-The fitted fishing row remains lower trust than a native action-journal episode: training only,
-not independent evaluation and not authority-promotion eligible. The model selected a long,
-single-target route even though a much nearer candidate had more productive slots; the success is
-useful data, not evidence that its ranking is already good.
+This is the first consecutive failure-update-success loop on an earned collection state. The failed
+row did not get retried or rewritten; after fitting it, the next sampled destination changed and
+succeeded. That demonstrates a functioning online learning loop, not independent evidence that the
+weights alone caused the change or that fishing policy is already efficient. Both rows lack a
+per-action journal and remain training-only.
 
-The restart boundary now authenticates alternating measured acquisition and deterministic support
-steps. This is necessary for the repeated collection loop: choose a strategic destination, execute
-generic skills, verify a registration, fit the result, perform any zero-label support, and continue
-from the earned state. Generic support-on-support and measured-on-measured chains remain rejected.
+The route repair is generic: visible non-battle scripted dialogue is now a typed interruption and
+may be resolved under an explicit bounded pulse budget. The resumed map and position are observed,
+so the route replans rather than assuming the dialogue left the player in place. Generic unbounded
+dialogue dismissal remains forbidden.
 
-Next: restore model106 action-free, rebuild the remaining fishing inventory and collect one more
-genuine bounded destination outcome. Do not add named-species routes, replay consumed attempts or
-move into Crystal.
+Next: restore model108 action-free and expose the broadest honest multi-option acquisition menu.
+Prefer a useful choice across acquisition families; otherwise collect one more varied fishing
+outcome. Stop if only forced support remains, a named-species route is required or progress cannot
+be retained once.
 
-[Latest report](docs/work-sessions/2026-09-12-model106-measured-fishing-capture.md) · [Latest evidence](docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json)
+[Latest report](docs/work-sessions/2026-09-12-model108-adaptive-fishing-loop.md) · [Latest evidence](docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json)
 
 ## Prior measured endpoint: Safari capture / model105
 
@@ -77,7 +81,7 @@ authority. The successful import checkpoint is
 Do not repeat the League rematch merely to strengthen this support history. Fossil acquisition is
 now one qualified acquisition-family provider; the next product constraint is broader acquisition.
 
-## Current result and next gate
+## Historical Safari result and superseded gate
 
 The Safari candidate layer is now live-tested. Cartridge data produced four productive areas that
 jointly covered six missing registrations. Model104 selected candidate1 from an identity-free menu
@@ -128,9 +132,9 @@ reusable candidate vocabulary. Do not add named Safari or fishing species routes
 
 The learned model chooses high-level goals and destinations in bounded development episodes.
 Deterministic, tested skills still execute navigation, menus, combat, capture and evolution. The
-latest Safari row teaches the result of one selected area, but its missing action trace makes it
+latest fishing rows teach selected destination outcomes, but their missing action traces make them
 ineligible for evaluation or promotion. The earlier successful three-option Golduck evolution is a
-native selected-arm outcome; Omanyte and Omastar were forced and added none.
+native selected-arm outcome; forced support and forced acquisitions add none.
 
 Fresh-game autonomy, arbitrary-seed reliability, full Red registration, unfamiliar-ROM competence,
 learned battle control and transfer to Blue or Crystal remain unproved. Crystal stays deferred.
@@ -144,6 +148,6 @@ learned battle control and transfer to Blue or Crystal remain unproved. Crystal 
    as learning, unsupported physical prerequisites or consumed-state replay.
 5. Reorient after the first bounded result or falsifier and update this file in place.
 
-[Prior report](docs/work-sessions/2026-09-12-model105-measured-safari-fit.md) · [Prior evidence](docs/evidence/red-model105-measured-safari-fit-2026-09-12.json). Recommended model:
+[Prior report](docs/work-sessions/2026-09-12-model106-measured-fishing-capture.md) · [Prior evidence](docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json). Recommended model:
 **Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
 authority-promotion review.

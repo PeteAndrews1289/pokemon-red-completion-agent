@@ -3,23 +3,23 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model106-measured-fishing-capture**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model108-adaptive-fishing-loop**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Repeat model-directed Red collection: 4/6 acceptance items (67%).**
+**Repeat model-directed Red collection: 5/6 acceptance items (83%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Publish the 81-registration state as a durable model106 restart ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [x] Build a multi-destination fishing menu without map or species identities ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
-- [ ] Collect varied destination outcomes from the earned model106 state
+- [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [ ] Expose a useful choice across more than one acquisition family
 
-Current model: **106 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **108 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -71,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -98,6 +98,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model108-adaptive-fishing-loop
+
+Model106 retained a92-action route-readiness failure as training row107. A bounded six-action scripted-dialogue recovery contributed no label. Model107 then selected a different one of eight anonymous fishing destinations; generic execution added registration82 after1,101actions/57,132frames, and the verified success produced model108 with108 retained examples.
+
+**Deviation:** The first choice did not reach its fishing destination, so it teaches observed route cost and zero gain rather than destination-specific fishing quality. The changed next sample is encouraging online adaptation but is not an independent comparison or proof that the fitted update alone caused the change. No teacher labels, authority promotion, full replay or Crystal access occurred.
+
+**Next:** Restore model108 action-free and expose the broadest honest multi-option acquisition menu. Prefer a cross-family choice; otherwise collect one more varied fishing result. Stop if only forced support remains or progress requires a named-species route.
 
 ### 2026-09-12-model106-measured-fishing-capture
 

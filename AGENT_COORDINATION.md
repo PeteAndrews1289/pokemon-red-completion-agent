@@ -13,28 +13,27 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-Model105 selected one of eight identity-free, cartridge-derived fishing destinations. The live
-generic route/cast/capture chain registered one missing species after 802 actions and 54,384 frames.
-The result was admitted as one training-only measured row, producing model106 with 106 examples and
-all 105 prior examples retained. The exact 81-registration state is now a durable zero-input restart.
-No independent evaluation or authority promotion occurred.
+Model106 retained a real route-readiness failure from one of eight identity-free fishing
+destinations, producing training row107 without changing the 81 registrations. A bounded six-action
+scripted-dialogue recovery contributed no label. Model107 then rebuilt eight choices, sampled a
+different destination and the generic route/fishing/capture chain added registration82 after1,101
+actions and57,132 frames. The success produced model108 with108 retained examples and a durable
+zero-input restart. No independent evaluation or authority promotion occurred.
 
-Continue from that model106 restart. Rebuild the remaining fishing menu action-free and let model106
-control one genuinely varied bounded destination attempt. Preserve success or failure. Do not add
-named-species routes, retry the model105 attempt, reset resources or move into Crystal. After another
-fishing outcome, decide whether the next menu should mix fishing with another acquisition family.
+Continue from model108. Restore it action-free and expose the broadest honest acquisition menu.
+Prefer a cross-family choice if existing providers make one physically executable; otherwise one
+more varied fishing outcome is acceptable. Preserve success or failure once. Do not add
+named-species routes, retry either consumed fishing choice, reset resources or move into Crystal.
 
-Claude's latest audit correctly highlighted the model105 ranking inversion and the risk of treating
-one success as a good policy. Its menu-geometry concern was superseded by direct exact-save physical
-measurements and a successful live cast. Flash correctly endorsed the model-choice→route→capture
-composition and the need for more diverse outcomes; its recommendation to revert measured menu
-bounds was rejected for the same live evidence. Neither reviewer edited this execution worktree.
-Codex remains responsible for the admission, restart lineage, tests and public claims.
+The prior Claude and Flash reviews remain historical context; neither reviewed the model108
+successor yet. Claude should receive one read-only closeout audit after Codex's local checks, focused
+on whether the evidence supports the adaptive-loop claim and whether the next menu should mix
+families. External review is advisory and must not block the next bounded Red lesson.
 
 ## Reviewer brief
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-12-model106-measured-fishing-capture.md) for limitations and adjudication.
+Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-12-model108-adaptive-fishing-loop.md) for limitations and adjudication.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

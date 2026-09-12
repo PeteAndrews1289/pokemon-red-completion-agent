@@ -4,21 +4,22 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: **the first full fishing learning loop**. Show 33 cartridge-derived productive
-maps narrowing to nine executable destinations and eight anonymous option cards. Model105 selects
-one card with zero teacher labels. Cut to the computed route handling three wild interruptions, then
-the actual fishing tally: 11 casts, nine misses, two encounters, one deliberate flee and one missing
-registration. Overlay **80→81 registered / model105→106 / 106 examples**.
+Newest systems beat: **failure → update → different choice → capture**. Show model106 selecting one
+of eight anonymous fishing destinations and stopping at a route input-readiness boundary after92
+actions. Keep the failed label visible. Then show the separate six-action dialogue recovery marked
+"deterministic support / zero training rows." Model107 rebuilds eight cards, selects a different
+one, and the generic route/fishing/capture chain records one new species after five casts. Overlay
+**81→82 registered / model106→107→108 / 108 examples**.
 
 Then show the exact terminal reopening as a durable checkpoint with zero publication inputs. Caption
 the division of labor plainly: **the model chose the destination; deterministic skills routed,
-fished and captured; the Pokédex verifier judged the outcome**. Do not edit the success into a policy
-quality claim. The scores favored a long one-target route over a near higher-yield option, so the
-honest hook is that the loop can now learn from a questionable decision.
+fished and captured; the Pokédex verifier judged the outcome**. The honest hook is not that the
+model has mastered fishing; it is that a real failure was retained, changed the learned corpus and
+the system continued from earned state to a different success without rewriting history.
 
 Retain the trust caveat on screen: the capability receipt has aggregate counters and exact state
 hashes but no per-action journal. It is training only, not evaluation, and grants no authority
-promotion. [Session](work-sessions/2026-09-12-model106-measured-fishing-capture.md).
+promotion. [Session](work-sessions/2026-09-12-model108-adaptive-fishing-loop.md).
 
 The preceding Safari beat remains useful context: model104 chose one of four anonymous areas,
 reached a real capture and became model105. Its four preserved integration failures—step-counter

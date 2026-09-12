@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-12",
+  "location": "Earned model108 fishing checkpoint",
+  "registered_species": 82,
+  "living_species": 62,
+  "specimens": 66,
+  "capture_items": 6,
+  "money": 58,
+  "checkpoint_sha256": "33657a3d87e716309d1fdbea2066079401249e0ff3aaed864c232807e76414ba"
+}

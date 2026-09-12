@@ -8,31 +8,29 @@ stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision
 ## Where we are
 
 The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
-and incremental fitting loop works. The current registered-objective model contains **104 settled
-examples**. Its retained save has **79 registered species**, **59 living species**, **63 specimens**
-and **45 required Red registrations remaining**.
+and incremental fitting loop works. The current registered-objective model contains **108 settled
+examples**. Its retained save has **82 registered species**, **62 living species**, **66 specimens**
+and **42 required Red registrations remaining**.
 
-Practical capture funding was restored through an explicitly support-only controlled-blackout and
-resupply bridge. The next gameplay cycle caught Psyduck as a forced singleton; the learned model
-then chose evolution from a three-goal menu and completed Golduck. The loop stopped cleanly because
-the previous candidate layer exhausted ordinary grass sources and owned level evolutions. A generic
-fossil provider has since revived Omanyte, and the automatic evolution inventory completed Omastar.
-Both were forced singletons, so model104 remains unchanged. Safari is now the first new
-multi-destination family: the cartridge produced four area offers covering six missing
-registrations, and an exact zero-input restore let model104 select among identity-free feature
-rows. The capture and admission mechanics are tested, but the selected area has not been played and
-no Safari outcome has been fitted.
+The latest cycle demonstrates online adaptation rather than a single clean success. Model106 chose
+one of eight anonymous fishing destinations and retained a route-readiness failure. That failure
+became training row107. A bounded scripted-dialogue recovery contributed zero labels; model107 then
+rebuilt the remaining menu, sampled a different destination and the generic route/fishing/capture
+chain added registration82. The verified success became row108 and the exact terminal is a durable
+zero-input model108 restart. This is same-lineage bounded development, not an independent policy
+comparison, but it proves the system can preserve failure, update, choose again and continue from
+the earned state without a species-specific route.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Complete one Safari outcome.** Authenticate the retained endpoint-to-Fuchsia join, enter the
-   already selected area and run one generic bounded patrol. Retain success, failure or exhaustion
-   exactly once; never substitute the deterministic higher-yield area for the model's sample.
-2. **Resume model-directed collection.** Require a useful action-free menu, execute one bounded
-   selected goal, retain its real outcome and fit it. Keep forced support outside training.
+1. **Broaden the next model108 menu.** Restore the earned checkpoint action-free and expose the
+   broadest physically executable acquisition choices. Prefer a genuine cross-family menu; do not
+   manufacture alternatives or embed map/species identity in policy features.
+2. **Resume model-directed collection.** Execute one bounded selected goal, retain success or
+   failure and fit it. Keep forced recovery/support outside training and preserve actual costs.
 3. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
    dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
    reset or hand-script the target.
@@ -47,12 +45,12 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Join the exact retained endpoint to the stable Fuchsia Center boundary and the already sampled
-Safari area. Missing targets come from the cartridge catalog; policy features contain neither map
-nor species identity. Run one admission only after the join and local patrol pass action-free
-checks. Stop if the result cannot preserve payment, balls, captures and failures honestly.
+Restore the exact model108 endpoint without input and ask the existing providers for a useful
+multi-option acquisition menu. If more than one family is executable, preserve that mixed choice;
+otherwise one additional varied fishing outcome is acceptable. Stop if the menu collapses to
+forced support, if a target needs a named-species route, or if its result cannot be retained once.
 
-[Latest preflight evidence](evidence/red-safari-capability-preflight-2026-09-12.json) · [Latest session](work-sessions/2026-09-12-safari-capability-preflight.md)
+[Latest evidence](evidence/red-model108-adaptive-fishing-loop-2026-09-12.json) · [Latest session](work-sessions/2026-09-12-model108-adaptive-fishing-loop.md)
 
 ## How to stay focused
 

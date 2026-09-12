@@ -1,24 +1,22 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest systems beat: fishing now completes the full development learning loop. From the
-80-registration state, cartridge data exposed 33 productive fishing maps; nine were physically
-executable and eight became anonymous semantic candidates. Model105 sampled one destination. Generic
-routing handled three interruptions, then 11 Super Rod casts produced two encounters: the agent fled
-one already-covered species and captured one missing species. The result is **81 registrations, 61
-living species and 65 specimens**.
+Latest systems beat: the fishing loop has now retained a failure, updated and continued to a
+different successful choice. From the 81-registration model106 state, eight anonymous destinations
+were executable. The first selected route stopped at a real input-readiness boundary after92
+actions and became failed training row107. A bounded six-action scripted-dialogue recovery restored
+control without adding a label. Model107 then rebuilt eight alternatives, sampled a different
+destination and the generic route/fishing/capture chain added one registration after1,101 actions
+and57,132 frames. The result is **82 registrations,62 living species and66 specimens**.
 
-The 802-action /54,384-frame outcome became one explicitly lower-trust training row, producing
-model106 with 106 retained examples. A zero-input publication then reopened the exact 81-registration
-terminal as a durable model106 checkpoint. The architecture was extended to preserve alternating
-learned collection outcomes and deterministic support steps without relabeling support as learning.
-This is the first end-to-end fishing example of observe alternatives → model choice → generic
-execution → verified Pokédex gain → fit → restart. It is not independent evaluation or proof of a
-good policy: the model preferred a long one-target route over a much nearer higher-yield option.
-[Evidence](evidence/red-model106-measured-fishing-capture-2026-09-12.json).
+The success became row108, and a zero-input publication reopened the exact terminal as a durable
+model108 checkpoint. This is stronger than a single clean demo: observe alternatives → choose →
+retain failure → fit → recover without learning credit → choose again → verify Pokédex gain → fit →
+restart. It is still same-lineage bounded development, not independent proof of a good policy or a
+fresh-game autonomous player. [Evidence](evidence/red-model108-adaptive-fishing-loop-2026-09-12.json).
 
-The prior Safari result established the same honest measured-choice boundary at80 registrations and
-model105. Its missing action journal remains disclosed; neither Safari nor fishing can promote
-authority on its own.
+The prior Safari and model106 fishing results established the same honest measured-choice boundary.
+Their missing action journals remain disclosed; these rows are training-only and cannot promote
+authority on their own.
 
 Latest result: practical resupply returned the project to collection, rather than extending the
 League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an

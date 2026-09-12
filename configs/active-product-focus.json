@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Repeat model-directed, cartridge-derived Red collection from a durable 81-registration model106 restart.",
-      "cheapest_falsifier": "The model106 restart cannot produce another physically executable identity-free menu with at least two useful remaining acquisition alternatives.",
+      "capability": "Adapt model-directed, cartridge-derived Red collection across both failed and successful destination outcomes from a durable 82-registration model108 restart.",
+      "cheapest_falsifier": "The model108 restart cannot expose another useful multi-option acquisition menu or its selected goal cannot settle under the existing bounded executor contract.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model105 selected one of eight identity-free fishing destinations and the live route, fishing and capture chain registered one missing species. The training-only outcome was fitted into model106 with 106 settled examples, and its 81-registration terminal is now a durable zero-input restart. No evaluation or authority promotion occurred.",
-        "blocker": "One successful fishing destination is not enough to demonstrate a useful acquisition policy. The learned scores favored a long, low-yield destination over a much nearer higher-yield option, so model106 needs varied measured destination outcomes before its preferences can be trusted.",
-        "decision": "Restore the published81-registration model106 checkpoint action-free, rebuild the remaining cartridge-derived fishing menu, and collect another genuine bounded destination outcome. Prefer strategic diversity and observed costs; do not add named-species routes or move into Crystal.",
+        "authority_delta": "Model106 selected one of eight identity-free fishing destinations, retained a route-readiness failure and fitted it into model107. After a six-action zero-label dialogue recovery, model107 rebuilt the menu, selected a different destination, and the generic route/fishing/capture chain added registration 82. That success was fitted into model108 with 108 settled examples. No evaluation or authority promotion occurred.",
+        "blocker": "The loop now adapts across one failure and one success, but both are same-lineage fishing development. More varied outcomes, and then mixed acquisition families, are required before destination preferences or sustained Red composition can be trusted.",
+        "decision": "Restore the published 82-registration model108 checkpoint action-free and ask the goal layer for the next genuine multi-option acquisition menu. Prefer a mixed-family menu if available; otherwise retain one more varied fishing outcome without adding named-species routes or moving into Crystal.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
-          "sha256": "518ddb4c4ca225ee029a62abe6378f783ec4222bc43ab8906b263a8d63f14c5d"
+          "path": "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json",
+          "sha256": "a754e657d392be1bd63e9f11dce3c93d2ecc7c0699628e0d466c7b8cc3827f79"
         },
-        "learning_output": "The model-directed fishing attempt added one lower-trust measured training row: model105 to model106 with all 105 prior examples retained. It binds the eight-option sample, 802-action/54,384-frame result and80-to-81 registration transition while carrying zero teacher labels and no independent-evaluation authority.",
-        "next_falsifier": "After removing the completed destination from demand, model106 cannot expose two useful executable alternatives, or another selected destination cannot settle within the existing bounded route/cast/capture contract.",
-        "next_session_goal": "Reopen the 81-registration model106 restart without input, rebuild the remaining fishing inventory, let model106 choose one bounded destination, and retain success or failure as the next honest lesson.",
-        "product_alignment": "This is the first complete learned high-level collection loop through fishing: observe alternatives, sample with the fitted model, execute generic navigation and capture skills, verify shared Pokedex progress, fit the result and continue from the earned state. It is a direct building block for repeated completion across versions.",
-        "session_id": "2026-09-12-model106-measured-fishing-capture",
+        "learning_output": "Two genuine model-selected outcomes added two training-only rows: a 92-action route-readiness failure and a 1,101-action fishing success. The failed row changed the next sampled destination; the successor registered one species and produced model108 while retaining all 107 prior examples. Teacher labels, independent evaluation and promotions remained zero.",
+        "next_falsifier": "Model108 exposes fewer than two useful executable goals, repeats a physically unsuitable choice without an observable feature distinction, or cannot settle its next selected goal without a species-specific patch.",
+        "next_session_goal": "Reopen the 82-registration model108 restart without input, build the broadest honest acquisition menu, and let the model control one new bounded choice. Retain success or failure and stop if the menu collapses to forced support.",
+        "product_alignment": "The online loop has now demonstrated the behavior required for learning: make a high-level choice, retain a failure, update, choose differently, execute generic skills, verify a new shared registration and continue from the earned state. It is still bounded same-lineage Red development, not a complete player.",
+        "session_id": "2026-09-12-model108-adaptive-fishing-loop",
         "status": "active",
         "stop_condition": "Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal.",
-        "transfer_result": "The alternating measured/support restart chain and identity-free fishing policy are reusable architecture. This one Red outcome is still same-lineage development, not an unseen seed, modified-ROM, Blue or cross-title transfer result."
+        "transfer_result": "The alternating measured/support restart chain, identity-free menu and failure-retaining update are reusable architecture. These Red outcomes remain same-lineage development, not an unseen seed, modified-ROM, Blue or cross-title transfer result."
       },
       "learned_authority": {
-        "current": "The bounded-development learner has 106 fitted examples, including lower-trust measured Safari and fishing choices. Its latest Red state has81 registrations and is published as a durable model106 restart. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed.",
+        "current": "The bounded-development learner has 108 fitted examples, including lower-trust measured Safari and fishing choices. Its latest Red state has 82 registrations and is published as a durable model108 restart. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Use the 81-registration model106 restart to collect another varied model-selected fishing outcome, then decide whether fishing has enough diversity or the next learning menu should mix acquisition families.",
+      "next_decision": "Use the 82-registration model108 restart to expose the broadest honest multi-option acquisition menu, then collect one bounded model-selected outcome and test whether the planner can move beyond fishing without identity-bearing policy features.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -225,14 +225,24 @@
             "kind": "model_fit",
             "path": "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json",
             "sha256": "518ddb4c4ca225ee029a62abe6378f783ec4222bc43ab8906b263a8d63f14c5d"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/red-model107-measured-fishing-failure-2026-09-12.json",
+            "sha256": "f3c90ad11f37ef9b4d85d03e6f44567a2c02655603a76a1aceef01e44cf0924b"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json",
+            "sha256": "a754e657d392be1bd63e9f11dce3c93d2ecc7c0699628e0d466c7b8cc3827f79"
           }
         ],
-        "model_fits": 12,
+        "model_fits": 14,
         "outcome_questions": {
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 106,
+        "registered_train_examples": 108,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
