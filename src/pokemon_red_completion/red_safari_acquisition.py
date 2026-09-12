@@ -40,7 +40,12 @@ from pokemon_red_completion.local_router import (
     find_local_path,
     without_coordinates,
 )
-from pokemon_red_completion.observation import MapId, PokemonRedStateReader, RamAddress
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    MapId,
+    PokemonRedStateReader,
+    RamAddress,
+)
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import (
     RED_SOLO_COLLECTION_CONTRACT,
@@ -1077,15 +1082,40 @@ class LiveSafariAreaExecutor:
         return self._balls() > 0
 
     def _select_ball(self) -> None:
-        # BALL is the north-west command in Red's two-by-two Safari menu.  The
-        # leading B safely advances battle text without selecting another command.
-        for kind, direction in (
-            (MacroActionKind.CANCEL, None),
-            (MacroActionKind.MOVE, "up"),
-            (MacroActionKind.MOVE, "left"),
-            (MacroActionKind.CONFIRM, None),
-        ):
-            self._pulse(kind, direction, frames=(360 if kind is MacroActionKind.CONFIRM else None))
+        # Red stores Safari's row in wCurrentMenuItem and its column in
+        # wTopMenuItemX.  Wait for that live signature instead of sending a
+        # blind B/up/left sequence while encounter text still owns input.
+        for _ in range(self._settle_pulses):
+            raw = self._reader.read()
+            menu = self._reader.read_battle_menu_state(raw)
+            if menu.phase is not BattleMenuPhase.MAIN:
+                self._pulse(MacroActionKind.CANCEL)
+                continue
+            selected = menu.selected_main_command
+            if selected is None or not 0 <= selected <= 3:
+                raise RedAreaExecutionError(
+                    "Safari menu exposed an invalid command",
+                    reason_code="safari_menu_command_invalid",
+                )
+            if selected == 0:
+                self._pulse(MacroActionKind.CONFIRM, frames=360)
+                return
+            direction = "left" if selected >= 2 else "up"
+            expected = selected - 2 if selected >= 2 else 0
+            self._pulse(MacroActionKind.MOVE, direction)
+            after = self._reader.read_battle_menu_state(self._reader.read())
+            if (
+                after.phase is not BattleMenuPhase.MAIN
+                or after.selected_main_command != expected
+            ):
+                raise RedAreaExecutionError(
+                    "Safari menu did not acknowledge the selected direction",
+                    reason_code="safari_menu_selection_unacknowledged",
+                )
+        raise RedAreaExecutionError(
+            "Safari command menu did not become observable",
+            reason_code="safari_menu_unavailable",
+        )
 
     def _settle_throw(self, before_balls: int) -> bool:
         spent = False

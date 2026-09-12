@@ -15,7 +15,13 @@ from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_terrain import Terrain
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionContext
 from pokemon_red_completion.local_router import LocalEdge, LocalGraph
-from pokemon_red_completion.observation import MapId, RamAddress, RawGameState
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    BattleMenuState,
+    MapId,
+    RamAddress,
+    RawGameState,
+)
 from pokemon_red_completion.red_acquisition import RedAreaExecutionError
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_safari_acquisition import (
@@ -598,12 +604,13 @@ def test_live_safari_patrol_recovery_rejects_nonendpoint_battle() -> None:
 
 
 class _SafariSimulation:
-    def __init__(self, *, capture_on_throw: bool) -> None:
+    def __init__(self, *, capture_on_throw: bool, menu_ready: bool = True) -> None:
         self.frame_count = 0
         self.pressed_buttons: frozenset[str] = frozenset()
         self.balls = 3
         self.cursor = 0
         self.capture_on_throw = capture_on_throw
+        self.menu_ready = menu_ready
         self.captured = False
         self.raw = RawGameState(
             game_started=True,
@@ -639,13 +646,13 @@ class _SafariSimulation:
             self.frame_count += action.repeat
         elif action.kind is MacroActionKind.MOVE:
             if action.value == "up":
-                self.cursor &= 1
-            elif action.value == "left":
                 self.cursor &= 2
+            elif action.value == "left":
+                self.cursor &= 1
             elif action.value == "down":
-                self.cursor |= 2
-            elif action.value == "right":
                 self.cursor |= 1
+            elif action.value == "right":
+                self.cursor |= 2
         elif action.kind is MacroActionKind.CONFIRM and self.raw.battle_state:
             if self.cursor == 0:
                 self.balls -= 1
@@ -655,12 +662,19 @@ class _SafariSimulation:
                     self.raw = replace(self.raw, battle_state=0, enemy_species_id=None)
             elif self.cursor == 3:
                 self.raw = replace(self.raw, battle_state=0, enemy_species_id=None)
+        elif action.kind is MacroActionKind.CANCEL and self.raw.battle_state:
+            self.menu_ready = True
 
     def read(self) -> RawGameState:
         return self.raw
 
     def read_input_readiness(self) -> SimpleNamespace:
         return SimpleNamespace(ready=self.raw.battle_state == 0)
+
+    def read_battle_menu_state(self, raw: RawGameState) -> BattleMenuState:
+        if not raw.battle_state or not self.menu_ready:
+            return BattleMenuState(BattleMenuPhase.UNKNOWN)
+        return BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=self.cursor)
 
 
 def _live(simulation: _SafariSimulation, *, maximum_throws: int = 1) -> LiveSafariAreaExecutor:
@@ -683,6 +697,23 @@ def test_live_safari_capture_retains_exact_target_and_spends_one_safari_ball() -
     assert simulation.balls == 2
     assert simulation.collection == _collection(9, 30)
     assert simulation.raw.bag_items == ((4, 12),)
+
+
+def test_live_safari_capture_waits_for_observed_command_menu() -> None:
+    simulation = _SafariSimulation(capture_on_throw=True, menu_ready=False)
+
+    assert _live(simulation).capture_encounter(red_species_ref(30))
+    assert simulation.balls == 2
+    assert simulation.menu_ready
+
+
+@pytest.mark.parametrize("initial_command", [1, 2, 3])
+def test_live_safari_capture_observes_each_menu_move(initial_command: int) -> None:
+    simulation = _SafariSimulation(capture_on_throw=True)
+    simulation.cursor = initial_command
+
+    assert _live(simulation).capture_encounter(red_species_ref(30))
+    assert simulation.balls == 2
 
 
 def test_live_safari_failed_throw_flees_and_returns_false() -> None:

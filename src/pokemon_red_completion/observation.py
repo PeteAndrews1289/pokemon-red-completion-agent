@@ -911,6 +911,8 @@ ROUTE_6_JR_TRAINER_M_CLASS_ID = 0x05
 ROUTE_6_JR_TRAINER_M_NUMBER = 5
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
+SAFARI_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x01, 0x11)
+SAFARI_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0D, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
 # ``EnemySendOut`` draws Red's two-option trainer-switch prompt at (1, 8).
 # The live prompt responds only to A/B and has exactly two entries.  Requiring
@@ -4555,12 +4557,17 @@ class PokemonRedStateReader:
         if signature in {
             MAIN_BATTLE_MENU_LEFT_SIGNATURE,
             MAIN_BATTLE_MENU_RIGHT_SIGNATURE,
+            SAFARI_BATTLE_MENU_LEFT_SIGNATURE,
+            SAFARI_BATTLE_MENU_RIGHT_SIGNATURE,
         }:
             selected_row = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
             if not 0 <= selected_row <= 1 or not self._active_menu_cursor():
                 return BattleMenuState(BattleMenuPhase.UNKNOWN)
             selected_main_command = selected_row
-            if signature == MAIN_BATTLE_MENU_RIGHT_SIGNATURE:
+            if signature in {
+                MAIN_BATTLE_MENU_RIGHT_SIGNATURE,
+                SAFARI_BATTLE_MENU_RIGHT_SIGNATURE,
+            }:
                 selected_main_command += 2
             if MIN_BATTLE_COMMAND <= selected_main_command <= MAX_BATTLE_COMMAND:
                 return BattleMenuState(
