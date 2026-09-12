@@ -686,6 +686,8 @@ class ItemId(IntEnum):
     REVIVE = 0x35
     LIFT_KEY = 0x4A
     EXP_ALL = 0x4B
+    OLD_ROD = 0x4C
+    GOOD_ROD = 0x4D
     SUPER_ROD = 0x4E
     ELIXIR = 0x52
     HM01_CUT = 0xC4
