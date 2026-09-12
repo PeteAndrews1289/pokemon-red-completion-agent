@@ -479,8 +479,10 @@ def _player_observer(
             enumerate_forward
             if forward_story_only
             else enumerate_all
-            if router is not None or fossil_acquisitions
+            if fossil_acquisitions
             else None
+            if router is None
+            else router.enumerate
         ),
         registered_objective=getattr(runtime, "registration_policy", None) is not None,
     )
