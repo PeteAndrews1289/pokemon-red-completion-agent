@@ -28,26 +28,26 @@
       "status": "retired"
     },
     {
-      "capability": "Provision cumulative healing and move PP before repeatable League funding so model-directed Red registration can recover from exhausted finite income.",
-      "cheapest_falsifier": "A prospectively supplied League rematch still cannot preserve enough healing and usable coverage PP to defeat Champion, verify Hall of Fame and retain positive capture purchasing power.",
+      "capability": "Complete a repeatable, net-positive League funding cycle with generic survival handling for forced multi-turn attacks so model-directed Red registration can recover from exhausted finite income.",
+      "cheapest_falsifier": "After the generic trapping bound passes a zero-input terminal qualification, a separately labeled development successor still cannot clear Lorelei or exposes another unmodeled battle commitment.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The League rehearsal used deterministic navigation and battle support only; model103 remains at103 fitted examples and no battle authority was promoted.",
-        "blocker": "The exact model103 save earned four League payouts and reached Champion's final Venusaur, but cumulative HP depletion and the loss of its strongest coverage left no qualified offensive matchup. The run stopped with23917money, all six party members alive and no items spent; Champion/Hall-of-Fame and postcredits recovery remain unproved.",
-        "decision": "Preserve the failed retained Champion state as diagnostic evidence and stop brute-force continuations. Add prospective pre-League supply and cumulative PP qualification, then run one newly bound supplied rematch; on success, recover, buy capture items and resume model-selected registration.",
+        "authority_delta": "None. The supplied run used deterministic navigation, shopping and battle support only; model103 remains at103 fitted examples and no battle authority was promoted.",
+        "blocker": "The prospectively priced shop transaction succeeded, but the supplied run stopped during Lorelei's Cloyster because the incoming survival model did not yet qualify Gen-I trapping damage. It completed zero battles, preserved all six party members and ended with378money after the planned net175 supply cost.",
+        "decision": "Preserve the consumed supplied attempt without retry. Qualify all four Gen-I trapping attacks through the generic incoming-damage commitment, retain the stricter type-only and outgoing-attack boundaries, then use a separately labeled development successor rather than another sealed-style retry.",
         "evidence": {
           "kind": "development_episode",
-          "path": "docs/evidence/red-model103-league-rehearsal-2026-09-11.json",
-          "sha256": "d874411676f7e49961ca945f73f1bc30a10cfb0f8942a7dbb40217dc6d5276fc"
+          "path": "docs/evidence/red-model103-supplied-league-failure-2026-09-11.json",
+          "sha256": "642d02aebd35c13c94cc299d535515007dfe01c982fb9e41f8d48d091e47e8f6"
         },
-        "learning_output": "No learning or registration delta. The deterministic support path verified four exact League payouts,23364 income and arrival at Champion's final opponent in1482 actions/133282 frames. It falsified independent per-fight coverage as a sufficient whole-cycle qualification.",
-        "next_falsifier": "A supplied rematch cannot retain enough healing and usable coverage PP to defeat the final Champion roster, verify concurrent Champion/Hall-of-Fame evidence and preserve positive capture purchasing power.",
-        "next_session_goal": "Implement prospective League supply and cumulative-resource qualification, including a priced Full Restore reserve and usable late-fight coverage. Bind one fresh supplied rehearsal; do not retry the retained failures, fit forced support or begin Crystal.",
-        "product_alignment": "Renewable income remains required for autonomous capture under poor luck. The four verified payouts prove the source is real; supply-aware qualification is the smallest repair that turns it from partial income into a repeatable collection resource.",
-        "session_id": "2026-09-11-model103-league-rehearsal",
+        "learning_output": "No learning or registration delta. The deterministic support path executed the planned2825 sale proceeds and3000 Full Restore purchase, then stopped at Lorelei after274 actions and23484 frames. It exposed one missing generic forced-repeat damage bound before any battle completed.",
+        "next_falsifier": "A generic five-application trapping bound passes focused tests but cannot produce any safe action from the retained Lorelei terminal, or a separate development successor reveals another unsupported battle commitment.",
+        "next_session_goal": "Finish and publish the generic trapping repair, run a zero-input qualification on the retained terminal, then bind one repeatable development successor. Do not retry the consumed supplied identity, fit deterministic League support or begin Crystal.",
+        "product_alignment": "Renewable income remains required for sustained autonomous capture. Supporting a cartridge-generic forced-move mechanic improves reusable battle safety; it is worthwhile only if it promptly returns the system to the funding-and-collection loop.",
+        "session_id": "2026-09-11-model103-supplied-league-failure",
         "status": "active",
-        "stop_condition": "Stop on a changed supply plan, missing cumulative PP reserve, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs.",
+        "stop_condition": "Stop on a failed zero-input terminal qualification, changed supply accounting, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs.",
         "transfer_result": "ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists."
       },
       "learned_authority": {
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Implement prospective pre-League healing/PP provisioning and a cumulative resource gate, then bind one new supplied rematch and use verified net proceeds to restore capture supply before model-selected collection resumes.",
+      "next_decision": "Publish the generic Gen-I trapping commitment, qualify the retained Lorelei state without input and run a separate repeatable development successor toward a verified net-positive funding cycle before model-selected collection resumes.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

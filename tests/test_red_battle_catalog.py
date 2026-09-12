@@ -149,3 +149,11 @@ def test_unqualified_effects_do_not_become_fixed_zero_damage(move):
 
 def test_constant_only_contract_is_not_silently_extended_to_level_damage():
     assert RED_BATTLE_CATALOG.constant_damage_bound(_move(101)) is None
+
+
+@pytest.mark.parametrize("move", [20, 35, 83, 128])
+def test_trapping_is_pure_and_remains_outside_type_only_and_outgoing_contracts(move):
+    assert RED_BATTLE_CATALOG.resolve_move(_move(move)).effect_flags == frozenset({"trapping"})
+    with pytest.raises(RedBattleCatalogError, match="entry type screen"):
+        RED_BATTLE_CATALOG.switch_entry_attack_type(_move(move))
+    assert RED_BATTLE_CATALOG.recovery_attack_supported(_move(move)) is False

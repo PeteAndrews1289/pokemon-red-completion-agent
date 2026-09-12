@@ -74,6 +74,33 @@ def test_strict_damage_boundary_replaces_flat_half_hp(monkeypatch, hp, expected)
     assert subject.decide(subject.reader.raw).kind == expected
 
 
+def test_trapping_commitment_reaches_controller_and_keeps_strict_hp_boundary():
+    previous = (1, 2, 1, 2, 1, 2)  # Disable switching to isolate the HP boundary.
+    for hp, expected in ((75, None), (76, "attack")):
+        raw = state(active=0, hp=(hp, 118))
+        observed = TrainerDamageObservation(
+            raw,
+            (128, 0, 0, 0),
+            ("water",),
+            50,
+            50,
+            50,
+            50,
+            ((200, 200, 200, 200), (200, 200, 200, 200)),
+            (("normal",), ("water",)),
+        )
+        reader = SimpleNamespace(
+            read_trainer_damage_observation=lambda _, observed=observed: observed,
+        )
+        subject = RedTrainerSurvivalController(reader, object(), previous, 0)
+        if expected is None:
+            with pytest.raises(BattleRuntimeError, match="remaining recovery budget"):
+                subject.decide(raw)
+        else:
+            decision = subject.decide(raw)
+            assert (decision.kind, decision.incoming_bound) == (expected, 75)
+
+
 def test_used_item_and_switch_budgets_do_not_reset(monkeypatch):
     subject = controller(monkeypatch, state(active=0, hp=(53, 12)))
     subject.heals_claimed = 2

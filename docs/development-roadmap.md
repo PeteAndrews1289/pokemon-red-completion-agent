@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-league-rehearsal**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-11-model103-supplied-league-failure**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -14,7 +14,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Prove ordinary trainer income is exhausted ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
 - [x] Qualify exact League route and gross payout ([evidence](../docs/evidence/red-model103-collection-and-league-readiness-2026-09-11.json))
-- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-league-rehearsal-2026-09-11.json))
+- [ ] Supply, complete rematch and restore capture stock ([evidence](../docs/evidence/red-model103-supplied-league-failure-2026-09-11.json))
 
 Current model: **103 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -68,7 +68,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model103-league-rehearsal-2026-09-11.json)
+[Current evidence](../docs/evidence/red-model103-supplied-league-failure-2026-09-11.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +95,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-11-model103-supplied-league-failure
+
+The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. Zero battles completed; all six party members remained alive; model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. The consumed attempt is not retried. The narrow repair covers all four cartridge trapping moves only inside the full incoming-damage commitment; the type-only screen and outgoing recovery attack remain closed.
+
+**Next:** Publish the generic trapping repair, qualify the retained terminal without input and then use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle.
 
 ### 2026-09-11-model103-league-rehearsal
 

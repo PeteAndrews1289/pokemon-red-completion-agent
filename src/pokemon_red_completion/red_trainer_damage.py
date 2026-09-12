@@ -55,12 +55,17 @@ def ordinary_damage_upper(
 def incoming_damage_bounds(
     observation: TrainerDamageObservation, *, include_critical: bool = True,
 ) -> tuple[int, ...]:
-    """Worst supported incoming turn per member, including all multi-hit strikes.
+    """Worst supported incoming commitment per member, including forced repeats.
 
     All multi-hit moves conservatively receive five critical hits. Damage-side
     status adds a full ceil(maxHP/16) residual allowance even for paralysis/freeze.
     Existing poison/burn also receive residual allowance; toxic/seeded/transformed
     states must already have been rejected by the observation adapter.
+    Gen-I trapping can apply the first hit's damage up to five times while
+    suppressing the player's replies. The bound therefore charges five critical
+    hits and, for an already poisoned/burned member, five residual ticks. The
+    cartridge actually reuses the first calculated damage; using the critical
+    maximum for every application is intentionally conservative.
     Pure confusion, immediate pure boosts, fixed20/40 and incoming Night Shade
     at the observed enemy level are supported;
     other pure status and indirect effects abstain.
@@ -123,7 +128,14 @@ def incoming_damage_bounds(
                     if status & 0x18:
                         result[index] = max(result[index], ceil(raw.party_max_hp[index] / 16))
                 continue
-        attack_type = RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
+        attack_type: str | None
+        if move.effect_flags == frozenset({"trapping"}):
+            # The ordinary type-only entry screen deliberately rejects forced
+            # repeats. This full incoming commitment is the narrower API that
+            # can account for all of them.
+            attack_type = move.type_name
+        else:
+            attack_type = RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
         if attack_type is None:
             raise TrainerDamageError("status incoming turns are not yet qualified")
         special = move.category == "special"
@@ -148,9 +160,11 @@ def incoming_damage_bounds(
                 )
                 for critical in ((False, True) if include_critical else (False,))
             )
-            worst *= 5 if "multi_hit" in move.effect_flags else 1
+            repeated_hits = 5 if move.effect_flags & {"multi_hit", "trapping"} else 1
+            worst *= repeated_hits
             if "status" in move.effect_flags or raw.party_status[index] & 0x18:
-                worst += ceil(raw.party_max_hp[index] / 16)
+                residual_ticks = 5 if "trapping" in move.effect_flags else 1
+                worst += residual_ticks * ceil(raw.party_max_hp[index] / 16)
             result[index] = max(result[index], worst)
     if confusion_possible:
         active = raw.active_party_index

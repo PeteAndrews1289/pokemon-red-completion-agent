@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-11-model103-league-rehearsal",
+  "as_of_session": "2026-09-11-model103-supplied-league-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model103-league-rehearsal-2026-09-11.json"
+      "evidence": "docs/evidence/red-model103-supplied-league-failure-2026-09-11.json"
     },
     "red-hack": {
       "status": "planned",
@@ -56,7 +56,7 @@
         "id": "league-funded-capture-supply",
         "label": "Supply, complete rematch and restore capture stock",
         "done": false,
-        "evidence": "docs/evidence/red-model103-league-rehearsal-2026-09-11.json"
+        "evidence": "docs/evidence/red-model103-supplied-league-failure-2026-09-11.json"
       }
     ]
   },
@@ -984,6 +984,12 @@
       "result": "The exact model103 save verified Lorelei, Bruno, Agatha and Lance, earning23364 with no items spent or party faints. Champion reached its final Venusaur before cumulative HP and Ice PP exhausted every qualified matchup. All retained attempts total1482actions/133282frames; model103 and75 registrations are unchanged.",
       "deviation": "No stage exit or authority promotion. Two explicit critical-risk intents were consumed and every failure terminal was preserved. The result falsifies independent per-fight coverage as sufficient whole-cycle qualification; it does not justify brute-force retries or a renewable-funding claim.",
       "next": "Implement prospective pre-League healing and cumulative PP provisioning, including a priced Full Restore reserve and usable late-fight coverage. Bind one new supplied rematch, then on verified Champion/Hall of Fame recover, buy capture stock and resume model-selected collection."
+    },
+    {
+      "session": "2026-09-11-model103-supplied-league-failure",
+      "result": "The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. Zero battles completed; all six party members remained alive; model103 and75 registrations are unchanged.",
+      "deviation": "No stage exit or authority promotion. The consumed attempt is not retried. The narrow repair covers all four cartridge trapping moves only inside the full incoming-damage commitment; the type-only screen and outgoing recovery attack remain closed.",
+      "next": "Publish the generic trapping repair, qualify the retained terminal without input and then use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle."
     }
   ],
   "closed_milestones": [

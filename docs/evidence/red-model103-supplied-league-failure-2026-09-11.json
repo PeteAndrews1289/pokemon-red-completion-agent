@@ -1,0 +1,51 @@
+{
+  "schema": "pokemon.red.model103-supplied-league-public-evidence.v1",
+  "date": "2026-09-11",
+  "status": "failed_retained_no_retry",
+  "published_source": "4e4d733514f3b3364122e8caa34d825328d35abc",
+  "source_bundle_sha256": "8a80ed07114753b62cf6cb6c003888a25b02752eb856ec866ff52b844aa2006d",
+  "model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+  "initial_state_sha256": "4ce46bc10bb34fce4f91ea76a79f097b2672d09c9f6f16ee783fbb65d1d63029",
+  "terminal_state_sha256": "5e2781d163aee1199d07c3a92a244cacff9321a549f19d0e08ba18cff4846a06",
+  "preflight": {
+    "actions": 0,
+    "frames": 0,
+    "registered_species": 75,
+    "starting_money": 553,
+    "sale_proceeds": 2825,
+    "full_restore_purchase_cost": 3000,
+    "expected_pre_battle_money": 378,
+    "expected_gross_league_payout": 29799,
+    "expected_net_cash_delta": 29624,
+    "pp_floor_units": 180,
+    "pp_floor_opponents": 26,
+    "pp_floor_claim": "necessary_one_attack_per_opponent_only"
+  },
+  "execution": {
+    "actions": 274,
+    "frames": 23484,
+    "starting_money": 553,
+    "ending_money": 378,
+    "observed_cash_delta": -175,
+    "completed_battles": 0,
+    "completed_battle_ids": [],
+    "party_members_alive": 6,
+    "phase": "battle:defeat_lorelei",
+    "failure_stage": "lorelei_cloyster_main_menu",
+    "failure_reason": "incoming trapping move required a qualified multi-turn damage bound",
+    "unsupported_move": "Clamp",
+    "supply_transaction_verified": true
+  },
+  "learning_delta": {
+    "training_examples": 0,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registered_species": 0,
+    "specimens": 0
+  },
+  "verified_conclusion": "The prospectively priced shop transaction executed exactly, but the supplied League run stopped safely during Lorelei when the incoming survival model refused an unqualified Gen-I trapping sequence. The result does not test whether the purchased supply would have completed the League.",
+  "repair_scope": "Qualify the generic incoming damage commitment for all four Gen-I trapping attacks, including up to five reused damage applications and five existing poison or burn residual ticks. Preserve the type-only entry screen and outgoing recovery-attack rejection.",
+  "retry_authorized": false
+}

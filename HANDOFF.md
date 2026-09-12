@@ -16,7 +16,7 @@ The exact input-ready Vermilion Center save has75 registrations,57 living specie
 - Qualification source: `617115d6faa0227819a4ea112940bd6f5dac0daf`
 - Model: `59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843`
 
-## Continuation and League rehearsal state
+## Continuation and League funding state
 
 Reconstruct through the retained BZ ancestry. Do not retry the failed BX02 search. Model103 is the active learned head; BZ01/BZ02 are support-only and must not be retroactively fitted.
 
@@ -30,6 +30,13 @@ Champion reached its final Venusaur before stopping. The level77 Blastoise had88
 Beam PP and nine Surf PP; Venusaur had127/189 HP. No remaining member passed the observed matchup
 gate. Preserve that terminal as diagnostic evidence and do not retry it. This falsifies independent
 per-fight coverage as a whole-cycle resource guarantee. It does not erase the four verified payouts.
+
+A prospectively supplied successor at source `4e4d733514f3b3364122e8caa34d825328d35abc`
+then sold2,825 of battle items, bought one3,000 Full Restore and entered with378money. It stopped
+safely during Lorelei after274 actions/23,484 frames and zero completed battles because Cloyster's
+Clamp had no qualified incoming forced-repeat bound. All six party members remained alive. The
+transaction is verified; the supply plan's whole-cycle value is not. The exact attempt is consumed
+and may not retry. Model103,75 registrations,57 living species and61 specimens remain unchanged.
 
 ## Fresh-start checkpoint: Celadon midgame join
 
@@ -46,11 +53,12 @@ private artifact directory was not found; never reconstruct or relabel it from p
 
 ## Next product milestone
 
-Add prospective pre-League provisioning and cumulative HP/PP qualification. The plan must reserve
-priced Full Restores and usable late-fight coverage for the cartridge-derived Champion variant, bind those supplies
-before entry and preserve their exact cost. Then run one new supplied rematch. On verified Champion
-plus Hall of Fame, complete postcredits recovery, buy a practical ball reserve and return
-immediately to model-selected collection. Do not brute-force or relabel the retained failures.
+Finish and publish the cartridge-generic incoming trapping commitment, then perform a zero-input
+qualification of the retained Lorelei terminal. If the controller can establish a safe action, use
+a separately labeled repeatable development successor toward a full net-positive League cycle;
+never retry the consumed supplied identity. On verified Champion plus Hall of Fame, complete
+postcredits recovery, buy a practical ball reserve and return immediately to model-selected
+collection. Do not fit deterministic League support or begin Crystal.
 
 Fresh-game autonomy, arbitrary-seed reliability, complete Red collection, learned low-level combat, ROM-hack competence and cross-title transfer remain unproved. Crystal stays on the backburner until Red has a credible fresh-start sequence.
 

@@ -606,6 +606,20 @@ The Red-first stage order and exit criteria do not change. Replace the insuffici
 that five independent coverage checks imply a complete rematch with prospective pre-League supply
 and cumulative-resource qualification. The next falsifier is one newly bound supplied rematch that
 still cannot verify Champion plus Hall of Fame and retain positive capture purchasing power.
+
+## September 11 — supplied League attempt exposes a generic trapping gap
+
+The newly bound supplied attempt executed its priced sale and Full Restore purchase exactly, then
+stopped during Lorelei with zero completed battles when Cloyster's Clamp reached the incoming
+survival gate. All six party members remained alive, the planned175 net supply cost remained
+visible and model103/collection counters did not change. The exact attempt is consumed without
+retry.
+
+The Red-first stage order does not change. Qualify all four cartridge trapping moves only in the
+full incoming-damage commitment: up to five applications of the first hit's worst damage and five
+existing poison/burn residual ticks. Keep the weaker type-only entry screen and outgoing recovery
+attack contract closed. After a zero-input terminal check, use a separate repeatable development
+successor so experiment formalism does not again delay the product loop.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure

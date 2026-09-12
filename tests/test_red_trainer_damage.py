@@ -109,7 +109,26 @@ def test_all_five_multi_hits_count_and_existing_burn_adds_residual():
     )
 
 
-@pytest.mark.parametrize("move", [69, 149, 90, 68, 120, 35, 117, 118, 119, 144])
+def test_all_five_trapping_turns_count_damage_and_existing_residual_each_turn():
+    # Clamp reuses the first hit's damage for up to five total applications.
+    assert incoming_damage_bounds(observation((128, 0, 0, 0))) == (155, 150)
+    assert incoming_damage_bounds(
+        observation((128, 0, 0, 0)), include_critical=False,
+    ) == (85, 80)
+    base = observation((128, 0, 0, 0))
+    burned = replace(base, raw=replace(base.raw, party_status=(16, 0)))
+    assert incoming_damage_bounds(burned) == (220, 150)
+    assert incoming_damage_bounds(observation((128, 34, 0, 0))) == (155, 150)
+
+
+def test_trapping_does_not_multiply_confusion_self_hit():
+    # Held-in-place is checked before confusion on continuation turns.
+    assert incoming_damage_bounds(
+        confused_observation((128, 0, 0, 0), player_confused=True),
+    ) == (174, 150)
+
+
+@pytest.mark.parametrize("move", [69, 149, 90, 68, 120, 117, 118, 119, 144])
 def test_unsupported_damage_and_confusion_abstain(move):
     with pytest.raises((TrainerDamageError, RedBattleCatalogError)):
         incoming_damage_bounds(observation((move, 0, 0, 0)))

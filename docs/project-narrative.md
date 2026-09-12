@@ -6,8 +6,10 @@ recovery were forced singletons, so they correctly added no learned examples. Co
 stopped at zero capture items and zero unused ordinary trainer payouts. A zero-input cartridge
 qualifier identified a bounded League rematch worth29,799 gross. Execution then verified four
 fights and23,364 income before stopping at Champion's final Venusaur with cumulative HP and Ice PP
-depleted. That is meaningful resource progress and a falsified whole-cycle assumption, not a
-completed renewable economy. [Report](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
+depleted. A supplied successor executed its exact shop transaction but stopped during Lorelei
+because Clamp lacked a generic incoming forced-repeat bound. Both failures were retained without
+retry; neither changed the model. This is meaningful resource and safety evidence, not a completed
+renewable economy. [Report](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 Latest retained learning result: the model chose income twice, raising cash493→1093 and fitting
 model97→99. It then chose acquisition and generic mechanics registered Magnemite at Power Plant.

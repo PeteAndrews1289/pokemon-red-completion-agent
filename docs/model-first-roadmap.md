@@ -12,16 +12,18 @@ The retained Red loop now has103 fitted examples and75 registrations. Four fresh
 outcomes advanced the learner; the latest singleton acquisition and recovery advanced collection
 without being mislabeled as learning. Collection then stopped honestly at zero capture items,
 553money and zero unused ordinary trainer payouts. A bounded League rehearsal verified four fights
-and23,364 income, reaching Champion's final opponent with all six party members alive. It then
-stopped because cumulative HP depletion and loss of its strongest coverage left no qualified move.
-Champion/Hall of Fame, postcredits
-recovery, fresh-game autonomy and independent reliability remain unproven.
+and23,364 income, reaching Champion's final opponent with all six party members alive. A supplied
+successor then executed its exact shop plan but stopped at Lorelei's Cloyster because Clamp lacked
+a qualified incoming forced-repeat bound. The latter completed zero battles and changed no model
+or collection counter. Champion/Hall of Fame, postcredits recovery, fresh-game autonomy and
+independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** Provision priced Full Restores and cumulative usable
-   coverage before League entry, then prove one complete rematch, stable post-game return and honest
-   net proceeds. Buy a practical ball reserve and resume model-selected collection.
+1. **Restore renewable capture funding.** Finish the generic Gen-I trapping bound, qualify the
+   retained Lorelei terminal without input and run a separate repeatable development successor.
+   Prove one complete rematch, stable post-game return and honest net proceeds; then buy a practical
+   ball reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
    session.
@@ -39,9 +41,10 @@ The retained collection endpoint remains BZ recovery/model103:75 registrations,6
 four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
 failed BX02 search, the League attempts or the forced BZ steps.
 
-The next session implements a prospective supply plan and cumulative resource gate, then binds one
-new supplied rematch. Stop on a missing PP reserve, unpriced supply cost, unexpected payout, wipe,
-exceeded bound or non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
+The current session publishes the generic forced-repeat damage repair and runs one zero-input
+terminal qualification. A later live run must use a new repeatable development identity, not retry
+the consumed supplied attempt. Stop on no safe action, unexpected payout, wipe, exceeded bound or
+non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
 result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 
 ## How to stay focused

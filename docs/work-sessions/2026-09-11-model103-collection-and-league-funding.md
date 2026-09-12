@@ -2,8 +2,10 @@
 
 The retained Red learner advanced from model99 to model103 and from73 to75 registered species. It
 then reached a real resource boundary: zero capture items,553money and no remaining ordinary
-trainer payouts. A read-only qualifier identified a29,799-gross League rematch. The bounded
-rehearsal verified four fights and23,364 income before stopping at Champion's final Venusaur.
+trainer payouts. A read-only qualifier identified a29,799-gross League rematch. The first bounded
+rehearsal verified four fights and23,364 income before stopping at Champion's final Venusaur. A
+prospectively supplied successor then verified its shop transaction but stopped during Lorelei
+when the safety model encountered an unqualified Gen-I trapping sequence.
 
 [Path-free evidence](../evidence/red-model103-collection-and-league-readiness-2026-09-11.json).
 
@@ -54,13 +56,33 @@ remain unverified.
 
 [Public rehearsal evidence](../evidence/red-model103-league-rehearsal-2026-09-11.json).
 
+## Supplied successor result
+
+The replacement plan sold eight X Specials and three X Accuracies for2,825, bought one Full
+Restore for3,000 and entered the League with378money. Its sale, purchase, navigation and exact
+accounting all verified. It did not complete Lorelei: Cloyster exposed Clamp at a MAIN-menu
+decision, where the incoming survival bound correctly refused an unsupported forced multi-turn
+attack. The attempt stopped after274 actions and23,484 frames with all six party members alive.
+
+This exact supplied attempt is consumed and will not be retried. It added zero training examples,
+model updates or registrations. Its failure does not show that the supply plan was insufficient;
+it shows that the generic battle safety layer had not represented one cartridge mechanic.
+
+[Supplied-attempt evidence](../evidence/red-model103-supplied-league-failure-2026-09-11.json).
+
+The narrow repair qualifies Bind, Wrap, Fire Spin and Clamp only inside the full incoming-damage
+commitment. It charges up to five applications of the first hit's worst damage and up to five
+existing poison/burn ticks. The weaker type-only entry screen still refuses trapping, and trapping
+moves remain unavailable as outgoing recovery attacks. This preserves the separation between a
+conservative survival bound and a general promise that multi-turn play is safe.
+
 ## Decision and next falsifier
 
-Preserve the current failures as diagnostics; do not brute-force them. Add prospective pre-League
-provisioning and cumulative resource qualification. A newly bound plan must price its supplies,
-reserve priced healing and usable late-fight coverage for the saved Champion variant, and retain honest item costs.
-The next falsifier is whether that supplied run still fails to verify Champion plus Hall of Fame
-and retain positive purchasing power.
+Preserve both consumed failures as diagnostics; do not brute-force or relabel them. Publish the
+generic trapping repair, qualify the retained Lorelei terminal without input and then run a
+separately labeled repeatable development successor. The next falsifier is whether the repaired
+controller still has no safe action at Lorelei or exposes another unmodeled commitment before a
+complete League cycle.
 
 If the supplied rehearsal settles safely, complete postcredits recovery, buy a practical ball
 reserve and return immediately to model-selected collection. Pay Day remains a later income

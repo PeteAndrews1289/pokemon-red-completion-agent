@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Implement prospective pre-League healing/PP provisioning and a cumulative resource gate, then bind one new supplied rematch and use verified net proceeds to restore capture supply before model-selected collection resumes.
+- Next decision: Publish the generic Gen-I trapping commitment, qualify the retained Lorelei state without input and run a separate repeatable development successor toward a verified net-positive funding cycle before model-selected collection resumes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Provision cumulative healing and move PP before repeatable League funding so model-directed Red registration can recover from exhausted finite income. |
+| Reusable capability | Complete a repeatable, net-positive League funding cycle with generic survival handling for forced multi-turn attacks so model-directed Red registration can recover from exhausted finite income. |
 | Authority now | The bounded-development learner has103 fitted examples and75 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A prospectively supplied League rematch still cannot preserve enough healing and usable coverage PP to defeat Champion, verify Hall of Fame and retain positive capture purchasing power. |
+| Cheapest falsifier | After the generic trapping bound passes a zero-input terminal qualification, a separately labeled development successor still cannot clear Lorelei or exposes another unmodeled battle commitment. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-11-model103-league-rehearsal** · status **active** · evidence [development episode](docs/evidence/red-model103-league-rehearsal-2026-09-11.json)
+**2026-09-11-model103-supplied-league-failure** · status **active** · evidence [development episode](docs/evidence/red-model103-supplied-league-failure-2026-09-11.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Renewable income remains required for autonomous capture under poor luck. The four verified payouts prove the source is real; supply-aware qualification is the smallest repair that turns it from partial income into a repeatable collection resource. |
-| Learning output | No learning or registration delta. The deterministic support path verified four exact League payouts,23364 income and arrival at Champion's final opponent in1482 actions/133282 frames. It falsified independent per-fight coverage as a sufficient whole-cycle qualification. |
-| Authority delta | None. The League rehearsal used deterministic navigation and battle support only; model103 remains at103 fitted examples and no battle authority was promoted. |
+| Product alignment | Renewable income remains required for sustained autonomous capture. Supporting a cartridge-generic forced-move mechanic improves reusable battle safety; it is worthwhile only if it promptly returns the system to the funding-and-collection loop. |
+| Learning output | No learning or registration delta. The deterministic support path executed the planned2825 sale proceeds and3000 Full Restore purchase, then stopped at Lorelei after274 actions and23484 frames. It exposed one missing generic forced-repeat damage bound before any battle completed. |
+| Authority delta | None. The supplied run used deterministic navigation, shopping and battle support only; model103 remains at103 fitted examples and no battle authority was promoted. |
 | Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | The exact model103 save earned four League payouts and reached Champion's final Venusaur, but cumulative HP depletion and the loss of its strongest coverage left no qualified offensive matchup. The run stopped with23917money, all six party members alive and no items spent; Champion/Hall-of-Fame and postcredits recovery remain unproved. |
-| Decision | Preserve the failed retained Champion state as diagnostic evidence and stop brute-force continuations. Add prospective pre-League supply and cumulative PP qualification, then run one newly bound supplied rematch; on success, recover, buy capture items and resume model-selected registration. |
-| Next session | Implement prospective League supply and cumulative-resource qualification, including a priced Full Restore reserve and usable late-fight coverage. Bind one fresh supplied rehearsal; do not retry the retained failures, fit forced support or begin Crystal. |
-| Next falsifier | A supplied rematch cannot retain enough healing and usable coverage PP to defeat the final Champion roster, verify concurrent Champion/Hall-of-Fame evidence and preserve positive capture purchasing power. |
-| Stop condition | Stop on a changed supply plan, missing cumulative PP reserve, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
+| Blocker | The prospectively priced shop transaction succeeded, but the supplied run stopped during Lorelei's Cloyster because the incoming survival model did not yet qualify Gen-I trapping damage. It completed zero battles, preserved all six party members and ended with378money after the planned net175 supply cost. |
+| Decision | Preserve the consumed supplied attempt without retry. Qualify all four Gen-I trapping attacks through the generic incoming-damage commitment, retain the stricter type-only and outgoing-attack boundaries, then use a separately labeled development successor rather than another sealed-style retry. |
+| Next session | Finish and publish the generic trapping repair, run a zero-input qualification on the retained terminal, then bind one repeatable development successor. Do not retry the consumed supplied identity, fit deterministic League support or begin Crystal. |
+| Next falsifier | A generic five-application trapping bound passes focused tests but cannot produce any safe action from the retained Lorelei terminal, or a separate development successor reveals another unsupported battle commitment. |
+| Stop condition | Stop on a failed zero-input terminal qualification, changed supply accounting, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
 
 ### Stop conditions
 
