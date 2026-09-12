@@ -20,10 +20,10 @@ independent reliability remain unproven.
 
 ## Next sequence
 
-1. **Restore renewable capture funding.** Finish the generic Gen-I trapping bound, qualify the
-   retained Lorelei terminal without input and run a separate repeatable development successor.
-   Prove one complete rematch, stable post-game return and honest net proceeds; then buy a practical
-   ball reserve and resume model-selected collection.
+1. **Restore renewable capture funding.** The generic Gen-I trapping bound and zero-input retained
+   terminal qualification now pass. Run a separate repeatable development successor and prove one
+   complete rematch, stable post-game return and honest net proceeds; then buy a practical ball
+   reserve and resume model-selected collection.
 2. **Carry the fresh lineage farther only when learning needs it.** Celadon now joins the existing
    midgame registry. Reuse that handoff rather than adding another standalone story-infrastructure
    session.
@@ -41,9 +41,10 @@ The retained collection endpoint remains BZ recovery/model103:75 registrations,6
 four exact payouts and a failed mid-Champion terminal; neither is training data. Do not retry the
 failed BX02 search, the League attempts or the forced BZ steps.
 
-The current session publishes the generic forced-repeat damage repair and runs one zero-input
-terminal qualification. A later live run must use a new repeatable development identity, not retry
-the consumed supplied attempt. Stop on no safe action, unexpected payout, wipe, exceeded bound or
+The generic forced-repeat damage repair is published and its zero-input terminal qualification
+authorizes an attack at the retained Lorelei boundary. The next live run must use a new repeatable
+development identity, not retry the consumed supplied attempt. Stop on another unsupported
+commitment, unexpected payout, wipe, exceeded bound or
 non-input-ready terminal. No Crystal execution or autonomy claim. [Latest
 result](work-sessions/2026-09-11-model103-collection-and-league-funding.md).
 

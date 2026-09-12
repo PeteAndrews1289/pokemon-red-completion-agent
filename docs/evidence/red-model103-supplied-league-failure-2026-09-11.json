@@ -47,5 +47,17 @@
   },
   "verified_conclusion": "The prospectively priced shop transaction executed exactly, but the supplied League run stopped safely during Lorelei when the incoming survival model refused an unqualified Gen-I trapping sequence. The result does not test whether the purchased supply would have completed the League.",
   "repair_scope": "Qualify the generic incoming damage commitment for all four Gen-I trapping attacks, including up to five reused damage applications and five existing poison or burn residual ticks. Preserve the type-only entry screen and outgoing recovery-attack rejection.",
+  "post_repair_terminal_qualification": {
+    "source_commit": "ca41d4873433136628c3bbe5745e473d4f7971d5",
+    "actions": 0,
+    "frames": 0,
+    "party_members_alive": 6,
+    "incoming_damage_bounds": [80, 250, 160, 495, 150, 351],
+    "controller_decision": "attack",
+    "controller_party_index": 0,
+    "controller_incoming_bound": 80,
+    "active_party_hp": 253,
+    "status": "qualified_for_separate_development_successor"
+  },
   "retry_authorized": false
 }

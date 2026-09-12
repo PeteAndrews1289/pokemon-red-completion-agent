@@ -620,6 +620,10 @@ full incoming-damage commitment: up to five applications of the first hit's wors
 existing poison/burn residual ticks. Keep the weaker type-only entry screen and outgoing recovery
 attack contract closed. After a zero-input terminal check, use a separate repeatable development
 successor so experiment formalism does not again delay the product loop.
+
+That zero-input retained-terminal check passed at source `ca41d4873433136628c3bbe5745e473d4f7971d5`:
+the active workhorse had253 HP against an80-HP computed commitment and the controller authorized an
+attack without advancing a frame. This closes the local mechanics falsifier, not the League cycle.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure

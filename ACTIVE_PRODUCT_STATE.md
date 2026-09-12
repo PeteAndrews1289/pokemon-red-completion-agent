@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the generic Gen-I trapping commitment, qualify the retained Lorelei state without input and run a separate repeatable development successor toward a verified net-positive funding cycle before model-selected collection resumes.
+- Next decision: Run a separate repeatable development successor from the published trapping-qualified source toward a verified net-positive funding cycle before model-selected collection resumes.
 
 ### Mandatory mission check
 
@@ -64,14 +64,14 @@ outputs.
 | Check | Session conclusion |
 | --- | --- |
 | Product alignment | Renewable income remains required for sustained autonomous capture. Supporting a cartridge-generic forced-move mechanic improves reusable battle safety; it is worthwhile only if it promptly returns the system to the funding-and-collection loop. |
-| Learning output | No learning or registration delta. The deterministic support path executed the planned2825 sale proceeds and3000 Full Restore purchase, then stopped at Lorelei after274 actions and23484 frames. It exposed one missing generic forced-repeat damage bound before any battle completed. |
+| Learning output | No learning or registration delta. The deterministic support path executed the planned2825 sale proceeds and3000 Full Restore purchase, then stopped at Lorelei after274 actions and23484 frames. The repaired retained-terminal check then authorized an attack with zero actions or frames. |
 | Authority delta | None. The supplied run used deterministic navigation, shopping and battle support only; model103 remains at103 fitted examples and no battle authority was promoted. |
 | Transfer result | ROM-free boundary tests support a portable semantic interface, but no held-out modification, Blue or cross-title result exists. |
-| Blocker | The prospectively priced shop transaction succeeded, but the supplied run stopped during Lorelei's Cloyster because the incoming survival model did not yet qualify Gen-I trapping damage. It completed zero battles, preserved all six party members and ended with378money after the planned net175 supply cost. |
-| Decision | Preserve the consumed supplied attempt without retry. Qualify all four Gen-I trapping attacks through the generic incoming-damage commitment, retain the stricter type-only and outgoing-attack boundaries, then use a separately labeled development successor rather than another sealed-style retry. |
-| Next session | Finish and publish the generic trapping repair, run a zero-input qualification on the retained terminal, then bind one repeatable development successor. Do not retry the consumed supplied identity, fit deterministic League support or begin Crystal. |
-| Next falsifier | A generic five-application trapping bound passes focused tests but cannot produce any safe action from the retained Lorelei terminal, or a separate development successor reveals another unsupported battle commitment. |
-| Stop condition | Stop on a failed zero-input terminal qualification, changed supply accounting, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
+| Blocker | The supplied attempt is consumed after its Lorelei Clamp stop. The generic repair now passes a zero-input check on that retained terminal, but a complete net-positive League cycle and restored capture stock remain unverified. |
+| Decision | Preserve the consumed supplied attempt without retry. The generic incoming-damage commitment now qualifies all four Gen-I trapping attacks while the stricter type-only and outgoing-attack boundaries remain closed. Use a separately labeled development successor rather than another sealed-style retry. |
+| Next session | Bind and run one repeatable development successor from the repaired source toward a complete League funding cycle. Do not retry the consumed supplied identity, fit deterministic League support or begin Crystal. |
+| Next falsifier | A separate development successor reveals another unsupported battle commitment before verifying a complete net-positive League cycle. |
+| Stop condition | Stop on another unsupported battle commitment, changed supply accounting, unexpected opponent or payout, party wipe, exhausted action/frame bound, hidden retry, deterministic support counted as learned authority or any attempt to erase incurred costs. |
 
 ### Stop conditions
 

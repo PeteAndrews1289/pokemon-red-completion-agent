@@ -94,7 +94,8 @@
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
 <text x="50" y="1732" class="small muted">2026-09-11-model103-supplied-league-failure</text>
 <text x="50" y="1767" class="body">The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei&#x27;s Cloyster</text>
-<text x="50" y="1792" class="body">after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. Zero battles completed; all six</text>
-<text x="50" y="1817" class="body">party members remained alive; model103 and75 registrations are unchanged.</text>
+<text x="50" y="1792" class="body">after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. The generic repair passed a zero-</text>
+<text x="50" y="1817" class="body">input retained-terminal check and authorized the253-HP workhorse against an80-HP commitment. Model103 and75 registrations are</text>
+<text x="50" y="1842" class="body">unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

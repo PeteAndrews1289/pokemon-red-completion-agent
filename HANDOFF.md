@@ -53,10 +53,11 @@ private artifact directory was not found; never reconstruct or relabel it from p
 
 ## Next product milestone
 
-Finish and publish the cartridge-generic incoming trapping commitment, then perform a zero-input
-qualification of the retained Lorelei terminal. If the controller can establish a safe action, use
-a separately labeled repeatable development successor toward a full net-positive League cycle;
-never retry the consumed supplied identity. On verified Champion plus Hall of Fame, complete
+The cartridge-generic incoming trapping commitment is published at `ca41d4873433136628c3bbe5745e473d4f7971d5`.
+A zero-input reload of the retained Lorelei terminal computed bounds80/250/160/495/150/351 and
+authorized the253-HP active workhorse to attack against an80-HP commitment. Use a separately
+labeled repeatable development successor toward a full net-positive League cycle; never retry the
+consumed supplied identity. On verified Champion plus Hall of Fame, complete
 postcredits recovery, buy a practical ball reserve and return immediately to model-selected
 collection. Do not fit deterministic League support or begin Crystal.
 

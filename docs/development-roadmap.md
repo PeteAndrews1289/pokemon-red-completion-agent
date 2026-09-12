@@ -98,11 +98,11 @@ Already-credited lines need no redundant grind unless useful for the current run
 
 ### 2026-09-11-model103-supplied-league-failure
 
-The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. Zero battles completed; all six party members remained alive; model103 and75 registrations are unchanged.
+The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. The generic repair passed a zero-input retained-terminal check and authorized the253-HP workhorse against an80-HP commitment. Model103 and75 registrations are unchanged.
 
 **Deviation:** No stage exit or authority promotion. The consumed attempt is not retried. The narrow repair covers all four cartridge trapping moves only inside the full incoming-damage commitment; the type-only screen and outgoing recovery attack remain closed.
 
-**Next:** Publish the generic trapping repair, qualify the retained terminal without input and then use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle.
+**Next:** Use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle.
 
 ### 2026-09-11-model103-league-rehearsal
 

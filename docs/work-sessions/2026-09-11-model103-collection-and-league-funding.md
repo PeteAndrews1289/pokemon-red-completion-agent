@@ -76,13 +76,17 @@ existing poison/burn ticks. The weaker type-only entry screen still refuses trap
 moves remain unavailable as outgoing recovery attacks. This preserves the separation between a
 conservative survival bound and a general promise that multi-turn play is safe.
 
+A zero-input reload of the actual retained Lorelei terminal then computed per-member commitments
+of80/250/160/495/150/351. With253 HP, the active workhorse qualified to attack against its80-HP
+bound. The check sent no input and advanced zero frames. This validates the repaired decision seam;
+it does not convert the consumed attempt into a success or prove the rest of the League.
+
 ## Decision and next falsifier
 
-Preserve both consumed failures as diagnostics; do not brute-force or relabel them. Publish the
-generic trapping repair, qualify the retained Lorelei terminal without input and then run a
-separately labeled repeatable development successor. The next falsifier is whether the repaired
-controller still has no safe action at Lorelei or exposes another unmodeled commitment before a
-complete League cycle.
+Preserve both consumed failures as diagnostics; do not brute-force or relabel them. The generic
+repair and retained-terminal qualification now pass. Run a separately labeled repeatable
+development successor. The next falsifier is another unmodeled commitment before a complete
+League cycle.
 
 If the supplied rehearsal settles safely, complete postcredits recovery, buy a practical ball
 reserve and return immediately to model-selected collection. Pay Day remains a later income
