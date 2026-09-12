@@ -1,4 +1,5 @@
 from dataclasses import replace
+from types import SimpleNamespace
 
 import pytest
 
@@ -16,10 +17,13 @@ from pokemon_red_completion.red_super_rod_support import (
     SUPER_ROD_NPC_YX,
     SUPER_ROD_STANCE_YX,
     SUPER_ROD_STATUS_MASK,
+    RedRoutedSuperRodSupport,
+    RedRoutedSuperRodSupportResult,
     RedSuperRodSupportError,
     RedSuperRodSupportExecutor,
     observe_red_super_rod_support,
 )
+from pokemon_red_completion.route_executor import TraversalSnapshot
 
 
 def _raw(**changes) -> RawGameState:
@@ -70,6 +74,9 @@ class _Reader:
 class _Emulator:
     frame_count = 0
 
+    def read_u8(self, _address):
+        return 0
+
 
 class _GiftActions:
     def __init__(self, reader, emulator, acquire_on=3, settle_on=4):
@@ -99,6 +106,17 @@ class _GiftActions:
         if self.count >= self.settle_on:
             self.reader.ready = True
             self.reader.dialogue = False
+
+
+class _RoutedGiftActions(_GiftActions):
+    def execute(self, action):
+        if action.kind is MacroActionKind.MOVE:
+            self.count += 1
+            self.kinds.append(action.kind)
+            self.emulator.frame_count += 24
+            self.reader.facing = str(action.value)
+            return
+        super().execute(action)
 
 
 def test_red_super_rod_constants_match_cartridge_contract():
@@ -216,3 +234,124 @@ def test_executor_refuses_to_guess_after_dialogue_disappears_or_bound_expires():
         RedSuperRodSupportExecutor(
             CountingExecutor(stalled), reader, emulator, maximum_confirm_pulses=2
         ).execute()
+
+
+def test_routed_receipt_keeps_support_out_of_learning_and_hides_coordinates():
+    gift = RedSuperRodSupportExecutor(
+        CountingExecutor(_GiftActions(reader := _Reader(), emulator := _Emulator())),
+        reader,
+        emulator,
+    ).execute()
+    result = RedRoutedSuperRodSupportResult(gift, 384, 1, 2, True, 410, 42_000)
+    public = result.public_dict()
+    assert public["training_examples"] == 0
+    assert public["learned_goal_authority"] is False
+    assert public["private_coordinates_published"] == 0
+    assert SUPER_ROD_STANCE_YX not in public.values()
+
+
+@pytest.mark.parametrize("mutation", ["actions", "frames", "route", "facing"])
+def test_routed_receipt_rejects_invalid_accounting(mutation):
+    gift = RedSuperRodSupportExecutor(
+        CountingExecutor(_GiftActions(reader := _Reader(), emulator := _Emulator())),
+        reader,
+        emulator,
+    ).execute()
+    values = {
+        "gift": gift,
+        "route_steps": 384,
+        "route_replans": 0,
+        "route_interruptions": 0,
+        "facing_action_used": False,
+        "actions": 410,
+        "frames": 42_000,
+    }
+    if mutation == "actions":
+        values["actions"] = gift.actions - 1
+    elif mutation == "frames":
+        values["frames"] = gift.frames - 1
+    elif mutation == "route":
+        values["route_steps"] = -1
+    else:
+        values["facing_action_used"] = 1
+    with pytest.raises(ValueError):
+        RedRoutedSuperRodSupportResult(**values)
+
+
+def _patch_routed_dependencies(monkeypatch, reader):
+    import pokemon_red_completion.red_super_rod_support as runtime
+
+    plan = SimpleNamespace(steps=(object(),))
+    report = SimpleNamespace(
+        passed=True,
+        executed_steps=(object(),),
+        replans=(),
+        interruptions=(),
+    )
+
+    class Observer:
+        def observe(self):
+            raw = reader.read()
+            return TraversalSnapshot(
+                raw.map_id,
+                (raw.player_y, raw.player_x),
+                True,
+                mode="land",
+            )
+
+    monkeypatch.setattr(runtime, "Gen1FieldMovePort", lambda *args, **kwargs: object())
+    monkeypatch.setattr(runtime, "Gen1TraversalObserver", lambda *args, **kwargs: Observer())
+    monkeypatch.setattr(runtime, "Gen1TrainerSightProjector", lambda *args: object())
+    monkeypatch.setattr(runtime, "Gen1RouteInterruptionHandler", lambda *args, **kwargs: object())
+    monkeypatch.setattr(runtime, "_supported_plan", lambda *args, **kwargs: True)
+
+    def execute_route(*args, **kwargs):
+        reader.raw = replace(
+            reader.raw,
+            map_id=SUPER_ROD_HOUSE_MAP_ID,
+            player_y=SUPER_ROD_STANCE_YX[0],
+            player_x=SUPER_ROD_STANCE_YX[1],
+        )
+        return report
+
+    monkeypatch.setattr(runtime, "execute_route", execute_route)
+    world = SimpleNamespace(
+        rom=b"rom",
+        rules=SimpleNamespace(cut_block_swaps=()),
+        plan_feasible_to_map=lambda *args, **kwargs: plan,
+        replanner=lambda: object(),
+    )
+    return runtime, world
+
+
+def test_routed_executor_reaches_faces_and_accepts_support_gift(monkeypatch):
+    reader, emulator = _Reader(_raw(map_id=int(MapId.SAFARI_ZONE_EAST))), _Emulator()
+    reader.facing = "up"
+    _runtime, world = _patch_routed_dependencies(monkeypatch, reader)
+    delegate = _RoutedGiftActions(reader, emulator, acquire_on=4, settle_on=5)
+    result = RedRoutedSuperRodSupport(
+        CountingExecutor(delegate), reader, emulator, world
+    ).execute()
+    assert delegate.kinds == [
+        MacroActionKind.MOVE,
+        MacroActionKind.INTERACT,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+        MacroActionKind.CONFIRM,
+    ]
+    assert result.route_steps == 1
+    assert result.facing_action_used
+    assert result.actions == 5 and result.frames == 120
+    assert result.gift.actions == 4 and result.gift.frames == 96
+
+
+def test_routed_executor_rejects_unsupported_route_before_input(monkeypatch):
+    reader, emulator = _Reader(_raw(map_id=int(MapId.SAFARI_ZONE_EAST))), _Emulator()
+    runtime, world = _patch_routed_dependencies(monkeypatch, reader)
+    monkeypatch.setattr(runtime, "_supported_plan", lambda *args, **kwargs: False)
+    delegate = _RoutedGiftActions(reader, emulator)
+    with pytest.raises(RedSuperRodSupportError, match="unsupported transport"):
+        RedRoutedSuperRodSupport(
+            CountingExecutor(delegate), reader, emulator, world
+        ).execute()
+    assert delegate.count == 0 and emulator.frame_count == 0

@@ -1,4 +1,4 @@
-"""Bounded fishing foundation for Generation I and title-neutral planning.
+"""Bounded fishing-candidate foundation for Generation I planning.
 
 Provides strict mapping from observed bag entries to available :class:`RodKind`
 values without inventing ownership, and derives deterministic fishable shoreline
@@ -168,11 +168,11 @@ class ShorelineStance:
 
 
 def fishable_shoreline_stances(terrain: Terrain) -> tuple[ShorelineStance, ...]:
-    """Derive deterministic fishable shoreline stances from Terrain.
+    """Derive deterministic candidate shoreline stances from Terrain.
 
-    A fishable shoreline stance is a standable land coordinate facing an
-    orthogonally adjacent water coordinate, in canonical order (row-major
-    (y, x), then Direction order: DOWN, UP, LEFT, RIGHT), excluding out-of-bounds.
+    Geometry alone does not prove that a cast succeeds. A candidate is a
+    standable land coordinate facing orthogonally adjacent water, in canonical
+    row-major and direction order, with out-of-bounds coordinates excluded.
     """
     if not isinstance(terrain, Terrain):
         raise TypeError(
