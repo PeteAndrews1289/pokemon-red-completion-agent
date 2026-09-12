@@ -19,6 +19,7 @@ from pokemon_red_completion.red_super_rod_support import (
     SUPER_ROD_NPC_YX,
     SUPER_ROD_STANCE_YX,
     SUPER_ROD_STATUS_MASK,
+    RedAcquiredSuperRodDialogueSettlement,
     RedRoutedSuperRodSupport,
     RedRoutedSuperRodSupportResult,
     RedSuperRodSupportError,
@@ -154,6 +155,37 @@ def test_observation_distinguishes_ready_and_acquired():
     )
     after = observe_red_super_rod_support(reader)
     assert after.acquired and not after.ready_to_receive
+
+
+def test_acquired_gift_dialogue_settles_without_regranting_item():
+    reader, emulator = _Reader(), _Emulator()
+    reader.raw = replace(
+        reader.raw,
+        bag_items=((3, 12), (int(ItemId.SUPER_ROD), 1)),
+        status_flags_1=SUPER_ROD_STATUS_MASK,
+    )
+    reader.dialogue = True
+
+    class Actions:
+        def __init__(self):
+            self.count = 0
+
+        def execute(self, action):
+            assert action.kind is MacroActionKind.CONFIRM
+            self.count += 1
+            emulator.frame_count += 24
+            if self.count == 2:
+                reader.dialogue = False
+
+    delegate = Actions()
+    result = RedAcquiredSuperRodDialogueSettlement(
+        CountingExecutor(delegate), reader, emulator
+    ).execute()
+
+    assert delegate.count == 2
+    assert result.actions == 2 and result.frames == 48 and result.bag_slots == 2
+    assert result.public_dict()["training_examples"] == 0
+    assert dict(reader.raw.bag_items)[int(ItemId.SUPER_ROD)] == 1
 
 
 @pytest.mark.parametrize(

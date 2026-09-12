@@ -267,6 +267,96 @@ class RedSuperRodSupportExecutor:
         return value
 
 
+@dataclass(frozen=True, slots=True)
+class RedSuperRodDialogueSettlementResult:
+    actions: int
+    frames: int
+    bag_slots: int
+
+    def __post_init__(self) -> None:
+        if (
+            type(self.actions) is not int
+            or type(self.frames) is not int
+            or type(self.bag_slots) is not int
+            or self.actions <= 0
+            or self.frames <= 0
+            or not 0 < self.bag_slots <= MAX_BAG_ITEMS
+        ):
+            raise ValueError("Super Rod dialogue settlement has invalid accounting")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.red.super-rod-dialogue-settlement.v1",
+            "status": "verified_acquired_super_rod_dialogue_settled",
+            "item_id": int(ItemId.SUPER_ROD),
+            "item_already_owned": True,
+            "actions": self.actions,
+            "frames": self.frames,
+            "bag_slots": self.bag_slots,
+            "forced_support_step": True,
+            "learned_goal_authority": False,
+            "training_examples": 0,
+        }
+
+
+@dataclass(slots=True)
+class RedAcquiredSuperRodDialogueSettlement:
+    """Finish a retained gift conversation after the item was already written."""
+
+    actions: CountingExecutor
+    reader: RedSuperRodSupportReader
+    emulator: object
+    maximum_confirm_pulses: int = 12
+
+    def __post_init__(self) -> None:
+        if type(self.maximum_confirm_pulses) is not int or self.maximum_confirm_pulses <= 0:
+            raise ValueError("maximum_confirm_pulses must be a positive integer")
+
+    def execute(self) -> RedSuperRodDialogueSettlementResult:
+        initial_observation = observe_red_super_rod_support(self.reader)
+        if (
+            not initial_observation.acquired
+            or initial_observation.map_id != SUPER_ROD_HOUSE_MAP_ID
+            or initial_observation.player_yx != SUPER_ROD_STANCE_YX
+            or initial_observation.facing != SUPER_ROD_FACING
+            or initial_observation.in_battle
+            or not initial_observation.input_ready
+            or not initial_observation.dialogue_visible
+        ):
+            raise RedSuperRodSupportError("acquired Super Rod dialogue is not ready to settle")
+        initial = self.reader.read()
+        before_actions = self.actions.actions_executed
+        before_frames = self._frame_count()
+        for _ in range(self.maximum_confirm_pulses + 1):
+            current = self.reader.read()
+            _require_transition_state(initial, current)
+            observation = observe_red_super_rod_support(self.reader)
+            if (
+                observation.acquired
+                and observation.input_ready
+                and not observation.dialogue_visible
+            ):
+                return RedSuperRodDialogueSettlementResult(
+                    actions=self.actions.actions_executed - before_actions,
+                    frames=self._frame_count() - before_frames,
+                    bag_slots=observation.bag_slots,
+                )
+            if not observation.dialogue_visible:
+                raise RedSuperRodSupportError(
+                    "acquired Super Rod dialogue left its settlement boundary"
+                )
+            if self.actions.actions_executed - before_actions >= self.maximum_confirm_pulses:
+                break
+            self.actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        raise RedSuperRodSupportError("acquired Super Rod dialogue exceeded its confirmation bound")
+
+    def _frame_count(self) -> int:
+        value = getattr(self.emulator, "frame_count", None)
+        if type(value) is not int or value < 0:
+            raise RedSuperRodSupportError("acquired Super Rod dialogue lacks frame accounting")
+        return value
+
+
 SUPER_ROD_ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
