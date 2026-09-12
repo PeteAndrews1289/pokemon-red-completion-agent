@@ -345,11 +345,11 @@ class FishingCastExecutor:
     timing: FishingTiming = field(default_factory=FishingTiming)
     _internal_actions_count: int = field(default=0, init=False)
 
-    _START_MENU_ORIGIN = (11, 0)
-    _START_MENU_MAXIMUM = 6
-    _BAG_MENU_ORIGIN = (4, 1)
-    _BAG_MENU_MAXIMUM = 3
-    _ITEM_SUBMENU_ORIGIN = (11, 8)
+    _START_MENU_ORIGIN = (11, 2)
+    _START_MENU_MAXIMUM = 7
+    _BAG_MENU_ORIGIN = (5, 4)
+    _BAG_MENU_MAXIMUM = 2
+    _ITEM_SUBMENU_ORIGIN = (14, 11)
     _ITEM_SUBMENU_MAXIMUM = 1
 
     def __post_init__(self) -> None:
@@ -534,7 +534,7 @@ class FishingCastExecutor:
                     stable_field_observations = 0
                     if pulse < self.timing.max_settle_pulses:
                         self._pulse(
-                            MacroActionKind.CONFIRM,
+                            MacroActionKind.CANCEL,
                             frames=self.timing.dialogue_wait_frames,
                         )
                     continue

@@ -752,21 +752,21 @@ class _FishingSimulation:
             return MenuCursorState(
                 selected_visible_index=self.start_cursor,
                 scroll_offset=0,
-                maximum_visible_index=6,
+                maximum_visible_index=7,
                 top_x=11,
-                top_y=0,
+                top_y=2,
             )
         if self.stage == "bag_menu":
             if self.fail_bag_menu:
                 raise RuntimeError("simulated corrupt bag menu")
-            visible_idx = min(self.bag_cursor, 3)
-            scroll_off = max(0, self.bag_cursor - 3)
+            visible_idx = min(self.bag_cursor, 2)
+            scroll_off = max(0, self.bag_cursor - 2)
             return MenuCursorState(
                 selected_visible_index=visible_idx,
                 scroll_offset=scroll_off,
-                maximum_visible_index=min(3, len(self.raw.bag_items or ())),
-                top_x=4,
-                top_y=1,
+                maximum_visible_index=min(2, len(self.raw.bag_items or ())),
+                top_x=5,
+                top_y=4,
             )
         if self.stage == "item_submenu":
             if self.fail_submenu:
@@ -775,8 +775,8 @@ class _FishingSimulation:
                 selected_visible_index=self.submenu_cursor,
                 scroll_offset=0,
                 maximum_visible_index=1,
-                top_x=11,
-                top_y=8,
+                top_x=14,
+                top_y=11,
             )
         raise RuntimeError(f"read_menu_cursor_state called outside menu stages: {self.stage}")
 
@@ -807,7 +807,7 @@ class _FishingSimulation:
             elif self.stage == "start_menu":
                 if not self.stuck_start_menu:
                     if action.value == "down":
-                        self.start_cursor = min(self.start_cursor + 1, 6)
+                        self.start_cursor = min(self.start_cursor + 1, 7)
                     elif action.value == "up":
                         self.start_cursor = max(self.start_cursor - 1, 0)
             elif self.stage == "bag_menu":
@@ -830,33 +830,32 @@ class _FishingSimulation:
             elif self.stage == "bag_menu":
                 self.stage = "item_submenu"
                 self.submenu_cursor = 1 if self.stuck_submenu else 0
-            elif self.stage == "item_submenu":
-                if self.submenu_cursor == 0:  # USE
-                    self.stage = "settlement"
-                    if self.unexpected_settle_battle_state is not None:
-                        self.raw = replace(
-                            self.raw,
-                            battle_state=self.unexpected_settle_battle_state,
-                        )
-                    elif self.outcome_mode == "wild_encounter_immediate":
-                        self.raw = replace(self.raw, battle_state=1)
-                    elif self.outcome_mode == "delayed_dialogue":
-                        self.dialogue_box_visible = False
-                        self.input_ready = False
-                    else:
-                        self.dialogue_box_visible = True
-            elif self.stage == "settlement":
-                self.settle_pulses += 1
-                if not self.stuck_dialogue:
-                    if (
-                        self.outcome_mode == "wild_encounter_delayed"
-                        and self.settle_pulses >= self.dialogue_settle_delay
-                    ):
-                        self.dialogue_box_visible = False
-                        self.raw = replace(self.raw, battle_state=1)
-                    elif self.settle_pulses >= self.dialogue_settle_delay:
-                        self.dialogue_box_visible = False
-                        self.input_ready = True
+            elif self.stage == "item_submenu" and self.submenu_cursor == 0:  # USE
+                self.stage = "settlement"
+                if self.unexpected_settle_battle_state is not None:
+                    self.raw = replace(
+                        self.raw,
+                        battle_state=self.unexpected_settle_battle_state,
+                    )
+                elif self.outcome_mode == "wild_encounter_immediate":
+                    self.raw = replace(self.raw, battle_state=1)
+                elif self.outcome_mode == "delayed_dialogue":
+                    self.dialogue_box_visible = False
+                    self.input_ready = False
+                else:
+                    self.dialogue_box_visible = True
+        elif action.kind is MacroActionKind.CANCEL and self.stage == "settlement":
+            self.settle_pulses += 1
+            if not self.stuck_dialogue:
+                if (
+                    self.outcome_mode == "wild_encounter_delayed"
+                    and self.settle_pulses >= self.dialogue_settle_delay
+                ):
+                    self.dialogue_box_visible = False
+                    self.raw = replace(self.raw, battle_state=1)
+                elif self.settle_pulses >= self.dialogue_settle_delay:
+                    self.dialogue_box_visible = False
+                    self.input_ready = True
         elif action.kind is MacroActionKind.WAIT and self.stage == "settlement":
             self.settle_waits += 1
             if (
@@ -949,7 +948,7 @@ def test_fishing_cast_wild_encounter_delayed() -> None:
     assert sim.settle_pulses == 2
 
 
-def test_fishing_cast_waits_for_observed_dialogue_before_any_settlement_confirm() -> None:
+def test_fishing_cast_waits_for_observed_dialogue_before_any_settlement_dismissal() -> None:
     sim = _FishingSimulation(initial_facing="down", outcome_mode="delayed_dialogue")
     stance = ShorelineStance(at=(1, 10), direction=Direction.DOWN, water_at=(2, 10))
 
@@ -963,12 +962,12 @@ def test_fishing_cast_waits_for_observed_dialogue_before_any_settlement_confirm(
         and sim.recorded_stages[index] == "item_submenu"
     )
     settlement = sim.recorded_actions[submenu_confirmation + 1 :]
-    first_confirm = next(
-        index for index, action in enumerate(settlement) if action.kind is MacroActionKind.CONFIRM
+    first_dismissal = next(
+        index for index, action in enumerate(settlement) if action.kind is MacroActionKind.CANCEL
     )
-    assert first_confirm >= 2
+    assert first_dismissal >= 2
     assert all(
-        action.kind is MacroActionKind.WAIT for action in settlement[:first_confirm]
+        action.kind is MacroActionKind.WAIT for action in settlement[:first_dismissal]
     )
 
 
