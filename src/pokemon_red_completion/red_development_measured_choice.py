@@ -41,6 +41,7 @@ from pokemon_red_completion.registered_checkpoint import (
 from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
 
 DEVELOPMENT_MEASURED_CHOICE_SCHEMA = "pokemon.red.development-measured-choice.v1"
+DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2 = "pokemon.red.development-measured-choice.v2"
 DEVELOPMENT_MEASURED_SEGMENT_SCHEMA = "pokemon.red.development-measured-segment.v1"
 DEVELOPMENT_MEASURED_CHOICE_KIND = "red_development_measured_choice"
 DEVELOPMENT_MEASURED_RESULT_SCHEMA = "pokemon.red.development-measured-choice-result.v1"
@@ -54,7 +55,8 @@ _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _SEGMENT_STATUSES = frozenset({"retained_exception", "retained_failure", "retained_success"})
 _SAFARI_DECLARATION_SCHEMA = "pokemon.red.private-safari-outcome-declaration.v1"
 _FISHING_DECLARATION_SCHEMA = "pokemon.red.private-model105-fishing-capture-plan.v1"
-_CHOICE_KEYS = {
+_FISHING_DECLARATION_SCHEMA_V2 = "pokemon.red.private-model106-fishing-capture-plan.v1"
+_CHOICE_KEYS_V1 = {
     "action_trace_available",
     "after_observation",
     "after_observation_sha256",
@@ -93,6 +95,7 @@ _CHOICE_KEYS = {
     "training_only",
     "trust_tier",
 }
+_CHOICE_KEYS_V2 = _CHOICE_KEYS_V1 | {"succeeded"}
 
 
 def development_measured_choice_record_id(choice_id: str) -> str:
@@ -147,6 +150,7 @@ def _validate_selection_declaration(
     declaration: Mapping[str, object],
     *,
     policy_id: str,
+    parent_episode_id: str,
     parent_checkpoint_sha256: str,
     parent_state_sha256: str,
     menu_sha256: str,
@@ -191,7 +195,7 @@ def _validate_selection_declaration(
             or declaration.get("capture_quota") != 1
         )
     elif policy_id == FISHING_DESTINATION_POLICY:
-        expected_keys = {
+        legacy_keys = {
             "maximum_casts",
             "maximum_frames",
             "menu_file_sha256",
@@ -205,10 +209,28 @@ def _validate_selection_declaration(
             "source_commit",
             "teacher_labels",
         }
-        mismatch = (
-            set(declaration) != expected_keys
-            or declaration.get("schema") != _FISHING_DECLARATION_SCHEMA
-            or declaration.get("parent_state_sha256") != parent_state_sha256
+        successor_keys = legacy_keys | {
+            "menu_source_commit",
+            "parent_checkpoint_sha256",
+            "parent_episode",
+        }
+        schema = declaration.get("schema")
+        if schema == _FISHING_DECLARATION_SCHEMA:
+            mismatch = set(declaration) != legacy_keys
+        elif schema == _FISHING_DECLARATION_SCHEMA_V2:
+            mismatch = (
+                set(declaration) != successor_keys
+                or declaration.get("parent_episode") != parent_episode_id
+                or declaration.get("parent_checkpoint_sha256")
+                != parent_checkpoint_sha256
+            )
+            _git_commit(
+                declaration.get("menu_source_commit"), subject="menu source commit"
+            )
+        else:
+            mismatch = True
+        mismatch = mismatch or (
+            declaration.get("parent_state_sha256") != parent_state_sha256
             or declaration.get("retry_authorized") is not False
             or declaration.get("maximum_casts") != 24
             or declaration.get("maximum_frames") != 2_000_000
@@ -374,6 +396,7 @@ class RedDevelopmentMeasuredChoice:
     resource_costs: Mapping[str, object]
     observer_source_commit: str
     observer_source_bundle_sha256: str
+    succeeded: bool = True
     policy_id: str = SAFARI_AREA_CHOICE_POLICY
     normalization_contract: str = DEVELOPMENT_MEASURED_NORMALIZATION
     maximum_actions: int = DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
@@ -388,6 +411,8 @@ class RedDevelopmentMeasuredChoice:
     def __post_init__(self) -> None:
         if not isinstance(self.choice_id, str) or not self.choice_id:
             raise ValueError("measured choice identity differs")
+        if type(self.succeeded) is not bool:  # noqa: E721
+            raise ValueError("measured choice success status differs")
         if not isinstance(self.parent_episode_id, str) or not self.parent_episode_id:
             raise ValueError("measured choice parent episode differs")
         _sha256(self.parent_checkpoint_sha256, subject="parent checkpoint hash")
@@ -447,6 +472,7 @@ class RedDevelopmentMeasuredChoice:
         _validate_selection_declaration(
             self.selection_declaration,
             policy_id=self.policy_id,
+            parent_episode_id=self.parent_episode_id,
             parent_checkpoint_sha256=self.parent_checkpoint_sha256,
             parent_state_sha256=self.parent_state_sha256,
             menu_sha256=self.menu.policy_sha256,
@@ -478,8 +504,22 @@ class RedDevelopmentMeasuredChoice:
         _sha256(self.terminal_state_sha256, subject="terminal state hash")
         if len({segment.pair_id for segment in self.segments}) != len(self.segments):
             raise ValueError("measured choice segment identity repeats")
-        if self.segments[-1].status != "retained_success" or any(
-            segment.status == "retained_success" for segment in self.segments[:-1]
+        successful_segments = tuple(
+            segment for segment in self.segments if segment.status == "retained_success"
+        )
+        if (
+            self.succeeded
+            and (
+                self.segments[-1].status != "retained_success"
+                or len(successful_segments) != 1
+            )
+        ) or (
+            not self.succeeded
+            and (
+                successful_segments
+                or self.segments[-1].status
+                not in {"retained_exception", "retained_failure"}
+            )
         ):
             raise ValueError("measured choice settled segment ordering differs")
         if (
@@ -535,7 +575,7 @@ class RedDevelopmentMeasuredChoice:
             old,
             new,
             selected_kind=GoalKind.ACQUIRE_SPECIES,
-            require_selected_goal_progress=True,
+            require_selected_goal_progress=self.succeeded,
         )
         outcome = self._observed_outcome()
         expected_resources = {
@@ -552,7 +592,7 @@ class RedDevelopmentMeasuredChoice:
             self.before_observation,
             self.after_observation,
             selected_kind=GoalKind.ACQUIRE_SPECIES,
-            succeeded=True,
+            succeeded=self.succeeded,
             actions=self.controller_actions,
             frames=self.emulator_frames,
             maximum_actions=self.maximum_actions,
@@ -566,9 +606,17 @@ class RedDevelopmentMeasuredChoice:
                 "choice_id": self.choice_id,
                 "menu_sha256": self.menu.policy_sha256,
                 "model_sha256": self.model_sha256,
-                "schema": DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
+                "schema": self.schema,
                 "segments_sha256": self.segments_sha256,
             }
+        )
+
+    @property
+    def schema(self) -> str:
+        return (
+            DEVELOPMENT_MEASURED_CHOICE_SCHEMA
+            if self.succeeded
+            else DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2
         )
 
     @property
@@ -576,8 +624,8 @@ class RedDevelopmentMeasuredChoice:
         return canonical_sha256(self.public_dict())
 
     def public_dict(self) -> dict[str, object]:
-        return {
-            "schema": DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
+        document: dict[str, object] = {
+            "schema": self.schema,
             "choice_id": self.choice_id,
             "parent_episode_id": self.parent_episode_id,
             "parent_checkpoint_sha256": self.parent_checkpoint_sha256,
@@ -615,13 +663,24 @@ class RedDevelopmentMeasuredChoice:
             "training_only": True,
             "trust_tier": DEVELOPMENT_MEASURED_TRUST_TIER,
         }
+        if not self.succeeded:
+            document["succeeded"] = False
+        return document
 
     @classmethod
     def from_public(cls, document: Mapping[str, object]) -> RedDevelopmentMeasuredChoice:
-        if (
-            set(document) != _CHOICE_KEYS
-            or document.get("schema") != DEVELOPMENT_MEASURED_CHOICE_SCHEMA
-        ):
+        schema = document.get("schema")
+        if schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA:
+            succeeded = True
+            expected_keys = _CHOICE_KEYS_V1
+        elif schema == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2:
+            expected_keys = _CHOICE_KEYS_V2
+            if document.get("succeeded") is not False:
+                raise ValueError("measured choice success status differs")
+            succeeded = False
+        else:
+            raise ValueError("measured choice declaration differs")
+        if set(document) != expected_keys:
             raise ValueError("measured choice declaration differs")
         raw_segments = document.get("segments")
         if not isinstance(raw_segments, list):
@@ -701,6 +760,7 @@ class RedDevelopmentMeasuredChoice:
                 document.get("observer_source_bundle_sha256"),
                 subject="observer source bundle",
             ),
+            succeeded=cast(bool, succeeded),
             policy_id=_text(document, "policy_id"),
             normalization_contract=_text(document, "normalization_contract"),
             maximum_actions=_integer(

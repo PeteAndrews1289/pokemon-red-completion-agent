@@ -23,6 +23,7 @@ from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_development_measured_choice import (
     DEVELOPMENT_MEASURED_CHOICE_KIND,
     DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
+    DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2,
     DEVELOPMENT_MEASURED_RESULT_SCHEMA,
     RedDevelopmentMeasuredChoice,
     RedDevelopmentMeasuredChoiceInput,
@@ -207,6 +208,75 @@ def _valid_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
     )
 
 
+def _valid_failed_fishing_choice(
+    tmp_path: Path,
+    *,
+    model_sha256: str = "1" * 64,
+    behavior=None,
+) -> RedDevelopmentMeasuredChoice:
+    base = _valid_choice(
+        tmp_path, model_sha256=model_sha256, behavior=behavior
+    )
+    after = base.before_observation
+    declaration = {
+        "schema": "pokemon.red.private-model106-fishing-capture-plan.v1",
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "menu_source_commit": "9" * 40,
+        "parent_episode": base.parent_episode_id,
+        "parent_checkpoint_sha256": base.parent_checkpoint_sha256,
+        "parent_state_sha256": base.parent_state_sha256,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "model_sha256": base.model_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "maximum_casts": 24,
+        "maximum_frames": 2_000_000,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        pair_id="model106-fishing-capture-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+        terminal_state_sha256="4" * 64,
+        controller_actions=92,
+        emulator_frames=2592,
+        status="retained_exception",
+    )
+    outcome = red_registered_outcome_from_observations(
+        base.before_observation,
+        after,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=False,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    return replace(
+        base,
+        choice_id="model106-fishing-capture-20260912",
+        policy_id=FISHING_DESTINATION_POLICY,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        after_observation=after,
+        after_observation_sha256=canonical_sha256(after),
+        terminal_state_sha256=segment.terminal_state_sha256,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        succeeded=False,
+    )
+
+
 def _bind_parent(store, choice, behavior):
     record = store.publish_sealed_record(
         checkpoint_record_id(choice.parent_episode_id),
@@ -336,6 +406,36 @@ def test_fishing_measured_choice_roundtrip(tmp_path):
     assert restored.independent_evaluation is False
     assert restored.authority_promotion_eligible is False
     assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+def test_failed_fishing_choice_is_a_settled_v2_training_target(tmp_path):
+    choice = _valid_failed_fishing_choice(tmp_path)
+    document = choice.public_dict()
+    restored = RedDevelopmentMeasuredChoice.from_public(document)
+
+    assert document["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2
+    assert document["succeeded"] is False
+    assert restored == choice
+    assert restored.succeeded is False
+    outcome = restored.to_observed_arm_example().outcome
+    assert outcome.verified_success is False
+    assert outcome.completion_gain == 0.0
+    assert outcome.action_cost == 92 / 30_000
+    assert outcome.frame_cost == 2592 / 3_000_000
+
+
+def test_failed_fishing_choice_requires_failed_terminal_and_explicit_v2_status(tmp_path):
+    choice = _valid_failed_fishing_choice(tmp_path)
+    with pytest.raises(ValueError, match="settled segment ordering"):
+        replace(
+            choice,
+            segments=(replace(choice.segments[0], status="retained_success"),),
+        )
+
+    document = choice.public_dict()
+    document["succeeded"] = True
+    with pytest.raises(ValueError, match="success status"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 @pytest.mark.parametrize(
@@ -650,6 +750,41 @@ def test_fit_red_player_update_with_measured_choice(tmp_path, monkeypatch):
     # Check retained hashes include the measured choice arm hash
     arm_hash = canonical_sha256(choice.to_observed_arm_example().public_dict())
     assert arm_hash in model_b.retained_example_sha256
+
+
+def test_fit_red_player_update_with_failed_measured_choice(tmp_path, monkeypatch):
+    store, _, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_failed_fishing_choice(
+        tmp_path,
+        model_sha256=model_a.model.model_sha256,
+        behavior=model_a.model,
+    )
+    choice = _bind_parent(store, choice, model_a)
+    measured_input = publish_development_measured_choice(store, choice, model_a)
+
+    fitted = fit_red_player_update(
+        store,
+        prior=model_a,
+        episodes=(request,),
+        measured_choices=(measured_input,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    model_sha256 = _model_sha(fitted)
+    record = store.find_sealed_record(
+        f"rpr-model-{model_sha256}", expected_kind="red_player_model"
+    )
+    model_b = load_player_goal_model_record_bytes(
+        record.read_bytes(), expected_model_sha256=model_sha256
+    )
+
+    assert fitted["new_settled_examples"] == 1
+    assert fitted["prior_rows_retained"] is True
+    assert model_b.model.settled_examples == model_a.model.settled_examples + 1
+    arm = choice.to_observed_arm_example()
+    assert arm.outcome.verified_success is False
+    assert canonical_sha256(arm.public_dict()) in model_b.retained_example_sha256
 
 
 def test_subsequent_fit_retention_preserves_measured_choice_and_all_prior_rows(
