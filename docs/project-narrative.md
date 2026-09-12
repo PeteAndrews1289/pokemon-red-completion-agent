@@ -1,12 +1,17 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest systems beat: Safari is now a genuine four-destination model decision rather than a named
-species route. From the exact 79-registration checkpoint, cartridge tables expose four areas that
-jointly contain six missing registrations. Model104 selected one identity-free area profile without
-input or teacher labels. Deterministic code can handle bounded Safari capture and verify a paid
-selected-area admission, but the choice has not been executed and no new lesson exists yet. Most
-interestingly, the current model preferred the lower-yield feature family; the next retained outcome
-can correct that weakness instead of hiding it. [Evidence](evidence/red-safari-capability-preflight-2026-09-12.json).
+Latest systems beat: Safari became a genuine four-destination model decision rather than a named
+species route—and the choice was played. From the 79-registration checkpoint, model104 selected one
+identity-free cartridge area. Generic transport, one paid admission, terrain-derived patrol and an
+observed two-column Safari command controller then retained one missing registration. The measured
+state is now 80 registrations, 60 living species and 64 specimens. The successful patrol saw 12
+encounters, 11 flees and one capture. [Evidence](evidence/red-model104-safari-outcome-2026-09-12.json).
+
+The result also exposed an important data-engineering distinction. The new capability harness
+retained exact state hashes and aggregate action/frame counters, but not the standard per-action
+episode journal. The capture is factual; model104 has not yet learned from it. The next step is an
+explicit lower-trust development adapter—not retroactive wording that pretends the trace exists—then
+a model105 fit only if the committed choice and before/after outcome replay exactly.
 
 Latest result: practical resupply returned the project to collection, rather than extending the
 League-combat detour. A controlled blackout and shop sequence restored19 capture balls through an

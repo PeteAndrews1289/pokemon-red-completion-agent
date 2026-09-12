@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-safari-capability-preflight**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-safari-live-outcome**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -16,7 +16,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Close the ordinary-grass and owned-level frontier ([evidence](../docs/evidence/red-model104-funded-collection-2026-09-12.json))
 - [x] Expose one generic non-grass or special acquisition family ([evidence](../docs/evidence/red-fossil-owned-evolution-2026-09-12.json))
 - [x] Qualify exact item-evolution prerequisites ([evidence](../docs/evidence/red-item-evolution-prerequisites-2026-09-12.json))
-- [x] Expose one generic Safari acquisition goal ([evidence](../docs/evidence/red-safari-capability-preflight-2026-09-12.json))
+- [x] Expose one generic Safari acquisition goal ([evidence](../docs/evidence/red-model104-safari-outcome-2026-09-12.json))
 - [ ] Fit a productive model-selected acquisition-family outcome
 
 Current model: **104 examples**. This is a small goal-value learner, not a demonstrated full-game player.
@@ -71,7 +71,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-safari-capability-preflight-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model104-safari-outcome-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -98,6 +98,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-safari-live-outcome
+
+Model104's four-way Safari area choice controlled one paid attempt. Generic transport, admission, terrain patrol and observed commands retained one missing registration:79to80 registered,59to60 living and63to64 specimens. The final patrol saw12 encounters,11 flees and1 capture. Model104 remains unchanged.
+
+**Deviation:** Four consumed integration failures were resumed from exact retained states rather than retried. The capability harness has aggregate counters and exact state hashes but lacks the normal per-action player journal, so the useful outcome is measured evidence rather than a fitted native row.
+
+**Next:** Implement a development-measured outcome trust tier and retained-corpus adapter. Admit this exact row once only if selection replay, registered transition, aggregate costs and all104 prior rows verify; otherwise preserve it as zero-row support. Then broaden item procurement and fishing.
 
 ### 2026-09-12-safari-capability-preflight
 

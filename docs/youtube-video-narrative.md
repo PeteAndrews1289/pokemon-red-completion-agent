@@ -4,13 +4,18 @@ This is an editorial outline, not a completed video or a claim that the project 
 
 ## Opening: the honest hook
 
-Newest systems beat: a four-way Safari choice. Show the cartridge-derived menu as four anonymous
-area cards, then model104 sampling one with zero teacher labels and zero gameplay. Two cards contain
-five productive encounter slots and two contain four; the current model assigns higher scores to
-the four-slot family. That is an excellent honest cliffhanger: the system has a real decision and a
-real weakness, but no outcome yet. Follow it with the tested admission/capture telemetry while
-keeping the caption **deterministic mechanics, not learned movement**. The next episode is one paid,
-bounded attempt—not a montage implying success.
+Newest systems beat: a four-way Safari choice that reaches a real capture. Show the cartridge-
+derived menu as four anonymous area cards, model104 sampling one with zero teacher labels, and that
+same choice controlling a paid visit. Then show the generic patrol's final tally: 12 encounters, 11
+flees, one missing registration retained; 79→80 registrations and 63→64 specimens. Keep the caption
+**model chose the area; deterministic mechanics controlled movement and capture**.
+
+Do not call this model105 yet. The capability harness retained exact states and aggregate counters
+but not the normal per-action training journal. That makes a strong next beat: the gameplay result
+is real while the learning claim waits for a declared trust-tier adapter. Show the four preserved
+integration failures—step-counter width, encounter handoff, two-column command observation and
+post-throw settlement—as the engineering path to the successful continuation, not as four retries
+that were erased.
 
 Newest systems beat: [fossil and owned evolution](work-sessions/2026-09-12-fossil-owned-evolution.md).
 Open on the real progression: **77 → 79 registered species**, with model104 deliberately unchanged.

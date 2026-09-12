@@ -3,17 +3,18 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and
 [roles](../AGENT_COORDINATION.md).
 
-The active endpoint is model104 with 79 registrations, 59 living species, 63 specimens and 45
-required Red registrations remaining. The cartridge now exposes four productive Safari areas
-covering six missing registrations. An exact zero-input restore let model104 choose among four
-identity-free rows; it sampled candidate1. No gameplay or fit followed, so the learner remains at
-104 settled examples.
+The latest measured endpoint is model104 with 80 registrations, 60 living species, 64 specimens and
+44 required Red registrations remaining. Model104 selected candidate1 from four identity-free,
+cartridge-derived Safari-area rows. Generic transport, one paid admission, a terrain-derived patrol
+and observed Safari commands retained one missing registration. The learner remains at 104 settled
+examples because this capability harness did not write the standard per-action episode journal.
 
-The generic capture loop and single-admission/selected-area contract are tested. Review the next
-join for authenticated endpoint-to-Fuchsia transport, local patrol bounds, Safari-ball accounting,
-fresh-ledger settlement and route identity leakage. The model currently ranks both four-productive-
-slot rows above both five-slot rows; do not silently replace its sampled binding with a deterministic
-higher-yield answer.
+The next review target is the proposed development-measured outcome trust tier. It must replay the
+committed model/menu choice, verify before/after registration and physical stock, preserve aggregate
+costs, mark the missing action trace explicitly and prevent this evidence from becoming an
+independent evaluation. Reject retroactive native-trace wording, altered targets, omitted failures,
+or loss of any of the 104 prior rows. After admission, review the model105 fit and retained terminal;
+if admission fails, model104 must remain authoritative.
 
 Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
 useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's

@@ -33,14 +33,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Join the exact endpoint to the tested Safari admission and selected-area patrol, then retain one model-selected outcome before broadening another acquisition family.
+- Next decision: Admit or reject the exact measured Safari outcome through an explicit trust-tier adapter, preserve the80-registration terminal, then broaden item procurement and fishing without named-species routes.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Turn a model-selected, cartridge-derived Safari area into one retained Red acquisition outcome without a species route. |
-| Authority now | The bounded-development learner has104 fitted examples and79 registrations. It has selected useful income, purchase, acquisition, evolution and recovery goals in related saved-state episodes; deterministic code still executes navigation, combat, capture and menus. The latest fossil and evolution results were forced support, not new learned authority. No independent full-game competence is claimed. |
+| Authority now | The bounded-development learner has104 fitted examples. Its latest measured Red state has80 registrations after one model-selected Safari area produced a capture; deterministic code still executes navigation, combat, capture and menus. The Safari outcome is not fitted yet. No independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The exact checkpoint cannot authenticate transport, pay one admission, reach the sampled area and preserve one bounded generic encounter outcome. |
@@ -59,18 +59,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-safari-capability-preflight** · status **active** · evidence [qualification](docs/evidence/red-safari-capability-preflight-2026-09-12.json)
+**2026-09-12-safari-live-outcome** · status **active** · evidence [qualification](docs/evidence/red-model104-safari-outcome-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Safari adds a reusable cartridge-derived acquisition family and a genuine model destination choice. Its outcome directly advances or trains shared-registration planning; no named-species route or new title is needed. |
-| Learning output | No new model examples were created. The exact zero-input preflight exposed four distinct areas covering six missing registrations; model104 sampled candidate1 with zero teacher labels, actions or frames. Model104 and79 registrations are unchanged. |
-| Authority delta | Model104 made one action-free identity-free choice among four real Safari areas. Deterministic code now inventories the cartridge, handles Safari capture and verifies one paid selected-area admission. No gameplay, outcome, fitted example or authority promotion occurred. |
-| Transfer result | The cartridge-catalog and identity-free area-choice boundary is intended for later adapters, but this Red preflight is not a held-out modification, Blue or cross-title transfer result. |
-| Blocker | The exact retained endpoint is not yet joined to the stable Fuchsia Center boundary, and the selected area still needs a bounded generic patrol. The model's sampled lower-yield feature profile must be executed honestly rather than replaced by a deterministic higher-yield choice. |
-| Decision | Authenticate the exact endpoint-to-Fuchsia join, bind one generic local patrol to the already sampled area and execute one admission. Preserve the observed result once; fit only if the existing learning contract admits it. |
-| Next session | Connect authenticated transport and a generic selected-area patrol, then execute exactly one bounded model-selected Safari admission and retain its real outcome. |
-| Next falsifier | The sampled Safari area cannot produce any readable retained outcome before the admission, step, encounter or ball bound closes. |
+| Product alignment | Safari now demonstrates a reusable cartridge-derived acquisition family and a genuine model destination choice producing one registration. The next work converts measured gameplay into honest learning data rather than adding more species routes. |
+| Learning output | The live attempt advanced79to80 registrations and63to64 specimens. It added zero eligible fitted examples, so model104 remains unchanged. The result is measured development evidence pending an explicit trust-tier adapter. |
+| Authority delta | Model104 made one identity-free choice among four real Safari areas and that choice controlled one paid live attempt. Deterministic code executed transport, admission, terrain-derived patrol and observed capture commands. One missing registration was retained, but no fitted example or authority promotion occurred. |
+| Transfer result | Cartridge-derived inventory, terrain patrol and identity-free area choice are reusable adapter boundaries. This single Red outcome is not an unseen seed, modified-ROM, Blue or cross-title transfer result. |
+| Blocker | The productive Safari harness retained exact state hashes and aggregate counters but not the standard per-action player journal. The result cannot be called a native traced training row until an explicit development-measured trust tier authenticates it. |
+| Decision | Implement a typed development-measured Safari outcome adapter, replay the committed selection and reconstruct its registered before/after outcome. Fit model105 only if all104 prior rows are retained and the missing trace is explicit; otherwise keep model104 and preserve the capture as support. |
+| Next session | Implement and mutation-test the measured-harness outcome adapter and retained-corpus path, then admit this exact Safari result once or reject it closed before broadening item procurement and fishing. |
+| Next falsifier | The committed Safari menu, model sample and registered before/after transition cannot be reconstructed without inventing a per-action trace or discarding a prior model104 row. |
 | Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions
