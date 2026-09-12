@@ -32,6 +32,7 @@ from pokemon_red_completion.red_development_measured_choice import (
     load_red_development_measured_choice_example,
     publish_development_measured_choice,
 )
+from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_incremental_fit import (
     fit_incremental_measured_choice,
@@ -174,6 +175,38 @@ def _valid_choice(
     )
 
 
+def _valid_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+    base = _valid_choice(tmp_path)
+    declaration = {
+        "schema": "pokemon.red.private-model105-fishing-capture-plan.v1",
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "parent_state_sha256": base.parent_state_sha256,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "model_sha256": base.model_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "maximum_casts": 24,
+        "maximum_frames": 2_000_000,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        pair_id="model105-fishing-capture-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+    )
+    return replace(
+        base,
+        choice_id="model105-fishing-capture-20260912",
+        policy_id=FISHING_DESTINATION_POLICY,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
 def _bind_parent(store, choice, behavior):
     record = store.publish_sealed_record(
         checkpoint_record_id(choice.parent_episode_id),
@@ -291,6 +324,44 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert arm.outcome.target_vector is not None
     assert arm.outcome.action_cost == 150 / 30_000
     assert arm.outcome.frame_cost == 2400 / 3_000_000
+
+
+def test_fishing_measured_choice_roundtrip(tmp_path):
+    choice = _valid_fishing_choice(tmp_path)
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+
+    assert restored == choice
+    assert restored.policy_id == FISHING_DESTINATION_POLICY
+    assert restored.teacher_labels == 0
+    assert restored.independent_evaluation is False
+    assert restored.authority_promotion_eligible is False
+    assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_casts", 25),
+        ("maximum_frames", 2_000_001),
+        ("menu_file_sha256", "not-a-hash"),
+        ("parent_state_sha256", "0" * 64),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+    ),
+)
+def test_fishing_declaration_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_fishing_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration[key] = value
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 def test_adversarial_model_identity_tampering(tmp_path):

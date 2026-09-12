@@ -28,6 +28,7 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.living_dex_policy_codec import restore_living_dex_policy_menu
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_model import RedPlayerModelRecord
 from pokemon_red_completion.red_registered_observation import REGISTERED_OBSERVATION_SCHEMA
@@ -51,6 +52,8 @@ DEVELOPMENT_MEASURED_MAXIMUM_FRAMES = 3_000_000
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
 _SEGMENT_STATUSES = frozenset({"retained_exception", "retained_failure", "retained_success"})
+_SAFARI_DECLARATION_SCHEMA = "pokemon.red.private-safari-outcome-declaration.v1"
+_FISHING_DECLARATION_SCHEMA = "pokemon.red.private-model105-fishing-capture-plan.v1"
 _CHOICE_KEYS = {
     "action_trace_available",
     "after_observation",
@@ -138,6 +141,88 @@ def _float_tuple(value: object, *, subject: str) -> tuple[float, ...]:
     if any(not math.isfinite(item) for item in result):
         raise ValueError(f"measured choice {subject} differs")
     return result
+
+
+def _validate_selection_declaration(
+    declaration: Mapping[str, object],
+    *,
+    policy_id: str,
+    parent_checkpoint_sha256: str,
+    parent_state_sha256: str,
+    menu_sha256: str,
+    model_sha256: str,
+    selection_seed: int,
+    selected_candidate_index: int,
+    first_segment_pair_id: str,
+) -> None:
+    """Validate the immutable pre-input receipt for a supported measured policy."""
+
+    common_mismatch = (
+        declaration.get("model_sha256") != model_sha256
+        or declaration.get("menu_sha256") != menu_sha256
+        or declaration.get("selected_candidate_index") != selected_candidate_index
+    )
+    if policy_id == SAFARI_AREA_CHOICE_POLICY:
+        expected_keys = {
+            "capture_quota",
+            "maximum_encounters",
+            "maximum_semantic_actions",
+            "menu_sha256",
+            "model_sha256",
+            "pair_id",
+            "parent_checkpoint_sha256",
+            "retry_allowed",
+            "schema",
+            "seed",
+            "selected_candidate_index",
+            "source_bundle_sha256",
+            "source_commit",
+        }
+        mismatch = (
+            set(declaration) != expected_keys
+            or declaration.get("schema") != _SAFARI_DECLARATION_SCHEMA
+            or declaration.get("pair_id") != first_segment_pair_id
+            or declaration.get("parent_checkpoint_sha256")
+            != parent_checkpoint_sha256
+            or declaration.get("seed") != selection_seed
+            or declaration.get("retry_allowed") is not False
+            or declaration.get("maximum_semantic_actions") != 300
+            or declaration.get("maximum_encounters") != 40
+            or declaration.get("capture_quota") != 1
+        )
+    elif policy_id == FISHING_DESTINATION_POLICY:
+        expected_keys = {
+            "maximum_casts",
+            "maximum_frames",
+            "menu_file_sha256",
+            "menu_sha256",
+            "model_sha256",
+            "parent_state_sha256",
+            "retry_authorized",
+            "schema",
+            "selected_candidate_index",
+            "source_bundle_sha256",
+            "source_commit",
+            "teacher_labels",
+        }
+        mismatch = (
+            set(declaration) != expected_keys
+            or declaration.get("schema") != _FISHING_DECLARATION_SCHEMA
+            or declaration.get("parent_state_sha256") != parent_state_sha256
+            or declaration.get("retry_authorized") is not False
+            or declaration.get("maximum_casts") != 24
+            or declaration.get("maximum_frames") != 2_000_000
+            or declaration.get("teacher_labels") != 0
+            or _SHA256.fullmatch(str(declaration.get("menu_file_sha256"))) is None
+        )
+    else:
+        raise ValueError("measured choice policy differs")
+    if common_mismatch or mismatch:
+        raise ValueError("measured choice pre-input declaration differs")
+    _git_commit(declaration.get("source_commit"), subject="selection source commit")
+    _sha256(
+        declaration.get("source_bundle_sha256"), subject="selection source bundle"
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -357,47 +442,18 @@ class RedDevelopmentMeasuredChoice:
             )
         ):
             raise ValueError("measured choice segment inventory differs")
-        expected_declaration_keys = {
-            "capture_quota",
-            "maximum_encounters",
-            "maximum_semantic_actions",
-            "menu_sha256",
-            "model_sha256",
-            "pair_id",
-            "parent_checkpoint_sha256",
-            "retry_allowed",
-            "schema",
-            "seed",
-            "selected_candidate_index",
-            "source_bundle_sha256",
-            "source_commit",
-        }
-        if (
-            not isinstance(self.selection_declaration, Mapping)
-            or set(self.selection_declaration) != expected_declaration_keys
-            or self.selection_declaration.get("schema")
-            != "pokemon.red.private-safari-outcome-declaration.v1"
-            or self.selection_declaration.get("pair_id") != self.segments[0].pair_id
-            or self.selection_declaration.get("parent_checkpoint_sha256")
-            != self.parent_checkpoint_sha256
-            or self.selection_declaration.get("model_sha256") != self.model_sha256
-            or self.selection_declaration.get("menu_sha256") != self.menu.policy_sha256
-            or self.selection_declaration.get("seed") != self.selection_seed
-            or self.selection_declaration.get("selected_candidate_index")
-            != self.selected_candidate_index
-            or self.selection_declaration.get("retry_allowed") is not False
-            or self.selection_declaration.get("maximum_semantic_actions") != 300
-            or self.selection_declaration.get("maximum_encounters") != 40
-            or self.selection_declaration.get("capture_quota") != 1
-        ):
+        if not isinstance(self.selection_declaration, Mapping):
             raise ValueError("measured choice pre-input declaration differs")
-        _git_commit(
-            self.selection_declaration.get("source_commit"),
-            subject="selection source commit",
-        )
-        _sha256(
-            self.selection_declaration.get("source_bundle_sha256"),
-            subject="selection source bundle",
+        _validate_selection_declaration(
+            self.selection_declaration,
+            policy_id=self.policy_id,
+            parent_checkpoint_sha256=self.parent_checkpoint_sha256,
+            parent_state_sha256=self.parent_state_sha256,
+            menu_sha256=self.menu.policy_sha256,
+            model_sha256=self.model_sha256,
+            selection_seed=self.selection_seed,
+            selected_candidate_index=self.selected_candidate_index,
+            first_segment_pair_id=self.segments[0].pair_id,
         )
         _sha256(self.selection_declaration_sha256, subject="selection declaration hash")
         if (
@@ -461,8 +517,6 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("measured choice resource costs differ")
         _git_commit(self.observer_source_commit, subject="observer source commit")
         _sha256(self.observer_source_bundle_sha256, subject="observer source bundle")
-        if self.policy_id != SAFARI_AREA_CHOICE_POLICY:
-            raise ValueError("measured choice policy differs")
         if (
             self.action_trace_available is not False
             or self.independent_evaluation is not False
