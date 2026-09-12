@@ -5,41 +5,36 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Latest measured endpoint: adaptive fishing loop / model108
+## Latest measured endpoint: mixed goals and storage relief / model109
 
-The current restart is `red-model108-fishing-measured-terminal-20260912`, checkpoint record SHA-256
-`33657a3d87e716309d1fdbea2066079401249e0ff3aaed864c232807e76414ba`. It reopens the exact earned
-terminal with **82 registered species / 62 living species / 66 specimens** and model108.
+The current restart is `red-model109-storage-relief-reconstructed-terminal-20260912`, checkpoint
+record SHA-256 `90163f2776eae82544941ea0907d1cac39804883ee51608fba6e7e12bd6dbbd5`.
+It reopens **82 registered species / 62 living species / 66 specimens**, with 20 immediate capture
+slots and model109.
 
-- Registered-objective model: **108 settled examples**
-- Model SHA-256: `50ef6eae8e461ad6cf125c0e1858640c10f2bc27d6985a570e31c5bb1cb5e600`
-- First new lesson: model106 selected candidate0 from eight anonymous fishing destinations; the
-  route stopped at an input-readiness boundary after **92 actions / 2,592 frames** and the failed
-  outcome became row107
-- Support: three bounded CANCEL pulses restored field input in **6 actions / 432 frames**; this was
-  deterministic support with zero training examples
-- Successor lesson: model107 rebuilt eight alternatives, selected candidate6 and the generic route,
-  fishing and capture chain added one registration in **1,101 actions / 57,132 frames**, producing
-  model108
-- Teacher labels, evaluation accesses and authority promotions: **0**
+- Registered-objective model: **109 settled examples**
+- Model SHA-256: `726171e67b5c914f1e870b70f2f8992e55b5189117adce96dc4182c84bfa23af`
+- Learned lesson: model108 selected `restore_team` from six live mixed-family candidates at
+  probability **0.236989**; 83 actions / 3,900 frames verified the outcome and produced model109
+- Deterministic support: the next state had a full active box despite 180 free slots elsewhere; a
+  semantic routed storage goal changed Box 4 to Box 5 and immediate capacity 0→20
+- Collection, bag and cash were preserved; teacher labels, evaluation accesses and promotions: **0**
 
-This is the first consecutive failure-update-success loop on an earned collection state. The failed
-row did not get retried or rewritten; after fitting it, the next sampled destination changed and
-succeeded. That demonstrates a functioning online learning loop, not independent evidence that the
-weights alone caused the change or that fishing policy is already efficient. Both rows lack a
-per-action journal and remain training-only.
+The storage support step completed, but its private reporter failed after saving the terminal. It
+was not replayed. A zero-input reconstruction verified both endpoints. Exact execution meter totals
+are unavailable, so the checkpoint conservatively charges the full declared 30,000-action and
+3,000,000-frame bounds. Do not present those bounds as observed cost.
 
-The route repair is generic: visible non-battle scripted dialogue is now a typed interruption and
-may be resolved under an explicit bounded pulse budget. The resumed map and position are observed,
-so the route replans rather than assuming the dialogue left the player in place. Generic unbounded
-dialogue dismissal remains forbidden.
+The reusable split is now explicit: the model ranks high-level goal candidates; deterministic Red
+adapters route, heal and operate the PC; typed postconditions decide whether the observed result is
+eligible for training. Storage relief added no model row.
 
-Next: restore model108 action-free and expose the broadest honest multi-option acquisition menu.
-Prefer a useful choice across acquisition families; otherwise collect one more varied fishing
-outcome. Stop if only forced support remains, a named-species route is required or progress cannot
-be retained once.
+Next: reopen this 20-slot checkpoint action-free, expose the broadest useful acquisition menu,
+execute one bounded model109 choice, retain success or failure and fit model110 only from eligible
+evidence. Keep cross-acquisition-family coverage open until multiple acquisition mechanics are
+simultaneously executable.
 
-[Latest report](docs/work-sessions/2026-09-12-model108-adaptive-fishing-loop.md) · [Latest evidence](docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json)
+[Latest report](docs/work-sessions/2026-09-12-model109-mixed-and-storage.md) · [Latest evidence](docs/evidence/red-model109-mixed-and-storage-2026-09-12.json)
 
 ## Prior measured endpoint: Safari capture / model105
 

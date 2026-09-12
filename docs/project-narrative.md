@@ -1,5 +1,18 @@
 # Project story: from finishing Red to learning useful choices
 
+Latest systems beat: model108 chose healing from a live six-candidate menu that crossed goal
+families. The verified83-action outcome became row109. The next state exposed a practical
+collection problem: active Box4 was full even though180 slots elsewhere were free. A new semantic
+storage goal routed to a PC, switched to Box5 and restored20 immediate capture slots while keeping
+82 registrations,66 specimens and ₽58 intact. Storage support added no model row.
+
+The private reporter failed after saving that terminal, so the step was not replayed. A zero-input
+reconstruction verified the before/after state and the project conservatively charged the full
+declared cost bounds because exact meters were unavailable. This is the architecture in miniature:
+learned high-level choice, deterministic game adapter, typed verification and honest recovery from
+incomplete telemetry. It remains bounded Red training, not proof of full-game autonomy or transfer.
+[Evidence](evidence/red-model109-mixed-and-storage-2026-09-12.json).
+
 Latest systems beat: the fishing loop has now retained a failure, updated and continued to a
 different successful choice. From the 81-registration model106 state, eight anonymous destinations
 were executable. The first selected route stopped at a real input-readiness boundary after92

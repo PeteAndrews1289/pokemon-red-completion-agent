@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Adapt model-directed, cartridge-derived Red collection across both failed and successful destination outcomes from a durable 82-registration model108 restart.",
-      "cheapest_falsifier": "The model108 restart cannot expose another useful multi-option acquisition menu or its selected goal cannot settle under the existing bounded executor contract.",
+      "capability": "Choose among mixed high-level Red goals, preserve the measured outcome, and recover capture capacity through semantic routed storage management.",
+      "cheapest_falsifier": "The storage-relieved model109 restart cannot expose at least two useful acquisition candidates or its selected goal cannot settle under the existing bounded executor contract.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model106 selected one of eight identity-free fishing destinations, retained a route-readiness failure and fitted it into model107. After a six-action zero-label dialogue recovery, model107 rebuilt the menu, selected a different destination, and the generic route/fishing/capture chain added registration 82. That success was fitted into model108 with 108 settled examples. No evaluation or authority promotion occurred.",
-        "blocker": "The loop now adapts across one failure and one success, but both are same-lineage fishing development. More varied outcomes, and then mixed acquisition families, are required before destination preferences or sustained Red composition can be trusted.",
-        "decision": "Restore the published 82-registration model108 checkpoint action-free and ask the goal layer for the next genuine multi-option acquisition menu. Prefer a mixed-family menu if available; otherwise retain one more varied fishing outcome without adding named-species routes or moving into Crystal.",
+        "authority_delta": "Model108 selected restore_team from a real mixed-family menu and the verified outcome produced model109 with 109 settled examples. A subsequent full-active-box condition was handled as deterministic zero-label support: routed storage relief changed Box4 to Box5 and immediate capture capacity 0 to 20 without changing the model, collection or cash.",
+        "blocker": "Capture capacity is restored, but the next learned acquisition menu has not yet been rebuilt from the new terminal. The storage reporter also lost exact action and frame totals after saving the successful terminal; the attempt was not replayed and its full declared bounds are charged.",
+        "decision": "Reopen the storage-relieved model109 checkpoint action-free, expose the broadest honest acquisition menu, execute one bounded model-selected choice and fit model110 only from an eligible observed outcome.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json",
-          "sha256": "a754e657d392be1bd63e9f11dce3c93d2ecc7c0699628e0d466c7b8cc3827f79"
+          "path": "docs/evidence/red-model109-mixed-and-storage-2026-09-12.json",
+          "sha256": "cbd52801caf5eeecb19cb40572b393427ffa67be12c27ff137985e5adfd51ad1"
         },
-        "learning_output": "Two genuine model-selected outcomes added two training-only rows: a 92-action route-readiness failure and a 1,101-action fishing success. The failed row changed the next sampled destination; the successor registered one species and produced model108 while retaining all 107 prior examples. Teacher labels, independent evaluation and promotions remained zero.",
-        "next_falsifier": "Model108 exposes fewer than two useful executable goals, repeats a physically unsuitable choice without an observable feature distinction, or cannot settle its next selected goal without a species-specific patch.",
-        "next_session_goal": "Reopen the 82-registration model108 restart without input, build the broadest honest acquisition menu, and let the model control one new bounded choice. Retain success or failure and stop if the menu collapses to forced support.",
-        "product_alignment": "The online loop has now demonstrated the behavior required for learning: make a high-level choice, retain a failure, update, choose differently, execute generic skills, verify a new shared registration and continue from the earned state. It is still bounded same-lineage Red development, not a complete player.",
-        "session_id": "2026-09-12-model108-adaptive-fishing-loop",
+        "learning_output": "One verified mixed-family restore choice added one training-only row and produced model109 with 109 settled examples. Routed storage relief was a deterministic singleton support step with zero labels and zero fit rows. Teacher labels, independent evaluation and promotions remained zero.",
+        "next_falsifier": "Model109 exposes fewer than two useful acquisition candidates after storage relief, or its selected goal cannot settle without a species-specific patch.",
+        "next_session_goal": "Reopen the 20-slot model109 restart without input, build the broadest honest acquisition menu, and let the model control one bounded choice. Retain success or failure and stop if the menu collapses to forced support.",
+        "product_alignment": "The learner has now crossed goal families and the runtime can recover an authentic collection bottleneck without confusing support with learning. This advances reusable collection composition, but remains same-lineage Red development rather than a complete player or transfer result.",
+        "session_id": "2026-09-12-model109-mixed-and-storage",
         "status": "active",
         "stop_condition": "Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal.",
-        "transfer_result": "The alternating measured/support restart chain, identity-free menu and failure-retaining update are reusable architecture. These Red outcomes remain same-lineage development, not an unseen seed, modified-ROM, Blue or cross-title transfer result."
+        "transfer_result": "The semantic manage_storage goal, capacity observation and preservation verifier are transferable concepts; Red PC navigation and menu controls remain adapter code. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet."
       },
       "learned_authority": {
-        "current": "The bounded-development learner has 108 fitted examples, including lower-trust measured Safari and fishing choices. Its latest Red state has 82 registrations and is published as a durable model108 restart. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed.",
+        "current": "The bounded-development learner has 109 fitted examples, including a verified mixed-family restore choice. Its latest Red state has 82 registrations and a durable model109 restart with 20 immediate capture slots. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Use the 82-registration model108 restart to expose the broadest honest multi-option acquisition menu, then collect one bounded model-selected outcome and test whether the planner can move beyond fishing without identity-bearing policy features.",
+      "next_decision": "Use the storage-relieved 82-registration model109 restart to expose the broadest honest acquisition menu, collect one bounded model-selected outcome, and fit model110 only if the observed result is eligible.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -242,7 +242,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 108,
+        "registered_train_examples": 109,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

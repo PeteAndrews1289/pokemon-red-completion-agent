@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model108-adaptive-fishing-loop**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model109-mixed-and-storage**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Repeat model-directed Red collection: 5/6 acceptance items (83%).**
+**Broaden model-directed Red collection: 7/9 acceptance items (78%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -18,8 +18,11 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [ ] Expose a useful choice across more than one acquisition family
+- [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
+- [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
+- [ ] Execute and fit the next model-selected acquisition from the relieved state
 
-Current model: **108 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **109 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -71,7 +74,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -98,6 +101,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model109-mixed-and-storage
+
+Model108 selected restore_team from a mixed live menu;83actions/3900frames verified the outcome and one training-only row produced model109 with109examples. The next state had a full active box despite180free slots elsewhere. New routed storage relief changed Box4toBox5 and immediate capacity0to20 while preserving82registrations/66specimens and cash58; it added zero labels.
+
+**Deviation:** The storage skill completed but its private reporter failed after saving the terminal. The consumed step was not replayed. A zero-input reconstruction verified the outcome, while exact execution costs remain unknown and the full declared bounds are conservatively charged. This support result does not advance learned authority or evaluation.
+
+**Next:** Reopen the storage-relieved model109 checkpoint action-free, expose the broadest useful acquisition menu, execute one model-selected outcome and fit model110 only if eligible. Keep mixed acquisition-family coverage open until more than one acquisition mechanic is genuinely executable.
 
 ### 2026-09-12-model108-adaptive-fishing-loop
 
