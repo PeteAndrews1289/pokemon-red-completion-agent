@@ -258,6 +258,7 @@ def available_red_fossil_targets(
 @dataclass(frozen=True, slots=True)
 class RedFossilTiming:
     wait_frames: int = 180
+    npc_poll_frames: int = 30
     maximum_dialogue_pulses: int = 20
     maximum_npc_replans: int = 12
     maximum_controller_actions: int = 512
@@ -266,6 +267,7 @@ class RedFossilTiming:
     def __post_init__(self) -> None:
         for name in (
             "wait_frames",
+            "npc_poll_frames",
             "maximum_dialogue_pulses",
             "maximum_npc_replans",
             "maximum_controller_actions",
@@ -498,7 +500,7 @@ class RedRoutedFossilRevival:
         actions: Gen1FieldMovePort,
         observer: Gen1TraversalObserver,
         scientist_at: tuple[int, int],
-    ) -> int:
+    ) -> int | None:
         current = observer.observe()
         candidates = (
             (scientist_at[0] + 1, scientist_at[1]),
@@ -521,7 +523,7 @@ class RedRoutedFossilRevival:
             if _supported_plan(plan, allow_cut=True, allow_surf=True):
                 plans.append((plan.cost, len(plan.steps), order, plan))
         if not plans:
-            raise RedFossilAcquisitionError("no live route reaches the fossil scientist")
+            return None
         plan = min(plans, key=lambda row: row[:3])[3]
         report = execute_route(
             plan,
@@ -554,10 +556,26 @@ class RedRoutedFossilRevival:
             scientist = self._scientist()
             facing = _adjacent_facing(player, scientist.at)
             if facing is None:
-                route_steps += self._route_to_scientist(actions, observer, scientist.at)
+                approached = self._route_to_scientist(actions, observer, scientist.at)
+                if approached is None:
+                    # The scientist roams horizontally behind a counter.  Some
+                    # live positions have no standable adjacent tile, so wait
+                    # for a bounded poll interval instead of inventing a route
+                    # through furniture or treating normal NPC motion as fatal.
+                    self.actions.execute(
+                        MacroAction(
+                            MacroActionKind.WAIT,
+                            repeat=self.timing.npc_poll_frames,
+                        )
+                    )
+                    continue
+                route_steps += approached
                 continue
             if self.reader.read_player_facing() != facing:
-                self._pulse(MacroActionKind.MOVE, facing)
+                # Do not use ``_pulse`` here: its dialogue settle wait gives a
+                # roaming NPC time to leave the interaction boundary between
+                # the facing input and the immediately following A press.
+                self.actions.execute(MacroAction(MacroActionKind.MOVE, facing))
                 after = self.reader.read()
                 if (
                     after.map_id != FOSSIL_ROOM_MAP_ID

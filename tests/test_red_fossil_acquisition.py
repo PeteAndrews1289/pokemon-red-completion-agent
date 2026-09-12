@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
+from pokemon_red_completion.actions import MacroActionKind
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalKind,
@@ -33,6 +34,7 @@ from pokemon_red_completion.red_fossil_acquisition import (
     RedFossilExecution,
     RedFossilGoalProvider,
     RedFossilPhase,
+    RedFossilTiming,
     RedRoutedFossilRevival,
     available_red_fossil_targets,
     bind_available_fossil_acquisition,
@@ -293,3 +295,98 @@ def test_fossil_interaction_replans_to_roaming_scientists_live_position(
     ) == 1
     assert routed == [(2, 6)]
     assert (reader.raw.player_y, reader.raw.player_x) == (3, 6)
+
+
+def test_fossil_facing_does_not_wait_before_the_interaction_boundary() -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_LAB_FOSSIL_ROOM,
+        player_y=2,
+        player_x=5,
+    )
+    reader.facing = "up"
+    reader.objects = (
+        CurrentMapObject(1, 0x20, (2, 6), 1, 24),
+        CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+    )
+
+    class Actions:
+        actions_executed = 0
+
+        def __init__(self) -> None:
+            self.actions = []
+
+        def execute(self, action):
+            self.actions.append(action)
+            if action.kind is MacroActionKind.MOVE:
+                reader.facing = str(action.value)
+
+    actions = Actions()
+    executor = RedRoutedFossilRevival(
+        actions,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        SimpleNamespace(),  # type: ignore[arg-type]
+    )
+
+    assert executor._position_and_face_scientist(  # noqa: SLF001
+        SimpleNamespace(),  # type: ignore[arg-type]
+        SimpleNamespace(),  # type: ignore[arg-type]
+    ) == 0
+    assert [(action.kind, action.value) for action in actions.actions] == [
+        (MacroActionKind.MOVE, "right")
+    ]
+
+
+def test_fossil_interaction_polls_when_scientist_is_behind_counter(
+    monkeypatch,
+) -> None:
+    reader = _Reader()
+    reader.raw = replace(
+        reader.raw,
+        map_id=MapId.CINNABAR_LAB_FOSSIL_ROOM,
+        player_y=2,
+        player_x=5,
+    )
+    reader.facing = "right"
+    reader.objects = (
+        CurrentMapObject(1, 0x20, (2, 7), 1, 24),
+        CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+    )
+
+    class Actions:
+        actions_executed = 0
+
+        def __init__(self) -> None:
+            self.actions = []
+
+        def execute(self, action):
+            self.actions.append(action)
+            assert action.kind is MacroActionKind.WAIT
+            reader.objects = (
+                CurrentMapObject(1, 0x20, (2, 6), 1, 24),
+                CurrentMapObject(2, 0x20, (6, 7), 2, 20),
+            )
+
+    actions = Actions()
+    timing = RedFossilTiming(npc_poll_frames=24)
+    executor = RedRoutedFossilRevival(
+        actions,  # type: ignore[arg-type]
+        reader,  # type: ignore[arg-type]
+        SimpleNamespace(frame_count=0),
+        SimpleNamespace(),  # type: ignore[arg-type]
+        timing=timing,
+    )
+    monkeypatch.setattr(
+        RedRoutedFossilRevival,
+        "_route_to_scientist",
+        lambda *_args: None,
+    )
+
+    assert executor._position_and_face_scientist(  # noqa: SLF001
+        SimpleNamespace(),  # type: ignore[arg-type]
+        SimpleNamespace(),  # type: ignore[arg-type]
+    ) == 0
+    assert len(actions.actions) == 1
+    assert actions.actions[0].repeat == 24
