@@ -26,8 +26,9 @@ retry the Safari choice, reset resources or move into Crystal.
 
 Flash worked through `agy` on an isolated branch and drafted the broad measured-choice path. Codex
 found and repaired weak probability replay, permissive schemas, unverified segment continuity and
-resource-cost trust before integration. Claude's CLI session was logged out, so no Claude audit is
-claimed. No external agent is currently required for the next ordinary implementation pass.
+resource-cost trust before integration. After re-authentication, Claude found and Codex accepted a
+dashboard trust-block omission defect. Claude also recommended a distinct measured-terminal import
+and fishing before stone procurement. No external agent is currently required for implementation.
 
 ## Reviewer brief
 

@@ -36,6 +36,12 @@ def test_current_measured_choice_is_visible_without_becoming_native_evaluation()
     receipt["trust"]["authority_promotion_eligible"] = True
     with pytest.raises(ValueError, match="measured-choice trust boundary"):
         _training_projection(receipt)
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-model105-measured-safari-fit-2026-09-12.json").read_text()
+    )
+    receipt.pop("trust")
+    with pytest.raises(ValueError, match="measured-choice"):
+        _training_projection(receipt)
 
 
 def test_recovery_session_reports_last_fit_without_crediting_unsettled_attempt():

@@ -40,7 +40,7 @@ Not the product:
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Preserve the 80-registration Red terminal and expose the next useful generic acquisition-family choice to model105. |
-| Authority now | The bounded-development learner has105 fitted examples, including one explicitly lower-trust measured Safari choice. Its latest measured Red state has80 registrations. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed. |
+| Authority now | The bounded-development learner has105 fitted examples, including one explicitly lower-trust measured Safari choice. Its latest measured Red state has80 registrations but is not yet restartable through the ordinary player path. Deterministic code still executes navigation, combat, capture and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | An action-free restore cannot expose at least two physically executable, identity-free item-procurement or fishing alternatives from the retained terminal. |

@@ -17,6 +17,8 @@ measured Safari row as independent evaluation, or any loss of the 105-row corpus
 Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
 useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's
 useful role is architecture, portability and broad implementation review through `agy`. Flash
-drafted the measured-choice integration; Codex materially hardened it. Claude's CLI was logged out
-during this gate, so no Claude review is claimed. Neither external review should block ordinary
-development; disagreements are resolved against the mission and executable evidence.
+drafted the measured-choice integration; Codex materially hardened it. After re-authentication,
+Claude found a dashboard trust-block omission defect and recommended a distinct measured-terminal
+restart wrapper plus fishing before stone procurement. Codex accepted both findings. Neither
+external review should block ordinary development; disagreements are resolved against the mission
+and executable evidence.

@@ -38,8 +38,9 @@ promotion. It cannot silently become sealed evidence later.
 Antigravity Flash drafted the broad record/fitter path through `agy`. Codex found that the draft
 trusted self-reported probabilities and aggregate hashes too heavily, then added model-derived
 score replay, strict schemas, exact segment continuity, resource-cost equality, parent-checkpoint
-bindings and retained-corpus protections. Claude was not used because its CLI session was logged
-out; that did not block the implementation or adjudication.
+bindings and retained-corpus protections. After re-authentication, Claude found a dashboard
+presentation gap: a measured receipt could omit its trust block and receive native wording. The
+projection now derives measured status from the fit count and requires the lower-trust block.
 
 Focused verification passed 164 tests, Ruff and mypy across 487 source files. The new record also
 survived a read-only post-fit inventory audit.
