@@ -35,6 +35,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
 )
@@ -181,6 +182,7 @@ def _validate_selection_declaration(
 ) -> None:
     """Validate the immutable pre-input receipt for a supported measured policy."""
 
+    selection_source_commit = declaration.get("source_commit")
     common_mismatch = (
         declaration.get("model_sha256") != model_sha256
         or declaration.get("menu_sha256") != menu_sha256
@@ -280,6 +282,13 @@ def _validate_selection_declaration(
             "qualification_ci_run_id",
             "selected_binding_ref",
         }
+        frozen_choice_keys = (legacy_keys - {"selected_option_kind", "source_commit"}) | {
+            "current_repository_head",
+            "executable_source_commit",
+            "policy_queries_during_execution",
+            "qualification_ci_run_id",
+            "selected_binding_ref",
+        }
         schema = declaration.get("schema")
         shared_mismatch = (
             declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
@@ -309,13 +318,30 @@ def _validate_selection_declaration(
                 or not declaration["selected_binding_ref"]
                 or shared_mismatch
             )
+        elif schema == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA:
+            qualification_ci_run_id = declaration.get("qualification_ci_run_id")
+            selection_source_commit = declaration.get("executable_source_commit")
+            mismatch = (
+                set(declaration) != frozen_choice_keys
+                or declaration.get("maximum_frames") != 500_000
+                or declaration.get("policy_queries_during_execution") != 0
+                or type(qualification_ci_run_id) is not int
+                or qualification_ci_run_id <= 0
+                or not isinstance(declaration.get("selected_binding_ref"), str)
+                or not declaration["selected_binding_ref"]
+                or shared_mismatch
+            )
+            _git_commit(
+                declaration.get("current_repository_head"),
+                subject="current repository head",
+            )
         else:
             mismatch = True
     else:
         raise ValueError("measured choice policy differs")
     if common_mismatch or mismatch:
         raise ValueError("measured choice pre-input declaration differs")
-    _git_commit(declaration.get("source_commit"), subject="selection source commit")
+    _git_commit(selection_source_commit, subject="selection source commit")
     _sha256(
         declaration.get("source_bundle_sha256"), subject="selection source bundle"
     )
@@ -548,7 +574,10 @@ class RedDevelopmentMeasuredChoice:
             declared_kind = self.selection_declaration.get("selected_option_kind")
             if (
                 self.selection_declaration.get("schema")
-                == RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA
+                in {
+                    RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                }
             ):
                 declared_kind = selected_option_kind.value
             if (
@@ -673,13 +702,21 @@ class RedDevelopmentMeasuredChoice:
             snapshot_document(self.after_economy)
         elif self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
             raise ValueError("mixed measured choice requires economy evidence")
-        if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY and (
-            self.selection_declaration.get("source_commit")
-            != self.observer_source_commit
-            or self.selection_declaration.get("source_bundle_sha256")
-            != self.observer_source_bundle_sha256
-        ):
-            raise ValueError("mixed measured choice observer source differs")
+        if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
+            selection_source_commit = self.selection_declaration.get("source_commit")
+            if (
+                self.selection_declaration.get("schema")
+                == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA
+            ):
+                selection_source_commit = self.selection_declaration.get(
+                    "executable_source_commit"
+                )
+            if (
+                selection_source_commit != self.observer_source_commit
+                or self.selection_declaration.get("source_bundle_sha256")
+                != self.observer_source_bundle_sha256
+            ):
+                raise ValueError("mixed measured choice observer source differs")
         _git_commit(self.observer_source_commit, subject="observer source commit")
         _sha256(self.observer_source_bundle_sha256, subject="observer source bundle")
         if (

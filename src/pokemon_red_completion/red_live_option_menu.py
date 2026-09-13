@@ -51,6 +51,9 @@ RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA = (
 RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model111-automatic-fishing-plan.v1"
 )
+RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model112-frozen-restore-plan.v1"
+)
 
 
 class RedLiveOptionMenuError(ValueError):

@@ -53,6 +53,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
     build_red_live_option_set,
@@ -500,6 +501,41 @@ def _valid_automatic_fishing_failure_choice(
     )
 
 
+def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+    base = _valid_mixed_restore_choice(tmp_path)
+    declaration = {
+        "schema": RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        "executable_source_commit": "e" * 40,
+        "current_repository_head": "9" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "qualification_ci_run_id": 1,
+        "parent_checkpoint_sha256": base.parent_checkpoint_sha256,
+        "parent_state_sha256": base.parent_state_sha256,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "model_sha256": base.model_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "selected_binding_ref": "pokemon.red:recovery:routed-center:" + "0" * 64,
+        "selection_seed": base.selection_seed,
+        "behavior_probabilities": list(base.behavior_probabilities),
+        "maximum_frames": 500_000,
+        "policy_queries_during_execution": 0,
+        "retry_authorized": False,
+        "teacher_labels": 0,
+    }
+    segment = replace(
+        base.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    return replace(
+        base,
+        choice_id="model112-frozen-restore-20260913",
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
 def _bind_parent(store, choice, behavior):
     record = store.publish_sealed_record(
         checkpoint_record_id(choice.parent_episode_id),
@@ -663,6 +699,46 @@ def test_automatic_fishing_failure_uses_frozen_menu_to_recover_selected_kind(tmp
     assert restored.selected_goal_kind is GoalKind.ACQUIRE_SPECIES
     assert restored.succeeded is False
     assert restored.to_observed_arm_example().outcome.verified_success is False
+
+
+def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_path):
+    choice = _valid_frozen_restore_choice(tmp_path)
+    document = choice.public_dict()
+    restored = RedDevelopmentMeasuredChoice.from_public(document)
+
+    assert "selected_option_kind" not in choice.selection_declaration
+    assert "source_commit" not in choice.selection_declaration
+    assert restored.public_dict() == document
+    assert restored.selected_goal_kind is GoalKind.RESTORE_TEAM
+    assert restored.succeeded is True
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_frames", 500_001),
+        ("policy_queries_during_execution", 1),
+        ("qualification_ci_run_id", 0),
+        ("selected_binding_ref", ""),
+        ("executable_source_commit", "not-a-commit"),
+        ("current_repository_head", "not-a-commit"),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+    ),
+)
+def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_frozen_restore_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration[key] = value
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration|differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 @pytest.mark.parametrize(
