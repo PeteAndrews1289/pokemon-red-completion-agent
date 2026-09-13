@@ -503,6 +503,11 @@ def _valid_automatic_fishing_failure_choice(
 
 def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
     base = _valid_mixed_restore_choice(tmp_path)
+    frozen_seed = base.selection_seed
+    while _replay_behavior(
+        _live_model(), base.menu, seed=frozen_seed
+    )[2] == base.selected_candidate_index:
+        frozen_seed += 1
     declaration = {
         "schema": RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
         "executable_source_commit": "e" * 40,
@@ -516,7 +521,7 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         "model_sha256": base.model_sha256,
         "selected_candidate_index": base.selected_candidate_index,
         "selected_binding_ref": "pokemon.red:recovery:routed-center:" + "0" * 64,
-        "selection_seed": base.selection_seed,
+        "selection_seed": frozen_seed,
         "behavior_probabilities": list(base.behavior_probabilities),
         "maximum_frames": 500_000,
         "policy_queries_during_execution": 0,
@@ -529,6 +534,7 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
     return replace(
         base,
         choice_id="model112-frozen-restore-20260913",
+        selection_seed=frozen_seed,
         selection_declaration=declaration,
         selection_declaration_sha256=canonical_sha256(declaration),
         segments=(segment,),
@@ -711,6 +717,9 @@ def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_
     assert restored.public_dict() == document
     assert restored.selected_goal_kind is GoalKind.RESTORE_TEAM
     assert restored.succeeded is True
+    assert _replay_behavior(
+        _live_model(), restored.menu, seed=restored.selection_seed
+    )[2] != restored.selected_candidate_index
 
 
 @pytest.mark.parametrize(

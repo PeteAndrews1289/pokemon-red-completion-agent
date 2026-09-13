@@ -1039,8 +1039,12 @@ def _validate_behavior(
     scores, probabilities, selected = _replay_behavior(
         behavior.model, choice.menu, seed=choice.selection_seed
     )
+    frozen_receipt = (
+        choice.selection_declaration.get("schema")
+        == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA
+    )
     if (
-        selected != choice.selected_candidate_index
+        (not frozen_receipt and selected != choice.selected_candidate_index)
         or scores != choice.scores
         or any(
             not math.isclose(actual, expected, rel_tol=0.0, abs_tol=1e-12)
