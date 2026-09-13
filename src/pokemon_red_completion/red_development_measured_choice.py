@@ -36,6 +36,7 @@ from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_P
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
 )
@@ -289,6 +290,7 @@ def _validate_selection_declaration(
             "qualification_ci_run_id",
             "selected_binding_ref",
         }
+        frozen_fishing_keys = frozen_choice_keys | {"maximum_casts"}
         schema = declaration.get("schema")
         shared_mismatch = (
             declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
@@ -324,6 +326,24 @@ def _validate_selection_declaration(
             mismatch = (
                 set(declaration) != frozen_choice_keys
                 or declaration.get("maximum_frames") != 500_000
+                or declaration.get("policy_queries_during_execution") != 0
+                or type(qualification_ci_run_id) is not int
+                or qualification_ci_run_id <= 0
+                or not isinstance(declaration.get("selected_binding_ref"), str)
+                or not declaration["selected_binding_ref"]
+                or shared_mismatch
+            )
+            _git_commit(
+                declaration.get("current_repository_head"),
+                subject="current repository head",
+            )
+        elif schema == RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA:
+            qualification_ci_run_id = declaration.get("qualification_ci_run_id")
+            selection_source_commit = declaration.get("executable_source_commit")
+            mismatch = (
+                set(declaration) != frozen_fishing_keys
+                or declaration.get("maximum_frames") != 3_000_000
+                or declaration.get("maximum_casts") != 24
                 or declaration.get("policy_queries_during_execution") != 0
                 or type(qualification_ci_run_id) is not int
                 or qualification_ci_run_id <= 0
@@ -577,6 +597,7 @@ class RedDevelopmentMeasuredChoice:
                 in {
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
                 }
             ):
                 declared_kind = selected_option_kind.value
@@ -704,10 +725,10 @@ class RedDevelopmentMeasuredChoice:
             raise ValueError("mixed measured choice requires economy evidence")
         if self.policy_id == RED_LIVE_MIXED_OPTION_POLICY:
             selection_source_commit = self.selection_declaration.get("source_commit")
-            if (
-                self.selection_declaration.get("schema")
-                == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA
-            ):
+            if self.selection_declaration.get("schema") in {
+                RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+            }:
                 selection_source_commit = self.selection_declaration.get(
                     "executable_source_commit"
                 )
@@ -1039,10 +1060,10 @@ def _validate_behavior(
     scores, probabilities, selected = _replay_behavior(
         behavior.model, choice.menu, seed=choice.selection_seed
     )
-    frozen_receipt = (
-        choice.selection_declaration.get("schema")
-        == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA
-    )
+    frozen_receipt = choice.selection_declaration.get("schema") in {
+        RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    }
     if (
         (not frozen_receipt and selected != choice.selected_candidate_index)
         or scores != choice.scores
