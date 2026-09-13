@@ -58,6 +58,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
@@ -507,7 +508,11 @@ def _valid_automatic_fishing_failure_choice(
     )
 
 
-def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+def _valid_frozen_restore_choice(
+    tmp_path: Path,
+    *,
+    declaration_schema: str = RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+) -> RedDevelopmentMeasuredChoice:
     base = _valid_mixed_restore_choice(tmp_path)
     frozen_seed = base.selection_seed
     while _replay_behavior(
@@ -515,7 +520,7 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
     )[2] == base.selected_candidate_index:
         frozen_seed += 1
     declaration = {
-        "schema": RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        "schema": declaration_schema,
         "executable_source_commit": "e" * 40,
         "current_repository_head": "9" * 40,
         "source_bundle_sha256": "f" * 64,
@@ -952,8 +957,19 @@ def test_automatic_fishing_failure_uses_frozen_menu_to_recover_selected_kind(tmp
     assert restored.to_observed_arm_example().outcome.verified_success is False
 
 
-def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_path):
-    choice = _valid_frozen_restore_choice(tmp_path)
+@pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(
+    tmp_path, declaration_schema
+):
+    choice = _valid_frozen_restore_choice(
+        tmp_path, declaration_schema=declaration_schema
+    )
     document = choice.public_dict()
     restored = RedDevelopmentMeasuredChoice.from_public(document)
 
@@ -1020,6 +1036,13 @@ def test_frozen_fishing_declaration_tampering_fails_closed(tmp_path, key, value)
 
 
 @pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+@pytest.mark.parametrize(
     ("key", "value"),
     (
         ("maximum_frames", 500_001),
@@ -1032,8 +1055,12 @@ def test_frozen_fishing_declaration_tampering_fails_closed(tmp_path, key, value)
         ("teacher_labels", 1),
     ),
 )
-def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value):
-    choice = _valid_frozen_restore_choice(tmp_path)
+def test_frozen_restore_declaration_tampering_fails_closed(
+    tmp_path, declaration_schema, key, value
+):
+    choice = _valid_frozen_restore_choice(
+        tmp_path, declaration_schema=declaration_schema
+    )
     document = choice.public_dict()
     declaration = cast(dict[str, object], document["selection_declaration"])
     declaration[key] = value
@@ -1044,6 +1071,24 @@ def test_frozen_restore_declaration_tampering_fails_closed(tmp_path, key, value)
     document["segments_sha256"] = canonical_sha256(segments)
 
     with pytest.raises(ValueError, match="pre-input declaration|differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_model118_frozen_restore_rejects_non_recovery_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = "red-trainer-funding:" + "0" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
         RedDevelopmentMeasuredChoice.from_public(document)
 
 
