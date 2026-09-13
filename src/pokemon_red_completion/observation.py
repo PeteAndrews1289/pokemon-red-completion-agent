@@ -3903,8 +3903,8 @@ class PokemonRedStateReader:
 
         Red adds this three-byte BCD value to the player's money at the end of
         any won non-link battle, regardless of which side used Pay Day.  The
-        end-of-battle reset clears it, so callers that need payout accounting
-        must observe it while controller transitions are still in progress.
+        the next battle's initialization clears it, so callers must separate a
+        retained prior value from the newly initialized battle.
         """
         return self._read_bcd(RamAddress.TOTAL_PAY_DAY_MONEY, 3)
 

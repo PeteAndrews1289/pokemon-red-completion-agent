@@ -592,7 +592,6 @@ def bind_local_trainer_funding(
             validate_target=require_target,
             move_slot_policy=guard._safe_trainer_move,
             timing=DEFAULT_BATTLE_RUNTIME_TIMING,
-            pay_day_frame_source=runtime.emulator,
         )
         completed_receipt = receipt
         completed_report = GoalExecutionReport(

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Callable, Iterator
+from collections.abc import Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Protocol
@@ -88,7 +88,6 @@ class FrameBudgetController:
         "_error_type",
         "_maximum_frames",
         "_start_frame",
-        "_tick_observer",
     )
 
     def __init__(
@@ -113,7 +112,6 @@ class FrameBudgetController:
         self._start_frame = frame_count
         self._error_type = error_type
         self._error_message = error_message
-        self._tick_observer: Callable[[], None] | None = None
 
     @property
     def frame_count(self) -> int:
@@ -133,35 +131,7 @@ class FrameBudgetController:
             or self.frames_executed + frames > self._maximum_frames
         ):
             raise self._error_type(self._error_message)
-        if self._tick_observer is None:
-            self._delegate.tick(frames)
-        else:
-            for _ in range(frames):
-                before = self.frame_count
-                try:
-                    self._delegate.tick(1)
-                finally:
-                    after = self.frame_count
-                    if after > before:
-                        if after != before + 1:
-                            raise ControllerFrameBudgetError(
-                                "per-frame observer lost an exact frame boundary"
-                            )
-                        self._tick_observer()
-
-    @contextmanager
-    def observe_tick_frames(self, observer: Callable[[], None]) -> Iterator[None]:
-        """Invoke one read-only callback after every actual delegated frame."""
-
-        if not callable(observer):
-            raise TypeError("tick-frame observer must be callable")
-        if self._tick_observer is not None:
-            raise ControllerFrameBudgetError("a tick-frame observer is already active")
-        self._tick_observer = observer
-        try:
-            yield
-        finally:
-            self._tick_observer = None
+        self._delegate.tick(frames)
 
     def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
         """Preserve the delegate's bounded cartridge-RAM observation port."""
@@ -188,7 +158,6 @@ class WindowedFrameBudgetController:
         "_maximum_total_frames",
         "_window_start",
         "_nested_frame_deadlines",
-        "_tick_observer",
     )
 
     def __init__(
@@ -215,7 +184,6 @@ class WindowedFrameBudgetController:
         self._maximum_frames_per_window = maximum_frames_per_window
         self._maximum_total_frames = maximum_total_frames
         self._nested_frame_deadlines: list[int] = []
-        self._tick_observer: Callable[[], None] | None = None
 
     @contextmanager
     def limit_additional_frames(self, maximum_frames: int) -> Iterator[None]:
@@ -261,35 +229,7 @@ class WindowedFrameBudgetController:
             raise ControllerFrameBudgetExhausted(
                 "controller exhausted its hard windowed frame budget"
             )
-        if self._tick_observer is None:
-            self._delegate.tick(frames)
-        else:
-            for _ in range(frames):
-                before = self.frame_count
-                try:
-                    self._delegate.tick(1)
-                finally:
-                    after = self.frame_count
-                    if after > before:
-                        if after != before + 1:
-                            raise ControllerFrameBudgetError(
-                                "per-frame observer lost an exact frame boundary"
-                            )
-                        self._tick_observer()
-
-    @contextmanager
-    def observe_tick_frames(self, observer: Callable[[], None]) -> Iterator[None]:
-        """Invoke one read-only callback after every actual delegated frame."""
-
-        if not callable(observer):
-            raise TypeError("tick-frame observer must be callable")
-        if self._tick_observer is not None:
-            raise ControllerFrameBudgetError("a tick-frame observer is already active")
-        self._tick_observer = observer
-        try:
-            yield
-        finally:
-            self._tick_observer = None
+        self._delegate.tick(frames)
 
     def read_cartridge_ram_u8(self, bank: int, address: int) -> int:
         """Preserve the delegate's bounded cartridge-RAM observation port."""

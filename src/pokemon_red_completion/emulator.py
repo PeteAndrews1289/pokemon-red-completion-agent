@@ -1,8 +1,8 @@
 from __future__ import annotations
 
 import io
-from collections.abc import Callable, Iterator
-from contextlib import contextmanager, suppress
+from collections.abc import Callable
+from contextlib import suppress
 from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from types import TracebackType
@@ -82,7 +82,7 @@ class CausallyMeteredEmulator:
     then raises.  Controller-action admission remains the executor's job.
     """
 
-    __slots__ = ("_admit_frames", "_delegate", "_record_frames", "_tick_observer")
+    __slots__ = ("_admit_frames", "_delegate", "_record_frames")
 
     def __init__(
         self,
@@ -98,7 +98,6 @@ class CausallyMeteredEmulator:
         self._admit_frames = admit_frames
         self._delegate = delegate
         self._record_frames = record_frames
-        self._tick_observer: Callable[[], None] | None = None
 
     @property
     def frame_count(self) -> int:
@@ -115,54 +114,16 @@ class CausallyMeteredEmulator:
         return value
 
     def tick(self, frames: int) -> None:
-        if type(frames) is not int or frames < 1:  # noqa: E721
-            raise ValueError("metered emulator frames must be a positive integer")
         if self._admit_frames is not None:
             self._admit_frames(frames)
         before = self.frame_count
         try:
-            observer = self._tick_observer
-            if observer is None:
-                self._delegate.tick(frames)
-            else:
-                for _ in range(frames):
-                    frame_before = self.frame_count
-                    try:
-                        self._delegate.tick(1)
-                    finally:
-                        frame_after = self.frame_count
-                        if frame_after < frame_before:
-                            raise EmulatorError("metered emulator frame counter moved backwards")
-                        if frame_after > frame_before:
-                            if frame_after != frame_before + 1:
-                                raise EmulatorError(
-                                    "per-frame observer lost an exact frame boundary"
-                                )
-                            observer()
+            self._delegate.tick(frames)
         finally:
             after = self.frame_count
             if after < before:
                 raise EmulatorError("metered emulator frame counter moved backwards")
             self._record_frames(after - before)
-
-    @contextmanager
-    def observe_tick_frames(self, observer: Callable[[], None]) -> Iterator[None]:
-        """Invoke one read-only callback after every actual delegated frame.
-
-        This narrow scope serves transient cartridge facts that can appear and
-        clear inside one macro action. It grants no controller authority and
-        rejects nesting so evidence cannot be silently replaced.
-        """
-
-        if not callable(observer):
-            raise TypeError("tick-frame observer must be callable")
-        if self._tick_observer is not None:
-            raise EmulatorError("a tick-frame observer is already active")
-        self._tick_observer = observer
-        try:
-            yield
-        finally:
-            self._tick_observer = None
 
     def press(self, button: str) -> None:
         self._delegate.press(button)

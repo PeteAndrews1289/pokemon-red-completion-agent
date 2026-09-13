@@ -183,33 +183,6 @@ def test_windowed_frame_budget_preserves_cartridge_reads_and_both_caps() -> None
     ]
 
 
-@pytest.mark.parametrize("windowed", [False, True])
-def test_frame_budget_observer_exposes_every_actual_frame(windowed: bool) -> None:
-    raw = RecordingController()
-    bounded = (
-        WindowedFrameBudgetController(
-            raw,
-            maximum_frames_per_window=10,
-            maximum_total_frames=10,
-        )
-        if windowed
-        else FrameBudgetController(raw, maximum_frames=10)
-    )
-    observed: list[int] = []
-
-    with bounded.observe_tick_frames(lambda: observed.append(raw.frame_count)):
-        bounded.tick(3)
-
-    bounded.tick(2)
-    assert observed == [1, 2, 3]
-    assert raw.events == [
-        ("tick", 1),
-        ("tick", 1),
-        ("tick", 1),
-        ("tick", 2),
-    ]
-
-
 def test_read_only_controller_exposes_bounded_cartridge_reads_but_no_time() -> None:
     controller = RecordingController()
     read_only = ReadOnlyController(controller)

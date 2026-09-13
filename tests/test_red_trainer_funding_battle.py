@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from contextlib import contextmanager
 from dataclasses import dataclass, replace
 from types import SimpleNamespace
 
@@ -9,7 +8,6 @@ import pytest
 import pokemon_red_completion.red_trainer_funding_battle as funding_battle
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleIntent, BattleRuntimeTiming
-from pokemon_red_completion.executor import FrameBudgetController
 from pokemon_red_completion.gen1_trainer_parties import TrainerPartyMember, TrainerPartyQuote
 from pokemon_red_completion.gen1_trainer_sight import TrainerFacing, TrainerSightZone
 from pokemon_red_completion.observation import InputReadiness, RawGameState
@@ -67,13 +65,6 @@ class ScriptedEnvironment:
 
     def read_total_pay_day_money(self) -> int:
         return self.pay_day_money
-
-
-class ExactFrameSource:
-    @contextmanager
-    def observe_tick_frames(self, observer):
-        observer()
-        yield
 
 
 def make_flag_bytes(bit: int) -> bytes:
@@ -336,7 +327,6 @@ def test_armed_intro_waits_without_reinteracting_or_confirming(monkeypatch, alre
         validate_target=lambda: None,
         move_slot_policy=lambda _: 1,
         timing=TIMING,
-        pay_day_frame_source=ExactFrameSource(),
     )
     assert receipt.payout == 315
     buttons = [a.kind for a in env.actions if a.kind is not MacroActionKind.WAIT]
@@ -545,8 +535,6 @@ def test_enemy_pay_day_is_accounted_from_exact_cartridge_accumulator(monkeypatch
         env.pay_day_money = 58
         executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
         env.state = final
-        env.pay_day_money = 0
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
         return final
 
     monkeypatch.setattr(funding_battle, "battle_runner", fake_runner)
@@ -563,7 +551,6 @@ def test_enemy_pay_day_is_accounted_from_exact_cartridge_accumulator(monkeypatch
         validate_target=lambda: None,
         move_slot_policy=lambda _: 1,
         timing=TIMING,
-        pay_day_frame_source=ExactFrameSource(),
     )
 
     assert receipt.payout == 2088
@@ -571,109 +558,64 @@ def test_enemy_pay_day_is_accounted_from_exact_cartridge_accumulator(monkeypatch
     assert receipt.pay_day_money == 2 * receipt.target.quote.party[-1].level == 58
 
 
-def test_positive_pay_day_without_exact_frame_source_fails_closed(monkeypatch) -> None:
-    init = make_state(money=58)
-    battle = make_state(battle_state=2, money=58)
-    final = make_state(battle_state=0, money=2146, flags=make_flag_bytes(1139))
-    env = ScriptedEnvironment(init)
-    env.transitions = [(battle, False, True)]
+def test_stale_pay_day_value_must_clear_when_new_battle_initializes(monkeypatch) -> None:
+    init = make_state(money=2146)
+    battle = make_state(battle_state=2, money=2146)
+    final = make_state(battle_state=0, money=2461, flags=make_flag_bytes(1139))
+    env = ScriptedEnvironment(init, pay_day_money=58)
 
-    def fake_runner(_reader, executor, _policy, **_kwargs):
-        env.pay_day_money = 58
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
-        env.state = final
-        return final
-
-    monkeypatch.setattr(funding_battle, "battle_runner", fake_runner)
-    with pytest.raises(TrainerFundingBattleError, match="exact emulator-frame"):
-        run_prepared_trainer_funding(
-            env,
-            env,
-            target=make_candidate(pay=2030),
-            validate_target=lambda: None,
-            move_slot_policy=lambda _: 1,
-            timing=TIMING,
-        )
-
-
-def test_exact_frame_source_catches_increment_and_clear_inside_one_action(monkeypatch) -> None:
-    init = make_state(money=58)
-    battle = make_state(battle_state=2, money=58)
-    final = make_state(battle_state=0, money=2146, flags=make_flag_bytes(1139))
-    env = ScriptedEnvironment(init)
-    env.transitions = [(battle, False, True)]
-
-    class TransientController:
-        frame_count = 0
-        armed = False
-        observed_frames = 0
-
-        def tick(self, frames: int) -> None:
-            for _ in range(frames):
-                self.frame_count += 1
-                if self.armed:
-                    env.pay_day_money = 58 if self.observed_frames == 0 else 0
-                    self.observed_frames += 1
-
-        def press(self, _button: str) -> None:
-            pass
-
-        def release(self, _button: str) -> None:
-            pass
-
-    raw_controller = TransientController()
-    frame_source = FrameBudgetController(raw_controller, maximum_frames=100)
-
-    class ActionExecutor:
+    class InitializingExecutor:
         def execute(self, action: MacroAction) -> None:
             env.execute(action)
-            frame_source.tick(action.repeat)
+            if env.state.battle_state == 2:
+                env.pay_day_money = 0
 
-    def fake_runner(_reader, executor, _policy, **_kwargs):
-        raw_controller.armed = True
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=2))
-        assert env.pay_day_money == 0
+    env.transitions = [(battle, False, True)]
+
+    def fake_runner(_reader, _executor, _policy, **_kwargs):
         env.state = final
         return final
 
     monkeypatch.setattr(funding_battle, "battle_runner", fake_runner)
     receipt = run_prepared_trainer_funding(
         env,
-        ActionExecutor(),
-        target=make_candidate(
-            pay=2030,
-            party=(
-                TrainerPartyMember(4, 35, 29),
-                TrainerPartyMember(77, 52, 29),
-            ),
-        ),
+        InitializingExecutor(),
+        target=make_candidate(),
         validate_target=lambda: None,
         move_slot_policy=lambda _: 1,
         timing=TIMING,
-        pay_day_frame_source=frame_source,
     )
 
-    assert receipt.pay_day_money == 58
-    assert receipt.final_money == 2146
+    assert receipt.pay_day_money == 0
+    assert receipt.final_money == 2461
 
 
-@pytest.mark.parametrize("change", ["stale", "decrease", "reappear", "invalid"])
-def test_pay_day_tracking_fails_closed_on_unbound_accumulator_changes(monkeypatch, change) -> None:
-    env = ScriptedEnvironment(make_state(), pay_day_money=1 if change == "stale" else 0)
-    if change != "stale":
-        env.transitions = [(make_state(battle_state=2), False, True)]
+def test_stale_pay_day_value_that_survives_battle_initialization_fails(monkeypatch) -> None:
+    env = ScriptedEnvironment(make_state(), pay_day_money=58)
+    env.transitions = [(make_state(battle_state=2), False, True)]
+    monkeypatch.setattr(funding_battle, "battle_runner", lambda *_args, **_kwargs: None)
 
-        def fake_runner(reader, executor, _policy, **_kwargs):
-            env.pay_day_money = 58
-            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
-            env.pay_day_money = {"decrease": 20, "reappear": 0, "invalid": True}[change]
-            executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
-            if change == "reappear":
-                env.pay_day_money = 58
-                executor.execute(MacroAction(MacroActionKind.WAIT, repeat=1))
+    with pytest.raises(TrainerFundingBattleError, match="did not reset"):
+        run_prepared_trainer_funding(
+            env,
+            env,
+            target=make_candidate(),
+            validate_target=lambda: None,
+            move_slot_policy=lambda _: 1,
+            timing=TIMING,
+        )
 
-        monkeypatch.setattr(funding_battle, "battle_runner", fake_runner)
 
+def test_completed_pay_day_accumulator_must_be_valid_bcd_money(monkeypatch) -> None:
+    env = ScriptedEnvironment(make_state())
+    env.transitions = [(make_state(battle_state=2), False, True)]
+
+    def fake_runner(_reader, _executor, _policy, **_kwargs):
+        env.pay_day_money = True
+        env.state = make_state(battle_state=0)
+        return env.state
+
+    monkeypatch.setattr(funding_battle, "battle_runner", fake_runner)
     with pytest.raises(TrainerFundingBattleError, match="Pay Day accumulator"):
         run_prepared_trainer_funding(
             env,

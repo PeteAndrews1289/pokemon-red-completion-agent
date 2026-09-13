@@ -3,14 +3,13 @@
 Proves interaction boundary, undefeated state, full living party and active
 trainer identity before and during combat. Bounded intro and settlement
 transitions ensure no unhandled dialogue or stray inputs escape to the
-overworld. Payout is validated against the ordinary cartridge quote plus any
-Pay Day amount observed at exact emulator-frame boundaries.
+overworld. Payout is validated against the ordinary cartridge quote plus the
+new battle's persistent Pay Day accumulator.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
-from contextlib import AbstractContextManager
 from dataclasses import dataclass
 from typing import Protocol
 
@@ -45,14 +44,6 @@ class TrainerFundingBattleReader(BattleStateReader, Protocol):
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None: ...
 
     def read_total_pay_day_money(self) -> int: ...
-
-
-class PayDayFrameSource(Protocol):
-    """Exact frame boundary supplied by the emulator that backs the reader."""
-
-    def observe_tick_frames(
-        self, observer: Callable[[], None]
-    ) -> AbstractContextManager[None]: ...
 
 
 class TrainerFundingBattleError(BattleRuntimeError):
@@ -98,33 +89,18 @@ class TrainerFundingBattleReceipt:
 
 
 class _PayDayMoneyTracker:
-    """Observe the cartridge accumulator around every controller transition."""
+    """Separate a retained prior payout from the new battle's accumulator."""
 
-    __slots__ = (
-        "_cleared",
-        "_delegate",
-        "_frame_source",
-        "_positive_exact",
-        "_reader",
-        "money",
-    )
+    __slots__ = ("_initialized", "_reader", "_stale_money", "money")
 
     def __init__(
         self,
         reader: TrainerFundingBattleReader,
-        delegate: BattleActionExecutor,
-        frame_source: PayDayFrameSource | None,
     ) -> None:
         self._reader = reader
-        self._delegate = delegate
-        self._frame_source = frame_source
+        self._stale_money = self._read()
+        self._initialized = self._stale_money == 0
         self.money = 0
-        self._cleared = False
-        self._positive_exact = False
-        if self._read() != 0:
-            raise TrainerFundingBattleError(
-                "Pay Day accumulator was nonzero before trainer interaction"
-            )
 
     def _read(self) -> int:
         try:
@@ -135,34 +111,22 @@ class _PayDayMoneyTracker:
             raise TrainerFundingBattleError("Pay Day accumulator is invalid")
         return value
 
-    def observe(self, *, exact_frame: bool = False) -> None:
+    def require_battle_initialized(self) -> None:
+        """Require InitBattleVariables to clear any prior persistent payout."""
+
         value = self._read()
-        if value == 0:
-            if self.money:
-                self._cleared = True
-            return
-        if self._cleared or value < self.money:
-            raise TrainerFundingBattleError("Pay Day accumulator changed non-monotonically")
-        self.money = value
-        self._positive_exact = self._positive_exact or exact_frame
-
-    def require_exact_positive_evidence(self) -> None:
-        if self.money and not self._positive_exact:
+        if value != 0:
             raise TrainerFundingBattleError(
-                "positive Pay Day income lacked an exact emulator-frame observation"
+                "trainer battle did not reset the prior Pay Day accumulator"
             )
+        self._initialized = True
 
-    def execute(self, action: MacroAction) -> object:
-        self.observe()
-        if self._frame_source is None:
-            result = self._delegate.execute(action)
-        else:
-            with self._frame_source.observe_tick_frames(
-                lambda: self.observe(exact_frame=True)
-            ):
-                result = self._delegate.execute(action)
-        self.observe()
-        return result
+    def observe_completed_battle(self) -> None:
+        """Read the new amount, which Red retains until the next battle starts."""
+
+        if not self._initialized:
+            raise TrainerFundingBattleError("Pay Day accounting lacks battle initialization")
+        self.money = self._read()
 
 
 battle_runner: Callable[..., RawGameState] = run_adaptive_trainer_battle
@@ -276,7 +240,6 @@ def run_prepared_trainer_funding(
     battle_runner_override: Callable[..., RawGameState] | None = None,
     maximum_full_restores: int = 0,
     prospective_story_recovery: bool = False,
-    pay_day_frame_source: PayDayFrameSource | None = None,
 ) -> TrainerFundingBattleReceipt:
     """Execute a prepared trainer with shared identity/resource/victory checks.
 
@@ -334,10 +297,6 @@ def run_prepared_trainer_funding(
         raise TypeError("move_slot_policy must be callable")
     if not isinstance(timing, BattleRuntimeTiming):
         raise TypeError("timing must be a BattleRuntimeTiming")
-    if pay_day_frame_source is not None and not callable(
-        getattr(pay_day_frame_source, "observe_tick_frames", None)
-    ):
-        raise TypeError("pay_day_frame_source must expose observe_tick_frames")
 
     if (
         target.quote.opponent_id != target.trainer.trainer_class
@@ -417,8 +376,7 @@ def run_prepared_trainer_funding(
     ):
         raise TrainerFundingBattleError("initial player_money is missing or invalid")
 
-    pay_day_tracker = _PayDayMoneyTracker(reader, executor, pay_day_frame_source)
-    tracked_executor: BattleActionExecutor = pay_day_tracker
+    pay_day_tracker = _PayDayMoneyTracker(reader)
     expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
 
     def pending_start() -> bool:
@@ -434,8 +392,8 @@ def run_prepared_trainer_funding(
             and not resuming_pending and validate_scripted_dialogue is None):
         raise TrainerFundingBattleError("dialogue box is visible before interaction")
     if not resuming_pending and not resume_active_battle and validate_scripted_dialogue is None:
-        tracked_executor.execute(MacroAction(MacroActionKind.INTERACT))
-        tracked_executor.execute(
+        executor.execute(MacroAction(MacroActionKind.INTERACT))
+        executor.execute(
             MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
         )
 
@@ -472,8 +430,8 @@ def run_prepared_trainer_funding(
             validate_target()
             validate_scripted_dialogue()
         if dialogue or (not pending and validate_scripted_dialogue is None):
-            tracked_executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        tracked_executor.execute(
+            executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        executor.execute(
             MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
         )
         intro_count += 1
@@ -499,6 +457,7 @@ def run_prepared_trainer_funding(
         raise TrainerFundingBattleError(
             "party HP missing, truncated, or fainted before battle runner"
         )
+    pay_day_tracker.require_battle_initialized()
 
     def _guard(current_raw: RawGameState) -> None:
         if not trainer_bag_within_budget(initial, current_raw, maximum_full_restores):
@@ -552,7 +511,7 @@ def run_prepared_trainer_funding(
     )
     battle_final = (battle_runner_override or battle_runner)(
         reader,
-        tracked_executor,
+        executor,
         _wrapped_policy,
         expected_map=target.trainer.map_id,
         intent=intent,
@@ -564,8 +523,7 @@ def run_prepared_trainer_funding(
     if not isinstance(battle_final, RawGameState):
         raise TrainerFundingBattleError("battle runner did not return RawGameState")
 
-    pay_day_tracker.observe()
-    pay_day_tracker.require_exact_positive_evidence()
+    pay_day_tracker.observe_completed_battle()
     expected_money = min(
         999999,
         initial.player_money + target.quote.expected_victory_money + pay_day_tracker.money,
@@ -583,8 +541,8 @@ def run_prepared_trainer_funding(
             _raise_settle_failure(
                 state, reader, initial, target, expected_money, maximum_full_restores,
             )
-        tracked_executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        tracked_executor.execute(
+        executor.execute(MacroAction(MacroActionKind.CONFIRM))
+        executor.execute(
             MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
         )
         settle_count += 1
