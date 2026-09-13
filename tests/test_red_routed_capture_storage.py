@@ -40,6 +40,9 @@ class Router:
     def _replan(self, _request):
         pytest.fail("no replan in this fixture")
 
+    def plan_feasible_to_map(self, *args, **kwargs):
+        return self.world.plan_feasible_to_map(*args, **kwargs)
+
 
 def fixture(monkeypatch):
     calls = []

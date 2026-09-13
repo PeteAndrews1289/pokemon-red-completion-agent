@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock.
+- Next decision: Qualify capability-derived cross-box capture-helper retrieval, rebuild model111's menu action-free and allow one fresh choice only if a useful supported alternative exists.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
+| Reusable capability | Choose among identity-free Red acquisition destinations, retain gains and failures, recover generic route interruptions without labels, and retrieve required capture capabilities from any observed storage box without resampling the model. |
+| Authority now | The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model111 restart after verified zero-label dialogue recovery. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
+| Cheapest falsifier | A capability-derived cross-box helper plan cannot safely expose a useful acquisition from the recovered model111 checkpoint, or it requires a named species, coordinate route or second policy query. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 61 | 12 |
+| Registered Train Example · train | 111 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-surf-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-surf-access-learning-2026-09-10.json)
+**2026-09-12-model111-zero-label-recovery** · status **active** · evidence [qualification](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 1 real fits; no independent or cross-title authority promotion. |
-| Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Seven executable destinations yielded one actual learned choice, but Power Plant capture exhausted its balls and raised a generic error. The exact terminal is ready; affordable resupply remains transport-blocked. Failed composition lost its completed field summary. |
-| Decision | Preserve Dodrio and the real failed destination lesson. Restore supplies from the actual Power Plant terminal, not the old save; pursue a productive choice without more access infrastructure. |
-| Next session | Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock. |
-| Next falsifier | From exact AG02, qualify affordable resupply through observed indoor/field transport; reject missing holder, permission or stale terminal before input. Preserve spending and route evidence when balls run out, then attempt one productive choice without replaying AG. |
-| Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
+| Product alignment | The exact failed lineage resumed without retry or fake success, and the next blocker is expressed as a reusable capability gap: find required capture support anywhere in storage. This directly supports sustained collection across arbitrary saves rather than one destination. |
+| Learning output | No new learning output. Recovery is deterministic support with zero labels; model111 remains at 111 settled examples, 76 successful. The forced-only menu produced no choice, outcome or fit. |
+| Authority delta | Generic dialogue recovery restored field control in 8 actions and 576 frames, then published and reopened a zero-label model111 checkpoint. The model, its 111 rows and its authority are unchanged; the next menu was observed without input. |
+| Transfer result | The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
+| Blocker | The recovered menu is forced-only: restore_team is the sole executable goal. The healthy party has no usable sleep/paralysis move, the active box has no helper, and seven capability-qualified helpers exist in other boxes. Acquisition is withheld until capture preparation can retrieve across boxes. |
+| Decision | Implement capability-derived cross-box capture-helper retrieval, preserve every specimen and field-move dependency, then rebuild the recovered menu action-free. Permit one fresh choice only if the menu contains a useful supported alternative. |
+| Next session | Generalize capture-party preparation to search all observed boxes, switch safely through the existing PC primitive and rebind the original acquisition without a second model query. Then rebuild the menu action-free and allow at most one useful supported choice. |
+| Next falsifier | Cross-box helper retrieval cannot preserve the complete specimen ledger and safely rebind the same acquisition, or the rebuilt menu remains forced-only after the capability is available. |
+| Stop condition | Stop on species-specific helper selection, coordinate-bearing policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions
 
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **30**.
+Current evidence entries: **33**.

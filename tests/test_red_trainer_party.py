@@ -98,6 +98,23 @@ def test_exact_health_and_level_boundaries_and_pp_supply():
     assert plan.public_dict()["battle_execution_qualified"] is False
 
 
+def test_explicit_zero_hp_floor_preserves_a_living_damaged_matchup():
+    observed = replace(
+        party(),
+        members=(replace(party().members[0], hp=1),),
+    )
+    trainer = quote((22, 130, 55))
+    with pytest.raises(RedTrainerPartyError, match="positions"):
+        plan_trainer_party(observed, trainer)
+    plan = plan_trainer_party(observed, trainer, minimum_hp_ratio=0.0)
+    assert plan.lead.target_index == 0
+    assert plan.minimum_hp_ratio == 0.0
+    assert plan.public_dict()["minimum_hp_ratio"] == 0.0
+    plan.require_current(observed, trainer)
+    with pytest.raises(RedTrainerPartyError):
+        replace(plan, minimum_hp_ratio=0.5).require_current(observed, trainer)
+
+
 def test_no_coverage_is_a_refusal_not_an_empty_or_status_move_choice():
     observed = replace(party(), members=(party().members[0],))
     with pytest.raises(RedTrainerPartyError, match="positions \\(2,\\)"):

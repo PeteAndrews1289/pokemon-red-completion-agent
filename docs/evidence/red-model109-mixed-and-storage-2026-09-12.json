@@ -1,0 +1,50 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "immediate_capture_slots_after_storage": 20,
+    "immediate_capture_slots_before_storage": 0,
+    "living_species": 62,
+    "registered_species": 82,
+    "specimens": 66,
+    "total_free_box_slots_before_storage": 180
+  },
+  "independent_evaluation": false,
+  "mixed_choice": {
+    "behavior_model_sha256": "50ef6eae8e461ad6cf125c0e1858640c10f2bc27d6985a570e31c5bb1cb5e600",
+    "controller_actions": 83,
+    "emulator_frames": 3900,
+    "registered_species_after": 82,
+    "registered_species_before": 82,
+    "selected_goal_kind": "restore_team",
+    "selected_probability": 0.23698916438747006,
+    "status": "verified_success",
+    "teacher_labels": 0
+  },
+  "model": {
+    "model_sha256": "726171e67b5c914f1e870b70f2f8992e55b5189117adce96dc4182c84bfa23af",
+    "new_measured_rows": 1,
+    "settled_examples": 109,
+    "training_only": true
+  },
+  "schema": "pokemon.red.model109-mixed-and-storage-evidence.v1",
+  "session_id": "2026-09-12-model109-mixed-and-storage",
+  "storage_support": {
+    "charged_actions_upper_bound": 30000,
+    "charged_frames_upper_bound": 3000000,
+    "checkpoint_record_sha256": "90163f2776eae82544941ea0907d1cac39804883ee51608fba6e7e12bd6dbbd5",
+    "exact_execution_cost_available": false,
+    "final_box_index": 4,
+    "initial_box_index": 3,
+    "model_examples_added": 0,
+    "money_after": 58,
+    "money_before": 58,
+    "reporter_failure_reconstructed_read_only": true,
+    "retry_authorized": false,
+    "source_bundle_sha256": "d81d9f5c20becdea35a2bba0c8c245515023b20dae8b83f9d14a67ef89beae8d",
+    "source_commit": "30c5bb2aaae27c2631976882db8a5537a2b9a1c9",
+    "state_sha256": "85c26f7a9eda1da05a2ea9883053733860e316a1cc4b6388ef2bb5ac8de1b13d",
+    "status": "verified_support_terminal",
+    "teacher_labels": 0
+  },
+  "transfer_result": null
+}

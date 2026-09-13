@@ -196,6 +196,25 @@ def test_unexecuted_destination_does_not_invent_survey_counts() -> None:
     assert "capture_survey" not in binding.execute().evidence
 
 
+def test_ball_exhaustion_preserves_completed_transport_and_failed_destination():
+    survey = {
+        "semantic_actions": 2, "encounters_seen": 1, "captures": 0, "flees": 1,
+        "search_exhausted": False, "safety_stopped": False,
+        "capture_items_exhausted": True,
+    }
+    fields = {"cuts": 0, "surfs": 1, "flights": 1}
+    verdict = GoalVerification.failed(GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED)
+    _, binding, meter, _ = _composer(
+        capture_survey=survey, route_fields=fields, destination_verification=verdict,
+    )
+    report = binding.execute()
+    assert report.evidence["field_moves"] == fields
+    assert report.evidence["capture_survey"] == survey
+    assert report.actions_executed == meter.actions == 5
+    assert report.frames_executed == meter.frames == 50
+    assert binding.verify(report) == verdict
+
+
 def test_malformed_destination_survey_is_not_silently_discarded() -> None:
     _, binding, _, _ = _composer(capture_survey={"private_path": "fixture-private"})
     with pytest.raises(ValueError, match="fields"):
@@ -278,9 +297,13 @@ def test_fresh_destination_join_rejects_stale_or_drifted_identity(
     assert events == ["route_execute", "route_verify", "fresh_bind"]
 
 
-def test_unavailable_fresh_destination_settles_without_executing_an_alternate() -> None:
+@pytest.mark.parametrize(("reason", "expected"), [
+    (GoalUnavailableReason.MISSING_RESOURCE, "missing_resource"),
+    (GoalUnavailableReason.STORAGE_BLOCKED, "storage_blocked"),
+])
+def test_unavailable_fresh_destination_settles_without_executing_an_alternate(reason, expected):
     _composer_value, binding, _meter, events = _composer(
-        unavailable_reason=GoalUnavailableReason.MISSING_RESOURCE
+        unavailable_reason=reason
     )
 
     report = binding.execute()
@@ -291,6 +314,45 @@ def test_unavailable_fresh_destination_settles_without_executing_an_alternate() 
     assert events == ["route_execute", "route_verify", "fresh_bind"]
     assert report.evidence["destination_bound"] is False
     assert report.evidence["destination_executed"] is False
+    assert report.evidence["destination_unavailable"] == {"reason": expected}
+    assert report.actions_executed == 3 and report.frames_executed == 30
+
+
+@pytest.mark.parametrize("route_failed", [False, True])
+def test_no_unavailable_offer_does_not_invent_a_diagnostic(route_failed):
+    _, binding, _, _ = _composer(route_verification=(
+        GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
+        if route_failed else None
+    ))
+    report = binding.execute()
+    assert "destination_unavailable" not in report.evidence
+    assert binding.verify(report).status is (
+        GoalDecisionOutcome.FAILED if route_failed else GoalDecisionOutcome.SUCCEEDED
+    )
+
+
+@pytest.mark.parametrize("value", [
+    None, True, [], {}, {"reason": True}, {"reason": 1}, {"reason": None},
+    {"reason": "unknown"}, {"reason": "/private/example"},
+    {"reason": "missing_resource", "private_path": "/private/example"},
+])
+def test_destination_diagnostic_rejects_malformed_or_private_values(value):
+    from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
+    with pytest.raises(ValueError) as caught:
+        DestinationUnavailableSummary.from_evidence({"destination_unavailable": value})
+    assert "/private/example" not in str(caught.value)
+
+
+def test_destination_diagnostic_round_trip_and_absence():
+    from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
+    assert DestinationUnavailableSummary.from_evidence({"unrelated": True}) is None
+    parsed = DestinationUnavailableSummary.from_evidence({
+        "destination_unavailable": {"reason": "missing_resource"},
+    })
+    assert parsed == DestinationUnavailableSummary(GoalUnavailableReason.MISSING_RESOURCE)
+    assert parsed.public_dict() == {"reason": "missing_resource"}
+    with pytest.raises(ValueError):
+        DestinationUnavailableSummary("missing_resource")
 
 
 def test_route_self_report_must_match_the_independent_meter() -> None:

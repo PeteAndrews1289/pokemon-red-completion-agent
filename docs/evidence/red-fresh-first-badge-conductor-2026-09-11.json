@@ -1,0 +1,84 @@
+{
+  "schema": "pokemon-red-fresh-first-badge-conductor-result-v1",
+  "status": "complete",
+  "recorded_on": "2026-09-11",
+  "source": {
+    "git_commit": "df03423d14e622f7f6c677633e42120c100cd677",
+    "published_before_execution": true,
+    "worktree_dirty_before_execution": false
+  },
+  "ranker": {
+    "artifact_authenticated": false,
+    "kind": "integration_only_zero_weight_ranker",
+    "learned": false,
+    "model_id": "pokemon.core.planning.masked-linear-ranker.v1",
+    "model_sha256": "1e72fef6b13b5b31ca86867292e0bccf3196ea639f1045cf11e93b3a7dc0b59b"
+  },
+  "execution": {
+    "actions_executed": 2945,
+    "frames_executed": 221538,
+    "human_input": false,
+    "save_state_loaded": false,
+    "controller_released": true,
+    "replans": 0,
+    "selected_semantic_stages": [
+      "power_on",
+      "receive_pokedex",
+      "reach_pewter"
+    ],
+    "automatic_objective_effects": [
+      "begin_adventure",
+      "choose_starter",
+      "defeat_brock"
+    ],
+    "singleton_decisions": 3,
+    "branching_decisions": 0,
+    "integration_only_decisions": 3,
+    "expected_answer_labels_supplied": 0,
+    "fixed_dispatch_decisions": 0,
+    "teacher_objective_choices": 0
+  },
+  "checkpoint": {
+    "checkpoint_id": "red-first-badge-v1",
+    "checkpoint_label": "Stable post-Brock control boundary",
+    "state_sha256": "14e87ed3f2b6499b3649ffe6d96191afae87befdef5b1b4e9ee0f09f4fbbd6fe",
+    "envelope_sha256": "b780219f34ab722f18fc16f3f79339b57984d9c53db67172cacf0be30b057252",
+    "report_sha256": "be010ffa455e5087728a080e56e4d0c0e3bd5b7a9a60f80da023f47127c80275",
+    "private_rom_derived_files_published": false,
+    "verified_objective_ids": [
+      "power_on",
+      "begin_adventure",
+      "choose_starter",
+      "receive_pokedex",
+      "reach_pewter",
+      "defeat_brock"
+    ]
+  },
+  "resume_check": {
+    "status": "ok",
+    "location": "pewter_gym",
+    "next_objective_id": "reach_cerulean",
+    "next_skill_executable": true,
+    "actions_executed": 0,
+    "frames_advanced": 0,
+    "controller_released": true
+  },
+  "counter_delta": {
+    "registered_train_examples": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0,
+    "new_registrations": 0
+  },
+  "claim": "A published-source Red session progressed from clean power to an authenticated, resumable post-Brock checkpoint through three semantic stage dispatches and bounded deterministic mechanics.",
+  "limitations": [
+    "the_ranker_was_explicitly_unlearned",
+    "all_policy_menus_were_singletons",
+    "deterministic_code_executed_opening_navigation_training_and_battle_mechanics",
+    "not_objective_ranking_competence",
+    "not_fresh_game_autonomy",
+    "not_arbitrary_seed_reliability",
+    "not_full_red_completion",
+    "not_cross_title_transfer"
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "source": {
+    "support_contract_commit": "2d9427087b8a5212f97f05ab8c5347255f9526db",
+    "source_bundle_sha256": "423360148d02e827db3d718e61791674629dfc7f312d47352f2dd165f7f2484a",
+    "focused_tests_passed": 196,
+    "lint_passed": true,
+    "type_check_passed": true
+  },
+  "support_import": {
+    "episode_id": "red-model103-funded-support-20260912-02",
+    "checkpoint_record_sha256": "a3ba144e9a897b7bd32246985523059d0a7d126cba446e9edc74d8b3d01b2565",
+    "trajectory_manifest_sha256": "8998c6cfedab75165b31a8c02675e7c98c9aab7748b04276a11f4fb8b8ca13d6",
+    "terminal_state_sha256": "309a2e5739e6eeebcd475deccb27161748bf35e07f4265ff6fe7ed7753b2c7c4",
+    "historical_actions": 2556,
+    "historical_frames": 232774,
+    "import_actions": 0,
+    "import_frames": 0,
+    "training_examples": 0,
+    "starting_money": 558,
+    "starting_capture_balls": 19,
+    "evidence_scope": "hash-chained guarded receipts without retained action trace"
+  },
+  "completed_episode": {
+    "episode_id": "red-collection-20260912-ca-02-causal",
+    "status": "succeeded",
+    "actions": 16628,
+    "frames": 1538894,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "admitted_examples": 1,
+    "available_goal_count": 3,
+    "selected_kind": "evolve_species",
+    "verified_collection_gain": 1
+  },
+  "preceding_support_episode": {
+    "episode_id": "red-collection-20260912-ca-01-causal",
+    "checkpoint_record_sha256": "b352c99e6cd69e845993787a90ba7c6f95161110ffad6b8e8d76e2b16ade4927",
+    "status": "succeeded",
+    "actions": 1112,
+    "frames": 67704,
+    "available_goal_count": 1,
+    "selection_mode": "forced_singleton",
+    "selected_kind": "acquire_species",
+    "field_move": "Surf",
+    "encounters_seen": 14,
+    "flees": 13,
+    "captures": 1,
+    "registered_species_added": 1,
+    "admitted_examples": 0
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 104,
+      "total_examples": 104,
+      "weighted_mse": 0.011740620338888097
+    },
+    "fit_report": {
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "feature_version": 4,
+      "total_examples": 104,
+      "settled_examples": 104,
+      "successful_examples": 71,
+      "distinct_selected_feature_rows": 104,
+      "economy_qualified_examples": 31,
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "outcome_balance_required": false,
+      "missing_history": "unknown_not_unattempted",
+      "train_dataset_sha256": "943b221d46af919965efee65842519f75b0fce2a83e8d1d097a123f9c9e31584",
+      "weighted_mse_before": 0.032086391965780336,
+      "weighted_mse_after": 0.011712442712126915
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 104,
+      "model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+      "prior_model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+      "file_sha256": "aa25c5519c1749cc3c2bca99ae5e196db6e55d369e395ed0dfc7b4be6aef94ce",
+      "corpus_sha256": "e5326286dd384449e55b922d68092288199f32c3dfd2507291a0a4eafb4bc038",
+      "source_bundle_sha256": "423360148d02e827db3d718e61791674629dfc7f312d47352f2dd165f7f2484a",
+      "source_commit": "2d9427087b8a5212f97f05ab8c5347255f9526db",
+      "independent_evaluation": false,
+      "ci_is_training_dependency": false,
+      "private_path_fields": 0
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 104,
+      "total_examples": 104,
+      "weighted_mse": 0.011712442712126916
+    }
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "collection": {
+    "starting_registered_species": 75,
+    "ending_registered_species": 77,
+    "ending_living_species": 58,
+    "ending_specimens": 62,
+    "required_red_registrations_remaining": 47,
+    "latest_acquisition": {
+      "species": "Psyduck",
+      "actions": 1112,
+      "frames": 67704,
+      "registrations_added": 1,
+      "selection_mode": "forced_singleton",
+      "status": "succeeded"
+    },
+    "latest_evolution": {
+      "transition": "Psyduck to Golduck",
+      "actions": 16628,
+      "frames": 1538894,
+      "registrations_added": 1,
+      "available_goal_count": 3,
+      "selection_mode": "authority",
+      "status": "succeeded"
+    }
+  },
+  "learning": {
+    "starting_examples": 103,
+    "ending_examples": 104,
+    "ending_model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+    "new_settled_examples": 1,
+    "forced_capture_fitted": false,
+    "model_selected_evolution_fitted": true
+  },
+  "frontier": {
+    "stop_reason": "no_executable_native_goal",
+    "ordinary_grass_sources_remaining_in_current_enumerator": 0,
+    "owned_level_evolutions_remaining_in_current_enumerator": 0,
+    "required_registrations_remaining": 47,
+    "remaining_acquisition_kinds": {
+      "evolution": 14,
+      "wild": 8,
+      "fishing": 7,
+      "safari": 6,
+      "static": 4,
+      "in_game_trade": 3,
+      "prize": 2,
+      "fossil": 2,
+      "gift": 1
+    },
+    "next_engineering_gate": "Expose catalog-driven non-grass and special acquisition candidates without species-specific route scripts."
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "low_level_control_learned": false,
+    "full_game_autonomy_claimed": false
+  },
+  "limitations": [
+    "The imported support chain retains authenticated receipt hashes but not an action trace.",
+    "The Seafoam acquisition was a forced singleton and is not evidence of model judgment.",
+    "The model-selected evolution is one bounded development outcome, not independent evaluation.",
+    "Fishing, Safari, static, gift, prize, fossil and in-game-trade execution are not yet exposed as generic model choices.",
+    "Fresh-game autonomy, arbitrary-seed reliability, full Red registration and transfer remain unproved."
+  ]
+}

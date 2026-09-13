@@ -3,20 +3,27 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-10-surf-collection-access**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-zero-label-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Capture useful encounters during travel: 1/3 acceptance items (33%).**
+**Broaden model-directed Red collection: 9/10 acceptance items (90%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
-- [x] Verify missed registration opportunities ([evidence](../docs/evidence/red-registration-opportunities-learning-2026-09-10.json))
-- [ ] Qualify capture and route-resume guards
-- [ ] Fit a productive model-selected outcome
+- [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
+- [x] Build a multi-destination fishing menu without map or species identities ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
+- [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
+- [ ] Expose a useful choice across more than one acquisition family
+- [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
+- [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
+- [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
+- [x] Recover the qualified route interruption without a learning label ([evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json))
 
-Current model: **61 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **111 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -68,7 +75,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-surf-access-learning-2026-09-10.json)
+[Current evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -95,6 +102,366 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model111-zero-label-recovery
+
+The exact model111 terminal recovered input-ready field control in8actions/576frames and reopened as zero-label support with83registrations. The action-free next menu was forced-only restore_team; no choice or fit occurred. The roadmap advances to9/10.
+
+**Deviation:** The committed forced-only stop condition fired, so no healing or acquisition ran. Action-free diagnosis found no capture-status move in the party or active box, but seven capability-qualified helpers in other boxes. This is a cross-box preparation gap, not another route failure.
+
+**Next:** Qualify capability-derived cross-box helper retrieval using existing PC switching, preserve every specimen and field-move dependency, then rebuild model111's menu action-free. Allow one fresh choice only if a useful supported alternative exists.
+
+### 2026-09-12-model111-route-capability-gate
+
+The generic resource router now requires explicit wild, trainer and scripted-dialogue support before advertising a route. The declaration survives guarded recovery and travel-capture wrappers; 132 focused and 11,470 broad tests passed. Model111, 83 registrations and the retained terminal are unchanged.
+
+**Deviation:** This was the planned engineering gate, not another gameplay attempt. One Mac-only frozen PyBoy metadata fingerprint test was excluded and recorded; no controller input, label, fit, authority promotion or transfer occurred.
+
+**Next:** Publish one exact-source green qualification, then recover the exact model111 dialogue terminal as zero-label support, rebuild its menu action-free and permit at most one useful supported choice.
+
+### 2026-09-12-model111-fishing-learning-loop
+
+Model109 selected one of four identity-free fishing destinations and caught one missing species:82to83 registrations after542actions/31,464frames. The success produced model110. Its next four-way choice reached an unsupported scripted dialogue after435actions/14,832frames; the consumed failure produced model111. Both rows retained actual outcomes and all109 earlier examples.
+
+**Deviation:** Fishing remained the only executable acquisition family, so this did not close mixed-family coverage. The failed route was not retried or relabeled. A reporter-only exception occurred after the model111 checkpoint had published and reopened; the report was reconstructed against the sealed record with no new gameplay or publication.
+
+**Next:** Make destination eligibility consult declared interruption capability, then recover ordinary control from the exact model111 terminal as deterministic support. Rebuild the menu action-free and allow at most one fresh model choice.
+
+### 2026-09-12-model109-mixed-and-storage
+
+Model108 selected restore_team from a mixed live menu;83actions/3900frames verified the outcome and one training-only row produced model109 with109examples. The next state had a full active box despite180free slots elsewhere. New routed storage relief changed Box4toBox5 and immediate capacity0to20 while preserving82registrations/66specimens and cash58; it added zero labels.
+
+**Deviation:** The storage skill completed but its private reporter failed after saving the terminal. The consumed step was not replayed. A zero-input reconstruction verified the outcome, while exact execution costs remain unknown and the full declared bounds are conservatively charged. This support result does not advance learned authority or evaluation.
+
+**Next:** Reopen the storage-relieved model109 checkpoint action-free, expose the broadest useful acquisition menu, execute one model-selected outcome and fit model110 only if eligible. Keep mixed acquisition-family coverage open until more than one acquisition mechanic is genuinely executable.
+
+### 2026-09-12-model108-adaptive-fishing-loop
+
+Model106 retained a92-action route-readiness failure as training row107. A bounded six-action scripted-dialogue recovery contributed no label. Model107 then selected a different one of eight anonymous fishing destinations; generic execution added registration82 after1,101actions/57,132frames, and the verified success produced model108 with108 retained examples.
+
+**Deviation:** The first choice did not reach its fishing destination, so it teaches observed route cost and zero gain rather than destination-specific fishing quality. The changed next sample is encouraging online adaptation but is not an independent comparison or proof that the fitted update alone caused the change. No teacher labels, authority promotion, full replay or Crystal access occurred.
+
+**Next:** Restore model108 action-free and expose the broadest honest multi-option acquisition menu. Prefer a cross-family choice; otherwise collect one more varied fishing result. Stop if only forced support remains or progress requires a named-species route.
+
+### 2026-09-12-model106-measured-fishing-capture
+
+Model105 sampled one of eight identity-free fishing destinations. Generic routing handled three interruptions; 11 casts produced two encounters, one deliberate flee and one missing registration. The80-to-81 outcome added one lower-trust row, model105 became model106 with 106 retained examples, and the exact terminal reopened as a zero-input checkpoint.
+
+**Deviation:** The observed success does not prove that the destination ranking is good: model105 preferred a long one-target route over a near four-target route. The attempt has no action journal, remains training-only, and produced no evaluation or authority promotion. The restart trust boundary was extended only to authenticate alternating measured acquisition and deterministic support steps.
+
+**Next:** Rebuild the remaining action-free fishing menu from the 81-registration model106 restart, collect another genuine bounded destination outcome, and preserve success or failure. Seek varied strategic costs before claiming a useful fishing policy; no named-species route, full replay or Crystal execution.
+
+### 2026-09-12-model105-measured-safari-fit
+
+The typed measured-choice adapter replayed model104's committed four-area sample, verified the five-state chain and79to80 registered transition, and admitted exactly one training-only row. Model105 has105 examples and retains all104 prior row hashes; the import observer sent zero input and advanced zero frames.
+
+**Deviation:** The source harness lacks a per-action journal, so the new row is permanently marked training-only, action-trace unavailable, independent-evaluation false and authority-promotion ineligible. Antigravity Flash drafted the broad path; Codex hardened and adjudicated it. No Crystal, full replay or new gameplay occurred.
+
+**Next:** Preserve the 80-registration terminal through the ordinary restart path, expose at least two physically executable identity-free item-procurement or fishing alternatives, and let model105 make one bounded choice. Stop before named-species routing or unsupported prerequisites.
+
+### 2026-09-12-safari-live-outcome
+
+Model104's four-way Safari area choice controlled one paid attempt. Generic transport, admission, terrain patrol and observed commands retained one missing registration:79to80 registered,59to60 living and63to64 specimens. The final patrol saw12 encounters,11 flees and1 capture. Model104 remains unchanged.
+
+**Deviation:** Four consumed integration failures were resumed from exact retained states rather than retried. The capability harness has aggregate counters and exact state hashes but lacks the normal per-action player journal, so the useful outcome is measured evidence rather than a fitted native row.
+
+**Next:** Implement a development-measured outcome trust tier and retained-corpus adapter. Admit this exact row once only if selection replay, registered transition, aggregate costs and all104 prior rows verify; otherwise preserve it as zero-row support. Then broaden item procurement and fishing.
+
+### 2026-09-12-safari-capability-preflight
+
+Cartridge data exposed four productive Safari areas covering six missing registrations. Model104 selected one identity-free area profile in an exact zero-input restore; capture and single-admission mechanics are tested. No gameplay, registration, fit or authority promotion occurred.
+
+**Deviation:** The model currently scores the two four-productive-slot profiles above the two five-slot profiles. Preserve that weakness as a real falsifier; do not override its sampled choice with the higher-yield deterministic answer.
+
+**Next:** Authenticate transport from the exact endpoint to Fuchsia Center, join the selected area to one generic bounded patrol and execute one model-selected admission. Retain the observed result once and fit only if eligible.
+
+### 2026-09-12-item-evolution-prerequisites
+
+A zero-input restore found nine owned missing stone-evolution candidates, but zero held stones,558money against the2100 shop price and no party Pay Day. Item evolution is not the cheapest executable next gameplay. Model104 and79 registrations are unchanged.
+
+**Deviation:** The roadmap pivots before implementation rather than fabricating availability or reopening the League-income detour. Safari costs500, supplies its own balls and has six missing registrations; existing traversal is retained but its encounter behavior must be generalized from flee to capture.
+
+**Next:** Implement a generic Safari capture provider from cartridge encounter tables and tested traversal. Require an action-free executable goal, then one bounded admission with no species-specific route or forced result called learning.
+
+### 2026-09-12-fossil-owned-evolution
+
+The generic fossil provider retained Omanyte and the automatic owned-evolution inventory completed Omastar. Registrations advanced77to79, living species58to59 and specimens62to63. Both goals were forced singletons, so model104 and its104 examples are unchanged.
+
+**Deviation:** An interrupted fossil transaction required bounded authenticated recovery after the game entered its nickname screen. No original choice was retried, and the repaired executor now completes nickname and storage settlement atomically. No Crystal, Blue, full replay or model fit occurred.
+
+**Next:** Read exact stone inventory, owned precursors and procurement access from the retained endpoint. Implement a generic item-evolution provider and require a useful action-free menu before gameplay; fishing is the next family if item procurement is not executable.
+
+### 2026-09-12-funded-model104-collection
+
+A guarded zero-label support bridge restored19 capture balls. The continuation caught Psyduck as a forced singleton, then model103 chose evolve_species from three goals and completed Golduck. Registrations advanced75to77 and the learner fitted103to104 before a clean no-executable-goal stop.
+
+**Deviation:** The practical funding detour closed through a disclosed controlled blackout and resupply rather than a completed League rematch. The support import retains authenticated receipt and state hashes but no action trace, so it remains support-only and contributes no learning claim.
+
+**Next:** Inventory the model104 checkpoint's physical prerequisites and expose one catalog-driven acquisition family. Require an action-free useful menu before bounded play; reject species-specific routing and defer Blue and Crystal.
+
+### 2026-09-11-model103-confusion-attack-drop-qualification
+
+The generic confusion-plus-Attack-drop bound passed375 focused tests. A zero-input retained-state check computed bounds165/250/160/495/150/351 and selected attack for the241-HP active member against its165-HP commitment. Model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit, gameplay, fit or authority promotion. An initial observed-Attack proposal was rejected after a reachable burn-plus-badge-glitch counterexample; the implementation uses the cartridge-wide999 Attack cap and still refuses every non-Attack stat drop.
+
+**Next:** Await exact-source green CI, then bind one separately identified development successor from the unchanged model103 checkpoint. Stop on the first new unsupported mechanic or resource failure; after verified net-positive funding, restore capture stock and resume model-selected registration immediately.
+
+### 2026-09-11-model103-trapping-qualified-league-failure
+
+The green-CI successor crossed the prior Clamp stop and reduced Cloyster124to61HP, then stopped after298actions/25812frames while the active member was confused because an available damaging stat-reduction move made same-turn self-hit risk unqualified. All six party members remain alive; model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. The consumed successor is not retried and the live loop stopped at its declared unsupported-mechanics condition. Another boss-specific exception is prohibited.
+
+**Next:** Use pinned cartridge order and live stats to qualify or reject one generic confusion-plus-damaging-debuff commitment. Require focused tests and a zero-input retained-terminal decision before any new gameplay.
+
+### 2026-09-11-model103-supplied-league-failure
+
+The prospectively priced shop transaction succeeded, but the supplied successor stopped at Lorelei's Cloyster after274actions/23484frames because Clamp lacked a qualified incoming forced-repeat bound. The generic repair passed a zero-input retained-terminal check and authorized the253-HP workhorse against an80-HP commitment. Model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. The consumed attempt is not retried. The narrow repair covers all four cartridge trapping moves only inside the full incoming-damage commitment; the type-only screen and outgoing recovery attack remain closed.
+
+**Next:** Use a separately labeled repeatable development successor. Stop on another unsupported commitment and return to model-selected collection immediately after a net-positive League cycle.
+
+### 2026-09-11-model103-league-rehearsal
+
+The exact model103 save verified Lorelei, Bruno, Agatha and Lance, earning23364 with no items spent or party faints. Champion reached its final Venusaur before cumulative HP and Ice PP exhausted every qualified matchup. All retained attempts total1482actions/133282frames; model103 and75 registrations are unchanged.
+
+**Deviation:** No stage exit or authority promotion. Two explicit critical-risk intents were consumed and every failure terminal was preserved. The result falsifies independent per-fight coverage as sufficient whole-cycle qualification; it does not justify brute-force retries or a renewable-funding claim.
+
+**Next:** Implement prospective pre-League healing and cumulative PP provisioning, including a priced Full Restore reserve and usable late-fight coverage. Bind one new supplied rematch, then on verified Champion/Hall of Fame recover, buy capture stock and resume model-selected collection.
+
+### 2026-09-11-model103-league-readiness
+
+Four real multi-option outcomes advanced model99 to103 and collection advanced73 to75 registrations. The final acquisition and recovery were forced singletons and stayed unfit. A zero-input audit proved ordinary trainer income exhausted and qualified the exact save for a five-battle League rematch worth29799 gross.
+
+**Deviation:** No authority promotion or stage exit. The learner made measurable progress before reaching a legitimate resource dead end. League qualification establishes route, roster, coverage and gross payout only; execution, survival, post-credits recovery and net profit remain unproved.
+
+**Next:** Compose one bounded League-rematch executor from existing skills and rehearse it on an exact checkpoint copy. Preserve all partial money, bag and party costs; stop without retry on divergence. If stable, restore capture supply and resume model-selected collection.
+
+### 2026-09-11-fresh-celadon-join
+
+Published-source Red resumed the authenticated first-badge state through seven semantic stages in42584actions/2244209frames, retained fourteen verified objectives at Celadon Center, and exposed clear_rocket_hideout plus reach_saffron through the existing midgame registry. Model99 and73 registrations are unchanged.
+
+**Deviation:** The fresh-start checklist is3/3, but this remains integration rather than learning: the ranker was explicitly unlearned, every menu was a singleton and deterministic chapters executed the controls. A narrow Surge bound adjustment and missing Vermilion Gym location label were verified before publication.
+
+**Next:** Return immediately to the actual BV/model99 collection lineage for one bounded multi-option goal sequence. Fit only actual eligible outcomes and seek another registration or useful evolution; no additional story-infrastructure session, full replay or Crystal execution.
+
+### 2026-09-11-fresh-start-conductor
+
+Published-source Red reached Brock from clean power in2945actions/221538frames and retained an authenticated six-objective checkpoint. Reload advanced zero frames, used zero inputs and exposed reach_cerulean as executable. The explicitly unlearned integration ranker made three singleton dispatches; model99 and73 registrations are unchanged.
+
+**Deviation:** This is a fresh-start and resumability integration result, not learned objective competence or autonomous play. One pre-emulator CLI failure and one telemetry wording repair were retained in the session report; neither created input or a learning result.
+
+**Next:** Execute the bounded checkpoint continuation through Cerulean and Celadon, retain the next authenticated handoff, and prove the existing midgame skill registry accepts the fresh lineage. Then return immediately to measured model99 collection learning.
+
+### 2026-09-11-power-plant-diversification
+
+BU fitted two model-selected income outcomes, model97 to99 and money493 to1093. A third model-selected acquisition registered Magnemite at Power Plant before a post-action observer failure. The failed choice stayed unfit; deterministic recovery retained73 registrations,56 living species and60 specimens.
+
+**Deviation:** The requested non-Seafoam/non-water transfer test succeeded at the registration level but not as a successful outcome. A scripted encounter shared the cartridge trainer bit and crashed payout inventory; the narrow repair and46-action support recovery preserved the exact failure rather than retrying or relabeling it.
+
+**Next:** Close retained-endpoint diversity and begin the fresh-start Red conductor: semantic new-game goals, one bounded first-badge checkpoint and a join to existing midgame skills. No fixed input walkthrough, Crystal execution or autonomy claim.
+
+### 2026-09-11-slowpoke-slowbro-learning
+
+BT completed a model-directed catch-recover-evolve chain: six-way SeafoamB3F choice caught Slowpoke, recovery restored it, and evolution registered Slowbro. Model94 to97; registrations70 to72; final493money and three capture items. Read-only audit verified all terminals and retained artifacts.
+
+**Deviation:** No stage exit or authority promotion. The sequence is productive but concentrated in Seafoam/water species; Slowbro evolution also cost16066actions and1369123frames, so efficiency is not established.
+
+**Next:** Continue from audited BT03/model97 and seek a registration outside the Seafoam/water chain through a model-selected acquisition or owned evolution. Preserve all costs and failures; no retained-step replay, Crystal run or autonomy claim.
+
+### 2026-09-11-seadra-and-prerequisite-learning
+
+BR and BS completed four successful model-directed outcomes: evolve Horsea into Seadra, earn550, buy one capture item and restore the party. Model90 to94; registrations69 to70; final493money and four capture items. A read-only audit verified every terminal, resource, model and corpus hash.
+
+**Deviation:** No stage exit or authority promotion. Route-plan sharing preserved the exact regional menu but improved the measured scan only4.2percent. Indistinguishable regional identities are now excluded from source-choice training instead of receiving fake labels.
+
+**Next:** Continue from audited BS03/model94 and prioritize another verified model-selected acquisition or useful evolution. Keep the safe scan refactor, but do not spend another session optimizing it. No retained-step replay, Crystal run or autonomy claim.
+
+### 2026-09-11-horsea-capture-and-loop-speedup
+
+Two execution-path repairs removed duplicate authenticated preparation and duplicate regional inventory within each bounded step. BQ then completed three fitted choices: earn700, buy one ball for600 and select one of six regional sources. Exploration chose SeafoamB1F, where deterministic mechanics registered Horsea. Model87 to90; registrations68 to69; ending543money, three balls and full party HP.
+
+**Deviation:** No stage exit or authority promotion. The loop now performs one full preparation/inventory pass instead of two, but a fresh51-source route scan still measured252.24seconds and remains the main engineering bottleneck. BQ is bounded development, not fresh-game autonomy or independent evaluation.
+
+**Next:** Continue from audited BQ03/model90 at SeafoamB1F. Cache or precompute only cartridge-static source work while recomputing live blockers and resources; prove identical candidate menus and hashes, then resume bounded collection. No BQ replay, Crystal run or autonomy claim.
+
+### 2026-09-11-resource-cycle-and-staryu
+
+After Dewgong evolved through forced mechanics, the retained model completed real earn, buy and recovery choices. BI then earned315, chose to spend1200 on two balls, selected SeafoamB2F from six acquisition sources, and registered Staryu during travel. The destination survey exhausted its remaining stock and failed; the partial gain and all costs remain. The audited model advanced79 to82examples and the collection67 to68 registrations.
+
+**Deviation:** No stage exit changed. The learner made a useful earn-then-buy sequence and a source choice; the resulting acquisition remains failed despite real partial gain.
+
+**Next:** Continue from audited BK01/model82 at Vermilion Center with168money, zero balls and a fully restored team. Expose legitimate trainer income, then another model-selected earn/buy/acquisition decision. Do not retry BI's failed survey, reset supplies, or count deterministic support as a learned choice.
+
+### 2026-09-11-cave-recovery
+
+BC selected recovery from three actual options, escaped Seafoam and healed at FuchsiaCenter. The selected success was fitted:76 to77examples.66registrations/56specimens remain, with333money and zero balls; no costs were erased. The preceding Seel capture still belongs to a failed acquisition, not a retroactive success.
+
+**Deviation:** No stage-exit change. Flash identified diagnostic loss, but actual recovery refutes an absorbing-dead-end claim. Codex added optional typed diagnostics only; past outcomes unchanged. Publication later blocked by authentication; no gameplay retried. Overnight follow-up paused.
+
+**Next:** Restore GitHub authentication and publish the tested local source before more gameplay. BD stopped before input because publication was unavailable; retire its declaration. Then use a fresh BE identity from actual BC01/model77 for at most3goals/30minutes, preserving all costs.
+
+### 2026-09-11-seel-partial-result
+
+BB selected Seafoam1F from six destinations and retained Seel:65 to66registrations,55 to56specimens. The full acquisition failed with binding_failed after all three balls were spent. The actual selected failure was fitted once:75 to76examples. Current Seafoam1F save has333money and zero balls; costs and partial progress remain retained.
+
+**Deviation:** No stage-exit change. Resource checklist3/3 remains tied to AZ. BB is failed despite partial registration gain.
+
+**Next:** Inspect the retained capture-to-destination resource boundary, then continue only from actual BB01/model76 through legitimate supplies, recovery or useful evolution. No retry, rewind or success relabeling. Bound the next attempt to3goals/30minutes within the overnight cutoff.
+
+### 2026-09-11-collection-replenishment
+
+BA earned1540 as forced support, then the model bought3GreatBalls and chose recovery rather than the offered acquisition. All three goals succeeded; only the two model-selected outcomes were fitted:73 to75examples. Registrations65/specimens55 unchanged. Current FuchsiaCenter save:333money,3balls,fully healed team. No Seafoam capture attempt occurred.
+
+**Deviation:** The prior resource-choice checklist remains completed3/3 on AZ evidence. BA adds useful supplies and two selected outcomes, not a new capture or phase exit.
+
+**Next:** Continue from actual BA03/model75 with the purchased balls and healed team. Expose the next useful acquisition/evolution options without forcing a destination; retain any failure and fit only the actual selected outcome. At most3goals/30minutes, within the overnight cutoff.
+
+### 2026-09-11-funded-capture-result
+
+AZ completed all three model-selected goals: team recovery, buying2GreatBalls instead of earning more money, then choosing Route21 from7destinations and catching Tangela. Audited outcomes fitted70 to73examples; registrations64 to65 and specimens54 to55. Current save:593money,no balls. This proves one productive funded sequence, not reliable autonomy or learned advantage.
+
+**Deviation:** The unchanged resource checklist is now3/3: real earn/buy options, selected outcome fitting and a new registration. This is not phase completion, independent advantage or sustainable income. Earlier failed attempts remain retained.
+
+**Next:** Continue from actual AZ03/model73: replenish through available legitimate income, then let the model select a different useful missing-registration goal. Retain costs and failures; no forced destination, old-state replay, sealed Red or Crystal. Reassess after at most3goals or30minutes.
+
+### 2026-09-11-flight-income-result
+
+AY verified Fly-to-Lavender and Route8 trainer income:113actions/9565frames, cash113 to1793, unchanged HP and64registrations. One forced support goal, zero eligible examples/fit; model70 retained. Read-only terminal audit passed.
+
+**Deviation:** Resource checklist stays1/3: income access is working but useful earn/buy learning and new registration remain unproved. No stage exits changed. Three CI typing errors repaired without relaxing checks.
+
+**Next:** Continue actual AY01 through bounded resource choices toward another model-selected collection outcome; retain costs and fit only eligible choices.
+
+### 2026-09-11-funding-fly-integration
+
+Flight-assisted ordinary-income integration passes240 focused tests after a bounded Flash draft and Codex repairs. Zero-input inspection found93 unpaid outdoor trainers and usable Fly; these are not routed victories. Model70 and64registrations unchanged; gameplay stopped.
+
+**Deviation:** Choose the smaller access repair before a League-rematch subsystem. Preserve resource checklist1/3 and all stage exits; no support or tests counted as learning.
+
+**Next:** Qualify the opt-in flight-assisted ordinary-income path from AX03/model70, then retain one actual earning outcome before another collection choice. Verify the exact landing and same trainer after travel; no League replay, erased costs or support labels.
+
+### 2026-09-11-funded-search-reorientation
+
+AW healed the team; AX earned145, bought one GreatBall, then chose Route21 from seven destinations. A paralyzed Tangela escaped the only throw; no new registration. The actual failed destination outcome was audited and fitted:69 to70examples. Current Route21 save:113money,no balls,64registrations/54specimens.
+
+**Deviation:** Resource checklist remains1/3. Reorient before another one-ball search; actual funding/purchase support is not learned earning or new registration.
+
+**Next:** Stop repeating one-ball searches. Audit practical reserve funding and existing repeatable-income components, with bounded Flash support; qualify the smallest legitimate resource continuation from AX03/model70 before further collection.
+
+### 2026-09-11-collection-resource-exhaustion
+
+AV01 chose acquisition from two native options, traveled to Seafoam and spent its last GreatBall without a new registration. It stopped safely after443actions/21408frames. One failed selected outcome was audited and fitted:68 to69examples. Cash568,64registrations and54specimens remain; party HP costs are retained.
+
+**Deviation:** Resource checklist remains1/3. The next failed collection outcome adds feedback, not useful earning competence or registration progress.
+
+**Next:** Inspect legitimate replenishment and recovery from the actual AV01 cave endpoint/model69, preserving its source ancestry and spent ball. Execute only a qualified bounded continuation; no earlier restore or fabricated funding success.
+
+### 2026-09-11-funding-route-failure
+
+AU01 selected funding from two native options but stopped on a blocked Fuchsia step:47actions/1284frames,no income or new registration. The failed selected outcome was retained and fitted:67 to68examples. Current save:FuchsiaCity,568money,one GreatBall,full HP;64registrations/54specimens unchanged.
+
+**Deviation:** 1/3 useful-resource checklist: actual negative resource-choice fit. Earn/buy alternatives and new registration remain unverified; no stage exit changed.
+
+**Next:** Existing live-terrain observation now qualifies a122-step route from actual AU01/model68 that avoids the failed edge. Execute a fresh bounded changed-state choice with its exact source ancestry. No new route patch, Mart replay or erased costs.
+
+### 2026-09-11-resource-choice-runtime
+
+AT01 bought one GreatBall for600 through a forced singleton:135actions/5520frames,zero learning examples or fit. Current save:FuchsiaMart,568money,one ball,full HP. Model67,64registrations and54specimens remain unchanged.
+
+**Deviation:** Runtime connected but actual economic alternatives absent; checklist remains0/3. No stage exit or objective changed.
+
+**Next:** Continue only from AT01/model67. Qualify a default-off exit from the declared Mart to existing bounded trainer routes; then seek a real funding/collection choice. Preserve the purchased ball and all earlier costs. No wider route radius, reset or consumed retry.
+
+### 2026-09-11-resource-variant-core
+
+Default-off earn/buy core integrated after Flash draft, Codex repairs and Claude contract review.194focused tests pass; ordered execution/replay and positive learned probabilities qualified with synthetic fixtures.67examples and64registrations unchanged; gameplay stopped.
+
+**Deviation:** No stage exit changed. Runtime/profile enumeration is not enabled; useful resource checklist remains0/3. Older rejected funding draft not integrated.
+
+**Next:** Connect explicit Red profile/router opt-in and preserve both legitimate offers. Then qualify one actual resource choice from AS02 with model67, retaining all costs and no reset.
+
+### 2026-09-11-recovery-funding-followup
+
+AS01 chose safe recovery from two native options and added one verified fitted example:66 to67. AS02 then earned725 through forced trainer support, with no additional label. Latest save:Route18,1168money,zero balls,full party HP;64registrations and54specimens unchanged.
+
+**Deviation:** Closed prior funded-lesson checklist without claiming sustainability; next checklist tests useful resource choice and collection yield.
+
+**Next:** Expose distinct earning and purchasing options without changing historical journals or removing an affordable purchase. First verify the default-off core draft, then connect one bounded runtime fork. Continue gameplay only from AS02 with model67; no reset or consumed retry.
+
+### 2026-09-11-funded-collection-overnight
+
+AR01 selected Seafoam B1F from7 destinations, reached it and spent all3 GreatBalls without a catch. The actual failure and costs were verified and fitted:65 to66 examples;64 registrations and54 specimens unchanged. Safely stopped with443money and no balls.
+
+**Deviation:** Resource checklist3/3 means one funded lesson retained, including failure; it does not mean sustainable capture or stage completion.
+
+**Next:** Continue only from AR01 and its new66-example model. Inspect existing Dig/recovery and funding offers, preserving spent balls and failed capture. Audit capture preparation before another poorly supplied search; no consumed retry, reset, full replay, sealed Red or Crystal.
+
+### 2026-09-11-economy-live-qualification
+
+AO01 funding succeeded: cash593 to1443 (+850),123 actions/7825frames, all party HP full. Forced singleton support:65examples and64registrations unchanged; no fit. Stopped safely on Route18.
+
+**Deviation:** Qualified finite trainer income through explicit observed Center exit, rather than unqualified League rematch. No learned earning claim; funded collection checklist remains2/3.
+
+**Next:** Continue exact AO01 with the same v4 model and economy-training. Buy affordable supplies using existing transport, then retain one genuine model-selected collection outcome. Preserve support as zero-label and actual failures/costs. Budget45-90minutes; no reset, full replay, sealed Red or Crystal.
+
+### 2026-09-11-economy-runtime-connection
+
+Native economy recorder/replay/update passes 314 targeted tests. Actual v4 initialization preserves 65 examples and 64 registrations; zero gameplay or fitting.
+
+**Deviation:** Engineering connection is complete, not a learned income result. Resource checklist remains 2/3; no phase exit or goal changed. Prior Flash implementation reused without another delegation.
+
+**Next:** Continue exact AM01 with initialized v4 model6cd88d0f…837e92 and explicit economy-training. Verify bound plan/supply readiness without input, then qualify Center departure and one bounded legitimate income attempt. Retain costs/failures and exclude forced support from fits. No full replay, sealed Red or Crystal.
+
+### 2026-09-11-economy-objective-loop
+
+183 focused tests pass for explicit economy objectives and native policy score integration. No live gameplay or checkpoint fitting;65examples/64registrations unchanged.
+
+**Deviation:** Flash draft plus one correction required Codex repairs; useful bounded delegation, not demonstrated net usage savings. No stage exit or mission change.
+
+**Next:** Continue AM01/model65. Refresh supply-derived cash context before selection; version and replay before/after economy evidence, then qualify one bounded League-income attempt. Fit only actual eligible measured choices, not forced support or quotes. Historical missing money stays unknown. No full replay, sealed Red or Crystal.
+
+### 2026-09-10-economy-agent-integration
+
+Flash draft/correction integrated after Codex review:258targeted tests; prospective economy features and supply budget only. No gameplay or fit;65examples/64registrations unchanged.
+
+**Deviation:** Use external subscriptions for bounded implementation and review. Cash metadata is not an economy objective; keep activation off until explicit targets and runtime replay connect.
+
+**Next:** Continue AM01/model65. Connect explicit economy gain/loss targets and runtime/replay wiring, masking historical missing evidence rather than inventing zeros. Then qualify one bounded League-income attempt with measured costs; forced support stays excluded from fits. Budget two bounded sessions for connection and live qualification, not Red completion; no full replay, sealed Red or Crystal.
+
+### 2026-09-10-renewable-funding
+
+Prospective economy facts/features tested; no controller input, fit or registration. Model65/64 registrations unchanged.
+
+**Deviation:** User prioritizes renewable income. Audit found cash missing from current learning; repair that boundary without changing historical targets or phase exits.
+
+**Next:** Connect explicit earning choices and measured economy outcomes, then one bounded League-income trial. Pay Day needs TM/holder setup.
+
+### 2026-09-10-dig-recovery
+
+Dig-to-Center recovery succeeded under an actual sampled native choice: 46 actions/3732 frames. An earlier exploration failure retained 244 actions/13380 frames. Both choices fitted 63 to 65 examples. 64 registrations and 54 specimens preserved; all party HP/status restored. Gameplay stopped at Fuchsia Center.
+
+**Deviation:** AL sampled exploration despite higher recovery value; its failure was retained. AM continued AL/model64 with the next seed and succeeded. No resampling, stage-exit or objective change.
+
+**Next:** Continue exact AM01/model65, not AJ or AL. Qualify reusable Center departure and legitimate trainer income: the healed Center offers no goal with zero balls and 593 money. Reuse existing mechanics, retain costs and protected stock, and exclude forced support from fits. Obtain adequate balls before one model-selected collection lesson. Allow 60-90 minutes for the funding/access boundary, not full collection. No replay, reset, sealed Red, Crystal or full run.
+
+### 2026-09-10-capture-sustainability
+
+Engineering only: 90 focused tests passed; exact preflight offers only explore, zero regional acquisitions and no planned Center-entry route. 64 registrations, 54 specimens and 63 examples unchanged; zero inputs or fits.
+
+**Deviation:** Stopped before gameplay at the declared no-resource-offer falsifier. Existing Dig is not yet integrated with collection recovery. No prior failure, stage exit or counter changed.
+
+**Next:** From exact AJ01/model63, qualify existing Dig as a bounded escape/recovery composition using observed legal terrain, living holder and healing anchor. Preserve party, inventory, registration and exact continuation; reobserve after escape. Then expose legitimate trainer income and adequate supplies before one model-selected collection lesson. Allow 60-90 minutes for escape/recovery qualification; funding/collection may need a follow-up. No replay, reset, sealed Red, Crystal or full run.
+
+### 2026-09-10-supply-transport
+
+2/3 goals succeeded; 2 eligible fits, 61 to 63 examples. 63 to 64 registrations; 54 specimens retained. Failed costs and deterministic support remain separate.
+
+**Deviation:** AH preparation stopped before inputs for a reporting-schema correction. AI completed supply and model-selected healing, so one separately declared AJ choice continued its save. AJ caught Shellder in transit, resumed to B3F and failed on Seel. A preliminary zero-gain interpretation of the destination-only survey was corrected against the full checkpoint before publication. Stage exits are unchanged.
+
+**Next:** Continue from AJ01/model63, never replay AI/AJ: Seafoam B3F, 64 registrations, 54 specimens, zero balls, 593 money, input-ready. Obtain sufficient legitimate supplies and qualify capture support that survives a catch without unnecessary healing trips. Preserve target/party guards and the real partial-gain failure. Then one short model-selected collection sequence. Skip unused history reconstruction as a bounded throughput repair. Allow 60-90 minutes; no reset, sealed Red, Crystal or full replay.
 
 ### 2026-09-10-surf-collection-access
 

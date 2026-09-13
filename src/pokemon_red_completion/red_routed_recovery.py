@@ -61,7 +61,12 @@ class RedRoutedRecoveryError(RuntimeError):
 
 
 def guarded_collection_route_handler(
-    actions: RouteActionPort, reader: PokemonRedStateReader, *, route_name: str,
+    actions: RouteActionPort,
+    reader: PokemonRedStateReader,
+    *,
+    route_name: str,
+    maximum_flees: int = 16,
+    maximum_scripted_dialogues: int = 0,
 ) -> RecoveryRouteInterruptionHandler:
     """Bind protected living slots from the actual prepared party, not old indices."""
     raw = reader.read()
@@ -69,6 +74,8 @@ def guarded_collection_route_handler(
         actions, reader,
         post_prep_species=tuple(raw.party_species_ids or ()),
         post_prep_living_slots=tuple(i for i, hp in enumerate(raw.party_hp or ()) if hp > 0),
+        maximum_flees=maximum_flees,
+        maximum_scripted_dialogues=maximum_scripted_dialogues,
         route_name=route_name,
     )
 
@@ -83,6 +90,7 @@ class RecoveryRouteInterruptionHandler:
     post_prep_living_slots: tuple[int, ...]
     maximum_flees: int = 16
     maximum_trainer_battles: int = 8
+    maximum_scripted_dialogues: int = 0
     stabilization_frames: int = 180
     route_name: str = "bounded routed recovery transport"
     inner: Gen1RouteInterruptionHandler | None = None
@@ -94,6 +102,7 @@ class RecoveryRouteInterruptionHandler:
                 self.reader,
                 maximum_flees=self.maximum_flees,
                 maximum_trainer_battles=self.maximum_trainer_battles,
+                maximum_scripted_dialogues=self.maximum_scripted_dialogues,
                 stabilization_frames=self.stabilization_frames,
                 route_name=self.route_name,
                 move_slot_policy=self._safe_trainer_move,
@@ -103,6 +112,11 @@ class RecoveryRouteInterruptionHandler:
     def handled_hazard_kinds(self) -> frozenset[str]:
         assert self.inner is not None
         return self.inner.handled_hazard_kinds
+
+    @property
+    def handled_interruption_kinds(self) -> frozenset[str]:
+        assert self.inner is not None
+        return self.inner.handled_interruption_kinds
 
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         assert self.inner is not None
@@ -266,7 +280,12 @@ def bind_routed_center_recovery(
             if plan is not None and _walking_plan(plan):
                 routes.append(plan)
         if not routes:
-            return bindings
+            from pokemon_red_completion.red_dig_recovery import bind_dig_recovery
+
+            return bind_dig_recovery(
+                router, bindings, observation, start, prepare_escort=prepare_escort,
+                require_pp_restore=require_pp_restore,
+            )
         route = min(routes, key=lambda r: (len(r.steps), r.terminal_map))
         if len(route.steps) == 0 and not at_boundary:
             return bindings

@@ -153,6 +153,37 @@ class CapturedPokemonRedObserver:
     def observe(self) -> GameState:
         return self.observe_raw(self.reader.read())
 
+    def latch_verified_facts(self, facts: frozenset[str]) -> None:
+        """Extend authenticated history only with consistent quest-contract evidence."""
+
+        if not isinstance(facts, frozenset) or any(
+            not isinstance(fact, str) or not fact for fact in facts
+        ):
+            raise ResumedStateError("verified facts must be a non-empty-string frozenset")
+        objective_facts = frozenset(
+            fact for objective in self.graph for fact in objective.completion_facts
+        )
+        unknown = facts.difference(objective_facts)
+        if unknown:
+            raise ResumedStateError(
+                "bounded skill supplied facts outside the quest contract: "
+                + ", ".join(sorted(unknown))
+            )
+        proposed = self._latched_facts.union(facts)
+        state = GameState(mode=game_mode(self.reader.read()), facts=frozenset(proposed))
+        completed = self.graph.completed_ids(state)
+        inconsistent = tuple(
+            objective.id
+            for objective in self.graph
+            if objective.id in completed and not objective.prerequisites.issubset(completed)
+        )
+        if inconsistent:
+            raise ResumedStateError(
+                "bounded skill evidence violates objective prerequisites: "
+                + ", ".join(inconsistent)
+            )
+        self._latched_facts.update(facts)
+
     def observe_raw(self, raw: RawGameState) -> GameState:
         """Project one caller-owned captured-state read at a coherent boundary."""
 
@@ -187,10 +218,19 @@ class CapturedPokemonRedObserver:
         )
 
     def public_dict(self) -> dict[str, object]:
+        verified = sorted(
+            self.graph.completed_ids(
+                GameState(
+                    mode=GameMode.OVERWORLD,
+                    facts=frozenset(self._latched_facts),
+                )
+            )
+        )
         return {
             "schema": "pokemon-red-captured-semantic-observer-v1",
             "checkpoint_id": self.envelope.checkpoint_id,
             "checkpoints_completed": self.envelope.checkpoints_completed,
-            "verified_objectives": list(self.envelope.verified_objective_ids),
+            "source_verified_objectives": list(self.envelope.verified_objective_ids),
+            "verified_objectives": verified,
             "latched_fact_count": len(self._latched_facts),
         }

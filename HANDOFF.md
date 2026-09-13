@@ -1,56 +1,169 @@
 # Current development handoff
 
-Updated September 10, 2026. Earlier results remain in dated reports and [history](docs/history/handoff-through-2026-09-10.md).
+Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). The North Star has not changed: build a
+transferable hierarchical Pokémon player that finishes stories and contributes legitimate
+registrations to one shared Pokédex across games.
 
-## Goal and scope
+## Current engineering boundary: model111 recovered / cross-box capture support next
 
-Build a learned player that completes stories and accumulates one shared registered Pokédex across games. Red first; global credit, local owned flags and physical stock remain separate. No level-100 or simultaneous-living-form requirement. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), then [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md).
+Source `23dadf37a59ad5f018d3d227921770174be108c7` passed GitHub CI run
+`34730511619` attempt 1. The exact model111 failure terminal then recovered once through the
+qualified generic dialogue handler: 8 actions / 576 frames / four dialogue pulses. The recovered
+state published and reopened as `red-model111-gate-recovery-support-20260912`, checkpoint
+`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
 
-## Latest verified save: AG02
+The recovery is deterministic support, not a replay or learning result: zero teacher labels, zero
+training examples, model111 unchanged. The action-free next menu exposed only `restore_team`.
+Acquisition is withheld because the healthy party has no usable sleep/paralysis move and the
+active box has no helper, although seven capable helpers exist in other observed boxes.
 
-- **63 global/local registrations, 53 specimens, 49 living species**, independently checked from the exact save.
-- AG01 evolved Doduo into Dodrio: 17,950 actions / 1,616,756 frames, one recorded Fly. This forced setup produced no fit.
-- AG02 exposed seven executable destinations. The existing model-plus-exploration policy selected Power Plant and reached it. Both remaining balls were spent without a capture; a later no-balls encounter raised a generic error.
-- The actual failed destination outcome was fitted: **model60 → model61**. This is development experience, not improved independent performance.
-- AG02 used 1,273 actions / 70,285 frames. Total batch: 19,223 actions / 1,687,041 frames, 1,390.502 seconds including preparation.
-- Exact terminal: Power Plant/map83, row19 col17, input-ready, battle0, no pending trainer; **zero balls and 1,638 money**.
-- Gameplay is stopped after the failed second goal. The third goal was never attempted.
-- [Session report](docs/work-sessions/2026-09-10-surf-collection-access.md) · [Outcome evidence](docs/evidence/red-surf-access-learning-2026-09-10.json) · [Saved collection](docs/evidence/red-surf-access-saved-2026-09-10.json).
+Next: generalize capture-party preparation to inspect all boxes, select by capability, switch using
+the existing PC primitive and rebind the same acquisition without a second model query. Preserve
+every specimen and field-move dependency. Rebuild the menu action-free before permitting one fresh
+choice; stop if it remains forced-only.
 
-Exact identities:
+[Latest report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md) ·
+[Latest evidence](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
-- Episode: `red-registered-surf-choices-20260910-ag-02-causal`
-- Checkpoint: `445f68aac643a6482f41972ead962d5ba75ef69b0d84b946326c02c41d48d871`
-- Manifest: `74db044a6836694a1e777d3a9338c561034049e8a34c8c81118b9ab094b8e951`
-- State: `d3be0828db030c995aa00013fb31a68029920093f667f0369189fdfa91351840`
-- Model61: `a699c3f740fad9182273140d98cfe0f77827765eb5b73b484dc6730cf13c3476`
-- Corpus: `4b27c0e83c0edfb40c14c2facdfb513d7abe5433344e241b0c8f4b237c8fe0d0`
-- Played source: `282bb30b0ce7c5cbe7c5a4ed35ad1d16cc3048ad`
+## Latest measured endpoint: capture, failure and online update / model111
 
-Preserve all earlier support episodes and costs. AF and AG01 are historical ancestors, not restart points. Never rerun the AG launcher.
+The current restart is `red-model111-gate-recovery-support-20260912`, checkpoint record SHA-256
+`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
+It reopens **83 registered species / 63 living species / 67 specimens** at an input-ready field
+boundary with model111.
 
-## Repair and limitations
+- Registered-objective model: **111 settled examples**, 76 successful
+- Model SHA-256: `2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9`
+- First lesson: model109 sampled candidate 1 from four anonymous fishing destinations at
+  probability **0.087610**; 542 actions / 31,464 frames / five casts added registration83
+- Second lesson: model110 sampled candidate 3 from a rebuilt four-way menu at probability
+  **0.292434**; after 435 actions / 14,832 frames its route met an unsupported scripted dialogue
+- The second attempt is a retained failure with no retry. Both outcomes added one row; teacher
+  labels, independent evaluations and authority promotions remained **0**
 
-The first Surf-only projection exposed zero candidates. Diagnosis found eleven unnamed land-encounter maps and two unnamed water maps. Thirteen independent map-ID tests failed before repair. All actual nonempty encounter maps now have adapter names; names do not grant access.
+The model111 checkpoint published and reopened before its private summary writer raised a
+module-alias error. The sealed record was inspected and the missing summary reconstructed without
+republication or game input. This is a reporter-only failure, not a missing checkpoint.
 
-Capture-only Surf is explicitly enabled, requires observed badge/healthy holder/title permission, shares the original primitive budget, and preserves Cut/Strength boundaries. After map repair, seven routes remained preparation-blocked by the injured helper. Legitimate evolution/recovery restored that helper; seven actual destination choices then became executable.
+The reusable split remains explicit: the model ranks identity-free destination features;
+deterministic Red adapters route, fish and capture; typed postconditions retain success or failure.
+The successful registration is real, but the next route exposed a capability-advertising defect:
+the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
 
-347 targeted tests passed, plus a separate 127 checkpoint/fit/cycle tests. Ruff and configured mypy passed (471 source files). These are not a full-suite claim. Field counts survive successful composition (AG01 Fly), but AG02's downstream exception prevented its completed route summary from propagating. Do not invent retained Surf counts.
+The capability-advertising defect is repaired and the retained terminal is recovered. The next
+menu is forced-only because capture support searches only the active box; mixed
+acquisition-family coverage remains open.
 
-The last streamed AG02 snapshot was not ready; the exact final checkpoint is ready. Always use the authenticated terminal for continuation decisions. AB's earlier incidental-arrival repair remains unqualified; capture/resume stays 1/3.
+[Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 
-## Next bounded session
+## Prior measured endpoint: Safari capture / model105
 
-1. Continue from AG02/model61 with all ancestry and capture-Cut/Surf options. Reconstruct AG's transitions in order: its owned Doduo→Dodrio transition plus evolution-Fly/indoor options, AG01 checkpoint, then AG02 checkpoint and selected Power Plant warp-safe/discovery source. The private read-only next-menu script reconstructs these exact arguments.
-2. The exact native preflight offers no goal: resupply resources are available, but transport reports missing capability. Extend the existing supply transport to truthful indoor departure/required field movement; do not weaken capture-only permissions globally.
-3. Qualify one legitimate purchase from the actual terminal, then one productive collection choice. Preserve the failed AG label and costs; no old-save replay.
-4. Return ball exhaustion as a typed bounded outcome and preserve completed transport evidence when the destination stops. An exception must not masquerade as successful capture.
-5. Time box 60–90 minutes. Duplicate unchanged-state route inspections are a measured secondary cost; optimize only where it directly unblocks this loop.
+The latest standard registered-player checkpoint remains
+`red-collection-20260912-cg-owned-evolution-01-causal`, record SHA-256
+`ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677`. A later private Safari
+capability chain retains a measured terminal state SHA-256
+`9f33ca2de0f87fc469896e014b3a3774e902ede46f58237127be6570382ab4d6`. It supplied one explicit
+development-measured training row but has not yet been imported as a standard traced-player
+checkpoint.
 
-No reset, sealed Red, Crystal, full replay, release or independent-performance claim. Stage exits are unchanged.
+- Registered-objective model: **105 settled examples**
+- Model SHA-256: `00e1ae35eb296caa3956f5f766f6a10f4410ee026c1c58bb030e1d0c4d466bae`
+- Latest measured collection: **80 registered / 60 living species / 64 specimens**
+- Required Red registrations remaining: **44**
+- Latest collection result: one model-selected Safari area produced a retained missing registration
+  after a generic cartridge-derived patrol; the successful patrol saw 12 encounters, 11 flees and
+  one capture
+- Latest learning result: model104→105 through one training-only measured-choice row; all 104 prior
+  row hashes remain present
 
-## External work and publication
+The prior three-option learned result remains Psyduck-to-Golduck. The fossil transaction needed a
+bounded retained-state recovery because the game had entered its nickname editor before writing the
+full box structure. The original fossil choice was not retried.
 
-No external agents ran this session; no fresh external quota was queried. Flash's prior stone draft remains isolated at `895b4d6b`, not integrated or live-qualified.
+## Funding and support boundary
 
-PR241 merged as `83038a7b`. Played source is published on `codex/red-surf-choices-20260910` and must remain recoverable. Publish this evidence closeout as one tested batch; ordinary gameplay does not wait on hosted CI.
+The immediate resource dead end is closed in practice. A controlled blackout retained half of the
+money earned during the incomplete League sequence, healed the party and enabled deterministic
+resupply of 19 capture balls. The support chain totals 2,556 historical actions / 232,774 frames.
+Its registered import sent zero input, advanced zero frames and created zero training examples.
+
+The retained support wrappers authenticate declarations, claims, results, source commits and state
+transitions, but do not contain an action trace. Public code therefore gives them a separate
+`registered recorded support` type and may not represent them as native traced play or learned
+authority. The successful import checkpoint is
+`a3ba144e9a897b7bd32246985523059d0a7d126cba446e9edc74d8b3d01b2565`.
+
+Do not repeat the League rematch merely to strengthen this support history. Fossil acquisition is
+now one qualified acquisition-family provider; the next product constraint is broader acquisition.
+
+## Historical Safari result and superseded gate
+
+The Safari candidate layer is now live-tested. Cartridge data produced four productive areas that
+jointly covered six missing registrations. Model104 selected candidate1 from an identity-free menu
+with zero teacher labels; that choice controlled the played attempt. Generic transport, one paid
+admission, a terrain-derived patrol and observed Safari commands added one registration. The full
+retained chain used 1,271 counted actions / 152,580 frames and left 23 Safari Balls / 235 steps.
+
+Four failed continuation identities remain preserved: full step-counter reading, encounter handoff,
+two-column command observation and post-throw settlement were each repaired without replaying the
+admission or resampling the model. These are now generic tested mechanics.
+
+The measured-choice gate is closed. The adapter recomputed model104's scores and sampled choice,
+verified the exact declaration/claim/result chain, checked every parent/terminal state transition,
+reconstructed the 79→80 registration and 63→64 specimen outcome with zero controller input, and
+admitted exactly one row. Model105's corpus SHA-256 is
+`28722d391b5f1aff8dfc9733a7357f006f17f554b7457d9264047ffedc8e9f0d`.
+
+The row is permanently lower trust than a native episode: no action trace, training only, no
+independent evaluation and no authority promotion. The next gate is to preserve the 80-registration
+terminal through the ordinary restart path and expose at least two physically executable,
+identity-free item-procurement or fishing alternatives for model105.
+
+The ordinary regional candidate layer and already-owned level evolutions were exhausted at the
+standard 79-registration checkpoint. After the Safari result, 44 Red registrations remain. Rebuild
+the exact method census from the retained terminal before quoting per-family counts; the prior
+79-registration census was:
+
+| Method | Missing registrations |
+| --- | ---: |
+| evolution | 13 |
+| ordinary wild/water | 8 |
+| fishing | 7 |
+| Safari | 6 |
+| static encounter | 4 |
+| in-game trade | 3 |
+| prize | 2 |
+| fossil | 1 |
+| gift | 1 |
+
+The exact action-free inventory found nine owned missing stone-evolution precursors, but no held
+stones, ₽558 against the ₽2,100 shop price and no party member with Pay Day. Those candidates are
+preserved for later resource planning; item evolution is not the cheapest executable next gameplay.
+
+The stone candidates remain deferred. Broaden item procurement and fishing through the same
+reusable candidate vocabulary. Do not add named Safari or fishing species routes.
+
+## Authority and claim boundary
+
+The learned model chooses high-level goals and destinations in bounded development episodes.
+Deterministic, tested skills still execute navigation, menus, combat, capture and evolution. The
+latest fishing rows teach selected destination outcomes, but their missing action traces make them
+ineligible for evaluation or promotion. The earlier successful three-option Golduck evolution is a
+native selected-arm outcome; forced support and forced acquisitions add none.
+
+Fresh-game autonomy, arbitrary-seed reliability, full Red registration, unfamiliar-ROM competence,
+learned battle control and transfer to Blue or Crystal remain unproved. Crystal stays deferred.
+
+## Session discipline
+
+1. Name the reusable capability and cheapest falsifier before editing.
+2. Spend most effort on executable data/scenarios and measured model outcomes.
+3. One focused test batch; one CI check after a meaningful commit. No CI-only loop.
+4. Stop on species-specific routing, coordinate-bearing policy features, forced outcomes described
+   as learning, unsupported physical prerequisites or consumed-state replay.
+5. Reorient after the first bounded result or falsifier and update this file in place.
+
+[Prior report](docs/work-sessions/2026-09-12-model106-measured-fishing-capture.md) · [Prior evidence](docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json). Recommended model:
+**Sol High, Fast enabled** for implementation. Use Astra High/Max only for architecture or
+authority-promotion review.

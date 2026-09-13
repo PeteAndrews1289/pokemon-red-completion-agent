@@ -67,7 +67,7 @@ def bind_capture_party_support(
                else sorted(_POKEMON_CENTER_MAPS))
     for center in centers:
         try:
-            route = router.world.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
+            route = router.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
         except RoutePlanningError:
             continue
         if _walking_plan(route):

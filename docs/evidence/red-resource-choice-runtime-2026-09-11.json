@@ -1,0 +1,110 @@
+{
+  "actions": 135,
+  "available_goals": 1,
+  "behavior_model_sha256": "5887a2406551e233509e0b2a401cc9257c9ae1c9054ba887ef3f808ed8c1852a",
+  "checkpoint_sha256": "e91b2743e8bdf3a3b79999775d2771a15f4ac0f2aa8367c89c3fd6548d97f0a4",
+  "eligible_examples": 0,
+  "episode_id": "red-resource-choice-20260911-at-01-causal",
+  "failure_reason": null,
+  "fit_performed": false,
+  "frames": 5520,
+  "manifest_sha256": "de4b602bf6f4d59d0d41a76012af5676f016a4f5aa8cdc7fe15a69534b189461",
+  "model": null,
+  "registrations": 64,
+  "selected_kind": "resupply",
+  "selection_mode": "forced_singleton",
+  "source_commit": "1f12ffd3e4b22c57a911915131a7ad786747e1ec",
+  "specimens": 54,
+  "state_sha256": "3aad30234495b429346c31af3b7b73d881e43c60332176e734056b22b1c8cdd2",
+  "status": "succeeded",
+  "terminal": {
+    "bag": [
+      [
+        42,
+        1
+      ],
+      [
+        63,
+        1
+      ],
+      [
+        196,
+        1
+      ],
+      [
+        74,
+        1
+      ],
+      [
+        198,
+        1
+      ],
+      [
+        199,
+        1
+      ],
+      [
+        46,
+        3
+      ],
+      [
+        197,
+        1
+      ],
+      [
+        214,
+        1
+      ],
+      [
+        43,
+        1
+      ],
+      [
+        209,
+        1
+      ],
+      [
+        201,
+        2
+      ],
+      [
+        68,
+        8
+      ],
+      [
+        65,
+        1
+      ],
+      [
+        52,
+        2
+      ],
+      [
+        53,
+        3
+      ],
+      [
+        3,
+        1
+      ]
+    ],
+    "battle_state": 0,
+    "input_ready": true,
+    "map_id": 152,
+    "money": 568,
+    "party_hp": [
+      249,
+      118,
+      146,
+      88,
+      92,
+      73
+    ],
+    "position": [
+      5,
+      2
+    ]
+  },
+  "verification_actions": 0,
+  "verification_frames": 0
+}

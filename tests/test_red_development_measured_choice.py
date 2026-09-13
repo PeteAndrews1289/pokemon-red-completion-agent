@@ -1,0 +1,1197 @@
+from __future__ import annotations
+
+import random
+from collections.abc import Mapping
+from copy import deepcopy
+from dataclasses import replace
+from pathlib import Path
+from typing import cast
+
+import pytest
+from test_living_dex_option_value import _menu
+from test_red_live_option_menu import (
+    _binding as _live_binding,
+)
+from test_red_live_option_menu import (
+    _fishing_candidate as _live_fishing_candidate,
+)
+from test_red_live_option_menu import (
+    _model as _live_model,
+)
+from test_red_live_option_menu import (
+    _ordinary_bindings as _live_ordinary_bindings,
+)
+from test_red_live_option_menu import (
+    _situation as _live_situation,
+)
+from test_red_player_training import _episode
+from test_registered_learning_bridge import observations
+from test_registered_runtime_binding import bound_fixture
+
+from pokemon_red_completion.collection import CollectionLocation, LivingSpecimen
+from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager_composition_runtime import GoalManagerCompositionError
+from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
+from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
+from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_collection import red_species_ref
+from pokemon_red_completion.red_development_measured_choice import (
+    DEVELOPMENT_MEASURED_CHOICE_KIND,
+    DEVELOPMENT_MEASURED_CHOICE_SCHEMA,
+    DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2,
+    DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3,
+    DEVELOPMENT_MEASURED_RESULT_SCHEMA,
+    RedDevelopmentMeasuredChoice,
+    RedDevelopmentMeasuredChoiceInput,
+    RedDevelopmentMeasuredSegment,
+    _replay_behavior,
+    development_measured_choice_record_id,
+    load_red_development_measured_choice_example,
+    publish_development_measured_choice,
+)
+from pokemon_red_completion.red_economy_learning import red_registered_economy_outcome
+from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
+from pokemon_red_completion.red_live_option_menu import (
+    RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_MIXED_OPTION_POLICY,
+    build_red_live_option_set,
+    select_red_live_option,
+    supplemental_live_option,
+)
+from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+from pokemon_red_completion.red_player_incremental_fit import (
+    fit_incremental_measured_choice,
+    fit_incremental_registered_results,
+    load_prior_player_inventory,
+)
+from pokemon_red_completion.red_player_model import load_player_goal_model_record_bytes
+from pokemon_red_completion.red_player_training_fit import (
+    RedPlayerEpisodeInput,
+    fit_red_player_update,
+)
+from pokemon_red_completion.red_player_training_plan import (
+    REGISTERED_TRAINING_PLAN_SCHEMA,
+    RedPlayerTrainingPlan,
+)
+from pokemon_red_completion.red_registered_observation import project_registered_observation
+from pokemon_red_completion.red_registered_outcome import red_registered_outcome_from_observations
+from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+
+
+def _model_sha(fit_dict: Mapping[str, object]) -> str:
+    model_doc = cast(Mapping[str, object], fit_dict["model"])
+    return cast(str, model_doc["model_sha256"])
+
+
+def _safari_observations(tmp_path: Path):
+    runtime_path = tmp_path / "safari_runtime"
+    runtime_path.mkdir(parents=True, exist_ok=True)
+    runtime, _, _ = bound_fixture(runtime_path)
+    pol = runtime.registration_policy
+    b = runtime.adapter.observe()
+    new_species = red_species_ref(115)  # Kangaskhan (Safari zone acquisition)
+    new_specimen = LivingSpecimen(
+        new_species,
+        level=25,
+        location=CollectionLocation.BOX,
+        container_index=1,
+        slot_index=1,
+    )
+    a = replace(
+        b,
+        capture_item_count=b.capture_item_count - 1,
+        collection_observation=replace(
+            b.collection_observation,
+            owned_species=b.collection_observation.owned_species | {new_species},
+            specimens=(*b.collection_observation.specimens, new_specimen),
+        ),
+    )
+    pb = project_registered_observation(b, pol).public_dict()
+    pa = project_registered_observation(a, pol).public_dict()
+    return pb, pa
+
+
+def _valid_choice(
+    tmp_path: Path,
+    *,
+    model_sha256: str = "1" * 64,
+    behavior=None,
+) -> RedDevelopmentMeasuredChoice:
+    from pokemon_red_completion.living_dex_policy_codec import restore_living_dex_policy_menu
+
+    pb, pa = _safari_observations(tmp_path)
+    menu = restore_living_dex_policy_menu(_menu("safari").policy_dict())
+    seed = 1
+    if behavior is None:
+        scores = (0.0, 0.0, 0.0, None)
+        probabilities = (0.6, 0.3, 0.1, 0.0)
+        assert random.Random(seed).choices(range(4), weights=probabilities, k=1)[0] == 0
+    else:
+        scores, probabilities, selected = _replay_behavior(behavior, menu, seed=seed)
+        while selected != 0:
+            seed += 1
+            scores, probabilities, selected = _replay_behavior(behavior, menu, seed=seed)
+    declaration = {
+        "schema": "pokemon.red.private-safari-outcome-declaration.v1",
+        "pair_id": "safari-segment-1",
+        "parent_checkpoint_sha256": "d" * 64,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "model_sha256": model_sha256,
+        "menu_sha256": menu.policy_sha256,
+        "seed": seed,
+        "selected_candidate_index": 0,
+        "maximum_semantic_actions": 300,
+        "maximum_encounters": 40,
+        "capture_quota": 1,
+        "retry_allowed": False,
+    }
+    segment = RedDevelopmentMeasuredSegment(
+        pair_id="safari-segment-1",
+        declaration_sha256=canonical_sha256(declaration),
+        claim_sha256="b" * 64,
+        result_sha256="c" * 64,
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        controller_actions=150,
+        emulator_frames=2400,
+        status="retained_success",
+    )
+    outcome = red_registered_outcome_from_observations(
+        pb,
+        pa,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=True,
+        actions=150,
+        frames=2400,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    return RedDevelopmentMeasuredChoice(
+        choice_id="safari-choice-kangaskhan",
+        parent_episode_id="measured-safari-parent",
+        parent_checkpoint_sha256="d" * 64,
+        menu=menu,
+        selected_candidate_index=0,
+        behavior_probabilities=probabilities,
+        scores=scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        model_sha256=model_sha256,
+        before_observation=pb,
+        after_observation=pa,
+        before_observation_sha256=canonical_sha256(pb),
+        after_observation_sha256=canonical_sha256(pa),
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=150,
+        emulator_frames=2400,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        observer_source_commit="e" * 40,
+        observer_source_bundle_sha256="f" * 64,
+    )
+
+
+def _valid_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+    base = _valid_choice(tmp_path)
+    declaration = {
+        "schema": "pokemon.red.private-model105-fishing-capture-plan.v1",
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "parent_state_sha256": base.parent_state_sha256,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "model_sha256": base.model_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "maximum_casts": 24,
+        "maximum_frames": 2_000_000,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        pair_id="model105-fishing-capture-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+    )
+    return replace(
+        base,
+        choice_id="model105-fishing-capture-20260912",
+        policy_id=FISHING_DESTINATION_POLICY,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
+def _valid_failed_fishing_choice(
+    tmp_path: Path,
+    *,
+    model_sha256: str = "1" * 64,
+    behavior=None,
+) -> RedDevelopmentMeasuredChoice:
+    base = _valid_choice(
+        tmp_path, model_sha256=model_sha256, behavior=behavior
+    )
+    after = base.before_observation
+    declaration = {
+        "schema": "pokemon.red.private-model106-fishing-capture-plan.v1",
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "menu_source_commit": "9" * 40,
+        "parent_episode": base.parent_episode_id,
+        "parent_checkpoint_sha256": base.parent_checkpoint_sha256,
+        "parent_state_sha256": base.parent_state_sha256,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": base.menu.policy_sha256,
+        "model_sha256": base.model_sha256,
+        "selected_candidate_index": base.selected_candidate_index,
+        "maximum_casts": 24,
+        "maximum_frames": 2_000_000,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        pair_id="model106-fishing-capture-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+        terminal_state_sha256="4" * 64,
+        controller_actions=92,
+        emulator_frames=2592,
+        status="retained_exception",
+    )
+    outcome = red_registered_outcome_from_observations(
+        base.before_observation,
+        after,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=False,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    return replace(
+        base,
+        choice_id="model106-fishing-capture-20260912",
+        policy_id=FISHING_DESTINATION_POLICY,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        after_observation=after,
+        after_observation_sha256=canonical_sha256(after),
+        terminal_state_sha256=segment.terminal_state_sha256,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        succeeded=False,
+    )
+
+
+def _valid_mixed_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+    before, _after = _safari_observations(tmp_path)
+    calls: list[str] = []
+    fishing = _live_binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    economy = EconomySnapshot(58, (("red-item-004", 6),))
+    options = build_red_live_option_set(
+        situation=_live_situation(resources=0.4),
+        binding_set=_live_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(
+                fishing,
+                _live_fishing_candidate("provider-row", travel=0.2),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="9" * 64,
+        economy_snapshot=economy,
+        target_cash=2400,
+    )
+    model = _live_model()
+    seed = 0
+    while True:
+        selected = select_red_live_option(
+            model,
+            options,
+            seed=seed,
+            allow_earning_exploration=True,
+        )
+        if selected.selected_binding.kind is GoalKind.RESTORE_TEAM:
+            break
+        seed += 1
+    declaration = {
+        "schema": RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "parent_checkpoint_sha256": "d" * 64,
+        "parent_state_sha256": "2" * 64,
+        "menu_file_sha256": "a" * 64,
+        "menu_sha256": options.menu.policy_sha256,
+        "model_sha256": model.model_sha256,
+        "selected_candidate_index": selected.selected_candidate_index,
+        "selected_option_kind": "restore",
+        "selection_seed": seed,
+        "behavior_probabilities": list(selected.probabilities),
+        "maximum_frames": 500_000,
+        "retry_authorized": False,
+        "teacher_labels": 0,
+    }
+    segment = RedDevelopmentMeasuredSegment(
+        pair_id="model108-mixed-restore-20260912",
+        declaration_sha256=canonical_sha256(declaration),
+        claim_sha256="b" * 64,
+        result_sha256="c" * 64,
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        controller_actions=83,
+        emulator_frames=3900,
+        status="retained_success",
+    )
+    outcome = red_registered_economy_outcome(
+        before,
+        before,
+        selected_kind=GoalKind.RESTORE_TEAM,
+        succeeded=True,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+        before_economy=economy,
+        after_economy=economy,
+        target_cash=2400,
+    )
+    return RedDevelopmentMeasuredChoice(
+        choice_id="model108-mixed-restore-20260912",
+        parent_episode_id="model108-mixed-parent",
+        parent_checkpoint_sha256="d" * 64,
+        menu=options.menu,
+        selected_candidate_index=selected.selected_candidate_index,
+        behavior_probabilities=selected.probabilities,
+        scores=selected.scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        model_sha256=model.model_sha256,
+        before_observation=before,
+        after_observation=before,
+        before_observation_sha256=canonical_sha256(before),
+        after_observation_sha256=canonical_sha256(before),
+        parent_state_sha256="2" * 64,
+        terminal_state_sha256="3" * 64,
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            "irreversible_loss": outcome.irreversible_loss,
+            "party_cost": outcome.party_cost,
+            "resource_cost": outcome.resource_cost,
+            "storage_cost": outcome.storage_cost,
+        },
+        observer_source_commit="e" * 40,
+        observer_source_bundle_sha256="f" * 64,
+        selected_goal_kind=GoalKind.RESTORE_TEAM,
+        before_economy=economy,
+        after_economy=economy,
+        target_cash=2400,
+        policy_id=RED_LIVE_MIXED_OPTION_POLICY,
+    )
+
+
+def _bind_parent(store, choice, behavior):
+    record = store.publish_sealed_record(
+        checkpoint_record_id(choice.parent_episode_id),
+        kind=CHECKPOINT_KIND,
+        record={
+            "state_sha256": choice.parent_state_sha256,
+            "model_sha256": behavior.model.model_sha256,
+            "collection": choice.before_observation["registration"],
+        },
+    )
+    declaration = {
+        **choice.selection_declaration,
+        "parent_checkpoint_sha256": record.summary.record_sha256,
+    }
+    segment = replace(
+        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    segments = (segment, *choice.segments[1:])
+    return replace(
+        choice,
+        parent_checkpoint_sha256=record.summary.record_sha256,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=segments,
+        segments_sha256=canonical_sha256([item.public_dict() for item in segments]),
+    )
+
+
+def _bootstrap_registered_model(tmp_path: Path, monkeypatch):
+    root = tmp_path.resolve()
+    _, before, _, policy = observations(root / "obs")
+    after = replace(before, capture_item_count=before.capture_item_count + 1)
+    pair = tuple(project_registered_observation(o, policy) for o in (before, after))
+
+    def declare(store, plan):
+        document = dict(plan.document)
+        document.update(
+            schema=REGISTERED_TRAINING_PLAN_SCHEMA,
+            objective=REGISTERED_OBJECTIVE,
+            registration_binding_sha256=policy.sha256,
+            maximum_actions=30_000,
+            maximum_frames=3_000_000,
+            origin_state_sha256="a" * 64,
+            origin_envelope_sha256="b" * 64,
+            restore_profile_sha256="c" * 64,
+            continuation_episode_id="parent",
+            continuation_checkpoint_sha256="d" * 64,
+        )
+        return RedPlayerTrainingPlan(document)
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_player_training_dataset._require_continuation_origin",
+        lambda *_: None,
+    )
+    (root / "fitting").mkdir(parents=True, exist_ok=True)
+    store, plan, behavior, completed = _episode(
+        root / "fitting",
+        plan_transform=declare,
+        registration_observations=pair,
+        return_inputs=True,
+        repeat_registered_choice=True,
+    )
+    prior = LivingDexGoalModelRecord(behavior, "a" * 64, "b" * 40, "c" * 64, 1, 1)
+    request = RedPlayerEpisodeInput(plan, "goal-episode-1", completed.manifest_sha256, prior)
+
+    fit_a = fit_red_player_update(
+        store,
+        prior=prior,
+        episodes=(request,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    sha_a = _model_sha(fit_a)
+    rec_a = store.find_sealed_record(f"rpr-model-{sha_a}", expected_kind="red_player_model")
+    model_a = load_player_goal_model_record_bytes(rec_a.read_bytes(), expected_model_sha256=sha_a)
+    return store, prior, request, model_a
+
+
+def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
+    choice = _valid_choice(tmp_path)
+    assert choice.action_trace_available is False
+    assert choice.independent_evaluation is False
+    assert choice.authority_promotion_eligible is False
+    assert choice.teacher_labels == 0
+    assert choice.training_only is True
+
+    pub = choice.public_dict()
+    assert pub["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA
+    assert pub["choice_id"] == "safari-choice-kangaskhan"
+    assert pub["action_trace_available"] is False
+    assert pub["independent_evaluation"] is False
+    assert pub["authority_promotion_eligible"] is False
+    assert pub["teacher_labels"] == 0
+    assert pub["training_only"] is True
+    assert pub["controller_actions"] == 150
+    assert pub["emulator_frames"] == 2400
+    assert pub["resource_costs"] == {
+        "irreversible_loss": 0.0,
+        "party_cost": 0.0,
+        "resource_cost": 0.5,
+        "storage_cost": 0.0,
+    }
+
+    # Deserialization round-trip
+    restored = RedDevelopmentMeasuredChoice.from_public(pub)
+    assert restored.public_dict() == pub
+    assert restored.record_sha256 == choice.record_sha256
+    assert restored.decision_sha256 == choice.decision_sha256
+
+    # Arm conversion
+    arm = choice.to_observed_arm_example()
+    assert arm.partition == "train"
+    assert arm.decision_sha256 == choice.decision_sha256
+    assert arm.outcome.verified_success is True
+    assert arm.outcome.target_vector is not None
+    assert arm.outcome.action_cost == 150 / 30_000
+    assert arm.outcome.frame_cost == 2400 / 3_000_000
+
+
+def test_fishing_measured_choice_roundtrip(tmp_path):
+    choice = _valid_fishing_choice(tmp_path)
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+
+    assert restored == choice
+    assert restored.policy_id == FISHING_DESTINATION_POLICY
+    assert restored.teacher_labels == 0
+    assert restored.independent_evaluation is False
+    assert restored.authority_promotion_eligible is False
+    assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+def test_mixed_restore_choice_roundtrip_retains_economy_and_exact_propensity(tmp_path):
+    choice = _valid_mixed_restore_choice(tmp_path)
+    document = choice.public_dict()
+    restored = RedDevelopmentMeasuredChoice.from_public(document)
+    arm = restored.to_observed_arm_example()
+
+    assert document["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V3
+    assert document["policy_id"] == RED_LIVE_MIXED_OPTION_POLICY
+    assert document["selected_goal_kind"] == GoalKind.RESTORE_TEAM.value
+    assert restored.public_dict() == document
+    assert restored.record_sha256 == choice.record_sha256
+    assert arm.outcome.verified_success is True
+    assert arm.outcome.completion_gain == 0.0
+    assert arm.outcome.economy is not None
+    assert arm.outcome.economy.cash_delta == 0
+    assert arm.importance_weight(4.0) == 4.0
+    assert arm.selected_probability == choice.behavior_probabilities[
+        choice.selected_candidate_index
+    ]
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_frames", 500_001),
+        ("menu_file_sha256", "not-a-hash"),
+        ("parent_checkpoint_sha256", "0" * 64),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+        ("selected_option_kind", "acquire"),
+    ),
+)
+def test_mixed_restore_declaration_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_mixed_restore_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration[key] = value
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration|selected goal kind"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_failed_fishing_choice_is_a_settled_v2_training_target(tmp_path):
+    choice = _valid_failed_fishing_choice(tmp_path)
+    document = choice.public_dict()
+    restored = RedDevelopmentMeasuredChoice.from_public(document)
+
+    assert document["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA_V2
+    assert document["succeeded"] is False
+    assert restored == choice
+    assert restored.succeeded is False
+    outcome = restored.to_observed_arm_example().outcome
+    assert outcome.verified_success is False
+    assert outcome.completion_gain == 0.0
+    assert outcome.action_cost == 92 / 30_000
+    assert outcome.frame_cost == 2592 / 3_000_000
+
+
+def test_failed_fishing_choice_requires_failed_terminal_and_explicit_v2_status(tmp_path):
+    choice = _valid_failed_fishing_choice(tmp_path)
+    with pytest.raises(ValueError, match="settled segment ordering"):
+        replace(
+            choice,
+            segments=(replace(choice.segments[0], status="retained_success"),),
+        )
+
+    document = choice.public_dict()
+    document["succeeded"] = True
+    with pytest.raises(ValueError, match="success status"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_casts", 25),
+        ("maximum_frames", 2_000_001),
+        ("menu_file_sha256", "not-a-hash"),
+        ("parent_state_sha256", "0" * 64),
+        ("retry_authorized", True),
+        ("teacher_labels", 1),
+    ),
+)
+def test_fishing_declaration_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_fishing_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration[key] = value
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_adversarial_model_identity_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Corrupt model sha (non-hex, wrong length)
+    for bad_sha in ["not-a-hash", "0" * 63, "0" * 65, "G" * 64]:
+        with pytest.raises(ValueError, match="model hash differs"):
+            replace(choice, model_sha256=bad_sha)
+
+    # Deserializer rejecting bad model_sha256
+    doc = choice.public_dict()
+    doc["model_sha256"] = "bad"
+    with pytest.raises(ValueError, match="model hash differs"):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+
+def test_adversarial_menu_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Deserializing menu with fewer than 2 candidates is rejected
+    doc = choice.public_dict()
+    doc["menu"]["candidates"] = []
+    with pytest.raises(LivingDexPolicyCodecError):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+    doc_single = choice.public_dict()
+    doc_single["menu"]["candidates"] = [doc_single["menu"]["candidates"][0]]
+    with pytest.raises(LivingDexPolicyCodecError):
+        RedDevelopmentMeasuredChoice.from_public(doc_single)
+
+    # Selecting unavailable candidate
+    with pytest.raises(ValueError, match="selected candidate differs"):
+        replace(choice, selected_candidate_index=3)
+
+
+def test_adversarial_sample_selection_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Selected index out of bounds or unavailable
+    for bad_idx in [-1, 4, 10]:
+        with pytest.raises(ValueError, match="selected candidate differs"):
+            replace(choice, selected_candidate_index=bad_idx)
+
+    # Selected index as boolean
+    with pytest.raises(ValueError, match="selected candidate differs"):
+        replace(choice, selected_candidate_index=True)
+
+    # Non-integer in serialized format
+    doc = choice.public_dict()
+    doc["selected_candidate_index"] = "0"
+    match_msg = "selected candidate differs"
+    with pytest.raises(ValueError, match=match_msg):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+    # Behavior probabilities length mismatch
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
+        replace(choice, behavior_probabilities=(0.5, 0.5))
+
+    # Probabilities not summing to 1.0
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
+        replace(choice, behavior_probabilities=(0.5, 0.3, 0.1, 0.2))
+
+    # Negative probability
+    with pytest.raises(ValueError, match="behavior probabilities differ"):
+        replace(choice, behavior_probabilities=(1.1, -0.1, 0.0, 0.0))
+
+    with pytest.raises(ValueError, match="selection seed differs"):
+        replace(choice, selection_seed=-1)
+
+
+def test_adversarial_state_hashes_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Invalid hex hashes
+    for bad_hash in ["invalid", "x" * 64, "0" * 63]:
+        with pytest.raises(ValueError, match="parent state hash differs"):
+            replace(choice, parent_state_sha256=bad_hash)
+        with pytest.raises(ValueError, match="terminal state hash differs"):
+            replace(choice, terminal_state_sha256=bad_hash)
+        with pytest.raises(ValueError, match="segment inventory hash differs"):
+            replace(choice, segments_sha256=bad_hash)
+
+    # Parent state cannot disagree with the first retained segment.
+    with pytest.raises(ValueError, match="segment endpoints differ"):
+        replace(choice, parent_state_sha256=choice.terminal_state_sha256)
+
+
+def test_adversarial_outcome_and_observation_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Before observation corrupted schema
+    bad_before = dict(choice.before_observation)
+    bad_before["schema"] = "corrupted.v1"
+    with pytest.raises(ValueError, match="schema"):
+        replace(choice, before_observation=bad_before)
+
+    # After observation missing required collection fields
+    bad_after = deepcopy(choice.after_observation)
+    del bad_after["semantic_observation"]["collection"]["registered"]
+    with pytest.raises((ValueError, KeyError)):
+        replace(choice, after_observation=bad_after)
+
+    # Lost specimen / regressed credit
+    # Replace after with before so no acquisition occurred
+    with pytest.raises(GoalManagerCompositionError, match="no physical acquisition"):
+        replace(
+            choice,
+            after_observation=choice.before_observation,
+            after_observation_sha256=choice.before_observation_sha256,
+        )
+
+
+def test_adversarial_costs_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # Actions <= 0
+    act_err = "aggregate action count differs"
+    with pytest.raises(ValueError, match=act_err):
+        replace(choice, controller_actions=0)
+    with pytest.raises(ValueError, match=act_err):
+        replace(choice, controller_actions=-5)
+
+    # Actions as boolean
+    with pytest.raises(ValueError, match=act_err):
+        replace(choice, controller_actions=True)
+
+    # Actions > the fixed maximum also disagrees with the segment census.
+    with pytest.raises(ValueError, match="aggregate costs differ from segments"):
+        replace(choice, controller_actions=30_001)
+
+    # Frames < 0
+    frames_err = "aggregate frame count differs"
+    with pytest.raises(ValueError, match=frames_err):
+        replace(choice, emulator_frames=-1)
+
+    # Frames > maximum_frames
+    with pytest.raises(ValueError, match="aggregate costs differ from segments"):
+        replace(choice, emulator_frames=3_000_001)
+
+    # Negative resource costs
+    with pytest.raises(ValueError, match="resource costs differ from observations"):
+        replace(choice, resource_costs={"balls": -1})
+
+
+def test_adversarial_trust_flags_tampering(tmp_path):
+    choice = _valid_choice(tmp_path)
+
+    # from_public rejects any violated trust flags
+    for flag in [
+        "action_trace_available",
+        "independent_evaluation",
+        "authority_promotion_eligible",
+    ]:
+        doc = choice.public_dict()
+        doc[flag] = True
+        with pytest.raises(ValueError, match="trust boundary differs"):
+            RedDevelopmentMeasuredChoice.from_public(doc)
+
+    doc_t = choice.public_dict()
+    doc_t["teacher_labels"] = 1
+    with pytest.raises(ValueError, match="trust boundary differs"):
+        RedDevelopmentMeasuredChoice.from_public(doc_t)
+
+    doc_tr = choice.public_dict()
+    doc_tr["training_only"] = False
+    with pytest.raises(ValueError, match="trust boundary differs"):
+        RedDevelopmentMeasuredChoice.from_public(doc_tr)
+
+
+def test_publish_and_load_measured_choice(tmp_path, monkeypatch):
+    store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
+
+    # Mismatched behavior record rejected on publish
+    with pytest.raises(ValueError, match="behavior model differs"):
+        publish_development_measured_choice(store, choice, prior)
+
+    # Successful publish
+    meas_input = publish_development_measured_choice(store, choice, model_a)
+    assert meas_input.choice_id == choice.choice_id
+    assert len(meas_input.record_sha256) == 64
+
+    # Load and verify arm example
+    arm = load_red_development_measured_choice_example(
+        store, meas_input, objective=REGISTERED_OBJECTIVE
+    )
+    assert arm.partition == "train"
+    assert arm.decision_sha256 == choice.decision_sha256
+
+    # Load with non-registered objective rejected
+    with pytest.raises(ValueError, match="requires the registered training objective"):
+        load_red_development_measured_choice_example(store, meas_input, objective="other")
+
+
+@pytest.mark.parametrize("fault", ["probabilities", "scores", "seed"])
+def test_loader_replays_behavior_from_model_not_self_reported_values(
+    tmp_path, monkeypatch, fault
+):
+    store, _, _, model = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model.model.model_sha256, behavior=model.model
+    )
+    choice = _bind_parent(store, choice, model)
+    document = choice.public_dict()
+    if fault == "probabilities":
+        probabilities = document["behavior_probabilities"]
+        probabilities[0] += 0.01
+        probabilities[1] -= 0.01
+    elif fault == "scores":
+        document["scores"][0] += 0.01
+    else:
+        seed = 0
+        while _replay_behavior(model.model, choice.menu, seed=seed)[2] == 0:
+            seed += 1
+        document["selection_seed"] = seed
+        document["selection_declaration"]["seed"] = seed
+        declaration_sha = canonical_sha256(document["selection_declaration"])
+        document["selection_declaration_sha256"] = declaration_sha
+        document["segments"][0]["declaration_sha256"] = declaration_sha
+        document["segments_sha256"] = canonical_sha256(document["segments"])
+    sealed = store.publish_sealed_record(
+        development_measured_choice_record_id(choice.choice_id),
+        kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
+        record=document,
+    )
+    item = RedDevelopmentMeasuredChoiceInput(
+        choice.choice_id, sealed.summary.record_sha256, model
+    )
+    with pytest.raises(ValueError, match="behavior selection does not replay"):
+        load_red_development_measured_choice_example(
+            store, item, objective=REGISTERED_OBJECTIVE
+        )
+
+
+def test_serialized_choice_rejects_extra_keys_and_changed_outcome(tmp_path):
+    choice = _valid_choice(tmp_path)
+    document = choice.public_dict()
+    document["unexpected"] = True
+    with pytest.raises(ValueError, match="declaration differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+    document = choice.public_dict()
+    document["observed_outcome"]["target_values"][3] = 0.0
+    with pytest.raises(ValueError, match="observed outcome differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_fit_red_player_update_with_measured_choice(tmp_path, monkeypatch):
+    store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
+    meas_input = publish_development_measured_choice(store, choice, model_a)
+
+    fit_b = fit_red_player_update(
+        store,
+        prior=model_a,
+        episodes=(request,),
+        measured_choices=(meas_input,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    assert fit_b["new_settled_examples"] == 1
+    assert fit_b["prior_rows_retained"] is True
+
+    sha_b = _model_sha(fit_b)
+    rec_b = store.find_sealed_record(f"rpr-model-{sha_b}", expected_kind="red_player_model")
+    model_b = load_player_goal_model_record_bytes(rec_b.read_bytes(), expected_model_sha256=sha_b)
+    assert model_b.model.settled_examples == model_a.model.settled_examples + 1
+
+    # Check corpus contains measured_choices
+    corpus_rec = store.find_sealed_record(
+        f"rp-corpus-{model_b.corpus_sha256}", expected_kind="red_player_training_corpus"
+    )
+    assert corpus_rec is not None
+    corpus_data = corpus_rec.read()
+    assert "measured_choices" in corpus_data
+    assert len(corpus_data["measured_choices"]) == 1
+    assert corpus_data["measured_choices"][0]["choice_id"] == choice.choice_id
+
+    # Check retained hashes include the measured choice arm hash
+    arm_hash = canonical_sha256(choice.to_observed_arm_example().public_dict())
+    assert arm_hash in model_b.retained_example_sha256
+
+
+def test_fit_red_player_update_with_failed_measured_choice(tmp_path, monkeypatch):
+    store, _, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_failed_fishing_choice(
+        tmp_path,
+        model_sha256=model_a.model.model_sha256,
+        behavior=model_a.model,
+    )
+    choice = _bind_parent(store, choice, model_a)
+    measured_input = publish_development_measured_choice(store, choice, model_a)
+
+    fitted = fit_red_player_update(
+        store,
+        prior=model_a,
+        episodes=(request,),
+        measured_choices=(measured_input,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    model_sha256 = _model_sha(fitted)
+    record = store.find_sealed_record(
+        f"rpr-model-{model_sha256}", expected_kind="red_player_model"
+    )
+    model_b = load_player_goal_model_record_bytes(
+        record.read_bytes(), expected_model_sha256=model_sha256
+    )
+
+    assert fitted["new_settled_examples"] == 1
+    assert fitted["prior_rows_retained"] is True
+    assert model_b.model.settled_examples == model_a.model.settled_examples + 1
+    arm = choice.to_observed_arm_example()
+    assert arm.outcome.verified_success is False
+    assert canonical_sha256(arm.public_dict()) in model_b.retained_example_sha256
+
+
+def test_subsequent_fit_retention_preserves_measured_choice_and_all_prior_rows(
+    tmp_path, monkeypatch
+):
+    store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice_1 = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice_1 = _bind_parent(store, choice_1, model_a)
+    meas_input_1 = publish_development_measured_choice(store, choice_1, model_a)
+
+    # Fit Model B with choice 1
+    fit_b = fit_red_player_update(
+        store,
+        prior=model_a,
+        episodes=(request,),
+        measured_choices=(meas_input_1,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    sha_b = _model_sha(fit_b)
+    rec_b = store.find_sealed_record(f"rpr-model-{sha_b}", expected_kind="red_player_model")
+    model_b = load_player_goal_model_record_bytes(rec_b.read_bytes(), expected_model_sha256=sha_b)
+
+    # Build second measured choice for Model C
+    pb, _ = _safari_observations(tmp_path)
+    runtime_path = tmp_path / "safari_runtime"
+    runtime, _, _ = bound_fixture(runtime_path)
+    pol = runtime.registration_policy
+    b = runtime.adapter.observe()
+    new_species_2 = red_species_ref(128)  # Tauros
+    new_specimen_2 = LivingSpecimen(
+        new_species_2,
+        level=28,
+        location=CollectionLocation.BOX,
+        container_index=1,
+        slot_index=2,
+    )
+    a2 = replace(
+        b,
+        capture_item_count=b.capture_item_count - 1,
+        collection_observation=replace(
+            b.collection_observation,
+            owned_species=b.collection_observation.owned_species | {new_species_2},
+            specimens=(*b.collection_observation.specimens, new_specimen_2),
+        ),
+    )
+    pa2 = project_registered_observation(a2, pol).public_dict()
+    outcome_2 = red_registered_outcome_from_observations(
+        pb,
+        pa2,
+        selected_kind=GoalKind.ACQUIRE_SPECIES,
+        succeeded=True,
+        actions=120,
+        frames=1800,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+    )
+    choice_2 = _valid_choice(
+        tmp_path, model_sha256=model_b.model.model_sha256, behavior=model_b.model
+    )
+    declaration_2 = {
+        **choice_2.selection_declaration,
+        "pair_id": "safari-segment-2",
+    }
+    segment_2 = RedDevelopmentMeasuredSegment(
+        pair_id="safari-segment-2",
+        declaration_sha256=canonical_sha256(declaration_2),
+        claim_sha256="5" * 64,
+        result_sha256="6" * 64,
+        parent_state_sha256="7" * 64,
+        terminal_state_sha256="8" * 64,
+        controller_actions=120,
+        emulator_frames=1800,
+        status="retained_success",
+    )
+    choice_2 = replace(
+        choice_2,
+        choice_id="safari-choice-tauros",
+        parent_episode_id="measured-safari-parent-2",
+        selection_declaration=declaration_2,
+        selection_declaration_sha256=canonical_sha256(declaration_2),
+        before_observation=pb,
+        after_observation=pa2,
+        before_observation_sha256=canonical_sha256(pb),
+        after_observation_sha256=canonical_sha256(pa2),
+        parent_state_sha256="7" * 64,
+        terminal_state_sha256="8" * 64,
+        segments=(segment_2,),
+        segments_sha256=canonical_sha256([segment_2.public_dict()]),
+        controller_actions=120,
+        emulator_frames=1800,
+        resource_costs={
+            "irreversible_loss": outcome_2.irreversible_loss,
+            "party_cost": outcome_2.party_cost,
+            "resource_cost": outcome_2.resource_cost,
+            "storage_cost": outcome_2.storage_cost,
+        },
+    )
+    choice_2 = _bind_parent(store, choice_2, model_b)
+    meas_input_2 = publish_development_measured_choice(store, choice_2, model_b)
+
+    # Fit Model C passing ONLY meas_input_2! Choice 1 is NOT passed explicitly!
+    fit_c = fit_red_player_update(
+        store,
+        prior=model_b,
+        episodes=(request,),
+        measured_choices=(meas_input_2,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
+    )
+    sha_c = _model_sha(fit_c)
+    rec_c = store.find_sealed_record(f"rpr-model-{sha_c}", expected_kind="red_player_model")
+    model_c = load_player_goal_model_record_bytes(rec_c.read_bytes(), expected_model_sha256=sha_c)
+    assert model_c.model.settled_examples == model_b.model.settled_examples + 1
+
+    resolver = {
+        prior.model.model_sha256: prior,
+        model_a.model.model_sha256: model_a,
+        model_b.model.model_sha256: model_b,
+        model_c.model.model_sha256: model_c,
+    }.__getitem__
+
+    # Verify inventory of Model C preserves BOTH choices
+    inv_c = load_prior_player_inventory(store, model_c, resolver)
+    assert len(inv_c.measured_choices) == 2
+    assert {m.choice_id for m in inv_c.measured_choices} == {
+        "safari-choice-kangaskhan",
+        "safari-choice-tauros",
+    }
+
+    # Verify every old row's hash from Model A and Model B is preserved in Model C
+    arm_1_hash = canonical_sha256(choice_1.to_observed_arm_example().public_dict())
+    arm_2_hash = canonical_sha256(choice_2.to_observed_arm_example().public_dict())
+    assert arm_1_hash in model_c.retained_example_sha256
+    assert arm_2_hash in model_c.retained_example_sha256
+    assert set(model_a.retained_example_sha256).issubset(set(model_c.retained_example_sha256))
+    assert set(model_b.retained_example_sha256).issubset(set(model_c.retained_example_sha256))
+
+
+def test_incremental_measured_choice_and_registered_results(tmp_path, monkeypatch):
+    store, prior, request, model_a = _bootstrap_registered_model(tmp_path, monkeypatch)
+    choice = _valid_choice(
+        tmp_path, model_sha256=model_a.model.model_sha256, behavior=model_a.model
+    )
+    choice = _bind_parent(store, choice, model_a)
+    meas_input = publish_development_measured_choice(store, choice, model_a)
+
+    resolver = {
+        prior.model.model_sha256: prior,
+        model_a.model.model_sha256: model_a,
+    }.__getitem__
+
+    # fit_incremental_measured_choice
+    fitted = fit_incremental_measured_choice(
+        store,
+        prior=model_a,
+        measured_choice=meas_input,
+        resolve=resolver,
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+    )
+    assert fitted["new_settled_examples"] == 1
+    assert fitted["prior_rows_retained"] is True
+
+    sha_b = _model_sha(fitted)
+    rec_b = store.find_sealed_record(f"rpr-model-{sha_b}")
+    model_b = load_player_goal_model_record_bytes(rec_b.read_bytes(), expected_model_sha256=sha_b)
+
+    resolver_b = {
+        prior.model.model_sha256: prior,
+        model_a.model.model_sha256: model_a,
+        model_b.model.model_sha256: model_b,
+    }.__getitem__
+
+    # Re-adding duplicate measured choice is rejected
+    with pytest.raises(ValueError, match="already included"):
+        fit_incremental_measured_choice(
+            store,
+            prior=model_b,
+            measured_choice=meas_input,
+            resolve=resolver_b,
+            source_commit="b" * 40,
+            source_bundle_sha256="c" * 64,
+        )
+
+    # Testing fit_incremental_registered_results with DEVELOPMENT_MEASURED_RESULT_SCHEMA
+    result_doc = {
+        "schema": DEVELOPMENT_MEASURED_RESULT_SCHEMA,
+        "objective": REGISTERED_OBJECTIVE,
+        "model_sha256": model_a.model.model_sha256,
+        "choice_id": choice.choice_id,
+        "record_sha256": meas_input.record_sha256,
+        "eligible_examples": 1,
+        "action_trace_available": False,
+        "independent_evaluation": False,
+        "authority_promotion_eligible": False,
+        "teacher_labels": 0,
+    }
+
+    # Trust flags rejection in incremental registered results
+    for bad_flag, bad_val in [
+        ("action_trace_available", True),
+        ("independent_evaluation", True),
+        ("authority_promotion_eligible", True),
+        ("teacher_labels", 1),
+        ("eligible_examples", 2),
+    ]:
+        bad_result = dict(result_doc)
+        bad_result[bad_flag] = bad_val
+        inc_err = "scope differ|trust flags|objective or behavior differs"
+        with pytest.raises(ValueError, match=inc_err):
+            fit_incremental_registered_results(
+                store,
+                prior=model_a,
+                results=(bad_result,),
+                resolve=resolver,
+                source_commit="b" * 40,
+                source_bundle_sha256="c" * 64,
+            )

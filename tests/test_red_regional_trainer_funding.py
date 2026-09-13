@@ -120,6 +120,23 @@ def test_step_bound_and_defeated_target(region):
     assert candidates((world, start, tuple(replace(t, defeated=True) for t in trainers))) == ()
 
 
+@pytest.mark.parametrize("trainer_class", [0, 200, 247, 255, True])
+def test_scripted_encounters_are_not_ordinary_income_candidates(
+    region, monkeypatch, trainer_class
+):
+    world, start, trainers = region
+    scripted = replace(trainers[1], trainer_class=trainer_class)
+    calls = []
+
+    def quote(*args):
+        calls.append(args)
+        raise AssertionError("scripted encounter was quoted as ordinary income")
+
+    monkeypatch.setattr(funding, "trainer_party_quote", quote)
+    assert candidates((world, start, (scripted,))) == ()
+    assert calls == []
+
+
 @pytest.mark.parametrize(
     "edge_changes",
     [
@@ -168,3 +185,131 @@ def test_route_postcondition_catches_planner_ignoring_reservations(region, monke
     monkeypatch.setattr(funding, "plan_route", unsafe)
     with pytest.raises(CartridgeReadError, match="corridor"):
         candidates(region)
+
+
+def indoor_region(region):
+    world, start, trainers = region
+    world.local_graphs[154] = world.local_graphs[22]
+    world.macro_graph = replace(world.macro_graph, edges={
+        **world.macro_graph.edges,
+        154: (MacroEdge(22, kind="warp", at=(5, 3), arrival_at=(5, 1)),),
+    })
+    return world, replace(start, map_id=154, last_outside_map=22), trainers
+
+
+@pytest.mark.parametrize("mode", ["enabled", "disabled", "different_mart", "outside_missing"])
+def test_real_runtime_passes_only_explicit_declared_mart_exit(region, monkeypatch, mode):
+    from test_red_goal_context_profile import _indoor_supply_profile
+
+    import pokemon_red_completion.red_routed_trainer_funding as runtime_funding
+
+    world, start, trainers = indoor_region(region)
+    world.local_graphs[152] = world.local_graphs.pop(154)
+    world.macro_graph = replace(world.macro_graph, edges={
+        **{m: e for m, e in world.macro_graph.edges.items() if m != 154},
+        152: world.macro_graph.edges[154],
+    })
+    world.rom = b"test"
+    start = replace(start, map_id=152,
+                    last_outside_map=None if mode == "outside_missing" else 22)
+    profile = _indoor_supply_profile(
+        map_id=40 if mode == "different_mart" else 152,
+        mart_funding_departure=mode != "disabled",
+    )
+    raw = SimpleNamespace(map_id=152, event_flags=bytes(320))
+    reader = SimpleNamespace(read=lambda: raw, read_current_map_objects=lambda: (),
+                             read_pending_trainer_battle_identity=lambda: None)
+    monkeypatch.setattr(runtime_funding, "trainer_headers", lambda *_a, **_k: ())
+    monkeypatch.setattr(runtime_funding, "map_object_events", lambda *_a: ())
+    monkeypatch.setattr(runtime_funding, "trainer_sight_zones", lambda *_a: ())
+    monkeypatch.setattr(runtime_funding, "Gen1TrainerSightProjector", lambda *_a, **_k: None)
+    monkeypatch.setattr(runtime_funding, "Gen1TraversalObserver",
+                        lambda *_a: SimpleNamespace(observe=lambda: start))
+    # Preserve actual candidate routing and map inventory; only cartridge reads are fixtures.
+    monkeypatch.setattr(runtime_funding, "static_trainer_sight_zones", lambda *_a: ())
+    def map_events(_rom, maps):
+        return tuple(t for t in trainers if t.map_id in maps)
+    monkeypatch.setattr(runtime_funding, "map_object_events", map_events)
+    monkeypatch.setattr(runtime_funding, "static_trainer_sight_zones",
+                        lambda _headers, events, _flags: events)
+    router = SimpleNamespace(world=world, regional_trainer_funding=True,
+        observed_trainer_funding=False, trainer_pending_recovery=False,
+        runtime=SimpleNamespace(reader=reader, profile=profile))
+    result = runtime_funding._candidates(router)
+    if mode == "enabled":
+        assert len(result) == 1
+        assert result[0].approach.macro_path.maps == (152, 22, 23)
+        assert result[0].approach.terminal_at == (2, 3)
+        assert [s.kind for s in result[0].approach.steps if s.kind != "walk"] == [
+            "warp", "connection"]
+    else:
+        assert result == ()
+
+
+def test_opted_indoor_route_crosses_one_exit_then_real_connection(region):
+    world, start, trainers = indoor_region(region)
+    (candidate,) = funding.regional_trainer_funding_candidates(
+        b"test", world, start, trainers,
+        inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+    )
+    assert candidate.approach.macro_path.maps == (154, 22, 23)
+    assert [s.kind for s in candidate.approach.steps if s.kind != "walk"] == ["warp", "connection"]
+    assert candidate.approach.terminal_at == (2, 3)
+    assert len(candidate.approach.steps) > 2
+    assert funding.regional_trainer_funding_candidates(
+        b"test", world, start, trainers, maximum_steps=2,
+        inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+    ) == ()
+
+
+@pytest.mark.parametrize("exit_map", [True, -1, 37, 23])
+def test_indoor_exit_requires_observed_outdoor_identity(region, exit_map):
+    world, start, _ = indoor_region(region)
+    with pytest.raises(ValueError, match="observed"):
+        funding.funding_scope(world.macro_graph, start, indoor_exit_map=exit_map)
+
+
+def test_indoor_scope_rejects_missing_inventory_and_other_doors(region):
+    world, start, trainers = indoor_region(region)
+    with pytest.raises(ValueError, match="complete"):
+        funding.regional_trainer_funding_candidates(
+            b"test", world, start, trainers,
+            inventoried_maps=frozenset({22, 23}), indoor_exit_map=22,
+        )
+    world.macro_graph = replace(world.macro_graph, edges={
+        **world.macro_graph.edges,
+        154: (MacroEdge(23, kind="warp", at=(5, 3), arrival_at=(5, 1)),),
+    })
+    assert funding.regional_trainer_funding_candidates(
+        b"test", world, start, trainers,
+        inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+    ) == ()
+
+
+def test_indoor_exit_still_reserves_origin_and_remote_sight(region):
+    world, start, trainers = indoor_region(region)
+    for blocked in ({(5, 2), (4, 1), (6, 1), (5, 0)}, {(5, 3)}):
+        assert funding.regional_trainer_funding_candidates(
+            b"test", world, replace(start, occupied=frozenset(blocked)), trainers,
+            inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+        ) == ()
+    target = replace(trainers[1], at=(3, 0), engage_distance=3)
+    assert funding.regional_trainer_funding_candidates(
+        b"test", world, start, (trainers[0], target),
+        inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+    ) == ()
+
+
+def test_return_exit_uses_retained_outside_and_cartridge_arrival(region):
+    world, start, trainers = indoor_region(region)
+    world.macro_graph = replace(world.macro_graph, edges={
+        **world.macro_graph.edges,
+        154: (MacroEdge(None, kind="return", at=(5, 3), destination_warp_index=0),),
+    }, warp_locations={22: ((5, 1),)})
+    (candidate,) = funding.regional_trainer_funding_candidates(
+        b"test", world, start, trainers,
+        inventoried_maps=frozenset({154, 22, 23}), indoor_exit_map=22,
+    )
+    step = next(s for s in candidate.approach.steps if s.kind == "return")
+    assert (step.expected_map, step.expected_at) == (22, (5, 1))
+    assert candidate.approach.macro_path.maps == (154, 22, 23)

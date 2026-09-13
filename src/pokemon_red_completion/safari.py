@@ -830,6 +830,8 @@ def _move(
     directions: Iterable[str],
     timing: SafariTiming,
     label: str,
+    *,
+    expected_party_species_ids: tuple[int, ...] | None = None,
 ) -> int:
     encounters = 0
     state = reader.read()
@@ -860,7 +862,12 @@ def _move(
                 f"{label} blocked at step {step}: {direction}; "
                 f"{(state.map_id, state.player_x, state.player_y)!r}."
             )
-        if not party_core_intact(state.party_species_ids) or _balls(emulator) not in {0, 30}:
+        party_intact = (
+            party_core_intact(state.party_species_ids)
+            if expected_party_species_ids is None
+            else state.party_species_ids == expected_party_species_ids
+        )
+        if not party_intact or _balls(emulator) not in {0, 30}:
             raise SafariChapterError(f"{label} changed party or Safari Balls.")
     return encounters
 

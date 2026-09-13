@@ -18,6 +18,7 @@ from enum import StrEnum
 
 from pokemon_red_completion.capture_support import CaptureSupportSummary
 from pokemon_red_completion.capture_survey import CaptureSurveySummary
+from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
 from pokemon_red_completion.executor import GoalExecutionBudgetExhausted
 from pokemon_red_completion.field_move_summary import FieldMoveSummary
 from pokemon_red_completion.goal_manager import (
@@ -142,6 +143,7 @@ class BoundedPlayerStep:
     storage_preparation: StoragePreparationSummary | None = None
     capture_survey: CaptureSurveySummary | None = None
     field_moves: FieldMoveSummary | None = None
+    destination_unavailable: DestinationUnavailableSummary | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -169,6 +171,8 @@ class BoundedPlayerStep:
                if self.storage_preparation is not None else {}),
             **({"field_moves": self.field_moves.public_dict()}
                if self.field_moves is not None else {}),
+            **({"destination_unavailable": self.destination_unavailable.public_dict()}
+               if self.destination_unavailable is not None else {}),
         }
 
 
@@ -277,6 +281,7 @@ def _retaining_binding_set(
             _retain_executor_failure(binding, budget_meter, failure_observer)
             for binding in binding_set.bindings
         ),
+        allow_resource_variants=binding_set.allow_resource_variants,
     )
 
 
@@ -401,6 +406,7 @@ def run_bounded_player_episode(
         question = trajectory.ordered_question(
             current.situation,
             current.binding_set.opportunities,
+            allow_resource_variants=current.binding_set.allow_resource_variants,
         )
         if len(question.available_indices) != available_count:
             raise BoundedPlayerError(
@@ -552,6 +558,10 @@ def run_bounded_player_episode(
                 field_moves=(
                     None if execution_report is None
                     else FieldMoveSummary.from_evidence(execution_report.evidence)
+                ),
+                destination_unavailable=(
+                    None if execution_report is None
+                    else DestinationUnavailableSummary.from_evidence(execution_report.evidence)
                 ),
                 storage_preparation=(
                     None if execution_report is None

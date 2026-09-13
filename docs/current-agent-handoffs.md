@@ -1,25 +1,26 @@
 # Reviewer handoff
 
-Start with the [operational handoff](../HANDOFF.md) and [role assignments](../AGENT_COORDINATION.md). They are the current agent entry points; old reports cannot authorize work.
+Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and
+[roles](../AGENT_COORDINATION.md).
 
-## Current facts
+The latest measured endpoint is model111 with83 registrations,63 living species,67 specimens and41
+required Red registrations remaining. Model109 selected one of four anonymous fishing destinations
+and added one registration; model110's next four-way choice stopped at an unsupported scripted
+dialogue. Success and failure were each retained once, producing rows110 and111. No teacher label,
+independent evaluation or authority promotion occurred.
 
-- Goal: a transferable player and one shared registered Pokédex, not a fixed Red walkthrough.
-- Latest exact save: AG02, Power Plant; 63 registrations, 53 specimens, input-ready, zero balls and 1,638 money.
-- Model61 contains 61 related development examples. Goal/destination choices are learned; game mechanics remain deterministic.
-- AG01's Dodrio evolution was forced and unfitted. AG02 selected Power Plant among seven destinations; the capture failed after ball exhaustion and its actual outcome was fitted.
-- Gameplay is stopped. The next menu has no goal: resupply is affordable but transport-blocked.
-- Missing map identities and explicit capture-Surf access are integrated. The failed destination lost its completed field summary; arrival is verified, a retained Surf count is not.
-- No external agents ran this session. Flash's older stone draft remains isolated.
+The current restart is the recovered input-ready model111 checkpoint. Source
+`23dadf37a59ad5f018d3d227921770174be108c7` passed CI; one generic recovery used8
+actions/576frames and added zero labels. The next action-free menu is forced-only. Party and active
+box lack a capture-status move, while seven helpers exist in other boxes. The next reusable gate is
+capability-derived cross-box retrieval with one policy query, not a retry, named-species route,
+hidden identity or independent-performance claim.
 
-## Focused review questions
-
-1. Does supply transport support an actual indoor exit/field journey without globally relaxing capture-only permissions?
-2. Does exhaustion retain spending, safe terminal control and completed transport diagnostics without changing AG's failed label?
-3. Does the next fit correspond to a real played choice, with deterministic setup excluded?
-4. Can redundant unchanged-state route inspection be removed without reusing stale observations or live executor bindings?
-5. Are the public README, roadmap and learning claims readable and consistent with evidence?
-
-Review only; do not play the game, open protected contexts or edit the shared worktree. Submit concrete defects and the shortest falsifier. Codex owns integration decisions and explains disagreements.
-
-[Previous handoffs](history/agent-handoffs-through-2026-09-10.md)
+Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
+useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's
+useful role is architecture, portability and broad implementation review through `agy`. Flash
+previously drafted the measured-choice integration; Codex materially hardened it. The next useful
+milestone review is after cross-box capture preparation and a fresh useful menu, not before this
+bounded engineering gate. Neither
+external review should block ordinary development; disagreements are resolved against the mission
+and executable evidence.

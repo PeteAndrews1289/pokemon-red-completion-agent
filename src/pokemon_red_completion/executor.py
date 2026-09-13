@@ -280,6 +280,14 @@ class FrameSafeExecutor:
         self._controller = controller
         self._timing = timing or ControllerTiming()
 
+    @property
+    def controller(self) -> ControllerPort:
+        return self._controller
+
+    @property
+    def timing(self) -> ControllerTiming:
+        return self._timing
+
     def execute(self, action: MacroAction) -> ExecutedAction:
         button = self._button_for(action)
         if button is None:

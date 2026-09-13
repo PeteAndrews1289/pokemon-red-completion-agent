@@ -32,7 +32,11 @@ from pokemon_red_completion.red_player_checkpoint import (
     publish_red_player_checkpoint,
     recover_completed_red_player_checkpoint,
 )
-from pokemon_red_completion.red_recorded_support import RedRecordedSupportResult
+from pokemon_red_completion.red_recorded_support import (
+    REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+    RedRecordedSupportResult,
+    RedRegisteredRecordedSupportResult,
+)
 from pokemon_red_completion.red_registered_observation import project_registered_observation
 from pokemon_red_completion.red_registration_session import (
     observe_registration,
@@ -415,6 +419,21 @@ def test_registered_support_import_remains_forbidden(case):
     arguments["meter"] = SimpleNamespace(checkpoint=lambda: CompositionBudgetCheckpoint(0, 0))
     with pytest.raises(RedPlayerCheckpointError, match="declared contract"):
         capture_red_player_terminal(**arguments)
+
+
+def test_registered_support_import_requires_and_emits_its_declared_contract(case):
+    _, arguments, _, _, _, _ = case
+    arguments["result"] = RedRegisteredRecordedSupportResult(
+        "parent", "a" * 64, "b" * 64, "c" * 64, 2, 37,
+    )
+    arguments["emulator"].frame_count = 0
+    arguments["meter"] = SimpleNamespace(
+        checkpoint=lambda: CompositionBudgetCheckpoint(0, 0)
+    )
+    document = capture_red_player_terminal(**arguments)
+    assert document["schema"] == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+    assert document["terminal_result"]["training_examples"] == 0
+    assert document["terminal_result"]["steps"] == []
 
 
 def test_legacy_recovery_behavior_preserved(case):

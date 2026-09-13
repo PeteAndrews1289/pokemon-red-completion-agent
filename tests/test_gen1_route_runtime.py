@@ -6,6 +6,7 @@ from typing import cast
 
 import pytest
 
+from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_runtime import BattleRuntimeError
 from pokemon_red_completion.gen1_route_runtime import (
     Gen1RouteInterruptionHandler,
@@ -36,6 +37,7 @@ class FakeReader:
     occupied: frozenset[tuple[int, int]] = frozenset()
     occupancy_reads: int = 0
     trainer_engagement: bool = False
+    dialogue_visible: bool = False
     retained_outside_map: int = MapId.VIRIDIAN_CITY
 
     def read(self) -> RawGameState:
@@ -59,6 +61,9 @@ class FakeReader:
 
     def trainer_engagement_active(self) -> bool:
         return self.trainer_engagement
+
+    def read_bottom_dialogue_box_visible(self) -> bool:
+        return self.dialogue_visible
 
     def read_retained_outside_map(self) -> int:
         return self.retained_outside_map
@@ -99,6 +104,25 @@ class TrainerDialogueExecutor:
     def execute(self, action: object) -> object:
         self.actions += 1
         self.reader.trainer_engagement = False
+        return action
+
+
+@dataclass
+class ScriptedDialogueExecutor:
+    reader: FakeReader
+    cancel_pulses: int = 0
+    actions: int = 0
+
+    def execute(self, action: object) -> object:
+        self.actions += 1
+        if isinstance(action, MacroAction) and action.kind == MacroActionKind.CANCEL:
+            self.cancel_pulses += 1
+            if self.cancel_pulses == 1:
+                self.reader.raw = replace(self.reader.raw, player_y=3)
+            elif self.cancel_pulses == 3:
+                self.reader.raw = replace(self.reader.raw, player_x=8)
+                self.reader.dialogue_visible = False
+                self.reader.ready = True
         return action
 
 
@@ -161,6 +185,16 @@ def test_observer_withholds_map_objects_and_hazards_during_transition() -> None:
     assert observed.hazards == ()
     assert fake.occupancy_reads == 0
     assert hazards.calls == 0
+
+
+def test_observer_types_visible_scripted_dialogue_during_a_route() -> None:
+    fake = FakeReader(raw(), ready=False, dialogue_visible=True)
+
+    observed = Gen1TraversalObserver(reader_as_real(fake)).observe()
+
+    assert observed.interruption == "scripted_dialogue"
+    assert not observed.ready
+    assert observed.occupied == frozenset()
 
 
 def test_observer_projects_live_nested_return_context() -> None:
@@ -344,6 +378,79 @@ def test_combined_handler_closes_defeated_trainer_dialogue_without_a_battle() ->
         "verified": True,
     }
     assert executor.actions == 1
+
+
+def test_combined_handler_boundedly_dismisses_a_scripted_route_dialogue() -> None:
+    fake = FakeReader(raw(), ready=False, dialogue_visible=True)
+    executor = ScriptedDialogueExecutor(fake)
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, executor),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=0,
+        stabilization_frames=120,
+        maximum_scripted_dialogues=1,
+        max_scripted_dialogue_pulses=4,
+    )
+
+    receipt = handler.handle(
+        TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "scripted_dialogue")
+    )
+
+    assert receipt.kind == "scripted_dialogue"
+    assert receipt.resumed_at == (3, 8)
+    assert receipt.details == {
+        "cancel_pulses": 3,
+        "position_changed": True,
+        "verified": True,
+    }
+    assert executor.actions == 6
+    assert handler.scripted_dialogue_evidence == [receipt]
+    with pytest.raises(RouteExecutionError, match="dialogue budget"):
+        handler.handle(
+            TraversalSnapshot(MapId.ROUTE_1, (3, 8), False, "scripted_dialogue")
+        )
+
+
+def test_combined_handler_declares_only_configured_interruption_capabilities() -> None:
+    fake = FakeReader(raw())
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, FakeExecutor()),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=0,
+        stabilization_frames=24,
+        maximum_scripted_dialogues=2,
+    )
+
+    assert handler.handled_interruption_kinds == frozenset(
+        {"wild_battle", "scripted_dialogue"}
+    )
+
+
+def test_combined_handler_rejects_a_disappeared_but_unready_dialogue() -> None:
+    fake = FakeReader(raw(), ready=False, dialogue_visible=True)
+
+    @dataclass
+    class DisappearingExecutor:
+        def execute(self, action: object) -> object:
+            if isinstance(action, MacroAction) and action.kind == MacroActionKind.CANCEL:
+                fake.dialogue_visible = False
+            return action
+
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, DisappearingExecutor()),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=0,
+        stabilization_frames=120,
+        maximum_scripted_dialogues=1,
+    )
+
+    with pytest.raises(RouteExecutionError, match="without restoring input readiness"):
+        handler.handle(
+            TraversalSnapshot(MapId.ROUTE_1, (8, 7), False, "scripted_dialogue")
+        )
 
 
 def test_combined_handler_resumes_after_one_bounded_trainer_recovery(

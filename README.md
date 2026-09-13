@@ -7,11 +7,14 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest verified collection contains **63 registered species**. The current registered-objective model has **61 training examples**—a small development dataset, not a measure of general intelligence. The latest batch added Dodrio through forced evolution and fitted one failed model-selected trip to the Power Plant.
+- The latest measured collection contains **83 registered species**. The registered-objective model has **111 settled examples**. Its retained route failure was recovered once as zero-label support; the input-ready restart is durable, but its next menu is forced-only until capture preparation can retrieve a capability from another storage box.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest collection report](docs/work-sessions/2026-09-10-surf-collection-access.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),
+[route-capability report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md),
+[latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) and
+[story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 
@@ -33,6 +36,6 @@ Python and PyBoy provide game observation and control. A small NumPy-based goal-
 
 **Pete Andrews** defines the product, directs development, challenges design decisions and validates observed behavior. AI coding agents—including Codex, Claude and Antigravity—have contributed implementation and review. This is an explicitly AI-assisted engineering project, not a claim that Pete hand-wrote every component.
 
-[Project story](docs/project-narrative.md) · [Concise portfolio brief](docs/portfolio-brief.md) · [Historical work log](docs/worklog.md)
+[Documentation map](docs/README.md) · [Project story](docs/project-narrative.md) · [Concise portfolio brief](docs/portfolio-brief.md) · [Interview handoff](docs/ai-systems-specialist-interview-handoff.md) · [Historical work log](docs/worklog.md)
 
 Contributors: use [AGENTS.md](AGENTS.md), the [active development state](ACTIVE_PRODUCT_STATE.md) and the single current [handoff](HANDOFF.md). Session reports belong in the history, not at the top of this README.

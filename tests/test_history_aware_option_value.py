@@ -126,7 +126,7 @@ def test_mixed_corpus_keeps_legacy_rows_unchanged_and_retains_negative_outcomes(
     assert restored.menu.candidates[0].search_history == rows[0].menu.candidates[0].search_history
 
 
-@pytest.mark.parametrize("version", [True, 0, 4, "2"])
+@pytest.mark.parametrize("version", [True, 0, 5, "2"])
 def test_invalid_feature_versions_are_rejected(version):
     with pytest.raises(LivingDexOptionValueError):
         fit_living_dex_option_value(_rows(), feature_version=version)

@@ -37,6 +37,11 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionMenu,
     LivingDexOptionUnavailableReason,
 )
+from pokemon_red_completion.resource_economy_observation import (
+    EconomyMode,
+    EconomyOffer,
+    EconomySnapshot,
+)
 
 LIVING_DEX_PRIVATE_MENU_SCHEMA = "pokemon.core.private-living-dex-option-menu.v1"
 
@@ -112,10 +117,16 @@ def restore_living_dex_policy_menu(
         LIVING_DEX_OPTION_MENU_SCHEMA,
         "pokemon.core.living-dex-option-menu.v2",
         "pokemon.core.living-dex-option-menu.v3",
+        "pokemon.core.living-dex-option-menu.v4",
     ):
         raise LivingDexPolicyCodecError("living-Dex policy menu schema differs")
     context_document = _mapping(document["context"], subject="policy context")
     context = _restore_context(context_document)
+    if document["schema"] == "pokemon.core.living-dex-option-menu.v4":
+        if context.economy_snapshot is None or context.target_cash is None:
+            raise LivingDexPolicyCodecError("v4 living-Dex policy menu requires economy context")
+    elif context.economy_snapshot is not None or context.target_cash is not None:
+        raise LivingDexPolicyCodecError("pre-v4 policy menu cannot include economy context")
     rows = _sequence(document["candidates"], subject="policy candidates")
     if binding_refs is None:
         bindings = tuple(f"policy-row-{index}" for index in range(len(rows)))
@@ -143,18 +154,38 @@ def restore_living_dex_policy_menu(
 
 
 def _restore_context(document: Mapping[str, object]) -> LivingDexOptionContext:
-    _exact_keys(
-        document,
-        {"schema", *_CONTEXT_FIELDS},
-        subject="policy context",
-    )
-    if document["schema"] != LIVING_DEX_OPTION_CONTEXT_SCHEMA:
+    schema = document.get("schema")
+    if schema == LIVING_DEX_OPTION_CONTEXT_SCHEMA:
+        _exact_keys(
+            document,
+            {"schema", *_CONTEXT_FIELDS},
+            subject="policy context",
+        )
+        values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
+        try:
+            context = LivingDexOptionContext(**values, economy_snapshot=None, target_cash=None)
+        except (TypeError, ValueError) as error:
+            raise LivingDexPolicyCodecError(str(error)) from None
+    elif schema == "pokemon.core.living-dex-option-context.v2":
+        _exact_keys(
+            document,
+            {"schema", *_CONTEXT_FIELDS, "economy_cash", "target_cash"},
+            subject="policy context",
+        )
+        values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
+        cash = _integer(document["economy_cash"], subject="economy cash")
+        try:
+            # Cash-only inference context, never a reconstruction of inventory
+            # evidence. Full ledgers must be read from the outcome observation.
+            snapshot = EconomySnapshot(cash, ())
+            target_cash = _integer(document["target_cash"], subject="target cash")
+            context = LivingDexOptionContext(
+                **values, economy_snapshot=snapshot, target_cash=target_cash
+            )
+        except (TypeError, ValueError) as error:
+            raise LivingDexPolicyCodecError(str(error)) from None
+    else:
         raise LivingDexPolicyCodecError("living-Dex policy context schema differs")
-    values = {field: _number(document[field], subject=field) for field in _CONTEXT_FIELDS}
-    try:
-        context = LivingDexOptionContext(**values)
-    except (TypeError, ValueError) as error:
-        raise LivingDexPolicyCodecError(str(error)) from None
     if context.policy_dict() != dict(document):
         raise LivingDexPolicyCodecError("living-Dex policy context does not replay")
     return context
@@ -169,7 +200,8 @@ def _restore_candidate(
     _exact_keys(
         document,
         {"availability", "features", "unavailable_reason"}
-        | ({"search_history"} if "search_history" in document else set()),
+        | ({"search_history"} if "search_history" in document else set())
+        | ({"economy_offer"} if "economy_offer" in document else set()),
         subject="policy candidate",
     )
     feature_document = _mapping(document["features"], subject="candidate features")
@@ -213,6 +245,30 @@ def _restore_candidate(
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None
     reason_value = document["unavailable_reason"]
+    economy_offer = None
+    if "economy_offer" in document:
+        offer_doc = _mapping(document["economy_offer"], subject="economy offer")
+        _exact_keys(
+            offer_doc,
+            {"conditional_income", "mode", "planned_spend"},
+            subject="economy offer",
+        )
+        try:
+            mode = EconomyMode(_string(offer_doc["mode"], subject="economy mode"))
+        except ValueError:
+            raise LivingDexPolicyCodecError("economy offer mode differs") from None
+        cond_income = _integer(offer_doc["conditional_income"], subject="conditional income")
+        planned_spend = _integer(offer_doc["planned_spend"], subject="planned spend")
+        try:
+            economy_offer = EconomyOffer(
+                mode=mode,
+                conditional_income=cond_income,
+                planned_spend=planned_spend,
+            )
+        except (TypeError, ValueError) as error:
+            raise LivingDexPolicyCodecError(str(error)) from None
+        if context.economy_snapshot is None or context.target_cash is None:
+            raise LivingDexPolicyCodecError("economy candidate requires economy context")
     try:
         reason = (
             None
@@ -231,6 +287,7 @@ def _restore_candidate(
                 if "search_history" in document
                 else None
             ),
+            economy_offer=economy_offer,
         )
     except (TypeError, ValueError) as error:
         raise LivingDexPolicyCodecError(str(error)) from None
@@ -288,6 +345,12 @@ def _string(value: object, *, subject: str) -> str:
 def _sha256(value: object, *, subject: str) -> str:
     if not isinstance(value, str) or _SHA256.fullmatch(value) is None:
         raise LivingDexPolicyCodecError(f"{subject} SHA-256 differs")
+    return value
+
+
+def _integer(value: object, *, subject: str) -> int:
+    if type(value) is not int or value < 0:
+        raise LivingDexPolicyCodecError(f"{subject} must be a non-negative integer")
     return value
 
 

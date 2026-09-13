@@ -98,6 +98,10 @@ class RegisteredTravelCaptureHandler:
     def handled_hazard_kinds(self) -> frozenset[str]:
         return frozenset(getattr(self.fallback, "handled_hazard_kinds", ()))
 
+    @property
+    def handled_interruption_kinds(self) -> frozenset[str]:
+        return frozenset(getattr(self.fallback, "handled_interruption_kinds", ()))
+
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         if self.attempted and not self.receipts:
             raise RedTravelCaptureError("incomplete capture cannot resume or fall back")

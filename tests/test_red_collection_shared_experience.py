@@ -227,6 +227,18 @@ def test_pp_independent_escape_does_not_waive_defensive_guards(change):
     ) is None
 
 
+def test_support_escape_can_reuse_safe_active_member_without_a_training_recipient():
+    active = member(0x76, 55, 1, pp=0)
+    assert training.collection_escape_escort(
+        PartyObservation((active,)), None, POLICY,
+        enemy_level=9, enemy_species=0x30,
+    ) == active
+    assert training.collection_escape_escort(
+        PartyObservation((active,)), active.species_id, POLICY,
+        enemy_level=9, enemy_species=0x30,
+    ) is None
+
+
 def test_real_loop_heals_instead_of_accepting_species_blind_helper():
     class Memory(FakeMemory):
         def _field(self, observed, offset):

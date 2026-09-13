@@ -8,11 +8,17 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 63 verified registered species and 61 examples in the current collection-learning dataset. The latest batch added Dodrio through forced evolution and fitted an actual failed choice among seven destinations; it did not establish independent improvement.
+- 83 verified registered species and 111 settled examples in the current collection-learning dataset. The latest loop retained both a model-selected fishing capture and the next model-selected route failure. Both are training-only, same-lineage outcomes and do not establish independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current collection](work-sessions/2026-09-10-surf-collection-access.md).
+[Evidence for the current model](work-sessions/2026-09-12-model111-zero-label-recovery.md).
+
+The latest engineering repair makes route menus fail closed: a destination cannot be ranked unless
+its executor declares bounded support for the wild, trainer and dialogue interruptions it may meet.
+The exact failed terminal then recovered once in eight actions / 576 frames and reopened as
+zero-label support. Its next menu is forced-only because capture preparation cannot yet retrieve a
+status-move helper from another box; the learner and its 111 rows remain unchanged.
 
 ## My role and the stack
 

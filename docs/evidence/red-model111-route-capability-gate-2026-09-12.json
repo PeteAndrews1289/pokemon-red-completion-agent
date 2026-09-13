@@ -1,0 +1,52 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "living_species": 63,
+    "registered_species": 83,
+    "required_red_registrations_remaining": 41,
+    "specimens": 67
+  },
+  "controller_actions": 0,
+  "emulator_frames": 0,
+  "model": {
+    "model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+    "settled_examples": 111,
+    "successful_examples": 76,
+    "unchanged": true
+  },
+  "qualification": {
+    "configured_limits": {
+      "scripted_dialogues": 4,
+      "trainer_battles": 8,
+      "wild_flees": 128
+    },
+    "fail_closed_before_ranking": true,
+    "full_nonintegration_suite": {
+      "excluded_host_specific_runtime_fingerprint_tests": 1,
+      "expected_failures": 1,
+      "passed": 11470
+    },
+    "required_dynamic_interruptions": [
+      "battle:2",
+      "scripted_dialogue",
+      "trainer_engagement",
+      "wild_battle"
+    ],
+    "targeted_tests_passed": 132,
+    "wrapper_propagation": [
+      "guarded_collection_recovery",
+      "registered_travel_capture"
+    ]
+  },
+  "restart": {
+    "checkpoint_record_sha256": "7b70cb03508650d47863159b16c49d2985bd6fea07553e5bc4defddb2bb3380c",
+    "episode_id": "red-model111-fishing-measured-failure-terminal-20260912",
+    "state_sha256": "30b99599b061396e21247f769baddd53942e97d6529c555b24e6dfb6bcc20ca1",
+    "unchanged": true
+  },
+  "schema": "pokemon.red.model111-route-capability-gate-evidence.v1",
+  "session_id": "2026-09-12-model111-route-capability-gate",
+  "source_commit": "07fbfbbd767e5648a03be955e93b888f97ed02c3",
+  "teacher_labels": 0,
+  "transfer_result": null
+}

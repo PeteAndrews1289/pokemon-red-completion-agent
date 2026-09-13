@@ -99,7 +99,9 @@ def fixture(monkeypatch):
         emulator=emulator,
         adapter=SimpleNamespace(observe=lambda: state),
         provider_for=lambda *_: provider,
-        profile=SimpleNamespace(providers=(SimpleNamespace(kind=GoalKind.RESUPPLY),)),
+        profile=SimpleNamespace(providers=(
+            SimpleNamespace(kind=GoalKind.RESUPPLY, parameters={}),
+        )),
     )
     router = SimpleNamespace(
         runtime=runtime,
@@ -175,6 +177,102 @@ def fixture(monkeypatch):
     return router, state, target, bindings, calls
 
 
+def test_explicit_indoor_support_settles_before_party_preparation(monkeypatch):
+    router, state, _, bindings, calls = fixture(monkeypatch)
+    assert not funding._indoor_funding_enabled(router)
+    router.runtime.profile.providers[0].parameters["indoor_funding_departure"] = True
+    assert funding._indoor_funding_enabled(router)
+    monkeypatch.setattr(funding, "prepare_center_departure", lambda *_: calls.append("departure"))
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+    report = bound.execute()
+    assert calls.index("departure") < calls.index("escort") < calls.index("route")
+    assert report.actions_executed > 0
+
+
+def resource_choice_fixture(monkeypatch, *, money=400, stock=0, enabled=True):
+    from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
+
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    bag = ((int(ItemId.POKE_BALL), stock),) if stock else ()
+    state.raw = replace(state.raw, player_money=money, bag_items=bag)
+    state.capture_item_count = stock
+    provider = router.runtime.provider_for(GoalKind.RESUPPLY, router.actions)
+    provider.adapter.config = SimpleNamespace(desired_capture_items=5)
+    router.runtime.profile.providers[0].parameters["resource_choice_variants"] = enabled
+    buy = ExecutableGoalBinding(
+        "affordable-buy", GoalKind.RESUPPLY, 0.1, 0.05,
+        lambda: GoalExecutionReport(0, 0, {}), lambda _: GoalVerification.succeeded(),
+        resource_quote=GoalResourceQuote(money, 200, (
+            GoalResourceReserve("capture", stock, 5, 1),
+        )),
+    )
+    other = bindings.bindings[0]
+    return router, state, target, GoalBindingSet(
+        (buy.opportunity, other.opportunity), (buy, other),
+    ), calls
+
+
+@pytest.mark.parametrize("money", [200, 400, 999])
+def test_reserve_shortfall_keeps_affordable_purchase_and_adds_income(monkeypatch, money):
+    router, state, _, original, calls = resource_choice_fixture(monkeypatch, money=money)
+    offered = funding.bind_local_trainer_funding(router, original, state)
+    assert offered.allow_resource_variants
+    assert offered.bindings[:2] == original.bindings
+    assert offered.opportunities[:2] == original.opportunities
+    assert len(offered.bindings) == 3
+    assert offered.bindings[2].resource_quote.expected_income == 1050
+    assert offered.bindings[2].resource_quote.available_funds == money
+    assert offered.bindings[0].resource_quote.purchase_cost == 200
+    assert funding.bind_local_trainer_funding(router, offered, state) is offered
+    assert calls == []
+    assert router.actions.actions_executed == router.runtime.emulator.frame_count == 0
+
+
+def test_reserve_shortfall_can_compose_partial_trainer_income(monkeypatch):
+    router, state, target, original, calls = fixture(monkeypatch)
+    router.runtime.profile.providers[0].parameters["resource_choice_variants"] = True
+    provider = router.runtime.provider_for(GoalKind.RESUPPLY, router.actions)
+    provider.adapter.config = SimpleNamespace(desired_capture_items=5)
+    state.capture_item_count = 0
+    # 9 + 160 remains below this Mart's 200-unit ball price.  The battle is
+    # still useful because a later finite reward can compose with this one.
+    partial = replace(
+        target,
+        quote=replace(target.quote, expected_victory_money=160),
+    )
+    monkeypatch.setattr(funding, "_candidates", lambda _: (partial,))
+
+    # Historical profiles retain the old one-payout affordability contract,
+    # allowing their saved semantic states to authenticate under new source.
+    assert funding.bind_local_trainer_funding(router, original, state) is original
+    router.runtime.profile.providers[0].parameters[
+        "composable_trainer_funding"
+    ] = True
+
+    offered = funding.bind_local_trainer_funding(router, original, state)
+
+    assert not calls
+    assert offered.bindings[0] is original.bindings[0]
+    assert offered.bindings[1].kind is GoalKind.RESUPPLY
+    assert offered.bindings[1].resource_quote.available_funds == 9
+    assert offered.bindings[1].resource_quote.expected_income == 160
+    assert offered.bindings[1].resource_quote.purchase_cost == 0
+
+
+@pytest.mark.parametrize("case", ["legacy", "funded", "stocked", "no_trainer", "fainted"])
+def test_resource_variants_do_not_invent_unneeded_or_unsafe_income(monkeypatch, case):
+    router, state, _, original, calls = resource_choice_fixture(
+        monkeypatch, money=1000 if case == "funded" else 400,
+        stock=5 if case == "stocked" else 0, enabled=case != "legacy",
+    )
+    if case == "no_trainer":
+        monkeypatch.setattr(funding, "_candidates", lambda _: ())
+    if case == "fainted":
+        state.raw = replace(state.raw, party_hp=(0,))
+    assert funding.bind_local_trainer_funding(router, original, state) is original
+    assert calls == []
+
+
 def test_observed_route_rejection_stops_before_escort_or_input(monkeypatch):
     router, state, _, bindings, calls = fixture(monkeypatch)
 
@@ -205,6 +303,93 @@ def test_execution_uses_requalified_approach_not_stale_quoted_plan(monkeypatch):
     bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
     bound.execute()
     assert "observed_route" in calls
+
+
+def test_trainer_facing_settles_one_same_boundary_wild_interruption(monkeypatch):
+    router, state, target, bindings, calls = fixture(monkeypatch)
+    reader = router.runtime.reader
+    reader.read_input_readiness = lambda: SimpleNamespace(ready=True)
+
+    def interrupted_face(*_args):
+        calls.append("face")
+        state.raw = replace(state.raw, battle_state=1)
+        raise funding.RedPCStorageError("PC facing did not preserve its bound position")
+
+    class Observer:
+        def observe(self):
+            assert state.raw.battle_state == 1
+            return SimpleNamespace(
+                interruption="wild_battle",
+                map_id=state.raw.map_id,
+                at=(state.raw.player_y, state.raw.player_x),
+            )
+
+    class Flee:
+        def __init__(self, _actions, _reader, **kwargs):
+            self.kwargs = kwargs
+
+        def handle(self, interruption):
+            assert self.kwargs == {
+                "maximum_flees": 1,
+                "stabilization_frames": 180,
+                "route_name": "ordinary trainer funding facing",
+            }
+            calls.append("flee")
+            state.raw = replace(state.raw, battle_state=0)
+            return funding.InterruptionReceipt(
+                "wild_battle", interruption.map_id, interruption.at, {"verified": True}
+            )
+
+    monkeypatch.setattr(funding, "face_pc_boundary", interrupted_face)
+    monkeypatch.setattr(funding, "Gen1TraversalObserver", lambda *_: Observer())
+    monkeypatch.setattr(funding, "Gen1WildFleeHandler", Flee)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+
+    report = bound.execute()
+
+    assert calls == ["escort", "route", "face", "flee", "battle"]
+    assert report.evidence["funding_facing_interruption"] == {
+        "kind": "wild_battle",
+        "resumed_map": target.trainer.map_id,
+        "resumed_at": [10, 36],
+        "details": {"verified": True},
+    }
+    assert bound.verify(report).status is GoalDecisionOutcome.SUCCEEDED
+
+
+def test_trainer_facing_never_recovers_wild_interruption_after_position_drift(monkeypatch):
+    router, state, _target, bindings, calls = fixture(monkeypatch)
+
+    def interrupted_face(*_args):
+        calls.append("face")
+        state.raw = replace(state.raw, player_y=9, battle_state=1)
+        raise funding.RedPCStorageError("PC facing did not preserve its bound position")
+
+    class Observer:
+        def observe(self):
+            return SimpleNamespace(
+                interruption="wild_battle",
+                map_id=state.raw.map_id,
+                at=(state.raw.player_y, state.raw.player_x),
+            )
+
+    monkeypatch.setattr(funding, "face_pc_boundary", interrupted_face)
+    monkeypatch.setattr(funding, "Gen1TraversalObserver", lambda *_: Observer())
+
+    class Flee:
+        def __init__(self, *_args, **_kwargs):
+            pass
+
+        def handle(self, _interruption):
+            pytest.fail("drifted encounter must not be controlled")
+
+    monkeypatch.setattr(funding, "Gen1WildFleeHandler", Flee)
+    bound = funding.bind_local_trainer_funding(router, bindings, state).bindings[-1]
+
+    with pytest.raises(funding.RedTrainerFundingError, match="unchanged wild interruption"):
+        bound.execute()
+
+    assert calls == ["escort", "route", "face"]
 
 
 @pytest.mark.parametrize(

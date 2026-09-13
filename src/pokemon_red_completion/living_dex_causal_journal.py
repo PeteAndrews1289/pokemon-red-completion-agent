@@ -50,6 +50,9 @@ from pokemon_red_completion.private_artifacts import (
     PrivateArtifactRoot,
 )
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.resource_economy_observation import (
+    EconomyOutcome,
+)
 
 LIVING_DEX_CAUSAL_IDENTITY_SCHEMA = "pokemon.core.living-dex-causal-identity.v1"
 LIVING_DEX_CAUSAL_CLAIM_SCHEMA = "pokemon.core.private-living-dex-causal-claim.v1"
@@ -2731,18 +2734,71 @@ def restore_living_dex_observed_arm_example(
     return _restore_observed_arm_example(document)
 
 
+def _restore_economy_outcome(document: Mapping[str, object]) -> EconomyOutcome:
+    _exact_keys(
+        document,
+        {
+            "cash_delta",
+            "cash_loss",
+            "gross_income",
+            "gross_spend",
+            "net_item_decrease",
+            "net_item_increase",
+            "schema",
+            "useful_liquidity_gain",
+        },
+        subject="economy outcome",
+    )
+    if document["schema"] != "pokemon.core.resource-economy-outcome.v1":
+        raise LivingDexCausalJournalError("economy outcome schema differs")
+    if document["gross_income"] is not None or document["gross_spend"] is not None:
+        raise LivingDexCausalJournalError("economy outcome gross flows must be None")
+    cash_delta = _integer(document["cash_delta"], subject="economy cash delta")
+    net_item_decrease = _integer(document["net_item_decrease"], subject="economy net item decrease")
+    net_item_increase = _integer(document["net_item_increase"], subject="economy net item increase")
+    if net_item_decrease < 0 or net_item_increase < 0:
+        raise LivingDexCausalJournalError("economy item counts cannot be negative")
+    useful_liquidity_gain = _unit_interval(
+        document["useful_liquidity_gain"], subject="economy useful liquidity gain"
+    )
+    cash_loss = _unit_interval(document["cash_loss"], subject="economy cash loss")
+    try:
+        return EconomyOutcome(
+            cash_delta=cash_delta,
+            net_item_decrease=net_item_decrease,
+            net_item_increase=net_item_increase,
+            useful_liquidity_gain=useful_liquidity_gain,
+            cash_loss=cash_loss,
+        )
+    except ValueError as err:
+        raise LivingDexCausalJournalError(str(err)) from err
+
+
 def _restore_observed_outcome(
     document: Mapping[str, object],
 ) -> LivingDexObservedOutcome:
-    _exact_keys(
-        document,
-        {"censor_reason", "schema", "status", "target_names", "target_values"},
-        subject="observed outcome",
-    )
-    if (
-        document["schema"] != "pokemon.core.living-dex-observed-outcome.v1"
-        or document["target_names"] != list(LIVING_DEX_OPTION_OUTCOME_NAMES)
-    ):
+    schema = document.get("schema")
+    economy: EconomyOutcome | None = None
+    if schema == "pokemon.core.living-dex-observed-outcome.v1":
+        _exact_keys(
+            document,
+            {"censor_reason", "schema", "status", "target_names", "target_values"},
+            subject="observed outcome",
+        )
+    elif schema == "pokemon.core.living-dex-observed-outcome.v2":
+        _exact_keys(
+            document,
+            {"censor_reason", "economy", "schema", "status", "target_names", "target_values"},
+            subject="observed outcome",
+        )
+        economy_raw = document.get("economy")
+        if economy_raw is None:
+            raise LivingDexCausalJournalError("observed outcome v2 missing economy payload")
+        economy = _restore_economy_outcome(_mapping(economy_raw, subject="economy outcome"))
+    else:
+        raise LivingDexCausalJournalError("observed outcome contract differs")
+
+    if document["target_names"] != list(LIVING_DEX_OPTION_OUTCOME_NAMES):
         raise LivingDexCausalJournalError("observed outcome contract differs")
     try:
         status = LivingDexOutcomeStatus(
@@ -2753,13 +2809,15 @@ def _restore_observed_outcome(
     if status is LivingDexOutcomeStatus.CENSORED:
         if document["target_values"] is not None:
             raise LivingDexCausalJournalError("censored outcome contains targets")
+        if economy is not None:
+            raise LivingDexCausalJournalError("censored outcome cannot contain economy targets")
         try:
             reason = LivingDexCensorReason(
                 _string(document["censor_reason"], subject="censor reason")
             )
         except ValueError:
             raise LivingDexCausalJournalError("censor reason differs") from None
-        outcome = LivingDexObservedOutcome(status=status, censor_reason=reason)
+        outcome = LivingDexObservedOutcome(status=status, censor_reason=reason, economy=None)
     else:
         if document["censor_reason"] is not None:
             raise LivingDexCausalJournalError("settled outcome contains a censor reason")
@@ -2780,6 +2838,7 @@ def _restore_observed_outcome(
             party_cost=values[6],
             storage_cost=values[7],
             irreversible_loss=values[8],
+            economy=economy,
         )
     if outcome.public_dict() != dict(document):
         raise LivingDexCausalJournalError("observed outcome does not replay")
@@ -2938,6 +2997,15 @@ def _float_tuple(value: object, *, subject: str) -> tuple[float, ...]:
     if not isinstance(value, list) or any(type(item) is not float for item in value):  # noqa: E721
         raise LivingDexCausalJournalError(f"{subject} differ")
     return tuple(value)
+
+
+def _unit_interval(value: object, *, subject: str) -> float:
+    if type(value) not in (int, float):
+        raise LivingDexCausalJournalError(f"{subject} must be finite in [0, 1]")
+    assert isinstance(value, (int, float))
+    if not math.isfinite(value) or not 0.0 <= float(value) <= 1.0:
+        raise LivingDexCausalJournalError(f"{subject} must be finite in [0, 1]")
+    return float(value)
 
 
 def _require_sha256(value: object, *, subject: str) -> str:

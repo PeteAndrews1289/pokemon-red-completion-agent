@@ -1,0 +1,62 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "living_species": 63,
+    "registered_species_after": 83,
+    "registered_species_before": 82,
+    "required_red_registrations_remaining": 41,
+    "specimens": 67
+  },
+  "failed_followup": {
+    "behavior_model_sha256": "ac5b703641a068c338e577131d2f52a655858a028424caee33bac61be89bb6bb",
+    "candidate_count": 4,
+    "controller_actions": 435,
+    "emulator_frames": 14832,
+    "failure_kind": "scripted_dialogue_outside_declared_route_capability",
+    "registered_species_after": 83,
+    "registered_species_before": 83,
+    "retry_authorized": false,
+    "selected_candidate_index": 3,
+    "selected_probability": 0.2924336330188473,
+    "status": "retained_failure",
+    "teacher_labels": 0
+  },
+  "independent_evaluation": false,
+  "model": {
+    "model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+    "new_measured_rows": 2,
+    "prior_model_sha256": "726171e67b5c914f1e870b70f2f8992e55b5189117adce96dc4182c84bfa23af",
+    "settled_examples": 111,
+    "successful_examples": 76,
+    "training_only": true,
+    "weighted_mse_after_last_fit": 0.011165315549423422
+  },
+  "restart": {
+    "checkpoint_record_sha256": "7b70cb03508650d47863159b16c49d2985bd6fea07553e5bc4defddb2bb3380c",
+    "episode_id": "red-model111-fishing-measured-failure-terminal-20260912",
+    "publication_actions": 0,
+    "publication_frames": 0,
+    "report_reconstructed_after_reporter_failure": true,
+    "state_sha256": "30b99599b061396e21247f769baddd53942e97d6529c555b24e6dfb6bcc20ca1"
+  },
+  "schema": "pokemon.red.model111-fishing-learning-loop-evidence.v1",
+  "session_id": "2026-09-12-model111-fishing-learning-loop",
+  "source_bundle_sha256": "d81d9f5c20becdea35a2bba0c8c245515023b20dae8b83f9d14a67ef89beae8d",
+  "source_commit": "04f71cbb5bca62f3b0a6d9362a3a14aeeced089a",
+  "successful_capture": {
+    "behavior_model_sha256": "726171e67b5c914f1e870b70f2f8992e55b5189117adce96dc4182c84bfa23af",
+    "candidate_count": 4,
+    "captures": 1,
+    "casts": 5,
+    "controller_actions": 542,
+    "emulator_frames": 31464,
+    "registered_species_after": 83,
+    "registered_species_before": 82,
+    "route_interruptions": 0,
+    "selected_candidate_index": 1,
+    "selected_probability": 0.0876097452026932,
+    "status": "verified_new_registration",
+    "teacher_labels": 0
+  },
+  "transfer_result": null
+}

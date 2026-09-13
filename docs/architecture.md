@@ -44,7 +44,9 @@ The source-level boundaries prevent accidental misuse; Python interfaces are not
 
 Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
 
-The active registered-objective model has 61 examples from related development states. Those are not 61 independent games. In-sample fit quality and a successful collection batch cannot establish generalization.
+The active registered-objective model has 111 settled examples from related development states,
+including successful choices and retained failures. Those are not 111 independent games. In-sample
+fit quality and bounded collection gains cannot establish generalization.
 
 Champion and Hall-of-Fame evidence exists for checkpoint-based hierarchical story integration. It does not prove that the present collection model can start from the title screen and independently complete the game.
 
@@ -57,12 +59,24 @@ All module paths below are under [the Python package](../src/pokemon_red_complet
 | Semantic observation | `observation.py`, `red_player_observer.py`, `red_party.py` |
 | Cartridge knowledge | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py`, `gen1_acquisition.py` |
 | Learned choice | `living_dex_option_value.py`, `living_dex_player_exploration.py`, `red_player_model.py` |
-| Runtime and routing | `red_bounded_player.py`, `red_routed_semantic_goal.py`, `red_travel_capture.py` |
+| Runtime and routing | `red_bounded_player.py`, `red_resource_goal_router.py`, `gen1_route_runtime.py`, `red_routed_semantic_goal.py`, `red_travel_capture.py` |
 | Registration | `registration_memory.py`, `registered_collection.py`, `registered_checkpoint.py` |
 | Training | `red_player_incremental_fit.py`, `red_player_training_dataset.py` |
 | Evidence and recovery | `private_artifacts.py`, `red_player_checkpoint.py`, `provenance.py` |
 | Orchestration | [Regional learning-cycle runner](../scripts/run_red_regional_learning_cycle.py) |
 
 ROMs, states, recordings, datasets and model artifacts are private. Public summaries contain selected metrics and hashes, not enough material to reproduce every private run.
+
+Resource-route eligibility now has an explicit fail-closed seam: before a route becomes a model
+candidate, the configured handler must declare finite support for wild encounters, trainer
+engagement/battles and scripted dialogue. Recovery and travel-capture wrappers must preserve the
+same declaration. This prevents a deterministic execution deficit from masquerading as a viable
+learned choice.
+
+The current capture-preparation boundary is narrower than the storage reader: it can select a
+sleep/paralysis helper only from the active box, although observation can inventory all twelve
+boxes. Model111's recovered save makes that limitation concrete—seven suitable helpers exist in
+other boxes and none in the active box. Cross-box capability selection and safe PC switching are
+the next adapter seam; helper species identity must remain outside the learned policy.
 
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)

@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon.red.model103-league-rehearsal-public-evidence.v1",
+  "date": "2026-09-11",
+  "published_source": "d6ec371b04800df56f641f0483265a40906989b1",
+  "model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+  "starting_money": 553,
+  "ending_money": 23917,
+  "observed_income": 23364,
+  "expected_full_cycle_income": 29799,
+  "verified_battles": [
+    {"objective": "defeat_lorelei", "payout": 5544},
+    {"objective": "defeat_bruno", "payout": 5742},
+    {"objective": "defeat_agatha", "payout": 5940},
+    {"objective": "defeat_lance", "payout": 6138}
+  ],
+  "champion": {
+    "status": "failed_retained_no_retry",
+    "opponents_defeated_before_stop": 5,
+    "terminal_opponent_species_id": 154,
+    "terminal_opponent_level": 65,
+    "terminal_opponent_hp": 127,
+    "terminal_opponent_max_hp": 189,
+    "terminal_workhorse_level": 77,
+    "terminal_workhorse_hp": 88,
+    "terminal_workhorse_max_hp": 261,
+    "terminal_workhorse_move_ids": [66, 70, 58, 57],
+    "terminal_workhorse_pp": [20, 10, 0, 9],
+    "party_faints": 0,
+    "reason": "no healthy offensive matchup remained after cumulative HP and PP use"
+  },
+  "execution_totals": {
+    "actions": 1482,
+    "frames": 133282,
+    "items_spent": 0,
+    "critical_risk_intents": 2
+  },
+  "learning_delta": {
+    "training_examples": 0,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registered_species": 0,
+    "specimens": 0
+  },
+  "verified_conclusion": "The exact save can earn four League payouts and reach the final Champion opponent while preserving the party and bag, but it cannot yet prove a complete renewable funding cycle. Independent per-fight coverage did not account for cumulative HP and PP depletion.",
+  "next_falsifier": "A prospectively supplied rematch can preserve enough healing and Ice-type PP to verify Champion plus Hall-of-Fame, then recover to an input-ready post-game state with positive capture purchasing power.",
+  "retry_authorized": false
+}

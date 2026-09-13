@@ -1209,6 +1209,7 @@ def _execute_policy_turn(
     timing: BattleRuntimeTiming,
     label: str,
     before_attack: Callable[[], None] | None = None,
+    allow_player_faint: bool = False,
 ) -> bool:
     raw = initial_raw
     menu = initial_menu
@@ -1334,6 +1335,45 @@ def _execute_policy_turn(
         initial_pp=initial_pp,
         timing=timing,
         label=label,
+        allow_player_faint=allow_player_faint,
+    )
+
+
+def execute_observed_trainer_move(
+    reader: BattleStateReader,
+    executor: BattleActionExecutor,
+    slot: int,
+    *,
+    expected_map: int,
+    timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
+    label: str = "observed trainer move",
+) -> bool:
+    """Execute one already-chosen move from a proven trainer MAIN boundary.
+
+    This is the narrow public turn primitive for controllers whose objective is
+    not to win a whole battle.  It owns menu navigation and PP-decrement proof,
+    but it deliberately does not choose the slot, settle dialogue, switch party
+    members, or infer a battle outcome.
+    """
+
+    raw = reader.read()
+    _require_active_trainer_state(raw, expected_map=expected_map, label=label)
+    menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+    if menu.phase is not BattleMenuPhase.MAIN:
+        raise BattleRuntimeError(f"{label} must start from the semantic MAIN menu.")
+    initial_pp = _current_pp(raw, slot=slot, label=label)
+    return _execute_policy_turn(
+        reader,
+        executor,
+        expected_map=expected_map,
+        initial_raw=raw,
+        initial_menu=menu,
+        slot=slot,
+        initial_pp=initial_pp,
+        required_move_id=None,
+        timing=timing,
+        label=label,
+        allow_player_faint=True,
     )
 
 
@@ -1347,6 +1387,7 @@ def _confirm_attack_with_pp_gate(
     initial_pp: int,
     timing: BattleRuntimeTiming,
     label: str,
+    allow_player_faint: bool = False,
 ) -> bool:
     confirmation_count = 1
     _pulse(
@@ -1357,7 +1398,12 @@ def _confirm_attack_with_pp_gate(
 
     for _ in range(timing.max_pp_confirmation_pulses):
         raw = reader.read()
-        _require_present_state(raw, expected_map=expected_map, label=label)
+        _require_present_turn_state(
+            raw,
+            expected_map=expected_map,
+            label=label,
+            allow_player_faint=allow_player_faint,
+        )
         observed_pp = _original_battler_pp_vector(
             initial_raw,
             raw,
@@ -1380,6 +1426,7 @@ def _confirm_attack_with_pp_gate(
                 spent_pp=current_pp,
                 timing=timing,
                 label=label,
+                allow_player_faint=allow_player_faint,
             )
             return True
         if _selected_move_identity_replaced(initial_raw, raw, slot=slot):
@@ -1391,6 +1438,12 @@ def _confirm_attack_with_pp_gate(
             return True
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
+        if (
+            allow_player_faint
+            and (raw.battler_hp or 0) <= 0
+            and observed_pp == initial_raw.battler_pp
+        ):
+            return False
         if raw.enemy_hp == 0 and observed_pp == initial_raw.battler_pp:
             # An opponent can move first and faint from recoil or
             # Selfdestruct before the cursor-proven move executes. The full
@@ -1678,6 +1731,7 @@ def _await_selected_turn_effect(
     spent_pp: int,
     timing: BattleRuntimeTiming,
     label: str,
+    allow_player_faint: bool = False,
 ) -> None:
     """Latch one PP-proven turn until its semantic effect becomes observable."""
 
@@ -1708,7 +1762,12 @@ def _await_selected_turn_effect(
         else:
             _wait(executor, timing.attack_wait_frames)
         raw = reader.read()
-        _require_present_state(raw, expected_map=expected_map, label=label)
+        _require_present_turn_state(
+            raw,
+            expected_map=expected_map,
+            label=label,
+            allow_player_faint=allow_player_faint,
+        )
         if _selected_turn_effect_observed(initial_raw, raw):
             return
         current_pp = _current_pp(
@@ -1910,6 +1969,29 @@ def _require_present_state(
     expected_battle_state = _ACTIVE_BATTLE_STATE.get()
     if expected_battle_state == _TRAINER_BATTLE_STATE and raw.battle_state == _WILD_BATTLE_STATE:
         raise BattleRuntimeError(f"{label} changed to an unexpected wild battle.")
+    if raw.battle_state not in {0, expected_battle_state}:
+        raise BattleRuntimeError(f"{label} exposed unsupported battle state {raw.battle_state!r}.")
+
+
+def _require_present_turn_state(
+    raw: RawGameState,
+    *,
+    expected_map: int,
+    label: str,
+    allow_player_faint: bool,
+) -> None:
+    """Validate a selected turn while optionally admitting its expected faint."""
+
+    if not allow_player_faint:
+        _require_present_state(raw, expected_map=expected_map, label=label)
+        return
+    if raw.map_id != expected_map:
+        raise BattleRuntimeError(
+            f"{label} left expected map {expected_map:#04x} for {raw.map_id!r}."
+        )
+    if raw.party_count is None or raw.party_count <= 0 or raw.battler_hp is None:
+        raise BattleRuntimeError(f"{label} lacks active-battler evidence.")
+    expected_battle_state = _ACTIVE_BATTLE_STATE.get()
     if raw.battle_state not in {0, expected_battle_state}:
         raise BattleRuntimeError(f"{label} exposed unsupported battle state {raw.battle_state!r}.")
 

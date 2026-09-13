@@ -113,6 +113,43 @@ def test_resumed_observer_does_not_latch_transient_inventory_affordances() -> No
     assert "location:celadon_city" in state.facts
 
 
+def test_resumed_observer_accepts_only_consistent_bounded_skill_evidence() -> None:
+    prefix = (
+        "power_on",
+        "begin_adventure",
+        "choose_starter",
+        "receive_pokedex",
+        "reach_pewter",
+        "defeat_brock",
+    )
+    reader = _Reader(
+        RawGameState(
+            game_started=True,
+            map_id=MapId.PEWTER_GYM,
+            player_x=4,
+            player_y=13,
+            party_count=1,
+            battle_state=0,
+        )
+    )
+    observer = CapturedPokemonRedObserver(reader, COMPLETION_QUEST, _envelope(*prefix))
+
+    observer.latch_verified_facts(
+        COMPLETION_QUEST.objective("reach_cerulean").completion_facts
+    )
+    assert "reach_cerulean" in COMPLETION_QUEST.completed_ids(observer.observe())
+    public = observer.public_dict()
+    assert public["source_verified_objectives"] == list(prefix)
+    assert "reach_cerulean" in public["verified_objectives"]
+
+    with pytest.raises(ResumedStateError, match="outside the quest contract"):
+        observer.latch_verified_facts(frozenset({"private:route_hint"}))
+    with pytest.raises(ResumedStateError, match="prerequisites"):
+        observer.latch_verified_facts(
+            COMPLETION_QUEST.objective("defeat_surge").completion_facts
+        )
+
+
 def test_live_observer_latches_only_consistent_verified_quest_facts() -> None:
     reader = _Reader(replace(_celadon_raw(), game_started=False, map_id=None))
     observer = LivePokemonRedObserver(reader, COMPLETION_QUEST)

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 import pytest
 
@@ -131,6 +131,7 @@ def _observer(
     exhaust_budget: bool = False,
     singleton_after_first: bool = False,
     binding_failure: bool = False,
+    destination_reason: str | None = None,
 ):
     state = {"stage": 0, "actions": 0, "frames": 0, "observations": 0}
 
@@ -190,7 +191,9 @@ def _observer(
                 return GoalExecutionReport(
                     4 if mismatched_report else 5,
                     50,
-                    {"fail": fail_first and before == 0},
+                    {"fail": fail_first and before == 0,
+                     **({"destination_unavailable": {"reason": destination_reason}}
+                        if before == 0 and destination_reason is not None else {})},
                 )
 
             def verify(report: GoalExecutionReport) -> GoalVerification:
@@ -319,6 +322,53 @@ def test_menu_validation_is_action_free_and_callable(fault):
     assert authority.calls == trajectory.next_decision_index == 0
 
 
+@pytest.mark.parametrize("earn", [False, True])
+def test_resource_variants_survive_bounded_player_and_failure_wrapping(earn):
+    from pokemon_red_completion.goal_resource_quote import GoalResourceQuote, GoalResourceReserve
+
+    trajectory, sink = _trajectory()
+    original_observe, meter, state = _observer(fail_first=False)
+
+    def observe():
+        original = original_observe()
+        skill = original.binding_set.bindings[0]
+        buy = replace(skill, binding_ref="private:buy", kind=GoalKind.RESUPPLY,
+                      resource_quote=GoalResourceQuote(
+                          600, 200, (GoalResourceReserve("capture", 0, 5, 1),),
+                      ))
+        income = replace(skill, binding_ref="private:earn", kind=GoalKind.RESUPPLY,
+                         resource_quote=GoalResourceQuote(600, 0, (), expected_income=500))
+        masked = tuple(replace(
+            item, availability=GoalAvailability.UNAVAILABLE,
+            unavailable_reason=GoalUnavailableReason.MISSING_RESOURCE,
+            estimated_effort=None, estimated_risk=None,
+        ) for item in original.binding_set.opportunities if item.kind is not GoalKind.RESUPPLY)
+        return replace(original, binding_set=GoalBindingSet(
+            (*masked, buy.opportunity, income.opportunity), (buy, income),
+            allow_resource_variants=True,
+        ))
+
+    class Select:
+        def select(self, question):
+            assert question.allow_resource_variants
+            return next(index for index, item in enumerate(question.opportunities)
+                        if item.resource_quote is not None
+                        and (item.resource_quote.expected_income > 0) is earn)
+
+    result = run_bounded_player_episode(
+        observe=observe, authority=Select(), authority_id="resource-variant-unit-test",
+        trajectory=trajectory, budget_meter=meter,
+        completion_satisfied=lambda _: False,
+        limits=BoundedPlayerLimits(max_decisions=1, max_replans=0),
+    )
+    assert result.stop_reason is BoundedPlayerStopReason.DECISION_LIMIT
+    assert len(result.steps) == 1
+    assert result.steps[0].status.value == "succeeded"
+    assert result.steps[0].selection_mode is GoalSelectionMode.AUTHORITY
+    assert state["actions"] == 5 and state["frames"] == 50
+    assert len(sink.decisions) == len(sink.events) == 1
+
+
 def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     trajectory, sink = _trajectory()
     observe, meter, state = _observer()
@@ -346,6 +396,26 @@ def test_verified_failure_reobserves_and_replans_to_a_different_goal() -> None:
     public = json.dumps(result.public_dict(), sort_keys=True)
     assert "private:red" not in public
     assert "bounded-player-root" not in public
+
+
+@pytest.mark.parametrize("reason", ["missing_resource", "storage_blocked"])
+def test_actual_bounded_step_preserves_destination_reason_without_relabeling(reason):
+    trajectory, sink = _trajectory()
+    observe, meter, state = _observer(destination_reason=reason)
+    result = run_bounded_player_episode(
+        observe=observe, authority=CompletionFirstGoalTeacher(),
+        authority_id="completion-first-v1", trajectory=trajectory,
+        budget_meter=meter, completion_satisfied=_complete,
+    )
+    first, recovery = result.public_dict()["steps"]
+    assert first["destination_unavailable"] == {"reason": reason}
+    assert first["status"] == "failed"
+    assert first["failure_reason"] == "outcome_not_verified"
+    assert first["actions_executed"] == 5 and first["frames_executed"] == 50
+    assert "destination_unavailable" not in recovery
+    assert recovery["status"] == "succeeded"
+    assert len(sink.decisions) == len(sink.events) == 2
+    assert state["actions"] == 10 and state["frames"] == 100
 
 
 def test_unchanged_failed_context_stops_without_repeating_input() -> None:

@@ -13,18 +13,33 @@ Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) fo
 
 ## Current assignment
 
-PR241 merged. Codex repaired missing encounter-map names and connected scoped capture-Surf transport. AG01 evolved Doduo; AG02 chose Power Plant among seven destinations and failed after ball exhaustion. The exact saved state retains 63 registrations and 53 specimens; model61 includes that failed choice. Gameplay is stopped. Next connect affordable resupply from the Power Plant interior, preserve typed exhaustion/transport diagnostics, then obtain a productive collection choice.
+Model109's four-way fishing choice added registration83 and training row110. Model110's next
+four-way choice reached an unsupported scripted dialogue after435 actions; that consumed failure
+became row111. The current zero-input restart preserves the exact interruption with83 registrations,
+63 living species and67 specimens. No independent evaluation or authority promotion occurred.
 
-No external agents ran during this session and no fresh quota was queried. Flash's prior stone draft remains isolated at 895b4d6b with 40 passing tests after Codex corrections, not integrated or live-qualified. Earlier usage readings are historical. Codex owns supply integration; a bounded exhaustion/reporting draft or unchanged-state inspection review could help, but is not a required gate.
+Continue from model111. The destination capability gate is qualified in source
+`07fbfbbd767e5648a03be955e93b888f97ed02c3`; publish it under one green GitHub run. Then
+recover ordinary input control through generic deterministic support, rebuild the action-free menu
+and permit at most one newly committed choice. Do not retry the failed candidate, add a
+named-species route, hide destination identity in features, reset resources or move into
+Blue/Crystal. Mixed acquisition-family coverage remains unfinished.
 
-Accepted: the README and handoffs had accumulated contradictory status reports and needed replacement with concise current summaries.
-
-Not adopted: archiving or privatizing the repository. It remains an active project; honest scope, readable evidence and clear AI-assisted authorship are the appropriate presentation.
+The route repair passed local closeout. Use the next external read-only audit after the live
+zero-label recovery and fresh menu outcome, where it can evaluate a meaningful product boundary.
+Antigravity already found and helped close runner-wiring and documentation-surface defects in the
+preceding storage session. Claude found no earlier closeout blocker and correctly moved the generic
+capability gate ahead of the next menu. Its cosmetic concern about the immutable failed episode's
+`capture` identifier remains rejected: the name is provenance, while status and gain fields are
+explicit.
 
 ## Reviewer brief
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-10-surf-collection-access.md) for limitations and adjudication.
+Report accepted/rejected findings and reasons after external review. Check service usage when
+available. See the [latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md)
+and [latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) for
+limitations and adjudication.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

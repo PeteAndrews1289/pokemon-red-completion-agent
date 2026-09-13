@@ -1,0 +1,53 @@
+{
+  "schema": "pokemon.red.item-evolution-prerequisite-inspection.v1",
+  "status": "observed_action_free",
+  "source_commit": "71f3fabc1ed84723c302403d9cdf01166eb7574c",
+  "source_bundle_sha256": "7ace3df9b9ea7775af9b54e583720c878e2ab9bb0004c13479dcca4e0dc9dcb3",
+  "parent_episode_id": "red-collection-20260912-cg-owned-evolution-01-causal",
+  "parent_checkpoint_sha256": "ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677",
+  "collection": {
+    "registered_species": 79,
+    "living_species": 59,
+    "specimens": 63,
+    "remaining_registrations": 45
+  },
+  "resources": {
+    "money": 558,
+    "great_balls": 12,
+    "held_evolution_stones": 0,
+    "party_members_with_pay_day": 0,
+    "buyable_stone_price": 2100,
+    "safari_admission_price": 500
+  },
+  "owned_missing_item_evolution_candidates": [
+    {"source": 25, "target": 26, "item_id": 33, "item": "thunder_stone"},
+    {"source": 30, "target": 31, "item_id": 10, "item": "moon_stone"},
+    {"source": 33, "target": 34, "item_id": 10, "item": "moon_stone"},
+    {"source": 35, "target": 36, "item_id": 10, "item": "moon_stone"},
+    {"source": 39, "target": 40, "item_id": 10, "item": "moon_stone"},
+    {"source": 44, "target": 45, "item_id": 47, "item": "leaf_stone"},
+    {"source": 58, "target": 59, "item_id": 32, "item": "fire_stone"},
+    {"source": 90, "target": 91, "item_id": 34, "item": "water_stone"},
+    {"source": 120, "target": 121, "item_id": 34, "item": "water_stone"}
+  ],
+  "result": {
+    "candidate_count": 9,
+    "immediately_executable_candidate_count": 0,
+    "distinct_required_stones": 5,
+    "item_evolution_falsified_as_next_gameplay": true,
+    "next_capability": "generic_safari_acquisition",
+    "reason": "The exact save can afford one Safari admission, which supplies its own capture balls and contains six missing registrations; stone evolution first requires a new funding or finite-item detour."
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "training_examples": 0
+  },
+  "boundaries": {
+    "blue_accesses": 0,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "independent_evaluation": false
+  }
+}

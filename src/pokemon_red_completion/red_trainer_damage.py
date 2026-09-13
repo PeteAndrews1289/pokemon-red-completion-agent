@@ -55,12 +55,17 @@ def ordinary_damage_upper(
 def incoming_damage_bounds(
     observation: TrainerDamageObservation, *, include_critical: bool = True,
 ) -> tuple[int, ...]:
-    """Worst supported incoming turn per member, including all multi-hit strikes.
+    """Worst supported incoming commitment per member, including forced repeats.
 
     All multi-hit moves conservatively receive five critical hits. Damage-side
     status adds a full ceil(maxHP/16) residual allowance even for paralysis/freeze.
     Existing poison/burn also receive residual allowance; toxic/seeded/transformed
     states must already have been rejected by the observation adapter.
+    Gen-I trapping can apply the first hit's damage up to five times while
+    suppressing the player's replies. The bound therefore charges five critical
+    hits and, for an already poisoned/burned member, five residual ticks. The
+    cartridge actually reuses the first calculated damage; using the critical
+    maximum for every application is intentionally conservative.
     Pure confusion, immediate pure boosts, fixed20/40 and incoming Night Shade
     at the observed enemy level are supported;
     other pure status and indirect effects abstain.
@@ -87,6 +92,7 @@ def incoming_damage_bounds(
         raise TrainerDamageError("incoming damage move inventory is incomplete")
     result = [0] * raw.party_count
     confusion_possible = observation.player_confused
+    confusion_attack_reset_possible = False
     for move_id in observation.moves:
         if not move_id:
             continue
@@ -94,9 +100,18 @@ def incoming_damage_bounds(
         move = RED_BATTLE_CATALOG.resolve_move(ref)
         fixed = RED_BATTLE_CATALOG.incoming_fixed_damage_bound(ref, enemy_level=raw.enemy_level)
         if "debuff" in move.effect_flags and observation.player_confused:
-            # A faster stat drop (including a damaging side effect) can change
-            # self-hit damage and reapply badge boosts within this same turn.
-            raise TrainerDamageError("confusion with incoming stat reduction is not qualified")
+            # A faster stat drop can precede the player's confusion check and
+            # reapplies Gen-I badge boosts. Defense-down can shrink the self-hit
+            # divisor; other non-Attack drops can raise live Attack without
+            # recalculating it, so those cases still abstain. Attack-down is
+            # narrower: it cannot lower Defense, and any recalculated/boosted
+            # Attack is capped at 999. Use that global cap below because burn
+            # reapplication can make the pre-turn live Attack non-monotonic.
+            if RED_BATTLE_CATALOG.stat_reduction_target(ref) != "attack":
+                raise TrainerDamageError(
+                    "confusion with incoming non-attack stat reduction is not qualified"
+                )
+            confusion_attack_reset_possible = True
         if fixed is not None or (
             move.power == 0 and move.category == "status"
             and (move.effect_flags in (
@@ -123,7 +138,14 @@ def incoming_damage_bounds(
                     if status & 0x18:
                         result[index] = max(result[index], ceil(raw.party_max_hp[index] / 16))
                 continue
-        attack_type = RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
+        attack_type: str | None
+        if move.effect_flags == frozenset({"trapping"}):
+            # The ordinary type-only entry screen deliberately rejects forced
+            # repeats. This full incoming commitment is the narrower API that
+            # can account for all of them.
+            attack_type = move.type_name
+        else:
+            attack_type = RED_BATTLE_CATALOG.switch_entry_attack_type(ref)
         if attack_type is None:
             raise TrainerDamageError("status incoming turns are not yet qualified")
         special = move.category == "special"
@@ -148,9 +170,11 @@ def incoming_damage_bounds(
                 )
                 for critical in ((False, True) if include_critical else (False,))
             )
-            worst *= 5 if "multi_hit" in move.effect_flags else 1
+            repeated_hits = 5 if move.effect_flags & {"multi_hit", "trapping"} else 1
+            worst *= repeated_hits
             if "status" in move.effect_flags or raw.party_status[index] & 0x18:
-                worst += ceil(raw.party_max_hp[index] / 16)
+                residual_ticks = 5 if "trapping" in move.effect_flags else 1
+                worst += residual_ticks * ceil(raw.party_max_hp[index] / 16)
             result[index] = max(result[index], worst)
     if confusion_possible:
         active = raw.active_party_index
@@ -163,6 +187,8 @@ def incoming_damage_bounds(
         ):
             raise TrainerDamageError("confusion requires observed active stats and level")
         attack, defense = observation.active_self_hit_stats
+        if confusion_attack_reset_possible:
+            attack = max(attack, 999)
         result[active] += ordinary_damage_upper(
             level=raw.party_levels[active],
             power=40,

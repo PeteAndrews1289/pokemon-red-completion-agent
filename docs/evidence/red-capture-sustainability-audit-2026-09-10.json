@@ -1,0 +1,56 @@
+{
+  "schema": "pokemon.red.capture-sustainability-audit.v1",
+  "source_commit": "cd2ef95a8fd2db89e50a17054a97eb15f8acaf82",
+  "checkpoint_sha256": "c0e01cb2956b9346195fc8c5e8055f441b0b06a8e407710be789ff2f3b6af89a",
+  "preflight": {
+    "available_goal_kinds": [
+      "explore"
+    ],
+    "actions": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "episode_created": false,
+    "elapsed_seconds": 33.507980375085026
+  },
+  "regional_inventory": {
+    "candidate_count": 0,
+    "inventory_seconds": 4.859312958084047,
+    "ranking_history_requested": false
+  },
+  "center_entry_routes": {
+    "target_at": [
+      3,
+      3
+    ],
+    "feasible_count": 0
+  },
+  "escape_capability": {
+    "actions": 0,
+    "battle_state": 0,
+    "fits": 0,
+    "frames": 0,
+    "input_ready": true,
+    "last_healing_anchor": 7,
+    "live_escape_qualified": false,
+    "living_dig_holders": [
+      2
+    ],
+    "map_id": 161,
+    "schema": "pokemon.red.escape-capability-inspection.v1",
+    "source_commit": "cd2ef95a8fd2db89e50a17054a97eb15f8acaf82",
+    "tileset_allows_escape": true,
+    "tileset_id": 17
+  },
+  "registered_species": 64,
+  "physical_specimens": 54,
+  "training_examples": 63,
+  "new_examples": 0,
+  "new_registrations": 0,
+  "interpretation": "Only explore is executable. No controller inputs or fits. Existing Dig mechanics are a candidate recovery composition, not a live-qualified collection option.",
+  "limitations": [
+    "No before/after speedup ratio measured.",
+    "Candidate Center entry is not nurse execution.",
+    "No escape, recovery, funding or collection trial executed.",
+    "No new model authority or independent reliability evidence."
+  ]
+}

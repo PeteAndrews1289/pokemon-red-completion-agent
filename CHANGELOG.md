@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Aligned the public documentation with the model111 Red collection endpoint: 83 registrations,
+  63 living species, 67 specimens and 111 settled training-only examples. Replaced the stale
+  interview handoff with a concise working/partial/planned account, archived its August baseline,
+  added a documentation authority map, updated the architecture and presentation narrative, and
+  marked superseded teacher, level-100, Crystal and long-form roadmap material as historical or
+  frozen future design. No gameplay, fit or authority change occurred.
+
 - Repaired the repeatable Red battle-learning evidence boundary after a falsification audit showed
   the adapted model (5/7, utility 2.644) trailing the strongest legal fixed-power rule (6/7,
   utility 2.992), and showed that the nominally fresh rehearsal duplicated a training feature

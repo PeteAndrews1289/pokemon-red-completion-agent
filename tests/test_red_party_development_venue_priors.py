@@ -746,7 +746,7 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "bb1ff8c7b449b359f01c7c1c9474c1a660ea604f629cbc0c9130e20030a7cd8c"
     )
     assert contract.encounter_execution_sha256 == (
-        "93742d0089d4f7241b6473477a8e313e2779d85d397f58e9e86d5ce21c315704"
+        "1688a2fc5dd62acd9e3bb0832b9daf0aec44bb14789a742a36644ee28cd6d83a"
     )
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
@@ -755,10 +755,10 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     # scene handoff. Default settlement remains unchanged (dedicated regression
     # test); this contract fingerprints the whole module, including that opt-in.
     assert contract.battle_timing_sha256 == (
-        "eb16f526570f62b01982802a751e3d495a64992b0ab8f64ad677d08baf149d31"
+        "5d16989f2bf05f3c24709013dcb352ce8e32f9aee6e304b60fd35c2649e1ec63"
     )
     assert contract.accounting_sha256 == (
-        "a0199f37eb398f2212c05b7e0fed751244e40689ad37f802111a7674cc9ac62a"
+        "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"
     )
 
 

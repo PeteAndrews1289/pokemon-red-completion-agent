@@ -19,6 +19,17 @@ from .provenance import canonical_sha256
 SUPPORT_HEADER_SCHEMA = "pokemon.red.recorded-support-header.v1"
 SUPPORT_TERMINAL_SCHEMA = "pokemon.red.recorded-support-terminal.v1"
 SUPPORT_CHECKPOINT_SCHEMA = "pokemon.red.private-recorded-support-checkpoint.v1"
+REGISTERED_SUPPORT_HEADER_SCHEMA = "pokemon.red.registered-recorded-support-header.v1"
+REGISTERED_SUPPORT_TERMINAL_SCHEMA = "pokemon.red.registered-recorded-support-terminal.v1"
+REGISTERED_SUPPORT_CHECKPOINT_SCHEMA = (
+    "pokemon.red.private-registered-recorded-support-checkpoint.v1"
+)
+REGISTERED_MEASURED_HEADER_SCHEMA = "pokemon.red.registered-measured-terminal-header.v1"
+REGISTERED_MEASURED_TERMINAL_SCHEMA = "pokemon.red.registered-measured-terminal.v1"
+REGISTERED_MEASURED_CHECKPOINT_SCHEMA = (
+    "pokemon.red.private-registered-measured-terminal-checkpoint.v1"
+)
+VERIFIED_SUPPORT_SEGMENT_SCHEMA = "pokemon.red.verified-support-segment.v1"
 
 
 class RedRecordedSupportError(ValueError):
@@ -31,6 +42,16 @@ def _mapping(value: object) -> Mapping:
     return value
 
 
+def _digest(value: object, *, subject: str) -> str:
+    if (
+        not isinstance(value, str)
+        or len(value) != 64
+        or any(character not in "0123456789abcdef" for character in value)
+    ):
+        raise RedRecordedSupportError(f"{subject} digest differs")
+    return value
+
+
 def support_costs(segments: Sequence[Mapping], parent_state: str) -> tuple[int, int, str]:
     """Check continuous exact saves and paired action traces, including failed support."""
     if not 1 <= len(segments) <= 8:
@@ -38,6 +59,59 @@ def support_costs(segments: Sequence[Mapping], parent_state: str) -> tuple[int, 
     actions = frames = 0
     current = parent_state
     for segment in segments:
+        if segment.get("schema") == VERIFIED_SUPPORT_SEGMENT_SCHEMA:
+            plan, audit = _mapping(segment.get("plan")), _mapping(segment.get("audit"))
+            if (
+                plan.get("parent_state_sha256") != current
+                or plan.get("diagnostic_only") is not True
+                or plan.get("fit_admission") is not False
+                or plan.get("action_trace_available") is not False
+                or audit.get("audit_actions") != 0
+                or audit.get("audit_frames") != 0
+            ):
+                raise RedRecordedSupportError("verified support scope differs")
+            source = plan.get("source_commit")
+            if not isinstance(source, str) or len(source) != 40 or any(
+                c not in "0123456789abcdef" for c in source
+            ):
+                raise RedRecordedSupportError("support executable source missing")
+            for name in (
+                "retained_declaration_sha256",
+                "retained_claim_sha256",
+                "retained_result_sha256",
+            ):
+                value = plan.get(name)
+                if not isinstance(value, str) or len(value) != 64 or any(
+                    c not in "0123456789abcdef" for c in value
+                ):
+                    raise RedRecordedSupportError("verified support receipt identity differs")
+            encoded = segment.get("state_base64")
+            if not isinstance(encoded, str) or not 0 < len(encoded) <= 699052:
+                raise RedRecordedSupportError("support state encoding differs")
+            try:
+                state = base64.b64decode(encoded, altchars=b"-_", validate=True)
+            except ValueError as error:
+                raise RedRecordedSupportError("support state encoding differs") from error
+            current = hashlib.sha256(state).hexdigest()
+            count, elapsed = audit.get("actions"), audit.get("frames")
+            if (
+                not state
+                or current != audit.get("state_sha256")
+                or type(count) is not int
+                or type(elapsed) is not int
+                or count < 0
+                or elapsed < 0
+                or count > plan.get("maximum_actions", -1)
+                or elapsed > plan.get("maximum_frames", -1)
+                or audit.get("retry_authorized") is not False
+                or audit.get("training_examples") != 0
+                or not isinstance(audit.get("status"), str)
+                or not audit.get("status")
+            ):
+                raise RedRecordedSupportError("verified support audit differs")
+            actions += count
+            frames += elapsed
+            continue
         plan, audit = _mapping(segment.get("plan")), _mapping(segment.get("audit"))
         if (
             plan.get("parent_state_sha256") != current
@@ -124,13 +198,120 @@ class RedRecordedSupportResult:
         }
 
 
+@dataclass(frozen=True, slots=True)
+class RedRegisteredRecordedSupportResult(RedRecordedSupportResult):
+    """Zero-label admission of hash-chained guarded receipts to a registered lineage."""
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": REGISTERED_SUPPORT_TERMINAL_SCHEMA,
+            "authority_id": "registered-recorded-support-import",
+            "status": "imported_retained_state",
+            "steps": [],
+            "authority_decisions": 0,
+            "decisions": 0,
+            "training_examples": 0,
+            "completion_satisfied": False,
+            "independent_root": False,
+            "total_actions": 0,
+            "total_frames": 0,
+            "historical_support_actions": self.historical_actions,
+            "historical_support_frames": self.historical_frames,
+            "evidence_scope": "hash_chained_guarded_receipts_without_action_trace",
+            "origin": {
+                "episode_id": self.parent_episode_id,
+                "checkpoint_sha256": self.parent_checkpoint_sha256,
+                "manifest_sha256": self.parent_manifest_sha256,
+                "segments_sha256": self.segments_sha256,
+            },
+        }
+
+
+@dataclass(frozen=True, slots=True)
+class RedRegisteredMeasuredTerminalResult(RedRecordedSupportResult):
+    """Zero-input restart admission for one already-fitted measured choice."""
+
+    choice_id: str
+    choice_record_sha256: str
+    behavior_model_sha256: str
+    continuation_model_sha256: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.choice_id, str) or not self.choice_id:
+            raise RedRecordedSupportError("measured terminal choice identity differs")
+        for value in (
+            self.choice_record_sha256,
+            self.behavior_model_sha256,
+            self.continuation_model_sha256,
+        ):
+            if (
+                not isinstance(value, str)
+                or len(value) != 64
+                or any(character not in "0123456789abcdef" for character in value)
+            ):
+                raise RedRecordedSupportError("measured terminal digest differs")
+        if self.behavior_model_sha256 == self.continuation_model_sha256:
+            raise RedRecordedSupportError("measured terminal needs the fitted successor model")
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": REGISTERED_MEASURED_TERMINAL_SCHEMA,
+            "authority_id": "registered-measured-terminal-import",
+            "status": "imported_retained_state",
+            "steps": [],
+            "authority_decisions": 0,
+            "decisions": 0,
+            "training_examples": 0,
+            "completion_satisfied": False,
+            "independent_root": False,
+            "total_actions": 0,
+            "total_frames": 0,
+            "historical_support_actions": self.historical_actions,
+            "historical_support_frames": self.historical_frames,
+            "action_trace_available": False,
+            "independent_evaluation": False,
+            "authority_promotion_eligible": False,
+            "evidence_scope": "fitted_measured_choice_without_action_trace",
+            "origin": {
+                "episode_id": self.parent_episode_id,
+                "checkpoint_sha256": self.parent_checkpoint_sha256,
+                "manifest_sha256": self.parent_manifest_sha256,
+                "segments_sha256": self.segments_sha256,
+            },
+            "measured_choice": {
+                "choice_id": self.choice_id,
+                "record_sha256": self.choice_record_sha256,
+                "behavior_model_sha256": self.behavior_model_sha256,
+                "continuation_model_sha256": self.continuation_model_sha256,
+            },
+        }
+
+
 def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mapping) -> None:
-    from .red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+    from .red_player_checkpoint import (
+        CHECKPOINT_KIND,
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
+        checkpoint_record_id,
+    )
 
     terminal = document.get("terminal_result")
-    is_support = document.get("schema") == SUPPORT_CHECKPOINT_SCHEMA
+    schema = document.get("schema")
+    is_measured = schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+    is_support = schema in {
+        SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
+    }
+    expected_terminal_schema = (
+        REGISTERED_MEASURED_TERMINAL_SCHEMA
+        if is_measured
+        else REGISTERED_SUPPORT_TERMINAL_SCHEMA
+        if schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+        else SUPPORT_TERMINAL_SCHEMA
+    )
     if is_support != (
-        isinstance(terminal, Mapping) and terminal.get("schema") == SUPPORT_TERMINAL_SCHEMA
+        isinstance(terminal, Mapping)
+        and terminal.get("schema") == expected_terminal_schema
     ):
         raise RedRecordedSupportError("support checkpoint and terminal types differ")
     if not is_support:
@@ -147,8 +328,31 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         raise RedRecordedSupportError("support predecessor checkpoint differs")
     parent = record.read()
     parent_episode = store.open_episode(parent_id)
+    parent_schema = parent.get("schema")
+    measured_restart_parent = (
+        schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+    )
+    measured_after_registered_support = (
+        schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+    )
+    measured_after_measured = (
+        schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+        and parent_schema == REGISTERED_MEASURED_CHECKPOINT_SCHEMA
+    )
     if (
-        parent.get("schema") == SUPPORT_CHECKPOINT_SCHEMA
+        (
+            parent_schema
+            in {
+                SUPPORT_CHECKPOINT_SCHEMA,
+                REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+                REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
+            }
+            and not measured_restart_parent
+            and not measured_after_registered_support
+            and not measured_after_measured
+        )
         or parent_episode.manifest_sha256 != origin.get("manifest_sha256")
         or parent.get("trajectory_manifest_sha256") != parent_episode.manifest_sha256
         or list(parent_episode.iter_stream("checkpoint")) != [
@@ -156,10 +360,27 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         ]
     ):
         raise RedRecordedSupportError("support requires its original completed native predecessor")
+    if (
+        measured_restart_parent
+        or measured_after_registered_support
+        or measured_after_measured
+    ):
+        # Authenticate every derived predecessor before accepting another
+        # zero-input join. Consecutive measured terminals are required when a
+        # model makes another choice directly from its last measured state;
+        # the exact choice, state transition, and fitted successor are checked
+        # below. Generic support-on-support chains remain forbidden.
+        require_recorded_support_origin(store, parent)
+    if is_measured and parent.get("schema") not in {
+        REGISTERED_PLAYER_CHECKPOINT_SCHEMA,
+        REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
+    }:
+        raise RedRecordedSupportError("measured terminal requires a native registered predecessor")
     for key, original in (
         ("original_state_sha256", "state_sha256"),
         ("profile_sha256", "profile_sha256"), ("rom_sha256", "rom_sha256"),
-        ("model_sha256", "model_sha256"), ("context_origin", "context_origin"),
+        ("context_origin", "context_origin"),
         ("search_memory", "search_memory"),
     ):
         if document.get(key) != parent.get(original):
@@ -171,20 +392,42 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
     old_collection, new_collection = _mapping(parent.get("collection")), _mapping(
         document.get("collection"),
     )
-    for key in old_collection:
-        if key != "storage_headroom" and new_collection.get(key) != old_collection[key]:
-            raise RedRecordedSupportError("transport support changed the living collection")
+    if not is_measured:
+        if document.get("model_sha256") != parent.get("model_sha256"):
+            raise RedRecordedSupportError("support changed inherited model")
+        for key in old_collection:
+            if key != "storage_headroom" and new_collection.get(key) != old_collection[key]:
+                raise RedRecordedSupportError("transport support changed the living collection")
     episode = store.open_episode(document["episode_id"])
     metadata = _mapping(episode.read_header().get("metadata"))
     previous = _mapping(parent_episode.read_header().get("metadata"))
     if (
-        metadata.get("schema") != SUPPORT_HEADER_SCHEMA
+        metadata.get("schema")
+        != (
+            REGISTERED_MEASURED_HEADER_SCHEMA
+            if is_measured
+            else REGISTERED_SUPPORT_HEADER_SCHEMA
+            if schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+            else SUPPORT_HEADER_SCHEMA
+        )
         or metadata.get("training_eligible") is not False
         or metadata.get("split") != previous.get("split")
         or metadata.get("player_training_plan") is not None
         or {"decisions", "executions"}.intersection(episode.stream_names)
     ):
         raise RedRecordedSupportError("support import changed partition or invented gameplay")
+    if schema in {
+        REGISTERED_SUPPORT_CHECKPOINT_SCHEMA,
+        REGISTERED_MEASURED_CHECKPOINT_SCHEMA,
+    } and (
+        not isinstance(previous.get("registration_session_record_id"), str)
+        or metadata.get(
+            "registration_session_record_id",
+            previous.get("registration_session_record_id"),
+        )
+        != previous.get("registration_session_record_id")
+    ):
+        raise RedRecordedSupportError("registered support session binding differs")
     split = _mapping(metadata.get("split"))
     if split.get("partition") != "train" or not isinstance(split.get("root_lineage_id"), str):
         raise RedRecordedSupportError("support requires an explicit training lineage")
@@ -193,6 +436,7 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         "routed_recovery", "trainer_funding", "trainer_pending_recovery",
         "regional_trainer_funding", "observed_trainer_funding",
         "remaining_acquisition_demand", "level_evolution_acquisitions",
+        "fossil_acquisitions",
     ):
         if metadata.get(flag, False) != previous.get(flag, False):
             raise RedRecordedSupportError("support changed an inherited observer mode")
@@ -205,9 +449,201 @@ def require_recorded_support_origin(store: PrivateArtifactRoot, document: Mappin
         or first_plan.get("parent_checkpoint_sha256") != origin["checkpoint_sha256"]
     ):
         raise RedRecordedSupportError("support terminal or first native anchor differs")
-    expected = RedRecordedSupportResult(
-        parent_id, origin["checkpoint_sha256"], origin["manifest_sha256"],
-        canonical_sha256(segments), actions, frames,
-    ).public_dict()
+    if is_measured:
+        _require_measured_terminal_binding(
+            store,
+            document=document,
+            terminal=terminal,
+            parent=parent,
+            old_collection=old_collection,
+            new_collection=new_collection,
+            segments=segments,
+        )
+        binding = _mapping(terminal.get("measured_choice"))
+        expected = RedRegisteredMeasuredTerminalResult(
+            parent_id,
+            origin["checkpoint_sha256"],
+            origin["manifest_sha256"],
+            canonical_sha256(segments),
+            actions,
+            frames,
+            choice_id=str(binding.get("choice_id")),
+            choice_record_sha256=_digest(
+                binding.get("record_sha256"), subject="measured choice record"
+            ),
+            behavior_model_sha256=_digest(
+                binding.get("behavior_model_sha256"), subject="behavior model"
+            ),
+            continuation_model_sha256=_digest(
+                binding.get("continuation_model_sha256"), subject="continuation model"
+            ),
+        ).public_dict()
+    else:
+        result_type = (
+            RedRegisteredRecordedSupportResult
+            if schema == REGISTERED_SUPPORT_CHECKPOINT_SCHEMA
+            else RedRecordedSupportResult
+        )
+        expected = result_type(
+            parent_id, origin["checkpoint_sha256"], origin["manifest_sha256"],
+            canonical_sha256(segments), actions, frames,
+        ).public_dict()
     if terminal != expected:
         raise RedRecordedSupportError("support terminal scope or historical costs differ")
+
+
+def _require_measured_terminal_binding(
+    store: PrivateArtifactRoot,
+    *,
+    document: Mapping,
+    terminal: Mapping,
+    parent: Mapping,
+    old_collection: Mapping,
+    new_collection: Mapping,
+    segments: Sequence[Mapping],
+) -> None:
+    """Join a restart state to the exact measured row and fitted successor."""
+
+    from .red_collection import red_species_ref
+    from .red_development_measured_choice import (
+        DEVELOPMENT_MEASURED_CHOICE_KIND,
+        RedDevelopmentMeasuredChoice,
+        development_measured_choice_record_id,
+    )
+    from .red_player_model import RedPlayerModelRecord, load_player_goal_model_record_bytes
+    from .red_registration_session import registration_row
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    binding = _mapping(terminal.get("measured_choice"))
+    if set(binding) != {
+        "choice_id",
+        "record_sha256",
+        "behavior_model_sha256",
+        "continuation_model_sha256",
+    }:
+        raise RedRecordedSupportError("measured terminal binding differs")
+    choice_id = binding.get("choice_id")
+    if not isinstance(choice_id, str) or not choice_id:
+        raise RedRecordedSupportError("measured terminal choice identity differs")
+    behavior_model_sha = _digest(
+        binding.get("behavior_model_sha256"), subject="behavior model"
+    )
+    continuation_model_sha = _digest(
+        binding.get("continuation_model_sha256"), subject="continuation model"
+    )
+    choice_record_sha = _digest(
+        binding.get("record_sha256"), subject="measured choice record"
+    )
+    choice_record = store.find_sealed_record(
+        development_measured_choice_record_id(choice_id),
+        expected_kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
+    )
+    if choice_record is None or choice_record.summary.record_sha256 != choice_record_sha:
+        raise RedRecordedSupportError("measured terminal choice record differs")
+    try:
+        choice = RedDevelopmentMeasuredChoice.from_public(choice_record.read())
+    except ValueError as error:
+        raise RedRecordedSupportError("measured terminal choice record differs") from error
+    if (
+        choice.choice_id != choice_id
+        or choice.model_sha256 != behavior_model_sha
+        or parent.get("model_sha256") != choice.model_sha256
+        or document.get("model_sha256") != continuation_model_sha
+        or choice.parent_episode_id != _mapping(terminal.get("origin")).get("episode_id")
+        or choice.parent_checkpoint_sha256
+        != _mapping(terminal.get("origin")).get("checkpoint_sha256")
+        or choice.parent_state_sha256 != parent.get("state_sha256")
+        or choice.terminal_state_sha256 != document.get("state_sha256")
+        or choice.before_observation.get("registration") != old_collection
+        or choice.after_observation.get("registration") != new_collection
+        or choice.controller_actions != terminal.get("historical_support_actions")
+        or choice.emulator_frames != terminal.get("historical_support_frames")
+        or choice.action_trace_available is not False
+        or choice.independent_evaluation is not False
+        or choice.authority_promotion_eligible is not False
+        or choice.training_only is not True
+    ):
+        raise RedRecordedSupportError("measured terminal choice transition differs")
+    try:
+        parent_registration = registration_row(parent.get("registration_observation"))
+        terminal_registration = registration_row(document.get("registration_observation"))
+    except (TypeError, ValueError) as error:
+        raise RedRecordedSupportError("measured terminal registration row differs") from error
+    expected_owned = {
+        number
+        for number in range(1, 152)
+        if red_species_ref(number) in set(new_collection.get("local_species", ()))
+    }
+    expected_physical = {
+        number: count
+        for species, count in new_collection.get("specimen_counts", ())
+        for number in range(1, 152)
+        if species == red_species_ref(number)
+    }
+    if (
+        terminal_registration.run_id != parent_registration.run_id
+        or terminal_registration.game_id != parent_registration.game_id
+        or terminal_registration.adapter_id != parent_registration.adapter_id
+        or terminal_registration.cartridge_sha256 != document.get("rom_sha256")
+        or terminal_registration.cartridge_sha256 != parent_registration.cartridge_sha256
+        or terminal_registration.sequence != parent_registration.sequence + 1
+        or terminal_registration.snapshot_sha256 != document.get("state_sha256")
+        or terminal_registration.owned != expected_owned
+        or dict(terminal_registration.physical_counts) != expected_physical
+    ):
+        raise RedRecordedSupportError("measured terminal registration row differs")
+    if len(segments) != len(choice.segments):
+        raise RedRecordedSupportError("measured terminal segment inventory differs")
+    for imported, measured in zip(segments, choice.segments, strict=True):
+        plan = _mapping(imported.get("plan"))
+        audit = _mapping(imported.get("audit"))
+        if (
+            imported.get("schema") != VERIFIED_SUPPORT_SEGMENT_SCHEMA
+            or plan.get("parent_state_sha256") != measured.parent_state_sha256
+            or plan.get("retained_declaration_sha256") != measured.declaration_sha256
+            or plan.get("retained_claim_sha256") != measured.claim_sha256
+            or plan.get("retained_result_sha256") != measured.result_sha256
+            or audit.get("state_sha256") != measured.terminal_state_sha256
+            or audit.get("actions") != measured.controller_actions
+            or audit.get("frames") != measured.emulator_frames
+            or audit.get("status") != measured.status
+        ):
+            raise RedRecordedSupportError("measured terminal segment binding differs")
+    model_sha = continuation_model_sha
+    model_record = store.find_sealed_record(
+        f"rpr-model-{model_sha}", expected_kind="red_player_model"
+    )
+    if model_record is None:
+        raise RedRecordedSupportError("measured terminal successor model is absent")
+    try:
+        model = load_player_goal_model_record_bytes(
+            model_record.read_bytes(), expected_model_sha256=model_sha
+        )
+    except ValueError as error:
+        raise RedRecordedSupportError("measured terminal successor model differs") from error
+    example_sha = canonical_sha256(choice.to_observed_arm_example().public_dict())
+    if (
+        not isinstance(model, RedPlayerModelRecord)
+        or model.objective != REGISTERED_OBJECTIVE
+        or model.prior_model_sha256 != behavior_model_sha
+        or example_sha not in model.retained_example_sha256
+    ):
+        raise RedRecordedSupportError("measured terminal successor omitted its fitted row")
+    corpus = store.find_sealed_record(
+        f"rp-corpus-{model.corpus_sha256}", expected_kind="red_player_training_corpus"
+    )
+    expected_inventory = {
+        "choice_id": choice.choice_id,
+        "record_sha256": choice_record.summary.record_sha256,
+        "behavior_model_sha256": choice.model_sha256,
+    }
+    if corpus is None:
+        raise RedRecordedSupportError("measured terminal successor corpus is absent")
+    corpus_document = corpus.read()
+    inventory = corpus_document.get("measured_choices")
+    if (
+        canonical_sha256(corpus_document) != model.corpus_sha256
+        or not isinstance(inventory, list)
+        or expected_inventory not in inventory
+    ):
+        raise RedRecordedSupportError("measured terminal successor corpus differs")

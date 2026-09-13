@@ -29,6 +29,7 @@ from pokemon_red_completion.goal_manager import (
     BoundGoalSelection,
     GoalKind,
     GoalManagerQuestion,
+    GoalOpportunity,
     bind_goal_selection,
 )
 from pokemon_red_completion.goal_manager_runtime import CompletionFirstGoalTeacher
@@ -45,6 +46,11 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.red_living_dex_setup_policy import (
     red_living_dex_setup_candidate_features,
+)
+from pokemon_red_completion.resource_economy_observation import (
+    EconomyMode,
+    EconomyOffer,
+    EconomySnapshot,
 )
 
 
@@ -73,6 +79,27 @@ _OPTION_BY_GOAL = {
     GoalKind.EXPLORE: LivingDexOptionKind.EXPLORE,
 }
 
+
+def living_dex_option_kind_for_goal(
+    kind: GoalKind,
+    *,
+    feature_version: int,
+) -> LivingDexOptionKind | None:
+    """Return the portable option kind supported by one semantic goal.
+
+    Keeping this projection public lets opt-in live menus reuse the exact same
+    goal-to-feature contract as :class:`LivingDexGoalShadowPolicy` instead of
+    copying a second mapping beside it.
+    """
+
+    if not isinstance(kind, GoalKind):
+        raise TypeError("kind must be a GoalKind")
+    if type(feature_version) is not int or feature_version not in {1, 2, 3, 4}:
+        raise LivingDexGoalPolicyError("living-Dex feature version differs")
+    if kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
+        return LivingDexOptionKind.RESTORE
+    return _OPTION_BY_GOAL.get(kind)
+
 # Benefits dominate routine cost, while irreversible loss is as important as
 # verified success.  These weights are fixed policy governance, not fitted
 # parameters and not tuned on development outcomes.
@@ -89,6 +116,35 @@ DEFAULT_LIVING_DEX_GOAL_UTILITY = LivingDexOptionUtility(
 )
 
 
+def economy_offer_from_opportunity(opportunity: GoalOpportunity) -> EconomyOffer:
+    """Project a semantic opportunity into an explicit prospective economy offer.
+
+    Preserves both conditional income and planned spend when an opportunity
+    features both (e.g. earning with an upfront cost).
+    """
+    if not isinstance(opportunity, GoalOpportunity):
+        raise TypeError("opportunity must be a GoalOpportunity")
+    quote = opportunity.resource_quote
+    if quote is None:
+        return EconomyOffer(mode=EconomyMode.OTHER, conditional_income=0, planned_spend=0)
+    expected_income = getattr(quote, "expected_income", 0)
+    purchase_cost = getattr(quote, "purchase_cost", 0)
+    planned_spend = getattr(quote, "planned_spend", purchase_cost)
+    if expected_income > 0:
+        return EconomyOffer(
+            mode=EconomyMode.EARN,
+            conditional_income=expected_income,
+            planned_spend=planned_spend,
+        )
+    if planned_spend > 0:
+        return EconomyOffer(
+            mode=EconomyMode.PURCHASE,
+            conditional_income=0,
+            planned_spend=planned_spend,
+        )
+    return EconomyOffer(mode=EconomyMode.OTHER, conditional_income=0, planned_spend=0)
+
+
 def project_living_dex_goal_candidate(
     question: GoalManagerQuestion, index: int, *, feature_version: int,
     binding_ref: str,
@@ -97,13 +153,17 @@ def project_living_dex_goal_candidate(
     if type(index) is not int or index not in question.available_indices:
         raise LivingDexGoalPolicyError("projected goal is unavailable")
     opportunity = question.opportunities[index]
-    option_kind = _OPTION_BY_GOAL.get(opportunity.kind)
-    if opportunity.kind is GoalKind.RESTORE_TEAM and feature_version >= 3:
-        option_kind = LivingDexOptionKind.RESTORE
+    option_kind = living_dex_option_kind_for_goal(
+        opportunity.kind,
+        feature_version=feature_version,
+    )
     if option_kind is None:
         return None
     if opportunity.estimated_effort is None or opportunity.estimated_risk is None:
         raise LivingDexGoalPolicyError("available goal lacks bounded estimates")
+    economy_offer = (
+        economy_offer_from_opportunity(opportunity) if feature_version >= 4 else None
+    )
     return LivingDexOptionCandidate(
         binding_ref=binding_ref,
         features=red_living_dex_setup_candidate_features(
@@ -114,6 +174,7 @@ def project_living_dex_goal_candidate(
         ),
         availability=LivingDexOptionAvailability.AVAILABLE,
         search_history=opportunity.search_history,
+        economy_offer=economy_offer,
     )
 
 
@@ -251,6 +312,9 @@ class LivingDexGoalShadowPolicy:
     utility: LivingDexOptionUtility = DEFAULT_LIVING_DEX_GOAL_UTILITY
     safety: CompletionFirstGoalTeacher = field(default_factory=CompletionFirstGoalTeacher)
     legacy_restoration_preference: bool = False
+    allow_earning_exploration: bool = False
+    economy_snapshot: EconomySnapshot | None = None
+    target_cash: int | None = None
     decisions: int = field(default=0, init=False)
     model_decisions: int = field(default=0, init=False)
     deterministic_decisions: int = field(default=0, init=False)
@@ -272,6 +336,18 @@ class LivingDexGoalShadowPolicy:
             raise TypeError("living-Dex shadow policy needs a deterministic safety policy")
         if type(self.legacy_restoration_preference) is not bool:
             raise TypeError("legacy restoration preference must be explicit boolean")
+        if type(self.allow_earning_exploration) is not bool:
+            raise TypeError("allow earning exploration must be explicit boolean")
+        if (self.economy_snapshot is None) != (self.target_cash is None):
+            raise TypeError("economy context requires both snapshot and target cash or neither")
+        if self.economy_snapshot is not None and not isinstance(
+            self.economy_snapshot, EconomySnapshot
+        ):
+            raise TypeError("economy snapshot must be an EconomySnapshot instance")
+        if self.target_cash is not None and (
+            type(self.target_cash) is not int or self.target_cash < 0
+        ):
+            raise TypeError("target cash must be a non-negative integer")
 
     @property
     def decision_history(self) -> tuple[LivingDexGoalShadowDecision, ...]:
@@ -292,6 +368,33 @@ class LivingDexGoalShadowPolicy:
         self.last_menu = None
         self.last_menu_indices = ()
         deterministic = self.safety.select(question)
+        relax_resupply_for_earning = False
+        if (
+            self.allow_earning_exploration
+            and self.model.feature_version >= 4
+            and self.economy_snapshot is not None
+            and self.target_cash is not None
+            and self.target_cash > self.economy_snapshot.cash
+        ):
+            has_available_earning = any(
+                op.resource_quote is not None and op.resource_quote.expected_income > 0
+                for op in (question.opportunities[idx] for idx in question.available_indices)
+            )
+            if has_available_earning:
+                qualified_available = sum(
+                    1
+                    for idx in question.available_indices
+                    if project_living_dex_goal_candidate(
+                        question,
+                        idx,
+                        feature_version=self.model.feature_version,
+                        binding_ref=f"policy-check-{idx}",
+                    )
+                    is not None
+                )
+                if qualified_available >= 2:
+                    relax_resupply_for_earning = True
+
         deterministic_safety_gate = (
             deterministic.kind is GoalKind.RECOVER_CONTROL
             or (
@@ -309,6 +412,7 @@ class LivingDexGoalShadowPolicy:
             or (
                 deterministic.kind is GoalKind.RESUPPLY
                 and question.situation.resource_pressure >= self.safety.resource_gate
+                and not relax_resupply_for_earning
             )
         )
         if deterministic_safety_gate:
@@ -318,8 +422,21 @@ class LivingDexGoalShadowPolicy:
                 LivingDexGoalDecisionMode.DETERMINISTIC_SAFETY,
             )
 
+        if self.model.feature_version >= 4 and (
+            self.economy_snapshot is None or self.target_cash is None
+        ):
+            return self._record_deterministic(
+                question,
+                deterministic,
+                LivingDexGoalDecisionMode.DETERMINISTIC_UNSUPPORTED,
+            )
+
         projected: list[tuple[int, GoalKind, LivingDexOptionCandidate]] = []
-        context = living_dex_option_context_from_goal_situation(question.situation)
+        context = living_dex_option_context_from_goal_situation(
+            question.situation,
+            economy_snapshot=self.economy_snapshot if self.model.feature_version >= 4 else None,
+            target_cash=self.target_cash if self.model.feature_version >= 4 else None,
+        )
         for index in question.available_indices:
             opportunity = question.opportunities[index]
             candidate = project_living_dex_goal_candidate(
@@ -416,4 +533,7 @@ __all__ = [
     "LivingDexGoalPolicyError",
     "LivingDexGoalShadowDecision",
     "LivingDexGoalShadowPolicy",
+    "economy_offer_from_opportunity",
+    "living_dex_option_kind_for_goal",
+    "project_living_dex_goal_candidate",
 ]

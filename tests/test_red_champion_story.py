@@ -11,7 +11,7 @@ from pokemon_red_completion.domain import GameMode, GameState
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.gen1_champion_script import ChampionScriptBinding
 from pokemon_red_completion.gen1_trainer_parties import TrainerPartyMember, TrainerPartyQuote
-from pokemon_red_completion.observation import CurrentMapBlocks, FinalLeagueScene
+from pokemon_red_completion.observation import CurrentMapBlocks, EventFlag, FinalLeagueScene
 from pokemon_red_completion.red_goal_context import _build_provider
 from pokemon_red_completion.red_goal_context_profile import bind_cartridge_trainer_story_profile
 from pokemon_red_completion.referee import CHAMPION_DEFEATED_FACT
@@ -32,7 +32,64 @@ def test_champion_profile_has_only_its_declared_skill_no_legacy_fallback():
     assert not skill.availability(GameState(GameMode.OVERWORLD, frozenset(), "lance")).executable
 
 
+def test_champion_rematch_boundary_uses_current_lance_and_champion_flags():
+    flags = bytearray(320)
+    flags[int(EventFlag.BEAT_LANCE) // 8] |= 1 << (int(EventFlag.BEAT_LANCE) % 8)
+    assert module._live_champion_rematch_ready(replace(_raw(), event_flags=bytes(flags)))
+    flags[int(EventFlag.BEAT_CHAMPION_RIVAL) // 8] |= (
+        1 << (int(EventFlag.BEAT_CHAMPION_RIVAL) % 8)
+    )
+    assert not module._live_champion_rematch_ready(replace(_raw(), event_flags=bytes(flags)))
+    assert not module._live_champion_rematch_ready(replace(_raw(), event_flags=bytes(320)))
+
+
+def test_champion_rematch_availability_ignores_latched_champion_history(
+    monkeypatch,
+):
+    skill, reader, inputs, _ = fixture(monkeypatch)
+    original_observe = skill.runtime.adapter.observe
+
+    def historical():
+        current = original_observe()
+        return replace(
+            current,
+            game_state=replace(
+                current.game_state,
+                facts=current.game_state.facts | {CHAMPION_DEFEATED_FACT, HALL_OF_FAME_FACT},
+            ),
+        )
+
+    skill.runtime.adapter.observe = historical
+    entry = RouteStep(
+        113, (0, 5), "up", 120, (7, 3), "warp", MacroActionKind.MOVE, "land", "land",
+    )
+    full = SimpleNamespace(steps=(entry,))
+    approach = SimpleNamespace(steps=())
+    skill.world.with_current_blocks = lambda blocks: skill.world
+    skill.world.plan_feasible_to_map = lambda start, target, **kwargs: (
+        full if target == 120 else approach
+    )
+    monkeypatch.setattr(
+        module,
+        "Gen1TraversalObserver",
+        lambda *args: SimpleNamespace(observe=lambda: object()),
+    )
+    monkeypatch.setattr(module, "plan_trainer_party", lambda *args: object())
+    import pokemon_red_completion.red_resource_goal_router as router
+
+    monkeypatch.setattr(router, "_walking_plan", lambda plan: True)
+    ordinary = module.RedCartridgeChampionSkill(skill.runtime, skill.actions, skill.world)
+    rematch = module.RedCartridgeChampionSkill(
+        skill.runtime, skill.actions, skill.world, rematch=True,
+    )
+    assert not ordinary.availability(historical().game_state).executable
+    assert rematch.availability(historical().game_state).executable
+    assert not inputs and reader.raw.map_id == 113
+
+
 def fixture(monkeypatch, fault=None):
+    flags = bytearray(319)
+    flags[int(EventFlag.BEAT_LANCE) // 8] |= 1 << (int(EventFlag.BEAT_LANCE) % 8)
     raw = replace(
         _raw(),
         map_id=113,
@@ -40,7 +97,7 @@ def fixture(monkeypatch, fault=None):
         player_x=6,
         player_money=23983,
         badge_bits=255,
-        event_flags=bytes(319),
+        event_flags=bytes(flags),
         battle_result=0,
     )
     reader = _Reader(raw=raw, ready=True)
@@ -144,6 +201,12 @@ def fixture(monkeypatch, fault=None):
                 reader.raw = replace(reader.raw, bag_items=((4, 1),))
             kwargs["battle_exit_guard"](reader.raw)
             scene["won"] = True
+            if fault != "missing_current_event":
+                flags = bytearray(reader.raw.event_flags)
+                flags[int(EventFlag.BEAT_CHAMPION_RIVAL) // 8] |= (
+                    1 << (int(EventFlag.BEAT_CHAMPION_RIVAL) % 8)
+                )
+                reader.raw = replace(reader.raw, event_flags=bytes(flags))
             reader.ready = False  # epilogue is not ordinary input-ready field
             return reader.raw
 
@@ -172,6 +235,30 @@ def test_owned_entry_single_taps_and_cartridge_epilogue_reach_concurrent_referee
     with pytest.raises(module.RedChampionStoryError, match="unconsumed"):
         skill.execute()
     assert len(inputs) == count
+
+
+def test_changed_champion_rematch_mode_refuses_before_input(monkeypatch):
+    skill, _, inputs, scene = fixture(monkeypatch)
+    skill.rematch = True
+    with pytest.raises(module.RedChampionStoryError, match="origin"):
+        skill.execute()
+    assert not inputs and scene["entry"] == 0
+
+
+@pytest.mark.parametrize("fault", [None, "missing_current_event"])
+def test_rematch_requires_the_current_champion_event_not_only_historical_completion(
+    monkeypatch, fault,
+):
+    skill, _, inputs, scene = fixture(monkeypatch, fault)
+    skill.rematch = skill._prepared_rematch = True
+    if fault is None:
+        result = skill.execute()
+        assert result.evidence["rematch"] is True
+    else:
+        with pytest.raises(module.RedChampionStoryError, match="epilogue"):
+            skill.execute()
+    assert scene["entry"] == scene["battle_calls"] == 1
+    assert inputs
 
 
 @pytest.mark.parametrize("spent", [0, 1, 2])

@@ -1,0 +1,176 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0
+  },
+  "completed_episode": {
+    "actions": 145,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "episode_id": "red-collection-20260911-bu-02-causal",
+    "frames": 10429,
+    "sampled_choices": 1,
+    "status": "succeeded",
+    "verified_collection_gain": 0
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "e79f22083685d33cda7971960e342247645d2363880d6eb9b6ffb37406365c8d",
+      "file_sha256": "e6c6fc4524c9dd3a9c252af9e8d8517e072bff178f6f1adf26db210012bc6493",
+      "independent_evaluation": false,
+      "model_sha256": "e985527fa13680b8f45a99cb1cacedc11e05241b46a3f4dd414a7acaee542612",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "4ef341e02c75417c790fa0d17050199c1134375349501fb08814d11edb1a7f35",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 99,
+      "source_bundle_sha256": "342a01dfa85614bd98de970678ecd90635e0f1362b9e0b61583c3997f4cd125f",
+      "source_commit": "0d50d09d4873b5bf2c0543e67bc72061b4bc2cdc"
+    },
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 99,
+      "economy_qualified_examples": 26,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 99,
+      "successful_examples": 66,
+      "total_examples": 99,
+      "train_dataset_sha256": "c1a6cc1283ecf19f109d248f5f22f052e2b338d99aa0063b0d1f72f0b470da7b",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012180227195301636,
+      "weighted_mse_before": 0.03180882361632194
+    },
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 99,
+      "total_examples": 99,
+      "weighted_mse": 0.012166003492788367
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 99,
+      "total_examples": 99,
+      "weighted_mse": 0.012180227195301634
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "session": {
+    "starting_model_examples": 97,
+    "ending_model_examples": 99,
+    "starting_registered_species": 72,
+    "ending_registered_species": 73,
+    "ending_living_species": 56,
+    "ending_specimens": 60,
+    "required_registrations_remaining": 51,
+    "starting_money": 493,
+    "ending_money": 1093,
+    "ending_capture_items": 0,
+    "total_recorded_actions": 1898,
+    "total_recorded_frames": 125006,
+    "failed_attempts_retried": 0,
+    "steps": [
+      {
+        "episode_id": "red-collection-20260911-bu-01-causal",
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "available_goal_count": 2,
+        "status": "succeeded",
+        "actions": 145,
+        "frames": 11629,
+        "money_after": 748,
+        "eligible_examples": 1,
+        "model_examples_after": 98
+      },
+      {
+        "episode_id": "red-collection-20260911-bu-02-causal",
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "available_goal_count": 3,
+        "status": "succeeded",
+        "actions": 145,
+        "frames": 10429,
+        "money_after": 1093,
+        "eligible_examples": 1,
+        "model_examples_after": 99
+      },
+      {
+        "episode_id": "red-collection-20260911-bu-03-causal",
+        "selected_kind": "acquire_species",
+        "selection_mode": "authority_exploration",
+        "available_goal_count": 4,
+        "selected_probability": 0.0875909075365292,
+        "proposed_source": "wild:PowerPlant:grass",
+        "status": "failed",
+        "failure_reason": "world_state_diverged",
+        "actions": 1562,
+        "frames": 99216,
+        "registrations_added_before_failure": [
+          "pokemon:national:081"
+        ],
+        "eligible_examples": 0,
+        "fit_performed": false
+      }
+    ],
+    "support_recovery": {
+      "episode_id": "red-registered-recovery-20260911-bv",
+      "authority_decisions": 0,
+      "training_examples": 0,
+      "original_choice_retried": false,
+      "actions": 46,
+      "frames": 3732,
+      "ending_location": "vermilion_pokecenter",
+      "ending_party_hp": [
+        131,
+        118,
+        150,
+        120,
+        253,
+        73
+      ]
+    },
+    "model_sha256": "e985527fa13680b8f45a99cb1cacedc11e05241b46a3f4dd414a7acaee542612",
+    "source_commits": {
+      "gameplay": "0d50d09d4873b5bf2c0543e67bc72061b4bc2cdc",
+      "recovery": "e5fda02ab9deb7511a7140e6197d33674364c207"
+    }
+  },
+  "repair": {
+    "cause": "A stationary scripted encounter used the cartridge trainer bit but not an ordinary trainer-party class, so post-action funding inventory raised after capture.",
+    "scope": "Keep scripted bodies and sight lanes reserved while excluding non-ordinary trainer classes from payout candidates.",
+    "focused_tests_passed": 203
+  },
+  "limitations": [
+    "The acquisition outcome remains failed and supplied no model target; the registration was preserved from the exact failed state.",
+    "The learner selected the high-level goal, while deterministic code executed travel, battle, capture and recovery.",
+    "This related development sequence is not an independent reliability result or a fresh-game autonomous run.",
+    "Complete Red registration, fresh-start sequencing, arbitrary-start reliability and transfer remain unfinished."
+  ]
+}

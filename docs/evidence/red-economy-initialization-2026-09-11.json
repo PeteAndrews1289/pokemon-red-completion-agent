@@ -1,0 +1,25 @@
+{
+  "authority_promotions": 0,
+  "controller_actions": 0,
+  "economy_effect_learned": false,
+  "fits": 0,
+  "initialization": "retained-head-with-zero-economy-coefficients",
+  "model": {
+    "authority": "bounded_development_only",
+    "ci_is_training_dependency": false,
+    "corpus_sha256": "9f9a3a86a9315d8f702468468aff32c492b9e0de7a2f0e92a6322858471b7997",
+    "file_sha256": "4af393c341cdc715672fd0f1476fffbd7202d3c30bf14d02d8dfbb099151efbd",
+    "independent_evaluation": false,
+    "model_sha256": "6cd88d0f3acb08ae66e72b18cf0e3bad0edefeedc58a7c128653aa144b837e92",
+    "objective": "pokemon.registered-collection.v1",
+    "prior_model_sha256": "fad0b1bce9887862fb1214a6b95d1d43cc96457f8029f50715f189c72a03238b",
+    "private_path_fields": 0,
+    "schema": "pokemon.red.registered-player-model.v1",
+    "settled_examples": 65,
+    "source_bundle_sha256": "c48f79d729a96ddb62efe7e1004070340e08675a4ea4394c9617a8a2b82f2b55",
+    "source_commit": "3d508eb3570605c467ba510d448b62a8be594cd0"
+  },
+  "new_examples": 0,
+  "retained_examples": 65,
+  "schema": "pokemon.red.economy-bootstrap.v1"
+}
