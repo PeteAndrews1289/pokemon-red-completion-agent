@@ -110,6 +110,21 @@ def _ordinary_bindings(calls: list[str]) -> GoalBindingSet:
     return GoalBindingSet(opportunities, (restore, resupply))
 
 
+def _no_ordinary_bindings() -> GoalBindingSet:
+    return GoalBindingSet(
+        tuple(
+            GoalOpportunity(
+                binding_ref=f"private:red:masked:{kind.value}",
+                kind=kind,
+                availability=GoalAvailability.UNAVAILABLE,
+                unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET,
+            )
+            for kind in GoalKind
+        ),
+        (),
+    )
+
+
 def _fishing_candidate(binding_ref: str, *, travel: float) -> LivingDexOptionCandidate:
     return LivingDexOptionCandidate(
         binding_ref=binding_ref,
@@ -231,6 +246,75 @@ def test_model_selects_one_exact_private_binding_without_executing_it() -> None:
     assert choice.public_dict()["emulator_frames"] == 0
     assert "private:red" not in encoded
     assert "fishing-map" not in encoded
+
+
+def test_model_can_select_from_supplemental_options_without_an_ordinary_goal() -> None:
+    calls: list[str] = []
+    first = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    second = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-24",
+        calls=calls,
+    )
+    options = build_red_live_option_set(
+        situation=_situation(resources=0.2),
+        binding_set=_no_ordinary_bindings(),
+        supplements=(
+            supplemental_live_option(
+                first, _fishing_candidate("provider-row-0", travel=0.1)
+            ),
+            supplemental_live_option(
+                second, _fishing_candidate("provider-row-1", travel=0.8)
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="c" * 64,
+        economy_snapshot=EconomySnapshot(58, (("capture", 6),)),
+        target_cash=400,
+    )
+
+    choice = select_red_live_option(
+        _model(),
+        options,
+        seed=4,
+        allow_earning_exploration=True,
+    )
+
+    assert options.public_dict()["ordinary_candidate_count"] == 0
+    assert options.public_dict()["supplemental_candidate_count"] == 2
+    assert choice.selected_binding.kind is GoalKind.ACQUIRE_SPECIES
+    assert choice.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION
+    assert calls == []
+
+
+def test_supplemental_only_acquisitions_still_obey_storage_safety() -> None:
+    calls: list[str] = []
+    supplements = tuple(
+        supplemental_live_option(
+            _binding(
+                GoalKind.ACQUIRE_SPECIES,
+                binding_ref=f"private:red:fishing-map-{index}",
+                calls=calls,
+            ),
+            _fishing_candidate(f"provider-row-{index}", travel=travel),
+        )
+        for index, travel in ((23, 0.1), (24, 0.2))
+    )
+
+    with pytest.raises(RedLiveOptionMenuError, match="distinct executable candidates"):
+        build_red_live_option_set(
+            situation=_situation(storage=0.95),
+            binding_set=_no_ordinary_bindings(),
+            supplements=supplements,
+            model_feature_version=4,
+            ordering_seed_sha256="d" * 64,
+            economy_snapshot=EconomySnapshot(58, (("capture", 6),)),
+            target_cash=400,
+        )
 
 
 def test_critical_resupply_remains_a_hard_safety_choice() -> None:

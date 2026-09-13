@@ -266,35 +266,31 @@ def build_red_live_option_set(
     if not isinstance(safety, CompletionFirstGoalTeacher):
         raise TypeError("mixed live menu needs a safety policy")
 
-    question = binding_set.question(situation)
-    if any(
-        question.opportunities[index].kind is GoalKind.RECOVER_CONTROL
-        for index in question.available_indices
-    ):
+    question = binding_set.question(situation) if binding_set.bindings else None
+    if any(binding.kind is GoalKind.RECOVER_CONTROL for binding in binding_set.bindings):
         raise RedLiveOptionMenuError(
             "control recovery must remain outside learned mixed-family authority"
         )
-    available_kinds = {
-        question.opportunities[index].kind for index in question.available_indices
-    }
+    available_kinds = {binding.kind for binding in binding_set.bindings}
     mask_acquisitions = (
         situation.storage_pressure >= safety.storage_gate
         and GoalKind.MANAGE_STORAGE not in available_kinds
     )
     rows: list[tuple[ExecutableGoalBinding, LivingDexOptionCandidate, bool]] = []
-    for index in question.available_indices:
-        opportunity = question.opportunities[index]
-        if mask_acquisitions and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
-            continue
-        candidate = project_living_dex_goal_candidate(
-            question,
-            index,
-            feature_version=model_feature_version,
-            binding_ref=opportunity.binding_ref,
-        )
-        if candidate is None:
-            continue
-        rows.append((binding_set.require(opportunity.binding_ref), candidate, True))
+    if question is not None:
+        for index in question.available_indices:
+            opportunity = question.opportunities[index]
+            if mask_acquisitions and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
+                continue
+            candidate = project_living_dex_goal_candidate(
+                question,
+                index,
+                feature_version=model_feature_version,
+                binding_ref=opportunity.binding_ref,
+            )
+            if candidate is None:
+                continue
+            rows.append((binding_set.require(opportunity.binding_ref), candidate, True))
 
     for supplement in supplements:
         if mask_acquisitions and supplement.binding.kind is GoalKind.ACQUIRE_SPECIES:
@@ -387,19 +383,26 @@ def select_red_live_option(
     if model.feature_version < options.menu.feature_version:
         raise RedLiveOptionMenuError("mixed live menu exceeds the fitted model")
 
-    question = options.original_bindings.question(options.situation)
-    deterministic = safety.select(question)
-    selected_opportunity = question.opportunities[deterministic.selected_index]
-    relax_earning = (
-        allow_earning_exploration
-        and selected_opportunity.kind is GoalKind.RESUPPLY
-        and selected_opportunity.resource_quote is not None
-        and selected_opportunity.resource_quote.expected_income > 0
-        and options.menu.context.economy_snapshot is not None
-        and options.menu.context.target_cash is not None
-        and options.menu.context.target_cash > options.menu.context.economy_snapshot.cash
+    question = (
+        options.original_bindings.question(options.situation)
+        if options.original_bindings.bindings
+        else None
     )
-    safety_forced = (
+    deterministic = None if question is None else safety.select(question)
+    relax_earning = False
+    if question is not None and deterministic is not None:
+        selected_opportunity = question.opportunities[deterministic.selected_index]
+        relax_earning = (
+            allow_earning_exploration
+            and selected_opportunity.kind is GoalKind.RESUPPLY
+            and selected_opportunity.resource_quote is not None
+            and selected_opportunity.resource_quote.expected_income > 0
+            and options.menu.context.economy_snapshot is not None
+            and options.menu.context.target_cash is not None
+            and options.menu.context.target_cash
+            > options.menu.context.economy_snapshot.cash
+        )
+    safety_forced = deterministic is not None and (
         deterministic.kind is GoalKind.RECOVER_CONTROL
         or (
             deterministic.kind is GoalKind.RESTORE_TEAM
@@ -416,6 +419,7 @@ def select_red_live_option(
         )
     )
     if safety_forced:
+        assert deterministic is not None
         try:
             selected_index = next(
                 index
