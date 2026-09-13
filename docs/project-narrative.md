@@ -1,15 +1,15 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest engineering beat: the failure produced by model110 exposed a mismatch between what the menu
-called executable and what the route handler had actually promised to survive. The repair does not
-name the destination or species. Every generic resource route must now declare bounded support for
-wild encounters, trainer transitions and scripted dialogue before the model can rank it. The same
-declaration survives collection-safety and travel-capture wrappers.
+Latest engineering beat: the failure produced by model110 led to a generic route-capability gate,
+then the exact retained terminal recovered once through that same handler. Eight actions and 576
+frames restored input-ready field control, and the terminal reopened as a durable zero-label
+model111 checkpoint with all 83 registrations intact. The failure was never retried or relabeled.
 
-The repair passed 132 focused and 11,470 broad tests without opening the game. Model111 remains at
-83 registrations and 111 examples; the retained dialogue terminal is still the next live boundary.
-That distinction is the point: safer future choices are engineering progress, not a retroactive
-success or a new lesson. [Evidence](evidence/red-model111-route-capability-gate-2026-09-12.json).
+The next action-free menu exposed only healing. The party is healthy but has no usable capture
+status move; seven suitable helpers exist in other boxes while the active box has none. That turns
+the next problem into a reusable systems question: can the agent discover and retrieve a required
+capability across storage without naming a species or asking the model to choose twice? Model111
+remains at 111 examples. [Evidence](evidence/red-model111-zero-label-recovery-2026-09-12.json).
 
 Latest systems beat: model109 selected one of four anonymous fishing destinations. Generic routing,
 fishing and capture added registration83 after542 actions,31,464 frames and five casts; the measured
@@ -19,9 +19,8 @@ whose route met a scripted dialogue outside the runner's declared capability aft
 or patched into a success.
 
 The durable endpoint now has83 registrations,63 living species,67 specimens and111 training-only
-examples. It is an honest online loop—choice, gain, fit, next choice, failure, fit—not proof that the
-policy is good or that it can play from a fresh game. The next task is generic control recovery and
-route-capability qualification, not a named-species route. [Evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json).
+examples. It is an honest online loop—choice, gain, fit, next choice, failure, fit, recover—not proof
+that the policy is good or that it can play from a fresh game. [Evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json).
 
 Latest systems beat: model108 chose healing from a live six-candidate menu that crossed goal
 families. The verified83-action outcome became row109. The next state exposed a practical

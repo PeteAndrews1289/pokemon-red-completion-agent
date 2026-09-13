@@ -73,4 +73,10 @@ engagement/battles and scripted dialogue. Recovery and travel-capture wrappers m
 same declaration. This prevents a deterministic execution deficit from masquerading as a viable
 learned choice.
 
+The current capture-preparation boundary is narrower than the storage reader: it can select a
+sleep/paralysis helper only from the active box, although observation can inventory all twelve
+boxes. Model111's recovered save makes that limitation concrete—seven suitable helpers exist in
+other boxes and none in the active box. Cross-box capability selection and safe PC switching are
+the next adapter seam; helper species identity must remain outside the learned policy.
+
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)

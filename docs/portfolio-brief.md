@@ -12,11 +12,13 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-12-model111-fishing-learning-loop.md).
+[Evidence for the current model](work-sessions/2026-09-12-model111-zero-label-recovery.md).
 
 The latest engineering repair makes route menus fail closed: a destination cannot be ranked unless
 its executor declares bounded support for the wild, trainer and dialogue interruptions it may meet.
-That repair is tested but did not add a training row or recover the retained game state.
+The exact failed terminal then recovered once in eight actions / 576 frames and reopened as
+zero-label support. Its next menu is forced-only because capture preparation cannot yet retrieve a
+status-move helper from another box; the learner and its 111 rows remain unchanged.
 
 ## My role and the stack
 

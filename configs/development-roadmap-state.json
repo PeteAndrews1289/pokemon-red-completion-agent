@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-model111-route-capability-gate",
+  "as_of_session": "2026-09-12-model111-zero-label-recovery",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json"
+      "evidence": "docs/evidence/red-model111-zero-label-recovery-2026-09-12.json"
     },
     "red-hack": {
       "status": "planned",
@@ -97,8 +97,8 @@
       {
         "id": "model111-dialogue-recovery",
         "label": "Recover the qualified route interruption without a learning label",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-model111-zero-label-recovery-2026-09-12.json"
       }
     ]
   },
@@ -1110,6 +1110,12 @@
       "result": "The generic resource router now requires explicit wild, trainer and scripted-dialogue support before advertising a route. The declaration survives guarded recovery and travel-capture wrappers; 132 focused and 11,470 broad tests passed. Model111, 83 registrations and the retained terminal are unchanged.",
       "deviation": "This was the planned engineering gate, not another gameplay attempt. One Mac-only frozen PyBoy metadata fingerprint test was excluded and recorded; no controller input, label, fit, authority promotion or transfer occurred.",
       "next": "Publish one exact-source green qualification, then recover the exact model111 dialogue terminal as zero-label support, rebuild its menu action-free and permit at most one useful supported choice."
+    },
+    {
+      "session": "2026-09-12-model111-zero-label-recovery",
+      "result": "The exact model111 terminal recovered input-ready field control in8actions/576frames and reopened as zero-label support with83registrations. The action-free next menu was forced-only restore_team; no choice or fit occurred. The roadmap advances to9/10.",
+      "deviation": "The committed forced-only stop condition fired, so no healing or acquisition ran. Action-free diagnosis found no capture-status move in the party or active box, but seven capability-qualified helpers in other boxes. This is a cross-box preparation gap, not another route failure.",
+      "next": "Qualify capability-derived cross-box helper retrieval using existing PC switching, preserve every specimen and field-move dependency, then rebuild model111's menu action-free. Allow one fresh choice only if a useful supported alternative exists."
     }
   ],
   "closed_milestones": [

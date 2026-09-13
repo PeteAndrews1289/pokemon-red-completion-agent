@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the route-capability repair, then recover model111 without learning credit, rebuild its menu action-free and allow one supported fresh choice.
+- Next decision: Qualify capability-derived cross-box capture-helper retrieval, rebuild model111's menu action-free and allow one fresh choice only if a useful supported alternative exists.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose among identity-free Red acquisition destinations, retain both collection gains and route failures, and exclude routes whose configured executor does not declare every required dynamic interruption capability. |
-| Authority now | The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable model111 restart at a recoverable scripted-dialogue interruption. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
+| Reusable capability | Choose among identity-free Red acquisition destinations, retain gains and failures, recover generic route interruptions without labels, and retrieve required capture capabilities from any observed storage box without resampling the model. |
+| Authority now | The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model111 restart after verified zero-label dialogue recovery. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The model111 failure checkpoint cannot recover ordinary input control through the qualified generic dialogue support, or its rebuilt menu still advertises a route lacking declared interruption support. |
+| Cheapest falsifier | A capability-derived cross-box helper plan cannot safely expose a useful acquisition from the recovered model111 checkpoint, or it requires a named species, coordinate route or second policy query. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-model111-route-capability-gate** · status **active** · evidence [qualification](docs/evidence/red-model111-route-capability-gate-2026-09-12.json)
+**2026-09-12-model111-zero-label-recovery** · status **active** · evidence [qualification](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The repair reduces wasted model-directed gameplay by making executor capability a prerequisite for ranking, without adding map identity, species identity or a special route. It is reusable infrastructure toward sustained Red collection, not learned progress by itself. |
-| Learning output | No new learning output. Model111 remains at 111 settled examples, 76 successful; the repair prevents unsupported routes from entering future model menus rather than manufacturing another label. |
-| Authority delta | The resource router now rejects a route before ranking unless its finite handler declares wild, trainer and scripted-dialogue support; safety and travel-capture wrappers preserve that declaration. No gameplay, learner row, fit or authority promotion occurred, so model111 and its exact terminal are unchanged. |
+| Product alignment | The exact failed lineage resumed without retry or fake success, and the next blocker is expressed as a reusable capability gap: find required capture support anywhere in storage. This directly supports sustained collection across arbitrary saves rather than one destination. |
+| Learning output | No new learning output. Recovery is deterministic support with zero labels; model111 remains at 111 settled examples, 76 successful. The forced-only menu produced no choice, outcome or fit. |
+| Authority delta | Generic dialogue recovery restored field control in 8 actions and 576 frames, then published and reopened a zero-label model111 checkpoint. The model, its 111 rows and its authority are unchanged; the next menu was observed without input. |
 | Transfer result | The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The model111 restart remains intentionally at the consumed failure terminal, in a scripted-dialogue interruption. The eligibility defect is repaired, but ordinary control must still be recovered without a label before the next menu. Fishing remains the only demonstrated executable acquisition family in this lineage. |
-| Decision | Publish the qualified route-capability gate, then recover the authenticated model111 terminal as zero-label support, rebuild the menu action-free and allow at most one fresh supported choice. |
-| Next session | Reopen the exact model111 terminal without input, recover it through generic zero-label dialogue support, rebuild the candidate menu action-free and execute at most one useful supported committed choice. |
-| Next falsifier | Generic zero-label recovery cannot regain input-ready field control from the exact model111 terminal, or the rebuilt menu is forced-only, unsupported or strategically unchanged. |
-| Stop condition | Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal. |
+| Blocker | The recovered menu is forced-only: restore_team is the sole executable goal. The healthy party has no usable sleep/paralysis move, the active box has no helper, and seven capability-qualified helpers exist in other boxes. Acquisition is withheld until capture preparation can retrieve across boxes. |
+| Decision | Implement capability-derived cross-box capture-helper retrieval, preserve every specimen and field-move dependency, then rebuild the recovered menu action-free. Permit one fresh choice only if the menu contains a useful supported alternative. |
+| Next session | Generalize capture-party preparation to search all observed boxes, switch safely through the existing PC primitive and rebind the original acquisition without a second model query. Then rebuild the menu action-free and allow at most one useful supported choice. |
+| Next falsifier | Cross-box helper retrieval cannot preserve the complete specimen ledger and safely rebind the same acquisition, or the rebuilt menu remains forced-only after the capability is available. |
+| Stop condition | Stop on species-specific helper selection, coordinate-bearing policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, repeated CI-only work, or any move into Blue or Crystal. |
 
 ### Stop conditions
 

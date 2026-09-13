@@ -130,7 +130,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         f"{samples} goal-value examples  /  Checkpoint-based Red story: {story_status}",
         "small",
     )
-    parts.append('<rect x="50" y="260" width="1320" height="365" rx="20" fill="#16243a"/>')
+    parts.append('<rect x="50" y="260" width="1320" height="395" rx="20" fill="#16243a"/>')
     current_number = next(
         i + 1 for i, stage in enumerate(baseline["stages"]) if stage["id"] == state["current_stage"]
     )
@@ -143,13 +143,13 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(82, 495, f"{done} of {len(items)} acceptance items verified", "body")
     text(82, 529, "Checklist only. Not phase completion or a time estimate.", "small muted")
     for i, item in enumerate(items):
-        y = 342 + i * 44
+        y = 326 + i * 30
         color = "#57dfb1" if item["done"] else "#8594ad"
         text(705, y, "DONE" if item["done"] else "NEXT", "small", color)
-        text(778, y, item["label"], "body")
-    parts.append('<rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>')
+        text(778, y, item["label"], "small")
+    parts.append('<rect x="80" y="625" width="1260" height="8" rx="4" fill="#293b55"/>')
     parts.append(
-        f'<rect x="80" y="577" width="{1260 * done / len(items):g}" '
+        f'<rect x="80" y="625" width="{1260 * done / len(items):g}" '
         'height="8" rx="4" fill="#ffd36a"/>'
     )
     text(50, 695, "THE WHOLE JOURNEY", "eyebrow")

@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-route-capability-gate**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-zero-label-recovery**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 8/10 acceptance items (80%).**
+**Broaden model-directed Red collection: 9/10 acceptance items (90%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -21,7 +21,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
-- [ ] Recover the qualified route interruption without a learning label
+- [x] Recover the qualified route interruption without a learning label ([evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json))
 
 Current model: **111 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -75,7 +75,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -102,6 +102,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model111-zero-label-recovery
+
+The exact model111 terminal recovered input-ready field control in8actions/576frames and reopened as zero-label support with83registrations. The action-free next menu was forced-only restore_team; no choice or fit occurred. The roadmap advances to9/10.
+
+**Deviation:** The committed forced-only stop condition fired, so no healing or acquisition ran. Action-free diagnosis found no capture-status move in the party or active box, but seven capability-qualified helpers in other boxes. This is a cross-box preparation gap, not another route failure.
+
+**Next:** Qualify capability-derived cross-box helper retrieval using existing PC switching, preserve every specimen and field-move dependency, then rebuild model111's menu action-free. Allow one fresh choice only if a useful supported alternative exists.
 
 ### 2026-09-12-model111-route-capability-gate
 

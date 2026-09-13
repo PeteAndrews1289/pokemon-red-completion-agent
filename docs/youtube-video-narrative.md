@@ -2,9 +2,9 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest engineering beat: show why the failed destination should never have entered the menu. The old router could dismiss dialogue but gave this route a zero-dialogue budget.
-The repaired menu requires finite wild, trainer and dialogue support before ranking; a wrapper that drops one declaration makes the route disappear.
-Overlay **132 focused tests / 11,470 broad tests / 0 game actions / model111 unchanged**. The exact retained terminal still needs zero-label recovery.
+Newest engineering beat: show the generic route-capability repair, then the single recovery.
+Overlay **8 actions / 576 frames / 83 registrations preserved / 0 labels**. Rebuild the menu and
+reveal the next blocker: one forced heal, no capture-status move in party, seven helpers elsewhere.
 
 ## Opening: the honest hook
 
@@ -21,8 +21,8 @@ training-only examples /0 teacher labels /0 authority promotions**.
 
 The hook is not that the model has mastered Pokémon. It is that the same online system preserves a
 real gain and the next real failure, learns from both, and keeps the environment state honest. The
-next scene is generic dialogue recovery and route-capability qualification—not a handcrafted
-Magikarp route. [Session](work-sessions/2026-09-12-model111-fishing-learning-loop.md).
+next scene is verified zero-label recovery and a forced-only menu—not a handcrafted Magikarp route.
+[Session](work-sessions/2026-09-12-model111-zero-label-recovery.md).
 
 The preceding Safari beat remains useful context: model104 chose one of four anonymous areas,
 reached a real capture and became model105. Its four preserved integration failures—step-counter

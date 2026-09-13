@@ -40,14 +40,14 @@ the backburner so the project can first establish sustained model-directed Red p
 | --- | --- | --- |
 | Red teacher, mechanics and verification | **Working** | Deterministic checkpoint-based runs reached Champion and Hall of Fame under semantic verification. |
 | Bounded learned Red goal selection | **Partial** | Model111 has 111 settled training-only examples; models have selected real resource, recovery, evolution, capture and destination goals. |
-| Current retained Red state | **Working** | 83 registered species, 63 living species and 67 specimens reopen at an authenticated checkpoint. |
+| Current retained Red state | **Working** | 83 registered species, 63 living species and 67 specimens reopen at an authenticated input-ready model111 checkpoint. |
 | Sustained autonomous Red player | **Partial / unfinished** | The hierarchy can execute bounded chains. Route eligibility now fails closed on undeclared interruption support, but empty/forced menus and deterministic support still prevent an independent start-to-finish claim. |
 | Modified-Red, Blue and Crystal transfer | **Planned** | Contracts and some adapters exist, but no transfer result is claimed. |
 
-The route-eligibility repair is complete: a candidate now requires declared finite support for wild,
-trainer and scripted-dialogue interruptions before ranking. The immediate live task is to recover
-model111 from the retained dialogue terminal without awarding a training label, rebuild the
-action-free candidate menu, and permit one fresh supported model choice.
+The route-eligibility repair is complete, and the exact retained dialogue recovered once in eight
+actions / 576 frames without a training label. The next action-free menu was forced-only. The
+immediate task is capability-derived retrieval of a capture helper from another observed box,
+followed by a rebuilt menu and at most one fresh supported model choice.
 
 ## 2. What the system can demonstrably do now
 
@@ -265,7 +265,8 @@ An interview-safe description is:
 - No learned model has independently played Red from title screen through Hall of Fame.
 - The current 111 examples are related development outcomes, not 111 independent games.
 - The latest fit has no independent evaluation or promoted authority.
-- Route eligibility still needs to reflect scripted-dialogue capability before the next menu.
+- Capture preparation searches only the active box; the current save's seven suitable helpers are
+  stored elsewhere, so the rebuilt menu exposes only deterministic recovery.
 - Low-level navigation, battle, capture and menu control remain primarily deterministic.
 - Red registrations are incomplete: 41 required Red registrations remain in the current contract.
 - The system has not autonomously completed the shared Pokédex.

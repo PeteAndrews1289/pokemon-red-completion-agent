@@ -5,35 +5,33 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current engineering boundary: route capability qualified / model111 unchanged
+## Current engineering boundary: model111 recovered / cross-box capture support next
 
-Source `07fbfbbd767e5648a03be955e93b888f97ed02c3` closes the defect exposed by the
-latest failed route. A resource destination is now excluded before model ranking unless its finite
-handler explicitly declares support for wild encounters, trainer engagement, active trainer
-battles and scripted dialogue. Guarded collection recovery and registered travel capture preserve
-the declaration. The route allows at most 128 wild exits, 8 trainer battles and 4 scripted
-dialogues inside one 140-interruption bound.
+Source `23dadf37a59ad5f018d3d227921770174be108c7` passed GitHub CI run
+`34730511619` attempt 1. The exact model111 failure terminal then recovered once through the
+qualified generic dialogue handler: 8 actions / 576 frames / four dialogue pulses. The recovered
+state published and reopened as `red-model111-gate-recovery-support-20260912`, checkpoint
+`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
 
-Verification: 132 focused tests and 11,470 non-integration tests passed; Ruff, mypy and all public
-artifact/document/registry checks passed. One Mac-only frozen PyBoy metadata fingerprint test was
-excluded because the installed local metadata changed; GitHub's Python 3.11 runner does not meet
-that test's Mac/Python 3.14 condition. No game input, training row, fit or authority promotion
-occurred.
+The recovery is deterministic support, not a replay or learning result: zero teacher labels, zero
+training examples, model111 unchanged. The action-free next menu exposed only `restore_team`.
+Acquisition is withheld because the healthy party has no usable sleep/paralysis move and the
+active box has no helper, although seven capable helpers exist in other observed boxes.
 
-Next: publish this exact source and require one green GitHub qualification. Then reopen the exact
-model111 failure terminal action-free, recover ordinary control through generic zero-label dialogue
-support, rebuild the menu and allow at most one fresh useful supported choice. Stop on a
-route-specific fix, a forced-only menu, an unsupported route or a move into Blue/Crystal.
+Next: generalize capture-party preparation to inspect all boxes, select by capability, switch using
+the existing PC primitive and rebind the same acquisition without a second model query. Preserve
+every specimen and field-move dependency. Rebuild the menu action-free before permitting one fresh
+choice; stop if it remains forced-only.
 
-[Latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md) ·
-[Qualification evidence](docs/evidence/red-model111-route-capability-gate-2026-09-12.json)
+[Latest report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md) ·
+[Latest evidence](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
 
 ## Latest measured endpoint: capture, failure and online update / model111
 
-The current restart is `red-model111-fishing-measured-failure-terminal-20260912`, checkpoint record
-SHA-256 `7b70cb03508650d47863159b16c49d2985bd6fea07553e5bc4defddb2bb3380c`.
-It reopens **83 registered species / 63 living species / 67 specimens** at the exact retained
-scripted-dialogue interruption, with model111.
+The current restart is `red-model111-gate-recovery-support-20260912`, checkpoint record SHA-256
+`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
+It reopens **83 registered species / 63 living species / 67 specimens** at an input-ready field
+boundary with model111.
 
 - Registered-objective model: **111 settled examples**, 76 successful
 - Model SHA-256: `2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9`
@@ -53,8 +51,9 @@ deterministic Red adapters route, fish and capture; typed postconditions retain 
 The successful registration is real, but the next route exposed a capability-advertising defect:
 the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
 
-The capability-advertising defect is now repaired in the exact source named above. The retained
-terminal itself is still unrecovered. Mixed acquisition-family coverage remains open.
+The capability-advertising defect is repaired and the retained terminal is recovered. The next
+menu is forced-only because capture support searches only the active box; mixed
+acquisition-family coverage remains open.
 
 [Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 

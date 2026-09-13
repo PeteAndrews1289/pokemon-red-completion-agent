@@ -15,10 +15,10 @@ valuable evidence without remaining an instruction.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
 As of the latest measured session, model111 has 111 settled training-only examples. Its durable Red
-checkpoint contains 83 registered species, 63 living species and 67 physical specimens. The
-generic route-capability gate is now qualified; the next task is zero-label recovery from the exact
-retained dialogue terminal before another model-selected choice. This is bounded development, not
-independent full-game competence.
+checkpoint contains 83 registered species, 63 living species and 67 physical specimens. Generic
+zero-label dialogue recovery restored an input-ready checkpoint, but the next menu is forced-only
+until capture preparation can retrieve a required capability from another storage box. This is
+bounded development, not independent full-game competence.
 
 ## Reader-facing summaries
 

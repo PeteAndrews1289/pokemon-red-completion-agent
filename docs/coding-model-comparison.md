@@ -268,3 +268,21 @@ recovery, action-free menu inspection and at most one live choice; it needs care
 not a broad architecture rethink. Use Astra High only if the authenticated recovery exposes an
 ambiguous cross-layer defect. Reserve Claude or Antigravity for the meaningful post-outcome audit
 rather than duplicating this completed gate.
+
+## 2026-09-12: zero-label recovery and cross-box boundary
+
+The qualified source passed one GitHub run, and the exact model111 terminal recovered on its sole
+attempt in eight actions / 576 frames. Publication and two action-free diagnostics established the
+next boundary without another model fit: the party and active box lack capture-status capability,
+while seven suitable helpers exist elsewhere in storage. The session stopped at the forced-only
+menu as planned.
+
+This was integration work with explicit invariants rather than an architecture search. Sol High
+was sufficient: the one-shot identity checks, state publication, menu diagnosis and documentation
+all completed without needing an Astra escalation or external-agent duplicate audit. Repository
+evidence still cannot measure exact token consumption or weekly account debit.
+
+Recommendation for the next session: **Sol High, Fast off** for cross-box helper planning,
+implementation and focused tests. Use Astra High only if preserving field-move dependencies across
+box switching exposes an ambiguous ownership or composition problem. External review is most useful
+after the executable menu changes, not before this clearly bounded adapter seam.

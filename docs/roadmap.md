@@ -4,8 +4,8 @@
 > should not be read as the active plan. Start with the [mission](../MISSION.md),
 > [active product state](../ACTIVE_PRODUCT_STATE.md), and
 > [model-first roadmap](model-first-roadmap.md). The current endpoint is model111 with 83 verified
-> registrations and 111 settled training examples; the immediate task is capability-aware route
-> recovery before the next model choice.
+> registrations and 111 settled training examples; its dialogue terminal is recovered, and the
+> immediate task is capability-derived cross-box capture preparation before the next model choice.
 
 ## September 5 bootstrap stop and final successor
 
