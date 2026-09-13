@@ -7,7 +7,7 @@ import pytest
 
 from pokemon_red_completion import red_living_dex_production_runtime as runtime
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
-from pokemon_red_completion.emulator import CausallyMeteredEmulator
+from pokemon_red_completion.emulator import CausallyMeteredEmulator, EmulatorError
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.red_living_dex_production_runtime import (
     RED_LIVING_DEX_RUNTIME_FACTORY_SHA256,
@@ -110,6 +110,43 @@ def test_successful_action_has_identical_validator_and_effect_counts() -> None:
 
     assert counted.actions_executed == meter.controller_actions == 1
     assert meter.emulator_frames == 5
+
+
+def test_transient_tick_observer_sees_each_frame_and_cleans_up() -> None:
+    meter = RedLivingDexSetupEffectMeter()
+    raw = _FakeEmulator()
+    emulator = runtime._build_metered_emulator(raw, meter)
+    observed: list[int] = []
+
+    with emulator.observe_tick_frames(lambda: observed.append(raw.frame_count)):
+        emulator.tick(3)
+
+    emulator.tick(2)
+    assert observed == [1, 2, 3]
+    assert raw.frame_count == meter.emulator_frames == 5
+
+
+def test_transient_tick_observer_rejects_nesting_and_cleans_up_after_failure() -> None:
+    meter = RedLivingDexSetupEffectMeter()
+    emulator = runtime._build_metered_emulator(_FakeEmulator(), meter)
+
+    def fail() -> None:
+        raise RuntimeError("observer failed")
+
+    with (
+        pytest.raises(RuntimeError, match="observer failed"),
+        emulator.observe_tick_frames(fail),
+    ):
+        with (
+            pytest.raises(EmulatorError, match="already active"),
+            emulator.observe_tick_frames(lambda: None),
+        ):
+            pass
+        emulator.tick(1)
+
+    with emulator.observe_tick_frames(lambda: None):
+        emulator.tick(1)
+    assert meter.emulator_frames == 2
 
 
 def test_process_wide_limits_reject_input_before_it_crosses_the_boundary() -> None:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Callable, Mapping
+from contextlib import AbstractContextManager
 from dataclasses import dataclass, replace
 from typing import TYPE_CHECKING, Protocol, cast
 
@@ -125,6 +126,10 @@ class RedGoalContextEmulator(Protocol):
     def release(self, button: str) -> None: ...
 
     def tick(self, frames: int) -> None: ...
+
+    def observe_tick_frames(
+        self, observer: Callable[[], None]
+    ) -> AbstractContextManager[None]: ...
 
 
 @dataclass(frozen=True, slots=True)

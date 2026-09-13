@@ -519,6 +519,7 @@ class RedCartridgeLoreleiSkill:
             validate_scripted_dialogue=scripted_dialogue,
             maximum_full_restores=self.maximum_full_restores,
             prospective_story_recovery=bool(self.maximum_full_restores),
+            pay_day_frame_source=self.runtime.emulator,
         )
         spent = (
             controller.heals_claimed if self.maximum_full_restores else 0

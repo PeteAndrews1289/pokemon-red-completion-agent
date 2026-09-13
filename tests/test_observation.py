@@ -1019,6 +1019,17 @@ def test_reader_exposes_pinned_player_disable_slot_and_turns() -> None:
     assert raw.player_disable_turns == 6
 
 
+def test_reader_exposes_exact_pay_day_bcd_accumulator() -> None:
+    memory = RecordingMemory({
+        RamAddress.TOTAL_PAY_DAY_MONEY: 0x00,
+        int(RamAddress.TOTAL_PAY_DAY_MONEY) + 1: 0x00,
+        int(RamAddress.TOTAL_PAY_DAY_MONEY) + 2: 0x58,
+    })
+
+    assert RamAddress.TOTAL_PAY_DAY_MONEY == 0xCCE5
+    assert PokemonRedStateReader(memory).read_total_pay_day_money() == 58
+
+
 def test_reader_exposes_pinned_player_special_stage() -> None:
     memory = RecordingMemory(
         {

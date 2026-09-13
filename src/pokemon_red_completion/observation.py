@@ -48,6 +48,7 @@ class RamAddress(IntEnum):
     PLAYER_MON_NUMBER = 0xCC2F
     MENU_CURSOR_LOCATION = 0xCC30
     NPC_MOVEMENT_SCRIPT_TABLE = 0xCC57
+    TOTAL_PAY_DAY_MONEY = 0xCCE5
     PLAYER_ATTACK_STAGE = 0xCD1A
     PLAYER_SPECIAL_STAGE = 0xCD1D
     PLAYER_ACCURACY_STAGE = 0xCD1E
@@ -3896,6 +3897,16 @@ class PokemonRedStateReader:
         if self._encounter_log is not None:
             self._record_encounter(raw)
         return raw
+
+    def read_total_pay_day_money(self) -> int:
+        """Read the battle's exact cartridge Pay Day accumulator.
+
+        Red adds this three-byte BCD value to the player's money at the end of
+        any won non-link battle, regardless of which side used Pay Day.  The
+        end-of-battle reset clears it, so callers that need payout accounting
+        must observe it while controller transitions are still in progress.
+        """
+        return self._read_bcd(RamAddress.TOTAL_PAY_DAY_MONEY, 3)
 
     def read_fossil_reviver_identity(self) -> tuple[int, int]:
         """Return the cartridge-retained fossil item and resulting internal species.
