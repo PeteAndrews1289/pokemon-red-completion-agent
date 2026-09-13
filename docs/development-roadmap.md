@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model117-sparse-fishing-menu**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model118-frozen-purchase**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 18/19 acceptance items (95%).**
+**Broaden model-directed Red collection: 19/20 acceptance items (95%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -31,8 +31,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
 - [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
 - [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
+- [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
 
-Current model: **117 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **118 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -82,7 +83,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -109,6 +110,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model118-frozen-purchase
+
+Model117's frozen resupply executed once:134 actions and7,716 frames bought3 Ultra Balls for exactly1,800 money. The terminal remained at85 registered species, Model118 retained all118 rows with80 successes and improved weighted MSE from0.0311424461 to0.0120639699.
+
+**Deviation:** No redraw, retry, teacher label, ROM hack, Crystal work or full replay occurred. Exact hosted CI passed before input; one broad local runtime-identity assertion remains blocked by a pre-existing PyBoy RECORD digest mismatch while the other11,567 tests passed.
+
+**Next:** Execute Model118's exact frozen restore once from checkpoint ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d, retain the actual outcome and fit only eligible measured evidence.
 
 ### 2026-09-13-model117-sparse-fishing-menu
 

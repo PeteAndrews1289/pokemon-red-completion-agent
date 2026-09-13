@@ -1,0 +1,220 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-13-model118-frozen-purchase",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "completed_episode": {
+    "status": "verified_purchase",
+    "actions": 134,
+    "frames": 7716,
+    "candidate_count": 4,
+    "selected_candidate_index": 0,
+    "selected_kind": "resupply",
+    "selected_probability": 0.25776856860308145,
+    "sampled_choices": 1,
+    "policy_queries_during_execution": 0,
+    "flights": 1,
+    "planned_spend": 1800,
+    "purchased_item_id": 3,
+    "purchase_quantity": 3,
+    "purchase_verified": true,
+    "admitted_examples": 1,
+    "verified_collection_gain": 0,
+    "terminal_state_sha256": "1d8082780f80685825a3e3ab6a149edb737aa7b03ac4e3b870df1b1120c7d36e",
+    "retry_allowed": false
+  },
+  "measured_choice": {
+    "record_sha256": "7c257794bd03c4caf68a76514f14701ef72cb811d2a70bc03ec5794c6d4223c8",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "menu_sha256": "15f5ee54c90f0d88da481719b81031cfd1eb5adc19d2235a4e202a7593d3e263",
+    "selected_candidate_index": 0,
+    "selected_probability": 0.25776856860308145,
+    "importance_weight": 3.8794489390978666,
+    "source_binding_sha256": "c6e684fc85b2b17c670547cd6d107972938efed398969f7d28d5fba2619df2b8",
+    "verified_success": true,
+    "completion_gain": 0,
+    "dependency_unlock_gain": 0
+  },
+  "collection": {
+    "registered_before": 85,
+    "registered_after": 85,
+    "living_species": 65,
+    "total_living_specimens": 69,
+    "cash_before": 2146,
+    "cash_after": 346,
+    "capture_items_added": 3,
+    "required_native_registrations_remaining": 39
+  },
+  "learning": {
+    "prior_examples": 117,
+    "new_examples": 1,
+    "settled_examples": 118,
+    "successful_examples": 80,
+    "measured_source_examples": 14,
+    "economy_qualified_examples": 39,
+    "prior_rows_retained": true,
+    "teacher_labels": 0,
+    "historical_rewards_reused": false
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 118,
+      "model_sha256": "279f45e3fb6b332ce907bdcda9a381614352f27248308ff4c4d23111e0db5d40",
+      "prior_model_sha256": "ebf3aac2909d54240285d7dd6c43f2ff8d6a9415a42103eb1f449171f9e994e5",
+      "source_commit": "d4a6aecb59dd24266725ce35ca349969cfe9da5f",
+      "source_bundle_sha256": "bba81c5311a7495c724a907ab8c95b15439a2e023b2f8571d5b95e4d54faff47",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 118,
+      "settled_examples": 118,
+      "successful_examples": 80,
+      "economy_qualified_examples": 39,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.031142446134483134,
+      "weighted_mse_after": 0.012063969904823517
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.012064413026777663
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.012063969904823512
+    }
+  },
+  "publication": {
+    "checkpoint_record_sha256": "ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d",
+    "state_sha256": "1d8082780f80685825a3e3ab6a149edb737aa7b03ac4e3b870df1b1120c7d36e",
+    "trajectory_manifest_sha256": "9416955e665bb78e7c66dce730d97a402bfb8699263353089f72f4abe9a0c66f",
+    "choice_record_sha256": "7c257794bd03c4caf68a76514f14701ef72cb811d2a70bc03ec5794c6d4223c8",
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "next_menu": {
+    "status": "verified_action_free_choice_frozen",
+    "artifact_sha256": "6be9b18731d45dc7fea73f269db1d565c3b3c501e1ecc4f230ce77709c0192cd",
+    "menu_sha256": "2bc2b6cd86124fa13e79362131de00a0da0caf6cb0325e122327af078756f3ea",
+    "candidate_count": 2,
+    "distinct_option_kinds": 2,
+    "selected_candidate_index": 1,
+    "selected_kind": "restore",
+    "selected_probability": 0.6782507836124833,
+    "probabilities": [
+      0.3217492163875167,
+      0.6782507836124833
+    ],
+    "scores": [
+      2.964849316306813,
+      3.9987308071104706
+    ],
+    "selection_seed": 118091301,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_labels": 0,
+    "executed": false,
+    "retry_or_redraw_allowed": false
+  },
+  "source": {
+    "menu_commit": "60a81c21d3165e1234c8bd32a6186bf1b544d057",
+    "execution_and_fit_commit": "d4a6aecb59dd24266725ce35ca349969cfe9da5f",
+    "execution_source_bundle_sha256": "bba81c5311a7495c724a907ab8c95b15439a2e023b2f8571d5b95e4d54faff47",
+    "execution_qualification_ci_run_id": 34780233067,
+    "execution_qualification_ci_status": "passed",
+    "registry_sha256": "fb5d7be30106009ad3ebbaaee46d0239ee1d420fbf9d5525934d7170f9fe7c77"
+  },
+  "private_receipts": {
+    "declaration_sha256": "7ee7b92edc5c0b1b40093a3072451d70a893e027943df57aeaf11f82ffd3927e",
+    "controller_claim_sha256": "647bb228db9f10adcc9c041250920f78bd01686a3204670a7ea6fa29f7158efa",
+    "result_sha256": "895e4ca112eceb3b354df96b003f18ecf8d295548fb889adf8e4825956f39b91",
+    "source_binding_sha256": "b081c6ade7fab8ffbe6925c4ae79917f7250bf0e9506882038152ed2c4ecdc77",
+    "fit_report_sha256": "ff81daedceadb6b45e1b4870d52172e7280000f68dcbacb28aa830164de609aa",
+    "materialization_report_sha256": "aa0a617a636581e44c5b69fa6a2fa2cfe655d974f4ad81615b5ab3219954646e"
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "scope": "read-only pre-execution one-shot, binding and receipt review",
+      "result": "PASS; no execution-safety blocker",
+      "accepted_or_rejected": "No code finding required adjudication.",
+      "quota": "unavailable from the CLI"
+    },
+    "claude": {
+      "model": "claude-sonnet",
+      "status": "completed",
+      "scope": "read-only source, declaration, failure-retention and accounting review",
+      "result": "PASS with two non-blocking advisories",
+      "accepted": "Confirm hosted CI against the exact execution commit before controller input; completed.",
+      "informational": "A preflight identity failure intentionally creates no gameplay receipt because no controller input has started.",
+      "quota": "unavailable from the CLI"
+    }
+  },
+  "verification": {
+    "action_free_preflight": "passed with exact model, menu, binding, candidate and parent-state hashes; zero actions and frames",
+    "focused_rom_free_tests": 84,
+    "local_full_suite": "11567 passed, 1 xfailed, 2 warnings with only the pre-existing exact Mac PyBoy RECORD identity assertion excluded",
+    "local_environment_limit": "The installed PyBoy 2.7.0 RECORD hash differs from the repository-pinned Mac runtime identity; the assertion failed before reaching this change.",
+    "ruff": "passed",
+    "mypy": "passed for changed source files",
+    "public_artifacts": "passed in hosted CI",
+    "documentation_before_closeout": "passed",
+    "product_focus_before_closeout": "passed",
+    "registry_check": "passed",
+    "hosted_ci_run_id": 34780233067,
+    "hosted_ci_status_at_closeout": "passed on exact execution commit"
+  },
+  "next": {
+    "decision": "Execute Model118's exact frozen restoration choice once from its authenticated purchase terminal, retain the result and fit only eligible measured evidence.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on menu redraw, retry, source/model/parent mismatch, teacher fallback, controller activity during preflight, unverifiable recovery accounting or any ROM-hack/Crystal progression."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

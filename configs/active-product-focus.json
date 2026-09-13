@@ -29,29 +29,29 @@
     },
     {
       "capability": "Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs.",
-      "cheapest_falsifier": "Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback.",
+      "cheapest_falsifier": "Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model117 constructed a four-option mixed menu with one identity-free fishing supplement and froze resupply candidate0 at probability0.2577685686. The choice was not executed; model117 remains at117 examples/79 successes and authority was not promoted.",
-        "blocker": "The sparse-fishing blocker is closed. The exact frozen Model117 resupply still needs one bounded execution and verified measured outcome; collection remains85 registrations with39 native-scope entries remaining.",
-        "decision": "Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
+        "authority_delta": "Model117's frozen resupply ran once and bought three Ultra Balls for1800 after one verified Fly. The success became row118; Model118 has118 examples/80 successes. Its next action-free two-option menu froze restoration candidate1 at probability0.6782507836. No authority promotion occurred.",
+        "blocker": "The purchase is complete and the exact frozen Model118 restoration remains unexecuted. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution.",
+        "decision": "Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json",
-          "sha256": "6aeef066737f7467e71d33eb64d7651642b7432af7581b9c5176f8f1d16bcc50"
+          "kind": "model_fit",
+          "path": "docs/evidence/red-model118-frozen-purchase-2026-09-13.json",
+          "sha256": "b69c5b7255c5700bb3dcf199aa78f01b7989dd1da3d30e283c3a4a6a959f3bc5"
         },
-        "learning_output": "No new learning output. This qualification repaired zero/one-destination degradation and froze one action-free Model117 choice; counters remain117 examples/79 successes.",
-        "next_falsifier": "Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback.",
-        "next_session_goal": "Execute Model117's exact frozen resupply once, retain its real resource result and fit only eligible measured evidence.",
-        "product_alignment": "Sparse acquisition methods can now disappear or remain as one identity-free supplement without stealing goal choice from the model or forcing a manual target.",
-        "session_id": "2026-09-13-model117-sparse-fishing-menu",
+        "learning_output": "One verified model-selected resupply success added row118. Model118 now has118 examples/80 successes,14 measured-source rows and39 economy-qualified rows; all117 prior rows remain retained.",
+        "next_falsifier": "Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback.",
+        "next_session_goal": "Execute Model118's exact frozen restoration once, retain its real recovery result and fit only eligible measured evidence.",
+        "product_alignment": "The learner selected and completed a legitimate resource purchase, improving sustainable collection capacity before freezing the next changed-state goal.",
+        "session_id": "2026-09-13-model118-frozen-purchase",
         "status": "active",
-        "stop_condition": "Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable resource accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
+        "stop_condition": "Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable recovery accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
         "transfer_result": "No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon."
       },
       "learned_authority": {
-        "current": "Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its sparse-fishing repair preserved one identity-free fishing supplement in a four-option mixed menu and froze resupply candidate0 at probability0.2577685686 with zero input. The choice is unexecuted; no fresh-game or independent competence is claimed.",
+        "current": "Model118 has118 examples/80 successes and retains85 registrations,65 living species,69 specimens, three additional Ultra Balls and cash346. Its action-free two-option menu froze restoration candidate1 at probability0.6782507836. The restoration is unexecuted; no fresh-game or independent competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
+      "next_decision": "Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -247,7 +247,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 117,
+        "registered_train_examples": 118,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

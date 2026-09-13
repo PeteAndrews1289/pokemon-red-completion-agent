@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## September 13 — retain the resource purchase and follow the changed-state restoration choice
+
+The [Model118 purchase session](work-sessions/2026-09-13-model118-frozen-purchase.md) executed
+Model117's exact frozen resupply once. One verified Fly led to a three-Ultra-Ball purchase for1800;
+cash changed2146 to346, registrations stayed85, and the measured success became row118 without a
+retry, teacher label or execution-time policy query.
+
+The zero-input restart then exposed one fishing acquisition and restoration. Model118 froze
+restoration candidate1 at probability0.6782507836. Execute that exact changed-state choice next and
+retain its real result. This advances sustainable resource learning, not the Red stage exit: the
+fresh-run story/full local Pokédex gate, version/trade/event dependencies and no-ROM-hack boundary
+remain unchanged.
+
 ## September 13 — preserve goal choice as fishing opportunities collapse
 
 The [sparse-fishing qualification](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)

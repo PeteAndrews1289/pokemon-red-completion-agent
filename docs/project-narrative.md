@@ -12,22 +12,21 @@ Red comes a compatible unfamiliar hack, then Crystal and at least Emerald.
 
 ## Latest measured chapter
 
-Model116's exact frozen acquisition ran once after its model, menu, binding and parent state were
-reconstructed without input. Six casts produced two encounters and one capture in979 actions /
-59232 frames. The fresh ledger verified one new registration: the save now has85 registrations,
-65 living species and69 specimens.
+Model117's exact frozen resupply ran once after its model, menu, binding and parent state were
+reconstructed without input. One verified Fly led to a purchase of three Ultra Balls for1800 in134
+actions /7716 frames. Cash changed2146 to346 while the save retained85 registrations,65 living
+species and69 specimens.
 
-That success became row117 while preserving all116 earlier examples; successes rise to79. The
-sparse-fishing repair now keeps one remaining destination as an identity-free supplement and omits
-fishing cleanly when none remain. From the actual terminal, Model117 froze resupply candidate0 from
-four options at probability25.78%, with zero input. The choice remains unexecuted.
+That success became row118 while preserving all117 earlier examples; successes rise to80. From the
+actual changed terminal, Model118 built a two-option menu and froze restoration candidate1 at
+probability67.83%, with zero input. The choice remains unexecuted.
 
 This is the intended learning loop: choose, act, measure, retain, learn and continue from
 the real terminal. It is not independent proof that the policy is good, a fresh-game autonomous
 playthrough, or cross-title transfer. Deterministic mechanics still control low-level play.
 
-[Latest qualification evidence](evidence/red-model117-sparse-fishing-menu-2026-09-13.json) ·
-[Detailed session](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
+[Latest measured evidence](evidence/red-model118-frozen-purchase-2026-09-13.json) ·
+[Detailed session](work-sessions/2026-09-13-model118-frozen-purchase.md)
 
 ## What earlier chapters established
 
@@ -48,9 +47,9 @@ full Red finish line. The player still needs broad acquisition mechanics, sustai
 genuine model-directed story choices and an authenticated full run. A collection of related
 training outcomes does not establish generalization.
 
-Flash identified missing exact sparse-menu tests, and Claude found singleton travel-cost saturation.
-Codex accepted both repairs; both final reviews passed. Review and qualification are not learning
-progress, so model and collection counters remain unchanged.
+Flash and Claude independently passed the exact purchase runner. Claude's request to confirm hosted
+CI against the exact execution commit was accepted and satisfied before input. These reviews guard
+the evidence boundary; the measured purchase—not the reviews—advanced the learning counter.
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
 [Roadmap](development-roadmap.md) · [Authorship and public overview](../README.md)

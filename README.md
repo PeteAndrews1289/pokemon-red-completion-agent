@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **84 registered species** and the model has **115 settled examples**. Its latest income choice increased cash but failed payout verification. The failure was retained and learned once, with no retry or teacher label; the next choice is frozen while the discrepancy is diagnosed.
+- The latest measured collection contains **85 registered species** and Model118 has **118 settled examples / 80 successes**. Its latest frozen resupply made one verified Fly and bought three Ultra Balls for exactly 1,800; the measured success was retained and learned once with no retry or teacher label. The next restoration choice is frozen and unexecuted.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest continuation report](docs/work-sessions/2026-09-13-model115-frozen-resupply-learning.md),
+The [latest continuation report](docs/work-sessions/2026-09-13-model118-frozen-purchase.md),
 [latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
 [cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
 [latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),

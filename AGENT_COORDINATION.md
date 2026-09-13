@@ -11,12 +11,12 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model117 has117 examples,79 successes,85 registrations,65 living species,69 specimens and cash2146.
-Its sparse-fishing repair is qualified: one reachable destination remains one identity-free mixed-menu
-supplement, while zero omits fishing cleanly. The actual four-option menu froze resupply candidate0
-at probability0.2577685686 with zero controller actions, emulator frames or teacher labels.
+Model118 has118 examples,80 successes,85 registrations,65 living species,69 specimens, three new
+Ultra Balls and cash346. Model117's exact frozen resupply succeeded once in134 actions /7716 frames
+after one verified Fly. The purchase is consumed and cannot retry.
 
-Execute that exact frozen resupply once from the authenticated parent, retain its actual resource
+The action-free two-option Model118 menu froze restoration candidate1 at probability0.6782507836.
+Execute that exact choice once from the authenticated purchase terminal, retain its actual recovery
 result and fit only eligible measured evidence. No redraw, retry, policy requery, teacher fallback,
 identity-bearing policy feature or authority promotion. Do not assign a broad architecture audit.
 
@@ -27,17 +27,15 @@ Emerald.
 
 ## Latest external contributions
 
-Flash3.8 High identified missing exact tests for zero/one factory behavior, omission, validation and
-standalone indistinguishability. Codex accepted them; Flash returned PASS after the additions.
-Claude Sonnet4.6 found singleton travel-effort saturation. Codex accepted a fixed1000-step singleton
-scale while retaining historical multi-destination normalization; Claude returned PASS. Its
-standalone-API note was informational and rejected as a removal request because that distinct
-two-choice contract remains supported. Neither reviewer edited the worktree or ran gameplay.
+Flash3.8 High reviewed the exact one-shot runner, bindings, accounting and failure retention and
+returned PASS. Claude Sonnet independently returned PASS; Codex accepted its request to confirm the
+exact hosted CI run before input, while its preflight-receipt note was informational. Neither
+reviewer edited the repository or ran gameplay.
 
 Current Flash and Claude quota is unavailable from their CLIs. Next useful external assignment is a
-small pre-execution audit of the exact frozen-resupply runner. Next Codex recommendation:
+small pre-execution audit of the exact frozen-restoration runner. Next Codex recommendation:
 Sol/High/Fast off.
 
-[Session and adjudication](docs/work-sessions/2026-09-13-model117-sparse-fishing-menu.md) ·
+[Session and adjudication](docs/work-sessions/2026-09-13-model118-frozen-purchase.md) ·
 [Detailed workflow](docs/three-agent-workflow.md) ·
 [Reviewer entry point](docs/current-agent-handoffs.md)

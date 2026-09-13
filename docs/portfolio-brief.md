@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 84 verified registrations and116 settled examples. The latest exact continuation stopped before trainer interaction and became row116 without a retry or teacher label. These are same-lineage development results, not independent improvement.
+- 85 verified registrations and118 settled examples. The latest exact frozen resupply bought three Ultra Balls for1800 and became successful row118 without a retry or teacher label. These are same-lineage development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model116-pay-day-accounting.md).
+[Evidence for the current model](work-sessions/2026-09-13-model118-frozen-purchase.md).
 
 The automatic runtime now derives useful fishing sources from current cartridge and save data
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
@@ -22,7 +22,8 @@ The next checkpoint recovered in 8 actions and preserved every registration and 
 frozen restore produced Model113; the following frozen fishing choice added registration84 and
 produced Model114. The subsequent income-verification failure became Model115. Cartridge source
 then explained the extra58 as opponent Pay Day; the exact continuation's stale-accumulator failure
-became Model116. Its next selected acquisition is frozen.
+became Model116. A later frozen fishing success produced Model117, whose verified resource purchase
+produced Model118. Model118's next restoration choice is frozen and unexecuted.
 
 ## My role and the stack
 

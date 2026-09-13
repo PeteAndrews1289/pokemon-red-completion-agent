@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.
+- Next decision: Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its sparse-fishing repair preserved one identity-free fishing supplement in a four-option mixed menu and froze resupply candidate0 at probability0.2577685686 with zero input. The choice is unexecuted; no fresh-game or independent competence is claimed. |
+| Authority now | Model118 has118 examples/80 successes and retains85 registrations,65 living species,69 specimens, three additional Ultra Balls and cash346. Its action-free two-option menu froze restoration candidate1 at probability0.6782507836. The restoration is unexecuted; no fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback. |
+| Cheapest falsifier | Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 117 | 12 |
+| Registered Train Example · train | 118 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model117-sparse-fishing-menu** · status **active** · evidence [qualification](docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json)
+**2026-09-13-model118-frozen-purchase** · status **active** · evidence [model fit](docs/evidence/red-model118-frozen-purchase-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Sparse acquisition methods can now disappear or remain as one identity-free supplement without stealing goal choice from the model or forcing a manual target. |
-| Learning output | No new learning output. This qualification repaired zero/one-destination degradation and froze one action-free Model117 choice; counters remain117 examples/79 successes. |
-| Authority delta | Model117 constructed a four-option mixed menu with one identity-free fishing supplement and froze resupply candidate0 at probability0.2577685686. The choice was not executed; model117 remains at117 examples/79 successes and authority was not promoted. |
+| Product alignment | The learner selected and completed a legitimate resource purchase, improving sustainable collection capacity before freezing the next changed-state goal. |
+| Learning output | One verified model-selected resupply success added row118. Model118 now has118 examples/80 successes,14 measured-source rows and39 economy-qualified rows; all117 prior rows remain retained. |
+| Authority delta | Model117's frozen resupply ran once and bought three Ultra Balls for1800 after one verified Fly. The success became row118; Model118 has118 examples/80 successes. Its next action-free two-option menu froze restoration candidate1 at probability0.6782507836. No authority promotion occurred. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The sparse-fishing blocker is closed. The exact frozen Model117 resupply still needs one bounded execution and verified measured outcome; collection remains85 registrations with39 native-scope entries remaining. |
-| Decision | Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback. |
-| Next session | Execute Model117's exact frozen resupply once, retain its real resource result and fit only eligible measured evidence. |
-| Next falsifier | Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback. |
-| Stop condition | Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable resource accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The purchase is complete and the exact frozen Model118 restoration remains unexecuted. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution. |
+| Decision | Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback. |
+| Next session | Execute Model118's exact frozen restoration once, retain its real recovery result and fit only eligible measured evidence. |
+| Next falsifier | Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback. |
+| Stop condition | Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable recovery accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

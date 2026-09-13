@@ -3,8 +3,8 @@
 > **Historical work record.** This file preserves the detailed sequence of earlier experiments and
 > should not be read as the active plan. Start with the [mission](../MISSION.md),
 > [active product state](../ACTIVE_PRODUCT_STATE.md), and
-> [model-first roadmap](model-first-roadmap.md). The current endpoint is Model116 with84 registrations
-> and116 settled examples. The exact next acquisition is frozen and unexecuted. Full fresh-run Red
+> [model-first roadmap](model-first-roadmap.md). The current endpoint is Model118 with85 registrations
+> and118 settled examples. The exact next restoration is frozen and unexecuted. Full fresh-run Red
 > story and local Pokédex completion must precede any ROM hack.
 
 ## September 5 bootstrap stop and final successor
