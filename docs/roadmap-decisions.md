@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## September 13 — degrade fishing inventory instead of forcing another target
+
+The [Model117 acquisition session](work-sessions/2026-09-13-model117-frozen-acquisition.md)
+completed Model116's exact frozen acquisition and added registration85. Model117's next menu then
+failed closed before selection because fewer than two reachable productive fishing destinations
+remain, while the reusable fishing inventory requires at least two.
+
+The next bounded task is therefore an action-free option-construction contract for one or zero
+destinations. It may omit unavailable fishing supplements or expose one executable supplement, but
+must not invent another species target, consult a teacher, leak identity or issue controller input.
+This changes only the immediate work order. The fresh-run Red/full local Pokédex gate, no-ROM-hack
+boundary and all consumed-choice identities remain unchanged.
+
 ## September 12 — end the funding detour and broaden acquisition families
 
 The [funded model104 continuation](work-sessions/2026-09-12-funded-model104-collection.md)

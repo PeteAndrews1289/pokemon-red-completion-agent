@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116.
+- Next decision: Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Opponent Pay Day explains Model114's extra58; its failure is unchanged. Model115's continuation stopped before trainer interaction after27 actions/864 frames on the retained accumulator and became row116. Model116 has116 examples/78 successes and retains84 registrations,64 living species,68 specimens and cash2146. Its six-option menu selected an unexecuted acquisition. No fresh-game or independent competence is claimed. |
+| Authority now | Model116's exact frozen acquisition ran once, registered one missing species after979 actions/59232 frames and became row117. Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its next action-free menu stopped before selection because fewer than two reachable productive fishing destinations remain. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features. |
+| Cheapest falsifier | Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 116 | 12 |
+| Registered Train Example · train | 117 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model116-pay-day-accounting** · status **active** · evidence [model fit](docs/evidence/red-model116-pay-day-accounting-2026-09-13.json)
+**2026-09-13-model117-frozen-acquisition** · status **active** · evidence [model fit](docs/evidence/red-model117-frozen-acquisition-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Exact Pay Day accounting removes a generic economy blind spot while retaining both failed attempts honestly. Model116's next choice returns directly to missing-species acquisition. |
-| Learning output | One measured pre-interaction verification failure became row116. Prior rows remain intact; successful-example count stays78 and collection stays84. |
-| Authority delta | Pinned cartridge source explained Model114's extra58 as opponent Pay Day, without relabeling that failure. The exact Model115 continuation then stopped on its stale accumulator guard after27 actions/864 frames; its actual failure became row116. Model116 selected an acquisition from six choices action-free. Deterministic mechanics still own execution; authority was not promoted. |
+| Product alignment | The model selected and completed another missing-species acquisition from actual resources, moving the local Red collection forward while preserving the exact sampled choice and costs. |
+| Learning output | One verified Model116 acquisition became row117. Prior rows remain intact; successful examples rise to79 and the collection rises to85 registrations. |
+| Authority delta | Model116's exact frozen candidate2 ran once and added one registration after979 actions/59232 frames and six casts. Its actual success became row117. Model117 retains85 registrations,65 living species and69 specimens. Deterministic mechanics still own execution; authority was not promoted. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The exact Model116 acquisition is frozen and unexecuted. It must retain a fresh typed collection outcome; the consumed Model115 trainer attempt cannot retry. |
-| Decision | Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116. |
-| Next session | Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116. |
-| Next falsifier | The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features. |
-| Stop condition | Stop on retry of Model115, resampling Model116, teacher labels, parent/source mismatch, unverifiable collection change or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | Model117's action-free menu construction failed closed before selection because fewer than two reachable productive fishing destinations remain, while the live fishing inventory currently requires at least two. |
+| Decision | Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback. |
+| Next session | Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback. |
+| Next falsifier | Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input. |
+| Stop condition | Stop on retry or redraw of Model116, controller input during Model117 menu construction, teacher fallback, identity-bearing policy features, unverifiable collection state or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

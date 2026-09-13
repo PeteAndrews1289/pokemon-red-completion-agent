@@ -1,0 +1,170 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-13-model117-frozen-acquisition",
+  "status": "fit_complete_checkpoint_published_next_menu_failed_closed",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "completed_episode": {
+    "status": "verified_new_registration",
+    "actions": 979,
+    "frames": 59232,
+    "candidate_count": 6,
+    "selected_candidate_index": 2,
+    "selected_kind": "acquire",
+    "selected_probability": 0.0856079343148439,
+    "sampled_choices": 1,
+    "policy_queries_during_execution": 0,
+    "casts": 6,
+    "encounters": 2,
+    "captures": 1,
+    "flees": 1,
+    "no_bites": 4,
+    "failed_captures": 0,
+    "admitted_examples": 1,
+    "verified_collection_gain": 1,
+    "terminal_state_sha256": "521cbae761e87c2d29e76726d468a84c0428035cc4652dd66ca648d444bcba2c",
+    "retry_allowed": false
+  },
+  "measured_choice": {
+    "record_sha256": "92139ca235f99f9616e7b76c422af141b319b7530d783c68e12013d5eb0bff24",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "menu_sha256": "fa88ebd9acbef213c90a4ae1705c5c725ed600222bfb7fdab4727a3f16f9b3f8",
+    "selected_candidate_index": 2,
+    "selected_probability": 0.0856079343148439,
+    "importance_weight": 4.0,
+    "source_binding_sha256": "ecf98d8629a5eb7da73024c126a7127de682c66e778e662f1bb6fe53a8c408cc",
+    "verified_success": true,
+    "completion_gain": 0.008064516129032258,
+    "dependency_unlock_gain": 0
+  },
+  "collection": {
+    "registered_before": 84,
+    "registered_after": 85,
+    "living_species": 65,
+    "total_living_specimens": 69,
+    "cash_before": 2146,
+    "cash_after": 2146,
+    "required_native_registrations_remaining": 39
+  },
+  "learning": {
+    "prior_examples": 116,
+    "new_examples": 1,
+    "settled_examples": 117,
+    "successful_examples": 79,
+    "measured_source_examples": 13,
+    "prior_rows_retained": true,
+    "teacher_labels": 0,
+    "historical_rewards_reused": false
+  },
+  "fit": {
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 117,
+      "model_sha256": "ebf3aac2909d54240285d7dd6c43f2ff8d6a9415a42103eb1f449171f9e994e5",
+      "prior_model_sha256": "01e64ac47c96b05f43f9d1a75ee2d40ff75a5a4c000d0cb083dd0640317549b0",
+      "source_commit": "4bb35c1e31843459da915c7e4234514d4a9fc5e1",
+      "source_bundle_sha256": "1df0250dff6a87ed9f5e6b4a4e42d84e8d448058db2ebfa24c6221045308e82a",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "settled_examples": 117,
+      "successful_examples": 79,
+      "economy_qualified_examples": 38,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.031306667662672864,
+      "weighted_mse_after": 0.012218851935045683,
+      "train_dataset_sha256": "ea1ee992241e06ef006b02169c6171424c251e3690684bd55a6a54bbe944c4ae"
+    }
+  },
+  "publication": {
+    "checkpoint_record_sha256": "e12ada5358a31a4afab8b97249e008321f4c8f611faf1d71329fb0241d2008fc",
+    "state_sha256": "521cbae761e87c2d29e76726d468a84c0428035cc4652dd66ca648d444bcba2c",
+    "trajectory_manifest_sha256": "4c47e2b7e95d0bd1417f31bb32d91a5c763af5e4ecbf705af430aa749c155d85",
+    "choice_record_sha256": "92139ca235f99f9616e7b76c422af141b319b7530d783c68e12013d5eb0bff24",
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "next_menu": {
+    "status": "failed_closed_before_write",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_labels": 0,
+    "artifact_created": false,
+    "error_type": "RedLiveFishingError",
+    "error": "live fishing needs at least two reachable destinations",
+    "meaning": "After the successful capture, the mixed-menu builder had fewer than two reachable productive fishing destinations. The existing multi-destination fishing inventory contract rejected the state before selection."
+  },
+  "source": {
+    "menu_commit": "f19c936010f1085510542a77f6b37a4af9f429e2",
+    "execution_commit": "e740074dac1d4ccb3583b1194e8303a1a57b0057",
+    "execution_qualification_ci_run_id": 34771367481,
+    "fit_commit": "4bb35c1e31843459da915c7e4234514d4a9fc5e1",
+    "fit_source_bundle_sha256": "1df0250dff6a87ed9f5e6b4a4e42d84e8d448058db2ebfa24c6221045308e82a",
+    "fit_ci_is_dependency": false
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "scope": "read-only frozen identity, one-shot and verification review",
+      "result": "PASS; no actionable execution-safety issue",
+      "quota": "unavailable from the CLI"
+    },
+    "claude": {
+      "model": "claude-sonnet-4-6",
+      "status": "completed",
+      "scope": "read-only failure-mode and provenance review",
+      "accepted": "Separate the canceled menu CI reference from the later green execution qualification in a dedicated source-binding receipt.",
+      "verdict": "PASS after a medium-severity audit-honesty finding",
+      "quota": "unavailable from the CLI"
+    }
+  },
+  "verification": {
+    "action_free_preflight": "passed with exact model, menu, binding, candidate and parent-state hashes; zero actions and frames",
+    "focused_rom_free_passed": 91,
+    "focused_plus_documentation_passed": 103,
+    "python_compile": "passed",
+    "hosted_ci_run_id": 34774476092,
+    "hosted_ci_status_at_closeout": "in_progress"
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

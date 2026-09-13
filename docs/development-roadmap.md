@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model116-pay-day-accounting**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model117-frozen-acquisition**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 16/17 acceptance items (94%).**
+**Broaden model-directed Red collection: 17/19 acceptance items (89%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -29,8 +29,10 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
 - [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
 - [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
+- [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
+- [ ] Degrade safely when fewer than two fishing destinations remain
 
-Current model: **116 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **117 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -80,7 +82,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -107,6 +109,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model117-frozen-acquisition
+
+Model116's exact frozen acquisition added one registration in979actions/59232frames across six casts. The verified success became row117; Model117 has117 examples,79 successes,85 registrations,65 living species and69 specimens.
+
+**Deviation:** Model117's next action-free menu failed closed before selection because fewer than two reachable productive fishing destinations remain. No second gameplay attempt, manual target, teacher label, retry or authority promotion occurred.
+
+**Next:** Qualify identity-free one/zero-destination fishing degradation, then rebuild and freeze Model117's next mixed menu without controller input. No hack, Crystal or full replay.
 
 ### 2026-09-13-model116-pay-day-accounting
 

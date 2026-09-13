@@ -21,34 +21,33 @@ away from Red. Full-run readiness rules still apply before starting the final ex
 
 ## What is demonstrated
 
-The bounded observe/choose/execute/verify/save/learn loop works. Model116 has116 measured
-training examples and78 successful outcomes. The current save retains84 registrations,
-64 living species and68 specimens. These are training-lineage results, not independent reliability.
+The bounded observe/choose/execute/verify/save/learn loop works. Model117 has117 measured
+training examples and79 successful outcomes. The current save retains85 registrations,
+65 living species and69 specimens. These are training-lineage results, not independent reliability.
 
 The earlier checkpoint-based story demonstration remains valid under its declared authority.
 It does not prove the new fresh-start full-run gate, which is explicitly unproved in
 [baselineV3](../configs/development-roadmap-baseline-v3.json). Older baselines are preserved.
 
-Pinned cartridge source now explains the earlier cash mismatch exactly: ordinary trainer income2030
-plus58 from a level29 opponent Meowth's Pay Day. The historical failure remains unchanged. The exact
-Model115 continuation then stopped after27 actions/864 frames because that accumulator persisted
-until the next battle; its actual failure became row116 without a retry or teacher label.
+Model116's exact frozen acquisition ran once after an action-free reconstruction. It captured one
+missing species in979 actions/59232 frames across six casts and became successful row117 without a
+teacher label, policy requery or retry.
 
 ## Immediate next session
 
-Model116's next six-option menu selected an acquisition, candidate2, with
-probability0.0856079343148439. That selection is frozen and unexecuted.
+Model117's next menu construction failed closed before selection because the existing live-fishing
+inventory requires at least two reachable productive destinations and fewer than two remain.
 
-Execute the exact frozen acquisition once, retain its actual result and refit only eligible
-evidence. No consumed Model115 retry, resampling or post-hoc target change.
+Qualify identity-free one/zero-destination degradation, then rebuild and freeze Model117's next
+mixed menu without controller input, teacher fallback or manual target selection.
 
 Then move toward short, measured multi-goal sessions. Expand missing acquisition families
 and meaningful story alternatives, measure costs/interventions, and evaluate on genuinely
 independent scenarios. More tiny same-lineage rows alone cannot establish a full-game player.
 
-[Latest session](work-sessions/2026-09-13-model116-pay-day-accounting.md) ·
-[Latest evidence](evidence/red-model116-pay-day-accounting-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model117-frozen-acquisition.md) ·
+[Latest evidence](evidence/red-model117-frozen-acquisition-2026-09-13.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the bounded acquisition
-execution and integration; bounded Flash assistance, with Astra reserved for harder authority design.
+Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the bounded menu-contract
+change; bounded Flash assistance, with Astra reserved for harder authority design.

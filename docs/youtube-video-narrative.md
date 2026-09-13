@@ -1,4 +1,4 @@
-# Video narrative: the hidden Pay Day carried forward
+# Video narrative: a low-probability choice pays off
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
@@ -6,19 +6,15 @@ did, including failures; do not present coding assistants as the live Pokémon p
 
 ## Latest episode
 
-Start with the retained Model114 result: ordinary trainer income2030, but the balance rose2088.
-Reveal the cartridge explanation: a level29 opponent Meowth used Pay Day for the missing58. Keep
-the outcome labeled failed—the explanation does not rewrite its frozen verifier.
+Start with Model116's already-frozen six-option choice: acquisition candidate2 had only an8.56%
+sampling probability. Reconstruct the same menu and parent state with zero input, then show the
+single authorized execution—six casts, two encounters and one capture in979 actions/59232 frames.
 
-Then show the exact continuation. Model115 travels27 actions/864 frames and stops before the new
-trainer because the old58 still occupies Red's Pay Day accumulator. The cartridge clears it only
-when the next battle initializes, not when the previous battle ends.
+The fresh ledger rises84 to85 registrations. The success becomes row117 with79 successes and all
+116 earlier rows retained. End honestly: Model117's next menu does not exist yet. Construction
+failed closed before selection because fewer than two productive fishing destinations remain.
 
-That failure becomes row116 with all115 earlier rows retained. Collection remains84 registrations
-and68 specimens; successes remain78. End with Model116's action-free six-option menu selecting an
-acquisition. It is frozen and unexecuted.
-
-[Session and evidence](work-sessions/2026-09-13-model116-pay-day-accounting.md)
+[Session and evidence](work-sessions/2026-09-13-model117-frozen-acquisition.md)
 
 ## The real finish line
 
@@ -39,6 +35,6 @@ Crystal → at least Emerald, with one shared registration ledger that never fab
 - [Checkpoint story audit](audits/red-phase4-closeout-2026-09-09.md):
   show the achievement and the forced/deterministic authority caveat together.
 
-Never loop old footage as current gameplay. Do not convert116 training examples into a
+Never loop old footage as current gameplay. Do not convert117 training examples into a
 whole-project completion percentage or imply that low-level control is learned.
 [Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)

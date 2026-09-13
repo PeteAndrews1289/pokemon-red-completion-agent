@@ -29,29 +29,29 @@
     },
     {
       "capability": "Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs.",
-      "cheapest_falsifier": "The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features.",
+      "cheapest_falsifier": "Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Pinned cartridge source explained Model114's extra58 as opponent Pay Day, without relabeling that failure. The exact Model115 continuation then stopped on its stale accumulator guard after27 actions/864 frames; its actual failure became row116. Model116 selected an acquisition from six choices action-free. Deterministic mechanics still own execution; authority was not promoted.",
-        "blocker": "The exact Model116 acquisition is frozen and unexecuted. It must retain a fresh typed collection outcome; the consumed Model115 trainer attempt cannot retry.",
-        "decision": "Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116.",
+        "authority_delta": "Model116's exact frozen candidate2 ran once and added one registration after979 actions/59232 frames and six casts. Its actual success became row117. Model117 retains85 registrations,65 living species and69 specimens. Deterministic mechanics still own execution; authority was not promoted.",
+        "blocker": "Model117's action-free menu construction failed closed before selection because fewer than two reachable productive fishing destinations remain, while the live fishing inventory currently requires at least two.",
+        "decision": "Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-model116-pay-day-accounting-2026-09-13.json",
-          "sha256": "d886e486196b5d552c2a7dc6c354b0630863297c1b9d17a75012f578bfd3dfbe"
+          "path": "docs/evidence/red-model117-frozen-acquisition-2026-09-13.json",
+          "sha256": "c8bd8ad44b8cd808e5d1f99a06fb8ff06606d85ebd243ceb29816a21fac9ba84"
         },
-        "learning_output": "One measured pre-interaction verification failure became row116. Prior rows remain intact; successful-example count stays78 and collection stays84.",
-        "next_falsifier": "The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features.",
-        "next_session_goal": "Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116.",
-        "product_alignment": "Exact Pay Day accounting removes a generic economy blind spot while retaining both failed attempts honestly. Model116's next choice returns directly to missing-species acquisition.",
-        "session_id": "2026-09-13-model116-pay-day-accounting",
+        "learning_output": "One verified Model116 acquisition became row117. Prior rows remain intact; successful examples rise to79 and the collection rises to85 registrations.",
+        "next_falsifier": "Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input.",
+        "next_session_goal": "Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback.",
+        "product_alignment": "The model selected and completed another missing-species acquisition from actual resources, moving the local Red collection forward while preserving the exact sampled choice and costs.",
+        "session_id": "2026-09-13-model117-frozen-acquisition",
         "status": "active",
-        "stop_condition": "Stop on retry of Model115, resampling Model116, teacher labels, parent/source mismatch, unverifiable collection change or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
+        "stop_condition": "Stop on retry or redraw of Model116, controller input during Model117 menu construction, teacher fallback, identity-bearing policy features, unverifiable collection state or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
         "transfer_result": "No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon."
       },
       "learned_authority": {
-        "current": "Opponent Pay Day explains Model114's extra58; its failure is unchanged. Model115's continuation stopped before trainer interaction after27 actions/864 frames on the retained accumulator and became row116. Model116 has116 examples/78 successes and retains84 registrations,64 living species,68 specimens and cash2146. Its six-option menu selected an unexecuted acquisition. No fresh-game or independent competence is claimed.",
+        "current": "Model116's exact frozen acquisition ran once, registered one missing species after979 actions/59232 frames and became row117. Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its next action-free menu stopped before selection because fewer than two reachable productive fishing destinations remain. No fresh-game or independent competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116.",
+      "next_decision": "Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -247,7 +247,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 116,
+        "registered_train_examples": 117,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
