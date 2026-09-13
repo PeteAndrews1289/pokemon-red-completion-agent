@@ -11,15 +11,17 @@ independent evaluation or authority promotion occurred.
 
 The current restart is the exact model111 failure terminal. Its checkpoint published and reopened;
 only the private summary writer failed, and that report was reconstructed against the sealed record
-without replay. Review whether the route menu advertised an executable option honestly, whether the
-failure target is correct, and whether generic dialogue recovery can resume without a route-specific
-patch. The capability-aware eligibility gate must be repaired before the next menu is rebuilt.
-Reject retries, named-species routing, hidden identities or independent-performance claims.
+without replay. Source `07fbfbbd767e5648a03be955e93b888f97ed02c3` now repairs the
+capability-advertising defect: every resource route must declare bounded wild, trainer and dialogue
+support before ranking, and both safety wrappers preserve that declaration. The retained terminal
+has not yet been recovered. Reject retries, named-species routing, hidden identities or
+independent-performance claims.
 
 Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
 useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's
 useful role is architecture, portability and broad implementation review through `agy`. Flash
-previously drafted the measured-choice integration; Codex materially hardened it. Claude's next
-useful task is a read-only audit of the model111 failure fit and recovery boundary. Neither
+previously drafted the measured-choice integration; Codex materially hardened it. The next useful
+milestone review is after zero-label recovery and the fresh menu result, not before publication of
+this bounded gate. Neither
 external review should block ordinary development; disagreements are resolved against the mission
 and executable evidence.

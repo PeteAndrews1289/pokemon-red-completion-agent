@@ -11,7 +11,9 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) and [story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
+The [latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md),
+[latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) and
+[story-completion audit](docs/audits/red-phase4-closeout-2026-09-09.md) explain exactly what ran.
 
 ## What is not solved
 

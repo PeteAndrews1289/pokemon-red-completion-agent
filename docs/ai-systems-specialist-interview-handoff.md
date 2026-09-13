@@ -41,12 +41,13 @@ the backburner so the project can first establish sustained model-directed Red p
 | Red teacher, mechanics and verification | **Working** | Deterministic checkpoint-based runs reached Champion and Hall of Fame under semantic verification. |
 | Bounded learned Red goal selection | **Partial** | Model111 has 111 settled training-only examples; models have selected real resource, recovery, evolution, capture and destination goals. |
 | Current retained Red state | **Working** | 83 registered species, 63 living species and 67 specimens reopen at an authenticated checkpoint. |
-| Sustained autonomous Red player | **Partial / unfinished** | The hierarchy can execute bounded chains, but unsupported route interruptions, empty/forced menus and deterministic support still prevent an independent start-to-finish claim. |
+| Sustained autonomous Red player | **Partial / unfinished** | The hierarchy can execute bounded chains. Route eligibility now fails closed on undeclared interruption support, but empty/forced menus and deterministic support still prevent an independent start-to-finish claim. |
 | Modified-Red, Blue and Crystal transfer | **Planned** | Contracts and some adapters exist, but no transfer result is claimed. |
 
-The immediate task is deliberately narrow: make route eligibility reflect what the executor can
-actually handle, recover model111 from a retained scripted-dialogue interruption without awarding a
-training label, rebuild the action-free candidate menu, and permit one fresh supported model choice.
+The route-eligibility repair is complete: a candidate now requires declared finite support for wild,
+trainer and scripted-dialogue interruptions before ranking. The immediate live task is to recover
+model111 from the retained dialogue terminal without awarding a training label, rebuild the
+action-free candidate menu, and permit one fresh supported model choice.
 
 ## 2. What the system can demonstrably do now
 

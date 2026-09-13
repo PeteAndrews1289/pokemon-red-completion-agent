@@ -1,5 +1,16 @@
 # Project story: from finishing Red to learning useful choices
 
+Latest engineering beat: the failure produced by model110 exposed a mismatch between what the menu
+called executable and what the route handler had actually promised to survive. The repair does not
+name the destination or species. Every generic resource route must now declare bounded support for
+wild encounters, trainer transitions and scripted dialogue before the model can rank it. The same
+declaration survives collection-safety and travel-capture wrappers.
+
+The repair passed 132 focused and 11,470 broad tests without opening the game. Model111 remains at
+83 registrations and 111 examples; the retained dialogue terminal is still the next live boundary.
+That distinction is the point: safer future choices are engineering progress, not a retroactive
+success or a new lesson. [Evidence](evidence/red-model111-route-capability-gate-2026-09-12.json).
+
 Latest systems beat: model109 selected one of four anonymous fishing destinations. Generic routing,
 fishing and capture added registration83 after542 actions,31,464 frames and five casts; the measured
 success produced model110. From the rebuilt four-way menu, model110 then chose a longer destination

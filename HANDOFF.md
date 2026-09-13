@@ -5,6 +5,29 @@ Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
+## Current engineering boundary: route capability qualified / model111 unchanged
+
+Source `07fbfbbd767e5648a03be955e93b888f97ed02c3` closes the defect exposed by the
+latest failed route. A resource destination is now excluded before model ranking unless its finite
+handler explicitly declares support for wild encounters, trainer engagement, active trainer
+battles and scripted dialogue. Guarded collection recovery and registered travel capture preserve
+the declaration. The route allows at most 128 wild exits, 8 trainer battles and 4 scripted
+dialogues inside one 140-interruption bound.
+
+Verification: 132 focused tests and 11,470 non-integration tests passed; Ruff, mypy and all public
+artifact/document/registry checks passed. One Mac-only frozen PyBoy metadata fingerprint test was
+excluded because the installed local metadata changed; GitHub's Python 3.11 runner does not meet
+that test's Mac/Python 3.14 condition. No game input, training row, fit or authority promotion
+occurred.
+
+Next: publish this exact source and require one green GitHub qualification. Then reopen the exact
+model111 failure terminal action-free, recover ordinary control through generic zero-label dialogue
+support, rebuild the menu and allow at most one fresh useful supported choice. Stop on a
+route-specific fix, a forced-only menu, an unsupported route or a move into Blue/Crystal.
+
+[Latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md) ·
+[Qualification evidence](docs/evidence/red-model111-route-capability-gate-2026-09-12.json)
+
 ## Latest measured endpoint: capture, failure and online update / model111
 
 The current restart is `red-model111-fishing-measured-failure-terminal-20260912`, checkpoint record
@@ -30,11 +53,8 @@ deterministic Red adapters route, fish and capture; typed postconditions retain 
 The successful registration is real, but the next route exposed a capability-advertising defect:
 the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
 
-Next: first make destination eligibility consult the executor's declared interruption capability.
-Then recover ordinary input control from this exact terminal as zero-label support, rebuild the
-model111 menu action-free and execute at most one fresh committed choice. Stop on a route-specific
-patch, a forced-only menu or any move into Blue/Crystal. Mixed acquisition-family coverage remains
-open.
+The capability-advertising defect is now repaired in the exact source named above. The retained
+terminal itself is still unrecovered. Mixed acquisition-family coverage remains open.
 
 [Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 

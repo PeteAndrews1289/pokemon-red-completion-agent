@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-model111-fishing-learning-loop",
+  "as_of_session": "2026-09-12-model111-route-capability-gate",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -96,7 +96,7 @@
       },
       {
         "id": "model111-dialogue-recovery",
-        "label": "Gate route eligibility, then recover the interruption without a learning label",
+        "label": "Recover the qualified route interruption without a learning label",
         "done": false,
         "evidence": null
       }
@@ -1104,6 +1104,12 @@
       "result": "Model109 selected one of four identity-free fishing destinations and caught one missing species:82to83 registrations after542actions/31,464frames. The success produced model110. Its next four-way choice reached an unsupported scripted dialogue after435actions/14,832frames; the consumed failure produced model111. Both rows retained actual outcomes and all109 earlier examples.",
       "deviation": "Fishing remained the only executable acquisition family, so this did not close mixed-family coverage. The failed route was not retried or relabeled. A reporter-only exception occurred after the model111 checkpoint had published and reopened; the report was reconstructed against the sealed record with no new gameplay or publication.",
       "next": "Make destination eligibility consult declared interruption capability, then recover ordinary control from the exact model111 terminal as deterministic support. Rebuild the menu action-free and allow at most one fresh model choice."
+    },
+    {
+      "session": "2026-09-12-model111-route-capability-gate",
+      "result": "The generic resource router now requires explicit wild, trainer and scripted-dialogue support before advertising a route. The declaration survives guarded recovery and travel-capture wrappers; 132 focused and 11,470 broad tests passed. Model111, 83 registrations and the retained terminal are unchanged.",
+      "deviation": "This was the planned engineering gate, not another gameplay attempt. One Mac-only frozen PyBoy metadata fingerprint test was excluded and recorded; no controller input, label, fit, authority promotion or transfer occurred.",
+      "next": "Publish one exact-source green qualification, then recover the exact model111 dialogue terminal as zero-label support, rebuild its menu action-free and permit at most one useful supported choice."
     }
   ],
   "closed_milestones": [

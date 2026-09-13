@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-fishing-learning-loop**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-route-capability-gate**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -21,7 +21,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
-- [ ] Gate route eligibility, then recover the interruption without a learning label
+- [ ] Recover the qualified route interruption without a learning label
 
 Current model: **111 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -102,6 +102,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-12-model111-route-capability-gate
+
+The generic resource router now requires explicit wild, trainer and scripted-dialogue support before advertising a route. The declaration survives guarded recovery and travel-capture wrappers; 132 focused and 11,470 broad tests passed. Model111, 83 registrations and the retained terminal are unchanged.
+
+**Deviation:** This was the planned engineering gate, not another gameplay attempt. One Mac-only frozen PyBoy metadata fingerprint test was excluded and recorded; no controller input, label, fit, authority promotion or transfer occurred.
+
+**Next:** Publish one exact-source green qualification, then recover the exact model111 dialogue terminal as zero-label support, rebuild its menu action-free and permit at most one useful supported choice.
 
 ### 2026-09-12-model111-fishing-learning-loop
 

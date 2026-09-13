@@ -248,3 +248,23 @@ evidence in the comparison: Sol found and repaired its own architectural shortcu
 real boundary falsified it. No claim about model quality or gameplay follows.
 
 Evidence: [V1 five-root preflight failure](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
+## 2026-09-12: route-capability repair
+
+This bounded implementation isolated one concrete mismatch: generic dialogue recovery existed, but
+the resource router instantiated it with a zero-dialogue budget while still advertising the route
+as executable. The repair added a capability declaration derived from actual finite budgets,
+propagated it through recovery and travel-capture wrappers, and made candidate construction fail
+closed when any required interruption kind is absent.
+
+The focused 132-test slice passed in 1.47 seconds. The one post-change broad qualification passed
+11,470 tests in 25 minutes 24 seconds, with one expected failure; a separate Mac-only frozen PyBoy
+metadata fingerprint was excluded and disclosed. No external agent was needed for this narrow
+implementation, and no live gameplay or model fit occurred. Exact assistant token use and account
+debit remain unavailable, so the repository cannot claim a measured cost ratio.
+
+Recommendation for the next session: **Sol High, Fast off**. The next work is a bounded exact-state
+recovery, action-free menu inspection and at most one live choice; it needs careful integration but
+not a broad architecture rethink. Use Astra High only if the authenticated recovery exposes an
+ambiguous cross-layer defect. Reserve Claude or Antigravity for the meaningful post-outcome audit
+rather than duplicating this completed gate.

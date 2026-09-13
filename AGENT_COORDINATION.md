@@ -18,23 +18,28 @@ four-way choice reached an unsupported scripted dialogue after435 actions; that 
 became row111. The current zero-input restart preserves the exact interruption with83 registrations,
 63 living species and67 specimens. No independent evaluation or authority promotion occurred.
 
-Continue from model111. First gate destination advertisement on the executor's declared
-interruption capability. Then recover ordinary input control through generic deterministic support,
-rebuild the action-free menu and permit at most one newly committed choice. Do not retry the failed
-candidate, add a named-species route, hide destination identity in features, reset resources or move
-into Blue/Crystal. Mixed acquisition-family coverage remains unfinished.
+Continue from model111. The destination capability gate is qualified in source
+`07fbfbbd767e5648a03be955e93b888f97ed02c3`; publish it under one green GitHub run. Then
+recover ordinary input control through generic deterministic support, rebuild the action-free menu
+and permit at most one newly committed choice. Do not retry the failed candidate, add a
+named-species route, hide destination identity in features, reset resources or move into
+Blue/Crystal. Mixed acquisition-family coverage remains unfinished.
 
-Claude should receive one read-only closeout audit after local checks, focused on failure-label
-correctness, checkpoint reconstruction and the shortest transferable route-capability repair.
-Antigravity already found and helped close the runner-wiring and documentation-surface defects in
-the preceding storage session. Claude found no closeout blocker and correctly moved the generic
+The route repair passed local closeout. Use the next external read-only audit after the live
+zero-label recovery and fresh menu outcome, where it can evaluate a meaningful product boundary.
+Antigravity already found and helped close runner-wiring and documentation-surface defects in the
+preceding storage session. Claude found no earlier closeout blocker and correctly moved the generic
 capability gate ahead of the next menu. Its cosmetic concern about the immutable failed episode's
-`capture` identifier is rejected: the name is provenance, while status and gain fields are explicit.
+`capture` identifier remains rejected: the name is provenance, while status and gain fields are
+explicit.
 
 ## Reviewer brief
 
 Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when available. See the [session report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) for limitations and adjudication.
+Report accepted/rejected findings and reasons after external review. Check service usage when
+available. See the [latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md)
+and [latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) for
+limitations and adjudication.
 
 [Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)

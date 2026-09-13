@@ -14,6 +14,10 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 [Evidence for the current model](work-sessions/2026-09-12-model111-fishing-learning-loop.md).
 
+The latest engineering repair makes route menus fail closed: a destination cannot be ranked unless
+its executor declares bounded support for the wild, trainer and dialogue interruptions it may meet.
+That repair is tested but did not add a training row or recover the retained game state.
+
 ## My role and the stack
 
 Pete owns requirements, directs AI coding agents, challenges architecture and scope decisions, observes runs and validates results. Codex, Claude and Antigravity contribute implementation and review. The stack is Python, PyBoy, NumPy, SQLite, a local web dashboard and automated verification with pytest/Ruff/mypy/GitHub Actions.

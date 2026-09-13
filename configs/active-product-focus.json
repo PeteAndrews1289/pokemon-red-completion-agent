@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Choose among identity-free Red acquisition destinations, retain both collection gains and route failures, and continue from authenticated fitted-model checkpoints.",
-      "cheapest_falsifier": "The model111 failure checkpoint cannot recover ordinary input control through the existing generic dialogue support, or its rebuilt menu repeats an ineligible route as if the failure were a success.",
+      "capability": "Choose among identity-free Red acquisition destinations, retain both collection gains and route failures, and exclude routes whose configured executor does not declare every required dynamic interruption capability.",
+      "cheapest_falsifier": "The model111 failure checkpoint cannot recover ordinary input control through the qualified generic dialogue support, or its rebuilt menu still advertises a route lacking declared interruption support.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model109 selected one of four anonymous fishing destinations and added registration83; model110 then selected another four-way destination whose route stopped at an unsupported scripted dialogue. Both observed outcomes were retained, producing model111 with111 settled examples. No authority promotion occurred.",
-        "blocker": "The latest model111 restart is intentionally at the consumed failure terminal, in a scripted-dialogue interruption. Generic control recovery must reopen it before another acquisition choice. Fishing remains the only executable acquisition family in the current inventory, so mixed acquisition-family learning is still open.",
-        "decision": "Make route advertisement consult the executor's declared interruption capability, then recover the authenticated model111 terminal as zero-label support, rebuild the menu and test one useful next choice.",
+        "authority_delta": "The resource router now rejects a route before ranking unless its finite handler declares wild, trainer and scripted-dialogue support; safety and travel-capture wrappers preserve that declaration. No gameplay, learner row, fit or authority promotion occurred, so model111 and its exact terminal are unchanged.",
+        "blocker": "The model111 restart remains intentionally at the consumed failure terminal, in a scripted-dialogue interruption. The eligibility defect is repaired, but ordinary control must still be recovered without a label before the next menu. Fishing remains the only demonstrated executable acquisition family in this lineage.",
+        "decision": "Publish the qualified route-capability gate, then recover the authenticated model111 terminal as zero-label support, rebuild the menu action-free and allow at most one fresh supported choice.",
         "evidence": {
-          "kind": "model_fit",
-          "path": "docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json",
-          "sha256": "4337aaf095378f7a6a0af2cdfbee0448099580f19ccd7e6a2fd338d9d6c37528"
+          "kind": "qualification",
+          "path": "docs/evidence/red-model111-route-capability-gate-2026-09-12.json",
+          "sha256": "301cd87eadef8fb228dfc7bf799bf277c73fb2a96a919ad5f0a16c159a65e010"
         },
-        "learning_output": "Two four-way fishing choices added two training-only rows: one verified registration gain and one retained route failure. Model109 became model111 with111 settled examples and registration count rose82to83. Teacher labels, independent evaluation and promotions remained zero.",
-        "next_falsifier": "The model111 failure checkpoint cannot regain control through generic dialogue recovery, or the next menu cannot distinguish useful executable options from the route shape that just failed.",
-        "next_session_goal": "Gate destination eligibility on declared interruption capability before rebuilding the menu; then recover the model111 terminal without a label and execute at most one newly committed choice.",
-        "product_alignment": "The loop now demonstrates the intended online pattern--choose, gain a registration, fit, choose again, retain failure and fit--while preserving the earned state. It advances adaptive collection judgment but remains same-lineage Red training, not fresh-game autonomy or transfer.",
-        "session_id": "2026-09-12-model111-fishing-learning-loop",
+        "learning_output": "No new learning output. Model111 remains at 111 settled examples, 76 successful; the repair prevents unsupported routes from entering future model menus rather than manufacturing another label.",
+        "next_falsifier": "Generic zero-label recovery cannot regain input-ready field control from the exact model111 terminal, or the rebuilt menu is forced-only, unsupported or strategically unchanged.",
+        "next_session_goal": "Reopen the exact model111 terminal without input, recover it through generic zero-label dialogue support, rebuild the candidate menu action-free and execute at most one useful supported committed choice.",
+        "product_alignment": "The repair reduces wasted model-directed gameplay by making executor capability a prerequisite for ranking, without adding map identity, species identity or a special route. It is reusable infrastructure toward sustained Red collection, not learned progress by itself.",
+        "session_id": "2026-09-12-model111-route-capability-gate",
         "status": "active",
         "stop_condition": "Stop on species-specific scripting, coordinate-bearing policy features, forced outcomes mislabeled as learning, consumed-state replay, unsupported physical prerequisites, repeated CI-only work, or any move into Blue or Crystal.",
-        "transfer_result": "The destination policy uses identity-free value, cost and risk features, while fishing, route and dialogue controls remain Red adapters. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet."
+        "transfer_result": "The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet."
       },
       "learned_authority": {
-        "current": "The bounded-development learner has111 fitted examples. Its latest Red state has83 registrations,63 living species and67 specimens in a durable model111 restart at a recoverable scripted-dialogue interruption. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed.",
+        "current": "The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable model111 restart at a recoverable scripted-dialogue interruption. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Repair the identity-free route capability gate before rebuilding the model111 menu, then recover control without learning credit and allow one supported fresh choice.",
+      "next_decision": "Publish the route-capability repair, then recover model111 without learning credit, rebuild its menu action-free and allow one supported fresh choice.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

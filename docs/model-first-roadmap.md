@@ -25,10 +25,12 @@ reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Qualify route capability before ranking.** Exclude or correctly advertise paths whose required
-   interruptions the executor cannot handle; keep map/species identity out of policy features.
-2. **Recover model111 generically.** Dismiss the retained scripted dialogue through the existing
-   control-recovery boundary, with zero learning credit and no retry of the consumed choice.
+1. **Route capability before ranking — qualified.** Resource routes now fail closed unless the
+   configured executor declares wild, trainer and scripted-dialogue support. Map/species identity
+   remains outside policy features.
+2. **Recover model111 generically — next.** Dismiss the retained scripted dialogue through the
+   existing control-recovery boundary, with zero learning credit and no retry of the consumed
+   choice.
 3. **Resume model-directed collection.** Rebuild the menu, execute one bounded selected goal,
    retain success or failure and fit it. Keep forced support outside training.
 4. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
@@ -45,12 +47,15 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Restore the exact model111 interruption without input, recover ordinary control through generic
-zero-label support and rebuild the next menu. Execute at most one fresh committed choice. Stop if
-recovery requires a route-specific patch, the menu is forced-only, or route eligibility still
-claims unsupported dialogue handling.
+Publish source `07fbfbbd767e5648a03be955e93b888f97ed02c3` and require one green GitHub
+qualification. Restore the exact model111 interruption without input, recover ordinary control
+through generic zero-label support and rebuild the next menu. Execute at most one fresh committed
+choice. Stop if recovery requires a route-specific patch, the menu is forced-only, or route
+eligibility still claims unsupported dialogue handling.
 
-[Latest evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json) · [Latest session](work-sessions/2026-09-12-model111-fishing-learning-loop.md)
+[Latest qualification](evidence/red-model111-route-capability-gate-2026-09-12.json) ·
+[Latest session](work-sessions/2026-09-12-model111-route-capability-gate.md) ·
+[Latest learning evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 
 ## How to stay focused
 

@@ -33,7 +33,7 @@
 <text x="705" y="694" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="694" class="body">Execute and fit the next model-selected acquisition from the relieved state</text>
 <text x="705" y="738" class="small" style="fill:#8594ad">NEXT</text>
-<text x="778" y="738" class="body">Gate route eligibility, then recover the interruption without a learning label</text>
+<text x="778" y="738" class="body">Recover the qualified route interruption without a learning label</text>
 <rect x="80" y="577" width="1260" height="8" rx="4" fill="#293b55"/>
 <rect x="80" y="577" width="1008" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
@@ -106,10 +106,9 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-12-model111-fishing-learning-loop</text>
-<text x="50" y="1767" class="body">Model109 selected one of four identity-free fishing destinations and caught one missing species:82to83 registrations</text>
-<text x="50" y="1792" class="body">after542actions/31,464frames. The success produced model110. Its next four-way choice reached an unsupported scripted</text>
-<text x="50" y="1817" class="body">dialogue after435actions/14,832frames; the consumed failure produced model111. Both rows retained actual outcomes and all109</text>
-<text x="50" y="1842" class="body">earlier examples.</text>
+<text x="50" y="1732" class="small muted">2026-09-12-model111-route-capability-gate</text>
+<text x="50" y="1767" class="body">The generic resource router now requires explicit wild, trainer and scripted-dialogue support before advertising a route. The</text>
+<text x="50" y="1792" class="body">declaration survives guarded recovery and travel-capture wrappers; 132 focused and 11,470 broad tests passed. Model111, 83</text>
+<text x="50" y="1817" class="body">registrations and the retained terminal are unchanged.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

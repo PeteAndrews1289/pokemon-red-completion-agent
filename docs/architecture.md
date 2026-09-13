@@ -59,12 +59,18 @@ All module paths below are under [the Python package](../src/pokemon_red_complet
 | Semantic observation | `observation.py`, `red_player_observer.py`, `red_party.py` |
 | Cartridge knowledge | `gen1_maps.py`, `gen1_terrain.py`, `gen1_traversal.py`, `gen1_acquisition.py` |
 | Learned choice | `living_dex_option_value.py`, `living_dex_player_exploration.py`, `red_player_model.py` |
-| Runtime and routing | `red_bounded_player.py`, `red_routed_semantic_goal.py`, `red_travel_capture.py` |
+| Runtime and routing | `red_bounded_player.py`, `red_resource_goal_router.py`, `gen1_route_runtime.py`, `red_routed_semantic_goal.py`, `red_travel_capture.py` |
 | Registration | `registration_memory.py`, `registered_collection.py`, `registered_checkpoint.py` |
 | Training | `red_player_incremental_fit.py`, `red_player_training_dataset.py` |
 | Evidence and recovery | `private_artifacts.py`, `red_player_checkpoint.py`, `provenance.py` |
 | Orchestration | [Regional learning-cycle runner](../scripts/run_red_regional_learning_cycle.py) |
 
 ROMs, states, recordings, datasets and model artifacts are private. Public summaries contain selected metrics and hashes, not enough material to reproduce every private run.
+
+Resource-route eligibility now has an explicit fail-closed seam: before a route becomes a model
+candidate, the configured handler must declare finite support for wild encounters, trainer
+engagement/battles and scripted dialogue. Recovery and travel-capture wrappers must preserve the
+same declaration. This prevents a deterministic execution deficit from masquerading as a viable
+learned choice.
 
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)
