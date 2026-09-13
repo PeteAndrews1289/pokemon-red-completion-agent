@@ -1,7 +1,9 @@
 # Contributing
 
-This project is completion-first: a change must make the system more correct, more observable, or
-more likely to finish the game under the declared evaluation contract.
+This project is mission-first: a change must make the system more correct, more observable, or more
+likely to produce a transferable player and shared verified registered Pokédex under the declared
+evaluation contract. Improving a fixed Red route is maintenance unless it unblocks a named learned
+decision or verification result.
 
 Before opening a change:
 
