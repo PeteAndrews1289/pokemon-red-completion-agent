@@ -33,17 +33,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Recover the exact model112 dialogue terminal without a label, publish an input-ready restart, then rebuild its automatic mixed menu action-free.
+- Next decision: Execute the exact frozen model112 restore choice once, retain its real outcome, fit model113 if eligible, then publish and rebuild the next menu action-free.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning. |
-| Authority now | The bounded-development learner has 112 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable recovery-required model112 restart after a retained route-dialogue failure. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
+| Authority now | The bounded-development learner has 112 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model112 restart. Model112 selected restore from one restore and four automatic fishing choices; the choice is not yet executed. Deterministic code still executes mechanics; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact recovery-required model112 terminal cannot regain input-ready control through generic bounded dialogue recovery, or its recovered automatic menu exposes no useful supported choice. |
+| Cheapest falsifier | The exact frozen model112 restore choice cannot execute and verify safely, or its resulting state cannot reopen for another automatic choice. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model112-automatic-fishing-failure-learning** · status **active** · evidence [model fit](docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
+**2026-09-13-model112-dialogue-recovery-and-menu** · status **active** · evidence [qualification](docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session completed a genuine discover, choose, act, observe and learn cycle over current cartridge data. It retained failure instead of scripting around it, which is essential for adapting collection behavior on unfamiliar saves. |
-| Learning output | One real model-selected acquisition failure was admitted as a training-only observed arm. Model111 advanced to model112 with 112 settled examples; successful examples remain 76 and registrations remain 83. |
-| Authority delta | The automatic runtime exposed four reachable fishing acquisitions beside restore, model111 selected one without a teacher, and its real failed outcome advanced the bounded learner to model112 with 112 settled examples. No authority promotion occurred. |
+| Product alignment | The agent recovered from a real interruption without resetting, then resumed model-directed choice from the true save. That durable continuation is required for long collection runs on unfamiliar states. |
+| Learning output | No new training row was added. Model112 remains at 112 settled examples; its recovered state now exposes one restore and four reachable fishing choices, and model112 selected restore by exploration. |
+| Authority delta | Generic zero-label recovery restored input-ready control in 8 actions and 576 frames. Model112 then selected restore from a five-choice automatic menu without input or a teacher. No learning counter or authority tier advanced. |
 | Transfer result | The policy menu remains identity-free and the learner retained a failure, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The consumed acquisition stopped at a scripted dialogue after 228 actions and 16668 frames. Model112 now has the failure lesson and an exact recovery-required restart, but generic zero-label dialogue recovery must restore input-ready control before another choice. |
-| Decision | Recover the exact model112 scripted-dialogue terminal once as deterministic zero-label support, publish an input-ready checkpoint, then rebuild the automatic mixed menu action-free. |
-| Next session | Recover the exact model112 dialogue terminal as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh bounded choice only if useful alternatives remain. |
-| Next falsifier | The exact recovery-required model112 state cannot regain input-ready field control through the generic bounded dialogue handler, or the recovered menu contains no useful supported alternative. |
-| Stop condition | Stop on retrying the consumed acquisition, post-hoc targets, named-species routes, teacher labels, another unsupported interruption, or any move into Blue or Crystal. |
+| Blocker | The selected restore is frozen but unexecuted. It must retain its actual bounded outcome before model113 may be fitted; the earlier failed acquisition remains non-retryable. |
+| Decision | Execute the exact frozen model112 restore choice once, retain success or failure, fit only its observed outcome, publish the terminal and rebuild the next menu action-free. |
+| Next session | Execute the exact frozen restore once, retain its actual outcome, fit model113 only from that outcome, then publish and rebuild the next automatic menu without input. |
+| Next falsifier | The exact selected restore cannot execute and verify safely, or the post-outcome state cannot reopen under model113 for another automatic menu. |
+| Stop condition | Stop on a second policy query for the frozen menu, retrying the consumed acquisition, post-hoc targets, teacher labels, checkpoint mismatch, or any move into Blue or Crystal. |
 
 ### Stop conditions
 

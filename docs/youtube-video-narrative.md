@@ -2,11 +2,10 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest systems beat: show a five-card live menu—four automatically derived fishing destinations and one restore goal—with no map or species names exposed to the model. Show model111 selecting acquisition, then cross-box support attaching without another prediction. Let the route visibly stop at dialogue and overlay **228 actions /16,668 frames /83 registrations unchanged**. Do not cut around the failure. Show it becoming row112 and the exact state reopening as a recovery-required model112 checkpoint. Caption: **0 teacher labels /0 authority promotions /failure retained once**.
+Newest systems beat: show a five-card live menu—four automatically derived fishing destinations and one restore goal—with no map or species names exposed to the model. Show model111 selecting acquisition, then stopping at dialogue after **228 actions /16,668 frames**. Do not cut around the failure. Show it becoming row112, then recovering in **8 actions /576 frames /0 labels**, with all **83 registrations /67 specimens** intact. Rebuild the five-card menu and show model112 selecting restore. Freeze there: the restore has not executed.
 
-Then show the engineering correction: future executions can handle at most four generic scripted
-dialogues, but the consumed outcome stays failed. The next scene is zero-label recovery—not a replay
-of the acquisition. [Session](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md).
+Caption: **failure retained once / recovery earned no learning credit / next choice frozen**.
+[Session](work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md).
 
 Prior engineering beat: show seven helpers across the PC, then capability-based selection. Overlay
 **12 boxes /304 tests /0 game actions /0 labels**. The first exact menu remained forced because its

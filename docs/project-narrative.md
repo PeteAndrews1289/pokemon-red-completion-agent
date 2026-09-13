@@ -14,6 +14,12 @@ derive current options → let the model choose → execute bounded mechanics �
 failure → update → continue from the real terminal. It is still bounded Red development, not fresh-
 game autonomy, policy-quality proof or transfer.
 
+Continuation beat: the exact model112 terminal recovered input-ready control in 8 actions / 576
+frames with zero learning credit. The durable state kept all 83 registrations and 67 specimens.
+From that true terminal, the automatic menu again exposed four reachable fishing destinations plus
+restore; model112 selected restore by exploration. The choice is frozen but unexecuted, so it is not
+yet another learning row. [Evidence](evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json).
+
 Prior engineering beat: model111 exposed a clean distinction between a missing capability and an
 exhausted source. Capture preparation now searches all twelve verified boxes, chooses a usable
 status helper without species identity, switches safely and preserves every specimen and field-

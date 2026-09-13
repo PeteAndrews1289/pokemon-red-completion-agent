@@ -8,7 +8,7 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 83 verified registered species and 112 settled examples in the current collection-learning dataset. The latest automatic five-choice menu contained four reachable fishing destinations plus healing; the model selected acquisition and its real route-dialogue failure became row112. These are training-only, same-lineage outcomes and do not establish independent improvement.
+- 83 verified registered species and 112 settled examples in the current collection-learning dataset. A failed automatic fishing choice became row112; the exact state then recovered without a label and model112 selected restore from the rebuilt five-choice menu. The restore remains unexecuted. These are same-lineage development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
@@ -18,7 +18,8 @@ The automatic runtime now derives useful fishing sources from current cartridge 
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
 verified box after selection. The first five-choice execution stopped at a dialogue boundary after
 228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
-The next exact checkpoint preserves that state and requires generic zero-label recovery.
+The next checkpoint recovered in 8 actions, preserved every registration and specimen, and now
+awaits execution of the model's exact frozen restore choice.
 
 ## My role and the stack
 

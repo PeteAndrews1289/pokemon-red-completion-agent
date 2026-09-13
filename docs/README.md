@@ -16,10 +16,10 @@ valuable evidence without remaining an instruction.
 
 As of the latest measured session, model112 has 112 settled training-only examples. Its durable Red
 checkpoint contains 83 registered species, 63 living species and 67 physical specimens. The
-automatic runtime exposed four reachable fishing acquisitions beside restore; model111 selected
-one and its real route-dialogue failure became row112. The exact terminal is preserved but still
-requires generic zero-label recovery before another choice. This is bounded development, not
-independent full-game competence.
+failed fishing route became row112; its exact terminal then recovered input-ready control in eight
+actions without a training label. From the recovered state, model112 selected restore from one
+restore goal and four automatically derived fishing choices. That frozen choice is not yet
+executed. This is bounded development, not independent full-game competence.
 
 ## Reader-facing summaries
 

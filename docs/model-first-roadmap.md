@@ -12,10 +12,11 @@ and incremental fitting loop works. The current registered-objective model conta
 examples**. Its retained save has **83 registered species**, **63 living species**, **67 specimens**
 and **41 required Red registrations remaining**.
 
-The latest cycle automatically exposed four reachable fishing acquisitions beside restore, let
-model111 select one, attached cross-box support and retained the actual route-dialogue failure as
-training row112. The exact state is now a recovery-required model112 checkpoint. This is same-
-lineage bounded development, not an independent policy comparison or full-game result.
+The latest cycle retained an automatic fishing-route failure as training row112, then recovered the
+exact terminal in 8 actions without a label. The input-ready model112 state exposes restore plus
+four reachable fishing destinations. Model112 selected restore from that identity-free menu, but
+the frozen choice has not executed. This is same-lineage bounded development, not an independent
+policy comparison or full-game result.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
@@ -33,9 +34,9 @@ reliability result or learned low-level controller.
 4. **Integrate automatic multi-source fishing — verified.** Production code derives reachable
    productive destinations, builds bounded bindings and joins them to the mixed menu without
    identity-bearing policy features.
-5. **Recover and resume model112 — next.** Recover the exact dialogue terminal as zero-label
-   support, publish an input-ready restart, rebuild the menu, then execute one bounded selected goal,
-   retain success or failure and fit it. Keep forced support outside training.
+5. **Recover and resume model112 — recovered and selected.** The exact dialogue terminal recovered
+   as zero-label support and reopened an automatic five-choice menu. Execute the frozen restore once,
+   retain success or failure and fit it. Keep support outside training.
 6. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
    dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
    reset or hand-script the target.
@@ -50,12 +51,12 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Recover the exact model112 scripted-dialogue terminal once through the generic bounded handler as
-zero-label support. Publish an input-ready restart and rebuild its automatic mixed menu action-free.
-Execute at most one fresh choice only if the resulting menu contains useful supported alternatives.
+Execute the exact frozen model112 restore choice once without a second policy query. Retain its
+actual outcome, fit model113 only if eligible, publish the terminal and rebuild the next automatic
+menu action-free.
 
-[Latest evidence](evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json) ·
-[Latest session](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md) ·
+[Latest evidence](evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md) ·
 [Cross-box qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ## How to stay focused

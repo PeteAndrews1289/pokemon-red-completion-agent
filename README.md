@@ -7,11 +7,12 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **83 registered species**. The registered-objective model has **112 settled examples**. The automatic runtime derived four reachable fishing acquisitions beside a restore goal, model111 selected one without a teacher, and its real route-dialogue failure became training row112. The exact terminal is preserved as a recovery-required model112 checkpoint.
+- The latest measured collection contains **83 registered species**. The registered-objective model has **112 settled examples**. After a model-selected fishing route failed, the exact state recovered in 8 actions without a label. The input-ready model112 restart now exposes restore plus four automatic fishing choices; model112 selected restore, but that choice has not executed yet.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
+The [latest continuation report](docs/work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md),
+[latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
 [cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
 [latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),
 [route-capability report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md),

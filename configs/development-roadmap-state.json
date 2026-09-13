@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-13-model112-automatic-fishing-failure-learning",
+  "as_of_session": "2026-09-13-model112-dialogue-recovery-and-menu",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+      "evidence": "docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -115,8 +115,8 @@
       {
         "id": "model112-input-ready-recovery",
         "label": "Recover the exact model112 terminal and rebuild its next menu",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json"
       }
     ]
   },
@@ -1146,6 +1146,12 @@
       "result": "The automatic runtime exposed four reachable fishing acquisitions beside restore. Model111 selected acquisition without a teacher, then stopped at a scripted dialogue after228actions/16668frames. The failure was retained once and fitted as example112; registrations remain83.",
       "deviation": "No consumed action was retried and no post-hoc target was added. A zero-dialogue default was repaired prospectively to a four-dialogue bound; the historical outcome remains a failure and model112 remains bounded-development only.",
       "next": "Recover the exact model112 terminal once as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh choice only when useful supported alternatives remain."
+    },
+    {
+      "session": "2026-09-13-model112-dialogue-recovery-and-menu",
+      "result": "The exact model112 dialogue terminal recovered input-ready control in8actions/576frames and published with83registrations/67specimens unchanged. A zero-input automatic menu exposed restore plus four reachable fishing destinations; model112 selected restore by exploration. No outcome or fit has occurred yet.",
+      "deviation": "Flash's warning about brittle private module rebinding was borne out by one publication assembly failure before any write; resolving the parent first fixed it. One incomplete continuation chain also failed closed before emulator input. Neither event retried gameplay or changed the checkpoint.",
+      "next": "Execute the exact frozen restore choice once without another policy query, retain success or failure, fit model113 only from that observed outcome, publish the terminal and rebuild the next menu action-free."
     }
   ],
   "closed_milestones": [

@@ -78,10 +78,11 @@ sleep/paralysis capability and capacity, switches through the existing PC primit
 complete specimen multiset and last field-move carriers, then rebinds the selected acquisition
 without another policy query. Helper species identity remains outside learned features.
 
-The next boundary sits one level higher. Cartridge-derived fishing destinations, identity-free
-features, model scoring and bounded live executors all exist, but candidate/executor assembly is
-still performed by private run scripts. Until that assembly moves into the reusable player
-runtime, an exhausted profile source can leave the generic menu empty even when productive,
-reachable fishing maps exist.
+Automatic candidate assembly now derives productive reachable fishing destinations and combines
+them with ordinary goals in an identity-free menu. The latest real interruption also recovered into
+an authenticated input-ready checkpoint without a label. The immediate boundary is execution of
+the exact restore choice already selected by model112, retention of its actual outcome and a
+single eligible incremental fit. Assembly still relies on private run orchestration and therefore
+does not establish a general fresh-game player.
 
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)

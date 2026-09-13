@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model112-automatic-fishing-failure-learning**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model112-dialogue-recovery-and-menu**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 11/13 acceptance items (85%).**
+**Broaden model-directed Red collection: 12/13 acceptance items (92%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -24,7 +24,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Recover the qualified route interruption without a learning label ([evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json))
 - [x] Derive and bind multiple reachable fishing choices automatically ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
 - [x] Retain and fit the automatic runtime's actual selected-arm result ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
-- [ ] Recover the exact model112 terminal and rebuild its next menu
+- [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
 
 Current model: **112 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -78,7 +78,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -105,6 +105,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-13-model112-dialogue-recovery-and-menu
+
+The exact model112 dialogue terminal recovered input-ready control in8actions/576frames and published with83registrations/67specimens unchanged. A zero-input automatic menu exposed restore plus four reachable fishing destinations; model112 selected restore by exploration. No outcome or fit has occurred yet.
+
+**Deviation:** Flash's warning about brittle private module rebinding was borne out by one publication assembly failure before any write; resolving the parent first fixed it. One incomplete continuation chain also failed closed before emulator input. Neither event retried gameplay or changed the checkpoint.
+
+**Next:** Execute the exact frozen restore choice once without another policy query, retain success or failure, fit model113 only from that observed outcome, publish the terminal and rebuild the next menu action-free.
 
 ### 2026-09-13-model112-automatic-fishing-failure-learning
 

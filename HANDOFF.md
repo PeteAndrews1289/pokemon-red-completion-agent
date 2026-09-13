@@ -5,7 +5,7 @@ Updated September 13, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current boundary: automatic collection choice retained and fitted / recovery next
+## Current boundary: model112 recovered and selected restore / execution next
 
 Source `8277eb604772413be1875526c0a8b989318b3dd7`, bundle
 `de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e`, passed
@@ -19,26 +19,24 @@ checkpoint it exposed four acquisition destinations plus restore. Public policy 
 map, coordinate or species identity. Model111 selected acquisition candidate4; cross-box support
 then attached without a second model query.
 
-The consumed attempt stopped at a scripted dialogue after **228 actions / 16,668 frames**. It was
-not retried. Registrations remained **83** and all **67 specimens** survived. The frozen menu,
-propensity, selected arm, claim, bounds, terminal and economy evidence were admitted once as a
-training-only failure. Model112 now has **112 settled examples**, 76 successful. Model SHA-256:
+The consumed attempt stopped at a scripted dialogue after **228 actions / 16,668 frames** and was
+not retried. Its measured failure produced model112 with **112 settled examples**, 76 successful.
+The exact terminal then recovered once through the generic handler in **8 actions / 576 frames**,
+with zero labels and all **83 registrations / 67 specimens** intact. Model SHA-256:
 `f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0`.
 
-The failed state is preserved in checkpoint record
-`babe391f75208f80032f7ff3c32a098ac8a0c55b8a362be4c6afd7a67c08eace` as episode
-`red-model112-automatic-fishing-failure-terminal-20260913`. Publication used zero actions and
-frames. This is a **recovery-required** restart, not an input-ready one. The production executor's
-scripted-dialogue allowance is prospectively bounded at four for future choices; the historical
-model111 outcome remains failed.
+The input-ready state is checkpoint
+`793d9e9dc9c5b38d0b21de48c31285aed32ebeaacc19d435801d94cf5e77800a`, state
+`4801bbd3bd60aa7dc99b245d5a1893aa2cbf253d5e8dc233dc5bea44a46ca47b`. Its action-free menu has
+one restore goal and four reachable fishing destinations. Model112 selected restore at index0 by
+exploration with probability `0.599148676088116`. That exact choice is frozen but unexecuted.
 
-Next: recover this exact model112 terminal once through the generic bounded dialogue handler as
-zero-label support, publish an input-ready restart and rebuild the automatic menu without input.
-Allow one fresh model choice only if a useful supported alternative remains. Do not retry the
-consumed acquisition, invent a target or move into Blue/Crystal.
+Next: execute the exact frozen restore once without another policy query, retain its actual
+outcome, fit model113 only from that outcome, publish the terminal and rebuild the next menu without
+input. Do not retry the consumed acquisition, invent a target or move into Blue/Crystal.
 
-[Latest report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md) ·
-[Latest evidence](docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
+[Latest report](docs/work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md) ·
+[Latest evidence](docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json)
 
 ## Prior measured endpoint: capture, failure and online update / model111
 
