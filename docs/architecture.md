@@ -44,8 +44,8 @@ The source-level boundaries prevent accidental misuse; Python interfaces are not
 
 Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
 
-The active registered-objective model has 112 settled examples from related development states,
-including successful choices and retained failures. Those are not 112 independent games. In-sample
+The active registered-objective model has 113 settled examples from related development states,
+including successful choices and retained failures. Those are not 113 independent games. In-sample
 fit quality and bounded collection gains cannot establish generalization.
 
 Champion and Hall-of-Fame evidence exists for checkpoint-based hierarchical story integration. It does not prove that the present collection model can start from the title screen and independently complete the game.
@@ -79,10 +79,12 @@ complete specimen multiset and last field-move carriers, then rebinds the select
 without another policy query. Helper species identity remains outside learned features.
 
 Automatic candidate assembly now derives productive reachable fishing destinations and combines
-them with ordinary goals in an identity-free menu. The latest real interruption also recovered into
-an authenticated input-ready checkpoint without a label. The immediate boundary is execution of
-the exact restore choice already selected by model112, retention of its actual outcome and a
-single eligible incremental fit. Assembly still relies on private run orchestration and therefore
-does not establish a general fresh-game player.
+them with ordinary goals in an identity-free menu. When no ordinary goal remains, it can also expose
+at least two authenticated supplemental choices without weakening storage-pressure or recovery
+safety. The latest real interruption recovered without a label; Model112's frozen restore then
+succeeded once and produced Model113. The immediate boundary is execution of Model113's exact
+frozen acquisition, retention of its actual outcome and a single eligible incremental fit.
+Assembly still relies on private run orchestration and therefore does not establish a general
+fresh-game player.
 
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)

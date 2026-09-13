@@ -8,18 +8,18 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 83 verified registered species and 112 settled examples in the current collection-learning dataset. A failed automatic fishing choice became row112; the exact state then recovered without a label and model112 selected restore from the rebuilt five-choice menu. The restore remains unexecuted. These are same-lineage development results, not independent improvement.
+- 83 verified registered species and 113 settled examples in the current collection-learning dataset. Model112's frozen restore succeeded once and became row113 without a teacher label. From the durable Model113 checkpoint, the model selected one of four automatic fishing destinations; that acquisition remains unexecuted. These are same-lineage development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md).
+[Evidence for the current model](work-sessions/2026-09-13-model113-frozen-restore-learning.md).
 
 The automatic runtime now derives useful fishing sources from current cartridge and save data
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
 verified box after selection. The first five-choice execution stopped at a dialogue boundary after
 228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
-The next checkpoint recovered in 8 actions, preserved every registration and specimen, and now
-awaits execution of the model's exact frozen restore choice.
+The next checkpoint recovered in 8 actions and preserved every registration and specimen. Its
+frozen restore then succeeded in 87 actions, produced Model113 and exposed the next acquisition.
 
 ## My role and the stack
 

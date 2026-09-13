@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1870" viewBox="0 0 1420 1870" role="img" aria-labelledby="title description">
 <title id="title">Pokemon development roadmap</title>
-<desc id="description">12 of 13 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
+<desc id="description">13 of 14 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>
 <rect width="1420" height="1870" fill="#0b1221"/>
 <path d="M1120 0H1420V225Z" fill="#172947"/>
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a registered Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">112 goal-value examples  /  Checkpoint-based Red story: verified</text>
+<text x="50" y="215" class="small">113 goal-value examples  /  Checkpoint-based Red story: verified</text>
 <rect x="50" y="260" width="1320" height="395" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Broaden model-directed Red collection</text>
-<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">92%</text>
-<text x="82" y="495" class="body">12 of 13 acceptance items verified</text>
+<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">93%</text>
+<text x="82" y="495" class="body">13 of 14 acceptance items verified</text>
 <text x="82" y="529" class="small muted">Checklist only. Not phase completion or a time estimate.</text>
 <text x="705" y="326" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="326" class="small">Publish the earned state as a durable fitted-model restart</text>
@@ -40,8 +40,10 @@
 <text x="778" y="656" class="small">Retain and fit the automatic runtime&#x27;s actual selected-arm result</text>
 <text x="705" y="686" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="686" class="small">Recover the exact model112 terminal and rebuild its next menu</text>
+<text x="705" y="716" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="716" class="small">Execute the frozen restore, fit model113 and rebuild a supplemental-only menu</text>
 <rect x="80" y="625" width="1260" height="8" rx="4" fill="#293b55"/>
-<rect x="80" y="625" width="1163.08" height="8" rx="4" fill="#ffd36a"/>
+<rect x="80" y="625" width="1170" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="695" class="eyebrow">THE WHOLE JOURNEY</text>
 <text x="740" y="695" class="small" style="fill:#57dfb1">VERIFIED</text>
 <text x="870" y="695" class="small" style="fill:#ffd36a">CURRENT</text>
@@ -112,9 +114,10 @@
 <text x="754" y="1565" class="small muted">Already-credited lines need no redundant grind unless useful for the</text>
 <text x="754" y="1584" class="small muted">current run or a new dependency.</text>
 <text x="50" y="1694" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="1732" class="small muted">2026-09-13-model112-dialogue-recovery-and-menu</text>
-<text x="50" y="1767" class="body">The exact model112 dialogue terminal recovered input-ready control in8actions/576frames and published</text>
-<text x="50" y="1792" class="body">with83registrations/67specimens unchanged. A zero-input automatic menu exposed restore plus four reachable fishing</text>
-<text x="50" y="1817" class="body">destinations; model112 selected restore by exploration. No outcome or fit has occurred yet.</text>
+<text x="50" y="1732" class="small muted">2026-09-13-model113-frozen-restore-learning</text>
+<text x="50" y="1767" class="body">Model112&#x27;s exact frozen restore succeeded once in87actions/3996frames with zero policy queries during execution and zero</text>
+<text x="50" y="1792" class="body">teacher labels. Its measured success became example113 and published a durable Model113 checkpoint</text>
+<text x="50" y="1817" class="body">with83registrations/63living/67specimens. Model113 then selected one of four supplemental-only fishing destinations action-</text>
+<text x="50" y="1842" class="body">free.</text>
 <text x="50" y="1830" class="small muted">Baseline red-first-v2-registered / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

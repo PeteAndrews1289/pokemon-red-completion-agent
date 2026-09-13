@@ -5,13 +5,14 @@ Updated September 13, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current boundary: model112 recovered and selected restore / execution next
+## Current boundary: model113 selected acquisition / execution next
 
-Source `8277eb604772413be1875526c0a8b989318b3dd7`, bundle
+Restore source `5dcdce45737538e2ce4fdabceab4574949614896`, bundle
 `de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e`, passed
-GitHub CI run `34738073030` attempt 2. Attempt 1 never received a runner and was cancelled before
-execution. Locally, 11,492 tests passed with one expected xfail after excluding the known Mac-only
-PyBoy metadata fingerprint check.
+GitHub CI run `34743224160`. Model113 fit source
+`5f99096b05b2adc5832ae47e5c1af4d778bb5bf9`, bundle
+`f59a49a7e02960631d2f90c394b9e54ef666a31bceeeff359f96aa7ea7a1d83e`, passed
+GitHub CI run `34746954501`.
 
 The reusable runtime now derives reachable productive fishing destinations from the cartridge,
 builds their bounded executors and joins them to the ordinary live option menu. At the exact
@@ -25,18 +26,24 @@ The exact terminal then recovered once through the generic handler in **8 action
 with zero labels and all **83 registrations / 67 specimens** intact. Model SHA-256:
 `f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0`.
 
-The input-ready state is checkpoint
-`793d9e9dc9c5b38d0b21de48c31285aed32ebeaacc19d435801d94cf5e77800a`, state
-`4801bbd3bd60aa7dc99b245d5a1893aa2cbf253d5e8dc233dc5bea44a46ca47b`. Its action-free menu has
-one restore goal and four reachable fishing destinations. Model112 selected restore at index0 by
-exploration with probability `0.599148676088116`. That exact choice is frozen but unexecuted.
+Model112's frozen restore then succeeded once in **87 actions / 3,996 frames**, with zero policy
+queries during execution and zero teacher labels. It retained **83 registered / 63 living / 67
+specimens** and became training row113. Model113 SHA-256:
+`8fa20f5b5e8889fa7340c8cc8113cc5407768306dfba7797cfeb4364c90d0cbc`.
 
-Next: execute the exact frozen restore once without another policy query, retain its actual
-outcome, fit model113 only from that outcome, publish the terminal and rebuild the next menu without
-input. Do not retry the consumed acquisition, invent a target or move into Blue/Crystal.
+The input-ready Model113 state is checkpoint
+`1365ed6e8ae8ee9c79cc17b9c0b55cad1f8fbebaba1cb7fb174636f2dff2f8ae`, state
+`8ac5abe2fafdf6963ce6731499cfa2e990871528cbd8e3d626a66cb2f34ccf3e`. The runtime now supports
+supplemental-only menus when at least two authenticated options remain. Its action-free menu has
+four reachable fishing destinations. Model113 selected acquisition candidate0 by exploration with
+probability `0.19050388143341396`. That exact choice is frozen but unexecuted.
 
-[Latest report](docs/work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md) ·
-[Latest evidence](docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json)
+Next: execute the exact frozen Model113 acquisition once without another policy query, retain its
+actual result, fit only the measured outcome, publish the terminal and rebuild the next menu. Do not
+retry consumed attempts, invent a species target or move into Blue/Crystal.
+
+[Latest report](docs/work-sessions/2026-09-13-model113-frozen-restore-learning.md) ·
+[Latest evidence](docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json)
 
 ## Prior measured endpoint: capture, failure and online update / model111
 

@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model112-dialogue-recovery-and-menu**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model113-frozen-restore-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 12/13 acceptance items (92%).**
+**Broaden model-directed Red collection: 13/14 acceptance items (93%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -25,8 +25,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Derive and bind multiple reachable fishing choices automatically ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
 - [x] Retain and fit the automatic runtime's actual selected-arm result ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
 - [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
+- [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
 
-Current model: **112 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **113 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -78,7 +79,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -105,6 +106,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-13-model113-frozen-restore-learning
+
+Model112's exact frozen restore succeeded once in87actions/3996frames with zero policy queries during execution and zero teacher labels. Its measured success became example113 and published a durable Model113 checkpoint with83registrations/63living/67specimens. Model113 then selected one of four supplemental-only fishing destinations action-free.
+
+**Deviation:** The first fit attempt failed before record publication because the generic validator did not admit the new frozen receipt; a second failed before publication because Python runtime RNG drift could not reproduce an already-frozen sample. Validation now recomputes exact scores/probabilities but does not redraw frozen decisions. The post-restore menu also exposed a reusable zero-ordinary-option gap, repaired without weakening storage or recovery safety.
+
+**Next:** Execute Model113's exact frozen acquisition once without another policy query, retain its actual outcome, fit only that measured result, publish the terminal and rebuild the next menu. No consumed retry, named-species target, Blue, Crystal or full replay.
 
 ### 2026-09-13-model112-dialogue-recovery-and-menu
 

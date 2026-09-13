@@ -8,15 +8,16 @@ stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision
 ## Where we are
 
 The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
-and incremental fitting loop works. The current registered-objective model contains **112 settled
+and incremental fitting loop works. The current registered-objective model contains **113 settled
 examples**. Its retained save has **83 registered species**, **63 living species**, **67 specimens**
 and **41 required Red registrations remaining**.
 
-The latest cycle retained an automatic fishing-route failure as training row112, then recovered the
-exact terminal in 8 actions without a label. The input-ready model112 state exposes restore plus
-four reachable fishing destinations. Model112 selected restore from that identity-free menu, but
-the frozen choice has not executed. This is same-lineage bounded development, not an independent
-policy comparison or full-game result.
+The latest cycle retained an automatic fishing-route failure as training row112, recovered the
+exact terminal in 8 actions without a label, then executed Model112's frozen restore once. That
+success became row113 and produced a durable Model113 checkpoint. Model113 selected one of four
+reachable fishing destinations from a supplemental-only identity-free menu; the frozen acquisition
+has not executed. This is same-lineage bounded development, not an independent policy comparison
+or full-game result.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
@@ -34,29 +35,31 @@ reliability result or learned low-level controller.
 4. **Integrate automatic multi-source fishing — verified.** Production code derives reachable
    productive destinations, builds bounded bindings and joins them to the mixed menu without
    identity-bearing policy features.
-5. **Recover and resume model112 — recovered and selected.** The exact dialogue terminal recovered
-   as zero-label support and reopened an automatic five-choice menu. Execute the frozen restore once,
-   retain success or failure and fit it. Keep support outside training.
-6. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
+5. **Recover and resume Model112 — complete.** The exact dialogue terminal recovered as zero-label
+   support; the frozen restore succeeded once and produced row113 plus a durable Model113 state.
+6. **Continue from supplemental-only acquisition — selected.** Model113 selected one of four
+   authenticated fishing destinations without an ordinary goal. Execute that frozen choice once,
+   retain its real outcome and rebuild the next menu.
+7. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
    dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
    reset or hand-script the target.
-7. **Measure fresh-game composition.** Connect the already authenticated story checkpoints to the
+8. **Measure fresh-game composition.** Connect the already authenticated story checkpoints to the
    same model-facing vocabulary, then test increasingly long Red segments without hidden choices.
-8. **Test an unfamiliar compatible Red modification.** Freeze the Red policy and measure initial
+9. **Test an unfamiliar compatible Red modification.** Freeze the Red policy and measure initial
    competence separately from adaptation. This is the first meaningful portability test.
-9. **Integrate Blue and shared memory.** Reuse global registrations while keeping local flags,
+10. **Integrate Blue and shared memory.** Reuse global registrations while keeping local flags,
    owned specimens and version-only availability truthful.
-10. **Adapt to Crystal, then later titles.** Add genuinely new mechanics through adapters and
+11. **Adapt to Crystal, then later titles.** Add genuinely new mechanics through adapters and
    measure what transferred rather than assuming it.
 
 ## Immediate session boundary
 
-Execute the exact frozen model112 restore choice once without a second policy query. Retain its
-actual outcome, fit model113 only if eligible, publish the terminal and rebuild the next automatic
-menu action-free.
+Execute the exact frozen Model113 acquisition once without a second policy query. Retain its actual
+outcome, fit only that measured result, publish the terminal and rebuild the next automatic menu
+action-free.
 
-[Latest evidence](evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json) ·
-[Latest session](work-sessions/2026-09-13-model112-dialogue-recovery-and-menu.md) ·
+[Latest evidence](evidence/red-model113-frozen-restore-learning-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model113-frozen-restore-learning.md) ·
 [Cross-box qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ## How to stay focused

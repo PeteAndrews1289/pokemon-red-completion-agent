@@ -20,6 +20,14 @@ From that true terminal, the automatic menu again exposed four reachable fishing
 restore; model112 selected restore by exploration. The choice is frozen but unexecuted, so it is not
 yet another learning row. [Evidence](evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json).
 
+Latest continuation: that exact frozen restore then succeeded once in 87 actions / 3,996 frames,
+with no policy query during execution and no teacher label. Its measured result became row113 and
+published a durable Model113 checkpoint with all 83 registrations and 67 specimens intact. When
+the ordinary goal menu was empty, the runtime initially discarded four valid fishing alternatives;
+the reusable planner now admits supplemental-only menus with at least two authenticated choices.
+Model113 selected one of those four destinations. The acquisition is frozen but unexecuted.
+[Evidence](evidence/red-model113-frozen-restore-learning-2026-09-13.json).
+
 Prior engineering beat: model111 exposed a clean distinction between a missing capability and an
 exhausted source. Capture preparation now searches all twelve verified boxes, chooses a usable
 status helper without species identity, switches safely and preserves every specimen and field-
