@@ -35,6 +35,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
@@ -361,7 +362,10 @@ def _validate_selection_declaration(
                         str(declaration.get("selected_binding_ref")),
                     ) is None
                 )
-        elif schema == RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA:
+        elif schema in {
+            RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
             mismatch = (
@@ -622,6 +626,7 @@ class RedDevelopmentMeasuredChoice:
                 self.selection_declaration.get("schema")
                 in {
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
@@ -763,6 +768,7 @@ class RedDevelopmentMeasuredChoice:
             selection_source_commit = self.selection_declaration.get("source_commit")
             if self.selection_declaration.get("schema") in {
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
@@ -1097,6 +1103,7 @@ def _validate_behavior(
         raise ValueError("measured choice behavior model differs")
     frozen_receipt = choice.selection_declaration.get("schema") in {
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,

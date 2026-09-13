@@ -54,6 +54,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
@@ -546,7 +547,11 @@ def _valid_frozen_restore_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
     )
 
 
-def _valid_frozen_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice:
+def _valid_frozen_fishing_choice(
+    tmp_path: Path,
+    *,
+    declaration_schema: str = RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+) -> RedDevelopmentMeasuredChoice:
     base = _valid_automatic_fishing_failure_choice(tmp_path)
     frozen_seed = base.selection_seed
     while _replay_behavior(
@@ -555,7 +560,7 @@ def _valid_frozen_fishing_choice(tmp_path: Path) -> RedDevelopmentMeasuredChoice
         frozen_seed += 1
     source = base.selection_declaration
     declaration = {
-        "schema": RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        "schema": declaration_schema,
         "executable_source_commit": source["source_commit"],
         "current_repository_head": "9" * 40,
         "source_bundle_sha256": source["source_bundle_sha256"],
@@ -904,8 +909,19 @@ def test_frozen_restore_declaration_reuses_selected_kind_without_resampling(tmp_
     )[2] != restored.selected_candidate_index
 
 
-def test_frozen_fishing_declaration_reuses_selected_kind_without_resampling(tmp_path):
-    choice = _valid_frozen_fishing_choice(tmp_path)
+@pytest.mark.parametrize(
+    "declaration_schema",
+    (
+        RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
+    ),
+)
+def test_frozen_fishing_declaration_reuses_selected_kind_without_resampling(
+    tmp_path, declaration_schema
+):
+    choice = _valid_frozen_fishing_choice(
+        tmp_path, declaration_schema=declaration_schema
+    )
     document = choice.public_dict()
     restored = RedDevelopmentMeasuredChoice.from_public(document)
 
