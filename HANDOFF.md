@@ -5,59 +5,50 @@ Updated September 13, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current engineering boundary: cross-box support qualified / automatic fishing next
+## Current boundary: automatic collection choice retained and fitted / recovery next
 
-Source `e9fb7cc83dba84e1ca966a2dae3e740c2ed6a4b5`, bundle
-`ff562c7dad41eb8ac4d93c5a797ab16f7db98fd025350148221b446f4c101cf5`, passed
-GitHub CI run `34733442341` attempt 1. Capture preparation now inventories all twelve boxes,
-selects by usable status-move capability and safe capacity, switches through the verified PC
-primitive and rebinds the same acquisition without a second policy query. Focused suite: 304
-passed. No gameplay or fit was needed to qualify the engineering seam.
+Source `8277eb604772413be1875526c0a8b989318b3dd7`, bundle
+`de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e`, passed
+GitHub CI run `34738073030` attempt 2. Attempt 1 never received a runner and was cancelled before
+execution. Locally, 11,492 tests passed with one expected xfail after excluding the known Mac-only
+PyBoy metadata fingerprint check.
 
-The exact recovered checkpoint then rebuilt under the qualified source with zero actions and zero
-frames. It still exposed only `restore_team`; acquisition remained `no_legal_target`. The immediate
-cause is source exhaustion: the profile targets Seafoam Islands 1F and all eight listed species are
-already registered. Cross-box retrieval remains necessary infrastructure, but was not sufficient
-to broaden this menu. Model111 and the 83-registration checkpoint are unchanged.
+The reusable runtime now derives reachable productive fishing destinations from the cartridge,
+builds their bounded executors and joins them to the ordinary live option menu. At the exact
+checkpoint it exposed four acquisition destinations plus restore. Public policy rows contained no
+map, coordinate or species identity. Model111 selected acquisition candidate4; cross-box support
+then attached without a second model query.
 
-Next: move the existing cartridge-derived fishing candidate and bounded executor assembly out of
-private run scripts into the reusable automatic runtime. Four of 18 productive fishing maps are
-reachable from the recovered state. Join at least two to the mixed-option menu, wrap the selected
-acquisition with cross-box support and rebuild action-free before one fresh model choice.
+The consumed attempt stopped at a scripted dialogue after **228 actions / 16,668 frames**. It was
+not retried. Registrations remained **83** and all **67 specimens** survived. The frozen menu,
+propensity, selected arm, claim, bounds, terminal and economy evidence were admitted once as a
+training-only failure. Model112 now has **112 settled examples**, 76 successful. Model SHA-256:
+`f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0`.
 
-[Latest report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md) ·
-[Latest evidence](docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
+The failed state is preserved in checkpoint record
+`babe391f75208f80032f7ff3c32a098ac8a0c55b8a362be4c6afd7a67c08eace` as episode
+`red-model112-automatic-fishing-failure-terminal-20260913`. Publication used zero actions and
+frames. This is a **recovery-required** restart, not an input-ready one. The production executor's
+scripted-dialogue allowance is prospectively bounded at four for future choices; the historical
+model111 outcome remains failed.
 
-## Latest measured endpoint: capture, failure and online update / model111
+Next: recover this exact model112 terminal once through the generic bounded dialogue handler as
+zero-label support, publish an input-ready restart and rebuild the automatic menu without input.
+Allow one fresh model choice only if a useful supported alternative remains. Do not retry the
+consumed acquisition, invent a target or move into Blue/Crystal.
 
-The current restart is `red-model111-gate-recovery-support-20260912`, checkpoint record SHA-256
-`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
-It reopens **83 registered species / 63 living species / 67 specimens** at an input-ready field
-boundary with model111.
+[Latest report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md) ·
+[Latest evidence](docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
 
-- Registered-objective model: **111 settled examples**, 76 successful
-- Model SHA-256: `2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9`
-- First lesson: model109 sampled candidate 1 from four anonymous fishing destinations at
-  probability **0.087610**; 542 actions / 31,464 frames / five casts added registration83
-- Second lesson: model110 sampled candidate 3 from a rebuilt four-way menu at probability
-  **0.292434**; after 435 actions / 14,832 frames its route met an unsupported scripted dialogue
-- The second attempt is a retained failure with no retry. Both outcomes added one row; teacher
-  labels, independent evaluations and authority promotions remained **0**
+## Prior measured endpoint: capture, failure and online update / model111
 
-The model111 checkpoint published and reopened before its private summary writer raised a
-module-alias error. The sealed record was inspected and the missing summary reconstructed without
-republication or game input. This is a reporter-only failure, not a missing checkpoint.
+The prior input-ready restart had **83 registered / 63 living / 67 specimens** and model111 with
+111 examples. It followed a model-selected capture with a second model-selected route failure,
+then recovered that earlier dialogue terminal as zero-label support. Cross-box capture preparation
+was subsequently qualified. These remain valid historical steps; model112 supersedes the model111
+learner and its new terminal now requires recovery.
 
-The reusable split remains explicit: the model ranks identity-free destination features;
-deterministic Red adapters route, fish and capture; typed postconditions retain success or failure.
-The successful registration is real, but the next route exposed a capability-advertising defect:
-the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
-
-The capability-advertising defect is repaired and the retained terminal is recovered. Cross-box
-capture support is also qualified. The next menu remains forced-only because its configured source
-is exhausted; automatic multi-source fishing and mixed acquisition-family coverage remain open.
-
-[Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
+[Prior report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Prior evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 
 ## Prior measured endpoint: Safari capture / model105
 

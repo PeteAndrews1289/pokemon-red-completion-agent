@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Integrate cartridge-derived reachable fishing candidates into the automatic mixed-option runtime, attach cross-box support after selection, then rebuild model111 action-free.
+- Next decision: Recover the exact model112 dialogue terminal without a label, publish an input-ready restart, then rebuild its automatic mixed menu action-free.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Choose among identity-free Red acquisition destinations, retain gains and failures, recover generic route interruptions without labels, and retrieve required capture capabilities from any observed storage box without resampling the model. |
-| Authority now | The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model111 restart after verified zero-label dialogue recovery. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
+| Reusable capability | Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning. |
+| Authority now | The bounded-development learner has 112 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable recovery-required model112 restart after a retained route-dialogue failure. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The reusable runtime cannot expose at least two reachable productive fishing candidates beside ordinary goals without identity leakage, state change or a second policy query. |
+| Cheapest falsifier | The exact recovery-required model112 terminal cannot regain input-ready control through generic bounded dialogue recovery, or its recovered automatic menu exposes no useful supported choice. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 111 | 12 |
+| Registered Train Example · train | 112 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model111-cross-box-capture-support** · status **active** · evidence [qualification](docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
+**2026-09-13-model112-automatic-fishing-failure-learning** · status **active** · evidence [model fit](docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session removed active-box locality as a hidden assumption and used the exact checkpoint to distinguish capability readiness from exhausted demand. The next work replaces private one-off assembly with reusable automatic source discovery. |
-| Learning output | No new learning output. Cross-box qualification and the exact menu rebuild were action-free engineering; model111 remains at 111 settled examples, 76 successful. |
-| Authority delta | Capture preparation can now retrieve a capable helper from any verified box and rebind the same acquisition without another policy query. Exact model111 inspection used zero actions and frames; the model, 111 rows and 83 registrations remain unchanged. |
-| Transfer result | The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The configured Seafoam Islands 1F source is exhausted, so the generic menu remains forced-only even with cross-box support. Four of eighteen productive fishing destinations are reachable, but their live executors are still assembled in private run scripts rather than the automatic runtime. |
-| Decision | Move cartridge-derived fishing candidate and bounded executor assembly into the reusable runtime, join at least two reachable destinations to the mixed-option menu, wrap the selected acquisition with cross-box support and rebuild model111 action-free. |
-| Next session | Productionize cartridge-derived multi-source fishing candidates and executors, join them to the mixed-option runtime, attach cross-box support after one selected acquisition and rebuild the exact model111 menu action-free. |
-| Next falsifier | Production candidate construction cannot expose at least two reachable productive fishing bindings from the exact model111 checkpoint, or it leaks private identity, changes state during planning, or cannot attach cross-box preparation after one model choice. |
-| Stop condition | Stop on destination-specific profiles, private-only executor assembly, coordinate/species policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, or any move into Blue or Crystal. |
+| Product alignment | The session completed a genuine discover, choose, act, observe and learn cycle over current cartridge data. It retained failure instead of scripting around it, which is essential for adapting collection behavior on unfamiliar saves. |
+| Learning output | One real model-selected acquisition failure was admitted as a training-only observed arm. Model111 advanced to model112 with 112 settled examples; successful examples remain 76 and registrations remain 83. |
+| Authority delta | The automatic runtime exposed four reachable fishing acquisitions beside restore, model111 selected one without a teacher, and its real failed outcome advanced the bounded learner to model112 with 112 settled examples. No authority promotion occurred. |
+| Transfer result | The policy menu remains identity-free and the learner retained a failure, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
+| Blocker | The consumed acquisition stopped at a scripted dialogue after 228 actions and 16668 frames. Model112 now has the failure lesson and an exact recovery-required restart, but generic zero-label dialogue recovery must restore input-ready control before another choice. |
+| Decision | Recover the exact model112 scripted-dialogue terminal once as deterministic zero-label support, publish an input-ready checkpoint, then rebuild the automatic mixed menu action-free. |
+| Next session | Recover the exact model112 dialogue terminal as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh bounded choice only if useful alternatives remain. |
+| Next falsifier | The exact recovery-required model112 state cannot regain input-ready field control through the generic bounded dialogue handler, or the recovered menu contains no useful supported alternative. |
+| Stop condition | Stop on retrying the consumed acquisition, post-hoc targets, named-species routes, teacher labels, another unsupported interruption, or any move into Blue or Crystal. |
 
 ### Stop conditions
 
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **33**.
+Current evidence entries: **34**.

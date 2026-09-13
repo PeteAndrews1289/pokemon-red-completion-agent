@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model111-cross-box-capture-support**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model112-automatic-fishing-failure-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 9/10 acceptance items (90%).**
+**Broaden model-directed Red collection: 11/13 acceptance items (85%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -22,8 +22,11 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
 - [x] Recover the qualified route interruption without a learning label ([evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json))
+- [x] Derive and bind multiple reachable fishing choices automatically ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
+- [x] Retain and fit the automatic runtime's actual selected-arm result ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
+- [ ] Recover the exact model112 terminal and rebuild its next menu
 
-Current model: **111 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **112 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -75,7 +78,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -102,6 +105,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-13-model112-automatic-fishing-failure-learning
+
+The automatic runtime exposed four reachable fishing acquisitions beside restore. Model111 selected acquisition without a teacher, then stopped at a scripted dialogue after228actions/16668frames. The failure was retained once and fitted as example112; registrations remain83.
+
+**Deviation:** No consumed action was retried and no post-hoc target was added. A zero-dialogue default was repaired prospectively to a four-dialogue bound; the historical outcome remains a failure and model112 remains bounded-development only.
+
+**Next:** Recover the exact model112 terminal once as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh choice only when useful supported alternatives remain.
 
 ### 2026-09-13-model111-cross-box-capture-support
 

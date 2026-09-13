@@ -177,13 +177,19 @@ _MODEL108_ADAPTIVE_FISHING_LOOP_PATH = (
 _MODEL108_ADAPTIVE_FISHING_LOOP_SHA256 = (
     "a754e657d392be1bd63e9f11dce3c93d2ecc7c0699628e0d466c7b8cc3827f79"
 )
+_MODEL112_AUTOMATIC_FISHING_FAILURE_PATH = (
+    "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+)
+_MODEL112_AUTOMATIC_FISHING_FAILURE_SHA256 = (
+    "066d6d8751f6817ad489c12d5a50627adeff61dbdc0836aafd6f4f66b3716a85"
+)
 _PROJECTED_COUNTERS = {
     "atomic_goal_episodes": 0,
     "authority_promotions": 0,
-    "causal_train_examples": 111,
+    "causal_train_examples": 112,
     "composition_attempts": 6,
-    "development_episode_attempts": 29,
-    "model_fits": 14,
+    "development_episode_attempts": 30,
+    "model_fits": 15,
     "outcome_questions": {"development": 61, "train": 103},
     "synthetic_rootless_atomic_goal_episodes": 8,
     "synthetic_rootless_model_fits": 1,
@@ -192,7 +198,7 @@ _PROJECTED_COUNTERS = {
     "transfer_results": 0,
     "unseen_comparisons": 9,
     "verified_composition_episodes": 4,
-    "verified_outcome_examples": 66,
+    "verified_outcome_examples": 67,
 }
 
 
@@ -1098,7 +1104,7 @@ def _validate_projected_counters(
 
     progress = _mapping(lane, "progress", subject="active lane")
     evidence = _sequence(progress, "evidence", subject="active lane progress")
-    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 16:
+    if len(evidence) != _PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 17:
         raise ProductFocusError(
             "active learning evidence lacks a supported counter projection"
         )
@@ -1519,6 +1525,34 @@ def _validate_projected_counters(
     if not isinstance(adaptive, Mapping):
         raise ProductFocusError("adaptive fishing evidence is invalid")
     _validate_model108_adaptive_fishing_projection(adaptive)
+    automatic_failure_evidence = _mapping_value(
+        evidence[_PROJECTED_COUNTER_PREFIX_EVIDENCE_COUNT + 16],
+        subject="projected automatic fishing failure evidence",
+    )
+    if automatic_failure_evidence != {
+        "kind": "model_fit",
+        "path": _MODEL112_AUTOMATIC_FISHING_FAILURE_PATH,
+        "sha256": _MODEL112_AUTOMATIC_FISHING_FAILURE_SHA256,
+    }:
+        raise ProductFocusError(
+            "active learning evidence lacks a supported counter projection"
+        )
+    automatic_failure_path = (
+        root / _MODEL112_AUTOMATIC_FISHING_FAILURE_PATH
+    ).resolve()
+    try:
+        automatic_failure = json.loads(
+            automatic_failure_path.read_text(encoding="ascii"),
+            object_pairs_hook=_unique_json_object,
+            parse_constant=_reject_json_constant,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError):
+        raise ProductFocusError(
+            "automatic fishing failure evidence is invalid"
+        ) from None
+    if not isinstance(automatic_failure, Mapping):
+        raise ProductFocusError("automatic fishing failure evidence is invalid")
+    _validate_model112_automatic_fishing_failure_projection(automatic_failure)
     observed = {key: progress.get(key) for key in _PROJECTED_COUNTERS}
     if observed != _PROJECTED_COUNTERS:
         raise ProductFocusError(
@@ -1741,6 +1775,125 @@ def _validate_model108_adaptive_fishing_projection(
         or _count(receipt, "encounters", subject="adaptive fishing evidence") != 4
     ):
         raise ProductFocusError("adaptive fishing outcome projection differs")
+
+
+def _validate_model112_automatic_fishing_failure_projection(
+    receipt: Mapping[str, object],
+) -> None:
+    """Project one automatic mixed-menu failure without overstating competence."""
+
+    expected = {
+        "schema": "pokemon.red.model112-automatic-fishing-failure-learning-evidence.v1",
+        "session_id": "2026-09-13-model112-automatic-fishing-failure-learning",
+        "teacher_labels": 0,
+        "authority_promotions": 0,
+        "transfer_result": None,
+    }
+    if {key: receipt.get(key) for key in expected} != expected:
+        raise ProductFocusError("automatic fishing failure projection differs")
+
+    collection = _mapping_value(
+        receipt.get("collection"), subject="automatic fishing failure collection"
+    )
+    if collection != {
+        "living_species": 63,
+        "registered_species": 83,
+        "required_red_registrations_remaining": 41,
+        "specimens": 67,
+    }:
+        raise ProductFocusError("automatic fishing failure collection differs")
+
+    menu = _mapping_value(
+        receipt.get("menu"), subject="automatic fishing failure menu"
+    )
+    if menu != {
+        "action_free": True,
+        "candidate_count": 5,
+        "cross_box_capture_support_attached_after_selection": True,
+        "distinct_option_kinds": 2,
+        "identity_fields_public": 0,
+        "model_exploration": True,
+        "reachable_fishing_candidates": 4,
+        "second_policy_query": False,
+    }:
+        raise ProductFocusError("automatic fishing failure menu differs")
+
+    execution = _mapping_value(
+        receipt.get("execution"), subject="automatic fishing failure execution"
+    )
+    if execution != {
+        "controller_actions": 228,
+        "emulator_frames": 16668,
+        "registered_species_after": 83,
+        "registered_species_before": 83,
+        "retry_allowed": False,
+        "selected_candidate_index": 4,
+        "selected_goal_kind": "acquire_species",
+        "status": "retained_route_dialogue_failure",
+    }:
+        raise ProductFocusError("automatic fishing failure execution differs")
+
+    learning = _mapping_value(
+        receipt.get("learning"), subject="automatic fishing failure learning"
+    )
+    if learning != {
+        "action_trace_available": False,
+        "independent_evaluation": False,
+        "model_sha256": (
+            "f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0"
+        ),
+        "prior_model_sha256": (
+            "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9"
+        ),
+        "settled_examples": 112,
+        "successful_examples": 76,
+        "training_examples_added": 1,
+        "training_only": True,
+    }:
+        raise ProductFocusError("automatic fishing failure learning differs")
+
+    qualification = _mapping_value(
+        receipt.get("qualification"),
+        subject="automatic fishing failure qualification",
+    )
+    if qualification != {
+        "github_ci_attempt": 2,
+        "github_ci_conclusion": "success",
+        "github_ci_run": 34738073030,
+        "source_bundle_sha256": (
+            "de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e"
+        ),
+        "source_commit": "8277eb604772413be1875526c0a8b989318b3dd7",
+    }:
+        raise ProductFocusError("automatic fishing failure qualification differs")
+
+    recovery = _mapping_value(
+        receipt.get("recovery"), subject="automatic fishing failure recovery"
+    )
+    if recovery != {
+        "checkpoint_record_sha256": (
+            "babe391f75208f80032f7ff3c32a098ac8a0c55b8a362be4c6afd7a67c08eace"
+        ),
+        "input_ready": False,
+        "publication_actions": 0,
+        "publication_frames": 0,
+        "state_sha256": (
+            "9ed90d82f93a4d9fb5eb1a1327f5d81824252ab01ba10946fa659f0ea4e5cb7b"
+        ),
+    }:
+        raise ProductFocusError("automatic fishing failure recovery differs")
+
+    validation = _mapping_value(
+        receipt.get("validation"), subject="automatic fishing failure validation"
+    )
+    if validation != {
+        "focused_tests_passed": 65,
+        "full_local_expected_xfails": 1,
+        "full_local_tests_passed": 11492,
+        "future_scripted_dialogue_budget": 4,
+        "known_local_environment_failure": "macos_pyboy_metadata_fingerprint",
+    }:
+        raise ProductFocusError("automatic fishing failure validation differs")
 
 
 def _validate_repeatable_living_dex_first_two_projection(

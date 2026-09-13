@@ -28,30 +28,30 @@
       "status": "retired"
     },
     {
-      "capability": "Choose among identity-free Red acquisition destinations, retain gains and failures, recover generic route interruptions without labels, and retrieve required capture capabilities from any observed storage box without resampling the model.",
-      "cheapest_falsifier": "The reusable runtime cannot expose at least two reachable productive fishing candidates beside ordinary goals without identity leakage, state change or a second policy query.",
+      "capability": "Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning.",
+      "cheapest_falsifier": "The exact recovery-required model112 terminal cannot regain input-ready control through generic bounded dialogue recovery, or its recovered automatic menu exposes no useful supported choice.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Capture preparation can now retrieve a capable helper from any verified box and rebind the same acquisition without another policy query. Exact model111 inspection used zero actions and frames; the model, 111 rows and 83 registrations remain unchanged.",
-        "blocker": "The configured Seafoam Islands 1F source is exhausted, so the generic menu remains forced-only even with cross-box support. Four of eighteen productive fishing destinations are reachable, but their live executors are still assembled in private run scripts rather than the automatic runtime.",
-        "decision": "Move cartridge-derived fishing candidate and bounded executor assembly into the reusable runtime, join at least two reachable destinations to the mixed-option menu, wrap the selected acquisition with cross-box support and rebuild model111 action-free.",
+        "authority_delta": "The automatic runtime exposed four reachable fishing acquisitions beside restore, model111 selected one without a teacher, and its real failed outcome advanced the bounded learner to model112 with 112 settled examples. No authority promotion occurred.",
+        "blocker": "The consumed acquisition stopped at a scripted dialogue after 228 actions and 16668 frames. Model112 now has the failure lesson and an exact recovery-required restart, but generic zero-label dialogue recovery must restore input-ready control before another choice.",
+        "decision": "Recover the exact model112 scripted-dialogue terminal once as deterministic zero-label support, publish an input-ready checkpoint, then rebuild the automatic mixed menu action-free.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json",
-          "sha256": "6467f40d85e765614a6a2121283e780af261b3a8f778b20563f8c279509bd2d4"
+          "kind": "model_fit",
+          "path": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json",
+          "sha256": "066d6d8751f6817ad489c12d5a50627adeff61dbdc0836aafd6f4f66b3716a85"
         },
-        "learning_output": "No new learning output. Cross-box qualification and the exact menu rebuild were action-free engineering; model111 remains at 111 settled examples, 76 successful.",
-        "next_falsifier": "Production candidate construction cannot expose at least two reachable productive fishing bindings from the exact model111 checkpoint, or it leaks private identity, changes state during planning, or cannot attach cross-box preparation after one model choice.",
-        "next_session_goal": "Productionize cartridge-derived multi-source fishing candidates and executors, join them to the mixed-option runtime, attach cross-box support after one selected acquisition and rebuild the exact model111 menu action-free.",
-        "product_alignment": "The session removed active-box locality as a hidden assumption and used the exact checkpoint to distinguish capability readiness from exhausted demand. The next work replaces private one-off assembly with reusable automatic source discovery.",
-        "session_id": "2026-09-13-model111-cross-box-capture-support",
+        "learning_output": "One real model-selected acquisition failure was admitted as a training-only observed arm. Model111 advanced to model112 with 112 settled examples; successful examples remain 76 and registrations remain 83.",
+        "next_falsifier": "The exact recovery-required model112 state cannot regain input-ready field control through the generic bounded dialogue handler, or the recovered menu contains no useful supported alternative.",
+        "next_session_goal": "Recover the exact model112 dialogue terminal as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh bounded choice only if useful alternatives remain.",
+        "product_alignment": "The session completed a genuine discover, choose, act, observe and learn cycle over current cartridge data. It retained failure instead of scripting around it, which is essential for adapting collection behavior on unfamiliar saves.",
+        "session_id": "2026-09-13-model112-automatic-fishing-failure-learning",
         "status": "active",
-        "stop_condition": "Stop on destination-specific profiles, private-only executor assembly, coordinate/species policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, or any move into Blue or Crystal.",
-        "transfer_result": "The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet."
+        "stop_condition": "Stop on retrying the consumed acquisition, post-hoc targets, named-species routes, teacher labels, another unsupported interruption, or any move into Blue or Crystal.",
+        "transfer_result": "The policy menu remains identity-free and the learner retained a failure, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet."
       },
       "learned_authority": {
-        "current": "The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model111 restart after verified zero-label dialogue recovery. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed.",
+        "current": "The bounded-development learner has 112 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable recovery-required model112 restart after a retained route-dialogue failure. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,13 +63,13 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Integrate cartridge-derived reachable fishing candidates into the automatic mixed-option runtime, attach cross-box support after selection, then rebuild model111 action-free.",
+      "next_decision": "Recover the exact model112 dialogue terminal without a label, publish an input-ready restart, then rebuild its automatic mixed menu action-free.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
-        "causal_train_examples": 111,
+        "causal_train_examples": 112,
         "composition_attempts": 6,
-        "development_episode_attempts": 29,
+        "development_episode_attempts": 30,
         "evidence": [
           {
             "kind": "unseen_comparison",
@@ -235,14 +235,19 @@
             "kind": "model_fit",
             "path": "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json",
             "sha256": "a754e657d392be1bd63e9f11dce3c93d2ecc7c0699628e0d466c7b8cc3827f79"
+          },
+          {
+            "kind": "model_fit",
+            "path": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json",
+            "sha256": "066d6d8751f6817ad489c12d5a50627adeff61dbdc0836aafd6f4f66b3716a85"
           }
         ],
-        "model_fits": 14,
+        "model_fits": 15,
         "outcome_questions": {
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 111,
+        "registered_train_examples": 112,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
@@ -250,7 +255,7 @@
         "transfer_results": 0,
         "unseen_comparisons": 9,
         "verified_composition_episodes": 4,
-        "verified_outcome_examples": 66
+        "verified_outcome_examples": 67
       },
       "prohibited_actions": [
         "unexecuted_counterfactual_target",

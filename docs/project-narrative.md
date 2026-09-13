@@ -1,12 +1,23 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest engineering beat: model111 exposed a clean distinction between a missing capability and an
+Latest learning beat: the automatic runtime replaced the exhausted fixed source with four
+cartridge-derived reachable fishing choices beside one restore goal. Model111 selected acquisition
+from that identity-free five-card menu, and capability-based cross-box support attached without a
+second policy query. The route then stopped at a scripted dialogue after228 actions and16668
+frames. The attempt was not retried or rewritten as success. Its exact failure became training
+row112, and the state reopened as a recovery-required model112 checkpoint with83 registrations and
+all67 specimens. [Evidence](evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json).
+
+The prospective executor now permits at most four generic scripted dialogues, but that repair does
+not alter the historical result. This is the desired systems loop even when the outcome is poor:
+derive current options → let the model choose → execute bounded mechanics → retain actual costs and
+failure → update → continue from the real terminal. It is still bounded Red development, not fresh-
+game autonomy, policy-quality proof or transfer.
+
+Prior engineering beat: model111 exposed a clean distinction between a missing capability and an
 exhausted source. Capture preparation now searches all twelve verified boxes, chooses a usable
 status helper without species identity, switches safely and preserves every specimen and field-
-move dependency. The exact read-only rebuild still showed one forced heal because all targets in
-the configured Seafoam source were already registered. Four productive fishing destinations are
-reachable, so the next step is automatic multi-source inventory—not another box or route patch.
-[Evidence](evidence/red-model111-cross-box-capture-support-2026-09-13.json).
+move dependency. [Evidence](evidence/red-model111-cross-box-capture-support-2026-09-13.json).
 
 Previous engineering beat: the failure produced by model110 led to a generic route-capability gate,
 then the exact retained terminal recovered once through that same handler. Eight actions and 576

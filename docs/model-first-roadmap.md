@@ -8,17 +8,14 @@ stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision
 ## Where we are
 
 The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
-and incremental fitting loop works. The current registered-objective model contains **111 settled
+and incremental fitting loop works. The current registered-objective model contains **112 settled
 examples**. Its retained save has **83 registered species**, **63 living species**, **67 specimens**
 and **41 required Red registrations remaining**.
 
-The latest cycle preserved both a successful registration and a failed route as training rows,
-then recovered the exact model111 failure terminal once as zero-label deterministic support.
-Capture preparation now searches all twelve verified boxes and can safely retrieve a capable
-helper. The exact input-ready checkpoint still rebuilds a forced-only menu because its configured
-Seafoam source is exhausted, while four productive fishing destinations remain reachable but are
-not part of the reusable automatic runtime. This is same-lineage bounded development, not an
-independent policy comparison or full-game result.
+The latest cycle automatically exposed four reachable fishing acquisitions beside restore, let
+model111 select one, attached cross-box support and retained the actual route-dialogue failure as
+training row112. The exact state is now a recovery-required model112 checkpoint. This is same-
+lineage bounded development, not an independent policy comparison or full-game result.
 
 This is bounded development progress. It is not a fresh-game autonomous player, independent
 reliability result or learned low-level controller.
@@ -33,9 +30,11 @@ reliability result or learned low-level controller.
 3. **Retrieve capture capabilities across boxes — qualified.** Find a helper by observed
    move/status capability, switch boxes safely and rebind the original acquisition without
    resampling. The exact menu proved this was necessary but not sufficient.
-4. **Integrate automatic multi-source fishing — next.** Move candidate construction and bounded
-   executors out of private scripts, then join reachable productive destinations to the mixed menu.
-5. **Resume model-directed collection.** Rebuild the menu, execute one bounded selected goal,
+4. **Integrate automatic multi-source fishing — verified.** Production code derives reachable
+   productive destinations, builds bounded bindings and joins them to the mixed menu without
+   identity-bearing policy features.
+5. **Recover and resume model112 — next.** Recover the exact dialogue terminal as zero-label
+   support, publish an input-ready restart, rebuild the menu, then execute one bounded selected goal,
    retain success or failure and fit it. Keep forced support outside training.
 6. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
    dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
@@ -51,15 +50,13 @@ reliability result or learned low-level controller.
 
 ## Immediate session boundary
 
-Productionize the existing cartridge-derived fishing destination inventory and bounded live
-executor. Expose at least two reachable productive candidates through the mixed-option runtime,
-with no map/species identity in model features. Wrap the selected acquisition with qualified
-cross-box capture preparation and rebind without another model query. Rebuild model111 action-free;
-execute at most one fresh choice only if the resulting menu contains useful alternatives.
+Recover the exact model112 scripted-dialogue terminal once through the generic bounded handler as
+zero-label support. Publish an input-ready restart and rebuild its automatic mixed menu action-free.
+Execute at most one fresh choice only if the resulting menu contains useful supported alternatives.
 
-[Latest qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json) ·
-[Latest session](work-sessions/2026-09-13-model111-cross-box-capture-support.md) ·
-[Latest learning evidence](evidence/red-model111-fishing-learning-loop-2026-09-12.json)
+[Latest evidence](evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md) ·
+[Cross-box qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ## How to stay focused
 

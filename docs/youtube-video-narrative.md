@@ -2,9 +2,15 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest engineering beat: show seven helpers across the PC, then capability-based selection.
-Overlay **12 boxes / 304 tests / 0 game actions / 0 labels**. Reveal that the menu is still forced
-because Seafoam is exhausted, while four productive fishing destinations await runtime integration.
+Newest systems beat: show a five-card live menu—four automatically derived fishing destinations and one restore goal—with no map or species names exposed to the model. Show model111 selecting acquisition, then cross-box support attaching without another prediction. Let the route visibly stop at dialogue and overlay **228 actions /16,668 frames /83 registrations unchanged**. Do not cut around the failure. Show it becoming row112 and the exact state reopening as a recovery-required model112 checkpoint. Caption: **0 teacher labels /0 authority promotions /failure retained once**.
+
+Then show the engineering correction: future executions can handle at most four generic scripted
+dialogues, but the consumed outcome stays failed. The next scene is zero-label recovery—not a replay
+of the acquisition. [Session](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md).
+
+Prior engineering beat: show seven helpers across the PC, then capability-based selection. Overlay
+**12 boxes /304 tests /0 game actions /0 labels**. The first exact menu remained forced because its
+configured Seafoam source was exhausted; that finding motivated automatic multi-source discovery.
 
 ## Opening: the honest hook
 
@@ -152,13 +158,11 @@ The [runtime connection](work-sessions/2026-09-11-economy-runtime-connection.md)
 
 Follow with [the live funding qualification](work-sessions/2026-09-11-economy-live-qualification.md): the Center exit connects to a real Route18 trainer and cash rises593→1443. Display +850 money,123 actions and7,825 frames, with all party HP full. Label it deterministic singleton support:64 registrations and65 examples unchanged. This is not League income or learned economic judgment; the next scene should show the proceeds enabling a real collection choice.
 
-
 For [the funded lesson](work-sessions/2026-09-11-funded-collection-overnight.md), show three purchased balls,
 seven genuine destinations and Seafoam B1F arrival. All three throws fail; keep that
 visible. The failed outcome is fitted:65→66 examples,64 registrations unchanged.
 Explain that training happened without proving improved performance. Deterministic
 support and mechanics remain distinct from the learned destination selection.
-
 
 In [the recovery follow-up](work-sessions/2026-09-11-recovery-funding-followup.md), the model chooses recovery,
 returns to the Center and then a forced trainer-income skill earns725. Show66→67
@@ -166,13 +170,11 @@ examples for recovery, not the income. With1168money, the current menu only buys
 one GreatBall and hides earning more; explain why preserving a real economic choice
 is the next engineering task, not already a trained money-making strategy.
 
-
 For [the first resource-choice runtime test](work-sessions/2026-09-11-resource-choice-runtime.md), show the
 honest difference between a tested menu mechanism and an actual choice: only buying
 was available. Display600 spent,one ball,zero new examples. The latest model remains67.
 The missing funding exit becomes a small engineering task; do not edit this into a
 successful money-strategy lesson. Keep the failed capture and prior costs visible.
-
 
 In [the funding approach](work-sessions/2026-09-11-funding-route-failure.md), show the model choosing
 funding, leaving the shop, then stopping at a blocked outdoor movement. Caption:
@@ -180,20 +182,17 @@ zero income,one retained failed outcome,67→68 examples. The safety stop protec
 the save; the refit does not mean the system learned a successful earning strategy.
 Continue from that outdoor position, never edit away the failure by replaying the shop.
 
-
 In [the next collection attempt](work-sessions/2026-09-11-collection-resource-exhaustion.md), show the learner
 choosing acquisition over funding, traveling to Seafoam, and using its final ball
 without a new registration. Caption:68→69 actual examples;64registrations unchanged.
 Learning from a failure is real feedback, but not yet evidence of successful learning.
 The save keeps the spent ball and HP cost; the next task is legitimate replenishment.
 
-
 [The funded search](work-sessions/2026-09-11-funded-search-reorientation.md) demonstrates a useful distinction:
 the agent can heal, earn money, buy a ball and reach a missing species, yet still
 fail at sustainable collection. Show the cash568→713→113 and the failed Tangela
 throw.70examples is learning data, not70successful decisions; registrations stayed64.
 The next engineering question is supply endurance, not how to hide that failure.
-
 
 For [the earn-buy-Staryu sequence](work-sessions/2026-09-11-resource-cycle-and-staryu.md), show the actual choice reversal: earn315 at1,053money, then buy two balls at1,368. The source model chooses SeafoamB2F from six areas. Staryu is registered during travel, but the full survey fails with zero balls left. Display68registrations and82examples together with the failed label; do not edit this into a clean success montage.
 

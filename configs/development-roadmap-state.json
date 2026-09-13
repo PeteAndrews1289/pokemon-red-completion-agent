@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-13-model111-cross-box-capture-support",
+  "as_of_session": "2026-09-13-model112-automatic-fishing-failure-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json"
+      "evidence": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -99,6 +99,24 @@
         "label": "Recover the qualified route interruption without a learning label",
         "done": true,
         "evidence": "docs/evidence/red-model111-zero-label-recovery-2026-09-12.json"
+      },
+      {
+        "id": "automatic-reachable-fishing-runtime",
+        "label": "Derive and bind multiple reachable fishing choices automatically",
+        "done": true,
+        "evidence": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+      },
+      {
+        "id": "model112-observed-failure-fit",
+        "label": "Retain and fit the automatic runtime's actual selected-arm result",
+        "done": true,
+        "evidence": "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
+      },
+      {
+        "id": "model112-input-ready-recovery",
+        "label": "Recover the exact model112 terminal and rebuild its next menu",
+        "done": false,
+        "evidence": null
       }
     ]
   },
@@ -1122,6 +1140,12 @@
       "result": "All-box capability discovery, safe PC switching, complete specimen/resource guards and same-acquisition rebinding passed304 focused tests and exact-source CI. The model111 menu rebuilt with zero actions/frames and remained forced-only; model111 and83 registrations are unchanged.",
       "deviation": "The prior handoff treated helper locality as the immediate menu blocker. Exact inspection separated two facts: cross-box support was a real reusable gap, but the configured Seafoam source is exhausted. Four productive fishing destinations remain reachable, so no gameplay or fit was attempted from the unchanged menu.",
       "next": "Move cartridge-derived fishing candidate and bounded executor assembly from private scripts into the reusable mixed-option runtime, attach cross-box preparation after one model-selected acquisition, then rebuild model111 action-free."
+    },
+    {
+      "session": "2026-09-13-model112-automatic-fishing-failure-learning",
+      "result": "The automatic runtime exposed four reachable fishing acquisitions beside restore. Model111 selected acquisition without a teacher, then stopped at a scripted dialogue after228actions/16668frames. The failure was retained once and fitted as example112; registrations remain83.",
+      "deviation": "No consumed action was retried and no post-hoc target was added. A zero-dialogue default was repaired prospectively to a four-dialogue bound; the historical outcome remains a failure and model112 remains bounded-development only.",
+      "next": "Recover the exact model112 terminal once as zero-label support, publish an input-ready restart and rebuild its automatic menu action-free. Permit one fresh choice only when useful supported alternatives remain."
     }
   ],
   "closed_milestones": [

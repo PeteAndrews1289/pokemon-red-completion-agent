@@ -8,19 +8,17 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 83 verified registered species and 111 settled examples in the current collection-learning dataset. The latest loop retained both a model-selected fishing capture and the next model-selected route failure. Both are training-only, same-lineage outcomes and do not establish independent improvement.
+- 83 verified registered species and 112 settled examples in the current collection-learning dataset. The latest automatic five-choice menu contained four reachable fishing destinations plus healing; the model selected acquisition and its real route-dialogue failure became row112. These are training-only, same-lineage outcomes and do not establish independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model111-cross-box-capture-support.md).
+[Evidence for the current model](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md).
 
-The latest engineering repair makes route menus fail closed: a destination cannot be ranked unless
-its executor declares bounded support for the wild, trainer and dialogue interruptions it may meet.
-The exact failed terminal then recovered once in eight actions / 576 frames and reopened as
-zero-label support. Capture preparation can now retrieve a status-move helper from any verified
-box without a second model choice. The exact menu remains forced-only for a different reason: its
-configured Seafoam source is exhausted. The learner and its 111 rows remain unchanged while the
-next session integrates reachable productive fishing destinations into the automatic runtime.
+The automatic runtime now derives useful fishing sources from current cartridge and save data
+instead of a named-species route. Capture preparation can retrieve a status-move helper from any
+verified box after selection. The first five-choice execution stopped at a dialogue boundary after
+228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
+The next exact checkpoint preserves that state and requires generic zero-label recovery.
 
 ## My role and the stack
 
