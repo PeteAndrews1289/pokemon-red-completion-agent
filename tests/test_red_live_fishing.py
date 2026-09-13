@@ -52,7 +52,7 @@ def test_discovery_is_action_free_filters_unreachable_and_sorts_by_effort(monkey
     )
     monkeypatch.setattr(live_fishing, "_supported_plan", lambda *_a, **_k: True)
 
-    def plan(_start, map_id):
+    def plan(_start, map_id, **_kwargs):
         if map_id == 25:
             raise RoutePlanningError("unreachable")
         return SimpleNamespace(
@@ -86,7 +86,7 @@ def test_discovery_is_action_free_filters_unreachable_and_sorts_by_effort(monkey
     )
 
     assert [item.offer.map_id for item in found] == [24, 23]
-    assert [(item.route_steps, item.route_cost) for item in found] == [(4, 5), (8, 11)]
+    assert [(item.route_steps, item.route_cost) for item in found] == [(2, 3), (6, 9)]
     assert all(item.offer.map_id != 25 for item in found)
     assert all("116" not in str(item.public_dict()) for item in found)
     assert all("24" not in str(item.public_dict()) for item in found)

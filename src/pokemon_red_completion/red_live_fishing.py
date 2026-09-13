@@ -190,16 +190,26 @@ def discover_reachable_red_fishing_destinations(
         )
         if not local:
             continue
-        local_cost, local_steps, stance = min(
+        _local_cost, _local_steps, stance = min(
             local,
             key=lambda row: (row[0], row[1], row[2].at, row[2].direction.value),
         )
+        try:
+            terminal_route = world.plan_feasible_to_map(
+                traversal,
+                offer.map_id,
+                goal_at=stance.at,
+            )
+        except RoutePlanningError:
+            continue
+        if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
+            continue
         executable.append(
             RedReachableFishingDestination(
                 offer,
                 stance,
-                len(route.steps) + local_steps,
-                route.cost + local_cost,
+                len(terminal_route.steps),
+                terminal_route.cost,
             )
         )
     executable.sort(

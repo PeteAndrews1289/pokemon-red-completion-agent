@@ -185,9 +185,6 @@ def bind_selected_capture_party_support(
         selected,
         execute=execute,
         verify=verify,
-        binding_ref=(
-            f"{selected.binding_ref}:capture-support:{canonical_sha256(asdict(plan))}"
-        ),
         estimated_effort=min(
             1.0,
             selected.estimated_effort + 0.1 + len(route.steps) / 1_000,

@@ -206,7 +206,8 @@ def test_already_selected_live_acquisition_keeps_identity_through_pc_setup(monke
     supported = support.bind_selected_capture_party_support(router, selected, observation)
 
     assert calls == []
-    assert supported.binding_ref.startswith(selected.binding_ref + ':capture-support:')
+    assert supported is not selected
+    assert supported.binding_ref == selected.binding_ref
     assert supported.search_source_ref == selected.search_source_ref
     report = supported.execute()
     assert (report.actions_executed, report.frames_executed) == (15, 100)
