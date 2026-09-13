@@ -57,6 +57,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
@@ -694,6 +695,63 @@ def test_frozen_resupply_continuation_accepts_local_qualification_without_redraw
     restored = RedDevelopmentMeasuredChoice.from_public(continuation.public_dict())
     assert restored.selected_goal_kind is GoalKind.RESUPPLY
     assert restored.selection_declaration["qualification_ci_run_id"] is None
+
+
+def test_frozen_purchase_continuation_admits_fly_bound_resupply_without_redraw(tmp_path):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+        "selected_binding_ref": "red-collection-fly-goal:" + "1" * 64 + ":" + "2" * 64,
+        "maximum_frames": 3_000_000,
+    }
+    segment = replace(
+        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    continuation = replace(
+        choice,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+    restored = RedDevelopmentMeasuredChoice.from_public(continuation.public_dict())
+    assert restored.selected_goal_kind is GoalKind.RESUPPLY
+    assert restored.selection_declaration["selected_binding_ref"].startswith(
+        "red-collection-fly-goal:"
+    )
+
+
+@pytest.mark.parametrize(
+    ("key", "value"),
+    (
+        ("maximum_frames", 500_000),
+        ("qualification_ci_run_id", None),
+        ("policy_queries_during_execution", 1),
+        ("selected_binding_ref", "red-collection-fly-goal:wrong"),
+    ),
+)
+def test_frozen_purchase_continuation_tampering_fails_closed(tmp_path, key, value):
+    choice = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+        "selected_binding_ref": "red-collection-fly-goal:" + "1" * 64 + ":" + "2" * 64,
+        "maximum_frames": 3_000_000,
+    }
+    declaration[key] = value
+    segment = replace(
+        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    with pytest.raises(ValueError):
+        replace(
+            choice,
+            selection_declaration=declaration,
+            selection_declaration_sha256=canonical_sha256(declaration),
+            segments=(segment,),
+            segments_sha256=canonical_sha256([segment.public_dict()]),
+        )
 
 
 @pytest.mark.parametrize("key,value", [

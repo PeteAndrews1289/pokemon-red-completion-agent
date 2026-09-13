@@ -38,6 +38,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
@@ -362,6 +363,25 @@ def _validate_selection_declaration(
                         str(declaration.get("selected_binding_ref")),
                     ) is None
                 )
+        elif schema == RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA:
+            qualification_ci_run_id = declaration.get("qualification_ci_run_id")
+            selection_source_commit = declaration.get("executable_source_commit")
+            mismatch = (
+                set(declaration) != frozen_choice_keys
+                or declaration.get("maximum_frames") != 3_000_000
+                or declaration.get("policy_queries_during_execution") != 0
+                or type(qualification_ci_run_id) is not int
+                or qualification_ci_run_id <= 0
+                or re.fullmatch(
+                    r"red-collection-fly-goal:[0-9a-f]{64}:[0-9a-f]{64}",
+                    str(declaration.get("selected_binding_ref")),
+                ) is None
+                or shared_mismatch
+            )
+            _git_commit(
+                declaration.get("current_repository_head"),
+                subject="current repository head",
+            )
         elif schema in {
             RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
@@ -629,6 +649,7 @@ class RedDevelopmentMeasuredChoice:
                     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 }
@@ -646,6 +667,7 @@ class RedDevelopmentMeasuredChoice:
                     in {
                         RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                     }
                     and self.selected_goal_kind is not GoalKind.RESUPPLY
                 )
@@ -770,6 +792,7 @@ class RedDevelopmentMeasuredChoice:
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
@@ -1105,6 +1128,7 @@ def _validate_behavior(
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     }
