@@ -80,7 +80,7 @@ def test_portable_clean_start_report_separates_selected_and_automatic_objectives
         "begin_adventure",
         "enter_hall_of_fame",
     ]
-    assert "early_game_is_one_fourteen_objective_composite" in public["limitations"]
+    assert "early_game_stages_include_declared_automatic_effects" in public["limitations"]
 
 
 @pytest.mark.parametrize(

@@ -339,8 +339,11 @@ class GoalManagerQuestion:
 
     situation: GoalSituation
     opportunities: tuple[GoalOpportunity, ...]
+    allow_resource_variants: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.allow_resource_variants) is not bool:
+            raise GoalManagerError("allow_resource_variants must be a bool")
         if not isinstance(self.situation, GoalSituation):
             raise GoalManagerError("goal-manager situation is invalid")
         if not isinstance(self.opportunities, tuple) or len(self.opportunities) < 2:
@@ -350,11 +353,65 @@ class GoalManagerQuestion:
         bindings = tuple(item.binding_ref for item in self.opportunities)
         if len(set(bindings)) != len(bindings):
             raise GoalManagerError("goal-manager bindings must be unique")
-        kinds = tuple(item.kind for item in self.opportunities)
-        if len(set(kinds)) != len(kinds):
-            raise GoalManagerError(
-                "goal manager accepts one option per kind; destination choice belongs below it"
-            )
+        if not self.allow_resource_variants:
+            kinds = tuple(item.kind for item in self.opportunities)
+            if len(set(kinds)) != len(kinds):
+                raise GoalManagerError(
+                    "goal manager accepts one option per kind; destination choice belongs below it"
+                )
+        else:
+            kind_counts: dict[GoalKind, int] = {}
+            for item in self.opportunities:
+                kind_counts[item.kind] = kind_counts.get(item.kind, 0) + 1
+            for kind, count in kind_counts.items():
+                if kind is not GoalKind.RESUPPLY and count > 1:
+                    raise GoalManagerError(
+                        "goal manager accepts one option per kind; "
+                        "destination choice belongs below it"
+                    )
+            resupply_count = kind_counts.get(GoalKind.RESUPPLY, 0)
+            if resupply_count > 2:
+                raise GoalManagerError("opted-in resupply accepts at most two options")
+            if resupply_count == 2:
+                resupply_items = [
+                    item for item in self.opportunities if item.kind is GoalKind.RESUPPLY
+                ]
+                if any(
+                    item.availability is not GoalAvailability.AVAILABLE
+                    for item in resupply_items
+                ):
+                    raise GoalManagerError(
+                        "opted-in resupply variants must both be available"
+                    )
+                if any(item.resource_quote is None for item in resupply_items):
+                    raise GoalManagerError(
+                        "opted-in resupply variants require distinct "
+                        "semantic resource quotes"
+                    )
+                quote_0 = resupply_items[0].resource_quote
+                quote_1 = resupply_items[1].resource_quote
+                assert quote_0 is not None
+                assert quote_1 is not None
+                if quote_0.available_funds != quote_1.available_funds:
+                    raise GoalManagerError(
+                        "opted-in resupply variants must agree on available funds"
+                    )
+                quotes = (quote_0, quote_1)
+                earning_count = sum(1 for q in quotes if q.expected_income > 0)
+                purchase_count = sum(1 for q in quotes if q.expected_income == 0)
+                if earning_count == 2:
+                    raise GoalManagerError(
+                        "opted-in resupply variants reject two earning options"
+                    )
+                if purchase_count == 2:
+                    raise GoalManagerError(
+                        "opted-in resupply variants reject two purchase options"
+                    )
+                if earning_count != 1 or purchase_count != 1:
+                    raise GoalManagerError(
+                        "opted-in resupply variants require exactly one "
+                        "earning and one purchase option"
+                    )
         if not self.available_indices:
             raise GoalManagerError("goal manager needs at least one available option")
 
@@ -365,8 +422,10 @@ class GoalManagerQuestion:
         if (
             set(value) != {"candidates", "schema", "situation"}
             or value.get("schema") not in {
-                "pokemon.core.goal-manager-input.v1", "pokemon.core.goal-manager-input.v2",
+                "pokemon.core.goal-manager-input.v1",
+                "pokemon.core.goal-manager-input.v2",
                 "pokemon.core.goal-manager-input.v3",
+                "pokemon.core.goal-manager-input.v4",
             }
         ):
             raise GoalManagerError("goal-manager policy input schema is invalid")
@@ -409,14 +468,19 @@ class GoalManagerQuestion:
             if (
                 isinstance(raw, Mapping)
                 and value["schema"] in {
-                    "pokemon.core.goal-manager-input.v2", "pokemon.core.goal-manager-input.v3"
+                    "pokemon.core.goal-manager-input.v2",
+                    "pokemon.core.goal-manager-input.v3",
+                    "pokemon.core.goal-manager-input.v4",
                 }
                 and "resource_quote" in raw
             ):
                 expected_keys.add("resource_quote")
             if (
                 isinstance(raw, Mapping)
-                and value["schema"] == "pokemon.core.goal-manager-input.v3"
+                and value["schema"] in {
+                    "pokemon.core.goal-manager-input.v3",
+                    "pokemon.core.goal-manager-input.v4",
+                }
                 and "search_history" in raw
             ):
                 expected_keys.add("search_history")
@@ -457,9 +521,11 @@ class GoalManagerQuestion:
                                     if "search_history" in raw else None),
                 )
             )
+        is_v4 = value.get("schema") == "pokemon.core.goal-manager-input.v4"
         result = cls(
             situation=GoalSituation(**pressures),
             opportunities=tuple(opportunities),
+            allow_resource_variants=is_v4,
         )
         if result.policy_input["schema"] != value["schema"]:
             raise GoalManagerError("resource quote input version differs")
@@ -483,6 +549,9 @@ class GoalManagerQuestion:
                     MappingProxyType(item.policy_dict()) for item in self.opportunities
                 ),
                 "schema": (
+                    "pokemon.core.goal-manager-input.v4"
+                    if self.allow_resource_variants
+                    else
                     "pokemon.core.goal-manager-input.v3"
                     if any(item.search_history is not None for item in self.opportunities)
                     else

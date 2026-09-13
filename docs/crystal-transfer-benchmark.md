@@ -1,5 +1,9 @@
 # Crystal transfer benchmark
 
+> **Frozen future benchmark, not the active development lane.** Its preregistration remains useful,
+> but no Crystal execution is authorized or implied by this document. Red model-directed play and
+> registered collection come first; see the [active product state](../ACTIVE_PRODUCT_STATE.md).
+
 ## Current decision
 
 Crystal is an early falsifier of shared Pokémon knowledge, not a second walkthrough. The first

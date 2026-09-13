@@ -509,7 +509,7 @@ def collection_encounter_coverage(
 
 def collection_escape_escort(
     party: PartyObservation,
-    recipient_species_id: int,
+    recipient_species_id: int | None,
     policy: BalancedTeamPolicy,
     *,
     enemy_level: int | None,
@@ -519,12 +519,14 @@ def collection_escape_escort(
 
     PP does not power RUN. Preserve the health, status, level and incoming
     type guards, however: an exhausted healthy helper is not a fainted one.
+    ``None`` means a support-only recovery has no training recipient to
+    exclude; ordinary shared-experience callers still exclude their trainee.
     This is not a promise of guaranteed escape or permission to fight.
     """
     return max(
         (
             member for member in party.members
-            if member.species_id != recipient_species_id
+            if recipient_species_id is None or member.species_id != recipient_species_id
             and enemy_level is not None
             and enemy_species is not None
             and enemy_level <= training_safety_ceiling(member, policy)
@@ -577,7 +579,7 @@ def escape_collection_battle(
     reader: PokemonRedStateReader,
     emulator: EmulatorState,
     *,
-    recipient_species_id: int,
+    recipient_species_id: int | None,
     policy: BalancedTeamPolicy,
     flee_func: Callable[..., None],
     flee_timing: object,

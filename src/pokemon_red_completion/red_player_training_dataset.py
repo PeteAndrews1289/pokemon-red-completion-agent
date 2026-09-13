@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import cast
 
 from pokemon_red_completion.goal_manager import GoalDecisionOutcome, GoalKind, GoalSelectionMode
@@ -36,6 +36,15 @@ from pokemon_red_completion.red_living_dex_causal_adapter import (
     red_living_dex_outcome_from_observations,
 )
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
+from pokemon_red_completion.red_player_economy import (
+    ECONOMY_CONTEXT_EVENT,
+    ECONOMY_CONTEXT_SCHEMA,
+    ECONOMY_TRAINING_EVENT_SCHEMA,
+    PlayerEconomySupply,
+    restore_context,
+    restore_snapshot,
+    semantic_facts,
+)
 from pokemon_red_completion.red_player_training import (
     CURRICULUM_EVENT,
     CURRICULUM_EVENT_SCHEMA,
@@ -47,10 +56,12 @@ from pokemon_red_completion.red_player_training_plan import (
     COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
     CURRICULUM_TRAINING_PLAN_SCHEMA,
+    ECONOMY_TRAINING_PLAN_SCHEMA,
     REGISTERED_TRAINING_PLAN_SCHEMA,
     STORY_CURRICULUM_CONTRACT,
     RedPlayerTrainingPlan,
 )
+from pokemon_red_completion.resource_economy_observation import EconomySnapshot, economy_outcome
 
 
 @dataclass(frozen=True, slots=True)
@@ -178,8 +189,24 @@ def _audit_red_player_training_reader(
     ):
         raise ValueError("player training partition differs")
     events: dict[str, Mapping[str, object]] = {}
+    economy_contexts: dict[str, Mapping[str, object]] = {}
+    economy = plan.document["schema"] == ECONOMY_TRAINING_PLAN_SCHEMA
+    supply = PlayerEconomySupply.from_plan(plan.document) if economy else None
     curriculum_events: dict[str, Mapping[str, object]] = {}
     for event in reader.iter_stream("events"):
+        if event.get("kind") == ECONOMY_CONTEXT_EVENT:
+            context = _mapping(event.get("payload"))
+            identity = context.get("decision_id")
+            if (not economy or not isinstance(identity, str) or identity in economy_contexts
+                    or set(context) != {"schema", "decision_id", "question_sha256",
+                        "plan_sha256", "before", "economy_before", "budget"}
+                    or context.get("schema") != ECONOMY_CONTEXT_SCHEMA
+                    or context.get("plan_sha256") != plan.plan_sha256
+                    or event.get("episode_id") != episode_id
+                    or event.get("step_index") != decision_steps.get(identity)):
+                raise ValueError("economy preselection context provenance differs")
+            economy_contexts[identity] = context
+            continue
         is_curriculum = event.get("kind") == CURRICULUM_EVENT
         if event.get("kind") not in {TRAINING_EVENT, CURRICULUM_EVENT}:
             continue
@@ -191,7 +218,7 @@ def _audit_red_player_training_reader(
             raise ValueError("player training outcome is duplicated")
         if (
             payload.get("schema")
-            != (REGISTERED_TRAINING_EVENT_SCHEMA
+            != (ECONOMY_TRAINING_EVENT_SCHEMA if economy else REGISTERED_TRAINING_EVENT_SCHEMA
                 if plan.document["schema"] == REGISTERED_TRAINING_PLAN_SCHEMA
                 else CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
             or payload.get("plan_sha256") != plan.plan_sha256
@@ -209,6 +236,8 @@ def _audit_red_player_training_reader(
     curriculum_examples = []
     nonexploratory = zero_input = 0
     for decision in joined.examples:
+        before_economy, budget = None, None
+        context = {}  # assigned from the required event before any v4 policy replay
         if plan.document["economic_contract"] == "known-spend-and-excess-reserve-v1" and any(
             option.resource_quote is not None
             and option.resource_quote.available_recovery_units is not None
@@ -286,6 +315,32 @@ def _audit_red_player_training_reader(
             ):
                 raise ValueError("curriculum features or example differ from executed story")
         else:
+            if economy:
+                assert supply is not None
+                context = economy_contexts.pop(decision.decision_id, {})
+                if (not context or context["question_sha256"]
+                        != decision.question.ordered_policy_input_sha256
+                        or semantic_facts(_mapping(context["before"])).get("situation")
+                        != decision.question.situation.policy_dict()):
+                    raise ValueError("economy choice lacks its preselection context")
+                before_economy, budget = restore_context(context, supply)
+                from .registered_checkpoint import RegisteredCollectionCheckpoint
+
+                observed_binding = RegisteredCollectionCheckpoint.from_public(
+                    _mapping(context["before"]).get("registration"),
+                )
+                if observed_binding.binding_sha256 != plan.document["registration_binding_sha256"]:
+                    raise ValueError("economy preselection registration binding differs")
+                if before_economy is not None and any(
+                    quote is not None and quote.available_funds != before_economy.cash
+                    for i in decision.question.available_indices
+                    for quote in (decision.question.opportunities[i].resource_quote,)
+                ):
+                    raise ValueError("economy quote differs from observed cash")
+                policy.economy_snapshot = (EconomySnapshot(before_economy.cash, ())
+                    if before_economy is not None and budget is not None else None)
+                policy.target_cash = budget.target_cash if budget is not None else None
+                policy.allow_earning_exploration = True
             selection = policy.select(decision.question)
             expected_behavior = policy.selection_metadata()
             if (
@@ -301,6 +356,9 @@ def _audit_red_player_training_reader(
             if decision.decision_id not in events:
                 raise ValueError("exploratory choice lacks its observed outcome")
             payload = events.pop(decision.decision_id)
+            if economy and (context is None or payload.get("before") != context["before"]
+                            or "economy_after" not in payload):
+                raise ValueError("economy outcome differs from preselection observation")
             row = restore_living_dex_observed_arm_example(_mapping(payload.get("example")))
             if (
                 row.menu != policy.last_menu
@@ -362,7 +420,8 @@ def _audit_red_player_training_reader(
                 censor_reason=LivingDexCensorReason.OBSERVATION_FAILED,
             )
         else:
-            if plan.document["schema"] == REGISTERED_TRAINING_PLAN_SCHEMA:
+            if plan.document["schema"] in {REGISTERED_TRAINING_PLAN_SCHEMA,
+                                            ECONOMY_TRAINING_PLAN_SCHEMA}:
                 from .red_registered_outcome import red_registered_outcome_from_observations
                 from .registered_checkpoint import RegisteredCollectionCheckpoint
 
@@ -391,6 +450,23 @@ def _audit_red_player_training_reader(
                     maximum_actions=plan.maximum_actions,
                     maximum_frames=plan.maximum_frames,
                 )
+        if economy:
+            if budget is None:
+                raise ValueError("eligible economy choice lacks a supply budget")
+            after_economy = restore_snapshot(payload.get("economy_after"))
+            if after_economy is not None:
+                assert supply is not None
+                supply.budget(after_economy,
+                    semantic_facts(_mapping(payload.get("after"))).get("capture_item_count"))
+            if decision.outcome_status is GoalDecisionOutcome.INTERRUPTED:
+                if after_economy is not None:
+                    raise ValueError("interrupted choice has invented economy evidence")
+            elif expected.status is LivingDexOutcomeStatus.SETTLED:
+                measured = economy_outcome(before_economy, after_economy,
+                                           target_cash=budget.target_cash)
+                expected = (replace(expected, economy=measured) if measured is not None
+                    else LivingDexObservedOutcome(LivingDexOutcomeStatus.CENSORED,
+                         censor_reason=LivingDexCensorReason.OBSERVATION_FAILED))
         if row.outcome != expected:
             raise ValueError("player training target does not match observed evidence")
         if actions == 0:
@@ -399,7 +475,7 @@ def _audit_red_player_training_reader(
             curriculum_examples.append(row)
         else:
             examples.append(row)
-    if events or curriculum_events:
+    if events or curriculum_events or economy_contexts:
         raise ValueError("unselected or nonexploratory outcome was offered for training")
     return RedPlayerTrainingDataset(
         tuple(examples),
@@ -426,6 +502,7 @@ def _require_continuation_origin(store: PrivateArtifactRoot, plan: RedPlayerTrai
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
+        ECONOMY_TRAINING_PLAN_SCHEMA,
     }:
         return
     ancestor_id = cast(str, plan.document["continuation_episode_id"])

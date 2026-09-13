@@ -1,5 +1,9 @@
 # Teaching and data plan
 
+> The teacher and mechanics sections remain active reference material. The older living-form and
+> level-100 collection contract has been retired; the replacement is the shared registered-Pokédex
+> objective in [MISSION.md](../MISSION.md) and the [shared-ledger plan](shared-pokedex-registration-plan.md).
+
 ## Teacher role and final goal
 
 The deterministic player is the project's disclosed reference policy: it proves semantic gates,
@@ -175,39 +179,26 @@ many species, not spend thousands of redundant battles equalizing every specimen
 
 ## Collection curriculum and multi-game north star
 
-The curriculum uses four cumulative, independently reported tiers:
+The active curriculum uses three cumulative, independently reported tiers:
 
 1. **Finish** — complete the story and reach the title's verified terminal.
-2. **Master** — finish with reusable party, battle, recovery, navigation, and resource skills.
-3. **Complete** — satisfy the title-specific 100% contract, including every legitimately
-   obtainable species and supported optional objective.
-4. **Perfect collection** — retain every species that can coexist in the declared save lineage and
-   train every retained specimen to level 100.
+2. **Play** — make and recover from useful model-directed party, battle, navigation, resource and
+   collection decisions.
+3. **Register** — contribute every legitimately obtainable missing species to the shared verified
+   Pokédex, with explicit version, trade, event and unsupported blockers.
 
-This ordering makes level 100 a genuine completeness proof without letting brute-force experience
-grinding masquerade as the ability to understand a new game.
+Level 100 and simultaneous living forms are no longer product gates. After story completion, the
+player develops a specimen only as far as needed for a missing registration, a story capability or
+a genuine dependency, then deposits it when practical. Brute-force grinding must not replace the
+decisions the model is supposed to learn.
 
-The balanced Hall-of-Fame route is the prerequisite, not the final collection target. After that
-route qualifies, Red gains a separate completionist curriculum that surveys every encounter area,
-catches every species legitimately obtainable in the supported Red cartridge, performs every
-available evolution, manages the active party and PC as one living collection, and trains every
-coexisting target to level 100. Trade- and version-exclusive gaps are reported explicitly rather
-than silently claimed as solo-cartridge completions.
+The earlier one-save Red contract—124 registrations, 120 simultaneous living targets and a
+level-100 field—remains historical evidence for acquisition and storage mechanics. It is not the
+active completion denominator. Current reporting keeps three non-interchangeable facts: shared
+verified registration, this save's local Pokédex flags, and presently owned physical specimens.
+The Red adapter can still perform a checksum-verified census of party and all twelve PC boxes.
 
-For the declared Squirtle, Helix Fossil, Hitmonlee, and Jolteon lineage, the executable contract
-partitions all 151 National Pokédex entries into 124 obtainable registrations and 27 named
-exclusions. Four registered earlier forms cannot coexist after evolving the route's unique
-Squirtle, Eevee, and Helix Fossil specimens, so the living and level-100 gates use an honest
-120-species denominator. Progress is deliberately reported through three non-interchangeable
-gates: registered as owned in the Pokédex, presently retained as a living specimen, and presently
-retained at level 100. The Red
-adapter now reads the Pokédex and performs a checksum-verified census of the party plus all twelve
-PC boxes. It overlays the active Work-RAM box on the saved-box banks exactly as the game does and
-treats the other eleven boxes as logically empty before the game's first box change. The latter
-two gates are therefore measurable, but remain false until the actual collection and training
-curricula satisfy them.
-
-The Red acquisition adapter now gives every one of the 124 registration targets exactly one
+The legacy Red acquisition adapter gives every one of its 124 registration targets exactly one
 canonical method at the pinned pret/pokered revision: 67 ordinary wild sources, 11 Safari sources,
 7 fishing sources, 4 gifts, 5 static encounters, 2 Game Corner prizes, 2 fossils, 4 in-game trades,
 and 22 evolutions. Starting from the 120 living targets and propagating every evolution/trade

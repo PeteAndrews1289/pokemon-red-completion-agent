@@ -217,7 +217,7 @@ def test_cinnabar_fly_arrival_proves_story_neutral_island_relocation() -> None:
 
 def test_fuchsia_fly_arrival_requires_exact_protected_state() -> None:
     initial = replace(_raw(), map_id=MapId.CINNABAR_POKECENTER)
-    final = replace(initial, map_id=MapId.FUCHSIA_CITY, player_x=18, player_y=26)
+    final = replace(initial, map_id=MapId.FUCHSIA_CITY, player_x=19, player_y=28)
     bag = ((4, 1), (int(ItemId.HM02_FLY), 1))
     report = FuchsiaFlyArrivalReport(
         initial,
@@ -240,3 +240,7 @@ def test_fuchsia_fly_arrival_requires_exact_protected_state() -> None:
 
     assert report.passed
     assert not replace(report, final_bag=((4, 1),)).passed
+    assert not replace(
+        report,
+        final_raw=replace(report.final_raw, player_x=18),
+    ).passed

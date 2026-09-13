@@ -347,7 +347,10 @@ def run(args):
             )
         ):
             raise ValueError("recovery entry is neither a preserved wild battle nor a needy field")
-        recipient = before.party.lead.species_id
+        # A support-only failure recovery has no XP recipient to protect.  Let
+        # the same defensive selector consider the already-active healthy lead;
+        # normal collection training continues to exclude its trainee.
+        recipient = None if before.raw.battle_state == 1 else before.party.lead.species_id
         escort = collection_escape_escort(
             before.party,
             recipient,

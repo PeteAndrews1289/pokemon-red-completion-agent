@@ -118,7 +118,7 @@ class RedBoundedPlayerObserver:
             binding_set = GoalBindingSet(tuple(
                 by_ref.get(opportunity.binding_ref, opportunity)
                 for opportunity in binding_set.opportunities
-            ), bindings)
+            ), bindings, allow_resource_variants=binding_set.allow_resource_variants)
         semantic_document = red_bounded_player_semantic_document(
             live=live,
             binding_set=binding_set,
@@ -239,6 +239,7 @@ def preflight_red_bounded_player(
         decision_index=0,
         situation=observation.situation,
         opportunities=observation.binding_set.opportunities,
+        allow_resource_variants=observation.binding_set.allow_resource_variants,
     )
     forced_bridge = allow_forced_bridge and len(question.available_indices) == 1
     if len(question.available_indices) < 2 and not forced_bridge:
@@ -311,6 +312,9 @@ def red_bounded_player_semantic_document(
         # asked to choose.
         "candidates": [item.policy_dict() for item in binding_set.opportunities],
         "schema": (
+            "pokemon.core.goal-manager-input.v4"
+            if binding_set.allow_resource_variants
+            else
             "pokemon.core.goal-manager-input.v2"
             if any(item.resource_quote is not None for item in binding_set.opportunities)
             else "pokemon.core.goal-manager-input.v1"

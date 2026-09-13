@@ -1,0 +1,64 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "living_species": 63,
+    "registered_species": 83,
+    "required_red_registrations_remaining": 41,
+    "specimens": 67
+  },
+  "execution": {
+    "controller_actions": 228,
+    "emulator_frames": 16668,
+    "registered_species_after": 83,
+    "registered_species_before": 83,
+    "retry_allowed": false,
+    "selected_candidate_index": 4,
+    "selected_goal_kind": "acquire_species",
+    "status": "retained_route_dialogue_failure"
+  },
+  "learning": {
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "model_sha256": "f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0",
+    "prior_model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+    "settled_examples": 112,
+    "successful_examples": 76,
+    "training_examples_added": 1,
+    "training_only": true
+  },
+  "menu": {
+    "action_free": true,
+    "candidate_count": 5,
+    "cross_box_capture_support_attached_after_selection": true,
+    "distinct_option_kinds": 2,
+    "identity_fields_public": 0,
+    "model_exploration": true,
+    "reachable_fishing_candidates": 4,
+    "second_policy_query": false
+  },
+  "qualification": {
+    "github_ci_attempt": 2,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 34738073030,
+    "source_bundle_sha256": "de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e",
+    "source_commit": "8277eb604772413be1875526c0a8b989318b3dd7"
+  },
+  "recovery": {
+    "checkpoint_record_sha256": "babe391f75208f80032f7ff3c32a098ac8a0c55b8a362be4c6afd7a67c08eace",
+    "input_ready": false,
+    "publication_actions": 0,
+    "publication_frames": 0,
+    "state_sha256": "9ed90d82f93a4d9fb5eb1a1327f5d81824252ab01ba10946fa659f0ea4e5cb7b"
+  },
+  "schema": "pokemon.red.model112-automatic-fishing-failure-learning-evidence.v1",
+  "session_id": "2026-09-13-model112-automatic-fishing-failure-learning",
+  "teacher_labels": 0,
+  "transfer_result": null,
+  "validation": {
+    "focused_tests_passed": 65,
+    "full_local_expected_xfails": 1,
+    "full_local_tests_passed": 11492,
+    "future_scripted_dialogue_budget": 4,
+    "known_local_environment_failure": "macos_pyboy_metadata_fingerprint"
+  }
+}

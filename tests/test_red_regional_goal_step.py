@@ -121,7 +121,7 @@ def test_interruption_after_proposal_does_not_retry_or_fit(case, monkeypatch):
         driver._run(SimpleNamespace())
 
 
-@pytest.mark.parametrize("count", [0, 1])
+@pytest.mark.parametrize("count", [0, 1, 2])
 def test_native_goals_do_not_require_or_sample_multiple_sources(case, monkeypatch, count):
     ready, candidates = prepared(case, monkeypatch)
     candidates = candidates[:count]
@@ -138,7 +138,11 @@ def test_native_goals_do_not_require_or_sample_multiple_sources(case, monkeypatc
             expected_kind=driver.REGIONAL_PROPOSAL_KIND,
         ).read()
         assert doc["selection"] is None and doc["menu"] is None
-        assert doc["source_mode"] == ("unique_binding" if count else "no_source")
+        assert doc["source_mode"] == (
+            "no_source" if count == 0 else (
+                "unique_binding" if count == 1 else "deterministic_undifferentiated"
+            )
+        )
         assert doc["selected_source"] == (candidates[0].source_id if count else None)
         return {
             "episode": {"steps": [{"selected_kind": "evolve_species", "status": "succeeded"}]},

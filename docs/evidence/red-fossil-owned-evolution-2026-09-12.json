@@ -1,0 +1,97 @@
+{
+  "schema": "pokemon.red.registered-player-collection-session.v1",
+  "status": "bounded_collection_progress",
+  "source": {
+    "commit": "f11716095b1e09bbff540159cf8241d85360f8cc",
+    "focused_tests_passed": 427,
+    "collection_registry_current": true,
+    "product_focus_check_passed": true
+  },
+  "fossil_acquisition": {
+    "species": "Omanyte",
+    "episode_id": "red-collection-20260912-cf-fossil-storage-recovery-04",
+    "status": "recovered",
+    "checkpoint_record_id": "rpc-77bc472ba543bebd4b69094bb19998aaa91dbcf21d43b5202886fc95de916767",
+    "checkpoint_record_sha256": "3f3924334c8d89f04a81c3750970f93e1b526ac771dbca4bbdad76fb639ddfa1",
+    "terminal_state_sha256": "a578ae3d13d98553ef33b1ce4f8d3ebb1ba27654e3fbda1409baa59c9fae568b",
+    "recovery_actions": 8,
+    "recovery_frames": 816,
+    "registered_species_before": 77,
+    "registered_species_after": 78,
+    "living_species_before": 58,
+    "living_species_after": 59,
+    "specimens_before": 62,
+    "specimens_after": 63,
+    "training_examples": 0,
+    "model_queries": 0,
+    "original_choice_retried": false,
+    "verification": {
+      "all_prior_registrations_preserved": true,
+      "all_prior_specimens_preserved": true,
+      "dialogue_settled": true,
+      "exactly_one_living_specimen_added": true,
+      "exactly_one_registration_added": true,
+      "field_ready": true
+    }
+  },
+  "owned_evolution": {
+    "transition": "Omanyte to Omastar",
+    "episode_id": "red-collection-20260912-cg-owned-evolution-01-causal",
+    "status": "succeeded",
+    "checkpoint_record_sha256": "ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677",
+    "trajectory_manifest_sha256": "547551d6681da096ece65067198fdb4f9775842e3c4611c72274ad914069d320",
+    "actions": 27215,
+    "frames": 2293481,
+    "available_goal_count": 1,
+    "selection_mode": "forced_singleton",
+    "registered_species_before": 78,
+    "registered_species_after": 79,
+    "living_species_after": 59,
+    "specimens_after": 63,
+    "new_settled_examples": 0,
+    "model_fitted": false
+  },
+  "learning": {
+    "model_name": "model104",
+    "settled_examples_before": 104,
+    "settled_examples_after": 104,
+    "model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+    "authority_promotions": 0,
+    "reason_no_fit": "Both successful goals were singletons; deterministic support is not a model-choice label."
+  },
+  "collection": {
+    "starting_registered_species": 77,
+    "ending_registered_species": 79,
+    "ending_living_species": 59,
+    "ending_specimens": 63,
+    "required_red_registrations_remaining": 45,
+    "remaining_acquisition_kinds": {
+      "evolution": 13,
+      "wild": 8,
+      "fishing": 7,
+      "safari": 6,
+      "static": 4,
+      "in_game_trade": 3,
+      "prize": 2,
+      "fossil": 1,
+      "gift": 1
+    }
+  },
+  "reorientation": {
+    "automatic_regional_candidates": 0,
+    "automatic_owned_level_evolution_candidates_before_episode": 1,
+    "automatic_owned_level_evolution_candidates_after_episode": 0,
+    "next_capability": "Generic item-evolution acquisition from observed inventory and cartridge evolution data.",
+    "next_falsifier": "The exact checkpoint has no executable item-evolution candidate, or the implementation requires a species-specific route or policy feature."
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "blue_accesses": 0,
+    "full_game_replays": 0,
+    "teacher_fallbacks": 0,
+    "independent_evaluation": false,
+    "low_level_control_learned": false,
+    "full_game_autonomy_claimed": false
+  }
+}

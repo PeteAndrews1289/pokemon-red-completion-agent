@@ -83,6 +83,7 @@ def bind_indoor_collection_departure(
         spec.mechanic not in {
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
             RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+            RedGoalMechanic.MART_RESUPPLY,
         }
         or spec.parameters.get("fly_transport") is not True
         or spec.parameters.get("indoor_fly_departure") is not True

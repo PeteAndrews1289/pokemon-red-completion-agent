@@ -1409,6 +1409,10 @@ class RedAreaSurveyGoalProvider:
                 safety_check=lambda: all(
                     member.hp > 0 for member in self.adapter.observe().party.members
                 ),
+                capture_resources_available=lambda: any(
+                    quantity > 0 and item in _ORDINARY_CAPTURE_ITEMS
+                    for item, quantity in (self.adapter.observe().raw.bag_items or ())
+                ),
             )
             if (report.captures and not report.safety_stopped
                     and self.normalize_after_capture is not None):
@@ -1430,6 +1434,7 @@ class RedAreaSurveyGoalProvider:
                 "flees": report.flees,
                 "search_exhausted": report.search_exhausted,
                 "safety_stopped": report.safety_stopped,
+                **({"capture_items_exhausted": True} if report.capture_items_exhausted else {}),
                 **({"search_stop_reason": report.search_stop_reason}
                    if report.search_stop_reason is not None else {}),
             }
@@ -1507,7 +1512,10 @@ class RedAreaSurveyGoalProvider:
             remaining_specimens = after_survey.missing_specimen_count
             captures = report.evidence.get("captures")
             if (
-                report.evidence.get("search_exhausted") is True
+                (report.evidence.get("search_exhausted") is True
+                 or (report.evidence.get("capture_items_exhausted") is True
+                     and not any(dict(after.raw.bag_items or ()).get(int(item), 0) > 0
+                                 for item in _ORDINARY_CAPTURE_ITEMS)))
                 and type(captures) is int  # noqa: E721
                 and captures == 0
                 and remaining == initial_missing
@@ -1523,7 +1531,8 @@ class RedAreaSurveyGoalProvider:
             ):
                 return GoalVerification.failed(
                     GoalFailureReason.CAPTURE_ITEMS_EXHAUSTED
-                    if after.capture_item_count == 0
+                    if not any(dict(after.raw.bag_items or ()).get(int(item), 0) > 0
+                               for item in _ORDINARY_CAPTURE_ITEMS)
                     else GoalFailureReason.SEARCH_EXHAUSTED
                 )
             if (

@@ -65,6 +65,12 @@ class Gen1TraversalObserver:
         if interruption is None and self.reader.trainer_engagement_active():
             interruption = "trainer_engagement"
         input_ready = self.reader.read_input_readiness().ready
+        if (
+            interruption is None
+            and not input_ready
+            and self.reader.read_bottom_dialogue_box_visible()
+        ):
+            interruption = "scripted_dialogue"
         ready = interruption is None and input_ready
         movement_mode = self.reader.read_overworld_movement_mode()
         occupied = (
@@ -266,11 +272,16 @@ class Gen1RouteInterruptionHandler:
     trainer_recovery_required: Callable[[RawGameState], bool] | None = None
     trainer_recovery_action: Callable[[], None] | None = None
     maximum_trainer_recoveries: int = 0
+    maximum_scripted_dialogues: int = 0
+    max_scripted_dialogue_pulses: int = 8
     handled_hazard_kinds: frozenset[str] = field(
         default=frozenset({"trainer_sight"}),
         init=False,
     )
     trainer_evidence: list[InterruptionReceipt] = field(default_factory=list, init=False)
+    scripted_dialogue_evidence: list[InterruptionReceipt] = field(
+        default_factory=list, init=False
+    )
     _wild: Gen1WildFleeHandler = field(init=False, repr=False)
 
     def __post_init__(self) -> None:
@@ -291,6 +302,16 @@ class Gen1RouteInterruptionHandler:
             raise ValueError("maximum_trainer_recoveries must be a non-negative integer")
         if self.trainer_recovery_required is not None and self.maximum_trainer_recoveries == 0:
             raise ValueError("configured trainer recovery requires a positive recovery budget")
+        if (
+            type(self.maximum_scripted_dialogues) is not int  # noqa: E721
+            or self.maximum_scripted_dialogues < 0
+        ):
+            raise ValueError("maximum_scripted_dialogues must be a non-negative integer")
+        if (
+            type(self.max_scripted_dialogue_pulses) is not int  # noqa: E721
+            or self.max_scripted_dialogue_pulses <= 0
+        ):
+            raise ValueError("max_scripted_dialogue_pulses must be a positive integer")
         self._wild = Gen1WildFleeHandler(
             self.executor,
             self.reader,
@@ -303,9 +324,23 @@ class Gen1RouteInterruptionHandler:
     def wild_evidence(self) -> tuple[Route1WildFleeEvidence, ...]:
         return tuple(self._wild.evidence)
 
+    @property
+    def handled_interruption_kinds(self) -> frozenset[str]:
+        """Declare only the dynamic interruptions this configured instance can resolve."""
+        kinds: set[str] = set()
+        if self.maximum_flees > 0:
+            kinds.add("wild_battle")
+        if self.maximum_trainer_battles > 0:
+            kinds.update(("trainer_engagement", "battle:2"))
+        if self.maximum_scripted_dialogues > 0:
+            kinds.add("scripted_dialogue")
+        return frozenset(kinds)
+
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         if interruption.interruption == "wild_battle":
             return self._wild.handle(interruption)
+        if interruption.interruption == "scripted_dialogue":
+            return self._dismiss_scripted_dialogue(interruption)
         if interruption.interruption not in {"trainer_engagement", "battle:2"}:
             raise RouteExecutionError(f"Gen I route cannot dismiss {interruption.interruption!r}")
         if len(self.trainer_evidence) >= self.maximum_trainer_battles:
@@ -430,6 +465,65 @@ class Gen1RouteInterruptionHandler:
         )
         self.trainer_evidence.append(receipt)
         return receipt
+
+    def _dismiss_scripted_dialogue(
+        self, interruption: TraversalSnapshot
+    ) -> InterruptionReceipt:
+        """Release a bounded overworld text script and report its actual landing."""
+
+        if len(self.scripted_dialogue_evidence) >= self.maximum_scripted_dialogues:
+            raise RouteExecutionError(
+                f"{self.route_name} exceeded its {self.maximum_scripted_dialogues}-dialogue budget"
+            )
+        initial = self.reader.read()
+        if (
+            initial.map_id != interruption.map_id
+            or (initial.player_y, initial.player_x) != interruption.at
+            or initial.battle_state != 0
+            or not self.reader.read_bottom_dialogue_box_visible()
+        ):
+            raise RouteExecutionError("scripted dialogue drifted before recovery")
+        for pulses in range(self.max_scripted_dialogue_pulses + 1):
+            active = self.reader.read()
+            if active.battle_state != 0:
+                raise RouteExecutionError("scripted dialogue entered a battle")
+            visible = self.reader.read_bottom_dialogue_box_visible()
+            ready = self.reader.read_input_readiness().ready
+            if ready and not visible:
+                if active.map_id is None or active.player_y is None or active.player_x is None:
+                    raise RouteExecutionError("scripted dialogue lost its traversal position")
+                receipt = InterruptionReceipt(
+                    kind="scripted_dialogue",
+                    resumed_map=active.map_id,
+                    resumed_at=(active.player_y, active.player_x),
+                    details={
+                        "cancel_pulses": pulses,
+                        "position_changed": (
+                            active.map_id,
+                            active.player_y,
+                            active.player_x,
+                        )
+                        != (
+                            initial.map_id,
+                            initial.player_y,
+                            initial.player_x,
+                        ),
+                        "verified": True,
+                    },
+                )
+                self.scripted_dialogue_evidence.append(receipt)
+                return receipt
+            if not visible:
+                raise RouteExecutionError(
+                    "scripted dialogue disappeared without restoring input readiness"
+                )
+            if pulses == self.max_scripted_dialogue_pulses:
+                break
+            self.executor.execute(MacroAction(MacroActionKind.CANCEL))
+            self.executor.execute(
+                MacroAction(MacroActionKind.WAIT, repeat=self.stabilization_frames)
+            )
+        raise RouteExecutionError("scripted dialogue exceeded its dismissal budget")
 
 
 class _PauseRouteTrainerRecovery(BattleControlRequest):

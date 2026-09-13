@@ -1,0 +1,228 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "5072d2d139cf278ee269135e9ea1debb9a3f49a4fa7ae6170a9988fed147e4db",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 66,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 66,
+      "successful_examples": 39,
+      "total_examples": 66,
+      "train_dataset_sha256": "58a86ec6619cd3c6181f050720290607432a00a1fe5c497fa19d42070b0cc767",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012003276217387138,
+      "weighted_mse_before": 0.033202029262671205
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "f0ce6225d95ab5af3d27261cdf8b69af6f0ecac84cfcca57e111c0ab120e1478",
+      "file_sha256": "cfc8c0f3293ac2eab6c36f229279d362730a60f080531f728c9559cc59150de0",
+      "independent_evaluation": false,
+      "model_sha256": "2c8da5d0d84560129846b0fd0c25ef7ca1f0cfff2de92654658860a613e53f7d",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "6cd88d0f3acb08ae66e72b18cf0e3bad0edefeedc58a7c128653aa144b837e92",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 66,
+      "source_bundle_sha256": "13c24c57e4245a73bf07a3929c2ccba9fa5ec3f604e3ce36457140b984e3f219",
+      "source_commit": "94b7a758daa85fa89e28e778237ba1a6a2f76fa9"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08653733055714673,
+        7.175269031344024e-06,
+        5.10300103041338e-06,
+        0.0013414252317360178,
+        0.0010443390827240787,
+        0.017654827478719697,
+        0.0019014564426802607,
+        2.786647002831356e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 66,
+      "total_examples": 66,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01205493819000793
+    },
+    "regional_source_examples": 26,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.08631028050590853,
+        7.123088746152173e-06,
+        5.12021043180537e-06,
+        0.001341227519685319,
+        0.0010441243533862055,
+        0.017418342869481275,
+        0.0019004996763289524,
+        2.7677325159843985e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 66,
+      "total_examples": 66,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.012003276217387136
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-funded-learning-20260911-ar-01-causal",
+    "actions": 532,
+    "frames": 32473,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 0,
+    "status": "failed"
+  },
+  "session": {
+    "steps": [
+      {
+        "episode_id": "red-funded-learning-20260911-ar-01-causal",
+        "checkpoint_sha256": "b737ba15322d71898369ba60b888ffd2800dc7241a91be404aab55c474bac12d",
+        "manifest_sha256": "234a4cad2782bad6c35c502585385181df8eff925390c58e35cd65dcacf4986f",
+        "source_commit": "94b7a758daa85fa89e28e778237ba1a6a2f76fa9",
+        "selected_kind": "acquire_species",
+        "selection_mode": "authority",
+        "selection_scope": "regional_destination",
+        "status": "failed",
+        "failure_reason": "binding_failed",
+        "actions": 532,
+        "frames": 32473,
+        "available_goal_count": 7,
+        "registered_before": 64,
+        "registered_after": 64,
+        "new_registrations": [],
+        "fit_performed": true,
+        "eligible_examples": 1,
+        "behavior_policy_id": "living-dex-regional-source-softmax-v1",
+        "exploration_mix": 0.25,
+        "selected_probability": 0.13055548154810226,
+        "sampled_native_goal": false
+      }
+    ],
+    "attempted_steps": 1,
+    "completed_steps": 0,
+    "fits": 1,
+    "registered_examples_before": 65,
+    "registered_examples_after": 66,
+    "initial_registered": 64,
+    "last_verified_registered": 64,
+    "last_verified_specimens": 54,
+    "source_commit": "94b7a758daa85fa89e28e778237ba1a6a2f76fa9",
+    "elapsed_seconds": 547.245,
+    "stop_reason": "failed_step_retained_and_fitted",
+    "latest_fit_belongs_to_session": true,
+    "failed_attempts_retried": 0,
+    "total_recorded_actions": 532,
+    "total_recorded_frames": 32473,
+    "forced_singleton_parent_steps": 1,
+    "model_selected_goal_steps": 0,
+    "deterministic_support_steps": 0,
+    "sampled_destination_choices": 1,
+    "declared_batches": {
+      "AR": 2
+    },
+    "fresh_game_autonomy": false,
+    "policy_sampling": "25 percent uniform exploration mixed with75 percent model softmax; source choice controlled the actual attempted destination.",
+    "mechanics": "Deterministic navigation and capture; failed destination is fitted, singleton parent is not duplicated.",
+    "terminal_observation": {
+      "source": "exact_authenticated_checkpoint_read",
+      "state_sha256": "df87846e3ed33e8f24bd4baf0e095343df972e531613c777dfed540dd1a8c167",
+      "input_ready": true,
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "collection_verified_from_saved_state": true
+    },
+    "terminal_resources": {
+      "money": 443,
+      "capture_items": 0,
+      "party_hp": [
+        244,
+        118,
+        146,
+        88,
+        92,
+        56
+      ]
+    },
+    "support_before_collection": {
+      "AP": {
+        "actions": 237,
+        "frames": 14701,
+        "balls_after": 2,
+        "money_after": 893,
+        "eligible_examples": 0
+      },
+      "AQ": {
+        "actions": 26,
+        "frames": 2592,
+        "balls_after": 3,
+        "money_after": 293,
+        "eligible_examples": 0
+      }
+    },
+    "limitation": "Three failed throws do not prove a capture-policy defect. All observed throws faced the same99/99HP target; status/preparation policy needs inspection. No independent improvement, learned income or sustainable collection claim."
+  }
+}

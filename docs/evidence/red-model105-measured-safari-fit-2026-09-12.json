@@ -1,0 +1,146 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "source": {
+    "source_commit": "2eb4897502f40c1bfa9bb1ff328ecfb542ad90a7",
+    "source_bundle_sha256": "2a1cc1030bbe3f5b37c7ba052d6a8884cbfd637fe38c1e5347cd0336232b5729",
+    "focused_tests_passed": 164,
+    "lint_passed": true,
+    "type_check_passed": true
+  },
+  "measured_choice": {
+    "record_sha256": "ef8e0a5b7a9eb881f1b6575c1e3b5717e76a05682c30dcdb35ba245029f63ad9",
+    "segment_inventory_sha256": "21e604145279b710f5f71702e10066b673f2157e8c2bde6c3c850720c1c6cd0d",
+    "candidate_count": 4,
+    "selected_candidate_index": 1,
+    "teacher_labels": 0,
+    "segments": 5,
+    "historical_actions": 1271,
+    "historical_frames": 152580,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "registered_before": 79,
+    "registered_after": 80,
+    "specimens_before": 63,
+    "specimens_after": 64
+  },
+  "completed_episode": {
+    "episode_id": "red-safari-measured-choice-public-v1",
+    "status": "succeeded",
+    "actions": 1271,
+    "frames": 152580,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "admitted_examples": 1,
+    "available_goal_count": 4,
+    "selected_kind": "safari_area",
+    "verified_collection_gain": 1
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 105,
+      "total_examples": 105,
+      "weighted_mse": 0.012476243669832241
+    },
+    "fit_report": {
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "feature_version": 4,
+      "total_examples": 105,
+      "settled_examples": 105,
+      "successful_examples": 72,
+      "distinct_selected_feature_rows": 105,
+      "economy_qualified_examples": 31,
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "outcome_balance_required": false,
+      "missing_history": "unknown_not_unattempted",
+      "train_dataset_sha256": "0be76df44221c736c40676f8670e9975a203ad2480b54d1fa7d4bd5effc8ae99",
+      "weighted_mse_before": 0.03189935850081571,
+      "weighted_mse_after": 0.011543770025703995,
+      "measured_choice_examples": 1,
+      "native_episode_inventory": 118,
+      "regional_choice_inventory": 33
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 105,
+      "model_sha256": "00e1ae35eb296caa3956f5f766f6a10f4410ee026c1c58bb030e1d0c4d466bae",
+      "prior_model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+      "file_sha256": "e0bee9262bd60af8b048989e9d6e5c56667232f4c741e324bf8fcb94c9af0e3e",
+      "corpus_sha256": "28722d391b5f1aff8dfc9733a7357f006f17f554b7457d9264047ffedc8e9f0d",
+      "source_bundle_sha256": "2a1cc1030bbe3f5b37c7ba052d6a8884cbfd637fe38c1e5347cd0336232b5729",
+      "source_commit": "2eb4897502f40c1bfa9bb1ff328ecfb542ad90a7",
+      "independent_evaluation": false,
+      "ci_is_training_dependency": false,
+      "private_path_fields": 0
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 105,
+      "total_examples": 105,
+      "weighted_mse": 0.011543770025703996
+    }
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "collection": {
+    "starting_registered_species": 79,
+    "ending_registered_species": 80,
+    "ending_living_species": 60,
+    "ending_specimens": 64,
+    "required_red_registrations_remaining": 44
+  },
+  "learning": {
+    "starting_examples": 104,
+    "ending_examples": 105,
+    "prior_row_hashes_retained": 104,
+    "new_settled_examples": 1,
+    "measured_choice_examples": 1,
+    "teacher_labels": 0
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false,
+    "model_choice_recomputed": true,
+    "registered_transition_verified": true,
+    "state_chain_verified": true,
+    "aggregate_costs_verified": true
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "low_level_control_learned": false,
+    "full_game_autonomy_claimed": false
+  },
+  "limitations": [
+    "The admitted example authenticates the committed model choice, state chain, aggregate costs and registered outcome, but it has no per-action player journal.",
+    "This row is training-only and cannot support independent evaluation or authority promotion.",
+    "One productive Safari outcome does not establish reliable Safari play across areas or seeds.",
+    "Fresh-game autonomy, complete Red registration, modified-Red adaptation and cross-title transfer remain unproved."
+  ]
+}

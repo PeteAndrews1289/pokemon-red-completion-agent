@@ -1,0 +1,48 @@
+{
+  "actions": 123,
+  "all_party_full_hp": true,
+  "balls_after": 0,
+  "checkpoint_sha256": "45ee2764806c3a781aa0633f7e8b7d814c04b4aefc3af28990e6de1fac58f992",
+  "eligible_examples": 0,
+  "episode_id": "red-income-20260911-ao-01-causal",
+  "fits": 0,
+  "frames": 7825,
+  "learning_examples_after": 65,
+  "learning_examples_before": 65,
+  "manifest_sha256": "3f78764816affb38a9ff1f158780b7aaedf649d41e8cd360484b18269eb92c72",
+  "model_sha256": "6cd88d0f3acb08ae66e72b18cf0e3bad0edefeedc58a7c128653aa144b837e92",
+  "money_after": 1443,
+  "money_before": 593,
+  "net_cash": 850,
+  "registrations_after": 64,
+  "registrations_before": 64,
+  "renewable_income_demonstrated": false,
+  "schema": "pokemon.red.income-qualification-report.v1",
+  "selection_mode": "forced_singleton",
+  "source_commit": "dfb3d2963c1be9760f2fcfd1fdf1ef7084fa62d3",
+  "specimens_after": 54,
+  "specimens_before": 54,
+  "state_sha256": "86f8ab56968dbe0502c805425b15f0a8e2095270e2c6245221972f5d74b944ba",
+  "status": "succeeded",
+  "terminal": {
+    "battle_state": 0,
+    "input_ready": true,
+    "map_id": 29,
+    "money": 1443,
+    "party_hp": [
+      244,
+      118,
+      146,
+      88,
+      92,
+      73
+    ],
+    "pending_trainer": null,
+    "position": [
+      14,
+      40
+    ]
+  },
+  "verification_actions": 0,
+  "verification_frames": 0
+}

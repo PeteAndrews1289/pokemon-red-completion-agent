@@ -92,7 +92,7 @@ def bind_collection_fly(
 ) -> ExecutableGoalBinding | None:
     """Offer only a legal flight with a feasible onward walking plan.
 
-    Scope is capture or evolution access. Profiles without the explicit flag retain
+    Scope is capture, evolution or explicitly opted-in Mart access. Profiles without the flag retain
     their historical walking-only behavior. No controller actions occur here.
     """
     from pokemon_red_completion.observation import MapId
@@ -114,6 +114,7 @@ def bind_collection_fly(
     if (
         spec.mechanic not in {
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+            RedGoalMechanic.MART_RESUPPLY,
         }
         or spec.parameters.get("fly_transport") is not True
     ):
@@ -155,7 +156,7 @@ def bind_collection_fly(
     else:
         target, x, y = (spec.parameters[key] for key in ("map_id", "player_x", "player_y"))
         if type(target) is not int or type(x) is not int or type(y) is not int:
-            raise Gen1FieldMoveError("capture destination is not an integer boundary")
+            raise Gen1FieldMoveError("field-transport destination is not an integer boundary")
         destinations = ((target, (y, x)),)
     possibilities = []
     for town in reader.read_fly_destinations():

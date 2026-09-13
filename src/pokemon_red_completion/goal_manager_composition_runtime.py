@@ -154,7 +154,11 @@ class GoalManagerCompositionObservation:
         if not isinstance(self.collection, LivingCollectionCheckpoint):
             raise TypeError("collection must be a LivingCollectionCheckpoint")
         opportunities = self.binding_set.opportunities
-        if len(opportunities) != len(GoalKind) or {item.kind for item in opportunities} != set(
+        resource_count = sum(item.kind is GoalKind.RESUPPLY for item in opportunities)
+        extra_resource = int(self.binding_set.allow_resource_variants and resource_count == 2)
+        if len(opportunities) != len(GoalKind) + extra_resource or {
+            item.kind for item in opportunities
+        } != set(
             GoalKind
         ):
             raise GoalManagerCompositionError(
@@ -315,6 +319,7 @@ def run_goal_manager_composition_episode(
         question = trajectory.ordered_question(
             current.situation,
             current.binding_set.opportunities,
+            allow_resource_variants=current.binding_set.allow_resource_variants,
         )
         available_count = len(question.available_indices)
         if available_count < 2:

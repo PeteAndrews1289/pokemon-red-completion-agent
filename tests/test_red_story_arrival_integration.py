@@ -82,6 +82,7 @@ def test_each_cross_room_story_uses_qualified_arrival_or_refuses_before_input(
     assert world.macro_graph is original_graph
     if fault is None:
         assert original_graph.warp_arrivals[target_map] == ((11, 4), (11, 5), (0, 4))
+        assert skill._arrival_steps == 6
     assert not inputs
 
 

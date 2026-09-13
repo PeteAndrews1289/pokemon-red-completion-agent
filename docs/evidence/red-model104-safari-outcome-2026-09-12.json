@@ -1,0 +1,67 @@
+{
+  "schema": "pokemon.red.public-safari-outcome.v1",
+  "status": "retained_productive_development_outcome",
+  "behavior_model": {
+    "settled_examples": 104,
+    "model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+    "policy_id": "living-dex-safari-area-softmax-v1",
+    "candidate_count": 4,
+    "selected_candidate_index": 1,
+    "teacher_labels": 0
+  },
+  "execution": {
+    "single_paid_admission": true,
+    "selected_area_reached": true,
+    "cartridge_derived_patrol": true,
+    "species_specific_route": false,
+    "controller_actions": 1271,
+    "emulator_frames": 152580,
+    "bounded_success_phase": {
+      "controller_actions": 640,
+      "emulator_frames": 78540,
+      "encounters_seen": 12,
+      "flees": 11,
+      "captures": 1
+    },
+    "controller_released": true
+  },
+  "collection": {
+    "registered_before": 79,
+    "registered_after": 80,
+    "living_species_after": 60,
+    "specimens_before": 63,
+    "specimens_after": 64,
+    "required_red_registrations_remaining": 44
+  },
+  "resources": {
+    "admission_money_spent": 500,
+    "safari_balls_after": 23,
+    "safari_steps_after": 235
+  },
+  "retained_failures": [
+    "two-byte Safari step counter was initially read as one byte",
+    "an encounter during patrol approach was initially treated as navigation failure",
+    "Safari command layout was initially controlled without observing its two-column state",
+    "post-throw settlement initially trusted a stale cursor after a natural flee"
+  ],
+  "learning": {
+    "eligible_examples_added": 0,
+    "model_fits": 0,
+    "model_after": 104,
+    "reason": "The capability harness retained state hashes and aggregate counters but did not write the standard per-action episode journal. The result remains measured development evidence until a declared trust-tier adapter admits it; it is not retroactively called a native traced lesson."
+  },
+  "claim_boundary": {
+    "demonstrated": [
+      "one model-selected Safari area controlled the played attempt",
+      "generic transport, admission, patrol and observed Safari capture composed successfully",
+      "one missing registration and one physical specimen were retained"
+    ],
+    "not_demonstrated": [
+      "model improvement from this outcome",
+      "reliable Safari collection across areas or seeds",
+      "fresh-game autonomy",
+      "complete Red registration",
+      "Blue, modified Red or Crystal transfer"
+    ]
+  }
+}

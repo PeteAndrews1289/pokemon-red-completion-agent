@@ -1,0 +1,79 @@
+{
+  "schema": "pokemon.red.safari-capability-preflight.v1",
+  "status": "action_free_model_selection_ready",
+  "observed_source": {
+    "commit": "2bd354f157fa9c58cb9a80822c34444167fc9af3",
+    "source_bundle_sha256": "575214319d44dc6bc284818e72917e4ef9840b4c9419991446083418ae69177d"
+  },
+  "retained_endpoint": {
+    "checkpoint_record_sha256": "ff0f3f3268712efca4015c9538f3625b8cf736eae1bef3cfaa3c839f743a2677",
+    "model_sha256": "4b19997416712acbf75fead1e324791d1202b2f384da70ab12810b2af0154df2",
+    "model_examples": 104,
+    "registered_species": 79,
+    "required_red_registrations_remaining": 45,
+    "available_money": 558,
+    "free_storage_slots": 183
+  },
+  "cartridge_inventory": {
+    "candidate_area_count": 4,
+    "distinct_missing_registration_count": 6,
+    "productive_slot_counts": [
+      5,
+      4,
+      5,
+      4
+    ],
+    "candidate_route_steps_after_admission": [
+      0,
+      29,
+      126,
+      265
+    ],
+    "private_map_fields_published": 0,
+    "private_species_fields_published": 0,
+    "private_source_fields_published": 0
+  },
+  "model_choice": {
+    "policy": "living-dex-safari-area-softmax-v1",
+    "menu_sha256": "9853657060fd6f5dccffdbd6ab1be70f39ecd1c37d74ee1beb82d86e1dfcc379",
+    "seed": 104079,
+    "scores": [
+      0.8720703828430213,
+      1.1585825102195768,
+      0.8720703828430213,
+      1.1585825102195768
+    ],
+    "probabilities": [
+      0.22332173861708007,
+      0.2766782613829199,
+      0.22332173861708007,
+      0.2766782613829199
+    ],
+    "selected_candidate_index": 1,
+    "teacher_labels": 0
+  },
+  "effects": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "registrations_added": 0,
+    "training_examples_added": 0,
+    "model_fits": 0
+  },
+  "capability_boundary": {
+    "working": [
+      "cartridge-derived productive Safari-area inventory",
+      "identity-free four-candidate area menu",
+      "existing model104 area selection",
+      "bounded Safari encounter capture mechanic",
+      "single-admission and selected-area arrival postconditions"
+    ],
+    "not_yet_demonstrated": [
+      "live transport from the exact retained endpoint to Fuchsia",
+      "live selected-area admission and patrol",
+      "a retained Safari registration",
+      "an eligible Safari training outcome",
+      "any model improvement from Safari evidence"
+    ]
+  },
+  "interpretation": "The exact checkpoint exposes four real Safari-area alternatives and the existing model selects one without species, map or source identity. This is an action-free preflight, not gameplay or learning. The selected feature profile has four productive encounter slots rather than five, so the first bounded outcome is a useful model falsifier rather than evidence that the learner already understands encounter yield."
+}

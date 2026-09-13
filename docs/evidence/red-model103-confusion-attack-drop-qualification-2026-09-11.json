@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon.red.model103-confusion-attack-drop-qualification-public-evidence.v1",
+  "date": "2026-09-11",
+  "status": "qualified_action_free_green_ci",
+  "published_source": "c277ab8af8a5e0ac3dcb8b41648b54459f3486be",
+  "github_ci_run": 34670437259,
+  "github_ci_attempt": 1,
+  "github_ci_conclusion": "success",
+  "pinned_mechanics_source": "pret/pokered@1e96034092686d006e863cace09e87273051a3d8",
+  "scope": {
+    "qualified": "A player already confused while an incoming move may lower Attack",
+    "attack_upper_bound": 999,
+    "defense_bound": "observed live self-hit Defense; an Attack drop cannot reduce it",
+    "still_rejected": [
+      "Defense reduction",
+      "Speed reduction",
+      "Special reduction",
+      "Accuracy reduction",
+      "Evasion reduction"
+    ],
+    "special_case_ids": [],
+    "learned_feature_delta": 0
+  },
+  "review_correction": "Initial reviews proposed using observed live Attack. A reachable burn-plus-badge-glitch counterexample disproved that narrower bound before implementation. Both independent reviewers accepted the correction to the cartridge-wide 999 Attack cap.",
+  "verification": {
+    "focused_tests_passed": 375,
+    "catalog_and_damage_tests_passed": 128,
+    "typed_source_files": 483,
+    "lint_passed": true,
+    "public_artifact_check_passed": true,
+    "documentation_check_passed": true,
+    "retained_terminal_actions": 0,
+    "retained_terminal_frames": 0,
+    "incoming_damage_bounds": [165, 250, 160, 495, 150, 351],
+    "active_party_hp": 241,
+    "controller_decision": "attack",
+    "controller_party_index": 0,
+    "controller_incoming_bound": 165
+  },
+  "learning_delta": {
+    "training_examples": 0,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registered_species": 0,
+    "specimens": 0
+  },
+  "verified_conclusion": "The compound confusion-plus-Attack-drop boundary now has a conservative cartridge-generic bound and the retained Lorelei state exposes a strictly safe attack without input. This qualifies engineering for a separately identified development successor after green CI; it does not complete Lorelei, prove renewable funding or advance model learning.",
+  "gameplay_authorized": false,
+  "consumed_successor_retry_authorized": false
+}

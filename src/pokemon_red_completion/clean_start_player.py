@@ -28,7 +28,9 @@ from pokemon_red_completion.objective_skills import ObjectiveSkillRegistry
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.planner_model import ObjectiveRanker
 from pokemon_red_completion.player_loop import PlayerRunReport, PortablePlayerLoop
-from pokemon_red_completion.red_early_game_skill import EarlyGameThroughCeladonObjectiveSkill
+from pokemon_red_completion.red_early_game_skill import (
+    build_red_early_game_semantic_skill_registry,
+)
 from pokemon_red_completion.red_objective_skills import (
     build_red_midgame_objective_skill_registry,
 )
@@ -227,7 +229,7 @@ class CleanStartPortableReport:
             "initial_wait_frames": self.initial_wait_frames,
             "limitations": [
                 "teacher_authored_bounded_mechanic_skills",
-                "early_game_is_one_fourteen_objective_composite",
+                "early_game_stages_include_declared_automatic_effects",
                 "singleton_dispatches_do_not_measure_ranking_quality",
                 "not_cross_title_transfer",
             ],
@@ -395,12 +397,12 @@ def run_portable_clean_start(
                 candidate_authority if execute_training_candidate_model else None
             ),
         )
-        early = EarlyGameThroughCeladonObjectiveSkill(
+        early = build_red_early_game_semantic_skill_registry(
             rom_path,
-            emulator,
-            reader,
-            executor,
-            observer,
+            emulator=emulator,
+            reader=reader,
+            executor=executor,
+            observer=observer,
         )
         loop = PortablePlayerLoop(
             graph=COMPLETION_QUEST,
@@ -408,7 +410,7 @@ def run_portable_clean_start(
             objective_policy=objective_policy,
             specialists=SpecialistRegistry(()),
             executor=executor,
-            objective_skills=ObjectiveSkillRegistry((early, *midgame.skills())),
+            objective_skills=ObjectiveSkillRegistry((*early.skills(), *midgame.skills())),
         )
         try:
             run = loop.run(max_steps=PORTABLE_CLEAN_START_MAX_STEPS)

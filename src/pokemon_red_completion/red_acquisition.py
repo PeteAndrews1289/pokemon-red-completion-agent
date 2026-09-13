@@ -478,6 +478,7 @@ class RedAreaExecutionReport:
     search_exhausted: bool = False
     safety_stopped: bool = False
     search_stop_reason: str | None = None
+    capture_items_exhausted: bool = False
 
     @property
     def passed(self) -> bool:
@@ -694,6 +695,7 @@ def run_red_area_survey(
     policy: RedAreaExecutionPolicy | None = None,
     catalog: RedAcquisitionCatalog | None = None,
     safety_check: Callable[[], bool] | None = None,
+    capture_resources_available: Callable[[], bool] | None = None,
 ) -> RedAreaExecutionReport:
     """Execute one bounded source survey through a semantic game adapter."""
 
@@ -754,6 +756,18 @@ def run_red_area_survey(
         if action_count >= policy.max_actions:
             break
         if decision.directive is RedAreaDirective.SEEK_ENCOUNTER:
+            # Check between encounters, not inside one: battle exit remains the
+            # executor's responsibility and cannot be certified by an inventory read.
+            if capture_resources_available is not None:
+                available = capture_resources_available()
+                if type(available) is not bool:
+                    raise TypeError("capture resource check must return a bool")
+                if not available:
+                    return RedAreaExecutionReport(
+                        source_id, initial.missing_species_refs, survey.missing_species_refs,
+                        action_count, encounters_seen, captures, flees, box_switches,
+                        capture_items_exhausted=True,
+                    )
             try:
                 executor.seek_encounter()
             except RedAreaExecutionError as error:

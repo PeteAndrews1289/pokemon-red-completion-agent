@@ -8,7 +8,7 @@ never fabricates a destination state or grants a successful outcome.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from functools import partial
 
 from pokemon_red_completion.actions import MacroActionKind
@@ -53,6 +53,7 @@ from pokemon_red_completion.route_executor import (
     InterruptionHandler,
     ReplanRequest,
     RouteExecutionLimits,
+    TraversalSnapshot,
 )
 from pokemon_red_completion.route_plan import RoutePlan, RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import RoutedSemanticGoalLimits
@@ -68,10 +69,25 @@ _MECHANICS = frozenset(
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
     }
 )
+# Resource routes also perform bounded encounter search.  Sixteen exits is a
+# reasonable transport guard but too small for a five-percent missing encounter:
+# a healthy route can exhaust it before the ordinary search budget has a fair
+# chance to produce its target.  This remains finite and is covered by the route's
+# independent action/frame bounds.
+_MAX_ROUTE_FLEES = 128
+_MAX_ROUTE_TRAINER_BATTLES = 8
+_MAX_ROUTE_SCRIPTED_DIALOGUES = 4
+_REQUIRED_ROUTE_INTERRUPTION_KINDS = frozenset(
+    {"wild_battle", "trainer_engagement", "battle:2", "scripted_dialogue"}
+)
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
-    max_interruptions=16,
+    max_interruptions=(
+        _MAX_ROUTE_FLEES
+        + _MAX_ROUTE_TRAINER_BATTLES
+        + _MAX_ROUTE_SCRIPTED_DIALOGUES
+    ),
     max_replans=8,
     replan_after_unchanged=2,
     retry_wait_frames=24,
@@ -82,6 +98,15 @@ _ROUTE_LIMITS = RouteExecutionLimits(
 
 class RedResourceGoalRoutingError(RuntimeError):
     """A refreshed resource goal cannot keep its observed transport contract."""
+
+
+def _supports_required_route_interruptions(handler: InterruptionHandler) -> bool:
+    """Fail closed unless every dynamic route interruption is explicitly supported."""
+    kinds = getattr(handler, "handled_interruption_kinds", None)
+    return (
+        isinstance(kinds, frozenset)
+        and kinds >= _REQUIRED_ROUTE_INTERRUPTION_KINDS
+    )
 
 
 @dataclass(slots=True)
@@ -96,6 +121,7 @@ class RedResourceGoalRouter:
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
     prepare_capture_storage: bool = False
+    routed_storage_relief: bool = False
     routed_recovery: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
@@ -105,8 +131,43 @@ class RedResourceGoalRouter:
     # Capture-only menus discard RESTORE_TEAM offers. Keep guarded transport
     # and escort preparation enabled without planning unused Center routes.
     include_recovery_offers: bool = True
+    # Shared only during one action-free candidate inventory. It is explicitly
+    # cleared before returning so a later live observation cannot inherit it.
+    route_plan_cache: dict[
+        tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
+    ] | None = field(default=None, repr=False, compare=False)
 
     def enumerate(self, observation: RedGoalObservation) -> GoalBindingSet:
+        """Enumerate every local and routable goal in the active profile."""
+        return self._enumerate(observation, routed_kinds=None)
+
+    def enumerate_routed_kinds(
+        self,
+        observation: RedGoalObservation,
+        routed_kinds: frozenset[GoalKind],
+    ) -> GoalBindingSet:
+        """Route only requested kinds while preserving the complete local menu.
+
+        Regional source comparison needs one acquisition binding from each
+        retargeted profile. Planning unrelated Mart, recovery or evolution
+        transports cannot change that binding, but used to dominate inventory
+        latency. Live provider availability, traversal capabilities and the
+        acquisition route are still recomputed for every source.
+        """
+        if (
+            not isinstance(routed_kinds, frozenset)
+            or not routed_kinds
+            or any(not isinstance(kind, GoalKind) for kind in routed_kinds)
+        ):
+            raise TypeError("routed goal kinds must be a non-empty GoalKind frozenset")
+        return self._enumerate(observation, routed_kinds=routed_kinds)
+
+    def _enumerate(
+        self,
+        observation: RedGoalObservation,
+        *,
+        routed_kinds: frozenset[GoalKind] | None,
+    ) -> GoalBindingSet:
         before = (self.actions.actions_executed, self.runtime.emulator.frame_count)
         local = self.runtime.enumerator(self.actions).enumerate(observation)
         if observation.raw.battle_state or not observation.input_ready:
@@ -156,6 +217,8 @@ class RedResourceGoalRouter:
             )
         opportunities = list(local.opportunities)
         for index, opportunity in enumerate(opportunities):
+            if routed_kinds is not None and opportunity.kind not in routed_kinds:
+                continue
             spec = specs.get(opportunity.kind)
             if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
                 # Never reinstate the static, unreachable patch as a fallback.
@@ -197,8 +260,9 @@ class RedResourceGoalRouter:
                     opportunities[index] = flight.opportunity
                 continue
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
-                self.actions, self.runtime.reader, maximum_flees=16,
-                maximum_trainer_battles=8, stabilization_frames=180,
+                self.actions, self.runtime.reader, maximum_flees=_MAX_ROUTE_FLEES,
+                maximum_trainer_battles=_MAX_ROUTE_TRAINER_BATTLES, stabilization_frames=180,
+                maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 route_name="bounded resource-goal transport",
             )
             if self.routed_recovery:
@@ -206,13 +270,19 @@ class RedResourceGoalRouter:
                     guarded_collection_route_handler,
                 )
                 interruption_handler = guarded_collection_route_handler(
-                    self.actions, self.runtime.reader, route_name="guarded resource-goal transport",
+                    self.actions,
+                    self.runtime.reader,
+                    route_name="guarded resource-goal transport",
+                    maximum_flees=_MAX_ROUTE_FLEES,
+                    maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 )
             from pokemon_red_completion.red_travel_capture_runtime import (
                 bind_travel_capture_destination,
                 bind_travel_capture_handler,
             )
             interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
+            if not _supports_required_route_interruptions(interruption_handler):
+                continue
             transport = RedSemanticTransportRoute(
                 binding_ref=f"red-resource-route:{spec.configuration_sha256}",
                 origin_observation_sha256=origin,
@@ -287,6 +357,11 @@ class RedResourceGoalRouter:
         if before != (self.actions.actions_executed, self.runtime.emulator.frame_count):
             raise RedResourceGoalRoutingError("resource-goal enumeration changed the game")
         result = GoalBindingSet(tuple(opportunities), (*local.bindings, *replacements.values()))
+        if self.routed_storage_relief:
+            from pokemon_red_completion.red_routed_storage_relief import (
+                bind_routed_storage_relief,
+            )
+            result = bind_routed_storage_relief(self, result, observation)
         if self.prepare_capture_storage:
             from pokemon_red_completion.red_routed_capture_storage import (
                 bind_capture_storage_support,
@@ -368,13 +443,38 @@ class RedResourceGoalRouter:
 
         return replace(binding, resource_quote=quote, execute=execute)
 
+    def plan_feasible_to_map(
+        self,
+        start: TraversalSnapshot,
+        goal_map: int,
+        *,
+        goal_at: tuple[int, int] | None = None,
+    ) -> RoutePlan:
+        """Reuse an identical route query only inside one frozen inventory pass."""
+        cache = self.route_plan_cache
+        if cache is None:
+            return self.world.plan_feasible_to_map(start, goal_map, goal_at=goal_at)
+        key = (start, goal_map, goal_at)
+        if key in cache:
+            cached = cache[key]
+            if isinstance(cached, str):
+                raise RoutePlanningError(cached)
+            return cached
+        try:
+            plan = self.world.plan_feasible_to_map(start, goal_map, goal_at=goal_at)
+        except RoutePlanningError as error:
+            cache[key] = str(error)
+            raise
+        cache[key] = plan
+        return plan
+
     def _plan(self, spec: RedGoalProviderSpec, fresh: FreshRedGoalObservation) -> RoutePlan | None:
         parameters = spec.parameters
         if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
             # Known mechanic entry boundaries, connected by the cartridge router.
             for center in (MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER):
                 try:
-                    plan = self.world.plan_feasible_to_map(
+                    plan = self.plan_feasible_to_map(
                         fresh.traversal,
                         int(center),
                         goal_at=(3, 3),
@@ -394,7 +494,7 @@ class RedResourceGoalRouter:
         if (fresh.traversal.map_id, fresh.traversal.at) == (target_map, (y, x)):
             return None
         try:
-            plan = self.world.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
+            plan = self.plan_feasible_to_map(fresh.traversal, target_map, goal_at=(y, x))
         except RoutePlanningError:
             return None
         if not plan.steps or not _supported_plan(

@@ -33,24 +33,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock.
+- Next decision: Execute the exact frozen Model114 resupply once, retain its real outcome, fit only an eligible result, then publish and rebuild the next menu action-free.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Share verified species registration across runs while keeping local owned flags and physical stock separate. |
-| Authority now | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
+| Reusable capability | Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning. |
+| Authority now | The bounded-development learner has 114 fitted examples. Its latest Red state has 84 registrations, 64 living species and 68 specimens in a durable input-ready Model114 checkpoint. Model114 selected resupply/income from six choices across three goal families; the choice is not yet executed. Deterministic code still executes mechanics; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A sole unreserved precursor evolves without lost registration; a globally credited chain has zero capture demand; stale checkpoint joins fail before input. |
+| Cheapest falsifier | The exact frozen Model114 resupply choice cannot execute within declared bounds and retain its actual resource outcome. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 61 | 12 |
+| Registered Train Example · train | 114 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-10-surf-collection-access** · status **active** · evidence [registered train example](docs/evidence/red-surf-access-learning-2026-09-10.json)
+**2026-09-13-model114-frozen-fishing-learning** · status **active** · evidence [model fit](docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | User-directed registration-first objective and shared memory; retired level100 and living-form completion requirements. |
-| Learning output | 1/2 goals succeeded; 1 eligible fits,60 to61 examples. 62 to63 registrations; 53 specimens retained. Failed costs and deterministic support remain separate. |
-| Authority delta | 1 real fits; no independent or cross-title authority promotion. |
-| Transfer result | No independent or cross-title result; same-lineage outcomes remain development only. |
-| Blocker | Seven executable destinations yielded one actual learned choice, but Power Plant capture exhausted its balls and raised a generic error. The exact terminal is ready; affordable resupply remains transport-blocked. Failed composition lost its completed field summary. |
-| Decision | Preserve Dodrio and the real failed destination lesson. Restore supplies from the actual Power Plant terminal, not the old save; pursue a productive choice without more access infrastructure. |
-| Next session | Resume AG02/model61: Power Plant, 63 registrations, zero balls, 1638 money, input-ready. Qualify scoped indoor/field transport for affordable resupply, then one productive collection choice. Preserve typed ball exhaustion, completed-route diagnostics and failed costs. Allow 60-90 minutes; no replay, reset, sealed Red or Crystal. Optimize duplicate route inspection only as a secondary unblock. |
-| Next falsifier | From exact AG02, qualify affordable resupply through observed indoor/field transport; reject missing holder, permission or stale terminal before input. Preserve spending and route evidence when balls run out, then attempt one productive choice without replaying AG. |
-| Stop condition | No consumed retry, unsafe checkpoint admission, invented labels or old-objective mixing. |
+| Product alignment | The model chose collection, learned from a verified registration gain and then chose resource generation from the earned state. That durable choose-act-verify-learn continuation is required for long Pokedex runs. |
+| Learning output | One real frozen fishing success was added as row114 without a teacher label. Model114 now has 114 settled examples and selected resupply from six choices spanning three goal families. |
+| Authority delta | Model113's exact frozen fishing choice added one registration in 513 actions and 30,804 frames with zero policy queries during execution and zero teacher labels. Its observed success became row114. Model114 then selected resupply from a six-choice, three-family menu action-free; no authority tier advanced. |
+| Transfer result | The policy menu remains identity-free and supports supplemental-only acquisition choices, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
+| Blocker | The selected Model114 resupply choice is frozen but unexecuted. It must retain its actual bounded outcome before another fit; consumed attempts remain non-retryable. |
+| Decision | Execute the exact frozen Model114 resupply choice once without another policy query, retain success or failure, fit only an eligible observed outcome, publish the terminal and rebuild the next menu action-free. |
+| Next session | Execute the exact frozen Model114 resupply once, retain its actual outcome, fit only an eligible result, then publish and rebuild the next automatic menu without input. |
+| Next falsifier | The exact frozen Model114 resupply cannot execute within its existing bounds and retain its real resource outcome. |
+| Stop condition | Stop on a second policy query for the frozen menu, retrying a consumed attempt, post-hoc targets, teacher labels, checkpoint mismatch, or any move into Blue or Crystal. |
 
 ### Stop conditions
 
@@ -217,4 +217,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **30**.
+Current evidence entries: **34**.

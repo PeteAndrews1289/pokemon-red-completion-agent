@@ -83,7 +83,7 @@ def bind_capture_storage_support(
     routes: list[RoutePlan] = []
     for center in sorted(_POKEMON_CENTER_MAPS):
         try:
-            route = router.world.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
+            route = router.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
         except RoutePlanningError:
             continue
         if _walking_plan(route):

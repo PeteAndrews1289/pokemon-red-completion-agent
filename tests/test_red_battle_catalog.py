@@ -80,6 +80,21 @@ def test_known_effect_and_priority_flags_match_red_battle_core() -> None:
     assert RED_BATTLE_CATALOG.resolve_move(_move(136)).effect_flags == frozenset({"recoil"})
 
 
+@pytest.mark.parametrize(
+    "target,moves",
+    [
+        ("attack", (45, 62)),
+        ("defense", (39, 43, 51, 103)),
+        ("speed", (61, 81, 132, 145)),
+        ("special", (94,)),
+        ("accuracy", (28, 108, 134, 148)),
+    ],
+)
+def test_stat_reduction_target_is_derived_from_pinned_effect(target, moves):
+    assert all(RED_BATTLE_CATALOG.stat_reduction_target(_move(move)) == target for move in moves)
+    assert RED_BATTLE_CATALOG.stat_reduction_target(_move(33)) is None
+
+
 def test_species_types_match_internal_red_species_references() -> None:
     assert RED_BATTLE_CATALOG.resolve_species(_species(177)).types == ("water",)
     assert RED_BATTLE_CATALOG.resolve_species(_species(180)).types == ("fire", "flying")
@@ -149,3 +164,11 @@ def test_unqualified_effects_do_not_become_fixed_zero_damage(move):
 
 def test_constant_only_contract_is_not_silently_extended_to_level_damage():
     assert RED_BATTLE_CATALOG.constant_damage_bound(_move(101)) is None
+
+
+@pytest.mark.parametrize("move", [20, 35, 83, 128])
+def test_trapping_is_pure_and_remains_outside_type_only_and_outgoing_contracts(move):
+    assert RED_BATTLE_CATALOG.resolve_move(_move(move)).effect_flags == frozenset({"trapping"})
+    with pytest.raises(RedBattleCatalogError, match="entry type screen"):
+        RED_BATTLE_CATALOG.switch_entry_attack_type(_move(move))
+    assert RED_BATTLE_CATALOG.recovery_attack_supported(_move(move)) is False

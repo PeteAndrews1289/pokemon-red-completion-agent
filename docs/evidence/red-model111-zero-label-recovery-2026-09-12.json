@@ -1,0 +1,63 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "living_species": 63,
+    "registered_species": 83,
+    "required_red_registrations_remaining": 41,
+    "specimens": 67
+  },
+  "model": {
+    "model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+    "settled_examples": 111,
+    "successful_examples": 76,
+    "unchanged": true
+  },
+  "next_menu": {
+    "available_goal_count": 1,
+    "available_goal_kinds": [
+      "restore_team"
+    ],
+    "capture_items": 4,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "executable_fishing_maps": 4,
+    "free_storage_slots": 179,
+    "generic_acquisition_status": "unavailable_no_legal_target",
+    "money": 58,
+    "productive_fishing_maps": 18,
+    "status": "forced_support_only"
+  },
+  "party_capability_diagnostic": {
+    "capture_party_ready": false,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "helpers_in_active_box": 0,
+    "helpers_in_other_boxes": 7,
+    "reason": "no_usable_sleep_or_paralysis_move_in_party",
+    "state_unchanged": true
+  },
+  "qualification": {
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 34730511619,
+    "source_commit": "23dadf37a59ad5f018d3d227921770174be108c7",
+    "source_bundle_sha256": "13d5c5ae929f7ebc2777b32a1891f1a78ef56bc5c9dee7c19aad7942ce91cfbc"
+  },
+  "recovery": {
+    "checkpoint_record_sha256": "8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3",
+    "controller_actions": 8,
+    "dialogue_pulses": 4,
+    "episode_id": "red-model111-gate-recovery-support-20260912",
+    "input_ready": true,
+    "parent_checkpoint_record_sha256": "7b70cb03508650d47863159b16c49d2985bd6fea07553e5bc4defddb2bb3380c",
+    "parent_episode_id": "red-model111-fishing-measured-failure-terminal-20260912",
+    "state_sha256": "5d3688b3e3b60080335ba01b400df949f057f9aaf9140e0eb7bbac3be34fa3aa",
+    "support_frames": 576,
+    "training_examples": 0,
+    "verified_reopen": true
+  },
+  "schema": "pokemon.red.model111-zero-label-recovery-evidence.v1",
+  "session_id": "2026-09-12-model111-zero-label-recovery",
+  "teacher_labels": 0,
+  "transfer_result": null
+}

@@ -13,6 +13,11 @@ from pokemon_red_completion.red_player_checkpoint import (
     capture_red_player_terminal,
     publish_red_player_checkpoint,
 )
+from pokemon_red_completion.red_regional_goal_proposal import (
+    REGIONAL_PROPOSAL_KIND,
+    REGIONAL_PROPOSAL_SCHEMA,
+    regional_proposal_record_id,
+)
 
 case = checkpoint_case
 
@@ -50,7 +55,8 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
             feature_version=1 if history_mode == "legacy" else 3,
         )),
         profile=None, quote_resource_costs=True, completion_dose=True,
-        routed_recovery=True, pair_id="preview", challenger_arm_id="test",
+        routed_recovery=True, routed_storage_relief=True,
+        pair_id="preview", challenger_arm_id="test",
         remaining_acquisition_demand=True, level_evolution_acquisitions=True,
         trainer_funding=True, trainer_pending_recovery=True,
         regional_trainer_funding=True,
@@ -81,6 +87,7 @@ def test_preflight_observer_receives_actor_history_without_mutating_parent(
     monkeypatch.setattr(runner, "PokemonRedStateReader", lambda _controller: None)
     observer = SimpleNamespace(search_memory="not wired")
     def preview_observer(*_args, **kwargs):
+        assert kwargs["routed_storage_relief"] is True
         assert kwargs["remaining_acquisition_demand"] is True
         assert kwargs["level_evolution_acquisitions"] is True
         assert kwargs["trainer_funding"] is True
@@ -138,7 +145,8 @@ def _readiness(store, arguments):
         rom_sha256=arguments["rom_sha256"], capture=arguments["parent"],
         profile=SimpleNamespace(profile_sha256=arguments["profile_sha256"]),
         challenger_arm_id=runner.CAUSAL_ARM_ID, legacy_model=None, causal_record=None,
-        calibration_record=None, model_file_sha256="3" * 64, model_sha256="4" * 64,
+        calibration_record=None, model_file_sha256="3" * 64,
+        model_sha256=arguments["model_sha256"],
         decision_limit=4, private_root=store, output_path=Path("unused-output"),
         protected_paths=(), context_origin="training", save_terminal_checkpoints=True,
     )
@@ -169,6 +177,14 @@ def test_continuation_changes_state_not_lineage_or_partition(case):
         "independent_root": False, "training_eligible": False,
     }
     continued.continuation.require_restored_observation(case[2])
+
+
+def test_continuation_requires_the_active_model_to_match_the_terminal(case):
+    readiness, ancestor = _completed(case)
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError, match="continuation_terminal_model"
+    ):
+        runner._continue_readiness(replace(readiness, model_sha256="4" * 64), (ancestor,))
 
 
 def test_continuation_opens_each_ancestor_once_and_revalidates_on_next_call(case, monkeypatch):
@@ -221,6 +237,37 @@ def test_recovery_restore_mode_is_taken_from_recorded_parent_not_successor(case,
     )
     assert resumed.restore_routed_recovery is parent_mode
     assert resumed.routed_recovery is not parent_mode
+
+
+@pytest.mark.parametrize("parent_mode", [False, True])
+def test_storage_relief_restores_parent_mode_and_forbids_rollback(case, parent_mode):
+    store, arguments, _observation = case
+    document = capture_red_player_terminal(**arguments)
+    _complete(store, document, alter_header={
+        "split": {"partition": "train", "root_lineage_id": "original-training-root"},
+        **({"routed_storage_relief": True} if parent_mode else {}),
+    })
+    record = publish_red_player_checkpoint(store, document)
+    ready = replace(_readiness(store, arguments), routed_storage_relief=True)
+    chain = ((arguments["episode_id"], record["record_sha256"]),)
+    resumed = runner._continue_readiness(ready, chain)
+    assert resumed.restore_routed_storage_relief is parent_mode
+    assert resumed.routed_storage_relief is True
+    if parent_mode:
+        with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="storage_relief_rollback"):
+            runner._continue_readiness(replace(ready, routed_storage_relief=False), chain)
+
+
+@pytest.mark.parametrize("value", [None, 0, "true", []])
+def test_storage_relief_checkpoint_mode_is_strict(value):
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="parent_routed_storage"):
+        runner._checkpoint_routed_storage_relief({
+            "metadata": {"routed_storage_relief": value},
+        })
+
+
+def test_old_checkpoint_does_not_gain_storage_relief():
+    assert runner._checkpoint_routed_storage_relief({"metadata": {}}) is False
 
 
 @pytest.mark.parametrize("partition", ["development", "validation", "test", "unassigned"])
@@ -448,6 +495,95 @@ def test_regional_chain_preserves_restore_profile_and_rejects_history_rollback(c
     assert len(revisited.continuation_chain) == 3
 
 
+def test_dynamic_proposal_profile_authenticates_saved_native_goal(case):
+    import json
+
+    from test_goal_resource_quote import _supply_model
+    from test_red_player_training import _plan
+    from test_red_regional_acquisition import _candidate
+
+    from pokemon_red_completion.red_goal_context_profile import (
+        _thaw,
+        build_red_goal_context_profile_payload,
+    )
+
+    store, arguments, _ = case
+    readiness = _readiness(store, arguments)
+    profile = _candidate("wild:Route11:grass").profile
+    assert profile.profile_sha256 != readiness.profile.profile_sha256
+    parent_plan = {
+        **_plan(_supply_model()).document,
+        "profile_sha256": profile.profile_sha256,
+    }
+    proposal = store.publish_sealed_record(
+        regional_proposal_record_id(arguments["episode_id"]),
+        kind=REGIONAL_PROPOSAL_KIND,
+        record={
+            "schema": REGIONAL_PROPOSAL_SCHEMA,
+            "episode_id": arguments["episode_id"],
+            "source_proposal_fitted": False,
+            "controller_input_before_commit": False,
+            "parent_overridden": False,
+            "independent_evaluation": False,
+            "profile_sha256": profile.profile_sha256,
+            "parent_plan": parent_plan,
+            "profile": json.loads(
+                build_red_goal_context_profile_payload(
+                    profile_id=profile.profile_id,
+                    providers=tuple(
+                        (spec.kind, spec.mechanic, _thaw(spec.parameters))
+                        for spec in profile.providers
+                    ),
+                )
+            ),
+        },
+    )
+    document = capture_red_player_terminal(
+        **{**arguments, "profile_sha256": profile.profile_sha256}
+    )
+    _complete(
+        store,
+        document,
+        alter_header={
+            "split": {
+                "partition": "train",
+                "root_lineage_id": "original-training-root",
+            },
+            "regional_proposal_record_sha256": proposal.summary.record_sha256,
+            "player_training_plan": parent_plan,
+        },
+    )
+    checkpoint = publish_red_player_checkpoint(store, document)
+    resumed = runner._continue_readiness(
+        readiness, ((arguments["episode_id"], checkpoint["record_sha256"]),)
+    )
+    assert resumed.restore_profile.profile_sha256 == profile.profile_sha256
+    assert resumed.profile.profile_sha256 == profile.profile_sha256
+
+    next_profile = _candidate("wild:Route12:grass").profile
+    arguments["emulator"].state = b"after-dynamic-profile"
+    next_document = capture_red_player_terminal(
+        **{
+            **arguments,
+            "parent": resumed.capture,
+            "episode_id": "after-dynamic-proposal",
+            "profile_sha256": next_profile.profile_sha256,
+        }
+    )
+    _complete(store, next_document, alter_header=runner._continuation_header(resumed))
+    next_checkpoint = publish_red_player_checkpoint(store, next_document)
+    continued = runner._continue_readiness(
+        readiness,
+        (
+            (arguments["episode_id"], checkpoint["record_sha256"]),
+            ("after-dynamic-proposal", next_checkpoint["record_sha256"]),
+        ),
+        regional_profiles=(next_profile,),
+    )
+    assert continued.restore_profile.profile_sha256 == next_profile.profile_sha256
+    assert continued.profile.profile_sha256 == next_profile.profile_sha256
+
+
 @pytest.mark.parametrize("damage", [None, "semantics", "frames", "held"])
 def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, damage):
     readiness, ancestor = _completed(case)
@@ -483,18 +619,22 @@ def test_actual_restore_is_checked_through_readonly_controls(case, monkeypatch, 
     monkeypatch.setattr(runner, "build_red_goal_context_runtime", runtime)
     monkeypatch.setattr(runner, "_route_world", lambda _: None)
     def player_observer(*_args, completion_dose=False, routed_recovery=False,
+                        routed_storage_relief=False,
                         trainer_funding=False, trainer_pending_recovery=False,
                         regional_trainer_funding=False,
                         observed_trainer_funding=False,
-                        remaining_acquisition_demand=False, level_evolution_acquisitions=False):
+                        remaining_acquisition_demand=False, level_evolution_acquisitions=False,
+                        fossil_acquisitions=False):
         assert completion_dose is False  # This historical fixture predates completion dose.
         assert routed_recovery is False
+        assert routed_storage_relief is False
         assert trainer_funding is False
         assert trainer_pending_recovery is False
         assert regional_trainer_funding is False
         assert observed_trainer_funding is False
         assert remaining_acquisition_demand is False  # Never use successor mode for old restore.
         assert level_evolution_acquisitions is False
+        assert fossil_acquisitions is False
         return observe
 
     monkeypatch.setattr(runner, "_player_observer", player_observer)
@@ -531,6 +671,34 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
     )
 
     def source(*_a, **_k):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
+        runner._prepare(args)
+
+
+@pytest.mark.parametrize("chain,routed", [([], True), ([('old', 'a' * 64)], False)])
+def test_storage_relief_requires_a_routed_continuation_before_source(chain, routed):
+    args = SimpleNamespace(
+        pair_id="storage-relief-scope", continue_from_checkpoint=chain,
+        train_player=False, context_origin="training", save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID, routed_storage_relief=True,
+        routed_resource_goals=routed,
+    )
+    with pytest.raises(runner.PairedRedBoundedPlayerRunError, match="storage_relief_scope"):
+        runner._prepare(args)
+
+
+def test_valid_storage_relief_scope_reaches_source_check(monkeypatch):
+    args = SimpleNamespace(
+        pair_id="storage-relief-scope", continue_from_checkpoint=[("old", "a" * 64)],
+        train_player=False, context_origin="training", save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID, routed_storage_relief=True,
+        routed_resource_goals=True,
+    )
+
+    def source(*_args, **_kwargs):
         raise RuntimeError("source verification reached")
 
     monkeypatch.setattr(runner, "detect_source_identity", source)

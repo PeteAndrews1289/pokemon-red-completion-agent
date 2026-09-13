@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import math
 import random
+from collections.abc import Callable
 from copy import deepcopy
 from dataclasses import dataclass, field, replace
 
@@ -25,14 +26,17 @@ from pokemon_red_completion.living_dex_goal_policy import (
 EXPLORATION_POLICY_ID = "living-dex-player-supported-menu-v2"
 LEGACY_RECOVERY_EXPLORATION_POLICY_ID = "living-dex-player-optional-recovery-v3"
 RECOVERY_EXPLORATION_POLICY_ID = "living-dex-player-optional-recovery-v4"
+ECONOMY_EXPLORATION_POLICY_ID = "living-dex-player-economy-v1"
 DETERMINISTIC_POLICY_ID = "living-dex-player-nontraining-v1"
 
 
 def exploration_policy_id(
     feature_version: int, *, legacy_restoration_preference: bool = False,
 ) -> str:
-    if type(feature_version) is not int or feature_version not in (1, 2, 3):
+    if type(feature_version) is not int or feature_version not in (1, 2, 3, 4):
         raise ValueError("exploration feature version differs")
+    if feature_version == 4:
+        return ECONOMY_EXPLORATION_POLICY_ID
     if feature_version == 3:
         return (LEGACY_RECOVERY_EXPLORATION_POLICY_ID if legacy_restoration_preference
                 else RECOVERY_EXPLORATION_POLICY_ID)
@@ -51,6 +55,9 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
     """
 
     seed: int = 0
+    prepare_selection: Callable[[GoalManagerQuestion], None] | None = field(
+        default=None, repr=False, compare=False,
+    )
     _rng: random.Random = field(init=False, repr=False)
     _metadata: dict[str, object] | None = field(default=None, init=False, repr=False)
     training_eligible: bool = field(default=False, init=False)
@@ -64,6 +71,8 @@ class ExploringLivingDexGoalPolicy(LivingDexGoalShadowPolicy):
         self._rng = random.Random(self.seed)
 
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
+        if self.prepare_selection is not None:
+            self.prepare_selection(question)
         if any(
             question.opportunities[index].kind is GoalKind.RESUPPLY
             and question.opportunities[index].resource_quote is None

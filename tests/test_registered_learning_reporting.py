@@ -23,6 +23,27 @@ def test_actual_registered_fit_has_separate_dashboard_identity():
     assert component.model_sha256 == receipt["fit"]["model"]["model_sha256"]
 
 
+def test_current_adaptive_measured_choice_is_visible_without_becoming_native_evaluation():
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-model108-adaptive-fishing-fit-2026-09-12.json").read_text()
+    )
+    training, component = _training_projection(receipt)
+    assert (training.samples_before, training.samples_after) == (107, 108)
+    assert training.successful_examples == 74
+    assert component.scope == (
+        "Measured outcome without action trace; training only; no independent evaluation"
+    )
+    receipt["trust"]["authority_promotion_eligible"] = True
+    with pytest.raises(ValueError, match="measured-choice trust boundary"):
+        _training_projection(receipt)
+    receipt = json.loads(
+        (ROOT / "docs/evidence/red-model108-adaptive-fishing-fit-2026-09-12.json").read_text()
+    )
+    receipt.pop("trust")
+    with pytest.raises(ValueError, match="measured-choice"):
+        _training_projection(receipt)
+
+
 def test_recovery_session_reports_last_fit_without_crediting_unsettled_attempt():
     receipt = json.loads(
         (ROOT / "docs/evidence/red-registered-helper-recovery-learning-2026-09-09.json")

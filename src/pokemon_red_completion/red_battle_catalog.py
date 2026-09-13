@@ -37,6 +37,9 @@ _PHYSICAL_TYPES = frozenset(
 )
 _SPECIAL_TYPES = frozenset({"fire", "water", "grass", "electric", "psychic", "ice", "dragon"})
 _DAMAGING_ZERO_POWER_EFFECTS = frozenset({"SPECIAL_DAMAGE_EFFECT", "BIDE_EFFECT"})
+_STAT_REDUCTION_PATTERN = re.compile(
+    r"^(ATTACK|DEFENSE|SPEED|SPECIAL|ACCURACY|EVASION)_DOWN(?:1|2|_SIDE)_EFFECT$"
+)
 
 
 class RedBattleCatalogError(BattleFeatureError):
@@ -99,6 +102,18 @@ class PokemonRedBattleCatalog:
         identifier = _parse_ref(move_ref, expected_kind="move")
         self.resolve_move(move_ref)
         return _MOVE_EFFECT_BY_ID[identifier] == "SWITCH_AND_TELEPORT_EFFECT"
+
+    def stat_reduction_target(self, move_ref: str, /) -> str | None:
+        """Return the exact stat reduced by a pinned move effect, if any.
+
+        This is mechanics metadata for conservative same-turn bounds. It does
+        not add a learned feature or predict that a probabilistic side effect
+        will occur.
+        """
+        identifier = _parse_ref(move_ref, expected_kind="move")
+        self.resolve_move(move_ref)
+        match = _STAT_REDUCTION_PATTERN.fullmatch(_MOVE_EFFECT_BY_ID[identifier])
+        return match.group(1).lower() if match is not None else None
 
     def recovery_attack_supported(self, move_ref: str, /) -> bool:
         """One ordinary attack without recoil, delayed turns or forced repeats."""

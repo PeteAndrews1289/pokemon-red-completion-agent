@@ -1,0 +1,190 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0
+  },
+  "completed_episode": {
+    "actions": 153,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "episode_id": "red-collection-20260911-bs-03-causal",
+    "frames": 5424,
+    "sampled_choices": 1,
+    "status": "succeeded",
+    "verified_collection_gain": 0
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 94,
+      "economy_qualified_examples": 22,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 94,
+      "successful_examples": 61,
+      "total_examples": 94,
+      "train_dataset_sha256": "630e756ba30f2bd7d53458af1109bdca86fbe089f8540c2cb28a9fb283bbc300",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011590647695374838,
+      "weighted_mse_before": 0.03198646403417574
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "285d85c49f597d7d1cbaf1be90d5129e5afe85dfce2d9e96e013d12c97f71bc5",
+      "file_sha256": "dd836a978e8af20faaedaff9b2def1fabfbacd4c98ff1eda910d30d45be1f4a5",
+      "independent_evaluation": false,
+      "model_sha256": "d065d38230b92adcdf0a5e8d674d1de96b5a170737ed86e2310aeb0fd8d9d5fc",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "1e2b18b3e8d7073ce22f61524a35736ca551c1333c16bacb031d59340c782bd4",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 94,
+      "source_bundle_sha256": "342a01dfa85614bd98de970678ecd90635e0f1362b9e0b61583c3997f4cd125f",
+      "source_commit": "782f811cdcef79406a3f1382b2dabe25cba84338"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 94,
+      "total_examples": 94,
+      "weighted_mse": 0.011590224251100923
+    },
+    "prior_rows_retained": true,
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 94,
+      "total_examples": 94,
+      "weighted_mse": 0.011590647695374838
+    },
+    "weighted_mse_after": 0.011590647695374838
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "session": {
+    "attempted_steps": 4,
+    "completed_steps": 4,
+    "elapsed_seconds": 1347.229,
+    "failed_attempts_retried": 0,
+    "fits": 4,
+    "fresh_game_autonomy": false,
+    "initial_registered": 69,
+    "last_verified_registered": 70,
+    "registered_examples_after": 94,
+    "registered_examples_before": 90,
+    "stop_reason": "step_limit",
+    "terminal_resources": {
+      "capture_items": 4,
+      "money": 493,
+      "party_hp": [88, 118, 150, 90, 120, 249]
+    },
+    "total_recorded_actions": 4827,
+    "total_recorded_frames": 397860,
+    "steps": [
+      {
+        "actions": 4378,
+        "checkpoint_sha256": "7579408db34ca98c7f3611e609162a77f3ae7996e6f648108713c551081a52de",
+        "episode_id": "red-collection-20260911-br-01-causal",
+        "frames": 371135,
+        "manifest_sha256": "f7c1066f6135498a1bae2910876ac9b81717882d7604ad8520380fc5b5e4a9b7",
+        "registered_species": 70,
+        "registrations_added": ["pokemon:national:117"],
+        "selected_kind": "evolve_species",
+        "selection_mode": "authority",
+        "source_commit": "bf291a3868d1862c880a37a6b42c903e329d2594",
+        "state_sha256": "b0297434f34e43c8c6499292b525cb8bfc0203fe88cb4f069843332a78978373",
+        "status": "succeeded"
+      },
+      {
+        "actions": 164,
+        "capture_items_after": 3,
+        "capture_items_before": 3,
+        "checkpoint_sha256": "d639ebee7970f2b4fab3000973fc87bb4332fb6d99b52fd6967d6fd5912cfe1c",
+        "episode_id": "red-collection-20260911-bs-01-causal",
+        "frames": 13669,
+        "manifest_sha256": "09edd9dfd246a5dcdeb9a4cae96744538b48bffb00bfde43377d860a55a4b4c1",
+        "money_after": 1093,
+        "money_before": 543,
+        "proposed_source": "wild:PowerPlant:grass",
+        "registered_species": 70,
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "source_proposal_fitted": false,
+        "state_sha256": "a5f0fd2afc73ee1c51c89f375401efe58f93faa9baaaa85dba3a47679a292482",
+        "status": "succeeded"
+      },
+      {
+        "actions": 132,
+        "capture_items_after": 4,
+        "capture_items_before": 3,
+        "checkpoint_sha256": "61b0f0a44feb8a797eed157d457fe434caac0d9939923445326c9d1dc5f5abb0",
+        "episode_id": "red-collection-20260911-bs-02-causal",
+        "frames": 7632,
+        "manifest_sha256": "dcd15afa01e2fd80c012458eb2be84226f6bf6ddbd06d38314121ec42e3ceae7",
+        "money_after": 493,
+        "money_before": 1093,
+        "proposed_source": "wild:PowerPlant:grass",
+        "registered_species": 70,
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "source_proposal_fitted": false,
+        "state_sha256": "8cede5488e51c5bed392dee53ce7a319663cb5e1fc39971acfbd96e6585e295c",
+        "status": "succeeded"
+      },
+      {
+        "actions": 153,
+        "capture_items_after": 4,
+        "capture_items_before": 4,
+        "checkpoint_sha256": "d1f93b41db0faaa1cdd01af342aa6b92dfdcc1bee01302d62e08a4cf1d8c3c87",
+        "episode_id": "red-collection-20260911-bs-03-causal",
+        "frames": 5424,
+        "manifest_sha256": "938e4a2fe34b387c4cfb404c310e5c1e530092b36451eeac79e0280de32362f7",
+        "money_after": 493,
+        "money_before": 493,
+        "proposed_source": "wild:SeafoamIslandsB4F:grass",
+        "registered_species": 70,
+        "selected_kind": "restore_team",
+        "selection_mode": "authority",
+        "source_proposal_fitted": false,
+        "state_sha256": "e2f0221f8467caa5465ae73d5400bb59b5de439965a6055dc2c786140fbaaa05",
+        "status": "succeeded"
+      }
+    ]
+  },
+  "performance": {
+    "candidate_menu_preserved": true,
+    "fresh_inventory_seconds_after": 246.736,
+    "fresh_inventory_seconds_before": 257.442,
+    "improvement_percent": 4.2,
+    "menu_sha256": "1a56550b8449c6bfc0dfbae99aa2dd4b4256009beebbe1b0b3f37c1a9dd15779",
+    "scope": "input_free_exact_endpoint_measurement"
+  },
+  "limitations": [
+    "The learner selected high-level goals; deterministic code executed movement, menus, battles, evolution, purchases and healing.",
+    "The four related development outcomes are not an independent test or a fresh-game autonomous run.",
+    "Six regional sources were indistinguishable in the current policy features, so their deterministic proposals were not fitted as source-choice examples.",
+    "Complete Red registration, arbitrary-start reliability, Blue, ROM-hack and Crystal transfer remain unfinished."
+  ]
+}

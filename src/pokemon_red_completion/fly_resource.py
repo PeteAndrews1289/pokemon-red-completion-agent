@@ -374,6 +374,7 @@ class FuchsiaFlyArrivalReport:
             and (self.initial_raw.player_x, self.initial_raw.player_y) == (3, 3)
             and self.initial_raw.battle_state == 0
             and self.final_raw.map_id == MapId.FUCHSIA_CITY
+            and (self.final_raw.player_x, self.final_raw.player_y) == (19, 28)
             and self.final_raw.battle_state == 0
             and self.initial_raw.party_species_ids == self.final_raw.party_species_ids
             and self.initial_raw.first_party_moves == self.final_raw.first_party_moves

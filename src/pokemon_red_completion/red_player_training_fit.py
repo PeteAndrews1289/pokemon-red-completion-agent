@@ -16,11 +16,16 @@ from pokemon_red_completion.living_dex_option_value import (
     evaluate_living_dex_option_value,
     fit_living_dex_option_value,
     living_dex_option_train_dataset_sha256,
+    upgrade_option_value_model_for_economy,
     upgrade_option_value_model_for_optional_recovery,
     upgrade_option_value_model_for_search_history,
 )
 from pokemon_red_completion.private_artifacts import PrivateArtifactRoot
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_development_measured_choice import (
+    RedDevelopmentMeasuredChoiceInput,
+    load_red_development_measured_choice_example,
+)
 from pokemon_red_completion.red_player_model import (
     PLAYER_MODEL_SCHEMA,
     REGISTERED_PLAYER_MODEL_SCHEMA,
@@ -51,6 +56,7 @@ def fit_red_player_update(
     source_commit: str,
     source_bundle_sha256: str,
     regional_choices: tuple[RedRegionalChoiceInput, ...] = (),
+    measured_choices: tuple[RedDevelopmentMeasuredChoiceInput, ...] = (),
     registered_objective: bool = False,
 ) -> dict[str, object]:
     """Retain all prior rows; add only validated, executed sampled choices.
@@ -62,9 +68,14 @@ def fit_red_player_update(
     prior parameters provide behavior/comparison only, and later registered updates
     must retain their own prior rows. Regional labels require the matching
     explicit objective schema and reconstruct their actual terminal outcome.
+    Measured choices without an action trace are training-only and survive all fits.
     """
-    if not episodes or len({item.episode_id for item in episodes}) != len(episodes):
+    if (not episodes and not measured_choices) or len(
+        {item.episode_id for item in episodes}
+    ) != len(episodes):
         raise ValueError("native training episode inventory differs")
+    if len({item.choice_id for item in measured_choices}) != len(measured_choices):
+        raise ValueError("measured training choice inventory is duplicated")
     if (
         re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
@@ -108,7 +119,99 @@ def fit_red_player_update(
         for item in regional_choices
     )
     curriculum = tuple(row for dataset in datasets for row in dataset.curriculum_examples)
-    rows = (*base, *(row for dataset in datasets for row in dataset.examples), *regional_rows)
+    if measured_choices and not registered_objective:
+        raise ValueError("measured choices require the registered training objective")
+    incoming_measured = {item.choice_id: item for item in measured_choices}
+    prior_measured: list[RedDevelopmentMeasuredChoiceInput] = []
+    prior_measured_ids: set[str] = set()
+    if prior_registered:
+        assert isinstance(prior, RedPlayerModelRecord)
+        corpus_rec = store.find_sealed_record(
+            f"rp-corpus-{prior.corpus_sha256}", expected_kind="red_player_training_corpus"
+        )
+        if corpus_rec is None:
+            raise ValueError("prior registered corpus is missing")
+        corpus_data = corpus_rec.read()
+        if (
+            canonical_sha256(corpus_data) != prior.corpus_sha256
+            or corpus_data.get("schema") != "pokemon.red.registered-player-corpus.v1"
+            or corpus_data.get("objective") != REGISTERED_OBJECTIVE
+            or corpus_data.get("independent_evaluation") is not False
+        ):
+            raise ValueError("prior registered corpus binding differs")
+        measured_list = corpus_data.get("measured_choices", [])
+        if not isinstance(measured_list, list):
+            raise ValueError("prior measured choice inventory differs")
+        if bool(measured_list) != (
+            corpus_data.get("measured_choice_contract")
+            == {
+                "action_trace_available": False,
+                "authority_promotion_eligible": False,
+                "independent_evaluation": False,
+                "training_only": True,
+                "trust_tier": "development_measured_without_action_trace",
+            }
+        ):
+            raise ValueError("prior measured choice trust contract differs")
+        for raw_item in measured_list:
+            if not isinstance(raw_item, Mapping) or set(raw_item) != {
+                "choice_id",
+                "record_sha256",
+                "behavior_model_sha256",
+            }:
+                raise ValueError("prior measured choice inventory differs")
+            cid = raw_item.get("choice_id")
+            record_sha = raw_item.get("record_sha256")
+            behavior_sha = raw_item.get("behavior_model_sha256")
+            if (
+                not isinstance(cid, str)
+                or not cid
+                or cid in prior_measured_ids
+                or not isinstance(record_sha, str)
+                or re.fullmatch(r"[0-9a-f]{64}", record_sha) is None
+                or not isinstance(behavior_sha, str)
+                or re.fullmatch(r"[0-9a-f]{64}", behavior_sha) is None
+            ):
+                raise ValueError("prior measured choice inventory differs")
+            prior_measured_ids.add(cid)
+            incoming = incoming_measured.get(cid)
+            if incoming is not None:
+                if (
+                    incoming.record_sha256 != record_sha
+                    or incoming.behavior_record.model.model_sha256 != behavior_sha
+                ):
+                    raise ValueError("prior measured choice cannot be replaced")
+                continue
+            if prior.model.model_sha256 == behavior_sha:
+                behavior_record = prior
+            else:
+                model_record = store.find_sealed_record(
+                    f"rpr-model-{behavior_sha}", expected_kind="red_player_model"
+                )
+                if model_record is None:
+                    raise ValueError("prior measured choice behavior model is missing")
+                loaded_behavior = load_player_goal_model_record_bytes(
+                    model_record.read_bytes(), expected_model_sha256=behavior_sha
+                )
+                if not isinstance(loaded_behavior, RedPlayerModelRecord):
+                    raise ValueError("measured choice behavior model is not registered")
+                behavior_record = loaded_behavior
+            prior_measured.append(
+                RedDevelopmentMeasuredChoiceInput(cid, record_sha, behavior_record)
+            )
+    all_measured_choices = (*prior_measured, *measured_choices)
+    measured_rows = tuple(
+        load_red_development_measured_choice_example(store, item, objective=objective)
+        for item in all_measured_choices
+    )
+    if any(row.partition != "train" for row in measured_rows):
+        raise ValueError("measured choices must be training-only")
+    rows = (
+        *base,
+        *(row for dataset in datasets for row in dataset.examples),
+        *regional_rows,
+        *measured_rows,
+    )
     hashes = tuple(
         sorted(
             [canonical_sha256(row.public_dict()) for row in rows]
@@ -132,7 +235,7 @@ def fit_red_player_update(
         raise ValueError("native training has no additional settled experience")
     if registered_objective and settled_count < 2:
         raise ValueError("registered fitting needs two settled choices before publication")
-    corpus = {
+    corpus: dict[str, object] = {
         "schema": (
             "pokemon.red.registered-player-corpus.v1"
             if registered_objective
@@ -175,6 +278,23 @@ def fit_red_player_update(
             for item in regional_choices
         ]
         corpus_sha = canonical_sha256(corpus)
+    if all_measured_choices:
+        corpus["measured_choices"] = [
+            {
+                "choice_id": item.choice_id,
+                "record_sha256": item.record_sha256,
+                "behavior_model_sha256": item.behavior_record.model.model_sha256,
+            }
+            for item in all_measured_choices
+        ]
+        corpus["measured_choice_contract"] = {
+            "action_trace_available": False,
+            "authority_promotion_eligible": False,
+            "independent_evaluation": False,
+            "training_only": True,
+            "trust_tier": "development_measured_without_action_trace",
+        }
+        corpus_sha = canonical_sha256(corpus)
     corpus_record = store.publish_sealed_record(
         f"rp-corpus-{corpus_sha}", kind="red_player_training_corpus", record=corpus
     )
@@ -187,7 +307,9 @@ def fit_red_player_update(
         rows, feature_version=feature_version, curriculum_examples=curriculum
     )
     baseline_model = (
-        upgrade_option_value_model_for_optional_recovery(prior.model)
+        upgrade_option_value_model_for_economy(prior.model)
+        if feature_version == 4
+        else upgrade_option_value_model_for_optional_recovery(prior.model)
         if feature_version == 3
         else upgrade_option_value_model_for_search_history(prior.model)
         if feature_version == 2
@@ -256,6 +378,19 @@ def fit_red_player_update(
             else {}
         ),
         **({"regional_source_examples": len(regional_rows)} if regional_choices else {}),
+        **(
+            {
+                "measured_source_examples": len(measured_rows),
+                "new_measured_source_examples": len(
+                    {item.choice_id for item in all_measured_choices} - prior_measured_ids
+                ),
+                "measured_evidence_action_trace_available": False,
+                "measured_evidence_authority_promotions": 0,
+                "measured_evidence_independent_evaluations": 0,
+            }
+            if all_measured_choices
+            else {}
+        ),
     }
 
 
@@ -304,13 +439,18 @@ def _bootstrap_red_player_features(
     source_commit: str,
     source_bundle_sha256: str,
     optional_recovery: bool,
+    economy: bool = False,
 ) -> dict[str, object]:
-    allowed_versions = (1, 2) if optional_recovery else (1,)
+    from .registered_collection import REGISTERED_OBJECTIVE
+
+    allowed_versions = (3,) if economy else (1, 2) if optional_recovery else (1,)
     if (
         not isinstance(prior, RedPlayerModelRecord)
         or prior.model.feature_version not in allowed_versions
     ):
         raise ValueError("bootstrap requires a legacy native player record")
+    if economy and prior.objective != REGISTERED_OBJECTIVE:
+        raise ValueError("economy bootstrap requires the registered objective")
     if (
         re.fullmatch(r"[0-9a-f]{40}", source_commit) is None
         or re.fullmatch(r"[0-9a-f]{64}", source_bundle_sha256) is None
@@ -338,12 +478,14 @@ def _bootstrap_red_player_features(
     ):
         raise ValueError("history bootstrap corpus differs from retained model")
     model = (
-        upgrade_option_value_model_for_optional_recovery(prior.model)
+        upgrade_option_value_model_for_economy(prior.model)
+        if economy
+        else upgrade_option_value_model_for_optional_recovery(prior.model)
         if optional_recovery
         else upgrade_option_value_model_for_search_history(prior.model)
     )
     document = {
-        "schema": PLAYER_MODEL_SCHEMA,
+        "schema": REGISTERED_PLAYER_MODEL_SCHEMA if economy else PLAYER_MODEL_SCHEMA,
         "authority": "bounded_development_only",
         "model": model.to_dict(),
         "model_sha256": model.model_sha256,
@@ -352,9 +494,11 @@ def _bootstrap_red_player_features(
         "corpus_sha256": prior.corpus_sha256,
         "prior_model_sha256": prior.model.model_sha256,
         "retained_example_sha256": list(hashes),
+        **({"objective": REGISTERED_OBJECTIVE} if economy else {}),
     }
     record = store.publish_sealed_record(
-        f"rp-model-{model.model_sha256}", kind="red_player_model", record=document
+        f"{'rpr' if economy else 'rp'}-model-{model.model_sha256}",
+        kind="red_player_model", record=document
     )
     loaded = load_player_goal_model_record_bytes(
         record.read_bytes(), expected_model_sha256=model.model_sha256
@@ -371,7 +515,15 @@ def _bootstrap_red_player_features(
         "history_effect_learned": False,
         "authority_promotions": 0,
     }
-    if optional_recovery:
+    if economy:
+        report.update({
+            "schema": "pokemon.red.economy-bootstrap.v1",
+            "initialization": "retained-head-with-zero-economy-coefficients",
+            "economy_effect_learned": False,
+        })
+        del report["unknown_history_examples"]
+        del report["history_effect_learned"]
+    elif optional_recovery:
         report.update(
             {
                 "schema": "pokemon.red.optional-recovery-bootstrap.v1",
@@ -382,3 +534,18 @@ def _bootstrap_red_player_features(
         del report["unknown_history_examples"]
         del report["history_effect_learned"]
     return report
+
+
+def bootstrap_red_player_economy(
+    store: PrivateArtifactRoot, *, prior: RedPlayerModelRecord,
+    source_commit: str, source_bundle_sha256: str,
+) -> dict[str, object]:
+    """Preserve registered history while enabling prospective cash observations.
+
+    The six new inputs have zero weights and the economy head is absent. This
+    creates no new examples or learned income effect; it is not model fitting.
+    """
+    return _bootstrap_red_player_features(
+        store, prior=prior, source_commit=source_commit,
+        source_bundle_sha256=source_bundle_sha256, optional_recovery=False, economy=True,
+    )

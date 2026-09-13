@@ -145,6 +145,9 @@ from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
     continue_red_player_training,
     declare_red_player_training,
 )
+from pokemon_red_completion.red_regional_goal_proposal import (  # noqa: E402
+    load_regional_proposal_profile,
+)
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter  # noqa: E402
 from pokemon_red_completion.red_trajectory import (  # noqa: E402
     PokemonRedObservationEncoder,
@@ -211,12 +214,14 @@ class _Readiness:
     restore_profile: RedGoalContextProfile | None = None
     restore_completion_dose: bool = False
     restore_routed_recovery: bool = False
+    restore_routed_storage_relief: bool = False
     restore_trainer_funding: bool = False
     restore_trainer_pending_recovery: bool = False
     restore_regional_trainer_funding: bool = False
     restore_observed_trainer_funding: bool = False
     completion_dose: bool = False
     routed_recovery: bool = False
+    routed_storage_relief: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
@@ -227,6 +232,8 @@ class _Readiness:
     restore_remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
     restore_level_evolution_acquisitions: bool = False
+    fossil_acquisitions: bool = False
+    restore_fossil_acquisitions: bool = False
     forward_story_objective: str | None = None
     forward_resource_budget: int | None = None
     registration_policy: Any = None
@@ -289,6 +296,7 @@ class _LiveObserver:
     search_memory: GoalSearchMemory | None = None
     completion_dose: bool = False
     routed_recovery: bool = False
+    routed_storage_relief: bool = False
     trainer_funding: bool = False
     trainer_pending_recovery: bool = False
     regional_trainer_funding: bool = False
@@ -296,6 +304,7 @@ class _LiveObserver:
     retain_quantum: Callable[[], None] | None = None
     remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
+    fossil_acquisitions: bool = False
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -319,12 +328,22 @@ class _LiveObserver:
             self.quote_resource_costs,
             completion_dose=self.completion_dose,
             routed_recovery=self.routed_recovery,
+            **(
+                {"routed_storage_relief": True}
+                if self.routed_storage_relief
+                else {}
+            ),
             trainer_funding=self.trainer_funding,
             trainer_pending_recovery=self.trainer_pending_recovery,
             regional_trainer_funding=self.regional_trainer_funding,
             observed_trainer_funding=self.observed_trainer_funding,
             remaining_acquisition_demand=self.remaining_acquisition_demand,
             level_evolution_acquisitions=self.level_evolution_acquisitions,
+            **(
+                {"fossil_acquisitions": True}
+                if self.fossil_acquisitions
+                else {}
+            ),
             retain_quantum=self.retain_quantum,
         )
         bridge.search_memory = self.search_memory
@@ -354,6 +373,8 @@ def _player_observer(
     observed_trainer_funding: bool = False,
     remaining_acquisition_demand: bool = False,
     level_evolution_acquisitions: bool = False,
+    fossil_acquisitions: bool = False,
+    routed_storage_relief: bool = False,
     retain_quantum: Callable[[], None] | None = None,
     forward_story_only: bool = False,
 ) -> RedBoundedPlayerObserver:
@@ -385,6 +406,10 @@ def _player_observer(
         )
     elif getattr(runtime, "level_evolution_acquisition_edges", ()):
         runtime = replace(runtime, level_evolution_acquisition_edges=())
+    if type(fossil_acquisitions) is not bool or (
+        fossil_acquisitions and (not remaining_acquisition_demand or world is None)
+    ):
+        raise PairedRedBoundedPlayerRunError("fossil_acquisitions_scope")
     if world is not None and any(
         s.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION for s in runtime.profile.providers
     ):
@@ -406,6 +431,7 @@ def _player_observer(
             world,
             quote_resource_costs=quote_resource_costs,
             prepare_capture_storage=completion_dose,
+            routed_storage_relief=routed_storage_relief,
             routed_recovery=routed_recovery,
             trainer_funding=trainer_funding,
             trainer_pending_recovery=trainer_pending_recovery,
@@ -416,12 +442,43 @@ def _player_observer(
         )
     )
 
-    def enumerate_forward(observation: Any) -> Any:
+    def enumerate_all(observation: Any) -> Any:
         bindings = (
             runtime.enumerator(actions).enumerate(observation)
             if router is None
             else router.enumerate(observation)
         )
+        if fossil_acquisitions:
+            from pokemon_red_completion.red_fossil_acquisition import (
+                RedFossilGoalProvider,
+                RedRoutedFossilRevival,
+                available_red_fossil_targets,
+                bind_available_fossil_acquisition,
+            )
+
+            targets = available_red_fossil_targets(runtime.reader)
+            if len(targets) > 1:
+                raise PairedRedBoundedPlayerRunError("ambiguous_fossil_acquisition")
+            binding = None
+            if targets:
+                assert world is not None
+                skill = RedRoutedFossilRevival(
+                    actions,
+                    runtime.reader,
+                    runtime.emulator,
+                    world,
+                )
+                binding = RedFossilGoalProvider(
+                    targets[0],
+                    runtime.adapter,
+                    runtime.reader,
+                    skill,
+                ).binding(observation)
+            bindings = bind_available_fossil_acquisition(bindings, binding)
+        return bindings
+
+    def enumerate_forward(observation: Any) -> Any:
+        bindings = enumerate_all(observation)
         _require_forward_binding_scope(bindings, runtime.profile)
         return bindings
 
@@ -431,6 +488,8 @@ def _player_observer(
         enumerate_bindings=(
             enumerate_forward
             if forward_story_only
+            else enumerate_all
+            if fossil_acquisitions
             else None
             if router is None
             else router.enumerate
@@ -552,6 +611,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--training-seed", type=int, default=None)
     parser.add_argument("--registered-ledger", type=Path, default=None)
     parser.add_argument("--registration-session", default=None)
+    parser.add_argument("--economy-training", action="store_true",
+                        help="Opt in to recorded cash outcomes with a feature-v4 model.")
     parser.add_argument("--registration-run-id", default=None)
     parser.add_argument(
         "--remaining-acquisition-demand",
@@ -564,9 +625,19 @@ def _parser() -> argparse.ArgumentParser:
         help="offer spare-precursor captures using cartridge level rules and actual living stock",
     )
     parser.add_argument(
+        "--fossil-acquisitions",
+        action="store_true",
+        help="offer an observed held fossil through the reusable Cinnabar revival mechanic",
+    )
+    parser.add_argument(
         "--routed-recovery",
         action="store_true",
         help="enable guarded walking-to-Center recovery after verified continuation restore",
+    )
+    parser.add_argument(
+        "--routed-storage-relief",
+        action="store_true",
+        help="offer guarded PC box switching when the active capture box is full",
     )
     parser.add_argument(
         "--trainer-funding",
@@ -624,6 +695,14 @@ def _parser() -> argparse.ArgumentParser:
         action="append_const",
         const="indoor-fly-departure",
         help="prospective indoor departure before Fly; preserves prior checkpoint menus",
+    )
+    parser.add_argument(
+        "--resupply-fly-transport", dest="regional_transitions", action="append_const",
+        const="resupply-fly", help="opt future Mart supply into observed indoor exit and Fly",
+    )
+    parser.add_argument(
+        "--dig-recovery", dest="regional_transitions", action="append_const",
+        const="dig-recovery", help="opt future recovery into observed legal Dig escape",
     )
     parser.add_argument(
         "--capture-surf-transport", dest="regional_transitions", action="append_const",
@@ -712,6 +791,28 @@ def _parser() -> argparse.ArgumentParser:
         help="explicit cash-only bounded ball purchases; no sale or increased batch cap",
     )
     parser.add_argument("--expected-training-catalog-sha256", default=None)
+    parser.add_argument(
+        "--resource-choice-variants", dest="regional_transitions", action="append_const",
+        const="resource-choice-variants",
+        help="explicit useful-reserve earning choice beside an affordable capture purchase",
+    )
+    parser.add_argument(
+        "--composable-trainer-funding",
+        dest="regional_transitions",
+        action="append_const",
+        const="composable-trainer-funding",
+        help="allow multiple finite trainer payouts to compose toward a capture reserve",
+    )
+    parser.add_argument(
+        "--mart-funding-departure", dest="regional_transitions", action="append_const",
+        const="mart-funding-departure",
+        help="explicit observed exit from the declared Mart for bounded trainer funding",
+    )
+    parser.add_argument(
+        "--funding-fly-transport", dest="regional_transitions", action="append_const",
+        const="funding-fly",
+        help="explicit observed Fly to bounded ordinary trainer income; not a League replay",
+    )
     parser.add_argument(
         "--context-origin",
         choices=("training", "development", "unspecified"),
@@ -905,12 +1006,27 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         and (not remaining_acquisition_demand or not getattr(args, "routed_resource_goals", False))
     ):
         raise PairedRedBoundedPlayerRunError("level_evolution_acquisitions_scope")
+    fossil_acquisitions = getattr(args, "fossil_acquisitions", False)
+    if type(fossil_acquisitions) is not bool or (
+        fossil_acquisitions
+        and (
+            not remaining_acquisition_demand
+            or not getattr(args, "routed_resource_goals", False)
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("fossil_acquisitions_scope")
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
         routed_recovery
         and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
+    routed_storage_relief = getattr(args, "routed_storage_relief", False)
+    if type(routed_storage_relief) is not bool or (
+        routed_storage_relief
+        and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
+    ):
+        raise PairedRedBoundedPlayerRunError("routed_storage_relief_scope")
     trainer_funding = getattr(args, "trainer_funding", False)
     regional_trainer_funding = getattr(args, "regional_trainer_funding", False)
     if type(regional_trainer_funding) is not bool or (
@@ -1056,7 +1172,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             args.training_catalog, subject="training_catalog", rom_path=rom_path
         )
         training_plan = declare_red_player_training(
-            feature_version=causal_record.model.feature_version if causal_record is not None else 1,
+            feature_version=(min(3, causal_record.model.feature_version)
+                if causal_record is not None and getattr(args, "economy_training", False)
+                else causal_record.model.feature_version if causal_record is not None else 1),
             repository_root=PROJECT_ROOT,
             catalog_path=catalog_path,
             expected_catalog_sha256=args.expected_training_catalog_sha256,
@@ -1086,12 +1204,14 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         training_plan=training_plan,
         completion_dose=completion_dose,
         routed_recovery=routed_recovery,
+        routed_storage_relief=routed_storage_relief,
         trainer_funding=trainer_funding,
         trainer_pending_recovery=trainer_pending_recovery,
         regional_trainer_funding=regional_trainer_funding,
         observed_trainer_funding=observed_trainer_funding,
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
+        fossil_acquisitions=fossil_acquisitions,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1198,7 +1318,28 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         forward_resource_budget=getattr(args, "forward_resource_budget", None),
     )
     _forward_goal_plan(readiness)  # Validate the opt-in before any execution claim.
-    return _prepare_registration(readiness, args)
+    readiness = _prepare_registration(readiness, args)
+    if getattr(args, "economy_training", False):
+        from pokemon_red_completion.living_dex_player_exploration import (
+            ECONOMY_EXPLORATION_POLICY_ID,
+        )
+        from pokemon_red_completion.red_player_economy import supply_from_profile
+        from pokemon_red_completion.red_player_training_plan import (
+            ECONOMY_TRAINING_PLAN_SCHEMA,
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+        )
+
+        if (readiness.training_plan is None
+                or readiness.training_plan.document["schema"] != REGISTERED_TRAINING_PLAN_SCHEMA
+                or readiness.causal_record is None
+                or readiness.causal_record.model.feature_version != 4):
+            raise ValueError("economy training requires a registered continuation and v4 model")
+        supply = supply_from_profile(readiness.profile)
+        readiness = replace(readiness, training_plan=RedPlayerTrainingPlan({
+            **readiness.training_plan.document, "schema": ECONOMY_TRAINING_PLAN_SCHEMA,
+            "behavior_policy_id": ECONOMY_EXPLORATION_POLICY_ID, **supply.plan_fields(),
+        }))
+    return readiness
 
 
 def _registered_runtime(
@@ -1559,11 +1700,17 @@ def _regional_profiles(
                 "capture-fly",
                 "capture-cut",
                 "capture-surf",
+                "resupply-fly",
+                "dig-recovery",
                 "indoor-fly-departure",
                 "observed-local-capture",
                 "travel-capture",
                 "capture-access-requirements",
                 "affordable-capture-supply",
+                "resource-choice-variants",
+                "composable-trainer-funding",
+                "mart-funding-departure",
+                "funding-fly",
                 "cartridge-trainer-story",
                 "cartridge-trainer-story:bruno",
                 "cartridge-trainer-story:agatha",
@@ -1597,6 +1744,18 @@ def _regional_profiles(
         if warp_safe:
             assert isinstance(source, str)
             source = source.removeprefix("warp-safe:")
+        if source == "resupply-fly":
+            from pokemon_red_completion.red_goal_context_profile import bind_resupply_fly_profile
+
+            profile = bind_resupply_fly_profile(profile)
+            result.append(profile)
+            continue
+        if source == "dig-recovery":
+            from pokemon_red_completion.red_goal_context_profile import bind_dig_recovery_profile
+
+            profile = bind_dig_recovery_profile(profile)
+            result.append(profile)
+            continue
         if source == "capture-surf":
             from pokemon_red_completion.red_goal_context_profile import bind_capture_surf_profile
 
@@ -1749,6 +1908,50 @@ def _regional_profiles(
             profile = bind_affordable_ball_supply_profile(profile)
             result.append(profile)
             continue
+        if source == "resource-choice-variants":
+            from pokemon_red_completion.red_goal_context_profile import bind_resource_choice_profile
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "resource_variants_require_registered_objective",
+                )
+            profile = bind_resource_choice_profile(profile)
+            result.append(profile)
+            continue
+        if source == "composable-trainer-funding":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_composable_trainer_funding_profile,
+            )
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "composable_funding_requires_registered_objective",
+                )
+            profile = bind_composable_trainer_funding_profile(profile)
+            result.append(profile)
+            continue
+        if source == "funding-fly":
+            from pokemon_red_completion.red_goal_context_profile import bind_funding_fly_profile
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "funding_fly_requires_registered_objective",
+                )
+            profile = bind_funding_fly_profile(profile)
+            result.append(profile)
+            continue
+        if source == "mart-funding-departure":
+            from pokemon_red_completion.red_goal_context_profile import (
+                bind_mart_funding_departure_profile,
+            )
+
+            if not allow_cartridge_sources:
+                raise PairedRedBoundedPlayerRunError(
+                    "mart_funding_requires_registered_objective",
+                )
+            profile = bind_mart_funding_departure_profile(profile)
+            result.append(profile)
+            continue
         if source == "capture-status":
             from pokemon_red_completion.red_living_dex_wild_corridor import (
                 bind_red_capture_status_profile,
@@ -1828,6 +2031,7 @@ def _continue_readiness(
 ) -> _Readiness:
     """Authenticate each completed ancestor without inventing an independent root."""
     seen: set[str] = set()
+    terminal_model_sha256: object = None
     admitted_profiles = tuple(
         p
         for p in (readiness.profile, expanded_profile, execution_profile, *regional_profiles)
@@ -1841,20 +2045,51 @@ def _continue_readiness(
         episode = readiness.private_root.open_episode(episode_id)
         header = episode.read_header()
         metadata = header.get("metadata")
+        proposal_profile = None
         if isinstance(metadata, Mapping):
+            terminal_model_sha256 = metadata.get("model_sha256")
+            proposal_sha256 = metadata.get("regional_proposal_record_sha256")
+            if proposal_sha256 is not None:
+                if not isinstance(proposal_sha256, str):
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    )
+                parent_plan = metadata.get("player_training_plan")
+                if not isinstance(parent_plan, Mapping):
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    )
+                try:
+                    proposal_profile = load_regional_proposal_profile(
+                        readiness.private_root,
+                        episode_id,
+                        proposal_sha256,
+                        expected_parent_plan=parent_plan,
+                    )
+                except ValueError as error:
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_binding"
+                    ) from error
+                if metadata.get("profile_sha256") != proposal_profile.profile_sha256:
+                    raise PairedRedBoundedPlayerRunError(
+                        "continuation_regional_proposal_profile"
+                    )
             matches = [
                 index
                 for index, candidate in enumerate(admitted_profiles)
                 if metadata.get("profile_sha256") == candidate.profile_sha256
             ]
             forward = [index for index in matches if index >= profile_index]
-            if matches and not forward:
-                raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
             if forward:
-                # Explicitly declared revisits are valid; an undeclared rollback
-                # is not. Repeated hashes must match the remaining ordered suffix.
+                # Static transitions still advance monotonically. A profile
+                # committed in this episode's proposal is an explicit
+                # transition and need not occupy the static transition list.
                 profile_index = forward[0]
                 readiness = replace(readiness, profile=admitted_profiles[profile_index])
+            elif proposal_profile is not None:
+                readiness = replace(readiness, profile=proposal_profile)
+            elif matches:
+                raise PairedRedBoundedPlayerRunError("continuation_profile_rollback")
         checkpoint = open_red_player_checkpoint(
             readiness.private_root,
             episode_id=episode_id,
@@ -1890,20 +2125,27 @@ def _continue_readiness(
             continuation=checkpoint,
             restore_registration_record_id=cast(
                 str | None,
-                cast(Mapping[str, object], metadata).get("registration_session_record_id"),
+                cast(Mapping[str, object], metadata).get(
+                    "registration_session_record_id",
+                    readiness.restore_registration_record_id,
+                ),
             ),
             restore_completion_dose=_checkpoint_completion_dose(header),
             restore_routed_recovery=_checkpoint_routed_recovery(header),
+            restore_routed_storage_relief=_checkpoint_routed_storage_relief(header),
             restore_trainer_funding=_checkpoint_trainer_funding(header),
             restore_trainer_pending_recovery=_checkpoint_trainer_pending_recovery(header),
             restore_regional_trainer_funding=_checkpoint_regional_trainer_funding(header),
             restore_observed_trainer_funding=_checkpoint_observed_trainer_funding(header),
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
+            restore_fossil_acquisitions=_checkpoint_fossil_acquisitions(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
     if chain:
+        if terminal_model_sha256 != readiness.model_sha256:
+            raise PairedRedBoundedPlayerRunError("continuation_terminal_model")
         if readiness.restore_regional_trainer_funding and not readiness.regional_trainer_funding:
             raise PairedRedBoundedPlayerRunError("regional_trainer_funding_rollback")
         if readiness.restore_observed_trainer_funding and not readiness.observed_trainer_funding:
@@ -1920,6 +2162,13 @@ def _continue_readiness(
             and not readiness.remaining_acquisition_demand
         ):
             raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_rollback")
+        if readiness.restore_fossil_acquisitions and not readiness.fossil_acquisitions:
+            raise PairedRedBoundedPlayerRunError("fossil_acquisitions_rollback")
+        if (
+            readiness.restore_routed_storage_relief
+            and not readiness.routed_storage_relief
+        ):
+            raise PairedRedBoundedPlayerRunError("routed_storage_relief_rollback")
         readiness = replace(
             readiness,
             restore_profile=readiness.profile,
@@ -1955,6 +2204,20 @@ def _checkpoint_remaining_acquisition_demand(header: Mapping[str, object]) -> bo
     return enabled
 
 
+def _checkpoint_fossil_acquisitions(header: Mapping[str, object]) -> bool:
+    """Preserve explicit fossil capability across continued checkpoints."""
+
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("fossil_acquisitions", False)
+    if type(enabled) is not bool or (
+        enabled and not _checkpoint_remaining_acquisition_demand(header)
+    ):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_fossil_acquisitions")
+    return enabled
+
+
 def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
     """Old endpoints use old opportunity menus; new ones retain their opt-in."""
     metadata = header.get("metadata")
@@ -1963,6 +2226,19 @@ def _checkpoint_routed_recovery(header: Mapping[str, object]) -> bool:
     enabled = metadata.get("routed_recovery", False)
     if type(enabled) is not bool:
         raise PairedRedBoundedPlayerRunError("continuation_parent_routed_recovery")
+    return enabled
+
+
+def _checkpoint_routed_storage_relief(header: Mapping[str, object]) -> bool:
+    """Preserve explicit full-box recovery across continued checkpoints."""
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("routed_storage_relief", False)
+    if type(enabled) is not bool:
+        raise PairedRedBoundedPlayerRunError(
+            "continuation_parent_routed_storage_relief"
+        )
     return enabled
 
 
@@ -2022,6 +2298,7 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import (
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     )
 
@@ -2056,6 +2333,7 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     return parsed.document["schema"] in {
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     }
 
@@ -2097,6 +2375,9 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         readiness.quote_resource_costs,
         completion_dose=getattr(readiness, "restore_completion_dose", False),
         routed_recovery=getattr(readiness, "restore_routed_recovery", False),
+        routed_storage_relief=getattr(
+            readiness, "restore_routed_storage_relief", False
+        ),
         trainer_funding=getattr(readiness, "restore_trainer_funding", False),
         trainer_pending_recovery=getattr(readiness, "restore_trainer_pending_recovery", False),
         regional_trainer_funding=getattr(readiness, "restore_regional_trainer_funding", False),
@@ -2109,6 +2390,11 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
         level_evolution_acquisitions=getattr(
             readiness,
             "restore_level_evolution_acquisitions",
+            False,
+        ),
+        fossil_acquisitions=getattr(
+            readiness,
+            "restore_fossil_acquisitions",
             False,
         ),
     )
@@ -2313,12 +2599,14 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             readiness.quote_resource_costs,
             completion_dose=readiness.completion_dose,
             routed_recovery=readiness.routed_recovery,
+            routed_storage_relief=getattr(readiness, "routed_storage_relief", False),
             trainer_funding=getattr(readiness, "trainer_funding", False),
             trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
             regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
             observed_trainer_funding=getattr(readiness, "observed_trainer_funding", False),
             remaining_acquisition_demand=getattr(readiness, "remaining_acquisition_demand", False),
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
+            fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
             forward_story_only=getattr(readiness, "forward_story_objective", None) is not None,
         )
         # Preview the same prospective history as the actor. Historical restore
@@ -2501,6 +2789,11 @@ def _run_arm(
                 ),
                 "routed_resource_goals": readiness.routed_resource_goals,
                 "routed_recovery": readiness.routed_recovery,
+                **(
+                    {"routed_storage_relief": True}
+                    if getattr(readiness, "routed_storage_relief", False)
+                    else {}
+                ),
                 "trainer_funding": getattr(readiness, "trainer_funding", False),
                 "trainer_pending_recovery": getattr(readiness, "trainer_pending_recovery", False),
                 "regional_trainer_funding": getattr(readiness, "regional_trainer_funding", False),
@@ -2513,6 +2806,11 @@ def _run_arm(
                 **(
                     {"level_evolution_acquisitions": True}
                     if readiness.level_evolution_acquisitions
+                    else {}
+                ),
+                **(
+                    {"fossil_acquisitions": True}
+                    if getattr(readiness, "fossil_acquisitions", False)
                     else {}
                 ),
                 "quote_resource_costs": readiness.quote_resource_costs,
@@ -2595,12 +2893,16 @@ def _run_arm(
                 search_memory=search_memory,
                 completion_dose=readiness.completion_dose,
                 routed_recovery=readiness.routed_recovery,
+                routed_storage_relief=getattr(
+                    readiness, "routed_storage_relief", False
+                ),
                 trainer_funding=getattr(readiness, "trainer_funding", False),
                 trainer_pending_recovery=getattr(readiness, "trainer_pending_recovery", False),
                 regional_trainer_funding=getattr(readiness, "regional_trainer_funding", False),
                 observed_trainer_funding=getattr(readiness, "observed_trainer_funding", False),
                 remaining_acquisition_demand=readiness.remaining_acquisition_demand,
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
+                fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
             )
             if forward_probe is not None:
@@ -2670,6 +2972,21 @@ def _run_arm(
             )
             if forward is not None:
                 training_kwargs["forward"] = forward
+            if readiness.training_plan is not None:
+                from pokemon_red_completion.red_player_training_plan import (
+                    ECONOMY_TRAINING_PLAN_SCHEMA,
+                )
+
+                if readiness.training_plan.document["schema"] == ECONOMY_TRAINING_PLAN_SCHEMA:
+                    from pokemon_red_completion.red_player_economy import (
+                        PlayerEconomySupply,
+                        supply_from_profile,
+                    )
+
+                    supply = PlayerEconomySupply.from_plan(readiness.training_plan.document)
+                    if supply != supply_from_profile(runtime.profile):
+                        raise ValueError("live supply profile differs from economy declaration")
+                    training_kwargs["economy_supply"] = supply
             if readiness.continuation is not None and not readiness.continuation_root_lineage_id:
                 raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(

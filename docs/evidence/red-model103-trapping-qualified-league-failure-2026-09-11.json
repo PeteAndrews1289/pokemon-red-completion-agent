@@ -1,0 +1,54 @@
+{
+  "schema": "pokemon.red.model103-league-development-successor-public-evidence.v1",
+  "date": "2026-09-11",
+  "status": "failed_retained_no_retry",
+  "published_source": "4d883152ccba4b3c0a84150c7de5e5e4e1f1efd9",
+  "github_ci_run": 34668075588,
+  "github_ci_attempt": 1,
+  "github_ci_conclusion": "success",
+  "source_bundle_sha256": "33e29f4715e379e60fca6673154238eaf1caf93163fd7b50807f995fa94882e9",
+  "model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+  "initial_state_sha256": "4ce46bc10bb34fce4f91ea76a79f097b2672d09c9f6f16ee783fbb65d1d63029",
+  "terminal_state_sha256": "3d7d58e0c12e83489f021a20aa9da905019398245f89a87324548b05bf2a31f0",
+  "execution": {
+    "actions": 298,
+    "frames": 25812,
+    "starting_money": 553,
+    "ending_money": 378,
+    "observed_cash_delta": -175,
+    "completed_battles": 0,
+    "completed_battle_ids": [],
+    "party_members_alive": 6,
+    "phase": "battle:defeat_lorelei",
+    "failure_stage": "lorelei_cloyster_main_menu",
+    "failure_reason": "current confusion combined with an available damaging stat-reduction move lacks a qualified same-turn bound",
+    "supply_transaction_verified": true,
+    "trapping_bound_reached_live_control": true
+  },
+  "terminal_diagnostic": {
+    "actions": 0,
+    "frames": 0,
+    "active_party_index": 0,
+    "active_party_hp": 241,
+    "active_self_hit_attack": 139,
+    "active_self_hit_defense": 261,
+    "player_confused": true,
+    "party_hp": [241, 154, 120, 118, 131, 73],
+    "enemy_species_id": 139,
+    "enemy_level": 53,
+    "enemy_hp": 61,
+    "enemy_move_ids": [48, 128, 62, 131]
+  },
+  "learning_delta": {
+    "training_examples": 0,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registered_species": 0,
+    "specimens": 0
+  },
+  "verified_conclusion": "The trapping repair crossed its previous live stop and allowed useful attacks, but the development successor exposed a separate compound-status safety gap before Lorelei completed. The result does not establish a League funding cycle or trained battle authority.",
+  "next_falsifier": "A pinned cartridge analysis cannot establish a conservative confusion-plus-damaging-debuff commitment that preserves strict HP safety without species-specific or route-specific exceptions.",
+  "retry_authorized": false
+}

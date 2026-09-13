@@ -1,5 +1,8 @@
 # Cross-game transfer plan
 
+> **Future qualification plan.** Red sustained play and registered collection are the active lane.
+> The Crystal V3 design below remains frozen for later use and has opened no Crystal evidence.
+
 ## What “understands how to play” means
 
 Understanding is an evaluated capability, not a description of model internals. A player shows
@@ -12,7 +15,7 @@ product is the shared hierarchy plus thin title/revision adapters.
 
 ## First prospective cross-title experiment
 
-The active first test is Crystal V3:
+The frozen Crystal test design is V3:
 [`crystal-goal-manager-transfer-v3.json`](../configs/crystal-goal-manager-transfer-v3.json), SHA-256
 `1df5dcff58723e75788aa1f61a86d058fd2c2fd738618f072f470f28fb5bdd6a`.
 It remains review-gated and authorizes no private context access.

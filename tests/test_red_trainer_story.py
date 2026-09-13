@@ -15,7 +15,7 @@ from pokemon_red_completion.gen1_trainer_sight import TrainerFacing, TrainerSigh
 from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
-from pokemon_red_completion.observation import CurrentMapBlocks, MapId
+from pokemon_red_completion.observation import CurrentMapBlocks, EventFlag, MapId
 from pokemon_red_completion.red_goal_context import _build_provider
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalContextProfileError,
@@ -45,6 +45,46 @@ def test_scripted_entry_prefix_stops_before_dialogue_without_weakening_route_suc
                              (((2, 6),), TrainerFacing.DOWN)]:
         with pytest.raises(story.RedTrainerStoryError):
             story._before_scripted_interaction(plan, triggers, facing)
+
+
+def _with_events(*events):
+    flags = bytearray(320)
+    for event in events:
+        flags[int(event) // 8] |= 1 << (int(event) % 8)
+    return replace(_raw(), event_flags=bytes(flags))
+
+
+@pytest.mark.parametrize(
+    "objective,prior,targets",
+    [
+        ("defeat_lorelei", None, (EventFlag.BEAT_LORELEI,)),
+        ("defeat_bruno", EventFlag.BEAT_LORELEI, (EventFlag.BEAT_BRUNO,)),
+        ("defeat_agatha", EventFlag.BEAT_BRUNO, (EventFlag.BEAT_AGATHA,)),
+        (
+            "defeat_lance",
+            EventFlag.BEAT_AGATHA,
+            (EventFlag.BEAT_LANCES_ROOM_TRAINER, EventFlag.BEAT_LANCE),
+        ),
+    ],
+)
+def test_rematch_boundaries_use_live_cycle_flags_not_historical_facts(
+    objective, prior, targets,
+):
+    prerequisites = () if prior is None else (prior,)
+    before = _with_events(*prerequisites)
+    assert story._live_rematch_boundary(before, objective)
+    assert not story._live_rematch_completed(before, objective)
+    after = _with_events(*prerequisites, *targets)
+    assert not story._live_rematch_boundary(after, objective)
+    assert story._live_rematch_completed(after, objective)
+    if prior is not None:
+        assert not story._live_rematch_boundary(_with_events(), objective)
+
+
+def test_lance_rematch_completion_requires_both_script_events():
+    partial = _with_events(EventFlag.BEAT_AGATHA, EventFlag.BEAT_LANCES_ROOM_TRAINER)
+    assert not story._live_rematch_boundary(partial, "defeat_lance")
+    assert not story._live_rematch_completed(partial, "defeat_lance")
 
 
 def test_profile_opt_in_preserves_other_skills_and_reaches_the_real_factory():
@@ -114,6 +154,65 @@ def test_changed_prepared_controller_refuses_without_input(fixture):
     assert skill.availability(observe().game_state).executable
     skill.recovery_controller = 'ordinary-bounded-healing'
     with pytest.raises(story.RedTrainerStoryError, match='before input'):
+        skill.execute()
+    assert not inputs
+
+
+def test_lance_risk_contract_builds_the_explicit_two_intent_controller():
+    reader = SimpleNamespace()
+    skill = story.RedCartridgeLoreleiSkill(
+        SimpleNamespace(emulator=object()),
+        CountingExecutor(object()),
+        None,
+        objective_id="defeat_lance",
+        recovery_controller="bounded-critical-risk",
+        maximum_critical_exposures=2,
+    )
+    controller = skill._battle_controller(reader)
+    assert isinstance(controller, story.RedTrainerRiskController)
+    assert controller.maximum_critical_exposures == 2
+    assert controller.maximum_full_restores == 0
+
+
+@pytest.mark.parametrize(
+    "objective,mode,risk_budget,restore_budget",
+    [
+        ("defeat_lorelei", "bounded-critical-risk", 2, 0),
+        ("defeat_lance", "bounded-critical-risk", 1, 0),
+        ("defeat_lance", "bounded-critical-risk", 2, 1),
+        ("defeat_lance", "damage-bounded-zero-item", 2, 0),
+    ],
+)
+def test_critical_risk_authority_is_narrowly_bound_to_lance(
+    objective, mode, risk_budget, restore_budget,
+):
+    with pytest.raises(story.RedTrainerStoryError, match="risk controller budget"):
+        story.RedCartridgeLoreleiSkill(
+            SimpleNamespace(),
+            CountingExecutor(object()),
+            None,
+            objective_id=objective,
+            recovery_controller=mode,
+            maximum_critical_exposures=risk_budget,
+            maximum_full_restores=restore_budget,
+        )
+
+
+def test_mutated_risk_contract_refuses_during_availability_without_input(fixture):
+    skill, _, inputs, observe, _ = fixture
+    skill.recovery_controller = "bounded-critical-risk"
+    skill.maximum_critical_exposures = 2
+    available = skill.availability(observe().game_state)
+    assert not available.executable
+    assert "critical-risk controller budget" in available.reason
+    assert not inputs
+
+
+def test_changed_prepared_rematch_mode_refuses_without_input(fixture):
+    skill, _, inputs, observe, _ = fixture
+    assert skill.availability(observe().game_state).executable
+    skill.rematch = True
+    with pytest.raises(story.RedTrainerStoryError, match="before input"):
         skill.execute()
     assert not inputs
 
@@ -192,6 +291,30 @@ def test_goal_availability_is_action_free_and_prepares_the_shortest_real_target(
     assert target.approach.terminal_at == (3, 5)
     assert target.interaction_facing is TrainerFacing.UP
     assert len(target.approach.steps) == 1
+
+
+def test_rematch_availability_accepts_latched_history_with_fresh_live_lorelei(fixture):
+    old, _, inputs, observe, _ = fixture
+
+    def historical():
+        current = observe()
+        return replace(
+            current,
+            game_state=replace(
+                current.game_state,
+                facts=current.game_state.facts | {"league:lorelei_defeated"},
+            ),
+        )
+
+    old.runtime.adapter.observe = historical
+    ordinary = story.RedCartridgeLoreleiSkill(old.runtime, old.actions, old.world)
+    rematch = story.RedCartridgeLoreleiSkill(
+        old.runtime, old.actions, old.world, rematch=True,
+    )
+    state = historical().game_state
+    assert not ordinary.availability(state).executable
+    assert rematch.availability(state).executable
+    assert not inputs
 
 
 @pytest.mark.parametrize("fault", [None, "prerequisite", "lobby", "completed", "wrong_trainer"])
@@ -474,19 +597,36 @@ def test_stale_selected_story_refuses_before_input(fixture):
 
 
 @pytest.mark.parametrize("fault", [None, "route", "target", "bag", "event", "specimen"])
+@pytest.mark.parametrize("rematch", [False, True])
 @pytest.mark.parametrize("recovery_budget,mode", [
     (0, 'critical-inclusive'), (1, 'critical-inclusive'), (2, 'critical-inclusive'),
+    (0, 'damage-bounded-zero-item'),
     (1, 'ordinary-bounded-healing'), (2, 'ordinary-bounded-healing'),
 ])
 def test_selected_story_composes_existing_operators_and_verifies_result(
-    fixture, monkeypatch, fault, recovery_budget, mode,
+    fixture, monkeypatch, fault, rematch, recovery_budget, mode,
 ):
     skill, reader, inputs, observe, zone = fixture
     if recovery_budget:
         reader.raw = replace(reader.raw, bag_items=((16, 2), (4, 8)))
     skill.maximum_full_restores = recovery_budget
     skill.recovery_controller = mode
-    assert skill.availability(observe().game_state).executable
+    if rematch:
+        original_observe = skill.runtime.adapter.observe
+
+        def historical():
+            current = original_observe()
+            return replace(
+                current,
+                game_state=replace(
+                    current.game_state,
+                    facts=current.game_state.facts | {"league:lorelei_defeated"},
+                ),
+            )
+
+        skill.runtime.adapter.observe = historical
+        skill.rematch = True
+    assert skill.availability(skill.runtime.adapter.observe().game_state).executable
     stages = []
     def prepare(_runtime, actions, plan, *, current_quote):
         plan.require_current(observe().party, current_quote)
@@ -505,7 +645,8 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert battle_runner_override.__self__.maximum_switches == 6
         controller = battle_runner_override.__self__
         assert isinstance(controller, story.RedTrainerSurvivalController) is (
-            bool(recovery_budget) and mode == 'critical-inclusive'
+            (bool(recovery_budget) and mode == 'critical-inclusive')
+            or mode == 'damage-bounded-zero-item'
         )
         assert _kwargs['maximum_full_restores'] == recovery_budget
         assert _kwargs['prospective_story_recovery'] is bool(recovery_budget)
@@ -547,9 +688,12 @@ def test_selected_story_composes_existing_operators_and_verifies_result(
         assert stages == ["prepare", "route", "face", "battle"]
         assert result.actions_executed == len(inputs) == 3
         assert result.evidence["story_event_verified"] is True
+        assert result.evidence["rematch"] is rematch
         assert result.evidence["learned_battle_authority"] is False
         assert result.evidence['bag_items_spent'] == recovery_budget
         assert result.evidence['maximum_full_restores'] == recovery_budget
+        assert result.evidence['maximum_critical_exposures'] == 0
+        assert result.evidence['critical_exposures_claimed'] == 0
     count = len(inputs)
     with pytest.raises(story.RedTrainerStoryError, match="unconsumed"):
         skill.execute()

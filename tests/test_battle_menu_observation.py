@@ -111,6 +111,38 @@ def test_battle_menu_reader_exposes_selected_main_command(
     assert state.selected_move_slot is None
 
 
+@pytest.mark.parametrize(
+    ("top_x", "watched_keys", "current_item", "expected_command"),
+    [
+        (0x01, 0x11, 0, 0),
+        (0x01, 0x11, 1, 1),
+        (0x0D, 0x21, 0, 2),
+        (0x0D, 0x21, 1, 3),
+    ],
+)
+def test_battle_menu_reader_exposes_safari_command_positions(
+    top_x: int,
+    watched_keys: int,
+    current_item: int,
+    expected_command: int,
+) -> None:
+    memory = _memory(
+        top_y=0x0E,
+        top_x=top_x,
+        watched_keys=watched_keys,
+        current_item=current_item,
+    )
+
+    state = PokemonRedStateReader(memory).read_battle_menu_state(
+        _raw(battle_state=1)
+    )
+
+    assert state == BattleMenuState(
+        BattleMenuPhase.MAIN,
+        selected_main_command=expected_command,
+    )
+
+
 @pytest.mark.parametrize("selected_move_slot", [1, 2, 3, 4])
 def test_battle_menu_reader_exposes_one_based_move_slot(
     selected_move_slot: int,

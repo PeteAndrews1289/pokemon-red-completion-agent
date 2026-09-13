@@ -176,6 +176,8 @@ class RamAddress(IntEnum):
     VERMILION_GYM_SECOND_LOCK = 0xD744
     EVENT_FLAGS = 0xD747
     SAFARI_STEPS = 0xD70D
+    FOSSIL_ITEM = 0xD70F
+    FOSSIL_MON = 0xD710
     TRAINER_HEADER_POINTER = 0xDA30
     CURRENT_MAP_SCRIPT = 0xDA39
     SAFARI_BALLS = 0xDA47
@@ -306,9 +308,14 @@ class MapId(IntEnum):
     ROUTE_15_GATE_1F = 0xB8
     ROUTE_16_GATE_1F = 0xBA
     ROUTE_16_FLY_HOUSE = 0xBC
+    ROUTE_12_SUPER_ROD_HOUSE = 0xBD
     SEAFOAM_ISLANDS_1F = 0xC0
     POKEMON_MANSION_1F = 0xA5
     CINNABAR_GYM = 0xA6
+    CINNABAR_LAB = 0xA7
+    CINNABAR_LAB_TRADE_ROOM = 0xA8
+    CINNABAR_LAB_METRONOME_ROOM = 0xA9
+    CINNABAR_LAB_FOSSIL_ROOM = 0xAA
     CINNABAR_POKECENTER = 0xAB
     CINNABAR_MART = 0xAC
     ROCKET_HIDEOUT_B1F = 0xC7
@@ -544,6 +551,9 @@ class EventFlag(IntEnum):
     CINNABAR_GYM_GATE_4_UNLOCKED = 0x2AC
     CINNABAR_GYM_GATE_5_UNLOCKED = 0x2AD
     CINNABAR_GYM_GATE_6_UNLOCKED = 0x2AE
+    GAVE_FOSSIL_TO_LAB = 0x2E0
+    LAB_STILL_REVIVING_FOSSIL = 0x2E1
+    LAB_HANDING_OVER_FOSSIL_MON = 0x2E2
     GOT_TM46 = 0x360
     DEFEATED_FIGHTING_DOJO = 0x350
     BEAT_KARATE_MASTER = 0x351
@@ -657,6 +667,7 @@ class ItemId(IntEnum):
     THUNDER_STONE = 0x21
     SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
+    OLD_AMBER = 0x1F
     DOME_FOSSIL = 0x29
     HELIX_FOSSIL = 0x2A
     SECRET_KEY = 0x2B
@@ -676,6 +687,8 @@ class ItemId(IntEnum):
     REVIVE = 0x35
     LIFT_KEY = 0x4A
     EXP_ALL = 0x4B
+    OLD_ROD = 0x4C
+    GOOD_ROD = 0x4D
     SUPER_ROD = 0x4E
     ELIXIR = 0x52
     HM01_CUT = 0xC4
@@ -901,6 +914,8 @@ ROUTE_6_JR_TRAINER_M_CLASS_ID = 0x05
 ROUTE_6_JR_TRAINER_M_NUMBER = 5
 MAIN_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x09, 0x11)
 MAIN_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0F, 0x21)
+SAFARI_BATTLE_MENU_LEFT_SIGNATURE = (0x0E, 0x01, 0x11)
+SAFARI_BATTLE_MENU_RIGHT_SIGNATURE = (0x0E, 0x0D, 0x21)
 MOVE_BATTLE_MENU_SIGNATURE = (0x0C, 0x05, 0xC7)
 # ``EnemySendOut`` draws Red's two-option trainer-switch prompt at (1, 8).
 # The live prompt responds only to A/B and has exactly two entries.  Requiring
@@ -3882,6 +3897,18 @@ class PokemonRedStateReader:
             self._record_encounter(raw)
         return raw
 
+    def read_fossil_reviver_identity(self) -> tuple[int, int]:
+        """Return the cartridge-retained fossil item and resulting internal species.
+
+        These bytes are meaningful only while the lab hand-over event is set;
+        callers must bind them to that independently observed event state.
+        """
+
+        return (
+            self._memory.read_u8(RamAddress.FOSSIL_ITEM),
+            self._memory.read_u8(RamAddress.FOSSIL_MON),
+        )
+
     def _record_encounter(self, raw: RawGameState) -> None:
         """Append one newly seen encounter to the harvest log.
 
@@ -4533,12 +4560,17 @@ class PokemonRedStateReader:
         if signature in {
             MAIN_BATTLE_MENU_LEFT_SIGNATURE,
             MAIN_BATTLE_MENU_RIGHT_SIGNATURE,
+            SAFARI_BATTLE_MENU_LEFT_SIGNATURE,
+            SAFARI_BATTLE_MENU_RIGHT_SIGNATURE,
         }:
             selected_row = self._memory.read_u8(RamAddress.CURRENT_MENU_ITEM)
             if not 0 <= selected_row <= 1 or not self._active_menu_cursor():
                 return BattleMenuState(BattleMenuPhase.UNKNOWN)
             selected_main_command = selected_row
-            if signature == MAIN_BATTLE_MENU_RIGHT_SIGNATURE:
+            if signature in {
+                MAIN_BATTLE_MENU_RIGHT_SIGNATURE,
+                SAFARI_BATTLE_MENU_RIGHT_SIGNATURE,
+            }:
                 selected_main_command += 2
             if MIN_BATTLE_COMMAND <= selected_main_command <= MAX_BATTLE_COMMAND:
                 return BattleMenuState(
@@ -4637,6 +4669,13 @@ class PokemonRedStateReader:
             self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
             bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )
+
+    def read_rival_starter(self) -> int:
+        """Read the persistent rival starter selector outside room-local scripts."""
+        starter = self._memory.read_u8(RamAddress.RIVAL_STARTER)
+        if not 1 <= starter <= 190:
+            raise SemanticStateError("rival starter is unavailable")
+        return starter
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None:
         """Recognize the ordinary trainer-start latch before battle mode appears.
@@ -4973,6 +5012,10 @@ class PokemonRedStateReader:
         """
 
         return self._memory.read_u8(RamAddress.LAST_BLACKOUT_MAP)
+
+    def read_current_map_tileset(self) -> int:
+        """Observed tileset for legal field escape; not a policy feature."""
+        return self._memory.read_u8(RamAddress.CURRENT_MAP_TILESET)
 
     def read_pewter_chapter_state(self, raw: RawGameState) -> PewterChapterState:
         """Translate route, script, battle, and badge evidence into one phase."""
@@ -5728,6 +5771,10 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CELADON_CITY: "celadon_city",
         MapId.FUCHSIA_CITY: "fuchsia_city",
         MapId.CINNABAR_ISLAND: "cinnabar_island",
+        MapId.CINNABAR_LAB: "cinnabar_lab",
+        MapId.CINNABAR_LAB_TRADE_ROOM: "cinnabar_lab_trade_room",
+        MapId.CINNABAR_LAB_METRONOME_ROOM: "cinnabar_lab_metronome_room",
+        MapId.CINNABAR_LAB_FOSSIL_ROOM: "cinnabar_lab_fossil_room",
         MapId.CINNABAR_POKECENTER: "cinnabar_pokecenter",
         MapId.INDIGO_PLATEAU: "indigo_plateau",
         MapId.SAFFRON_CITY: "saffron_city",
@@ -5765,6 +5812,7 @@ def location_label(map_id: int | None) -> str | None:
         MapId.CERULEAN_TRASHED_HOUSE: "cerulean_trashed_house",
         MapId.CERULEAN_POKECENTER: "cerulean_pokecenter",
         MapId.CERULEAN_GYM: "cerulean_gym",
+        MapId.VERMILION_GYM: "vermilion_gym",
         MapId.MT_MOON_POKECENTER: "mt_moon_pokecenter",
         MapId.UNDERGROUND_PATH_ROUTE_5: "underground_path_route_5",
         MapId.UNDERGROUND_PATH_ROUTE_6: "underground_path_route_6",
@@ -5833,6 +5881,10 @@ def semantic_facts(raw: RawGameState) -> frozenset[str]:
         MapId.WARDENS_HOUSE: "location:fuchsia_city",
         MapId.FUCHSIA_GYM: "location:fuchsia_city",
         MapId.CINNABAR_ISLAND: "location:cinnabar_island",
+        MapId.CINNABAR_LAB: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_TRADE_ROOM: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_METRONOME_ROOM: "location:cinnabar_island",
+        MapId.CINNABAR_LAB_FOSSIL_ROOM: "location:cinnabar_island",
         MapId.CINNABAR_POKECENTER: "location:cinnabar_island",
         MapId.CINNABAR_MART: "location:cinnabar_island",
         MapId.CINNABAR_GYM: "location:cinnabar_island",

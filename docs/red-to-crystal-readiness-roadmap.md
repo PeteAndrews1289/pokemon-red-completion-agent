@@ -1,5 +1,10 @@
 # Red-to-Crystal readiness roadmap
 
+> **Historical long-form roadmap.** Crystal is intentionally on the backburner while the project
+> establishes sustained model-directed Red play and shared registered-Pokédex progress. The live
+> sequence is maintained in the [model-first roadmap](model-first-roadmap.md); this file preserves
+> earlier reasoning and transfer gates rather than issuing current instructions.
+
 ## Current visual baseline supersedes the historical sequence below
 
 Latest result: the earned-resource checklist is 3/3, not Phase 4 completion.

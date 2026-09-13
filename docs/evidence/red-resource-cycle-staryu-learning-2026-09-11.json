@@ -1,0 +1,319 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "c78ca856d2c89e844452639af114ffd84f064ba46f3b21f4cb1021fb621ddf9e",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 82,
+      "economy_qualified_examples": 12,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 82,
+      "successful_examples": 50,
+      "total_examples": 82,
+      "train_dataset_sha256": "b402cd9fe77c7b3c51755c9df136d35d86e9dd47e29bee02286afe1d4a7d7487",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.010223641544619562,
+      "weighted_mse_before": 0.03269723022070402
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "403c23cb8a2f039d631999515b4bc69ca060b02b21d62ad194ffcaf0bf9fc286",
+      "file_sha256": "aa80080fb9c042c92d419dfa0e9ec94d5699586b57eb61787fcf0a909d598542",
+      "independent_evaluation": false,
+      "model_sha256": "a19062fcd123788e92aafc6b2e2242aec9c8d4fc1a5d6a217a5f174113e08feb",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "94c96d40fdf141d42db74905900c9afc9cee28434087a54a7c7be43542cd5533",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 82,
+      "source_bundle_sha256": "064ec904a352ec4382138aa52e2dcdb1a77de759ae96a6014c451e04b05aa583",
+      "source_commit": "d272ad06bf4428a9bf978f7cde68398b35c80017"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07349200503029714,
+        7.292248425713168e-06,
+        4.196862505319955e-06,
+        0.0010854412220636582,
+        0.000844374236875561,
+        0.015457352252408591,
+        0.0015841879372935747,
+        2.8809536218400265e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 82,
+      "total_examples": 82,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01027530341594349
+    },
+    "regional_source_examples": 30,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07309377851174279,
+        7.19682208313232e-06,
+        4.198657429202648e-06,
+        0.001085841962433282,
+        0.0008446414365925012,
+        0.015390741976380221,
+        0.0015835457020008938,
+        2.8288329140272144e-06,
+        0.0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 82,
+      "total_examples": 82,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.01022364154461956
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-collection-20260911-bi-03-causal",
+    "actions": 976,
+    "frames": 59400,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 1,
+    "status": "failed"
+  },
+  "session": {
+    "steps": [
+      {
+        "actions": 91,
+        "available_goal_count": 2,
+        "capture_survey": null,
+        "checkpoint_sha256": "ebfa3cc1dd6d81f874ca01005033e3bc76274204e3648e83f0b0bc7be45ef6d4",
+        "eligible_examples": 1,
+        "episode_id": "red-collection-20260911-bi-01-causal",
+        "failure_reason": null,
+        "fit_performed": true,
+        "frames": 4969,
+        "manifest_sha256": "c5bd83af8f97e692c23bbe43cda97ce010b141a15a9d897b33faf89fb79a03ce",
+        "new_registrations": [],
+        "registered_after": 67,
+        "registered_before": 67,
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "behavior_policy_id": "living-dex-player-economy-v1",
+        "destination_candidate_count": 0,
+        "exploration_mix": 0.25,
+        "observed_wild_battle_starts": [],
+        "proposed_source": null,
+        "sampled_native_goal": true,
+        "selected_source": null,
+        "travel_capture_receipts": []
+      },
+      {
+        "actions": 134,
+        "available_goal_count": 2,
+        "capture_survey": null,
+        "checkpoint_sha256": "27ac7d5c5f634363cb538227f3ab03561b2f7e0488981fea29993925504df1eb",
+        "eligible_examples": 1,
+        "episode_id": "red-collection-20260911-bi-02-causal",
+        "failure_reason": null,
+        "fit_performed": true,
+        "frames": 7776,
+        "manifest_sha256": "347112155473fcfc1f9994f88b2b92cdbefdbe401eef2600eb32ecf5706ee5ac",
+        "new_registrations": [],
+        "registered_after": 67,
+        "registered_before": 67,
+        "selected_kind": "resupply",
+        "selection_mode": "authority",
+        "selection_scope": "native_goal",
+        "status": "succeeded",
+        "behavior_policy_id": "living-dex-player-economy-v1",
+        "destination_candidate_count": 0,
+        "exploration_mix": 0.25,
+        "observed_wild_battle_starts": [],
+        "proposed_source": null,
+        "sampled_native_goal": true,
+        "selected_source": null,
+        "travel_capture_receipts": []
+      },
+      {
+        "actions": 976,
+        "available_goal_count": 1,
+        "capture_survey": {
+          "capture_items_exhausted": true,
+          "captures": 0,
+          "encounters_seen": 4,
+          "flees": 4,
+          "safety_stopped": false,
+          "search_exhausted": false,
+          "semantic_actions": 91
+        },
+        "checkpoint_sha256": "889092b48a3800866da6d3ba0bbc75b114ce12d97501ea356276eb7f383b86e6",
+        "eligible_examples": 1,
+        "episode_id": "red-collection-20260911-bi-03-causal",
+        "failure_reason": "world_state_diverged",
+        "fit_performed": true,
+        "frames": 59400,
+        "manifest_sha256": "eab883dcf026a75b01fab28a84ef28c57de654f5ed6139fe444a79adb437a651",
+        "new_registrations": [
+          "pokemon:national:120"
+        ],
+        "registered_after": 68,
+        "registered_before": 67,
+        "selected_kind": "acquire_species",
+        "selection_mode": "forced_singleton",
+        "selection_scope": "regional_destination",
+        "status": "failed",
+        "behavior_policy_id": null,
+        "destination_candidate_count": 6,
+        "exploration_mix": 0.25,
+        "observed_wild_battle_starts": [],
+        "proposed_source": null,
+        "sampled_native_goal": false,
+        "selected_source": "wild:SeafoamIslandsB2F:grass",
+        "travel_capture_receipts": []
+      }
+    ],
+    "attempted_steps": 3,
+    "completed_steps": 2,
+    "fits": 3,
+    "registered_examples_before": 79,
+    "registered_examples_after": 82,
+    "initial_registered": 67,
+    "last_verified_registered": 68,
+    "last_verified_specimens": 57,
+    "source_commit": "d272ad06bf4428a9bf978f7cde68398b35c80017",
+    "elapsed_seconds": 1126.699,
+    "stop_reason": "failed_step_retained_and_fitted",
+    "latest_fit_belongs_to_session": true,
+    "failed_attempts_retried": 0,
+    "total_recorded_actions": 1201,
+    "total_recorded_frames": 72145,
+    "forced_singleton_parent_steps": 1,
+    "model_selected_goal_steps": 2,
+    "deterministic_support_steps": 0,
+    "sampled_destination_choices": 1,
+    "declared_batches": {
+      "BI": 3
+    },
+    "fresh_game_autonomy": false,
+    "policy_sampling": "Two actual native economy choices and one six-way regional destination choice used25percent uniform exploration mixed with75percent model softmax. Only actual selected outcomes were fitted.",
+    "mechanics": "Deterministic trainer funding, shopping, travel, capture preparation and survey. Travel registered Staryu; destination capture exhausted the remaining stock and the full acquisition stayed failed.",
+    "terminal_observation": {
+      "source": "exact_authenticated_checkpoint_read",
+      "state_sha256": "e653539352644ff559052425ad873da53bdecf7f2ea370c5bb2db0db516c3dda",
+      "input_ready": true,
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "collection_verified_from_saved_state": true
+    },
+    "terminal_resources": {
+      "money": 168,
+      "capture_items": 0,
+      "party_hp": [
+        120,
+        118,
+        150,
+        90,
+        245,
+        59
+      ]
+    },
+    "resource_choices": [
+      {
+        "episode_id": "red-collection-20260911-bi-01-causal",
+        "selected": "earn315",
+        "available_funds": 1053,
+        "unselected": "buy_one_for600",
+        "model_examples_after": 80
+      },
+      {
+        "episode_id": "red-collection-20260911-bi-02-causal",
+        "selected": "buy_two_for1200",
+        "available_funds": 1368,
+        "unselected": "earn270",
+        "model_examples_after": 81
+      }
+    ],
+    "coverage": {
+      "acquire": {
+        "rows": 38,
+        "successes": 9
+      },
+      "evolve": {
+        "rows": 10,
+        "successes": 10
+      },
+      "explore": {
+        "rows": 1,
+        "successes": 0
+      },
+      "restore": {
+        "rows": 19,
+        "successes": 19
+      },
+      "resupply": {
+        "rows": 14,
+        "successes": 12
+      }
+    },
+    "limitation": "This is related bounded development, not an independent success rate or a fresh-game player. Staryu is a durable partial gain inside a failed acquisition."
+  }
+}

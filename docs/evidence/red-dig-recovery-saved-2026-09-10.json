@@ -1,0 +1,13 @@
+{
+  "schema": "pokemon.dashboard.saved-collection.v1",
+  "live": false,
+  "controller_actions": 0,
+  "verified_at": "2026-09-11T00:13:36.308507+00:00",
+  "location": "Fuchsia Pokemon Center \u00b7 saved, not live",
+  "registered_species": 64,
+  "living_species": 50,
+  "specimens": 54,
+  "capture_items": 0,
+  "money": 593,
+  "checkpoint_sha256": "13c4c37c079c1d8c33200885bf1ec21db7f058af73ed5e685b1fc877ed08057d"
+}

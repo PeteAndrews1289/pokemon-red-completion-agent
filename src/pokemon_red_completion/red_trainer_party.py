@@ -140,6 +140,7 @@ class RedTrainerPartyPlan:
     party: PartyObservation
     quote: TrainerPartyQuote
     matchups: tuple[tuple[PartyMatchupProfile, ...], ...]
+    minimum_hp_ratio: float = 0.5
 
     @property
     def lead(self) -> RedCaptureLeadPlan:
@@ -147,7 +148,9 @@ class RedTrainerPartyPlan:
 
     def require_current(self, party: PartyObservation, quote: TrainerPartyQuote) -> None:
         """Recompute, so neither a stale roster nor a forged plan may swap."""
-        if self != plan_trainer_party(party, quote):
+        if self != plan_trainer_party(
+            party, quote, minimum_hp_ratio=self.minimum_hp_ratio,
+        ):
             raise RedTrainerPartyError("trainer party, roster or preparation plan changed")
 
     def public_dict(self) -> dict[str, object]:
@@ -159,13 +162,19 @@ class RedTrainerPartyPlan:
             "opening_party_slot": self.lead.target_index + 1,
             "preferred_party_slots": [candidates[0].party_slot for candidates in self.matchups],
             "requires_lead_swap": self.lead.requires_swap,
+            "minimum_hp_ratio": self.minimum_hp_ratio,
             "victory_predicted": False,
             "battle_execution_qualified": False,
             "training_examples": 0,
         }
 
 
-def plan_trainer_party(party: PartyObservation, quote: TrainerPartyQuote) -> RedTrainerPartyPlan:
+def plan_trainer_party(
+    party: PartyObservation,
+    quote: TrainerPartyQuote,
+    *,
+    minimum_hp_ratio: float = 0.5,
+) -> RedTrainerPartyPlan:
     """Require at least one observed matchup per quoted opponent, then plan the lead.
 
     Multiple opponents can share a candidate. This is *coverage*, not cumulative
@@ -177,7 +186,10 @@ def plan_trainer_party(party: PartyObservation, quote: TrainerPartyQuote) -> Red
         raise RedTrainerPartyError("trainer preparation requires a fully living party")
     matchups = tuple(
         trainer_matchup_candidates(
-            party, opponent_species=member.internal_species, opponent_level=member.level,
+            party,
+            opponent_species=member.internal_species,
+            opponent_level=member.level,
+            minimum_hp_ratio=minimum_hp_ratio,
         ) for member in quote.party
     )
     uncovered = tuple(index + 1 for index, candidates in enumerate(matchups) if not candidates)
@@ -185,7 +197,7 @@ def plan_trainer_party(party: PartyObservation, quote: TrainerPartyQuote) -> Red
         raise RedTrainerPartyError(
             f"no qualified offensive matchup for roster positions {uncovered}"
         )
-    return RedTrainerPartyPlan(party, quote, matchups)
+    return RedTrainerPartyPlan(party, quote, matchups, minimum_hp_ratio)
 
 
 def prepare_trainer_lead(

@@ -182,6 +182,38 @@ def _supply(bindings):
     return next(item for item in bindings.opportunities if item.kind is GoalKind.RESUPPLY)
 
 
+def test_route_limit_covers_every_declared_handler_interruption() -> None:
+    assert routing._MAX_ROUTE_FLEES == 128
+    assert routing._MAX_ROUTE_TRAINER_BATTLES == 8
+    assert routing._MAX_ROUTE_SCRIPTED_DIALOGUES == 4
+    assert routing._ROUTE_LIMITS.max_interruptions == (
+        routing._MAX_ROUTE_FLEES
+        + routing._MAX_ROUTE_TRAINER_BATTLES
+        + routing._MAX_ROUTE_SCRIPTED_DIALOGUES
+    )
+
+
+def test_router_does_not_advertise_route_without_every_interruption_capability(
+    fixture, monkeypatch,
+):
+    f = fixture
+    monkeypatch.setattr(
+        routing,
+        "Gen1RouteInterruptionHandler",
+        lambda *_a, **_k: SimpleNamespace(
+            handled_interruption_kinds=frozenset(
+                {"wild_battle", "trainer_engagement", "battle:2"}
+            )
+        ),
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert _supply(result).unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert all(binding.kind is not GoalKind.RESUPPLY for binding in result.bindings)
+    assert f.actions.actions_executed == 0
+
+
 @pytest.mark.parametrize("include_offers", [None, False])
 def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
     fixture, monkeypatch, include_offers,
@@ -203,7 +235,11 @@ def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
 
     def guard(*args, **kwargs):
         calls.append("guard")
-        return object()
+        assert kwargs["maximum_flees"] == routing._MAX_ROUTE_FLEES
+        assert kwargs["maximum_scripted_dialogues"] == routing._MAX_ROUTE_SCRIPTED_DIALOGUES
+        return SimpleNamespace(
+            handled_interruption_kinds=routing._REQUIRED_ROUTE_INTERRUPTION_KINDS
+        )
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_routed_recovery.bind_routed_center_recovery", center,
@@ -257,6 +293,39 @@ def test_legacy_router_keeps_quotes_absent(fixture):
     supply = _supply(fixture.router.enumerate(fixture.adapter.observe()))
     assert supply.resource_quote is None
     assert "resource_quote" not in supply.policy_dict()
+
+
+def test_routed_kind_filter_skips_unrelated_transport_but_keeps_local_menu(fixture):
+    f = fixture
+    result = f.router.enumerate_routed_kinds(
+        f.adapter.observe(), frozenset({GoalKind.ACQUIRE_SPECIES})
+    )
+    assert not f.world.plans
+    assert _supply(result).unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert f.actions.actions_executed == 0
+    for invalid in (set(), frozenset(), frozenset({"acquire"})):
+        with pytest.raises(TypeError, match="GoalKind frozenset"):
+            f.router.enumerate_routed_kinds(f.adapter.observe(), invalid)
+
+
+def test_inventory_route_cache_reuses_identical_success_and_failure_queries(fixture):
+    f = fixture
+    f.router.route_plan_cache = {}
+    first = f.router.enumerate(f.adapter.observe())
+    second = f.router.enumerate(f.adapter.observe())
+    assert _supply(first).policy_dict() == _supply(second).policy_dict()
+    assert len(f.world.plans) == 1
+
+    f.router.route_plan_cache.clear()
+    f.world.plans.clear()
+    f.world.fail = True
+    assert _supply(f.router.enumerate(f.adapter.observe())).unavailable_reason is (
+        GoalUnavailableReason.MISSING_CAPABILITY
+    )
+    assert _supply(f.router.enumerate(f.adapter.observe())).unavailable_reason is (
+        GoalUnavailableReason.MISSING_CAPABILITY
+    )
+    assert len(f.world.plans) == 1
 
 
 def test_remote_supply_uses_actual_route_and_fresh_mart_then_disappears(fixture):

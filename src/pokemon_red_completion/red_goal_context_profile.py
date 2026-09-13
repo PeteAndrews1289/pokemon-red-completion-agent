@@ -12,7 +12,7 @@ import hashlib
 import json
 import re
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 from enum import StrEnum
 from pathlib import Path
 from types import MappingProxyType
@@ -167,6 +167,23 @@ def build_native_boxed_evolution_profile_payload(
         profile_id=profile.profile_id,
         providers=tuple(providers[kind] for kind in GoalKind if kind in providers),
     )
+
+
+def bind_resupply_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt only Mart supply into observed indoor departure and Fly transport."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            parameters.update(fly_transport=True, indoor_fly_departure=True)
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("resupply Fly needs an existing Mart objective")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
 
 
 def bind_capture_surf_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
@@ -459,6 +476,23 @@ def bind_field_pp_restore_profile(profile: RedGoalContextProfile) -> RedGoalCont
     ))
 
 
+def bind_dig_recovery_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt future field recovery into legal escape; preserve every other skill."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.FIELD_RESTORE:
+            parameters["dig_recovery"] = True
+            found = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    if not found:
+        raise RedGoalContextProfileError("Dig recovery requires field restoration")
+    return parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=profile.profile_id, providers=tuple(providers),
+    ))
+
+
 def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
     """Explicit cash-only affordability transition, preserving all other skills."""
     providers = []
@@ -475,6 +509,115 @@ def bind_affordable_ball_supply_profile(profile: RedGoalContextProfile) -> RedGo
     changed = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
         profile_id=profile.profile_id, providers=tuple(providers),
     ))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
+def bind_resource_choice_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt into earning beside an affordable purchase without changing its budget."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if parameters.get("affordable_ball_purchase") is not True:
+                raise RedGoalContextProfileError("resource variants require affordable supply")
+            parameters["resource_choice_variants"] = True
+            found = True
+        providers.append({
+            "kind": spec.kind.value, "mechanic": spec.mechanic.value,
+            "parameters": parameters,
+        })
+    if not found:
+        raise RedGoalContextProfileError("resource variants require an existing Mart skill")
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config), "providers": providers,
+    }))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
+def bind_composable_trainer_funding_profile(
+    profile: RedGoalContextProfile,
+) -> RedGoalContextProfile:
+    """Allow several finite trainer payouts to compose toward one reserve."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if (
+                parameters.get("affordable_ball_purchase") is not True
+                or parameters.get("resource_choice_variants") is not True
+            ):
+                raise RedGoalContextProfileError(
+                    "composable trainer funding requires resource-choice supply"
+                )
+            parameters["composable_trainer_funding"] = True
+            found = True
+        providers.append({
+            "kind": spec.kind.value,
+            "mechanic": spec.mechanic.value,
+            "parameters": parameters,
+        })
+    if not found:
+        raise RedGoalContextProfileError(
+            "composable trainer funding requires an existing Mart skill"
+        )
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA,
+        "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config),
+        "providers": providers,
+    }))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
+def bind_mart_funding_departure_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Prospectively allow only the declared Mart's observed outdoor funding exit."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if (parameters.get("affordable_ball_purchase") is not True
+                    or parameters.get("indoor_funding_departure") is not True):
+                raise RedGoalContextProfileError("Mart funding requires existing indoor funding")
+            parameters["mart_funding_departure"] = True
+            found = True
+        providers.append({"kind": spec.kind.value, "mechanic": spec.mechanic.value,
+                          "parameters": parameters})
+    if not found:
+        raise RedGoalContextProfileError("Mart funding requires an existing Mart skill")
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config), "providers": providers,
+    }))
+    require_resupply_only_profile_transition(profile, changed)
+    return changed
+
+
+def bind_funding_fly_profile(profile: RedGoalContextProfile) -> RedGoalContextProfile:
+    """Opt future ordinary income into observed Fly; old supply flights stay unchanged."""
+    providers = []
+    found = False
+    for spec in profile.providers:
+        parameters = cast(dict[str, object], _thaw(spec.parameters))
+        if spec.mechanic is RedGoalMechanic.MART_RESUPPLY:
+            if parameters.get("affordable_ball_purchase") is not True:
+                raise RedGoalContextProfileError("funding Fly requires affordable capture supply")
+            parameters["funding_fly_transport"] = True
+            found = True
+        providers.append({"kind": spec.kind.value, "mechanic": spec.mechanic.value,
+                          "parameters": parameters})
+    if not found:
+        raise RedGoalContextProfileError("funding Fly requires an existing Mart skill")
+    changed = parse_red_goal_context_profile(_canonical_line({
+        "schema": RED_GOAL_CONTEXT_PROFILE_SCHEMA, "profile_id": profile.profile_id,
+        "manager_config": asdict(profile.manager_config), "providers": providers,
+    }))
     require_resupply_only_profile_transition(profile, changed)
     return changed
 
@@ -677,6 +820,10 @@ def _parse_parameters(
     value: object,
 ) -> dict[str, object]:
     row = dict(_mapping(value, "provider parameters"))
+    if mechanic is RedGoalMechanic.FIELD_RESTORE and "dig_recovery" in row:
+        if row.pop("dig_recovery") is not True:
+            raise RedGoalContextProfileError("Dig recovery requires explicit opt-in")
+        return {**_parse_parameters(mechanic, row), "dig_recovery": True}
     if mechanic is RedGoalMechanic.MIDGAME_STORY:
         if not row:
             return row
@@ -955,8 +1102,47 @@ def _parse_parameters(
                 "interaction_direction",
                 "purchases",
             } | ({"funding_sale"} if "funding_sale" in row else set())
-            | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set()),
+            | ({"affordable_ball_purchase"} if "affordable_ball_purchase" in row else set())
+            | {key for key in (
+                "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
+                "resource_choice_variants", "composable_trainer_funding",
+                "mart_funding_departure", "funding_fly_transport",
+            ) if key in row},
         )
+        transport_fields: dict[str, object] = {}
+        for key in (
+            "fly_transport", "indoor_fly_departure", "indoor_funding_departure",
+            "resource_choice_variants", "composable_trainer_funding",
+            "mart_funding_departure", "funding_fly_transport",
+        ):
+            if key in row:
+                if type(row[key]) is not bool:
+                    raise RedGoalContextProfileError("Mart transport flags must be bools")
+                transport_fields[key] = row[key]
+        if "indoor_fly_departure" in row and row.get("fly_transport") is not True:
+            raise RedGoalContextProfileError("Mart indoor departure requires Fly transport")
+        if "indoor_funding_departure" in row and row.get("affordable_ball_purchase") is not True:
+            raise RedGoalContextProfileError("indoor funding requires affordable capture supply")
+        if row.get("funding_fly_transport") is True and (
+            row.get("affordable_ball_purchase") is not True
+        ):
+            raise RedGoalContextProfileError("funding Fly requires affordable capture supply")
+        if row.get("mart_funding_departure") is True and (
+            row.get("indoor_funding_departure") is not True
+            or row.get("affordable_ball_purchase") is not True
+        ):
+            raise RedGoalContextProfileError("Mart funding requires existing indoor funding")
+        if row.get("resource_choice_variants") is True and (
+            row.get("affordable_ball_purchase") is not True
+        ):
+            raise RedGoalContextProfileError("resource variants require affordable supply")
+        if row.get("composable_trainer_funding") is True and (
+            row.get("affordable_ball_purchase") is not True
+            or row.get("resource_choice_variants") is not True
+        ):
+            raise RedGoalContextProfileError(
+                "composable trainer funding requires resource-choice supply"
+            )
         purchases = row["purchases"]
         if not isinstance(purchases, list) or not purchases:
             raise RedGoalContextProfileError("Mart purchases must be a non-empty list")
@@ -1005,6 +1191,7 @@ def _parse_parameters(
             "purchases": parsed_purchases,
             **sale_fields,
             **affordability_fields,
+            **transport_fields,
         }
     if mechanic is RedGoalMechanic.BOX_SWITCH:
         _exact_keys(

@@ -1,5 +1,78 @@
 # Roadmap baseline and deviations
 
+## September 12 — end the funding detour and broaden acquisition families
+
+The [funded model104 continuation](work-sessions/2026-09-12-funded-model104-collection.md)
+restored practical capture stock through a disclosed support-only bridge, caught Psyduck as a
+forced singleton and then fitted a genuine three-option evolution decision that registered
+Golduck. The retained endpoint advances from75 to77 registrations and model103 to model104.
+
+This changes the immediate milestone from renewable funding to **remaining Red acquisition
+families**. A completed League rematch is no longer a prerequisite for the next collection lesson:
+the incomplete League proceeds, controlled blackout and resupply already restored practical stock.
+The evidence limitation remains explicit because the support wrappers retain authenticated hashes
+but no action trace and contribute zero training examples.
+
+The next provider must be catalog-driven by method and physical prerequisite. Handwritten routes
+for the47 remaining species, Crystal work and another League replay are out of scope. The Red stage
+remains current; no stage exit, transfer result or low-level authority is claimed.
+
+## September 11 — close the fresh-start join and return to learning
+
+The [Celadon join](work-sessions/2026-09-11-fresh-celadon-join.md) closes the
+three-item fresh-start checklist. The authenticated post-Brock state resumed through seven
+semantic stages, retained a fourteen-objective Celadon checkpoint and was accepted by the
+independently existing Rocket Hideout and Saffron skills.
+
+This changes the immediate work order, not the stage exit: return now to the actual BV/model99
+collection lineage and require a measured multi-option outcome. The join used an explicitly
+unlearned ranker over singleton menus, so it adds no training example, authority promotion,
+registration or transfer result. Another story-infrastructure-only session would violate the
+anti-drift intent. No full replay, Crystal execution or autonomy claim is opened.
+
+The completed fresh-start checklist moves to closed milestones without discarding its evidence.
+The new current checklist is **measured model99 collection continuation**: authenticated learner
+lineage (already verified), one fresh multi-option outcome, and one productive missing-species
+registration or evolution. Its1/3 status prevents a completed integration checklist from looking
+like completed collection or completed Red.
+
+## September 11 — close endpoint diversity and prioritize fresh-start sequencing
+
+The [Power Plant session](work-sessions/2026-09-11-power-plant-diversification.md)
+closes the three-item diversity checklist. A model-selected acquisition used the
+same generic regional/capture machinery to register Magnemite outside the
+Seafoam/water chain. Its later observer failure remains failed and unfit; a
+separate deterministic recovery preserved the exact registration without retry.
+
+Additional examples from the same late-game lineage now have lower product value
+than connecting the existing skills into a fresh game. The current milestone is
+therefore **fresh-start Red conductor**: semantic new-game goals, a retained
+first-badge checkpoint and a join to existing midgame skills. This changes the
+order of open Red work, not the Red-collection stage exit, evidence standard or
+long-term Blue/modified-Red/Crystal sequence. No fresh-game competence is claimed.
+
+## September 10 — advance from travel capture to sustainable resources
+
+Preserve the completed travel-capture checklist at 3/3 in closed milestones. The
+[sustainability audit](work-sessions/2026-09-10-capture-sustainability.md) found no
+resource or recovery offer at the exact retained save. The new local checklist
+tracks diagnosed resources (done), safe escape/recovery (planned), and a funded
+collection lesson (planned). Its 1/3 is not Phase 5 progress. No stage exits,
+learning counters or failed outcomes changed. Prefer reusing existing Dig mechanics
+over cave-specific route orchestration; no further explore-only run is useful here.
+
+## September 10 — qualify travel capture without relabeling the failed destination
+
+The [supply session](work-sessions/2026-09-10-supply-transport.md) closes the existing
+travel-capture checklist at 3/3 without changing its IDs or criteria. A model-selected
+journey caught Shellder, resumed to Seafoam B3F and fitted the actual positive gain.
+The later Seel goal remains failed with its resource costs retained. Exact save,
+trace and fitted-row reconciliation corrected a preliminary destination-only
+zero-capture interpretation before publication. No nested travel receipt is claimed.
+Phase 5 remains current; the already-satisfied-destination shortcut is unqualified.
+Next prioritize adequate legitimate supplies and capture-support endurance, plus
+a small inventory-only preparation optimization if it saves measured time.
+
 ## September 10 — make the current checklist reflect missed travel captures
 
 The indoor-eligibility checklist remains completed 3/3, with its original IDs,
@@ -538,6 +611,58 @@ deviation (or none), and next step. Refresh again within a long session after a 
 fit, gameplay result, capability or blocker changes the project position. No heartbeat or
 minute-by-minute rewrites are needed. Missing new learning is a fact to show, not a reason to
 move the goalposts.
+
+## September 11 — League execution falsifies independent per-fight coverage
+
+The exact model103 save completed Lorelei, Bruno, Agatha and Lance for23,364 verified income, then
+stopped at Champion's final Venusaur with all six party members alive but insufficient current HP
+and its strongest remaining coverage. Two separately bounded critical-risk intents were consumed; no item, model example or
+registration changed. Preserve every failed terminal and do not brute-force it.
+
+The Red-first stage order and exit criteria do not change. Replace the insufficient assumption
+that five independent coverage checks imply a complete rematch with prospective pre-League supply
+and cumulative-resource qualification. The next falsifier is one newly bound supplied rematch that
+still cannot verify Champion plus Hall of Fame and retain positive capture purchasing power.
+
+## September 11 — supplied League attempt exposes a generic trapping gap
+
+The newly bound supplied attempt executed its priced sale and Full Restore purchase exactly, then
+stopped during Lorelei with zero completed battles when Cloyster's Clamp reached the incoming
+survival gate. All six party members remained alive, the planned175 net supply cost remained
+visible and model103/collection counters did not change. The exact attempt is consumed without
+retry.
+
+The Red-first stage order does not change. Qualify all four cartridge trapping moves only in the
+full incoming-damage commitment: up to five applications of the first hit's worst damage and five
+existing poison/burn residual ticks. Keep the weaker type-only entry screen and outgoing recovery
+attack contract closed. After a zero-input terminal check, use a separate repeatable development
+successor so experiment formalism does not again delay the product loop.
+
+That zero-input retained-terminal check passed at source `ca41d4873433136628c3bbe5745e473d4f7971d5`:
+the active workhorse had253 HP against an80-HP computed commitment and the controller authorized an
+attack without advancing a frame. This closes the local mechanics falsifier, not the League cycle.
+
+The separately labeled green-CI successor crossed that stop and reduced Cloyster to61 HP, then
+stopped with the active member confused while a damaging stat-reduction move remained available.
+Preserve the298-action terminal and do not retry. The next work is one generic cartridge-pinned
+compound bound and zero-input retained-terminal test. A Lorelei-specific exception or another live
+attempt before that test would violate the anti-drift stop.
+
+## September 11 — qualify confused Attack drops with a global cap
+
+Pinned cartridge order confirmed that an enemy Aurora Beam can deal damage, lower the player's
+Attack and then precede the slower player's confusion check. The first proposed bound reused the
+observed live Attack, but a reachable burned-plus-badge-glitch sequence showed that Aurora Beam can
+recalculate Attack above that observed value. That proposal was rejected before implementation;
+both independent reviewers accepted the counterexample.
+
+The generic repair classifies the stat named by the move effect. Only Attack reduction is admitted
+while already confused, and self-hit uses Red's hard999 Attack cap with observed Defense. Defense,
+Speed, Special, Accuracy and Evasion reductions remain closed. The retained terminal then computed
+165/250/160/495/150/351 with zero input and selected attack for the241-HP active member. This closes
+the compound mechanics falsifier without advancing model103, collection, or battle authority.
+Await exact-source green CI before one separately identified development successor; never retry
+either consumed League attempt.
 # September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure
@@ -552,3 +677,11 @@ Champion qualification is separate. See the
 ## September10 — indoor choices after native stock completion
 
 The native-stock checklist closed3/3 with model21 and47 registrations. Read-only inspection then found no capture alternatives despite18 capture items and healthy party members. The next checklist measures indoor eligibility, actual alternatives and a learned lesson; permanent stage exits do not change. Ordinary cave floors were incorrectly excluded by a literal-grass test. Prioritize this specific coverage repair over speculative preparation optimizations.
+## September 11 — accept fresh-start plumbing, keep learning claims at zero
+
+The clean-power conductor reached Brock and retained an authenticated checkpoint. Its reload
+exposed the next Cerulean skill without input, so semantic fresh-start goals and the first-badge
+handoff are complete. The integration ranker was explicitly unlearned and every menu was a
+singleton; model99 and all learning counters remain unchanged. The next bounded task is the
+post-Brock-to-Celadon join, followed immediately by measured model99 collection learning. This
+prevents fresh-start plumbing from becoming another long substitute for learner outcomes.

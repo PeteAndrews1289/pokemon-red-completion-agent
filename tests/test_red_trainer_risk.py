@@ -107,6 +107,32 @@ def test_suppressed_no_pp_turn_consumes_intent_before_input_and_cannot_repeat(mo
     assert receipts[0]['risk_probability_estimated'] is False
 
 
+def test_two_intent_budget_claims_each_before_input_and_refuses_a_third(monkeypatch):
+    subject = fixture(budget=2)
+    inputs, receipts = [], []
+
+    def sink(report):
+        assert len(receipts) == len(inputs)
+        receipts.append(report)
+
+    subject.decision_sink = sink
+
+    def battle(reader, actions, policy, **_):
+        for expected_claim in (1, 2):
+            assert policy(reader.read()) == 2
+            assert subject.critical_exposures_claimed == expected_claim
+            actions.execute(MacroAction(MacroActionKind.CONFIRM))
+        policy(reader.read())
+        pytest.fail('a third risky intent was authorized')
+
+    monkeypatch.setattr(survival, 'run_adaptive_trainer_battle', battle)
+    with pytest.raises(NoTrainerSurvivalAction):
+        run(subject, SimpleNamespace(execute=lambda action: inputs.append(action)))
+    assert len(receipts) == len(inputs) == 2
+    assert [row['critical_exposure_claim'] for row in receipts] == [1, 2]
+    assert all(row['maximum_total_critical_exposures'] == 2 for row in receipts)
+
+
 def test_missing_durable_receipt_blocks_every_input(monkeypatch):
     subject = fixture()
     inputs = []

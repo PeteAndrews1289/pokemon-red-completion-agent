@@ -19,6 +19,10 @@ from product_focus import (  # noqa: E402
     _validate_battle_cycle_projection,
     _validate_calibration_player_partial_projection,
     _validate_calibration_player_recovery_projection,
+    _validate_model106_measured_fishing_projection,
+    _validate_model107_measured_fishing_failure_projection,
+    _validate_model108_adaptive_fishing_projection,
+    _validate_model112_automatic_fishing_failure_projection,
     _validate_paired_bounded_player_projection,
     _validate_repeatable_living_dex_calibration_audit_projection,
     _validate_repeatable_living_dex_first_two_projection,
@@ -77,6 +81,21 @@ REPEATABLE_LIVING_DEX_CALIBRATION_AUDIT = (
     PROJECT_ROOT
     / "docs/evidence"
     / "red-repeatable-living-dex-five-case-calibration-audit-v1-2026-09-05.json"
+)
+MODEL106_MEASURED_FISHING_RESULT = (
+    PROJECT_ROOT
+    / "docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json"
+)
+MODEL107_MEASURED_FISHING_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence/red-model107-measured-fishing-failure-2026-09-12.json"
+)
+MODEL108_ADAPTIVE_FISHING_LOOP = (
+    PROJECT_ROOT / "docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json"
+)
+MODEL112_AUTOMATIC_FISHING_FAILURE = (
+    PROJECT_ROOT
+    / "docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json"
 )
 COMPOSITION_DESIGN = (
     PROJECT_ROOT / "docs/evidence/fresh-goal-manager-composition-design-v2-2026-08-17.json"
@@ -377,15 +396,15 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     ]
     assert len(state.retired_lanes) == 60
     assert focus_progress_fraction(state) == 1.0
-    assert focus_scorecard(state) == (("Registered Train Example · train", 61, 12),)
+    assert focus_scorecard(state) == (("Registered Train Example · train", 114, 12),)
     assert state.progress["outcome_questions"] == {"development": 61, "train": 103}
-    assert state.progress["model_fits"] == 11
+    assert state.progress["model_fits"] == 15
     assert state.progress["composition_attempts"] == 6
     assert state.progress["unseen_comparisons"] == 9
-    assert state.progress["development_episode_attempts"] == 29
-    assert state.progress["verified_outcome_examples"] == 66
+    assert state.progress["development_episode_attempts"] == 30
+    assert state.progress["verified_outcome_examples"] == 67
     assert state.progress["verified_composition_episodes"] == 4
-    assert state.progress["causal_train_examples"] == 111
+    assert state.progress["causal_train_examples"] == 112
     assert state.progress["synthetic_rootless_train_outcomes"] == 8
     assert state.progress["synthetic_rootless_atomic_goal_episodes"] == 8
     assert state.progress["synthetic_rootless_model_fits"] == 1
@@ -393,6 +412,120 @@ def test_tracked_focus_is_canonical_and_preserves_learning_during_scope_migratio
     encoded = json.dumps(state.document, sort_keys=True)
     assert "/Users/" not in encoded
     assert "/Volumes/" not in encoded
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "fitted_training_examples",
+        "registered_species_after",
+        "controller_actions_observed",
+        "teacher_labels",
+        "authority_promotions",
+        "independent_evaluation",
+        "durable_restart_published",
+        "model_sha256",
+    ),
+)
+def test_measured_fishing_projection_rejects_claim_drift(field: str) -> None:
+    receipt = json.loads(MODEL106_MEASURED_FISHING_RESULT.read_text(encoding="ascii"))
+    _validate_model106_measured_fishing_projection(receipt)
+
+    changed = deepcopy(receipt)
+    value = changed[field]
+    changed[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="measured fishing"):
+        _validate_model106_measured_fishing_projection(changed)
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "fitted_training_examples",
+        "registered_species_after",
+        "failure_stage",
+        "automatic_retry",
+        "teacher_labels",
+        "model_sha256",
+    ),
+)
+def test_measured_fishing_failure_projection_rejects_claim_drift(field: str) -> None:
+    receipt = json.loads(
+        MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii")
+    )
+    _validate_model107_measured_fishing_failure_projection(receipt)
+
+    changed = deepcopy(receipt)
+    value = changed[field]
+    changed[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="measured fishing failure"):
+        _validate_model107_measured_fishing_failure_projection(changed)
+
+
+def test_measured_fishing_failure_recovery_cannot_claim_learning() -> None:
+    receipt = json.loads(
+        MODEL107_MEASURED_FISHING_FAILURE.read_text(encoding="ascii")
+    )
+    changed = deepcopy(receipt)
+    changed["recovery"]["training_examples"] = 1
+    with pytest.raises(ProductFocusError, match="failure recovery"):
+        _validate_model107_measured_fishing_failure_projection(changed)
+
+
+@pytest.mark.parametrize(
+    "field",
+    (
+        "fitted_training_examples",
+        "selection_changed_after_failure",
+        "registered_species_after",
+        "controller_actions_observed",
+        "teacher_labels",
+        "independent_evaluation",
+        "model_sha256",
+    ),
+)
+def test_adaptive_fishing_projection_rejects_claim_drift(field: str) -> None:
+    receipt = json.loads(MODEL108_ADAPTIVE_FISHING_LOOP.read_text(encoding="ascii"))
+    _validate_model108_adaptive_fishing_projection(receipt)
+
+    changed = deepcopy(receipt)
+    value = changed[field]
+    changed[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="adaptive fishing"):
+        _validate_model108_adaptive_fishing_projection(changed)
+
+
+@pytest.mark.parametrize(
+    ("section", "field"),
+    (
+        (None, "teacher_labels"),
+        (None, "authority_promotions"),
+        ("collection", "registered_species"),
+        ("menu", "candidate_count"),
+        ("menu", "second_policy_query"),
+        ("execution", "controller_actions"),
+        ("execution", "retry_allowed"),
+        ("learning", "settled_examples"),
+        ("learning", "independent_evaluation"),
+        ("qualification", "github_ci_attempt"),
+        ("recovery", "input_ready"),
+        ("validation", "future_scripted_dialogue_budget"),
+    ),
+)
+def test_automatic_fishing_failure_projection_rejects_claim_drift(
+    section: str | None, field: str
+) -> None:
+    receipt = json.loads(
+        MODEL112_AUTOMATIC_FISHING_FAILURE.read_text(encoding="ascii")
+    )
+    _validate_model112_automatic_fishing_failure_projection(receipt)
+
+    changed = deepcopy(receipt)
+    target = changed if section is None else changed[section]
+    value = target[field]
+    target[field] = not value if isinstance(value, bool) else 999
+    with pytest.raises(ProductFocusError, match="automatic fishing failure"):
+        _validate_model112_automatic_fishing_failure_projection(changed)
 
 
 def test_paired_player_projection_rejects_counter_or_arm_drift() -> None:
@@ -1707,7 +1840,7 @@ def test_checker_binds_discovery_docs_and_pull_request_mission_check() -> None:
     rows = CHECKER["check_product_focus"]()
 
     # Only actual new-objective outcomes advance this separate counter.
-    assert rows == ("Registered Train Example · train: 61/12",)
+    assert rows == ("Registered Train Example · train: 114/12",)
 
 
 @pytest.mark.parametrize("goal", [
@@ -1790,8 +1923,8 @@ def test_learning_lane_accepts_honest_model_led_development_outputs() -> None:
     state = validate_product_focus_document(document)
 
     assert focus_scorecard(state) == (
-        ("Development Episode · development", 29, 12),
-        ("Verified Outcome Example · development", 66, 12),
+        ("Development Episode · development", 30, 12),
+        ("Verified Outcome Example · development", 67, 12),
         ("Verified Composition Episode · development", 4, 2),
     )
 
@@ -1806,7 +1939,7 @@ def test_learning_lane_accepts_evidence_backed_causal_train_examples() -> None:
     ]
     state = validate_product_focus_document(document)
 
-    assert focus_scorecard(state) == (("Causal Train Example · train", 111, 1),)
+    assert focus_scorecard(state) == (("Causal Train Example · train", 112, 1),)
 
 
 def test_causal_train_example_cannot_be_mislabeled_as_development() -> None:

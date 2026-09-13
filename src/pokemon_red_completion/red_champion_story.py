@@ -25,7 +25,14 @@ from .gen1_trainer_parties import trainer_party_quote
 from .gen1_trainer_sight import Gen1TrainerSightProjector
 from .goal_manager_composition_qualification import HardCompositionActionLimiter
 from .objective_skills import ObjectiveSkillAvailability, ObjectiveSkillExecution
-from .observation import CurrentMapBlocks, FinalLeagueScene, MapId, RawGameState, event_flag_is_set
+from .observation import (
+    CurrentMapBlocks,
+    EventFlag,
+    FinalLeagueScene,
+    MapId,
+    RawGameState,
+    event_flag_is_set,
+)
 from .quest import Specialist
 from .red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from .red_goal_manager import RedGoalObservation
@@ -48,6 +55,14 @@ class RedChampionStoryError(RuntimeError):
     """A qualified final-story attempt left its declared contract."""
 
 
+def _live_champion_rematch_ready(raw: RawGameState) -> bool:
+    return (
+        raw.event_flags is not None
+        and event_flag_is_set(raw.event_flags, EventFlag.BEAT_LANCE)
+        and not event_flag_is_set(raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL)
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class _Prepared:
     before: RedGoalObservation
@@ -67,6 +82,7 @@ class RedCartridgeChampionSkill:
     world: StrategicScenarioRouteWorld | None
     maximum_full_restores: int = 0
     recovery_controller: str = "critical-inclusive"
+    rematch: bool = False
     objective_id: str = field(default="defeat_champion", init=False)
     specialist: Specialist = field(default=Specialist.BATTLE, init=False)
     expected_facts: frozenset[str] = field(
@@ -83,6 +99,11 @@ class RedCartridgeChampionSkill:
     _claimed: bool = field(default=False, init=False)
     _prepared_budget: int | None = field(default=None, init=False)
     _prepared_controller: str = field(default="critical-inclusive", init=False)
+    _prepared_rematch: bool = field(default=False, init=False)
+
+    def __post_init__(self) -> None:
+        if type(self.rematch) is not bool:  # noqa: E721
+            raise RedChampionStoryError("rematch must be a boolean")
 
     def _plan(self) -> _Prepared:
         from .red_resource_goal_router import _walking_plan
@@ -90,10 +111,16 @@ class RedCartridgeChampionSkill:
         if self.world is None or battle_policy_override_active():
             raise RedChampionStoryError("cartridge world or fixed battle authority unavailable")
         before = self.runtime.adapter.observe()
-        if self.recovery_controller not in {"critical-inclusive", "ordinary-bounded-healing"}:
+        if self.recovery_controller not in {
+            "critical-inclusive", "ordinary-bounded-healing", "damage-bounded-zero-item",
+        }:
             raise RedChampionStoryError("unsupported recovery controller")
         require_story_recovery_stock(before.raw, self.maximum_full_restores)
         reader = self.runtime.reader
+        historical_boundary = (
+            "league:lance_defeated" in before.game_state.facts
+            and CHAMPION_DEFEATED_FACT not in before.game_state.facts
+        )
         if (
             before.raw.map_id != MapId.LANCES_ROOM
             or before.raw.battle_state
@@ -101,8 +128,10 @@ class RedCartridgeChampionSkill:
             or self.runtime.emulator.pressed_buttons
             or reader.read_bottom_dialogue_box_visible()
             or reader.read_pending_trainer_battle_identity() is not None
-            or "league:lance_defeated" not in before.game_state.facts
-            or CHAMPION_DEFEATED_FACT in before.game_state.facts
+            or not (
+                _live_champion_rematch_ready(before.raw)
+                if self.rematch else historical_boundary
+            )
         ):
             raise RedChampionStoryError("requires the living, settled post-Lance field boundary")
         scene = reader.read_final_league_scene()
@@ -114,7 +143,11 @@ class RedCartridgeChampionSkill:
         ):
             raise RedChampionStoryError("final-story event is mismatched or already consumed")
         quote = trainer_party_quote(self.world.rom, script.opponent, script.trainer_set)
-        party = plan_trainer_party(before.party, quote)
+        party = (
+            plan_trainer_party(before.party, quote, minimum_hp_ratio=0.0)
+            if self.recovery_controller == "damage-bounded-zero-item"
+            else plan_trainer_party(before.party, quote)
+        )
         blocks = reader.read_current_map_blocks()
         if blocks.map_id != before.raw.map_id:
             raise RedChampionStoryError("field map changed during terrain observation")
@@ -158,6 +191,7 @@ class RedCartridgeChampionSkill:
         self._prepared = prepared
         self._prepared_budget = self.maximum_full_restores
         self._prepared_controller = self.recovery_controller
+        self._prepared_rematch = self.rematch
         return ObjectiveSkillAvailability(
             True, "Qualified final scene with observed party controls."
         )
@@ -174,6 +208,7 @@ class RedCartridgeChampionSkill:
             runtime.adapter.observe() != prepared.before
             or self._prepared_budget != self.maximum_full_restores
             or self._prepared_controller != self.recovery_controller
+            or self._prepared_rematch != self.rematch
             or battle_policy_override_active()
             or reader.read_current_map_blocks() != prepared.blocks
             or runtime.emulator.pressed_buttons
@@ -244,7 +279,10 @@ class RedCartridgeChampionSkill:
 
         controller = (
             RedTrainerSurvivalController(reader, runtime.emulator, (), self.maximum_full_restores)
-            if self.maximum_full_restores else RedTrainerPartyController(reader, runtime.emulator)
+            if (
+                self.maximum_full_restores
+                or self.recovery_controller == "damage-bounded-zero-item"
+            ) else RedTrainerPartyController(reader, runtime.emulator)
         )
 
         if self.maximum_full_restores and self.recovery_controller == "ordinary-bounded-healing":
@@ -343,7 +381,15 @@ class RedCartridgeChampionSkill:
                 )
             ):
                 raise RedChampionStoryError("final battle payout differs from the cartridge quote")
-            if CompletionReferee().inspect(after.game_state).complete:
+            live_champion_verified = (
+                after.raw.event_flags is not None
+                and event_flag_is_set(
+                    after.raw.event_flags, EventFlag.BEAT_CHAMPION_RIVAL,
+                )
+            )
+            if CompletionReferee().inspect(after.game_state).complete and (
+                not self.rematch or live_champion_verified
+            ):
                 if runtime.emulator.pressed_buttons or dependency_specimen_ledger(
                     after.collection_observation,
                 ) != dependency_specimen_ledger(prepared.before.collection_observation):
@@ -356,6 +402,7 @@ class RedCartridgeChampionSkill:
                     {
                         "authority": "deterministic-trainer-controls",
                         "learned_battle_authority": False,
+                        "rematch": self.rematch,
                         "concurrent_champion_and_hall_of_fame": True,
                         "bag_items_spent": (
                             controller.heals_claimed

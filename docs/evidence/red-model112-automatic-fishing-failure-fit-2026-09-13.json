@@ -1,0 +1,148 @@
+{
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_autonomy_claimed": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "low_level_control_learned": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0
+  },
+  "collection": {
+    "ending_living_species": 63,
+    "ending_registered_species": 83,
+    "ending_specimens": 67,
+    "required_red_registrations_remaining": 41,
+    "starting_registered_species": 83
+  },
+  "completed_episode": {
+    "actions": 228,
+    "admitted_examples": 1,
+    "available_goal_count": 5,
+    "episode_id": "red-model111-automatic-fishing-20260913",
+    "frames": 16668,
+    "sampled_choices": 1,
+    "selected_kind": "acquire_species",
+    "status": "failed",
+    "verified_collection_gain": 0
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 112,
+      "economy_qualified_examples": 33,
+      "feature_version": 4,
+      "measured_choice_examples": 1,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 112,
+      "successful_examples": 76,
+      "total_examples": 112,
+      "train_dataset_sha256": "4790622abe5e9d75cdb574759630b379745fc1009d18b8b0adc3ecdaddf5a2ba",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011937054988559574,
+      "weighted_mse_before": 0.031568706790392524
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "29b7014cc88579c68a0598875ba78da8116e8711ecaea9ae026b921f336532fb",
+      "file_sha256": "f276c9a5ca4ee79ba7aad8e0e94e2a71e2d4c0dfcac03bb9b9343314ae193909",
+      "independent_evaluation": false,
+      "model_sha256": "f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 112,
+      "source_bundle_sha256": "de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e",
+      "source_commit": "8277eb604772413be1875526c0a8b989318b3dd7"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 112,
+      "total_examples": 112,
+      "weighted_mse": 0.013575605284220785
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 112,
+      "total_examples": 112,
+      "weighted_mse": 0.011937054988559572
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "learning": {
+    "ending_examples": 112,
+    "measured_choice_examples": 1,
+    "new_settled_examples": 1,
+    "prior_row_hashes_retained": 111,
+    "starting_examples": 111,
+    "teacher_labels": 0
+  },
+  "limitations": [
+    "The selected fishing route stopped in scripted dialogue before reaching its destination, so this row teaches measured cost and zero collection gain rather than fishing quality.",
+    "The row is training-only and cannot support independent evaluation or authority promotion.",
+    "The published restart requires zero-label dialogue recovery before any new choice; the consumed choice may not be retried.",
+    "Fresh-game autonomy, complete Red registration, modified-Red adaptation and cross-title transfer remain unproved."
+  ],
+  "measured_choice": {
+    "candidate_count": 5,
+    "historical_actions": 228,
+    "historical_frames": 16668,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "record_sha256": "b5758f0061b56d193ef6c6b758ace72032c893f05c61de6d31eb6e71fce6d448",
+    "registered_after": 83,
+    "registered_before": 83,
+    "segments": 1,
+    "segments_sha256": "c70b4869eacf5ba10c5bf2899c9dc3e7ef5fdc62f85a5ef74625410e5f421f7a",
+    "selected_candidate_index": 4,
+    "selected_probability": 0.21218057399648926,
+    "specimens_after": 67,
+    "specimens_before": 67,
+    "teacher_labels": 0
+  },
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "source": {
+    "focused_tests_passed": 65,
+    "full_local_expected_xfails": 1,
+    "full_local_tests_passed": 11492,
+    "github_ci_attempt": 2,
+    "github_ci_run": 34738073030,
+    "lint_passed": true,
+    "source_bundle_sha256": "de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e",
+    "source_commit": "8277eb604772413be1875526c0a8b989318b3dd7",
+    "type_check_passed": true
+  },
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "action_trace_available": false,
+    "aggregate_costs_verified": true,
+    "authority_promotion_eligible": false,
+    "independent_evaluation": false,
+    "model_choice_recomputed": true,
+    "registered_transition_verified": true,
+    "retrospective_native_trace_claim": false,
+    "state_chain_verified": true,
+    "training_only": true
+  }
+}

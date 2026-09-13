@@ -1,37 +1,70 @@
 # Model-first development roadmap
 
-The product is a model that plays Pokémon and accumulates a shared, verified Pokédex across games—not a fixed Red walkthrough. See the [mission](../MISSION.md) for the permanent goal.
-
-The [development infographic](development-roadmap.md) shows the complete sequence and fixed exit criteria. The [active state](../ACTIVE_PRODUCT_STATE.md) owns current counters; [the handoff](../HANDOFF.md) owns the latest saved endpoint. This page explains priorities rather than duplicating every session.
+The product is a model that plays Pokémon and accumulates a shared, verified Pokédex across games,
+not a fixed Red walkthrough. The [mission](../MISSION.md) and [North Star](../NORTH_STAR.md) are
+stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision and the
+[development infographic](development-roadmap.md) owns the current checklist.
 
 ## Where we are
 
-The observation/control/verification loop works. Model-selected goals have produced sustained bounded Red progress, and checkpoint-based story integration reached the Champion and Hall of Fame under disclosed deterministic battle control.
+The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
+and incremental fitting loop works. The current registered-objective model contains **114 settled
+examples**. Its retained save has **84 registered species**, **64 living species**, **68 specimens**
+and **40 required Red registrations remaining**.
 
-Current work is Red collection: 63 verified registrations and 61 examples under the registered-only learning objective. The latest batch added Dodrio through forced evolution and fitted an actual failed choice among seven destinations. Earlier datasets remain historical; their counts are not silently added. Fresh-game autonomy and independent reliability are not established.
+The latest cycle executed Model113's exact frozen fishing choice once. It added one registration in
+513 actions / 30,804 frames and became row114 without a teacher label. The durable Model114 state
+then exposed six choices across restore, acquisition and resupply; Model114 selected resupply. That
+choice is frozen but unexecuted. This is same-lineage bounded development, not an independent policy
+comparison or full-game result.
+
+This is bounded development progress. It is not a fresh-game autonomous player, independent
+reliability result or learned low-level controller.
 
 ## Next sequence
 
-1. **Sustain useful collection.** Let the model choose missing-species acquisition, supported evolution, supplies and recovery. Keep actual costs and failed searches.
-2. **Remove demonstrated mechanic gaps.** Qualify incidental capture plus route resumption and add missing acquisition/evolution mechanisms as real collection outcomes require them.
-3. **Measure learner value.** Compare with appropriate baselines on genuinely separate situations before claiming better planning, reliable new-seed play or greater authority.
-4. **Broaden Red coverage and fresh-run sequencing.** Collect all declared reachable registrations and account for unsupported or externally dependent entries.
-5. **Integrate Blue/shared memory.** Reuse global registration credit without fabricating local flags or transferable specimens.
-6. **Test a compatible unfamiliar Red modification, then Crystal.** Report initial performance and adaptation separately. Semantic interfaces make reuse possible; they do not prove transfer.
-7. **Extend to later titles.** Add adapters and mechanics only when measured reuse supports the expansion.
-
-These priorities do not change the [baseline's stage exits](../configs/development-roadmap-baseline-v2.json).
+1. **Route capability before ranking — qualified.** Resource routes now fail closed unless the
+   configured executor declares wild, trainer and scripted-dialogue support. Map/species identity
+   remains outside policy features.
+2. **Recover model111 generically — verified.** The retained dialogue closed in eight actions / 576
+   frames, with zero learning credit and no retry of the consumed choice.
+3. **Retrieve capture capabilities across boxes — qualified.** Find a helper by observed
+   move/status capability, switch boxes safely and rebind the original acquisition without
+   resampling. The exact menu proved this was necessary but not sufficient.
+4. **Integrate automatic multi-source fishing — verified.** Production code derives reachable
+   productive destinations, builds bounded bindings and joins them to the mixed menu without
+   identity-bearing policy features.
+5. **Recover and resume Model112 — complete.** The exact dialogue terminal recovered as zero-label
+   support; the frozen restore succeeded once and produced row113 plus a durable Model113 state.
+6. **Continue from supplemental-only acquisition — verified.** Model113 selected one of four
+   authenticated fishing destinations and added a new registration; the real result became row114.
+7. **Fund the next collection cycle — selected.** Model114 chose resupply/income from a six-choice,
+   three-family menu. Execute the frozen choice once and retain its real outcome.
+8. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
+   dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
+   reset or hand-script the target.
+9. **Measure fresh-game composition.** Connect the already authenticated story checkpoints to the
+   same model-facing vocabulary, then test increasingly long Red segments without hidden choices.
+10. **Test an unfamiliar compatible Red modification.** Freeze the Red policy and measure initial
+   competence separately from adaptation. This is the first meaningful portability test.
+11. **Integrate Blue and shared memory.** Reuse global registrations while keeping local flags,
+   owned specimens and version-only availability truthful.
+12. **Adapt to Crystal, then later titles.** Add genuinely new mechanics through adapters and
+   measure what transferred rather than assuming it.
 
 ## Immediate session boundary
 
-PR241 merged. AG01's forced evolution was followed by a genuine seven-way choice. AG02 reached Power Plant but failed after spending both remaining balls; that failed outcome produced model61. The exact terminal is input-ready with 63 registrations, 53 specimens and 1,638 money. The downstream exception lost the completed route's field summary. AB's incidental-arrival repair still lacks live qualification.
+Execute the exact frozen Model114 resupply choice once without a second policy query. Retain its
+actual outcome, fit only an eligible measured result, publish the terminal and rebuild the next
+automatic menu action-free.
 
-Resume from AG02/model61 with complete ancestry, capture-Cut/Surf and the selected Power Plant source. The read-only menu confirms affordable resupply is blocked by transport capability. Connect truthful indoor departure/field transport to the existing supply routine, then attempt one productive collection choice. Return ball exhaustion as a bounded typed outcome and preserve completed-route diagnostics. Allow 60–90 minutes; repeated unchanged-state route inspection is a secondary optimization, not a new infrastructure campaign. Stone procurement remains unfinished. Capture/resume stays 1/3, not a project-completion percentage.
+[Latest evidence](evidence/red-model114-frozen-fishing-learning-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model114-frozen-fishing-learning.md) ·
+[Cross-box qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ## How to stay focused
 
-Each work session names a reusable capability, model-controlled choice, transfer test, cheapest falsifier, time box and stop condition. Evidence and tests support progress; they are not substitutes for played learning results.
-
-Update the current summary in place. Put details in one dated report; never prepend another “Current” block. Record material roadmap changes in [roadmap decisions](roadmap-decisions.md).
-
-[Latest collection report](work-sessions/2026-09-10-surf-collection-access.md) · [Historical roadmap](history/model-roadmap-through-2026-09-10.md)
+Every session names one reusable capability, one model-controlled decision, one cheapest falsifier,
+one time box and one stop condition. Data collection and executable scenarios take priority over
+process. CI runs once after a meaningful verified change; documentation is updated after measured
+progress, not instead of it.

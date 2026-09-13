@@ -17,6 +17,7 @@ from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Protocol, runtime_checkable
 
+from pokemon_red_completion.destination_unavailable import DestinationUnavailableSummary
 from pokemon_red_completion.goal_manager import (
     GoalDecisionOutcome,
     GoalFailureReason,
@@ -470,6 +471,10 @@ class RoutedSemanticGoalComposer:
                 "route_is_policy_kind": False,
                 "private_binding_fields": 0,
                 "private_route_fields": 0,
+                **({"destination_unavailable": DestinationUnavailableSummary(
+                    destination_offer.unavailable_reason,
+                ).public_dict()} if destination_offer is not None
+                   and destination_offer.unavailable_reason is not None else {}),
                 **({"capture_support": capture_support.public_dict()}
                    if capture_support is not None else {}),
                 **({"capture_survey": capture_survey.public_dict()}

@@ -248,3 +248,41 @@ evidence in the comparison: Sol found and repaired its own architectural shortcu
 real boundary falsified it. No claim about model quality or gameplay follows.
 
 Evidence: [V1 five-root preflight failure](evidence/red-development-five-root-preflight-failure-v1-2026-09-05.json).
+
+## 2026-09-12: route-capability repair
+
+This bounded implementation isolated one concrete mismatch: generic dialogue recovery existed, but
+the resource router instantiated it with a zero-dialogue budget while still advertising the route
+as executable. The repair added a capability declaration derived from actual finite budgets,
+propagated it through recovery and travel-capture wrappers, and made candidate construction fail
+closed when any required interruption kind is absent.
+
+The focused 132-test slice passed in 1.47 seconds. The one post-change broad qualification passed
+11,470 tests in 25 minutes 24 seconds, with one expected failure; a separate Mac-only frozen PyBoy
+metadata fingerprint was excluded and disclosed. No external agent was needed for this narrow
+implementation, and no live gameplay or model fit occurred. Exact assistant token use and account
+debit remain unavailable, so the repository cannot claim a measured cost ratio.
+
+Recommendation for the next session: **Sol High, Fast off**. The next work is a bounded exact-state
+recovery, action-free menu inspection and at most one live choice; it needs careful integration but
+not a broad architecture rethink. Use Astra High only if the authenticated recovery exposes an
+ambiguous cross-layer defect. Reserve Claude or Antigravity for the meaningful post-outcome audit
+rather than duplicating this completed gate.
+
+## 2026-09-12: zero-label recovery and cross-box boundary
+
+The qualified source passed one GitHub run, and the exact model111 terminal recovered on its sole
+attempt in eight actions / 576 frames. Publication and two action-free diagnostics established the
+next boundary without another model fit: the party and active box lack capture-status capability,
+while seven suitable helpers exist elsewhere in storage. The session stopped at the forced-only
+menu as planned.
+
+This was integration work with explicit invariants rather than an architecture search. Sol High
+was sufficient: the one-shot identity checks, state publication, menu diagnosis and documentation
+all completed without needing an Astra escalation or external-agent duplicate audit. Repository
+evidence still cannot measure exact token consumption or weekly account debit.
+
+Recommendation for the next session: **Sol High, Fast off** for cross-box helper planning,
+implementation and focused tests. Use Astra High only if preserving field-move dependencies across
+box switching exposes an ambiguous ownership or composition problem. External review is most useful
+after the executable menu changes, not before this clearly bounded adapter seam.

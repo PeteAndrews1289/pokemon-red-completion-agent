@@ -470,5 +470,6 @@ def test_execute_capture_party_at_pc_succeeds_when_helper_is_ready(monkeypatch):
     )
     assert result["capture_party_prepared"] is True
     assert result["specimens_preserved"] == 8
+    assert result["box_rotations"] == 0
     assert result["setup_training_rows"] == 0
     assert result["new_acquisitions"] == 0

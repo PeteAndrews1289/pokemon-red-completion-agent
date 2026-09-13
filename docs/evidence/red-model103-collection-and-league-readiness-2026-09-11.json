@@ -1,0 +1,174 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "league_rematch_executed": false,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "retroactive_sampling_labels": false
+  },
+  "completed_episode": {
+    "actions": 19217,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "episode_id": "red-collection-20260911-bx-01-causal",
+    "frames": 1772647,
+    "sampled_choices": 1,
+    "status": "succeeded",
+    "verified_collection_gain": 1
+  },
+  "learning": {
+    "starting_examples": 99,
+    "ending_examples": 103,
+    "ending_model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+    "new_settled_examples": 4,
+    "latest_two_steps_fitted": false,
+    "latest_two_steps_reason": "Both were forced singleton support steps rather than learned choices."
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 103,
+      "total_examples": 103,
+      "weighted_mse": 0.011794974153538532
+    },
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 103,
+      "economy_qualified_examples": 30,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 103,
+      "successful_examples": 70,
+      "total_examples": 103,
+      "train_dataset_sha256": "8b0a64cfdcdec17d21955ad80c848dbae7830479e53e7bd983d3dfc106e380df",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.011771789128152856,
+      "weighted_mse_before": 0.03169573449955971
+    },
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "4e6b0f21ba99e5447289120e792030487b2b5d391f3075df11a82feea232a42f",
+      "file_sha256": "a9d3f1e711dc1921b155d60d693ec8b1b010a92447d3d1159c9464319bad1bc8",
+      "independent_evaluation": false,
+      "model_sha256": "59252f9d9c677bf78fc38a205a1753497b91c894944e1b86b857a2f8d3b6e843",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "6924b5aa3d16b8ed2557579bd192966246e0719bd12d3f1ed84c0bc7b441f23e",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 103,
+      "source_bundle_sha256": "4df639fdf0c37871033ad6f6d39a66a414f3abdc06c7dd8020dcf7e31addf7a6",
+      "source_commit": "46168082062fa007693c89c0372ed55c3fbf5c39"
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 103,
+      "total_examples": 103,
+      "weighted_mse": 0.011771789128152856
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "collection": {
+    "starting_registered_species": 73,
+    "ending_registered_species": 75,
+    "ending_living_species": 57,
+    "ending_specimens": 61,
+    "required_red_registrations_remaining": 49,
+    "latest_acquisition": {
+      "actions": 1106,
+      "available_goal_count": 1,
+      "frames": 63948,
+      "registrations_added": 1,
+      "selection_mode": "forced_singleton",
+      "status": "succeeded"
+    },
+    "latest_recovery": {
+      "actions": 44,
+      "available_goal_count": 1,
+      "frames": 3588,
+      "selection_mode": "forced_singleton",
+      "status": "succeeded"
+    }
+  },
+  "frontier": {
+    "capture_items": 0,
+    "money": 553,
+    "ordinary_funding_candidates": 0,
+    "regional_capture_candidates": 0,
+    "stop_reason": "no_executable_native_goal"
+  },
+  "renewable_league_qualification": {
+    "battle_count": 5,
+    "battles": [
+      {
+        "expected_money": 5544,
+        "maximum_opponent_level": 56,
+        "objective_id": "defeat_lorelei"
+      },
+      {
+        "expected_money": 5742,
+        "maximum_opponent_level": 58,
+        "objective_id": "defeat_bruno"
+      },
+      {
+        "expected_money": 5940,
+        "maximum_opponent_level": 60,
+        "objective_id": "defeat_agatha"
+      },
+      {
+        "expected_money": 6138,
+        "maximum_opponent_level": 62,
+        "objective_id": "defeat_lance"
+      },
+      {
+        "expected_money": 6435,
+        "maximum_opponent_level": 65,
+        "objective_id": "defeat_champion"
+      }
+    ],
+    "center_exit_steps": 5,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "expected_gross_income": 29799,
+    "indigo_to_first_battle_steps": 21,
+    "net_profit_proven": false,
+    "status": "ready_for_bounded_executor",
+    "survival_proven": false
+  },
+  "source": {
+    "collection_commit": "1e5ce72b15d9be077781b2bfe02f4afd572694ee",
+    "qualification_commit": "617115d6faa0227819a4ea112940bd6f5dac0daf",
+    "focused_tests_passed": 285,
+    "lint_passed": true,
+    "type_check_passed": true
+  },
+  "limitations": [
+    "The four fitted outcomes are related development examples, not an independent success rate.",
+    "The latest acquisition and recovery used deterministic mechanics and supplied no new model target.",
+    "The League rematch has been qualified without input but has not been executed from this save.",
+    "Gross payout does not prove survival, recovery-item cost, net profit or a repeatable purchase cycle.",
+    "Fresh-game autonomy, complete Red registration, ROM-hack adaptation and transfer remain unfinished."
+  ]
+}

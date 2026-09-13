@@ -321,6 +321,31 @@ def _native_training_projection(
         raise ProgressDashboardError("dashboard registered objective boundary differs")
     added = _count(fit, "new_settled_examples")
     curriculum = _count(episode, "curriculum_outcomes") if "curriculum_outcomes" in episode else 0
+    measured_examples = report.get("measured_choice_examples", 0)
+    if type(measured_examples) is not int or measured_examples < 0:  # noqa: E721
+        raise ProgressDashboardError("dashboard measured-choice count differs")
+    measured_trust = measured_examples > 0
+    if measured_trust:
+        if not isinstance(evidence.get("trust"), Mapping) or not isinstance(
+            evidence.get("measured_choice"), Mapping
+        ):
+            raise ProgressDashboardError("dashboard measured-choice trust boundary differs")
+        trust = _mapping(evidence, "trust")
+        measured = _mapping(evidence, "measured_choice")
+        if (
+            trust.get("training_only") is not True
+            or trust.get("action_trace_available") is not False
+            or trust.get("independent_evaluation") is not False
+            or trust.get("authority_promotion_eligible") is not False
+            or trust.get("retrospective_native_trace_claim") is not False
+            or _count(measured, "teacher_labels") != 0
+            or _count(measured, "observer_actions") != 0
+            or _count(measured, "observer_frames") != 0
+            or measured_examples != added
+        ):
+            raise ProgressDashboardError("dashboard measured-choice trust boundary differs")
+    elif evidence.get("trust") is not None or evidence.get("measured_choice") is not None:
+        raise ProgressDashboardError("dashboard measured-choice evidence differs")
     if curriculum and (
         evidence.get("curriculum_contract") != "forced-singleton-story-outcome-unit-weight-v1"
         or fit.get("curriculum_is_comparative_evidence") is not False
@@ -374,6 +399,8 @@ def _native_training_projection(
     component = DashboardLearningComponent(
         name="Registered-Pokédex goal scorer" if registered else "Living-Pokédex goal scorer",
         scope=(
+            "Measured outcome without action trace; training only; no independent evaluation"
+            if measured_trust else
             "Sampled choices plus separately recorded guided outcomes; no independent evaluation"
             if curriculum else
             "Native sampled outcomes; bounded development only; no independent evaluation"

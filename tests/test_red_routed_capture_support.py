@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from types import SimpleNamespace
 
 import pytest
@@ -12,6 +12,7 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
+from pokemon_red_completion.observation import RedBoxCollectionState, RedCurrentBoxState
 
 
 @dataclass
@@ -31,6 +32,9 @@ class Router:
     def _replan(self, _request):
         raise AssertionError('not needed by this bounded transport')
 
+    def plan_feasible_to_map(self, *args, **kwargs):
+        return self.world.plan_feasible_to_map(*args, **kwargs)
+
 
 def unavailable():
     from pokemon_red_completion.goal_manager import (
@@ -47,9 +51,16 @@ def fixture(monkeypatch):
     actions = SimpleNamespace(actions_executed=0)
     emulator = SimpleNamespace(frame_count=0)
     observation = SimpleNamespace(party=party(), collection_observation='all eight specimens')
+    boxes = tuple(
+        RedCurrentBoxState(index, tuple(row.species_id for row in box()), (13, 13))
+        if index == 0 else RedCurrentBoxState(index, (), ())
+        for index in range(12)
+    )
     reader = SimpleNamespace(
-        read_current_box_state=lambda: SimpleNamespace(box_index=0),
+        read_current_box_state=lambda: boxes[0],
         read_current_box_move_members=box,
+        read_all_box_states=lambda: RedBoxCollectionState(boxes, 0, True),
+        read_box_move_members=lambda index: box() if index == 0 else (),
     )
     runtime = SimpleNamespace(
         reader=reader, emulator=emulator,
@@ -73,7 +84,7 @@ def fixture(monkeypatch):
         emulator.frame_count += 50
         return SimpleNamespace(passed=True)
     def pc(plan, *_args, **_kwargs):
-        calls.append(('pc', plan.helper.box_slot, plan.deposit_party_slot))
+        calls.append(('pc', plan.helper_box_index, plan.helper.box_slot, plan.deposit_party_slot))
         actions.actions_executed += 3
         emulator.frame_count += 20
         return {'capture_party_prepared': True, 'setup_training_rows': 0}
@@ -114,7 +125,7 @@ def test_pc_setup_preserves_selected_source_and_meters_every_action(monkeypatch)
     assert report.evidence['capture_support'] == {
         'status_attempts': 3, 'verified_status_observations': 1, 'party_preparations': 1}
     assert binding.verify(report).status.value == 'succeeded'
-    assert calls == ['travel', ('pc', 2, 6), 'capture', 'verify']
+    assert calls == ['travel', ('pc', 0, 2, 6), 'capture', 'verify']
     with pytest.raises(support.RedCapturePartyError, match='consumed'):
         binding.execute()
 
@@ -134,10 +145,23 @@ def test_rebinding_cannot_silently_change_the_destination(monkeypatch):
 def test_absent_helper_masks_only_capture_without_input(monkeypatch):
     router, bindings, observation, calls = fixture(monkeypatch)
     router.runtime.reader.read_current_box_move_members = lambda: (box()[0],)
+    router.runtime.reader.read_box_move_members = (
+        lambda index: (box()[0],) if index == 0 else ()
+    )
     result = support.bind_capture_party_support(router, bindings, observation)
     assert result.bindings == () and calls == []
     assert result.opportunities[0].availability.value == 'unavailable'
     assert result.opportunities[1] == bindings.opportunities[1]
+
+
+def test_box_move_inventory_mismatch_masks_capture_without_input(monkeypatch):
+    router, bindings, observation, calls = fixture(monkeypatch)
+    router.runtime.reader.read_box_move_members = (
+        lambda index: (replace(box()[0], species_id=164), box()[1]) if index == 0 else ()
+    )
+    result = support.bind_capture_party_support(router, bindings, observation)
+    assert result.bindings == () and calls == []
+    assert result.opportunities[0].availability.value == 'unavailable'
 
 
 def test_existing_center_preparation_does_not_search_distant_centers(monkeypatch):
@@ -152,4 +176,55 @@ def test_existing_center_preparation_does_not_search_distant_centers(monkeypatch
     router.world.plan_feasible_to_map = plan
     support.bind_capture_party_support(router, bindings, observation)
     assert destinations == [64]
+    assert calls == []
+
+
+def test_helper_in_another_box_is_bound_without_another_policy_choice(monkeypatch):
+    router, bindings, observation, calls = fixture(monkeypatch)
+    helper = box()[1]
+    states = tuple(
+        RedCurrentBoxState(index, (185,), (13,))
+        if index == 0 else RedCurrentBoxState(index, (helper.species_id,), (helper.level,))
+        if index == 4 else RedCurrentBoxState(index, (), ())
+        for index in range(12)
+    )
+    router.runtime.reader.read_all_box_states = lambda: RedBoxCollectionState(states, 0, True)
+    router.runtime.reader.read_box_move_members = (
+        lambda index: (box()[0],) if index == 0 else (replace(helper, box_slot=1),)
+        if index == 4 else ()
+    )
+    binding = support.bind_capture_party_support(router, bindings, observation).bindings[0]
+    report = binding.execute()
+    assert report.evidence['capture_party_prepared'] is True
+    assert calls == ['travel', ('pc', 4, 1, 6), 'capture']
+
+
+def test_already_selected_live_acquisition_keeps_identity_through_pc_setup(monkeypatch):
+    router, _bindings, observation, calls = fixture(monkeypatch)
+    selected = router.fresh_binding
+
+    supported = support.bind_selected_capture_party_support(router, selected, observation)
+
+    assert calls == []
+    assert supported is not selected
+    assert supported.binding_ref == selected.binding_ref
+    assert supported.search_source_ref == selected.search_source_ref
+    report = supported.execute()
+    assert (report.actions_executed, report.frames_executed) == (15, 100)
+    assert report.evidence['capture_support']['party_preparations'] == 1
+    assert supported.verify(report).status.value == 'succeeded'
+    assert calls == ['travel', ('pc', 0, 2, 6), 'capture', 'verify']
+    with pytest.raises(support.RedCapturePartyError, match='consumed'):
+        supported.execute()
+
+
+def test_selected_capture_support_rejects_non_acquisition_without_input(monkeypatch):
+    router, _bindings, observation, calls = fixture(monkeypatch)
+    selected = replace(
+        router.fresh_binding, kind=GoalKind.RESUPPLY, search_source_ref=None
+    )
+
+    with pytest.raises(support.RedCapturePartyError, match='selected acquisition'):
+        support.bind_selected_capture_party_support(router, selected, observation)
+
     assert calls == []

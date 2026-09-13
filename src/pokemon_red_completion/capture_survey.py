@@ -22,7 +22,9 @@ _REQUIRED_EVIDENCE_FIELDS = frozenset({
     "search_exhausted",
     "safety_stopped",
 })
-_ALLOWED_EVIDENCE_FIELDS = _REQUIRED_EVIDENCE_FIELDS | {"search_stop_reason"}
+_ALLOWED_EVIDENCE_FIELDS = _REQUIRED_EVIDENCE_FIELDS | {
+    "search_stop_reason", "capture_items_exhausted",
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -36,6 +38,7 @@ class CaptureSurveySummary:
     search_exhausted: bool
     safety_stopped: bool
     search_stop_reason: str | None = None
+    capture_items_exhausted: bool = False
 
     def __post_init__(self) -> None:
         for name, maximum in (
@@ -49,12 +52,14 @@ class CaptureSurveySummary:
                 raise ValueError(
                     f"{name} must be an exact non-negative bounded integer <= {maximum}"
                 )
-        for name in ("search_exhausted", "safety_stopped"):
+        for name in ("search_exhausted", "safety_stopped", "capture_items_exhausted"):
             value = getattr(self, name)
             if type(value) is not bool:
                 raise ValueError(f"{name} must be an exact bool")
         if self.captures + self.flees > self.encounters_seen:
             raise ValueError("captures and flees cannot exceed encounters seen")
+        if self.capture_items_exhausted and (self.search_exhausted or self.safety_stopped):
+            raise ValueError("capture item exhaustion must be a distinct terminal stop")
         if (
             self.search_stop_reason is not None
             and self.search_stop_reason != ALLOWED_SEARCH_STOP_REASON
@@ -80,6 +85,8 @@ class CaptureSurveySummary:
         }
         if self.search_stop_reason is not None:
             result["search_stop_reason"] = self.search_stop_reason
+        if self.capture_items_exhausted:
+            result["capture_items_exhausted"] = True
         return result
 
     @classmethod
@@ -117,4 +124,5 @@ class CaptureSurveySummary:
             search_exhausted=raw["search_exhausted"],  # type: ignore[arg-type]
             safety_stopped=raw["safety_stopped"],  # type: ignore[arg-type]
             search_stop_reason=stop_reason,
+            capture_items_exhausted=raw.get("capture_items_exhausted", False),  # type: ignore[arg-type]
         )

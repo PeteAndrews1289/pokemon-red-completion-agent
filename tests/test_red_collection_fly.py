@@ -217,6 +217,28 @@ def test_real_fly_controller_then_walk_and_fresh_skill_share_actual_accounting(s
         binding.execute()
 
 
+@pytest.mark.parametrize("enabled", [False, True])
+def test_mart_uses_same_verified_fly_and_fresh_destination_only_when_enabled(scene, enabled):
+    from test_red_resupply_fly import supply_spec
+    spec = supply_spec(scene, enabled=enabled)
+    fresh = FreshRedGoalObservation(
+        "0" * 64, scene.router.runtime.adapter.observe(), scene.observer.observe()
+    )
+    binding = bind_collection_fly(scene.router, spec, scene.provider, fresh, scene.observer)
+    assert not scene.game.actions and not scene.provider_calls
+    if not enabled:
+        assert binding is None
+        return
+    assert binding.kind is GoalKind.RESUPPLY
+    report = binding.execute()
+    assert binding.verify(report).status.value == "succeeded"
+    assert scene.provider_calls == [(89, 3, 3)]
+    assert scene.game.flight_confirms == 1
+    assert report.evidence["field_moves"] == {"cuts": 0, "surfs": 0, "flights": 1}
+    assert report.actions_executed == scene.router.actions.actions_executed
+    assert report.frames_executed == scene.game.frame_count
+
+
 @pytest.mark.parametrize(
     "change", ["badge", "holder", "fainted", "indoor", "unvisited", "blocked_landing", "no_route"]
 )

@@ -62,6 +62,19 @@ def test_invalid_starter_refuses(starter):
 
 
 @pytest.mark.parametrize("starter", [1, 153, 176, 190])
+def test_rival_starter_can_be_read_outside_the_room_local_scene(starter):
+    source = memory(map_id=0, starter=starter)
+    assert PokemonRedStateReader(source).read_rival_starter() == starter
+    assert source.reads == [0xD715]
+
+
+@pytest.mark.parametrize("starter", [0, 191, 255])
+def test_standalone_rival_starter_rejects_invalid_values(starter):
+    with pytest.raises(SemanticStateError, match="starter"):
+        PokemonRedStateReader(memory(map_id=0, starter=starter)).read_rival_starter()
+
+
+@pytest.mark.parametrize("starter", [1, 153, 176, 190])
 @pytest.mark.parametrize("queue", [0, 1, 100])
 def test_starter_and_queue_are_observed_without_stage_or_victory_inference(starter, queue):
     scene = PokemonRedStateReader(memory(starter=starter, queue=queue)).read_final_league_scene()

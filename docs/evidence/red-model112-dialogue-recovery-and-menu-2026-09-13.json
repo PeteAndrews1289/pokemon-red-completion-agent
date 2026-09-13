@@ -1,0 +1,62 @@
+{
+  "audit": {
+    "auditor": "gemini-3.8-flash-high",
+    "source_bundle_recomputed": true,
+    "verdict_before_execution": "go_after_exact_head_ci_green"
+  },
+  "boundaries": {
+    "acquisition_retried": false,
+    "action_trace_available": false,
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fresh_goal_executed": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "teacher_labels": 0,
+    "training_examples_added": 0
+  },
+  "menu": {
+    "action_free": true,
+    "candidate_count": 5,
+    "controller_actions": 0,
+    "distinct_option_kinds": 2,
+    "emulator_frames": 0,
+    "fishing_candidate_count": 4,
+    "identity_fields_public": 0,
+    "menu_sha256": "c5fd34387f430a964b8a58e2b7199816fc11de424f550e6b189e60064193f362",
+    "mode": "model_exploration",
+    "model_sha256": "f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0",
+    "selected_candidate_index": 0,
+    "selected_option_kind": "restore",
+    "selected_probability": 0.599148676088116
+  },
+  "publication": {
+    "checkpoint_record_sha256": "793d9e9dc9c5b38d0b21de48c31285aed32ebeaacc19d435801d94cf5e77800a",
+    "input_ready": true,
+    "living_species": 63,
+    "registered_species": 83,
+    "state_sha256": "4801bbd3bd60aa7dc99b245d5a1893aa2cbf253d5e8dc233dc5bea44a46ca47b",
+    "total_living_specimens": 67,
+    "trajectory_manifest_sha256": "7959b52e9269503285e7dd128afed8912feceb2a381679b82ca2e9aab715465b"
+  },
+  "recovery": {
+    "controller_actions": 8,
+    "dialogue_cancel_pulses": 4,
+    "emulator_frames": 576,
+    "parent_checkpoint_sha256": "babe391f75208f80032f7ff3c32a098ac8a0c55b8a362be4c6afd7a67c08eace",
+    "parent_state_sha256": "9ed90d82f93a4d9fb5eb1a1327f5d81824252ab01ba10946fa659f0ea4e5cb7b",
+    "position_changed": true,
+    "registered_species_after": 83,
+    "result_sha256": "1046e309632e224f407ddea98a4e1d0d35381e51597df2010a3d650cf8b8ffac",
+    "status": "verified_input_ready"
+  },
+  "schema": "pokemon.red.model112-dialogue-recovery-and-menu-evidence.v1",
+  "session_id": "2026-09-13-model112-dialogue-recovery-and-menu",
+  "source": {
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 34743224160,
+    "source_bundle_sha256": "de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e",
+    "source_commit": "5dcdce45737538e2ce4fdabceab4574949614896"
+  }
+}

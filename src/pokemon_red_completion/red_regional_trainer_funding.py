@@ -1,7 +1,8 @@
 """Bounded, walking-only income candidates across ordinary map connections.
 
-This is a prospective skill planner, not learned trainer selection. It excludes
-doors, HMs, ledges and scripted passages; no static candidate authorizes input.
+This is a prospective skill planner, not learned trainer selection. Defaults
+exclude doors; an explicit observed indoor exit is supported without adding
+arbitrary doors, HMs, ledges or scripted passages. No candidate authorizes input.
 The existing funding executor must recheck live hazards and target identity.
 """
 
@@ -50,6 +51,8 @@ def regional_trainer_funding_candidates(
     *,
     inventoried_maps: frozenset[int],
     maximum_steps: int = 256,
+    indoor_exit_map: int | None = None,
+    static_blockers: Mapping[int, frozenset[tuple[int, int]]] | None = None,
 ) -> tuple[TrainerFundingCandidate, ...]:
     """Route only through inventoried maps, reserving bodies and all sight lanes.
 
@@ -59,15 +62,22 @@ def regional_trainer_funding_candidates(
     """
     if type(maximum_steps) is not int or maximum_steps < 1:
         raise ValueError("maximum_steps must be a positive integer")
-    maps = connected_funding_maps(world.macro_graph, start.map_id)
+    maps = funding_scope(world.macro_graph, start, indoor_exit_map=indoor_exit_map)
     if inventoried_maps != maps or any(t.map_id not in maps for t in trainers):
         raise ValueError("regional funding requires complete bounded map inventory")
     if len({(t.map_id, t.sprite_index) for t in trainers}) != len(trainers):
         raise ValueError("regional funding contains duplicate trainer identities")
     if not start.ready or start.interruption is not None or start.mode != "land":
         return ()
-    blocked: dict[int, frozenset[tuple[int, int]]] = {m: frozenset() for m in maps}
-    blocked[start.map_id] = start.occupied | frozenset(h.at for h in start.hazards)
+    if static_blockers is not None and (
+        set(static_blockers) != maps
+        or any(not isinstance(points, frozenset) for points in static_blockers.values())
+    ):
+        raise ValueError("regional funding requires complete static object inventory")
+    blocked: dict[int, frozenset[tuple[int, int]]] = {
+        m: static_blockers[m] if static_blockers is not None else frozenset() for m in maps
+    }
+    blocked[start.map_id] |= start.occupied | frozenset(h.at for h in start.hazards)
     for trainer in trainers:
         blocked[trainer.map_id] |= {trainer.at}
         if trainer.active:
@@ -82,7 +92,14 @@ def regional_trainer_funding_candidates(
             m: tuple(
                 e
                 for e in world.macro_graph.neighbors(m)
-                if e.kind == "connection" and e.target_map in maps
+                if (e.kind == "connection" and e.target_map in maps)
+                or (
+                    indoor_exit_map is not None and m == start.map_id
+                    and e.kind in {"warp", "return"}
+                    and (e.target_map == indoor_exit_map or (
+                        e.kind == "return" and e.target_map is None
+                    ))
+                )
             )
             for m in maps
         },
@@ -107,6 +124,13 @@ def regional_trainer_funding_candidates(
     result = []
     for trainer in trainers:
         if trainer.defeated:
+            continue
+        # The cartridge trainer bit also marks scripted encounters such as
+        # stationary legendaries.  They remain reserved bodies/sight lanes
+        # above, but they are not ordinary payout candidates and their script
+        # identifiers do not index the trainer-party table.  Do not let one
+        # such object make an otherwise healthy post-action observation fail.
+        if type(trainer.trainer_class) is not int or not 201 <= trainer.trainer_class <= 246:
             continue
         quote = trainer_party_quote(rom, trainer.trainer_class, trainer.trainer_set)
         approaches = []
@@ -146,7 +170,12 @@ def regional_trainer_funding_candidates(
                     )
                     or step.action_kind is not MacroActionKind.MOVE
                     or step.action not in {"up", "down", "left", "right"}
-                    or step.kind not in {"walk", "connection"}
+                    or (step.kind not in {"walk", "connection"} and not (
+                        indoor_exit_map is not None
+                        and step.source_map == start.map_id
+                        and step.expected_map == indoor_exit_map
+                        and step.kind in {"warp", "return"}
+                    ))
                     or step.source_mode != "land"
                     or step.expected_mode != "land"
                 ):
@@ -158,3 +187,21 @@ def regional_trainer_funding_candidates(
         if approaches:
             result.append(min(approaches, key=lambda c: len(c.approach.steps)))
     return tuple(result)
+
+
+def funding_scope(
+    graph: MacroGraph, start: TraversalSnapshot, *, indoor_exit_map: int | None = None,
+) -> frozenset[int]:
+    """An explicit indoor exit adds only its outside map and immediate connections.
+
+    The runtime additionally requires a known Center and an opted-in profile.
+    No arbitrary door traversal, second outdoor hop, Fly or HM is enabled.
+    """
+    if indoor_exit_map is None:
+        return connected_funding_maps(graph, start.map_id)
+    if (
+        type(indoor_exit_map) is not int or not 0 <= indoor_exit_map <= 0x24
+        or start.map_id < 0x25 or start.last_outside_map != indoor_exit_map
+    ):
+        raise ValueError("funding departure requires the observed indoor/outdoor boundary")
+    return connected_funding_maps(graph, indoor_exit_map) | {start.map_id}

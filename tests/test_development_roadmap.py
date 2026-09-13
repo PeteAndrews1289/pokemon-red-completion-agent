@@ -89,6 +89,31 @@ def test_graphic_updates_current_position_and_checklist_without_static_claims(pr
     assert "Checkpoint-based Red story: verified" in render_svg(baseline, state, lane, evidence)
 
 
+def test_ten_item_checklist_stays_above_its_progress_bar(project):
+    baseline, state, lane, evidence = load_roadmap(project)
+    state["milestone"]["items"] = [
+        {"label": f"Fixture criterion {i}", "done": i < 9} for i in range(10)
+    ]
+
+    root = ElementTree.fromstring(render_svg(baseline, state, lane, evidence))
+    namespace = {"svg": "http://www.w3.org/2000/svg"}
+    checklist = [
+        node
+        for node in root.findall("svg:text", namespace)
+        if node.get("x") == "778" and (node.text or "").startswith("Fixture criterion")
+    ]
+    progress = next(
+        node
+        for node in root.findall("svg:rect", namespace)
+        if node.get("x") == "80" and node.get("width") == "1260"
+    )
+
+    assert len(checklist) == 10
+    assert max(int(node.get("y", "0")) for node in checklist) + 20 < int(
+        progress.get("y", "0")
+    )
+
+
 def test_changed_learning_evidence_is_rejected(project):
     ref = json.loads((project / "configs/dashboard-learning-evidence.json").read_text())
     path = project / ref["path"]

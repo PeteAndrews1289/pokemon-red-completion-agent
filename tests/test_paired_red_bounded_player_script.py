@@ -28,6 +28,90 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = PROJECT_ROOT / "scripts" / "run_paired_red_bounded_player.py"
 
 
+def test_mart_funding_transition_is_prospective_and_registered_only(monkeypatch):
+    from test_red_goal_context_profile import _indoor_supply_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _indoor_supply_profile()
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, ("mart-funding-departure",), object())
+    (after,) = derive(before, ("mart-funding-departure",), object(),
+                      allow_cartridge_sources=True)
+    assert "mart_funding_departure" not in before.providers[2].parameters
+    assert after.providers[2].parameters["mart_funding_departure"] is True
+    assert after.providers[:2] == before.providers[:2]
+    assert after.manager_config == before.manager_config
+    assert "--mart-funding-departure" in module["_parser"]().format_help()
+
+
+def test_funding_fly_transition_is_prospective_and_registered_only(monkeypatch):
+    from test_red_goal_context_profile import _indoor_supply_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _indoor_supply_profile()
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, ("funding-fly",), object())
+    (after,) = derive(before, ("funding-fly",), object(), allow_cartridge_sources=True)
+    assert "funding_fly_transport" not in before.providers[2].parameters
+    assert after.providers[2].parameters["funding_fly_transport"] is True
+    assert after.providers[:2] == before.providers[:2]
+    assert after.manager_config == before.manager_config
+    assert "--funding-fly-transport" in module["_parser"]().format_help()
+
+
+def test_resource_choice_transition_requires_registered_and_affordable_supply(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _supply_transition_profile()
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, ("resource-choice-variants",), object())
+    old, new = derive(
+        before, ("affordable-capture-supply", "resource-choice-variants"), object(),
+        allow_cartridge_sources=True,
+    )
+    assert "resource_choice_variants" not in old.providers[2].parameters
+    assert new.providers[2].parameters["resource_choice_variants"] is True
+    assert new.providers[:2] == old.providers[:2]
+    assert new.manager_config == old.manager_config
+    assert "--resource-choice-variants" in module["_parser"]().format_help()
+
+
+def test_composable_funding_transition_is_prospective_and_registered_only(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _supply_transition_profile()
+    transitions = (
+        "affordable-capture-supply",
+        "resource-choice-variants",
+        "composable-trainer-funding",
+    )
+    with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="registered_objective"):
+        derive(before, transitions, object())
+    old, choice, after = derive(
+        before, transitions, object(), allow_cartridge_sources=True,
+    )
+    assert "composable_trainer_funding" not in choice.providers[2].parameters
+    assert after.providers[2].parameters["composable_trainer_funding"] is True
+    assert after.providers[:2] == old.providers[:2]
+    assert after.manager_config == old.manager_config
+    assert "--composable-trainer-funding" in module["_parser"]().format_help()
+
+
+def test_routed_storage_relief_is_an_explicit_runner_option() -> None:
+    module = runpy.run_path(str(SCRIPT))
+    assert "--routed-storage-relief" in module["_parser"]().format_help()
+
+
 def test_search_budget_transition_preserves_history_and_requires_registration(monkeypatch):
     from test_red_living_dex_wild_corridor import _local_discovery_profile
     module = runpy.run_path(str(SCRIPT))
@@ -59,6 +143,20 @@ def test_capture_cut_is_an_ordered_prospective_transition(monkeypatch, field):
     assert new.providers[0].parameters['fly_transport'] is True
     assert derive(before, ('capture-fly',), object()) == (old,)
     assert '--capture-' + field + '-transport' in module['_parser']().format_help()
+
+
+def test_resupply_fly_is_an_ordered_prospective_transition(monkeypatch):
+    from test_red_goal_context_profile import _supply_transition_profile
+    module = runpy.run_path(str(SCRIPT))
+    derive = module["_regional_profiles"]
+    monkeypatch.setitem(derive.__globals__, "_route_world", lambda _: object())
+    before = _supply_transition_profile()
+    (new,) = derive(before, ("resupply-fly",), object())
+    assert new.providers[:2] == before.providers[:2]
+    assert "fly_transport" not in before.providers[2].parameters
+    assert new.providers[2].parameters["fly_transport"] is True
+    assert new.providers[2].parameters["indoor_fly_departure"] is True
+    assert "--resupply-fly-transport" in module["_parser"]().format_help()
 
 
 def test_observed_capture_is_an_ordered_prospective_transition(monkeypatch):
@@ -201,6 +299,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
 
     def player(
         _runtime, actions, *_args, completion_dose=False, routed_recovery=False,
+        routed_storage_relief=False,
         trainer_funding=False,
         trainer_pending_recovery=False,
         regional_trainer_funding=False,
@@ -209,6 +308,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
     ):
         assert completion_dose is False
         assert routed_recovery is False
+        assert routed_storage_relief is True
         assert trainer_funding is False
         assert trainer_pending_recovery is False
         assert regional_trainer_funding is False
@@ -234,7 +334,7 @@ def test_live_skill_has_real_limits_without_bypassing_observation_gate_or_total(
     observer = observe_type(
         runtime=object(), actions=count_type(outer), meter=meter,
         maximum_actions_per_decision=1, remaining_acquisition_demand=remaining_mode,
-        level_evolution_acquisitions=remaining_mode,
+        level_evolution_acquisitions=remaining_mode, routed_storage_relief=True,
     )
     if probe_during_observation:
         with pytest.raises(module["PairedRedBoundedPlayerRunError"], match="action_free"):
@@ -844,22 +944,26 @@ def test_routed_mode_uses_the_same_observer_hook_instead_of_local_only(monkeypat
     assert routed.enumerate_bindings(object()) is sentinel
     factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(), True)
     completed = factory(SimpleNamespace(profile=SimpleNamespace(providers=())), object(), object(),
-                        completion_dose=True, routed_recovery=True, trainer_funding=True,
+                        completion_dose=True, routed_recovery=True,
+                        routed_storage_relief=True, trainer_funding=True,
                         trainer_pending_recovery=True, regional_trainer_funding=True,
                         observed_trainer_funding=True)
     assert completed.collection_projector.__name__ == "living_completion_checkpoint"
     assert received == [
-        {"quote_resource_costs": False, "prepare_capture_storage": False, "routed_recovery": False,
+        {"quote_resource_costs": False, "prepare_capture_storage": False,
+         "routed_storage_relief": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
          "regional_trainer_funding": False, "observed_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": True, "prepare_capture_storage": False, "routed_recovery": False,
+        {"quote_resource_costs": True, "prepare_capture_storage": False,
+         "routed_storage_relief": False, "routed_recovery": False,
          "trainer_funding": False, "trainer_pending_recovery": False,
          "regional_trainer_funding": False, "observed_trainer_funding": False,
          "maximum_controller_actions": 6000,
          "maximum_emulator_frames": 600000},
-        {"quote_resource_costs": False, "prepare_capture_storage": True, "routed_recovery": True,
+        {"quote_resource_costs": False, "prepare_capture_storage": True,
+         "routed_storage_relief": True, "routed_recovery": True,
          "trainer_funding": True, "trainer_pending_recovery": True,
          "regional_trainer_funding": True, "observed_trainer_funding": True,
          "maximum_controller_actions": 30000,

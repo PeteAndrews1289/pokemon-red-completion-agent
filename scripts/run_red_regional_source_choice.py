@@ -130,8 +130,16 @@ def source_search_memory(ready: base._Readiness) -> GoalSearchMemory:
     return memory
 
 
-def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) -> tuple[Any, ...]:
-    """Restore the exact parent and enumerate without predictions or controller input."""
+def inspect_sources(
+    ready: base._Readiness, *, allow_no_choice: bool = False, include_menu: bool = True,
+) -> tuple[Any, ...]:
+    """Restore and enumerate; inventory-only callers need no ranking history.
+
+    Actual choice callers retain the default authenticated history projection.
+    Skipping a menu never skips restoring or checking the fresh game state.
+    """
+    if type(include_menu) is not bool:
+        raise ValueError("include_menu must be a boolean")
     if ready.continuation is None or ready.training_plan is None or ready.causal_record is None:
         raise ValueError("regional source choice requires an authenticated train continuation")
     world = base._route_world(ready)
@@ -180,12 +188,19 @@ def inspect_sources(ready: base._Readiness, *, allow_no_choice: bool = False) ->
             routed_recovery=ready.routed_recovery,
             prepare_capture_storage=ready.completion_dose,
         )
-        memory = source_search_memory(ready)
-        menu = (
-            None
-            if allow_no_choice and len(candidates) < 2
-            else regional_acquisition_menu(observed, candidates, memory)
-        )
+        menu = None
+        if include_menu and not (allow_no_choice and len(candidates) < 2):
+            try:
+                menu = regional_acquisition_menu(
+                    observed, candidates, source_search_memory(ready)
+                )
+            except ValueError as error:
+                if not (
+                    allow_no_choice
+                    and str(error)
+                    == "regional candidates have no distinguishable semantic features"
+                ):
+                    raise
         if (
             before != emulator.save_state_bytes()
             or frame != emulator.frame_count
@@ -208,8 +223,17 @@ def _require_capture_parent(preflight: dict[str, Any]) -> None:
         raise ValueError("regional parent would override or duplicate the source choice")
 
 
-def _run(args: argparse.Namespace) -> dict[str, object]:
-    ready = base._prepare(args)
+def _run_prepared(
+    ready: base._Readiness,
+    *,
+    inspected: tuple[Any, ...] | None = None,
+) -> dict[str, object]:
+    """Execute one source choice from the caller's authenticated readiness.
+
+    This keeps the preparation snapshot call-local: inventory and commitment use
+    the same immutable ancestry that was authenticated immediately before them.
+    It avoids reparsing that entire ancestry a second time before controller input.
+    """
     if ready.decision_limit != 1 or not ready.save_terminal_checkpoints:
         raise ValueError("regional pilot requires one saved bounded acquisition")
     assert ready.training_plan is not None and ready.causal_record is not None
@@ -217,8 +241,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     choice_id = regional_choice_record_id(episode_id)
     if ready.private_root.find_sealed_record(choice_id, expected_kind=REGIONAL_CHOICE_KIND):
         raise ValueError("regional choice identity already consumed; never resample")
-    observed, candidates, menu = inspect_sources(ready)
+    observed, candidates, menu = inspected if inspected is not None else inspect_sources(ready)
     require_source_attempt_ready(observed)
+    if menu is None or len(candidates) < 2:
+        raise ValueError("regional pilot needs an inspected genuine source choice")
     selection = sample_regional_acquisition(
         ready.causal_record.model,
         menu,
@@ -407,6 +433,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_fitted": False,
         "independent_evaluation": False,
     }
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    return _run_prepared(base._prepare(args))
 
 
 def main(argv: list[str] | None = None) -> int:

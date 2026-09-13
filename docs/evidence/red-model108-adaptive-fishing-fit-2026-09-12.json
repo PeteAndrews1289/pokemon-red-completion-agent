@@ -1,0 +1,144 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "source": {
+    "source_commit": "fd0355760ce3d762716ca1d528975a7e646220ff",
+    "source_bundle_sha256": "b12a0d0a14a1373aa1ddf5dbf73e580b4ff89669049479f6cd02f46f2c911b97",
+    "focused_tests_passed": 115,
+    "lint_passed": true,
+    "type_check_passed": true
+  },
+  "measured_choice": {
+    "record_sha256": "b6899db89e272344b2d1b407ec71ec237d2b8b3abd45d7f6f4824471e495387a",
+    "segment_inventory_sha256": "e002e83daaa5d619fd9737ea25e792d4eb0b076c85b9fd6b5f412eef963def23",
+    "candidate_count": 8,
+    "selected_candidate_index": 6,
+    "teacher_labels": 0,
+    "segments": 1,
+    "historical_actions": 1101,
+    "historical_frames": 57132,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "registered_before": 81,
+    "registered_after": 82,
+    "specimens_before": 65,
+    "specimens_after": 66
+  },
+  "completed_episode": {
+    "episode_id": "red-model107-fishing-destination-success-20260912",
+    "status": "succeeded",
+    "actions": 1101,
+    "frames": 57132,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "admitted_examples": 1,
+    "available_goal_count": 8,
+    "selected_kind": "fishing_destination",
+    "verified_collection_gain": 1
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 108,
+      "total_examples": 108,
+      "weighted_mse": 0.011103349611791248
+    },
+    "fit_report": {
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "feature_version": 4,
+      "total_examples": 108,
+      "settled_examples": 108,
+      "successful_examples": 74,
+      "distinct_selected_feature_rows": 108,
+      "economy_qualified_examples": 31,
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "outcome_balance_required": false,
+      "missing_history": "unknown_not_unattempted",
+      "train_dataset_sha256": "2f2763c865e77e323b6b146ed381c9ee00cb961ece93f445d8604b05deb3043a",
+      "weighted_mse_before": 0.03168964237286518,
+      "weighted_mse_after": 0.011026853216327267,
+      "measured_choice_examples": 1
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 108,
+      "model_sha256": "50ef6eae8e461ad6cf125c0e1858640c10f2bc27d6985a570e31c5bb1cb5e600",
+      "prior_model_sha256": "871b422f8386d976f3c77645cfae4f8bf90631f297efa50417214503674695eb",
+      "file_sha256": "53240aa57f0c4e2210e426c5780faa008d74238f3d89d2ef6c8128d4369dd995",
+      "corpus_sha256": "7a4d6b33e468f66f5eddee611078d1a3dc684758e11ec9b7d3c7e55684c6ddb8",
+      "source_bundle_sha256": "b12a0d0a14a1373aa1ddf5dbf73e580b4ff89669049479f6cd02f46f2c911b97",
+      "source_commit": "fd0355760ce3d762716ca1d528975a7e646220ff",
+      "independent_evaluation": false,
+      "ci_is_training_dependency": false,
+      "private_path_fields": 0
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 108,
+      "total_examples": 108,
+      "weighted_mse": 0.011026853216327268
+    }
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "collection": {
+    "starting_registered_species": 81,
+    "ending_registered_species": 82,
+    "ending_living_species": 62,
+    "ending_specimens": 66,
+    "required_red_registrations_remaining": 42
+  },
+  "learning": {
+    "starting_examples": 107,
+    "ending_examples": 108,
+    "prior_row_hashes_retained": 107,
+    "new_settled_examples": 1,
+    "measured_choice_examples": 1,
+    "teacher_labels": 0
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false,
+    "model_choice_recomputed": true,
+    "registered_transition_verified": true,
+    "state_chain_verified": true,
+    "aggregate_costs_verified": true
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "full_game_replays": 0,
+    "sealed_red_accesses": 0,
+    "teacher_fallbacks": 0,
+    "independent_evaluation": false,
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "low_level_control_learned": false,
+    "full_game_autonomy_claimed": false
+  },
+  "limitations": [
+    "The admitted example authenticates the committed model choice, state chain, aggregate costs and registered outcome, but it has no per-action player journal.",
+    "The immediately preceding failed choice was retained as a separate training-only row; the changed next sample is not an independent policy comparison.",
+    "This row is training-only and cannot support independent evaluation or authority promotion.",
+    "Fresh-game autonomy, complete Red registration, modified-Red adaptation and cross-title transfer remain unproved."
+  ]
+}

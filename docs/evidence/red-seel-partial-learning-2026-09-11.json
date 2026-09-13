@@ -1,0 +1,260 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "status": "fit_complete_bounded_only",
+  "boundaries": {
+    "authority_promotions": 0,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "corpus_record_sha256": "255a51c72895c2d115986b2bcab07dafcc8e72f2324dccd0ccd5aba8815ceeea",
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 76,
+      "economy_qualified_examples": 7,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 76,
+      "successful_examples": 45,
+      "total_examples": 76,
+      "train_dataset_sha256": "d52a666f0ed425e0f67724de073a69de85d923f03627e83caed311d4ef435fe0",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.010944213036546978,
+      "weighted_mse_before": 0.032925365769678916
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "03c256b7bb34de170547168ebdd9ff9461019d23a937c2fa493f3b0188396f2d",
+      "file_sha256": "6f101835738ccdc2729d8982f810092e136bf76518abc2a1b1e9e209aaca64a5",
+      "independent_evaluation": false,
+      "model_sha256": "4988b114c0c5935708aa911e4aca9b50bf19e23ee6a5e6947cdaad283207c595",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "9343948f2a4675bc6bbff212a7a0166b2a41c7076c7dc45daafe5efeca37e39a",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 76,
+      "source_bundle_sha256": "036bb8fab44638748b9da407886c8fb5042e79ffd2968cde1eb5252c920b9675",
+      "source_commit": "767ba9a03d49cd202a995b7b7fd21c315d7de2f2"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_model_role": "behavior_and_in_sample_comparison_only",
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07834045852133892,
+        0.000007735708053899232,
+        0.0000045499051365296305,
+        0.0011765051171499514,
+        0.0009157127205150227,
+        0.016553053849844127,
+        0.0017144726141586875,
+        0.0000030464037627850548,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 76,
+      "total_examples": 76,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010968392759995546
+    },
+    "regional_source_examples": 29,
+    "schema": "pokemon.red.registered-player-fit-result.v1",
+    "updated_train_error": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "outcome_names": [
+        "verified_success",
+        "completion_gain",
+        "dependency_unlock_gain",
+        "action_cost",
+        "frame_cost",
+        "resource_cost",
+        "party_cost",
+        "storage_cost",
+        "irreversible_loss"
+      ],
+      "partition": "train",
+      "per_outcome_weighted_mse": [
+        0.07826235374450874,
+        0.000007634697963974597,
+        0.000004560489257476647,
+        0.0011762853901732108,
+        0.0009155997679667337,
+        0.016414065047774987,
+        0.001714415706462713,
+        0.0000030024848149703273,
+        0
+      ],
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 76,
+      "total_examples": 76,
+      "unselected_action_targets": 0,
+      "weighted_mse": 0.010944213036546978
+    }
+  },
+  "completed_episode": {
+    "episode_id": "red-collection-20260911-bb-01-causal",
+    "actions": 370,
+    "frames": 26892,
+    "admitted_examples": 1,
+    "sampled_choices": 1,
+    "curriculum_outcomes": 0,
+    "verified_collection_gain": 1,
+    "status": "failed"
+  },
+  "session": {
+    "steps": [
+      {
+        "actions": 370,
+        "available_goal_count": 1,
+        "behavior_policy_id": null,
+        "capture_survey": null,
+        "checkpoint_sha256": "d0ad1b0d38db05971af6fa147758a78c6a1abcb59d0c64ce0a825204f6a83a89",
+        "destination_candidate_count": 6,
+        "eligible_examples": 1,
+        "episode_id": "red-collection-20260911-bb-01-causal",
+        "exploration_mix": 0,
+        "failure_reason": "binding_failed",
+        "fit_performed": true,
+        "frames": 26892,
+        "manifest_sha256": "287cbcc0d1cfeffbafd7b0a4fef072236f0956ce71b254c27f1fe2d0f277f219",
+        "new_registrations": [
+          "pokemon:national:086"
+        ],
+        "observed_wild_battle_starts": [
+          {
+            "area": "pokemon.red.gb.us.rev0:area:route_19",
+            "level": 10,
+            "registered_before_step": false,
+            "species": "pokemon:national:072"
+          },
+          {
+            "area": "pokemon.red.gb.us.rev0:area:route_19",
+            "level": 5,
+            "registered_before_step": false,
+            "species": "pokemon:national:072"
+          },
+          {
+            "area": "pokemon.red.gb.us.rev0:area:seafoam_islands_1f",
+            "level": 30,
+            "registered_before_step": false,
+            "species": "pokemon:national:086"
+          }
+        ],
+        "proposed_source": null,
+        "registered_after": 66,
+        "registered_before": 65,
+        "sampled_native_goal": false,
+        "selected_kind": "acquire_species",
+        "selected_source": "wild:SeafoamIslands1F:grass",
+        "selection_mode": "forced_singleton",
+        "selection_scope": "regional_destination",
+        "status": "failed",
+        "travel_capture_receipts": []
+      }
+    ],
+    "attempted_steps": 1,
+    "completed_steps": 0,
+    "fits": 1,
+    "registered_examples_before": 75,
+    "registered_examples_after": 76,
+    "initial_registered": 65,
+    "last_verified_registered": 66,
+    "last_verified_specimens": 56,
+    "source_commit": "767ba9a03d49cd202a995b7b7fd21c315d7de2f2",
+    "elapsed_seconds": 536.081,
+    "stop_reason": "failed_step_retained_and_fitted",
+    "latest_fit_belongs_to_session": true,
+    "failed_attempts_retried": 0,
+    "total_recorded_actions": 370,
+    "total_recorded_frames": 26892,
+    "forced_singleton_parent_steps": 1,
+    "model_selected_goal_steps": 0,
+    "deterministic_support_steps": 0,
+    "sampled_destination_choices": 1,
+    "declared_batches": {
+      "BB": 3
+    },
+    "fresh_game_autonomy": false,
+    "policy_sampling": "Six actual destinations; selected Seafoam1F probability0.13227433031928895 under25percent uniform exploration and75percent model softmax. Native acquisition was forced, with no duplicate target.",
+    "mechanics": "Surf and incidental wild encounters; actual new Seel registration. Full routed acquisition failed. Generic failure record does not establish the detailed binding cause.",
+    "terminal_observation": {
+      "source": "exact_authenticated_checkpoint_read",
+      "state_sha256": "4a082536b6684ee255b1c4e3899aeef160a3e4b485771d195524680231564b3d",
+      "input_ready": true,
+      "controller_actions": 0,
+      "frames": 0,
+      "fits": 0,
+      "collection_verified_from_saved_state": true
+    },
+    "terminal_resources": {
+      "money": 333,
+      "capture_items": 0,
+      "party_hp": [
+        246,
+        118,
+        146,
+        88,
+        92,
+        62
+      ]
+    },
+    "coverage": {
+      "acquire": {
+        "rows": 37,
+        "successes": 9
+      },
+      "evolve": {
+        "rows": 10,
+        "successes": 10
+      },
+      "explore": {
+        "rows": 1,
+        "successes": 0
+      },
+      "restore": {
+        "rows": 17,
+        "successes": 17
+      },
+      "resupply": {
+        "rows": 11,
+        "successes": 9
+      }
+    },
+    "limitation": "Partial registration is not successful goal completion or independent advantage. Resource exhaustion before fresh destination binding is a source-supported hypothesis, not a retained detailed runtime verdict."
+  }
+}

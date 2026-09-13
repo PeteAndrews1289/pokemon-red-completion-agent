@@ -27,8 +27,12 @@ from pokemon_red_completion.red_regional_goal_proposal import (
 )
 
 
-def _run(args: argparse.Namespace) -> dict[str, object]:
-    ready = source.base._prepare(args)
+def _run_prepared(
+    ready: source.base._Readiness,
+    *,
+    inspected: tuple[Any, ...] | None = None,
+) -> dict[str, object]:
+    """Execute one native goal from the caller's authenticated readiness."""
     if (
         ready.decision_limit != 1
         or not ready.save_terminal_checkpoints
@@ -40,9 +44,13 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     proposal_id = regional_proposal_record_id(episode_id)
     if ready.private_root.find_sealed_record(proposal_id, expected_kind=REGIONAL_PROPOSAL_KIND):
         raise ValueError("regional goal proposal already consumed; never resample")
-    observed, candidates, menu = source.inspect_sources(ready, allow_no_choice=True)
+    observed, candidates, menu = (
+        inspected
+        if inspected is not None
+        else source.inspect_sources(ready, allow_no_choice=True)
+    )
     selection = None
-    if len(candidates) >= 2:
+    if len(candidates) >= 2 and menu is not None:
         selection = source.sample_regional_acquisition(
             ready.causal_record.model,
             menu,
@@ -92,7 +100,15 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "selected_source": selected.source_id if selected is not None else None,
             "source_mode": "sampled"
             if selection is not None
-            else ("unique_binding" if selected is not None else "no_source"),
+            else (
+                "unique_binding"
+                if len(candidates) == 1
+                else (
+                    "deterministic_undifferentiated"
+                    if selected is not None
+                    else "no_source"
+                )
+            ),
             "before": observed.public_dict(),
             "menu": menu.policy_dict() if menu is not None else None,
             "selection": selection,
@@ -156,6 +172,10 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         "model_fitted": False,
         "independent_evaluation": False,
     }
+
+
+def _run(args: argparse.Namespace) -> dict[str, object]:
+    return _run_prepared(source.base._prepare(args))
 
 
 def main(argv: list[str] | None = None) -> int:

@@ -132,11 +132,29 @@ class CompletionFirstGoalTeacher:
     def select(self, question: GoalManagerQuestion) -> BoundGoalSelection:
         if not isinstance(question, GoalManagerQuestion):
             raise TypeError("question must be a GoalManagerQuestion")
-        available_by_kind = {
-            opportunity.kind: index
-            for index, opportunity in enumerate(question.opportunities)
-            if opportunity.availability is GoalAvailability.AVAILABLE
-        }
+
+        def resource_rank(opp: GoalOpportunity) -> tuple[float, float, float, int]:
+            # Only compared for the opt-in, validated earn/purchase pair.
+            assert opp.estimated_risk is not None
+            assert opp.estimated_effort is not None
+            assert opp.resource_quote is not None
+            return (
+                float(opp.estimated_risk), float(opp.estimated_effort),
+                opp.resource_quote.cost_units, int(opp.resource_quote.expected_income > 0),
+            )
+
+        available_by_kind: dict[GoalKind, int] = {}
+        for index, opportunity in enumerate(question.opportunities):
+            if opportunity.availability is not GoalAvailability.AVAILABLE:
+                continue
+            kind = opportunity.kind
+            if kind not in available_by_kind:
+                available_by_kind[kind] = index
+            elif kind is GoalKind.RESUPPLY:
+                current_best_index = available_by_kind[kind]
+                current_best = question.opportunities[current_best_index]
+                if resource_rank(opportunity) < resource_rank(current_best):
+                    available_by_kind[kind] = index
         gates = (
             (GoalKind.RECOVER_CONTROL, question.situation.recovery_pressure, self.recovery_gate),
             (GoalKind.RESTORE_TEAM, question.situation.safety_pressure, self.safety_gate),
@@ -144,11 +162,11 @@ class CompletionFirstGoalTeacher:
             (GoalKind.RESUPPLY, question.situation.resource_pressure, self.resource_gate),
         )
         for kind, pressure, threshold in gates:
-            index = available_by_kind.get(kind)
-            if index is not None and pressure >= threshold:
-                return bind_goal_selection(question, index)
+            gate_index = available_by_kind.get(kind)
+            if gate_index is not None and pressure >= threshold:
+                return bind_goal_selection(question, gate_index)
 
-        def score(index: int) -> tuple[float, str]:
+        def score(index: int) -> tuple[float, str, tuple[float, ...]]:
             opportunity = question.opportunities[index]
             pressures = tuple(
                 question.situation.pressure(need) for need in opportunity.addressed_needs
@@ -161,8 +179,15 @@ class CompletionFirstGoalTeacher:
                 - self.effort_penalty * opportunity.estimated_effort
                 - self.risk_penalty * opportunity.estimated_risk
             )
-            # A semantic string is a stable, position-free final tie break.
-            return utility, opportunity.kind.value
+            # Preserve historical unique-kind ordering. New same-kind ties use
+            # observed semantics, never binding names or candidate position.
+            resource_tie = (
+                tuple(-value for value in resource_rank(opportunity))
+                if question.allow_resource_variants
+                and opportunity.kind is GoalKind.RESUPPLY
+                and opportunity.resource_quote is not None else ()
+            )
+            return utility, opportunity.kind.value, resource_tie
 
         selected_index = max(question.available_indices, key=score)
         return bind_goal_selection(question, selected_index)
@@ -241,8 +266,11 @@ class GoalBindingSet:
 
     opportunities: tuple[GoalOpportunity, ...]
     bindings: tuple[ExecutableGoalBinding, ...]
+    allow_resource_variants: bool = False
 
     def __post_init__(self) -> None:
+        if type(self.allow_resource_variants) is not bool:
+            raise GoalManagerRuntimeError("allow_resource_variants must be a bool")
         if not isinstance(self.opportunities, tuple) or len(self.opportunities) < 2:
             raise GoalManagerRuntimeError("goal binding set needs at least two opportunities")
         if any(not isinstance(item, GoalOpportunity) for item in self.opportunities):
@@ -275,6 +303,22 @@ class GoalBindingSet:
             return next(item for item in self.bindings if item.binding_ref == binding_ref)
         except StopIteration as error:
             raise GoalManagerRuntimeError("selected goal has no executable binding") from error
+
+    def question(
+        self,
+        situation: GoalSituation,
+        *,
+        allow_resource_variants: bool | None = None,
+    ) -> GoalManagerQuestion:
+        """Construct a validated question from these opportunities and situation."""
+
+        return GoalManagerQuestion(
+            situation=situation,
+            opportunities=self.opportunities,
+            allow_resource_variants=(self.allow_resource_variants
+                                     if allow_resource_variants is None
+                                     else allow_resource_variants),
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -339,7 +383,10 @@ def execute_goal_manager_decision(
         raise TypeError("selection_guard must be callable")
     if not isinstance(selection_mode, GoalSelectionMode):
         raise TypeError("selection_mode must be GoalSelectionMode")
-    question = trajectory.ordered_question(situation, binding_set.opportunities)
+    question = trajectory.ordered_question(
+        situation, binding_set.opportunities,
+        allow_resource_variants=binding_set.allow_resource_variants,
+    )
     selected = authority.select(question)
     if isinstance(selected, BoundGoalSelection):
         rebound = bind_goal_selection(question, selected.selected_index)

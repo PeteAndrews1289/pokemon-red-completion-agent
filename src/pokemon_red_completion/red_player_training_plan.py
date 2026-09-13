@@ -18,6 +18,7 @@ from pokemon_red_completion.goal_manager_protocol import (
     load_committed_goal_manager_registry_at_revision,
 )
 from pokemon_red_completion.living_dex_player_exploration import (
+    ECONOMY_EXPLORATION_POLICY_ID,
     EXPLORATION_POLICY_ID,
     LEGACY_RECOVERY_EXPLORATION_POLICY_ID,
     RECOVERY_EXPLORATION_POLICY_ID,
@@ -30,6 +31,7 @@ CONTINUATION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v3
 COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
 CURRICULUM_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v5"
 REGISTERED_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v1"
+ECONOMY_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v2"
 STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
@@ -41,7 +43,8 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        registered = document.get("schema") == REGISTERED_TRAINING_PLAN_SCHEMA
+        economy = document.get("schema") == ECONOMY_TRAINING_PLAN_SCHEMA
+        registered = economy or document.get("schema") == REGISTERED_TRAINING_PLAN_SCHEMA
         curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
         completion = registered or curriculum or (
             document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
@@ -55,6 +58,7 @@ class RedPlayerTrainingPlan:
                 COMPLETION_TRAINING_PLAN_SCHEMA,
                 CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
+                ECONOMY_TRAINING_PLAN_SCHEMA,
             }
             or document.get("partition") != "train"
         ):
@@ -111,6 +115,11 @@ class RedPlayerTrainingPlan:
             expected_fields.update({"objective", "registration_binding_sha256"})
             if document.get("objective") != REGISTERED_OBJECTIVE:
                 raise ValueError("registered training objective differs")
+        if economy:
+            from .red_player_economy import SUPPLY_FIELDS, PlayerEconomySupply
+
+            expected_fields.update(SUPPLY_FIELDS)
+            PlayerEconomySupply.from_plan(document)
         if set(document) != expected_fields:
             raise ValueError("player training declaration fields differ")
         if any(
@@ -124,8 +133,9 @@ class RedPlayerTrainingPlan:
             raise ValueError("player training scope differs")
         if (
             document["behavior_policy_id"]
-            not in {EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID,
-                    LEGACY_RECOVERY_EXPLORATION_POLICY_ID}
+            not in ({ECONOMY_EXPLORATION_POLICY_ID} if economy else {
+                EXPLORATION_POLICY_ID, RECOVERY_EXPLORATION_POLICY_ID,
+                LEGACY_RECOVERY_EXPLORATION_POLICY_ID})
             or document["economic_contract"] not in {
                 "known-spend-and-excess-reserve-v1", "known-spend-and-bounded-consumption-v2",
             }
@@ -166,6 +176,7 @@ class RedPlayerTrainingPlan:
             if self.document["schema"] in {
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
+                ECONOMY_TRAINING_PLAN_SCHEMA,
             }
             else 6000
         )
@@ -177,6 +188,7 @@ class RedPlayerTrainingPlan:
             if self.document["schema"] in {
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
+                ECONOMY_TRAINING_PLAN_SCHEMA,
             }
             else 600000
         )

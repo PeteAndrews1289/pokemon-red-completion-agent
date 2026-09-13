@@ -1,5 +1,10 @@
 # The story: teaching a model to actually play Pokémon
 
+> **Historical narrative archive.** The sections below preserve the story as it developed and use
+> “current” relative to their dates. For the live state, read the
+> [project narrative](project-narrative.md), [active product state](../ACTIVE_PRODUCT_STATE.md), and
+> [latest session](work-sessions/2026-09-12-model111-zero-label-recovery.md).
+
 ## Current — persisted search history; history-aware learner next
 
 The [search-memory session](audits/red-search-memory-2026-09-06.md) implements source/objective-specific effort, versioned

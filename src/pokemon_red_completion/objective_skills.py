@@ -112,7 +112,13 @@ class ObjectiveSkillRegistry:
     def execute_bounded(skill: ObjectiveSkill) -> ObjectiveSkillExecution:
         result = skill.execute()
         if result.actions_executed > skill.max_actions:
-            raise ObjectiveSkillError("objective skill exceeded its declared action bound")
+            raise ObjectiveSkillError(
+                f"objective skill {skill.objective_id} exceeded its declared action bound: "
+                f"{result.actions_executed}>{skill.max_actions}"
+            )
         if result.frames_executed > skill.max_frames:
-            raise ObjectiveSkillError("objective skill exceeded its declared frame bound")
+            raise ObjectiveSkillError(
+                f"objective skill {skill.objective_id} exceeded its declared frame bound: "
+                f"{result.frames_executed}>{skill.max_frames}"
+            )
         return result

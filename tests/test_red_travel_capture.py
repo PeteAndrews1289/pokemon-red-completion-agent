@@ -65,7 +65,11 @@ class Harness:
             self,
             self,
             SimpleNamespace(
-                handle=self.fallback, handled_hazard_kinds=frozenset({"trainer_sight"})
+                handle=self.fallback,
+                handled_hazard_kinds=frozenset({"trainer_sight"}),
+                handled_interruption_kinds=frozenset(
+                    {"wild_battle", "scripted_dialogue"}
+                ),
             ),
             lambda col: col.owned_species | self.extra_registered,
             frozenset({self.target}),
@@ -122,6 +126,9 @@ def test_missing_species_capture_verifies_physical_registration_and_resumes(targ
     assert receipt.details["learned_encounter_choice"] is False
     assert h.calls == 1 and h.fallback_calls == 0
     assert h.handler.handled_hazard_kinds == frozenset({"trainer_sight"})
+    assert h.handler.handled_interruption_kinds == frozenset(
+        {"wild_battle", "scripted_dialogue"}
+    )
 
 
 @pytest.mark.parametrize(
