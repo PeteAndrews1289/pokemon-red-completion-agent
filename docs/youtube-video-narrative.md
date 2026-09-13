@@ -2,15 +2,9 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest engineering beat: pause on the failed destination card and show why it should never have
-entered the menu. The old router could dismiss scripted dialogue but configured that route with a
-zero-dialogue budget. The repaired menu asks the executor for an explicit finite capability set
-before ranking: wild encounter, trainer engagement/battle and scripted dialogue. If a wrapper drops
-one declaration, the route disappears rather than failing hundreds of actions later.
-
-Overlay **132 focused tests / 11,470 broad tests / 0 game actions / model111 unchanged**. Do not show
-this as a recovered run or a new model lesson. The next live scene is still the exact retained
-dialogue terminal, recovered through generic zero-label support.
+Newest engineering beat: show why the failed destination should never have entered the menu. The old router could dismiss dialogue but gave this route a zero-dialogue budget.
+The repaired menu requires finite wild, trainer and dialogue support before ranking; a wrapper that drops one declaration makes the route disappear.
+Overlay **132 focused tests / 11,470 broad tests / 0 game actions / model111 unchanged**. The exact retained terminal still needs zero-label recovery.
 
 ## Opening: the honest hook
 
