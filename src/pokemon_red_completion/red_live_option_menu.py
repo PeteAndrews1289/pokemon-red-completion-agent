@@ -48,6 +48,9 @@ RED_LIVE_MIXED_OPTION_POLICY = "red-live-mixed-option-v1"
 RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model108-mixed-live-execution-plan.v1"
 )
+RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model111-automatic-fishing-plan.v1"
+)
 
 
 class RedLiveOptionMenuError(ValueError):
@@ -489,6 +492,7 @@ def supplemental_live_option(
 
 
 __all__ = [
+    "RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_OPTION_POLICY",
     "RedLiveOptionChoice",

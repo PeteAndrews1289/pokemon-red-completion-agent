@@ -34,6 +34,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_economy_learning import red_registered_economy_outcome
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
+    RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
 )
@@ -257,7 +258,7 @@ def _validate_selection_declaration(
             or _SHA256.fullmatch(str(declaration.get("menu_file_sha256"))) is None
         )
     elif policy_id == RED_LIVE_MIXED_OPTION_POLICY:
-        expected_keys = {
+        legacy_keys = {
             "behavior_probabilities",
             "maximum_frames",
             "menu_file_sha256",
@@ -274,21 +275,42 @@ def _validate_selection_declaration(
             "source_commit",
             "teacher_labels",
         }
-        mismatch = (
-            set(declaration) != expected_keys
-            or declaration.get("schema")
-            != RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA
-            or declaration.get("parent_checkpoint_sha256")
-            != parent_checkpoint_sha256
+        automatic_fishing_keys = (legacy_keys - {"selected_option_kind"}) | {
+            "maximum_casts",
+            "qualification_ci_run_id",
+            "selected_binding_ref",
+        }
+        schema = declaration.get("schema")
+        shared_mismatch = (
+            declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
             or declaration.get("parent_state_sha256") != parent_state_sha256
             or declaration.get("selection_seed") != selection_seed
             or declaration.get("retry_authorized") is not False
-            or declaration.get("maximum_frames") != 500_000
             or declaration.get("teacher_labels") != 0
             or _SHA256.fullmatch(str(declaration.get("menu_file_sha256"))) is None
             or declaration.get("behavior_probabilities")
             != list(behavior_probabilities)
         )
+        if schema == RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA:
+            mismatch = (
+                set(declaration) != legacy_keys
+                or declaration.get("maximum_frames") != 500_000
+                or shared_mismatch
+            )
+        elif schema == RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA:
+            qualification_ci_run_id = declaration.get("qualification_ci_run_id")
+            mismatch = (
+                set(declaration) != automatic_fishing_keys
+                or declaration.get("maximum_frames") != 3_000_000
+                or declaration.get("maximum_casts") != 24
+                or type(qualification_ci_run_id) is not int
+                or qualification_ci_run_id <= 0
+                or not isinstance(declaration.get("selected_binding_ref"), str)
+                or not declaration["selected_binding_ref"]
+                or shared_mismatch
+            )
+        else:
+            mismatch = True
     else:
         raise ValueError("measured choice policy differs")
     if common_mismatch or mismatch:
@@ -523,14 +545,19 @@ class RedDevelopmentMeasuredChoice:
             selected_option_kind = self.menu.candidates[
                 self.selected_candidate_index
             ].features.kind
+            declared_kind = self.selection_declaration.get("selected_option_kind")
+            if (
+                self.selection_declaration.get("schema")
+                == RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA
+            ):
+                declared_kind = selected_option_kind.value
             if (
                 living_dex_option_kind_for_goal(
                     self.selected_goal_kind,
                     feature_version=self.menu.feature_version,
                 )
                 is not selected_option_kind
-                or self.selection_declaration.get("selected_option_kind")
-                != selected_option_kind.value
+                or declared_kind != selected_option_kind.value
             ):
                 raise ValueError("measured choice selected goal kind differs")
         if (

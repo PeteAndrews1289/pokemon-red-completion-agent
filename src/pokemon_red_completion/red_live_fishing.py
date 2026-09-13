@@ -357,6 +357,7 @@ def _live_fishing_binding(
             maximum_trainer_battles=0,
             stabilization_frames=180,
             route_name="model-directed fishing destination",
+            maximum_scripted_dialogues=4,
         )
         route = execute_route(
             plan,

@@ -215,7 +215,15 @@ def test_selected_live_binding_replans_executes_verifies_and_cannot_retry(monkey
         replanner=lambda: object(),
     )
     monkeypatch.setattr(live_fishing, "_supported_plan", lambda *_a, **_k: True)
-    monkeypatch.setattr(live_fishing, "Gen1RouteInterruptionHandler", lambda *_a, **_k: object())
+    handler_kwargs = {}
+
+    def interruption_handler(*_args, **kwargs):
+        handler_kwargs.update(kwargs)
+        return object()
+
+    monkeypatch.setattr(
+        live_fishing, "Gen1RouteInterruptionHandler", interruption_handler
+    )
 
     def execute_route(*_args, **_kwargs):
         actions.actions_executed += 3
@@ -257,6 +265,7 @@ def test_selected_live_binding_replans_executes_verifies_and_cannot_retry(monkey
     report = binding.execute()
 
     assert (report.actions_executed, report.frames_executed) == (5, 50)
+    assert handler_kwargs["maximum_scripted_dialogues"] == 4
     assert binding.verify(report).status.value == "succeeded"
     with pytest.raises(live_fishing.RedLiveFishingError, match="consumed"):
         binding.execute()
