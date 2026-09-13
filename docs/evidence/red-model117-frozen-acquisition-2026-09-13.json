@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.red.registered-player-learning-session.v1",
   "session_id": "2026-09-13-model117-frozen-acquisition",
-  "status": "fit_complete_checkpoint_published_next_menu_failed_closed",
+  "status": "fit_complete_bounded_only",
   "trust": {
     "training_only": true,
     "action_trace_available": false,
@@ -69,6 +69,7 @@
     "prior_rows_retained": true,
     "historical_rewards_reused": false,
     "parameter_warm_start": false,
+    "in_sample_only": true,
     "authority_promotions": 0,
     "controller_actions": 0,
     "model": {
@@ -85,6 +86,8 @@
     },
     "fit_report": {
       "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 117,
       "settled_examples": 117,
       "successful_examples": 79,
       "economy_qualified_examples": 38,
@@ -93,7 +96,19 @@
       "weighted_mse_before": 0.031306667662672864,
       "weighted_mse_after": 0.012218851935045683,
       "train_dataset_sha256": "ea1ee992241e06ef006b02169c6171424c251e3690684bd55a6a54bbe944c4ae"
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.01255067819534544
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.012218851935045679
     }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
   },
   "publication": {
     "checkpoint_record_sha256": "e12ada5358a31a4afab8b97249e008321f4c8f611faf1d71329fb0241d2008fc",
@@ -159,7 +174,7 @@
     "focused_plus_documentation_passed": 103,
     "python_compile": "passed",
     "hosted_ci_run_id": 34774476092,
-    "hosted_ci_status_at_closeout": "in_progress"
+    "hosted_ci_status_at_closeout": "failed because this receipt omitted the required in_sample_policy_replay boundary; repaired in the closeout successor commit"
   },
   "red_completion_gate": {
     "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
