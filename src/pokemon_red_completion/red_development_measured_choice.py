@@ -37,6 +37,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
 )
@@ -320,7 +321,10 @@ def _validate_selection_declaration(
                 or not declaration["selected_binding_ref"]
                 or shared_mismatch
             )
-        elif schema == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA:
+        elif schema in {
+            RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
             mismatch = (
@@ -337,6 +341,14 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
+            if schema == RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA:
+                mismatch = mismatch or (
+                    type(declaration.get("policy_queries_during_execution")) is not int
+                    or re.fullmatch(
+                        r"red-trainer-funding:[0-9a-f]{64}",
+                        str(declaration.get("selected_binding_ref")),
+                    ) is None
+                )
         elif schema == RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
@@ -468,7 +480,8 @@ def _replay_behavior(
     menu: LivingDexOptionMenu,
     *,
     seed: int,
-) -> tuple[tuple[float | None, ...], tuple[float, ...], int]:
+    draw_selected: bool = True,
+) -> tuple[tuple[float | None, ...], tuple[float, ...], int | None]:
     if model.feature_version < menu.feature_version:
         raise ValueError("measured choice behavior feature version differs")
     scores = tuple(model.scores(menu, DEFAULT_LIVING_DEX_GOAL_UTILITY))
@@ -482,9 +495,10 @@ def _replay_behavior(
     probabilities = [0.0] * len(menu.candidates)
     for index, value in zip(menu.available_indices, exponentials, strict=True):
         probabilities[index] = 0.75 * value / total + 0.25 / len(exponentials)
-    selected = random.Random(seed).choices(
-        range(len(probabilities)), weights=probabilities, k=1
-    )[0]
+    selected = (
+        random.Random(seed).choices(range(len(probabilities)), weights=probabilities, k=1)[0]
+        if draw_selected else None
+    )
     return scores, tuple(probabilities), selected
 
 
@@ -598,6 +612,7 @@ class RedDevelopmentMeasuredChoice:
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 }
             ):
                 declared_kind = selected_option_kind.value
@@ -608,6 +623,11 @@ class RedDevelopmentMeasuredChoice:
                 )
                 is not selected_option_kind
                 or declared_kind != selected_option_kind.value
+                or (
+                    self.selection_declaration.get("schema")
+                    == RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                    and self.selected_goal_kind is not GoalKind.RESUPPLY
+                )
             ):
                 raise ValueError("measured choice selected goal kind differs")
         if (
@@ -728,6 +748,7 @@ class RedDevelopmentMeasuredChoice:
             if self.selection_declaration.get("schema") in {
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
                 selection_source_commit = self.selection_declaration.get(
                     "executable_source_commit"
@@ -1057,13 +1078,15 @@ def _validate_behavior(
         or choice.model_sha256 != behavior.model.model_sha256
     ):
         raise ValueError("measured choice behavior model differs")
-    scores, probabilities, selected = _replay_behavior(
-        behavior.model, choice.menu, seed=choice.selection_seed
-    )
     frozen_receipt = choice.selection_declaration.get("schema") in {
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     }
+    scores, probabilities, selected = _replay_behavior(
+        behavior.model, choice.menu, seed=choice.selection_seed,
+        draw_selected=not frozen_receipt,
+    )
     if (
         (not frozen_receipt and selected != choice.selected_candidate_index)
         or scores != choice.scores
