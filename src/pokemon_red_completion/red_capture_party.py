@@ -20,6 +20,7 @@ from pokemon_red_completion.red_pc_storage import (
     deposit_party_member,
     face_pc_boundary,
     open_bills_pc,
+    switch_box,
     withdraw_box_member,
 )
 from pokemon_red_completion.red_team_training import close_menu
@@ -39,7 +40,9 @@ class RedCapturePartyPlan:
     party_species_ids: tuple[int, ...]
     party_moves: tuple[tuple[int, ...], ...]
     current_box_index: int
+    helper_box_index: int
     box_species_ids: tuple[int, ...]
+    observed_box_species: tuple[tuple[int, tuple[int, ...]], ...]
 
 
 def capture_party_ready(party: PartyObservation) -> bool:
@@ -136,31 +139,85 @@ def plan_capture_party(
     *,
     box_index: int,
 ) -> RedCapturePartyPlan | None:
-    """Choose capabilities, not species; preserve every last field-move carrier."""
-    if type(box_index) is not int or not 0 <= box_index < 12:
+    """Choose a helper from one observed box (the compatibility entry point)."""
+    return plan_capture_party_across_boxes(
+        party,
+        ((box_index, box),),
+        current_box_index=box_index,
+    )
+
+
+def plan_capture_party_across_boxes(
+    party: PartyObservation,
+    boxes: tuple[tuple[int, tuple[RedBoxMoveMember, ...]], ...],
+    *,
+    current_box_index: int,
+) -> RedCapturePartyPlan | None:
+    """Choose capabilities across observed boxes and preserve field-move carriers.
+
+    ``boxes`` is deliberately keyed by box index instead of species identity.  The
+    caller may pass all twelve verified boxes; the one-box entry point above keeps
+    older callers honest without pretending unobserved storage is empty.
+    """
+    if type(current_box_index) is not int or not 0 <= current_box_index < 12:
         raise ValueError("capture support current box differs")
-    if tuple(row.box_slot for row in box) != tuple(range(1, len(box) + 1)):
-        raise ValueError("capture support box slots are not contiguous")
+    indices = tuple(index for index, _members in boxes)
+    if (
+        not boxes
+        or len(set(indices)) != len(indices)
+        or any(type(index) is not int or not 0 <= index < 12 for index in indices)
+        or tuple(sorted(indices)) != indices
+        or current_box_index not in indices
+    ):
+        raise ValueError("capture support observed boxes differ")
+    for _index, members in boxes:
+        if tuple(row.box_slot for row in members) != tuple(range(1, len(members) + 1)):
+            raise ValueError("capture support box slots are not contiguous")
     if capture_party_ready(party):
         return None
     if not any(member.hp > 0 for member in party.members):
         raise RedCapturePartyError("capture preparation needs a living escort")
     helpers = []
-    for boxed in box:
-        accuracy = [
-            RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move)).accuracy
-            for move, pp in zip(boxed.moves, boxed.pp, strict=True)
-            if move and pp and RED_BATTLE_CATALOG.capture_status_effect(pokemon_red_move_ref(move))
-        ]
-        if accuracy:
-            helpers.append((max(accuracy), boxed.level, -boxed.box_slot, boxed))
+    blocked_capability = False
+    for candidate_box_index, members in boxes:
+        # A full party must first deposit into the helper's box.  Do not choose a
+        # technically capable helper whose container cannot accept that deposit.
+        if len(party.members) == 6 and len(members) >= 20:
+            blocked_capability = blocked_capability or any(
+                move and pp
+                and RED_BATTLE_CATALOG.capture_status_effect(pokemon_red_move_ref(move))
+                for boxed in members
+                for move, pp in zip(boxed.moves, boxed.pp, strict=True)
+            )
+            continue
+        for boxed in members:
+            accuracy = [
+                RED_BATTLE_CATALOG.resolve_move(pokemon_red_move_ref(move)).accuracy
+                for move, pp in zip(boxed.moves, boxed.pp, strict=True)
+                if move and pp
+                and RED_BATTLE_CATALOG.capture_status_effect(pokemon_red_move_ref(move))
+            ]
+            if accuracy:
+                helpers.append(
+                    (
+                        max(accuracy),
+                        boxed.level,
+                        candidate_box_index == current_box_index,
+                        -candidate_box_index,
+                        -boxed.box_slot,
+                        candidate_box_index,
+                        boxed,
+                    )
+                )
     if not helpers:
-        raise RedCapturePartyError("no usable sleep/paralysis move in party or current box")
-    helper = max(helpers, key=lambda row: row[:3])[3]
+        if blocked_capability:
+            raise RedCapturePartyError("capture helper substitution needs one free box slot")
+        raise RedCapturePartyError("no usable retrievable sleep/paralysis helper in observed boxes")
+    selected = max(helpers, key=lambda row: row[:5])
+    helper_box_index, helper = selected[5], selected[6]
+    helper_box = dict(boxes)[helper_box_index]
     deposit = None
     if len(party.members) == 6:
-        if len(box) >= 20:
-            raise RedCapturePartyError("capture helper substitution needs one free box slot")
         strongest = max(
             (member for member in party.members if member.hp > 0),
             key=lambda member: (member.level, member.hp),
@@ -190,9 +247,24 @@ def plan_capture_party(
         deposit,
         tuple(member.species_id for member in party.members),
         tuple(tuple(move.move_id for move in member.moves) for member in party.members),
-        box_index,
-        tuple(member.species_id for member in box),
+        current_box_index,
+        helper_box_index,
+        tuple(member.species_id for member in helper_box),
+        tuple(
+            (index, tuple(member.species_id for member in members))
+            for index, members in boxes
+        ),
     )
+
+
+def _read_observed_box_species(
+    plan: RedCapturePartyPlan, reader: PokemonRedStateReader,
+) -> tuple[tuple[int, tuple[int, ...]], ...]:
+    if len(plan.observed_box_species) == 1:
+        box = reader.read_current_box_state()
+        return ((box.box_index, box.species_ids),)
+    collection = reader.read_all_box_states()
+    return tuple((box.box_index, box.species_ids) for box in collection.boxes)
 
 
 def execute_capture_party_at_pc(
@@ -207,7 +279,12 @@ def execute_capture_party_at_pc(
     """Withdraw at a settled PC; any optional restoration is explicit and reported."""
     raw = reader.read()
     box = reader.read_current_box_state()
-    moves = reader.read_current_box_move_members()
+    observed_boxes = _read_observed_box_species(plan, reader)
+    moves = (
+        reader.read_current_box_move_members()
+        if plan.helper_box_index == plan.current_box_index
+        else reader.read_box_move_members(plan.helper_box_index)
+    )
     if (
         (raw.map_id, raw.player_y, raw.player_x) != (pc_map_id, 4, 13)
         or raw.battle_state != 0
@@ -215,14 +292,25 @@ def execute_capture_party_at_pc(
         or raw.party_species_ids != plan.party_species_ids
         or raw.party_moves != plan.party_moves
         or box.box_index != plan.current_box_index
-        or box.species_ids != plan.box_species_ids
+        or observed_boxes != plan.observed_box_species
+        or dict(observed_boxes).get(plan.helper_box_index) != plan.box_species_ids
         or moves[plan.helper.box_slot - 1] != plan.helper
     ):
         raise RedCapturePartyError("capture helper plan differs before PC input")
-    before = Counter((*plan.party_species_ids, *plan.box_species_ids))
+    before = Counter(
+        (*plan.party_species_ids, *(species for _, rows in observed_boxes for species in rows))
+    )
     bag, money = raw.bag_items, raw.player_money
     face_pc_boundary(actions, reader, "up")
     open_bills_pc(actions, reader)
+    rotations = 0
+    if plan.helper_box_index != plan.current_box_index:
+        report_switch = switch_box(
+            actions, reader, target_box_index=plan.helper_box_index,
+        )
+        if not report_switch.passed:
+            raise RedCapturePartyError("capture helper box switch failed")
+        rotations = 1
     if plan.deposit_party_slot is not None:
         report = deposit_party_member(
             actions,
@@ -243,9 +331,12 @@ def execute_capture_party_at_pc(
     close_menu(actions, reader)
     after = reader.read()
     stored = reader.read_current_box_state()
+    stored_all = _read_observed_box_species(plan, reader)
     if (
-        Counter((*(after.party_species_ids or ()), *stored.species_ids)) != before
-        or stored.box_index != plan.current_box_index
+        Counter(
+            (*(after.party_species_ids or ()), *(s for _, rows in stored_all for s in rows))
+        ) != before
+        or stored.box_index != plan.helper_box_index
         or after.bag_items != bag
         or after.player_money != money
         or after.battle_state != 0
@@ -258,9 +349,12 @@ def execute_capture_party_at_pc(
         restoration = restore_helper()
         after = reader.read()
         stored = reader.read_current_box_state()
+        stored_all = _read_observed_box_species(plan, reader)
         if (
-            Counter((*(after.party_species_ids or ()), *stored.species_ids)) != before
-            or stored.box_index != plan.current_box_index
+            Counter(
+                (*(after.party_species_ids or ()), *(s for _, rows in stored_all for s in rows))
+            ) != before
+            or stored.box_index != plan.helper_box_index
             or after.bag_items != bag
             or after.player_money != money
             or after.battle_state != 0
@@ -275,6 +369,7 @@ def execute_capture_party_at_pc(
         **restoration,
         "capture_party_prepared": True,
         "specimens_preserved": sum(before.values()),
+        "box_rotations": rotations,
         "setup_training_rows": 0,
         "new_acquisitions": 0,
     }

@@ -20,7 +20,7 @@ from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_capture_party import (
     RedCapturePartyError,
     execute_capture_party_at_pc,
-    plan_capture_party,
+    plan_capture_party_across_boxes,
 )
 from pokemon_red_completion.red_dual_capability_curriculum_runtime import dependency_specimen_ledger
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
@@ -47,11 +47,21 @@ def bind_capture_party_support(
     runtime = router.runtime
     capture_spec = next(s for s in runtime.profile.providers if s.kind is original.kind)
     source_ref = f"pokemon.red:acquisition:{capture_spec.parameters['source_id']}"
-    box = runtime.reader.read_current_box_state()
+    collection = runtime.reader.read_all_box_states()
+    move_boxes = tuple(
+        (box.box_index, runtime.reader.read_box_move_members(box.box_index))
+        for box in collection.boxes
+    )
+    if any(
+        tuple(member.species_id for member in members) != collection.boxes[index].species_ids
+        for index, members in move_boxes
+    ):
+        return _without_capture(bindings, original)
     try:
-        plan = plan_capture_party(
-            observation.party, runtime.reader.read_current_box_move_members(),
-            box_index=box.box_index,
+        plan = plan_capture_party_across_boxes(
+            observation.party,
+            move_boxes,
+            current_box_index=collection.current_box_index,
         )
     except RedCapturePartyError:
         return _without_capture(bindings, original)

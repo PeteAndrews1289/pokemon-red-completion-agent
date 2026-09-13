@@ -272,6 +272,17 @@ def test_capture_helper_is_retrieved_before_storage_and_rebound_capture(monkeypa
         parameters={'source_id': 'wild:Route24:grass'}),))
     runtime.reader.read_current_box_state = lambda: SimpleNamespace(box_index=0)
     runtime.reader.read_current_box_move_members = box
+    runtime.reader.read_all_box_states = lambda: SimpleNamespace(
+        current_box_index=0,
+        boxes=tuple(
+            SimpleNamespace(
+                box_index=index,
+                species_ids=tuple(row.species_id for row in box()) if index == 0 else (),
+            )
+            for index in range(12)
+        ),
+    )
+    runtime.reader.read_box_move_members = lambda index: box() if index == 0 else ()
     monkeypatch.setattr(support, 'Gen1TraversalObserver', storage.Gen1TraversalObserver)
     monkeypatch.setattr(support, '_POKEMON_CENTER_MAPS', (64,))
     monkeypatch.setattr(support, 'dependency_specimen_ledger', storage.dependency_specimen_ledger)

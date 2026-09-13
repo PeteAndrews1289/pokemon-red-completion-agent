@@ -4,7 +4,12 @@ from types import SimpleNamespace
 import pytest
 
 import pokemon_red_completion.red_capture_party as support
-from pokemon_red_completion.observation import RawGameState, RedBoxMoveMember, RedCurrentBoxState
+from pokemon_red_completion.observation import (
+    RawGameState,
+    RedBoxCollectionState,
+    RedBoxMoveMember,
+    RedCurrentBoxState,
+)
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation, PartyObservation
 
 
@@ -59,6 +64,130 @@ def test_empty_pp_and_full_box_do_not_invent_support():
     assert support.plan_capture_party(smaller, box(), box_index=0).deposit_party_slot is None
 
 
+def test_all_box_planner_selects_capability_with_deterministic_tie_break():
+    helper = replace(box()[1], box_slot=1)
+    boxes = tuple(
+        (index, (helper,) if index in {2, 3} else (box()[0],) if index == 0 else ())
+        for index in range(12)
+    )
+    plan = support.plan_capture_party_across_boxes(
+        party(), boxes, current_box_index=0,
+    )
+    assert plan is not None
+    assert plan.helper_box_index == 2
+    assert plan.helper == helper
+    assert len(plan.observed_box_species) == 12
+    # Species identity is not part of the choice: changing it preserves the plan location.
+    changed = tuple(
+        (index, (replace(helper, species_id=164),) if index == 2 else members)
+        for index, members in boxes
+    )
+    assert support.plan_capture_party_across_boxes(
+        party(), changed, current_box_index=0,
+    ).helper_box_index == 2
+
+
+def test_all_box_planner_skips_capable_full_box_for_retrievable_helper():
+    helper = replace(box()[1], box_slot=1)
+    full = tuple(replace(helper, box_slot=slot) for slot in range(1, 21))
+    boxes = tuple(
+        (index, full if index == 1 else (helper,) if index == 4 else ())
+        for index in range(12)
+    )
+    plan = support.plan_capture_party_across_boxes(
+        party(), boxes, current_box_index=0,
+    )
+    assert plan is not None and plan.helper_box_index == 4
+
+
+def test_cross_box_execution_switches_before_deposit_and_preserves_all_storage(monkeypatch):
+    helper = replace(box()[1], box_slot=1)
+    move_boxes = tuple(
+        (index, (box()[0],) if index == 0 else (helper,) if index == 2 else ())
+        for index in range(12)
+    )
+    original = party()
+    plan = support.plan_capture_party_across_boxes(
+        original, move_boxes, current_box_index=0,
+    )
+    assert plan is not None and plan.helper_box_index == 2
+    state = SimpleNamespace(
+        current=0,
+        species=[[185], [], [48], *([] for _ in range(9))],
+        levels=[[13], [], [13], *([] for _ in range(9))],
+        raw=RawGameState(
+            True, 64, 13, 4, 6, 0,
+            party_species_ids=plan.party_species_ids,
+            party_moves=plan.party_moves,
+            bag_items=((4, 4),), player_money=1109,
+        ),
+        calls=[],
+    )
+
+    def current_box():
+        return RedCurrentBoxState(
+            state.current, tuple(state.species[state.current]), tuple(state.levels[state.current]),
+        )
+
+    def all_boxes():
+        return RedBoxCollectionState(
+            tuple(
+                RedCurrentBoxState(index, tuple(rows), tuple(state.levels[index]))
+                for index, rows in enumerate(state.species)
+            ),
+            state.current,
+            True,
+        )
+
+    reader = SimpleNamespace(
+        read=lambda: state.raw,
+        read_current_box_state=current_box,
+        read_current_box_move_members=lambda: move_boxes[state.current][1],
+        read_box_move_members=lambda index: move_boxes[index][1],
+        read_all_box_states=all_boxes,
+        read_input_readiness=lambda: SimpleNamespace(ready=True),
+    )
+    for name in ('face_pc_boundary', 'open_bills_pc', 'close_menu'):
+        monkeypatch.setattr(support, name, lambda *_args, _name=name: state.calls.append(_name))
+
+    def switch(_actions, _reader, *, target_box_index):
+        state.calls.append(('switch', target_box_index))
+        state.current = target_box_index
+        return SimpleNamespace(passed=True)
+
+    def deposit(_actions, _reader, *, party_slot, expected_species_id):
+        assert state.current == 2
+        state.calls.append(('deposit', party_slot, expected_species_id))
+        state.raw = replace(state.raw, party_species_ids=state.raw.party_species_ids[:-1])
+        state.species[2].append(expected_species_id)
+        state.levels[2].append(40)
+        return SimpleNamespace(passed=True)
+
+    def withdraw(_actions, _reader, *, box_slot, expected_species_id):
+        assert state.current == 2
+        state.calls.append(('withdraw', box_slot, expected_species_id))
+        state.raw = replace(state.raw, party_species_ids=(*state.raw.party_species_ids, 48))
+        state.species[2].pop(box_slot - 1)
+        state.levels[2].pop(box_slot - 1)
+        return SimpleNamespace(passed=True)
+
+    monkeypatch.setattr(support, 'switch_box', switch)
+    monkeypatch.setattr(support, 'deposit_party_member', deposit)
+    monkeypatch.setattr(support, 'withdraw_box_member', withdraw)
+    ready = replace(original, members=(*original.members[:-1],
+        PartyMemberObservation(6, 48, 13, 40, 40, moves=(MoveObservation(95, 20),))))
+    result = support.execute_capture_party_at_pc(
+        plan, object(), reader, pc_map_id=64, read_party=lambda: ready,
+    )
+    assert result['box_rotations'] == 1
+    assert result['specimens_preserved'] == 8
+    assert state.calls == [
+        'face_pc_boundary', 'open_bills_pc', ('switch', 2),
+        ('deposit', 6, 164), ('withdraw', 1, 48), 'close_menu',
+    ]
+    assert state.raw.bag_items == ((4, 4),) and state.raw.player_money == 1109
+
+
 def fixture(monkeypatch):
     original = party()
     plan = support.plan_capture_party(original, box(), box_index=0)
@@ -104,7 +233,8 @@ def test_pc_substitution_preserves_specimen_multiset_and_counts_no_training_row(
     result = support.execute_capture_party_at_pc(plan, object(), reader, pc_map_id=64,
                                                 read_party=lambda: ready)
     assert result == {'capture_party_prepared': True, 'specimens_preserved': 8,
-                      'setup_training_rows': 0, 'new_acquisitions': 0}
+                      'box_rotations': 0, 'setup_training_rows': 0,
+                      'new_acquisitions': 0}
     assert state.calls == ['face_pc_boundary', 'open_bills_pc', ('deposit', 6, 164),
                            ('withdraw', 2, 48), 'close_menu']
 
