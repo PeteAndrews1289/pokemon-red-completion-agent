@@ -76,10 +76,18 @@ _MECHANICS = frozenset(
 # independent action/frame bounds.
 _MAX_ROUTE_FLEES = 128
 _MAX_ROUTE_TRAINER_BATTLES = 8
+_MAX_ROUTE_SCRIPTED_DIALOGUES = 4
+_REQUIRED_ROUTE_INTERRUPTION_KINDS = frozenset(
+    {"wild_battle", "trainer_engagement", "battle:2", "scripted_dialogue"}
+)
 _ROUTE_LIMITS = RouteExecutionLimits(
     max_step_attempts=8,
     max_readiness_waits=16,
-    max_interruptions=_MAX_ROUTE_FLEES + _MAX_ROUTE_TRAINER_BATTLES,
+    max_interruptions=(
+        _MAX_ROUTE_FLEES
+        + _MAX_ROUTE_TRAINER_BATTLES
+        + _MAX_ROUTE_SCRIPTED_DIALOGUES
+    ),
     max_replans=8,
     replan_after_unchanged=2,
     retry_wait_frames=24,
@@ -90,6 +98,15 @@ _ROUTE_LIMITS = RouteExecutionLimits(
 
 class RedResourceGoalRoutingError(RuntimeError):
     """A refreshed resource goal cannot keep its observed transport contract."""
+
+
+def _supports_required_route_interruptions(handler: InterruptionHandler) -> bool:
+    """Fail closed unless every dynamic route interruption is explicitly supported."""
+    kinds = getattr(handler, "handled_interruption_kinds", None)
+    return (
+        isinstance(kinds, frozenset)
+        and kinds >= _REQUIRED_ROUTE_INTERRUPTION_KINDS
+    )
 
 
 @dataclass(slots=True)
@@ -245,6 +262,7 @@ class RedResourceGoalRouter:
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
                 self.actions, self.runtime.reader, maximum_flees=_MAX_ROUTE_FLEES,
                 maximum_trainer_battles=_MAX_ROUTE_TRAINER_BATTLES, stabilization_frames=180,
+                maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 route_name="bounded resource-goal transport",
             )
             if self.routed_recovery:
@@ -256,12 +274,15 @@ class RedResourceGoalRouter:
                     self.runtime.reader,
                     route_name="guarded resource-goal transport",
                     maximum_flees=_MAX_ROUTE_FLEES,
+                    maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
                 )
             from pokemon_red_completion.red_travel_capture_runtime import (
                 bind_travel_capture_destination,
                 bind_travel_capture_handler,
             )
             interruption_handler = bind_travel_capture_handler(self, spec, interruption_handler)
+            if not _supports_required_route_interruptions(interruption_handler):
+                continue
             transport = RedSemanticTransportRoute(
                 binding_ref=f"red-resource-route:{spec.configuration_sha256}",
                 origin_observation_sha256=origin,

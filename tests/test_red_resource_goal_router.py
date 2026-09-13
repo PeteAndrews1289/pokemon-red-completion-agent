@@ -185,9 +185,33 @@ def _supply(bindings):
 def test_route_limit_covers_every_declared_handler_interruption() -> None:
     assert routing._MAX_ROUTE_FLEES == 128
     assert routing._MAX_ROUTE_TRAINER_BATTLES == 8
+    assert routing._MAX_ROUTE_SCRIPTED_DIALOGUES == 4
     assert routing._ROUTE_LIMITS.max_interruptions == (
-        routing._MAX_ROUTE_FLEES + routing._MAX_ROUTE_TRAINER_BATTLES
+        routing._MAX_ROUTE_FLEES
+        + routing._MAX_ROUTE_TRAINER_BATTLES
+        + routing._MAX_ROUTE_SCRIPTED_DIALOGUES
     )
+
+
+def test_router_does_not_advertise_route_without_every_interruption_capability(
+    fixture, monkeypatch,
+):
+    f = fixture
+    monkeypatch.setattr(
+        routing,
+        "Gen1RouteInterruptionHandler",
+        lambda *_a, **_k: SimpleNamespace(
+            handled_interruption_kinds=frozenset(
+                {"wild_battle", "trainer_engagement", "battle:2"}
+            )
+        ),
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert _supply(result).unavailable_reason is GoalUnavailableReason.MISSING_CAPABILITY
+    assert all(binding.kind is not GoalKind.RESUPPLY for binding in result.bindings)
+    assert f.actions.actions_executed == 0
 
 
 @pytest.mark.parametrize("include_offers", [None, False])
@@ -212,7 +236,10 @@ def test_capture_only_menu_skips_center_offers_but_keeps_escort_and_route_guard(
     def guard(*args, **kwargs):
         calls.append("guard")
         assert kwargs["maximum_flees"] == routing._MAX_ROUTE_FLEES
-        return object()
+        assert kwargs["maximum_scripted_dialogues"] == routing._MAX_ROUTE_SCRIPTED_DIALOGUES
+        return SimpleNamespace(
+            handled_interruption_kinds=routing._REQUIRED_ROUTE_INTERRUPTION_KINDS
+        )
 
     monkeypatch.setattr(
         "pokemon_red_completion.red_routed_recovery.bind_routed_center_recovery", center,

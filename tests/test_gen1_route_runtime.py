@@ -412,6 +412,22 @@ def test_combined_handler_boundedly_dismisses_a_scripted_route_dialogue() -> Non
         )
 
 
+def test_combined_handler_declares_only_configured_interruption_capabilities() -> None:
+    fake = FakeReader(raw())
+    handler = Gen1RouteInterruptionHandler(
+        cast(object, FakeExecutor()),  # type: ignore[arg-type]
+        reader_as_real(fake),
+        maximum_flees=1,
+        maximum_trainer_battles=0,
+        stabilization_frames=24,
+        maximum_scripted_dialogues=2,
+    )
+
+    assert handler.handled_interruption_kinds == frozenset(
+        {"wild_battle", "scripted_dialogue"}
+    )
+
+
 def test_combined_handler_rejects_a_disappeared_but_unready_dialogue() -> None:
     fake = FakeReader(raw(), ready=False, dialogue_visible=True)
 

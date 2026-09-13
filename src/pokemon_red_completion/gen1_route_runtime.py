@@ -324,6 +324,18 @@ class Gen1RouteInterruptionHandler:
     def wild_evidence(self) -> tuple[Route1WildFleeEvidence, ...]:
         return tuple(self._wild.evidence)
 
+    @property
+    def handled_interruption_kinds(self) -> frozenset[str]:
+        """Declare only the dynamic interruptions this configured instance can resolve."""
+        kinds: set[str] = set()
+        if self.maximum_flees > 0:
+            kinds.add("wild_battle")
+        if self.maximum_trainer_battles > 0:
+            kinds.update(("trainer_engagement", "battle:2"))
+        if self.maximum_scripted_dialogues > 0:
+            kinds.add("scripted_dialogue")
+        return frozenset(kinds)
+
     def handle(self, interruption: TraversalSnapshot) -> InterruptionReceipt:
         if interruption.interruption == "wild_battle":
             return self._wild.handle(interruption)
