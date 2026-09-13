@@ -1,26 +1,28 @@
 # Reviewer handoff
 
-Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and
-[roles](../AGENT_COORDINATION.md).
+Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
+[roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The latest measured endpoint is model111 with83 registrations,63 living species,67 specimens and41
-required Red registrations remaining. Model109 selected one of four anonymous fishing destinations
-and added one registration; model110's next four-way choice stopped at an unsupported scripted
-dialogue. Success and failure were each retained once, producing rows110 and111. No teacher label,
-independent evaluation or authority promotion occurred.
+Model114's exact frozen trainer-income choice failed verification after160 actions/10633frames:
+cash58 to2146, expected2088. It was retained once as failure and produced Model115 with115
+examples/78 successes. Registration remains84 and all68 specimens remain. No independent
+evaluation or authority promotion occurred.
 
-The current restart is the recovered input-ready model111 checkpoint. Source
-`23dadf37a59ad5f018d3d227921770174be108c7` passed CI; one generic recovery used8
-actions/576frames and added zero labels. The next action-free menu is forced-only. Party and active
-box lack a capture-status move, while seven helpers exist in other boxes. The next reusable gate is
-capability-derived cross-box retrieval with one policy query, not a retry, named-species route,
-hidden identity or independent-performance claim.
+The Model115 terminal reopened without input. Its new six-choice menu selected another
+trainer-income goal, candidate2, probability0.30759519928865214. The choice is frozen,
+unexecuted and blocked pending a qualified explanation of the earlier payout mismatch.
+Do not propose another selection, consumed retry or post-hoc cash tolerance.
 
-Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
-useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's
-useful role is architecture, portability and broad implementation review through `agy`. Flash
-previously drafted the measured-choice integration; Codex materially hardened it. The next useful
-milestone review is after cross-box capture preparation and a fresh useful menu, not before this
-bounded engineering gate. Neither
-external review should block ordinary development; disagreements are resolved against the mission
-and executable evidence.
+Flash supplied a useful schema proposal; Codex corrected its test fixtures and added
+no-random-draw and positive-cash failure coverage. Claude's admission-site warning was
+accepted. Its suspected hardcoded-payout cause was rejected against the actual stack:
+the existing battle verifier failed first. Both external tasks are complete.
+
+Pete's explicit gate is a fresh start-to-finish model-directed Red run with story completion
+and the full local Red Pokédex before any ROM hack. Version/trade/event dependencies cannot
+be dropped, and shared credit is not local ownership. The older checkpoint-story demonstration
+does not meet this gate. After full Red: compatible hack, Crystal, at least Emerald.
+
+Next external work, if useful: narrowly scoped accounting regression tests once the actual
+cartridge rule is established. No broad audit, gameplay or private-save access.
+[Latest session](work-sessions/2026-09-13-model115-frozen-resupply-learning.md).

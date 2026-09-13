@@ -663,7 +663,7 @@ Speed, Special, Accuracy and Evasion reductions remain closed. The retained term
 the compound mechanics falsifier without advancing model103, collection, or battle authority.
 Await exact-source green CI before one separately identified development successor; never retry
 either consumed League attempt.
-# September 9 — distinguish ordinary combat risk from strict item-turn proof
+## September 9 — distinguish ordinary combat risk from strict item-turn proof
 
 The strict proactive trial stopped before attacking; its retained Leer failure
 and read-only worst-critical analysis do not justify another unchanged attempt.
@@ -685,3 +685,23 @@ handoff are complete. The integration ranker was explicitly unlearned and every 
 singleton; model99 and all learning counters remain unchanged. The next bounded task is the
 post-Brock-to-Celadon join, followed immediately by measured model99 collection learning. This
 prevents fresh-start plumbing from becoming another long substitute for learner outcomes.
+
+## September 13 — full fresh-run Red before any ROM hack
+
+Pete explicitly requires a complete, non-walkthrough, model-directed Red run from a fresh game,
+with story completion and the full local Red Pokédex, before any ROM hack. Adopt
+`red-first-v3-full-run`; retain V1 and V2 unchanged as historical baselines and keep stage IDs.
+The V2 checkpoint-story result remains valid supporting evidence, but the strengthened fresh-run
+story exit is unproved and returns to planned. This is a stronger acceptance requirement, not a
+loss or retroactive relabeling of measured results.
+
+The current 40-entry remaining counter covers the existing 124-entry native-availability scope;
+it is not the full Red Pokédex finish line. Version, trade and event dependencies stay explicit
+and must be legitimately resolved in the final Red save. Global credit cannot stand in for a
+local owned flag. Supporting version/trade work does not authorize moving the main curriculum
+away from Red. Unresolved dependencies keep the hack gate closed.
+
+After complete Red, test a compatible unfamiliar Red modification, then learn Crystal and
+continue the shared registered Pokédex through at least Emerald. The existing full-run readiness
+conditions still apply: train and qualify reusable decisions in bounded scenarios before the
+fresh-run final exam. No new clean-power teacher replay is authorized by this clarification.

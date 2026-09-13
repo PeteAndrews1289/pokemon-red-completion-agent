@@ -13,6 +13,25 @@ review history; their “latest” labels are relative to that archived sequence
 
 ## Roles
 
+### September13 — frozen income outcome and complete-Red gate
+
+Flash3.8 High supplied a bounded admission/test proposal after headless command permission
+blocked its isolated editing attempt. Codex integrated it, corrected invented probabilities
+and mismatched budget fixtures, and added no-random-draw and positive-cash failure tests.
+Claude Opus4.8 High audited five source files read-only: its four-site schema warning was
+accepted; its hardcoded-payout concern was not the actual cause because the battle verifier
+failed first. Original-menu provenance remains separately bound, lower-trust evidence.
+
+The160-action attempt was retained as failure and became row115; no retry or promotion.
+Both external tasks completed. Shared Gemini quota refreshed to96.12%five-hour/68.38%weekly
+remaining, approximately4h34m/128h10m to reset. Claude subscription quota was unavailable;
+its standard-speed review reported$1.647777. No task-wide Astra savings were measured.
+
+Next Flash role: a narrowly specified accounting test draft once Codex establishes the
+cartridge rule. Codex owns diagnosis, integration and any eventual exact frozen continuation.
+Full fresh-run Red story and the full local Pokédex must precede any ROM hack; a reviewer
+cannot waive that user requirement. [Session](work-sessions/2026-09-13-model115-frozen-resupply-learning.md).
+
 ### Latest loop — September9 resource exit and Transform review
 
 Flash3.8 High supplied three isolated implementation/test drafts and two bounded

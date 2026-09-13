@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model114-frozen-fishing-learning**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model115-frozen-resupply-learning**.
 
-A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
+A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 14/15 acceptance items (93%).**
+**Broaden model-directed Red collection: 15/16 acceptance items (94%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -27,8 +27,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
 - [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
 - [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
+- [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
 
-Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **115 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -62,33 +63,31 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — verified
+### 04. Finish Red with the model — planned
 
-Plan quests, prerequisites and puzzles through the Champion.
+Choose progression from a fresh game through the Champion.
 
-**Exit criterion:** Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.
+**Exit criterion:** One authenticated fresh start-to-finish model-directed Red run with concurrent Champion and Hall-of-Fame evidence; no fixed walkthrough or checkpoint stitching.
 
-Teacher completion already exists. It does not satisfy this learned-player milestone.
+Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
-[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
+### 05. Complete the full Red Pokedex — current
 
-### 05. Build the shared registered Dex — current
+Register every Red Pokedex entry in the same fresh-run save.
 
-Catch, evolve and record missing species; deposit completed lines and skip already-credited work.
+**Exit criterion:** Full local Red registration in the authenticated model-directed run, with legitimate version, trade and event dependencies explicitly resolved before any ROM hack.
 
-**Exit criterion:** Verified registered-objective Red collection, fresh-run sequencing and shared-ledger continuity on Blue under explicit availability rules.
+No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
-
-[Current evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
 Test changed encounters, rules or difficulty in a compatible hack.
 
-**Exit criterion:** Report initial performance and learning gains against an otherwise identical learner without Red experience.
+**Exit criterion:** Only after the full Red fresh-run/story/Pokedex gate: compare initial performance and adaptation with a learner lacking Red experience.
 
-Compatibility is checked separately. Red competence does not guarantee an immediate win.
+Blocked until complete Red. Compatibility and initial performance are separate tests.
 
 ### 07. Transfer and learn Crystal — planned
 
@@ -100,13 +99,21 @@ Add the title adapter, time-dependent encounters, breeding and new mechanics; no
 
 ### 08. Accumulate a cross-game registered Dex — planned
 
-Reuse competence and verified registration while pursuing new gaps in later games.
+Continue the shared registered Pokedex through at least Emerald.
 
 **Exit criterion:** Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.
 
-Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
+Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model115-frozen-resupply-learning
+
+Model115 retains one income-verification failure: 115 examples, 84 registrations, cash2146. The next income choice is frozen and stopped.
+
+**Deviation:** Actual terminal cash2146 differed from expected2088; retained as failure, never retried. Pete strengthened the gate: full fresh-run Red story and local Pokedex before any ROM hack. V3 preserves V1/V2 and returns the unproved fresh-run story exit to planned.
+
+**Next:** Diagnose and qualify income accounting before executing the exact frozen Model115 choice. No post-hoc tolerance, resampling or consumed retry. Red remains the curriculum through the full fresh-run/Pokedex gate, followed by hack, Crystal and at least Emerald.
 
 ### 2026-09-13-model114-frozen-fishing-learning
 

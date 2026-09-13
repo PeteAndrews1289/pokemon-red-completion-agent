@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **84 registered species**. The registered-objective model has **114 settled examples**. Model113's frozen fishing choice added one registration in 513 actions, became row114 without a teacher label, and produced a durable Model114 checkpoint. From it, Model114 selected a resupply/income goal from a six-choice, three-family menu; that choice is frozen but unexecuted.
+- The latest measured collection contains **84 registered species** and the model has **115 settled examples**. Its latest income choice increased cash but failed payout verification. The failure was retained and learned once, with no retry or teacher label; the next choice is frozen while the discrepancy is diagnosed.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest continuation report](docs/work-sessions/2026-09-13-model114-frozen-fishing-learning.md),
+The [latest continuation report](docs/work-sessions/2026-09-13-model115-frozen-resupply-learning.md),
 [latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
 [cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
 [latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),
@@ -22,6 +22,8 @@ The [latest continuation report](docs/work-sessions/2026-09-13-model114-frozen-f
 ## What is not solved
 
 Fresh-game autonomy, reliable play across arbitrary seeds, complete Pokédex collection, learned low-level combat and transfer to Blue, ROM hacks or Crystal remain unfinished. Good results from related training states do not establish independent reliability.
+
+**Complete Red comes first:** one fresh start-to-finish model-directed run, story completion and the full local Red Pokédex before any ROM hack. Version, trade and event dependencies cannot be silently excluded. After Red: a compatible unfamiliar hack, Crystal, then at least Emerald.
 
 ## How it works
 

@@ -82,9 +82,10 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 ### Fixed visual roadmap and session closeout
 
 Use the [development infographic](docs/development-roadmap.md) and its
-[stable baseline](configs/development-roadmap-baseline-v2.json) to locate each substantial task
+[stable baseline](configs/development-roadmap-baseline-v3.json) to locate each substantial task
 within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
-Red registration and Blue/shared-ledger integration, a compatible Red modification, Crystal, then later titles.
+full Red registration and a fresh-start model-directed Red completion run, a compatible Red
+modification, Crystal, then at least Emerald. Version/trade support serves Red's explicit gate.
 This baseline is subordinate to the mission and this contract; it does not authorize execution.
 
 After **every completed work session**, and during a longer session after a substantial verified
@@ -137,6 +138,14 @@ Use authenticated development checkpoints and short randomized scenarios:
 Do not replay Pallet Town to test a Saffron navigation change or a Cinnabar training policy.
 
 ## Full-run gate
+
+Pete's September 13 acceptance requirement is a fresh start-to-finish model-directed Red run
+with story completion and the **full local Red Pokédex before any ROM hack**. Checkpoint story
+demonstrations and the current reduced availability counter do not meet that requirement.
+No version-, trade- or event-dependent entry may be silently dropped. Resolve its legitimate
+acquisition path explicitly; unresolved dependencies block the ROM-hack gate. Shared global
+credit remains distinct from local Red owned flags. This strengthens the final exam; it does
+not bypass the readiness conditions below or authorize another teacher factory.
 
 A new clean-power full-game run is prohibited unless all of these are recorded first:
 

@@ -11,6 +11,7 @@ def project(tmp_path):
     names = [STATE, "configs/development-roadmap-baseline-v1.json",
              "configs/active-product-focus.json", "configs/dashboard-learning-evidence.json"]
     names.append("configs/development-roadmap-baseline-v2.json")
+    names.append("configs/development-roadmap-baseline-v3.json")
     state = json.loads((ROOT / STATE).read_text())
     names += [row["evidence"] for row in state["stages"].values() if row["evidence"]]
     names += [row["evidence"] for row in state["milestone"]["items"] if row["evidence"]]
@@ -84,9 +85,9 @@ def test_graphic_updates_current_position_and_checklist_without_static_claims(pr
     graphic = render_svg(baseline, state, lane, evidence)
     assert "60%" in graphic and "PHASE 04" in graphic
     assert "47 goal-value examples" in graphic
-    assert "Checkpoint-based Red story: not demonstrated" in graphic
+    assert "Fresh-start Red story: not demonstrated" in graphic
     state["stages"]["red-story"]["status"] = "verified"
-    assert "Checkpoint-based Red story: verified" in render_svg(baseline, state, lane, evidence)
+    assert "Fresh-start Red story: verified" in render_svg(baseline, state, lane, evidence)
 
 
 def test_ten_item_checklist_stays_above_its_progress_bar(project):
@@ -124,7 +125,7 @@ def test_changed_learning_evidence_is_rejected(project):
 
 def test_registered_baseline_is_explicit_and_old_baseline_remains_available(project):
     baseline, state, lane, evidence = load_roadmap(project)
-    assert baseline["baseline_id"] == "red-first-v2-registered"
+    assert baseline["baseline_id"] == "red-first-v3-full-run"
     assert "From Red to a registered Pokedex" in render_svg(baseline, state, lane, evidence)
     state["baseline_id"] = "red-first-v1"
     (project / STATE).write_text(json.dumps(state))
@@ -136,3 +137,39 @@ def test_registered_baseline_is_explicit_and_old_baseline_remains_available(proj
     (project / STATE).write_text(json.dumps(state))
     with pytest.raises(ValueError, match="explicit adoption"):
         load_roadmap(project)
+
+
+@pytest.mark.parametrize("stage", ["red-hack", "crystal", "cross-generation"])
+def test_cannot_advance_beyond_red_with_incomplete_full_run_gate(project, stage):
+    state = json.loads((project / STATE).read_text())
+    state["stages"][state["current_stage"]]["status"] = "planned"
+    state["stages"][stage] = {
+        "status": "current", "evidence": state["milestone"]["items"][0]["evidence"]}
+    state["current_stage"] = stage
+    (project / STATE).write_text(json.dumps(state))
+    with pytest.raises(ValueError, match="before any ROM hack"):
+        load_roadmap(project)
+
+
+def test_full_red_claims_require_explicit_evidence(project):
+    state = json.loads((project / STATE).read_text())
+    state["red_completion_gate"]["fresh_start"] = True
+    (project / STATE).write_text(json.dumps(state))
+    with pytest.raises(ValueError, match="require evidence"):
+        load_roadmap(project)
+
+
+def test_long_realistic_checklist_expands_without_clipping(project):
+    baseline, state, lane, evidence = load_roadmap(project)
+    state["milestone"]["items"] = [
+        {"label": f"Criterion {i}: retain the exact measured outcome and all its source bindings",
+         "done": False} for i in range(17)
+    ]
+    root = ElementTree.fromstring(render_svg(baseline, state, lane, evidence))
+    ns = {"svg": "http://www.w3.org/2000/svg"}
+    labels = [node for node in root.findall("svg:text", ns) if node.get("x") == "778"]
+    progress = next(node for node in root.findall("svg:rect", ns)
+                    if node.get("x") == "80" and node.get("width") == "1260")
+    assert len(labels) > 17
+    assert max(int(node.get("y")) for node in labels) + 20 < int(progress.get("y"))
+    assert all(len(node.text or "") <= 48 for node in labels)

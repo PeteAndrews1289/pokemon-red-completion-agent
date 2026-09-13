@@ -1,7 +1,15 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
-  "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-13-model114-frozen-fishing-learning",
+  "baseline_id": "red-first-v3-full-run",
+  "red_completion_gate": {
+    "fresh_start": false,
+    "model_directed_start_to_finish": false,
+    "champion_and_hall_of_fame": false,
+    "full_local_red_pokedex": false,
+    "legitimate_external_dependencies_resolved": false,
+    "evidence": null
+  },
+  "as_of_session": "2026-09-13-model115-frozen-resupply-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -17,12 +25,12 @@
       "evidence": "docs/evidence/red-phase3-sustained-closeout-2026-09-08.json"
     },
     "red-story": {
-      "status": "verified",
-      "evidence": "docs/evidence/red-phase4-closeout-2026-09-09.json"
+      "status": "planned",
+      "evidence": null
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json"
+      "evidence": "docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -129,6 +137,12 @@
         "label": "Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu",
         "done": true,
         "evidence": "docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json"
+      },
+      {
+        "id": "model115-frozen-income-outcome",
+        "label": "Retain and learn the real income result, including verification failure",
+        "done": true,
+        "evidence": "docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json"
       }
     ]
   },
@@ -1176,6 +1190,12 @@
       "result": "Model113's exact frozen fishing choice added one registration in513actions/30804frames across four casts. The success became example114 with zero teacher labels and published a durable Model114 checkpoint with84registrations/64living/68specimens. The next action-free six-choice menu crossed three goal families and Model114 selected resupply.",
       "deviation": "Flash rejected a stale parent-model binding and selection seed before controller input; both were corrected before the one consumed execution. The successful choice was not retried, no post-hoc target was added and no authority tier advanced.",
       "next": "Execute Model114's exact frozen resupply choice once without another policy query, retain its actual outcome, fit Model115 only if eligible, publish the terminal and rebuild the next menu. No consumed retry, Blue, Crystal or full replay."
+    },
+    {
+      "session": "2026-09-13-model115-frozen-resupply-learning",
+      "result": "Model115 retains one income-verification failure: 115 examples, 84 registrations, cash2146. The next income choice is frozen and stopped.",
+      "deviation": "Actual terminal cash2146 differed from expected2088; retained as failure, never retried. Pete strengthened the gate: full fresh-run Red story and local Pokedex before any ROM hack. V3 preserves V1/V2 and returns the unproved fresh-run story exit to planned.",
+      "next": "Diagnose and qualify income accounting before executing the exact frozen Model115 choice. No post-hoc tolerance, resampling or consumed retry. Red remains the curriculum through the full fresh-run/Pokedex gate, followed by hack, Crystal and at least Emerald."
     }
   ],
   "closed_milestones": [

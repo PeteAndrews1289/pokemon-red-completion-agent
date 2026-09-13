@@ -11,10 +11,11 @@ they conflict with this page.
 
 Build a transferable Pokemon agent that finishes stories and accumulates one verified registered Pokedex across runs, mainline games, versions, trades and legitimate events.
 
-**Environment role:** Red first, then Blue with shared registration credit; a compatible unfamiliar Red modification tests adaptation before Crystal. No single title is the product.
+**Environment role:** Complete a fresh start-to-finish model-directed Red run and its full local Pokedex before any ROM hack. Resolve version/trade/event dependencies explicitly; then test a compatible unfamiliar Red modification, learn Crystal and continue through at least Emerald.
 
 Success means:
 
+- Before any ROM hack, finish one authenticated fresh-start model-directed Red run with Champion/Hall-of-Fame evidence and the full local Red Pokedex; no reduced availability subset.
 - Complete each title's story and supported mechanics under declared learned authority.
 - Register missing global species through legitimate acquisition and evolution; no level100 or simultaneous living-form quota.
 - Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.
@@ -33,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute the exact frozen Model114 resupply once, retain its real outcome, fit only an eligible result, then publish and rebuild the next menu action-free.
+- Next decision: Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning. |
-| Authority now | The bounded-development learner has 114 fitted examples. Its latest Red state has 84 registrations, 64 living species and 68 specimens in a durable input-ready Model114 checkpoint. Model114 selected resupply/income from six choices across three goal families; the choice is not yet executed. Deterministic code still executes mechanics; no independent full-game competence is claimed. |
+| Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
+| Authority now | Model114's frozen resupply choice stopped at payout verification after 160 actions/10633 frames. Its failed outcome became row115, preserving all 114 older rows. Model115 has 115 examples and 78 successes; its durable state retains 84 registrations, 64 living species, 68 specimens and cash2146. Model115 selected a new trainer-income goal from six options action-free; it remains unexecuted. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact frozen Model114 resupply choice cannot execute within declared bounds and retain its actual resource outcome. |
+| Cheapest falsifier | The trainer-income verifier cannot explain the retained cash difference without weakening the frozen quote or concealing a failure. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 114 | 12 |
+| Registered Train Example · train | 115 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model114-frozen-fishing-learning** · status **active** · evidence [model fit](docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
+**2026-09-13-model115-frozen-resupply-learning** · status **active** · evidence [model fit](docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model chose collection, learned from a verified registration gain and then chose resource generation from the earned state. That durable choose-act-verify-learn continuation is required for long Pokedex runs. |
-| Learning output | One real frozen fishing success was added as row114 without a teacher label. Model114 now has 114 settled examples and selected resupply from six choices spanning three goal families. |
-| Authority delta | Model113's exact frozen fishing choice added one registration in 513 actions and 30,804 frames with zero policy queries during execution and zero teacher labels. Its observed success became row114. Model114 then selected resupply from a six-choice, three-family menu action-free; no authority tier advanced. |
-| Transfer result | The policy menu remains identity-free and supports supplemental-only acquisition choices, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The selected Model114 resupply choice is frozen but unexecuted. It must retain its actual bounded outcome before another fit; consumed attempts remain non-retryable. |
-| Decision | Execute the exact frozen Model114 resupply choice once without another policy query, retain success or failure, fit only an eligible observed outcome, publish the terminal and rebuild the next menu action-free. |
-| Next session | Execute the exact frozen Model114 resupply once, retain its actual outcome, fit only an eligible result, then publish and rebuild the next automatic menu without input. |
-| Next falsifier | The exact frozen Model114 resupply cannot execute within its existing bounds and retain its real resource outcome. |
-| Stop condition | Stop on a second policy query for the frozen menu, retrying a consumed attempt, post-hoc targets, teacher labels, checkpoint mismatch, or any move into Blue or Crystal. |
+| Product alignment | Resource generation is necessary for full Red collection. This session retained a falsifying outcome instead of converting extra cash into a success claim. |
+| Learning output | One measured verification failure, including positive observed cash change, became row115. Prior rows remain intact; successful-example count stays78 and collection stays84. |
+| Authority delta | The exact Model114 choice controlled one consumed attempt. Cash rose58 to2146, but the verifier expected2088 and failed. That actual failed outcome became row115; the next model selected a different income binding from six choices. Deterministic mechanics still own execution; authority was not promoted. |
+| Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
+| Blocker | Trainer-income accounting predicted2030 but observed a2088 cash increase. Cause is unqualified. Model115's next income choice is frozen and must not execute until the reusable accounting boundary is understood. |
+| Decision | Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115. |
+| Next session | Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115. |
+| Next falsifier | The trainer-income verifier cannot explain the retained cash difference without weakening the frozen quote or concealing a failure. |
+| Stop condition | Stop on replay of Model114, resampling Model115, post-hoc payout tolerance, teacher labels, parent mismatch or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 
