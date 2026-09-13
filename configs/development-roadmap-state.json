@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-12-model111-zero-label-recovery",
+  "as_of_session": "2026-09-13-model111-cross-box-capture-support",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model111-zero-label-recovery-2026-09-12.json"
+      "evidence": "docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1116,6 +1116,12 @@
       "result": "The exact model111 terminal recovered input-ready field control in8actions/576frames and reopened as zero-label support with83registrations. The action-free next menu was forced-only restore_team; no choice or fit occurred. The roadmap advances to9/10.",
       "deviation": "The committed forced-only stop condition fired, so no healing or acquisition ran. Action-free diagnosis found no capture-status move in the party or active box, but seven capability-qualified helpers in other boxes. This is a cross-box preparation gap, not another route failure.",
       "next": "Qualify capability-derived cross-box helper retrieval using existing PC switching, preserve every specimen and field-move dependency, then rebuild model111's menu action-free. Allow one fresh choice only if a useful supported alternative exists."
+    },
+    {
+      "session": "2026-09-13-model111-cross-box-capture-support",
+      "result": "All-box capability discovery, safe PC switching, complete specimen/resource guards and same-acquisition rebinding passed304 focused tests and exact-source CI. The model111 menu rebuilt with zero actions/frames and remained forced-only; model111 and83 registrations are unchanged.",
+      "deviation": "The prior handoff treated helper locality as the immediate menu blocker. Exact inspection separated two facts: cross-box support was a real reusable gap, but the configured Seafoam source is exhausted. Four productive fishing destinations remain reachable, so no gameplay or fit was attempted from the unchanged menu.",
+      "next": "Move cartridge-derived fishing candidate and bounded executor assembly from private scripts into the reusable mixed-option runtime, attach cross-box preparation after one model-selected acquisition, then rebuild model111 action-free."
     }
   ],
   "closed_milestones": [

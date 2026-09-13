@@ -33,7 +33,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify capability-derived cross-box capture-helper retrieval, rebuild model111's menu action-free and allow one fresh choice only if a useful supported alternative exists.
+- Next decision: Integrate cartridge-derived reachable fishing candidates into the automatic mixed-option runtime, attach cross-box support after selection, then rebuild model111 action-free.
 
 ### Mandatory mission check
 
@@ -43,7 +43,7 @@ Not the product:
 | Authority now | The bounded-development learner has 111 fitted examples. Its latest Red state has 83 registrations, 63 living species and 67 specimens in a durable input-ready model111 restart after verified zero-label dialogue recovery. Deterministic code still executes navigation, combat, capture, storage and menus; no independent full-game competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A capability-derived cross-box helper plan cannot safely expose a useful acquisition from the recovered model111 checkpoint, or it requires a named species, coordinate route or second policy query. |
+| Cheapest falsifier | The reusable runtime cannot expose at least two reachable productive fishing candidates beside ordinary goals without identity leakage, state change or a second policy query. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -59,19 +59,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-12-model111-zero-label-recovery** · status **active** · evidence [qualification](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
+**2026-09-13-model111-cross-box-capture-support** · status **active** · evidence [qualification](docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The exact failed lineage resumed without retry or fake success, and the next blocker is expressed as a reusable capability gap: find required capture support anywhere in storage. This directly supports sustained collection across arbitrary saves rather than one destination. |
-| Learning output | No new learning output. Recovery is deterministic support with zero labels; model111 remains at 111 settled examples, 76 successful. The forced-only menu produced no choice, outcome or fit. |
-| Authority delta | Generic dialogue recovery restored field control in 8 actions and 576 frames, then published and reopened a zero-label model111 checkpoint. The model, its 111 rows and its authority are unchanged; the next menu was observed without input. |
+| Product alignment | The session removed active-box locality as a hidden assumption and used the exact checkpoint to distinguish capability readiness from exhausted demand. The next work replaces private one-off assembly with reusable automatic source discovery. |
+| Learning output | No new learning output. Cross-box qualification and the exact menu rebuild were action-free engineering; model111 remains at 111 settled examples, 76 successful. |
+| Authority delta | Capture preparation can now retrieve a capable helper from any verified box and rebind the same acquisition without another policy query. Exact model111 inspection used zero actions and frames; the model, 111 rows and 83 registrations remain unchanged. |
 | Transfer result | The gate is phrased in title-neutral interruption categories, but its qualified executor is still the Red adapter. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The recovered menu is forced-only: restore_team is the sole executable goal. The healthy party has no usable sleep/paralysis move, the active box has no helper, and seven capability-qualified helpers exist in other boxes. Acquisition is withheld until capture preparation can retrieve across boxes. |
-| Decision | Implement capability-derived cross-box capture-helper retrieval, preserve every specimen and field-move dependency, then rebuild the recovered menu action-free. Permit one fresh choice only if the menu contains a useful supported alternative. |
-| Next session | Generalize capture-party preparation to search all observed boxes, switch safely through the existing PC primitive and rebind the original acquisition without a second model query. Then rebuild the menu action-free and allow at most one useful supported choice. |
-| Next falsifier | Cross-box helper retrieval cannot preserve the complete specimen ledger and safely rebind the same acquisition, or the rebuilt menu remains forced-only after the capability is available. |
-| Stop condition | Stop on species-specific helper selection, coordinate-bearing policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, repeated CI-only work, or any move into Blue or Crystal. |
+| Blocker | The configured Seafoam Islands 1F source is exhausted, so the generic menu remains forced-only even with cross-box support. Four of eighteen productive fishing destinations are reachable, but their live executors are still assembled in private run scripts rather than the automatic runtime. |
+| Decision | Move cartridge-derived fishing candidate and bounded executor assembly into the reusable runtime, join at least two reachable destinations to the mixed-option menu, wrap the selected acquisition with cross-box support and rebuild model111 action-free. |
+| Next session | Productionize cartridge-derived multi-source fishing candidates and executors, join them to the mixed-option runtime, attach cross-box support after one selected acquisition and rebuild the exact model111 menu action-free. |
+| Next falsifier | Production candidate construction cannot expose at least two reachable productive fishing bindings from the exact model111 checkpoint, or it leaks private identity, changes state during planning, or cannot attach cross-box preparation after one model choice. |
+| Stop condition | Stop on destination-specific profiles, private-only executor assembly, coordinate/species policy features, a second policy query after setup, forced outcomes mislabeled as learning, consumed-state replay, or any move into Blue or Crystal. |
 
 ### Stop conditions
 

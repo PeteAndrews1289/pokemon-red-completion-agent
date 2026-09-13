@@ -45,9 +45,11 @@ the backburner so the project can first establish sustained model-directed Red p
 | Modified-Red, Blue and Crystal transfer | **Planned** | Contracts and some adapters exist, but no transfer result is claimed. |
 
 The route-eligibility repair is complete, and the exact retained dialogue recovered once in eight
-actions / 576 frames without a training label. The next action-free menu was forced-only. The
-immediate task is capability-derived retrieval of a capture helper from another observed box,
-followed by a rebuilt menu and at most one fresh supported model choice.
+actions / 576 frames without a training label. Capture preparation can now retrieve a capable
+helper from any verified box without another policy query. The exact action-free menu remained
+forced-only because its configured Seafoam source is exhausted; the immediate task is reusable
+automatic assembly of reachable productive fishing destinations, followed by at most one fresh
+supported model choice.
 
 ## 2. What the system can demonstrably do now
 
@@ -265,8 +267,9 @@ An interview-safe description is:
 - No learned model has independently played Red from title screen through Hall of Fame.
 - The current 111 examples are related development outcomes, not 111 independent games.
 - The latest fit has no independent evaluation or promoted authority.
-- Capture preparation searches only the active box; the current save's seven suitable helpers are
-  stored elsewhere, so the rebuilt menu exposes only deterministic recovery.
+- Capture preparation now searches all twelve verified boxes and safely preserves the complete
+  specimen/resource state. The rebuilt menu still exposes only deterministic recovery because its
+  configured Seafoam source is exhausted; automatic multi-source fishing assembly is unfinished.
 - Low-level navigation, battle, capture and menu control remain primarily deterministic.
 - Red registrations are incomplete: 41 required Red registrations remain in the current contract.
 - The system has not autonomously completed the shared Pokédex.
@@ -291,6 +294,7 @@ An interview-safe description is:
 | Proof | `tests/`, `docs/evidence/`, `docs/work-sessions/`, `.github/workflows/ci.yml` |
 
 The exact current restart and evidence are in the
-[model111 session](work-sessions/2026-09-12-model111-fishing-learning-loop.md). Historical receipts
+[model111 cross-box session](work-sessions/2026-09-13-model111-cross-box-capture-support.md).
+Historical receipts
 remain immutable; the [documentation map](README.md) explains which files are current instructions
 and which are preserved history.

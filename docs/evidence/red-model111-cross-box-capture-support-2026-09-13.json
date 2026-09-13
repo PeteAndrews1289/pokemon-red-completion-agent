@@ -1,0 +1,57 @@
+{
+  "authority_promotions": 0,
+  "collection": {
+    "living_species": 63,
+    "registered_species": 83,
+    "required_red_registrations_remaining": 41,
+    "specimens": 67
+  },
+  "engineering": {
+    "all_box_inventory": true,
+    "capability_based_selection": true,
+    "complete_specimen_multiset_guard": true,
+    "field_move_carrier_guard": true,
+    "focused_tests_passed": 304,
+    "same_acquisition_rebound_without_policy_requery": true,
+    "safe_box_switch": true
+  },
+  "exact_menu": {
+    "available_goal_count": 1,
+    "available_goal_kinds": [
+      "restore_team"
+    ],
+    "capture_items": 4,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "executable_fishing_maps": 4,
+    "free_storage_slots": 179,
+    "generic_acquisition_status": "unavailable_no_legal_target",
+    "money": 58,
+    "productive_fishing_maps": 18,
+    "state_unchanged": true
+  },
+  "finding": {
+    "cross_box_support_necessary": true,
+    "cross_box_support_sufficient_for_current_menu": false,
+    "immediate_blocker": "configured_seafoam_source_exhausted",
+    "next_reusable_seam": "automatic_cartridge_derived_multi_source_fishing_options"
+  },
+  "model": {
+    "model_sha256": "2eb854c7bc267a907fd5ffaf4037e06266bd9c1cc120fa335c011b59b7bbbaa9",
+    "settled_examples": 111,
+    "successful_examples": 76,
+    "unchanged": true
+  },
+  "qualification": {
+    "github_ci_attempt": 1,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 34733442341,
+    "source_bundle_sha256": "ff562c7dad41eb8ac4d93c5a797ab16f7db98fd025350148221b446f4c101cf5",
+    "source_commit": "e9fb7cc83dba84e1ca966a2dae3e740c2ed6a4b5"
+  },
+  "schema": "pokemon.red.model111-cross-box-capture-support-evidence.v1",
+  "session_id": "2026-09-13-model111-cross-box-capture-support",
+  "teacher_labels": 0,
+  "training_examples_added": 0,
+  "transfer_result": null
+}

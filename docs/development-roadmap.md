@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-12-model111-zero-label-recovery**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model111-cross-box-capture-support**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
@@ -75,7 +75,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
+[Current evidence](../docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -102,6 +102,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-13-model111-cross-box-capture-support
+
+All-box capability discovery, safe PC switching, complete specimen/resource guards and same-acquisition rebinding passed304 focused tests and exact-source CI. The model111 menu rebuilt with zero actions/frames and remained forced-only; model111 and83 registrations are unchanged.
+
+**Deviation:** The prior handoff treated helper locality as the immediate menu blocker. Exact inspection separated two facts: cross-box support was a real reusable gap, but the configured Seafoam source is exhausted. Four productive fishing destinations remain reachable, so no gameplay or fit was attempted from the unchanged menu.
+
+**Next:** Move cartridge-derived fishing candidate and bounded executor assembly from private scripts into the reusable mixed-option runtime, attach cross-box preparation after one model-selected acquisition, then rebuild model111 action-free.
 
 ### 2026-09-12-model111-zero-label-recovery
 

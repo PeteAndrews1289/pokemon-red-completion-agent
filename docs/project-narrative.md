@@ -1,15 +1,23 @@
 # Project story: from finishing Red to learning useful choices
 
-Latest engineering beat: the failure produced by model110 led to a generic route-capability gate,
+Latest engineering beat: model111 exposed a clean distinction between a missing capability and an
+exhausted source. Capture preparation now searches all twelve verified boxes, chooses a usable
+status helper without species identity, switches safely and preserves every specimen and field-
+move dependency. The exact read-only rebuild still showed one forced heal because all targets in
+the configured Seafoam source were already registered. Four productive fishing destinations are
+reachable, so the next step is automatic multi-source inventory—not another box or route patch.
+[Evidence](evidence/red-model111-cross-box-capture-support-2026-09-13.json).
+
+Previous engineering beat: the failure produced by model110 led to a generic route-capability gate,
 then the exact retained terminal recovered once through that same handler. Eight actions and 576
 frames restored input-ready field control, and the terminal reopened as a durable zero-label
 model111 checkpoint with all 83 registrations intact. The failure was never retried or relabeled.
 
-The next action-free menu exposed only healing. The party is healthy but has no usable capture
-status move; seven suitable helpers exist in other boxes while the active box has none. That turns
-the next problem into a reusable systems question: can the agent discover and retrieve a required
-capability across storage without naming a species or asking the model to choose twice? Model111
-remains at 111 examples. [Evidence](evidence/red-model111-zero-label-recovery-2026-09-12.json).
+The next action-free menu exposed only healing. The party has no usable capture status move; seven
+suitable helpers exist in other boxes while the active box has none. The cross-box session solved
+that reusable storage question and then corrected the causal story: source exhaustion, not helper
+locality, is what keeps this exact generic menu empty. Model111 remains at 111 examples.
+[Evidence](evidence/red-model111-zero-label-recovery-2026-09-12.json).
 
 Latest systems beat: model109 selected one of four anonymous fishing destinations. Generic routing,
 fishing and capture added registration83 after542 actions,31,464 frames and five casts; the measured

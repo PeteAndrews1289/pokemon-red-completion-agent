@@ -16,9 +16,11 @@ valuable evidence without remaining an instruction.
 
 As of the latest measured session, model111 has 111 settled training-only examples. Its durable Red
 checkpoint contains 83 registered species, 63 living species and 67 physical specimens. Generic
-zero-label dialogue recovery restored an input-ready checkpoint, but the next menu is forced-only
-until capture preparation can retrieve a required capability from another storage box. This is
-bounded development, not independent full-game competence.
+zero-label dialogue recovery restored an input-ready checkpoint. Capture preparation now retrieves
+required capabilities across all verified boxes, but the next menu is forced-only because its
+configured Seafoam source is exhausted. Productive reachable fishing destinations are not yet
+assembled by the reusable automatic runtime. This is bounded development, not independent
+full-game competence.
 
 ## Reader-facing summaries
 

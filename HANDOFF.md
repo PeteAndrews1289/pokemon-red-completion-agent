@@ -1,30 +1,32 @@
 # Current development handoff
 
-Updated September 12, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
+Updated September 13, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). The North Star has not changed: build a
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current engineering boundary: model111 recovered / cross-box capture support next
+## Current engineering boundary: cross-box support qualified / automatic fishing next
 
-Source `23dadf37a59ad5f018d3d227921770174be108c7` passed GitHub CI run
-`34730511619` attempt 1. The exact model111 failure terminal then recovered once through the
-qualified generic dialogue handler: 8 actions / 576 frames / four dialogue pulses. The recovered
-state published and reopened as `red-model111-gate-recovery-support-20260912`, checkpoint
-`8c358a3a5dd8346fc62a247e19aed0caee461eb77e9ce0f562dfa7c3f65b79f3`.
+Source `e9fb7cc83dba84e1ca966a2dae3e740c2ed6a4b5`, bundle
+`ff562c7dad41eb8ac4d93c5a797ab16f7db98fd025350148221b446f4c101cf5`, passed
+GitHub CI run `34733442341` attempt 1. Capture preparation now inventories all twelve boxes,
+selects by usable status-move capability and safe capacity, switches through the verified PC
+primitive and rebinds the same acquisition without a second policy query. Focused suite: 304
+passed. No gameplay or fit was needed to qualify the engineering seam.
 
-The recovery is deterministic support, not a replay or learning result: zero teacher labels, zero
-training examples, model111 unchanged. The action-free next menu exposed only `restore_team`.
-Acquisition is withheld because the healthy party has no usable sleep/paralysis move and the
-active box has no helper, although seven capable helpers exist in other observed boxes.
+The exact recovered checkpoint then rebuilt under the qualified source with zero actions and zero
+frames. It still exposed only `restore_team`; acquisition remained `no_legal_target`. The immediate
+cause is source exhaustion: the profile targets Seafoam Islands 1F and all eight listed species are
+already registered. Cross-box retrieval remains necessary infrastructure, but was not sufficient
+to broaden this menu. Model111 and the 83-registration checkpoint are unchanged.
 
-Next: generalize capture-party preparation to inspect all boxes, select by capability, switch using
-the existing PC primitive and rebind the same acquisition without a second model query. Preserve
-every specimen and field-move dependency. Rebuild the menu action-free before permitting one fresh
-choice; stop if it remains forced-only.
+Next: move the existing cartridge-derived fishing candidate and bounded executor assembly out of
+private run scripts into the reusable automatic runtime. Four of 18 productive fishing maps are
+reachable from the recovered state. Join at least two to the mixed-option menu, wrap the selected
+acquisition with cross-box support and rebuild action-free before one fresh model choice.
 
-[Latest report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md) ·
-[Latest evidence](docs/evidence/red-model111-zero-label-recovery-2026-09-12.json)
+[Latest report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md) ·
+[Latest evidence](docs/evidence/red-model111-cross-box-capture-support-2026-09-13.json)
 
 ## Latest measured endpoint: capture, failure and online update / model111
 
@@ -51,9 +53,9 @@ deterministic Red adapters route, fish and capture; typed postconditions retain 
 The successful registration is real, but the next route exposed a capability-advertising defect:
 the menu scored a destination whose path crossed dialogue that this runner declared unsupported.
 
-The capability-advertising defect is repaired and the retained terminal is recovered. The next
-menu is forced-only because capture support searches only the active box; mixed
-acquisition-family coverage remains open.
+The capability-advertising defect is repaired and the retained terminal is recovered. Cross-box
+capture support is also qualified. The next menu remains forced-only because its configured source
+is exhausted; automatic multi-source fishing and mixed acquisition-family coverage remain open.
 
 [Latest report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) · [Latest evidence](docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json)
 

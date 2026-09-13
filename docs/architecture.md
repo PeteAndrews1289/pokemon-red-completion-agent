@@ -73,10 +73,15 @@ engagement/battles and scripted dialogue. Recovery and travel-capture wrappers m
 same declaration. This prevents a deterministic execution deficit from masquerading as a viable
 learned choice.
 
-The current capture-preparation boundary is narrower than the storage reader: it can select a
-sleep/paralysis helper only from the active box, although observation can inventory all twelve
-boxes. Model111's recovered save makes that limitation concrete—seven suitable helpers exist in
-other boxes and none in the active box. Cross-box capability selection and safe PC switching are
-the next adapter seam; helper species identity must remain outside the learned policy.
+Capture preparation now inventories all twelve verified boxes, selects a helper by usable
+sleep/paralysis capability and capacity, switches through the existing PC primitive, protects the
+complete specimen multiset and last field-move carriers, then rebinds the selected acquisition
+without another policy query. Helper species identity remains outside learned features.
+
+The next boundary sits one level higher. Cartridge-derived fishing destinations, identity-free
+features, model scoring and bounded live executors all exist, but candidate/executor assembly is
+still performed by private run scripts. Until that assembly moves into the reusable player
+runtime, an exhausted profile source can leave the generic menu empty even when productive,
+reachable fishing maps exist.
 
 [Current roadmap](model-first-roadmap.md) · [Historical architecture claims](history/architecture-through-2026-09-10.md)

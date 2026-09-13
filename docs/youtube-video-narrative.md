@@ -2,9 +2,9 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest engineering beat: show the generic route-capability repair, then the single recovery.
-Overlay **8 actions / 576 frames / 83 registrations preserved / 0 labels**. Rebuild the menu and
-reveal the next blocker: one forced heal, no capture-status move in party, seven helpers elsewhere.
+Newest engineering beat: show seven helpers across the PC, then capability-based selection.
+Overlay **12 boxes / 304 tests / 0 game actions / 0 labels**. Reveal that the menu is still forced
+because Seafoam is exhausted, while four productive fishing destinations await runtime integration.
 
 ## Opening: the honest hook
 
