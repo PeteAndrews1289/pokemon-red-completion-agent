@@ -214,6 +214,43 @@ def test_mixed_menu_exposes_real_families_without_private_identity_or_actions() 
     assert "binding_ref" not in encoded
 
 
+@pytest.mark.parametrize("supplement_count", (0, 1))
+def test_mixed_menu_preserves_ordinary_families_with_zero_or_one_supplements(
+    supplement_count,
+) -> None:
+    calls: list[str] = []
+    fishing = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    supplements = (
+        supplemental_live_option(
+            fishing,
+            _fishing_candidate("provider-row-0", travel=0.1),
+        ),
+    )[:supplement_count]
+
+    options = build_red_live_option_set(
+        situation=_situation(),
+        binding_set=_ordinary_bindings(calls),
+        supplements=supplements,
+        model_feature_version=4,
+        ordering_seed_sha256="e" * 64,
+        economy_snapshot=EconomySnapshot(58, (("capture", 6),)),
+        target_cash=400,
+    )
+
+    assert calls == []
+    assert options.public_dict()["ordinary_candidate_count"] == 2
+    assert options.public_dict()["supplemental_candidate_count"] == supplement_count
+    kinds = {
+        item.features.kind for item in options.menu.candidates
+    }
+    assert kinds >= {LivingDexOptionKind.RESUPPLY, LivingDexOptionKind.RESTORE}
+    assert (LivingDexOptionKind.ACQUIRE in kinds) is bool(supplement_count)
+
+
 def test_model_selects_one_exact_private_binding_without_executing_it() -> None:
     calls: list[str] = []
     options = _mixed(calls)

@@ -122,12 +122,35 @@ def red_fishing_destination_menu(
 ) -> LivingDexOptionMenu:
     """Project executable fishing maps into the shared option-value vocabulary."""
 
+    if len(offers) < 2:
+        raise ValueError("fishing learning needs distinct executable destinations")
+    candidates = red_fishing_destination_candidates(
+        offers,
+        route_steps=route_steps,
+        maximum_route_steps=maximum_route_steps,
+        free_storage_slots=free_storage_slots,
+    )
+    menu = LivingDexOptionMenu(context, candidates)
+    if len({menu.candidate_vector(index) for index in menu.available_indices}) < 2:
+        raise ValueError("fishing destinations have no distinguishable semantic features")
+    return menu
+
+
+def red_fishing_destination_candidates(
+    offers: tuple[RedFishingDestinationOffer, ...],
+    *,
+    route_steps: tuple[int, ...],
+    maximum_route_steps: int,
+    free_storage_slots: int,
+) -> tuple[LivingDexOptionCandidate, ...]:
+    """Project one or more private fishing maps into identity-free candidates."""
+
     if (
-        len(offers) < 2
+        not offers
         or len(offers) != len(route_steps)
         or len({offer.source_ref for offer in offers}) != len(offers)
     ):
-        raise ValueError("fishing learning needs distinct executable destinations")
+        raise ValueError("fishing projection needs distinct executable destinations")
     if type(maximum_route_steps) is not int or maximum_route_steps <= 0:
         raise ValueError("fishing route bound must be positive")
     if any(
@@ -137,7 +160,7 @@ def red_fishing_destination_menu(
         raise ValueError("fishing route steps exceed their bound")
     if type(free_storage_slots) is not int or free_storage_slots <= 0:
         raise ValueError("fishing destination menu needs immediate storage")
-    candidates = tuple(
+    return tuple(
         LivingDexOptionCandidate(
             binding_ref=f"fishing-destination-private-{index}",
             features=LivingDexOptionFeatures(
@@ -160,10 +183,6 @@ def red_fishing_destination_menu(
         )
         for index, offer in enumerate(offers)
     )
-    menu = LivingDexOptionMenu(context, candidates)
-    if len({menu.candidate_vector(index) for index in menu.available_indices}) < 2:
-        raise ValueError("fishing destinations have no distinguishable semantic features")
-    return menu
 
 
 @dataclass(frozen=True, slots=True)
