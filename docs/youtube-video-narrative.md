@@ -1,4 +1,4 @@
-# Video narrative: extra money is not automatically success
+# Video narrative: the hidden Pay Day carried forward
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
@@ -6,21 +6,19 @@ did, including failures; do not present coding assistants as the live Pokémon p
 
 ## Latest episode
 
-Start with the authentic six-option menu: Model114 chooses trainer income. Then show the
-retained outcome, clearly labeled recorded—not live. Overlay160 actions/10633 frames and
-the balance58 →2146. The expected balance was2088, so the verifier stopped.
+Start with the retained Model114 result: ordinary trainer income2030, but the balance rose2088.
+Reveal the cartridge explanation: a level29 opponent Meowth used Pay Day for the missing58. Keep
+the outcome labeled failed—the explanation does not rewrite its frozen verifier.
 
-The line for the viewer: “The money went up. That did not mean our prediction was right.”
+Then show the exact continuation. Model115 travels27 actions/864 frames and stops before the new
+trainer because the old58 still occupies Red's Pay Day accumulator. The cartridge clears it only
+when the next battle initializes, not when the previous battle ends.
 
-Keep the result labeled failed. Show that the save is preserved and the failed outcome becomes
-training row115, with all114 earlier rows retained. The collection remains84 registrations
-and68 specimens; successful examples remain78. No retry or hidden teacher label was used.
+That failure becomes row116 with all115 earlier rows retained. Collection remains84 registrations
+and68 specimens; successes remain78. End with Model116's action-free six-option menu selecting an
+acquisition. It is frozen and unexecuted.
 
-End the beat with the action-free next menu. Model115 selects another income opportunity,
-but it is not executed. The next task is to understand the accounting discrepancy, not to
-repeat the failed attempt or loosen the success rule until it passes.
-
-[Session and evidence](work-sessions/2026-09-13-model115-frozen-resupply-learning.md)
+[Session and evidence](work-sessions/2026-09-13-model116-pay-day-accounting.md)
 
 ## The real finish line
 
@@ -41,6 +39,6 @@ Crystal → at least Emerald, with one shared registration ledger that never fab
 - [Checkpoint story audit](audits/red-phase4-closeout-2026-09-09.md):
   show the achievement and the forced/deterministic authority caveat together.
 
-Never loop old footage as current gameplay. Do not convert115 training examples into a
+Never loop old footage as current gameplay. Do not convert116 training examples into a
 whole-project completion percentage or imply that low-level control is learned.
 [Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)

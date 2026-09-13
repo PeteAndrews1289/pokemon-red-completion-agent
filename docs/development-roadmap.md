@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model115-frozen-resupply-learning**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model116-pay-day-accounting**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 15/16 acceptance items (94%).**
+**Broaden model-directed Red collection: 16/17 acceptance items (94%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -28,8 +28,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
 - [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
 - [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
+- [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
 
-Current model: **115 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **116 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -79,7 +80,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -106,6 +107,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model116-pay-day-accounting
+
+Pinned cartridge source explains Model114's extra58 as opponent Pay Day. Model115's exact continuation stopped on the retained accumulator after27 actions/864 frames; its actual failure became row116. Model116 has116 examples,78 successes,84 registrations and cash2146; its next acquisition choice is frozen.
+
+**Deviation:** The first verifier assumed the Pay Day accumulator cleared at battle end. Source proved it persists until the next battle initializes, so the final contract now proves stale prior value, exact battle-init clear and current-battle terminal value. Neither historical failure was relabeled or retried.
+
+**Next:** Execute Model116's exact frozen acquisition once, retain its actual result, fit only eligible evidence, publish the terminal and rebuild the menu. No resampling, consumed Model115 retry, hack, Crystal or full replay.
 
 ### 2026-09-13-model115-frozen-resupply-learning
 

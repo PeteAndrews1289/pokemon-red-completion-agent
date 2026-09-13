@@ -44,7 +44,7 @@ The source-level boundaries prevent accidental misuse; Python interfaces are not
 
 Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
 
-The active registered-objective model has115 settled examples from related development states,
+The active registered-objective model has116 settled examples from related development states,
 including successful choices and retained failures. Those are not115 independent games. In-sample
 fit quality and bounded collection gains cannot establish generalization.
 

@@ -705,3 +705,17 @@ After complete Red, test a compatible unfamiliar Red modification, then learn Cr
 continue the shared registered Pokédex through at least Emerald. The existing full-run readiness
 conditions still apply: train and qualify reusable decisions in bounded scenarios before the
 fresh-run final exam. No new clean-power teacher replay is authorized by this clarification.
+
+## September 13 — account for opponent Pay Day without rewriting failures
+
+Pinned cartridge source explains Model114's extra58 as Pay Day used by a level29 opponent Meowth:
+ordinary income2030 plus Pay Day58 equals the observed2088. Preserve Model114 as failed under its
+original frozen verifier. The exact Model115 continuation also remains consumed: it stopped after27
+actions/864frames because the first repaired guard rejected that retained accumulator before the
+next battle initialized.
+
+Adopt the source-backed lifetime contract instead of a payout tolerance. A stale prior accumulator
+may exist before interaction; the next battle must clear it at initialization; its own accumulator
+must remain readable after victory and exactly reconcile terminal cash. Fit the retained Model115
+failure once as row116. Freeze Model116's selected acquisition for the next session; no retry or
+resampling. The full Red-before-hack sequence and exit criteria do not change.

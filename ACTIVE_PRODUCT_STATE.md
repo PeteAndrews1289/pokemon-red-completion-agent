@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115.
+- Next decision: Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model114's frozen resupply choice stopped at payout verification after 160 actions/10633 frames. Its failed outcome became row115, preserving all 114 older rows. Model115 has 115 examples and 78 successes; its durable state retains 84 registrations, 64 living species, 68 specimens and cash2146. Model115 selected a new trainer-income goal from six options action-free; it remains unexecuted. No fresh-game or independent competence is claimed. |
+| Authority now | Opponent Pay Day explains Model114's extra58; its failure is unchanged. Model115's continuation stopped before trainer interaction after27 actions/864 frames on the retained accumulator and became row116. Model116 has116 examples/78 successes and retains84 registrations,64 living species,68 specimens and cash2146. Its six-option menu selected an unexecuted acquisition. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The trainer-income verifier cannot explain the retained cash difference without weakening the frozen quote or concealing a failure. |
+| Cheapest falsifier | The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 115 | 12 |
+| Registered Train Example · train | 116 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model115-frozen-resupply-learning** · status **active** · evidence [model fit](docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json)
+**2026-09-13-model116-pay-day-accounting** · status **active** · evidence [model fit](docs/evidence/red-model116-pay-day-accounting-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Resource generation is necessary for full Red collection. This session retained a falsifying outcome instead of converting extra cash into a success claim. |
-| Learning output | One measured verification failure, including positive observed cash change, became row115. Prior rows remain intact; successful-example count stays78 and collection stays84. |
-| Authority delta | The exact Model114 choice controlled one consumed attempt. Cash rose58 to2146, but the verifier expected2088 and failed. That actual failed outcome became row115; the next model selected a different income binding from six choices. Deterministic mechanics still own execution; authority was not promoted. |
+| Product alignment | Exact Pay Day accounting removes a generic economy blind spot while retaining both failed attempts honestly. Model116's next choice returns directly to missing-species acquisition. |
+| Learning output | One measured pre-interaction verification failure became row116. Prior rows remain intact; successful-example count stays78 and collection stays84. |
+| Authority delta | Pinned cartridge source explained Model114's extra58 as opponent Pay Day, without relabeling that failure. The exact Model115 continuation then stopped on its stale accumulator guard after27 actions/864 frames; its actual failure became row116. Model116 selected an acquisition from six choices action-free. Deterministic mechanics still own execution; authority was not promoted. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | Trainer-income accounting predicted2030 but observed a2088 cash increase. Cause is unqualified. Model115's next income choice is frozen and must not execute until the reusable accounting boundary is understood. |
-| Decision | Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115. |
-| Next session | Diagnose and qualify the trainer-income payout mismatch with read-only evidence and ROM-free tests before executing the exact frozen Model115 income choice once; never retry Model114 or resample Model115. |
-| Next falsifier | The trainer-income verifier cannot explain the retained cash difference without weakening the frozen quote or concealing a failure. |
-| Stop condition | Stop on replay of Model114, resampling Model115, post-hoc payout tolerance, teacher labels, parent mismatch or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The exact Model116 acquisition is frozen and unexecuted. It must retain a fresh typed collection outcome; the consumed Model115 trainer attempt cannot retry. |
+| Decision | Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116. |
+| Next session | Execute the exact frozen Model116 acquisition once, retain its actual result, fit only eligible measured evidence and rebuild the next menu; never retry Model115 or resample Model116. |
+| Next falsifier | The exact frozen Model116 acquisition cannot produce a typed, freshly verified collection outcome without resampling, teacher labels or identity-bearing policy features. |
+| Stop condition | Stop on retry of Model115, resampling Model116, teacher labels, parent/source mismatch, unverifiable collection change or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

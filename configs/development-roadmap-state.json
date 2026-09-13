@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-13-model115-frozen-resupply-learning",
+  "as_of_session": "2026-09-13-model116-pay-day-accounting",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json"
+      "evidence": "docs/evidence/red-model116-pay-day-accounting-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -143,6 +143,12 @@
         "label": "Retain and learn the real income result, including verification failure",
         "done": true,
         "evidence": "docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json"
+      },
+      {
+        "id": "model116-pay-day-accounting",
+        "label": "Explain Pay Day exactly and retain the consumed continuation failure",
+        "done": true,
+        "evidence": "docs/evidence/red-model116-pay-day-accounting-2026-09-13.json"
       }
     ]
   },
@@ -1196,6 +1202,12 @@
       "result": "Model115 retains one income-verification failure: 115 examples, 84 registrations, cash2146. The next income choice is frozen and stopped.",
       "deviation": "Actual terminal cash2146 differed from expected2088; retained as failure, never retried. Pete strengthened the gate: full fresh-run Red story and local Pokedex before any ROM hack. V3 preserves V1/V2 and returns the unproved fresh-run story exit to planned.",
       "next": "Diagnose and qualify income accounting before executing the exact frozen Model115 choice. No post-hoc tolerance, resampling or consumed retry. Red remains the curriculum through the full fresh-run/Pokedex gate, followed by hack, Crystal and at least Emerald."
+    },
+    {
+      "session": "2026-09-13-model116-pay-day-accounting",
+      "result": "Pinned cartridge source explains Model114's extra58 as opponent Pay Day. Model115's exact continuation stopped on the retained accumulator after27 actions/864 frames; its actual failure became row116. Model116 has116 examples,78 successes,84 registrations and cash2146; its next acquisition choice is frozen.",
+      "deviation": "The first verifier assumed the Pay Day accumulator cleared at battle end. Source proved it persists until the next battle initializes, so the final contract now proves stale prior value, exact battle-init clear and current-battle terminal value. Neither historical failure was relabeled or retried.",
+      "next": "Execute Model116's exact frozen acquisition once, retain its actual result, fit only eligible evidence, publish the terminal and rebuild the menu. No resampling, consumed Model115 retry, hack, Crystal or full replay."
     }
   ],
   "closed_milestones": [

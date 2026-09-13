@@ -1534,3 +1534,18 @@ Mission check for this planning task:
 - Mission check: this removes uncertainty from the battle-data gate and prevents consumed-root
   reuse. It does not advance model, route, story, capture, evolution, trade, living-Pokedex or
   cross-title competence.
+
+## Codex reorientation — opponent Pay Day accounting (2026-09-13)
+
+- Result: pinned Red source explains Model114's extra58 as level29 opponent Pay Day. The original
+  failure remains unchanged. Model115's exact continuation stopped after27 actions/864 frames on
+  the retained accumulator and became failed row116 without retry.
+- Contract: allow stale pre-battle value, prove exact zero after the next battle initializes, then
+  reconcile terminal cash with the new battle's persistent Pay Day accumulator plus ordinary pay.
+- External review: Flash's terminal-sampling concern was useful; its clear-at-end premise was
+  corrected from cartridge source. Three bounded Claude CLI attempts returned no response, so no
+  Claude contribution is claimed.
+- Verification:393 focused accounting/execution tests,252 admission tests, Ruff and mypy across495
+  source files passed. Hosted CI run34770365977 is authoritative for final source.
+- Next: execute Model116's exact frozen acquisition once. Do not retry Model115, resample Model116,
+  use a teacher label or approach any hack/Crystal gate before complete Red.

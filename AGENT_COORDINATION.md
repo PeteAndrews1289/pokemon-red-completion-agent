@@ -11,35 +11,36 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model115 has115 examples,84 registrations and cash2146. The consumed Model114 trainer-income
-attempt failed payout verification after160 actions/10633frames and became one failed learning
-row. Model115 then selected a new income binding from six options; it remains frozen and unexecuted.
+Model116 has116 examples,78 successes,84 registrations and cash2146. Pinned cartridge source
+explains Model114's extra58 as opponent Pay Day. The exact Model115 continuation stopped after27
+actions/864frames on a stale-accumulator guard and became one failed learning row. Neither attempt
+was retried or relabeled.
 
-Diagnose the previous mismatch and qualify reusable income accounting before executing that
-exact next choice. No retry, resampling, post-hoc payout tolerance, teacher label or authority
-promotion. Do not assign an agent another broad architecture audit.
+Model116 selected an acquisition from six choices. Execute that exact frozen choice once, retain
+its actual result and fit only eligible measured evidence. No retry, resampling, teacher label,
+identity-bearing policy feature or authority promotion. Do not assign another broad architecture
+audit.
 
-Pete requires a fresh start-to-finish model-directed Red run and the full local Red Pokédex
-before any ROM hack. The old checkpoint story and124-entry availability scope do not qualify.
-Resolve legitimate external dependencies explicitly; after full Red, hack, Crystal and at least Emerald.
+Pete requires a fresh start-to-finish non-deterministic model-directed Red run and the full local
+Red Pokédex before any ROM hack. The old checkpoint story and124-entry availability scope do not
+qualify. Resolve legitimate dependencies explicitly; after full Red, hack, Crystal and at least
+Emerald.
 
 ## Latest external contributions
 
-Flash3.8 High supplied the separate frozen-resupply schema/test proposal after unattended
-command permission blocked its isolated editing attempt. Codex fixed invented probabilities
-and a mismatched budget, then added real failure and no-random-draw tests.
-Claude Opus4.8 High audited five files read-only. Its four-site admission warning was accepted;
-the hardcoded-payout concern was not the actual failure cause. Separate menu-provenance
-binding remains lower-trust evidence, not self-certification.
+Flash3.8 High supplied a read-only accounting review. Codex accepted its concern about ambiguous
+terminal sampling and added adversarial coverage, but corrected its assumption that Pay Day clears
+at battle end: pinned source shows the next battle initialization clears it. Flash had no gameplay,
+fit or publishing authority.
 
-Both tasks completed. Shared Gemini quota:96.12%five-hour/68.38%weekly remaining.
-Claude subscription quota unavailable; its standard-speed review reported$1.647777.
-No reviewer was granted gameplay, fitting, private-save or publishing authority.
+Three bounded Claude CLI review attempts produced no response before interruption. No Claude
+contribution or cost is claimed; subscription quota is unavailable. Next useful Flash assignment:
+a small test review around the frozen acquisition. Claude is optional at the eventual full-run
+authority boundary. Next Codex recommendation: Sol/High/Fast off.
 
-Next useful Flash assignment: a small ROM-free accounting test draft after Codex establishes
-the cartridge rule. Codex owns diagnosis and actual continuation. Claude is optional at the
-eventual full-run authority boundary. Next Codex recommendation: Sol/High/Fast off.
+Refreshed shared Gemini quota:96.69% five-hour /69.30% weekly remaining. These are group counters,
+not a per-task token saving.
 
-[Session and adjudication](docs/work-sessions/2026-09-13-model115-frozen-resupply-learning.md) ·
+[Session and adjudication](docs/work-sessions/2026-09-13-model116-pay-day-accounting.md) ·
 [Detailed workflow](docs/three-agent-workflow.md) ·
 [Reviewer entry point](docs/current-agent-handoffs.md)
