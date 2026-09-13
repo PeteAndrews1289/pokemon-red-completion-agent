@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-13-model117-frozen-acquisition",
+  "as_of_session": "2026-09-13-model117-sparse-fishing-menu",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model117-frozen-acquisition-2026-09-13.json"
+      "evidence": "docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -159,8 +159,8 @@
       {
         "id": "model117-sparse-fishing-menu",
         "label": "Degrade safely when fewer than two fishing destinations remain",
-        "done": false,
-        "evidence": null
+        "done": true,
+        "evidence": "docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json"
       }
     ]
   },
@@ -1226,6 +1226,12 @@
       "result": "Model116's exact frozen acquisition added one registration in979actions/59232frames across six casts. The verified success became row117; Model117 has117 examples,79 successes,85 registrations,65 living species and69 specimens.",
       "deviation": "Model117's next action-free menu failed closed before selection because fewer than two reachable productive fishing destinations remain. No second gameplay attempt, manual target, teacher label, retry or authority promotion occurred.",
       "next": "Qualify identity-free one/zero-destination fishing degradation, then rebuild and freeze Model117's next mixed menu without controller input. No hack, Crystal or full replay."
+    },
+    {
+      "session": "2026-09-13-model117-sparse-fishing-menu",
+      "result": "Zero/one-destination fishing degradation passed150 broader targeted tests. The actual Model117 terminal exposed one identity-free fishing supplement beside three ordinary goals and froze resupply candidate0 at probability0.2577685686 with zero actions, frames or teacher labels.",
+      "deviation": "No gameplay or learning output occurred. Claude found singleton travel-effort saturation and Flash found exact test gaps; the accepted repairs preserved historical multi-destination behavior. Both final verdicts were PASS.",
+      "next": "Execute Model117's exact frozen resupply once from the authenticated parent, retain its actual resource result and fit only eligible measured evidence. No redraw, retry, hack, Crystal or full replay."
     }
   ],
   "closed_milestones": [

@@ -17,16 +17,17 @@ reconstructed without input. Six casts produced two encounters and one capture i
 59232 frames. The fresh ledger verified one new registration: the save now has85 registrations,
 65 living species and69 specimens.
 
-That success became row117 while preserving all116 earlier examples; successes rise to79. The next
-menu build failed closed before selection because fewer than two productive fishing destinations
-remain and the current inventory contract requires at least two. No second gameplay attempt ran.
+That success became row117 while preserving all116 earlier examples; successes rise to79. The
+sparse-fishing repair now keeps one remaining destination as an identity-free supplement and omits
+fishing cleanly when none remain. From the actual terminal, Model117 froze resupply candidate0 from
+four options at probability25.78%, with zero input. The choice remains unexecuted.
 
 This is the intended learning loop: choose, act, measure, retain, learn and continue from
 the real terminal. It is not independent proof that the policy is good, a fresh-game autonomous
 playthrough, or cross-title transfer. Deterministic mechanics still control low-level play.
 
-[Latest measured evidence](evidence/red-model117-frozen-acquisition-2026-09-13.json) ·
-[Detailed session](work-sessions/2026-09-13-model117-frozen-acquisition.md)
+[Latest qualification evidence](evidence/red-model117-sparse-fishing-menu-2026-09-13.json) ·
+[Detailed session](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
 
 ## What earlier chapters established
 
@@ -47,9 +48,9 @@ full Red finish line. The player still needs broad acquisition mechanics, sustai
 genuine model-directed story choices and an authenticated full run. A collection of related
 training outcomes does not establish generalization.
 
-Flash passed the one-shot acquisition guards. Claude identified an audit ambiguity between the
-menu's canceled CI reference and the later green execution qualification; Codex accepted the
-finding with an explicit source-binding receipt. Review volume is not learning progress.
+Flash identified missing exact sparse-menu tests, and Claude found singleton travel-cost saturation.
+Codex accepted both repairs; both final reviews passed. Review and qualification are not learning
+progress, so model and collection counters remain unchanged.
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
 [Roadmap](development-roadmap.md) · [Authorship and public overview](../README.md)

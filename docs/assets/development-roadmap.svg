@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1420" height="2561" viewBox="0 0 1420 2561" role="img" aria-labelledby="title description">
 <title id="title">Pokemon development roadmap</title>
-<desc id="description">17 of 19 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
+<desc id="description">18 of 19 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>
 <rect width="1420" height="2561" fill="#0b1221"/>
 <path d="M1120 0H1420V225Z" fill="#172947"/>
@@ -11,8 +11,8 @@
 <rect x="50" y="260" width="1320" height="1086" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Broaden model-directed Red collection</text>
-<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">89%</text>
-<text x="82" y="495" class="body">17 of 19 acceptance items verified</text>
+<text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">95%</text>
+<text x="82" y="495" class="body">18 of 19 acceptance items verified</text>
 <text x="82" y="529" class="small muted">Checklist only. Not phase completion or a time estimate.</text>
 <text x="705" y="326" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="326" class="small">Publish the earned state as a durable fitted-</text>
@@ -68,11 +68,11 @@
 <text x="705" y="1176" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="1176" class="small">Execute and fit Model116&#x27;s exact frozen</text>
 <text x="778" y="1196" class="small">acquisition</text>
-<text x="705" y="1226" class="small" style="fill:#8594ad">NEXT</text>
+<text x="705" y="1226" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="1226" class="small">Degrade safely when fewer than two fishing</text>
 <text x="778" y="1246" class="small">destinations remain</text>
 <rect x="80" y="1316" width="1260" height="8" rx="4" fill="#293b55"/>
-<rect x="80" y="1316" width="1127.37" height="8" rx="4" fill="#ffd36a"/>
+<rect x="80" y="1316" width="1193.68" height="8" rx="4" fill="#ffd36a"/>
 <text x="50" y="1386" class="eyebrow">THE WHOLE JOURNEY</text>
 <text x="740" y="1386" class="small" style="fill:#57dfb1">VERIFIED</text>
 <text x="870" y="1386" class="small" style="fill:#ffd36a">CURRENT</text>
@@ -142,8 +142,9 @@
 <text x="754" y="2256" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
 <text x="754" y="2275" class="small muted">physical views.</text>
 <text x="50" y="2385" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2423" class="small muted">2026-09-13-model117-frozen-acquisition</text>
-<text x="50" y="2458" class="body">Model116&#x27;s exact frozen acquisition added one registration in979actions/59232frames across six casts. The verified success</text>
-<text x="50" y="2483" class="body">became row117; Model117 has117 examples,79 successes,85 registrations,65 living species and69 specimens.</text>
+<text x="50" y="2423" class="small muted">2026-09-13-model117-sparse-fishing-menu</text>
+<text x="50" y="2458" class="body">Zero/one-destination fishing degradation passed150 broader targeted tests. The actual Model117 terminal exposed one identity-</text>
+<text x="50" y="2483" class="body">free fishing supplement beside three ordinary goals and froze resupply candidate0 at probability0.2577685686 with zero</text>
+<text x="50" y="2508" class="body">actions, frames or teacher labels.</text>
 <text x="50" y="2521" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

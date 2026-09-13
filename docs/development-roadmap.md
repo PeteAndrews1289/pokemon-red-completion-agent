@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model117-frozen-acquisition**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model117-sparse-fishing-menu**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 17/19 acceptance items (89%).**
+**Broaden model-directed Red collection: 18/19 acceptance items (95%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -30,7 +30,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
 - [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
 - [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
-- [ ] Degrade safely when fewer than two fishing destinations remain
+- [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
 
 Current model: **117 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -82,7 +82,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -109,6 +109,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model117-sparse-fishing-menu
+
+Zero/one-destination fishing degradation passed150 broader targeted tests. The actual Model117 terminal exposed one identity-free fishing supplement beside three ordinary goals and froze resupply candidate0 at probability0.2577685686 with zero actions, frames or teacher labels.
+
+**Deviation:** No gameplay or learning output occurred. Claude found singleton travel-effort saturation and Flash found exact test gaps; the accepted repairs preserved historical multi-destination behavior. Both final verdicts were PASS.
+
+**Next:** Execute Model117's exact frozen resupply once from the authenticated parent, retain its actual resource result and fit only eligible measured evidence. No redraw, retry, hack, Crystal or full replay.
 
 ### 2026-09-13-model117-frozen-acquisition
 

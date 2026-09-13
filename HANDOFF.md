@@ -3,7 +3,7 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September13,2026.
 
-## Current boundary: Model117 / next menu unavailable
+## Current boundary: Model117 / frozen resupply
 
 Model116's exact frozen acquisition ran once after a zero-input reconstruction of the same model,
 menu, private binding and parent state. It used979 actions /59232 frames across six casts, captured
@@ -20,18 +20,18 @@ authority promotion occurred.
 - Fit/publication source: `4bb35c1e31843459da915c7e4234514d4a9fc5e1`
 - Bundle: `1df0250dff6a87ed9f5e6b4a4e42d84e8d448058db2ebfa24c6221045308e82a`
 
-## Exact next task — action-free menu degradation
+## Exact next task — execute the frozen resupply once
 
-Model117's next menu construction failed closed before selection or artifact creation. Fewer than
-two reachable productive fishing destinations remain, but `RedLiveFishingInventory` and its
-supplement builder currently require at least two. No controller action, frame, teacher label or
-next choice occurred.
+The zero/one-destination fishing repair is qualified. One destination remains an identity-free
+supplement beside three ordinary goals; zero destinations omit fishing without removing ordinary
+goals. Standalone destination learning still requires two distinguishable choices.
 
-Add ROM-free support for one or zero reachable fishing destinations. One destination may remain an
-executable mixed-menu supplement; zero should omit fishing cleanly while preserving ordinary goal
-families. Then reconstruct the actual Model117 menu action-free and freeze exactly one choice. Do
-not manually substitute a target, retry/redraw Model116 or execute Model117 in the same repair
-session unless a separately recorded bounded plan authorizes it. Gameplay is stopped.
+The actual action-free Model117 menu has four candidates across three goal kinds. Model117 froze
+candidate0, `resupply`, at probability `0.25776856860308145`; menu SHA is
+`15f5ee54c90f0d88da481719b81031cfd1eb5adc19d2235a4e202a7593d3e263`. Construction and
+selection used zero actions, frames, teacher labels or training examples. Execute this exact choice
+once from the authenticated parent, retain the real result and fit only eligible measured evidence.
+Do not redraw, retry, query the policy again or use a teacher fallback. Gameplay is stopped.
 
 ## Red must come before any ROM hack
 
@@ -46,15 +46,18 @@ full-run readiness conditions still apply; no fresh full run is authorized in th
 
 ## External work and next session
 
-Flash3.8 High passed the frozen identity and one-shot execution guards. Claude Sonnet4.6 found a
-provenance-label ambiguity; its source-binding recommendation was accepted before execution, and
-its final execution-safety verdict was PASS. Current service quota was unavailable from both CLIs.
+Flash3.8 High identified exact zero/one factory, omission, validation and indistinguishability test
+gaps; all were accepted and its final verdict was PASS. Claude Sonnet4.6 found that singleton route
+normalization saturated travel effort; the accepted fixed1000-step singleton scale preserves the
+historical multi-destination path, and Claude returned PASS. Its orphaned-API note was informational:
+the standalone two-choice contract remains intentionally supported. Both reviews were read-only and
+complete. Current service quota was unavailable from both CLIs.
 
-Next objective: qualify one/zero-destination fishing degradation and freeze Model117's next menu.
-Estimate45–90minutes. Use **GPT-5.6 Sol / High / Fast off**. Reserve Astra for fresh-run
-authority/generalization design.
+Next objective: execute Model117's exact frozen resupply once, verify the resource outcome and fit
+only eligible evidence. Estimate60–120minutes. Use **GPT-5.6 Sol / High / Fast off**. Reserve Astra
+for fresh-run authority/generalization design.
 No recommendation changes the currently selected model.
 
-[Session report](docs/work-sessions/2026-09-13-model117-frozen-acquisition.md) ·
-[Evidence](docs/evidence/red-model117-frozen-acquisition-2026-09-13.json) ·
-[Prior result](docs/work-sessions/2026-09-13-model116-pay-day-accounting.md)
+[Session report](docs/work-sessions/2026-09-13-model117-sparse-fishing-menu.md) ·
+[Evidence](docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json) ·
+[Prior result](docs/work-sessions/2026-09-13-model117-frozen-acquisition.md)

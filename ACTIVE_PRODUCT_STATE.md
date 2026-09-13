@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback.
+- Next decision: Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model116's exact frozen acquisition ran once, registered one missing species after979 actions/59232 frames and became row117. Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its next action-free menu stopped before selection because fewer than two reachable productive fishing destinations remain. No fresh-game or independent competence is claimed. |
+| Authority now | Model117 has117 examples/79 successes and retains85 registrations,65 living species,69 specimens and cash2146. Its sparse-fishing repair preserved one identity-free fishing supplement in a four-option mixed menu and froze resupply candidate0 at probability0.2577685686 with zero input. The choice is unexecuted; no fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input. |
+| Cheapest falsifier | Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model117-frozen-acquisition** · status **active** · evidence [model fit](docs/evidence/red-model117-frozen-acquisition-2026-09-13.json)
+**2026-09-13-model117-sparse-fishing-menu** · status **active** · evidence [qualification](docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model selected and completed another missing-species acquisition from actual resources, moving the local Red collection forward while preserving the exact sampled choice and costs. |
-| Learning output | One verified Model116 acquisition became row117. Prior rows remain intact; successful examples rise to79 and the collection rises to85 registrations. |
-| Authority delta | Model116's exact frozen candidate2 ran once and added one registration after979 actions/59232 frames and six casts. Its actual success became row117. Model117 retains85 registrations,65 living species and69 specimens. Deterministic mechanics still own execution; authority was not promoted. |
+| Product alignment | Sparse acquisition methods can now disappear or remain as one identity-free supplement without stealing goal choice from the model or forcing a manual target. |
+| Learning output | No new learning output. This qualification repaired zero/one-destination degradation and froze one action-free Model117 choice; counters remain117 examples/79 successes. |
+| Authority delta | Model117 constructed a four-option mixed menu with one identity-free fishing supplement and froze resupply candidate0 at probability0.2577685686. The choice was not executed; model117 remains at117 examples/79 successes and authority was not promoted. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | Model117's action-free menu construction failed closed before selection because fewer than two reachable productive fishing destinations remain, while the live fishing inventory currently requires at least two. |
-| Decision | Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback. |
-| Next session | Add and qualify identity-free degradation for one or zero reachable fishing destinations, then rebuild and freeze Model117's next mixed menu without gameplay or a teacher fallback. |
-| Next falsifier | Model117 cannot construct a useful identity-free menu when fewer than two productive fishing destinations remain, without a teacher fallback or controller input. |
-| Stop condition | Stop on retry or redraw of Model116, controller input during Model117 menu construction, teacher fallback, identity-bearing policy features, unverifiable collection state or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The sparse-fishing blocker is closed. The exact frozen Model117 resupply still needs one bounded execution and verified measured outcome; collection remains85 registrations with39 native-scope entries remaining. |
+| Decision | Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback. |
+| Next session | Execute Model117's exact frozen resupply once, retain its real resource result and fit only eligible measured evidence. |
+| Next falsifier | Model117's exact frozen resupply cannot execute once and produce a verifiable resource outcome from the authenticated parent without redraw, retry or teacher fallback. |
+| Stop condition | Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable resource accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

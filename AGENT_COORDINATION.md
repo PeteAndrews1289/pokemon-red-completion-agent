@@ -11,15 +11,14 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model116 has116 examples,78 successes,84 registrations and cash2146. Pinned cartridge source
-explains Model114's extra58 as opponent Pay Day. The exact Model115 continuation stopped after27
-actions/864frames on a stale-accumulator guard and became one failed learning row. Neither attempt
-was retried or relabeled.
+Model117 has117 examples,79 successes,85 registrations,65 living species,69 specimens and cash2146.
+Its sparse-fishing repair is qualified: one reachable destination remains one identity-free mixed-menu
+supplement, while zero omits fishing cleanly. The actual four-option menu froze resupply candidate0
+at probability0.2577685686 with zero controller actions, emulator frames or teacher labels.
 
-Model116 selected an acquisition from six choices. Execute that exact frozen choice once, retain
-its actual result and fit only eligible measured evidence. No retry, resampling, teacher label,
-identity-bearing policy feature or authority promotion. Do not assign another broad architecture
-audit.
+Execute that exact frozen resupply once from the authenticated parent, retain its actual resource
+result and fit only eligible measured evidence. No redraw, retry, policy requery, teacher fallback,
+identity-bearing policy feature or authority promotion. Do not assign a broad architecture audit.
 
 Pete requires a fresh start-to-finish non-deterministic model-directed Red run and the full local
 Red Pokédex before any ROM hack. The old checkpoint story and124-entry availability scope do not
@@ -28,19 +27,17 @@ Emerald.
 
 ## Latest external contributions
 
-Flash3.8 High supplied a read-only accounting review. Codex accepted its concern about ambiguous
-terminal sampling and added adversarial coverage, but corrected its assumption that Pay Day clears
-at battle end: pinned source shows the next battle initialization clears it. Flash had no gameplay,
-fit or publishing authority.
+Flash3.8 High identified missing exact tests for zero/one factory behavior, omission, validation and
+standalone indistinguishability. Codex accepted them; Flash returned PASS after the additions.
+Claude Sonnet4.6 found singleton travel-effort saturation. Codex accepted a fixed1000-step singleton
+scale while retaining historical multi-destination normalization; Claude returned PASS. Its
+standalone-API note was informational and rejected as a removal request because that distinct
+two-choice contract remains supported. Neither reviewer edited the worktree or ran gameplay.
 
-Three bounded Claude CLI review attempts produced no response before interruption. No Claude
-contribution or cost is claimed; subscription quota is unavailable. Next useful Flash assignment:
-a small test review around the frozen acquisition. Claude is optional at the eventual full-run
-authority boundary. Next Codex recommendation: Sol/High/Fast off.
+Current Flash and Claude quota is unavailable from their CLIs. Next useful external assignment is a
+small pre-execution audit of the exact frozen-resupply runner. Next Codex recommendation:
+Sol/High/Fast off.
 
-Refreshed shared Gemini quota:96.69% five-hour /69.30% weekly remaining. These are group counters,
-not a per-task token saving.
-
-[Session and adjudication](docs/work-sessions/2026-09-13-model116-pay-day-accounting.md) ·
+[Session and adjudication](docs/work-sessions/2026-09-13-model117-sparse-fishing-menu.md) ·
 [Detailed workflow](docs/three-agent-workflow.md) ·
 [Reviewer entry point](docs/current-agent-handoffs.md)

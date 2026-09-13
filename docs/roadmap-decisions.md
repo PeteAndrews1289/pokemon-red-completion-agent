@@ -1,5 +1,24 @@
 # Roadmap baseline and deviations
 
+## September 13 — preserve goal choice as fishing opportunities collapse
+
+The [sparse-fishing qualification](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
+closed the one/zero-destination blocker without inventing another target. One fishing destination
+now remains an identity-free supplement beside ordinary goals; zero omits fishing cleanly.
+Standalone destination learning still requires two distinguishable choices. A fixed1000-step scale
+prevents singleton travel effort from saturating while the historical multi-destination path remains
+unchanged.
+
+The actual Model117 terminal exposed one fishing supplement and three ordinary candidates. Model117
+froze resupply candidate0 at probability0.2577685686 with zero controller actions, emulator frames,
+teacher labels or training examples. The choice remains unexecuted. This closes a maintenance
+unblock, not a learning or authority milestone; counters remain117 examples /79 successes and85
+registrations.
+
+Next, execute that exact frozen resupply once and retain the real resource outcome. Do not redraw,
+retry, consult a teacher, or progress to a ROM hack or Crystal. The fresh-run Red/full local Pokédex
+gate and all stage exit criteria remain unchanged.
+
 ## September 13 — degrade fishing inventory instead of forcing another target
 
 The [Model117 acquisition session](work-sessions/2026-09-13-model117-frozen-acquisition.md)

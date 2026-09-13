@@ -1,0 +1,138 @@
+{
+  "schema": "pokemon.red.registered-player-menu-qualification.v1",
+  "session_id": "2026-09-13-model117-sparse-fishing-menu",
+  "status": "verified_action_free_choice_frozen",
+  "trust": {
+    "qualification_only": true,
+    "new_training_example": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "gameplay_result": false
+  },
+  "input": {
+    "model_sha256": "ebf3aac2909d54240285d7dd6c43f2ff8d6a9415a42103eb1f449171f9e994e5",
+    "parent_checkpoint_sha256": "e12ada5358a31a4afab8b97249e008321f4c8f611faf1d71329fb0241d2008fc",
+    "parent_state_sha256": "521cbae761e87c2d29e76726d468a84c0428035cc4652dd66ca648d444bcba2c",
+    "registered_species": 85,
+    "living_species": 65,
+    "total_living_specimens": 69,
+    "cash": 2146,
+    "required_native_registrations_remaining": 39
+  },
+  "qualification": {
+    "zero_fishing_destinations": "omit fishing supplements while ordinary goals remain available",
+    "one_fishing_destination": "project one identity-free acquisition supplement into the mixed menu",
+    "multiple_fishing_destinations": "retain the existing relative normalization and standalone two-choice learning contract",
+    "singleton_route_step_normalization": 1000,
+    "private_identity_policy_fields": 0
+  },
+  "actual_menu": {
+    "artifact_sha256": "86446a0f66a462990d3e76bdf2bbe0c8073ea8abca96e47a78895cbad17e6712",
+    "menu_sha256": "15f5ee54c90f0d88da481719b81031cfd1eb5adc19d2235a4e202a7593d3e263",
+    "candidate_count": 4,
+    "ordinary_candidate_count": 3,
+    "supplemental_candidate_count": 1,
+    "distinct_option_kinds": 3,
+    "reachable_fishing_destinations": 1,
+    "fishing_route_steps": 547,
+    "fishing_route_cost": 559,
+    "fishing_missing_species_count": 1,
+    "fishing_productive_slot_count": 1,
+    "fishing_encounter_slot_count": 2
+  },
+  "frozen_choice": {
+    "mode": "model_exploration",
+    "selected_candidate_index": 0,
+    "selected_kind": "resupply",
+    "selected_probability": 0.25776856860308145,
+    "probabilities": [
+      0.25776856860308145,
+      0.39602744417462743,
+      0.16758755059548325,
+      0.17861643662680796
+    ],
+    "scores": [
+      3.3930394336547627,
+      3.9283887011246525,
+      2.7734573656983583,
+      2.8732569994728516
+    ],
+    "selection_seed": 117091301,
+    "teacher_labels": 0,
+    "executed": false,
+    "retry_or_redraw_allowed": false
+  },
+  "learning": {
+    "settled_examples_before": 117,
+    "settled_examples_after": 117,
+    "successful_examples": 79,
+    "new_examples": 0,
+    "model_fits": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0
+  },
+  "source": {
+    "commit": "60a81c21d3165e1234c8bd32a6186bf1b544d057",
+    "source_bundle_sha256": "3a8283963a8a7f1cbf4a096d96ac0d4a9ce7cbddfa037ef7581f8a84a71df096",
+    "registry_sha256": "141dfdbe12519dc079718f1058d10fc6c79be2d47f63dc2ab7e25eee48b7b979",
+    "hosted_ci_run_id": 34777786334,
+    "hosted_ci_is_menu_dependency": false,
+    "hosted_ci_status_at_freeze": "in_progress"
+  },
+  "boundaries": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "private_binding_fields_public": 0,
+    "private_path_fields_public": 0,
+    "manual_target_substitution": false,
+    "prior_choice_retried": false,
+    "next_choice_executed": false,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "scope": "read-only zero/one fishing degradation and test review",
+      "accepted": "Add exact omission, factory, validation and standalone indistinguishability tests.",
+      "verdict": "PASS after the accepted test additions",
+      "quota": "unavailable from the CLI"
+    },
+    "claude": {
+      "model": "claude-sonnet-4-6",
+      "status": "completed",
+      "scope": "read-only singleton normalization review",
+      "accepted": "Use a fixed 1000-step singleton normalization while preserving the historical multiple-destination path.",
+      "rejected_or_informational": "The standalone two-destination API remains intentionally supported rather than removed as orphaned code.",
+      "verdict": "PASS after the accepted normalization repair",
+      "quota": "unavailable from the CLI"
+    }
+  },
+  "verification": {
+    "focused_rom_free_tests": 32,
+    "broader_targeted_rom_free_tests": 150,
+    "ruff": "passed",
+    "mypy": "passed for 495 source files",
+    "public_artifacts": "passed",
+    "documentation_before_closeout": "passed",
+    "product_focus_before_closeout": "passed",
+    "registry_check": "passed",
+    "actual_action_free_reconstruction": "passed with exact source, model, parent checkpoint and state; zero actions and frames"
+  },
+  "next": {
+    "decision": "Execute Model117's exact frozen resupply choice once from the authenticated parent, retain its actual result and fit only eligible measured evidence.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable resource accounting or any ROM-hack/Crystal progression."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

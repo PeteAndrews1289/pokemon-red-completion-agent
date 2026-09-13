@@ -1,4 +1,4 @@
-# Video narrative: a low-probability choice pays off
+# Video narrative: one fishing route remains, but the model still chooses
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
@@ -11,10 +11,11 @@ sampling probability. Reconstruct the same menu and parent state with zero input
 single authorized execution—six casts, two encounters and one capture in979 actions/59232 frames.
 
 The fresh ledger rises84 to85 registrations. The success becomes row117 with79 successes and all
-116 earlier rows retained. End honestly: Model117's next menu does not exist yet. Construction
-failed closed before selection because fewer than two productive fishing destinations remain.
+116 earlier rows retained. Then show the repair: one remaining fishing destination stays as an
+identity-free supplement beside three ordinary goals. Model117 freezes resupply candidate0 at a
+25.78% probability without advancing a frame. End before execution; this episode adds no new fit.
 
-[Session and evidence](work-sessions/2026-09-13-model117-frozen-acquisition.md)
+[Session and evidence](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
 
 ## The real finish line
 

@@ -33,21 +33,23 @@ Model116's exact frozen acquisition ran once after an action-free reconstruction
 missing species in979 actions/59232 frames across six casts and became successful row117 without a
 teacher label, policy requery or retry.
 
+Sparse fishing now degrades without manufacturing a destination choice. The actual Model117 state
+retained one identity-free fishing supplement beside three ordinary goals; Model117 froze resupply
+candidate0 at probability0.2577685686 with zero actions, frames, labels or training examples.
+
 ## Immediate next session
 
-Model117's next menu construction failed closed before selection because the existing live-fishing
-inventory requires at least two reachable productive destinations and fewer than two remain.
-
-Qualify identity-free one/zero-destination degradation, then rebuild and freeze Model117's next
-mixed menu without controller input, teacher fallback or manual target selection.
+Execute Model117's exact frozen resupply choice once from the authenticated parent. Retain its real
+resource result and fit only eligible measured evidence without redraw, retry, another policy query
+or teacher fallback.
 
 Then move toward short, measured multi-goal sessions. Expand missing acquisition families
 and meaningful story alternatives, measure costs/interventions, and evaluate on genuinely
 independent scenarios. More tiny same-lineage rows alone cannot establish a full-game player.
 
-[Latest session](work-sessions/2026-09-13-model117-frozen-acquisition.md) ·
-[Latest evidence](evidence/red-model117-frozen-acquisition-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model117-sparse-fishing-menu.md) ·
+[Latest evidence](evidence/red-model117-sparse-fishing-menu-2026-09-13.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the bounded menu-contract
-change; bounded Flash assistance, with Astra reserved for harder authority design.
+Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for exact-source resource
+execution and verification; bounded Flash assistance, with Astra reserved for harder authority design.
