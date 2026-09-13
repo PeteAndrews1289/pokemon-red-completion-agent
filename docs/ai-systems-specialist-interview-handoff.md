@@ -13,10 +13,10 @@ concluded predecessor project.
 > planner chooses useful semantic goals—such as where to search, whether to develop the team, or how
 > to restore resources—while deterministic, verified skills handle exact movement, menus, battles,
 > captures and safety. Pokémon Red is the first curriculum, not the final product. The current
-> model has 113 settled training examples and its latest durable save has 83 verified Pokédex
-> registrations. A failed model-selected fishing route became row112; the exact state recovered
-> without a training label, and Model112's frozen restore succeeded once as row113. Model113 then
-> selected one of four automatic fishing destinations. That acquisition remains unexecuted. A deterministic teacher has completed Red, but the learned
+> model has 114 settled training examples and its latest durable save has 84 verified Pokédex
+> registrations. Model113's frozen fishing choice added one registration as row114 without a
+> teacher label. Model114 then selected resupply/income from six choices across three goal families.
+> That choice remains unexecuted. A deterministic teacher has completed Red, but the learned
 > player has not yet independently completed the game, finished the Pokédex, or transferred to
 > another title.
 
@@ -40,8 +40,8 @@ the backburner so the project can first establish sustained model-directed Red p
 | Layer | Status | Current evidence boundary |
 | --- | --- | --- |
 | Red teacher, mechanics and verification | **Working** | Deterministic checkpoint-based runs reached Champion and Hall of Fame under semantic verification. |
-| Bounded learned Red goal selection | **Partial** | Model113 has 113 settled training-only examples; models have selected real resource, recovery, evolution, capture and destination goals. |
-| Current retained Red state | **Partial** | 83 registered species, 63 living species and 67 specimens reopen at an authenticated input-ready Model113 checkpoint. |
+| Bounded learned Red goal selection | **Partial** | Model114 has 114 settled training-only examples; models have selected real resource, recovery, evolution, capture and destination goals. |
+| Current retained Red state | **Partial** | 84 registered species, 64 living species and 68 specimens reopen at an authenticated input-ready Model114 checkpoint. |
 | Sustained autonomous Red player | **Partial / unfinished** | The hierarchy can execute bounded chains. Route eligibility now fails closed on undeclared interruption support, but empty/forced menus and deterministic support still prevent an independent start-to-finish claim. |
 | Modified-Red, Blue and Crystal transfer | **Planned** | Contracts and some adapters exist, but no transfer result is claimed. |
 
@@ -49,7 +49,8 @@ Automatic reachable-fishing assembly and cross-box capture preparation are now i
 first five-choice execution stopped at a scripted dialogue after 228 actions and retained that
 failure as row112 with no teacher label or retry. Its exact checkpoint recovered in eight actions
 with zero learning credit. Model112's frozen restore then succeeded once and became row113.
-Model113 selected one of four automatically derived fishing destinations; execution is next.
+Model113's frozen fishing choice added registration84. Model114 then selected resupply/income from
+the next six-choice menu; execution of that frozen resource choice is next.
 
 ## 2. What the system can demonstrably do now
 
@@ -79,7 +80,8 @@ Model113 selected one of four automatically derived fishing destinations; execut
   the route. It made no collection gain and was retained as training row112 without retry.
 - The exact failed state recovered input-ready control in 8 actions and 576 frames with zero
   teacher labels. Model112's frozen restore then succeeded in 87 actions / 3,996 frames and became
-  row113. Model113 selected from a four-way fishing menu; that acquisition is unexecuted.
+  row113. Model113's next fishing choice added registration84 as row114. Model114 selected
+  resupply/income from the next three-family menu; that exact choice is unexecuted.
 - Model-selected collection, evolution, recovery, supply and income chains have run in related
   development states. They are useful curriculum evidence, not independent generalization.
 - A shared-Pokédex planner can account for acquisition dependencies and blockers, but it cannot yet
@@ -239,12 +241,12 @@ progress.
 | Milestone | Verified result | What it establishes |
 | --- | --- | --- |
 | Deterministic Red integration | Champion and Hall of Fame reached under semantic verification | Teacher, mechanics and referee can compose; not learned autonomy. |
-| Current collection state | 83 registrations, 63 living species, 67 specimens | Real retained Red progress; not Pokédex completion. |
-| Current learner | 113 settled training-only examples, 77 successful | Incremental selected-outcome training works; not 113 independent games. |
+| Current collection state | 84 registrations, 64 living species, 68 specimens | Real retained Red progress; not Pokédex completion. |
+| Current learner | 114 settled training-only examples, 78 successful | Incremental selected-outcome training works; not 114 independent games. |
 | Latest successful choice | Four candidates; probability 0.087610; 542 actions; 31,464 frames; five casts; registrations 82→83 | A model-selected destination produced a verified gain. |
 | Latest retained failure | Five candidates; selected acquisition; 228 actions; 16,668 frames; no gain | Failure and cost survived and became row112; no retry. |
 | Latest fit | Model111→112; all 111 prior examples retained | One actual selected-arm failure was added; no independent advantage claim. |
-| Latest recovery and menu | Recovery: 8 actions / 576 frames / 0 labels. Frozen restore: 87 actions / 3,996 frames, then Model113 selected acquisition with probability 0.190504. | Durable continuation and one measured update work; the next acquisition has not executed. |
+| Latest acquisition and menu | Frozen fishing: 513 actions / 30,804 frames / 0 labels, one registration. Model114 then selected resupply with probability 0.438695. | Durable continuation and measured updating work; the next resource choice has not executed. |
 | Latest loop boundaries | 0 teacher labels, 0 authority promotions, 0 sealed/Crystal accesses | The result stayed inside bounded Red development. |
 
 The current model artifact is identified publicly by SHA-256
@@ -274,7 +276,7 @@ An interview-safe description is:
 - Capture preparation searches all twelve verified boxes and preserves the complete
   specimen/resource state. Automatic multi-source fishing now works, but the latest selected route
   stopped at dialogue. The retained checkpoint recovered and Model112's restore succeeded once.
-  Model113 selected the next fishing acquisition, but that exact choice has not executed.
+  Model114 selected the next resupply/income goal, but that exact choice has not executed.
 - Low-level navigation, battle, capture and menu control remain primarily deterministic.
 - Red registrations are incomplete: 41 required Red registrations remain in the current contract.
 - The system has not autonomously completed the shared Pokédex.
@@ -299,7 +301,7 @@ An interview-safe description is:
 | Proof | `tests/`, `docs/evidence/`, `docs/work-sessions/`, `.github/workflows/ci.yml` |
 
 The exact current restart and evidence are in the
-[Model113 frozen restore learning session](work-sessions/2026-09-13-model113-frozen-restore-learning.md).
+[Model114 frozen fishing learning session](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
 Historical receipts
 remain immutable; the [documentation map](README.md) explains which files are current instructions
 and which are preserved history.

@@ -44,8 +44,8 @@ The source-level boundaries prevent accidental misuse; Python interfaces are not
 
 Training retains actual selected choices and outcomes, including losses and resource costs. Interrupted choices remain incomplete rather than becoming invented successes or failures. Incremental fitting retains earlier eligible data.
 
-The active registered-objective model has 113 settled examples from related development states,
-including successful choices and retained failures. Those are not 113 independent games. In-sample
+The active registered-objective model has 114 settled examples from related development states,
+including successful choices and retained failures. Those are not 114 independent games. In-sample
 fit quality and bounded collection gains cannot establish generalization.
 
 Champion and Hall-of-Fame evidence exists for checkpoint-based hierarchical story integration. It does not prove that the present collection model can start from the title screen and independently complete the game.
@@ -81,9 +81,9 @@ without another policy query. Helper species identity remains outside learned fe
 Automatic candidate assembly now derives productive reachable fishing destinations and combines
 them with ordinary goals in an identity-free menu. When no ordinary goal remains, it can also expose
 at least two authenticated supplemental choices without weakening storage-pressure or recovery
-safety. The latest real interruption recovered without a label; Model112's frozen restore then
-succeeded once and produced Model113. The immediate boundary is execution of Model113's exact
-frozen acquisition, retention of its actual outcome and a single eligible incremental fit.
+safety. Model113's exact frozen fishing choice then added one registration and produced Model114.
+The next action-free menu crossed restore, acquisition and resupply; Model114 selected resupply.
+The immediate boundary is execution of that exact frozen choice and retention of its real outcome.
 Assembly still relies on private run orchestration and therefore does not establish a general
 fresh-game player.
 

@@ -5,45 +5,36 @@ Updated September 13, 2026. Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH
 transferable hierarchical Pokémon player that finishes stories and contributes legitimate
 registrations to one shared Pokédex across games.
 
-## Current boundary: model113 selected acquisition / execution next
+## Current boundary: Model114 selected resupply / execution next
 
-Restore source `5dcdce45737538e2ce4fdabceab4574949614896`, bundle
-`de8c1320250030c842c884fb89f58fe26504cc9038cbe85e18b6aa8bbb49899e`, passed
-GitHub CI run `34743224160`. Model113 fit source
-`5f99096b05b2adc5832ae47e5c1af4d778bb5bf9`, bundle
-`f59a49a7e02960631d2f90c394b9e54ef666a31bceeeff359f96aa7ea7a1d83e`, passed
-GitHub CI run `34746954501`.
+Execution and fit source `003612b8b505781a917bbbd416155f5b2defe2eb`, bundle
+`cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f`, passed exact-source
+GitHub CI run `34750593606`.
 
-The reusable runtime now derives reachable productive fishing destinations from the cartridge,
-builds their bounded executors and joins them to the ordinary live option menu. At the exact
-checkpoint it exposed four acquisition destinations plus restore. Public policy rows contained no
-map, coordinate or species identity. Model111 selected acquisition candidate4; cross-box support
-then attached without a second model query.
+Gemini 3.8 Flash High rejected the first private runner before gameplay because it bound the wrong
+parent model and retained a stale selection seed. Both defects were fixed before controller input;
+the re-audit and separate fit audit returned GO with zero P0/P1 findings.
 
-The consumed attempt stopped at a scripted dialogue after **228 actions / 16,668 frames** and was
-not retried. Its measured failure produced model112 with **112 settled examples**, 76 successful.
-The exact terminal then recovered once through the generic handler in **8 actions / 576 frames**,
-with zero labels and all **83 registrations / 67 specimens** intact. Model SHA-256:
-`f5a1be72911b519b960a494a92b3f052279bf914344e0bb398c18a5e1aaf9fb0`.
+Model113's exact frozen acquisition then ran once. It used **513 actions / 30,804 frames** and four
+fishing casts, added one missing registration and retained **84 registered / 64 living / 68
+specimens**. It made zero policy queries during execution, used zero teacher labels and was not
+retried. The measured success became training row114. Model114 has **114 settled examples**, 78
+successful. Model SHA-256:
+`f503725e2153e7523d9be26a431c45782f1b473c3406e87dfa96a9450f190ec3`.
 
-Model112's frozen restore then succeeded once in **87 actions / 3,996 frames**, with zero policy
-queries during execution and zero teacher labels. It retained **83 registered / 63 living / 67
-specimens** and became training row113. Model113 SHA-256:
-`8fa20f5b5e8889fa7340c8cc8113cc5407768306dfba7797cfeb4364c90d0cbc`.
+The input-ready Model114 state is checkpoint
+`73836c65f54ab81ec357f5fffd68b3da799582d38546ea3eb8a722e664574f18`, state
+`7025658c08948147f9798d45ea59c4d5eef1aaa1831b5d953348c6a409522797`. Its action-free menu has
+six choices across three goal families: restore, four acquisitions and resupply/income. Model114
+selected resupply candidate5 with probability `0.43869514182473374`. That exact choice is frozen but
+unexecuted.
 
-The input-ready Model113 state is checkpoint
-`1365ed6e8ae8ee9c79cc17b9c0b55cad1f8fbebaba1cb7fb174636f2dff2f8ae`, state
-`8ac5abe2fafdf6963ce6731499cfa2e990871528cbd8e3d626a66cb2f34ccf3e`. The runtime now supports
-supplemental-only menus when at least two authenticated options remain. Its action-free menu has
-four reachable fishing destinations. Model113 selected acquisition candidate0 by exploration with
-probability `0.19050388143341396`. That exact choice is frozen but unexecuted.
+Next: execute the exact frozen Model114 resupply choice once without another policy query, retain
+its actual result, fit Model115 only if the measured outcome is eligible, publish the terminal and
+rebuild the next menu. Do not retry consumed attempts or move into Blue/Crystal.
 
-Next: execute the exact frozen Model113 acquisition once without another policy query, retain its
-actual result, fit only the measured outcome, publish the terminal and rebuild the next menu. Do not
-retry consumed attempts, invent a species target or move into Blue/Crystal.
-
-[Latest report](docs/work-sessions/2026-09-13-model113-frozen-restore-learning.md) ·
-[Latest evidence](docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json)
+[Latest report](docs/work-sessions/2026-09-13-model114-frozen-fishing-learning.md) ·
+[Latest evidence](docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
 
 ## Prior measured endpoint: capture, failure and online update / model111
 

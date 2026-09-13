@@ -1,7 +1,7 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
   "baseline_id": "red-first-v2-registered",
-  "as_of_session": "2026-09-13-model113-frozen-restore-learning",
+  "as_of_session": "2026-09-13-model114-frozen-fishing-learning",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -22,7 +22,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json"
+      "evidence": "docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -123,6 +123,12 @@
         "label": "Execute the frozen restore, fit model113 and rebuild a supplemental-only menu",
         "done": true,
         "evidence": "docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json"
+      },
+      {
+        "id": "model114-frozen-fishing-continuation",
+        "label": "Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu",
+        "done": true,
+        "evidence": "docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json"
       }
     ]
   },
@@ -1164,6 +1170,12 @@
       "result": "Model112's exact frozen restore succeeded once in87actions/3996frames with zero policy queries during execution and zero teacher labels. Its measured success became example113 and published a durable Model113 checkpoint with83registrations/63living/67specimens. Model113 then selected one of four supplemental-only fishing destinations action-free.",
       "deviation": "The first fit attempt failed before record publication because the generic validator did not admit the new frozen receipt; a second failed before publication because Python runtime RNG drift could not reproduce an already-frozen sample. Validation now recomputes exact scores/probabilities but does not redraw frozen decisions. The post-restore menu also exposed a reusable zero-ordinary-option gap, repaired without weakening storage or recovery safety.",
       "next": "Execute Model113's exact frozen acquisition once without another policy query, retain its actual outcome, fit only that measured result, publish the terminal and rebuild the next menu. No consumed retry, named-species target, Blue, Crystal or full replay."
+    },
+    {
+      "session": "2026-09-13-model114-frozen-fishing-learning",
+      "result": "Model113's exact frozen fishing choice added one registration in513actions/30804frames across four casts. The success became example114 with zero teacher labels and published a durable Model114 checkpoint with84registrations/64living/68specimens. The next action-free six-choice menu crossed three goal families and Model114 selected resupply.",
+      "deviation": "Flash rejected a stale parent-model binding and selection seed before controller input; both were corrected before the one consumed execution. The successful choice was not retried, no post-hoc target was added and no authority tier advanced.",
+      "next": "Execute Model114's exact frozen resupply choice once without another policy query, retain its actual outcome, fit Model115 only if eligible, publish the terminal and rebuild the next menu. No consumed retry, Blue, Crystal or full replay."
     }
   ],
   "closed_milestones": [

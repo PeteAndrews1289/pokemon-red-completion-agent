@@ -1,0 +1,157 @@
+{
+  "audits": {
+    "frozen_acquisition_runner_initial": {
+      "auditor": "gemini-3.8-flash-high",
+      "p0_findings": 1,
+      "p1_findings": 1,
+      "verdict": "no-go-fixed-before-controller-input"
+    },
+    "frozen_acquisition_runner_final": {
+      "auditor": "gemini-3.8-flash-high",
+      "p0_findings": 0,
+      "p1_findings": 0,
+      "verdict": "go"
+    },
+    "model114_fit": {
+      "auditor": "gemini-3.8-flash-high",
+      "p0_findings": 0,
+      "p1_findings": 0,
+      "verdict": "go"
+    }
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "crystal_accesses": 0,
+    "fit_on_development": false,
+    "full_game_replays": 0,
+    "independent_evaluation": false,
+    "next_choice_executed": false,
+    "policy_queries_during_execution": 0,
+    "retroactive_sampling_labels": false,
+    "sealed_red_accesses": 0,
+    "teacher_labels": 0
+  },
+  "collection": {
+    "ending_living_species": 64,
+    "ending_registered_species": 84,
+    "ending_specimens": 68,
+    "required_red_registrations_remaining": 40,
+    "starting_registered_species": 83
+  },
+  "completed_episode": {
+    "actions": 513,
+    "admitted_examples": 1,
+    "candidate_count": 4,
+    "casts": 4,
+    "frames": 30804,
+    "policy_queries_during_execution": 0,
+    "sampled_choices": 1,
+    "selected_candidate_index": 0,
+    "selected_kind": "acquire_species",
+    "selected_probability": 0.19050388143341396,
+    "status": "verified_new_registration",
+    "verified_collection_gain": 1
+  },
+  "fit": {
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "fit_report": {
+      "censored_examples": 0,
+      "counterfactual_targets": 0,
+      "distinct_selected_feature_rows": 114,
+      "economy_qualified_examples": 35,
+      "feature_version": 4,
+      "missing_history": "unknown_not_unattempted",
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "outcome_balance_required": false,
+      "schema": "pokemon.core.living-dex-option-value-fit.v1",
+      "settled_examples": 114,
+      "successful_examples": 78,
+      "total_examples": 114,
+      "train_dataset_sha256": "5073a5c3f41c94eadc605134d2236281c46b4ebbf7893ac2dbc4f047b2ea10fb",
+      "unselected_action_targets": 0,
+      "weighted_mse_after": 0.012305209064133633,
+      "weighted_mse_before": 0.03130390293269924
+    },
+    "historical_rewards_reused": false,
+    "in_sample_only": true,
+    "model": {
+      "authority": "bounded_development_only",
+      "ci_is_training_dependency": false,
+      "corpus_sha256": "2dd560649528b89cfa7b32c7313c17116a197dd8b0072be5cbeee3d2bf7ab0e7",
+      "file_sha256": "881df4d47088d49d1cb38fa78e8a40b2fe4faedd56485493d564959b90b4f6e5",
+      "independent_evaluation": false,
+      "model_sha256": "f503725e2153e7523d9be26a431c45782f1b473c3406e87dfa96a9450f190ec3",
+      "objective": "pokemon.registered-collection.v1",
+      "prior_model_sha256": "8fa20f5b5e8889fa7340c8cc8113cc5407768306dfba7797cfeb4364c90d0cbc",
+      "private_path_fields": 0,
+      "schema": "pokemon.red.registered-player-model.v1",
+      "settled_examples": 114,
+      "source_bundle_sha256": "cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f",
+      "source_commit": "003612b8b505781a917bbbd416155f5b2defe2eb"
+    },
+    "new_settled_examples": 1,
+    "parameter_warm_start": false,
+    "prior_rows_retained": true,
+    "prior_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 114,
+      "total_examples": 114,
+      "weighted_mse": 0.01250418800735066
+    },
+    "updated_train_error": {
+      "schema": "pokemon.core.living-dex-option-value-evaluation.v1",
+      "settled_examples": 114,
+      "total_examples": 114,
+      "weighted_mse": 0.012305209064133628
+    }
+  },
+  "learning": {
+    "ending_examples": 114,
+    "new_settled_examples": 1,
+    "starting_examples": 113,
+    "successful_examples": 78,
+    "teacher_labels": 0
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "next_menu": {
+    "action_free": true,
+    "candidate_count": 6,
+    "controller_actions": 0,
+    "distinct_option_kinds": 3,
+    "emulator_frames": 0,
+    "identity_fields_public": 0,
+    "menu_sha256": "af078403f69495ad22ad3a38f284dd3037cc5349720c03c3da4045c035f81315",
+    "ordinary_candidate_count": 2,
+    "selected_candidate_index": 5,
+    "selected_kind": "resupply",
+    "selected_probability": 0.43869514182473374,
+    "supplemental_candidate_count": 4
+  },
+  "publication": {
+    "checkpoint_record_sha256": "73836c65f54ab81ec357f5fffd68b3da799582d38546ea3eb8a722e664574f18",
+    "publication_actions": 0,
+    "publication_frames": 0,
+    "state_sha256": "7025658c08948147f9798d45ea59c4d5eef1aaa1831b5d953348c6a409522797",
+    "trajectory_manifest_sha256": "2ee72e101d55d965b256d2275ee3b75b75f41fd63bd6f563d0eef482c9d97371"
+  },
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-13-model114-frozen-fishing-learning",
+  "source": {
+    "fit_source_bundle_sha256": "cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f",
+    "fit_source_commit": "003612b8b505781a917bbbd416155f5b2defe2eb",
+    "focused_tests_passed": 246,
+    "github_ci_conclusion": "success",
+    "github_ci_run": 34750593606,
+    "menu_source_bundle_sha256": "cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f",
+    "menu_source_commit": "003612b8b505781a917bbbd416155f5b2defe2eb",
+    "runtime_source_bundle_sha256": "cbd6651cf747f5e6bb0edcb136f21033f2d9893f8b5e0c42a8893416b2b6a86f",
+    "runtime_source_commit": "003612b8b505781a917bbbd416155f5b2defe2eb"
+  },
+  "status": "fit_complete_bounded_only"
+}

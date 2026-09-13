@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model113-frozen-restore-learning**.
+Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model114-frozen-fishing-learning**.
 
 A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 13/14 acceptance items (93%).**
+**Broaden model-directed Red collection: 14/15 acceptance items (93%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -26,8 +26,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain and fit the automatic runtime's actual selected-arm result ([evidence](../docs/evidence/red-model112-automatic-fishing-failure-learning-2026-09-13.json))
 - [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
 - [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
+- [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
 
-Current model: **113 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -79,7 +80,7 @@ Catch, evolve and record missing species; deposit completed lines and skip alrea
 
 No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
 
-[Current evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -106,6 +107,14 @@ Reuse competence and verified registration while pursuing new gaps in later game
 Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
 
 ## Session reviews
+
+### 2026-09-13-model114-frozen-fishing-learning
+
+Model113's exact frozen fishing choice added one registration in513actions/30804frames across four casts. The success became example114 with zero teacher labels and published a durable Model114 checkpoint with84registrations/64living/68specimens. The next action-free six-choice menu crossed three goal families and Model114 selected resupply.
+
+**Deviation:** Flash rejected a stale parent-model binding and selection seed before controller input; both were corrected before the one consumed execution. The successful choice was not retried, no post-hoc target was added and no authority tier advanced.
+
+**Next:** Execute Model114's exact frozen resupply choice once without another policy query, retain its actual outcome, fit Model115 only if eligible, publish the terminal and rebuild the next menu. No consumed retry, Blue, Crystal or full replay.
 
 ### 2026-09-13-model113-frozen-restore-learning
 

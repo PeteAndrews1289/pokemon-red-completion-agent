@@ -28,6 +28,13 @@ the reusable planner now admits supplemental-only menus with at least two authen
 Model113 selected one of those four destinations. The acquisition is frozen but unexecuted.
 [Evidence](evidence/red-model113-frozen-restore-learning-2026-09-13.json).
 
+Newest continuation: Model113's exact frozen fishing choice executed once and added one previously
+missing registration in 513 actions / 30,804 frames across four casts. The verified success became
+row114, preserving all 113 earlier rows and publishing a durable Model114 checkpoint with 84
+registrations, 64 living species and 68 specimens. The next action-free menu crossed three goal
+families; Model114 selected resupply/income. That choice is frozen but unexecuted.
+[Evidence](evidence/red-model114-frozen-fishing-learning-2026-09-13.json).
+
 Prior engineering beat: model111 exposed a clean distinction between a missing capability and an
 exhausted source. Capture preparation now searches all twelve verified boxes, chooses a usable
 status helper without species identity, switches safely and preserves every specimen and field-

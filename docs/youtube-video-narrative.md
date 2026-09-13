@@ -2,10 +2,10 @@
 
 This is an editorial outline, not a completed video or a claim that the project is finished.
 
-Newest systems beat: show a five-card live menu—four automatically derived fishing destinations and one restore goal—with no map or species names exposed to the model. Show model111 selecting acquisition, then stopping at dialogue after **228 actions /16,668 frames**. Do not cut around the failure. Show it becoming row112, then recovering in **8 actions /576 frames /0 labels**, with all **83 registrations /67 specimens** intact. Rebuild the five-card menu and show model112 selecting restore. Then show that exact frozen restore succeeding once in **87 actions /3,996 frames**, becoming row113 without another policy query. From the durable Model113 state, show a four-card fishing-only menu and freeze on the selected acquisition: it has not executed.
+Newest systems beat: show Model113's frozen four-way fishing choice running exactly once. After four casts and **513 actions / 30,804 frames**, the Pokédex advances **83→84** and the verified success becomes row114 with no teacher label. Show the durable Model114 checkpoint, then the action-free six-card menu: restore, four anonymous acquisition destinations and resupply/income. Model114 selects resupply at probability **0.438695**; freeze there because it has not executed.
 
-Caption: **failure retained once / recovery earned no learning credit / restore learned once / next acquisition frozen**.
-[Session](work-sessions/2026-09-13-model113-frozen-restore-learning.md).
+Caption: **model chose collection / result verified / row114 fitted / model chose resources next**.
+[Session](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
 
 Prior engineering beat: show seven helpers across the PC, then capability-based selection. Overlay
 **12 boxes /304 tests /0 game actions /0 labels**. The first exact menu remained forced because its

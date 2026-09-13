@@ -8,18 +8,19 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 83 verified registered species and 113 settled examples in the current collection-learning dataset. Model112's frozen restore succeeded once and became row113 without a teacher label. From the durable Model113 checkpoint, the model selected one of four automatic fishing destinations; that acquisition remains unexecuted. These are same-lineage development results, not independent improvement.
+- 84 verified registered species and 114 settled examples in the current collection-learning dataset. Model113's frozen fishing choice added one registration and became row114 without a teacher label. From the durable Model114 checkpoint, the model selected resupply/income from six choices across three goal families; that choice remains unexecuted. These are same-lineage development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model113-frozen-restore-learning.md).
+[Evidence for the current model](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
 
 The automatic runtime now derives useful fishing sources from current cartridge and save data
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
 verified box after selection. The first five-choice execution stopped at a dialogue boundary after
 228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
 The next checkpoint recovered in 8 actions and preserved every registration and specimen. Its
-frozen restore then succeeded in 87 actions, produced Model113 and exposed the next acquisition.
+frozen restore produced Model113; the following frozen fishing choice added registration84 and
+produced Model114. The new three-family menu selected resupply/income as the next bounded goal.
 
 ## My role and the stack
 
