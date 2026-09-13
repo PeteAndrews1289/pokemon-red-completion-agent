@@ -286,3 +286,22 @@ Recommendation for the next session: **Sol High, Fast off** for cross-box helper
 implementation and focused tests. Use Astra High only if preserving field-move dependencies across
 box switching exposes an ambiguous ownership or composition problem. External review is most useful
 after the executable menu changes, not before this clearly bounded adapter seam.
+
+## 2026-09-13: Model119 frozen-restoration session
+
+Sol High completed the exact frozen-restoration execution, independent before/after observation,
+one measured fit and zero-input checkpoint publication. The single gameplay attempt fully restored
+HP/PP in153 actions/5,424 frames and produced Model119 with119 examples/81 successes. The next
+inventory correctly stopped at one fishing acquisition instead of claiming a model ranking choice.
+
+Flash3.8 High saved a live failure: its runner review caught a stale menu-era source-bundle
+comparison before controller input. Claude Sonnet supplied the missing public export and a clean
+worktree guard. Accepted findings were fixed; both requests to split mandatory registry identity
+changes were rejected. Flash timed out only after delivering its finding, and both CLIs left quota
+unavailable. Exact assistant usage and account debit remain unavailable, so this is not a measured
+cost comparison.
+
+Recommendation for the next session: **Sol High, Fast off**. The forced-singleton supplemental
+bridge has established semantics and a narrow integration surface. Use bounded Flash/Claude review
+after implementation; escalate to Astra High only if authenticating the supplemental binding would
+require a new authority contract or weaken the learned-choice boundary.

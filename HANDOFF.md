@@ -3,34 +3,35 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September13,2026.
 
-## Current boundary: Model118 / frozen restoration
+## Current boundary: Model119 / forced-singleton fishing acquisition
 
-Model117's exact frozen resupply ran once after a zero-input reconstruction of the same model, menu,
-private binding and parent state. It used134 actions /7716 frames, made one verified Fly and bought
-three Ultra Balls for exactly1800. Cash changed2146 to346; registrations stayed85. The choice is
-consumed and cannot retry.
+Model118's exact frozen restoration ran once after a zero-input reconstruction of the same model,
+menu, private routed-Center binding and parent state. It used153 actions /5424 frames and fully
+restored HP/PP. Cash346, five Ultra Balls and registrations85 were preserved. The choice is consumed
+and cannot retry.
 
-Its actual success became row118. Model118 has118 examples /80 successes and retains85
+Its actual success became row119. Model119 has119 examples /81 successes and retains85
 registrations /65 living species /69 specimens with cash346. No independent evaluation or
 authority promotion occurred.
 
-- Model: `279f45e3fb6b332ce907bdcda9a381614352f27248308ff4c4d23111e0db5d40`
-- Checkpoint: `ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d`
-- State: `1d8082780f80685825a3e3ab6a149edb737aa7b03ac4e3b870df1b1120c7d36e`
-- Episode: `red-model118-frozen-purchase-terminal-20260913`
-- Fit/publication source: `d4a6aecb59dd24266725ce35ca349969cfe9da5f`
-- Bundle: `bba81c5311a7495c724a907ab8c95b15439a2e023b2f8571d5b95e4d54faff47`
+- Model: `d1528e871ec245e3e5aa05b13d4a4bf6b08f952ce99a7413cd3810d26b1c89c6`
+- Checkpoint: `11d2cfdc25a92e63b9c91e7fd9cb526e251567ae55b308192f83a47b1bd2c5a6`
+- State: `e584fde6adca6bdc1a2001bad619420f67927fc553e096a89a4676fa56a89f63`
+- Episode: `red-model119-frozen-restore-terminal-20260913`
+- Fit/publication source: `0643cb742d6d736b33ad5bd0384feb9d276306c8`
+- Bundle: `ac147b39f65415322ef8beaed31d57e39399708703882058fd416c014176bd36`
 
-## Exact next task — execute the frozen restoration once
+## Exact next task — qualify the forced-singleton acquisition
 
-The actual action-free Model118 menu has two candidates across two goal kinds: the final visible
-fishing acquisition and ordinary team restoration. Model118 froze candidate1, `restore`, at
-probability `0.6782507836124833`; menu SHA is
-`2bc2b6cd86124fa13e79362131de00a0da0caf6cb0325e122327af078756f3ea`. Construction and
-selection used zero actions, frames, teacher labels or training examples. Execute this exact choice
-once from the authenticated purchase terminal, retain the real result and fit only eligible measured
-evidence. Do not redraw, retry, query the policy again or use a teacher fallback. Gameplay is
-stopped.
+The actual action-free Model119 inventory has exactly one executable candidate: a supplemental
+fishing acquisition. There are zero ordinary candidates. The mixed-option constructor correctly
+rejected it because learned option menus require two alternatives. Observation and diagnosis used
+zero actions, frames, model queries, teacher labels or training examples.
+
+Publish and qualify a separate forced-singleton supplemental-acquisition bridge. It must authenticate
+the exact Model119 checkpoint and sole private binding, record forced authority explicitly, issue
+zero model/teacher queries and stay out of the option-value fit. Only after exact-source green CI may
+it execute once; retain success or failure without retry. Gameplay is stopped.
 
 ## Red must come before any ROM hack
 
@@ -45,17 +46,16 @@ full-run readiness conditions still apply; no fresh full run is authorized in th
 
 ## External work and next session
 
-Flash3.8 High reviewed the exact one-shot runner, source/menu/model/parent binding, purchase
-accounting and failure retention and returned PASS with no blocker. Claude Sonnet independently
-returned PASS; its request to confirm hosted CI against the exact execution commit was accepted and
-satisfied before controller input, while its preflight-receipt note was informational. Both reviews
-were read-only and complete. Current service quota was unavailable from both CLIs.
+Flash3.8 High caught the first restoration runner's stale source-bundle comparison and suggested
+explicit restore-kind and routed-Center binding checks; Codex accepted and fixed all three before
+gameplay. Claude Sonnet returned PASS and supplied the missing export and clean-worktree guard.
+Both reviews were read-only and complete. Current service quota was unavailable from both CLIs.
 
-Next objective: execute Model118's exact frozen restoration once, verify the recovery outcome and
-fit only eligible evidence. Estimate60–120minutes. Use **GPT-5.6 Sol / High / Fast off**. Reserve
+Next objective: qualify and execute the exact singleton fishing acquisition without model/teacher
+queries or choice fitting. Estimate60–120minutes. Use **GPT-5.6 Sol / High / Fast off**. Reserve
 Astra for fresh-run authority/generalization design.
 No recommendation changes the currently selected model.
 
-[Session report](docs/work-sessions/2026-09-13-model118-frozen-purchase.md) ·
-[Evidence](docs/evidence/red-model118-frozen-purchase-2026-09-13.json) ·
-[Prior result](docs/work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
+[Session report](docs/work-sessions/2026-09-13-model119-frozen-restore.md) ·
+[Evidence](docs/evidence/red-model119-frozen-restore-2026-09-13.json) ·
+[Prior result](docs/work-sessions/2026-09-13-model118-frozen-purchase.md)

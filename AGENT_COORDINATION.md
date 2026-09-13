@@ -11,14 +11,14 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model118 has118 examples,80 successes,85 registrations,65 living species,69 specimens, three new
-Ultra Balls and cash346. Model117's exact frozen resupply succeeded once in134 actions /7716 frames
-after one verified Fly. The purchase is consumed and cannot retry.
+Model119 has119 examples,81 successes,85 registrations,65 living species,69 specimens, five Ultra
+Balls and cash346. Model118's exact frozen restoration succeeded once in153 actions /5424 frames
+and fully restored HP/PP. The restoration is consumed and cannot retry.
 
-The action-free two-option Model118 menu froze restoration candidate1 at probability0.6782507836.
-Execute that exact choice once from the authenticated purchase terminal, retain its actual recovery
-result and fit only eligible measured evidence. No redraw, retry, policy requery, teacher fallback,
-identity-bearing policy feature or authority promotion. Do not assign a broad architecture audit.
+The action-free Model119 inventory exposes exactly one supplemental fishing acquisition and no
+ordinary goal. The mixed-option contract stopped rather than fabricating a learned choice. Publish
+and qualify a separately labelled forced-singleton bridge, prove zero model/teacher queries and
+choice-fit exclusion, then execute it once without retry. Do not assign a broad architecture audit.
 
 Pete requires a fresh start-to-finish non-deterministic model-directed Red run and the full local
 Red Pokédex before any ROM hack. The old checkpoint story and124-entry availability scope do not
@@ -27,15 +27,15 @@ Emerald.
 
 ## Latest external contributions
 
-Flash3.8 High reviewed the exact one-shot runner, bindings, accounting and failure retention and
-returned PASS. Claude Sonnet independently returned PASS; Codex accepted its request to confirm the
-exact hosted CI run before input, while its preflight-receipt note was informational. Neither
-reviewer edited the repository or ran gameplay.
+Flash3.8 High caught a stale menu-era source-bundle comparison in the first restoration-runner
+draft and suggested explicit restore-kind and routed-Center binding checks; all were fixed before
+gameplay. Claude Sonnet returned PASS and supplied the missing export and clean-worktree guard.
+Neither reviewer edited the repository or ran gameplay.
 
 Current Flash and Claude quota is unavailable from their CLIs. Next useful external assignment is a
-small pre-execution audit of the exact frozen-restoration runner. Next Codex recommendation:
+small post-implementation audit of the forced-singleton supplemental-acquisition bridge. Next Codex recommendation:
 Sol/High/Fast off.
 
-[Session and adjudication](docs/work-sessions/2026-09-13-model118-frozen-purchase.md) ·
+[Session and adjudication](docs/work-sessions/2026-09-13-model119-frozen-restore.md) ·
 [Detailed workflow](docs/three-agent-workflow.md) ·
 [Reviewer entry point](docs/current-agent-handoffs.md)

@@ -1,18 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="2611" viewBox="0 0 1420 2611" role="img" aria-labelledby="title description">
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="2661" viewBox="0 0 1420 2661" role="img" aria-labelledby="title description">
 <title id="title">Pokemon development roadmap</title>
-<desc id="description">19 of 20 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
+<desc id="description">20 of 21 current checklist items verified, not overall completion. Eight stages lead from the learning loop to a cross-game registered Pokedex.</desc>
 <style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>
-<rect width="1420" height="2611" fill="#0b1221"/>
+<rect width="1420" height="2661" fill="#0b1221"/>
 <path d="M1120 0H1420V225Z" fill="#172947"/>
 <text x="50" y="55" class="eyebrow" style="fill:#57dfb1">POKEMON / DEVELOPMENT ATLAS</text>
 <text x="50" y="125" style="font-size:49px;font-weight:bold">From Red to a registered Pokedex.</text>
 <text x="50" y="168" class="body muted">A fixed destination. Evidence-led steps. No hidden finish-line changes.</text>
-<text x="50" y="215" class="small">118 goal-value examples  /  Fresh-start Red story: not demonstrated</text>
-<rect x="50" y="260" width="1320" height="1136" rx="20" fill="#16243a"/>
+<text x="50" y="215" class="small">119 goal-value examples  /  Fresh-start Red story: not demonstrated</text>
+<rect x="50" y="260" width="1320" height="1186" rx="20" fill="#16243a"/>
 <text x="80" y="304" class="eyebrow" style="fill:#ffd36a">YOU ARE HERE / PHASE 05</text>
 <text x="80" y="349" class="heading">Broaden model-directed Red collection</text>
 <text x="80" y="456" style="font-size:88px;font-weight:bold;fill:#ffd36a">95%</text>
-<text x="82" y="495" class="body">19 of 20 acceptance items verified</text>
+<text x="82" y="495" class="body">20 of 21 acceptance items verified</text>
 <text x="82" y="529" class="small muted">Checklist only. Not phase completion or a time estimate.</text>
 <text x="705" y="326" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="326" class="small">Publish the earned state as a durable fitted-</text>
@@ -74,80 +74,83 @@
 <text x="705" y="1276" class="small" style="fill:#57dfb1">DONE</text>
 <text x="778" y="1276" class="small">Execute and fit Model117&#x27;s frozen purchase, then</text>
 <text x="778" y="1296" class="small">freeze Model118&#x27;s next choice</text>
-<rect x="80" y="1366" width="1260" height="8" rx="4" fill="#293b55"/>
-<rect x="80" y="1366" width="1197" height="8" rx="4" fill="#ffd36a"/>
-<text x="50" y="1436" class="eyebrow">THE WHOLE JOURNEY</text>
-<text x="740" y="1436" class="small" style="fill:#57dfb1">VERIFIED</text>
-<text x="870" y="1436" class="small" style="fill:#ffd36a">CURRENT</text>
-<text x="1000" y="1436" class="small" style="fill:#9daac4">PLANNED / NOT DEMONSTRATED</text>
-<rect x="50" y="1476" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="50" y="1498" width="4" height="161" rx="2" fill="#57dfb1"/>
-<text x="74" y="1507" class="eyebrow" style="fill:#57dfb1">01 / VERIFIED</text>
-<text x="74" y="1548" class="heading">Build the learning loop</text>
-<text x="74" y="1582" class="body">Observe, act, verify, save and learn from actual</text>
-<text x="74" y="1606" class="body">outcomes.</text>
-<text x="74" y="1631" class="small muted">Teacher and deterministic mechanics support learning; they are not</text>
-<text x="74" y="1650" class="small muted">the final player.</text>
-<rect x="730" y="1476" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="730" y="1498" width="4" height="161" rx="2" fill="#57dfb1"/>
-<text x="754" y="1507" class="eyebrow" style="fill:#57dfb1">02 / VERIFIED</text>
-<text x="754" y="1548" class="heading">Make useful Red decisions</text>
-<text x="754" y="1582" class="body">Remember failed searches and choose productive</text>
-<text x="754" y="1606" class="body">alternatives.</text>
-<text x="754" y="1631" class="small muted">Search history must inform learned choices, not a scripted rule</text>
-<text x="754" y="1650" class="small muted">forcing another goal.</text>
-<rect x="50" y="1701" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="50" y="1723" width="4" height="161" rx="2" fill="#57dfb1"/>
-<text x="74" y="1732" class="eyebrow" style="fill:#57dfb1">03 / VERIFIED</text>
-<text x="74" y="1773" class="heading">Sustain model-directed play</text>
-<text x="74" y="1807" class="body">Combine navigation, battles, captures, resources and</text>
-<text x="74" y="1831" class="body">recovery.</text>
-<text x="74" y="1856" class="small muted">Replace brittle fixed routing with reusable skills; scale battle and</text>
-<text x="74" y="1875" class="small muted">navigation authority on evidence.</text>
-<rect x="730" y="1701" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="730" y="1723" width="4" height="161" rx="2" fill="#9daac4"/>
-<text x="754" y="1732" class="eyebrow" style="fill:#9daac4">04 / PLANNED</text>
-<text x="754" y="1773" class="heading">Finish Red with the model</text>
-<text x="754" y="1807" class="body">Choose progression from a fresh game through the</text>
-<text x="754" y="1831" class="body">Champion.</text>
-<text x="754" y="1856" class="small muted">Earlier checkpoint completion is supporting evidence, not this</text>
-<text x="754" y="1875" class="small muted">fresh-run gate.</text>
-<rect x="50" y="1926" width="640" height="205" rx="14" fill="#202d3d"/>
-<rect x="50" y="1948" width="4" height="161" rx="2" fill="#ffd36a"/>
-<text x="74" y="1957" class="eyebrow" style="fill:#ffd36a">05 / CURRENT</text>
-<text x="74" y="1998" class="heading">Complete the full Red Pokedex</text>
-<text x="74" y="2032" class="body">Register every Red Pokedex entry in the same fresh-run</text>
-<text x="74" y="2056" class="body">save.</text>
-<text x="74" y="2081" class="small muted">No reduced availability subset. Shared credit is not a local flag;</text>
-<text x="74" y="2100" class="small muted">no living-form quota.</text>
-<rect x="730" y="1926" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="730" y="1948" width="4" height="161" rx="2" fill="#9daac4"/>
-<text x="754" y="1957" class="eyebrow" style="fill:#9daac4">06 / PLANNED</text>
-<text x="754" y="1998" class="heading">Adapt to an unfamiliar Red hack</text>
-<text x="754" y="2032" class="body">Test changed encounters, rules or difficulty in a</text>
-<text x="754" y="2056" class="body">compatible hack.</text>
-<text x="754" y="2081" class="small muted">Blocked until complete Red. Compatibility and initial performance</text>
-<text x="754" y="2100" class="small muted">are separate tests.</text>
-<rect x="50" y="2151" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="50" y="2173" width="4" height="161" rx="2" fill="#9daac4"/>
-<text x="74" y="2182" class="eyebrow" style="fill:#9daac4">07 / PLANNED</text>
-<text x="74" y="2223" class="heading">Transfer and learn Crystal</text>
-<text x="74" y="2257" class="body">Reuse shared skills while learning new mechanics and</text>
-<text x="74" y="2281" class="body">progression.</text>
-<text x="74" y="2306" class="small muted">Add the title adapter, time-dependent encounters, breeding and new</text>
-<text x="74" y="2325" class="small muted">mechanics; not another fixed walkthrough.</text>
-<rect x="730" y="2151" width="640" height="205" rx="14" fill="#111e31"/>
-<rect x="730" y="2173" width="4" height="161" rx="2" fill="#9daac4"/>
-<text x="754" y="2182" class="eyebrow" style="fill:#9daac4">08 / PLANNED</text>
-<text x="754" y="2223" class="heading">Accumulate a cross-game registered Dex</text>
-<text x="754" y="2257" class="body">Continue the shared registered Pokedex through at least</text>
-<text x="754" y="2281" class="body">Emerald.</text>
-<text x="754" y="2306" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
-<text x="754" y="2325" class="small muted">physical views.</text>
-<text x="50" y="2435" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2473" class="small muted">2026-09-13-model118-frozen-purchase</text>
-<text x="50" y="2508" class="body">Model117&#x27;s frozen resupply executed once:134 actions and7,716 frames bought3 Ultra Balls for exactly1,800 money. The terminal</text>
-<text x="50" y="2533" class="body">remained at85 registered species, Model118 retained all118 rows with80 successes and improved weighted MSE from0.0311424461</text>
-<text x="50" y="2558" class="body">to0.0120639699.</text>
-<text x="50" y="2571" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
+<text x="705" y="1326" class="small" style="fill:#57dfb1">DONE</text>
+<text x="778" y="1326" class="small">Execute and fit Model118&#x27;s frozen restoration,</text>
+<text x="778" y="1346" class="small">then stop honestly at the singleton boundary</text>
+<rect x="80" y="1416" width="1260" height="8" rx="4" fill="#293b55"/>
+<rect x="80" y="1416" width="1200" height="8" rx="4" fill="#ffd36a"/>
+<text x="50" y="1486" class="eyebrow">THE WHOLE JOURNEY</text>
+<text x="740" y="1486" class="small" style="fill:#57dfb1">VERIFIED</text>
+<text x="870" y="1486" class="small" style="fill:#ffd36a">CURRENT</text>
+<text x="1000" y="1486" class="small" style="fill:#9daac4">PLANNED / NOT DEMONSTRATED</text>
+<rect x="50" y="1526" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="1548" width="4" height="161" rx="2" fill="#57dfb1"/>
+<text x="74" y="1557" class="eyebrow" style="fill:#57dfb1">01 / VERIFIED</text>
+<text x="74" y="1598" class="heading">Build the learning loop</text>
+<text x="74" y="1632" class="body">Observe, act, verify, save and learn from actual</text>
+<text x="74" y="1656" class="body">outcomes.</text>
+<text x="74" y="1681" class="small muted">Teacher and deterministic mechanics support learning; they are not</text>
+<text x="74" y="1700" class="small muted">the final player.</text>
+<rect x="730" y="1526" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="1548" width="4" height="161" rx="2" fill="#57dfb1"/>
+<text x="754" y="1557" class="eyebrow" style="fill:#57dfb1">02 / VERIFIED</text>
+<text x="754" y="1598" class="heading">Make useful Red decisions</text>
+<text x="754" y="1632" class="body">Remember failed searches and choose productive</text>
+<text x="754" y="1656" class="body">alternatives.</text>
+<text x="754" y="1681" class="small muted">Search history must inform learned choices, not a scripted rule</text>
+<text x="754" y="1700" class="small muted">forcing another goal.</text>
+<rect x="50" y="1751" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="1773" width="4" height="161" rx="2" fill="#57dfb1"/>
+<text x="74" y="1782" class="eyebrow" style="fill:#57dfb1">03 / VERIFIED</text>
+<text x="74" y="1823" class="heading">Sustain model-directed play</text>
+<text x="74" y="1857" class="body">Combine navigation, battles, captures, resources and</text>
+<text x="74" y="1881" class="body">recovery.</text>
+<text x="74" y="1906" class="small muted">Replace brittle fixed routing with reusable skills; scale battle and</text>
+<text x="74" y="1925" class="small muted">navigation authority on evidence.</text>
+<rect x="730" y="1751" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="1773" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="1782" class="eyebrow" style="fill:#9daac4">04 / PLANNED</text>
+<text x="754" y="1823" class="heading">Finish Red with the model</text>
+<text x="754" y="1857" class="body">Choose progression from a fresh game through the</text>
+<text x="754" y="1881" class="body">Champion.</text>
+<text x="754" y="1906" class="small muted">Earlier checkpoint completion is supporting evidence, not this</text>
+<text x="754" y="1925" class="small muted">fresh-run gate.</text>
+<rect x="50" y="1976" width="640" height="205" rx="14" fill="#202d3d"/>
+<rect x="50" y="1998" width="4" height="161" rx="2" fill="#ffd36a"/>
+<text x="74" y="2007" class="eyebrow" style="fill:#ffd36a">05 / CURRENT</text>
+<text x="74" y="2048" class="heading">Complete the full Red Pokedex</text>
+<text x="74" y="2082" class="body">Register every Red Pokedex entry in the same fresh-run</text>
+<text x="74" y="2106" class="body">save.</text>
+<text x="74" y="2131" class="small muted">No reduced availability subset. Shared credit is not a local flag;</text>
+<text x="74" y="2150" class="small muted">no living-form quota.</text>
+<rect x="730" y="1976" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="1998" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="2007" class="eyebrow" style="fill:#9daac4">06 / PLANNED</text>
+<text x="754" y="2048" class="heading">Adapt to an unfamiliar Red hack</text>
+<text x="754" y="2082" class="body">Test changed encounters, rules or difficulty in a</text>
+<text x="754" y="2106" class="body">compatible hack.</text>
+<text x="754" y="2131" class="small muted">Blocked until complete Red. Compatibility and initial performance</text>
+<text x="754" y="2150" class="small muted">are separate tests.</text>
+<rect x="50" y="2201" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="50" y="2223" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="74" y="2232" class="eyebrow" style="fill:#9daac4">07 / PLANNED</text>
+<text x="74" y="2273" class="heading">Transfer and learn Crystal</text>
+<text x="74" y="2307" class="body">Reuse shared skills while learning new mechanics and</text>
+<text x="74" y="2331" class="body">progression.</text>
+<text x="74" y="2356" class="small muted">Add the title adapter, time-dependent encounters, breeding and new</text>
+<text x="74" y="2375" class="small muted">mechanics; not another fixed walkthrough.</text>
+<rect x="730" y="2201" width="640" height="205" rx="14" fill="#111e31"/>
+<rect x="730" y="2223" width="4" height="161" rx="2" fill="#9daac4"/>
+<text x="754" y="2232" class="eyebrow" style="fill:#9daac4">08 / PLANNED</text>
+<text x="754" y="2273" class="heading">Accumulate a cross-game registered Dex</text>
+<text x="754" y="2307" class="body">Continue the shared registered Pokedex through at least</text>
+<text x="754" y="2331" class="body">Emerald.</text>
+<text x="754" y="2356" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
+<text x="754" y="2375" class="small muted">physical views.</text>
+<text x="50" y="2485" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
+<text x="50" y="2523" class="small muted">2026-09-13-model119-frozen-restore</text>
+<text x="50" y="2558" class="body">Model118&#x27;s frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85</text>
+<text x="50" y="2583" class="body">registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free</text>
+<text x="50" y="2608" class="body">successor exposed one supplemental fishing acquisition.</text>
+<text x="50" y="2621" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

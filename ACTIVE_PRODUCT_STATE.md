@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.
+- Next decision: Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model118 has118 examples/80 successes and retains85 registrations,65 living species,69 specimens, three additional Ultra Balls and cash346. Its action-free two-option menu froze restoration candidate1 at probability0.6782507836. The restoration is unexecuted; no fresh-game or independent competence is claimed. |
+| Authority now | Model119 has119 examples/81 successes and retains85 registrations,65 living species,69 specimens, five Ultra Balls and cash346 after verified full HP/PP recovery. The action-free successor exposes one fishing acquisition; it is unexecuted and cannot count as a learned choice. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback. |
+| Cheapest falsifier | The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 118 | 12 |
+| Registered Train Example · train | 119 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model118-frozen-purchase** · status **active** · evidence [model fit](docs/evidence/red-model118-frozen-purchase-2026-09-13.json)
+**2026-09-13-model119-frozen-restore** · status **active** · evidence [model fit](docs/evidence/red-model119-frozen-restore-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner selected and completed a legitimate resource purchase, improving sustainable collection capacity before freezing the next changed-state goal. |
-| Learning output | One verified model-selected resupply success added row118. Model118 now has118 examples/80 successes,14 measured-source rows and39 economy-qualified rows; all117 prior rows remain retained. |
-| Authority delta | Model117's frozen resupply ran once and bought three Ultra Balls for1800 after one verified Fly. The success became row118; Model118 has118 examples/80 successes. Its next action-free two-option menu froze restoration candidate1 at probability0.6782507836. No authority promotion occurred. |
+| Product alignment | The learner's selected recovery restored sustainable collection readiness, and the changed-state inventory honestly separated a necessary singleton acquisition from model ranking. |
+| Learning output | One verified model-selected restoration success added row119. Model119 now has119 examples/81 successes,15 measured-source rows and40 economy-qualified rows; all118 prior rows remain retained. |
+| Authority delta | Model118's frozen restoration ran once and fully restored HP/PP in153 actions/5424 frames. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one fishing acquisition and stopped before falsely treating it as a learned choice. No authority promotion occurred. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The purchase is complete and the exact frozen Model118 restoration remains unexecuted. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution. |
-| Decision | Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback. |
-| Next session | Execute Model118's exact frozen restoration once, retain its real recovery result and fit only eligible measured evidence. |
-| Next falsifier | Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback. |
-| Stop condition | Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable recovery accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The sole next executable candidate is a supplemental fishing acquisition. The mixed-option contract correctly requires at least two candidates, so a separately labelled forced-singleton bridge is required before execution. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution. |
+| Decision | Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry. |
+| Next session | Qualify and execute Model119's sole fishing acquisition as an explicit forced singleton with zero model/teacher queries and no choice fit. |
+| Next falsifier | The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback. |
+| Stop condition | Stop on any second candidate, model or teacher query, source/model/checkpoint mismatch, controller activity during preflight, failure to exclude the singleton from choice training, retry, redraw or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

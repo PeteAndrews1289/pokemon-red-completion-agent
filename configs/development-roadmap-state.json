@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-13-model118-frozen-purchase",
+  "as_of_session": "2026-09-13-model119-frozen-restore",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model118-frozen-purchase-2026-09-13.json"
+      "evidence": "docs/evidence/red-model119-frozen-restore-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -167,6 +167,12 @@
         "label": "Execute and fit Model117's frozen purchase, then freeze Model118's next choice",
         "done": true,
         "evidence": "docs/evidence/red-model118-frozen-purchase-2026-09-13.json"
+      },
+      {
+        "id": "model119-frozen-restore",
+        "label": "Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary",
+        "done": true,
+        "evidence": "docs/evidence/red-model119-frozen-restore-2026-09-13.json"
       }
     ]
   },
@@ -1244,6 +1250,12 @@
       "result": "Model117's frozen resupply executed once:134 actions and7,716 frames bought3 Ultra Balls for exactly1,800 money. The terminal remained at85 registered species, Model118 retained all118 rows with80 successes and improved weighted MSE from0.0311424461 to0.0120639699.",
       "deviation": "No redraw, retry, teacher label, ROM hack, Crystal work or full replay occurred. Exact hosted CI passed before input; one broad local runtime-identity assertion remains blocked by a pre-existing PyBoy RECORD digest mismatch while the other11,567 tests passed.",
       "next": "Execute Model118's exact frozen restore once from checkpoint ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d, retain the actual outcome and fit only eligible measured evidence."
+    },
+    {
+      "session": "2026-09-13-model119-frozen-restore",
+      "result": "Model118's frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85 registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one supplemental fishing acquisition.",
+      "deviation": "The mixed-option contract rejected the singleton instead of inventing a learned choice. No controller input, model query, teacher label or fit followed that stop. Exact hosted CI passed before the restoration; a duplicate local suite reached7,742 passing tests without failure before being deliberately stopped.",
+      "next": "Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model/teacher queries and choice-fit exclusion, then execute once from Model119 without retry."
     }
   ],
   "closed_milestones": [

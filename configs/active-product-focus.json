@@ -29,29 +29,29 @@
     },
     {
       "capability": "Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs.",
-      "cheapest_falsifier": "Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback.",
+      "cheapest_falsifier": "The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model117's frozen resupply ran once and bought three Ultra Balls for1800 after one verified Fly. The success became row118; Model118 has118 examples/80 successes. Its next action-free two-option menu froze restoration candidate1 at probability0.6782507836. No authority promotion occurred.",
-        "blocker": "The purchase is complete and the exact frozen Model118 restoration remains unexecuted. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution.",
-        "decision": "Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
+        "authority_delta": "Model118's frozen restoration ran once and fully restored HP/PP in153 actions/5424 frames. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one fishing acquisition and stopped before falsely treating it as a learned choice. No authority promotion occurred.",
+        "blocker": "The sole next executable candidate is a supplemental fishing acquisition. The mixed-option contract correctly requires at least two candidates, so a separately labelled forced-singleton bridge is required before execution. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution.",
+        "decision": "Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry.",
         "evidence": {
           "kind": "model_fit",
-          "path": "docs/evidence/red-model118-frozen-purchase-2026-09-13.json",
-          "sha256": "b69c5b7255c5700bb3dcf199aa78f01b7989dd1da3d30e283c3a4a6a959f3bc5"
+          "path": "docs/evidence/red-model119-frozen-restore-2026-09-13.json",
+          "sha256": "9f6c197ce682912ec57ae249b3e50a50358cc47a6b1e4354d5f2a047e069c0cc"
         },
-        "learning_output": "One verified model-selected resupply success added row118. Model118 now has118 examples/80 successes,14 measured-source rows and39 economy-qualified rows; all117 prior rows remain retained.",
-        "next_falsifier": "Model118's exact frozen restoration cannot execute once and produce a verifiable recovery outcome from the authenticated purchase terminal without redraw, retry or teacher fallback.",
-        "next_session_goal": "Execute Model118's exact frozen restoration once, retain its real recovery result and fit only eligible measured evidence.",
-        "product_alignment": "The learner selected and completed a legitimate resource purchase, improving sustainable collection capacity before freezing the next changed-state goal.",
-        "session_id": "2026-09-13-model118-frozen-purchase",
+        "learning_output": "One verified model-selected restoration success added row119. Model119 now has119 examples/81 successes,15 measured-source rows and40 economy-qualified rows; all118 prior rows remain retained.",
+        "next_falsifier": "The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback.",
+        "next_session_goal": "Qualify and execute Model119's sole fishing acquisition as an explicit forced singleton with zero model/teacher queries and no choice fit.",
+        "product_alignment": "The learner's selected recovery restored sustainable collection readiness, and the changed-state inventory honestly separated a necessary singleton acquisition from model ranking.",
+        "session_id": "2026-09-13-model119-frozen-restore",
         "status": "active",
-        "stop_condition": "Stop on menu redraw, retry, source or parent mismatch, teacher fallback, controller activity during preflight, unverifiable recovery accounting or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
+        "stop_condition": "Stop on any second candidate, model or teacher query, source/model/checkpoint mismatch, controller activity during preflight, failure to exclude the singleton from choice training, retry, redraw or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate.",
         "transfer_result": "No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon."
       },
       "learned_authority": {
-        "current": "Model118 has118 examples/80 successes and retains85 registrations,65 living species,69 specimens, three additional Ultra Balls and cash346. Its action-free two-option menu froze restoration candidate1 at probability0.6782507836. The restoration is unexecuted; no fresh-game or independent competence is claimed.",
+        "current": "Model119 has119 examples/81 successes and retains85 registrations,65 living species,69 specimens, five Ultra Balls and cash346 after verified full HP/PP recovery. The action-free successor exposes one fishing acquisition; it is unexecuted and cannot count as a learned choice. No fresh-game or independent competence is claimed.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Execute Model118's exact frozen restoration choice once from the authenticated purchase terminal, retain its actual result and fit only eligible measured evidence without redraw, retry or teacher fallback.",
+      "next_decision": "Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -247,7 +247,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 118,
+        "registered_train_examples": 119,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,

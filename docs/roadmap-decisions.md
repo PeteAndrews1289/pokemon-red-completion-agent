@@ -764,3 +764,15 @@ may exist before interaction; the next battle must clear it at initialization; i
 must remain readable after victory and exactly reconcile terminal cash. Fit the retained Model115
 failure once as row116. Freeze Model116's selected acquisition for the next session; no retry or
 resampling. The full Red-before-hack sequence and exit criteria do not change.
+
+## September 13 — keep a sole acquisition outside learned-choice training
+
+Model118's exact frozen restoration fully recovered HP/PP once and became successful row119. The
+action-free Model119 successor then exposed exactly one executable candidate: a supplemental fishing
+acquisition. Preserve the mixed-option contract's rejection; one option is not a ranking decision.
+
+The next bridge must use the already established forced-singleton semantics while authenticating
+the supplemental binding. It records zero model and teacher queries, remains excluded from the
+option-value fit, and retains its one actual outcome without retry. Do not invent a second candidate
+or weaken multi-option training invariants. The full fresh-run Red story and local Pokédex gate
+still precedes every ROM hack.

@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model118-frozen-purchase**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model119-frozen-restore**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 19/20 acceptance items (95%).**
+**Broaden model-directed Red collection: 20/21 acceptance items (95%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -32,8 +32,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
 - [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
 - [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
+- [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
 
-Current model: **118 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **119 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -83,7 +84,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -110,6 +111,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model119-frozen-restore
+
+Model118's frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85 registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one supplemental fishing acquisition.
+
+**Deviation:** The mixed-option contract rejected the singleton instead of inventing a learned choice. No controller input, model query, teacher label or fit followed that stop. Exact hosted CI passed before the restoration; a duplicate local suite reached7,742 passing tests without failure before being deliberately stopped.
+
+**Next:** Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model/teacher queries and choice-fit exclusion, then execute once from Model119 without retry.
 
 ### 2026-09-13-model118-frozen-purchase
 
