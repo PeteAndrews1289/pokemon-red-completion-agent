@@ -45,10 +45,10 @@ support boundary clearly: authenticated receipt/state chain, no retained action 
 labels. The point is not that the League was solved. The point is that the resource detour ended and
 the system returned to a genuine model decision.
 
-The next engineering question is visually simple: can model105 resume from the retained terminal
+At that point, the next engineering question was visually simple: could model105 resume from the retained terminal
 and choose between useful, physically executable item-procurement or fishing alternatives—without a
 named-species route? Later planners still need to expose static, trade, gift and prize opportunities without a
-handwritten route for every Pokémon? That makes the next milestone legible to a nontechnical
+handwritten route for every Pokémon? That made the milestone legible to a nontechnical
 viewer and connects directly to the eventual multi-game Pokédex.
 
 Newest systems beat: [fresh lineage to Celadon](work-sessions/2026-09-11-fresh-celadon-join.md).

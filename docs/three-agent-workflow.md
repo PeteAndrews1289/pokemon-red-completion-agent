@@ -7,9 +7,9 @@ and two read-only reviewers.
 The durable role definitions live here. The exact current assignments, gate order, deliverables and
 stop conditions live in [current-agent-handoffs.md](current-agent-handoffs.md). Read both before
 dispatching work. Also read the generated [active product state](../ACTIVE_PRODUCT_STATE.md) for
-the immediate lane and the
-[Red-to-Crystal readiness roadmap](red-to-crystal-readiness-roadmap.md) for the mission horizon. A
-dated audit does not silently reactivate an older assignment.
+the immediate lane and the [model-first roadmap](model-first-roadmap.md) for the mission horizon. A
+dated audit does not silently reactivate an older assignment. The dated loop summaries below are a
+review history; their “latest” labels are relative to that archived sequence.
 
 ## Roles
 

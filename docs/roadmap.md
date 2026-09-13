@@ -1,5 +1,12 @@
 # Roadmap
 
+> **Historical work record.** This file preserves the detailed sequence of earlier experiments and
+> should not be read as the active plan. Start with the [mission](../MISSION.md),
+> [active product state](../ACTIVE_PRODUCT_STATE.md), and
+> [model-first roadmap](model-first-roadmap.md). The current endpoint is model111 with 83 verified
+> registrations and 111 settled training examples; the immediate task is capability-aware route
+> recovery before the next model choice.
+
 ## September 5 bootstrap stop and final successor
 
 Strict V2 merged and passed exact-main CI, but its first launcher forced CPython into

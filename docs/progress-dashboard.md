@@ -19,7 +19,12 @@ python scripts/run_product_focus_dashboard.py --port 8768 --live-port 8769 --no-
 
 Open http://127.0.0.1:8768/ on that machine. Starting the viewer does not launch gameplay or fit a model. The live port must be supplied by a separate configured runtime.
 
-The saved panels use repository evidence references. Private operational records and game assets are not part of the public checkout. See [setup](getting-started.md).
+The saved panels use repository evidence references. A complete saved-state card can lag the newest
+collection receipt when the newer public evidence omits one of the card's required resource fields;
+the learning and active-state panels remain independently pinned to their own current evidence.
+The dashboard must show that distinction rather than combining numbers from different checkpoints.
+Private operational records and game assets are not part of the public checkout. See
+[setup](getting-started.md).
 
 ## Update engineering status
 

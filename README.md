@@ -33,6 +33,6 @@ Python and PyBoy provide game observation and control. A small NumPy-based goal-
 
 **Pete Andrews** defines the product, directs development, challenges design decisions and validates observed behavior. AI coding agents—including Codex, Claude and Antigravity—have contributed implementation and review. This is an explicitly AI-assisted engineering project, not a claim that Pete hand-wrote every component.
 
-[Project story](docs/project-narrative.md) · [Concise portfolio brief](docs/portfolio-brief.md) · [Historical work log](docs/worklog.md)
+[Documentation map](docs/README.md) · [Project story](docs/project-narrative.md) · [Concise portfolio brief](docs/portfolio-brief.md) · [Interview handoff](docs/ai-systems-specialist-interview-handoff.md) · [Historical work log](docs/worklog.md)
 
 Contributors: use [AGENTS.md](AGENTS.md), the [active development state](ACTIVE_PRODUCT_STATE.md) and the single current [handoff](HANDOFF.md). Session reports belong in the history, not at the top of this README.

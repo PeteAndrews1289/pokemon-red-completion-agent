@@ -1,5 +1,9 @@
 # Preregistered battle collection protocol
 
+> **Historical teacher-data protocol.** This file preserves retired full-run campaign design and
+> failures. It is not the active training loop. Current learning uses bounded selected-outcome Red
+> play from authenticated checkpoints; see the [active product state](../ACTIVE_PRODUCT_STATE.md).
+
 ## Scope and current status
 
 The public
