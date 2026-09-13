@@ -197,3 +197,33 @@ def test_helper_in_another_box_is_bound_without_another_policy_choice(monkeypatc
     report = binding.execute()
     assert report.evidence['capture_party_prepared'] is True
     assert calls == ['travel', ('pc', 4, 1, 6), 'capture']
+
+
+def test_already_selected_live_acquisition_keeps_identity_through_pc_setup(monkeypatch):
+    router, _bindings, observation, calls = fixture(monkeypatch)
+    selected = router.fresh_binding
+
+    supported = support.bind_selected_capture_party_support(router, selected, observation)
+
+    assert calls == []
+    assert supported.binding_ref.startswith(selected.binding_ref + ':capture-support:')
+    assert supported.search_source_ref == selected.search_source_ref
+    report = supported.execute()
+    assert (report.actions_executed, report.frames_executed) == (15, 100)
+    assert report.evidence['capture_support']['party_preparations'] == 1
+    assert supported.verify(report).status.value == 'succeeded'
+    assert calls == ['travel', ('pc', 0, 2, 6), 'capture', 'verify']
+    with pytest.raises(support.RedCapturePartyError, match='consumed'):
+        supported.execute()
+
+
+def test_selected_capture_support_rejects_non_acquisition_without_input(monkeypatch):
+    router, _bindings, observation, calls = fixture(monkeypatch)
+    selected = replace(
+        router.fresh_binding, kind=GoalKind.RESUPPLY, search_source_ref=None
+    )
+
+    with pytest.raises(support.RedCapturePartyError, match='selected acquisition'):
+        support.bind_selected_capture_party_support(router, selected, observation)
+
+    assert calls == []

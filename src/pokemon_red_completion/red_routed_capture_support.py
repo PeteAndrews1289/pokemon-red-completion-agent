@@ -33,6 +33,168 @@ if TYPE_CHECKING:
     from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
 
 
+def _capture_party_preparation(
+    router: RedResourceGoalRouter,
+    observation: RedGoalObservation,
+):
+    """Return an action-free all-box plan and PC route, or no-op when already ready."""
+
+    runtime = router.runtime
+    collection = runtime.reader.read_all_box_states()
+    move_boxes = tuple(
+        (box.box_index, runtime.reader.read_box_move_members(box.box_index))
+        for box in collection.boxes
+    )
+    if any(
+        tuple(member.species_id for member in members) != collection.boxes[index].species_ids
+        for index, members in move_boxes
+    ):
+        raise RedCapturePartyError("box species and move inventories differ")
+    plan = plan_capture_party_across_boxes(
+        observation.party,
+        move_boxes,
+        current_box_index=collection.current_box_index,
+    )
+    if plan is None:
+        return None
+    from pokemon_red_completion.red_resource_goal_router import _walking_plan
+
+    traversal = Gen1TraversalObserver(runtime.reader)
+    start = traversal.observe()
+    current_map = getattr(start, "map_id", None)
+    centers = (
+        (current_map,)
+        if current_map in _POKEMON_CENTER_MAPS
+        else sorted(_POKEMON_CENTER_MAPS)
+    )
+    routes: list[RoutePlan] = []
+    for center in centers:
+        try:
+            route = router.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
+        except RoutePlanningError:
+            continue
+        if _walking_plan(route):
+            routes.append(route)
+    if not routes:
+        raise RedCapturePartyError("capture preparation has no supported PC route")
+    route = min(routes, key=lambda value: (len(value.steps), value.terminal_map))
+    return plan, route, traversal
+
+
+def bind_selected_capture_party_support(
+    router: RedResourceGoalRouter,
+    selected: ExecutableGoalBinding,
+    observation: RedGoalObservation,
+) -> ExecutableGoalBinding:
+    """Attach all-box deterministic preparation to one already selected acquisition.
+
+    The policy has already committed to ``selected``.  Setup cannot change that
+    binding or trigger another policy query.  Live route-based bindings must
+    replan internally from the post-PC position when they execute.
+    """
+
+    if (
+        not isinstance(selected, ExecutableGoalBinding)
+        or selected.kind is not GoalKind.ACQUIRE_SPECIES
+    ):
+        raise RedCapturePartyError("capture support needs one selected acquisition")
+    preparation = _capture_party_preparation(router, observation)
+    if preparation is None:
+        return selected
+    plan, route, traversal = preparation
+    runtime = router.runtime
+    executed: list[GoalExecutionReport] = []
+    claimed = False
+
+    def execute() -> GoalExecutionReport:
+        nonlocal claimed
+        if claimed:
+            raise RedCapturePartyError("capture preparation binding was already consumed")
+        claimed = True
+        action_start = router.actions.actions_executed
+        frame_start = runtime.emulator.frame_count
+        before = dependency_specimen_ledger(runtime.adapter.observe().collection_observation)
+        prepare_center_departure(router.actions, runtime.reader)
+        interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
+            router.actions,
+            runtime.reader,
+            maximum_flees=16,
+            maximum_trainer_battles=8,
+            stabilization_frames=180,
+            route_name="bounded selected-acquisition PC access",
+        )
+        if getattr(router, "routed_recovery", False):
+            from pokemon_red_completion.red_routed_recovery import guarded_collection_route_handler
+
+            interruption_handler = guarded_collection_route_handler(
+                router.actions,
+                runtime.reader,
+                route_name="guarded selected-acquisition PC access",
+            )
+        from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS
+
+        transport = execute_route(
+            route,
+            router.actions,
+            traversal,
+            interruption_handler=interruption_handler,
+            replanner=router._replan,
+            limits=_ROUTE_LIMITS,
+        )
+        if not transport.passed:
+            raise RedCapturePartyError("selected-acquisition PC route failed")
+        recovery_kwargs = {}
+        if getattr(router, "routed_recovery", False):
+            from pokemon_red_completion.red_capture_helper_recovery import restore_capture_helper
+
+            recovery_kwargs["restore_helper"] = lambda: restore_capture_helper(router)
+        setup = execute_capture_party_at_pc(
+            plan,
+            router.actions,
+            runtime.reader,
+            pc_map_id=route.terminal_map,
+            read_party=PokemonRedPartyReader(runtime.emulator).read,
+            **recovery_kwargs,
+        )
+        if dependency_specimen_ledger(
+            runtime.adapter.observe().collection_observation
+        ) != before:
+            raise RedCapturePartyError("PC preparation changed the complete living collection")
+        report = selected.execute()
+        executed.append(report)
+        summary = CaptureSupportSummary.from_evidence(
+            report.evidence
+        ) or CaptureSupportSummary(0, 0)
+        summary = replace(summary, party_preparations=1)
+        return GoalExecutionReport(
+            actions_executed=router.actions.actions_executed - action_start,
+            frames_executed=runtime.emulator.frame_count - frame_start,
+            evidence={
+                **report.evidence,
+                **setup,
+                "capture_support": summary.public_dict(),
+            },
+        )
+
+    def verify(_report: GoalExecutionReport) -> GoalVerification:
+        if len(executed) != 1:
+            raise RedCapturePartyError("capture preparation has no completed selected execution")
+        return selected.verify(executed[0])
+
+    return replace(
+        selected,
+        execute=execute,
+        verify=verify,
+        binding_ref=(
+            f"{selected.binding_ref}:capture-support:{canonical_sha256(asdict(plan))}"
+        ),
+        estimated_effort=min(
+            1.0,
+            selected.estimated_effort + 0.1 + len(route.steps) / 1_000,
+        ),
+    )
+
+
 def bind_capture_party_support(
     router: RedResourceGoalRouter, bindings: GoalBindingSet, observation: RedGoalObservation,
 ) -> GoalBindingSet:
@@ -47,44 +209,14 @@ def bind_capture_party_support(
     runtime = router.runtime
     capture_spec = next(s for s in runtime.profile.providers if s.kind is original.kind)
     source_ref = f"pokemon.red:acquisition:{capture_spec.parameters['source_id']}"
-    collection = runtime.reader.read_all_box_states()
-    move_boxes = tuple(
-        (box.box_index, runtime.reader.read_box_move_members(box.box_index))
-        for box in collection.boxes
-    )
-    if any(
-        tuple(member.species_id for member in members) != collection.boxes[index].species_ids
-        for index, members in move_boxes
-    ):
-        return _without_capture(bindings, original)
     try:
-        plan = plan_capture_party_across_boxes(
-            observation.party,
-            move_boxes,
-            current_box_index=collection.current_box_index,
-        )
+        preparation = _capture_party_preparation(router, observation)
     except RedCapturePartyError:
         return _without_capture(bindings, original)
-    if plan is None:
+    if preparation is None:
         return bindings
-    from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS, _walking_plan
-
-    traversal = Gen1TraversalObserver(runtime.reader)
-    start = traversal.observe()
-    routes: list[RoutePlan] = []
-    current_map = getattr(start, "map_id", None)
-    centers = ((current_map,) if current_map in _POKEMON_CENTER_MAPS
-               else sorted(_POKEMON_CENTER_MAPS))
-    for center in centers:
-        try:
-            route = router.plan_feasible_to_map(start, int(center), goal_at=(4, 13))
-        except RoutePlanningError:
-            continue
-        if _walking_plan(route):
-            routes.append(route)
-    if not routes:
-        return _without_capture(bindings, original)
-    route = min(routes, key=lambda value: (len(value.steps), value.terminal_map))
+    plan, route, traversal = preparation
+    from pokemon_red_completion.red_resource_goal_router import _ROUTE_LIMITS
     executed: list[tuple[ExecutableGoalBinding, GoalExecutionReport]] = []
     claimed = False
 
