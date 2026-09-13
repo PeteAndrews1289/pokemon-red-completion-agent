@@ -37,6 +37,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
@@ -323,16 +324,24 @@ def _validate_selection_declaration(
             )
         elif schema in {
             RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
         }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
+            qualification_differs = (
+                qualification_ci_run_id is not None
+                if schema == RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA
+                else (
+                    type(qualification_ci_run_id) is not int
+                    or qualification_ci_run_id <= 0
+                )
+            )
             mismatch = (
                 set(declaration) != frozen_choice_keys
                 or declaration.get("maximum_frames") != 500_000
                 or declaration.get("policy_queries_during_execution") != 0
-                or type(qualification_ci_run_id) is not int
-                or qualification_ci_run_id <= 0
+                or qualification_differs
                 or not isinstance(declaration.get("selected_binding_ref"), str)
                 or not declaration["selected_binding_ref"]
                 or shared_mismatch
@@ -341,7 +350,10 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
-            if schema == RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA:
+            if schema in {
+                RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+            }:
                 mismatch = mismatch or (
                     type(declaration.get("policy_queries_during_execution")) is not int
                     or re.fullmatch(
@@ -612,6 +624,7 @@ class RedDevelopmentMeasuredChoice:
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 }
             ):
@@ -625,7 +638,10 @@ class RedDevelopmentMeasuredChoice:
                 or declared_kind != selected_option_kind.value
                 or (
                     self.selection_declaration.get("schema")
-                    == RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                    in {
+                        RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                    }
                     and self.selected_goal_kind is not GoalKind.RESUPPLY
                 )
             ):
@@ -748,6 +764,7 @@ class RedDevelopmentMeasuredChoice:
             if self.selection_declaration.get("schema") in {
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
                 selection_source_commit = self.selection_declaration.get(
@@ -1081,6 +1098,7 @@ def _validate_behavior(
     frozen_receipt = choice.selection_declaration.get("schema") in {
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     }
     scores, probabilities, selected = _replay_behavior(

@@ -56,6 +56,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
@@ -665,6 +666,29 @@ def test_frozen_resupply_checks_model_scores_without_random_draw(tmp_path, monke
     _validate_behavior(choice, Behavior())
     with pytest.raises(ValueError, match="does not replay"):
         _validate_behavior(replace(choice, scores=tuple(x + 1 for x in choice.scores)), Behavior())
+
+
+def test_frozen_resupply_continuation_accepts_local_qualification_without_redraw(tmp_path):
+    choice = _valid_frozen_resupply_choice(tmp_path, succeeded=False)
+    declaration = {
+        **choice.selection_declaration,
+        "schema": RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+        "qualification_ci_run_id": None,
+    }
+    segment = replace(
+        choice.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    continuation = replace(
+        choice,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+    restored = RedDevelopmentMeasuredChoice.from_public(continuation.public_dict())
+    assert restored.selected_goal_kind is GoalKind.RESUPPLY
+    assert restored.selection_declaration["qualification_ci_run_id"] is None
 
 
 @pytest.mark.parametrize("key,value", [
