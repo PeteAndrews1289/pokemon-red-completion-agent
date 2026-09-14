@@ -29,25 +29,25 @@
     },
     {
       "capability": "Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs.",
-      "cheapest_falsifier": "An independent authenticated Red state cannot expose an action-free menu spanning two genuinely executable acquisition families from the full-151 inventory.",
+      "cheapest_falsifier": "A Pokemon Center action-free inventory cannot expose both a travel-capable wild capture and a native boxed level evolution from the full-151 inventory.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. Model121's terminal was inspected action-free and stopped at a resupply-versus-restore loop; no model query, gameplay, label, fit, promotion or independent evaluation occurred.",
-        "blocker": "The full-151 inventory now classifies every target, but it is not yet connected to goal proposal. Model121 exposes no acquisition candidate, and the missing mixed-acquisition-family milestone remains open.",
-        "decision": "Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families. Do not return to the Model121 resource loop.",
+        "authority_delta": "None. The full-151 proposal gate inspected one historical authenticated context with zero actions and refused gameplay because only one acquisition family was executable; no model query, label, outcome, fit, promotion or independent evaluation occurred.",
+        "blocker": "The inventory-to-goal join is complete, but existing live boundaries are location-incompatible: wild capture is source-local while native boxed evolution is Pokemon-Center-bound. The inspected state had missing targets for both mechanics but exposed only the wild family.",
+        "decision": "Redesign one reusable shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist in one action-free menu. Do not inspect another historical menu or run gameplay before that gate passes.",
         "evidence": {
           "kind": "falsification",
-          "path": "docs/evidence/red-model121-full-pokedex-refocus-2026-09-14.json",
-          "sha256": "a233a4c23ec9882b1717a769403bac88cc8ed5c95a8c8fdd41906c63735e5f62"
+          "path": "docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json",
+          "sha256": "d7b9bf5c3636e4cd4895b0d718b0c5bd3606b3972c35e4763191fc00b87d5177"
         },
-        "learning_output": "None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. Engineering added an explicit 151-target inventory:38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input remain.",
-        "next_falsifier": "A short independent authenticated state cannot expose two supported executable acquisition families after consuming the full-151 inventory.",
-        "next_session_goal": "Connect the 151-target inventory to goal proposal and qualify one independent action-free mixed-acquisition-family menu; permit gameplay only if that exact gate passes.",
-        "product_alignment": "The session stopped a repetitive same-lineage resource loop and replaced the reduced124-entry completion view with an explicit151-target dependency inventory without inflating learning or completion authority.",
-        "session_id": "2026-09-14-model121-full-pokedex-refocus",
+        "learning_output": "None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. It produced no query, outcome or example. This is the second consecutive session without measured learning output, so the anti-drift alarm fired.",
+        "next_falsifier": "A Pokemon Center action-free inventory still cannot expose both a travel-capable wild capture and a native boxed level evolution.",
+        "next_session_goal": "Settle one reusable shared-departure executor contract, then run only its action-free mixed-family gate; permit gameplay only if the gate passes and can produce a measured outcome.",
+        "product_alignment": "The full151 inventory now controls goal proposal, and a real historical state proved that mere missing targets do not manufacture executable diversity. The enforced stop prevented another unsupported gameplay row.",
+        "session_id": "2026-09-14-full-pokedex-goal-proposal-falsification",
         "status": "active",
-        "stop_condition": "Stop before gameplay if fewer than two acquisition families are supported and executable, if the scenario shares the Model106-121 checkpoint lineage, or on any local/shared/physical registration conflation. No ROM hack or Crystal before the complete Red gate.",
+        "stop_condition": "Stop before gameplay unless one authenticated state exposes at least two independently verified acquisition families from the full151 inventory and the run can create a measured outcome. Stop on route-specific policy identity or local/shared/physical conflation. No ROM hack or Crystal before the complete Red gate.",
         "transfer_result": "No transfer result. Blue is represented only as an explicit dependency for11 missing local Red registrations; no Blue, ROM-hack or Crystal gameplay occurred."
       },
       "learned_authority": {
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families; stop before gameplay if the gate fails.",
+      "next_decision": "Redesign one shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist, then run one action-free mixed-family gate; stop before gameplay if it fails.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

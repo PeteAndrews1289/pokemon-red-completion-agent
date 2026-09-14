@@ -11,32 +11,31 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model121's action-free terminal exposes only resupply and restoration, with no acquisition option.
-That same-lineage resource loop is stopped; do not freeze or execute it. The full-151 inventory now
-classifies the current 65 missing local registrations as 38 solo catalog plans, 11 version trades,
-4 link trades, 11 supporting-save trades and 1 legitimate event input. It grants no execution
-authority.
+The full-151 inventory-to-goal join is complete. One action-free authenticated historical state had
+missing wild targets and a physically ready missing level evolution, but only wild capture was
+executable. Source-local capture and Pokémon-Center-bound native evolution cannot currently coexist
+in one preselection menu. The two-family gate failed with zero input, and gameplay remains stopped.
 
-Codex owns the next bounded integration: feed that inventory into goal proposal and seek one
-authenticated scenario outside the Model106–121 lineage whose action-free menu spans two supported
-executable acquisition families. No gameplay is allowed if the menu is singleton, resource-only,
-unsupported or dependent on a manual species route.
+Codex owns one shared-departure contract: from an authenticated Pokémon Center state, bind both a
+travel-capable capture and native boxed evolution before model selection while keeping target, route
+and location identity out of policy features. Run only an action-free gate first. Do not search more
+historical menus, add wrapper-only successors or execute unless at least two independently verified
+acquisition families are available and a measured outcome can be produced.
 
-Pete requires a fresh start-to-finish model-directed Red run with Champion/Hall-of-Fame evidence
-and all 151 local registrations before any ROM hack. After full Red: compatible hack, Crystal and
-at least Emerald.
+Model121 remains at 121 examples, 83 successes and 86 local registrations. Two consecutive sessions
+have produced no measured learning output, so the anti-drift alarm is active. No ROM hack or Crystal
+work is allowed before a fresh model-directed Red run finishes with Champion/Hall-of-Fame evidence
+and all 151 local registrations.
 
 ## Latest external contributions
 
-Gemini 3.8 Flash High reviewed the new classifier read-only. Codex accepted its authority-wording,
-branch-coverage and serialization findings and implemented the planning/execution distinction
-structurally. The standalone Claude CLI requested login, but Claude Sonnet 4.6 completed a second
-read-only audit through `agy` and returned GO with P0/P1 zero; its two incorrect or non-actionable
-P2 notes were rejected. Neither reviewer edited files, accessed private runtime state or ran
-gameplay. Remaining service quota percentages were unavailable from `agy`.
+Gemini 3.8 Flash High recommended the accepted inventory-to-binding join and fail-closed family,
+identity and local-registration checks. Claude Sonnet 4.6 completed through `agy`, agreed that the
+gameplay stop was correct, and made no accepted blocking finding. The standalone Claude CLI is
+installed at version 2.1.197 but remains logged out. Neither reviewer exposes quota percentages.
 
-Next external work, if useful: audit only the eventual action-free mixed-acquisition menu and its
-local/shared/physical state boundaries. Do not assign a broad architecture review.
+Next external work, if useful: audit the shared-departure authority boundary after Codex drafts it.
+Do not assign broad implementation or permit reviewers to edit the worktree.
 
-[Session](docs/work-sessions/2026-09-14-model121-full-pokedex-refocus.md) ·
+[Session](docs/work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

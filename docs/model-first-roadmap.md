@@ -30,22 +30,27 @@ from that repeated resource loop.
 
 A new ROM-free inventory classifies all 151 local targets. Of the 65 missing entries, 38 have solo
 catalog plans, 11 need Blue plus trade, 4 need link evolution, 11 need supporting-save choices plus
-trade, and 1 needs a legitimate event input. A catalog plan is not an executable live option.
+trade, and 1 needs a legitimate event input. That inventory now gates goal proposal without
+conflating local flags, shared credit or physical stock.
+
+The first independent action-free inspection had missing targets for wild capture and level
+evolution, but only wild capture was executable. Source-local capture and Pokémon-Center-bound
+evolution could not coexist, so the two-family gate stopped gameplay with zero input.
 
 ## Immediate next session
 
-Connect the 151-target inventory to goal proposal. From an authenticated scenario outside the
-Model106–121 lineage, require an action-free menu spanning at least two supported executable
-acquisition families. Prefer an item-evolution versus in-game-trade decision or another genuinely
-heterogeneous pair. Stop without gameplay if that exact gate fails.
+Settle one reusable shared-departure collection contract. From an authenticated Pokémon Center
+state, both a travel-capable wild capture and native boxed evolution must be bound before selection,
+while route and target identity remain private to each executor. Run only the action-free gate first;
+stop without gameplay if two independently verified acquisition families do not appear.
 
-The next session must yield a measured learned decision or generalization result; another
-engineering-only session would trip the anti-drift alarm. Full-game Red remains a final exam and is
-not authorized until its bounded component gates are recorded.
+The anti-drift alarm is active after two sessions without a measured learning output. Do not search
+another historical menu or add another wrapper. Full-game Red remains a final exam and is not
+authorized until its bounded component gates are recorded.
 
-[Latest session](work-sessions/2026-09-14-model121-full-pokedex-refocus.md) ·
-[Latest evidence](evidence/red-model121-full-pokedex-refocus-2026-09-14.json) ·
+[Latest session](work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
+[Latest evidence](evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the bounded planner
-integration. Use Astra High only if the falsifier forces dependency/authority redesign.
+Next-session recommendation: **GPT-6 Astra, High effort, Fast off** for the authority and
+executor-boundary redesign. Return to Sol High after the shared-departure contract is settled.

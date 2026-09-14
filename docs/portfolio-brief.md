@@ -27,7 +27,9 @@ produced Model118. Its verified restoration produced Model119; a separately labe
 then captured Poliwhirl without fitting it. Model119's next genuine choice selected a one-item
 restore; the verified success produced Model120. Model120 then selected trainer resupply and earned
 360 cash, producing Model121. The next action-free inventory repeated resupply and restoration, so
-the loop stopped. A full-151 inventory now exposes the actual 65-entry dependency gap.
+the loop stopped. A full-151 inventory now exposes the actual 65-entry dependency gap and gates goal
+proposal. An independent state with missing wild and evolution targets still exposed only wild
+capture, so the two-family gate stopped gameplay before another uninformative outcome.
 
 ## My role and the stack
 

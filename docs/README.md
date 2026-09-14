@@ -15,11 +15,10 @@ valuable evidence without remaining an instruction.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
 Model121 has121 settled training-only examples and83 successes. Its durable Red checkpoint has86
-local registrations,66 living species and70 physical specimens. The checkpoint's next action-free
-menu contained only resupply and restoration, so the repeated same-lineage loop stopped without a
-model query or gameplay. A ROM-free inventory now accounts for all151 local targets:65 remain across
-solo catalog plans, Blue/trade, link evolution, supporting-save/trade and legitimate-event paths.
-This is planning infrastructure, not independent full-game competence or new learned authority.
+local registrations,66 living species and70 physical specimens. A ROM-free inventory accounts for
+all151 local targets and now gates live goal proposal. Its first independent action-free inspection
+had missing wild and evolution targets but only one executable acquisition family, so gameplay
+stopped. This is planning infrastructure, not independent competence or new learned authority.
 
 ## Reader-facing summaries
 

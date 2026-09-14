@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families; stop before gameplay if the gate fails.
+- Next decision: Redesign one shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist, then run one action-free mixed-family gate; stop before gameplay if it fails.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | An independent authenticated Red state cannot expose an action-free menu spanning two genuinely executable acquisition families from the full-151 inventory. |
+| Cheapest falsifier | A Pokemon Center action-free inventory cannot expose both a travel-capable wild capture and a native boxed level evolution from the full-151 inventory. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-model121-full-pokedex-refocus** · status **active** · evidence [falsification](docs/evidence/red-model121-full-pokedex-refocus-2026-09-14.json)
+**2026-09-14-full-pokedex-goal-proposal-falsification** · status **active** · evidence [falsification](docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session stopped a repetitive same-lineage resource loop and replaced the reduced124-entry completion view with an explicit151-target dependency inventory without inflating learning or completion authority. |
-| Learning output | None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. Engineering added an explicit 151-target inventory:38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input remain. |
-| Authority delta | None. Model121's terminal was inspected action-free and stopped at a resupply-versus-restore loop; no model query, gameplay, label, fit, promotion or independent evaluation occurred. |
+| Product alignment | The full151 inventory now controls goal proposal, and a real historical state proved that mere missing targets do not manufacture executable diversity. The enforced stop prevented another unsupported gameplay row. |
+| Learning output | None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. It produced no query, outcome or example. This is the second consecutive session without measured learning output, so the anti-drift alarm fired. |
+| Authority delta | None. The full-151 proposal gate inspected one historical authenticated context with zero actions and refused gameplay because only one acquisition family was executable; no model query, label, outcome, fit, promotion or independent evaluation occurred. |
 | Transfer result | No transfer result. Blue is represented only as an explicit dependency for11 missing local Red registrations; no Blue, ROM-hack or Crystal gameplay occurred. |
-| Blocker | The full-151 inventory now classifies every target, but it is not yet connected to goal proposal. Model121 exposes no acquisition candidate, and the missing mixed-acquisition-family milestone remains open. |
-| Decision | Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families. Do not return to the Model121 resource loop. |
-| Next session | Connect the 151-target inventory to goal proposal and qualify one independent action-free mixed-acquisition-family menu; permit gameplay only if that exact gate passes. |
-| Next falsifier | A short independent authenticated state cannot expose two supported executable acquisition families after consuming the full-151 inventory. |
-| Stop condition | Stop before gameplay if fewer than two acquisition families are supported and executable, if the scenario shares the Model106-121 checkpoint lineage, or on any local/shared/physical registration conflation. No ROM hack or Crystal before the complete Red gate. |
+| Blocker | The inventory-to-goal join is complete, but existing live boundaries are location-incompatible: wild capture is source-local while native boxed evolution is Pokemon-Center-bound. The inspected state had missing targets for both mechanics but exposed only the wild family. |
+| Decision | Redesign one reusable shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist in one action-free menu. Do not inspect another historical menu or run gameplay before that gate passes. |
+| Next session | Settle one reusable shared-departure executor contract, then run only its action-free mixed-family gate; permit gameplay only if the gate passes and can produce a measured outcome. |
+| Next falsifier | A Pokemon Center action-free inventory still cannot expose both a travel-capable wild capture and a native boxed level evolution. |
+| Stop condition | Stop before gameplay unless one authenticated state exposes at least two independently verified acquisition families from the full151 inventory and the run can create a measured outcome. Stop on route-specific policy identity or local/shared/physical conflation. No ROM hack or Crystal before the complete Red gate. |
 
 ### Stop conditions
 

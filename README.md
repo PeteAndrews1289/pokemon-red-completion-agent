@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. Its next action-free menu contained only resupply and restoration, so that same-lineage loop stopped without another model query or gameplay. A new inventory now accounts for all 151 Red targets and the 65 unresolved local entries.
+- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. A new inventory accounts for all 151 Red targets and rejects gameplay when a real state cannot expose at least two executable acquisition families; its first action-free gate found only wild capture and stopped.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest session report](docs/work-sessions/2026-09-14-model121-full-pokedex-refocus.md),
+The [latest session report](docs/work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md),
 [latest learning report](docs/work-sessions/2026-09-14-model121-frozen-resupply.md),
 [prior forced continuation report](docs/work-sessions/2026-09-13-model119-forced-singleton-fishing.md),
 [automatic failure report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),

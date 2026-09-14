@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-full-pokedex-refocus**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-goal-proposal-falsification**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 24/25 acceptance items (96%).**
+**Broaden model-directed Red collection: 25/26 acceptance items (96%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -18,6 +18,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [ ] Expose a useful choice across more than one acquisition family
+- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
@@ -88,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json)
+[Current evidence](../docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -115,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-full-pokedex-goal-proposal-falsification
+
+The full151 inventory now gates profile-bound goal proposal. An authenticated historical state had three missing wild targets plus a physical precursor for a missing evolution, but only the wild family was executable. The required two-family gate failed with zero controller actions, frames, model queries or claims.
+
+**Deviation:** No outcome, example, fit, registration, authority or stage changed. This is the second consecutive session without measured learning output, so the anti-drift alarm requires a shared-departure executor redesign rather than another menu search or wrapper.
+
+**Next:** From one authenticated Pokemon Center state, expose travel-capable capture and native boxed evolution before selection. Run only the action-free gate first and allow gameplay only if two independently verified acquisition families are available.
 
 ### 2026-09-14-model121-full-pokedex-refocus
 

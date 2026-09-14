@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-model121-full-pokedex-refocus",
+  "as_of_session": "2026-09-14-full-pokedex-goal-proposal-falsification",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model121-frozen-resupply-2026-09-14.json"
+      "evidence": "docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -83,6 +83,12 @@
         "label": "Expose a useful choice across more than one acquisition family",
         "done": false,
         "evidence": null
+      },
+      {
+        "id": "full-pokedex-goal-proposal-gate",
+        "label": "Connect all 151 local registrations to fail-closed executable goal proposal",
+        "done": true,
+        "evidence": "docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json"
       },
       {
         "id": "mixed-goal-family-choice",
@@ -1310,6 +1316,12 @@
       "result": "Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.",
       "deviation": "The dated handoff proposed freezing another same-lineage choice, but the North Star's anti-drift rule outranked it. No learning counter, registration, authority or stage changed. This is one engineering-only reorientation session; the mixed-acquisition-family milestone remains open.",
       "next": "Connect the151-target inventory to goal proposal and qualify one independent action-free menu spanning at least two supported executable acquisition families. Stop before gameplay if the gate fails; do not return to the Model121 resource loop."
+    },
+    {
+      "session": "2026-09-14-full-pokedex-goal-proposal-falsification",
+      "result": "The full151 inventory now gates profile-bound goal proposal. An authenticated historical state had three missing wild targets plus a physical precursor for a missing evolution, but only the wild family was executable. The required two-family gate failed with zero controller actions, frames, model queries or claims.",
+      "deviation": "No outcome, example, fit, registration, authority or stage changed. This is the second consecutive session without measured learning output, so the anti-drift alarm requires a shared-departure executor redesign rather than another menu search or wrapper.",
+      "next": "From one authenticated Pokemon Center state, expose travel-capable capture and native boxed evolution before selection. Run only the action-free gate first and allow gameplay only if two independently verified acquisition families are available."
     }
   ],
   "closed_milestones": [

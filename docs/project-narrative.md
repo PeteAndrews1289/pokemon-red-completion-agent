@@ -9,7 +9,7 @@ and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. 
 supporting-save and event dependencies remain requirements. After full Red comes a compatible
 unfamiliar hack, then Crystal and at least Emerald.
 
-## Latest chapter: stopping the loop
+## Latest chapter: proving that missing targets are not enough
 
 Model120's crash-safe choice selected trainer resupply once and earned exactly 360 cash. Its
 verified result became row121, leaving the save at 86 registrations and cash 706. Model121 then
@@ -25,8 +25,14 @@ eight have plans in the solo catalog; 11 need Blue plus trade, 4 need link evolu
 supporting-save choices plus trade, and Mew needs a legitimate event input. Shared credit and a
 physical specimen remain separate from a local Red owned flag.
 
-[Latest evidence](evidence/red-model121-full-pokedex-refocus-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-model121-full-pokedex-refocus.md) ·
+That inventory now controls goal proposal. The first action-free test used an authenticated older
+state with three missing Mansion encounters and a physical precursor for another missing evolution.
+Even so, only wild capture was executable: capture starts at the encounter source, while boxed
+evolution starts at a Pokémon Center. The required two-family menu failed with zero input, so the
+system did not turn “could eventually obtain” into “can execute now.”
+
+[Latest evidence](evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -42,9 +48,10 @@ physical specimen remain separate from a local Red owned flag.
 
 ## What matters next
 
-The 151-entry inventory must feed the model's goal proposals rather than remain a report. The next
-short experiment must come from an independent authenticated scenario and expose at least two
-executable acquisition families. If it cannot, gameplay stops and the missing executor is named.
+The next design must give collection options a shared departure boundary. From one authenticated
+Pokémon Center state, travel-capable capture and native boxed evolution should both be offered
+before the model chooses, with routes and species kept out of policy features. The action-free menu
+must pass before gameplay resumes.
 
 Only after the bounded story, navigation, battle, resource and collection components pass unseen
 gates should the project begin the fresh-start Red final exam. A growing same-lineage training set

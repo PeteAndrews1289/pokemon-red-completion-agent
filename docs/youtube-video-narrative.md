@@ -1,4 +1,4 @@
-# Video narrative: stopping a loop to recover the real goal
+# Video narrative: missing targets are not executable choices
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Antigravity
 help build and review the software; they are not the live Pokémon policy.
@@ -18,7 +18,13 @@ The actual full-Red gate has 65 missing local entries: 38 solo catalog plans, 11
 4 link evolutions, 11 supporting-save branch trades and 1 legitimate event input. Emphasize that a
 shared registration or physical Pokémon never fabricates the local Red Pokédex flag.
 
-[Latest session and evidence](work-sessions/2026-09-14-model121-full-pokedex-refocus.md)
+Then show the new proposal gate on an authenticated older save. Three Mansion encounters are
+missing, and a physical precursor exists for a missing evolution. Yet only wild capture is live:
+capture starts at the encounter source while boxed evolution starts at a Pokémon Center. The
+two-family gate refuses gameplay with zero actions and frames. This is the important lesson: a
+planning path is not present-tense execution authority.
+
+[Latest session and evidence](work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md)
 
 ## The real finish line
 
@@ -26,9 +32,9 @@ State Pete's requirement directly: finish Red from a fresh game with model-direc
 concurrent Champion/Hall-of-Fame evidence and all 151 local registrations before trying a ROM hack.
 Then: compatible unfamiliar Red modification → Crystal → at least Emerald.
 
-The next episode should show a short independent scenario with a real choice across two acquisition
-families. If the software cannot expose both options honestly, show that stop rather than substituting
-a singleton or teacher choice.
+The next episode should start at a shared Pokémon Center departure boundary and show a genuine
+choice between travel-capable capture and native boxed evolution. If both cannot be bound before
+selection, show that stop rather than substituting a singleton or teacher choice.
 
 ## Useful flashbacks
 
