@@ -1125,6 +1125,29 @@ def test_frozen_field_restore_rejects_routed_center_binding(tmp_path):
         RedDevelopmentMeasuredChoice.from_public(document)
 
 
+def test_frozen_routed_restore_rejects_field_item_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = (
+        "pokemon.red:recovery:single-field-item:profile-"
+        + "0" * 64
+        + ":config-"
+        + "1" * 64
+    )
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
 @pytest.mark.parametrize(
     ("key", "value"),
     (
