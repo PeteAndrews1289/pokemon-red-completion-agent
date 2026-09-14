@@ -56,6 +56,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
@@ -531,7 +532,15 @@ def _valid_frozen_restore_choice(
         "menu_sha256": base.menu.policy_sha256,
         "model_sha256": base.model_sha256,
         "selected_candidate_index": base.selected_candidate_index,
-        "selected_binding_ref": "pokemon.red:recovery:routed-center:" + "0" * 64,
+        "selected_binding_ref": (
+            "pokemon.red:recovery:single-field-item:profile-"
+            + "0" * 64
+            + ":config-"
+            + "1" * 64
+            if declaration_schema
+            == RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+            else "pokemon.red:recovery:routed-center:" + "0" * 64
+        ),
         "selection_seed": frozen_seed,
         "behavior_probabilities": list(base.behavior_probabilities),
         "maximum_frames": 500_000,
@@ -961,6 +970,7 @@ def test_automatic_fishing_failure_uses_frozen_menu_to_recover_selected_kind(tmp
     "declaration_schema",
     (
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     ),
 )
@@ -1039,6 +1049,7 @@ def test_frozen_fishing_declaration_tampering_fails_closed(tmp_path, key, value)
     "declaration_schema",
     (
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     ),
 )
@@ -1082,6 +1093,28 @@ def test_model118_frozen_restore_rejects_non_recovery_binding(tmp_path):
     document = choice.public_dict()
     declaration = cast(dict[str, object], document["selection_declaration"])
     declaration["selected_binding_ref"] = "red-trainer-funding:" + "0" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(document)
+
+
+def test_frozen_field_restore_rejects_routed_center_binding(tmp_path):
+    choice = _valid_frozen_restore_choice(
+        tmp_path,
+        declaration_schema=(
+            RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+        ),
+    )
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_binding_ref"] = (
+        "pokemon.red:recovery:routed-center:" + "0" * 64
+    )
     declaration_sha = canonical_sha256(declaration)
     document["selection_declaration_sha256"] = declaration_sha
     segments = cast(list[dict[str, object]], document["segments"])

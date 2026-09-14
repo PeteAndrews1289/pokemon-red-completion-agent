@@ -37,6 +37,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
@@ -327,6 +328,7 @@ def _validate_selection_declaration(
             )
         elif schema in {
             RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
@@ -365,9 +367,20 @@ def _validate_selection_declaration(
                         str(declaration.get("selected_binding_ref")),
                     ) is None
                 )
-            elif schema == RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA:
+            elif schema in {
+                RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+            }:
+                binding_pattern = (
+                    r"pokemon\.red:recovery:routed-center:[0-9a-f]{64}"
+                    if schema == RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+                    else (
+                        r"pokemon\.red:recovery:single-field-item:"
+                        r"profile-[0-9a-f]{64}:config-[0-9a-f]{64}"
+                    )
+                )
                 mismatch = mismatch or re.fullmatch(
-                    r"pokemon\.red:recovery:routed-center:[0-9a-f]{64}",
+                    binding_pattern,
                     str(declaration.get("selected_binding_ref")),
                 ) is None
         elif schema == RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA:
@@ -655,6 +668,7 @@ class RedDevelopmentMeasuredChoice:
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
@@ -681,7 +695,10 @@ class RedDevelopmentMeasuredChoice:
                 )
                 or (
                     self.selection_declaration.get("schema")
-                    == RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+                    in {
+                        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                    }
                     and self.selected_goal_kind is not GoalKind.RESTORE_TEAM
                 )
             ):
@@ -803,6 +820,7 @@ class RedDevelopmentMeasuredChoice:
             selection_source_commit = self.selection_declaration.get("source_commit")
             if self.selection_declaration.get("schema") in {
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
@@ -1140,6 +1158,7 @@ def _validate_behavior(
         raise ValueError("measured choice behavior model differs")
     frozen_receipt = choice.selection_declaration.get("schema") in {
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
