@@ -64,6 +64,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
+    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     build_red_live_option_set,
     select_red_live_option,
     supplemental_live_option,
@@ -654,6 +655,65 @@ def _valid_frozen_resupply_choice(tmp_path: Path, *, succeeded=True):
         resource_costs={name: getattr(outcome, name) for name in (
             "irreversible_loss", "party_cost", "resource_cost", "storage_cost")},
     )
+
+
+def _valid_write_ahead_frozen_resupply_choice(tmp_path: Path):
+    base = _valid_frozen_resupply_choice(tmp_path)
+    declaration = {
+        **base.selection_declaration,
+        "schema": RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        "decision_file_sha256": "1" * 64,
+        "observation_file_sha256": "2" * 64,
+        "query_intent_file_sha256": "3" * 64,
+    }
+    segment = replace(
+        base.segments[0], declaration_sha256=canonical_sha256(declaration)
+    )
+    return replace(
+        base,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+    )
+
+
+def test_write_ahead_frozen_resupply_declaration_round_trips(tmp_path):
+    choice = _valid_write_ahead_frozen_resupply_choice(tmp_path)
+    assert (
+        RedDevelopmentMeasuredChoice.from_public(choice.public_dict()).public_dict()
+        == choice.public_dict()
+    )
+
+
+@pytest.mark.parametrize(
+    "key",
+    [
+        "decision_file_sha256",
+        "observation_file_sha256",
+        "query_intent_file_sha256",
+    ],
+)
+def test_write_ahead_frozen_resupply_receipt_hashes_are_required(tmp_path, key):
+    doc = _valid_write_ahead_frozen_resupply_choice(tmp_path).public_dict()
+    doc["selection_declaration"][key] = "not-a-sha256"
+    digest = canonical_sha256(doc["selection_declaration"])
+    doc["selection_declaration_sha256"] = digest
+    doc["segments"][0]["declaration_sha256"] = digest
+    doc["segments_sha256"] = canonical_sha256(doc["segments"])
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(doc)
+
+
+def test_write_ahead_frozen_resupply_rejects_missing_receipt_hash(tmp_path):
+    doc = _valid_write_ahead_frozen_resupply_choice(tmp_path).public_dict()
+    del doc["selection_declaration"]["decision_file_sha256"]
+    digest = canonical_sha256(doc["selection_declaration"])
+    doc["selection_declaration_sha256"] = digest
+    doc["segments"][0]["declaration_sha256"] = digest
+    doc["segments_sha256"] = canonical_sha256(doc["segments"])
+    with pytest.raises(ValueError, match="pre-input declaration"):
+        RedDevelopmentMeasuredChoice.from_public(doc)
 
 
 @pytest.mark.parametrize("succeeded", [True, False])

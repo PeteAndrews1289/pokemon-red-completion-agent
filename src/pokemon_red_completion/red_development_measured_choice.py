@@ -45,6 +45,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
+    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
 )
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_economy import restore_snapshot, snapshot_document
@@ -297,6 +298,11 @@ def _validate_selection_declaration(
             "selected_binding_ref",
         }
         frozen_fishing_keys = frozen_choice_keys | {"maximum_casts"}
+        write_ahead_resupply_keys = frozen_choice_keys | {
+            "decision_file_sha256",
+            "observation_file_sha256",
+            "query_intent_file_sha256",
+        }
         schema = declaration.get("schema")
         shared_mismatch = (
             declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
@@ -332,6 +338,7 @@ def _validate_selection_declaration(
             RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
             RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
         }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
@@ -344,7 +351,13 @@ def _validate_selection_declaration(
                 )
             )
             mismatch = (
-                set(declaration) != frozen_choice_keys
+                set(declaration)
+                != (
+                    write_ahead_resupply_keys
+                    if schema
+                    == RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                    else frozen_choice_keys
+                )
                 or declaration.get("maximum_frames") != 500_000
                 or declaration.get("policy_queries_during_execution") != 0
                 or qualification_differs
@@ -359,6 +372,7 @@ def _validate_selection_declaration(
             if schema in {
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
                 mismatch = mismatch or (
                     type(declaration.get("policy_queries_during_execution")) is not int
@@ -367,6 +381,18 @@ def _validate_selection_declaration(
                         str(declaration.get("selected_binding_ref")),
                     ) is None
                 )
+                if (
+                    schema
+                    == RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                ):
+                    mismatch = mismatch or any(
+                        _SHA256.fullmatch(str(declaration.get(name))) is None
+                        for name in (
+                            "decision_file_sha256",
+                            "observation_file_sha256",
+                            "query_intent_file_sha256",
+                        )
+                    )
             elif schema in {
                 RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
@@ -674,6 +700,7 @@ class RedDevelopmentMeasuredChoice:
                     RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 }
             ):
                 declared_kind = selected_option_kind.value
@@ -689,6 +716,7 @@ class RedDevelopmentMeasuredChoice:
                     in {
                         RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                        RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                         RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                     }
                     and self.selected_goal_kind is not GoalKind.RESUPPLY
@@ -827,6 +855,7 @@ class RedDevelopmentMeasuredChoice:
                 RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
                 selection_source_commit = self.selection_declaration.get(
                     "executable_source_commit"
@@ -1165,6 +1194,7 @@ def _validate_behavior(
         RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     }
     scores, probabilities, selected = _replay_behavior(
         behavior.model, choice.menu, seed=choice.selection_seed,
