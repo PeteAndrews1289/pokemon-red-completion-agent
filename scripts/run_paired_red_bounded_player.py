@@ -331,6 +331,12 @@ class _LiveObserver:
             )
 
             self.full_local_pokedex_attempt = RedFullPokedexPlayerAttempt()
+        full_local_kwargs: dict[str, Any] = {}
+        if self.full_local_pokedex_choice:
+            full_local_kwargs.update(
+                full_local_pokedex_choice=True,
+                full_local_pokedex_attempt=self.full_local_pokedex_attempt,
+            )
         bridge = _player_observer(
             self.runtime,
             skill_actions,
@@ -355,8 +361,7 @@ class _LiveObserver:
                 else {}
             ),
             retain_quantum=self.retain_quantum,
-            full_local_pokedex_choice=self.full_local_pokedex_choice,
-            full_local_pokedex_attempt=self.full_local_pokedex_attempt,
+            **full_local_kwargs,
         )
         bridge.search_memory = self.search_memory
         observation = bridge()
