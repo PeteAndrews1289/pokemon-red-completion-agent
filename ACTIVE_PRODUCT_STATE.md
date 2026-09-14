@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Start a new session and run the repaired Model120 V2 freeze once. If it durably retains a valid choice, execute only that binding and fit only an eligible measured outcome; treat any ambiguous tombstone as consumed.
+- Next decision: Inspect Model121's published terminal action-free, freeze the resulting exact menu once, then execute and fit only one eligible measured Red result without redraw, retry or teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model120 has120 examples/82 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346. One freeze query was consumed without a retained selection; no gameplay or learning followed. The exact successor remains routed full-team restoration versus trainer-funded resupply. No fresh-game or independent competence is claimed. |
+| Authority now | Model121 has121 examples/83 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash706. Its latest model-selected resupply earned exactly360 cash without changing inventory or registrations. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The repaired Model120 V2 freeze cannot durably retain one exact choice before any later wrapper validation, or its retained binding cannot execute once and yield an eligible measured outcome without redraw, retry or teacher fallback. |
+| Cheapest falsifier | Model121's published terminal cannot be inspected action-free into an exact executable Red menu, or one durably frozen choice cannot yield another eligible measured outcome without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 120 | 12 |
+| Registered Train Example · train | 121 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,23 +60,23 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-model120-freeze-instrumentation-failure** · status **active** · evidence [qualification](docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json)
+**2026-09-14-model121-frozen-resupply** · status **active** · evidence [model fit](docs/evidence/red-model121-frozen-resupply-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session preserved an inconvenient instrumentation failure without inventing a selection or resampling, then hardened the next freeze so ambiguous query consumption cannot become hidden selection bias. |
-| Learning output | Zero. Model120 remains at120 settled examples/82 successes, including16 measured-source and41 economy-qualified rows. No selection is claimed and no row was added. |
-| Authority delta | None. One Model120 query returned at the exact action-free menu, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed, the choice is unknown, and no action, frame, label, fit or promotion occurred. |
+| Product alignment | The session completed one genuine model-selected resource decision, retained its exact cost and success, and advanced the learner without retry, teacher fallback, authority inflation or movement beyond Red. |
+| Learning output | One verified training-only resupply success. Model121 has121 settled examples/83 successes, including17 measured-source and42 economy-qualified rows. Cash increased from346 to706 with inventory and86 registrations unchanged. |
+| Authority delta | Model120 durably selected trainer resupply, earned exactly 360 cash in 153 actions/11461 frames, and produced one eligible measured success. The result became Model121 with bounded-development authority only; no promotion or independent evaluation occurred. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The first Model120 freeze identity cannot execute because its one sampled choice was not retained. A repaired V2 identity is prepared with a pre-query tombstone, write-ahead decision receipt and selected-option content hash, but it was deliberately not run in the consumed session. The full local Red Pokedex still requires explicit version, trade and event resolution. |
-| Decision | Start a new session and run the repaired Model120 V2 freeze once. If it durably retains a valid choice, execute only that binding and fit only an eligible measured outcome; treat any ambiguous tombstone as consumed. |
-| Next session | Run the repaired Model120 V2 freeze under a new identity once; if the decision is retained, execute only that binding and fit only its eligible measured result. |
-| Next falsifier | The repaired Model120 V2 freeze cannot durably retain one exact choice before any later wrapper validation, or its retained binding cannot execute once and yield an eligible measured outcome without redraw, retry or teacher fallback. |
-| Stop condition | Stop on source/model/checkpoint/menu/economy mismatch, an ambiguous query-intent tombstone, controller activity during freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | Model121 has not yet been inspected at its new terminal, cash 706 remains below the 3600 target, and the full local Red Pokedex still requires explicit version, trade and event resolution. No fresh-start full-game competence is demonstrated. |
+| Decision | Inspect Model121's published terminal action-free, freeze the resulting exact menu once, then execute and fit only one eligible measured Red result without redraw, retry or teacher fallback. |
+| Next session | Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result. |
+| Next falsifier | Model121's published terminal cannot be inspected action-free into an exact executable Red menu, or one durably frozen choice cannot yield another eligible measured outcome without redraw, retry or teacher fallback. |
+| Stop condition | Stop on source/model/checkpoint/state/menu/economy or receipt mismatch, controller activity during inspection/freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 
-- Model120 freeze seed120091401 is consumed without a retained choice; never retry, replay, infer, substitute, execute or fit that identity.
+- Model120 freeze seed120091401 is consumed without a retained choice and seed120091402 is consumed by its retained resupply success; never retry, replay, infer, substitute or re-execute either identity.
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
 - The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.

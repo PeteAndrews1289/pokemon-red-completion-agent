@@ -3,44 +3,38 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September14,2026.
 
-## Current boundary: Model120 / one freeze identity consumed without a receipt
+## Current boundary: Model121 / verified trainer income retained
 
-Model119's exact two-option resupply-versus-restore menu was frozen without input and sampled once.
-It selected field restoration at probability0.5524737204. The selected executor consumed one Full
-Heal and cured the sixth party member's status in58 actions/4776 frames. Collection remains86
-registrations/66 living species/70 specimens; cash346 and four capture items remain.
+The repaired Model120 V2 freeze wrote a pre-query tombstone and a write-ahead decision receipt,
+then selected trainer resupply at probability0.4072490891 from the exact routed-restore-versus-
+resupply menu. The binding executed once in153 actions/11461 frames and earned exactly360 cash:
+346 to706, with zero Pay Day money. Inventory, four capture items and all86 registrations remained
+unchanged. There was no retry, execution-time model query or teacher label.
 
-The generic runner incorrectly reused routed-Center postconditions and retained a failure. A
-zero-input audit rebuilt the exact field-item binding, passed its original verifier and preserved the
-failure without retry. The eligible outcome became row120. Model120 has120 examples/82 successes;
-there is no independent evaluation or authority promotion.
+The first zero-input fit preflight exposed that the new crash-safe receipt schema was not admitted.
+The original receipt was not rewritten. A narrow exact-key validator plus four negative/round-trip
+tests was published, the generated registry was refreshed, and exact source `ee8f402f` passed CI
+`34843054840`. The measured success became row121. Model121 has121 examples/83 successes,
+including42 economy-qualified and17 measured-source rows; there is no independent evaluation or
+authority promotion.
 
-On September14, the exact successor was rebuilt action-free and queried once. The wrapper then
-accessed a nonexistent choice attribute before writing the answer. The selected index is not
-retained and must not be inferred. Seed `120091401` is consumed with zero gameplay, controller
-actions, emulator frames, labels or fitting.
+- Model: `19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2`
+- Checkpoint: `8da4f48720d1a8dc4dc1b64877aee3ab3042e75320b16a5c5e4b4a4a4e0aebc6`
+- State: `b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225`
+- Episode: `red-model121-frozen-resupply-terminal-20260914`
+- Admission/fit source: `ee8f402fb4dd0038c982f3d6bf4029acd03f95fd`
+- Bundle: `3f7c47e4ed862d8ed96c5a44c9e27a4626c3ec9568011213acd8752beb53a3d2`
 
-- Model: `624945c9ce74658c8032dec88604725ad5d8345d5da624b41bb8fdd400324e29`
-- Checkpoint: `024d833eea4b1bbf6b58549def2bbfe0c46fed4aa09399bb19e4d8c71b5d5683`
-- State: `a71a95af83f904a02b81d42df6e0dd2798977bda1d81a2e1933bcde4326ebd0d`
-- Episode: `red-model120-post-forced-restore-terminal-20260913`
-- Admission/fit source: `fafc485c562515aead42bd9809f0b9067911331c`
-- Bundle: `18585b3f2189bd66280139d085f49e39020d969f8aac39aa36a01d996e768971`
+## Exact next task — inspect and freeze Model121
 
-## Exact next task — run the repaired Model120 V2 freeze
+Reopen the published Model121 terminal and rebuild its executable Red menu with zero controller
+actions, emulator frames, model queries or labels. If the action-free state, model, checkpoint,
+economy and menu all bind exactly, freeze that menu once under a new identity and durable
+write-ahead receipt. Execute only the retained binding and fit only an eligible measured result.
 
-The Model120 checkpoint reopened, and its changed-state inventory was rebuilt with zero actions or
-frames. Fishing is exhausted. Two ordinary identity-free candidates are available: routed full-team
-restore and trainer-funded resupply. The mixed-menu hash is
-`c9388ff6042149bec1f6db8cd64c9464cbd5ba80872cf2e727d3503b0cc636d9`.
-One query occurred under the consumed first freeze identity, but no selection was retained and no
-execution occurred. A V2 identity is prepared but unexecuted. It writes and fsyncs a pre-query
-tombstone, then durably records the public choice, private binding reference and selected-option
-content hash before later validation. Any ambiguous tombstone must stop without requery.
-
-In a new session, run that V2 identity once. If it retains a valid decision, execute only the
-selected binding and fit only the eligible measured result. Never rerun or reconstruct seed
-`120091401`; no redraw, retry or teacher fallback. Gameplay is stopped.
+Seeds `120091401` and `120091402` are both consumed: the first without a retained choice, the second
+by the successful resupply. Never redraw, infer, retry or re-execute either identity. Gameplay is
+stopped at the Model121 terminal.
 
 ## Red must come before any ROM hack
 
@@ -62,11 +56,12 @@ reenabled direct CLI completed both a readiness probe and review. Antigravity re
 and65% weekly Gemini quota remaining; direct Claude percentages were unavailable because its
 interactive usage view requested a fresh login.
 
-Next objective: run the repaired V2 freeze once, then execute and fit only a durably retained eligible
-result. Estimate60–120minutes. Use **GPT-5.6 Sol / High / Fast off**. Reserve
-Astra for fresh-run authority/generalization design or a checkpoint-admission redesign.
+Next objective: inspect Model121 action-free, freeze one exact choice, then execute and fit only a
+durably retained eligible result. Estimate60–120minutes. While capacity notices persist, use
+**GPT-5.6 Terra / High / Fast off**; use **GPT-5.6 Sol / High** when available. Reserve Astra for
+fresh-run authority/generalization design or a checkpoint-admission redesign.
 No recommendation changes the currently selected model.
 
-[Session report](docs/work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md) ·
-[Evidence](docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json) ·
-[Prior measured result](docs/work-sessions/2026-09-13-model120-frozen-field-restore.md)
+[Session report](docs/work-sessions/2026-09-14-model121-frozen-resupply.md) ·
+[Evidence](docs/evidence/red-model121-frozen-resupply-2026-09-14.json) ·
+[Prior failure](docs/work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md)

@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-model120-freeze-instrumentation-failure",
+  "as_of_session": "2026-09-14-model121-frozen-resupply",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model120-frozen-field-restore-2026-09-13.json"
+      "evidence": "docs/evidence/red-model121-frozen-resupply-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -191,6 +191,12 @@
         "label": "Retain the unrecorded Model120 sample without redraw and harden the next freeze",
         "done": true,
         "evidence": "docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json"
+      },
+      {
+        "id": "model121-frozen-resupply",
+        "label": "Execute and fit Model120's crash-safe frozen trainer resupply",
+        "done": true,
+        "evidence": "docs/evidence/red-model121-frozen-resupply-2026-09-14.json"
       }
     ]
   },
@@ -1292,6 +1298,12 @@
       "result": "The exact two-option Model120 menu was rebuilt action-free and queried once, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed; the selection is unknown. No gameplay, fit or counter changed.",
       "deviation": "This session produced no measured learning output and therefore triggers the one-session reorientation alarm. It stopped without redraw and prepared an unexecuted V2 freeze with a pre-query tombstone, write-ahead decision receipt and selected-option content hash.",
       "next": "In a new session, run the repaired Model120 V2 identity once. If it retains a valid decision, execute only that binding and fit only its eligible measured result; treat any ambiguous tombstone as consumed."
+    },
+    {
+      "session": "2026-09-14-model121-frozen-resupply",
+      "result": "Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70 specimens with cash706.",
+      "deviation": "The first fit preflight correctly rejected the new write-ahead declaration schema. The original receipt was preserved; a narrow exact-key and three-hash admission passed hosted CI before the row was fit. No retry, redraw, teacher fallback, authority promotion, hack, Crystal access or full replay occurred.",
+      "next": "Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result."
     }
   ],
   "closed_milestones": [

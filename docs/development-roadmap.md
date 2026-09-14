@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model120-freeze-instrumentation-failure**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-frozen-resupply**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 23/24 acceptance items (96%).**
+**Broaden model-directed Red collection: 24/25 acceptance items (96%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -36,8 +36,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
 - [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
 - [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
+- [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
 
-Current model: **120 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **121 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -87,7 +88,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -114,6 +115,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-model121-frozen-resupply
+
+Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70 specimens with cash706.
+
+**Deviation:** The first fit preflight correctly rejected the new write-ahead declaration schema. The original receipt was preserved; a narrow exact-key and three-hash admission passed hosted CI before the row was fit. No retry, redraw, teacher fallback, authority promotion, hack, Crystal access or full replay occurred.
+
+**Next:** Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result.
 
 ### 2026-09-14-model120-freeze-instrumentation-failure
 
