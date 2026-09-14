@@ -16,9 +16,10 @@ valuable evidence without remaining an instruction.
 
 Model121 has121 settled training-only examples and83 successes. Its durable Red checkpoint has86
 local registrations,66 living species and70 physical specimens. A ROM-free inventory accounts for
-all151 local targets and now gates live goal proposal. Its first independent action-free inspection
-had missing wild and evolution targets but only one executable acquisition family, so gameplay
-stopped. This is planning infrastructure, not independent competence or new learned authority.
+all151 local targets. The shared-departure redesign now exposes real routed capture and native
+evolution together: the same historical state passed with zero actions/frames and unchanged bytes.
+Local151 policy, checkpoint and reward accounting retain shared and physical views separately.
+This is engineering qualification, not a new learning result or independent competence.
 
 ## Reader-facing summaries
 

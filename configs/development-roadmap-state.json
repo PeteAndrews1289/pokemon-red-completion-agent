@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-full-pokedex-goal-proposal-falsification",
+  "as_of_session": "2026-09-14-full-pokedex-shared-departure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json"
+      "evidence": "docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -88,7 +88,7 @@
         "id": "full-pokedex-goal-proposal-gate",
         "label": "Connect all 151 local registrations to fail-closed executable goal proposal",
         "done": true,
-        "evidence": "docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json"
+        "evidence": "docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json"
       },
       {
         "id": "mixed-goal-family-choice",
@@ -1322,6 +1322,12 @@
       "result": "The full151 inventory now gates profile-bound goal proposal. An authenticated historical state had three missing wild targets plus a physical precursor for a missing evolution, but only the wild family was executable. The required two-family gate failed with zero controller actions, frames, model queries or claims.",
       "deviation": "No outcome, example, fit, registration, authority or stage changed. This is the second consecutive session without measured learning output, so the anti-drift alarm requires a shared-departure executor redesign rather than another menu search or wrapper.",
       "next": "From one authenticated Pokemon Center state, expose travel-capable capture and native boxed evolution before selection. Run only the action-free gate first and allow gameplay only if two independently verified acquisition families are available."
+    },
+    {
+      "session": "2026-09-14-full-pokedex-shared-departure",
+      "result": "Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed. Model121 remains121 examples/83 successes/86 registrations; no learning result.",
+      "deviation": "The prior structural-incompatibility diagnosis was too broad: it inspected the local enumerator rather than the existing travel-aware router. Corrected without a new route engine or a historical-menu search. Historical catalog identity does not prove independent upstream lineage. No stage exit or consumed-trial rule changed.",
+      "next": "Use the qualified runtime for one model-selected measured outcome from a prospectively eligible authenticated train departure. Preserve costs, failures and terminal registration before fitting; do not count this engineering diagnostic as learning."
     }
   ],
   "closed_milestones": [

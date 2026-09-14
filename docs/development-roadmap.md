@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-goal-proposal-falsification**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-shared-departure**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -18,7 +18,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [ ] Expose a useful choice across more than one acquisition family
-- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json))
+- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json)
+[Current evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-full-pokedex-shared-departure
+
+Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed. Model121 remains121 examples/83 successes/86 registrations; no learning result.
+
+**Deviation:** The prior structural-incompatibility diagnosis was too broad: it inspected the local enumerator rather than the existing travel-aware router. Corrected without a new route engine or a historical-menu search. Historical catalog identity does not prove independent upstream lineage. No stage exit or consumed-trial rule changed.
+
+**Next:** Use the qualified runtime for one model-selected measured outcome from a prospectively eligible authenticated train departure. Preserve costs, failures and terminal registration before fitting; do not count this engineering diagnostic as learning.
 
 ### 2026-09-14-full-pokedex-goal-proposal-falsification
 

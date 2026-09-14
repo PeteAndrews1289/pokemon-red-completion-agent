@@ -9,7 +9,7 @@ and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. 
 supporting-save and event dependencies remain requirements. After full Red comes a compatible
 unfamiliar hack, then Crystal and at least Emerald.
 
-## Latest chapter: proving that missing targets are not enough
+## Latest chapter: correcting the missing connection
 
 Model120's crash-safe choice selected trainer resupply once and earned exactly 360 cash. Its
 verified result became row121, leaving the save at 86 registrations and cash 706. Model121 then
@@ -25,14 +25,19 @@ eight have plans in the solo catalog; 11 need Blue plus trade, 4 need link evolu
 supporting-save choices plus trade, and Mew needs a legitimate event input. Shared credit and a
 physical specimen remain separate from a local Red owned flag.
 
-That inventory now controls goal proposal. The first action-free test used an authenticated older
-state with three missing Mansion encounters and a physical precursor for another missing evolution.
-Even so, only wild capture was executable: capture starts at the encounter source, while boxed
-evolution starts at a Pokémon Center. The required two-family menu failed with zero input, so the
-system did not turn “could eventually obtain” into “can execute now.”
+The first proposal check appeared to show that capture and evolution could not coexist. That
+diagnosis was too broad: it tested the local menu and omitted the existing travel-aware router.
 
-[Latest evidence](evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
+The redesign connects that router to the player and explicitly counts all151 local registrations.
+On the same historical save, capture and native evolution now appear together with zero actions,
+zero advanced frames and unchanged bytes. Shared credit and physical stock stay separate, and
+old shared124 rewards stay unchanged. Tests also cover departure from a Pokémon Center.
+
+This fixes a real engineering boundary. It is not a learned outcome, and the historical state has
+not been established as an independently rooted or eligible new training assignment.
+
+[Latest evidence](evidence/red-full-pokedex-shared-departure-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -48,10 +53,10 @@ system did not turn “could eventually obtain” into “can execute now.”
 
 ## What matters next
 
-The next design must give collection options a shared departure boundary. From one authenticated
-Pokémon Center state, travel-capable capture and native boxed evolution should both be offered
-before the model chooses, with routes and species kept out of policy features. The action-free menu
-must pass before gameplay resumes.
+The next episode should produce one actual model-selected outcome using this qualified boundary.
+Start from an eligible authenticated training departure, freeze the choice once, and retain its
+costs, failure or success and fresh local ledger before fitting. Do not replay consumed assignments,
+fit the diagnostic, or return to the Model121 resource loop.
 
 Only after the bounded story, navigation, battle, resource and collection components pass unseen
 gates should the project begin the fresh-start Red final exam. A growing same-lineage training set

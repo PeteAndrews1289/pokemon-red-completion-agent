@@ -28,8 +28,10 @@ then captured Poliwhirl without fitting it. Model119's next genuine choice selec
 restore; the verified success produced Model120. Model120 then selected trainer resupply and earned
 360 cash, producing Model121. The next action-free inventory repeated resupply and restoration, so
 the loop stopped. A full-151 inventory now exposes the actual 65-entry dependency gap and gates goal
-proposal. An independent state with missing wild and evolution targets still exposed only wild
-capture, so the two-family gate stopped gameplay before another uninformative outcome.
+proposal. The first local-menu test omitted the existing travel-aware router. The redesign connects
+that router, native evolution and full-local151 accounting to the player. The same historical state
+now exposes both acquisition families with zero actions/frames and unchanged bytes. This is
+engineering qualification, not new learning, training eligibility or independent performance.
 
 ## My role and the stack
 

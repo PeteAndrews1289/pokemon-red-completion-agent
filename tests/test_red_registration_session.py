@@ -18,7 +18,7 @@ from pokemon_red_completion.red_registration_session import (
 from pokemon_red_completion.registration_memory import RegistrationMemory
 
 
-def session(tmp_path):
+def session(tmp_path, *, completion_scope="shared"):
     _, before, _, _ = observations(tmp_path / "fixture")
     row = observe_registration(
         before,
@@ -38,6 +38,7 @@ def session(tmp_path):
         row=row,
         anchor_episode_id="actual-parent",
         anchor_checkpoint_sha256="c" * 64,
+        completion_scope=completion_scope,
     )
     return before, row, document, ledger_path
 
@@ -64,12 +65,16 @@ def test_direct_missing_evolved_capture_is_not_masked_by_future_evolution(tmp_pa
     assert counts[target] == 1  # immediate new registration remains a legal alternative
 
 
-def test_session_roundtrip_actual_party_reserves_and_idempotent_durable_import(tmp_path):
-    before, row, document, ledger_path = session(tmp_path)
+@pytest.mark.parametrize("completion_scope", ["shared", "local_red"])
+def test_session_roundtrip_actual_party_reserves_and_idempotent_durable_import(
+    tmp_path, completion_scope,
+):
+    before, row, document, ledger_path = session(tmp_path, completion_scope=completion_scope)
     policy = load_registration_policy(document)
     assert policy.initial_collection == before.collection_observation
     assert sum(policy.protected_counts.values()) == 6
     assert policy.sha256 == document["policy_sha256"]
+    assert policy.completion_scope == completion_scope
     ledger = RegistrationMemory(ledger_path)
     original = ledger.snapshot().sha256
     ledger.record(row)

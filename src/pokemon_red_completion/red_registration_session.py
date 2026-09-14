@@ -140,8 +140,11 @@ def publish_registration_session(
     row: RegistrationObservation,
     anchor_episode_id: str,
     anchor_checkpoint_sha256: str,
+    completion_scope: str = "shared",
 ) -> dict[str, Any]:
     """Freeze once after a read-only authenticated restore; no controller access."""
+    if completion_scope not in {"shared", "local_red"}:
+        raise ValueError("Red registration completion scope differs")
     ledger = RegistrationMemory(ledger_path)
     ledger.record(row)
     memory = ledger.snapshot()
@@ -157,6 +160,7 @@ def publish_registration_session(
         row.snapshot_sha256,
         observation.collection_observation,
         protected,
+        completion_scope=completion_scope,
     )
     collection = asdict(observation.collection_observation)
     collection["owned_species"] = sorted(collection["owned_species"])
@@ -200,6 +204,7 @@ def load_registration_policy(document: dict[str, Any]) -> RedRegistrationPolicy:
         binding["initial_snapshot_sha256"],
         initial,
         binding["protected_counts"],
+        completion_scope=binding.get("completion_scope", "shared"),
     )
     if result.document() != binding or result.sha256 != document["policy_sha256"]:
         raise ValueError("registration session policy differs")

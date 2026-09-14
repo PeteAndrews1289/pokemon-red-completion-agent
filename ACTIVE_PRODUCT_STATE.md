@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Redesign one shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist, then run one action-free mixed-family gate; stop before gameplay if it fails.
+- Next decision: Use the qualified shared-departure runtime for one prospectively bounded model-selected training outcome; authenticate train eligibility and retain actual costs and the fresh local151 ledger before fitting.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A Pokemon Center action-free inventory cannot expose both a travel-capable wild capture and a native boxed level evolution from the full-151 inventory. |
+| Cheapest falsifier | One prospectively bounded mixed-family model choice fails to produce a readable retained outcome, or its eligible departure lacks both capture and native evolution. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-full-pokedex-goal-proposal-falsification** · status **active** · evidence [falsification](docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json)
+**2026-09-14-full-pokedex-shared-departure** · status **closed** · evidence [qualification](docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The full151 inventory now controls goal proposal, and a real historical state proved that mere missing targets do not manufacture executable diversity. The enforced stop prevented another unsupported gameplay row. |
-| Learning output | None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. It produced no query, outcome or example. This is the second consecutive session without measured learning output, so the anti-drift alarm fired. |
-| Authority delta | None. The full-151 proposal gate inspected one historical authenticated context with zero actions and refused gameplay because only one acquisition family was executable; no model query, label, outcome, fit, promotion or independent evaluation occurred. |
-| Transfer result | No transfer result. Blue is represented only as an explicit dependency for11 missing local Red registrations; no Blue, ROM-hack or Crystal gameplay occurred. |
-| Blocker | The inventory-to-goal join is complete, but existing live boundaries are location-incompatible: wild capture is source-local while native boxed evolution is Pokemon-Center-bound. The inspected state had missing targets for both mechanics but exposed only the wild family. |
-| Decision | Redesign one reusable shared-departure collection boundary so travel-capable capture and native boxed evolution can coexist in one action-free menu. Do not inspect another historical menu or run gameplay before that gate passes. |
-| Next session | Settle one reusable shared-departure executor contract, then run only its action-free mixed-family gate; permit gameplay only if the gate passes and can produce a measured outcome. |
-| Next falsifier | A Pokemon Center action-free inventory still cannot expose both a travel-capable wild capture and a native boxed level evolution. |
-| Stop condition | Stop before gameplay unless one authenticated state exposes at least two independently verified acquisition families from the full151 inventory and the run can create a measured outcome. Stop on route-specific policy identity or local/shared/physical conflation. No ROM hack or Crystal before the complete Red gate. |
+| Product alignment | The redesign reuses existing cartridge routing instead of adding a route engine. A real same-state action-free gate now exposes two acquisition families and keeps shared credit, local151 completion and physical stock distinct. |
+| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. This engineering qualification changes no learning counter; the anti-drift alarm remains active. |
+| Authority delta | No new learned authority. The existing player now receives actual routed capture and native evolution together, with a coherent full-local151 checkpoint and reward. No model query, gameplay, fit or promotion occurred. |
+| Transfer result | No transfer or independent evaluation. Center-departure composition is ROM-free tested; the real gate used the same previously inspected field state with zero input. |
+| Blocker | Menu compatibility is resolved. Actual selected execution and local151 outcome admission are not yet measured; the inspected historical diagnostic does not establish train eligibility or disjoint upstream lineage. |
+| Decision | Use the qualified shared-departure runtime for one prospectively bounded model-selected training outcome; authenticate train eligibility and retain actual costs and the fresh local151 ledger before fitting. |
+| Next session | Bind one eligible authenticated train departure to the existing collector using the new full-local policy; freeze one model choice, retain success or failure and its terminal, and admit only that measured outcome. |
+| Next falsifier | One prospectively bounded mixed-family model choice fails to produce a readable retained outcome, or its eligible departure lacks both capture and native evolution. |
+| Stop condition | No input without eligible authenticated training provenance, two genuinely executable acquisition families and a durable measured-outcome path. Do not execute the diagnostic as a consumed-trial retry, infer upstream independence, re-enter the Model121 resource loop, or open full Red/ROM-hack/Crystal evaluation. |
 
 ### Stop conditions
 

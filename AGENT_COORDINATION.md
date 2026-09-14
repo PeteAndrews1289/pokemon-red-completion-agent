@@ -11,31 +11,34 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The full-151 inventory-to-goal join is complete. One action-free authenticated historical state had
-missing wild targets and a physically ready missing level evolution, but only wild capture was
-executable. Source-local capture and Pokémon-Center-bound native evolution cannot currently coexist
-in one preselection menu. The two-family gate failed with zero input, and gameplay remains stopped.
+The shared-departure redesign is implemented and action-free qualified. The real router exposed
+capture and native evolution together on the same previously inspected historical field state.
+No actions/frames occurred and save bytes were unchanged. Center-departure composition also
+passed ROM-free tests. The previous location-incompatibility conclusion omitted the existing router.
 
-Codex owns one shared-departure contract: from an authenticated Pokémon Center state, bind both a
-travel-capable capture and native boxed evolution before model selection while keeping target, route
-and location identity out of policy features. Run only an action-free gate first. Do not search more
-historical menus, add wrapper-only successors or execute unless at least two independently verified
-acquisition families are available and a measured outcome can be produced.
+Codex next connects the qualified runtime to one prospectively eligible authenticated training
+departure and the existing durable collector. Use the explicit local151 policy; retain shared,
+local and physical facts separately. Freeze one model choice, retain actual costs and the terminal
+after success or failure, and fit only the measured outcome. The diagnostic supplies no training
+eligibility or independent-lineage proof. Consumed identities remain closed.
 
-Model121 remains at 121 examples, 83 successes and 86 local registrations. Two consecutive sessions
-have produced no measured learning output, so the anti-drift alarm is active. No ROM hack or Crystal
-work is allowed before a fresh model-directed Red run finishes with Champion/Hall-of-Fame evidence
-and all 151 local registrations.
+Model121 remains121 examples/83 successes/86 registrations. This is engineering, not new learned
+competence. The anti-drift alarm remains active. No fresh Red final exam, ROM hack or Crystal work
+opens before the unchanged readiness/completion gates.
 
-## Latest external contributions
+## External contributions and status
 
-Gemini 3.8 Flash High recommended the accepted inventory-to-binding join and fail-closed family,
-identity and local-registration checks. Claude Sonnet 4.6 completed through `agy`, agreed that the
-gameplay stop was correct, and made no accepted blocking finding. The standalone Claude CLI is
-installed at version 2.1.197 but remains logged out. Neither reviewer exposes quota percentages.
+Claude Opus4.8 High completed the initial CLI review using the renewed login. Its configuration,
+routed-binding and allowlist findings were accepted; using shared credit as local flags was rejected.
+The follow-up delta review hit a session limit before delivering a final verdict; no approval is
+claimed. Reset reported: September14 at13:00 America/New_York. Remaining/weekly percentages unknown.
 
-Next external work, if useful: audit the shared-departure authority boundary after Codex drafts it.
-Do not assign broad implementation or permit reviewers to edit the worktree.
+Gemini3.8 Flash High completed a read-only regression review. Codex used its compatibility and
+local/shared/physical separation test categories, not its illustrative non-repository identifiers.
+Headless Flash quota remains unavailable. Neither reviewer remains running.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
+Next external work, if useful: one small outcome-admission test review after a concrete collector
+change. Do not repeat broad architecture audits or use reviewers as a gameplay gate.
+
+[Session](docs/work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

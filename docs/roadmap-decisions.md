@@ -818,3 +818,22 @@ frames, did not retry or redraw, and changed no historical receipt. Admit that o
 as row120. Model120's action-free successor exposes routed full-team restoration and trainer-funded
 resupply with no fishing supplement; stop before sampling. The full fresh-run Red story and local
 Pokédex gate still precedes every ROM hack.
+
+## September14 — qualify shared departure through the existing router
+
+The previous action-free result tested only source-local providers. Its conclusion that capture
+and boxed evolution were structurally location-incompatible was too broad: the existing resource
+router already supplies travel. Reuse it rather than build another route engine or search menus.
+
+The corrected player connection exposes both acquisition families on the same historical state
+with zero actions/frames and unchanged bytes. ROM-free tests cover Center departure as well.
+Use an explicit local151 completion scope across policy, checkpoints, rewards and recovery while
+preserving historical shared124 serialization and all three registration/stock views.
+
+This is engineering qualification, not a new learned outcome or a milestone promotion. Historical
+catalog identity is not proof of disjoint upstream lineage or permission to reuse consumed trials.
+Next is one prospectively eligible model-selected training outcome with durable cost/failure/state
+retention. Keep the mixed-acquisition learned-choice milestone open until measured; the full Red
+fresh-run, local151, legitimate dependency and Red-before-hack gates are unchanged.
+
+[Qualification](evidence/red-full-pokedex-shared-departure-2026-09-14.json).

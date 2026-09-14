@@ -3,61 +3,63 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Current boundary: the mixed-acquisition gate failed safely
+## Shared-departure redesign: implemented and action-free qualified
 
-The full-151 local Red inventory now feeds a strict goal-proposal boundary. It proposes only
-locally missing targets whose pinned acquisition method matches an exact profile-bound executable,
-requires physical precursors for evolution, and refuses menus with fewer than two acquisition
-families. Shared registration and physical possession never grant local completion credit.
+The existing travel-aware router now feeds the full-Pokédex proposal and the existing player.
+A real recheck of the same historical field state exposed both wild capture and native level
+evolution, with zero controller actions/frames and unchanged save bytes. ROM-free tests also
+cover routed capture from a Center while native evolution is available there.
 
-One authenticated historical train state outside the Model106–121 checkpoint lineage was inspected
-with zero input. It had 18 local registrations, missing Mansion wild targets 77/88/110, a physical
-species 11 precursor and missing evolution target 12. Its live goal menu exposed acquisition,
-restoration and exploration, so the full-Pokédex proposal contained only the wild family. The
-required two-family gate failed with zero controller actions, frames, model queries or claims.
+Correction: the previous check used only the source-local enumerator. It did not establish
+structural location incompatibility. No new route engine or historical-menu search was needed.
+The historical catalog identity also does not establish disjoint upstream lineage.
 
-The incompatibility is structural: current wild capture is executable only at its encounter source,
-while native boxed evolution is executable only from a supported Pokémon Center boundary. Missing
-targets and resources alone do not make both executors simultaneously available.
+An explicit `local_red` policy now targets all151 local flags while preserving actual shared
+history and physical stock. New versioned checkpoints/rewards count local novelty over151;
+old shared124 documents, hashes and rewards remain unchanged. The runtime joins actual capture
+demand/allowlists, retains other available goals, and rejects stale or twice-consumed menus.
+The observer permits one attempt, then keeps the fresh terminal ledger readable even when a
+successful goal removes one acquisition family; terminal observations cannot authorize input.
 
 ## Learning and completion status
 
-Model121 remains at 121 examples, 83 successes and 86 local registrations. This session produced no
-outcome, example, fit, authority promotion, independent evaluation or transfer result. It is the
-second consecutive session without measured learning output, so the North Star anti-drift alarm is
-active. Gameplay is stopped.
+Model121 remains121 examples,83 successes and86 local registrations. No gameplay, model query,
+example, outcome, fit, promotion or independent evaluation occurred. Gameplay is stopped and
+the anti-drift alarm remains active. The18 registrations in the diagnostic are not the retained
+Model121 checkpoint's86; they are separate saves.
 
-Pete requires a fresh start-to-finish non-deterministic model-directed Red run with concurrent
-Champion/Hall-of-Fame evidence and all 151 local registrations before any ROM hack. Version, trade,
-supporting-save and event dependencies must be resolved legitimately. After full Red: compatible
-unfamiliar Red modification, Crystal, then at least Emerald.
+Red must finish from a fresh start under model-directed decisions with concurrent Champion and
+Hall-of-Fame evidence and all151 local registrations before any ROM hack, then Crystal/Emerald.
+Version, trade, supporting-save and event dependencies remain unresolved requirements.
 
-## Exact next task
+## Next bounded work
 
-Settle one reusable shared-departure collection contract. A Pokémon Center state should be able to
-offer both a travel-capable wild capture and native boxed level evolution before the model chooses;
-travel and target identity remain private to each executor. Do not inspect another historical menu,
-add another inventory wrapper, or write a route-specific policy feature.
+Use `build_red_full_pokedex_player_observer` with an explicit prospective local-Red registration
+session and the existing durable bounded collector. First establish an eligible authenticated
+train departure; the diagnostic grants neither training eligibility nor permission to replay a
+consumed assignment. Freeze one real model choice, execute only its binding under the existing
+hard action/frame budget, retain success or failure and the fresh terminal ledger, then admit
+only that measured outcome. No Model121 resource-loop row, teacher fallback or diagnostic fit.
 
-Run only the action-free gate first. Gameplay is permitted only if one authenticated state exposes
-at least two independently verified acquisition families from the full-151 inventory and the bounded
-run can produce a measured outcome. Otherwise stop again.
+Estimate: one60–90minute session. Stop before input if eligibility, two executable acquisition
+families or the durable outcome path is missing. Do not restart architecture work or a full replay.
 
 ## Verification and reviewers
 
-Implementation commit `17eab16f` passed 21 focused tests, Ruff, mypy and collection-registry checks.
-The full suite had 11,619 passes and the known unrelated local Mac PyBoy metadata-digest failure.
-All 150 documentation/focus tests passed. These checks are not model progress.
+363 focused ROM-free tests and164 documentation/focus/roadmap tests passed; repository Ruff and
+configured mypy passed. Source plus both
+changed scripts passed mypy across499 files. An expanded, non-CI sweep of every historical script
+reported107 errors in24 files; it was not repaired in this scope. Full pytest was not repeated.
+Collection metadata and documentation checks are part of publication, not learning.
 
-Gemini 3.8 Flash High supplied the accepted inventory-to-binding and fail-closed invariant review.
-Claude Sonnet 4.6 completed read-only through `agy` and agreed with the gameplay stop; two findings
-that contradicted profile uniqueness and the pinned Mansion catalog were rejected. The standalone
-Claude CLI binary is present at version 2.1.197 but still requests login. Reviewer quotas are not
-available from `agy`.
+Claude Opus4.8 High completed the initial read-only audit. Accepted binding/config and capture
+allowlist defects; rejected its shared-as-local recommendation. A follow-up delta audit hit the
+session limit before a final verdict; the CLI reported reset at13:00 America/New_York today.
+No final-review approval is claimed. Flash3.8 High supplied the accepted regression categories.
+Remaining percentages and weekly Claude quota are unavailable; Flash headless quota is unavailable.
 
-Next-session recommendation: **GPT-6 Astra / High / Fast off** for the authority and executor-boundary
-redesign. Return to Sol High after the shared-departure contract is settled.
+Next-session recommendation: **GPT-5.6 Sol / High / Fast off**. The redesign is settled; the next
+job is bounded execution, failure retention and outcome admission rather than another broad audit.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-goal-proposal-falsification.md) ·
-[Evidence](docs/evidence/red-full-pokedex-goal-proposal-falsification-2026-09-14.json) ·
-[Prior refocus](docs/work-sessions/2026-09-14-model121-full-pokedex-refocus.md)
+[Session](docs/work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
+[Evidence](docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)

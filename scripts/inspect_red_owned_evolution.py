@@ -66,7 +66,7 @@ def inspect_owned_evolution(
             observed.collection_observation,
             evolution_graph(world.rom),
             target_species=policy.targets,
-            registered_species=policy.registered(observed.collection_observation),
+            registered_species=policy.goal_registered(observed.collection_observation),
             protected_source_counts=policy.protected_counts,
         )
         priority = prioritize_owned_level_evolutions(rows)
