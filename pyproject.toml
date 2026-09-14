@@ -52,6 +52,7 @@ where = ["src"]
 testpaths = ["tests"]
 markers = [
   "integration: requires a private, lawfully obtained Pokemon ROM",
+  "nonconsuming_direct_rehearsal: ROM-free direct full-local preparation and preflight rehearsal",
 ]
 
 [tool.mypy]

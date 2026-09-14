@@ -82,7 +82,10 @@ def test_direct_completion_rejects_relabeling_a_continuation():
         ("train", "train", True),
     ],
 )
-@pytest.mark.parametrize("feature_version", [1, 2, 3, 4, 5])
+@pytest.mark.parametrize(
+    "feature_version",
+    [1, 2, 3, pytest.param(4, marks=pytest.mark.nonconsuming_direct_rehearsal), 5],
+)
 def test_declaration_uses_original_assignment_not_filename(
     tmp_path, monkeypatch, partition, other_partition, state_changed, feature_version
 ):

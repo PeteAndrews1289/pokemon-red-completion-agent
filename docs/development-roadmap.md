@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-full-local-preflight-failure**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-nonconsuming-direct-rehearsal**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-direct-full-local-preflight-failure-2026-09-14.json)
+[Current evidence](../docs/evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-nonconsuming-direct-rehearsal
+
+A named ROM-free rehearsal passes 12 real component checks covering the parser fallback, v4 base-plan behavior, temporary direct registration, two-family proposal/observer, real preflight qualification and zero action/frame effects.
+
+**Deviation:** This user-requested maintenance session produced no learner outcome or transfer result. Flash rejected a heavily mocked first design; it was removed and replaced with an honest component suite. The anti-drift alarm remains active and every full-game gate stays unchanged.
+
+**Next:** Publish and green the rehearsal. Then run it before freezing and claiming one distinct unused source; require a real capture-plus-evolution action-free menu before one Model121 episode, with no fallback source.
 
 ### 2026-09-14-direct-full-local-preflight-failure
 

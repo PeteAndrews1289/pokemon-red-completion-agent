@@ -9,28 +9,27 @@ and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. 
 supporting-save and event dependencies remain requirements. After full Red comes a compatible
 unfamiliar hack, then Crystal and at least Emerald.
 
-## Latest chapter: the claim worked; preparation did not
+## Latest chapter: rehearse before spending another source
 
-The project published a direct catalog-origin bridge and its exact CI passed. It then claimed the
-one prospectively frozen source before opening its game payloads, exactly as designed.
+After two generic preparation defects consumed the previous source before its menu appeared, the
+project paused before claiming another. It now has a single ROM-free rehearsal command that checks
+the risky seams using real components: parser fallback, v4 base-plan behavior, direct registration,
+capture-versus-evolution proposal, registered observation and action-free preflight.
 
-The claim boundary succeeded, but the source never reached the promised capture-versus-evolution
-menu. The first preparation stopped before payload access because the parser represented an omitted
-transition list as null. One same-claim recovery authenticated and opened only the chosen source,
-then stopped while constructing the plan: Model121's v4 feature selected an economy behavior before
-the economy schema and supply fields existed.
+The rehearsal passes 12 tests with zero controller actions or emulator frames. It opens no ROM or
+private source and creates no real claim, registration, outcome, example or fit. This makes it cheap
+enough to run before every future direct-origin claim.
 
-Both failures remain durable. There were zero completed preflights, controller actions, advanced
-frames, model queries, registration sessions, outcomes, examples or fits. The source is consumed;
-it will not be retried or quietly replaced.
+The first attempt at this test was too heavily mocked. Flash rejected it for false confidence, so
+Codex removed it and grouped the real component checks under one named marker instead. Flash passed
+the replacement with no critical finding.
 
-The repair is deliberately generic rather than a route for this save. Empty transition input now
-works without discarding the legacy interface, and a v4 model uses ordinary recovery behavior until
-an explicitly valid economy promotion. Unsupported future versions still fail closed. This is
-maintenance that protects a future real choice, not a new lesson for Model121.
+The boundary remains honest: synthetic checks cannot prove that an unclaimed save has feasible
+cartridge routes or both acquisition families. Only one prospectively frozen, exactly claimed real
+source can answer that question.
 
-[Latest evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-direct-full-local-preflight-failure.md) ·
+[Latest evidence](evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -46,11 +45,11 @@ maintenance that protects a future real choice, not a new lesson for Model121.
 
 ## What matters next
 
-The next episode begins only after the repair is published and green. Freeze a distinct unused
-catalog source prospectively, claim it once, and stop action-free unless capture and evolution are
-both executable. Only then sample one model choice and retain its real costs, failure or success and
-fresh local ledger before fitting. Do not replay the consumed source or return to the Model121
-resource loop.
+The next episode begins by running the 12-test rehearsal on the published exact source. If it is
+green, freeze a distinct unused catalog source prospectively, claim it once, and stop action-free
+unless capture and evolution are both executable. Only then sample one model choice and retain its
+real costs, failure or success and fresh local ledger before fitting. Do not replay the consumed
+source, select a fallback or return to the Model121 resource loop.
 
 Only after the bounded story, navigation, battle, resource and collection components pass unseen
 gates should the project begin the fresh-start Red final exam. A growing same-lineage training set

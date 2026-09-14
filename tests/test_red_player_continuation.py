@@ -41,6 +41,7 @@ def test_history_tracking_starts_only_for_explicit_successor_and_preserves_paren
 
 
 @pytest.mark.parametrize("history_mode", ["legacy", "new", "retained"])
+@pytest.mark.nonconsuming_direct_rehearsal
 def test_preflight_observer_receives_actor_history_without_mutating_parent(
     monkeypatch, history_mode,
 ):
@@ -742,6 +743,7 @@ def test_direct_full_local_catalog_origin_reaches_source_without_parent_or_boxed
         runner._prepare(args)
 
 
+@pytest.mark.nonconsuming_direct_rehearsal
 def test_direct_full_local_parser_default_reaches_source(monkeypatch):
     args = runner._parser().parse_args(
         [

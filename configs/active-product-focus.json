@@ -29,26 +29,26 @@
     },
     {
       "capability": "Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs.",
-      "cheapest_falsifier": "A separately frozen unused source cannot pass exact-claim preparation and expose two executable acquisition families without caller-selected species or routes.",
+      "cheapest_falsifier": "The ROM-free direct rehearsal fails, or one separately frozen unused source cannot pass exact-claim preparation and expose two executable acquisition families without caller-selected species or routes.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; no model query, controller action, outcome or fit occurred.",
-        "blocker": "The sole frozen source was claimed and opened once but failed during preparation before the two-family preflight. It is consumed; the generic parser and v4 base-plan repairs now require publication and exact-head CI before any separately frozen future source.",
-        "decision": "Close the consumed source without retry or replacement, repair only the generic preparation defects, publish and green them, then require a separately prospective source for the next measured attempt.",
+        "authority_delta": "No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; the rehearsal opened no ROM/private source and created no query, action, frame, outcome or fit.",
+        "blocker": "The ROM-free suite cannot authenticate a candidate save or prove cartridge-specific two-family feasibility. One distinct prospectively frozen source and exact claim are still required for that result.",
+        "decision": "Adopt the 12-test nonconsuming_direct_rehearsal as the mandatory cheap pre-claim falsifier, publish it under exact-head CI, then permit one separately prospective source gate without fallback.",
         "evidence": {
-          "kind": "falsification",
-          "path": "docs/evidence/red-direct-full-local-preflight-failure-2026-09-14.json",
-          "sha256": "654e3f9d68f959a8d1a0677904f8d9024d64dd65eed249e321b9d00ca8504c7f"
+          "kind": "qualification",
+          "path": "docs/evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json",
+          "sha256": "4021aaf4aced54167b25490f12ef9c3c0f31e75b48ae36f61d6774a5af1719f3"
         },
-        "learning_output": "None. One root claim and one selected-source payload open produced zero completed preflights, queries, actions, frames, registration sessions, observations, outcomes, examples or fits.",
-        "next_falsifier": "A separately frozen unused source fails exact-claim preparation or cannot expose both acquisition families action-free under the repaired published runner.",
-        "next_session_goal": "After exact-head CI, freeze one distinct unused source prospectively, claim only it, and run the two-family gate; execute and fit one Model121 choice only if that gate passes.",
-        "product_alignment": "The failed exact-source attempt was retained without gameplay, retry or substitution, and the smallest generic repairs preserve direct-origin model choice instead of adding a route-specific rescue.",
-        "session_id": "2026-09-14-direct-full-local-preflight-failure",
+        "learning_output": "None. The ROM-free rehearsal produced zero real claims, source opens, registration sessions, queries, actions, frames, observations, outcomes, examples, fits or local registrations.",
+        "next_falsifier": "The marked rehearsal regresses, or the one separately frozen unused source fails exact-claim preparation or cannot expose both acquisition families action-free.",
+        "next_session_goal": "Run the marked rehearsal on the published exact source, then freeze and claim one distinct unused source and run the real two-family gate; execute and fit one Model121 choice only if that gate passes.",
+        "product_alignment": "A cheap source-independent rehearsal now catches the two generic defects that consumed the prior source, while preserving the irreversible real-source gate and avoiding source-specific routing.",
+        "session_id": "2026-09-14-nonconsuming-direct-rehearsal",
         "status": "closed",
-        "stop_condition": "Never reopen the consumed source or issue another claim for it. No replacement this session, historical retry, Model121 resource loop, full Red replay, ROM hack or Crystal execution.",
-        "transfer_result": "No independent evaluation or transfer. ROM-free regressions cover parser, legacy-caller and feature-version compatibility only."
+        "stop_condition": "No source claim or protected payload in the rehearsal session. Never reopen the consumed source; the next real attempt receives one distinct source and no replacement. No full Red replay, ROM hack or Crystal execution.",
+        "transfer_result": "No independent evaluation or transfer. The source-independent suite qualifies integration contracts only."
       },
       "learned_authority": {
         "current": "Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Publish and green the generic direct-preparation repairs, then freeze a distinct unused source prospectively for one exact-claim two-family gate.",
+      "next_decision": "Publish and green the ROM-free direct rehearsal, then run it before freezing one distinct unused source for a single exact-claim two-family gate.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

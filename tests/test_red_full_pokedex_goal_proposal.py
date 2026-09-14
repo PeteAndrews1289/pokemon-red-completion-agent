@@ -11,9 +11,16 @@ from test_registered_runtime_binding import bound_fixture
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroEdge, MacroPath, MacroTransition
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport
+from pokemon_red_completion.goal_manager_composition_runtime import (
+    CompositionBudgetCheckpoint,
+)
+from pokemon_red_completion.goal_manager_runtime import (
+    CompletionFirstGoalTeacher,
+    GoalExecutionReport,
+)
 from pokemon_red_completion.local_router import LocalPath
 from pokemon_red_completion.red_acquisition import RedAcquisitionKind
+from pokemon_red_completion.red_bounded_player import preflight_red_bounded_player
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_full_pokedex_goal_proposal import (
     RedFullPokedexGoalProposalError,
@@ -87,6 +94,7 @@ def setup(tmp_path, monkeypatch):
                            reader=reader, world=world, owned=owned, parameters=parameters)
 
 
+@pytest.mark.nonconsuming_direct_rehearsal
 def test_shared_departure_uses_real_travel_capture_and_native_evolution(setup):
     observed = setup.native.adapter.observe()
     local = setup.native.enumerator(setup.actions).enumerate(observed)
@@ -116,6 +124,7 @@ def test_public_menu_hides_identity_and_is_the_same_player_binding_set(setup):
         assert secret not in encoded
 
 
+@pytest.mark.nonconsuming_direct_rehearsal
 def test_existing_player_bridge_consumes_full_local_checkpoint_and_same_menu(setup):
     observer = build_red_full_pokedex_player_observer(setup.runtime, setup.actions, setup.world)
     result = observer()
@@ -127,6 +136,45 @@ def test_existing_player_bridge_consumes_full_local_checkpoint_and_same_menu(set
     assert result.collection.registered_species == len(setup.owned)
     assert red_species_ref(78) in result.collection.global_species
     assert red_species_ref(78) not in result.collection.local_species
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_action_free_preflight_qualifies_real_two_family_menu(setup):
+    observer = build_red_full_pokedex_player_observer(
+        setup.runtime,
+        setup.actions,
+        setup.world,
+        maximum_quanta=128,
+        maximum_controller_actions=30_000,
+        maximum_emulator_frames=3_000_000,
+        quote_resource_costs=True,
+    )
+
+    class Meter:
+        @staticmethod
+        def checkpoint():
+            return CompositionBudgetCheckpoint(
+                setup.actions.actions_executed,
+                setup.native.emulator.frame_count,
+            )
+
+    result = preflight_red_bounded_player(
+        observe=observer,
+        budget_meter=Meter(),
+        assignment_id="nonconsuming-direct-rehearsal",
+        authorities=(
+            ("rehearsal-challenger", CompletionFirstGoalTeacher()),
+            ("rehearsal-baseline", CompletionFirstGoalTeacher()),
+        ),
+    )
+    assert set(result.available_goal_kinds) >= {
+        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.EVOLVE_SPECIES,
+    }
+    assert len(result.choices) == 2
+    assert result.public_dict()["status"] == "ready"
+    assert setup.actions.actions_executed == 0
+    assert setup.native.emulator.frame_count == 0
 
 
 @pytest.mark.parametrize("failure", ["route", "precursor", "reserve", "local_complete", "balls"])

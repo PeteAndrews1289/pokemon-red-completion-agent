@@ -43,19 +43,25 @@ and failed while applying a v4 economy behavior to a non-economy base plan. Both
 retained; actions, frames, queries, registration sessions, outcomes, examples and fits stayed zero.
 The source is consumed without retry or replacement.
 
+A new ROM-free rehearsal now runs 12 real component checks before another source can be claimed.
+It covers the null parser default, v4 base plan, temporary direct registration, real two-family
+proposal/observer and real bounded-player preflight with zero action/frame effects. It does not
+authenticate a candidate save or prove cartridge-specific feasibility, and it grants no learning
+or transfer authority.
+
 ## Immediate next session
 
-Publish and green the generic parser/v4 base-plan repairs. In a separate session, select and freeze
+Publish and green the ROM-free rehearsal. In the next session, run it first, then select and freeze
 one distinct unused catalog source prospectively, claim only it under that exact source, and require
 two executable acquisition families action-free. Execute and fit one exploratory Model121 choice
-only if the gate passes. Do not reopen or replace the consumed source, return to the Model121
-resource loop, or infer feasibility from metadata.
+only if the gate passes. Do not reopen or replace the consumed source, select a fallback, return to
+the Model121 resource loop, or infer real feasibility from synthetic results.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-direct-full-local-preflight-failure.md) ·
-[Evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md) ·
+[Evidence](evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
 Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 60–120 minutes for the

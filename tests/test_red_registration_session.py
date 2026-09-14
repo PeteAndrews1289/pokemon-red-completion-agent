@@ -88,6 +88,7 @@ def test_session_roundtrip_actual_party_reserves_and_idempotent_durable_import(
         load_registration_policy(damaged)
 
 
+@pytest.mark.nonconsuming_direct_rehearsal
 def test_direct_session_roundtrip_binds_catalog_origin_without_parent(tmp_path):
     _, before, _, _ = observations(tmp_path / "fixture")
     row = observe_registration(

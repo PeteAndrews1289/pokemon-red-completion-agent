@@ -1,29 +1,28 @@
-# Video narrative: the claim passed and the preflight failed
+# Video narrative: rehearse before the irreversible claim
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Antigravity
 help build and review the software; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the exact-head CI pass, then the atomic claim for the one prospectively frozen source.
-Explain why that order matters: the program cannot inspect a save and then shop for a more
-convenient one.
+Open with the cost of the prior honest failure: the claim worked, but two ordinary integration bugs
+stopped preparation before a two-family menu appeared. The source remains consumed because the
+program cannot inspect saves and shop for a convenient replacement.
 
-Then show the honest result. Preparation attempt one stopped before opening the selected payload on
-a null parser default. One same-claim recovery opened only that source, but plan construction
-stopped because a v4 model chose economy behavior before the economy contract existed. The promised
-two-family menu never appeared.
+Then show the new guardrail. One command runs 12 ROM-free tests across the real parser, v4 plan,
+temporary registration, capture/evolution proposal, registered observer and action-free preflight.
+Put the zero-action and zero-frame assertions on screen.
 
-Keep the zeroes on screen: no completed preflight, query, controller action, advanced frame,
-registration session, outcome, example or fit. The source is consumed. There is no retry montage
-and no replacement save.
+Include the correction: the first rehearsal mocked too much. Flash rejected it, Codex removed it,
+and the replacement real-component suite passed review. That is a useful example of review changing
+the implementation rather than decorating it.
 
-Close with the generic maintenance fix and its tests: omitted transition lists work, the legacy
-interface remains intact, v4 base training uses ordinary recovery behavior, and future unsupported
-versions still reject. Flash caught the last two fail-closed/compatibility edges. This is not a new
-model lesson; it makes the next prospectively frozen attempt meaningful.
+Close with the limitation. Passing synthetic rehearsal does not prove a real save has two feasible
+families. The next episode runs the rehearsal, freezes one distinct source, claims it exactly once
+and reveals the real action-free menu. No fallback source and no gameplay unless both families are
+present.
 
-[Latest session and evidence](work-sessions/2026-09-14-direct-full-local-preflight-failure.md)
+[Latest session and evidence](work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md)
 
 ## The real finish line
 
@@ -31,9 +30,9 @@ State Pete's requirement directly: finish Red from a fresh game with model-direc
 concurrent Champion/Hall-of-Fame evidence and all 151 local registrations before trying a ROM hack.
 Then: compatible unfamiliar Red modification → Crystal → at least Emerald.
 
-The next episode should freeze one distinct unused source after exact-head CI, claim it once and
-show the action-free two-family gate before any model query. Gameplay occurs only if it passes.
-Consumed assignments stay closed.
+The next episode should run the rehearsal after exact-head CI, freeze one distinct unused source,
+claim it once and show the action-free two-family gate before gameplay. Gameplay occurs only if it
+passes. Consumed assignments stay closed.
 
 ## Useful flashbacks
 
