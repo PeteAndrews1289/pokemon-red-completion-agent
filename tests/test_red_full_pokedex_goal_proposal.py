@@ -17,6 +17,7 @@ from pokemon_red_completion.red_acquisition import RedAcquisitionKind
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_full_pokedex_goal_proposal import (
     RedFullPokedexGoalProposalError,
+    RedFullPokedexPlayerAttempt,
     build_red_full_pokedex_player_observer,
     propose_red_full_pokedex_goals,
 )
@@ -219,6 +220,24 @@ def test_only_selected_skill_is_dispatched_once_even_when_it_fails(setup):
         with pytest.raises(RedFullPokedexGoalProposalError, match="consumed"):
             binding.execute()
     assert calls == ["evolution"]
+
+
+def test_attempt_authority_survives_fresh_action_gates(setup):
+    attempt = RedFullPokedexPlayerAttempt()
+    first_observer = build_red_full_pokedex_player_observer(
+        setup.runtime, setup.actions, setup.world, attempt=attempt,
+    )
+    first_observer.runtime.boxed_level_evolution_executor = (
+        lambda _request, _actions: GoalExecutionReport(0, 0, {"test_only": True})
+    )
+    first = first_observer()
+    second_observer = build_red_full_pokedex_player_observer(
+        setup.runtime, setup.actions, setup.world, attempt=attempt,
+    )
+    second = second_observer()
+    next(b for b in first.binding_set.bindings if b.kind is GoalKind.EVOLVE_SPECIES).execute()
+    with pytest.raises(RedFullPokedexGoalProposalError, match="already attempted"):
+        next(b for b in second.binding_set.bindings if b.kind is GoalKind.EVOLVE_SPECIES).execute()
 
 
 @pytest.mark.parametrize("failed", [False, True])

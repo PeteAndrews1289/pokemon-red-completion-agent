@@ -54,6 +54,13 @@ class RedFullPokedexGoalProposalError(ValueError):
     """The authenticated context cannot produce a diverse full-Pokédex menu."""
 
 
+@dataclass(slots=True)
+class RedFullPokedexPlayerAttempt:
+    """Episode-scoped authority shared by freshly gated observer instances."""
+
+    attempted: bool = False
+
+
 @dataclass(frozen=True, slots=True)
 class RedFullPokedexGoalCandidate:
     """One private executable and the exact missing registrations it can advance."""
@@ -349,6 +356,8 @@ def build_red_full_pokedex_player_observer(
     maximum_controller_actions: int = 6_000,
     maximum_emulator_frames: int = 600_000,
     retain_quantum: Callable[[], None] | None = None,
+    quote_resource_costs: bool = False,
+    attempt: RedFullPokedexPlayerAttempt | None = None,
 ) -> RedBoundedPlayerObserver:
     """Wire one mixed-family choice and subsequent read-only terminal observations.
 
@@ -373,21 +382,21 @@ def build_red_full_pokedex_player_observer(
     )
     router = RedResourceGoalRouter(
         native, actions, world,
+        quote_resource_costs=quote_resource_costs,
         maximum_controller_actions=maximum_controller_actions,
         maximum_emulator_frames=maximum_emulator_frames,
         include_recovery_offers=False,
     )
-    attempted = False
+    attempt = attempt or RedFullPokedexPlayerAttempt()
 
     def execute_once(binding: ExecutableGoalBinding) -> GoalExecutionReport:
-        nonlocal attempted
-        if attempted:
+        if attempt.attempted:
             raise RedFullPokedexGoalProposalError("shared-departure episode already attempted")
-        attempted = True
+        attempt.attempted = True
         return binding.execute()
 
     def enumerate_bindings(observation: RedGoalObservation) -> GoalBindingSet:
-        if attempted:
+        if attempt.attempted:
             # A successful acquisition may remove one family. Never rerun the
             # admission gate while retaining its fresh terminal ledger, or hand
             # controller authority to a second choice from a terminal observer.
@@ -416,6 +425,7 @@ __all__ = [
     "RedFullPokedexGoalCandidate",
     "RedFullPokedexGoalProposal",
     "RedFullPokedexGoalProposalError",
+    "RedFullPokedexPlayerAttempt",
     "propose_red_full_pokedex_goals",
     "build_red_full_pokedex_player_observer",
 ]

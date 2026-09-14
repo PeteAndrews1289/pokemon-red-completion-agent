@@ -234,6 +234,7 @@ class _Readiness:
     restore_level_evolution_acquisitions: bool = False
     fossil_acquisitions: bool = False
     restore_fossil_acquisitions: bool = False
+    restore_full_local_pokedex_choice: bool = False
     forward_story_objective: str | None = None
     forward_resource_budget: int | None = None
     registration_policy: Any = None
@@ -241,6 +242,7 @@ class _Readiness:
     registration_session_record_id: str | None = None
     registration_sequence: int | None = None
     restore_registration_record_id: str | None = None
+    full_local_pokedex_choice: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -305,6 +307,8 @@ class _LiveObserver:
     remaining_acquisition_demand: bool = False
     level_evolution_acquisitions: bool = False
     fossil_acquisitions: bool = False
+    full_local_pokedex_choice: bool = False
+    full_local_pokedex_attempt: Any = None
 
     def __call__(self) -> GoalManagerCompositionObservation:
         if self.observations:
@@ -321,6 +325,12 @@ class _LiveObserver:
                 maximum_episode_actions=self.maximum_actions_per_decision,
             )
         )
+        if self.full_local_pokedex_choice and self.full_local_pokedex_attempt is None:
+            from pokemon_red_completion.red_full_pokedex_goal_proposal import (
+                RedFullPokedexPlayerAttempt,
+            )
+
+            self.full_local_pokedex_attempt = RedFullPokedexPlayerAttempt()
         bridge = _player_observer(
             self.runtime,
             skill_actions,
@@ -345,6 +355,8 @@ class _LiveObserver:
                 else {}
             ),
             retain_quantum=self.retain_quantum,
+            full_local_pokedex_choice=self.full_local_pokedex_choice,
+            full_local_pokedex_attempt=self.full_local_pokedex_attempt,
         )
         bridge.search_memory = self.search_memory
         observation = bridge()
@@ -377,9 +389,30 @@ def _player_observer(
     routed_storage_relief: bool = False,
     retain_quantum: Callable[[], None] | None = None,
     forward_story_only: bool = False,
+    full_local_pokedex_choice: bool = False,
+    full_local_pokedex_attempt: Any = None,
 ) -> RedBoundedPlayerObserver:
     from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 
+    if full_local_pokedex_choice and (world is None or not completion_dose):
+        raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
+    if full_local_pokedex_choice:
+        from pokemon_red_completion.red_full_pokedex_goal_proposal import (
+            build_red_full_pokedex_player_observer,
+        )
+
+        assert world is not None
+        return build_red_full_pokedex_player_observer(
+            runtime,
+            actions,
+            world,
+            maximum_quanta=128,
+            maximum_controller_actions=30_000,
+            maximum_emulator_frames=3_000_000,
+            retain_quantum=retain_quantum,
+            quote_resource_costs=quote_resource_costs,
+            attempt=full_local_pokedex_attempt,
+        )
     if world is not None and any(
         spec.parameters.get("trainer_objective")
         in {"defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance", "defeat_champion"}
@@ -614,6 +647,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--economy-training", action="store_true",
                         help="Opt in to recorded cash outcomes with a feature-v4 model.")
     parser.add_argument("--registration-run-id", default=None)
+    parser.add_argument(
+        "--full-local-pokedex-choice",
+        action="store_true",
+        help="offer one full-local Red capture-versus-evolution choice",
+    )
     parser.add_argument(
         "--remaining-acquisition-demand",
         action="store_true",
@@ -1212,6 +1250,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
         fossil_acquisitions=fossil_acquisitions,
+        full_local_pokedex_choice=getattr(args, "full_local_pokedex_choice", False),
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1461,10 +1500,20 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
                 row=row,
                 anchor_episode_id=anchor_id,
                 anchor_checkpoint_sha256=anchor_sha,
+                completion_scope=(
+                    "local_red"
+                    if getattr(readiness, "full_local_pokedex_choice", False)
+                    else "shared"
+                ),
             )
     else:
         document = record.read()
     policy = load_registration_policy(document)
+    if (
+        getattr(readiness, "full_local_pokedex_choice", False)
+        and policy.completion_scope != "local_red"
+    ):
+        raise ValueError("full-local player requires a local Red registration session")
     anchor = (document["anchor_episode_id"], document["anchor_checkpoint_sha256"])
     if anchor not in readiness.continuation_chain or policy.run_id != run_id:
         raise ValueError("registration session does not belong to this continuation")
@@ -2140,6 +2189,7 @@ def _continue_readiness(
             restore_remaining_acquisition_demand=_checkpoint_remaining_acquisition_demand(header),
             restore_level_evolution_acquisitions=_checkpoint_level_evolution_acquisitions(header),
             restore_fossil_acquisitions=_checkpoint_fossil_acquisitions(header),
+            restore_full_local_pokedex_choice=_checkpoint_full_local_pokedex_choice(header),
             continuation_root_lineage_id=lineage,
             continuation_chain=(*readiness.continuation_chain, (episode_id, record_sha256)),
         )
@@ -2164,6 +2214,11 @@ def _continue_readiness(
             raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_rollback")
         if readiness.restore_fossil_acquisitions and not readiness.fossil_acquisitions:
             raise PairedRedBoundedPlayerRunError("fossil_acquisitions_rollback")
+        if (
+            readiness.restore_full_local_pokedex_choice
+            and not readiness.full_local_pokedex_choice
+        ):
+            raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_rollback")
         if (
             readiness.restore_routed_storage_relief
             and not readiness.routed_storage_relief
@@ -2215,6 +2270,16 @@ def _checkpoint_fossil_acquisitions(header: Mapping[str, object]) -> bool:
         enabled and not _checkpoint_remaining_acquisition_demand(header)
     ):
         raise PairedRedBoundedPlayerRunError("continuation_parent_fossil_acquisitions")
+    return enabled
+
+
+def _checkpoint_full_local_pokedex_choice(header: Mapping[str, object]) -> bool:
+    metadata = header.get("metadata")
+    if not isinstance(metadata, Mapping):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_metadata")
+    enabled = metadata.get("full_local_pokedex_choice", False)
+    if type(enabled) is not bool or (enabled and not _checkpoint_completion_dose(header)):
+        raise PairedRedBoundedPlayerRunError("continuation_parent_full_local_pokedex_choice")
     return enabled
 
 
@@ -2368,35 +2433,40 @@ def _verify_continuation_restore(readiness: _Readiness, emulator: PyBoyAdapter) 
     actions = CountingExecutor(
         FrameSafeExecutor(controller, DEFAULT_NEW_GAME_TIMING.controller_timing())
     )
+    observer_kwargs: dict[str, Any] = {
+        "completion_dose": getattr(readiness, "restore_completion_dose", False),
+        "routed_recovery": getattr(readiness, "restore_routed_recovery", False),
+        "routed_storage_relief": getattr(
+            readiness, "restore_routed_storage_relief", False
+        ),
+        "trainer_funding": getattr(readiness, "restore_trainer_funding", False),
+        "trainer_pending_recovery": getattr(
+            readiness, "restore_trainer_pending_recovery", False
+        ),
+        "regional_trainer_funding": getattr(
+            readiness, "restore_regional_trainer_funding", False
+        ),
+        "observed_trainer_funding": getattr(
+            readiness, "restore_observed_trainer_funding", False
+        ),
+        "remaining_acquisition_demand": getattr(
+            readiness, "restore_remaining_acquisition_demand", False
+        ),
+        "level_evolution_acquisitions": getattr(
+            readiness, "restore_level_evolution_acquisitions", False
+        ),
+        "fossil_acquisitions": getattr(
+            readiness, "restore_fossil_acquisitions", False
+        ),
+    }
+    if getattr(readiness, "restore_full_local_pokedex_choice", False):
+        observer_kwargs["full_local_pokedex_choice"] = True
     observer = _player_observer(
         runtime,
         actions,
         _route_world(readiness),
         readiness.quote_resource_costs,
-        completion_dose=getattr(readiness, "restore_completion_dose", False),
-        routed_recovery=getattr(readiness, "restore_routed_recovery", False),
-        routed_storage_relief=getattr(
-            readiness, "restore_routed_storage_relief", False
-        ),
-        trainer_funding=getattr(readiness, "restore_trainer_funding", False),
-        trainer_pending_recovery=getattr(readiness, "restore_trainer_pending_recovery", False),
-        regional_trainer_funding=getattr(readiness, "restore_regional_trainer_funding", False),
-        observed_trainer_funding=getattr(readiness, "restore_observed_trainer_funding", False),
-        remaining_acquisition_demand=getattr(
-            readiness,
-            "restore_remaining_acquisition_demand",
-            False,
-        ),
-        level_evolution_acquisitions=getattr(
-            readiness,
-            "restore_level_evolution_acquisitions",
-            False,
-        ),
-        fossil_acquisitions=getattr(
-            readiness,
-            "restore_fossil_acquisitions",
-            False,
-        ),
+        **observer_kwargs,
     )
     from pokemon_red_completion.goal_manager_composition_qualification import (
         living_completion_checkpoint,
@@ -2608,6 +2678,11 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
             level_evolution_acquisitions=getattr(readiness, "level_evolution_acquisitions", False),
             fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
             forward_story_only=getattr(readiness, "forward_story_objective", None) is not None,
+            full_local_pokedex_choice=getattr(
+                readiness,
+                "full_local_pokedex_choice",
+                False,
+            ),
         )
         # Preview the same prospective history as the actor. Historical restore
         # authentication above must still use the checkpoint's original inputs.
@@ -2813,6 +2888,11 @@ def _run_arm(
                     if getattr(readiness, "fossil_acquisitions", False)
                     else {}
                 ),
+                **(
+                    {"full_local_pokedex_choice": True}
+                    if getattr(readiness, "full_local_pokedex_choice", False)
+                    else {}
+                ),
                 "quote_resource_costs": readiness.quote_resource_costs,
                 "save_terminal_checkpoints": readiness.save_terminal_checkpoints,
                 **(
@@ -2904,6 +2984,11 @@ def _run_arm(
                 level_evolution_acquisitions=readiness.level_evolution_acquisitions,
                 fossil_acquisitions=getattr(readiness, "fossil_acquisitions", False),
                 retain_quantum=retain_quantum if readiness.save_terminal_checkpoints else None,
+                full_local_pokedex_choice=getattr(
+                    readiness,
+                    "full_local_pokedex_choice",
+                    False,
+                ),
             )
             if forward_probe is not None:
                 from pokemon_red_completion.forward_first_choice_policy import (
@@ -3404,6 +3489,11 @@ def _run_prepared(readiness: _Readiness) -> dict[str, object]:
         "continue_after_progress": readiness.continue_after_progress,
         "routed_resource_goals": readiness.routed_resource_goals,
         "quote_resource_costs": readiness.quote_resource_costs,
+        "full_local_pokedex_choice": getattr(
+            readiness,
+            "full_local_pokedex_choice",
+            False,
+        ),
         "viewer_instrumentation_failures": 0 if viewer is None else viewer.failure_count,
         "teacher_queries": 0,
         "teacher_fallbacks": 0,
