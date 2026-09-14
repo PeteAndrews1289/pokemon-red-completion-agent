@@ -305,3 +305,21 @@ Recommendation for the next session: **Sol High, Fast off**. The forced-singleto
 bridge has established semantics and a narrow integration surface. Use bounded Flash/Claude review
 after implementation; escalate to Astra High only if authenticating the supplemental binding would
 require a new authority contract or weaken the learned-choice boundary.
+
+## 2026-09-13: Model119 forced-singleton fishing session
+
+Sol High implemented and qualified the forced acquisition boundary, froze the exact one-candidate
+state, executed it once and verified the child checkpoint and next menu. The capture added
+Poliwhirl in905 actions/45,564 frames while leaving Model119 at119 examples. The task required
+careful evidence bookkeeping but no new policy architecture, so Astra was not needed.
+
+Flash3.8 High passed the bridge and produced one useful runner finding: writing the controller claim
+inside observation weakened the meaning of that claim. Codex moved it into the sole executor after
+durable decision recording. Three Flash P0 claims were rejected against existing tests. Claude
+Sonnet supplied the forced enum and minimum-width requirements; its exact-file follow-up timed out.
+Neither CLI exposed service quota, and exact token/account debit remains unavailable, so this is not
+a measured cost comparison.
+
+Recommendation for the next session: **Sol High, Fast off**. The new terminal exposes the familiar
+two-option freeze/execute/fit loop. Escalate to Astra High only if the corrected checkpoint cannot
+enter measured-choice admission without changing authority semantics.

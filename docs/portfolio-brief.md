@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 85 verified registrations and119 settled examples. The latest exact frozen restoration fully recovered HP/PP and became successful row119 without a retry or teacher label. These are same-lineage development results, not independent improvement.
+- 86 verified registrations and119 settled examples. The latest forced singleton captured Poliwhirl without a model query, retry, teacher label or training row. These are same-lineage development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model119-frozen-restore.md).
+[Evidence for the current model](work-sessions/2026-09-13-model119-forced-singleton-fishing.md).
 
 The automatic runtime now derives useful fishing sources from current cartridge and save data
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
@@ -23,8 +23,9 @@ frozen restore produced Model113; the following frozen fishing choice added regi
 produced Model114. The subsequent income-verification failure became Model115. Cartridge source
 then explained the extra58 as opponent Pay Day; the exact continuation's stale-accumulator failure
 became Model116. A later frozen fishing success produced Model117, whose verified resource purchase
-produced Model118. Its verified restoration produced Model119; the next action-free inventory has
-one fishing acquisition and stopped before presenting that singleton as a learned choice.
+produced Model118. Its verified restoration produced Model119; a separately labelled forced bridge
+then captured Poliwhirl without fitting it. The next action-free inventory has a genuine resupply-
+versus-restore choice.
 
 ## My role and the stack
 

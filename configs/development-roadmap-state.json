@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-13-model119-frozen-restore",
+  "as_of_session": "2026-09-13-model119-forced-singleton-fishing",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model119-frozen-restore-2026-09-13.json"
+      "evidence": "docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json"
     },
     "red-hack": {
       "status": "planned",
@@ -173,6 +173,12 @@
         "label": "Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary",
         "done": true,
         "evidence": "docs/evidence/red-model119-frozen-restore-2026-09-13.json"
+      },
+      {
+        "id": "model119-forced-singleton-fishing",
+        "label": "Execute the sole fishing acquisition without fabricating learned authority",
+        "done": true,
+        "evidence": "docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json"
       }
     ]
   },
@@ -1256,6 +1262,12 @@
       "result": "Model118's frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85 registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one supplemental fishing acquisition.",
       "deviation": "The mixed-option contract rejected the singleton instead of inventing a learned choice. No controller input, model query, teacher label or fit followed that stop. Exact hosted CI passed before the restoration; a duplicate local suite reached7,742 passing tests without failure before being deliberately stopped.",
       "next": "Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model/teacher queries and choice-fit exclusion, then execute once from Model119 without retry."
+    },
+    {
+      "session": "2026-09-13-model119-forced-singleton-fishing",
+      "result": "The sole fishing acquisition executed once under forced-singleton authority and captured national species061 in905 actions/45,564 frames. Collection advanced to86 registrations/66 living species/70 specimens; Model119 stayed119 examples/81 successes with zero model queries, teacher labels or training examples.",
+      "deviation": "A zero-input audit corrected one private result field that had mislabeled the checkpoint document hash as the sealed record hash; the original result was preserved and the valid checkpoint reopened. Flash's observation-purity finding moved the controller claim into the executor before input. No retry, redraw, fit, hack, Crystal work or full replay occurred.",
+      "next": "Freeze Model119's genuine two-option resupply-versus-restore menu from the corrected checkpoint, execute the sampled choice once and fit only its eligible measured result."
     }
   ],
   "closed_milestones": [

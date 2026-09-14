@@ -1,4 +1,4 @@
-# Video narrative: one fishing route remains, but the model still chooses
+# Video narrative: one forced capture without a fake model choice
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
@@ -6,16 +6,17 @@ did, including failures; do not present coding assistants as the live Pokémon p
 
 ## Latest episode
 
-Start with Model116's already-frozen six-option choice: acquisition candidate2 had only an8.56%
-sampling probability. Reconstruct the same menu and parent state with zero input, then show the
-single authorized execution—six casts, two encounters and one capture in979 actions/59232 frames.
+Start with Model119's one-candidate fishing boundary. Explain why ranking one option would falsely
+credit the model, then show the explicit forced-singleton record: zero model queries, zero teacher
+labels and zero training examples. Reconstruct the exact source, model, checkpoint and sole binding
+without input before the one authorized execution.
 
-The fresh ledger rises84 to85 registrations. The success becomes row117 with79 successes and all
-116 earlier rows retained. Then show the repair: one remaining fishing destination stays as an
-identity-free supplement beside three ordinary goals. Model117 freezes resupply candidate0 at a
-25.78% probability without advancing a frame. End before execution; this episode adds no new fit.
+The capture adds Poliwhirl in905 actions/45564 frames. The ledger rises85 to86 registrations,
+65 to66 living species and69 to70 specimens, while Model119 remains119 examples/81 successes. Then
+show the changed-state read-only menu: fishing is exhausted, but resupply and restore form a genuine
+two-option model choice. End before sampling or execution.
 
-[Session and evidence](work-sessions/2026-09-13-model117-sparse-fishing-menu.md)
+[Session and evidence](work-sessions/2026-09-13-model119-forced-singleton-fishing.md)
 
 ## The real finish line
 
@@ -36,6 +37,6 @@ Crystal → at least Emerald, with one shared registration ledger that never fab
 - [Checkpoint story audit](audits/red-phase4-closeout-2026-09-09.md):
   show the achievement and the forced/deterministic authority caveat together.
 
-Never loop old footage as current gameplay. Do not convert117 training examples into a
+Never loop old footage as current gameplay. Do not convert119 training examples into a
 whole-project completion percentage or imply that low-level control is learned.
 [Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)

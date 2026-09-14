@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model119-frozen-restore**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model119-forced-singleton-fishing**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 20/21 acceptance items (95%).**
+**Broaden model-directed Red collection: 21/22 acceptance items (95%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -33,6 +33,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
 - [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
 - [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
+- [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
 
 Current model: **119 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -84,7 +85,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -111,6 +112,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model119-forced-singleton-fishing
+
+The sole fishing acquisition executed once under forced-singleton authority and captured national species061 in905 actions/45,564 frames. Collection advanced to86 registrations/66 living species/70 specimens; Model119 stayed119 examples/81 successes with zero model queries, teacher labels or training examples.
+
+**Deviation:** A zero-input audit corrected one private result field that had mislabeled the checkpoint document hash as the sealed record hash; the original result was preserved and the valid checkpoint reopened. Flash's observation-purity finding moved the controller claim into the executor before input. No retry, redraw, fit, hack, Crystal work or full replay occurred.
+
+**Next:** Freeze Model119's genuine two-option resupply-versus-restore menu from the corrected checkpoint, execute the sampled choice once and fit only its eligible measured result.
 
 ### 2026-09-13-model119-frozen-restore
 

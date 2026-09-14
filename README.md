@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **85 registered species** and Model119 has **119 settled examples / 81 successes**. Model118's frozen restoration fully recovered HP/PP in 153 actions with no retry or teacher label. The changed state exposes one fishing acquisition, stopped as a forced-singleton boundary rather than misreported as a learned choice.
+- The latest measured collection contains **86 registered species** and Model119 has **119 settled examples / 81 successes**. Its sole fishing acquisition captured Poliwhirl under explicit forced-singleton authority with no model query, teacher label, retry or training row. The changed state exposes a real resupply-versus-restore choice.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest continuation report](docs/work-sessions/2026-09-13-model119-frozen-restore.md),
+The [latest continuation report](docs/work-sessions/2026-09-13-model119-forced-singleton-fishing.md),
 [latest learning report](docs/work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md),
 [cross-box engineering report](docs/work-sessions/2026-09-13-model111-cross-box-capture-support.md),
 [latest recovery report](docs/work-sessions/2026-09-12-model111-zero-label-recovery.md),

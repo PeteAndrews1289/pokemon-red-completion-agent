@@ -776,3 +776,17 @@ the supplemental binding. It records zero model and teacher queries, remains exc
 option-value fit, and retains its one actual outcome without retry. Do not invent a second candidate
 or weaken multi-option training invariants. The full fresh-run Red story and local Pokédex gate
 still precedes every ROM hack.
+
+## September 13 — consume the forced bridge, return to genuine model choice
+
+The separately labelled Model119 bridge passed exact-source CI and an action-free freeze, then
+executed its sole fishing acquisition once. It captured national species061 and advanced collection
+to86 registrations/66 living species/70 specimens. Because no alternative existed, the step used
+forced-singleton authority and created zero model queries, teacher labels, training examples or fit.
+
+Preserve the successful terminal and forbid retry. A zero-input audit corrected a private summary
+field that confused the checkpoint document hash with the sealed-record hash; the original result
+remains preserved, and the corrected sealed checkpoint reopened. Its action-free successor exposes
+two ordinary candidates, resupply and restore. Return to the normal model-choice loop: freeze,
+sample once, execute once and fit only eligible measured evidence. The full Red-before-hack gate is
+unchanged.

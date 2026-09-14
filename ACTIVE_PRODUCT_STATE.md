@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry.
+- Next decision: Freeze Model119's exact two-option resupply-versus-restore menu from the corrected child checkpoint, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model119 has119 examples/81 successes and retains85 registrations,65 living species,69 specimens, five Ultra Balls and cash346 after verified full HP/PP recovery. The action-free successor exposes one fishing acquisition; it is unexecuted and cannot count as a learned choice. No fresh-game or independent competence is claimed. |
+| Authority now | Model119 has119 examples/81 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346 after the verified forced Poliwhirl acquisition. Its action-free successor exposes a genuine resupply-versus-restore choice. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback. |
+| Cheapest falsifier | Model119's exact two-option resupply-versus-restore menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model119-frozen-restore** · status **active** · evidence [model fit](docs/evidence/red-model119-frozen-restore-2026-09-13.json)
+**2026-09-13-model119-forced-singleton-fishing** · status **active** · evidence [development episode](docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner's selected recovery restored sustainable collection readiness, and the changed-state inventory honestly separated a necessary singleton acquisition from model ranking. |
-| Learning output | One verified model-selected restoration success added row119. Model119 now has119 examples/81 successes,15 measured-source rows and40 economy-qualified rows; all118 prior rows remain retained. |
-| Authority delta | Model118's frozen restoration ran once and fully restored HP/PP in153 actions/5424 frames. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one fishing acquisition and stopped before falsely treating it as a learned choice. No authority promotion occurred. |
+| Product alignment | The explicit forced bridge advanced the registered collection without fabricating model authority, and the actual child state now restores a genuine two-option learned decision. |
+| Learning output | Zero new examples by design: the forced singleton was excluded from learned-choice training. Model119 remains119 examples/81 successes with all prior rows retained; the session produced one verified collection gain and a fresh real choice boundary. |
+| Authority delta | Model119's sole fishing acquisition executed once under explicit forced-singleton authority and captured national species061 in905 actions/45564 frames. Collection advanced to86 registrations/66 living species/70 specimens while Model119 stayed119 examples/81 successes. No model query, choice label, fit or authority promotion occurred. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The sole next executable candidate is a supplemental fishing acquisition. The mixed-option contract correctly requires at least two candidates, so a separately labelled forced-singleton bridge is required before execution. Collection stays85 registrations with39 native-scope entries remaining; the full local Red Pokedex still requires explicit version, trade and event resolution. |
-| Decision | Publish and qualify a separately labelled forced-singleton bridge for Model119's sole fishing acquisition, prove zero model/teacher queries and training exclusion, then execute it once without retry. |
-| Next session | Qualify and execute Model119's sole fishing acquisition as an explicit forced singleton with zero model/teacher queries and no choice fit. |
-| Next falsifier | The sole Model119 fishing acquisition cannot be admitted as an explicit forced singleton, excluded from learned-choice training and executed once from the authenticated restored terminal without retry or teacher fallback. |
-| Stop condition | Stop on any second candidate, model or teacher query, source/model/checkpoint mismatch, controller activity during preflight, failure to exclude the singleton from choice training, retry, redraw or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The forced acquisition is consumed and its corrected child checkpoint is published. The changed-state inventory now exposes a genuine two-option Model119 choice between resupply and restore, unexecuted. The full local Red Pokedex still requires explicit version, trade and event resolution. |
+| Decision | Freeze Model119's exact two-option resupply-versus-restore menu from the corrected child checkpoint, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback. |
+| Next session | Freeze and execute Model119's genuine resupply-versus-restore choice once, then fit only its eligible measured result. |
+| Next falsifier | Model119's exact two-option resupply-versus-restore menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
+| Stop condition | Stop on source/model/checkpoint/menu/economy mismatch, controller activity during freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 

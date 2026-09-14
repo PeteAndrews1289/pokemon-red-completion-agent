@@ -1549,3 +1549,18 @@ Mission check for this planning task:
   source files passed. Hosted CI run34770365977 is authoritative for final source.
 - Next: execute Model116's exact frozen acquisition once. Do not retry Model115, resample Model116,
   use a teacher label or approach any hack/Crystal gate before complete Red.
+
+## Model119 forced-singleton fishing review (2026-09-13)
+
+- Flash3.8 High passed the forced-bridge contract. Its later runner review correctly objected to
+  writing the controller-started claim inside observation; Codex accepted the finding and moved the
+  claim into the sole executor after durable decision recording and before possible input.
+- Rejected three Flash P0 claims because the existing ROM-free tests prove the opposite: the
+  explicit bridge overrides a learned-menu width floor of two, forced steps intentionally increment
+  `forced_singleton_steps` rather than `authority_decisions`, and verified search exhaustion is
+  still an executed forced result.
+- Claude Sonnet passed the conceptual design. Accepted: use
+  `GoalSelectionMode.FORCED_SINGLETON` and keep `min_available_goals > 1`. Its later read-only
+  exact-file review timed out without output, so it contributed no additional finding.
+- Neither external reviewer edited repository source or ran gameplay. Current service quota was
+  unavailable from both CLIs.
