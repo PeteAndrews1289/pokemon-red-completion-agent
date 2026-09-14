@@ -1108,6 +1108,18 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         or any(type(value) is not int for value in boxed_evolution)
     ):
         raise PairedRedBoundedPlayerRunError("boxed_evolution_scope")
+    full_local_pokedex_choice = getattr(args, "full_local_pokedex_choice", False)
+    if type(full_local_pokedex_choice) is not bool or (
+        full_local_pokedex_choice
+        and (
+            not completion_dose
+            or not getattr(args, "train_player", False)
+            or getattr(args, "registered_ledger", None) is None
+            or not getattr(args, "registration_session", None)
+            or not getattr(args, "registration_run_id", None)
+        )
+    ):
+        raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
@@ -1255,7 +1267,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         remaining_acquisition_demand=remaining_acquisition_demand,
         level_evolution_acquisitions=level_evolution_acquisitions,
         fossil_acquisitions=fossil_acquisitions,
-        full_local_pokedex_choice=getattr(args, "full_local_pokedex_choice", False),
+        full_local_pokedex_choice=full_local_pokedex_choice,
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,

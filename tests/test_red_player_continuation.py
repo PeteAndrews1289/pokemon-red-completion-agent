@@ -678,6 +678,41 @@ def test_training_continuation_passes_scope_but_still_requires_source_check(monk
         runner._prepare(args)
 
 
+@pytest.mark.parametrize(
+    "override",
+    [
+        {"train_player": False},
+        {"completion_dose": False},
+        {"registered_ledger": None},
+        {"registration_session": None},
+        {"registration_run_id": None},
+    ],
+)
+def test_full_local_choice_requires_registered_training_scope_before_source(override):
+    args = SimpleNamespace(
+        pair_id="full-local-scope",
+        continue_from_checkpoint=[("old", "a" * 64)],
+        train_player=True,
+        context_origin="training",
+        save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID,
+        routed_resource_goals=True,
+        completion_dose=True,
+        boxed_evolution=(129, 130, 20),
+        full_local_pokedex_choice=True,
+        registered_ledger=Path("private-ledger.sqlite3"),
+        registration_session="full-local-session",
+        registration_run_id="red-postgame",
+    )
+    for key, value in override.items():
+        setattr(args, key, value)
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError,
+        match="full_local_pokedex_choice_scope",
+    ):
+        runner._prepare(args)
+
+
 @pytest.mark.parametrize("chain,routed", [([], True), ([('old', 'a' * 64)], False)])
 def test_storage_relief_requires_a_routed_continuation_before_source(chain, routed):
     args = SimpleNamespace(
