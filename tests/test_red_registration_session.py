@@ -9,8 +9,10 @@ from test_registered_learning_bridge import observations
 from pokemon_red_completion.red_player_checkpoint import REGISTERED_PLAYER_CHECKPOINT_SCHEMA
 from pokemon_red_completion.red_registered_observation import project_registered_observation
 from pokemon_red_completion.red_registration_session import (
+    DIRECT_SESSION_SCHEMA,
     load_registration_policy,
     observe_registration,
+    publish_direct_registration_session,
     publish_registration_session,
     read_registration_state,
     validate_terminal_registration,
@@ -84,6 +86,46 @@ def test_session_roundtrip_actual_party_reserves_and_idempotent_durable_import(
     damaged["policy"]["protected_counts"] = {}
     with pytest.raises(ValueError, match="policy differs"):
         load_registration_policy(damaged)
+
+
+def test_direct_session_roundtrip_binds_catalog_origin_without_parent(tmp_path):
+    _, before, _, _ = observations(tmp_path / "fixture")
+    row = observe_registration(
+        before,
+        seen=frozenset(range(1, 152)),
+        run_id="red-direct",
+        rom_sha256="a" * 64,
+        snapshot_sha256="b" * 64,
+        sequence=0,
+    )
+    _, _, store = _make_store(tmp_path)
+    document = publish_direct_registration_session(
+        store,
+        name="direct",
+        ledger_path=tmp_path / "direct-ledger.sqlite3",
+        observation=before,
+        row=row,
+        anchor_training_plan_sha256="c" * 64,
+        anchor_context_catalog_sha256="d" * 64,
+        anchor_context_id="f" * 64,
+        anchor_state_sha256="b" * 64,
+        anchor_envelope_sha256="e" * 64,
+        completion_scope="local_red",
+    )
+    assert document["schema"] == DIRECT_SESSION_SCHEMA
+    assert "anchor_episode_id" not in document
+    assert "anchor_checkpoint_sha256" not in document
+    policy = load_registration_policy(document)
+    assert policy.run_id == "red-direct"
+    assert policy.completion_scope == "local_red"
+    hybrid = deepcopy(document)
+    hybrid["anchor_episode_id"] = "invented-parent"
+    with pytest.raises(ValueError, match="fields differ"):
+        load_registration_policy(hybrid)
+    swapped = deepcopy(document)
+    swapped["anchor_state_sha256"] = "0" * 64
+    with pytest.raises(ValueError, match="state observation differs"):
+        load_registration_policy(swapped)
 
 
 @pytest.mark.parametrize("damage", [None, "state", "binding", "inventory", "sequence"])

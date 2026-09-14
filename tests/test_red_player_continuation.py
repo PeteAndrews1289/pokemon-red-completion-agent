@@ -1,4 +1,4 @@
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -8,6 +8,7 @@ from test_red_player_checkpoint import _complete
 from test_red_player_checkpoint import case as checkpoint_case
 
 from pokemon_red_completion.executor import ReadOnlyController
+from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_player_checkpoint import (
     RedPlayerCheckpointError,
     capture_red_player_terminal,
@@ -711,6 +712,217 @@ def test_full_local_choice_requires_registered_training_scope_before_source(over
         match="full_local_pokedex_choice_scope",
     ):
         runner._prepare(args)
+
+
+def test_direct_full_local_catalog_origin_reaches_source_without_parent_or_boxed_target(
+    monkeypatch,
+):
+    args = SimpleNamespace(
+        pair_id="direct-full-local",
+        continue_from_checkpoint=[],
+        train_player=True,
+        context_origin="training",
+        save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID,
+        routed_resource_goals=True,
+        quote_resource_costs=True,
+        completion_dose=True,
+        boxed_evolution=None,
+        full_local_pokedex_choice=True,
+        registered_ledger=Path("private-ledger.sqlite3"),
+        registration_session="direct-full-local-session",
+        registration_run_id="red-direct",
+    )
+
+    def source(*_args, **_kwargs):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
+        runner._prepare(args)
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("boxed_evolution", (77, 78, 40)),
+        ("wild_source", ["wild:Route1:grass"]),
+    ],
+)
+def test_full_local_targets_must_come_from_observation_not_caller(field, value):
+    args = SimpleNamespace(
+        pair_id="direct-full-local-config",
+        continue_from_checkpoint=[],
+        train_player=True,
+        context_origin="training",
+        save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID,
+        routed_resource_goals=True,
+        completion_dose=True,
+        boxed_evolution=None,
+        wild_source=[],
+        full_local_pokedex_choice=True,
+        registered_ledger=Path("private-ledger.sqlite3"),
+        registration_session="direct-full-local-session",
+        registration_run_id="red-direct",
+    )
+    setattr(args, field, value)
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError,
+        match="direct_full_local_configuration_scope",
+    ):
+        runner._prepare(args)
+
+
+def test_direct_profile_ineligibility_uses_runner_failure_contract(monkeypatch):
+    from pokemon_red_completion.red_full_pokedex_direct_profile import (
+        RedFullPokedexDirectProfileError,
+    )
+
+    monkeypatch.setattr(runner, "_route_world", lambda _ready: object())
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile.derive_direct_full_pokedex_profile_from_capture",
+        lambda *_a, **_k: (_ for _ in ()).throw(
+            RedFullPokedexDirectProfileError("no two-family configuration")
+        ),
+    )
+    readiness = SimpleNamespace(
+        rom_path=Path("unused"),
+        capture=SimpleNamespace(state_bytes=b"state"),
+        profile=object(),
+    )
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError,
+        match="direct_full_local_configuration",
+    ):
+        runner._derive_direct_full_local_profile(readiness)
+
+
+def test_direct_root_claim_is_authenticated_before_payload_open(monkeypatch):
+    claim = SimpleNamespace(
+        stage="full-local-red-training",
+        source_commit="a" * 40,
+        runner_sha256="b" * 64,
+        logical_root_sha256="c" * 64,
+        physical_root_sha256="d" * 64,
+        claim_sha256="e" * 64,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.claim_first_admission.read_root_pair_claim",
+        lambda registry, digest: claim
+        if registry == Path("registry") and digest == "e" * 64
+        else None,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.goal_manager_composition_qualification.fixed_account_claim_registry_root",
+        lambda: Path("registry"),
+    )
+    monkeypatch.setattr(runner, "_sha256", lambda _path: "b" * 64)
+    args = SimpleNamespace(
+        root_pair_claim_sha256="e" * 64,
+        expected_logical_root_sha256="c" * 64,
+        expected_physical_root_sha256="d" * 64,
+    )
+    assert runner._require_direct_root_claim(args, source_commit="a" * 40) is claim
+
+
+def test_direct_missing_claim_fails_before_rom_or_saved_payload(monkeypatch):
+    args = SimpleNamespace(
+        pair_id="direct-claim-first",
+        continue_from_checkpoint=[],
+        train_player=True,
+        context_origin="training",
+        save_terminal_checkpoints=True,
+        challenger=runner.CAUSAL_ARM_ID,
+        routed_resource_goals=True,
+        quote_resource_costs=True,
+        completion_dose=True,
+        boxed_evolution=None,
+        full_local_pokedex_choice=True,
+        registered_ledger=Path("private-ledger.sqlite3"),
+        registration_session="direct-full-local-session",
+        registration_run_id="red-direct",
+    )
+    monkeypatch.setattr(
+        runner,
+        "detect_source_identity",
+        lambda *_a, **_k: SimpleNamespace(git_commit="a" * 40),
+    )
+    monkeypatch.setattr(runner, "require_clean_source", lambda _source: None)
+    monkeypatch.setattr(runner, "require_published_source", lambda *_a: None)
+    monkeypatch.setattr(
+        runner,
+        "resolve_rom_path",
+        lambda *_a: pytest.fail("ROM opened before direct claim"),
+    )
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError,
+        match="direct_full_local_claim_arguments",
+    ):
+        runner._prepare(args)
+
+
+def test_direct_root_claim_rejects_opened_capture_with_different_pair():
+    capture = SimpleNamespace(state_sha256="1" * 64, envelope_sha256="2" * 64)
+    logical = runner.root_consumption_sha256(
+        state_sha256=capture.state_sha256,
+        envelope_sha256=capture.envelope_sha256,
+    )
+    physical = canonical_sha256(
+        {
+            "schema": "pokemon.red.private-physical-setup-root.v1",
+            "state_sha256": capture.state_sha256,
+            "envelope_sha256": capture.envelope_sha256,
+        }
+    )
+    runner._verify_direct_root_pair(
+        capture,
+        SimpleNamespace(
+            logical_root_sha256=logical,
+            physical_root_sha256=physical,
+        ),
+    )
+    with pytest.raises(
+        runner.PairedRedBoundedPlayerRunError,
+        match="direct_full_local_claim_capture",
+    ):
+        runner._verify_direct_root_pair(
+            capture,
+            SimpleNamespace(
+                logical_root_sha256=logical,
+                physical_root_sha256="3" * 64,
+            ),
+        )
+
+
+def test_full_local_continuation_derives_targets_from_authenticated_terminal(monkeypatch):
+    @dataclass(frozen=True)
+    class Readiness:
+        full_local_pokedex_choice: bool
+        restore_profile: object
+        profile: object
+        capture: object
+
+    terminal = Readiness(
+        full_local_pokedex_choice=True,
+        restore_profile="terminal-profile",
+        profile="origin-profile",
+        capture="terminal-capture",
+    )
+    seen = []
+
+    def derive(readiness):
+        seen.append((readiness.profile, readiness.capture))
+        return replace(readiness, profile="next-profile")
+
+    monkeypatch.setattr(runner, "_derive_direct_full_local_profile", derive)
+    advanced = runner._advance_full_local_profile(
+        terminal,
+        direct_catalog_origin=False,
+        initial_execution_profile="origin-profile",
+    )
+    assert seen == [("terminal-profile", "terminal-capture")]
+    assert advanced.profile == "next-profile"
 
 
 @pytest.mark.parametrize("chain,routed", [([], True), ([('old', 'a' * 64)], False)])

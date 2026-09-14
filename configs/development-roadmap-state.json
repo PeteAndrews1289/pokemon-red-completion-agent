@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-full-local-training-source",
+  "as_of_session": "2026-09-14-direct-catalog-origin-bridge",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-full-local-training-source-2026-09-14.json"
+      "evidence": "docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1340,6 +1340,12 @@
       "result": "A metadata-only census found54 train entries,42 claimed and12 unclaimed. One source was frozen by slot order before payload/menu inspection; its configuration lacks capture/evolution declarations. Zero game effects or learning results.",
       "deviation": "The previous handoff overstated direct-start readiness: completion-dose training and registration require a continuation. The selected profile omission is not proof of impossible gameplay. No root was claimed, substituted or opened.",
       "next": "Implement direct catalog-origin training/session anchoring and inventory-derived acquisition declarations; then claim and inspect only the frozen source. Require two real families before one model choice, retaining any failure without replacement."
+    },
+    {
+      "session": "2026-09-14-direct-catalog-origin-bridge",
+      "result": "Direct catalog-origin completion plans and local-registration sessions are qualified without a fabricated predecessor. A read-only inventory observation now derives one boxed level evolution and one ordinary wild corridor, while the runner requires an already-atomic exact-root claim before opening ROM or saved-state payloads. Model121 remains121 examples/83 successes/86 registrations; no game or learning effect occurred.",
+      "deviation": "This was an engineering session, not a measured learner result. The frozen source remained unopened and unclaimed because exact-head publication and CI must precede irreversible consumption. Legacy continuation schemas and their checkpoint requirements remain unchanged.",
+      "next": "Publish the exact bridge and require exact-head CI. Then atomically claim only the frozen source, run the action-free two-family preflight, and stop without substitution on claim conflict or menu failure; execute and fit one model-selected outcome only if it passes."
     }
   ],
   "closed_milestones": [

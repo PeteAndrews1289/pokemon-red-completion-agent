@@ -32,6 +32,12 @@ COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v4"
 CURRICULUM_TRAINING_PLAN_SCHEMA = "pokemon.red.bounded-player-training-plan.v5"
 REGISTERED_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v1"
 ECONOMY_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-player-training-plan.v2"
+DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.direct-catalog-bounded-player-training-plan.v1"
+)
+DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.direct-catalog-registered-player-training-plan.v1"
+)
 STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
@@ -43,13 +49,28 @@ class RedPlayerTrainingPlan:
 
     def __post_init__(self) -> None:
         document = dict(self.document)
-        economy = document.get("schema") == ECONOMY_TRAINING_PLAN_SCHEMA
-        registered = economy or document.get("schema") == REGISTERED_TRAINING_PLAN_SCHEMA
+        schema = document.get("schema")
+        economy = schema == ECONOMY_TRAINING_PLAN_SCHEMA
+        direct = schema in {
+            DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+            DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        }
+        registered = economy or schema in {
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+            DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        }
         curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
-        completion = registered or curriculum or (
-            document.get("schema") == COMPLETION_TRAINING_PLAN_SCHEMA
-        )
-        continuation = completion or document.get("schema") == CONTINUATION_TRAINING_PLAN_SCHEMA
+        completion = registered or curriculum or schema in {
+            COMPLETION_TRAINING_PLAN_SCHEMA,
+            DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+        }
+        continuation = schema in {
+            CONTINUATION_TRAINING_PLAN_SCHEMA,
+            COMPLETION_TRAINING_PLAN_SCHEMA,
+            CURRICULUM_TRAINING_PLAN_SCHEMA,
+            REGISTERED_TRAINING_PLAN_SCHEMA,
+            ECONOMY_TRAINING_PLAN_SCHEMA,
+        }
         if (
             document.get("schema")
             not in {
@@ -59,6 +80,8 @@ class RedPlayerTrainingPlan:
                 CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             or document.get("partition") != "train"
         ):
@@ -96,6 +119,8 @@ class RedPlayerTrainingPlan:
                     "continuation_checkpoint_sha256",
                 }
             )
+        if direct:
+            expected_fields.update({"origin_profile_sha256", "root_pair_claim_sha256"})
         if completion:
             expected_fields.update({"maximum_actions", "maximum_frames"})
             if (
@@ -177,6 +202,8 @@ class RedPlayerTrainingPlan:
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             else 6000
         )
@@ -189,6 +216,8 @@ class RedPlayerTrainingPlan:
                 COMPLETION_TRAINING_PLAN_SCHEMA, CURRICULUM_TRAINING_PLAN_SCHEMA,
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
+                DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
             }
             else 600000
         )
@@ -212,6 +241,33 @@ def declare_completion_dose(plan: RedPlayerTrainingPlan) -> RedPlayerTrainingPla
         {
             **plan.document,
             "schema": COMPLETION_TRAINING_PLAN_SCHEMA,
+            "maximum_actions": COMPLETION_ACTIONS,
+            "maximum_frames": COMPLETION_FRAMES,
+        }
+    )
+
+
+def declare_direct_completion_dose(
+    plan: RedPlayerTrainingPlan,
+    *,
+    execution_profile_sha256: str,
+    root_pair_claim_sha256: str,
+) -> RedPlayerTrainingPlan:
+    """Bind a completion dose directly to one authenticated catalog origin.
+
+    Direct initialization is not a continuation and never invents a parent
+    episode or checkpoint.  The original catalog profile and the exact profile
+    used for execution are both retained in the declaration.
+    """
+    if plan.document["schema"] != TRAINING_PLAN_SCHEMA:
+        raise ValueError("direct completion dose requires an original catalog plan")
+    return RedPlayerTrainingPlan(
+        {
+            **plan.document,
+            "schema": DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+            "origin_profile_sha256": plan.document["profile_sha256"],
+            "profile_sha256": execution_profile_sha256,
+            "root_pair_claim_sha256": root_pair_claim_sha256,
             "maximum_actions": COMPLETION_ACTIONS,
             "maximum_frames": COMPLETION_FRAMES,
         }

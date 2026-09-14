@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Implement direct catalog-origin registered training and derive acquisition declarations from semantic inventory, then claim and inspect only the frozen source.
+- Next decision: Publish the direct catalog bridge, require exact-head CI, then claim and preflight only the frozen source without substitution.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-full-local-training-source** · status **closed** · evidence [qualification](docs/evidence/red-full-local-training-source-2026-09-14.json)
+**2026-09-14-direct-catalog-origin-bridge** · status **closed** · evidence [qualification](docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Metadata-only source selection excludes claimed and nontrain/ambiguous states before any menu inspection. The resulting configuration gap is retained without treating it as impossible gameplay. |
-| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. Zero saved payload opens, input, queries, claims, outcomes, fits or registration sessions. |
-| Authority delta | No new learned authority. One catalog source is selected; no model, ROM or saved payload was opened. |
-| Transfer result | No independent evaluation or transfer. ROM-free source-order, partition-alias, registry and availability-coverage checks passed. |
-| Blocker | The selected historical profile has no capture or native evolution declaration. The registered collector also requires an existing continuation, so direct catalog starts need an explicit origin/session contract. |
-| Decision | Implement direct catalog-origin registered training and derive acquisition declarations from semantic inventory, then claim and inspect only the frozen source. |
-| Next session | Implement direct catalog-origin training/session anchoring and inventory-derived acquisition configuration in the existing collector, then attempt the single frozen source without substitution. |
-| Next falsifier | The frozen source cannot expose two executable acquisition families after direct-origin integration, or its live claim is no longer available. |
-| Stop condition | No payload or input until the direct-origin contract and acquisition configuration are qualified. Recheck and atomically claim the frozen source; no substitute on conflict or failed two-family gate. No historical retry, fabricated predecessor, Model121 resource loop or full Red/hack/Crystal evaluation. |
+| Product alignment | Direct catalog starts now enter the registered player without invented history, caller-selected species or routes, and cannot open game payloads without the exact account-wide pair claim. |
+| Learning output | None. Direct origin/session/profile and claim-before-read contracts are engineering only. Zero saved payload opens, input, queries, claims, outcomes, fits or registration sessions. |
+| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; no model, ROM or saved payload was opened. |
+| Transfer result | No independent evaluation or transfer. Direct-vs-continuation schema separation, action-free derivation, anchor swaps, caller injection and claim/capture matching passed locally. |
+| Blocker | The exact bridge must be published and pass exact-head CI before the frozen source's irreversible root-pair claim can be created. The source may then still fail the action-free two-family menu gate. |
+| Decision | Require an exact atomic root-pair claim before direct payload access, retain that claim in the direct plan, publish the bridge, then preflight only the frozen source without substitution. |
+| Next session | After exact-head CI, atomically claim only the frozen source and run one action-free two-family preflight; execute and fit one model choice only if it passes. |
+| Next falsifier | The frozen source's exact pair is unavailable, or action-free inspection cannot produce two executable acquisition families. |
+| Stop condition | No frozen payload before exact-head CI and its exact root-pair claim. No substitute on conflict or failed two-family gate. No historical retry, fabricated predecessor, Model121 resource loop or full Red/hack/Crystal evaluation. |
 
 ### Stop conditions
 

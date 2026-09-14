@@ -56,6 +56,7 @@ from pokemon_red_completion.red_player_training_plan import (
     COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
     CURRICULUM_TRAINING_PLAN_SCHEMA,
+    DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
     ECONOMY_TRAINING_PLAN_SCHEMA,
     REGISTERED_TRAINING_PLAN_SCHEMA,
     STORY_CURRICULUM_CONTRACT,
@@ -219,7 +220,10 @@ def _audit_red_player_training_reader(
         if (
             payload.get("schema")
             != (ECONOMY_TRAINING_EVENT_SCHEMA if economy else REGISTERED_TRAINING_EVENT_SCHEMA
-                if plan.document["schema"] == REGISTERED_TRAINING_PLAN_SCHEMA
+                if plan.document["schema"] in {
+                    REGISTERED_TRAINING_PLAN_SCHEMA,
+                    DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                }
                 else CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
             or payload.get("plan_sha256") != plan.plan_sha256
             or event.get("episode_id") != episode_id
@@ -420,8 +424,11 @@ def _audit_red_player_training_reader(
                 censor_reason=LivingDexCensorReason.OBSERVATION_FAILED,
             )
         else:
-            if plan.document["schema"] in {REGISTERED_TRAINING_PLAN_SCHEMA,
-                                            ECONOMY_TRAINING_PLAN_SCHEMA}:
+            if plan.document["schema"] in {
+                REGISTERED_TRAINING_PLAN_SCHEMA,
+                DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                ECONOMY_TRAINING_PLAN_SCHEMA,
+            }:
                 from .red_registered_outcome import red_registered_outcome_from_observations
                 from .registered_checkpoint import RegisteredCollectionCheckpoint
 

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-local-training-source**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-catalog-origin-bridge**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-full-local-training-source-2026-09-14.json)
+[Current evidence](../docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-direct-catalog-origin-bridge
+
+Direct catalog-origin completion plans and local-registration sessions are qualified without a fabricated predecessor. A read-only inventory observation now derives one boxed level evolution and one ordinary wild corridor, while the runner requires an already-atomic exact-root claim before opening ROM or saved-state payloads. Model121 remains121 examples/83 successes/86 registrations; no game or learning effect occurred.
+
+**Deviation:** This was an engineering session, not a measured learner result. The frozen source remained unopened and unclaimed because exact-head publication and CI must precede irreversible consumption. Legacy continuation schemas and their checkpoint requirements remain unchanged.
+
+**Next:** Publish the exact bridge and require exact-head CI. Then atomically claim only the frozen source, run the action-free two-family preflight, and stop without substitution on claim conflict or menu failure; execute and fit one model-selected outcome only if it passes.
 
 ### 2026-09-14-full-local-training-source
 

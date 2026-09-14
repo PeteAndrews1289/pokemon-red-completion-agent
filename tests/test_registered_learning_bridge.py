@@ -285,6 +285,35 @@ def test_registered_plan_requires_real_continuation_parent(tmp_path):
         )
 
 
+def test_direct_registered_plan_does_not_require_a_fabricated_parent(tmp_path):
+    from test_goal_resource_quote import _supply_model
+    from test_red_player_training import _plan
+
+    from pokemon_red_completion.red_player_training_dataset import _require_continuation_origin
+    from pokemon_red_completion.red_player_training_plan import (
+        DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        RedPlayerTrainingPlan,
+    )
+    from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
+
+    plan = RedPlayerTrainingPlan({
+        **_plan(_supply_model()).document,
+        "schema": DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        "objective": REGISTERED_OBJECTIVE,
+        "registration_binding_sha256": "a" * 64,
+        "maximum_actions": 30_000,
+        "maximum_frames": 3_000_000,
+        "origin_profile_sha256": "b" * 64,
+        "root_pair_claim_sha256": "c" * 64,
+    })
+    _require_continuation_origin(
+        SimpleNamespace(
+            find_sealed_record=lambda *_a, **_k: pytest.fail("opened a parent checkpoint")
+        ),
+        plan,
+    )
+
+
 def test_registered_terminal_roundtrip_and_legacy_disguise_rejected(tmp_path):
     from test_red_player_checkpoint import _complete, _open
     from test_red_player_checkpoint import case as checkpoint_case

@@ -44,17 +44,20 @@ Model121's original source is outside the catalog. A metadata-only supply census
 saved payload or menu was opened. Its configuration lacks capture/evolution declarations, and the
 registered collector requires a continuation. Actual gameplay feasibility remains untested.
 
-Implement direct catalog-origin training/session anchoring and derive acquisition declarations
-from semantic inventory using the existing cartridge adapters. Preserve legacy continuations.
-Then claim and inspect only the frozen source, require two executable families and retain one
-exploratory model outcome if the gate passes. No replacement selection or Model121 resource loop.
+The direct catalog-origin training/session schemas and inventory-derived acquisition configuration
+are locally qualified. They preserve legacy continuations, reject caller species/routes, and require
+an exact-code/exact-root account-wide claim before the runner opens game payloads. Publish and green
+that bridge, then create and pass the claim for only the frozen source, require two executable
+families and retain one exploratory model outcome if the gate passes. No replacement selection or
+Model121 resource loop.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-full-local-training-source.md) ·
-[Evidence](evidence/red-full-local-training-source-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-direct-catalog-origin-bridge.md) ·
+[Evidence](evidence/red-direct-catalog-origin-bridge-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 90–150 minutes for the
-specified direct-origin integration. Use Astra if an unresolved authority decision emerges.
+Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 60–120 minutes for the
+claim-first live gate and one bounded outcome if it passes. Use Astra if an unresolved authority
+decision emerges.

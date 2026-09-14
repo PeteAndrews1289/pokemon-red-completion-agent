@@ -7,6 +7,72 @@ import pytest
 import pokemon_red_completion.red_player_training_plan as plans
 
 
+def _base_plan():
+    return plans.RedPlayerTrainingPlan(
+        {
+            "schema": plans.TRAINING_PLAN_SCHEMA,
+            "episode_id": "direct-catalog-episode",
+            "partition": "train",
+            "seed": 17,
+            "decision_limit": 2,
+            "behavior_policy_id": "living-dex-player-supported-menu-v2",
+            "economic_contract": "known-spend-and-excess-reserve-v1",
+            "context_catalog_sha256": "1" * 64,
+            "context_id": "2" * 64,
+            "catalog_source_commit": "3" * 40,
+            "binding_manifest_sha256": "4" * 64,
+            "root_lineage_id": "direct-catalog-root",
+            "state_sha256": "5" * 64,
+            "envelope_sha256": "6" * 64,
+            "profile_sha256": "7" * 64,
+            "model_sha256": "8" * 64,
+            "source_commit": "9" * 40,
+            "source_bundle_sha256": "a" * 64,
+            "independent_evaluation": False,
+            "historical_trial_retry": False,
+            "episode_retry_after_input": False,
+        }
+    )
+
+
+def test_direct_completion_binds_execution_profile_without_inventing_parent():
+    direct = plans.declare_direct_completion_dose(
+        _base_plan(),
+        execution_profile_sha256="b" * 64,
+        root_pair_claim_sha256="c" * 64,
+    )
+    assert direct.document["schema"] == plans.DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA
+    assert direct.document["origin_profile_sha256"] == "7" * 64
+    assert direct.document["profile_sha256"] == "b" * 64
+    assert direct.document["root_pair_claim_sha256"] == "c" * 64
+    assert direct.maximum_actions == 30_000
+    assert direct.maximum_frames == 3_000_000
+    assert not any(key.startswith("continuation_") for key in direct.document)
+    assert "restore_profile_sha256" not in direct.document
+
+
+def test_direct_completion_rejects_relabeling_a_continuation():
+    direct = plans.declare_direct_completion_dose(
+        _base_plan(),
+        execution_profile_sha256="b" * 64,
+        root_pair_claim_sha256="c" * 64,
+    )
+    with pytest.raises(ValueError, match="original catalog plan"):
+        plans.declare_direct_completion_dose(
+            direct,
+            execution_profile_sha256="c" * 64,
+            root_pair_claim_sha256="d" * 64,
+        )
+    with pytest.raises(ValueError, match="fields differ"):
+        plans.RedPlayerTrainingPlan(
+            {
+                **direct.document,
+                "continuation_episode_id": "invented-parent",
+                "continuation_checkpoint_sha256": "d" * 64,
+            }
+        )
+
+
 @pytest.mark.parametrize(
     "partition,other_partition,state_changed",
     [

@@ -42,6 +42,7 @@ from pokemon_red_completion.forward_goal import ForwardGoalPlan  # noqa: E402
 from pokemon_red_completion.goal_manager_composition_qualification import (  # noqa: E402
     CompositionIndependentBudgetMeter,
     HardCompositionActionLimiter,
+    root_consumption_sha256,
 )
 from pokemon_red_completion.goal_manager_composition_runtime import (  # noqa: E402
     CompositionBudgetCheckpoint,
@@ -143,6 +144,7 @@ from pokemon_red_completion.red_player_training import RedPlayerTrainingTrajecto
 from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
     RedPlayerTrainingPlan,
     continue_red_player_training,
+    declare_direct_completion_dose,
     declare_red_player_training,
 )
 from pokemon_red_completion.red_regional_goal_proposal import (  # noqa: E402
@@ -172,6 +174,7 @@ BASELINE_ARM_ID = "completion-first-teacher"
 FORWARD_PROBE_ARM_ID = "forward-first-choice-training-probe"
 _CHALLENGER_IDS = (LEARNED_ARM_ID, CAUSAL_ARM_ID, CALIBRATION_ARM_ID)
 _PAIR_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,47}\Z")
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 # Historical references, not controller authority. A living collection can need
 # hundreds of source/objective revisits; retain them instead of truncating history.
 # Per-episode decision/action/frame limits and ordered authentication are unchanged.
@@ -243,6 +246,7 @@ class _Readiness:
     registration_sequence: int | None = None
     restore_registration_record_id: str | None = None
     full_local_pokedex_choice: bool = False
+    root_pair_claim_sha256: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -589,6 +593,55 @@ def _route_world(readiness: _Readiness) -> StrategicScenarioRouteWorld | None:
     return StrategicScenarioRouteWorld.from_rom(payload)
 
 
+def _derive_direct_full_local_profile(readiness: _Readiness) -> _Readiness:
+    """Observe once without input and bind cartridge-derived target declarations."""
+    from pokemon_red_completion.red_full_pokedex_direct_profile import (
+        RedFullPokedexDirectOriginError,
+        RedFullPokedexDirectProfileError,
+        derive_direct_full_pokedex_profile_from_capture,
+    )
+
+    world = _route_world(readiness)
+    if world is None:
+        raise PairedRedBoundedPlayerRunError("direct_full_local_routing")
+    try:
+        profile = derive_direct_full_pokedex_profile_from_capture(
+            readiness.rom_path,
+            readiness.capture,
+            readiness.profile,
+            world,
+        )
+    except RedFullPokedexDirectOriginError as error:
+        raise PairedRedBoundedPlayerRunError(
+            "direct_full_local_action_free_origin"
+        ) from error
+    except RedFullPokedexDirectProfileError as error:
+        raise PairedRedBoundedPlayerRunError(
+            "direct_full_local_configuration"
+        ) from error
+    return replace(readiness, profile=profile)
+
+
+def _advance_full_local_profile(
+    readiness: _Readiness,
+    *,
+    direct_catalog_origin: bool,
+    initial_execution_profile: RedGoalContextProfile | None,
+) -> _Readiness:
+    """Use origin inventory once, then re-derive from each authenticated terminal."""
+    if direct_catalog_origin:
+        if initial_execution_profile is None:
+            raise PairedRedBoundedPlayerRunError("direct_full_local_origin_profile")
+        return replace(readiness, profile=initial_execution_profile)
+    if not readiness.full_local_pokedex_choice:
+        return readiness
+    if readiness.restore_profile is None:
+        raise PairedRedBoundedPlayerRunError("direct_full_local_continuation_profile")
+    return _derive_direct_full_local_profile(
+        replace(readiness, profile=readiness.restore_profile)
+    )
+
+
 @dataclass(slots=True)
 class _ProgressPredicate:
     initial: LivingCollectionCheckpoint | None = None
@@ -652,6 +705,9 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--economy-training", action="store_true",
                         help="Opt in to recorded cash outcomes with a feature-v4 model.")
     parser.add_argument("--registration-run-id", default=None)
+    parser.add_argument("--root-pair-claim-sha256", default=None)
+    parser.add_argument("--expected-logical-root-sha256", default=None)
+    parser.add_argument("--expected-physical-root-sha256", default=None)
     parser.add_argument(
         "--full-local-pokedex-choice",
         action="store_true",
@@ -959,6 +1015,61 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _require_direct_root_claim(
+    args: argparse.Namespace,
+    *,
+    source_commit: str,
+) -> Any:
+    """Authenticate an already atomic pair claim before any game payload opens."""
+    from pokemon_red_completion.claim_first_admission import read_root_pair_claim
+    from pokemon_red_completion.goal_manager_composition_qualification import (
+        fixed_account_claim_registry_root,
+    )
+
+    values = tuple(
+        getattr(args, name, None)
+        for name in (
+            "root_pair_claim_sha256",
+            "expected_logical_root_sha256",
+            "expected_physical_root_sha256",
+        )
+    )
+    if any(not isinstance(value, str) or _SHA256.fullmatch(value) is None for value in values):
+        raise PairedRedBoundedPlayerRunError("direct_full_local_claim_arguments")
+    claim = read_root_pair_claim(
+        fixed_account_claim_registry_root(), cast(str, values[0])
+    )
+    if (
+        claim.stage != "full-local-red-training"
+        or claim.source_commit != source_commit
+        or claim.runner_sha256 != _sha256(Path(__file__))
+        or claim.logical_root_sha256 != values[1]
+        or claim.physical_root_sha256 != values[2]
+    ):
+        raise PairedRedBoundedPlayerRunError("direct_full_local_claim_identity")
+    return claim
+
+
+def _verify_direct_root_pair(capture: GoalManagerContextCapture, claim: Any) -> None:
+    """Reject a consumed claim whose exact bytes differ from the opened capture."""
+    logical = root_consumption_sha256(
+        state_sha256=capture.state_sha256,
+        envelope_sha256=capture.envelope_sha256,
+    )
+    physical = canonical_sha256(
+        {
+            "schema": "pokemon.red.private-physical-setup-root.v1",
+            "state_sha256": capture.state_sha256,
+            "envelope_sha256": capture.envelope_sha256,
+        }
+    )
+    if (
+        claim.logical_root_sha256 != logical
+        or claim.physical_root_sha256 != physical
+    ):
+        raise PairedRedBoundedPlayerRunError("direct_full_local_claim_capture")
+
+
 def _challenger_arguments(
     args: argparse.Namespace,
 ) -> tuple[Path, Path | None, str | None, str | None]:
@@ -1017,6 +1128,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     continuation_chain = tuple(
         tuple(item) for item in getattr(args, "continue_from_checkpoint", ())
     )
+    full_local_pokedex_choice = getattr(args, "full_local_pokedex_choice", False)
+    if type(full_local_pokedex_choice) is not bool:
+        raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
+    direct_catalog_origin = full_local_pokedex_choice and not continuation_chain
     if continuation_chain and (
         args.challenger != CAUSAL_ARM_ID
         or getattr(args, "context_origin", None) != "training"
@@ -1031,7 +1146,10 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         or any(not isinstance(source, (str, Path)) for source in wild_sources)
         or (
             wild_sources
-            and (not continuation_chain or not getattr(args, "routed_resource_goals", False))
+            and (
+                not (continuation_chain or direct_catalog_origin)
+                or not getattr(args, "routed_resource_goals", False)
+            )
         )
     ):
         raise PairedRedBoundedPlayerRunError("regional_profile_scope")
@@ -1040,7 +1158,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     boxed_evolution = getattr(args, "boxed_evolution", None)
     remaining_acquisition_demand = getattr(args, "remaining_acquisition_demand", False)
     if type(remaining_acquisition_demand) is not bool or (
-        remaining_acquisition_demand and not continuation_chain
+        remaining_acquisition_demand and not (continuation_chain or direct_catalog_origin)
     ):
         raise PairedRedBoundedPlayerRunError("remaining_acquisition_demand_scope")
     level_evolution_acquisitions = getattr(args, "level_evolution_acquisitions", False)
@@ -1061,13 +1179,19 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     routed_recovery = getattr(args, "routed_recovery", False)
     if type(routed_recovery) is not bool or (
         routed_recovery
-        and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
+        and (
+            not getattr(args, "routed_resource_goals", False)
+            or not (continuation_chain or direct_catalog_origin)
+        )
     ):
         raise PairedRedBoundedPlayerRunError("routed_recovery_scope")
     routed_storage_relief = getattr(args, "routed_storage_relief", False)
     if type(routed_storage_relief) is not bool or (
         routed_storage_relief
-        and (not getattr(args, "routed_resource_goals", False) or not continuation_chain)
+        and (
+            not getattr(args, "routed_resource_goals", False)
+            or not (continuation_chain or direct_catalog_origin)
+        )
     ):
         raise PairedRedBoundedPlayerRunError("routed_storage_relief_scope")
     trainer_funding = getattr(args, "trainer_funding", False)
@@ -1097,29 +1221,31 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         raise PairedRedBoundedPlayerRunError("trainer_funding_scope")
     completion_dose = getattr(args, "completion_dose", False)
     if type(completion_dose) is not bool or (
-        completion_dose and (boxed_evolution is None or not continuation_chain)
+        completion_dose
+        and not (
+            full_local_pokedex_choice
+            or (boxed_evolution is not None and continuation_chain)
+        )
     ):
         raise PairedRedBoundedPlayerRunError("completion_dose_scope")
     if boxed_evolution is not None and (
-        not continuation_chain
+        not (continuation_chain or direct_catalog_origin)
         or not getattr(args, "routed_resource_goals", False)
         or not isinstance(boxed_evolution, (tuple, list))
         or len(boxed_evolution) != 3
         or any(type(value) is not int for value in boxed_evolution)
     ):
         raise PairedRedBoundedPlayerRunError("boxed_evolution_scope")
-    full_local_pokedex_choice = getattr(args, "full_local_pokedex_choice", False)
-    if type(full_local_pokedex_choice) is not bool or (
-        full_local_pokedex_choice
-        and (
-            not completion_dose
-            or not getattr(args, "train_player", False)
-            or getattr(args, "registered_ledger", None) is None
-            or not getattr(args, "registration_session", None)
-            or not getattr(args, "registration_run_id", None)
-        )
+    if full_local_pokedex_choice and (
+        not completion_dose
+        or not getattr(args, "train_player", False)
+        or getattr(args, "registered_ledger", None) is None
+        or not getattr(args, "registration_session", None)
+        or not getattr(args, "registration_run_id", None)
     ):
         raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
+    if full_local_pokedex_choice and (boxed_evolution is not None or wild_sources):
+        raise PairedRedBoundedPlayerRunError("direct_full_local_configuration_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
         raise PairedRedBoundedPlayerRunError("context_origin")
@@ -1144,6 +1270,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     require_published_source(PROJECT_ROOT, source)
     if source.git_commit is None:
         raise PairedRedBoundedPlayerRunError("source_identity")
+    root_pair_claim = (
+        _require_direct_root_claim(args, source_commit=source.git_commit)
+        if direct_catalog_origin
+        else None
+    )
     (
         challenger_model_path,
         calibration_summary_path,
@@ -1157,6 +1288,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     profile_path = _regular_external(args.profile, subject="profile", rom_path=rom_path)
     output_path = _new_external_output(args.out, rom_path=rom_path)
     capture = open_goal_manager_context_capture(state, envelope)
+    if root_pair_claim is not None:
+        _verify_direct_root_pair(capture, root_pair_claim)
     profile = load_red_goal_context_profile(profile_path)
     if capture.capture_id != profile.profile_id:
         raise PairedRedBoundedPlayerRunError("capture_profile_identity")
@@ -1268,6 +1401,9 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         level_evolution_acquisitions=level_evolution_acquisitions,
         fossil_acquisitions=fossil_acquisitions,
         full_local_pokedex_choice=full_local_pokedex_choice,
+        root_pair_claim_sha256=(
+            root_pair_claim.claim_sha256 if root_pair_claim is not None else None
+        ),
         save_terminal_checkpoints=save_terminal_checkpoints,
         source_commit=source.git_commit,
         source_bundle_sha256=bundle,
@@ -1301,11 +1437,13 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         if expand_local
         else None
     )
-    execution_profile = (
-        _boxed_evolution_profile(expanded_profile or profile, boxed_evolution)
-        if boxed_evolution is not None
-        else None
-    )
+    execution_profile = None
+    if full_local_pokedex_choice:
+        execution_profile = _derive_direct_full_local_profile(readiness).profile
+    elif boxed_evolution is not None:
+        execution_profile = _boxed_evolution_profile(
+            expanded_profile or profile, boxed_evolution
+        )
     regional_profiles = _regional_profiles(
         execution_profile or expanded_profile or profile, tuple(wild_sources), readiness,
         allow_cartridge_sources=getattr(args, "registered_ledger", None) is not None,
@@ -1323,6 +1461,11 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         expanded_profile=expanded_profile,
         execution_profile=execution_profile,
         regional_profiles=regional_profiles,
+    )
+    readiness = _advance_full_local_profile(
+        readiness,
+        direct_catalog_origin=direct_catalog_origin,
+        initial_execution_profile=execution_profile,
     )
     if readiness.training_plan is not None and readiness.continuation is not None:
         assert readiness.restore_profile is not None
@@ -1345,7 +1488,17 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
 
         readiness = replace(
             readiness,
-            training_plan=declare_completion_dose(readiness.training_plan),
+            training_plan=(
+                declare_direct_completion_dose(
+                    readiness.training_plan,
+                    execution_profile_sha256=readiness.profile.profile_sha256,
+                    root_pair_claim_sha256=cast(
+                        str, readiness.root_pair_claim_sha256
+                    ),
+                )
+                if direct_catalog_origin
+                else declare_completion_dose(readiness.training_plan)
+            ),
         )
     if readiness.training_plan is not None and any(
         spec.parameters.get("maximum_full_restores", 0) for spec in readiness.profile.providers
@@ -1447,11 +1600,22 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
         if name is not None or run_id is not None or readiness.restore_registration_record_id:
             raise ValueError("registered continuation requires its ledger and session")
         return readiness
+    from pokemon_red_completion.red_player_training_plan import (
+        DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+        DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+        REGISTERED_TRAINING_PLAN_SCHEMA,
+    )
+
+    direct_catalog_origin = (
+        readiness.training_plan is not None
+        and readiness.training_plan.document["schema"]
+        == DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA
+    )
     if (
         not name
         or not run_id
         or readiness.training_plan is None
-        or readiness.continuation is None
+        or (readiness.continuation is None and not direct_catalog_origin)
         or not readiness.completion_dose
         or not readiness.save_terminal_checkpoints
         or not readiness.remaining_acquisition_demand
@@ -1459,11 +1623,13 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
         or readiness.forward_story_objective is not None
     ):
         raise ValueError("registered mode requires a saved collection training continuation")
-    from pokemon_red_completion.red_player_training_plan import REGISTERED_TRAINING_PLAN_SCHEMA
     from pokemon_red_completion.red_registration_session import (
+        DIRECT_SESSION_SCHEMA,
         SESSION_KIND,
+        SESSION_SCHEMA,
         load_registration_policy,
         observe_registration,
+        publish_direct_registration_session,
         publish_registration_session,
         read_registration_state,
         session_record_id,
@@ -1508,21 +1674,40 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
                 snapshot_sha256=readiness.capture.state_sha256,
                 sequence=0 if latest is None else latest.sequence,
             )
-            anchor_id, anchor_sha = readiness.continuation_chain[-1]
-            document = publish_registration_session(
-                readiness.private_root,
-                name=name,
-                ledger_path=ledger_path,
-                observation=observed,
-                row=row,
-                anchor_episode_id=anchor_id,
-                anchor_checkpoint_sha256=anchor_sha,
-                completion_scope=(
-                    "local_red"
-                    if getattr(readiness, "full_local_pokedex_choice", False)
-                    else "shared"
-                ),
+            scope = (
+                "local_red"
+                if getattr(readiness, "full_local_pokedex_choice", False)
+                else "shared"
             )
+            if direct_catalog_origin:
+                plan = readiness.training_plan
+                document = publish_direct_registration_session(
+                    readiness.private_root,
+                    name=name,
+                    ledger_path=ledger_path,
+                    observation=observed,
+                    row=row,
+                    anchor_training_plan_sha256=plan.plan_sha256,
+                    anchor_context_catalog_sha256=cast(
+                        str, plan.document["context_catalog_sha256"]
+                    ),
+                    anchor_context_id=cast(str, plan.document["context_id"]),
+                    anchor_state_sha256=cast(str, plan.document["state_sha256"]),
+                    anchor_envelope_sha256=cast(str, plan.document["envelope_sha256"]),
+                    completion_scope=scope,
+                )
+            else:
+                anchor_id, anchor_sha = readiness.continuation_chain[-1]
+                document = publish_registration_session(
+                    readiness.private_root,
+                    name=name,
+                    ledger_path=ledger_path,
+                    observation=observed,
+                    row=row,
+                    anchor_episode_id=anchor_id,
+                    anchor_checkpoint_sha256=anchor_sha,
+                    completion_scope=scope,
+                )
     else:
         document = record.read()
     policy = load_registration_policy(document)
@@ -1531,9 +1716,31 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
         and policy.completion_scope != "local_red"
     ):
         raise ValueError("full-local player requires a local Red registration session")
-    anchor = (document["anchor_episode_id"], document["anchor_checkpoint_sha256"])
-    if anchor not in readiness.continuation_chain or policy.run_id != run_id:
-        raise ValueError("registration session does not belong to this continuation")
+    if direct_catalog_origin:
+        plan = readiness.training_plan
+        expected_anchor = {
+            "anchor_training_plan_sha256": plan.plan_sha256,
+            "anchor_context_catalog_sha256": plan.document["context_catalog_sha256"],
+            "anchor_context_id": plan.document["context_id"],
+            "anchor_state_sha256": plan.document["state_sha256"],
+            "anchor_envelope_sha256": plan.document["envelope_sha256"],
+        }
+        if document.get("schema") != DIRECT_SESSION_SCHEMA or any(
+            document.get(key) != value for key, value in expected_anchor.items()
+        ):
+            raise ValueError("registration session does not belong to this catalog origin")
+        suffix: tuple[tuple[str, str], ...] = ()
+    else:
+        if document.get("schema") != SESSION_SCHEMA:
+            raise ValueError("registration session does not belong to this continuation")
+        anchor = (document["anchor_episode_id"], document["anchor_checkpoint_sha256"])
+        if anchor not in readiness.continuation_chain:
+            raise ValueError("registration session does not belong to this continuation")
+        suffix = readiness.continuation_chain[
+            readiness.continuation_chain.index(anchor) + 1 :
+        ]
+    if policy.run_id != run_id:
+        raise ValueError("registration session run differs")
     initial = policy.initial_memory.latest(run_id)
     if initial is None or initial.cartridge_sha256 != readiness.rom_sha256:
         raise ValueError("registration session cartridge differs")
@@ -1542,7 +1749,6 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
         r.sha256 for r in present.observations
     }:
         raise ValueError("registration ledger lost frozen source evidence")
-    suffix = readiness.continuation_chain[readiness.continuation_chain.index(anchor) + 1 :]
     ledger = RegistrationMemory(ledger_path)
     for offset, (episode_id, _) in enumerate(suffix, start=1):
         # _continue_readiness authenticated each completed trajectory and its
@@ -1579,7 +1785,11 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
         training_plan=RedPlayerTrainingPlan(
             {
                 **readiness.training_plan.document,
-                "schema": REGISTERED_TRAINING_PLAN_SCHEMA,
+                "schema": (
+                    DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA
+                    if direct_catalog_origin
+                    else REGISTERED_TRAINING_PLAN_SCHEMA
+                ),
                 "objective": REGISTERED_OBJECTIVE,
                 "registration_binding_sha256": policy.sha256,
             }
@@ -2380,6 +2590,8 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     from pokemon_red_completion.red_player_training_plan import (
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+        DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
         ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     )
@@ -2415,6 +2627,8 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
     return parsed.document["schema"] in {
         COMPLETION_TRAINING_PLAN_SCHEMA,
         CURRICULUM_TRAINING_PLAN_SCHEMA,
+        DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
+        DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
         ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
     }

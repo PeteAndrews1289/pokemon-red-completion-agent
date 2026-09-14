@@ -16,10 +16,11 @@ valuable evidence without remaining an instruction.
 
 Model121 has121 settled training-only examples and83 successes. Its durable Red checkpoint has86
 local registrations,66 living species and70 physical specimens. A ROM-free inventory accounts for
-all151 local targets. The shared-departure redesign now exposes real routed capture and native
-evolution together: the same historical state passed with zero actions/frames and unchanged bytes.
-Local151 policy, checkpoint and reward accounting retain shared and physical views separately.
-This is engineering qualification, not a new learning result or independent competence.
+all151 local targets. Direct catalog starts now have separate origin/session contracts, derive a
+boxed evolution and wild corridor from read-only state, and require an exact account-wide root-pair
+claim before opening game payloads. The frozen next source remains unclaimed and unopened pending
+exact-code CI. This is engineering qualification, not a new learning result or independent
+competence.
 
 ## Reader-facing summaries
 

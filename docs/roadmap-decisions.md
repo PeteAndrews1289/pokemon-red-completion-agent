@@ -855,3 +855,26 @@ factory, new catalog, source substitution, learning counter or stage exit is aut
 engineering result. The full model-directed Red story/local151 gate remains unchanged.
 
 [Evidence](evidence/red-full-local-training-source-2026-09-14.json).
+
+## September14 — direct catalog origins without invented parents
+
+The registered bounded player now distinguishes an original catalog start from a saved
+continuation. New direct completion and registered schemas bind the catalog, exact state/envelope,
+root lineage, original and derived profiles, model and current source without predecessor fields.
+A separate registration session anchors its policy to that exact catalog origin. Legacy schemas
+and checkpoint requirements remain unchanged.
+
+Full-local mode derives a missing boxed canonical level evolution and a missing ordinary wild
+source from a read-only semantic observation, with the encounter corridor derived from cartridge
+geometry. Caller species and routes are rejected. This is engineering qualification only: the
+frozen selected source remains unclaimed and unopened, and Model121 remains at121 examples,
+83 successes and86 local registrations.
+
+The runner now enforces an already-published account-wide pair claim before game-payload access,
+verifies the opened state/envelope pair against it, and retains its digest in the direct plan.
+Publish and green this exact bridge, then create that claim through a controller-capable boundary
+for only the frozen payload. Require two real executable families before a model query; retain a conflict or
+one-family failure without selecting a substitute. Only a measured, durably retained choice may
+advance the learner.
+
+[Evidence](evidence/red-direct-catalog-origin-bridge-2026-09-14.json).

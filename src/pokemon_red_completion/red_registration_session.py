@@ -26,6 +26,16 @@ from .registration_memory import (
 
 SESSION_KIND = "red_registration_session"
 SESSION_SCHEMA = "pokemon.red.private-registration-session.v1"
+DIRECT_SESSION_SCHEMA = "pokemon.red.private-direct-registration-session.v1"
+_DIRECT_ANCHOR_FIELDS = frozenset(
+    {
+        "anchor_training_plan_sha256",
+        "anchor_context_catalog_sha256",
+        "anchor_context_id",
+        "anchor_state_sha256",
+        "anchor_envelope_sha256",
+    }
+)
 
 
 def read_registration_state(
@@ -179,9 +189,96 @@ def publish_registration_session(
     return document
 
 
+def publish_direct_registration_session(
+    store: PrivateArtifactRoot,
+    *,
+    name: str,
+    ledger_path: Path,
+    observation: RedGoalObservation,
+    row: RegistrationObservation,
+    anchor_training_plan_sha256: str,
+    anchor_context_catalog_sha256: str,
+    anchor_context_id: str,
+    anchor_state_sha256: str,
+    anchor_envelope_sha256: str,
+    completion_scope: str = "shared",
+) -> dict[str, Any]:
+    """Freeze registration at an authenticated catalog origin without a parent."""
+    if completion_scope not in {"shared", "local_red"}:
+        raise ValueError("Red registration completion scope differs")
+    anchors = {
+        "anchor_training_plan_sha256": anchor_training_plan_sha256,
+        "anchor_context_catalog_sha256": anchor_context_catalog_sha256,
+        "anchor_context_id": anchor_context_id,
+        "anchor_state_sha256": anchor_state_sha256,
+        "anchor_envelope_sha256": anchor_envelope_sha256,
+    }
+    for name_, value in anchors.items():
+        if not isinstance(value, str) or not value:
+            raise ValueError(f"direct registration {name_} differs")
+        if (
+            len(value) != 64 or any(c not in "0123456789abcdef" for c in value)
+        ):
+            raise ValueError(f"direct registration {name_} differs")
+    if row.snapshot_sha256 != anchor_state_sha256:
+        raise ValueError("direct registration state observation differs")
+    ledger = RegistrationMemory(ledger_path)
+    ledger.record(row)
+    memory = ledger.snapshot()
+    protected: dict[str, int] = {}
+    for specimen in observation.collection_observation.specimens:
+        if specimen.location is CollectionLocation.PARTY:
+            protected[specimen.species_ref] = protected.get(specimen.species_ref, 0) + 1
+    policy = RedRegistrationPolicy(
+        memory,
+        row.run_id,
+        row.snapshot_sha256,
+        observation.collection_observation,
+        protected,
+        completion_scope=completion_scope,
+    )
+    collection = asdict(observation.collection_observation)
+    collection["owned_species"] = sorted(collection["owned_species"])
+    collection = json.loads(json.dumps(collection))
+    document = {
+        "schema": DIRECT_SESSION_SCHEMA,
+        "policy_sha256": policy.sha256,
+        **anchors,
+        "policy": policy.document(),
+        "memory": json.loads(memory.export_json()),
+        "initial_collection": collection,
+    }
+    _require_direct_session_shape(document)
+    store.publish_sealed_record(session_record_id(name), kind=SESSION_KIND, record=document)
+    return document
+
+
+def _require_direct_session_shape(document: dict[str, Any]) -> None:
+    expected = {
+        "schema",
+        "policy_sha256",
+        "policy",
+        "memory",
+        "initial_collection",
+        *_DIRECT_ANCHOR_FIELDS,
+    }
+    if set(document) != expected:
+        raise ValueError("direct registration session fields differ")
+    for name in _DIRECT_ANCHOR_FIELDS:
+        value = document[name]
+        if (
+            not isinstance(value, str)
+            or len(value) != 64
+            or any(c not in "0123456789abcdef" for c in value)
+        ):
+            raise ValueError(f"direct registration {name} differs")
+
+
 def load_registration_policy(document: dict[str, Any]) -> RedRegistrationPolicy:
-    if document.get("schema") != SESSION_SCHEMA:
+    if document.get("schema") not in {SESSION_SCHEMA, DIRECT_SESSION_SCHEMA}:
         raise ValueError("registration session schema differs")
+    if document["schema"] == DIRECT_SESSION_SCHEMA:
+        _require_direct_session_shape(document)
     memory = RegistrationSnapshot(
         tuple(registration_row(r) for r in document["memory"]["observations"])
     )
@@ -208,4 +305,9 @@ def load_registration_policy(document: dict[str, Any]) -> RedRegistrationPolicy:
     )
     if result.document() != binding or result.sha256 != document["policy_sha256"]:
         raise ValueError("registration session policy differs")
+    if (
+        document["schema"] == DIRECT_SESSION_SCHEMA
+        and result.initial_snapshot_sha256 != document["anchor_state_sha256"]
+    ):
+        raise ValueError("direct registration state observation differs")
     return result

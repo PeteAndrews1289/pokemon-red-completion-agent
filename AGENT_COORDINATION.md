@@ -17,11 +17,12 @@ One unclaimed catalog training source is frozen in private record
 is claimed and cannot supply this lesson. The fixed selected source's configuration declares
 only story, restoration and control recovery; its actual gameplay feasibility is unknown.
 
-Codex next adds direct catalog-origin training and registration anchoring to the existing
-player, preserving continuation contracts. Derive capture/evolution declarations from semantic
-inventory and existing cartridge adapters. Recheck and claim only the frozen source before
-opening it; require two executable families before a query. Do not reselect on conflict/failure.
-The exact implementation contract is in the current session.
+The direct catalog-origin plan/session bridge and inventory-derived acquisition declarations are
+locally qualified. They preserve continuation contracts, reject caller species/routes and require
+an exact account-wide pair claim before the runner can open game payloads. Codex next publishes
+that bridge, then uses a controller-capable boundary to claim only the frozen source and pass the
+claim to the runner; require two executable families before a query. Do not reselect on
+conflict/failure.
 
 Model121 remains 121 examples/83 successes/86 local registrations. There is no new learned
 authority or transfer evidence. The anti-drift alarm remains active and Red's full fresh-run
@@ -29,16 +30,14 @@ story/local151 gate still precedes any ROM hack, Crystal or Emerald.
 
 ## External contributions and status
 
-Claude Opus4.8 High completed the bounded selector source/test review with no concrete finding.
-It did not verify actual claim execution or upstream independence. An earlier inquiry produced
-no retained response and is not counted as a verdict.
-Flash3.8 High completed a tool-free test proposal. Partition aliases, fixed ordering and stale
-claims were accepted; treating historical menus as current executability was rejected.
+Claude Opus4.8 High reviewed the direct bridge, found one error-contract inconsistency and confirmed
+the repair in the retained diff. It did not verify claim execution or upstream independence.
+Flash3.8 High completed a tool-free adversarial review. Hybrid-schema, anchor-swap, exhausted
+inventory and caller-injection cases are covered; route and concurrency remain at existing gates.
 Neither reviewer remains running. Current subscription quota percentages/reset windows are
 unavailable from the headless interfaces; no reset, credits or billing change occurred.
 
-Next external task, if useful: review the direct-origin admission/continuation compatibility
-delta. Do not repeat general architecture audits or turn reviewer approval into a gameplay gate.
+Next external task, if useful: review only claim-before-payload ordering and failure admission.
 
-[Session](docs/work-sessions/2026-09-14-full-local-training-source.md) ·
+[Session](docs/work-sessions/2026-09-14-direct-catalog-origin-bridge.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
