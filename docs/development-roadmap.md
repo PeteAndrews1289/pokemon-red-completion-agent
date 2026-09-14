@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-shared-departure**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-full-local-collector-stop**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)
+[Current evidence](../docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-model121-full-local-collector-stop
+
+The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is training-ineligible and its original state has zero frozen-catalog matches.
+
+**Deviation:** No gameplay, query, label, registration session, outcome, fit, promotion or stage exit occurred. One hosted legacy false-mode compatibility failure was repaired without changing the opt-in contract. The provenance falsifier outranked pressure to produce another row.
+
+**Next:** Provision one prospectively eligible catalog-backed departure for the integrated full-local collector. Require two executable acquisition families action-free, then freeze and execute one exploratory model choice; do not search consumed historical states or weaken training provenance.
 
 ### 2026-09-14-full-pokedex-shared-departure
 

@@ -33,23 +33,24 @@ with unchanged bytes and zero actions/frames. Center departure also passed ROM-f
 The prior location-incompatibility diagnosis tested only the local enumerator, not the router.
 
 New opt-in local151 checkpoints and rewards preserve shared history and physical inventory
-without changing old shared124 documents or outcomes. This is engineering qualification:
-no new model choice, outcome, fit, independence result or registration was earned.
+without changing old shared124 documents or outcomes. The proposal is now connected to the
+durable player with one-shot and write-ahead selection guarantees. This is engineering
+qualification: no new model choice, outcome, fit, independence result or registration was earned.
 
 ## Immediate next session
 
-Use the qualified runtime for one prospectively bounded model-selected training outcome.
-First authenticate an eligible train departure and its full-local registration session; do not
-assume the diagnostic state is eligible or independently rooted. Freeze one choice, execute only
-its real binding, retain actual costs/failure/success and a fresh terminal ledger, then fit only
-the measured outcome. Do not reopen consumed assignments or the Model121 resource loop.
+The exact Model121 departure failed the provenance gate before input: its immutable header is
+training-ineligible and its original state has zero frozen-catalog matches. Provision one new
+catalog-backed eligible departure for the integrated collector. Require both capture and evolution
+action-free, then freeze and execute one exploratory model choice and fit only its measured outcome.
+Do not reopen consumed assignments, search historical states or resume the Model121 resource loop.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
-[Evidence](evidence/red-full-pokedex-shared-departure-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
+[Evidence](evidence/red-model121-full-local-collector-stop-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about60–90minutes for bounded
-execution and outcome admission. Reserve Astra for a genuinely new architectural blocker.
+Next-session recommendation: **GPT-6 Astra / High / Fast off**, about90–150minutes for eligible
+training-supply and authority design. Return to Sol High after a departure is frozen.

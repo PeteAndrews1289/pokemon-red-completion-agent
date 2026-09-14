@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-full-pokedex-shared-departure",
+  "as_of_session": "2026-09-14-model121-full-local-collector-stop",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json"
+      "evidence": "docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1328,6 +1328,12 @@
       "result": "Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed. Model121 remains121 examples/83 successes/86 registrations; no learning result.",
       "deviation": "The prior structural-incompatibility diagnosis was too broad: it inspected the local enumerator rather than the existing travel-aware router. Corrected without a new route engine or a historical-menu search. Historical catalog identity does not prove independent upstream lineage. No stage exit or consumed-trial rule changed.",
       "next": "Use the qualified runtime for one model-selected measured outcome from a prospectively eligible authenticated train departure. Preserve costs, failures and terminal registration before fitting; do not count this engineering diagnostic as learning."
+    },
+    {
+      "session": "2026-09-14-model121-full-local-collector-stop",
+      "result": "The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is training-ineligible and its original state has zero frozen-catalog matches.",
+      "deviation": "No gameplay, query, label, registration session, outcome, fit, promotion or stage exit occurred. One hosted legacy false-mode compatibility failure was repaired without changing the opt-in contract. The provenance falsifier outranked pressure to produce another row.",
+      "next": "Provision one prospectively eligible catalog-backed departure for the integrated full-local collector. Require two executable acquisition families action-free, then freeze and execute one exploratory model choice; do not search consumed historical states or weaken training provenance."
     }
   ],
   "closed_milestones": [

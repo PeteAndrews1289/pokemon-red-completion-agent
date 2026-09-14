@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Use the qualified shared-departure runtime for one prospectively bounded model-selected training outcome; authenticate train eligibility and retain actual costs and the fresh local151 ledger before fitting.
+- Next decision: Provision one prospectively eligible catalog-backed departure for the existing full-local collector; require two executable acquisition families before any model query or input.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | One prospectively bounded mixed-family model choice fails to produce a readable retained outcome, or its eligible departure lacks both capture and native evolution. |
+| Cheapest falsifier | One prospectively provisioned full-local departure cannot satisfy both catalog-backed train eligibility and the two-family action-free gate. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-full-pokedex-shared-departure** · status **closed** · evidence [qualification](docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)
+**2026-09-14-model121-full-local-collector-stop** · status **closed** · evidence [falsification](docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The redesign reuses existing cartridge routing instead of adding a route engine. A real same-state action-free gate now exposes two acquisition families and keeps shared credit, local151 completion and physical stock distinct. |
-| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. This engineering qualification changes no learning counter; the anti-drift alarm remains active. |
-| Authority delta | No new learned authority. The existing player now receives actual routed capture and native evolution together, with a coherent full-local151 checkpoint and reward. No model query, gameplay, fit or promotion occurred. |
-| Transfer result | No transfer or independent evaluation. Center-departure composition is ROM-free tested; the real gate used the same previously inspected field state with zero input. |
-| Blocker | Menu compatibility is resolved. Actual selected execution and local151 outcome admission are not yet measured; the inspected historical diagnostic does not establish train eligibility or disjoint upstream lineage. |
-| Decision | Use the qualified shared-departure runtime for one prospectively bounded model-selected training outcome; authenticate train eligibility and retain actual costs and the fresh local151 ledger before fitting. |
-| Next session | Bind one eligible authenticated train departure to the existing collector using the new full-local policy; freeze one model choice, retain success or failure and its terminal, and admit only that measured outcome. |
-| Next falsifier | One prospectively bounded mixed-family model choice fails to produce a readable retained outcome, or its eligible departure lacks both capture and native evolution. |
-| Stop condition | No input without eligible authenticated training provenance, two genuinely executable acquisition families and a durable measured-outcome path. Do not execute the diagnostic as a consumed-trial retry, infer upstream independence, re-enter the Model121 resource loop, or open full Red/ROM-hack/Crystal evaluation. |
+| Product alignment | The full-local policy is connected to the real durable collector with one-shot and write-ahead guarantees. The provenance gate correctly stopped the tempting Model121 endpoint before gameplay or relabeling. |
+| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. Zero input, model queries, labels, outcomes, fits or registration sessions occurred. |
+| Authority delta | No new learned authority. The full-local choice is connected to the durable player, but the exact Model121 checkpoint cannot authorize an exploratory training row. |
+| Transfer result | No transfer or independent evaluation. Legacy false-mode compatibility, local scope and one-shot authority are tested; actual gameplay remains unmeasured. |
+| Blocker | The Model121 checkpoint is on the train partition but explicitly training-ineligible, and its original state has zero matches in the frozen training catalog. The collector therefore cannot create the required local151 training session. |
+| Decision | Provision one prospectively eligible catalog-backed departure for the existing full-local collector; require two executable acquisition families before any model query or input. |
+| Next session | Provision one new eligible catalog-backed departure for the integrated full-local collector, then freeze and execute one exploratory model choice only after the two-family zero-input gate passes. |
+| Next falsifier | One prospectively provisioned full-local departure cannot satisfy both catalog-backed train eligibility and the two-family action-free gate. |
+| Stop condition | No input unless a prospectively eligible catalog-backed train departure also exposes two executable acquisition families and a durable local151 outcome path. Do not weaken provenance, search consumed historical states, run Model121 deterministically, or open full Red/ROM-hack/Crystal evaluation. |
 
 ### Stop conditions
 

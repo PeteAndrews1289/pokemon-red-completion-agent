@@ -163,9 +163,9 @@
 <text x="754" y="2606" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
 <text x="754" y="2625" class="small muted">physical views.</text>
 <text x="50" y="2735" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2773" class="small muted">2026-09-14-full-pokedex-shared-departure</text>
-<text x="50" y="2808" class="body">Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved</text>
-<text x="50" y="2833" class="body">state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed.</text>
-<text x="50" y="2858" class="body">Model121 remains121 examples/83 successes/86 registrations; no learning result.</text>
+<text x="50" y="2773" class="small muted">2026-09-14-model121-full-local-collector-stop</text>
+<text x="50" y="2808" class="body">The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation</text>
+<text x="50" y="2833" class="body">persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is</text>
+<text x="50" y="2858" class="body">training-ineligible and its original state has zero frozen-catalog matches.</text>
 <text x="50" y="2871" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

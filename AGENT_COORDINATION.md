@@ -11,16 +11,15 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The shared-departure redesign is implemented and action-free qualified. The real router exposed
-capture and native evolution together on the same previously inspected historical field state.
-No actions/frames occurred and save bytes were unchanged. Center-departure composition also
-passed ROM-free tests. The previous location-incompatibility conclusion omitted the existing router.
+The full-local151 proposal is integrated with the durable player. Local scope, checkpoint
+persistence, shared one-shot authority, write-ahead selection and false-mode compatibility pass.
+The exact Model121 checkpoint then failed the provenance gate before input: its immutable header
+is training-ineligible and its original state has zero frozen-catalog matches.
 
-Codex next connects the qualified runtime to one prospectively eligible authenticated training
-departure and the existing durable collector. Use the explicit local151 policy; retain shared,
-local and physical facts separately. Freeze one model choice, retain actual costs and the terminal
-after success or failure, and fit only the measured outcome. The diagnostic supplies no training
-eligibility or independent-lineage proof. Consumed identities remain closed.
+Codex next provisions one prospectively eligible catalog-backed departure for the existing
+collector. Require two executable acquisition families action-free before freezing one exploratory
+model choice. Retain actual costs and the terminal after success or failure, and fit only the
+measured outcome. Do not search consumed historical states or weaken the catalog join.
 
 Model121 remains121 examples/83 successes/86 registrations. This is engineering, not new learned
 competence. The anti-drift alarm remains active. No fresh Red final exam, ROM hack or Crystal work
@@ -37,8 +36,13 @@ Gemini3.8 Flash High completed a read-only regression review. Codex used its com
 local/shared/physical separation test categories, not its illustrative non-repository identifiers.
 Headless Flash quota remains unavailable. Neither reviewer remains running.
 
+Current collector review: Claude Opus returned GO with no P0/P1 findings; its prepare-time scope
+guard suggestion was implemented. Flash3.8 High returned STOP, but its three claims were rejected
+against existing durable episode identity/write-ahead selection, typed goal outcomes and the
+verified validation-before-session ordering.
+
 Next external work, if useful: one small outcome-admission test review after a concrete collector
 change. Do not repeat broad architecture audits or use reviewers as a gameplay gate.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
+[Session](docs/work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

@@ -3,16 +3,17 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Shared-departure redesign: implemented and action-free qualified
+## Full-local collector connected; Model121 provenance stopped execution
 
-The existing travel-aware router now feeds the full-Pokédex proposal and the existing player.
-A real recheck of the same historical field state exposed both wild capture and native level
-evolution, with zero controller actions/frames and unchanged save bytes. ROM-free tests also
-cover routed capture from a Center while native evolution is available there.
+The existing travel-aware router and full-Pokédex proposal now feed the durable player through an
+explicit opt-in. The path requires `local_red` registration scope, shares one execution attempt
+across fresh observation gates, persists the mode through checkpoints and uses the existing
+write-ahead selection record before controller authority.
 
-Correction: the previous check used only the source-local enumerator. It did not establish
-structural location incompatibility. No new route engine or historical-menu search was needed.
-The historical catalog identity also does not establish disjoint upstream lineage.
+The exact Model121 checkpoint cannot supply the planned training episode. Its immutable header is
+train-partitioned but explicitly `training_eligible: false`; its original state has zero matches in
+the frozen training catalog. The collector stopped before creating a local registration session.
+Do not weaken this join, use deterministic shadow play, or search consumed historical states.
 
 An explicit `local_red` policy now targets all151 local flags while preserving actual shared
 history and physical stock. New versioned checkpoints/rewards count local novelty over151;
@@ -34,15 +35,14 @@ Version, trade, supporting-save and event dependencies remain unresolved require
 
 ## Next bounded work
 
-Use `build_red_full_pokedex_player_observer` with an explicit prospective local-Red registration
-session and the existing durable bounded collector. First establish an eligible authenticated
-train departure; the diagnostic grants neither training eligibility nor permission to replay a
-consumed assignment. Freeze one real model choice, execute only its binding under the existing
-hard action/frame budget, retain success or failure and the fresh terminal ledger, then admit
-only that measured outcome. No Model121 resource-loop row, teacher fallback or diagnostic fit.
+Provision one new catalog-backed eligible train departure for the integrated collector. Require
+both capture and evolution to be executable in the zero-input gate. Only then freeze one
+exploratory model choice, execute its binding under the existing hard budget, preserve its actual
+outcome and local151 terminal, and fit that measured row. No Model121 resource-loop row,
+deterministic substitute, teacher fallback or historical-state search.
 
-Estimate: one60–90minute session. Stop before input if eligibility, two executable acquisition
-families or the durable outcome path is missing. Do not restart architecture work or a full replay.
+Estimate: one90–150minute provenance-design session. Stop before input if catalog eligibility, two
+executable acquisition families or the durable outcome path is missing. No full replay.
 
 ## Verification and reviewers
 
@@ -58,8 +58,13 @@ session limit before a final verdict; the CLI reported reset at13:00 America/New
 No final-review approval is claimed. Flash3.8 High supplied the accepted regression categories.
 Remaining percentages and weekly Claude quota are unavailable; Flash headless quota is unavailable.
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**. The redesign is settled; the next
-job is bounded execution, failure retention and outcome admission rather than another broad audit.
+For this collector delta, Claude Opus returned GO with no P0/P1 findings; its prepare-time scope
+guard was implemented. Flash3.8 High returned STOP from a tool-free contract review, but all three
+findings contradicted the durable episode/trajectory, typed outcome and validation-order evidence
+and were rejected. See the current session for adjudication.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-shared-departure.md) ·
-[Evidence](docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json)
+Next-session recommendation: **GPT-6 Astra / High / Fast off**. The remaining blocker is eligible
+training-supply and authority design. Return to Sol High once a departure is frozen.
+
+[Session](docs/work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
+[Evidence](docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json)
