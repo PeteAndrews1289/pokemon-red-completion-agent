@@ -368,7 +368,11 @@ def declare_red_player_training(
             "partition": "train",
             "seed": seed,
             "decision_limit": decision_limit,
-            "behavior_policy_id": exploration_policy_id(feature_version),
+            # A v4 model can score the base episode, but the economy behavior
+            # contract is only legal after registration adds its supply fields.
+            "behavior_policy_id": exploration_policy_id(
+                3 if feature_version == 4 else feature_version
+            ),
             "economic_contract": "known-spend-and-excess-reserve-v1",
             "context_catalog_sha256": catalog.catalog_sha256,
             "context_id": entry.context_id,

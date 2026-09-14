@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish the direct catalog bridge, require exact-head CI, then claim and preflight only the frozen source without substitution.
+- Next decision: Publish and green the generic direct-preparation repairs, then freeze a distinct unused source prospectively for one exact-claim two-family gate.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The frozen source cannot expose two executable acquisition families after direct-origin integration, or its live claim is no longer available. |
+| Cheapest falsifier | A separately frozen unused source cannot pass exact-claim preparation and expose two executable acquisition families without caller-selected species or routes. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-direct-catalog-origin-bridge** · status **closed** · evidence [qualification](docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json)
+**2026-09-14-direct-full-local-preflight-failure** · status **closed** · evidence [falsification](docs/evidence/red-direct-full-local-preflight-failure-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Direct catalog starts now enter the registered player without invented history, caller-selected species or routes, and cannot open game payloads without the exact account-wide pair claim. |
-| Learning output | None. Direct origin/session/profile and claim-before-read contracts are engineering only. Zero saved payload opens, input, queries, claims, outcomes, fits or registration sessions. |
-| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; no model, ROM or saved payload was opened. |
-| Transfer result | No independent evaluation or transfer. Direct-vs-continuation schema separation, action-free derivation, anchor swaps, caller injection and claim/capture matching passed locally. |
-| Blocker | The exact bridge must be published and pass exact-head CI before the frozen source's irreversible root-pair claim can be created. The source may then still fail the action-free two-family menu gate. |
-| Decision | Require an exact atomic root-pair claim before direct payload access, retain that claim in the direct plan, publish the bridge, then preflight only the frozen source without substitution. |
-| Next session | After exact-head CI, atomically claim only the frozen source and run one action-free two-family preflight; execute and fit one model choice only if it passes. |
-| Next falsifier | The frozen source's exact pair is unavailable, or action-free inspection cannot produce two executable acquisition families. |
-| Stop condition | No frozen payload before exact-head CI and its exact root-pair claim. No substitute on conflict or failed two-family gate. No historical retry, fabricated predecessor, Model121 resource loop or full Red/hack/Crystal evaluation. |
+| Product alignment | The failed exact-source attempt was retained without gameplay, retry or substitution, and the smallest generic repairs preserve direct-origin model choice instead of adding a route-specific rescue. |
+| Learning output | None. One root claim and one selected-source payload open produced zero completed preflights, queries, actions, frames, registration sessions, observations, outcomes, examples or fits. |
+| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; no model query, controller action, outcome or fit occurred. |
+| Transfer result | No independent evaluation or transfer. ROM-free regressions cover parser, legacy-caller and feature-version compatibility only. |
+| Blocker | The sole frozen source was claimed and opened once but failed during preparation before the two-family preflight. It is consumed; the generic parser and v4 base-plan repairs now require publication and exact-head CI before any separately frozen future source. |
+| Decision | Close the consumed source without retry or replacement, repair only the generic preparation defects, publish and green them, then require a separately prospective source for the next measured attempt. |
+| Next session | After exact-head CI, freeze one distinct unused source prospectively, claim only it, and run the two-family gate; execute and fit one Model121 choice only if that gate passes. |
+| Next falsifier | A separately frozen unused source fails exact-claim preparation or cannot expose both acquisition families action-free under the repaired published runner. |
+| Stop condition | Never reopen the consumed source or issue another claim for it. No replacement this session, historical retry, Model121 resource loop, full Red replay, ROM hack or Crystal execution. |
 
 ### Stop conditions
 

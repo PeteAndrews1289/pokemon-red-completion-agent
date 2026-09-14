@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-catalog-origin-bridge**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-full-local-preflight-failure**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json)
+[Current evidence](../docs/evidence/red-direct-full-local-preflight-failure-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-direct-full-local-preflight-failure
+
+The exact frozen source was claimed once. Its first preparation failed before payload access on a null parser default; one same-claim recovery opened and authenticated only that source, then failed during v4 base-plan construction. Both failures are retained with zero completed preflights, actions, frames, queries, registration sessions, outcomes, examples or fits.
+
+**Deviation:** The live gate exposed two generic preparation defects rather than an acquisition-family result. The source is consumed and was not retried or replaced. Maintenance now normalizes empty regional input, preserves legacy wild sources and keeps v4 base behavior separate from strict economy promotion; learning counters and all stage exits remain unchanged.
+
+**Next:** Publish and require exact-head CI for the generic repair. In a separate session, freeze one distinct unused source prospectively and run only its exact-claim two-family gate before any model query or gameplay.
 
 ### 2026-09-14-direct-catalog-origin-bridge
 

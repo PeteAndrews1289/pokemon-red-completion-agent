@@ -742,6 +742,58 @@ def test_direct_full_local_catalog_origin_reaches_source_without_parent_or_boxed
         runner._prepare(args)
 
 
+def test_direct_full_local_parser_default_reaches_source(monkeypatch):
+    args = runner._parser().parse_args(
+        [
+            "--pair-id", "direct-full-local-parser",
+            "--state", "state",
+            "--envelope", "envelope",
+            "--profile", "profile",
+            "--private-artifact-root", "private",
+            "--out", "out",
+            "--train-player",
+            "--challenger", runner.CAUSAL_ARM_ID,
+            "--context-origin", "training",
+            "--save-terminal-checkpoints",
+            "--routed-resource-goals",
+            "--quote-resource-costs",
+            "--completion-dose",
+            "--full-local-pokedex-choice",
+            "--registered-ledger", "private-ledger.sqlite3",
+            "--registration-session", "direct-full-local-session",
+            "--registration-run-id", "red-direct",
+        ]
+    )
+    assert args.regional_transitions is None
+
+    def source(*_args, **_kwargs):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
+        runner._prepare(args)
+
+
+def test_none_regional_transition_preserves_legacy_wild_source(monkeypatch):
+    args = SimpleNamespace(
+        pair_id="legacy-wild-source",
+        continue_from_checkpoint=[("old", "a" * 64)],
+        challenger=runner.CAUSAL_ARM_ID,
+        context_origin="training",
+        save_terminal_checkpoints=True,
+        regional_transitions=None,
+        wild_source=["wild:Route2:grass"],
+        routed_resource_goals=True,
+    )
+
+    def source(*_args, **_kwargs):
+        raise RuntimeError("source verification reached")
+
+    monkeypatch.setattr(runner, "detect_source_identity", source)
+    with pytest.raises(RuntimeError, match="source verification reached"):
+        runner._prepare(args)
+
+
 @pytest.mark.parametrize(
     "field,value",
     [

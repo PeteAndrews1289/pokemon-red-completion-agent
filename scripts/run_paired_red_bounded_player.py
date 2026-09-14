@@ -1140,6 +1140,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         raise PairedRedBoundedPlayerRunError("continuation_scope")
     expand_local = getattr(args, "expand_local_development", False)
     wild_sources = getattr(args, "regional_transitions", getattr(args, "wild_source", ()))
+    if wild_sources is None:
+        wild_sources = getattr(args, "wild_source", ())
     if (
         not isinstance(wild_sources, (list, tuple))
         or len(wild_sources) > _MAX_REGIONAL_TRANSITIONS

@@ -878,3 +878,23 @@ one-family failure without selecting a substitute. Only a measured, durably reta
 advance the learner.
 
 [Evidence](evidence/red-direct-catalog-origin-bridge-2026-09-14.json).
+
+## September14 — retain the consumed direct-source preparation failure
+
+The exact frozen source received one valid claim after its bridge passed exact-head CI. Preparation
+then exposed two generic defects before any action-free family gate: a null parser default, followed
+by a v4 model selecting economy behavior before the economy schema and supply contract existed.
+Preserve both failure records. The same-claim recovery opened only the selected payload; no query,
+input, frame, registration session, outcome, example or fit occurred.
+
+The source is consumed and may not be retried, reclaimed or replaced in this session. Repair only
+the generic boundaries: normalize an omitted regional list without discarding legacy wild-source
+callers, and map supported v4 models to the ordinary recovery behavior until a separately valid
+economy promotion. Unsupported future versions still fail closed; old continuation/economy schemas
+remain unchanged.
+
+After exact-head publication, a later session may freeze a distinct unused source prospectively.
+It must still pass exact claim and expose two real acquisition families action-free before any
+model query. This maintenance changes no learned authority, Red gate, ROM-hack order or stage exit.
+
+[Evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json).

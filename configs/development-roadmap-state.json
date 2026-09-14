@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-direct-catalog-origin-bridge",
+  "as_of_session": "2026-09-14-direct-full-local-preflight-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-direct-catalog-origin-bridge-2026-09-14.json"
+      "evidence": "docs/evidence/red-direct-full-local-preflight-failure-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1346,6 +1346,12 @@
       "result": "Direct catalog-origin completion plans and local-registration sessions are qualified without a fabricated predecessor. A read-only inventory observation now derives one boxed level evolution and one ordinary wild corridor, while the runner requires an already-atomic exact-root claim before opening ROM or saved-state payloads. Model121 remains121 examples/83 successes/86 registrations; no game or learning effect occurred.",
       "deviation": "This was an engineering session, not a measured learner result. The frozen source remained unopened and unclaimed because exact-head publication and CI must precede irreversible consumption. Legacy continuation schemas and their checkpoint requirements remain unchanged.",
       "next": "Publish the exact bridge and require exact-head CI. Then atomically claim only the frozen source, run the action-free two-family preflight, and stop without substitution on claim conflict or menu failure; execute and fit one model-selected outcome only if it passes."
+    },
+    {
+      "session": "2026-09-14-direct-full-local-preflight-failure",
+      "result": "The exact frozen source was claimed once. Its first preparation failed before payload access on a null parser default; one same-claim recovery opened and authenticated only that source, then failed during v4 base-plan construction. Both failures are retained with zero completed preflights, actions, frames, queries, registration sessions, outcomes, examples or fits.",
+      "deviation": "The live gate exposed two generic preparation defects rather than an acquisition-family result. The source is consumed and was not retried or replaced. Maintenance now normalizes empty regional input, preserves legacy wild sources and keeps v4 base behavior separate from strict economy promotion; learning counters and all stage exits remain unchanged.",
+      "next": "Publish and require exact-head CI for the generic repair. In a separate session, freeze one distinct unused source prospectively and run only its exact-claim two-family gate before any model query or gameplay."
     }
   ],
   "closed_milestones": [

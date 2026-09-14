@@ -82,7 +82,7 @@ def test_direct_completion_rejects_relabeling_a_continuation():
         ("train", "train", True),
     ],
 )
-@pytest.mark.parametrize("feature_version", [1, 2, 3])
+@pytest.mark.parametrize("feature_version", [1, 2, 3, 4, 5])
 def test_declaration_uses_original_assignment_not_filename(
     tmp_path, monkeypatch, partition, other_partition, state_changed, feature_version
 ):
@@ -141,14 +141,17 @@ def test_declaration_uses_original_assignment_not_filename(
         decision_limit=4,
         feature_version=feature_version,
     )
-    if partition == other_partition == "train" and not state_changed:
+    if partition == other_partition == "train" and not state_changed and feature_version <= 4:
         plan = plans.declare_red_player_training(**kwargs)
         assert plan.document["root_lineage_id"] == "original-root"
         assert plan.document["partition"] == "train"
         assert plan.document["behavior_policy_id"] == (
-            "living-dex-player-optional-recovery-v4" if feature_version == 3
+            "living-dex-player-optional-recovery-v4" if feature_version >= 3
             else "living-dex-player-supported-menu-v2"
         )
+    elif partition == other_partition == "train" and not state_changed:
+        with pytest.raises(ValueError, match="exploration feature version"):
+            plans.declare_red_player_training(**kwargs)
     else:
         with pytest.raises(ValueError, match="exclusively train"):
             plans.declare_red_player_training(**kwargs)

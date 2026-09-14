@@ -1,34 +1,29 @@
-# Video narrative: the missing connection was already there
+# Video narrative: the claim passed and the preflight failed
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Antigravity
 help build and review the software; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with Model120's verified trainer-resupply choice: 360 cash earned, row121 fitted, and the save
-still at 86 registrations. Then show the next Model121 menu being reconstructed with zero input.
-It offers only resupply and restoration—no capture, evolution, trade or story option.
+Open with the exact-head CI pass, then the atomic claim for the one prospectively frozen source.
+Explain why that order matters: the program cannot inspect a save and then shop for a more
+convenient one.
 
-Do not sample it. Explain that a technically valid choice can still be the wrong experiment. The
-roadmap's stop condition prevents another same-lineage resource row from masquerading as progress.
-The game remains stopped with zero new queries, actions, frames, labels or examples.
+Then show the honest result. Preparation attempt one stopped before opening the selected payload on
+a null parser default. One same-claim recovery opened only that source, but plan construction
+stopped because a v4 model chose economy behavior before the economy contract existed. The promised
+two-family menu never appeared.
 
-Next show the denominator correction. “38 remaining” covered only the old 124-entry solo scope.
-The actual full-Red gate has 65 missing local entries: 38 solo catalog plans, 11 Blue trades,
-4 link evolutions, 11 supporting-save branch trades and 1 legitimate event input. Emphasize that a
-shared registration or physical Pokémon never fabricates the local Red Pokédex flag.
+Keep the zeroes on screen: no completed preflight, query, controller action, advanced frame,
+registration session, outcome, example or fit. The source is consumed. There is no retry montage
+and no replacement save.
 
-Then show the first proposal gate rejecting an older save. Correct the initial explanation:
-that check used only the local menu, omitting an existing travel-aware router. The redesign
-connects the real router, native evolution and full-local151 accounting to the player.
+Close with the generic maintenance fix and its tests: omitted transition lists work, the legacy
+interface remains intact, v4 base training uses ordinary recovery behavior, and future unsupported
+versions still reject. Flash caught the last two fail-closed/compatibility edges. This is not a new
+model lesson; it makes the next prospectively frozen attempt meaningful.
 
-Recheck the same state: both acquisition families are offered, with zero actions/frames and
-unchanged save bytes. Shared history, local flags and physical specimens remain separate.
-This is a verified engineering correction—not footage of a successful model-selected attempt.
-Claude Opus4.8 helped identify binding and allowlist defects; its suggestion to use shared
-credit as local flags was rejected. Tests, not reviewer agreement, validate the correction.
-
-[Latest session and evidence](work-sessions/2026-09-14-full-pokedex-shared-departure.md)
+[Latest session and evidence](work-sessions/2026-09-14-direct-full-local-preflight-failure.md)
 
 ## The real finish line
 
@@ -36,9 +31,9 @@ State Pete's requirement directly: finish Red from a fresh game with model-direc
 concurrent Champion/Hall-of-Fame evidence and all 151 local registrations before trying a ROM hack.
 Then: compatible unfamiliar Red modification → Crystal → at least Emerald.
 
-The next episode should show one genuine model-selected attempt from an eligible authenticated
-training departure, retaining its costs and failure or success before fitting. The action-free
-diagnostic is not a new training root or an independent evaluation. Consumed assignments stay closed.
+The next episode should freeze one distinct unused source after exact-head CI, claim it once and
+show the action-free two-family gate before any model query. Gameplay occurs only if it passes.
+Consumed assignments stay closed.
 
 ## Useful flashbacks
 

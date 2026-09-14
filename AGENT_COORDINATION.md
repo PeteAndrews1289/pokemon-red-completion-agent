@@ -11,18 +11,14 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-One unclaimed catalog training source is frozen in private record
-`full-local-source-20260914-v1`. A metadata-only selector established 54 train entries,
-42 claimed and 12 unclaimed, with no saved payload opens. The preceding two-family diagnostic
-is claimed and cannot supply this lesson. The fixed selected source's configuration declares
-only story, restoration and control recovery; its actual gameplay feasibility is unknown.
+The source in `full-local-source-20260914-v1` is now consumed. Its exact claim succeeded, the first
+preparation failed before payload access on a null parser default, and one same-claim recovery
+opened only that source before v4 base-plan construction failed. No preflight, query, input, frame,
+registration session, outcome, example or fit occurred. Never retry, reclaim or substitute it.
 
-The direct catalog-origin plan/session bridge and inventory-derived acquisition declarations are
-locally qualified. They preserve continuation contracts, reject caller species/routes and require
-an exact account-wide pair claim before the runner can open game payloads. Codex next publishes
-that bridge, then uses a controller-capable boundary to claim only the frozen source and pass the
-claim to the runner; require two executable families before a query. Do not reselect on
-conflict/failure.
+Codex owns the generic parser/v4-plan repair, publication and exact-head CI. A later session may
+freeze one distinct unused source prospectively and apply the exact-claim two-family gate. No
+caller-entered species/route, historical retry, Model121 resource loop or full-game run.
 
 Model121 remains 121 examples/83 successes/86 local registrations. There is no new learned
 authority or transfer evidence. The anti-drift alarm remains active and Red's full fresh-run
@@ -30,14 +26,12 @@ story/local151 gate still precedes any ROM hack, Crystal or Emerald.
 
 ## External contributions and status
 
-Claude Opus4.8 High reviewed the direct bridge, found one error-contract inconsistency and confirmed
-the repair in the retained diff. It did not verify claim execution or upstream independence.
-Flash3.8 High completed a tool-free adversarial review. Hybrid-schema, anchor-swap, exhausted
-inventory and caller-injection cases are covered; route and concurrency remain at existing gates.
-Neither reviewer remains running. Current subscription quota percentages/reset windows are
-unavailable from the headless interfaces; no reset, credits or billing change occurred.
+Flash3.8 High completed a tool-free maintenance review. Codex accepted its unsupported-version and
+legacy-fallback findings and rejected its nonexistent stored-version skew. Claude reviews only the
+finished evidence/no-retry claims. Neither reviewer may access private artifacts or authorize a
+replacement source. Current quota windows remain unavailable from headless output.
 
-Next external task, if useful: review only claim-before-payload ordering and failure admission.
+Next external task, if useful: review only the next new source's action-free gate evidence.
 
-[Session](docs/work-sessions/2026-09-14-direct-catalog-origin-bridge.md) ·
+[Session](docs/work-sessions/2026-09-14-direct-full-local-preflight-failure.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

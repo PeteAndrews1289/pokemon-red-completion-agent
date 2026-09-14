@@ -37,27 +37,27 @@ without changing old shared124 documents or outcomes. The proposal is now connec
 durable player with one-shot and write-ahead selection guarantees. This is engineering
 qualification: no new model choice, outcome, fit, independence result or registration was earned.
 
+The first exact direct-origin source was claimed once but did not reach that menu. Preparation
+failed first on an omitted-list parser value, then a same-claim recovery opened only that source
+and failed while applying a v4 economy behavior to a non-economy base plan. Both failures were
+retained; actions, frames, queries, registration sessions, outcomes, examples and fits stayed zero.
+The source is consumed without retry or replacement.
+
 ## Immediate next session
 
-Model121's original source is outside the catalog. A metadata-only supply census instead found
-54 train entries: 42 claimed and 12 unclaimed. One source is now frozen by fixed order, before any
-saved payload or menu was opened. Its configuration lacks capture/evolution declarations, and the
-registered collector requires a continuation. Actual gameplay feasibility remains untested.
-
-The direct catalog-origin training/session schemas and inventory-derived acquisition configuration
-are locally qualified. They preserve legacy continuations, reject caller species/routes, and require
-an exact-code/exact-root account-wide claim before the runner opens game payloads. Publish and green
-that bridge, then create and pass the claim for only the frozen source, require two executable
-families and retain one exploratory model outcome if the gate passes. No replacement selection or
-Model121 resource loop.
+Publish and green the generic parser/v4 base-plan repairs. In a separate session, select and freeze
+one distinct unused catalog source prospectively, claim only it under that exact source, and require
+two executable acquisition families action-free. Execute and fit one exploratory Model121 choice
+only if the gate passes. Do not reopen or replace the consumed source, return to the Model121
+resource loop, or infer feasibility from metadata.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-direct-catalog-origin-bridge.md) ·
-[Evidence](evidence/red-direct-catalog-origin-bridge-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-direct-full-local-preflight-failure.md) ·
+[Evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
 Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 60–120 minutes for the
-claim-first live gate and one bounded outcome if it passes. Use Astra if an unresolved authority
-decision emerges.
+new-source exact-claim gate and one bounded outcome if it passes. Use Astra only if an unresolved
+authority or provenance decision emerges.
