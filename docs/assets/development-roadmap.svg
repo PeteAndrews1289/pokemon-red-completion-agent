@@ -160,9 +160,9 @@
 <text x="754" y="2556" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
 <text x="754" y="2575" class="small muted">physical views.</text>
 <text x="50" y="2685" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2723" class="small muted">2026-09-14-model121-frozen-resupply</text>
-<text x="50" y="2758" class="body">Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The</text>
-<text x="50" y="2783" class="body">verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70</text>
-<text x="50" y="2808" class="body">specimens with cash706.</text>
+<text x="50" y="2723" class="small muted">2026-09-14-model121-full-pokedex-refocus</text>
+<text x="50" y="2758" class="body">Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped</text>
+<text x="50" y="2783" class="body">without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38</text>
+<text x="50" y="2808" class="body">solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.</text>
 <text x="50" y="2821" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

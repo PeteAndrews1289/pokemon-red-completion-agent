@@ -13,6 +13,23 @@ review history; their “latest” labels are relative to that archived sequence
 
 ## Roles
 
+### September 14 — full-Red denominator and anti-loop refocus
+
+Gemini 3.8 Flash High completed one read-only review of the new 151-target classifier. Its initial
+verdict was STOP. Codex accepted the warnings against describing the 124-entry catalog as executable
+authority, added supporting-save evolution and serialization coverage, and made the distinction
+structural with `solo_catalog_plan`. Flash edited nothing and accessed no private runtime state.
+
+The standalone Claude CLI requested a fresh login, but Claude Sonnet 4.6 completed a read-only audit
+through `agy` and returned GO with P0/P1 zero. Codex rejected both advisory P2 notes: the evidence
+already records the 151 target denominator, and the Eevee observation misclassified cataloged #133
+as an excluded branch. Neither reviewer edited files. The headless CLI exposed no remaining-quota
+percentages for either model.
+
+The Model121 action-free terminal contained only resupply and restoration. The anti-drift stop fired
+before a model query or gameplay. Next external work, if any, is limited to the future independent
+mixed-acquisition menu and its local/shared/physical state boundary.
+
 ### September13 — frozen income outcome and complete-Red gate
 
 Flash3.8 High supplied a bounded admission/test proposal after headless command permission

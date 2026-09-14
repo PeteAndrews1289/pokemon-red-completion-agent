@@ -8,7 +8,7 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 86 verified registrations and120 settled examples. The latest model choice used one Full Heal and cured one status; its verified result became row120 without retry or teacher input. These are same-lineage development results, not independent improvement.
+- 86 verified local registrations and121 settled examples/83 successes. Model121's next menu was only resupply versus restoration, so the repeated lineage stopped before another query or gameplay. These are development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
@@ -25,8 +25,9 @@ then explained the extra58 as opponent Pay Day; the exact continuation's stale-a
 became Model116. A later frozen fishing success produced Model117, whose verified resource purchase
 produced Model118. Its verified restoration produced Model119; a separately labelled forced bridge
 then captured Poliwhirl without fitting it. Model119's next genuine choice selected a one-item
-restore; the verified success produced Model120. Its next action-free inventory contains routed
-full-team restoration and trainer-funded resupply.
+restore; the verified success produced Model120. Model120 then selected trainer resupply and earned
+360 cash, producing Model121. The next action-free inventory repeated resupply and restoration, so
+the loop stopped. A full-151 inventory now exposes the actual 65-entry dependency gap.
 
 ## My role and the stack
 

@@ -1,7 +1,7 @@
 # Model-first development roadmap
 
-Build a player that actually plays Pokémon, not a fixed walkthrough.
-The [mission](../MISSION.md), [North Star](../NORTH_STAR.md) and
+Build a player that actually plays Pokémon, not a fixed walkthrough. The
+[mission](../MISSION.md), [North Star](../NORTH_STAR.md) and
 [active state](../ACTIVE_PRODUCT_STATE.md) govern the work.
 
 ## Required sequence
@@ -9,48 +9,43 @@ The [mission](../MISSION.md), [North Star](../NORTH_STAR.md) and
 1. Train reusable decisions through bounded Red scenarios and retain failures.
 2. Qualify genuine model choices across story, battles, navigation, resources and collection.
 3. Complete one authenticated fresh start-to-finish model-directed Red run, with concurrent
-   Champion and Hall-of-Fame evidence and the **full local Red Pokédex**.
-4. Only after that complete-Red gate, test a compatible unfamiliar Red ROM modification.
+   Champion/Hall-of-Fame evidence and the **full local 151-entry Red Pokédex**.
+4. Only after that gate, test a compatible unfamiliar Red ROM modification.
 5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
-The full Red gate cannot be replaced by checkpoint stitching, a randomly timed walkthrough or a
-smaller native-availability subset. Version, trade and event dependencies must be resolved
-legitimately; unresolved entries keep the gate closed. Global credit, local flags and physical
-specimens remain separate. Supporting version/trade work does not move the main curriculum
-away from Red. Full-run readiness rules still apply before starting the final exam.
+The Red gate cannot be replaced by checkpoint stitching, a randomly timed walkthrough or the old
+124-entry solo scope. Version, trade, supporting-save and event dependencies must be resolved
+legitimately. Shared credit and physical possession never fabricate local owned flags.
 
 ## What is demonstrated
 
-The bounded observe/choose/execute/verify/save/learn loop works. Model121 has121 measured
-training examples and83 successful outcomes. The current save retains86 registrations,
-66 living species,70 specimens, four capture items and cash706. These are
-training-lineage results, not independent reliability.
+The bounded observe/choose/execute/verify/save/learn loop works. Model121 has 121 measured training
+examples and 83 successful outcomes. Its retained save has 86 local registrations, 66 living
+species, 70 specimens, four capture items and cash 706. These are related development results, not
+independent fresh-game reliability.
 
-The earlier checkpoint-based story demonstration remains valid under its declared authority.
-It does not prove the new fresh-start full-run gate, which is explicitly unproved in
-[baselineV3](../configs/development-roadmap-baseline-v3.json). Older baselines are preserved.
+Model121 reopened action-free into only resupply and restoration. With zero acquisition candidates,
+the anti-drift stop fired before a model query or gameplay. The project will not produce Model122
+from that repeated resource loop.
 
-Model120's repaired write-ahead freeze selected trainer resupply once at probability0.4072490891.
-The executor earned exactly360 cash in153 actions/11461 frames without changing inventory or the
-Pokédex. An exact-schema admission change passed hosted CI, and the verified outcome became row121.
-Model121 remains bounded-development only; this same-lineage training result is not independent
-evaluation or fresh-run authority.
+A new ROM-free inventory classifies all 151 local targets. Of the 65 missing entries, 38 have solo
+catalog plans, 11 need Blue plus trade, 4 need link evolution, 11 need supporting-save choices plus
+trade, and 1 needs a legitimate event input. A catalog plan is not an executable live option.
 
 ## Immediate next session
 
-Inspect Model121's published terminal with zero input. If its exact executable menu binds to the
-new model, checkpoint, state and economy, freeze one new choice behind a durable pre-query tombstone
-and write-ahead receipt. Execute only that retained binding and fit only an eligible measured Red
-result without redraw or retry.
+Connect the 151-target inventory to goal proposal. From an authenticated scenario outside the
+Model106–121 lineage, require an action-free menu spanning at least two supported executable
+acquisition families. Prefer an item-evolution versus in-game-trade decision or another genuinely
+heterogeneous pair. Stop without gameplay if that exact gate fails.
 
-Then move toward short, measured multi-goal sessions. Expand missing acquisition families
-and meaningful story alternatives, measure costs/interventions, and evaluate on genuinely
-independent scenarios. More tiny same-lineage rows alone cannot establish a full-game player.
+The next session must yield a measured learned decision or generalization result; another
+engineering-only session would trip the anti-drift alarm. Full-game Red remains a final exam and is
+not authorized until its bounded component gates are recorded.
 
-[Latest session](work-sessions/2026-09-14-model121-frozen-resupply.md) ·
-[Latest evidence](evidence/red-model121-frozen-resupply-2026-09-14.json) ·
+[Latest session](work-sessions/2026-09-14-model121-full-pokedex-refocus.md) ·
+[Latest evidence](evidence/red-model121-full-pokedex-refocus-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation while capacity notices persist: **GPT-5.6 Terra, High effort, Fast
-off** for the established bounded loop; use Sol High when available and Astra only if authority or
-dependency-resolution architecture changes.
+Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the bounded planner
+integration. Use Astra High only if the falsifier forces dependency/authority redesign.

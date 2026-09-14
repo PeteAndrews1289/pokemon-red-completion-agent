@@ -3,28 +3,29 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-Model121 has121 examples/83 successes with86 registrations,66 living species,70 specimens, four
-capture items and cash706. Model120's crash-safe V2 freeze selected trainer resupply at probability
-0.4072490891, and the binding earned exactly360 cash in153 actions/11461 frames without changing
-inventory or registrations. The choice executed once without redraw, retry, teacher fallback or an
-execution-time model query.
+Model121 remains at 121 examples/83 successes with 86 local registrations, 66 living species,
+70 specimens, four capture items and cash 706. Its published terminal reopened action-free into
+only resupply and restoration. There were zero acquisition candidates, controller actions,
+emulator frames, model queries, labels or new examples. The same-lineage resource loop is stopped;
+do not review or propose another freeze for it.
 
-The first fit preflight rejected the new write-ahead declaration schema before publishing a row.
-The original receipt was preserved. A narrow exact-key admission now requires its query-intent,
-decision and observation hashes and preserves frozen behavior replay. Exact source `ee8f402f`
-passed hosted CI `34843054840`; the eligible result became row121 and the new terminal checkpoint
-reopened with zero publication input.
+The new ROM-free full-Red inventory classifies every one of the 151 local targets. The current
+65 missing registrations comprise 38 solo catalog plans, 11 Blue-plus-trade dependencies, 4 link
+evolutions, 11 supporting-save-plus-trade branch outcomes and 1 legitimate event input. Local Red
+owned flags alone determine completion. Shared credit and physical specimens are independent
+annotations; a solo catalog plan does not claim current execution availability.
 
-Claude and Flash both passed the exact-once execution contract and the fail-closed admission rule.
-Neither touched gameplay or private state. Claude direct print-mode and Gemini3.8 Flash High through
-`agy` are both reachable.
+Gemini 3.8 Flash High reviewed the implementation. Codex integrated its authority-wording,
+supporting-branch and serialization findings and made the plan/execution distinction structural.
+The standalone Claude CLI requested login, but Claude Sonnet 4.6 completed through `agy` and returned
+GO with P0/P1 zero. Codex rejected its two P2 notes because the evidence already includes the claimed
+missing denominator and its Eevee claim was incorrect. Neither reviewer edited the repository or
+accessed private runtime state. Remaining quota percentages were unavailable from `agy`.
 
-Pete's explicit gate is a fresh start-to-finish model-directed Red run with story completion
-and the full local Red Pokédex before any ROM hack. Version/trade/event dependencies cannot
-be dropped, and shared credit is not local ownership. The older checkpoint-story demonstration
-does not meet this gate. After full Red: compatible hack, Crystal, at least Emerald.
+Next external work, if useful: inspect only the eventual action-free menu joining the full-151
+inventory to two executable acquisition families. Challenge lineage independence, actual executor
+support and local/shared/physical separation. No broad audit, gameplay, full replay, ROM hack or
+Crystal work is open.
 
-Next external work, if useful: review only a changed Model121 inspection/freeze contract. The next
-primary task is an action-free Model121 terminal inspection, then one new frozen Red choice. No broad
-audit, replay, ROM hack, Crystal run or private-save access.
-[Latest session](work-sessions/2026-09-14-model121-frozen-resupply.md).
+[Latest session](work-sessions/2026-09-14-model121-full-pokedex-refocus.md) ·
+[Evidence](evidence/red-model121-full-pokedex-refocus-2026-09-14.json)

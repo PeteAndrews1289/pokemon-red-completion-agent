@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Inspect Model121's published terminal action-free, freeze the resulting exact menu once, then execute and fit only one eligible measured Red result without redraw, retry or teacher fallback.
+- Next decision: Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families; stop before gameplay if the gate fails.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model121 has121 examples/83 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash706. Its latest model-selected resupply earned exactly360 cash without changing inventory or registrations. No fresh-game or independent competence is claimed. |
+| Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
+| Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model121's published terminal cannot be inspected action-free into an exact executable Red menu, or one durably frozen choice cannot yield another eligible measured outcome without redraw, retry or teacher fallback. |
+| Cheapest falsifier | An independent authenticated Red state cannot expose an action-free menu spanning two genuinely executable acquisition families from the full-151 inventory. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-model121-frozen-resupply** · status **active** · evidence [model fit](docs/evidence/red-model121-frozen-resupply-2026-09-14.json)
+**2026-09-14-model121-full-pokedex-refocus** · status **active** · evidence [falsification](docs/evidence/red-model121-full-pokedex-refocus-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session completed one genuine model-selected resource decision, retained its exact cost and success, and advanced the learner without retry, teacher fallback, authority inflation or movement beyond Red. |
-| Learning output | One verified training-only resupply success. Model121 has121 settled examples/83 successes, including17 measured-source and42 economy-qualified rows. Cash increased from346 to706 with inventory and86 registrations unchanged. |
-| Authority delta | Model120 durably selected trainer resupply, earned exactly 360 cash in 153 actions/11461 frames, and produced one eligible measured success. The result became Model121 with bounded-development authority only; no promotion or independent evaluation occurred. |
-| Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | Model121 has not yet been inspected at its new terminal, cash 706 remains below the 3600 target, and the full local Red Pokedex still requires explicit version, trade and event resolution. No fresh-start full-game competence is demonstrated. |
-| Decision | Inspect Model121's published terminal action-free, freeze the resulting exact menu once, then execute and fit only one eligible measured Red result without redraw, retry or teacher fallback. |
-| Next session | Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result. |
-| Next falsifier | Model121's published terminal cannot be inspected action-free into an exact executable Red menu, or one durably frozen choice cannot yield another eligible measured outcome without redraw, retry or teacher fallback. |
-| Stop condition | Stop on source/model/checkpoint/state/menu/economy or receipt mismatch, controller activity during inspection/freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Product alignment | The session stopped a repetitive same-lineage resource loop and replaced the reduced124-entry completion view with an explicit151-target dependency inventory without inflating learning or completion authority. |
+| Learning output | None. The action-free inspection retained Model121 at121 examples/83 successes and86 registrations. Engineering added an explicit 151-target inventory:38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input remain. |
+| Authority delta | None. Model121's terminal was inspected action-free and stopped at a resupply-versus-restore loop; no model query, gameplay, label, fit, promotion or independent evaluation occurred. |
+| Transfer result | No transfer result. Blue is represented only as an explicit dependency for11 missing local Red registrations; no Blue, ROM-hack or Crystal gameplay occurred. |
+| Blocker | The full-151 inventory now classifies every target, but it is not yet connected to goal proposal. Model121 exposes no acquisition candidate, and the missing mixed-acquisition-family milestone remains open. |
+| Decision | Connect the full-151 inventory to goal proposal and qualify one independent action-free menu spanning at least two genuinely executable acquisition families. Do not return to the Model121 resource loop. |
+| Next session | Connect the 151-target inventory to goal proposal and qualify one independent action-free mixed-acquisition-family menu; permit gameplay only if that exact gate passes. |
+| Next falsifier | A short independent authenticated state cannot expose two supported executable acquisition families after consuming the full-151 inventory. |
+| Stop condition | Stop before gameplay if fewer than two acquisition families are supported and executable, if the scenario shares the Model106-121 checkpoint lineage, or on any local/shared/physical registration conflation. No ROM hack or Crystal before the complete Red gate. |
 
 ### Stop conditions
 

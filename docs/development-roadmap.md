@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-frozen-resupply**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-full-pokedex-refocus**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -115,6 +115,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-model121-full-pokedex-refocus
+
+Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.
+
+**Deviation:** The dated handoff proposed freezing another same-lineage choice, but the North Star's anti-drift rule outranked it. No learning counter, registration, authority or stage changed. This is one engineering-only reorientation session; the mixed-acquisition-family milestone remains open.
+
+**Next:** Connect the151-target inventory to goal proposal and qualify one independent action-free menu spanning at least two supported executable acquisition families. Stop before gameplay if the gate fails; do not return to the Model121 resource loop.
 
 ### 2026-09-14-model121-frozen-resupply
 

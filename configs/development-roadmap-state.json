@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-model121-frozen-resupply",
+  "as_of_session": "2026-09-14-model121-full-pokedex-refocus",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1304,6 +1304,12 @@
       "result": "Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70 specimens with cash706.",
       "deviation": "The first fit preflight correctly rejected the new write-ahead declaration schema. The original receipt was preserved; a narrow exact-key and three-hash admission passed hosted CI before the row was fit. No retry, redraw, teacher fallback, authority promotion, hack, Crystal access or full replay occurred.",
       "next": "Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result."
+    },
+    {
+      "session": "2026-09-14-model121-full-pokedex-refocus",
+      "result": "Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.",
+      "deviation": "The dated handoff proposed freezing another same-lineage choice, but the North Star's anti-drift rule outranked it. No learning counter, registration, authority or stage changed. This is one engineering-only reorientation session; the mixed-acquisition-family milestone remains open.",
+      "next": "Connect the151-target inventory to goal proposal and qualify one independent action-free menu spanning at least two supported executable acquisition families. Stop before gameplay if the gate fails; do not return to the Model121 resource loop."
     }
   ],
   "closed_milestones": [

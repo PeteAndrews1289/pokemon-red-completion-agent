@@ -14,14 +14,12 @@ valuable evidence without remaining an instruction.
    Blue/shared memory, Crystal and later titles.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
-As of the latest measured session, Model120 has120 settled training-only examples and82 successes.
-Its durable Red checkpoint contains86 registered species,66 living species and70 physical
-specimens. Model119's exact two-option menu selected a one-item restoration; the verified terminal
-consumed one Full Heal and cured one status in58 actions/4776 frames, then became row120 without
-retry or teacher input. Model120's next routed-restore-versus-trainer-resupply freeze queried once,
-but a wrapper error prevented the selected index from being retained. That identity is consumed
-without gameplay or redraw; a hardened V2 identity is prepared but unexecuted. This is bounded
-development, not independent full-game competence.
+Model121 has121 settled training-only examples and83 successes. Its durable Red checkpoint has86
+local registrations,66 living species and70 physical specimens. The checkpoint's next action-free
+menu contained only resupply and restoration, so the repeated same-lineage loop stopped without a
+model query or gameplay. A ROM-free inventory now accounts for all151 local targets:65 remain across
+solo catalog plans, Blue/trade, link evolution, supporting-save/trade and legitimate-event paths.
+This is planning infrastructure, not independent full-game competence or new learned authority.
 
 ## Reader-facing summaries
 
