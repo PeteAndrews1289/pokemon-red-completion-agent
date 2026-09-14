@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model120-frozen-field-restore**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model120-freeze-instrumentation-failure**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 22/23 acceptance items (96%).**
+**Broaden model-directed Red collection: 23/24 acceptance items (96%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -35,6 +35,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
 - [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
 - [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
+- [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
 
 Current model: **120 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
@@ -113,6 +114,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-model120-freeze-instrumentation-failure
+
+The exact two-option Model120 menu was rebuilt action-free and queried once, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed; the selection is unknown. No gameplay, fit or counter changed.
+
+**Deviation:** This session produced no measured learning output and therefore triggers the one-session reorientation alarm. It stopped without redraw and prepared an unexecuted V2 freeze with a pre-query tombstone, write-ahead decision receipt and selected-option content hash.
+
+**Next:** In a new session, run the repaired Model120 V2 identity once. If it retains a valid decision, execute only that binding and fit only its eligible measured result; treat any ambiguous tombstone as consumed.
 
 ### 2026-09-13-model120-frozen-field-restore
 

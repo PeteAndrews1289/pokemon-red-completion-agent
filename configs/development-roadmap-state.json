@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-13-model120-frozen-field-restore",
+  "as_of_session": "2026-09-14-model120-freeze-instrumentation-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -185,6 +185,12 @@
         "label": "Execute and fit Model119's frozen field restoration, preserving the wrapper correction",
         "done": true,
         "evidence": "docs/evidence/red-model120-frozen-field-restore-2026-09-13.json"
+      },
+      {
+        "id": "model120-freeze-failure-retention",
+        "label": "Retain the unrecorded Model120 sample without redraw and harden the next freeze",
+        "done": true,
+        "evidence": "docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json"
       }
     ]
   },
@@ -1280,6 +1286,12 @@
       "result": "Model119 selected restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames. The verified success became row120; Model120 has120 examples/82 successes and retains86 registrations/66 living species/70 specimens.",
       "deviation": "The generic runner preserved a failure after applying routed-Center postconditions to a single-field-item binding. A zero-input audit passed the exact original binding verifier and admitted only that retained terminal; there was no retry, redraw, teacher fallback, hack, Crystal access or full replay.",
       "next": "Freeze Model120's exact routed-restore-versus-trainer-resupply menu, execute the sampled choice once and fit only its eligible measured result."
+    },
+    {
+      "session": "2026-09-14-model120-freeze-instrumentation-failure",
+      "result": "The exact two-option Model120 menu was rebuilt action-free and queried once, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed; the selection is unknown. No gameplay, fit or counter changed.",
+      "deviation": "This session produced no measured learning output and therefore triggers the one-session reorientation alarm. It stopped without redraw and prepared an unexecuted V2 freeze with a pre-query tombstone, write-ahead decision receipt and selected-option content hash.",
+      "next": "In a new session, run the repaired Model120 V2 identity once. If it retains a valid decision, execute only that binding and fit only its eligible measured result; treat any ambiguous tombstone as consumed."
     }
   ],
   "closed_milestones": [

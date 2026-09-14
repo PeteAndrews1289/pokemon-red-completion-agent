@@ -34,19 +34,22 @@ Model119's exact two-option menu selected field restoration once at probability0
 executor consumed one Full Heal and cured one status in58 actions/4776 frames. A zero-input audit
 corrected the runner's stale routed-Center postcondition without retry, and the verified outcome
 became row120. Model120's action-free successor exposes routed restoration and trainer resupply.
+Its first freeze identity queried once but failed before retaining the selected index. The seed is
+consumed with zero gameplay or learning; the choice is not known or reconstructed.
 
 ## Immediate next session
 
-Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu from the corrected
-child checkpoint, sample and execute it once, then fit only its eligible measured result without
+Run the repaired Model120 V2 freeze from the corrected child checkpoint under a new identity. It
+must persist a pre-query tombstone and write the selected option before later validation. If the
+choice is retained, execute only that binding and fit only its eligible measured result without
 redraw or retry.
 
 Then move toward short, measured multi-goal sessions. Expand missing acquisition families
 and meaningful story alternatives, measure costs/interventions, and evaluate on genuinely
 independent scenarios. More tiny same-lineage rows alone cannot establish a full-game player.
 
-[Latest session](work-sessions/2026-09-13-model120-frozen-field-restore.md) ·
-[Latest evidence](evidence/red-model120-frozen-field-restore-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md) ·
+[Latest evidence](evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
 Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the established two-option

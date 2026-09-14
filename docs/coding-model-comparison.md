@@ -4,6 +4,26 @@ Purpose: assess whether GPT-6 improves useful project progress enough to justify
 relative to GPT-5.6 Sol. These are observations from development, not a controlled benchmark.
 The coding assistant and the trained Pokemon policy are different models.
 
+## 2026-09-14: Sol freeze-failure adjudication and external review
+
+Starting revision `42cb6089`. GPT-5.6 Sol reconstructed Model120's exact action-free two-option menu
+and invoked the player model once. A private wrapper then accessed a nonexistent choice attribute
+before persisting the returned index. Sol stopped with zero gameplay and learning, sealed the seed
+as consumed, and did not infer or redraw the answer.
+
+Claude Sonnet High was restored through the direct CLI and completed a bounded no-tools review.
+Gemini3.8 Flash High completed the same review through `agy`. Both approved the no-redraw ruling and
+found a narrower prospective integrity gap: a process interruption after query processing but
+before receipt fsync could still permit a second query. Claude also required content identity for a
+reconstructed index. Sol accepted both findings, adding an exclusive fsynced pre-query tombstone and
+selected-option content hash to the unexecuted V2 freeze.
+
+Judgment: Sol handled the adverse result honestly and integrated two useful external findings, but
+the session produced no measured learner output and includes one failed implementation. It is not
+evidence of superiority over Astra or another coding model. Antigravity reported100% five-hour and
+65% weekly Gemini quota remaining after the review. Exact Sol tokens and direct Claude percentage
+remain unavailable.
+
 ## 2026-09-05: Sol bounded live-runner qualification
 
 Starting point: GPT-5.6 Sol inherited the green five-input readiness and synthetic production

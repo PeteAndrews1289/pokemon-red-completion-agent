@@ -1,10 +1,24 @@
-# Video narrative: one real recovery choice and an honest correction
+# Video narrative: one lost choice and no favorable redraw
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
 did, including failures; do not present coding assistants as the live Pokémon policy.
 
 ## Latest episode
+
+Open on the same Model120 routed-restoration-versus-trainer-resupply menu. The freeze reconstructs
+it with zero input and asks the model once—then the wrapper crashes before saving the answer. Do not
+claim which option won. Show the immutable failure receipt: one consumed query, zero controller
+actions, zero frames, zero labels and zero training examples. Explain why rerunning the seed would
+silently turn missing evidence into a redraw.
+
+Then show the repair prepared for the next session: a tombstone is durably written before the query,
+and a returned choice is written ahead of later validation with a content hash of the selected
+option. End before running that successor. Model120 and the collection counters do not change.
+
+[Latest session and evidence](work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md)
+
+## Prior measured episode
 
 Start with Model119's real two-option resupply-versus-restore menu. Show the single sample selecting
 restoration at probability0.5524737204, then the field-item executor consuming one Full Heal and
@@ -17,7 +31,7 @@ with120 examples/82 successes while the save remains at86 registrations/66 livin
 specimens. End on the next action-free menu—routed restoration versus trainer resupply—before a
 Model120 sample or execution.
 
-[Session and evidence](work-sessions/2026-09-13-model120-frozen-field-restore.md)
+[Prior session and evidence](work-sessions/2026-09-13-model120-frozen-field-restore.md)
 
 ## The real finish line
 

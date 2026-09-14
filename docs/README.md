@@ -18,8 +18,10 @@ As of the latest measured session, Model120 has120 settled training-only example
 Its durable Red checkpoint contains86 registered species,66 living species and70 physical
 specimens. Model119's exact two-option menu selected a one-item restoration; the verified terminal
 consumed one Full Heal and cured one status in58 actions/4776 frames, then became row120 without
-retry or teacher input. Model120's next routed-restore-versus-trainer-resupply menu is observed but
-unexecuted. This is bounded development, not independent full-game competence.
+retry or teacher input. Model120's next routed-restore-versus-trainer-resupply freeze queried once,
+but a wrapper error prevented the selected index from being retained. That identity is consumed
+without gameplay or redraw; a hardened V2 identity is prepared but unexecuted. This is bounded
+development, not independent full-game competence.
 
 ## Reader-facing summaries
 

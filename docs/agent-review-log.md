@@ -1581,3 +1581,20 @@ Mission check for this planning task:
   separate Claude/GPT pool showed quota available. Claude's earlier authenticated usage snapshot
   reported82% session and48% weekly remaining. A later direct Claude invocation prompted for login,
   so no newer percentage is claimed.
+
+## Model120 freeze instrumentation-failure review (2026-09-14)
+
+- Claude Sonnet High was restored through the direct CLI, returned `CLAUDE_CLI_READY`, and completed
+  a bounded no-tools review. It approved consuming seed120091401 without redraw and identified two
+  prospective gaps: query gating must be structurally durable before invocation, and recovery must
+  authenticate the selected option's content rather than trust an index alone.
+- Gemini3.8 Flash High independently approved the no-redraw stop and identified the crash window
+  after query processing but before receipt fsync. Codex accepted both reviews by adding an
+  exclusive fsynced pre-query tombstone and selected-option content hash to the unexecuted V2
+  freeze.
+- Neither reviewer edited source, received private save contents or ran gameplay. The consumed
+  attempt remains one unretained model query, zero controller actions, zero frames, zero labels and
+  zero training examples.
+- At closeout Antigravity reported100% five-hour and65% weekly Gemini quota remaining, plus100%
+  five-hour and weekly in its separate Claude/GPT pool. Claude print mode worked, but its interactive
+  usage view requested a fresh login, so no direct Claude percentage is claimed.

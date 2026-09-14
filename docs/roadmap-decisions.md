@@ -1,5 +1,19 @@
 # Roadmap baseline and deviations
 
+## September 14 — consume the unretained Model120 sample and repair the next freeze
+
+The [Model120 freeze failure](work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md)
+reconstructed the exact routed-restore-versus-trainer-resupply menu action-free and invoked the
+model once. A wrapper attribute error occurred after the result returned but before the selected
+index was persisted. The answer is unknown. Seed120091401 is consumed without redraw, inference,
+gameplay, label or fit.
+
+This triggers the one-session no-learning alarm but does not change the Red-first sequence. The next
+session gets a new V2 identity whose pre-query tombstone prevents ambiguous requery and whose
+write-ahead receipt authenticates the selected option by content hash. Run that identity once; only
+a durably retained choice may execute or fit. The fresh-run full-Red/full-local-Pokédex gate and the
+ban on ROM-hack or Crystal progression remain unchanged.
+
 ## September 13 — retain the resource purchase and follow the changed-state restoration choice
 
 The [Model118 purchase session](work-sessions/2026-09-13-model118-frozen-purchase.md) executed

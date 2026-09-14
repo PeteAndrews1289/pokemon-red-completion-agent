@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback.
+- Next decision: Start a new session and run the repaired Model120 V2 freeze once. If it durably retains a valid choice, execute only that binding and fit only an eligible measured outcome; treat any ambiguous tombstone as consumed.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model120 has120 examples/82 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346 after one verified field-item restoration. Its action-free successor exposes routed full-team restoration and trainer-funded resupply. No fresh-game or independent competence is claimed. |
+| Authority now | Model120 has120 examples/82 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346. One freeze query was consumed without a retained selection; no gameplay or learning followed. The exact successor remains routed full-team restoration versus trainer-funded resupply. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model120's exact two-option routed-restore-versus-trainer-resupply menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
+| Cheapest falsifier | The repaired Model120 V2 freeze cannot durably retain one exact choice before any later wrapper validation, or its retained binding cannot execute once and yield an eligible measured outcome without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,22 +60,23 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model120-frozen-field-restore** · status **active** · evidence [development episode](docs/evidence/red-model120-frozen-field-restore-2026-09-13.json)
+**2026-09-14-model120-freeze-instrumentation-failure** · status **active** · evidence [qualification](docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learned goal scorer selected and learned from a real low-cost recovery action while preserving exact failure history, and the retained child state presents another genuine resource decision. |
-| Learning output | One eligible measured restore success was added without historical reward reuse. Model120 has120 settled examples/82 successes, including16 measured-source and41 economy-qualified rows, with all119 prior rows retained. |
-| Authority delta | Model119 sampled restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames; a zero-input audit corrected a stale routed-center wrapper postcondition without retry. The verified success became row120, producing Model120 with120 examples/82 successes and no authority promotion. |
+| Product alignment | The session preserved an inconvenient instrumentation failure without inventing a selection or resampling, then hardened the next freeze so ambiguous query consumption cannot become hidden selection bias. |
+| Learning output | Zero. Model120 remains at120 settled examples/82 successes, including16 measured-source and41 economy-qualified rows. No selection is claimed and no row was added. |
+| Authority delta | None. One Model120 query returned at the exact action-free menu, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed, the choice is unknown, and no action, frame, label, fit or promotion occurred. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The corrected terminal is published as an input-ready Model120 checkpoint. Its action-free successor exposes routed full-team restore and trainer-funded resupply with no fishing supplement; that choice is unexecuted. The full local Red Pokedex still requires explicit version, trade and event resolution. |
-| Decision | Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback. |
-| Next session | Freeze and execute Model120's genuine routed-restore-versus-trainer-resupply choice once, then fit only its eligible measured result. |
-| Next falsifier | Model120's exact two-option routed-restore-versus-trainer-resupply menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
-| Stop condition | Stop on source/model/checkpoint/menu/economy mismatch, controller activity during freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
+| Blocker | The first Model120 freeze identity cannot execute because its one sampled choice was not retained. A repaired V2 identity is prepared with a pre-query tombstone, write-ahead decision receipt and selected-option content hash, but it was deliberately not run in the consumed session. The full local Red Pokedex still requires explicit version, trade and event resolution. |
+| Decision | Start a new session and run the repaired Model120 V2 freeze once. If it durably retains a valid choice, execute only that binding and fit only an eligible measured outcome; treat any ambiguous tombstone as consumed. |
+| Next session | Run the repaired Model120 V2 freeze under a new identity once; if the decision is retained, execute only that binding and fit only its eligible measured result. |
+| Next falsifier | The repaired Model120 V2 freeze cannot durably retain one exact choice before any later wrapper validation, or its retained binding cannot execute once and yield an eligible measured outcome without redraw, retry or teacher fallback. |
+| Stop condition | Stop on source/model/checkpoint/menu/economy mismatch, an ambiguous query-intent tombstone, controller activity during freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions
 
+- Model120 freeze seed120091401 is consumed without a retained choice; never retry, replay, infer, substitute, execute or fit that identity.
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
 - The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.
