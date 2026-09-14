@@ -1,4 +1,4 @@
-# Video narrative: one forced capture without a fake model choice
+# Video narrative: one real recovery choice and an honest correction
 
 This is an AI-assisted engineering project directed by Pete Andrews, with implementation
 and review contributions from Codex, Claude and Antigravity. Show what the software actually
@@ -6,17 +6,18 @@ did, including failures; do not present coding assistants as the live Pokémon p
 
 ## Latest episode
 
-Start with Model119's one-candidate fishing boundary. Explain why ranking one option would falsely
-credit the model, then show the explicit forced-singleton record: zero model queries, zero teacher
-labels and zero training examples. Reconstruct the exact source, model, checkpoint and sole binding
-without input before the one authorized execution.
+Start with Model119's real two-option resupply-versus-restore menu. Show the single sample selecting
+restoration at probability0.5524737204, then the field-item executor consuming one Full Heal and
+curing one status in58 actions/4776 frames. There was no redraw, teacher fallback or retry.
 
-The capture adds Poliwhirl in905 actions/45564 frames. The ledger rises85 to86 registrations,
-65 to66 living species and69 to70 specimens, while Model119 remains119 examples/81 successes. Then
-show the changed-state read-only menu: fishing is exhausted, but resupply and restore form a genuine
-two-option model choice. End before sampling or execution.
+Do not hide the wrapper failure. Explain that a reused Center postcondition expected unchanged
+inventory and whole-party restoration. Preserve that failure, then show the zero-input audit passing
+the exact field-item verifier against the retained terminal. The eligible success produces Model120
+with120 examples/82 successes while the save remains at86 registrations/66 living species/70
+specimens. End on the next action-free menu—routed restoration versus trainer resupply—before a
+Model120 sample or execution.
 
-[Session and evidence](work-sessions/2026-09-13-model119-forced-singleton-fishing.md)
+[Session and evidence](work-sessions/2026-09-13-model120-frozen-field-restore.md)
 
 ## The real finish line
 
@@ -37,6 +38,6 @@ Crystal → at least Emerald, with one shared registration ledger that never fab
 - [Checkpoint story audit](audits/red-phase4-closeout-2026-09-09.md):
   show the achievement and the forced/deterministic authority caveat together.
 
-Never loop old footage as current gameplay. Do not convert119 training examples into a
+Never loop old footage as current gameplay. Do not convert120 training examples into a
 whole-project completion percentage or imply that low-level control is learned.
 [Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)

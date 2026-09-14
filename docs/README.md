@@ -14,12 +14,12 @@ valuable evidence without remaining an instruction.
    Blue/shared memory, Crystal and later titles.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
-As of the latest measured session, Model114 has 114 settled training-only examples. Its durable Red
-checkpoint contains 84 registered species, 64 living species and 68 physical specimens. Model113's
-frozen fishing choice added one registration in 513 actions / 30,804 frames and became row114 with
-zero teacher labels. From the resulting checkpoint, Model114 selected resupply/income from six
-choices across three goal families. That choice is frozen but unexecuted. This is bounded
-development, not independent full-game competence.
+As of the latest measured session, Model120 has120 settled training-only examples and82 successes.
+Its durable Red checkpoint contains86 registered species,66 living species and70 physical
+specimens. Model119's exact two-option menu selected a one-item restoration; the verified terminal
+consumed one Full Heal and cured one status in58 actions/4776 frames, then became row120 without
+retry or teacher input. Model120's next routed-restore-versus-trainer-resupply menu is observed but
+unexecuted. This is bounded development, not independent full-game competence.
 
 ## Reader-facing summaries
 

@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model119-forced-singleton-fishing**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-13-model120-frozen-field-restore**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 21/22 acceptance items (95%).**
+**Broaden model-directed Red collection: 22/23 acceptance items (96%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -34,8 +34,9 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
 - [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
 - [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
+- [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
 
-Current model: **119 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **120 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -85,7 +86,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json)
+[Current evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -112,6 +113,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-13-model120-frozen-field-restore
+
+Model119 selected restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames. The verified success became row120; Model120 has120 examples/82 successes and retains86 registrations/66 living species/70 specimens.
+
+**Deviation:** The generic runner preserved a failure after applying routed-Center postconditions to a single-field-item binding. A zero-input audit passed the exact original binding verifier and admitted only that retained terminal; there was no retry, redraw, teacher fallback, hack, Crystal access or full replay.
+
+**Next:** Freeze Model120's exact routed-restore-versus-trainer-resupply menu, execute the sampled choice once and fit only its eligible measured result.
 
 ### 2026-09-13-model119-forced-singleton-fishing
 

@@ -11,14 +11,15 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model119 has119 examples,81 successes,86 registrations,66 living species,70 specimens, four capture
-items and cash346. Its sole fishing acquisition captured national species061 once under explicit
-forced-singleton authority in905 actions /45564 frames. The step is consumed and cannot retry.
+Model120 has120 examples,82 successes,86 registrations,66 living species,70 specimens, four capture
+items and cash346. Model119 selected a field-item restoration once at probability0.5524737204. It
+consumed one Full Heal and cured one status in58 actions/4776 frames. The step is consumed and cannot
+retry.
 
-The changed-state action-free inventory exposes a genuine two-option Model119 menu: resupply versus
-restore, with no fishing supplement. Freeze that exact menu, sample and execute once, and fit only an
-eligible measured result. Authenticate the corrected sealed checkpoint record hash. Do not assign a
-broad architecture audit.
+The changed-state action-free inventory exposes a genuine two-option Model120 menu: routed full-team
+restore versus trainer-funded resupply, with no fishing supplement. Freeze that exact menu, sample
+and execute once, and fit only an eligible measured result. Authenticate the Model120 checkpoint and
+do not assign a broad architecture audit.
 
 Pete requires a fresh start-to-finish non-deterministic model-directed Red run and the full local
 Red Pokédex before any ROM hack. The old checkpoint story and124-entry availability scope do not
@@ -27,16 +28,15 @@ Emerald.
 
 ## Latest external contributions
 
-Flash3.8 High passed the bridge and identified that the controller claim belonged in the executor,
-not observation; Codex fixed it before input. Three objections to tested forced semantics were
-rejected. Claude Sonnet passed the conceptual design and supplied the forced enum and menu-width
-requirements. A later exact-file review timed out. Neither reviewer edited the repository or ran
-gameplay.
+Flash3.8 High passed the field-restore admission change with no P0/P1. Claude Sonnet High passed the
+exact diff and identified a missing reverse cross-admission case; Codex added it before fitting.
+Neither reviewer edited the repository or ran gameplay.
 
-Current Flash and Claude quota is unavailable from their CLIs. Next useful external assignment is a
-small audit of the exact two-option freeze if it exposes a new admission seam. Next Codex
-recommendation: Sol/High/Fast off.
+At closeout Antigravity reported99.80% five-hour and64.74% weekly Gemini quota remaining, with its
+separate Claude/GPT pool available. Claude's earlier authenticated snapshot reported82% session and
+48% weekly remaining; its closeout invocation prompted for login, so no newer direct percentage is
+claimed. Next Codex recommendation: Sol/High/Fast off.
 
-[Session and adjudication](docs/work-sessions/2026-09-13-model119-forced-singleton-fishing.md) ·
+[Session and adjudication](docs/work-sessions/2026-09-13-model120-frozen-field-restore.md) ·
 [Detailed workflow](docs/three-agent-workflow.md) ·
 [Reviewer entry point](docs/current-agent-handoffs.md)

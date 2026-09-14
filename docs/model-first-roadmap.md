@@ -21,8 +21,8 @@ away from Red. Full-run readiness rules still apply before starting the final ex
 
 ## What is demonstrated
 
-The bounded observe/choose/execute/verify/save/learn loop works. Model119 has119 measured
-training examples and81 successful outcomes. The current save retains86 registrations,
+The bounded observe/choose/execute/verify/save/learn loop works. Model120 has120 measured
+training examples and82 successful outcomes. The current save retains86 registrations,
 66 living species,70 specimens, four capture items and cash346. These are
 training-lineage results, not independent reliability.
 
@@ -30,23 +30,24 @@ The earlier checkpoint-based story demonstration remains valid under its declare
 It does not prove the new fresh-start full-run gate, which is explicitly unproved in
 [baselineV3](../configs/development-roadmap-baseline-v3.json). Older baselines are preserved.
 
-Model119's sole fishing acquisition ran once under explicit forced-singleton authority and captured
-national species061 in905 actions/45564 frames. Collection advanced to86 registrations while the
-model stayed at119 examples: the forced step made zero model queries and cannot enter choice
-training. Its action-free successor exposes a genuine resupply-versus-restore menu.
+Model119's exact two-option menu selected field restoration once at probability0.5524737204. The
+executor consumed one Full Heal and cured one status in58 actions/4776 frames. A zero-input audit
+corrected the runner's stale routed-Center postcondition without retry, and the verified outcome
+became row120. Model120's action-free successor exposes routed restoration and trainer resupply.
 
 ## Immediate next session
 
-Freeze Model119's exact two-option resupply-versus-restore menu from the corrected child checkpoint,
-sample and execute it once, then fit only its eligible measured result without redraw or retry.
+Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu from the corrected
+child checkpoint, sample and execute it once, then fit only its eligible measured result without
+redraw or retry.
 
 Then move toward short, measured multi-goal sessions. Expand missing acquisition families
 and meaningful story alternatives, measure costs/interventions, and evaluate on genuinely
 independent scenarios. More tiny same-lineage rows alone cannot establish a full-game player.
 
-[Latest session](work-sessions/2026-09-13-model119-forced-singleton-fishing.md) ·
-[Latest evidence](evidence/red-model119-forced-singleton-fishing-2026-09-13.json) ·
+[Latest session](work-sessions/2026-09-13-model120-frozen-field-restore.md) ·
+[Latest evidence](evidence/red-model120-frozen-field-restore-2026-09-13.json) ·
 [Development infographic](development-roadmap.md)
 
 Next-session recommendation: **GPT-5.6 Sol, High effort, Fast off** for the established two-option
-freeze/execute/fit loop; use Astra only if checkpoint admission requires authority redesign.
+freeze/execute/fit loop; use Astra only if authority or dependency-resolution architecture changes.

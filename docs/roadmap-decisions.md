@@ -790,3 +790,17 @@ remains preserved, and the corrected sealed checkpoint reopened. Its action-free
 two ordinary candidates, resupply and restore. Return to the normal model-choice loop: freeze,
 sample once, execute once and fit only eligible measured evidence. The full Red-before-hack gate is
 unchanged.
+
+## September 13 — admit the measured field restore, preserve the wrapper failure
+
+Model119's exact resupply-versus-restore menu selected restoration once at probability0.5524737204.
+The selected single-field-item binding consumed one Full Heal and cured one party status in58
+actions/4776 frames. Preserve the generic runner's failure receipt: it incorrectly applied the
+routed-Center requirements of unchanged inventory and whole-party restoration.
+
+Accept one zero-input correction only because it reconstructed the exact original binding and
+passed that binding's existing verifier against the retained terminal. It issued zero actions or
+frames, did not retry or redraw, and changed no historical receipt. Admit that one verified result
+as row120. Model120's action-free successor exposes routed full-team restoration and trainer-funded
+resupply with no fishing supplement; stop before sampling. The full fresh-run Red story and local
+Pokédex gate still precedes every ROM hack.

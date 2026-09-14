@@ -1564,3 +1564,20 @@ Mission check for this planning task:
   exact-file review timed out without output, so it contributed no additional finding.
 - Neither external reviewer edited repository source or ran gameplay. Current service quota was
   unavailable from both CLIs.
+
+## Model120 frozen field-restoration review (2026-09-13)
+
+- Flash3.8 High completed a compact no-tools review of the field-restore receipt admission change
+  and returned PASS with no P0/P1. An earlier sandboxed attempt was denied repository read access
+  and produced no review, edit or gameplay effect.
+- Claude Sonnet High independently passed exact source `6449c360` with no P0/P1. Codex accepted its
+  one concrete nit and added the reverse cross-admission test proving a routed-Center declaration
+  cannot admit a field-item receipt; exact source `fafc485c` passed CI run34800466077.
+- Claude's request for a separate public record was accepted here. Its preference to publish that
+  record before fitting was not load-bearing: the immutable private result and zero-input
+  correction already existed, the result was admitted only after exact-source CI, and no gameplay,
+  retry, redraw or label occurred during fit or publication.
+- At closeout Antigravity reported99.80% five-hour and64.74% weekly Gemini quota remaining; its
+  separate Claude/GPT pool showed quota available. Claude's earlier authenticated usage snapshot
+  reported82% session and48% weekly remaining. A later direct Claude invocation prompted for login,
+  so no newer percentage is claimed.

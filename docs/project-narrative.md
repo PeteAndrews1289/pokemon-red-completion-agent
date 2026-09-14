@@ -12,20 +12,22 @@ Red comes a compatible unfamiliar hack, then Crystal and at least Emerald.
 
 ## Latest measured chapter
 
-Model119's sole fishing acquisition ran once after the forced bridge, model, binding and parent
-state were reconstructed without input. It captured national species061 in905 actions /45564
-frames, advancing the save to86 registrations,66 living species and70 specimens.
+Model119's genuine resupply-versus-restore menu was reconstructed without input and sampled once.
+It selected restoration at probability0.5524737204. The field-item executor consumed one Full Heal
+and cured one status in58 actions/4776 frames while preserving86 registrations,66 living species,
+70 specimens and cash346.
 
-The step was explicitly forced, not model-selected, so it created no choice label or fit: Model119
-remains119 examples/81 successes. From the actual child terminal, fishing is exhausted and the
-action-free runtime exposes a genuine two-option choice between resupply and restore.
+The runner first rejected the terminal because it applied a whole-party Center postcondition to a
+single-item binding. The failure remains immutable; a zero-input audit passed the original binding's
+own verifier without retry. The eligible success became row120. Model120 has120 examples/82
+successes, and its action-free successor exposes routed restoration and trainer resupply.
 
 This is the intended learning loop: choose, act, measure, retain, learn and continue from
 the real terminal. It is not independent proof that the policy is good, a fresh-game autonomous
 playthrough, or cross-title transfer. Deterministic mechanics still control low-level play.
 
-[Latest measured evidence](evidence/red-model119-forced-singleton-fishing-2026-09-13.json) ·
-[Detailed session](work-sessions/2026-09-13-model119-forced-singleton-fishing.md)
+[Latest measured evidence](evidence/red-model120-frozen-field-restore-2026-09-13.json) ·
+[Detailed session](work-sessions/2026-09-13-model120-frozen-field-restore.md)
 
 ## What earlier chapters established
 
@@ -46,9 +48,9 @@ full Red finish line. The player still needs broad acquisition mechanics, sustai
 genuine model-directed story choices and an authenticated full run. A collection of related
 training outcomes does not establish generalization.
 
-Flash moved the controller claim out of observation and into the executor; Claude preserved the
-forced enum and the minimum learned-menu width. These reviews guard the evidence boundary; the
-verified capture—not the reviews—advanced collection, and no learning counter changed.
+Flash passed the new admission seam. Claude found the missing reverse cross-admission test, which
+now proves routed-Center receipts cannot enter the field-item schema. These reviews guard the
+evidence boundary; the verified field restore—not the reviews—advanced the learning counter.
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
 [Roadmap](development-roadmap.md) · [Authorship and public overview](../README.md)

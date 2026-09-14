@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Freeze Model119's exact two-option resupply-versus-restore menu from the corrected child checkpoint, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback.
+- Next decision: Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Sustainable registered collection through model-selected acquisition, resource generation, purchasing and recovery, retaining actual gains, failures and costs. |
-| Authority now | Model119 has119 examples/81 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346 after the verified forced Poliwhirl acquisition. Its action-free successor exposes a genuine resupply-versus-restore choice. No fresh-game or independent competence is claimed. |
+| Authority now | Model120 has120 examples/82 successes and retains86 registrations,66 living species,70 specimens, four capture items and cash346 after one verified field-item restoration. Its action-free successor exposes routed full-team restoration and trainer-funded resupply. No fresh-game or independent competence is claimed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Model119's exact two-option resupply-versus-restore menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
+| Cheapest falsifier | Model120's exact two-option routed-restore-versus-trainer-resupply menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 119 | 12 |
+| Registered Train Example · train | 120 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model119-forced-singleton-fishing** · status **active** · evidence [development episode](docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json)
+**2026-09-13-model120-frozen-field-restore** · status **active** · evidence [development episode](docs/evidence/red-model120-frozen-field-restore-2026-09-13.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The explicit forced bridge advanced the registered collection without fabricating model authority, and the actual child state now restores a genuine two-option learned decision. |
-| Learning output | Zero new examples by design: the forced singleton was excluded from learned-choice training. Model119 remains119 examples/81 successes with all prior rows retained; the session produced one verified collection gain and a fresh real choice boundary. |
-| Authority delta | Model119's sole fishing acquisition executed once under explicit forced-singleton authority and captured national species061 in905 actions/45564 frames. Collection advanced to86 registrations/66 living species/70 specimens while Model119 stayed119 examples/81 successes. No model query, choice label, fit or authority promotion occurred. |
+| Product alignment | The learned goal scorer selected and learned from a real low-cost recovery action while preserving exact failure history, and the retained child state presents another genuine resource decision. |
+| Learning output | One eligible measured restore success was added without historical reward reuse. Model120 has120 settled examples/82 successes, including16 measured-source and41 economy-qualified rows, with all119 prior rows retained. |
+| Authority delta | Model119 sampled restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames; a zero-input audit corrected a stale routed-center wrapper postcondition without retry. The verified success became row120, producing Model120 with120 examples/82 successes and no authority promotion. |
 | Transfer result | No independent, fresh-game, ROM-hack, Blue or Crystal transfer result. Pete requires complete model-directed Red from a fresh start with the full local Red Pokedex before any ROM hack; at least Emerald remains the horizon. |
-| Blocker | The forced acquisition is consumed and its corrected child checkpoint is published. The changed-state inventory now exposes a genuine two-option Model119 choice between resupply and restore, unexecuted. The full local Red Pokedex still requires explicit version, trade and event resolution. |
-| Decision | Freeze Model119's exact two-option resupply-versus-restore menu from the corrected child checkpoint, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback. |
-| Next session | Freeze and execute Model119's genuine resupply-versus-restore choice once, then fit only its eligible measured result. |
-| Next falsifier | Model119's exact two-option resupply-versus-restore menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
+| Blocker | The corrected terminal is published as an input-ready Model120 checkpoint. Its action-free successor exposes routed full-team restore and trainer-funded resupply with no fishing supplement; that choice is unexecuted. The full local Red Pokedex still requires explicit version, trade and event resolution. |
+| Decision | Freeze Model120's exact two-option routed-restore-versus-trainer-resupply menu, execute the sampled choice once, and fit only an eligible measured outcome without redraw, retry or teacher fallback. |
+| Next session | Freeze and execute Model120's genuine routed-restore-versus-trainer-resupply choice once, then fit only its eligible measured result. |
+| Next falsifier | Model120's exact two-option routed-restore-versus-trainer-resupply menu cannot be frozen action-free, sampled once, executed once and fitted only from an eligible measured outcome without redraw, retry or teacher fallback. |
 | Stop condition | Stop on source/model/checkpoint/menu/economy mismatch, controller activity during freeze, teacher fallback, redraw, retry, ineligible fit or progression to a ROM hack or Crystal before the full fresh-run Red story and local Pokedex gate. |
 
 ### Stop conditions

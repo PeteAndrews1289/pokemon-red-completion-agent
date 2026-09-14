@@ -323,3 +323,27 @@ a measured cost comparison.
 Recommendation for the next session: **Sol High, Fast off**. The new terminal exposes the familiar
 two-option freeze/execute/fit loop. Escalate to Astra High only if the corrected checkpoint cannot
 enter measured-choice admission without changing authority semantics.
+
+## 2026-09-13: Model120 frozen field-restoration session
+
+Sol High froze Model119's exact two-option menu, executed its one sampled restoration and admitted
+the retained result through a narrowly corrected field-item contract. The executor consumed one
+Full Heal and cured one status in58 actions/4,776 frames. The eligible success produced Model120
+with120 examples/82 successes. An action-free continuation exposed routed restoration and trainer
+resupply without sampling either.
+
+Flash3.8 High completed a compact no-tools review and passed the admission change with no P0/P1.
+Claude Sonnet High independently passed the exact diff and found one missing reverse
+cross-admission test; Codex accepted and added it. Claude's suggestion to require the public
+closeout record before fitting was treated as a sequencing preference: immutable private evidence
+and exact-source CI already existed, and public evidence was completed in the same session. Neither
+reviewer edited source or ran gameplay.
+
+Antigravity exposed usable quota at closeout: Gemini99.80% five-hour/64.74% weekly remaining, and
+its separate Claude/GPT pool available. Claude's earlier authenticated snapshot showed82% session
+and48% weekly remaining; its closeout invocation prompted for login, so no fresher direct Claude
+reading is claimed. Exact token debit remains unavailable, so this is not a cost comparison.
+
+Recommendation for the next session: **GPT-5.6 Sol, High effort, Fast off**. Use Astra High only if
+the next cycle requires a new authority contract, fresh-run generalization design or explicit
+version/trade/event dependency architecture.
