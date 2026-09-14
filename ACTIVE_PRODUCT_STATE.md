@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Provision one prospectively eligible catalog-backed departure for the existing full-local collector; require two executable acquisition families before any model query or input.
+- Next decision: Implement direct catalog-origin registered training and derive acquisition declarations from semantic inventory, then claim and inspect only the frozen source.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | One prospectively provisioned full-local departure cannot satisfy both catalog-backed train eligibility and the two-family action-free gate. |
+| Cheapest falsifier | The frozen source cannot expose two executable acquisition families after direct-origin integration, or its live claim is no longer available. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-model121-full-local-collector-stop** · status **closed** · evidence [falsification](docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json)
+**2026-09-14-full-local-training-source** · status **closed** · evidence [qualification](docs/evidence/red-full-local-training-source-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The full-local policy is connected to the real durable collector with one-shot and write-ahead guarantees. The provenance gate correctly stopped the tempting Model121 endpoint before gameplay or relabeling. |
-| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. Zero input, model queries, labels, outcomes, fits or registration sessions occurred. |
-| Authority delta | No new learned authority. The full-local choice is connected to the durable player, but the exact Model121 checkpoint cannot authorize an exploratory training row. |
-| Transfer result | No transfer or independent evaluation. Legacy false-mode compatibility, local scope and one-shot authority are tested; actual gameplay remains unmeasured. |
-| Blocker | The Model121 checkpoint is on the train partition but explicitly training-ineligible, and its original state has zero matches in the frozen training catalog. The collector therefore cannot create the required local151 training session. |
-| Decision | Provision one prospectively eligible catalog-backed departure for the existing full-local collector; require two executable acquisition families before any model query or input. |
-| Next session | Provision one new eligible catalog-backed departure for the integrated full-local collector, then freeze and execute one exploratory model choice only after the two-family zero-input gate passes. |
-| Next falsifier | One prospectively provisioned full-local departure cannot satisfy both catalog-backed train eligibility and the two-family action-free gate. |
-| Stop condition | No input unless a prospectively eligible catalog-backed train departure also exposes two executable acquisition families and a durable local151 outcome path. Do not weaken provenance, search consumed historical states, run Model121 deterministically, or open full Red/ROM-hack/Crystal evaluation. |
+| Product alignment | Metadata-only source selection excludes claimed and nontrain/ambiguous states before any menu inspection. The resulting configuration gap is retained without treating it as impossible gameplay. |
+| Learning output | None. Model121 remains121 examples/83 successes and86 local registrations. Zero saved payload opens, input, queries, claims, outcomes, fits or registration sessions. |
+| Authority delta | No new learned authority. One catalog source is selected; no model, ROM or saved payload was opened. |
+| Transfer result | No independent evaluation or transfer. ROM-free source-order, partition-alias, registry and availability-coverage checks passed. |
+| Blocker | The selected historical profile has no capture or native evolution declaration. The registered collector also requires an existing continuation, so direct catalog starts need an explicit origin/session contract. |
+| Decision | Implement direct catalog-origin registered training and derive acquisition declarations from semantic inventory, then claim and inspect only the frozen source. |
+| Next session | Implement direct catalog-origin training/session anchoring and inventory-derived acquisition configuration in the existing collector, then attempt the single frozen source without substitution. |
+| Next falsifier | The frozen source cannot expose two executable acquisition families after direct-origin integration, or its live claim is no longer available. |
+| Stop condition | No payload or input until the direct-origin contract and acquisition configuration are qualified. Recheck and atomically claim the frozen source; no substitute on conflict or failed two-family gate. No historical retry, fabricated predecessor, Model121 resource loop or full Red/hack/Crystal evaluation. |
 
 ### Stop conditions
 

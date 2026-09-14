@@ -3,30 +3,25 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The full-local151 proposal is connected to the durable player with explicit local scope,
-checkpoint persistence, shared one-shot authority and write-ahead selection. Historical false-mode
-callers remain unchanged.
+The full-local player is integrated, but new starts need explicit catalog-origin training and
+registration-session anchoring. Existing continuation contracts must remain valid.
+The metadata-only selector froze one unclaimed source before any saved payload or menu open.
+The source's historical configuration lacks capture and native evolution declarations; this
+does not establish that the game state cannot support them.
 
-The exact Model121 checkpoint failed the provenance gate before input. Although partitioned train,
-its immutable header says `training_eligible: false`, and its original state has zero frozen-catalog
-matches. Do not build a permissive adapter, search historical menus, or use deterministic play as
-a substitute for one eligible exploratory outcome.
+Codex owns that integration and the frozen source. The first live gate must recheck/claim the
+exact selected pair, inspect only that source, and require capture plus evolution before querying
+the model. No replacement on conflict or failure. Preserve actual outcome, costs and terminal
+before any fit. The selection is not a reservation or proof of upstream independence.
 
-Next work is prospective eligible training supply for the existing collector. Provision one new
-catalog-backed departure, prove capture plus evolution action-free, then freeze and execute one
-exploratory choice. Preserve failure/success, costs and terminal ledger before fit. Model121
-remains121 examples/83 successes/86 local registrations.
+Claude Opus4.8 High reviewed the selector source/tests read-only and found no concrete bug.
+Flash3.8 High proposed partition-alias, deterministic-order and concurrent-claim tests.
+Historical menu metadata was rejected as proof of present executable alternatives.
+Subscription windows are unavailable from the headless interfaces. No reviewer is running.
 
-Claude Opus4.8 High completed the initial read-only audit. Binding/config and allowlist findings
-were accepted; its shared-as-local suggestion was rejected. The follow-up delta audit stopped
-at the session limit without a verdict; reset reported13:00 America/New_York September14.
-Flash3.8 High completed the regression review. Percentage/weekly quotas remain unavailable.
-No external reviewer is still running and no final-delta review approval is claimed.
+Next review should be limited to direct-origin authentication, legacy checkpoint/session
+compatibility and failure admission once the corresponding implementation exists.
+Model121 remains 121 examples/83 successes/86 local registrations; gameplay is stopped.
 
-Current delta: Claude Opus returned GO with no P0/P1 findings and its scope-guard P2 was accepted.
-Flash3.8 High returned STOP, but its ephemeral replay, untyped attribution and orphan-session claims
-were rejected against the concrete durable trajectory, typed goal outcomes and observed zero-session
-validation order.
-
-[Session](work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
-[Evidence](evidence/red-model121-full-local-collector-stop-2026-09-14.json)
+[Session](work-sessions/2026-09-14-full-local-training-source.md) ·
+[Evidence](evidence/red-full-local-training-source-2026-09-14.json)

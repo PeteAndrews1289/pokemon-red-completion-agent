@@ -837,3 +837,21 @@ retention. Keep the mixed-acquisition learned-choice milestone open until measur
 fresh-run, local151, legitimate dependency and Red-before-hack gates are unchanged.
 
 [Qualification](evidence/red-full-pokedex-shared-departure-2026-09-14.json).
+
+## September14 — select training supply by provenance before opening state
+
+The last handoff overstated direct-start readiness. The registered collector requires a completed
+continuation, while the fixed catalog freezer cannot enroll a new source. A metadata-only claim
+census nevertheless found12 unclaimed training sources among54 entries. The previous two-family
+diagnostic is claimed. Freeze the first unclaimed source by slot order, without using menu quality
+or opening game state; do not select another after a conflict or failed gate.
+
+The selected configuration has no capture/evolution declarations. This is a configuration gap,
+not a finding that the state cannot support acquisition. Next implement a versioned direct catalog
+origin and registration anchor, plus declarations derived from semantic inventory using existing
+adapters. Preserve old contracts, authenticate and claim the exact frozen source before opening it,
+and require actual two-family availability before a query. No fictitious predecessor, teacher
+factory, new catalog, source substitution, learning counter or stage exit is authorized by this
+engineering result. The full model-directed Red story/local151 gate remains unchanged.
+
+[Evidence](evidence/red-full-local-training-source-2026-09-14.json).

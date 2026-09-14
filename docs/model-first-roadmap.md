@@ -19,7 +19,7 @@ Shared credit and physical possession never fabricate local owned flags.
 
 ## What is demonstrated
 
-Model121 has121 measured training examples and83 successes. Its retained save has86 local
+Model121 has121 measured training examples and 83 successes. Its retained save has86 local
 registrations,66 living species,70 specimens, four capture items and cash706. These are related
 development results, not independent fresh-game reliability. Its resource-only continuation is
 closed to redundant new rows.
@@ -39,18 +39,22 @@ qualification: no new model choice, outcome, fit, independence result or registr
 
 ## Immediate next session
 
-The exact Model121 departure failed the provenance gate before input: its immutable header is
-training-ineligible and its original state has zero frozen-catalog matches. Provision one new
-catalog-backed eligible departure for the integrated collector. Require both capture and evolution
-action-free, then freeze and execute one exploratory model choice and fit only its measured outcome.
-Do not reopen consumed assignments, search historical states or resume the Model121 resource loop.
+Model121's original source is outside the catalog. A metadata-only supply census instead found
+54 train entries: 42 claimed and 12 unclaimed. One source is now frozen by fixed order, before any
+saved payload or menu was opened. Its configuration lacks capture/evolution declarations, and the
+registered collector requires a continuation. Actual gameplay feasibility remains untested.
+
+Implement direct catalog-origin training/session anchoring and derive acquisition declarations
+from semantic inventory using the existing cartridge adapters. Preserve legacy continuations.
+Then claim and inspect only the frozen source, require two executable families and retain one
+exploratory model outcome if the gate passes. No replacement selection or Model121 resource loop.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
-[Evidence](evidence/red-model121-full-local-collector-stop-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-full-local-training-source.md) ·
+[Evidence](evidence/red-full-local-training-source-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-6 Astra / High / Fast off**, about90–150minutes for eligible
-training-supply and authority design. Return to Sol High after a departure is frozen.
+Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 90–150 minutes for the
+specified direct-origin integration. Use Astra if an unresolved authority decision emerges.

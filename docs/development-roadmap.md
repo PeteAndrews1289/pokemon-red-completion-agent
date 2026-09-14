@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-model121-full-local-collector-stop**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-local-training-source**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json)
+[Current evidence](../docs/evidence/red-full-local-training-source-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-full-local-training-source
+
+A metadata-only census found54 train entries,42 claimed and12 unclaimed. One source was frozen by slot order before payload/menu inspection; its configuration lacks capture/evolution declarations. Zero game effects or learning results.
+
+**Deviation:** The previous handoff overstated direct-start readiness: completion-dose training and registration require a continuation. The selected profile omission is not proof of impossible gameplay. No root was claimed, substituted or opened.
+
+**Next:** Implement direct catalog-origin training/session anchoring and inventory-derived acquisition declarations; then claim and inspect only the frozen source. Require two real families before one model choice, retaining any failure without replacement.
 
 ### 2026-09-14-model121-full-local-collector-stop
 

@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-model121-full-local-collector-stop",
+  "as_of_session": "2026-09-14-full-local-training-source",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model121-full-local-collector-stop-2026-09-14.json"
+      "evidence": "docs/evidence/red-full-local-training-source-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1334,6 +1334,12 @@
       "result": "The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is training-ineligible and its original state has zero frozen-catalog matches.",
       "deviation": "No gameplay, query, label, registration session, outcome, fit, promotion or stage exit occurred. One hosted legacy false-mode compatibility failure was repaired without changing the opt-in contract. The provenance falsifier outranked pressure to produce another row.",
       "next": "Provision one prospectively eligible catalog-backed departure for the integrated full-local collector. Require two executable acquisition families action-free, then freeze and execute one exploratory model choice; do not search consumed historical states or weaken training provenance."
+    },
+    {
+      "session": "2026-09-14-full-local-training-source",
+      "result": "A metadata-only census found54 train entries,42 claimed and12 unclaimed. One source was frozen by slot order before payload/menu inspection; its configuration lacks capture/evolution declarations. Zero game effects or learning results.",
+      "deviation": "The previous handoff overstated direct-start readiness: completion-dose training and registration require a continuation. The selected profile omission is not proof of impossible gameplay. No root was claimed, substituted or opened.",
+      "next": "Implement direct catalog-origin training/session anchoring and inventory-derived acquisition declarations; then claim and inspect only the frozen source. Require two real families before one model choice, retaining any failure without replacement."
     }
   ],
   "closed_milestones": [

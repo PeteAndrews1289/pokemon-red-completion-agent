@@ -5,44 +5,40 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
 - Codex integrates, verifies actual outcomes and publishes tested batches.
-- Flash contributes bounded isolated drafts or targeted reviews through `agy`.
-- Claude provides selective read-only audits of consequential evidence and design boundaries.
-- External review is not a mandatory gate. Resolve every finding against evidence.
+- Flash supplies bounded isolated drafts or targeted reviews through `agy`.
+- Claude supplies selective read-only reviews of consequential evidence and design boundaries.
+- Review is advisory; resolve each finding against evidence.
 
 ## Current assignment
 
-The full-local151 proposal is integrated with the durable player. Local scope, checkpoint
-persistence, shared one-shot authority, write-ahead selection and false-mode compatibility pass.
-The exact Model121 checkpoint then failed the provenance gate before input: its immutable header
-is training-ineligible and its original state has zero frozen-catalog matches.
+One unclaimed catalog training source is frozen in private record
+`full-local-source-20260914-v1`. A metadata-only selector established 54 train entries,
+42 claimed and 12 unclaimed, with no saved payload opens. The preceding two-family diagnostic
+is claimed and cannot supply this lesson. The fixed selected source's configuration declares
+only story, restoration and control recovery; its actual gameplay feasibility is unknown.
 
-Codex next provisions one prospectively eligible catalog-backed departure for the existing
-collector. Require two executable acquisition families action-free before freezing one exploratory
-model choice. Retain actual costs and the terminal after success or failure, and fit only the
-measured outcome. Do not search consumed historical states or weaken the catalog join.
+Codex next adds direct catalog-origin training and registration anchoring to the existing
+player, preserving continuation contracts. Derive capture/evolution declarations from semantic
+inventory and existing cartridge adapters. Recheck and claim only the frozen source before
+opening it; require two executable families before a query. Do not reselect on conflict/failure.
+The exact implementation contract is in the current session.
 
-Model121 remains121 examples/83 successes/86 registrations. This is engineering, not new learned
-competence. The anti-drift alarm remains active. No fresh Red final exam, ROM hack or Crystal work
-opens before the unchanged readiness/completion gates.
+Model121 remains 121 examples/83 successes/86 local registrations. There is no new learned
+authority or transfer evidence. The anti-drift alarm remains active and Red's full fresh-run
+story/local151 gate still precedes any ROM hack, Crystal or Emerald.
 
 ## External contributions and status
 
-Claude Opus4.8 High completed the initial CLI review using the renewed login. Its configuration,
-routed-binding and allowlist findings were accepted; using shared credit as local flags was rejected.
-The follow-up delta review hit a session limit before delivering a final verdict; no approval is
-claimed. Reset reported: September14 at13:00 America/New_York. Remaining/weekly percentages unknown.
+Claude Opus4.8 High completed the bounded selector source/test review with no concrete finding.
+It did not verify actual claim execution or upstream independence. An earlier inquiry produced
+no retained response and is not counted as a verdict.
+Flash3.8 High completed a tool-free test proposal. Partition aliases, fixed ordering and stale
+claims were accepted; treating historical menus as current executability was rejected.
+Neither reviewer remains running. Current subscription quota percentages/reset windows are
+unavailable from the headless interfaces; no reset, credits or billing change occurred.
 
-Gemini3.8 Flash High completed a read-only regression review. Codex used its compatibility and
-local/shared/physical separation test categories, not its illustrative non-repository identifiers.
-Headless Flash quota remains unavailable. Neither reviewer remains running.
+Next external task, if useful: review the direct-origin admission/continuation compatibility
+delta. Do not repeat general architecture audits or turn reviewer approval into a gameplay gate.
 
-Current collector review: Claude Opus returned GO with no P0/P1 findings; its prepare-time scope
-guard suggestion was implemented. Flash3.8 High returned STOP, but its three claims were rejected
-against existing durable episode identity/write-ahead selection, typed goal outcomes and the
-verified validation-before-session ordering.
-
-Next external work, if useful: one small outcome-admission test review after a concrete collector
-change. Do not repeat broad architecture audits or use reviewers as a gameplay gate.
-
-[Session](docs/work-sessions/2026-09-14-model121-full-local-collector-stop.md) ·
+[Session](docs/work-sessions/2026-09-14-full-local-training-source.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
