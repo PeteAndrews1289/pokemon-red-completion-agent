@@ -56,9 +56,7 @@ RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA = (
 RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model111-automatic-fishing-plan.v1"
 )
-RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = (
-    "pokemon.red.private-model112-frozen-restore-plan.v1"
-)
+RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = "pokemon.red.private-model112-frozen-restore-plan.v1"
 RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model118-frozen-restore-plan.v1"
 )
@@ -82,6 +80,9 @@ RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA = (
 )
 RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model117-frozen-purchase-plan.v1"
+)
+RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model121-safari-execution-plan.v1"
 )
 
 
@@ -112,9 +113,7 @@ class RedLiveSupplementalOption:
             self.candidate.binding_ref != self.binding.binding_ref
             or self.candidate.availability is not LivingDexOptionAvailability.AVAILABLE
         ):
-            raise RedLiveOptionMenuError(
-                "supplemental candidate and executable binding differ"
-            )
+            raise RedLiveOptionMenuError("supplemental candidate and executable binding differ")
 
 
 @dataclass(frozen=True, slots=True)
@@ -139,13 +138,9 @@ class RedLiveForcedSingleton:
         if not isinstance(self.context, LivingDexOptionContext):
             raise TypeError("forced singleton needs a living-Dex context")
         if self.original_bindings.bindings:
-            raise RedLiveOptionMenuError(
-                "forced supplemental singleton rejects ordinary executors"
-            )
+            raise RedLiveOptionMenuError("forced supplemental singleton rejects ordinary executors")
         if len(self.binding_set.bindings) != 1:
-            raise RedLiveOptionMenuError(
-                "forced supplemental singleton needs one executor"
-            )
+            raise RedLiveOptionMenuError("forced supplemental singleton needs one executor")
         binding = self.binding_set.bindings[0]
         if (
             binding.kind is not GoalKind.ACQUIRE_SPECIES
@@ -154,18 +149,14 @@ class RedLiveForcedSingleton:
             is not living_dex_option_kind_for_goal(binding.kind, feature_version=4)
             or self.candidate.availability is not LivingDexOptionAvailability.AVAILABLE
         ):
-            raise RedLiveOptionMenuError(
-                "forced supplemental singleton candidate differs"
-            )
+            raise RedLiveOptionMenuError("forced supplemental singleton candidate differs")
         question = self.binding_set.question(self.situation)
         if (
             len(question.available_indices) != 1
             or question.opportunities[question.available_indices[0]].binding_ref
             != binding.binding_ref
         ):
-            raise RedLiveOptionMenuError(
-                "forced supplemental singleton availability differs"
-            )
+            raise RedLiveOptionMenuError("forced supplemental singleton availability differs")
 
     @property
     def binding(self) -> ExecutableGoalBinding:
@@ -218,31 +209,22 @@ def build_red_live_forced_singleton(
         raise TypeError("forced singleton needs a GoalSituation")
     if not isinstance(binding_set, GoalBindingSet):
         raise TypeError("forced singleton needs a GoalBindingSet")
-    if (
-        not isinstance(supplements, tuple)
-        or any(not isinstance(item, RedLiveSupplementalOption) for item in supplements)
+    if not isinstance(supplements, tuple) or any(
+        not isinstance(item, RedLiveSupplementalOption) for item in supplements
     ):
         raise TypeError("forced singleton supplements must be immutable")
     if binding_set.bindings:
-        raise RedLiveOptionMenuError(
-            "forced supplemental singleton rejects ordinary executors"
-        )
+        raise RedLiveOptionMenuError("forced supplemental singleton rejects ordinary executors")
     if len(supplements) != 1:
-        raise RedLiveOptionMenuError(
-            "forced supplemental singleton needs exactly one candidate"
-        )
+        raise RedLiveOptionMenuError("forced supplemental singleton needs exactly one candidate")
     if (economy_snapshot is None) != (target_cash is None):
-        raise RedLiveOptionMenuError(
-            "forced singleton economy context is incomplete"
-        )
+        raise RedLiveOptionMenuError("forced singleton economy context is incomplete")
     if safety is None:
         safety = CompletionFirstGoalTeacher()
     if not isinstance(safety, CompletionFirstGoalTeacher):
         raise TypeError("forced singleton needs a safety policy")
     if situation.storage_pressure >= safety.storage_gate:
-        raise RedLiveOptionMenuError(
-            "forced acquisition singleton is masked by storage safety"
-        )
+        raise RedLiveOptionMenuError("forced acquisition singleton is masked by storage safety")
 
     supplement = supplements[0]
     binding = supplement.binding
@@ -252,22 +234,16 @@ def build_red_live_forced_singleton(
         or expected_kind is None
         or supplement.candidate.features.kind is not expected_kind
     ):
-        raise RedLiveOptionMenuError(
-            "forced singleton needs one portable acquisition"
-        )
+        raise RedLiveOptionMenuError("forced singleton needs one portable acquisition")
     if economy_snapshot is None and supplement.candidate.economy_offer is not None:
-        raise RedLiveOptionMenuError(
-            "economy-bearing forced singleton needs measured context"
-        )
+        raise RedLiveOptionMenuError("economy-bearing forced singleton needs measured context")
     matching_indices = tuple(
         index
         for index, opportunity in enumerate(binding_set.opportunities)
         if opportunity.kind is binding.kind
     )
     if len(matching_indices) != 1:
-        raise RedLiveOptionMenuError(
-            "forced singleton needs one masked acquisition opportunity"
-        )
+        raise RedLiveOptionMenuError("forced singleton needs one masked acquisition opportunity")
     selected_index = matching_indices[0]
     opportunities = tuple(
         binding.opportunity if index == selected_index else opportunity
@@ -314,12 +290,9 @@ class RedLiveOptionSet:
             != tuple(item.binding_ref for item in self.menu.candidates)
         ):
             raise RedLiveOptionMenuError("live option menu and bindings differ")
-        if (
-            not isinstance(self.ordinary_binding_refs, frozenset)
-            or not self.ordinary_binding_refs <= {
-                item.binding_ref for item in self.bindings
-            }
-        ):
+        if not isinstance(
+            self.ordinary_binding_refs, frozenset
+        ) or not self.ordinary_binding_refs <= {item.binding_ref for item in self.bindings}:
             raise RedLiveOptionMenuError("ordinary binding inventory differs")
         if (
             not isinstance(self.ordering_seed_sha256, str)
@@ -328,10 +301,7 @@ class RedLiveOptionSet:
             raise RedLiveOptionMenuError("live option ordering seed differs")
 
     def binding(self, candidate_index: int) -> ExecutableGoalBinding:
-        if (
-            type(candidate_index) is not int
-            or candidate_index not in self.menu.available_indices
-        ):
+        if type(candidate_index) is not int or candidate_index not in self.menu.available_indices:
             raise RedLiveOptionMenuError("live option selection is unavailable")
         return self.bindings[candidate_index]
 
@@ -339,10 +309,7 @@ class RedLiveOptionSet:
         return {
             "available_candidate_count": len(self.menu.available_indices),
             "distinct_option_kinds": len(
-                {
-                    self.menu.candidates[index].features.kind
-                    for index in self.menu.available_indices
-                }
+                {self.menu.candidates[index].features.kind for index in self.menu.available_indices}
             ),
             "identity_fields_public": 0,
             "menu": self.menu.policy_dict(),
@@ -350,9 +317,7 @@ class RedLiveOptionSet:
             "ordinary_candidate_count": len(self.ordinary_binding_refs),
             "private_binding_fields": 0,
             "schema": "pokemon.red.live-mixed-option-set.v1",
-            "supplemental_candidate_count": (
-                len(self.bindings) - len(self.ordinary_binding_refs)
-            ),
+            "supplemental_candidate_count": (len(self.bindings) - len(self.ordinary_binding_refs)),
         }
 
 
@@ -394,15 +359,9 @@ class RedLiveOptionChoice:
             raise RedLiveOptionMenuError("live mixed-family choice differs")
         if self.probabilities[self.selected_candidate_index] <= 0.0:
             raise RedLiveOptionMenuError("selected live option has zero probability")
-        if (
-            self.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
-            and (
-                any(value is not None for value in self.scores)
-                or sum(
-                value > 0.0 for value in self.probabilities
-                )
-                != 1
-            )
+        if self.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY and (
+            any(value is not None for value in self.scores)
+            or sum(value > 0.0 for value in self.probabilities) != 1
         ):
             raise RedLiveOptionMenuError("safety choice retained model authority")
 
@@ -448,16 +407,13 @@ def build_red_live_option_set(
         raise TypeError("mixed live menu needs a GoalSituation")
     if not isinstance(binding_set, GoalBindingSet):
         raise TypeError("mixed live menu needs a GoalBindingSet")
-    if (
-        not isinstance(supplements, tuple)
-        or any(not isinstance(item, RedLiveSupplementalOption) for item in supplements)
+    if not isinstance(supplements, tuple) or any(
+        not isinstance(item, RedLiveSupplementalOption) for item in supplements
     ):
         raise TypeError("mixed live menu supplements must be immutable")
     if type(model_feature_version) is not int or model_feature_version not in {1, 2, 3, 4}:
         raise RedLiveOptionMenuError("mixed live menu feature version differs")
-    if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(
-        ordering_seed_sha256
-    ) is None:
+    if not isinstance(ordering_seed_sha256, str) or _SHA256.fullmatch(ordering_seed_sha256) is None:
         raise RedLiveOptionMenuError("mixed live menu ordering seed differs")
     if (economy_snapshot is None) != (target_cash is None):
         raise RedLiveOptionMenuError("mixed live menu economy context is incomplete")
@@ -500,16 +456,12 @@ def build_red_live_option_set(
             feature_version=model_feature_version,
         )
         if expected_kind is None or supplement.candidate.features.kind is not expected_kind:
-            raise RedLiveOptionMenuError(
-                "supplemental executor and portable option kind differ"
-            )
+            raise RedLiveOptionMenuError("supplemental executor and portable option kind differ")
         rows.append((supplement.binding, supplement.candidate, False))
 
     refs = tuple(binding.binding_ref for binding, _candidate, _ordinary in rows)
     if len(rows) < 2 or len(set(refs)) != len(refs):
-        raise RedLiveOptionMenuError(
-            "mixed live menu needs distinct executable candidates"
-        )
+        raise RedLiveOptionMenuError("mixed live menu needs distinct executable candidates")
 
     def ordering_key(index: int) -> str:
         return canonical_sha256(
@@ -527,8 +479,7 @@ def build_red_live_option_set(
         target_cash=target_cash,
     )
     if economy_snapshot is None and any(
-        candidate.economy_offer is not None
-        for _binding, candidate, _ordinary in ordered
+        candidate.economy_offer is not None for _binding, candidate, _ordinary in ordered
     ):
         raise RedLiveOptionMenuError(
             "economy-bearing mixed options need a measured economy context"
@@ -541,9 +492,7 @@ def build_red_live_option_set(
         binding_set,
         menu,
         tuple(binding for binding, _candidate, _ordinary in ordered),
-        frozenset(
-            binding.binding_ref for binding, _candidate, ordinary in ordered if ordinary
-        ),
+        frozenset(binding.binding_ref for binding, _candidate, ordinary in ordered if ordinary),
         ordering_seed_sha256,
     )
 
@@ -599,8 +548,7 @@ def select_red_live_option(
             and selected_opportunity.resource_quote.expected_income > 0
             and options.menu.context.economy_snapshot is not None
             and options.menu.context.target_cash is not None
-            and options.menu.context.target_cash
-            > options.menu.context.economy_snapshot.cash
+            and options.menu.context.target_cash > options.menu.context.economy_snapshot.cash
         )
     safety_forced = deterministic is not None and (
         deterministic.kind is GoalKind.RECOVER_CONTROL
@@ -631,8 +579,7 @@ def select_red_live_option(
                 "safety-selected goal is absent from the mixed menu"
             ) from error
         probabilities = tuple(
-            1.0 if index == selected_index else 0.0
-            for index in range(len(options.bindings))
+            1.0 if index == selected_index else 0.0 for index in range(len(options.bindings))
         )
         return RedLiveOptionChoice(
             options,
@@ -660,17 +607,13 @@ def select_red_live_option(
     mix = float(exploration_mix)
     probabilities_list = [0.0] * len(options.bindings)
     for index, weight in zip(available, exponentials, strict=True):
-        probabilities_list[index] = (
-            (1.0 - mix) * weight / total + mix / len(available)
-        )
+        probabilities_list[index] = (1.0 - mix) * weight / total + mix / len(available)
     selected_index = random.Random(seed).choices(
         range(len(probabilities_list)),
         weights=probabilities_list,
         k=1,
     )[0]
-    scores = tuple(
-        None if value is None else float(value) for value in raw_scores
-    )
+    scores = tuple(None if value is None else float(value) for value in raw_scores)
     return RedLiveOptionChoice(
         options,
         selected_index,
@@ -707,6 +650,7 @@ __all__ = [
     "RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
