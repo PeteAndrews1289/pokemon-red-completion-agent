@@ -23,6 +23,9 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalExecutionReport,
     GoalVerification,
 )
+from pokemon_red_completion.living_dex_option_value import (
+    living_dex_option_context_from_goal_situation,
+)
 from pokemon_red_completion.local_router import LocalPath
 from pokemon_red_completion.red_acquisition import RedAcquisitionKind
 from pokemon_red_completion.red_bounded_player import preflight_red_bounded_player
@@ -49,8 +52,17 @@ from pokemon_red_completion.red_live_fishing import (
     RedReachableFishingDestination,
 )
 from pokemon_red_completion.red_live_option_menu import supplemental_live_option
+from pokemon_red_completion.red_live_safari import (
+    RedLiveSafariInventory,
+    RedReachableSafariArea,
+)
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
+from pokemon_red_completion.red_safari_acquisition import (
+    RedSafariPatrolPlan,
+    RedSafariZoneOffer,
+    red_safari_area_menu,
+)
 from pokemon_red_completion.route_executor import TraversalSnapshot
 from pokemon_red_completion.route_plan import RoutePlan, RouteSegment
 
@@ -110,6 +122,56 @@ def _fishing_inventory(species_number: int = 60) -> RedLiveFishingInventory:
     )[0]
     return RedLiveFishingInventory(
         (destination,),
+        (supplemental_live_option(binding, candidate),),
+    )
+
+
+def _safari_inventory(setup, species_number: int = 111) -> RedLiveSafariInventory:
+    center = RedSafariZoneOffer(
+        "wild:SafariZoneCenter:grass",
+        0xDC,
+        tuple((25, species_number) for _ in range(10)),
+        (species_number,),
+    )
+    north = RedSafariZoneOffer(
+        "wild:SafariZoneNorth:grass",
+        0xDA,
+        tuple((25, species_number) for _ in range(10)),
+        (species_number,),
+    )
+    patrol = RedSafariPatrolPlan(
+        center.source_id,
+        center.map_id,
+        (25, 15),
+        ("up",),
+        (24, 15),
+        (23, 15),
+        2,
+        "up",
+        "down",
+    )
+    area = RedReachableSafariArea(center, patrol, 1)
+    binding = ExecutableGoalBinding(
+        binding_ref="private:test:safari",
+        kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.2,
+        estimated_risk=0.1,
+        execute=lambda: GoalExecutionReport(0, 0, {"test_only": True}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+    context = living_dex_option_context_from_goal_situation(
+        setup.native.adapter.observe().situation
+    )
+    candidate = red_safari_area_menu(
+        context,
+        (center, north),
+        route_steps=(1, 2),
+        maximum_route_steps=2,
+        available_money=500,
+        free_storage_slots=1,
+    ).candidates[0]
+    return RedLiveSafariInventory(
+        (area,),
         (supplemental_live_option(binding, candidate),),
     )
 
@@ -262,6 +324,33 @@ def test_reachable_fishing_replaces_only_unavailable_wild_acquisition(setup):
     assert public["identity_fields_public"] == 0
     encoded = json.dumps(public)
     assert "fishing" not in encoded
+    assert "private:test" not in encoded
+    assert setup.actions.actions_executed == setup.native.emulator.frame_count == 0
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_reachable_safari_precedes_fishing_after_unavailable_wild(setup):
+    setup.world.fail = True
+    proposal = _propose_red_full_pokedex_goals(
+        setup.router,
+        setup.native.adapter.observe(),
+        safari_inventory=_safari_inventory(setup),
+        fishing_inventory=_fishing_inventory(),
+    )
+
+    assert {candidate.acquisition_kind for candidate in proposal.candidates} == {
+        RedAcquisitionKind.SAFARI,
+        RedAcquisitionKind.EVOLUTION,
+    }
+    safari = next(
+        candidate
+        for candidate in proposal.candidates
+        if candidate.acquisition_kind is RedAcquisitionKind.SAFARI
+    )
+    assert safari.target_numbers == (111,)
+    assert safari.binding.binding_ref == "private:test:safari"
+    encoded = json.dumps(proposal.public_dict())
+    assert "safari" not in encoded
     assert "private:test" not in encoded
     assert setup.actions.actions_executed == setup.native.emulator.frame_count == 0
 

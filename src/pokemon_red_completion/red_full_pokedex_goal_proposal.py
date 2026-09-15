@@ -57,6 +57,10 @@ from pokemon_red_completion.red_live_fishing import (
     RedLiveFishingInventory,
     build_red_live_fishing_inventory,
 )
+from pokemon_red_completion.red_live_safari import (
+    RedLiveSafariInventory,
+    build_red_live_safari_inventory,
+)
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
 from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.red_resource_goal_router import (
@@ -90,6 +94,7 @@ class RedFullPokedexFamilyDiagnostic:
     def __post_init__(self) -> None:
         if self.acquisition_kind not in {
             RedAcquisitionKind.WILD,
+            RedAcquisitionKind.SAFARI,
             RedAcquisitionKind.FISHING,
             RedAcquisitionKind.EVOLUTION,
         }:
@@ -118,7 +123,12 @@ class RedFullPokedexFamilyDiagnostic:
     def option_kind(self) -> LivingDexOptionKind:
         return (
             LivingDexOptionKind.ACQUIRE
-            if self.acquisition_kind in {RedAcquisitionKind.WILD, RedAcquisitionKind.FISHING}
+            if self.acquisition_kind
+            in {
+                RedAcquisitionKind.WILD,
+                RedAcquisitionKind.SAFARI,
+                RedAcquisitionKind.FISHING,
+            }
             else LivingDexOptionKind.EVOLVE
         )
 
@@ -195,7 +205,12 @@ class RedFullPokedexGoalCandidate:
             )
         expected = (
             (GoalKind.ACQUIRE_SPECIES, LivingDexOptionKind.ACQUIRE)
-            if self.acquisition_kind in {RedAcquisitionKind.WILD, RedAcquisitionKind.FISHING}
+            if self.acquisition_kind
+            in {
+                RedAcquisitionKind.WILD,
+                RedAcquisitionKind.SAFARI,
+                RedAcquisitionKind.FISHING,
+            }
             else (GoalKind.EVOLVE_SPECIES, LivingDexOptionKind.EVOLVE)
             if self.acquisition_kind is RedAcquisitionKind.EVOLUTION
             else None
@@ -237,6 +252,7 @@ class RedFullPokedexGoalProposal:
             or tuple(diagnostic.acquisition_kind for diagnostic in self.family_diagnostics)
             not in {
                 (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION),
+                (RedAcquisitionKind.SAFARI, RedAcquisitionKind.EVOLUTION),
                 (RedAcquisitionKind.FISHING, RedAcquisitionKind.EVOLUTION),
             }
         ):
@@ -273,7 +289,7 @@ class RedFullPokedexGoalProposal:
             "family_diagnostics": [
                 diagnostic.public_dict() for diagnostic in self.family_diagnostics
             ],
-            "binding_authority": "live_resource_goal_router",
+            "binding_authority": "authenticated_live_goal_bindings",
             "completion_authority": "local_red_registration_flags",
             "identity_fields_public": 0,
             "controller_actions": 0,
@@ -503,27 +519,81 @@ def _fishing_candidate(
     )
 
 
+def _safari_candidate(
+    inventory: RedFullPokedexInventory,
+    safari: RedLiveSafariInventory,
+    catalog: RedAcquisitionCatalog,
+) -> tuple[RedFullPokedexGoalCandidate | None, RedFullPokedexFamilyDiagnostic]:
+    """Bind the ranked executable Safari area as one acquisition family."""
+
+    if not safari.areas:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.SAFARI,
+            RedFullPokedexFamilyReason.NO_MISSING_EXECUTABLE_TARGET,
+        )
+    if len(safari.supplements) != 1:
+        raise RedFullPokedexGoalProposalError(
+            "full-Pokédex Safari fallback needs one ranked binding"
+        )
+    area = safari.areas[0]
+    supplement = safari.supplements[0]
+    target_numbers = tuple(
+        number
+        for number in area.offer.missing_species_numbers
+        if not inventory.target(number).locally_registered
+        and inventory.target(number).resolution_kind
+        is RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN
+        and catalog.method_for(red_species_ref(number)).kind is RedAcquisitionKind.SAFARI
+    )
+    if not target_numbers:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.SAFARI,
+            RedFullPokedexFamilyReason.NO_MISSING_EXECUTABLE_TARGET,
+        )
+    if (
+        supplement.binding.kind is not GoalKind.ACQUIRE_SPECIES
+        or supplement.candidate.features.kind is not LivingDexOptionKind.ACQUIRE
+    ):
+        raise RedFullPokedexGoalProposalError(
+            "Safari executor differs from its portable acquisition"
+        )
+    return (
+        RedFullPokedexGoalCandidate(
+            RedAcquisitionKind.SAFARI,
+            LivingDexOptionKind.ACQUIRE,
+            target_numbers,
+            supplement.binding,
+        ),
+        RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.SAFARI,
+            RedFullPokedexFamilyReason.READY,
+        ),
+    )
+
+
 def _propose_red_full_pokedex_goals(
     router: RedResourceGoalRouter,
     observation: RedGoalObservation,
     *,
+    safari_inventory: RedLiveSafariInventory | None = None,
     fishing_inventory: RedLiveFishingInventory | None = None,
 ) -> RedFullPokedexGoalProposal:
     """Build a same-departure menu through the actual registered runtime.
 
-    Wild capture remains the preferred acquisition when it is executable. If it
-    is not, one already-authenticated, ranked reachable fishing executor may
-    supply the acquisition family. External trades, gifts, Safari, fossils,
-    prizes, and static encounters remain absent until they have authenticated
-    goal executors.
+    Wild capture remains preferred when executable. Otherwise one ranked Safari
+    executor, then one ranked reachable fishing executor, may supply acquisition.
+    External trades, gifts, fossils, prizes, and static encounters remain absent
+    until they have authenticated goal executors.
 
-    This internal variant accepts the fishing inventory built by the live player
+    This internal variant accepts supplemental inventories built by the live player
     observer. Public callers cannot supply bindings or inventories.
     """
     if not isinstance(router, RedResourceGoalRouter):
         raise TypeError("proposal requires the live Red resource router")
     if not isinstance(observation, RedGoalObservation):
         raise TypeError("proposal requires a Red goal observation")
+    if safari_inventory is not None and not isinstance(safari_inventory, RedLiveSafariInventory):
+        raise TypeError("proposal Safari inventory differs")
     if fishing_inventory is not None and not isinstance(fishing_inventory, RedLiveFishingInventory):
         raise TypeError("proposal fishing inventory differs")
     runtime = router.runtime
@@ -607,6 +677,36 @@ def _propose_red_full_pokedex_goals(
     acquisition_kind = RedAcquisitionKind.WILD
     if (
         not any(candidate.acquisition_kind is RedAcquisitionKind.WILD for candidate in candidates)
+        and safari_inventory is not None
+    ):
+        safari_candidate, safari_diagnostic = _safari_candidate(
+            inventory, safari_inventory, RED_ACQUISITION_CATALOG
+        )
+        if safari_candidate is not None:
+            acquisition_kind = RedAcquisitionKind.SAFARI
+            diagnostics[acquisition_kind] = safari_diagnostic
+            candidates.append(safari_candidate)
+            safari_binding = safari_candidate.binding
+            bindings = GoalBindingSet(
+                tuple(
+                    safari_binding.opportunity
+                    if opportunity.kind is GoalKind.ACQUIRE_SPECIES
+                    else opportunity
+                    for opportunity in bindings.opportunities
+                ),
+                tuple(
+                    binding
+                    for binding in bindings.bindings
+                    if binding.kind is not GoalKind.ACQUIRE_SPECIES
+                )
+                + (safari_binding,),
+                allow_resource_variants=bindings.allow_resource_variants,
+            )
+    if (
+        not any(
+            candidate.acquisition_kind in {RedAcquisitionKind.WILD, RedAcquisitionKind.SAFARI}
+            for candidate in candidates
+        )
         and fishing_inventory is not None
     ):
         fishing_candidate, fishing_diagnostic = _fishing_candidate(
@@ -796,13 +896,25 @@ def build_red_full_pokedex_player_observer(
                 controller,
                 cut_block_swaps={swap.before: swap.after for swap in world.rules.cut_block_swaps},
             )
+            registered_numbers = frozenset(
+                red_species_number(species)
+                for species in observation.collection_observation.owned_species
+            )
+            option_context = living_dex_option_context_from_goal_situation(observation.situation)
+            safari = build_red_live_safari_inventory(
+                world.rom,
+                registered_numbers,
+                option_context,
+                free_storage_slots=observation.free_storage_slots,
+                world=world,
+                controller=controller,
+                actions=actions,
+                reader=native.reader,
+            )
             fishing = build_red_live_fishing_inventory(
                 world.rom,
-                frozenset(
-                    red_species_number(species)
-                    for species in observation.collection_observation.owned_species
-                ),
-                living_dex_option_context_from_goal_situation(observation.situation),
+                registered_numbers,
+                option_context,
                 free_storage_slots=observation.free_storage_slots,
                 world=world,
                 traversal=traversal_observer.observe(),
@@ -817,6 +929,7 @@ def build_red_full_pokedex_player_observer(
             proposed = _propose_red_full_pokedex_goals(
                 router,
                 observation,
+                safari_inventory=safari,
                 fishing_inventory=fishing,
             ).binding_set
         return GoalBindingSet(

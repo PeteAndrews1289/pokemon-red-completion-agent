@@ -22,12 +22,21 @@ fresh Red is 0/5.
 
 ## Next bounded work
 
-End the standalone disposable cartridge-gate loop. Do not create Campaign D simply to discover the
-next mechanic in isolation. Return to the authenticated Model121 terminal and build one genuinely
-executable heterogeneous collection choice from legitimate observed resources. Execute at most one
-retained choice under the existing bounds. A retained registration/example is the desired output;
-if real play exposes another general battle boundary, preserve that failure and repair the shared
-runtime without route/species exceptions.
+The authenticated Model121 terminal now qualifies a genuine heterogeneous choice without taking an
+action: one ranked Safari acquisition binding beside the existing Tentacool evolution binding. The
+exact census preserved the state byte-for-byte, reported zero controller actions, and found
+`acquire_species` plus `evolve_species`. Safari discovery checks the observed Fly carrier, Fuchsia
+destination, admission money, storage headroom and four cartridge-derived productive areas, then
+exposes only the best area as the single acquisition-family choice. Public model features retain no
+species, map or private binding identity.
+
+This is implemented and locally verified, but it has not queried Model121 or played the cartridge.
+Focused tests passed (61), the broader related suite passed (161), lint passed and whole-source type
+checking passed across 492 files. Reopen the digest-pinned Model121 artifact, write the exact
+pre-query freeze, issue one durable heterogeneous-choice query, and execute at most one retained
+selection under the existing bounds. Do not reconstruct or substitute a model merely to proceed.
+A retained registration/example is the desired output; if real play exposes another general battle
+boundary, preserve that failure and repair the shared runtime without route/species exceptions.
 
 No full-game replay, ROM hack, Crystal work, protected-root scan, arbitrary source replacement or
 GitHub push. Pete alone decides publication.

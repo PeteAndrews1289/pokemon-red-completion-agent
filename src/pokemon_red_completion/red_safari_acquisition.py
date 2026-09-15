@@ -241,8 +241,7 @@ class RedSafariTransportReport:
             "exact_party_preserved": self.party_species_after == self.party_species_before,
             "verified_fly_receipts": self.verified_fly_receipts,
             "stable_fuchsia_center": (
-                self.final_map_id == int(MapId.FUCHSIA_POKECENTER)
-                and self.final_position == (3, 3)
+                self.final_map_id == int(MapId.FUCHSIA_POKECENTER) and self.final_position == (3, 3)
             ),
             "money_spent": self.money_before - self.money_after,
             "actions_executed": self.actions_executed,
@@ -312,9 +311,7 @@ _SAFARI_AREA_ROUTES: dict[str, tuple[str, ...]] = {
     "wild:SafariZoneCenter:grass": (),
     "wild:SafariZoneEast:grass": CENTER_TO_EAST,
     "wild:SafariZoneNorth:grass": CENTER_TO_EAST + EAST_TO_NORTH,
-    "wild:SafariZoneWest:grass": (
-        CENTER_TO_EAST + EAST_TO_NORTH + _NORTH_TO_WEST_ENCOUNTER_SHELF
-    ),
+    "wild:SafariZoneWest:grass": (CENTER_TO_EAST + EAST_TO_NORTH + _NORTH_TO_WEST_ENCOUNTER_SHELF),
 }
 _SAFARI_AREA_TERMINALS: dict[str, tuple[int, tuple[int, int], int]] = {
     "wild:SafariZoneCenter:grass": (int(MapId.SAFARI_ZONE_CENTER), (15, 25), 500),
@@ -355,9 +352,7 @@ def derive_red_safari_patrol(
         ("down", "up", (1, 0)),
         ("right", "left", (0, 1)),
     )
-    candidates: list[
-        tuple[int, Coordinate, Coordinate, tuple[str, ...], str, str]
-    ] = []
+    candidates: list[tuple[int, Coordinate, Coordinate, tuple[str, ...], str, str]] = []
     for y in range(terrain.height):
         for x in range(terrain.width):
             first = (y, x)
@@ -416,6 +411,27 @@ def derive_red_safari_patrol(
         int(terrain.grass[first[0]][first[1]]) + int(terrain.grass[second[0]][second[1]]),
         forward,
         backward,
+    )
+
+
+def derive_red_safari_offer_patrol(
+    offer: RedSafariZoneOffer,
+    terrain: Terrain,
+    graph: LocalGraph,
+    *,
+    excluded: Collection[Coordinate] = (),
+) -> RedSafariPatrolPlan:
+    """Derive the patrol from the qualified admission terminal for one offer."""
+
+    expected_map, (player_x, player_y), _steps_remaining = _SAFARI_AREA_TERMINALS[offer.source_id]
+    if expected_map != offer.map_id:
+        raise ValueError("Safari admission terminal differs from its offer")
+    return derive_red_safari_patrol(
+        offer,
+        terrain,
+        graph,
+        start_at=(player_y, player_x),
+        excluded=excluded,
     )
 
 
@@ -1132,10 +1148,7 @@ class LiveSafariAreaExecutor:
             expected = selected - 2 if selected >= 2 else 0
             self._pulse(MacroActionKind.MOVE, direction)
             after = self._reader.read_battle_menu_state(self._reader.read())
-            if (
-                after.phase is not BattleMenuPhase.MAIN
-                or after.selected_main_command != expected
-            ):
+            if after.phase is not BattleMenuPhase.MAIN or after.selected_main_command != expected:
                 raise RedAreaExecutionError(
                     "Safari menu did not acknowledge the selected direction",
                     reason_code="safari_menu_selection_unacknowledged",
@@ -1159,11 +1172,7 @@ class LiveSafariAreaExecutor:
             raw = self._reader.read()
             if not raw.battle_state:
                 return spent
-            if (
-                spent
-                and self._reader.read_battle_menu_state(raw).phase
-                is BattleMenuPhase.MAIN
-            ):
+            if spent and self._reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN:
                 return True
             self._pulse(MacroActionKind.CANCEL)
         if not spent:
@@ -1220,6 +1229,7 @@ __all__ = [
     "SAFARI_AREA_CHOICE_POLICY",
     "SAFARI_ZONE_SOURCES",
     "derive_red_safari_patrol",
+    "derive_red_safari_offer_patrol",
     "enter_red_safari_area",
     "red_safari_area_menu",
     "red_safari_admission_route",
