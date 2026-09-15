@@ -8,34 +8,33 @@ The first finish line is a fresh start-to-finish model-directed Red run with Cha
 Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
 compatible Red hack, Crystal and at least Emerald.
 
-## Latest chapter: stop spending blind sources
+## Latest chapter: a real gate exposes capture routing
 
-Three direct sources were consumed before producing a mixed capture/evolution lesson. Diagnostics
-now explain future one-family failures, but they cannot make an unopened source feasible. The
-metadata-only selector learns whether capture and evolution coexist only after the root is claimed.
+The system can now explicitly reuse an authenticated measured checkpoint for one bounded training
+lesson while preserving its original evidence limits. It records a one-shot reset before the gate,
+does not sample the model during that check, and retains native outcomes with registration and
+resource accounting. Correlated practice is not independent proof of competence.
 
-The supply audit therefore rejected source four and preserved all nine remaining roots. Scanning
-unclaimed payloads until a passing menu appears was also rejected: it would bypass claim-first
-admission and cherry-pick private state. Flash3.8 High and Claude Opus High independently agreed
-that the current claim-then-gate order cannot assure a measured lesson.
+The first Model121 reset authenticated but could not offer both acquisition families: evolution
+was ready, capture was rejected by the router as a missing capability. No model choice or input
+occurred. The original failure omitted detailed reasons; a separate read-only reconstruction
+matched the exact state, profile and registration policy, and the recorder was repaired for future
+failures. The closed reset was not replayed. Nine unused sources remain untouched.
 
-The next path uses the authenticated Model121 terminal as one explicitly correlated training reset,
-not an independent root. It needs a versioned registered-reset bridge before a zero-action
-capture/evolution check and one retained choice. Relevant source-free tests passed185 cases; no
-source, ROM, model choice, input or fit occurred.
+This is engineering progress, not learning: Model121 remains121 examples/83 successes and86/151
+registrations. A third consecutive no-learning session keeps the anti-drift alarm active.
+Next is a narrow capture-capability/route test, not another admission redesign or source survey.
 
-This is the second consecutive session without a learned result, so the anti-drift alarm is active.
-The next session must build the reset bridge and target one lesson, not another source audit.
+Claude Opus High reviewed the working implementation; an intermediate-plan fit guard was accepted.
+Flash supplied test themes from an older checkout, so no exact-source audit credit is claimed.
 
-Today's learning remains one new resupply example:120→121, or0.83% dataset growth. The development
-save remains86/151 (56.95%). Engineering progress and learned progress stay separate.
+Today's learning remains one resupply example:120→121 (+0.83% dataset size). The development save
+remains86/151 (56.95%); neither number measures whole-project completion.
 
-[Latest evidence](evidence/red-full-pokedex-supply-admission-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
+[Latest evidence](evidence/red-registered-correlated-reset-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-registered-correlated-reset.md) ·
 [Model-first roadmap](model-first-roadmap.md)
 
-Checkpoint story completion remains a useful component result, not the required fresh run.
-Full Red registration and legitimate trade/event dependencies still precede every later game.
-
+Checkpoint story completion is a component result, not the required fresh run.
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
 [Authorship and public overview](../README.md)

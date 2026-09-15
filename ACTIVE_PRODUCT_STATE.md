@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build the versioned registered correlated-reset bridge for the exact Model121 terminal and require its source-free qualification before one action-free two-family check or any model query.
+- Next decision: Diagnose and source-free qualify the capture-routing capability boundary. The reset bridge is implemented and its sole gate failed; no reset retry, protected-source scan or source four.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact Model121 terminal cannot expose both executable acquisition families under a versioned correlated-reset contract, or that contract cannot authenticate the parent without weakening provenance. |
+| Cheapest falsifier | A source-free capability-preservation test still cannot bind a legal capture route without fabricated or unsupported access. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-full-pokedex-supply-admission** · status **closed** · evidence [falsification](docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json)
+**2026-09-14-registered-correlated-reset** · status **closed** · evidence [falsification](docs/evidence/red-registered-correlated-reset-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Correlated training reuse practices the actual capture-versus-evolution decision without sacrificing finite protected roots or manufacturing independent evaluation evidence. |
-| Learning output | None. This is the second consecutive no-learning session, so the configured anti-drift alarm fired. Model121 remains121 examples/83 successes/86 local registrations. |
-| Authority delta | None. Model121 remains at121 examples/83 successes/86 local registrations. The supply audit created no model query, action, frame, outcome or fit. |
-| Transfer result | None. The chosen next path is explicitly correlated Red training, not independent development or cross-title transfer. |
-| Blocker | The direct selector cannot know whether an unopened source exposes both capture and evolution before its irreversible claim. The authenticated Model121 terminal is train-partitioned but deliberately catalog-ineligible, so correlated reuse needs a new explicit registered-reset contract. |
-| Decision | Reject source four and preclaim scanning of protected sources. Preserve nine unused eligible roots and target one prospectively declared correlated training reset from the exact Model121 terminal, never an independent history. |
-| Next session | Implement and source-free qualify the registered correlated-reset bridge, then inspect the exact reusable Model121 terminal action-free. Only a two-family PASS may proceed to one retained choice and fit; do not select source four. |
-| Next falsifier | The exact Model121 terminal fails the zero-action two-family gate, or a source-free reset contract cannot bind its parent, registered objective, Model121, one query, one execution and honest outcome retention. |
-| Stop condition | The current claim-then-gate order cannot assure a lesson before consuming source four. Stop direct-source selection, protected-payload scanning and gameplay; preserve V1-V3 and all nine unused roots. |
+| Product alignment | Explicit correlated training preserves the measured parent's evidence tier and saves finite independent roots. The implemented bridge now exposes a concrete capture-routing blocker. |
+| Learning output | None. This third consecutive no-learning session is engineering progress only. Model121 remains121 examples/83 successes/86 local registrations. |
+| Authority delta | None. The registered correlated-reset bridge is implemented, but its sole Model121 gate failed before a model query, input or fit. Model121 remains121 examples/83 successes/86 local registrations. |
+| Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
+| Blocker | The exact state/profile/policy reconstruction found evolution ready but capture rejected by the router as missing_capability. The original failure omitted typed reasons; future retention is repaired. The reset remains consumed. |
+| Decision | Close the Model121 reset without retry and preserve all nine unused sources. Target the narrow capture capability/route boundary, not another admission redesign or protected-source survey. |
+| Next session | Diagnose and source-free qualify capture capability preservation and route feasibility. Do not retry the closed reset; a later played successor needs a new prospective scope and the unchanged two-family gate. |
+| Next falsifier | A source-free test shows that preserving declared capture transport capabilities still cannot produce a legal route, or requires unsupported or fabricated game access. |
+| Stop condition | The sole correlated reset failed its two-family gate before a model query. Stop gameplay and retries; preserve this identity, V1-V3 and all nine unused roots. |
 
 ### Stop conditions
 

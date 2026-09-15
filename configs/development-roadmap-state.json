@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-full-pokedex-supply-admission",
+  "as_of_session": "2026-09-14-registered-correlated-reset",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json"
+      "evidence": "docs/evidence/red-registered-correlated-reset-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1388,6 +1388,12 @@
       "result": "Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.",
       "deviation": "The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.",
       "next": "Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation."
+    },
+    {
+      "session": "2026-09-14-registered-correlated-reset",
+      "result": "Reset bridge implemented. Model121's gate stopped before query/input/fit: evolution ready; capture routing unavailable. Reset closed, nine unused sources preserved. No learning delta.",
+      "deviation": "No learned result. The original failure omitted typed family details; matching read-only reconstruction retained them and future recorder behavior was repaired. This third no-learning session is engineering progress only; the consumed reset cannot replay.",
+      "next": "Sol High: source-free capture transport-capability preservation and route-feasibility test, then a scoped repair if justified. Do not redesign admission, scan sources or replay the closed reset. A played successor needs a new prospective scope."
     }
   ],
   "closed_milestones": [

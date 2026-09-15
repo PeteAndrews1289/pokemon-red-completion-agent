@@ -1,6 +1,6 @@
 # Registered correlated-reset implementation
 
-Status: implementation qualified locally; exact-terminal attempt pending publication.
+Status: bridge implemented; one reset closed at the action-free two-family gate.
 
 ## Mission check
 
@@ -36,4 +36,37 @@ own native recorder/replay tests. Its review predates that final addition. Flash
 five advisory test themes but referenced an older checkout, so this is not an exact-source audit.
 Neither service exposed subscription quota in its CLI help; refreshed quota is unavailable.
 
-No model query, controller input, learning row, fit or registration is claimed yet.
+## Exact-terminal outcome
+
+Execution source `fd2c76c23737542bc4a7247ebe1c283c026c35fd` was published before preparation.
+One prospective reset authenticated Model121's measured checkpoint and unchanged train lineage,
+created a local-registration policy and consumed its exclusive reset identity. Its real menu
+failed before a model query, native episode or controller input. The reset is permanently closed.
+
+The original failure retained the exception but omitted the typed family details. A separate
+read-only reconstruction matched the exact state, derived profile and frozen registration policy:
+**evolution ready; capture unavailable with router reason `missing_capability`**. State bytes,
+actions and frames remained unchanged; it was not a new gate, reset, query or execution grant.
+The final code retains these typed reasons directly;54 focused diagnostic/reset tests passed.
+Final reset and documentation validation passed193 tests. The regenerated infographic's top and
+footer were inspected; its session summary was shortened to remove a footer overlap.
+
+Static source inspection identifies a concrete hypothesis for the next bounded test: the derived
+capture profile replaces its parameters with a bare encounter corridor, while the router requires
+explicit Cut/Surf/Fly transport flags. This has not established which capability caused the live
+rejection, and no repaired profile was tried on the closed reset.
+
+Learning delta:0 examples,0 successes,0 fits,0 local registrations. Model121 remains121 examples,
+83 successes and86/151 registrations. The original collection checklist stays21/22; expanded25/26;
+all five final fresh-start Red acceptance conditions remain unmet. Nine unused sources are preserved.
+One accounting session records already-owned species; it grants no new species or independent run.
+
+This is a third consecutive no-learning session. The bridge is engineering progress, not player
+competence. Next work must address the now-narrow capture-routing failure, not repeat admission
+design, source audits or resource-only rows. Gameplay is stopped.
+
+[Path-free evidence](../evidence/red-registered-correlated-reset-2026-09-14.json).
+
+Next: **Sol / High / Fast off**, estimated60–90 minutes for the source-free capability-preservation
+and route-feasibility test. Any later played successor needs a new prospective scope; never replay
+this consumed reset. Astra is not required for another architecture review of the completed bridge.

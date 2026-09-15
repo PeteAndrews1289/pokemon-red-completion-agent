@@ -1,41 +1,39 @@
 # Current development handoff
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September14,2026.
 
-## Fourth blind source rejected
+## Reset bridge implemented; capture routing is the blocker
 
-The supply/admission audit returned NO-GO on source four. Metadata-only selection cannot establish
-that both capture and evolution are executable before the exact root is claimed and opened. A
-one-family failure would consume another source before a model query or outcome. Preserve V1–V3
-and all nine unused eligible roots.
+Published execution source `fd2c76c23737542bc4a7247ebe1c283c026c35fd` admitted one explicit correlated
+training reset from the authenticated Model121 measured terminal. It preserves the parent's
+catalog exclusion, trust tier and lineage. New registered/economy plans, an exclusive claim,
+observation-only gate and native outcome admission passed local qualification.
 
-Do not scan unclaimed private payloads and choose the first passing menu. That would bypass
-claim-first admission and cherry-pick feasibility. Flash3.8 High and Claude Opus High both agreed
-that the current claim-then-gate order cannot assure a lesson; their preclaim-scanning workaround
-was rejected against this boundary.
+The sole reset `model121-correlated-reset-20260914-v1` authenticated and was consumed, then failed
+the two-family gate before a model query or gameplay. It is permanently closed, not retryable.
+Its original failure omitted typed family details. A separate zero-input reconstruction matched
+the exact state, execution profile and registration policy: evolution ready, capture rejected by
+the router as `missing_capability`. Future failures now retain those details directly.
 
-The relevant source-free supply, proposal, inspector, continuation and training-plan surface
-passed185 tests. No source, payload, ROM, model query, input, frame, outcome, example or fit was
-created.
+Related332 tests, a separate48-test reset/economy run and54 post-failure diagnostic tests passed;
+the suites overlap. See session evidence for full-suite/CI status. No source four was selected;
+V1–V3 and all nine unused roots remain untouched.
 
-## Boundaries and next action
+## Next bounded work
 
-Next, build a versioned registered correlated-reset contract around the exact authenticated
-Model121 terminal. It is train-lineage reuse, never an independent root. Bind its parent,
-checkpoint, registered objective, Model121, reset identity, write-ahead choice and one-shot outcome
-retention before sampling. Only a zero-action two-family PASS may proceed to one choice and fit.
-Failure stops without source four.
+Diagnose and source-free qualify capture capability preservation and route feasibility. The derived
+capture profile replaces transport parameters with a bare encounter corridor, while Cut/Surf/Fly
+require explicit flags. That is a concrete hypothesis, not yet a proven complete live cause.
+Do not rebuild admission, scan protected sources or rerun the closed reset. Any played successor
+needs a new prospective declaration and the unchanged two-family gate.
 
 Model121 remains121 examples/83 successes/86 local registrations. Gameplay is stopped. The original
-collection checklist remains21/22; the full fresh-start Red acceptance gate remains0/5. Full local
-Red still precedes any ROM hack, Crystal or Emerald.
+collection checklist remains21/22, expanded25/26; final fresh-start Red gate0/5. No ROM hack or
+Crystal before a full non-deterministic model-directed Red run with all151 local registrations.
 
-The diagnostic session plus this decision are two consecutive sessions without learning, exceeding
-the configured maximum of one. Do not spend another session on pure diagnostics or source census.
+This third consecutive no-learning session is engineering progress only. Keep the next work narrow.
+Next: **Sol / High / Fast off**,60–90 minutes estimated for the capture-routing test and scoped repair.
 
-Next: **Astra / High / Fast off** for the consequential correlated-reset provenance and authority
-design. After exact source-free qualification, use Sol High for the bounded lesson.
-
-[Session](docs/work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
-[Evidence](docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-registered-correlated-reset.md) ·
+[Evidence](docs/evidence/red-registered-correlated-reset-2026-09-14.json)

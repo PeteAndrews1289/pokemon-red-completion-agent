@@ -19,52 +19,45 @@ Checkpoint stitching, random timing or shared credit cannot replace the local fr
 ## Where we stand
 
 Model121 has121 measured examples and83 successes. Its development save has86 local registrations,
-66 living species,70 specimens, four capture items and cash706. These related results are not
+66 living species,70 specimens, four capture items and cash706. These correlated results are not
 independent fresh-game reliability. The original collection checklist remains21/22; its sole open
 item is a useful choice across acquisition families. The expanded checklist is25/26.
 
-The65 missing local entries classify as38 solo catalog plans,11 version trades, four link
-evolutions,11 supporting-save branch trades and one legitimate event input. Classification is not
-execution.
+The65 missing entries classify as38 solo catalog plans,11 version trades, four link evolutions,
+11 supporting-save branch trades and one legitimate event input. Classification is not execution.
 
-The full151 goal inventory, local registration and shared-departure capture/evolution bridge are
-implemented. Three direct sources were consumed without a learned outcome. V3 reached the real
-menu gate but fewer than two acquisition families survived; its record did not retain the cause.
+The registered correlated-reset bridge is implemented and tested. One exact Model121 reset
+authenticated, then failed the real two-family gate before any model query or gameplay.
+A matching read-only reconstruction found evolution ready and capture unavailable with the router
+reason `missing_capability`. That reset is permanently closed. No fourth source was selected;
+nine unused sources are preserved.
 
-That diagnostic gap is now closed for future attempts. The player retains identity-free reasons for
-route capability, capture resources, missing/protected evolution stock and registered targets.
-The two-family gate remains strict. Focused25, rehearsal22 and related247 source-free tests passed.
-No new source, model choice, input, fit or registration was created; nine eligible sources remain.
-
-The supply audit rejected source four. Metadata-only selection cannot prove a two-family menu
-before claim, while scanning unclaimed payloads first would defeat claim-first admission. The next
-lesson must use a versioned correlated training reset from the authenticated Model121 terminal,
-explicitly not an independent history. The current code does not yet admit that catalogless
-checkpoint, so no action-free gate or gameplay is authorized until the bridge is qualified.
+The failure is now narrow: capture capability/route admission, not checkpoint-training provenance.
+Static inspection shows the derived encounter profile drops transport parameters; whether that
+fully explains the live rejection still needs a discriminating test. Do not reopen admission design.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Correlated-reset bridge | Exact parent/checkpoint, registered objective, non-independent reset identity and one-shot retention contract | Astra / High |
-| One collection lesson | One actual model choice, terminal outcome, costs/local flags and honest fit; source four untouched | Sol / High |
-| Useful training batch | Varied cases, declared resets, all failures/interventions and resource costs | Sol / High |
+| Capture-route repair | Source-free test of capability preservation and genuine route feasibility | Sol / High |
+| One collection lesson | Newly declared successor, two-family gate, one actual choice/outcome and honest fit | Sol / High |
+| Useful training batch | Varied cases, declared resets, all failures/interventions and actual costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
-Each first step is estimated at60–120 minutes; batch/reliability work may span1–2 sessions. This is
-a planning horizon, not a four-session Red promise. Source four is rejected under the current
-architecture. If the correlated reset cannot expose both families, stop without scanning sources.
+The next repair is estimated at60–90 minutes; later lessons/batches depend on its result. This is
+not a four-session Red promise. No consumed reset may retry, and no source scan is authorized.
 
-Today remains120→121 examples (+0.83% dataset size),86/151 registrations unchanged (56.95%).
-No whole-project percentage is available and all five final Red acceptance conditions are unmet.
+Today's learning remains120→121 (+0.83% dataset size),86/151 registrations unchanged (56.95%).
+This session added engineering capability but no learning. Three consecutive no-learning sessions
+trigger the anti-drift alarm. No whole-project percentage is available; final Red gates remain0/5.
 
-Do not return to resource-only Model121 rows, treat timing seeds as independent histories or begin a
-full replay. Full Red remains the final exam after bounded component gates, declared authority,
-realistic budgets and complete failure retention.
+Do not return to resource-only Model121 rows or treat timing seeds as independent histories.
+Full Red remains the final exam after bounded component gates, declared authority and honest costs.
 
-[Supply decision](work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
-[Evidence](evidence/red-full-pokedex-supply-admission-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-registered-correlated-reset.md) ·
+[Evidence](evidence/red-registered-correlated-reset-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Astra / High / Fast off**, for the registered correlated-reset authority redesign and its
-source-free qualification. Return to Sol High for the bounded lesson after that gate passes.
+Next: **Sol / High / Fast off**. The immediate job is a narrow routing regression, not another
+architecture review. Keep the completed reset bridge and its consumed identity unchanged.

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-supply-admission**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-registered-correlated-reset**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json)
+[Current evidence](../docs/evidence/red-registered-correlated-reset-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-registered-correlated-reset
+
+Reset bridge implemented. Model121's gate stopped before query/input/fit: evolution ready; capture routing unavailable. Reset closed, nine unused sources preserved. No learning delta.
+
+**Deviation:** No learned result. The original failure omitted typed family details; matching read-only reconstruction retained them and future recorder behavior was repaired. This third no-learning session is engineering progress only; the consumed reset cannot replay.
+
+**Next:** Sol High: source-free capture transport-capability preservation and route-feasibility test, then a scoped repair if justified. Do not redesign admission, scan sources or replay the closed reset. A played successor needs a new prospective scope.
 
 ### 2026-09-14-full-pokedex-supply-admission
 

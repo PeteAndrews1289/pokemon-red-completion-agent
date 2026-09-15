@@ -11,26 +11,24 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The supply/admission audit rejected source four. Metadata-only selection cannot prove both capture
-and evolution before an irreversible root claim. Preclaim scanning of unclaimed payloads is also
-forbidden because it defeats the claim-first anti-cherry-picking boundary. V1–V3 remain closed and
-all nine unused eligible roots are preserved.
+The correlated-reset bridge is implemented. Its sole Model121 reset authenticated, then failed
+the two-family gate with zero query/input/fit. A matching read-only reconstruction found evolution
+ready and capture rejected as `missing_capability`. The consumed reset remains closed; no source
+four, V1–V3 access or protected-source scan is authorized.
 
-Codex next owns the registered correlated-reset bridge for the authenticated Model121 terminal.
-It must bind the exact train-lineage parent, registered objective, reset identity, one write-ahead
-choice and all outcomes/costs, while declaring no independent history or new upstream root.
-
-The relevant source-free surface passed185 tests with zero source/ROM/model/game effects. This is
-the second consecutive no-learning session; the next work must target the bridge and one measured
-lesson, not another diagnostic pass. No full replay, ROM hack or Crystal execution.
+Codex next owns the narrow capture-routing capability test and scoped repair. Examine transport
+flags lost when a fresh encounter profile is derived; do not assume that alone proves the live
+cause. Do not reopen the completed reset-admission design. Model121 and86/151 remain unchanged.
 
 ## External contribution
 
-Flash3.8 High and Claude Opus High independently returned NO-GO on source four under the current
-ordering. Codex accepted that diagnosis and rejected their preclaim-scanning workaround.
+Claude Opus High reviewed the implementation read-only and found no hard blocker. Codex accepted
+its explicit intermediate-plan fit rejection. Subsequent economy and diagnostic additions have
+local tests, not a second external review. Flash3.8 High supplied test themes but referenced an
+older checkout; it is not counted as an exact-source audit. Both completed; quotas unavailable.
 
-A future external task, if useful, should review the correlated-reset schema and runner joins after
-implementation. It must not inspect private sources or become a standing review gate.
+Any future external task should be a bounded route-capability regression proposal with the exact
+checkout pinned. No standing reviewer gate, private-source access or concurrent editing.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
+[Session](docs/work-sessions/2026-09-14-registered-correlated-reset.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

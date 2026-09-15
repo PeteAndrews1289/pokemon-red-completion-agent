@@ -280,3 +280,40 @@ def test_process_interruption_retains_consumed_reset(case, monkeypatch):
     )
     with pytest.raises(ValueError, match="consumed"):
         declare_correlated_reset(store, **kwargs)
+
+
+def test_gate_failure_retains_typed_family_reasons(case, monkeypatch):
+    import run_paired_red_bounded_player as runner
+
+    from pokemon_red_completion.goal_manager import GoalUnavailableReason
+    from pokemon_red_completion.red_acquisition import RedAcquisitionKind
+    from pokemon_red_completion.red_full_pokedex_goal_proposal import (
+        RedFullPokedexFamilyDiagnostic,
+        RedFullPokedexFamilyReason,
+        RedFullPokedexGoalProposalError,
+    )
+
+    store, _, kwargs = case
+    plan = registered(store, kwargs)
+    error = RedFullPokedexGoalProposalError(
+        "two families unavailable",
+        family_diagnostics=(
+            RedFullPokedexFamilyDiagnostic(
+                RedAcquisitionKind.WILD,
+                RedFullPokedexFamilyReason.ROUTER_BINDING_UNAVAILABLE,
+                (GoalUnavailableReason.MISSING_CAPABILITY,),
+            ),
+            RedFullPokedexFamilyDiagnostic(
+                RedAcquisitionKind.EVOLUTION, RedFullPokedexFamilyReason.READY
+            ),
+        ),
+    )
+
+    def fail(_):
+        raise error
+
+    monkeypatch.setattr(runner, "_run_prepared_impl", fail)
+    with pytest.raises(RedFullPokedexGoalProposalError):
+        runner._run_prepared(SimpleNamespace(training_plan=plan, private_root=store))
+    terminal = store.find_sealed_record(reset_record_id(plan) + "-result").read()
+    assert terminal["family_diagnostics"] == error.public_family_diagnostics()

@@ -3699,12 +3699,20 @@ def _run_prepared(readiness: _Readiness) -> dict[str, object]:
     try:
         result = _run_prepared_impl(readiness)
     except BaseException as error:
+        from pokemon_red_completion.red_full_pokedex_goal_proposal import (
+            RedFullPokedexGoalProposalError,
+        )
+
         with suppress(Exception):
             readiness.private_root.publish_sealed_record(
                 reset_record_id(plan) + "-result", kind="red_correlated_reset_terminal",
                 record={"schema": "pokemon.red.correlated-reset-terminal.v1",
                         "status": "interrupted" if not isinstance(error, Exception) else "failed",
                         "plan_sha256": plan.plan_sha256,
+                        "family_diagnostics": (
+                            error.public_family_diagnostics()
+                            if isinstance(error, RedFullPokedexGoalProposalError) else []
+                        ),
                         "private_diagnostic": private_failure_diagnostic(error)},
             )
         raise
