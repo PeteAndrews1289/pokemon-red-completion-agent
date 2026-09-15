@@ -12,8 +12,12 @@ from collections.abc import Callable
 from dataclasses import dataclass, replace
 from enum import StrEnum
 from functools import partial
+from typing import cast
 
-from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.executor import CountingExecutor, FrameBudgetController
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMovePort
+from pokemon_red_completion.gen1_route_runtime import Gen1TraversalObserver
+from pokemon_red_completion.gen1_trainer_sight import Gen1TrainerSightProjector
 from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalKind,
@@ -25,7 +29,10 @@ from pokemon_red_completion.goal_manager_runtime import (
     GoalBindingSet,
     GoalExecutionReport,
 )
-from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
+from pokemon_red_completion.living_dex_option_value import (
+    LivingDexOptionKind,
+    living_dex_option_context_from_goal_situation,
+)
 from pokemon_red_completion.red_acquisition import (
     RED_ACQUISITION_CATALOG,
     RedAcquisitionCatalog,
@@ -46,9 +53,16 @@ from pokemon_red_completion.red_goal_context_profile import (
 )
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
+from pokemon_red_completion.red_live_fishing import (
+    RedLiveFishingInventory,
+    build_red_live_fishing_inventory,
+)
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
 from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
-from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
+from pokemon_red_completion.red_resource_goal_router import (
+    RedResourceGoalRouter,
+    collection_field_capabilities,
+)
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -76,6 +90,7 @@ class RedFullPokedexFamilyDiagnostic:
     def __post_init__(self) -> None:
         if self.acquisition_kind not in {
             RedAcquisitionKind.WILD,
+            RedAcquisitionKind.FISHING,
             RedAcquisitionKind.EVOLUTION,
         }:
             raise ValueError("diagnostic acquisition family is unsupported")
@@ -87,16 +102,11 @@ class RedFullPokedexFamilyDiagnostic:
                 not isinstance(reason, GoalUnavailableReason)
                 for reason in self.router_unavailable_reasons
             )
-            or tuple(
-                sorted(set(self.router_unavailable_reasons), key=lambda reason: reason.value)
-            )
+            or tuple(sorted(set(self.router_unavailable_reasons), key=lambda reason: reason.value))
             != self.router_unavailable_reasons
         ):
             raise ValueError("router unavailable reasons differ")
-        if (
-            self.reason is RedFullPokedexFamilyReason.READY
-            and self.router_unavailable_reasons
-        ):
+        if self.reason is RedFullPokedexFamilyReason.READY and self.router_unavailable_reasons:
             raise ValueError("ready diagnostic cannot carry router failures")
         if (
             self.reason is RedFullPokedexFamilyReason.ROUTER_BINDING_UNAVAILABLE
@@ -108,7 +118,7 @@ class RedFullPokedexFamilyDiagnostic:
     def option_kind(self) -> LivingDexOptionKind:
         return (
             LivingDexOptionKind.ACQUIRE
-            if self.acquisition_kind is RedAcquisitionKind.WILD
+            if self.acquisition_kind in {RedAcquisitionKind.WILD, RedAcquisitionKind.FISHING}
             else LivingDexOptionKind.EVOLVE
         )
 
@@ -139,12 +149,9 @@ class RedFullPokedexGoalProposalError(ValueError):
         family_diagnostics: tuple[RedFullPokedexFamilyDiagnostic, ...] = (),
     ) -> None:
         super().__init__(message)
-        if (
-            not isinstance(family_diagnostics, tuple)
-            or any(
-                not isinstance(diagnostic, RedFullPokedexFamilyDiagnostic)
-                for diagnostic in family_diagnostics
-            )
+        if not isinstance(family_diagnostics, tuple) or any(
+            not isinstance(diagnostic, RedFullPokedexFamilyDiagnostic)
+            for diagnostic in family_diagnostics
         ):
             raise TypeError("family diagnostics differ")
         self.family_diagnostics = family_diagnostics
@@ -180,8 +187,7 @@ class RedFullPokedexGoalCandidate:
             not self.target_numbers
             or tuple(sorted(set(self.target_numbers))) != self.target_numbers
             or any(
-                type(number) is not int or not 1 <= number <= 151
-                for number in self.target_numbers
+                type(number) is not int or not 1 <= number <= 151 for number in self.target_numbers
             )
         ):
             raise RedFullPokedexGoalProposalError(
@@ -189,7 +195,7 @@ class RedFullPokedexGoalCandidate:
             )
         expected = (
             (GoalKind.ACQUIRE_SPECIES, LivingDexOptionKind.ACQUIRE)
-            if self.acquisition_kind is RedAcquisitionKind.WILD
+            if self.acquisition_kind in {RedAcquisitionKind.WILD, RedAcquisitionKind.FISHING}
             else (GoalKind.EVOLVE_SPECIES, LivingDexOptionKind.EVOLVE)
             if self.acquisition_kind is RedAcquisitionKind.EVOLUTION
             else None
@@ -209,12 +215,8 @@ class RedFullPokedexGoalProposal:
     family_diagnostics: tuple[RedFullPokedexFamilyDiagnostic, ...]
 
     def __post_init__(self) -> None:
-        if (
-            not isinstance(self.candidates, tuple)
-            or any(
-                not isinstance(candidate, RedFullPokedexGoalCandidate)
-                for candidate in self.candidates
-            )
+        if not isinstance(self.candidates, tuple) or any(
+            not isinstance(candidate, RedFullPokedexGoalCandidate) for candidate in self.candidates
         ):
             raise TypeError("proposal candidates differ")
         if not isinstance(self.binding_set, GoalBindingSet) or any(
@@ -232,10 +234,11 @@ class RedFullPokedexGoalProposal:
                 not isinstance(diagnostic, RedFullPokedexFamilyDiagnostic)
                 for diagnostic in self.family_diagnostics
             )
-            or tuple(
-                diagnostic.acquisition_kind for diagnostic in self.family_diagnostics
-            )
-            != (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION)
+            or tuple(diagnostic.acquisition_kind for diagnostic in self.family_diagnostics)
+            not in {
+                (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION),
+                (RedAcquisitionKind.FISHING, RedAcquisitionKind.EVOLUTION),
+            }
         ):
             raise RedFullPokedexGoalProposalError("proposal family diagnostics differ")
         if {
@@ -276,6 +279,7 @@ class RedFullPokedexGoalProposal:
             "controller_actions": 0,
             "emulator_frames": 0,
         }
+
 
 def _binding_for(
     spec: RedGoalProviderSpec,
@@ -342,11 +346,15 @@ def _wild_candidate(
             else RedFullPokedexFamilyReason.NO_SOLO_CATALOG_TARGET
         )
         return None, RedFullPokedexFamilyDiagnostic(RedAcquisitionKind.WILD, reason)
-    target_numbers = tuple(sorted({
-        red_species_number(method.species_ref)
-        for method in eligible_methods
-        if method.species_ref in executable_targets
-    }))
+    target_numbers = tuple(
+        sorted(
+            {
+                red_species_number(method.species_ref)
+                for method in eligible_methods
+                if method.species_ref in executable_targets
+            }
+        )
+    )
     if not target_numbers:
         return None, RedFullPokedexFamilyDiagnostic(
             RedAcquisitionKind.WILD,
@@ -366,9 +374,7 @@ def _wild_candidate(
             target_numbers,
             binding,
         ),
-        RedFullPokedexFamilyDiagnostic(
-            RedAcquisitionKind.WILD, RedFullPokedexFamilyReason.READY
-        ),
+        RedFullPokedexFamilyDiagnostic(RedAcquisitionKind.WILD, RedFullPokedexFamilyReason.READY),
     )
 
 
@@ -396,10 +402,7 @@ def _evolution_candidate(
         raise RedFullPokedexGoalProposalError(
             "evolution target is absent from the pinned Red acquisition graph"
         ) from error
-    if (
-        method.kind is not RedAcquisitionKind.EVOLUTION
-        or method.consumes_species_ref != source_ref
-    ):
+    if method.kind is not RedAcquisitionKind.EVOLUTION or method.consumes_species_ref != source_ref:
         raise RedFullPokedexGoalProposalError(
             "evolution goal differs from the pinned Red acquisition graph"
         )
@@ -422,9 +425,7 @@ def _evolution_candidate(
             RedFullPokedexFamilyReason.PHYSICAL_PRECURSOR_MISSING,
             _router_unavailable_reasons(GoalKind.EVOLVE_SPECIES, bindings),
         )
-    if not policy.evolution_allowed(
-        observation.collection_observation, source_ref, target_ref
-    ):
+    if not policy.evolution_allowed(observation.collection_observation, source_ref, target_ref):
         return None, RedFullPokedexFamilyDiagnostic(
             RedAcquisitionKind.EVOLUTION,
             RedFullPokedexFamilyReason.PHYSICAL_PRECURSOR_PROTECTED,
@@ -450,24 +451,81 @@ def _evolution_candidate(
     )
 
 
-def propose_red_full_pokedex_goals(
+def _fishing_candidate(
+    inventory: RedFullPokedexInventory,
+    fishing: RedLiveFishingInventory,
+    catalog: RedAcquisitionCatalog,
+) -> tuple[RedFullPokedexGoalCandidate | None, RedFullPokedexFamilyDiagnostic]:
+    """Bind the best reachable cartridge fishing destination as acquisition."""
+
+    if not fishing.destinations:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.FISHING,
+            RedFullPokedexFamilyReason.NO_MISSING_EXECUTABLE_TARGET,
+        )
+    if len(fishing.destinations) != 1 or len(fishing.supplements) != 1:
+        raise RedFullPokedexGoalProposalError(
+            "full-Pokédex fishing fallback needs one ranked destination"
+        )
+    destination = fishing.destinations[0]
+    supplement = fishing.supplements[0]
+    target_numbers = tuple(
+        number
+        for number in destination.offer.missing_species_numbers
+        if not inventory.target(number).locally_registered
+        and inventory.target(number).resolution_kind
+        is RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN
+        and catalog.method_for(red_species_ref(number)).kind is RedAcquisitionKind.FISHING
+    )
+    if not target_numbers:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.FISHING,
+            RedFullPokedexFamilyReason.NO_MISSING_EXECUTABLE_TARGET,
+        )
+    if (
+        supplement.binding.kind is not GoalKind.ACQUIRE_SPECIES
+        or supplement.candidate.features.kind is not LivingDexOptionKind.ACQUIRE
+    ):
+        raise RedFullPokedexGoalProposalError(
+            "fishing executor differs from its portable acquisition"
+        )
+    return (
+        RedFullPokedexGoalCandidate(
+            RedAcquisitionKind.FISHING,
+            LivingDexOptionKind.ACQUIRE,
+            target_numbers,
+            supplement.binding,
+        ),
+        RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.FISHING,
+            RedFullPokedexFamilyReason.READY,
+        ),
+    )
+
+
+def _propose_red_full_pokedex_goals(
     router: RedResourceGoalRouter,
     observation: RedGoalObservation,
+    *,
+    fishing_inventory: RedLiveFishingInventory | None = None,
 ) -> RedFullPokedexGoalProposal:
     """Build a same-departure menu through the actual registered runtime.
 
-    Only the currently implemented wild-capture and level-evolution families
-    are admitted.  External trades, gifts, fishing, Safari, fossils, prizes,
-    and static encounters remain absent until they have their own authenticated
+    Wild capture remains the preferred acquisition when it is executable. If it
+    is not, one already-authenticated, ranked reachable fishing executor may
+    supply the acquisition family. External trades, gifts, Safari, fossils,
+    prizes, and static encounters remain absent until they have authenticated
     goal executors.
 
-    Arbitrary bindings and caller-supplied inventories are deliberately not inputs:
-    a profile-shaped string cannot authenticate a callback or a stale ledger.
+    This internal variant accepts the fishing inventory built by the live player
+    observer. Public callers cannot supply bindings or inventories.
     """
     if not isinstance(router, RedResourceGoalRouter):
         raise TypeError("proposal requires the live Red resource router")
     if not isinstance(observation, RedGoalObservation):
         raise TypeError("proposal requires a Red goal observation")
+    if fishing_inventory is not None and not isinstance(fishing_inventory, RedLiveFishingInventory):
+        raise TypeError("proposal fishing inventory differs")
     runtime = router.runtime
     policy = runtime.registration_policy
     if policy is None or policy.completion_scope != "local_red":
@@ -475,17 +533,34 @@ def propose_red_full_pokedex_goals(
     before = (router.actions.actions_executed, runtime.emulator.frame_count)
     profile = runtime.profile
     binding_identity = (profile.profile_sha256, policy.sha256)
-    origin = (observation.raw, observation.collection_observation, observation.party,
-              observation.game_state,
-              observation.input_ready)
+    origin = (
+        observation.raw,
+        observation.collection_observation,
+        observation.party,
+        observation.game_state,
+        observation.input_ready,
+    )
 
     def require_origin() -> None:
         fresh = runtime.adapter.observe()
-        if ((fresh.raw, fresh.collection_observation, fresh.party, fresh.game_state,
-             fresh.input_ready) != origin
-                or (runtime.profile.profile_sha256, runtime.registration_policy.sha256
-                    if runtime.registration_policy is not None else None) != binding_identity
-                or (router.actions.actions_executed, runtime.emulator.frame_count) != before):
+        if (
+            (
+                fresh.raw,
+                fresh.collection_observation,
+                fresh.party,
+                fresh.game_state,
+                fresh.input_ready,
+            )
+            != origin
+            or (
+                runtime.profile.profile_sha256,
+                runtime.registration_policy.sha256
+                if runtime.registration_policy is not None
+                else None,
+            )
+            != binding_identity
+            or (router.actions.actions_executed, runtime.emulator.frame_count) != before
+        ):
             raise RedFullPokedexGoalProposalError("shared-departure state or policy changed")
 
     require_origin()
@@ -493,8 +568,9 @@ def propose_red_full_pokedex_goals(
     inventory = build_red_full_pokedex_inventory(
         frozenset(map(red_species_number, current.owned_species)),
         shared_registered_numbers=frozenset(map(red_species_number, policy.registered(current))),
-        physical_specimen_numbers=frozenset(red_species_number(s.species_ref)
-                                            for s in current.specimens),
+        physical_specimen_numbers=frozenset(
+            red_species_number(s.species_ref) for s in current.specimens
+        ),
     )
     bindings = router.enumerate(observation)
     candidates: list[RedFullPokedexGoalCandidate] = []
@@ -505,10 +581,16 @@ def propose_red_full_pokedex_goals(
             if not isinstance(provider, RedAreaSurveyGoalProvider):
                 raise RedFullPokedexGoalProposalError("wild runtime provider differs")
             targets = summarize_red_area_survey(
-                provider.source_id, current, provider.catalog,
+                provider.source_id,
+                current,
+                provider.catalog,
             ).missing_species_refs
             candidate, diagnostic = _wild_candidate(
-                inventory, spec, bindings, RED_ACQUISITION_CATALOG, frozenset(targets),
+                inventory,
+                spec,
+                bindings,
+                RED_ACQUISITION_CATALOG,
+                frozenset(targets),
             )
         elif spec.mechanic in {
             RedGoalMechanic.DIGLETT_EVOLUTION,
@@ -522,11 +604,39 @@ def propose_red_full_pokedex_goals(
         diagnostics[diagnostic.acquisition_kind] = diagnostic
         if candidate is not None:
             candidates.append(candidate)
-    for acquisition_kind in (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION):
+    acquisition_kind = RedAcquisitionKind.WILD
+    if (
+        not any(candidate.acquisition_kind is RedAcquisitionKind.WILD for candidate in candidates)
+        and fishing_inventory is not None
+    ):
+        fishing_candidate, fishing_diagnostic = _fishing_candidate(
+            inventory, fishing_inventory, RED_ACQUISITION_CATALOG
+        )
+        if fishing_candidate is not None:
+            acquisition_kind = RedAcquisitionKind.FISHING
+            diagnostics[acquisition_kind] = fishing_diagnostic
+            candidates.append(fishing_candidate)
+            fishing_binding = fishing_candidate.binding
+            bindings = GoalBindingSet(
+                tuple(
+                    fishing_binding.opportunity
+                    if opportunity.kind is GoalKind.ACQUIRE_SPECIES
+                    else opportunity
+                    for opportunity in bindings.opportunities
+                ),
+                tuple(
+                    binding
+                    for binding in bindings.bindings
+                    if binding.kind is not GoalKind.ACQUIRE_SPECIES
+                )
+                + (fishing_binding,),
+                allow_resource_variants=bindings.allow_resource_variants,
+            )
+    for diagnostic_kind in (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION):
         diagnostics.setdefault(
-            acquisition_kind,
+            diagnostic_kind,
             RedFullPokedexFamilyDiagnostic(
-                acquisition_kind,
+                diagnostic_kind,
                 RedFullPokedexFamilyReason.PROFILE_DECLARATION_MISSING,
             ),
         )
@@ -546,14 +656,31 @@ def propose_red_full_pokedex_goals(
 
     guarded = {binding.binding_ref: guard(binding) for binding in bindings.bindings}
     return RedFullPokedexGoalProposal(
-        tuple(replace(candidate, binding=guarded[candidate.binding.binding_ref])
-              for candidate in candidates),
-        GoalBindingSet(bindings.opportunities, tuple(guarded.values()),
-                       allow_resource_variants=bindings.allow_resource_variants),
-        tuple(diagnostics[kind] for kind in (
-            RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION
-        )),
+        tuple(
+            replace(candidate, binding=guarded[candidate.binding.binding_ref])
+            for candidate in candidates
+        ),
+        GoalBindingSet(
+            bindings.opportunities,
+            tuple(guarded.values()),
+            allow_resource_variants=bindings.allow_resource_variants,
+        ),
+        tuple(diagnostics[kind] for kind in (acquisition_kind, RedAcquisitionKind.EVOLUTION)),
     )
+
+
+def propose_red_full_pokedex_goals(
+    router: RedResourceGoalRouter,
+    observation: RedGoalObservation,
+) -> RedFullPokedexGoalProposal:
+    """Build the public same-departure proposal from router-owned bindings only.
+
+    Arbitrary bindings and caller-supplied inventories are deliberately not
+    inputs: a profile-shaped string cannot authenticate a callback or stale
+    ledger.
+    """
+
+    return _propose_red_full_pokedex_goals(router, observation)
 
 
 def build_red_full_pokedex_player_observer(
@@ -574,23 +701,36 @@ def build_red_full_pokedex_player_observer(
     durability and the primitive hard budget, as for every bounded player episode.
     This is opt-in; a shared/legacy checkpoint is never silently reinterpreted.
     """
-    if (runtime.registration_policy is None
-            or runtime.registration_policy.completion_scope != "local_red"):
+    if (
+        runtime.registration_policy is None
+        or runtime.registration_policy.completion_scope != "local_red"
+    ):
         raise RedFullPokedexGoalProposalError("player requires explicit full-local Red policy")
-    if not any(spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
-               for spec in runtime.profile.providers):
+    if not any(
+        spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+        for spec in runtime.profile.providers
+    ):
         raise RedFullPokedexGoalProposalError(
             "player requires a native level-evolution declaration",
         )
-    runtime = replace(runtime, adapter=replace(
-        runtime.adapter, registration_policy=runtime.registration_policy,
-    ))
+    runtime = replace(
+        runtime,
+        adapter=replace(
+            runtime.adapter,
+            registration_policy=runtime.registration_policy,
+        ),
+    )
     native = bind_native_boxed_evolution(
-        runtime, world, maximum_quanta=maximum_quanta,
-        allow_cross_box=True, retain_quantum=retain_quantum,
+        runtime,
+        world,
+        maximum_quanta=maximum_quanta,
+        allow_cross_box=True,
+        retain_quantum=retain_quantum,
     )
     router = RedResourceGoalRouter(
-        native, actions, world,
+        native,
+        actions,
+        world,
         quote_resource_costs=quote_resource_costs,
         maximum_controller_actions=maximum_controller_actions,
         maximum_emulator_frames=maximum_emulator_frames,
@@ -609,23 +749,83 @@ def build_red_full_pokedex_player_observer(
             # A successful acquisition may remove one family. Never rerun the
             # admission gate while retaining its fresh terminal ledger, or hand
             # controller authority to a second choice from a terminal observer.
-            return GoalBindingSet(tuple(
-                GoalOpportunity(
-                    binding_ref=f"red-departure-episode-consumed:{kind.value}",
-                    kind=kind, availability=GoalAvailability.UNAVAILABLE,
-                    unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
-                ) for kind in GoalKind
-            ), ())
-        proposed = propose_red_full_pokedex_goals(router, observation).binding_set
+            return GoalBindingSet(
+                tuple(
+                    GoalOpportunity(
+                        binding_ref=f"red-departure-episode-consumed:{kind.value}",
+                        kind=kind,
+                        availability=GoalAvailability.UNAVAILABLE,
+                        unavailable_reason=GoalUnavailableReason.TEMPORARILY_BLOCKED,
+                    )
+                    for kind in GoalKind
+                ),
+                (),
+            )
+        try:
+            proposed = propose_red_full_pokedex_goals(router, observation).binding_set
+        except RedFullPokedexGoalProposalError as first_error:
+            diagnostics = first_error.family_diagnostics
+            if not (
+                len(diagnostics) == 2
+                and diagnostics[0].acquisition_kind is RedAcquisitionKind.WILD
+                and diagnostics[0].reason is not RedFullPokedexFamilyReason.READY
+                and diagnostics[1].acquisition_kind is RedAcquisitionKind.EVOLUTION
+                and diagnostics[1].reason is RedFullPokedexFamilyReason.READY
+            ):
+                raise
+            controller = cast(FrameBudgetController, native.emulator)
+            traversal_observer = Gen1TraversalObserver(
+                native.reader,
+                hazard_projector=Gen1TrainerSightProjector(world.rom, native.reader),
+                capability_projector=partial(
+                    collection_field_capabilities,
+                    controller,
+                    allow_cut=True,
+                    allow_surf=True,
+                ),
+            )
+            field = Gen1FieldMovePort(
+                actions,
+                native.reader,
+                controller,
+                cut_block_swaps={swap.before: swap.after for swap in world.rules.cut_block_swaps},
+            )
+            fishing = build_red_live_fishing_inventory(
+                world.rom,
+                frozenset(
+                    red_species_number(species)
+                    for species in observation.collection_observation.owned_species
+                ),
+                living_dex_option_context_from_goal_situation(observation.situation),
+                free_storage_slots=observation.free_storage_slots,
+                world=world,
+                traversal=traversal_observer.observe(),
+                observer=traversal_observer,
+                field=field,
+                controller=controller,
+                actions=actions,
+                reader=native.reader,
+                emulator=controller,
+                maximum_candidates=1,
+            )
+            proposed = _propose_red_full_pokedex_goals(
+                router,
+                observation,
+                fishing_inventory=fishing,
+            ).binding_set
         return GoalBindingSet(
             proposed.opportunities,
-            tuple(replace(binding, execute=partial(execute_once, binding))
-                  for binding in proposed.bindings),
+            tuple(
+                replace(binding, execute=partial(execute_once, binding))
+                for binding in proposed.bindings
+            ),
             allow_resource_variants=proposed.allow_resource_variants,
         )
 
     return RedBoundedPlayerObserver(
-        native, actions, registered_objective=True,
+        native,
+        actions,
+        registered_objective=True,
         enumerate_bindings=enumerate_bindings,
     )
 

@@ -9,6 +9,9 @@ from test_red_resource_goal_router import _World
 from test_registered_runtime_binding import bound_fixture
 
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.fishing import ShorelineStance
+from pokemon_red_completion.gen1_cartridge import FishingSlot, RodKind
+from pokemon_red_completion.gen1_traversal import Direction
 from pokemon_red_completion.global_router import MacroEdge, MacroPath, MacroTransition
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import (
@@ -16,16 +19,23 @@ from pokemon_red_completion.goal_manager_composition_runtime import (
 )
 from pokemon_red_completion.goal_manager_runtime import (
     CompletionFirstGoalTeacher,
+    ExecutableGoalBinding,
     GoalExecutionReport,
+    GoalVerification,
 )
 from pokemon_red_completion.local_router import LocalPath
 from pokemon_red_completion.red_acquisition import RedAcquisitionKind
 from pokemon_red_completion.red_bounded_player import preflight_red_bounded_player
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
+from pokemon_red_completion.red_fishing_acquisition import (
+    RedFishingDestinationOffer,
+    red_fishing_destination_candidates,
+)
 from pokemon_red_completion.red_full_pokedex_goal_proposal import (
     RedFullPokedexFamilyReason,
     RedFullPokedexGoalProposalError,
     RedFullPokedexPlayerAttempt,
+    _propose_red_full_pokedex_goals,
     build_red_full_pokedex_player_observer,
     propose_red_full_pokedex_goals,
 )
@@ -34,6 +44,11 @@ from pokemon_red_completion.red_goal_context_profile import (
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
+from pokemon_red_completion.red_live_fishing import (
+    RedLiveFishingInventory,
+    RedReachableFishingDestination,
+)
+from pokemon_red_completion.red_live_option_menu import supplemental_live_option
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
 from pokemon_red_completion.route_executor import TraversalSnapshot
@@ -48,12 +63,55 @@ class _CrossMapWorld(_World):
         transition = MacroTransition(start.at, goal_at, "right")
         return RoutePlan(
             macro_path=MacroPath((start.map_id, goal_map), (MacroEdge(goal_map),)),
-            start_at=start.at, start_mode="land",
-            segments=(RouteSegment(start.map_id, goal_map,
-                                   LocalPath((start.at,), (), ("land",)), transition,
-                                   "connection", False),),
-            terminal_approach=None, terminal_at=goal_at, terminal_mode="land",
+            start_at=start.at,
+            start_mode="land",
+            segments=(
+                RouteSegment(
+                    start.map_id,
+                    goal_map,
+                    LocalPath((start.at,), (), ("land",)),
+                    transition,
+                    "connection",
+                    False,
+                ),
+            ),
+            terminal_approach=None,
+            terminal_at=goal_at,
+            terminal_mode="land",
         )
+
+
+def _fishing_inventory(species_number: int = 60) -> RedLiveFishingInventory:
+    offer = RedFishingDestinationOffer(
+        "fishing-map-private-23",
+        23,
+        (FishingSlot(15, species_number, RodKind.SUPER),),
+        (species_number,),
+    )
+    destination = RedReachableFishingDestination(
+        offer,
+        ShorelineStance((2, 3), Direction.DOWN, (3, 3)),
+        4,
+        4,
+    )
+    binding = ExecutableGoalBinding(
+        binding_ref="private:test:fishing",
+        kind=GoalKind.ACQUIRE_SPECIES,
+        estimated_effort=0.2,
+        estimated_risk=0.1,
+        execute=lambda: GoalExecutionReport(0, 0, {"test_only": True}),
+        verify=lambda _report: GoalVerification.succeeded(),
+    )
+    candidate = red_fishing_destination_candidates(
+        (offer,),
+        route_steps=(4,),
+        maximum_route_steps=1_000,
+        free_storage_slots=1,
+    )[0]
+    return RedLiveFishingInventory(
+        (destination,),
+        (supplemental_live_option(binding, candidate),),
+    )
 
 
 @pytest.fixture
@@ -62,37 +120,76 @@ def setup(tmp_path, monkeypatch):
     # The route is deliberately off-Center. Synthetic geometry does not prove
     # cartridge travel; the native providers/availability tests are not mocked.
     parameters = {
-        "source_id": "wild:Route1:grass", "label": "test capture",
-        "map_id": 12, "player_x": 4, "player_y": 3,
-        "forward_directions": ["right", "left"], "starting_endpoint": "south",
-        "maximum_legs": 8, "maximum_seek_steps": 32, "maximum_encounters": 8,
+        "source_id": "wild:Route1:grass",
+        "label": "test capture",
+        "map_id": 12,
+        "player_x": 4,
+        "player_y": 3,
+        "forward_directions": ["right", "left"],
+        "starting_endpoint": "south",
+        "maximum_legs": 8,
+        "maximum_seek_steps": 32,
+        "maximum_encounters": 8,
     }
-    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id="shared-departure-test",
-        providers=tuple(sorted(tuple((s.kind, s.mechanic, dict(s.parameters))
-                                     for s in runtime.profile.providers
-                        if s.kind is not GoalKind.ACQUIRE_SPECIES) + (
-            (GoalKind.ACQUIRE_SPECIES, RedGoalMechanic.WILD_CORRIDOR_CAPTURE, parameters),
-        ), key=lambda s: tuple(GoalKind).index(s[0]))),
-    ))
-    runtime = replace(runtime, profile=profile,
-                      registration_policy=replace(runtime.registration_policy,
-                                                  completion_scope="local_red"))
+    profile = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id="shared-departure-test",
+            providers=tuple(
+                sorted(
+                    tuple(
+                        (s.kind, s.mechanic, dict(s.parameters))
+                        for s in runtime.profile.providers
+                        if s.kind is not GoalKind.ACQUIRE_SPECIES
+                    )
+                    + (
+                        (
+                            GoalKind.ACQUIRE_SPECIES,
+                            RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+                            parameters,
+                        ),
+                    ),
+                    key=lambda s: tuple(GoalKind).index(s[0]),
+                )
+            ),
+        )
+    )
+    runtime = replace(
+        runtime,
+        profile=profile,
+        registration_policy=replace(runtime.registration_policy, completion_scope="local_red"),
+    )
     actions = CountingExecutor(SimpleNamespace(execute=lambda _: pytest.fail("unexpected input")))
     world = _CrossMapWorld()
-    monkeypatch.setattr("pokemon_red_completion.red_native_boxed_evolution.wild_tables",
-                        lambda _: {22: [(10, 0x21), (15, 0x6C)]})
-    monkeypatch.setattr("pokemon_red_completion.red_resource_goal_router.Gen1TrainerSightProjector",
-                        lambda *_: None)
-    monkeypatch.setattr("pokemon_red_completion.red_resource_goal_router.Gen1TraversalObserver",
-                        lambda *_a, **_k: SimpleNamespace(observe=lambda: TraversalSnapshot(
-                            int(reader.raw.map_id),
-                            (reader.raw.player_y, reader.raw.player_x), True,
-                            mode="land")))
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_native_boxed_evolution.wild_tables",
+        lambda _: {22: [(10, 0x21), (15, 0x6C)]},
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_resource_goal_router.Gen1TrainerSightProjector", lambda *_: None
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_resource_goal_router.Gen1TraversalObserver",
+        lambda *_a, **_k: SimpleNamespace(
+            observe=lambda: TraversalSnapshot(
+                int(reader.raw.map_id),
+                (reader.raw.player_y, reader.raw.player_x),
+                True,
+                mode="land",
+            )
+        ),
+    )
     native = bind_native_boxed_evolution(runtime, world)
     router = RedResourceGoalRouter(native, actions, world)
-    return SimpleNamespace(runtime=runtime, native=native, router=router, actions=actions,
-                           reader=reader, world=world, owned=owned, parameters=parameters)
+    return SimpleNamespace(
+        runtime=runtime,
+        native=native,
+        router=router,
+        actions=actions,
+        reader=reader,
+        world=world,
+        owned=owned,
+        parameters=parameters,
+    )
 
 
 @pytest.mark.nonconsuming_direct_rehearsal
@@ -108,26 +205,76 @@ def test_shared_departure_uses_real_travel_capture_and_native_evolution(setup):
     assert capture.binding.binding_ref.startswith("red-resource-goal:")
     assert evolution.target_numbers == (78,)
     assert red_species_ref(78) in setup.native.registration_policy.registered(
-        observed.collection_observation)
+        observed.collection_observation
+    )
     assert setup.actions.actions_executed == setup.native.emulator.frame_count == 0
 
 
 def test_public_menu_hides_identity_and_is_the_same_player_binding_set(setup):
     proposal = propose_red_full_pokedex_goals(setup.router, setup.native.adapter.observe())
-    assert all(any(c.binding is b for b in proposal.binding_set.bindings)
-               for c in proposal.candidates)
+    assert all(
+        any(c.binding is b for b in proposal.binding_set.bindings) for c in proposal.candidates
+    )
     public = proposal.public_dict()
     assert public["candidate_count"] == public["acquisition_family_count"] == 2
     assert public["schema"] == "pokemon.red.full-pokedex-goal-proposal.v3"
-    assert {
-        row["portable_option_kind"]: row["reason"]
-        for row in public["family_diagnostics"]
-    } == {"acquire": "ready", "evolve": "ready"}
+    assert {row["portable_option_kind"]: row["reason"] for row in public["family_diagnostics"]} == {
+        "acquire": "ready",
+        "evolve": "ready",
+    }
     assert public["controller_actions"] == public["emulator_frames"] == 0
     encoded = json.dumps(public)
-    for secret in (setup.runtime.profile.profile_sha256, "wild:Route1:grass",
-                   "pokemon:national:", "red-resource-goal:"):
+    for secret in (
+        setup.runtime.profile.profile_sha256,
+        "wild:Route1:grass",
+        "pokemon:national:",
+        "red-resource-goal:",
+    ):
         assert secret not in encoded
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_reachable_fishing_replaces_only_unavailable_wild_acquisition(setup):
+    setup.world.fail = True
+    proposal = _propose_red_full_pokedex_goals(
+        setup.router,
+        setup.native.adapter.observe(),
+        fishing_inventory=_fishing_inventory(),
+    )
+
+    assert {candidate.acquisition_kind for candidate in proposal.candidates} == {
+        RedAcquisitionKind.FISHING,
+        RedAcquisitionKind.EVOLUTION,
+    }
+    fishing = next(
+        candidate
+        for candidate in proposal.candidates
+        if candidate.acquisition_kind is RedAcquisitionKind.FISHING
+    )
+    assert fishing.target_numbers == (60,)
+    assert fishing.binding.binding_ref == "private:test:fishing"
+    assert {binding.kind for binding in proposal.binding_set.bindings} >= {
+        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.EVOLVE_SPECIES,
+    }
+    public = proposal.public_dict()
+    assert public["portable_option_kinds"] == ["acquire", "evolve"]
+    assert public["identity_fields_public"] == 0
+    encoded = json.dumps(public)
+    assert "fishing" not in encoded
+    assert "private:test" not in encoded
+    assert setup.actions.actions_executed == setup.native.emulator.frame_count == 0
+
+
+def test_fishing_fallback_rejects_non_fishing_catalog_target(setup):
+    setup.world.fail = True
+    with pytest.raises(RedFullPokedexGoalProposalError, match="at least two"):
+        _propose_red_full_pokedex_goals(
+            setup.router,
+            setup.native.adapter.observe(),
+            fishing_inventory=_fishing_inventory(19),
+        )
+    assert setup.actions.actions_executed == setup.native.emulator.frame_count == 0
 
 
 @pytest.mark.nonconsuming_direct_rehearsal
@@ -135,7 +282,9 @@ def test_existing_player_bridge_consumes_full_local_checkpoint_and_same_menu(set
     observer = build_red_full_pokedex_player_observer(setup.runtime, setup.actions, setup.world)
     result = observer()
     assert {b.kind for b in result.binding_set.bindings} >= {
-        GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
+        GoalKind.ACQUIRE_SPECIES,
+        GoalKind.EVOLVE_SPECIES,
+    }
     assert len(result.binding_set.opportunities) == len(GoalKind)
     assert len(result.collection.target_species) == 151
     assert result.collection.completion_scope == "local_red"
@@ -200,12 +349,20 @@ def test_one_family_or_unready_state_stops_before_input(
     if failure == "route":
         setup.world.fail = True
     elif failure == "precursor":
-        setup.reader.boxes = replace(setup.reader.boxes, boxes=tuple(
-            replace(box, species_ids=(), levels=()) for box in setup.reader.boxes.boxes))
+        setup.reader.boxes = replace(
+            setup.reader.boxes,
+            boxes=tuple(
+                replace(box, species_ids=(), levels=()) for box in setup.reader.boxes.boxes
+            ),
+        )
     elif failure == "reserve":
         setup.native = bind_native_boxed_evolution(
-            replace(setup.runtime, registration_policy=replace(
-                setup.runtime.registration_policy, protected_counts={red_species_ref(77): 1})),
+            replace(
+                setup.runtime,
+                registration_policy=replace(
+                    setup.runtime.registration_policy, protected_counts={red_species_ref(77): 1}
+                ),
+            ),
             setup.world,
         )
         setup.router.runtime = setup.native
@@ -237,12 +394,21 @@ def test_one_family_or_unready_state_stops_before_input(
 
 
 def test_allowlist_uses_actual_capture_provider_not_entire_canonical_source(setup):
-    profile = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id="allowlist-test", providers=tuple(
-            (s.kind, s.mechanic, {**dict(s.parameters), "capture_species_numbers": [19]}
-             if s.kind is GoalKind.ACQUIRE_SPECIES else dict(s.parameters))
-            for s in setup.native.profile.providers),
-    ))
+    profile = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id="allowlist-test",
+            providers=tuple(
+                (
+                    s.kind,
+                    s.mechanic,
+                    {**dict(s.parameters), "capture_species_numbers": [19]}
+                    if s.kind is GoalKind.ACQUIRE_SPECIES
+                    else dict(s.parameters),
+                )
+                for s in setup.native.profile.providers
+            ),
+        )
+    )
     setup.native.profile = profile
     proposal = propose_red_full_pokedex_goals(setup.router, setup.native.adapter.observe())
     assert proposal.candidates[0].target_numbers == (19,)
@@ -258,8 +424,9 @@ def test_selected_binding_rejects_changed_departure_before_controller_input(setu
     elif change == "flags":
         setup.owned.add(78)
     elif change == "policy":
-        setup.native.registration_policy = replace(setup.native.registration_policy,
-                                                   completion_scope="shared")
+        setup.native.registration_policy = replace(
+            setup.native.registration_policy, completion_scope="shared"
+        )
     else:
         setup.native.emulator.frame_count += 1
     with pytest.raises(RedFullPokedexGoalProposalError, match="changed"):
@@ -281,8 +448,9 @@ def test_arbitrary_bindings_and_legacy_policy_are_not_admitted(setup):
     bindings = setup.native.enumerator(setup.actions).enumerate(observation)
     with pytest.raises(TypeError, match="live Red resource router"):
         propose_red_full_pokedex_goals(bindings, observation)
-    setup.native.registration_policy = replace(setup.native.registration_policy,
-                                               completion_scope="shared")
+    setup.native.registration_policy = replace(
+        setup.native.registration_policy, completion_scope="shared"
+    )
     with pytest.raises(RedFullPokedexGoalProposalError, match="explicit full-local"):
         propose_red_full_pokedex_goals(setup.router, observation)
 
@@ -309,14 +477,20 @@ def test_only_selected_skill_is_dispatched_once_even_when_it_fails(setup):
 def test_attempt_authority_survives_fresh_action_gates(setup):
     attempt = RedFullPokedexPlayerAttempt()
     first_observer = build_red_full_pokedex_player_observer(
-        setup.runtime, setup.actions, setup.world, attempt=attempt,
+        setup.runtime,
+        setup.actions,
+        setup.world,
+        attempt=attempt,
     )
-    first_observer.runtime.boxed_level_evolution_executor = (
-        lambda _request, _actions: GoalExecutionReport(0, 0, {"test_only": True})
+    first_observer.runtime.boxed_level_evolution_executor = lambda _request, _actions: (
+        GoalExecutionReport(0, 0, {"test_only": True})
     )
     first = first_observer()
     second_observer = build_red_full_pokedex_player_observer(
-        setup.runtime, setup.actions, setup.world, attempt=attempt,
+        setup.runtime,
+        setup.actions,
+        setup.world,
+        attempt=attempt,
     )
     second = second_observer()
     next(b for b in first.binding_set.bindings if b.kind is GoalKind.EVOLVE_SPECIES).execute()
@@ -330,11 +504,19 @@ def test_terminal_observation_survives_lost_diversity_and_has_no_second_authorit
 
     def final_io(request, actions):
         setup.owned.add(78)
-        setup.reader.boxes = replace(setup.reader.boxes, boxes=tuple(
-            replace(box, species_ids=tuple(red_internal_species_id(78)
-                                          if s == red_internal_species_id(77) else s
-                                          for s in box.species_ids))
-            for box in setup.reader.boxes.boxes))
+        setup.reader.boxes = replace(
+            setup.reader.boxes,
+            boxes=tuple(
+                replace(
+                    box,
+                    species_ids=tuple(
+                        red_internal_species_id(78) if s == red_internal_species_id(77) else s
+                        for s in box.species_ids
+                    ),
+                )
+                for box in setup.reader.boxes.boxes
+            ),
+        )
         if failed:
             raise RuntimeError("test execution failed after partial progress")
         return GoalExecutionReport(0, 0, {"test_only": True})
