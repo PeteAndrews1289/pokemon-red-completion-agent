@@ -773,6 +773,12 @@ def build_red_full_pokedex_player_observer(
                 and diagnostics[1].reason is RedFullPokedexFamilyReason.READY
             ):
                 raise
+            if not isinstance(world, StrategicScenarioRouteWorld):
+                # Live fishing discovery depends on cartridge-derived traversal
+                # rules. Read-only/synthetic inspection worlds must preserve the
+                # original typed family diagnostics instead of being promoted to
+                # execution authority by structural duck typing.
+                raise first_error
             controller = cast(FrameBudgetController, native.emulator)
             traversal_observer = Gen1TraversalObserver(
                 native.reader,
