@@ -8,22 +8,21 @@ The first finish line is a fresh start-to-finish model-directed Red run with Cha
 Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
 compatible Red hack, Crystal and at least Emerald.
 
-## Latest chapter: a real gate exposes capture routing
+## Latest chapter: preserving travel skills was necessary, but not sufficient
 
-The system can now explicitly reuse an authenticated measured checkpoint for one bounded training
-lesson while preserving its original evidence limits. It records a one-shot reset before the gate,
-does not sample the model during that check, and retains native outcomes with registration and
-resource accounting. Correlated practice is not independent proof of competence.
+Direct full-Pokédex retargeting had been forgetting reusable capture travel skills. It now preserves
+eight generic capabilities already earned by the profile while replacing the old encounter target;
+species, source and coordinates do not carry over. Focused386 integration tests pass.
 
-The first Model121 reset authenticated but could not offer both acquisition families: evolution
-was ready, capture was rejected by the router as a missing capability. No model choice or input
-occurred. The original failure omitted detailed reasons; a separate read-only reconstruction
-matched the exact state, profile and registration policy, and the recorder was repaired for future
-failures. The closed reset was not replayed. Nine unused sources remain untouched.
+That repair did not make the menu playable. In an exact zero-input check, capture still failed as a
+missing capability. Evolution also failed in the repaired profile, contradicting the previous
+legacy-profile diagnostic that called it ready. The project preserves the discrepancy and treats
+neither family as executable; it did not spend another reset to force an answer. Nine unused
+sources remain untouched.
 
 This is engineering progress, not learning: Model121 remains121 examples/83 successes and86/151
-registrations. A third consecutive no-learning session keeps the anti-drift alarm active.
-Next is a narrow capture-capability/route test, not another admission redesign or source survey.
+registrations. A fourth consecutive no-learning session keeps the anti-drift alarm active.
+Next is one generic route-feasible candidate check and, only if both families pass, a real lesson.
 
 Claude Opus High reviewed the working implementation; an intermediate-plan fit guard was accepted.
 Flash supplied test themes from an older checkout, so no exact-source audit credit is claimed.
@@ -31,8 +30,8 @@ Flash supplied test themes from an older checkout, so no exact-source audit cred
 Today's learning remains one resupply example:120→121 (+0.83% dataset size). The development save
 remains86/151 (56.95%); neither number measures whole-project completion.
 
-[Latest evidence](evidence/red-registered-correlated-reset-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-registered-correlated-reset.md) ·
+[Latest evidence](evidence/red-capture-route-capability-repair-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-capture-route-capability-repair.md) ·
 [Model-first roadmap](model-first-roadmap.md)
 
 Checkpoint story completion is a component result, not the required fresh run.

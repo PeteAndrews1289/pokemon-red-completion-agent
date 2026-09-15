@@ -3,37 +3,36 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September14,2026.
 
-## Reset bridge implemented; capture routing is the blocker
+## Capability preservation repaired; flags-alone hypothesis falsified
 
-Published execution source `fd2c76c23737542bc4a7247ebe1c283c026c35fd` admitted one explicit correlated
-training reset from the authenticated Model121 measured terminal. It preserves the parent's
-catalog exclusion, trust tier and lineage. New registered/economy plans, an exclusive claim,
-observation-only gate and native outcome admission passed local qualification.
+Published source `239a7f74fd393a09efce5bcf49f9ec927ab739e3` repairs a genuine direct-profile
+defect: a new cartridge-derived capture corridor now retains exactly the eight generic capture
+capabilities already declared by its predecessor. It copies no old target, source, coordinates,
+species allowlist or route, and invents no missing permission. Focused integration passed386 tests.
 
-The sole reset `model121-correlated-reset-20260914-v1` authenticated and was consumed, then failed
-the two-family gate before a model query or gameplay. It is permanently closed, not retryable.
-Its original failure omitted typed family details. A separate zero-input reconstruction matched
-the exact state, execution profile and registration policy: evolution ready, capture rejected by
-the router as `missing_capability`. Future failures now retain those details directly.
+The exact Model121 terminal then falsified the proposed explanation with zero input. All eight
+capabilities survived, but capture remained `router_binding_unavailable / missing_capability`.
+The repaired-profile check also reported evolution unavailable, conflicting with the preceding
+legacy-profile diagnostic that called it ready. Preserve that discrepancy and treat neither family
+as executable until a discriminating generic candidate test resolves it.
 
-Related332 tests, a separate48-test reset/economy run and54 post-failure diagnostic tests passed;
-the suites overlap. See session evidence for full-suite/CI status. No source four was selected;
-V1–V3 and all nine unused roots remain untouched.
+No reset, model query, action, frame, outcome or fit occurred. The old correlated reset stays
+consumed; V1–V3, source four and all nine unused roots remain untouched.
 
 ## Next bounded work
 
-Diagnose and source-free qualify capture capability preservation and route feasibility. The derived
-capture profile replaces transport parameters with a bare encounter corridor, while Cut/Surf/Fly
-require explicit flags. That is a concrete hypothesis, not yet a proven complete live cause.
-Do not rebuild admission, scan protected sources or rerun the closed reset. Any played successor
-needs a new prospective declaration and the unchanged two-family gate.
+Qualify generic route-feasible capture candidate selection without a species-specific exception,
+coordinate-bearing policy input or game mutation. If and only if that produces both a capture and
+an evolution binding under the unchanged gate, declare one new prospective collection lesson.
+Do not rebuild admission, scan protected roots, select source four or retry the closed reset.
 
 Model121 remains121 examples/83 successes/86 local registrations. Gameplay is stopped. The original
 collection checklist remains21/22, expanded25/26; final fresh-start Red gate0/5. No ROM hack or
 Crystal before a full non-deterministic model-directed Red run with all151 local registrations.
 
-This third consecutive no-learning session is engineering progress only. Keep the next work narrow.
-Next: **Sol / High / Fast off**,60–90 minutes estimated for the capture-routing test and scoped repair.
+This fourth consecutive no-learning session is maintenance only; the anti-drift alarm is active.
+Next: **Sol / High / Fast off**, one bounded generic candidate qualification followed immediately
+by a played lesson only if the gate passes.
 
-[Session](docs/work-sessions/2026-09-14-registered-correlated-reset.md) ·
-[Evidence](docs/evidence/red-registered-correlated-reset-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-capture-route-capability-repair.md) ·
+[Evidence](docs/evidence/red-capture-route-capability-repair-2026-09-14.json)

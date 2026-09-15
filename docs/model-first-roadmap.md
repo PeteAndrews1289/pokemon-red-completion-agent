@@ -26,38 +26,35 @@ item is a useful choice across acquisition families. The expanded checklist is25
 The65 missing entries classify as38 solo catalog plans,11 version trades, four link evolutions,
 11 supporting-save branch trades and one legitimate event input. Classification is not execution.
 
-The registered correlated-reset bridge is implemented and tested. One exact Model121 reset
-authenticated, then failed the real two-family gate before any model query or gameplay.
-A matching read-only reconstruction found evolution ready and capture unavailable with the router
-reason `missing_capability`. That reset is permanently closed. No fourth source was selected;
-nine unused sources are preserved.
-
-The failure is now narrow: capture capability/route admission, not checkpoint-training provenance.
-Static inspection shows the derived encounter profile drops transport parameters; whether that
-fully explains the live rejection still needs a discriminating test. Do not reopen admission design.
+The correlated-reset bridge is implemented; its one consumed reset stopped before any model query
+or gameplay. Direct capture retargeting now preserves exactly eight previously declared generic
+capabilities without copying a target. The exact zero-input check still found capture unavailable
+with `missing_capability`, so the flags-alone hypothesis is closed. It also found evolution
+unavailable, contradicting the prior legacy-profile diagnostic; neither family is currently ready.
+No fourth source was selected and all nine unused sources remain preserved.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Capture-route repair | Source-free test of capability preservation and genuine route feasibility | Sol / High |
-| One collection lesson | Newly declared successor, two-family gate, one actual choice/outcome and honest fit | Sol / High |
+| Route-feasible candidate gate | Generic source selection yields capture plus evolution without identity-bearing policy input | Sol / High |
+| One collection lesson | Newly declared successor, unchanged gate, one actual choice/outcome and honest fit | Sol / High |
 | Useful training batch | Varied cases, declared resets, all failures/interventions and actual costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
-The next repair is estimated at60–90 minutes; later lessons/batches depend on its result. This is
-not a four-session Red promise. No consumed reset may retry, and no source scan is authorized.
+The next qualification and conditional lesson are one bounded session, not a promise that gameplay
+will pass. No consumed reset may retry, and no protected-root scan or source-four use is authorized.
 
 Today's learning remains120→121 (+0.83% dataset size),86/151 registrations unchanged (56.95%).
-This session added engineering capability but no learning. Three consecutive no-learning sessions
+This session added engineering capability but no learning. Four consecutive no-learning sessions
 trigger the anti-drift alarm. No whole-project percentage is available; final Red gates remain0/5.
 
 Do not return to resource-only Model121 rows or treat timing seeds as independent histories.
 Full Red remains the final exam after bounded component gates, declared authority and honest costs.
 
-[Session](work-sessions/2026-09-14-registered-correlated-reset.md) ·
-[Evidence](evidence/red-registered-correlated-reset-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-capture-route-capability-repair.md) ·
+[Evidence](evidence/red-capture-route-capability-repair-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Sol / High / Fast off**. The immediate job is a narrow routing regression, not another
-architecture review. Keep the completed reset bridge and its consumed identity unchanged.
+Next: **Sol / High / Fast off**. Qualify generic route-feasible candidate selection, then run one
+newly declared lesson only if the real two-family gate passes. Keep the consumed reset unchanged.

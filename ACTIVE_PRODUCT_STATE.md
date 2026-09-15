@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Diagnose and source-free qualify the capture-routing capability boundary. The reset bridge is implemented and its sole gate failed; no reset retry, protected-source scan or source four.
+- Next decision: Qualify generic route-feasible capture candidate selection, then run one newly declared collection lesson only if capture and evolution are both executable. No reset retry, protected-root scan or source four.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A source-free capability-preservation test still cannot bind a legal capture route without fabricated or unsupported access. |
+| Cheapest falsifier | Generic route-feasible candidate qualification cannot expose both capture and evolution without a species-specific exception, coordinate-bearing policy feature or game mutation. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-registered-correlated-reset** · status **closed** · evidence [falsification](docs/evidence/red-registered-correlated-reset-2026-09-14.json)
+**2026-09-14-capture-route-capability-repair** · status **closed** · evidence [falsification](docs/evidence/red-capture-route-capability-repair-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Explicit correlated training preserves the measured parent's evidence tier and saves finite independent roots. The implemented bridge now exposes a concrete capture-routing blocker. |
-| Learning output | None. This third consecutive no-learning session is engineering progress only. Model121 remains121 examples/83 successes/86 local registrations. |
-| Authority delta | None. The registered correlated-reset bridge is implemented, but its sole Model121 gate failed before a model query, input or fit. Model121 remains121 examples/83 successes/86 local registrations. |
+| Product alignment | Direct retargeting now preserves reusable declared travel/capture skills without carrying a target. The exact falsifier proves that repair alone does not create a playable choice, preventing another wasted reset. |
+| Learning output | None. This fourth consecutive no-learning session is a bounded maintenance falsification. Model121 remains121 examples/83 successes/86 local registrations. |
+| Authority delta | None. Generic capture capabilities now survive direct retargeting, but the exact action-free gate still has no executable two-family menu. Model121 remains121 examples/83 successes/86 local registrations. |
 | Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
-| Blocker | The exact state/profile/policy reconstruction found evolution ready but capture rejected by the router as missing_capability. The original failure omitted typed reasons; future retention is repaired. The reset remains consumed. |
-| Decision | Close the Model121 reset without retry and preserve all nine unused sources. Target the narrow capture capability/route boundary, not another admission redesign or protected-source survey. |
-| Next session | Diagnose and source-free qualify capture capability preservation and route feasibility. Do not retry the closed reset; a later played successor needs a new prospective scope and the unchanged two-family gate. |
-| Next falsifier | A source-free test shows that preserving declared capture transport capabilities still cannot produce a legal route, or requires unsupported or fabricated game access. |
-| Stop condition | The sole correlated reset failed its two-family gate before a model query. Stop gameplay and retries; preserve this identity, V1-V3 and all nine unused roots. |
+| Blocker | All eight declared capture capabilities survive exactly, yet the authenticated terminal still reports capture as router_binding_unavailable/missing_capability. The repaired-profile check also reports evolution unavailable, conflicting with the prior legacy-profile diagnostic; neither family is treated as executable. |
+| Decision | Keep the scoped generic preservation repair and close the flags-alone hypothesis. Stop gameplay. Next qualify generic route-feasible candidate selection without a target-specific exception, then declare a played lesson only if the unchanged two-family gate passes. |
+| Next session | Qualify generic route-feasible capture candidate selection and immediately declare one new collection lesson only if the unchanged two-family gate passes. Do not retry the closed reset or scan protected roots. |
+| Next falsifier | No generic route-feasible candidate can expose both capture and evolution without a species-specific exception, coordinate-bearing policy feature or game mutation. |
+| Stop condition | Exact capability preservation still produced no legal capture route. Stop this repair lane without a target-specific patch, gameplay or reset; preserve both diagnostic records and all unused roots. |
 
 ### Stop conditions
 

@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-registered-correlated-reset",
+  "as_of_session": "2026-09-14-capture-route-capability-repair",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-registered-correlated-reset-2026-09-14.json"
+      "evidence": "docs/evidence/red-capture-route-capability-repair-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1394,6 +1394,12 @@
       "result": "Reset bridge implemented. Model121's gate stopped before query/input/fit: evolution ready; capture routing unavailable. Reset closed, nine unused sources preserved. No learning delta.",
       "deviation": "No learned result. The original failure omitted typed family details; matching read-only reconstruction retained them and future recorder behavior was repaired. This third no-learning session is engineering progress only; the consumed reset cannot replay.",
       "next": "Sol High: source-free capture transport-capability preservation and route-feasibility test, then a scoped repair if justified. Do not redesign admission, scan sources or replay the closed reset. A played successor needs a new prospective scope."
+    },
+    {
+      "session": "2026-09-14-capture-route-capability-repair",
+      "result": "Direct retargeting now preserves exactly eight declared generic capture capabilities without copying target identity. ROM-free regressions pass, but the exact zero-input terminal still has no capture route; no learning delta.",
+      "deviation": "The flags-alone hypothesis was falsified and the repair lane stopped without gameplay. The repaired-profile check also reports evolution unavailable, contradicting the prior legacy-profile diagnostic; the discrepancy is preserved and neither family is treated as executable. This is a fourth consecutive no-learning session.",
+      "next": "Sol High: qualify generic route-feasible capture candidate selection and declare one new collection lesson only if the unchanged capture-plus-evolution gate passes. No species-specific patch, consumed-reset retry, protected-root scan or source four."
     }
   ],
   "closed_milestones": [

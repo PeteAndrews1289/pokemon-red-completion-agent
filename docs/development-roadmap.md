@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-registered-correlated-reset**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-capture-route-capability-repair**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-registered-correlated-reset-2026-09-14.json)
+[Current evidence](../docs/evidence/red-capture-route-capability-repair-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-capture-route-capability-repair
+
+Direct retargeting now preserves exactly eight declared generic capture capabilities without copying target identity. ROM-free regressions pass, but the exact zero-input terminal still has no capture route; no learning delta.
+
+**Deviation:** The flags-alone hypothesis was falsified and the repair lane stopped without gameplay. The repaired-profile check also reports evolution unavailable, contradicting the prior legacy-profile diagnostic; the discrepancy is preserved and neither family is treated as executable. This is a fourth consecutive no-learning session.
+
+**Next:** Sol High: qualify generic route-feasible capture candidate selection and declare one new collection lesson only if the unchanged capture-plus-evolution gate passes. No species-specific patch, consumed-reset retry, protected-root scan or source four.
 
 ### 2026-09-14-registered-correlated-reset
 

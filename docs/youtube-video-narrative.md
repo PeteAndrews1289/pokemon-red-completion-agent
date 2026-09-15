@@ -1,26 +1,23 @@
-# Video narrative: checkpoint reuse exposes a capture-routing failure
+# Video narrative: the obvious capture fix was not the whole fix
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
 build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the implementation: one explicit training reset can now start from the authenticated
-Model121 terminal without pretending it is a new independent game. The gate checks the real menu
-without sampling the model, and the reset is recorded before anything can play.
+Open with the concrete bug: choosing a new cartridge-derived encounter corridor erased reusable
+Cut, Surf, Fly and capture-support declarations. The published repair carries eight generic
+capabilities forward without carrying the old species, source or coordinates.
 
-Then show the actual result: evolution ready, capture rejected as a missing routing capability.
-The gate stopped the attempt before any model choice or controller input. No new example or
-registration was earned. The reset stays closed and nine unused training sources remain untouched.
+Then show the falsifier. The exact Model121 endpoint retained every declaration and still could not
+bind capture. Its repaired menu also rejected evolution, contradicting the prior legacy-profile
+diagnostic. No input or reset was spent, and the discrepancy remains visible instead of being
+edited into a clean success story.
 
-Disclose the instrumentation mistake: the original failure omitted detailed family reasons.
-A separate read-only reconstruction matched the exact state, profile and registration policy;
-future failures now preserve those details directly. This was not a second gameplay attempt.
+Next is a generic route-feasible candidate check. Four consecutive no-learning sessions are an
+alarm, not a success montage; only a real model-selected outcome can advance the learner.
 
-Next is the narrow capture capability/route test. Three consecutive no-learning sessions are an
-alarm, not a success montage; do not sell another engineering checkpoint as learned competence.
-
-[Session and evidence](work-sessions/2026-09-14-registered-correlated-reset.md)
+[Session and evidence](work-sessions/2026-09-14-capture-route-capability-repair.md)
 
 ## The real finish line
 

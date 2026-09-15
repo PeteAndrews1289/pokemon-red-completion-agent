@@ -7,7 +7,7 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. A new inventory accounts for all 151 Red targets. Direct catalog starts now require an exact atomic source claim and derive capture/evolution candidates from read-only state, but the frozen next source remains unopened pending exact-code CI.
+- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. A new inventory accounts for all 151 Red targets. Direct retargeting now preserves generic capture travel skills, but an exact zero-input check still could not bind capture or evolution; gameplay remains stopped while route-feasible candidate selection is qualified.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
