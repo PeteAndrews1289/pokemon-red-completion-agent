@@ -3,21 +3,25 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The third source passed preparation and registration under exact-source green CI, then failed the
-real two-acquisition-family menu gate. All three sources are consumed and closed. No model query,
-action, frame, outcome or fit occurred; nine unused eligible training sources remain.
+The full-local player now retains identity-free capture/evolution exclusion diagnostics. Five
+source-free cases distinguish route capability, capture resources, missing precursor, protected
+precursor and already-registered target. Ready diagnostics must exactly match executable candidate
+families; the two-family gate remains strict.
 
-The private failure record lacks per-family exclusion reasons. Codex must not infer the missing
-family or reopen the source. Next work is source-free diagnostic retention and eligibility tests;
-no fourth-source attempt or weakening of the diversity requirement is authorized.
+Focused25, named rehearsal22 and related247 tests passed. Source `93ca9495` passed exact-head
+CI34918614083/1 with11,713 tests. No source, private payload, ROM, registration session, model query, action,
+frame, outcome or fit occurred.
 
-Flash3.8 High received a tool-free roadmap/source-risk advisory request but no completion result was
-retained. No verdict was used; Claude was not called this session. Headless quota windows remain
-unavailable. Historical PASS reviews cover only the previous repair.
+All V1–V3 sources remain closed, and the new schema cannot reconstruct V3's unretained reason.
+Nine eligible sources remain. Source four requires a separate prospective supply/admission plan
+and must lead directly to one retained measured lesson.
 
-Useful bounded review scope, if requested: challenge whether synthetic cases distinguish each
-family rejection and whether all failed checks preserve causes with zero model/game effects.
-Do not turn this into another broad architecture review or independently open any private payload.
+Flash3.8 High returned PASS without findings on the diagnostic contract. Claude was unused.
+Headless quota windows were unavailable.
 
-[Roadmap and session](work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
-[Evidence](evidence/red-third-source-roadmap-audit-2026-09-14.json)
+Useful future review scope: challenge whether a supply plan binds resets, source identity, model
+choice, terminal evidence and failure retention before execution. Do not inspect private sources,
+reopen V1–V3 or demand a broad architecture review.
+
+[Session](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
+[Evidence](evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-third-source-roadmap-audit**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-full-pokedex-family-diagnostics**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)
+[Current evidence](../docs/evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-full-pokedex-family-diagnostics
+
+Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.
+
+**Deviation:** None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.
+
+**Next:** Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software.
 
 ### 2026-09-14-third-source-roadmap-audit
 

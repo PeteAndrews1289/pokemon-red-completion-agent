@@ -1,53 +1,41 @@
 # Project story: learning to play, not repeat a walkthrough
 
-Pete's goal is a model that genuinely plays Pokémon: it must make useful decisions, react to
-unfamiliar situations and carry learned skills forward. AI coding assistants—including Codex,
-Claude and Antigravity—help build and review the system; they do not secretly choose live actions.
+Pete's goal is a model that genuinely plays Pokémon: make useful decisions, react when the game
+differs and carry skills into unfamiliar titles. AI assistants help build and review the system;
+they do not secretly choose its live actions.
 
-The first finish line is a fresh start-to-finish model-directed Red run with concurrent Champion
-and Hall-of-Fame evidence and all151 local registrations, before any ROM hack. Version, trade,
-supporting-save and event dependencies remain requirements. Then comes an unfamiliar compatible
-Red hack, Crystal and at least Emerald.
+The first finish line is a fresh start-to-finish model-directed Red run with Champion and
+Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
+compatible Red hack, Crystal and at least Emerald.
 
-## Latest chapter: the real menu still says no
+## Latest chapter: make failure explain itself
 
-After three preparation repairs and17 passing source-free regressions, the full test run passed.
-One third source was selected and claimed prospectively. This time preparation and registration
-setup succeeded, but the real menu could not offer two executable acquisition families.
+Three direct sources were consumed before producing a mixed capture/evolution lesson. The third
+finally reached the real menu gate, but the old error only said that two families were unavailable.
+It could not say whether capture lacked a route or balls, or evolution lacked usable stock.
 
-The attempt stopped without querying the model or pressing a button. The third source is closed,
-like the prior two; nine unused eligible training sources remain. The specific family rejection
-reason was not retained. That gap matters: another blind attempt would spend evidence without
-explaining the obstacle.
+The player now preserves that distinction in an identity-free report. It can say route capability,
+missing capture resource, missing precursor, protected precursor or already-registered target,
+without exposing a species, route, profile or execution binding. Both acquisition families are
+still mandatory; diagnostics cannot turn a one-family menu into a playable choice.
 
-The next session must qualify source-free rejection diagnostics. A measured collection lesson,
-practical training batch and separate-lineage reliability/dependency review follow only when their
-prerequisites pass. The plan does not promise Red completion in four sessions.
+This was verified entirely source-free:25 focused tests,22 named rehearsal cases and247 related
+tests. No source, ROM, model choice, game input or fit occurred. Nine eligible sources remain.
+The new schema cannot be used to invent a cause for the already-closed third source.
 
-Today's measured learning is120→121 examples:one resupply lesson, or0.83% growth in dataset size.
-The development save remains86/151 registrations (56.95%), with no new entry today. The original
-collection checklist remains21/22; adding checklist items is not learned progress.
+Flash3.8 High reviewed the change read-only and returned PASS without findings. Claude was unused.
+The next question is whether a prospective source plan can lead directly to one retained measured
+lesson rather than spending another save on software validation.
 
-A Flash advisory was dispatched without a retained result, so no reviewer verdict is used for this
-session. Claude's earlier repair review remains historical, not evidence that this menu passed.
+Today's learning remains one new resupply example:120→121, or0.83% dataset growth. The development
+save remains86/151 (56.95%). Engineering progress and learned progress stay separate.
 
-[Latest evidence](evidence/red-third-source-roadmap-audit-2026-09-14.json) ·
-[Detailed roadmap](work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
-[Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
+[Latest evidence](evidence/red-full-pokedex-family-diagnostics-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
+[Model-first roadmap](model-first-roadmap.md)
 
-## What earlier chapters established
-
-- [Checkpoint story completion](audits/red-phase4-closeout-2026-09-09.md) reached the Champion
-  and Hall of Fame under declared hierarchical authority. It is not the required fresh run.
-- [Cross-box capability retrieval](work-sessions/2026-09-13-model111-cross-box-capture-support.md)
-  made capture preparation reusable rather than a named-species route.
-- [Automatic fishing failure](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md)
-  demonstrated retaining an inconvenient outcome instead of retrying it.
-- [Model114 fishing success](work-sessions/2026-09-13-model114-frozen-fishing-learning.md)
-  added a registration through a real model-selected destination.
-
-Only after bounded story, navigation, battle, resource and collection gates should the project
-begin the fresh-start Red final exam. More same-lineage training does not establish that readiness.
+Checkpoint story completion remains a useful component result, not the required fresh run.
+Full Red registration and legitimate trade/event dependencies still precede every later game.
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
-[Roadmap](development-roadmap.md) · [Authorship and public overview](../README.md)
+[Authorship and public overview](../README.md)

@@ -1,48 +1,35 @@
-# Video narrative: reaching the real gate, and stopping honestly
+# Video narrative: make the failed menu explain itself
 
-This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Antigravity
-help build and review the software; they are not the live Pokémon policy.
+This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
+build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the goal: finish Red from a fresh game with real model-directed decisions, Champion and
-Hall-of-Fame proof, and all151 local registrations before any ROM hack.
+Open with the honest blocker: the third source reached the menu gate but could not expose capture
+and evolution together. Its old record lacked the reason, and the source is permanently closed.
 
-Then distinguish the numbers: one new measured lesson today (120→121;0.83% dataset growth),
-but86/151 development-save registrations unchanged. No whole-project percentage is defensible.
+Show the source-free repair. A future failure can distinguish inaccessible route, no capture items,
+missing evolution precursor, protected precursor or already-registered target. Its public report
+contains portable acquire/evolve reasons, never species, routes, profiles or bindings.
 
-Show the engineering result: three preparation repairs,17 source-free regressions, and11,713
-passing tests on the exact published source. Then show the inconvenient live result: the third
-source prepared and registered successfully, but still lacked two executable acquisition families.
+Keep the safety boundary visible: both acquisition families remain mandatory; a diagnostic cannot
+make a one-family menu playable. The inspector verifies zero inputs/frames and unchanged save bytes.
 
-No model decision or game input occurred. The source was closed without retry or replacement.
-Nine unused eligible sources remain. The error lacked per-family reasons, so the next useful work
-is source-free diagnostic qualification—not a fourth blind attempt.
+Verification:25 focused tests,22 named rehearsal cases,247 related tests, Ruff, mypy and regenerated
+collection metadata. No source, ROM, model query, action, outcome or fit occurred.
 
-Flash was asked for a brief advisory, but no result was retained and no verdict was used.
-Prior review approval is not proof of a successful game menu.
+Flash3.8 High returned PASS without findings. The next episode is a separate source-supply decision:
+can one prospective source lead directly to a retained model choice and outcome? Source four is not
+authorized yet.
 
-[Latest session and evidence](work-sessions/2026-09-14-third-source-roadmap-audit.md)
+[Latest session and evidence](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md)
 
-## What comes next
+## The real finish line
 
-Diagnostic qualification → one measured collection lesson → practical varied training →
-separate-lineage reliability and dependency review. These are conditional sessions, not a promise
-of four-session Red completion. The final fresh run waits for all readiness gates.
+Today moved the learner from120 to121 examples (+0.83%), while the development save stayed86/151
+(56.95%). Neither number is overall completion.
 
-After full Red only: compatible unfamiliar Red modification → Crystal → at least Emerald.
-Version, trade, branch and legitimate event dependencies cannot be dropped from the151 denominator.
-
-## Useful flashbacks
-
-- [Model114 fishing success](work-sessions/2026-09-13-model114-frozen-fishing-learning.md):
-  one learned destination choice adds a missing registration.
-- [Automatic fishing failure](work-sessions/2026-09-13-model112-automatic-fishing-failure-learning.md):
-  a route failure becomes an honest learning example.
-- [Checkpoint story audit](audits/red-phase4-closeout-2026-09-09.md):
-  the achievement and fresh-run authority caveat belong together.
-
-Never imply that low-level control is learned or convert121 related examples into an overall
-completion percentage.
+The final gate is a fresh model-directed Red run with Champion/Hall-of-Fame proof, all151 local
+registrations and legitimate dependencies. Only then: unfamiliar Red hack → Crystal → Emerald.
 
 [Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)

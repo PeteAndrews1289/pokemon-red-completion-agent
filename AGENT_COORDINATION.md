@@ -4,35 +4,33 @@ Pete owns requirements and acceptance. Codex owns implementation, verification a
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
-- Codex integrates, verifies actual outcomes and publishes tested batches.
+- Codex integrates, verifies outcomes and publishes tested batches.
 - Flash supplies bounded isolated drafts or targeted reviews through `agy`.
 - Claude supplies selective read-only reviews of consequential evidence and design boundaries.
-- Review is advisory; resolve each finding against evidence.
+- Review is advisory; Codex adjudicates against tests and actual outcomes.
 
 ## Current assignment
 
-All three direct-origin sources `full-local-source-20260914-v1`, `v2` and `v3` are consumed and
-permanently closed. Exact repair CI passed before V3 selection. V3 prepared and registered, then
-failed its real two-acquisition-family menu gate with no model query, input, frame, outcome or fit.
-The per-family exclusion reason was not retained; nine unused eligible training sources remain.
+Structured, identity-free acquisition-family diagnostics are published at `93ca9495`. They
+distinguish five source-free route/resource/inventory cases while preserving the mandatory capture
+plus evolution gate. Focused25, rehearsal22 and related247 tests passed; exact-head CI34918614083/1
+passed11,713 tests.
 
-Codex owns source-free diagnostic qualification next. Retain structured rejection reasons and test
-the eligibility boundaries without reopening any source, selecting a fourth source or weakening
-the two-family requirement. A future measured lesson needs a separately justified supply plan.
-No Model121 resource loop, fresh full-game run, ROM hack or Crystal execution.
+All three direct sources V1–V3 remain consumed and closed. The contract cannot reconstruct V3's
+missing reason. This session used no source, ROM, model or game input; nine eligible sources remain.
 
-Model121 remains121 examples/83 successes/86 local registrations. The anti-drift alarm remains
-active. The revised four-session horizon is in the linked report and does not promise full Red
-completion within four sessions.
+Codex next owns a separate supply/admission decision. Any proposed source must lead directly
+to one retained measured choice/outcome under a prospective plan, not another software check. No
+source four is authorized yet. No Model121 resource loop, full replay, ROM hack or Crystal execution.
 
-## External contributions and status
+## External contribution
 
-Flash3.8 High was asked for a tool-free roadmap/source-risk advisory; no completion result was
-retained, so no verdict is used. Claude was not used this session. Earlier repair reviews remain
-historical evidence, not approval of V3's failed menu. Refreshed headless quota windows unavailable.
+Flash3.8 High completed a sandboxed read-only review and returned PASS with no findings. Its initial
+permission-blocked invocation produced no review. Claude was unused. Current quota windows were
+unavailable from headless output.
 
-Next external task, if useful: a narrow source-free rejection-test review, not a broad architecture
-audit or a standing review gate. Codex alone changes the active checkout and publishes.
+A future external task, if useful, should challenge the prospective supply plan's reset, retention
+and no-fallback rules. It must not access private sources or become a standing review gate.
 
-[Session](docs/work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
+[Session](docs/work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

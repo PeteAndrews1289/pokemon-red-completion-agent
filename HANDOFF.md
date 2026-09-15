@@ -3,51 +3,44 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Third source closed at the real menu gate
+## Family rejection diagnostics qualified source-free
 
-Exact source `ffdc93a753658f135c136a1504f59e62cad81932` passed CI34915127725/1
-(11,713 passed, four skipped, one expected failure) before source selection. The17-test
-non-consuming rehearsal and a real-observer/synthetic-IO launcher smoke passed.
+The full-local capture/evolution proposal now retains one structured identity-free diagnostic for
+each supported acquisition family. Source-free cases distinguish route capability, capture
+resources, missing precursor, protected precursor and already-registered target. Ready diagnostics
+must exactly match executable candidate families, so the two-family gate cannot be weakened by the
+new reporting.
 
-One distinct source was selected prospectively and exactly claimed. Preparation and direct
-registration setup succeeded; the production menu then raised `RedFullPokedexGoalProposalError`
-because fewer than two executable acquisition families survived. Its specific excluded family and
-reason were not retained. Do not infer them or reopen the source to reconstruct the lost menu.
+The one-context inspector emits the diagnostics on failure while preserving save bytes, frames,
+buttons and actions. Public fields contain only portable acquire/evolve status and reason enums;
+species, source, profile and binding identity remain absent.
 
-One registration session was created, but model queries, actions, frames, outcomes and fits were
-zero. The final byte/frame/button and zero-action checks passed. V1, V2 and V3 are permanently
-closed, including V3's conditional measured follow-up. Nine eligible train sources remain unused.
+Focused25, named rehearsal22 and related247 tests passed. Ruff and mypy passed. Collection metadata
+was regenerated. Source `93ca9495d0abccf7511639af2abdc5cbbec41bb5` is published; exact-head
+CI34918614083/1 passed11,713 tests.
 
-## Next bounded work
+## Boundaries and next action
 
-Qualify structured per-family rejection diagnostics and source-free eligibility tests. Keep the
-two-family gate and no-query/no-input guarantees. No consumed-source retry, fourth-source selection,
-ROM access or same-state reconstruction is authorized for that repair session. New training supply
-needs a separately justified prospective plan after qualification, not another blind source check.
+No source was selected or claimed, and no private payload, ROM, registration session, model query,
+action, frame, outcome, example or fit occurred. V1–V3 remain closed. The new fields cannot
+retroactively explain V3 because its record predates them. Nine eligible sources remain unused.
 
-The following horizon is diagnostic qualification → one measured collection lesson → a practical
-varied training batch → separate-lineage reliability and version/trade/event dependency review.
-[Full next-session plan and daily percentages](docs/work-sessions/2026-09-14-third-source-roadmap-audit.md).
+Next, separately design and audit a prospective supply plan for one measured collection lesson.
+Source four is not authorized by this qualification. It must not be consumed
+merely to validate software, and every model choice/outcome must be retained without fallback.
 
-## Learning and completion status
+Model121 remains121 examples/83 successes/86 local registrations. Gameplay is stopped. The original
+collection checklist remains21/22; the full fresh-start Red acceptance gate remains0/5. Full local
+Red still precedes any ROM hack, Crystal or Emerald.
 
-Model121 remains121 examples/83 successes/86 local registrations. Today adds one actual resupply
-lesson over Model120 (+0.83% dataset size), but zero registration gains:86/151=56.95% in the
-development save. The original collection checklist remains21/22; expanded25/26 is a changed
-denominator, not a whole-project percentage. All five final Red acceptance conditions remain unmet.
+## Review and recommendation
 
-Gameplay is stopped and the zero-learning alarm remains active. The Model121 terminal remains
-ineligible for the standard collector; never relabel it or return to its redundant resource loop.
-Fresh-start model-directed Red story plus all151 local registrations still precedes every ROM hack,
-Crystal and Emerald. Checkpoint story completion is not that final run.
+Flash3.8 High completed a read-only review and returned PASS with no P0/P1/P2 finding. Its first
+headless call was permission-blocked; one sandboxed read-only retry completed. Claude was unused.
+Headless quota windows and cost were unavailable.
 
-## Reviews and recommendation
+Next: **Sol / High / Fast off**, about60–90 minutes for the supply/admission decision. Use Astra
+only if that decision requires a consequential redesign.
 
-A tool-free Flash3.8 High advisory was dispatched without a retained completion result; no verdict
-or finding is used. Claude was not used this session. Prior repair reviews remain historical only;
-current service quota windows are unavailable from headless output.
-
-Next: **Sol / High / Fast off**, approximately60–90 minutes for source-free diagnostic tests.
-Escalate to Astra for a consequential admission/authority redesign, not routine test execution.
-
-[Evidence](docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
+[Evidence](docs/evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)

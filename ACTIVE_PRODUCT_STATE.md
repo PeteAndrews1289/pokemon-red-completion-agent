@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify source-free family-eligibility diagnostics before any new source-spending decision; preserve the failed third source and the unchanged learning counters.
+- Next decision: Decide whether a practical prospective supply plan justifies one measured collection lesson now that the family-diagnostic contract has passed exact-head CI.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A source-free fixture cannot distinguish an acquisition-family rejection or retain its exact reason without changing model choices, game state or the diversity gate. |
+| Cheapest falsifier | A prospective supply plan cannot retain one model-selected capture/evolution outcome without reopening V1-V3 or spending a source on software validation. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-third-source-roadmap-audit** · status **closed** · evidence [qualification](docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)
+**2026-09-14-full-pokedex-family-diagnostics** · status **closed** · evidence [qualification](docs/evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The one-source integration test reached the real eligibility boundary and stopped honestly. Refocus the next session on diagnosable family eligibility rather than repeated source consumption or checklist inflation. |
-| Learning output | None this session. Today Model120 became121, adding one measured resupply lesson (+0.83% dataset size); local registration remained86/151 (56.95%, zero percentage-point gain). No whole-project percentage is claimed. |
-| Authority delta | None. Model121 remains at121 examples/83 successes and86 local registrations. The third source created one registration session but no query, action, frame, outcome or fit. |
-| Transfer result | None. This was a related training-source integration failure, not independent evaluation or cross-title transfer. |
-| Blocker | The third source passed preparation but failed the real two-acquisition-family gate. Its retained error does not identify the missing family or rejection reason. All three sources are closed; nine unused eligible sources remain. |
-| Decision | After exact-source CI passed11713 tests, prospectively select and claim one third source. Retain the failed action-free gate without replacement, then stop source spending and qualify source-free rejection diagnostics. |
-| Next session | Qualify structured per-family rejection diagnostics and source-free eligibility tests. Do not reopen consumed sources or select a fourth source. Then separately justify a practical supply plan for one real collection lesson. |
-| Next falsifier | A source-free rejection fixture loses its cause, permits one-family gameplay, changes its origin, or samples a model while collecting diagnostics. |
-| Stop condition | The acquisition-family gate failed; the third source and its success-only follow-up are closed. No v1/v2/v3 retry, fallback or fourth source under this roadmap. Next session is source-free. No full Red replay, ROM hack or Crystal execution. |
+| Product alignment | Future one-family failures retain portable causes without another source read, reducing scarce-source waste while keeping capture/evolution diversity mandatory. |
+| Learning output | None. Model121 remains121 examples/83 successes/86 local registrations; no gameplay or fit occurred. |
+| Authority delta | None. Model121 remains at121 examples/83 successes/86 local registrations. Diagnostics created no model query, action, frame, outcome or fit. |
+| Transfer result | No cross-title result. The identity-free option/reason schema is portable in shape but qualified only with Red source-free fixtures. |
+| Blocker | All three direct sources are closed and V3 cannot be retroactively diagnosed. Nine eligible sources remain, but another source needs a practical measured-lesson plan rather than another software check. |
+| Decision | Published structured identity-free capture/evolution exclusion reasons, preserved the two-family gate and stopped before source selection. Exact-head CI passed; supply/admission remains a separate decision. |
+| Next session | Design and audit a practical prospective supply plan for one measured collection lesson. Do not reopen V1-V3; source four is not authorized by this qualification alone. |
+| Next falsifier | No prospective plan can bind one source directly to a retained measured choice and outcome without retry, fallback or diagnostic-only consumption. |
+| Stop condition | End after source-free qualification and publication. No source selection, claim, payload, ROM, model query, input, frame, fit, full replay, ROM hack or Crystal execution. |
 
 ### Stop conditions
 

@@ -8,57 +8,57 @@ Build a player that actually plays Pokémon, not a fixed walkthrough. The
 
 1. Train reusable decisions through bounded Red scenarios and retain failures.
 2. Qualify genuine model choices across story, battles, navigation, resources and collection.
-3. Complete one authenticated fresh start-to-finish model-directed Red run, with concurrent
-   Champion/Hall-of-Fame evidence and the **full local151-entry Red Pokédex**.
-4. Only after that gate, test a compatible unfamiliar Red ROM modification.
+3. Complete one fresh start-to-finish model-directed Red run with concurrent Champion/Hall-of-Fame
+   evidence and the **full local151-entry Red Pokédex**.
+4. Only then test a compatible unfamiliar Red ROM modification.
 5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
 Version, trade, supporting-save and event dependencies require legitimate resolution.
-Checkpoint stitching, random timing or shared ledger credit cannot replace this local fresh-run gate.
+Checkpoint stitching, random timing or shared credit cannot replace the local fresh-run gate.
 
 ## Where we stand
 
-Model121 has121 measured training examples and83 successes. Its development save has86 local
-registrations,66 living species,70 specimens, four capture items and cash706. These are related
-development results, not independent fresh-game reliability. Its redundant resource loop is closed.
+Model121 has121 measured examples and83 successes. Its development save has86 local registrations,
+66 living species,70 specimens, four capture items and cash706. These related results are not
+independent fresh-game reliability. The original collection checklist remains21/22; its sole open
+item is a useful choice across acquisition families. The expanded checklist is25/26.
 
-The full151 inventory classifies the65 missing entries:38 solo catalog plans,11 version trades,
-four link evolutions,11 supporting-save branch trades and one legitimate event input. A plan is not
-an executable or completed acquisition.
+The65 missing local entries classify as38 solo catalog plans,11 version trades, four link
+evolutions,11 supporting-save branch trades and one legitimate event input. Classification is not
+execution.
 
-The shared-departure redesign connects travel-aware capture and native evolution to the player.
-Local151 registration/rewards preserve shared history and physical inventory. Three generic
-preparation defects were repaired; the named source-free rehearsal passes17 tests.
+The full151 goal inventory, local registration and shared-departure capture/evolution bridge are
+implemented. Three direct sources were consumed without a learned outcome. V3 reached the real
+menu gate but fewer than two acquisition families survived; its record did not retain the cause.
 
-Exact repair CI passed11,713 tests before a third prospective source was claimed. Preparation and
-registration setup succeeded, but the real menu failed the two-acquisition-family gate. It created
-no model query, action, frame, outcome or fit. All three sources are closed and nine eligible train
-sources remain unused. The rejected family and reason were not retained; do not guess or reopen.
+That diagnostic gap is now closed for future attempts. The player retains identity-free reasons for
+route capability, capture resources, missing/protected evolution stock and registered targets.
+The two-family gate remains strict. Focused25, rehearsal22 and related247 source-free tests passed.
+No new source, model choice, input, fit or registration was created; nine eligible sources remain.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Source-free diagnosis | Structured family rejection reasons; discriminating eligibility tests; no source access | Sol / High |
-| One collection lesson | Separately justified supply plan, one retained choice/outcome, honest fit and restart | Sol / High |
-| Useful training batch | Varied bounded cases, declared resets, all failures/interventions and resource costs | Sol / High |
-| Reliability/dependency review | Separate-lineage comparisons and concrete version/trade/event paths | Astra / High |
+| Supply/admission decision | A prospective plan binding one source directly to one retained lesson; exact-head CI has passed | Sol / High |
+| One collection lesson | One actual model choice, terminal outcome, costs/local flags and honest fit | Sol / High |
+| Useful training batch | Varied cases, declared resets, all failures/interventions and resource costs | Sol / High |
+| Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
-The first session is about60–90 minutes; the lesson about60–120 minutes. Batch and reliability work
-may each span1–2 sessions. This is a conditional planning horizon, not a four-session Red deadline.
-No fourth source is authorized by the roadmap alone. If diagnostic qualification fails, stop there.
+Each first step is estimated at60–120 minutes; batch/reliability work may span1–2 sessions. This is
+a planning horizon, not a four-session Red promise. Source four is not authorized by diagnostics
+alone. If the supply plan cannot avoid diagnostic-only source consumption, stop.
 
-Today:120→121 examples (+0.83% dataset size),86/151 local registrations unchanged (56.95%).
-The original21/22 collection checklist is unchanged; expanded25/26 changes the denominator.
-All five final Red acceptance conditions remain unmet. No whole-project percentage is available.
+Today remains120→121 examples (+0.83% dataset size),86/151 registrations unchanged (56.95%).
+No whole-project percentage is available and all five final Red acceptance conditions are unmet.
 
-The anti-drift alarm remains active. Do not spend another source on an undiagnosable check, return
-to Model121 resource-only rows or begin a full replay. Full Red remains a final exam after bounded
-component gates, declared authority, budgets and complete diagnostics.
+Do not return to resource-only Model121 rows, treat timing seeds as independent histories or begin a
+full replay. Full Red remains the final exam after bounded component gates, declared authority,
+realistic budgets and complete failure retention.
 
-[Detailed roadmap and audit](work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
-[Evidence](evidence/red-third-source-roadmap-audit-2026-09-14.json) ·
+[Diagnostic session](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
+[Evidence](evidence/red-full-pokedex-family-diagnostics-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **Sol / High / Fast off**, for focused source-free diagnostics.
-Reserve Astra for a consequential change to admission or model authority, not routine waiting.
+Next: **Sol / High / Fast off**, for the bounded supply/admission decision. Reserve Astra for a
+consequential authority redesign.
