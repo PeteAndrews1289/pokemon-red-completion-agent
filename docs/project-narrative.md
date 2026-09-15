@@ -9,27 +9,30 @@ and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. 
 supporting-save and event dependencies remain requirements. After full Red comes a compatible
 unfamiliar hack, then Crystal and at least Emerald.
 
-## Latest chapter: rehearse before spending another source
+## Latest chapter: the rehearsal found two bugs, but not the third
 
-After two generic preparation defects consumed the previous source before its menu appeared, the
-project paused before claiming another. It now has a single ROM-free rehearsal command that checks
-the risky seams using real components: parser fallback, v4 base-plan behavior, direct registration,
-capture-versus-evolution proposal, registered observation and action-free preflight.
+After two generic preparation defects consumed the first source, the project built a 12-test
+ROM-free rehearsal and published it green. The second source passed that rehearsal, was selected
+prospectively and claimed exactly once, then exposed another generic defect before the action-free
+menu appeared.
 
-The rehearsal passes 12 tests with zero controller actions or emulator frames. It opens no ROM or
-private source and creates no real claim, registration, outcome, example or fit. This makes it cheap
-enough to run before every future direct-origin claim.
+The acquisition catalog correctly records Tentacool as `wild:Route21:water`, but the direct profile
+sent every method with kind `WILD` through a resolver that accepts only grass sources. Sorting
+therefore crashed before a valid grass corridor could be tried. The claimed source was opened, but
+there were still zero model queries, controller actions, emulator frames, registration sessions,
+outcomes, examples or fits.
 
-The first attempt at this test was too heavily mocked. Flash rejected it for false confidence, so
-Codex removed it and grouped the real component checks under one named marker instead. Flash passed
-the replacement with no critical finding.
+Flash independently confirmed that failure and a second uncaught resolver boundary in the corridor
+loop. The source remains consumed without retry or replacement. This is not evidence that its game
+state lacked capture and evolution choices; the program failed before it could ask.
 
-The boundary remains honest: synthetic checks cannot prove that an unclaimed save has feasible
-cartridge routes or both acquisition families. Only one prospectively frozen, exactly claimed real
-source can answer that question.
+The next guardrail expands the non-consuming test from known seams to the complete public catalog:
+exclude water from grass candidates, preserve Route21 grass when water and grass coexist, run real
+unmocked profile derivation and fail cleanly when no grass source remains. No third source is spent
+while that repair is built.
 
-[Latest evidence](evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md) ·
+[Latest evidence](evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -45,11 +48,10 @@ source can answer that question.
 
 ## What matters next
 
-The next episode begins by running the 12-test rehearsal on the published exact source. If it is
-green, freeze a distinct unused catalog source prospectively, claim it once, and stop action-free
-unless capture and evolution are both executable. Only then sample one model choice and retain its
-real costs, failure or success and fresh local ledger before fitting. Do not replay the consumed
-source, select a fallback or return to the Model121 resource loop.
+The next episode is ROM-free: repair encounter-media filtering and add complete-catalog regression
+coverage, then publish it under exact-head CI. Do not reopen either consumed source, select a
+fallback, claim a third source or return to the Model121 resource loop. A later session must decide
+whether another scarce claim is justified.
 
 Only after the bounded story, navigation, battle, resource and collection components pass unseen
 gates should the project begin the fresh-start Red final exam. A growing same-lineage training set

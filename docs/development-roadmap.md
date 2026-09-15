@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-nonconsuming-direct-rehearsal**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-full-local-source-v2-preflight-failure**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json)
+[Current evidence](../docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-direct-full-local-source-v2-preflight-failure
+
+The 12-test rehearsal passed, then one distinct source was selected and claimed exactly once. Preparation opened only that source and failed before action-free preflight because wild:Route21:water entered the grass-only corridor sorter. Zero model queries, actions, frames, registration sessions, outcomes, examples or fits occurred.
+
+**Deviation:** The source is consumed without retry or replacement. The failure is a generic public-catalog integration defect, not evidence about the source's cartridge feasibility. Flash confirmed a second uncaught resolver boundary. The zero-learning alarm remains active and all Red-final, ROM-hack and later-title gates stay closed.
+
+**Next:** Implement and publish the generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression tests. Do not select or claim another source in that repair session; re-audit third-source spending only after exact-head CI.
 
 ### 2026-09-14-nonconsuming-direct-rehearsal
 

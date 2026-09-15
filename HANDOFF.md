@@ -3,35 +3,36 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Non-consuming direct-origin rehearsal qualified
+## Second direct-origin source closed before preflight
 
-The consumed source and both retained preparation failures remain closed exactly as previously
-recorded. This session claimed no replacement. Instead, it added the ROM-free
-`nonconsuming_direct_rehearsal` suite, which passes 12 real component checks before another source
-can be spent.
+The published `nonconsuming_direct_rehearsal` passed 12 tests. One distinct unused source was then
+selected prospectively and claimed exactly once. Preparation authenticated and opened only that
+source, but failed before the outer action-free preflight because the direct profile sent the
+catalog's `wild:Route21:water` method through a grass-only map resolver.
 
-The suite covers the parser's null transition default, feature-v4 base-plan behavior, an isolated
-direct-registration roundtrip, real capture/evolution proposal and observer logic, real preflight
-qualification with two authorities, and zero action/frame effects. It opens no ROM or private
-source and creates no real claim, registration, outcome, example or fit.
+The source is consumed and closed with no retry or replacement. There were zero model queries,
+controller actions, advanced frames, registration sessions, observations, outcomes, examples,
+fits or local registration gains. The failure does not establish that the source lacked feasible
+capture and evolution families; it stopped in generic catalog enumeration.
 
-This is a cheap integration falsifier, not a substitute for the real gate. It cannot authenticate
-a candidate save or prove cartridge-specific routing or family feasibility.
+Static review found a second gap in `_capture_corridor`: source resolution occurs outside its
+exception boundary. Flash3.8 High independently confirmed both P0 failures and the existing P1 test
+blind spot.
 
 ## Next bounded implementation
 
-Publish the rehearsal and require exact-head CI. At the start of the next session, run
-`PYTHONPATH=src:scripts .venv/bin/pytest -q -m nonconsuming_direct_rehearsal`. If green, freeze one
-distinct unused source prospectively, claim only it and run the real action-free two-family gate.
-Only if capture and evolution are both executable may one exploratory Model121 choice execute once
-and contribute its measured outcome. The attempt is bounded to one source and two hours, with no
-fallback source.
+In a new session, implement only the generic ROM-free source-media repair. Filter non-grass
+encounter media before grass-corridor sorting, defend the corridor loop against an invalid source,
+and prove the whole public catalog, Route21 water/grass coexistence, real unmocked profile
+derivation and clean grass-exhaustion behavior. Run the named rehearsal and broader verification,
+then publish and require exact-head CI. Do not select or claim another source in that repair
+session.
 
 ## Learning and completion status
 
-Model121 remains 121 examples, 83 successes and 86 local registrations. This session consumed no
-claim or selected payload and issued no gameplay input. It added no real registration session,
-outcome or fit. Gameplay is stopped; the anti-drift alarm remains active.
+Model121 remains 121 examples, 83 successes and 86 local registrations. This session consumed one
+claim and opened its selected payload, but issued no gameplay input and added no registration
+session, outcome or fit. Gameplay is stopped; the anti-drift alarm remains active.
 
 The Model121 terminal itself remains ineligible for the standard collector because its original
 state is not in the frozen catalog. Never relabel it, replay consumed trials or weaken provenance.
@@ -40,14 +41,14 @@ then Crystal and at least Emerald. Version, trade, supporting-save and event req
 
 ## Verification and reviewers
 
-Flash3.8 High rejected the first rehearsal design because it mocked registration and preflight too
-high in the stack. Codex removed that test and replaced it with the named real-component suite;
-Flash then returned PASS with no P0/P1 finding. Claude was not invoked. Neither reviewer accessed
-private artifacts, and CLI quota-window percentages/reset times were unavailable.
+Flash3.8 High completed a bounded read-only review and confirmed the catalog mismatch, the hidden
+corridor exception boundary and the missing regression coverage. Claude was not invoked. The CLI
+lists Claude Opus4.6 Thinking and Sonnet4.6 as available endpoints, but no Claude review was run.
+CLI quota-window percentages/reset times were unavailable.
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**. The next work is another tightly
-bounded source freeze/claim gate using the repaired path; reserve Astra for a new authority or
-provenance design dispute.
+Next-session recommendation: **GPT-5.6 Sol / High / Fast off**. The next work is a narrow ROM-free
+repair and regression gate; reserve Astra for the later decision about whether another scarce
+source should be spent.
 
-[Session](docs/work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md) ·
-[Evidence](docs/evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
+[Evidence](docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json)

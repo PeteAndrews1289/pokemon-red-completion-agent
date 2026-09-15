@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-nonconsuming-direct-rehearsal",
+  "as_of_session": "2026-09-14-direct-full-local-source-v2-preflight-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-nonconsuming-direct-rehearsal-2026-09-14.json"
+      "evidence": "docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1358,6 +1358,12 @@
       "result": "A named ROM-free rehearsal passes 12 real component checks covering the parser fallback, v4 base-plan behavior, temporary direct registration, two-family proposal/observer, real preflight qualification and zero action/frame effects.",
       "deviation": "This user-requested maintenance session produced no learner outcome or transfer result. Flash rejected a heavily mocked first design; it was removed and replaced with an honest component suite. The anti-drift alarm remains active and every full-game gate stays unchanged.",
       "next": "Publish and green the rehearsal. Then run it before freezing and claiming one distinct unused source; require a real capture-plus-evolution action-free menu before one Model121 episode, with no fallback source."
+    },
+    {
+      "session": "2026-09-14-direct-full-local-source-v2-preflight-failure",
+      "result": "The 12-test rehearsal passed, then one distinct source was selected and claimed exactly once. Preparation opened only that source and failed before action-free preflight because wild:Route21:water entered the grass-only corridor sorter. Zero model queries, actions, frames, registration sessions, outcomes, examples or fits occurred.",
+      "deviation": "The source is consumed without retry or replacement. The failure is a generic public-catalog integration defect, not evidence about the source's cartridge feasibility. Flash confirmed a second uncaught resolver boundary. The zero-learning alarm remains active and all Red-final, ROM-hack and later-title gates stay closed.",
+      "next": "Implement and publish the generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression tests. Do not select or claim another source in that repair session; re-audit third-source spending only after exact-head CI."
     }
   ],
   "closed_milestones": [

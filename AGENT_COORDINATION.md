@@ -11,14 +11,16 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The source in `full-local-source-20260914-v1` remains consumed and permanently closed. The generic
-parser/v4 repairs are published and green. A new ROM-free `nonconsuming_direct_rehearsal` now passes
-12 real component checks with zero real claims, source opens, actions, frames, outcomes or fits.
+The sources in `full-local-source-20260914-v1` and `full-local-source-20260914-v2` are consumed and
+permanently closed. The v2 attempt passed the 12-test rehearsal, was prospectively selected and
+claimed once, then stopped during preparation because `wild:Route21:water` entered a grass-only
+source sorter. It produced zero model queries, actions, frames, registration sessions, outcomes or
+fits.
 
-Codex owns publication and exact-head CI for the rehearsal. The next session must run it first,
-then may freeze one distinct unused source prospectively and apply one exact-claim two-family gate.
-No caller-entered species/route, historical retry, fallback source, Model121 resource loop or
-full-game run.
+Codex owns one ROM-free repair session: filter incompatible encounter media, defend corridor
+resolution and add complete-catalog, Route21 coexistence, unmocked derivation and clean-exhaustion
+tests. No source selection, claim, gameplay, caller-entered species/route, historical retry,
+fallback source, Model121 resource loop or full-game run is authorized in that session.
 
 Model121 remains 121 examples/83 successes/86 local registrations. There is no new learned
 authority or transfer evidence. The anti-drift alarm remains active and Red's full fresh-run
@@ -26,11 +28,12 @@ story/local151 gate still precedes any ROM hack, Crystal or Emerald.
 
 ## External contributions and status
 
-Flash3.8 High rejected a heavily mocked first rehearsal and passed the replacement marker suite
-with no P0/P1 finding. Claude was not invoked. Neither reviewer may access private artifacts or
-authorize a replacement source. Current quota windows remain unavailable from headless output.
+Flash3.8 High confirmed two P0 source-resolution defects and one P1 test blind spot. Claude was not
+invoked; Opus4.6 Thinking and Sonnet4.6 appear in the CLI model list. Neither reviewer may access
+private artifacts or authorize a replacement source. Current quota windows remain unavailable from
+headless output.
 
-Next external task, if useful: review only the next new source's action-free gate evidence.
+Next external task, if useful: read-only review of the generic repair after its tests pass.
 
-[Session](docs/work-sessions/2026-09-14-nonconsuming-direct-rehearsal.md) ·
+[Session](docs/work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
