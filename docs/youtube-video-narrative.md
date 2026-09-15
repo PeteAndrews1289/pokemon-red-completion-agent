@@ -1,28 +1,32 @@
-# Video narrative: the safety gate stops the cartridge campaign
+# Video narrative: test the failure recorder before the next cartridge case
 
 This is an AI-assisted engineering project directed by Pete Andrews.
 
 ## Latest episode
 
-Open with the synthetic failure injection: its durable diagnostic reopens with zero game input.
-Then show three disposable Route11 battles settling across varied menus and timing in 223 actions /
-19,851 frames. One natural sleep turn demonstrates why PP proof and complete settlement matter.
+Open with the previous campaign's stop: three Route11 successes, followed by a Diglett setup
+failure whose phase and cost did not survive. The case is consumed, not patched and replayed.
 
-The turning point is the first Diglett's Cave relocation. It fails, and the failed episode survives,
-but its semantic phase and exact cost do not. The frozen gate rejects the campaign immediately.
-There is no live patch, replay or replacement case.
+Show the replacement journal following source inspection, relocation, encounter setup, battle
+and settlement. Inject errors at each stage without opening a ROM. Distinguish an attempted
+action from a completed action, and demonstrate a partial tick retaining its actual frame cost.
+Then change emulator sessions and show cumulative cost remaining correct.
 
-Be explicit about the limit: three correlated successes do not prove cartridge reliability or
-model learning. V2 must retain phase, reason and cost across both setup and battle failures before
-new cartridge input.
+The turning point is the real battle-runtime test: its saved diagnostic uses JSON lists where
+the in-memory version used tuples. The new regression detects the mismatch before cartridge play.
+The executor-boundary check also caught misplaced primitive calls; the code moved, not the rule.
+
+371 focused tests pass. Be explicit: this locally qualifies accounting, not Pokémon competence.
+The next episode should be a short newly frozen cartridge campaign, with no replay of the old case.
 
 ## The finish line remains unchanged
 
 Model121 remains at 121 examples/83 successes; local registrations remain 86/151 (56.95%).
-This session added no examples or registrations. The final fresh-Red gate remains 0/5.
+This session added zero examples or registrations and used zero cartridge actions.
+The final fresh-Red gate remains 0/5.
 
 Complete a fresh model-directed Red run and its full local Pokédex before any ROM hack,
 then proceed through Crystal and at least Emerald.
 
-[Session](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md) ·
+[Session](work-sessions/2026-09-15-cartridge-journal-v2.md) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

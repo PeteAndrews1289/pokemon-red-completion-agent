@@ -956,3 +956,20 @@ It must still pass exact claim and expose two real acquisition families action-f
 model query. This maintenance changes no learned authority, Red gate, ROM-hack order or stage exit.
 
 [Evidence](evidence/red-direct-full-local-preflight-failure-2026-09-14.json).
+
+## September15 — locally qualify the cross-component journal before new cartridge work
+
+The prior disposable campaign remains failed and consumed; its missing Diglett phase/cost cannot
+be reconstructed as fact. V2 now records phase, bounded semantic reason, attempted/completed actions
+and actual frames across setup and battle, enforces prospective shared caps and requires exact
+durable reopening. Partial ticks, storage errors and interrupts fail closed. 371 focused tests
+and whole-source type checking pass; no cartridge, learning row, fit or registration occurred.
+
+Close architecture maintenance here. Next prospectively freeze distinct cartridge identities and
+exact inputs for a short V2 campaign, including cross-venue setup. No in-campaign retry or replacement,
+protected-source expansion, full run, ROM hack or Crystal. Gaps remain gaps, not partial successes.
+Only then resume the Model121 heterogeneous acquisition lesson. Model counters and checklist
+denominators are unchanged. The omitted prior battle-runtime-refocus review was restored from Git.
+
+[Evidence](evidence/red-cartridge-journal-v2-2026-09-15.json) ·
+[Detailed roadmap](work-sessions/2026-09-15-cartridge-journal-v2.md).

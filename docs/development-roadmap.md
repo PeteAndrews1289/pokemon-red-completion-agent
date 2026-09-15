@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-bounded-battle-cartridge-qualification**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-cartridge-journal-v2**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-bounded-battle-cartridge-qualification-2026-09-15.json)
+[Current evidence](../docs/evidence/red-cartridge-journal-v2-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -117,6 +117,14 @@ Learn new generation mechanics; retain truthful global, local and physical views
 
 ## Session reviews
 
+### 2026-09-15-cartridge-journal-v2
+
+Integrated V2 journal passes371 focused tests and whole-source type checking. Setup and battle retain phase/reason/attempted/completed/frame evidence, including partial failures and session changes. No gameplay or learning.
+
+**Deviation:** Planned maintenance only. Restored the prior battle-runtime-refocus review accidentally omitted by the previous closeout; no checklist or learning denominator changed.
+
+**Next:** Sol High, Fast off: freeze distinct cartridge identities and exact inputs for a bounded V2 campaign, including cross-venue setup. Stop on the first failure; no consumed-case retry.
+
 ### 2026-09-15-bounded-battle-cartridge-qualification
 
 Synthetic diagnostic reopening passed and three Route11 cartridge cases settled in223actions/19851frames. The first Diglett relocation failed and exposed missing phase/cost evidence; campaign stopped.
@@ -124,6 +132,14 @@ Synthetic diagnostic reopening passed and three Route11 cartridge cases settled 
 **Deviation:** Qualification failed honestly. The failed episode was durable but retained only its exception class, so alternate-venue and extended-training reliability remain open; no learning counter changed.
 
 **Next:** Astra High, Fast off: build and ROM-free test a V2 cross-component phase/reason/cost journal before any new cartridge identity.
+
+### 2026-09-15-battle-runtime-refocus
+
+Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.
+
+**Deviation:** User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.
+
+**Next:** Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready.
 
 ### 2026-09-15-exact-terminal-recovery
 

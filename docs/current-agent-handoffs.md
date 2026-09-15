@@ -3,17 +3,18 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The synthetic diagnostic-reopen gate passed. Three disposable Route11 cases then settled across
-two-, three- and four-move menus in 223 actions / 19,851 frames; one naturally exercised a
-status-suppressed selection without PP spend. The first Diglett relocation failed before battle.
-Its failed episode reopened, but retained neither semantic phase nor exact action/frame cost.
-The campaign stopped without retry; Model121 remains 121/83 and 86/151 local registrations.
+V2's integrated phase/reason/cost journal is locally qualified: 371 focused tests and whole-source
+type checking passed. No gameplay, model query, training row, fit or registration occurred.
+Model121 remains 121/83 and 86/151 local registrations.
 
-Next useful review: challenge the proposed V2 cross-component journal in the
-[failed qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md).
-It must preserve component phase, sanitized reason and cumulative cost for source inspection,
-relocation, encounter setup, battle execution and terminal settlement. Multi-phase synthetic
-failures must reopen exactly before any new cartridge identity. No broad audit is required.
+Claude Opus High completed a read-only accounting review of the pre-final-refinement snapshot:
+GO, no blocking findings. Codex's subsequent executor-boundary, JSON-shape and terminal-closure
+changes passed local tests. Flash 3.8 Low via `agy` timed out after three minutes without a verdict;
+no Flash finding is credited. CLI commands ended; refreshed service quotas were unavailable.
 
-No consumed evolution/recovery replay, protected-root scan, source four, fit, full run,
-ROM hack or Crystal. Codex owns implementation and publication.
+Next is a prospectively frozen, distinct bounded cartridge campaign using V2. Codex owns its
+exact source/input identity checks and execution. An external review is optional and bounded to a
+specific unresolved contract question; no standing broad audit is required.
+
+No consumed evolution/recovery/campaign replay, protected-root scan, source four, fit, full run,
+ROM hack or Crystal. [Session and next steps](work-sessions/2026-09-15-cartridge-journal-v2.md).
