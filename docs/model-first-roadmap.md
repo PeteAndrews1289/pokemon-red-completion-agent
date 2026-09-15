@@ -31,31 +31,33 @@ or gameplay. Direct retargeting now preserves generic capture and evolution trav
 Evolution is natively and routably ready. All four legitimate missing grass corridors were checked:
 three have ready capture providers but no cartridge route from a legal departure, and one lacks
 resources. A generic fishing fallback is now published, but exact committed-source qualification
-found zero reachable productive fishing destinations at the Model121 terminal. No fourth source
-was selected and all nine unused sources remain preserved.
+found zero reachable productive fishing destinations at the Model121 terminal. The next action-free
+check also found zero executable fossil targets. No fourth source was selected and all nine unused
+sources remain preserved.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Fossil acquisition gate | Qualify the existing observed fossil provider beside ready evolution | Sol / High |
-| One collection lesson | Newly declared successor, unchanged gate, one actual choice/outcome and honest fit | Sol / High |
+| Safe singleton evolution | Inspect the ready transition, freeze it once, execute without fit, retain the fresh terminal | Sol / High |
+| Fresh-terminal collection lesson | Rebuild a heterogeneous menu, then retain one actual choice/outcome and honest fit | Sol / High |
 | Useful training batch | Varied cases, declared resets, all failures/interventions and actual costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
-The next adapter and conditional lesson are one bounded session, not a promise that gameplay will
-pass. Grass-route hardening, consumed-reset retry, protected-root scan and source-four use are out.
+The next execution is not a learned choice; its purpose is honest Pokédex progress and a fresh
+terminal after the serial provider probes failed. Grass-route hardening, consumed-reset retry,
+protected-root scan and source-four use are out.
 
 Today's learning remains120→121 (+0.83% dataset size),86/151 registrations unchanged (56.95%).
-This session added engineering capability but no learning. Six consecutive no-learning sessions
+This session added no learning. Seven consecutive no-learning sessions
 trigger the anti-drift alarm. No whole-project percentage is available; final Red gates remain0/5.
 
 Do not return to resource-only Model121 rows or treat timing seeds as independent histories.
 Full Red remains the final exam after bounded component gates, declared authority and honest costs.
 
-[Session](work-sessions/2026-09-15-fishing-evolution-bridge.md) ·
-[Evidence](evidence/red-fishing-evolution-bridge-gate-2026-09-15.json) ·
+[Session](work-sessions/2026-09-15-fossil-evolution-bridge.md) ·
+[Evidence](evidence/red-fossil-evolution-bridge-gate-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Sol / High / Fast off**. Qualify the existing fossil executor at the exact terminal, then
-adapt and run one lesson only if its real acquire/evolve gate passes.
+Next: **Sol / High / Fast off**. Qualify the ready evolution's preservation boundary, execute it
+once only if safe, record no fit, and rebuild the menu from the retained terminal.

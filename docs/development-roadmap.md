@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-fishing-evolution-bridge**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-fossil-evolution-bridge**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json)
+[Current evidence](../docs/evidence/red-fossil-evolution-bridge-gate-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-fossil-evolution-bridge
+
+The exact action-free Model121 scan found ready evolution and zero executable fossil targets. No adapter, query, claim, action, frame, outcome or fit occurred; Model121 remains121/83 with86 local registrations.
+
+**Deviation:** The cheapest falsifier fired before implementation, so the planned conditional bridge was correctly skipped. This seventh consecutive no-learning session ends the serial provider-probe loop. Flash3.8 High recommended a safe forced-singleton evolution followed by a fresh menu rebuild; Claude returned no completed verdict.
+
+**Next:** Sol High: inspect the ready evolution's resource type and physical-preservation constraints action-free. If it is a safe level-triggered transition, freeze and execute it exactly once without a model query or fit, then rebuild the heterogeneous menu from the retained terminal.
 
 ### 2026-09-15-fishing-evolution-bridge
 

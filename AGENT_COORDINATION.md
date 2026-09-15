@@ -11,25 +11,21 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The full-Pokédex observer can now fall back from unavailable grass capture to one best reachable
-productive fishing executor while preserving ready evolution and identity-free policy input. The
-exact Model121 terminal has zero reachable fishing destinations, so its gate failed without query,
-input, reset or fit. Model121 remains121/83 with86/151 local registrations; source four, protected
-roots and all nine unused sources remain out of scope.
+The exact Model121 terminal has ready evolution but zero executable fossil targets. The conditional
+fossil bridge therefore stopped before implementation, query, input, reset or fit. Model121 remains
+121/83 with86/151 local registrations; source four, protected roots and all nine unused sources
+remain out of scope.
 
-Codex next owns an action-free exact-terminal qualification of the existing fossil acquisition
-provider. Adapt it beside evolution only if an observed fossil target is executable. A played lesson
-requires the same two-family gate. Do not patch grass/fishing routes or chain to another mechanism.
+Codex next owns an action-free resource/preservation inspection of the ready evolution. If safe,
+freeze and execute it exactly once as a forced singleton without a model query or fit, then rebuild
+the menu from the retained fresh terminal. Do not resume serial provider probes.
 
 ## External contribution
 
-This session confirmed both CLIs are installed and reachable: `agy` lists Gemini3.8 Flash High and
-Claude Code reports2.1.197. Neither bounded review returned a verdict before interruption; Flash
-first lacked sandbox command permission and both later waits exceeded the useful review window.
-No external finding or exact-source review credit is claimed.
+Flash3.8 High completed a bounded read-only strategy review and returned GO on the safe
+forced-singleton evolution followed by a fresh-menu rebuild, and NO-GO on another serial provider
+probe. Claude CLI connected but returned no completed verdict. Codex adopted the Flash finding;
+the reviewer did not edit the repository or receive private-source access.
 
-Any future external task should be a bounded fossil-adapter review with the exact checkout pinned.
-No standing reviewer gate, private-source access or concurrent editing.
-
-[Session](docs/work-sessions/2026-09-15-fishing-evolution-bridge.md) ·
+[Session](docs/work-sessions/2026-09-15-fossil-evolution-bridge.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

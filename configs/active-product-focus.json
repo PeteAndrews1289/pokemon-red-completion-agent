@@ -29,25 +29,25 @@
     },
     {
       "capability": "Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs.",
-      "cheapest_falsifier": "No already-supported non-grass acquisition mechanic can join the ready evolution binding at the exact terminal without identity-bearing policy input or new gameplay preparation.",
+      "cheapest_falsifier": "The ready evolution consumes a finite item or protected physical precursor, or cannot be frozen and executed once without a model query, fit or replay.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "None. The generic fishing fallback is published, but the exact terminal has zero reachable productive fishing destinations. Model121 remains121 examples/83 successes/86 local registrations.",
-        "blocker": "Evolution is ready, while both tested acquisition families are unavailable at this terminal: all four grass corridors failed route/resource qualification and the existing fishing discovery found zero reachable productive destinations.",
-        "decision": "Keep the generic fishing fallback for future reachable states, stop gameplay, and test the already-implemented fossil acquisition provider next. Do not patch grass/fishing routes or chain through untested mechanics.",
+        "authority_delta": "None. The exact terminal has zero executable fossil targets, so no fossil adapter or played choice was justified. Model121 remains121 examples/83 successes/86 local registrations.",
+        "blocker": "Evolution is ready, but grass routing, reachable fishing and now observed fossil inventory all fail to provide a second executable acquisition family at this exact terminal.",
+        "decision": "End the serial provider-probe loop. Next inspect the ready evolution's resource and preservation constraints action-free, then freeze and execute it once as a deterministic singleton only if safe. Claim Pokedex progress, not learning, and rebuild the menu from the fresh retained terminal.",
         "evidence": {
           "kind": "falsification",
-          "path": "docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json",
-          "sha256": "ca636a4c6f9b2b8edbb2e95a7f3d70b3595f3bb6a26343cbcd081dacad50ceab"
+          "path": "docs/evidence/red-fossil-evolution-bridge-gate-2026-09-15.json",
+          "sha256": "f4352c2b5751069c45e13f963ee5fe59c03dae26afc818196674ccf9d3189338"
         },
-        "learning_output": "None. This sixth consecutive no-learning session is a bounded adapter plus exact falsification. Model121 remains121 examples/83 successes/86 local registrations.",
-        "next_falsifier": "The exact terminal has no observed executable fossil acquisition that can join evolution without gameplay preparation or identity-bearing policy input.",
-        "next_session_goal": "Qualify the existing fossil acquisition provider at the exact terminal and connect it beside evolution only if its observed target is executable; run one lesson only if the unchanged two-family gate passes.",
-        "product_alignment": "A reusable fishing executor can now occupy the full-Pokedex acquisition slot in reachable states, while exact zero-input evidence prevents spending a reset where no fishing route exists. Fossil revival is the next already-implemented heterogeneous mechanic.",
-        "session_id": "2026-09-15-fishing-evolution-bridge",
+        "learning_output": "None. This seventh consecutive no-learning session is an exact action-free mechanic falsification. Model121 remains121 examples/83 successes/86 local registrations.",
+        "next_falsifier": "The ready evolution is not a resource-safe level transition, would violate physical preservation, or cannot be frozen once without replaying consumed authority.",
+        "next_session_goal": "Qualify and freeze the already-ready evolution as a deterministic forced singleton; execute once only if it is resource-safe, record no learned label, then rebuild the heterogeneous menu from the retained fresh terminal.",
+        "product_alignment": "The existing fossil provider was tested before integration and correctly rejected because the exact save has no executable fossil target. The next step creates real local-Pokedex progress instead of spending an eighth session probing adapters without outcomes.",
+        "session_id": "2026-09-15-fossil-evolution-bridge",
         "status": "closed",
-        "stop_condition": "The exact terminal exposed zero reachable productive fishing destinations, so the two-family gate failed. Stop gameplay; do not patch a map route, spend a reset or substitute another mechanic in this session.",
+        "stop_condition": "The exact terminal exposed zero executable fossil targets, so the two-family gate failed. Stop gameplay; do not add an unused fossil adapter or substitute another mechanic in this session.",
         "transfer_result": "None. No independent root, evaluation, learned outcome or cross-title execution was created."
       },
       "learned_authority": {
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Qualify the already-implemented fossil acquisition provider beside ready evolution at the exact terminal; play only if the unchanged two-family gate passes. No route patch, reset retry, protected-root scan or source four.",
+      "next_decision": "Inspect the ready evolution's resource type and preservation constraints action-free. If safe, freeze and execute it once as a deterministic singleton with no fit, then rebuild the menu from the fresh terminal. No serial provider probe, route patch, reset retry, protected-root scan or source four.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

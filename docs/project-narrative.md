@@ -8,31 +8,28 @@ The first finish line is a fresh start-to-finish model-directed Red run with Cha
 Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
 compatible Red hack, Crystal and at least Emerald.
 
-## Latest chapter: fishing is connected, but absent at the exact endpoint
+## Latest chapter: the fossil fallback is absent too
 
-The full-Pokédex observer can now keep executable grass capture or fall back to one best reachable,
-productive fishing destination beside evolution. Cartridge tables and routes remain private; the
-model sees only acquire versus evolve. Focused399 integration tests, lint and type checks pass.
-
-The exact Model121 terminal still cannot play that choice. Evolution is ready, but there are zero
-reachable productive fishing destinations and the four grass corridors remain inaccessible or
-under-resourced. The gate stopped before reset, query or controller input. Nine unused sources remain
-untouched.
+The exact Model121 terminal still cannot form an acquire/evolve choice. Evolution is ready, but
+there are zero executable fossil targets, just as the prior scan found zero reachable productive
+fishing destinations and the grass corridors remain inaccessible or under-resourced. The fossil
+gate stopped before implementation, reset, query or controller input. Nine unused sources remain
+untouched, and36 focused fossil/proposal tests pass.
 
 This is engineering progress, not learning: Model121 remains121 examples/83 successes and86/151
-registrations. A sixth consecutive no-learning session keeps the anti-drift alarm active. Next is a
-single action-free check of the already-implemented fossil acquisition provider beside evolution;
-gameplay starts only if both families pass.
+registrations. A seventh consecutive no-learning session keeps the anti-drift alarm active. The
+next step ends the serial provider-probe loop: inspect the ready evolution, then execute it once as
+a deterministic non-learning singleton only if its resource and preservation constraints are safe.
 
-Both external CLIs are reachable—`agy` lists Gemini3.8 Flash High and Claude Code is installed—but
-neither returned a verdict within this session's bounded review window. No external review credit is
-claimed.
+Flash3.8 High reviewed that reorientation and returned GO; Claude CLI connected but did not return a
+completed verdict. Codex adopted Flash's recommendation to rebuild the menu from a fresh retained
+post-evolution terminal.
 
 Today's learning remains one earlier resupply example:120→121 (+0.83% dataset size). The development
 save remains86/151 (56.95%); neither number measures whole-project completion.
 
-[Latest evidence](evidence/red-fishing-evolution-bridge-gate-2026-09-15.json) ·
-[Detailed session](work-sessions/2026-09-15-fishing-evolution-bridge.md) ·
+[Latest evidence](evidence/red-fossil-evolution-bridge-gate-2026-09-15.json) ·
+[Detailed session](work-sessions/2026-09-15-fossil-evolution-bridge.md) ·
 [Model-first roadmap](model-first-roadmap.md)
 
 Checkpoint story completion is a component result, not the required fresh run.

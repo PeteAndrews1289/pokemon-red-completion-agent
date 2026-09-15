@@ -1,0 +1,47 @@
+{
+  "collection": {
+    "local_registrations": 86,
+    "local_target": 151,
+    "model_examples": 121,
+    "successful_examples": 83
+  },
+  "exact_gate": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "evolution_native_readiness": "ready",
+    "executable_fossil_target_count": 0,
+    "execution_authorized": false,
+    "fossil_acquisition_bound": false,
+    "model_queries": 0,
+    "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+    "two_family_gate": false
+  },
+  "learning": {
+    "authority_promotions": 0,
+    "fits": 0,
+    "outcomes": 0,
+    "training_examples_added": 0,
+    "transfer_result": null
+  },
+  "private_evidence": {
+    "manifest_sha256": "f46b09907e271522136f2930840b052314f5d385f280c82562dbf3474c81696b",
+    "record_id": "model121-fossil-evolution-bridge-gate-20260915-v1",
+    "record_sha256": "a588d3d87a4a66d84d88d3d6b825b942ff13233b90581d69981a25e7bad0f766"
+  },
+  "publication": {
+    "source_commit": "a5d1ca367389c09eb81e067f8154938435c82a80"
+  },
+  "review": {
+    "claude": "CLI returned no completed verdict",
+    "flash": "GO on executing the ready evolution as an explicitly non-learning forced singleton, then rebuilding from the fresh terminal; NO-GO on another serial provider probe",
+    "review_findings_adopted": 1
+  },
+  "schema": "pokemon.red.fossil-evolution-bridge-gate-evidence.v1",
+  "session_id": "2026-09-15-fossil-evolution-bridge",
+  "status": "exact_fossil_unavailable",
+  "validation": {
+    "focused_tests_passed": 36,
+    "fossil_contract_passed": true,
+    "full_pokedex_proposal_contract_passed": true
+  }
+}

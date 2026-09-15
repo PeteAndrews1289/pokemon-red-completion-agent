@@ -1,20 +1,19 @@
-# Video narrative: the fishing bridge works, but this save cannot reach it
+# Video narrative: stop probing, advance the actual save
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
 build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the reusable result: when grass capture is unavailable, the full-Pokédex player can now
-substitute one cartridge-derived reachable fishing executor beside evolution. The model still sees
-only acquire versus evolve—not maps, species or routes.
+Open with the exact falsifier. Model121's terminal has ready evolution but zero executable fossil
+targets, following the prior zero-result fishing and grass checks. The gate rejected with zero reset
+claims, queries, actions or frames, so no lesson was played and no unused adapter was built.
 
-Then show the exact falsifier. Model121's terminal has ready evolution but zero reachable productive
-fishing destinations. The two-family gate rejected with zero reset claims, queries, actions or
-frames, so no lesson was played. This is the sixth straight session without a measured learning
-result; the next session gets one bounded fossil-provider check, not another route patch.
+This is the seventh straight session without a measured learning result. Flash3.8 High recommended
+ending the serial probe loop: safely execute the ready evolution once without pretending it is a
+learned choice, then rebuild the menu from the fresh retained terminal.
 
-[Session and evidence](work-sessions/2026-09-15-fishing-evolution-bridge.md)
+[Session and evidence](work-sessions/2026-09-15-fossil-evolution-bridge.md)
 
 ## The real finish line
 
