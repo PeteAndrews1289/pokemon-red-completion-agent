@@ -3,41 +3,36 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 15, 2026.
 
-## Generic stall contingency passes ROM-free; cartridge evidence is next
+## Campaign C consumed; return to collection progress
 
-The opt-in maintenance policy allows one voluntary switch from a living wild-battle MAIN menu
-after four PP-spending turns without enemy HP decrease, or no usable move. It uses existing reserve
-screening and switching, one unchanged runtime budget and the same metered executor. The switch
-claim is durable before input; stale state, partial switches, second stalls and unqualified
-transitions fail closed. Old frozen plans retain their original fixed policy.
+The exact local three-case campaign stopped at its first failure with complete accounting.
+Route 11 case one settled in 72 actions/6,150 frames. Case two stopped after 45 actions/3,731
+frames when Gen I Wrap dealt automatic continuation damage but exposed no new move menu; the third
+Diglett case never opened. Total cost was 117 actions/9,881 frames. No replay, resume or replacement
+was created.
 
-537 focused tests, lint and whole-source type checking (505 files) passed, including 46 new tests
-for real turn/switch controllers and the journal against simulated observations without a ROM.
-Gemini 3.8 Flash High completed a contract review through Antigravity; not a source audit.
+The runtime now recognizes automatic player-owned damage only when enemy HP falls and the active
+battler's PP vector stays unchanged. This is generic, observable and ROM-free qualified: 312 focused
+tests, three slow compatibility checks, lint, whole-source type checking and registry freshness
+passed. It has not been rerun on cartridge, so do not claim the repair itself settled a live case.
 
-No gameplay, query, label, example, fit or registration occurred. Model121 remains 121 examples/
-83 successes; 86/151 local registrations, 66 living species, 70 specimens. Collection 25/26; finalRed 0/5.
+No query, label, example, fit or registration occurred. Model121 remains 121 examples/83 successes;
+Red remains 86/151 local registrations, 66 living species and 70 specimens. Collection is 25/26;
+fresh Red is 0/5.
 
 ## Next bounded work
 
-Freeze a distinct campaign C with exact source, ROM, source-state and policy identities.
-Use `fixed_strongest_usable_move_with_stall_switch_v 1`; preserve shared campaign budgeting,
-2,000-action/200,000-frame case caps, 12,000-action/2,000,000-frame campaign caps,
-at most 12 cases and 512 encounter steps. Declare short varied controls and cross-venue coverage.
-Credit a contingency switch only if actually observed and durably settled; unavailable coverage is
-not a pass and never justifies replay or replacement. Stop at the first failure or lost evidence.
+End the standalone disposable cartridge-gate loop. Do not create Campaign D simply to discover the
+next mechanic in isolation. Return to the authenticated Model121 terminal and build one genuinely
+executable heterogeneous collection choice from legitimate observed resources. Execute at most one
+retained choice under the existing bounds. A retained registration/example is the desired output;
+if real play exposes another general battle boundary, preserve that failure and repair the shared
+runtime without route/species exceptions.
 
-Campaign B stays consumed: its first Route 11 case failed after 893 actions/80,081 frames with no
-usable PP; three later cases never opened. The earlier Diglett campaign and evolution/recovery
-identities also remain consumed. No protected-root scan, source four, model fit or full-game run.
+No full-game replay, ROM hack, Crystal work, protected-root scan, arbitrary source replacement or
+GitHub push. Pete alone decides publication.
 
-This is not fainted forced-switch handling. That boundary, move learning, same-battler move
-replacement and cross-venue cartridge settlement remain gaps. No survival or learned-authority
-claim follows from synthetic tests. Resume the heterogeneous acquisition lesson only after the
-required cartridge gate passes; resource-only menus do not satisfy the mixed-acquisition gate.
+Next: **Sol / High / Fast off**, roughly 1–2 hours. This is integration and bounded execution;
+reserve Astra for a genuinely new architecture problem.
 
-Next: **Sol / High / Fast off**, about 1–2 hours for bounded campaign qualification. Astra is
-reserved for a newly evidenced design problem, not routine execution.
-
-[Session and roadmap](docs/work-sessions/2026-09-15-battle-stall-contingency.md) ·
-[Evidence](docs/evidence/red-battle-stall-contingency-2026-09-15.json)
+[Evidence](docs/evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json)

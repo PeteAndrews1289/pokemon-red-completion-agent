@@ -13,14 +13,14 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The one-session ROM-free battle contingency implementation is complete. One living-battler switch
-after observed stall/no usable PP shares the original runtime and durable action/frame meter.
-537 focused tests, lint and whole-source type checking passed. Cartridge behavior remains unverified.
-Next is a newly frozen campaign C, not a replay of consumed campaign B.
+Campaign C is consumed. Its first case settled; its second retained a complete-cost failure on
+player-owned Wrap continuation, and its third case never opened. The generic automatic-continuation
+repair passes ROM-free regression and compatibility checks but has no post-repair cartridge result.
 
 No learning or collection delta: Model121 remains 121 examples/83 successes and 86/151 registrations.
-The heterogeneous acquisition lesson stays paused until the required cartridge gate passes.
-Fainted forced switching is distinct from this voluntary contingency and remains unqualified.
+Do not create another disposable cartridge campaign by default. Next return to one bounded,
+authenticated heterogeneous acquisition choice so real collection progress is the primary output.
+Fainted forced switching remains a distinct unqualified boundary.
 
 ## Actual reviewer contribution
 
@@ -35,5 +35,6 @@ Refreshed September 15 app quota: Gemini 57% weekly/98% five-hour remaining, res
 3 days 6 hours/2 hours 43 minutes. Antigravity Claude/GPT:86% weekly/100% five-hour.
 These are Antigravity pools, not the separate Claude subscription.
 
-Next setting: Sol High, Fast off, approximately 1–2 hours.
+Next setting: Sol High, Fast off, approximately 1–2 hours. No GitHub publication without Pete's
+explicit instruction.
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

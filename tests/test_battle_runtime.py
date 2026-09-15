@@ -3187,6 +3187,35 @@ def test_enemy_trapping_turn_can_suppress_move_selection_without_spending_pp() -
     assert final.first_party_pp == (35, 30, 30, 11)
 
 
+def test_automatic_damage_continuation_can_suppress_move_selection_without_pp() -> None:
+    runtime = FakeRuntime()
+    confirmations = 0
+
+    def continue_then_finish(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.raw = replace(runtime.raw, enemy_hp=(runtime.raw.enemy_hp or 0) - 5)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        else:
+            runtime.raw = replace(runtime.raw, battle_state=0)
+            runtime.controls = READY
+
+    runtime.on_action = continue_then_finish
+    final = run_adaptive_trainer_battle(
+        runtime,
+        runtime,
+        lambda _raw: 1,
+        expected_map=MapId.CERULEAN_CITY,
+    )
+
+    assert final.battle_state == 0
+    assert final.enemy_hp == (_raw().enemy_hp or 0) - 5
+    assert final.first_party_pp == (35, 30, 30, 11)
+
+
 def test_faster_opponent_disable_suppresses_selected_turn_without_pp() -> None:
     runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
     initial = runtime.raw

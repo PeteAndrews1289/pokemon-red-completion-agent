@@ -1010,3 +1010,19 @@ or replacement. Only a passing required gate opens the heterogeneous acquisition
 
 [Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
 [Session](work-sessions/2026-09-15-battle-stall-contingency.md).
+
+## September 15 — end the disposable cartridge gate after Campaign C
+
+Campaign C settled one Route 11 battle, then stopped with exact accounting when player-owned Wrap
+continued automatically without exposing a move menu; its third case never opened. The generic
+observable repair passes ROM-free regression and compatibility checks, but has no post-repair
+cartridge result and creates no learner or collection credit.
+
+Repeated isolated campaigns are now diminishing the only outcome that matters: a player that
+finishes Red and registers all 151 local entries. Retire the separate cartridge gate rather than
+creating Campaign D by default. The next bounded work returns to one authenticated heterogeneous
+collection choice; actual play may supply battle evidence while retained acquisition progress is
+the primary output. This changes the immediate development tactic, not the Red-first stage order,
+full fresh-run/full-Pokedex exit criterion, ROM-hack prohibition or later Crystal/Emerald sequence.
+
+[Evidence](evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json).

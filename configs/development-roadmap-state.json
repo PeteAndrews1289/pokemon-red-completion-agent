@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-battle-stall-contingency",
+  "as_of_session": "2026-09-15-local-battle-cartridge-campaign-c",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-battle-stall-contingency-2026-09-15.json"
+      "evidence": "docs/evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1460,6 +1460,12 @@
       "result": "One voluntary live-battler switch after observed stall or no usable move passes 537 ROM-free focused tests, lint and whole-source type checking. It uses the original runtime budget and metered executor; old frozen policies remain unchanged.",
       "deviation": "Clarify the prior roadmap: voluntary contingency switching is not fainted forced-switch handling. No cartridge, learning, registration or authority delta; stage criteria and denominators stay unchanged.",
       "next": "Sol High, Fast off: freeze a distinct campaign C with the opt-in policy, varied short controls and cross-venue coverage. Credit switches only if actually observed and durably settled. No replay or in-campaign replacement."
+    },
+    {
+      "session": "2026-09-15-local-battle-cartridge-campaign-c",
+      "result": "Campaign C settled its first Route11 battle, then stopped after117 total actions/9881 frames when player-owned Wrap continued automatically without a new move menu; the third case never opened. The generic repair passes312 focused tests and three slow compatibility checks. No learning or collection delta.",
+      "deviation": "The exact campaign and failure remain consumed, and the repair has no post-repair cartridge claim. End the standalone qualification loop because repeated isolated campaigns delay measured collection progress; Red-first stage exits and order are unchanged.",
+      "next": "Sol High, Fast off: build one legitimate heterogeneous acquisition choice from the authenticated Model121 terminal and execute at most one retained selection. Do not create Campaign D by default."
     }
   ],
   "closed_milestones": [

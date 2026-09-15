@@ -32,11 +32,12 @@ unchanged failing CI.
 Fix relevant failures locally, preserve safety assertions, and distinguish a targeted
 pass from a full-suite pass. Development gameplay does not wait on hosted CI.
 
-At session closeout and after substantial verified progress, refresh the
-[development infographic](docs/development-roadmap.md), its status/review log, handoffs and
-project/video narrative under the North Star's closeout rules. Regenerate with
-`python scripts/development_roadmap.py --write`; `scripts/check_docs.py` checks freshness.
-Keep stage IDs and exit criteria stable; log material deviations in `docs/roadmap-decisions.md`.
+At ordinary session closeout, replace the concise current handoff and retain one evidence record.
+Refresh the active state when the blocker or next decision changes. Update the infographic,
+roadmap status, narrative and review log only for a material learner milestone, stage/strategy
+change or Pete's explicit request; do not spend every session synchronizing presentation surfaces.
+Keep stage IDs and exit criteria stable and log material deviations in
+`docs/roadmap-decisions.md`. `scripts/check_docs.py` still checks any surfaces that are changed.
 Do not create a new CI workflow or count documentation work as model progress.
 
 This is the completion-first successor to the concluded `pokemon-red-ai` research project.

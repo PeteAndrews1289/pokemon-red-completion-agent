@@ -753,10 +753,10 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
     # Reviewed September15: whole-module identity now also includes the opt-in,
-    # default-disabled MAIN-menu intervention. The historical Route11 call does
-    # not supply it and preserves its old behavior.
+    # default-disabled MAIN-menu intervention and observable automatic-damage
+    # continuation. Historical Route11 behavior remains admitted explicitly.
     assert contract.battle_timing_sha256 == (
-        "5a091eddc3eb60e75d6a438179b44fcaa10adb942b2b00fcaefcefbe45e0794c"
+        "103b3461f6a35ab1e038f19c2056ff8166b9644f3a9c1248a87e63de6a556fb3"
     )
     assert contract.accounting_sha256 == (
         "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"

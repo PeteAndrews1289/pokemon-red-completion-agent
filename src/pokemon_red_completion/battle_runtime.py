@@ -1320,6 +1320,17 @@ def _execute_policy_turn(
             label=label,
         ):
             return False
+        if (
+            raw.enemy_hp is not None
+            and initial_raw.enemy_hp is not None
+            and raw.enemy_hp < initial_raw.enemy_hp
+            and raw.battler_pp == initial_raw.battler_pp
+        ):
+            # An automatic continuation (for example the player's Gen I Wrap)
+            # can deal damage while suppressing move selection.  The HP change
+            # proves that the battle advanced and the unchanged PP vector proves
+            # that this controller did not substitute or spend another move.
+            return False
         if (raw.battler_status or 0) != 0 and raw.battler_pp == initial_raw.battler_pp:
             # A status-suppressed turn (notably full paralysis) may consume
             # FIGHT before the move menu becomes observable.  An unchanged

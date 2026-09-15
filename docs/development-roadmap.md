@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-battle-stall-contingency**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-local-battle-cartridge-campaign-c**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-battle-stall-contingency-2026-09-15.json)
+[Current evidence](../docs/evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-local-battle-cartridge-campaign-c
+
+Campaign C settled its first Route11 battle, then stopped after117 total actions/9881 frames when player-owned Wrap continued automatically without a new move menu; the third case never opened. The generic repair passes312 focused tests and three slow compatibility checks. No learning or collection delta.
+
+**Deviation:** The exact campaign and failure remain consumed, and the repair has no post-repair cartridge claim. End the standalone qualification loop because repeated isolated campaigns delay measured collection progress; Red-first stage exits and order are unchanged.
+
+**Next:** Sol High, Fast off: build one legitimate heterogeneous acquisition choice from the authenticated Model121 terminal and execute at most one retained selection. Do not create Campaign D by default.
 
 ### 2026-09-15-battle-stall-contingency
 
