@@ -5,31 +5,34 @@ unfamiliar situations and carry learned skills forward. AI coding assistants—i
 Claude and Antigravity—help build and review the system; they do not secretly choose live actions.
 
 The first finish line is a fresh start-to-finish model-directed Red run with concurrent Champion
-and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. Version, trade,
-supporting-save and event dependencies remain requirements. After full Red comes a compatible
-unfamiliar hack, then Crystal and at least Emerald.
+and Hall-of-Fame evidence and all151 local registrations, before any ROM hack. Version, trade,
+supporting-save and event dependencies remain requirements. Then comes an unfamiliar compatible
+Red hack, Crystal and at least Emerald.
 
-## Latest chapter: make the third guardrail catalog-wide
+## Latest chapter: the real menu still says no
 
-The second direct-origin source exposed a catalog edge case before its action-free menu appeared:
-Tentacool's valid water encounter was sent into a grass-only corridor sorter. That source remains
-consumed, but the repair session spent no additional source and opened no ROM or private payload.
+After three preparation repairs and17 passing source-free regressions, the full test run passed.
+One third source was selected and claimed prospectively. This time preparation and registration
+setup succeeded, but the real menu could not offer two executable acquisition families.
 
-The direct profile now asks the existing grass resolver to qualify each candidate before sorting.
-It caches the valid map for deterministic priority and protects the corridor loop if an invalid
-source somehow bypasses the first filter. Water stays water; the repair does not fabricate surfing
-as a walking corridor.
+The attempt stopped without querying the model or pressing a button. The third source is closed,
+like the prior two; nine unused eligible training sources remain. The specific family rejection
+reason was not retained. That gap matters: another blind attempt would spend evidence without
+explaining the obstacle.
 
-Five new ROM-free tests cover the entire public catalog, Route21 water/grass coexistence, a real
-unmocked catalog-to-corridor derivation, clean water-only exhaustion and the defensive bypass. The
-named rehearsal now passes17 tests, while model, gameplay and collection counters remain unchanged.
+The next session must qualify source-free rejection diagnostics. A measured collection lesson,
+practical training batch and separate-lineage reliability/dependency review follow only when their
+prerequisites pass. The plan does not promise Red completion in four sessions.
 
-Flash3.8 High and Claude Opus4.6 Thinking both reviewed the final change and returned PASS without
-findings. The remaining question is no longer the code fix; it is whether that stronger guardrail
-justifies spending a third scarce source after two failures.
+Today's measured learning is120→121 examples:one resupply lesson, or0.83% growth in dataset size.
+The development save remains86/151 registrations (56.95%), with no new entry today. The original
+collection checklist remains21/22; adding checklist items is not learned progress.
 
-[Latest evidence](evidence/red-direct-profile-encounter-media-repair-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
+A Flash advisory was dispatched without a retained result, so no reviewer verdict is used for this
+session. Claude's earlier repair review remains historical, not evidence that this menu passed.
+
+[Latest evidence](evidence/red-third-source-roadmap-audit-2026-09-14.json) ·
+[Detailed roadmap](work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -43,16 +46,8 @@ justifies spending a third scarce source after two failures.
 - [Model114 fishing success](work-sessions/2026-09-13-model114-frozen-fishing-learning.md)
   added a registration through a real model-selected destination.
 
-## What matters next
-
-The next episode begins with exact-head CI and a source-risk re-audit. If the strengthened gate now
-justifies one more attempt, select one distinct unused source prospectively, claim it exactly once
-and stop action-free unless capture and evolution are both executable. Do not reopen either
-consumed source, select a fallback or return to the Model121 resource loop.
-
-Only after the bounded story, navigation, battle, resource and collection components pass unseen
-gates should the project begin the fresh-start Red final exam. A growing same-lineage training set
-does not establish that readiness.
+Only after bounded story, navigation, battle, resource and collection gates should the project
+begin the fresh-start Red final exam. More same-lineage training does not establish that readiness.
 
 [Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
 [Roadmap](development-roadmap.md) · [Authorship and public overview](../README.md)

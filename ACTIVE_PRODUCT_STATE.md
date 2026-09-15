@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Require exact-head CI for the 17-test complete-catalog repair, then re-audit whether its coverage justifies at most one separately prospective third-source action-free gate.
+- Next decision: Qualify source-free family-eligibility diagnostics before any new source-spending decision; preserve the failed third source and the unchanged learning counters.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The 17-test nonconsuming_direct_rehearsal regresses, or a separately authorized third source cannot reach a real action-free capture-plus-evolution menu under one exact claim. |
+| Cheapest falsifier | A source-free fixture cannot distinguish an acquisition-family rejection or retain its exact reason without changing model choices, game state or the diversity gate. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-direct-profile-encounter-media-repair** · status **closed** · evidence [qualification](docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)
+**2026-09-14-third-source-roadmap-audit** · status **closed** · evidence [qualification](docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The repair converts the third generic real-source failure into a reusable complete-catalog guard while preserving the grass/water mechanic boundary and spending no additional source. |
-| Learning output | None. The ROM-free repair produced zero source selections, claims, payload or ROM opens, registration sessions, queries, actions, frames, observations, outcomes, examples, fits or registration gains. |
-| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; the repair opened no source or ROM and created no query, action, frame, outcome or fit. |
-| Transfer result | No independent evaluation or transfer. The source-independent repair qualifies only a Red integration boundary. |
-| Blocker | The generic encounter-media defect is repaired, but two real sources were consumed before preflight and no synthetic gate can prove the next cartridge state exposes both families. Spending a third source needs a separate exact-head re-audit. |
-| Decision | Qualify the grass-only candidate filter, defensive corridor boundary and five complete-catalog regressions without source access. Publish under exact-head CI before considering one later third-source gate. |
-| Next session | After exact-head CI, re-audit the two consumed failures, remaining source inventory and strengthened gate. Authorize at most one distinct third-source action-free attempt only if the risk is now justified. |
-| Next falsifier | The 17-test rehearsal regresses, the exact published source is not green, or a separately authorized one-source action-free gate still cannot expose capture and evolution together. |
-| Stop condition | No source selection or claim in the repair session. Never reopen either consumed source. A later third-source attempt requires exact-head green status, prospective selection, one exact claim and no fallback. No full Red replay, ROM hack or Crystal execution. |
+| Product alignment | The one-source integration test reached the real eligibility boundary and stopped honestly. Refocus the next session on diagnosable family eligibility rather than repeated source consumption or checklist inflation. |
+| Learning output | None this session. Today Model120 became121, adding one measured resupply lesson (+0.83% dataset size); local registration remained86/151 (56.95%, zero percentage-point gain). No whole-project percentage is claimed. |
+| Authority delta | None. Model121 remains at121 examples/83 successes and86 local registrations. The third source created one registration session but no query, action, frame, outcome or fit. |
+| Transfer result | None. This was a related training-source integration failure, not independent evaluation or cross-title transfer. |
+| Blocker | The third source passed preparation but failed the real two-acquisition-family gate. Its retained error does not identify the missing family or rejection reason. All three sources are closed; nine unused eligible sources remain. |
+| Decision | After exact-source CI passed11713 tests, prospectively select and claim one third source. Retain the failed action-free gate without replacement, then stop source spending and qualify source-free rejection diagnostics. |
+| Next session | Qualify structured per-family rejection diagnostics and source-free eligibility tests. Do not reopen consumed sources or select a fourth source. Then separately justify a practical supply plan for one real collection lesson. |
+| Next falsifier | A source-free rejection fixture loses its cause, permits one-family gameplay, changes its origin, or samples a model while collecting diagnostics. |
+| Stop condition | The acquisition-family gate failed; the third source and its success-only follow-up are closed. No v1/v2/v3 retry, fallback or fourth source under this roadmap. Next session is source-free. No full Red replay, ROM hack or Crystal execution. |
 
 ### Stop conditions
 

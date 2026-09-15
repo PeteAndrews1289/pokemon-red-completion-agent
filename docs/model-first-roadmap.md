@@ -13,57 +13,52 @@ Build a player that actually plays Pokémon, not a fixed walkthrough. The
 4. Only after that gate, test a compatible unfamiliar Red ROM modification.
 5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
-The Red gate cannot be replaced by checkpoint stitching, random timing or the old124-entry solo
-scope. Version, trade, supporting-save and event dependencies require legitimate resolution.
-Shared credit and physical possession never fabricate local owned flags.
+Version, trade, supporting-save and event dependencies require legitimate resolution.
+Checkpoint stitching, random timing or shared ledger credit cannot replace this local fresh-run gate.
 
-## What is demonstrated
+## Where we stand
 
-Model121 has121 measured training examples and 83 successes. Its retained save has86 local
+Model121 has121 measured training examples and83 successes. Its development save has86 local
 registrations,66 living species,70 specimens, four capture items and cash706. These are related
-development results, not independent fresh-game reliability. Its resource-only continuation is
-closed to redundant new rows.
+development results, not independent fresh-game reliability. Its redundant resource loop is closed.
 
-The full151 inventory classifies the65 missing local entries:38 solo catalog plans,11 version
-trades,4 link evolutions,11 supporting-save branch trades and1 legitimate event input.
+The full151 inventory classifies the65 missing entries:38 solo catalog plans,11 version trades,
+four link evolutions,11 supporting-save branch trades and one legitimate event input. A plan is not
+an executable or completed acquisition.
 
-The shared-departure redesign now connects real travel-aware capture and native evolution to
-the existing player. An action-free check on the same historical state exposed both families,
-with unchanged bytes and zero actions/frames. Center departure also passed ROM-free tests.
-The prior location-incompatibility diagnosis tested only the local enumerator, not the router.
+The shared-departure redesign connects travel-aware capture and native evolution to the player.
+Local151 registration/rewards preserve shared history and physical inventory. Three generic
+preparation defects were repaired; the named source-free rehearsal passes17 tests.
 
-New opt-in local151 checkpoints and rewards preserve shared history and physical inventory
-without changing old shared124 documents or outcomes. The proposal is now connected to the
-durable player with one-shot and write-ahead selection guarantees. This is engineering
-qualification: no new model choice, outcome, fit, independence result or registration was earned.
+Exact repair CI passed11,713 tests before a third prospective source was claimed. Preparation and
+registration setup succeeded, but the real menu failed the two-acquisition-family gate. It created
+no model query, action, frame, outcome or fit. All three sources are closed and nine eligible train
+sources remain unused. The rejected family and reason were not retained; do not guess or reopen.
 
-The first exact direct-origin source was claimed once but did not reach that menu. Preparation
-failed first on an omitted-list parser value, then a same-claim recovery opened only that source
-and failed while applying a v4 economy behavior to a non-economy base plan. Both failures were
-retained; actions, frames, queries, registration sessions, outcomes, examples and fits stayed zero.
-The source is consumed without retry or replacement.
+## Next few sessions
 
-The generic defect exposed by the second source is now repaired without source or ROM access.
-Direct profile derivation filters non-grass encounter media through the existing resolver before
-sorting and defends the corridor loop without loosening water into grass. Five regressions cover the
-complete public catalog, Route21 coexistence, unmocked catalog-to-corridor derivation, clean
-exhaustion and invalid-candidate defense. The named non-consuming rehearsal now passes17 tests.
+| Session | Evidence needed | Setting |
+| --- | --- | --- |
+| Source-free diagnosis | Structured family rejection reasons; discriminating eligibility tests; no source access | Sol / High |
+| One collection lesson | Separately justified supply plan, one retained choice/outcome, honest fit and restart | Sol / High |
+| Useful training batch | Varied bounded cases, declared resets, all failures/interventions and resource costs | Sol / High |
+| Reliability/dependency review | Separate-lineage comparisons and concrete version/trade/event paths | Astra / High |
 
-## Immediate next session
+The first session is about60–90 minutes; the lesson about60–120 minutes. Batch and reliability work
+may each span1–2 sessions. This is a conditional planning horizon, not a four-session Red deadline.
+No fourth source is authorized by the roadmap alone. If diagnostic qualification fails, stop there.
 
-Publish and require exact-head CI. In the next session, re-audit both consumed failures, remaining
-unused-source inventory and the strength of the 17-test gate. Only if the irreversible cost is now
-justified may one distinct source be selected prospectively and exactly claimed for an action-free
-capture-plus-evolution preflight. Do not reopen either consumed source, select a fallback, return to
-the Model121 resource loop or execute gameplay with fewer than two families.
+Today:120→121 examples (+0.83% dataset size),86/151 local registrations unchanged (56.95%).
+The original21/22 collection checklist is unchanged; expanded25/26 changes the denominator.
+All five final Red acceptance conditions remain unmet. No whole-project percentage is available.
 
-The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
-Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
+The anti-drift alarm remains active. Do not spend another source on an undiagnosable check, return
+to Model121 resource-only rows or begin a full replay. Full Red remains a final exam after bounded
+component gates, declared authority, budgets and complete diagnostics.
 
-[Session](work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
-[Evidence](evidence/red-direct-profile-encounter-media-repair-2026-09-14.json) ·
+[Detailed roadmap and audit](work-sessions/2026-09-14-third-source-roadmap-audit.md) ·
+[Evidence](evidence/red-third-source-roadmap-audit-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-6 Astra / High / Fast off**, about 60–120 minutes for the source
-risk re-audit and at most one action-free exact-claim gate if justified. The decision now concerns
-irreversible experimental authority rather than routine implementation.
+Next-session recommendation: **Sol / High / Fast off**, for focused source-free diagnostics.
+Reserve Astra for a consequential change to admission or model authority, not routine waiting.

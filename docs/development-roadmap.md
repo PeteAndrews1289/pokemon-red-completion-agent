@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-profile-encounter-media-repair**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-third-source-roadmap-audit**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)
+[Current evidence](../docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-third-source-roadmap-audit
+
+Third source prepared and registered, then failed the two-acquisition-family gate. No model query, action, frame, outcome or fit. Nine unused sources remain; exact repair CI and17 source-free tests passed.
+
+**Deviation:** The expected menu unblock did not occur. The source is permanently closed without replacement, and missing per-family diagnostics limit the explanation. Today adds one measured lesson (120 to121, +0.83% dataset size), no local registrations (86/151), and no progress on the fixed21/22 checklist. Expanded25/26 is not a whole-project percentage.
+
+**Next:** Source-free rejection diagnostics and eligibility tests, then a separately justified measured lesson, practical training batch and separate-lineage reliability/dependency review. No fourth-source authority, fresh run, ROM hack or Crystal execution follows from this roadmap.
 
 ### 2026-09-14-direct-profile-encounter-media-repair
 

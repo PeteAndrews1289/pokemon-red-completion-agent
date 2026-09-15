@@ -3,51 +3,51 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Encounter-media repair qualified without a source
+## Third source closed at the real menu gate
 
-The generic defect that consumed the second direct-origin source is repaired ROM-free. Direct
-profile derivation now filters each missing `WILD` catalog method through the existing grass-only
-resolver before sorting, caches its map for deterministic priority and resolves candidates inside
-the narrow corridor exception boundary.
+Exact source `ffdc93a753658f135c136a1504f59e62cad81932` passed CI34915127725/1
+(11,713 passed, four skipped, one expected failure) before source selection. The17-test
+non-consuming rehearsal and a real-observer/synthetic-IO launcher smoke passed.
 
-Five regressions cover the complete public catalog, Route21 water/grass coexistence, real unmocked
-catalog-to-corridor derivation, clean non-grass exhaustion and invalid-candidate defense. The named
-`nonconsuming_direct_rehearsal` now passes 17 tests. The water resolver was not loosened.
+One distinct source was selected prospectively and exactly claimed. Preparation and direct
+registration setup succeeded; the production menu then raised `RedFullPokedexGoalProposalError`
+because fewer than two executable acquisition families survived. Its specific excluded family and
+reason were not retained. Do not infer them or reopen the source to reconstruct the lost menu.
 
-No source was selected or claimed, and no ROM, private payload, emulator, model query, action,
-frame, registration session, outcome, example or fit occurred. The two previously consumed sources
-remain permanently closed.
+One registration session was created, but model queries, actions, frames, outcomes and fits were
+zero. The final byte/frame/button and zero-action checks passed. V1, V2 and V3 are permanently
+closed, including V3's conditional measured follow-up. Nine eligible train sources remain unused.
 
-## Next bounded implementation
+## Next bounded work
 
-Publish and require exact-head CI. In the next session, re-audit the two consumed failures,
-remaining unused-source inventory and strength of the 17-test gate. Only if the irreversible cost
-is now justified may one distinct source be selected prospectively and exactly claimed for an
-action-free two-family preflight. No fallback source, same-session generic repair or gameplay below
-two executable families.
+Qualify structured per-family rejection diagnostics and source-free eligibility tests. Keep the
+two-family gate and no-query/no-input guarantees. No consumed-source retry, fourth-source selection,
+ROM access or same-state reconstruction is authorized for that repair session. New training supply
+needs a separately justified prospective plan after qualification, not another blind source check.
+
+The following horizon is diagnostic qualification → one measured collection lesson → a practical
+varied training batch → separate-lineage reliability and version/trade/event dependency review.
+[Full next-session plan and daily percentages](docs/work-sessions/2026-09-14-third-source-roadmap-audit.md).
 
 ## Learning and completion status
 
-Model121 remains 121 examples, 83 successes and 86 local registrations. This repair session
-consumed no source and added no registration session, outcome or fit. Gameplay is stopped; the
-anti-drift alarm remains active.
+Model121 remains121 examples/83 successes/86 local registrations. Today adds one actual resupply
+lesson over Model120 (+0.83% dataset size), but zero registration gains:86/151=56.95% in the
+development save. The original collection checklist remains21/22; expanded25/26 is a changed
+denominator, not a whole-project percentage. All five final Red acceptance conditions remain unmet.
 
-The Model121 terminal itself remains ineligible for the standard collector because its original
-state is not in the frozen catalog. Never relabel it, replay consumed trials or weaken provenance.
-Full fresh-start model-directed Red story plus all 151 local flags still precedes any ROM hack,
-then Crystal and at least Emerald. Version, trade, supporting-save and event requirements remain.
+Gameplay is stopped and the zero-learning alarm remains active. The Model121 terminal remains
+ineligible for the standard collector; never relabel it or return to its redundant resource loop.
+Fresh-start model-directed Red story plus all151 local registrations still precedes every ROM hack,
+Crystal and Emerald. Checkpoint story completion is not that final run.
 
-## Verification and reviewers
+## Reviews and recommendation
 
-Flash3.8 High and Claude Opus4.6 Thinking each completed a bounded read-only review and returned PASS
-with no P0/P1/P2 finding. Both confirmed the centralized grass boundary, deterministic ordering,
-narrow exception handling and distinct regression coverage. An initial Claude invocation inherited
-the wrong CLI project and was interrupted; the fresh project-bound review completed. CLI quota and
-cost output were unavailable.
+A tool-free Flash3.8 High advisory was dispatched without a retained completion result; no verdict
+or finding is used. Claude was not used this session. Prior repair reviews remain historical only;
+current service quota windows are unavailable from headless output.
 
-Next-session recommendation: **GPT-6 Astra / High / Fast off**. The next task is an authority and
-risk decision about spending a third scarce source, followed by at most one tightly bounded
-action-free gate if justified.
+Next: **Sol / High / Fast off**, approximately60–90 minutes for source-free diagnostic tests.
+Escalate to Astra for a consequential admission/authority redesign, not routine test execution.
 
-[Session](docs/work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
-[Evidence](docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)
+[Evidence](docs/evidence/red-third-source-roadmap-audit-2026-09-14.json)

@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-direct-profile-encounter-media-repair",
+  "as_of_session": "2026-09-14-third-source-roadmap-audit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json"
+      "evidence": "docs/evidence/red-third-source-roadmap-audit-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1370,6 +1370,12 @@
       "result": "The generic encounter-media repair is qualified ROM-free. Five regressions cover the complete catalog, Route21 coexistence, real unmocked corridor derivation, clean exhaustion and invalid-candidate defense; the named rehearsal now passes17 tests. Zero source, ROM, emulator or model effects occurred.",
       "deviation": "This maintenance directly unblocks the named learning experiment but creates no learner or transfer result. Both consumed sources remain closed, the zero-learning alarm remains active and no third source was selected or claimed. Flash3.8 High and Claude Opus4.6 returned PASS without findings.",
       "next": "Publish and require exact-head CI. Then separately re-audit the two failures, remaining inventory and strengthened gate; authorize at most one distinct third-source action-free attempt only if its irreversible cost is justified."
+    },
+    {
+      "session": "2026-09-14-third-source-roadmap-audit",
+      "result": "Third source prepared and registered, then failed the two-acquisition-family gate. No model query, action, frame, outcome or fit. Nine unused sources remain; exact repair CI and17 source-free tests passed.",
+      "deviation": "The expected menu unblock did not occur. The source is permanently closed without replacement, and missing per-family diagnostics limit the explanation. Today adds one measured lesson (120 to121, +0.83% dataset size), no local registrations (86/151), and no progress on the fixed21/22 checklist. Expanded25/26 is not a whole-project percentage.",
+      "next": "Source-free rejection diagnostics and eligibility tests, then a separately justified measured lesson, practical training batch and separate-lineage reliability/dependency review. No fourth-source authority, fresh run, ROM hack or Crystal execution follows from this roadmap."
     }
   ],
   "closed_milestones": [
