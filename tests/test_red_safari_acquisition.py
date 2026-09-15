@@ -244,10 +244,11 @@ def test_safari_steps_are_read_as_one_two_byte_counter() -> None:
 
 
 class _TransportSimulation:
-    def __init__(self, *, mutate_party: bool = False) -> None:
+    def __init__(self, *, mutate_party: bool = False, safari_balls: int = 0) -> None:
         self.frame_count = 0
         self.pressed_buttons: frozenset[str] = frozenset()
         self.mutate_party = mutate_party
+        self.safari_balls = safari_balls
         self.city_moves = 0
         party = (99, 64, 120, 118, 28, 128)
         self.raw = RawGameState(
@@ -267,7 +268,7 @@ class _TransportSimulation:
             int(RamAddress.PLAYER_MONEY) + 2: 0x58,
         }
         if address == int(RamAddress.SAFARI_BALLS):
-            return 0
+            return self.safari_balls
         return money.get(address, 0)
 
     def execute(self, action: MacroAction) -> None:
@@ -342,6 +343,25 @@ def test_safari_transport_flies_from_current_field_and_preserves_full_party(
     assert report.party_species_before == (99, 64, 120, 118, 28, 128)
     assert report.party_species_after == report.party_species_before
     assert report.public_dict()["private_map_fields"] == 0
+
+
+def test_safari_transport_preserves_stale_pre_admission_ball_byte(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import pokemon_red_completion.red_safari_acquisition as acquisition
+
+    simulation = _TransportSimulation(safari_balls=23)
+    monkeypatch.setattr(acquisition, "Gen1FieldMovePort", _TransportFieldMoves)
+
+    report = relocate_red_safari_origin_to_fuchsia_center(
+        simulation,  # type: ignore[arg-type]
+        CountingExecutor(simulation),
+        simulation,  # type: ignore[arg-type]
+        timing=SafariTiming(wait_frames=1, movement_frames=1),
+    )
+
+    assert report.passed
+    assert simulation.safari_balls == 23
 
 
 def test_safari_transport_rejects_wrong_fly_landing(

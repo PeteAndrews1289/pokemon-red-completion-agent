@@ -470,6 +470,7 @@ def relocate_red_safari_origin_to_fuchsia_center(
         -1 if initial.player_y is None else int(initial.player_y),
     )
     party_species = tuple(initial.party_species_ids or ())
+    safari_balls = _balls(emulator)
     if initial.map_id is None or not party_species:
         raise RedAreaExecutionError(
             "Safari transport lacks a complete outdoor party boundary",
@@ -496,6 +497,7 @@ def relocate_red_safari_origin_to_fuchsia_center(
         timing,
         "Fuchsia Fly landing to Center",
         expected_party_species_ids=party_species,
+        expected_safari_balls=safari_balls,
     )
     final = reader.read()
     report = RedSafariTransportReport(
@@ -553,6 +555,7 @@ def enter_red_safari_area(
     start_frames = emulator.frame_count
     money_before = _money(emulator)
     party_species = tuple(before.party_species_ids or ())
+    safari_balls = _balls(emulator)
     if not party_species:
         raise RedAreaExecutionError(
             "Safari admission lacks a complete party observation",
@@ -566,6 +569,7 @@ def enter_red_safari_area(
         timing,
         "Safari gate",
         expected_party_species_ids=party_species,
+        expected_safari_balls=safari_balls,
     )
     gate = reader.read()
     if gate.map_id != MapId.SAFARI_ZONE_GATE or (gate.player_x, gate.player_y) != (3, 5):
@@ -581,6 +585,7 @@ def enter_red_safari_area(
         timing,
         "Safari clerk",
         expected_party_species_ids=party_species,
+        expected_safari_balls=safari_balls,
     )
     for _ in range(timing.dialogue_pulses):
         admitted = reader.read()
