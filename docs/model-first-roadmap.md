@@ -36,18 +36,24 @@ route capability, capture resources, missing/protected evolution stock and regis
 The two-family gate remains strict. Focused25, rehearsal22 and related247 source-free tests passed.
 No new source, model choice, input, fit or registration was created; nine eligible sources remain.
 
+The supply audit rejected source four. Metadata-only selection cannot prove a two-family menu
+before claim, while scanning unclaimed payloads first would defeat claim-first admission. The next
+lesson must use a versioned correlated training reset from the authenticated Model121 terminal,
+explicitly not an independent history. The current code does not yet admit that catalogless
+checkpoint, so no action-free gate or gameplay is authorized until the bridge is qualified.
+
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Supply/admission decision | A prospective plan binding one source directly to one retained lesson; exact-head CI has passed | Sol / High |
-| One collection lesson | One actual model choice, terminal outcome, costs/local flags and honest fit | Sol / High |
+| Correlated-reset bridge | Exact parent/checkpoint, registered objective, non-independent reset identity and one-shot retention contract | Astra / High |
+| One collection lesson | One actual model choice, terminal outcome, costs/local flags and honest fit; source four untouched | Sol / High |
 | Useful training batch | Varied cases, declared resets, all failures/interventions and resource costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
 Each first step is estimated at60–120 minutes; batch/reliability work may span1–2 sessions. This is
-a planning horizon, not a four-session Red promise. Source four is not authorized by diagnostics
-alone. If the supply plan cannot avoid diagnostic-only source consumption, stop.
+a planning horizon, not a four-session Red promise. Source four is rejected under the current
+architecture. If the correlated reset cannot expose both families, stop without scanning sources.
 
 Today remains120→121 examples (+0.83% dataset size),86/151 registrations unchanged (56.95%).
 No whole-project percentage is available and all five final Red acceptance conditions are unmet.
@@ -56,9 +62,9 @@ Do not return to resource-only Model121 rows, treat timing seeds as independent 
 full replay. Full Red remains the final exam after bounded component gates, declared authority,
 realistic budgets and complete failure retention.
 
-[Diagnostic session](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
-[Evidence](evidence/red-full-pokedex-family-diagnostics-2026-09-14.json) ·
+[Supply decision](work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
+[Evidence](evidence/red-full-pokedex-supply-admission-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Sol / High / Fast off**, for the bounded supply/admission decision. Reserve Astra for a
-consequential authority redesign.
+Next: **Astra / High / Fast off**, for the registered correlated-reset authority redesign and its
+source-free qualification. Return to Sol High for the bounded lesson after that gate passes.

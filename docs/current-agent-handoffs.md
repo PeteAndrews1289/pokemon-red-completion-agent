@@ -3,25 +3,24 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The full-local player now retains identity-free capture/evolution exclusion diagnostics. Five
-source-free cases distinguish route capability, capture resources, missing precursor, protected
-precursor and already-registered target. Ready diagnostics must exactly match executable candidate
-families; the two-family gate remains strict.
+Source four is rejected under the current direct-origin architecture. Metadata-only selection
+cannot prove a two-family menu before claim, and preclaim inspection across protected roots would
+violate claim-first admission. Preserve V1–V3 and all nine unused roots.
 
-Focused25, named rehearsal22 and related247 tests passed. Source `93ca9495` passed exact-head
-CI34918614083/1 with11,713 tests. No source, private payload, ROM, registration session, model query, action,
-frame, outcome or fit occurred.
+The relevant source-free supply/proposal/inspector/continuation/training-plan surface passed185
+tests. No source, private payload, ROM, registration session, model query, action, frame, outcome or
+fit occurred.
 
-All V1–V3 sources remain closed, and the new schema cannot reconstruct V3's unretained reason.
-Nine eligible sources remain. Source four requires a separate prospective supply/admission plan
-and must lead directly to one retained measured lesson.
+Next implement a versioned registered correlated reset for the exact Model121 terminal. It must be
+explicitly train-lineage reuse, bind one reset/choice/execution/outcome path and never claim
+independence. Only a zero-action capture-plus-evolution PASS may proceed to gameplay.
 
-Flash3.8 High returned PASS without findings on the diagnostic contract. Claude was unused.
-Headless quota windows were unavailable.
+Flash3.8 High and Claude Opus High independently returned NO-GO on source four. Their preclaim
+scanning suggestion is rejected against the claim-first boundary. The second consecutive
+no-learning session fires the anti-drift alarm.
 
-Useful future review scope: challenge whether a supply plan binds resets, source identity, model
-choice, terminal evidence and failure retention before execution. Do not inspect private sources,
-reopen V1–V3 or demand a broad architecture review.
+Useful future review scope: inspect the implemented correlated-reset schema, exact parent join,
+write-ahead choice and failure retention. Do not inspect private sources or reopen V1–V3.
 
-[Session](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
-[Evidence](evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)
+[Session](work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
+[Evidence](evidence/red-full-pokedex-supply-admission-2026-09-14.json)

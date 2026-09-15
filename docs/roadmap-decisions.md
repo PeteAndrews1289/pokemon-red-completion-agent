@@ -1,5 +1,23 @@
 # Roadmap baseline and deviations
 
+## September 14 — reject a fourth blind source; use a correlated registered reset
+
+The [supply/admission audit](work-sessions/2026-09-14-full-pokedex-supply-admission.md)
+found that the current metadata-only selector cannot know whether an unopened root exposes both
+capture and evolution. The claim and payload open precede that gate, so another one-family state
+could consume source four without a model query or outcome. Three direct sources already produced
+no lesson. Preserve all nine remaining sources and keep the two-family gate strict.
+
+Do not inspect multiple unclaimed payloads and choose the first passing menu. That would bypass the
+claim-first anti-cherry-picking boundary. Instead, add an explicit registered correlated-reset
+contract for the authenticated Model121 terminal. It must remain training-only and non-independent,
+bind the exact parent and reset identity before sampling, retain every selected outcome and cost,
+and authorize no fallback, redraw, consumed-source reopen or new upstream-lineage claim.
+
+This is the second consecutive session without learning, so the anti-drift alarm fires. The next
+session must target the correlated-reset bridge and one retained capture/evolution lesson rather
+than another finite-source audit. Full Red, ROM-hack and later-title gates do not change.
+
 ## September 14 — consume the unretained Model120 sample and repair the next freeze
 
 The [Model120 freeze failure](work-sessions/2026-09-14-model120-freeze-instrumentation-failure.md)

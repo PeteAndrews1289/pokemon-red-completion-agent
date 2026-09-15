@@ -1,28 +1,29 @@
-# Video narrative: make the failed menu explain itself
+# Video narrative: stop spending blind training sources
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
 build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the honest blocker: the third source reached the menu gate but could not expose capture
-and evolution together. Its old record lacked the reason, and the source is permanently closed.
+Open with the pattern: three protected sources were consumed before a mixed capture/evolution
+lesson could reach the model. Better diagnostics explain the third kind of failure in the future,
+but the direct selector still discovers menu feasibility only after claiming the source.
 
-Show the source-free repair. A future failure can distinguish inaccessible route, no capture items,
-missing evolution precursor, protected precursor or already-registered target. Its public report
-contains portable acquire/evolve reasons, never species, routes, profiles or bindings.
+The project says no to source four. Metadata cannot prove both families, while scanning several
+unclaimed saves first would cherry-pick private state and defeat claim-first admission. All nine
+remaining roots stay untouched.
 
-Keep the safety boundary visible: both acquisition families remain mandatory; a diagnostic cannot
-make a one-family menu playable. The inspector verifies zero inputs/frames and unchanged save bytes.
+The replacement is a correlated training reset from the already authenticated Model121 terminal.
+It is not independent evidence. A new registered-reset contract must bind the exact parent, one
+write-ahead choice, one execution and every terminal outcome before gameplay can resume.
 
-Verification:25 focused tests,22 named rehearsal cases,247 related tests, Ruff, mypy and regenerated
-collection metadata. No source, ROM, model query, action, outcome or fit occurred.
+Verification:185 relevant source-free tests passed. No source, ROM, model query, action, outcome or
+fit occurred. Flash3.8 High and Claude Opus High both returned NO-GO on the current source path.
 
-Flash3.8 High returned PASS without findings. The next episode is a separate source-supply decision:
-can one prospective source lead directly to a retained model choice and outcome? Source four is not
-authorized yet.
+The next episode must implement and qualify the correlated-reset bridge. This is the second
+consecutive no-learning session, so another diagnostics-only detour is not acceptable.
 
-[Latest session and evidence](work-sessions/2026-09-14-full-pokedex-family-diagnostics.md)
+[Latest session and evidence](work-sessions/2026-09-14-full-pokedex-supply-admission.md)
 
 ## The real finish line
 

@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Decide whether a practical prospective supply plan justifies one measured collection lesson now that the family-diagnostic contract has passed exact-head CI.
+- Next decision: Build the versioned registered correlated-reset bridge for the exact Model121 terminal and require its source-free qualification before one action-free two-family check or any model query.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A prospective supply plan cannot retain one model-selected capture/evolution outcome without reopening V1-V3 or spending a source on software validation. |
+| Cheapest falsifier | The exact Model121 terminal cannot expose both executable acquisition families under a versioned correlated-reset contract, or that contract cannot authenticate the parent without weakening provenance. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-full-pokedex-family-diagnostics** · status **closed** · evidence [qualification](docs/evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)
+**2026-09-14-full-pokedex-supply-admission** · status **closed** · evidence [falsification](docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Future one-family failures retain portable causes without another source read, reducing scarce-source waste while keeping capture/evolution diversity mandatory. |
-| Learning output | None. Model121 remains121 examples/83 successes/86 local registrations; no gameplay or fit occurred. |
-| Authority delta | None. Model121 remains at121 examples/83 successes/86 local registrations. Diagnostics created no model query, action, frame, outcome or fit. |
-| Transfer result | No cross-title result. The identity-free option/reason schema is portable in shape but qualified only with Red source-free fixtures. |
-| Blocker | All three direct sources are closed and V3 cannot be retroactively diagnosed. Nine eligible sources remain, but another source needs a practical measured-lesson plan rather than another software check. |
-| Decision | Published structured identity-free capture/evolution exclusion reasons, preserved the two-family gate and stopped before source selection. Exact-head CI passed; supply/admission remains a separate decision. |
-| Next session | Design and audit a practical prospective supply plan for one measured collection lesson. Do not reopen V1-V3; source four is not authorized by this qualification alone. |
-| Next falsifier | No prospective plan can bind one source directly to a retained measured choice and outcome without retry, fallback or diagnostic-only consumption. |
-| Stop condition | End after source-free qualification and publication. No source selection, claim, payload, ROM, model query, input, frame, fit, full replay, ROM hack or Crystal execution. |
+| Product alignment | Correlated training reuse practices the actual capture-versus-evolution decision without sacrificing finite protected roots or manufacturing independent evaluation evidence. |
+| Learning output | None. This is the second consecutive no-learning session, so the configured anti-drift alarm fired. Model121 remains121 examples/83 successes/86 local registrations. |
+| Authority delta | None. Model121 remains at121 examples/83 successes/86 local registrations. The supply audit created no model query, action, frame, outcome or fit. |
+| Transfer result | None. The chosen next path is explicitly correlated Red training, not independent development or cross-title transfer. |
+| Blocker | The direct selector cannot know whether an unopened source exposes both capture and evolution before its irreversible claim. The authenticated Model121 terminal is train-partitioned but deliberately catalog-ineligible, so correlated reuse needs a new explicit registered-reset contract. |
+| Decision | Reject source four and preclaim scanning of protected sources. Preserve nine unused eligible roots and target one prospectively declared correlated training reset from the exact Model121 terminal, never an independent history. |
+| Next session | Implement and source-free qualify the registered correlated-reset bridge, then inspect the exact reusable Model121 terminal action-free. Only a two-family PASS may proceed to one retained choice and fit; do not select source four. |
+| Next falsifier | The exact Model121 terminal fails the zero-action two-family gate, or a source-free reset contract cannot bind its parent, registered objective, Model121, one query, one execution and honest outcome retention. |
+| Stop condition | The current claim-then-gate order cannot assure a lesson before consuming source four. Stop direct-source selection, protected-payload scanning and gameplay; preserve V1-V3 and all nine unused roots. |
 
 ### Stop conditions
 

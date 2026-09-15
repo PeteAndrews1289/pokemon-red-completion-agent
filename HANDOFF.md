@@ -3,44 +3,39 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Family rejection diagnostics qualified source-free
+## Fourth blind source rejected
 
-The full-local capture/evolution proposal now retains one structured identity-free diagnostic for
-each supported acquisition family. Source-free cases distinguish route capability, capture
-resources, missing precursor, protected precursor and already-registered target. Ready diagnostics
-must exactly match executable candidate families, so the two-family gate cannot be weakened by the
-new reporting.
+The supply/admission audit returned NO-GO on source four. Metadata-only selection cannot establish
+that both capture and evolution are executable before the exact root is claimed and opened. A
+one-family failure would consume another source before a model query or outcome. Preserve V1–V3
+and all nine unused eligible roots.
 
-The one-context inspector emits the diagnostics on failure while preserving save bytes, frames,
-buttons and actions. Public fields contain only portable acquire/evolve status and reason enums;
-species, source, profile and binding identity remain absent.
+Do not scan unclaimed private payloads and choose the first passing menu. That would bypass
+claim-first admission and cherry-pick feasibility. Flash3.8 High and Claude Opus High both agreed
+that the current claim-then-gate order cannot assure a lesson; their preclaim-scanning workaround
+was rejected against this boundary.
 
-Focused25, named rehearsal22 and related247 tests passed. Ruff and mypy passed. Collection metadata
-was regenerated. Source `93ca9495d0abccf7511639af2abdc5cbbec41bb5` is published; exact-head
-CI34918614083/1 passed11,713 tests.
+The relevant source-free supply, proposal, inspector, continuation and training-plan surface
+passed185 tests. No source, payload, ROM, model query, input, frame, outcome, example or fit was
+created.
 
 ## Boundaries and next action
 
-No source was selected or claimed, and no private payload, ROM, registration session, model query,
-action, frame, outcome, example or fit occurred. V1–V3 remain closed. The new fields cannot
-retroactively explain V3 because its record predates them. Nine eligible sources remain unused.
-
-Next, separately design and audit a prospective supply plan for one measured collection lesson.
-Source four is not authorized by this qualification. It must not be consumed
-merely to validate software, and every model choice/outcome must be retained without fallback.
+Next, build a versioned registered correlated-reset contract around the exact authenticated
+Model121 terminal. It is train-lineage reuse, never an independent root. Bind its parent,
+checkpoint, registered objective, Model121, reset identity, write-ahead choice and one-shot outcome
+retention before sampling. Only a zero-action two-family PASS may proceed to one choice and fit.
+Failure stops without source four.
 
 Model121 remains121 examples/83 successes/86 local registrations. Gameplay is stopped. The original
 collection checklist remains21/22; the full fresh-start Red acceptance gate remains0/5. Full local
 Red still precedes any ROM hack, Crystal or Emerald.
 
-## Review and recommendation
+The diagnostic session plus this decision are two consecutive sessions without learning, exceeding
+the configured maximum of one. Do not spend another session on pure diagnostics or source census.
 
-Flash3.8 High completed a read-only review and returned PASS with no P0/P1/P2 finding. Its first
-headless call was permission-blocked; one sandboxed read-only retry completed. Claude was unused.
-Headless quota windows and cost were unavailable.
+Next: **Astra / High / Fast off** for the consequential correlated-reset provenance and authority
+design. After exact source-free qualification, use Sol High for the bounded lesson.
 
-Next: **Sol / High / Fast off**, about60–90 minutes for the supply/admission decision. Use Astra
-only if that decision requires a consequential redesign.
-
-[Session](docs/work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
-[Evidence](docs/evidence/red-full-pokedex-family-diagnostics-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
+[Evidence](docs/evidence/red-full-pokedex-supply-admission-2026-09-14.json)

@@ -11,26 +11,26 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Structured, identity-free acquisition-family diagnostics are published at `93ca9495`. They
-distinguish five source-free route/resource/inventory cases while preserving the mandatory capture
-plus evolution gate. Focused25, rehearsal22 and related247 tests passed; exact-head CI34918614083/1
-passed11,713 tests.
+The supply/admission audit rejected source four. Metadata-only selection cannot prove both capture
+and evolution before an irreversible root claim. Preclaim scanning of unclaimed payloads is also
+forbidden because it defeats the claim-first anti-cherry-picking boundary. V1–V3 remain closed and
+all nine unused eligible roots are preserved.
 
-All three direct sources V1–V3 remain consumed and closed. The contract cannot reconstruct V3's
-missing reason. This session used no source, ROM, model or game input; nine eligible sources remain.
+Codex next owns the registered correlated-reset bridge for the authenticated Model121 terminal.
+It must bind the exact train-lineage parent, registered objective, reset identity, one write-ahead
+choice and all outcomes/costs, while declaring no independent history or new upstream root.
 
-Codex next owns a separate supply/admission decision. Any proposed source must lead directly
-to one retained measured choice/outcome under a prospective plan, not another software check. No
-source four is authorized yet. No Model121 resource loop, full replay, ROM hack or Crystal execution.
+The relevant source-free surface passed185 tests with zero source/ROM/model/game effects. This is
+the second consecutive no-learning session; the next work must target the bridge and one measured
+lesson, not another diagnostic pass. No full replay, ROM hack or Crystal execution.
 
 ## External contribution
 
-Flash3.8 High completed a sandboxed read-only review and returned PASS with no findings. Its initial
-permission-blocked invocation produced no review. Claude was unused. Current quota windows were
-unavailable from headless output.
+Flash3.8 High and Claude Opus High independently returned NO-GO on source four under the current
+ordering. Codex accepted that diagnosis and rejected their preclaim-scanning workaround.
 
-A future external task, if useful, should challenge the prospective supply plan's reset, retention
-and no-fallback rules. It must not access private sources or become a standing review gate.
+A future external task, if useful, should review the correlated-reset schema and runner joins after
+implementation. It must not inspect private sources or become a standing review gate.
 
-[Session](docs/work-sessions/2026-09-14-full-pokedex-family-diagnostics.md) ·
+[Session](docs/work-sessions/2026-09-14-full-pokedex-supply-admission.md) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
