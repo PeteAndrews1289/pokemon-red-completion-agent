@@ -5,27 +5,33 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
 - Codex integrates, verifies outcomes and publishes tested batches.
-- Flash supplies bounded isolated drafts or targeted reviews through `agy`.
-- Claude supplies selective read-only reviews of consequential evidence and design boundaries.
-- Review is advisory; Codex adjudicates against tests and actual outcomes.
+- Flash supplies bounded drafts or targeted reviews through `agy`.
+- Claude supplies selective read-only reviews. Neither reviewer grants gameplay authority.
 
 ## Current assignment
 
-The safe Tentacool evolution ran once, retained61 verified quanta and advanced from level5 to24
-before `BattleRuntimeError`. The exact mid-battle terminal is sealed with the collection unchanged.
-Model121 remains121/83 with86/151 local registrations; the consumed identity, source four,
-protected roots and all nine unused sources remain out of scope.
+The user-directed battle audit is maintenance for the Model121 heterogeneous collection lesson.
+Seven false-success cases were reproduced and corrected; 108 semantic transition cases and
+604 affected tests pass, one skipped. Bounded failure traces and a persistence hook are implemented.
+Cartridge qualification remains ahead; official gameplay is paused.
 
-Codex next owns an action-free diagnosis of the retained terminal and, only if safe, one separately
-frozen recovery-only settlement. Do not retry or automatically resume evolution. Rebuild the normal
-menu only after a stable terminal exists.
+Recovery already succeeded. Model121 remains 121 examples/83 successes and 86/151 local registrations.
+Both consumed identities, source four and protected roots remain excluded.
 
-## External contribution
+Codex next owns the bounded disposable campaign in the
+[session report](docs/work-sessions/2026-09-15-battle-runtime-refocus.md).
+It must test real cartridge settlement and durable diagnostics without producing learner rows.
 
-Claude Opus High returned GO on the frozen transition and initial executor; Codex adopted its
-terminal-retention suggestion. Flash3.8 is reachable through `agy`, but its attempted review returned
-no verdict because its own command permission was denied. The later production-route binding
-correction was action-free and was not re-reviewed.
+## Reviewer contribution
 
-[Session](docs/work-sessions/2026-09-15-safe-singleton-evolution.md) ·
+Claude Opus 4.8 High completed an excerpt audit and a patch review. Its PP-vector and diagnostic
+findings are accepted and tested; speculative identity remapping was rejected because the helper
+uses party index. Process interruptions deliberately propagate. The legacy move-replacement
+inference remains an explicit limitation. Final small changes were verified locally.
+Flash 3.8 High's first advisory lacked source input and is not a code review; the embedded-source
+retry timed out without a verdict. No Flash finding is treated as verified.
+
+Latest shared quotas: Claude68% session/27% weekly remaining; Gemini99% five-hour/58% weekly.
+Observation time, reset times and adjudications are in the session report; these are not task costs.
+
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

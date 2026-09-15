@@ -751,11 +751,11 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
-    # Reviewed September9: the module adds an explicit verified battle-exit
-    # scene handoff. Default settlement remains unchanged (dedicated regression
-    # test); this contract fingerprints the whole module, including that opt-in.
+    # Reviewed September15: whole-module identity now includes complete PP-vector
+    # checks, forced-switch attribution, the final settlement observation and
+    # bounded diagnostic hooks. Historical receipts/waivers are not rewritten.
     assert contract.battle_timing_sha256 == (
-        "5d16989f2bf05f3c24709013dcb352ce8e32f9aee6e304b60fd35c2649e1ec63"
+        "274a2b5c72f7add6c802f9c70e1a8dc5c53614bbc7467b7beaa999b83feffb18"
     )
     assert contract.accounting_sha256 == (
         "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"

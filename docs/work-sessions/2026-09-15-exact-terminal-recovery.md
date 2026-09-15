@@ -40,12 +40,13 @@ preserved the exact serialized state and consumed no frames or controller action
 The existing generic `flee_wild` primitive had219 focused tests pass with1 skipped. A separately
 frozen recovery identity bound that primitive to this exact state, Route11, a256-action hard cap,
 a100000-frame hard cap, zero model queries and no retry. The identity executed once and escaped
-after one unsuccessful RUN attempt. The verified terminal is input-ready on the same tile, outside
+with one recorded RUN attempt. The counter does not show a preceding failed attempt.
+The verified terminal is input-ready on the same tile, outside
 battle, after11 actions and1320 frames. Its state SHA-256 is
 `21f77af82628f903f1b44ce8f052f6d58b5c2889bb7a545d33b27c427cc4096d`.
 The party, boxes, Pokédex, bag, money, PP, levels, experience and status remained preserved; all
-party HP remained positive. The already-latched battle turn finished during dialogue settlement,
-reducing Ekans from9 HP to1 without spending another PP, before the recovery selected RUN.
+party HP remained positive. Ekans fell from9 HP to1 during settlement without another PP spend,
+consistent with pending effects. This does not identify the original exception's cause.
 
 Private recovery manifest
 `6958aea5101be534d60a736e8d9c84e51c12dab08966c7f9b509da3265d7a05f`

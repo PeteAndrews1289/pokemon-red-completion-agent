@@ -1,37 +1,29 @@
-# Project story: learning to play, not repeat a walkthrough
+# Project story: learning to play Pokémon
 
-Pete's goal is a model that genuinely plays Pokémon: make useful decisions, react when the game
-differs and carry skills into unfamiliar titles. AI assistants help build and review the system;
-they do not secretly choose its live actions.
+Pete's goal is a model that makes useful decisions, reacts when the game differs and carries skills
+into unfamiliar titles. This is an AI-assisted project; the coding assistants build and review the
+system rather than secretly choosing its live game actions.
 
-The first finish line is a fresh start-to-finish model-directed Red run with Champion and
-Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
-compatible Red hack, Crystal and at least Emerald.
+The first finish line is a fresh model-directed Red run with Champion/Hall-of-Fame evidence and
+all 151 local registrations. Then comes an unfamiliar compatible Red hack, Crystal and Emerald.
 
-## Latest chapter: the safe evolution made partial progress
+## Latest chapter: improve how failures are found
 
-After the acquisition alternatives failed, a safe Tentacool-to-Tentacruel level evolution ran once
-as a forced non-learning singleton. It retained61 verified training quanta and advanced Tentacool
-from level5 to24 before `BattleRuntimeError`. The exact terminal is sealed mid-battle with no
-fainted party member, pressed button, registration loss or specimen loss. The identity is consumed
-and cannot retry.
+After repeated runtime interruptions, Pete challenged the reactive development loop. The collection
+save had already been safely recovered, so this session examined the shared battle contract.
 
-This is real gameplay progress, but not learning or Pokédex progress: Model121 remains121
-examples/83 successes and86/151 registrations. An eighth consecutive no-learning session keeps the
-anti-drift alarm active. The next step is to diagnose and settle the actual retained battle through
-a separately frozen recovery-only action, then rebuild the normal menu from a stable save.
+Synthetic tests exposed seven false successes: extra PP spending could pass alongside an HP change,
+and a forced switch could look like move learning. The controller now verifies the full original
+PP vector before accepting an effect. It also retains bounded failure traces.
+604 affected tests pass, one skipped, including 108 combinations of slot, timing, menu and outcome.
 
-Claude Opus High returned GO on the safe transition and initial executor, and its suggestion to
-persist the raw terminal before richer inspection was adopted. Flash3.8 is reachable through
-`agy`, but its attempted review returned no verdict because its own command permission was denied.
+This is engineering progress. Model121 stays at 121 examples/83 successes and the development save
+at 86/151 registrations. No game input, training example or learned authority was added.
+The old failure's exact cause is unknown; real-cartridge qualification is the next task.
 
-Today's learning remains one earlier resupply example:120→121 (+0.83% dataset size). The development
-save remains86/151 (56.95%); neither number measures whole-project completion.
+The next campaign uses disposable bounded cases with retained failures before collection resumes.
+It must distinguish an observed move effect from a completely settled turn.
 
-[Latest evidence](evidence/red-safe-singleton-evolution-result-2026-09-15.json) ·
-[Detailed session](work-sessions/2026-09-15-safe-singleton-evolution.md) ·
-[Model-first roadmap](model-first-roadmap.md)
-
-Checkpoint story completion is a component result, not the required fresh run.
-[Mission](../MISSION.md) · [Active state](../ACTIVE_PRODUCT_STATE.md) ·
-[Authorship and public overview](../README.md)
+[Session and limits](work-sessions/2026-09-15-battle-runtime-refocus.md) ·
+[Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
+[Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

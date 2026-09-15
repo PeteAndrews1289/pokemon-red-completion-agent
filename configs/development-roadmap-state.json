@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-safe-singleton-evolution",
+  "as_of_session": "2026-09-15-battle-runtime-refocus",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json"
+      "evidence": "docs/evidence/red-battle-runtime-refocus-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1424,6 +1424,18 @@
       "result": "One safe Tentacool evolution ran once:61 verified quanta advanced level5 to24 before BattleRuntimeError. The sealed mid-battle terminal preserves86 registrations/66 living species/70 specimens; no retry.",
       "deviation": "The planned menu rebuild could not occur because the actual terminal is mid-battle. The attempt used25301 actions/2232160 frames, queried no model, created no row or fit, and is permanently consumed without retry. This is real gameplay progress but an eighth consecutive session without measured learning output.",
       "next": "Sol High: authenticate and diagnose the exact retained terminal action-free. Freeze one recovery-only settlement only if existing recovery preserves the collection; do not automatically resume evolution. Rebuild the menu after a stable terminal."
+    },
+    {
+      "session": "2026-09-15-exact-terminal-recovery",
+      "result": "Recovery settled the terminal in11 actions/1320 frames, preserving86 registrations. The menu has restoration and resupply.",
+      "deviation": "Prior closeout left entry points stale; corrected here. Evolution and recovery identities remain consumed.",
+      "next": "User requested a battle-runtime refocus before collection."
+    },
+    {
+      "session": "2026-09-15-battle-runtime-refocus",
+      "result": "Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.",
+      "deviation": "User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.",
+      "next": "Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready."
     }
   ],
   "closed_milestones": [

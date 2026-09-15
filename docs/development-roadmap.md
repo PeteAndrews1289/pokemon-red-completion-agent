@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-safe-singleton-evolution**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-battle-runtime-refocus**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json)
+[Current evidence](../docs/evidence/red-battle-runtime-refocus-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,22 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-battle-runtime-refocus
+
+Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.
+
+**Deviation:** User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.
+
+**Next:** Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready.
+
+### 2026-09-15-exact-terminal-recovery
+
+Recovery settled the terminal in11 actions/1320 frames, preserving86 registrations. The menu has restoration and resupply.
+
+**Deviation:** Prior closeout left entry points stale; corrected here. Evolution and recovery identities remain consumed.
+
+**Next:** User requested a battle-runtime refocus before collection.
 
 ### 2026-09-15-safe-singleton-evolution
 

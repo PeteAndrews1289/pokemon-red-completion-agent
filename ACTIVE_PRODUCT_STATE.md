@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Authenticate and diagnose the exact retained mid-battle terminal action-free. If existing recovery can settle it safely, freeze one recovery-only identity and retain the result; then rebuild the menu. Never retry or automatically resume the consumed evolution, fit the partial run, scan protected roots or use source four.
+- Next decision: Maintenance for the Model121 heterogeneous collection lesson: qualify a bounded disposable cartridge campaign with durable battle diagnostics before further collection. Preserve consumed evolution/recovery identities and protected sources.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model121 remains at121 examples/83 successes and86 local registrations. The safe singleton advanced Tentacool from level5 to24 but failed mid-battle before evolution; it granted no learned authority, fresh-game competence or independent result. |
+| Authority now | Model121 remains121 examples/83 successes and86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The retained mid-battle terminal cannot be authenticated and settled by an existing recovery without collection loss, replaying the consumed evolution identity or granting new learned authority. |
+| Cheapest falsifier | A disposable cartridge case violates selected-turn accounting, loses a failure diagnostic or cannot settle inside fixed action/frame limits. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-safe-singleton-evolution** · status **closed** · evidence [development episode](docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json)
+**2026-09-15-battle-runtime-refocus** · status **closed** · evidence [qualification](docs/evidence/red-battle-runtime-refocus-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session stopped probing and played the safe evolution once. It retained substantial real training progress and an honest failure instead of fabricating Tentacruel or a learned row; the next task preserves that actual save. |
-| Learning output | None. The non-learning singleton retained real gameplay progress from Tentacool level5 to24, but the registration ledger stayed86/151 and Model121 stayed121 examples/83 successes. |
-| Authority delta | None. The forced singleton queried no model and created no label, row, fit or promotion. Model121 remains121 examples/83 successes/86 local registrations. |
-| Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
-| Blocker | The retained state is mid-battle after BattleRuntimeError, so a fresh heterogeneous menu cannot be built until a separately authorized recovery settles the actual terminal. |
-| Decision | Never retry the consumed evolution identity. Authenticate and diagnose its exact retained terminal action-free; if safe, freeze one recovery-only settlement, retain that result, then rebuild the normal menu from the stable save. |
-| Next session | Diagnose the retained BattleRuntimeError terminal action-free and qualify one recovery-only settlement if safe; do not resume evolution automatically. Rebuild the menu only after a stable terminal exists. |
-| Next falsifier | The exact mid-battle terminal is unauthentic, corrupted, unsafe to settle with existing recovery, or would require retrying the consumed evolution attempt. |
-| Stop condition | The one-shot evolution failed after61 quanta and its identity is consumed. Stop gameplay at the retained mid-battle terminal; no retry, automatic continuation, fit, source substitution or reset is authorized. |
+| Product alignment | User-directed refocus replaces reactive debugging on the retained collection save with shared invariants, adversarial tests and disposable qualification. |
+| Learning output | None. Explicit maintenance unblocks the named Model121 heterogeneous collection lesson; tests are not learning progress. |
+| Authority delta | None. Model121 remains121 examples/83 successes and86/151 local registrations. |
+| Transfer result | None.108 semantic combinations test executor variation, not learned transfer or independent cartridge reliability. |
+| Blocker | ROM-free qualification passes; cartridge settlement remains untested. The original exception cause is unknown. Legacy move replacement is not exact execution proof. |
+| Decision | Keep gameplay paused. Qualify the shared battle contract and diagnostic persistence on disposable cartridge cases before another collection lesson. |
+| Next session | Sol High: implement and run the bounded disposable cartridge qualification in the session report, retaining every result. Resume collection only after its gate passes. |
+| Next falsifier | A disposable cartridge case violates selected-turn accounting, loses a failure diagnostic or cannot settle inside fixed action/frame limits. |
+| Stop condition | Stop the campaign on unexplained resource changes, lost diagnostics, hard budgets or unsupported transitions. Retain failures and reassess the shared contract; no consumed identity replay or protected-root scan. |
 
 ### Stop conditions
 

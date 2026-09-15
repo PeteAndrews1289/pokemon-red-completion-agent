@@ -1,26 +1,27 @@
-# Video narrative: retain the partial evolution honestly
+# Video narrative: stop discovering every defect during collection
 
-This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
-build or review the system; they are not the live Pokémon policy.
+This is an AI-assisted engineering project directed by Pete Andrews.
 
 ## Latest episode
 
-Open with the one-shot result. The safe Tentacool evolution retained61 training quanta and advanced
-from level5 to24, then stopped on `BattleRuntimeError`. The actual state is sealed mid-battle with
-the collection intact; no Tentacruel registration or learned success is claimed.
+Open with Pete's criticism: run, fail, patch, repeat had become too frequent.
+The collection save was safely recovered, but the old exception's exact cause was lost.
 
-This is the eighth straight session without a measured learning result. The one-shot identity is
-consumed. Next, diagnose and settle the exact terminal through a recovery-only action before any
-fresh menu or evolution continuation.
+Show the new adversarial tests: an HP change can happen alongside an extra PP spend.
+Seven false-success cases exposed gaps in the shared battle proof. Full-vector verification and
+bounded failure traces address those gaps; 108 semantic transition combinations now pass.
+The affected suite has 604 passing tests and one skip.
 
-[Session and evidence](work-sessions/2026-09-15-safe-singleton-evolution.md)
+Be explicit about the limit: synthetic tests do not prove cartridge reliability or model learning.
+The next step is a bounded disposable cartridge campaign with retained diagnostics.
 
-## The real finish line
+## The finish line remains unchanged
 
-Today's learner remains120→121 (+0.83%) from an earlier resupply lesson; this session added0
-examples. The development save remains86/151 (56.95%). Neither percentage is overall completion.
+Model121 remains at 121 examples/83 successes; local registrations remain 86/151 (56.95%).
+This session added no examples or registrations. The final fresh-Red gate remains 0/5.
 
-The final gate is a fresh model-directed Red run with Champion/Hall-of-Fame proof, all151 local
-registrations and legitimate dependencies. Only then: unfamiliar Red hack → Crystal → Emerald.
+Complete a fresh model-directed Red run and its full local Pokédex before any ROM hack,
+then proceed through Crystal and at least Emerald.
 
-[Project story](project-narrative.md) · [Current roadmap](development-roadmap.md)
+[Session](work-sessions/2026-09-15-battle-runtime-refocus.md) ·
+[Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

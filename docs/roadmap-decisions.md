@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## September 15 — qualify battle execution before more collection
+
+The user challenged the repeated run/fail/patch loop and authorized a systematic refocus.
+The [audit](work-sessions/2026-09-15-battle-runtime-refocus.md) found seven reproducible
+false-success cases, strengthened shared PP verification and added bounded failure traces.
+This is maintenance for the Model121 heterogeneous collection lesson, not learned progress.
+The prior recovery succeeded; current entry points now reflect its stable terminal.
+
+Next use a fixed, disposable cartridge campaign with durable diagnostics. Its caps and stop
+conditions are recorded in the session report. Synthetic coverage does not authorize a full
+run or establish the old failure's cause. Preserve all stage IDs and exit criteria, the
+151-entry Red requirement, consumed identities and protected sources. No ROM hack or Crystal.
+
 ## September 15 — retain the partial evolution; recover the exact terminal before continuing
 
 The [safe singleton session](work-sessions/2026-09-15-safe-singleton-evolution.md) verified that
