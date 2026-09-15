@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-model122-safari-transport-tentacruel",
+  "as_of_session": "2026-09-15-model122-heterogeneous-evolution",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json"
+      "evidence": "docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -82,7 +82,7 @@
         "id": "mixed-acquisition-family-choice",
         "label": "Expose a useful choice across more than one acquisition family",
         "done": true,
-        "evidence": "docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json"
+        "evidence": "docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json"
       },
       {
         "id": "full-pokedex-goal-proposal-gate",
@@ -1472,6 +1472,12 @@
       "result": "The heterogeneous Safari/evolution choice retained a failed Safari acquisition and fit Model122 at122 examples/83 successes. Semantic Safari exit plus Fly was cartridge-qualified, then one forced Tentacool evolution registered Tentacruel. Red is87/151 registered with67 living species and71 specimens.",
       "deviation": "The Safari failure required bounded generic transport repair and two exact no-retry recoveries. Tentacruel was a forced singleton, so it advances collection but adds no query, label or training target. The mixed-acquisition checklist closes26/26 without satisfying any of the five full-Red completion gates.",
       "next": "Sol High, Fast off: action-free freeze the exact Model122 terminal, require at least two executable acquisition families, and retain at most one model-selected outcome. No forced-evolution replay, full run, GitHub push or ROM-hack work."
+    },
+    {
+      "session": "2026-09-15-model122-heterogeneous-evolution",
+      "result": "Stored Silph Scope support exposed four Pokemon Tower capture sources action-free. Model122 then chose evolution from a genuine acquire/evolve menu and succeeded in11623actions/1050627frames, advancing Red to88/151 registrations with67living species and71specimens.",
+      "deviation": "The model legitimately selected evolution, so the qualified capture-item composite was not forced. One successful measured outcome is durable but not yet fitted; Model122 remains122 examples/83 successes and no full-Red gate changed.",
+      "next": "Sol High, Fast off: fit exactly the retained heterogeneous success into Model123, verify all prior rows and the frozen-menu selected-option response, then inspect the88-registration terminal action-free. No replay, forced capture, full run, push or ROM-hack work."
     }
   ],
   "closed_milestones": [

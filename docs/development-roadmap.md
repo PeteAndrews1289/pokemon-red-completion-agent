@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model122-safari-transport-tentacruel**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model122-heterogeneous-evolution**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -17,7 +17,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
-- [x] Expose a useful choice across more than one acquisition family ([evidence](../docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json))
+- [x] Expose a useful choice across more than one acquisition family ([evidence](../docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json))
 - [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-model122-heterogeneous-evolution
+
+Stored Silph Scope support exposed four Pokemon Tower capture sources action-free. Model122 then chose evolution from a genuine acquire/evolve menu and succeeded in11623actions/1050627frames, advancing Red to88/151 registrations with67living species and71specimens.
+
+**Deviation:** The model legitimately selected evolution, so the qualified capture-item composite was not forced. One successful measured outcome is durable but not yet fitted; Model122 remains122 examples/83 successes and no full-Red gate changed.
+
+**Next:** Sol High, Fast off: fit exactly the retained heterogeneous success into Model123, verify all prior rows and the frozen-menu selected-option response, then inspect the88-registration terminal action-free. No replay, forced capture, full run, push or ROM-hack work.
 
 ### 2026-09-15-model122-safari-transport-tentacruel
 

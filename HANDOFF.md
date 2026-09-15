@@ -3,51 +3,46 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 15, 2026.
 
-## Model122 retained; Red advanced to 87 registrations
+## Model122 made a useful mixed-family choice; Red reached 88 registrations
 
-The Model121 heterogeneous choice selected Safari acquisition and retained a real unsuccessful
-outcome. It consumed 295 actions/37,128 frames and ¥500 admission, added one living specimen but no
-new registration, and became Model122's sole new measured row. Model122 is training-only with 122
-settled examples and 83 successes; it has no authority promotion.
+The exact 87-registration terminal could not route its direct Cerulean Cave capture, but a
+zero-input cartridge inventory found four legitimate Pokemon Tower alternatives. The Silph Scope
+was stored in Red's PC. Source `8d2d4621` added verified singleton item withdrawal and a composite
+PC-item/capture executor; source `77eca5b3` exposed that support to the full-Pokedex mixed menu.
+Planning remained action-free. A disposable exact-terminal copy independently withdrew the Scope
+with party, boxes, money and collection preserved. Nothing was pushed to GitHub.
 
-The failure exposed a general active-Safari exit boundary. The runtime now handles the exact gate
-Yes/No dialogue semantically, verifies the cartridge's three-step scripted exit and cleared Safari
-flags, normalizes the remaining route, and prefers explicit Fly over long cross-region walking.
-This passed 448 focused tests, lint, whole-source type checking across 507 files and registry
-freshness. A disposable cartridge qualification then reached the Vermilion Pokemon Center in 54
-actions/3,804 frames with collection, party, inventory and money unchanged and zero model queries.
+The authenticated Model122 menu then contained exactly two executable families, acquire and
+evolve, with no species/source/binding identity exposed. One write-ahead query selected evolution
+with probability 0.852663 versus 0.147337 for capture. The selection was not overridden. It
+succeeded in 11,623 actions / 1,050,627 frames, used one Fly, retained cash at 206, and registered
+one new species. There were zero teacher labels and zero policy queries during execution.
 
-Two failed transport claims remain retained with exact cost and no retry. Their verified recoveries
-were combined into checkpoint record
-`0f5c102f9be73d90106bcb853a6eb4bba5d483c5978c7d2a13cd21c0342b59d2` at registration
-sequence 176. Incorrect unpublished support encodings were moved to the recoverable
-`quarantined-unpublished` area; they are not checkpoints.
+The durable restart is:
 
-From that recovered state, the forced singleton Tentacool evolution succeeded once: 16,465 actions,
-1,490,734 frames and one Fly. It registered Tentacruel, transforming the only Tentacool specimen
-without changing total living species or specimen count. This was deterministic collection work,
-not a model decision or training example. The durable native checkpoint is:
+- episode `red-model122-heterogeneous-evolution-terminal-20260915`
+- record `10e1f29eef8beea403c083400a1c95c5f86ec3c35d1ee8b3bd78c7938dc4cb0a`
+- manifest `0b89c21aa3d9fd757613b508161d49bf83d368a343765f3f5ab417731d9d0b6e`
+- state `bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b`
+- registration sequence 178; 88/151 local registrations, 67 living species, 71 specimens
 
-- episode `red-model122-tentacruel-forced-terminal-v2-20260915`
-- record `acc431cc7a2bcaa67a6779e97c2d08333ab48748b9ba657d059a3ef012175bea`
-- manifest `59888ada8bc7b5e54008afb72ce26453e12911c59438bd6ff8a2d11a1dea6e7f`
-- state `c82228f5e2b46665c59e7f4afd3e3cbb6ad725593eb18c674b8837f288d09c5e`
-- registration sequence 177; 87/151 local registrations, 67 living species, 71 specimens
+Model122 itself remains unchanged at 122 settled examples / 83 successes. The successful
+heterogeneous outcome is durable and fit-eligible, but the successor fit has not run. Gameplay is
+stopped safely.
 
 ## Next bounded work
 
-Reopen the exact Model122 checkpoint action-free and inspect the new terminal. Freeze a menu only if
-it contains at least two genuinely executable acquisition families from observed resources. Then
-issue at most one model query and execute at most one retained selection. The desired result is a
-new verified registration plus a measured learning row; a forced singleton may advance the Pokedex
-but must remain excluded from model training.
+Fit exactly this one measured choice into Model123, requiring all 122 prior rows to remain and the
+new successful row to be the only addition. Re-evaluate the frozen menu and reject the fit if it
+reduces support for the verified evolution choice or changes unrelated invariants. Then inspect the
+88-registration checkpoint action-free; do not replay the evolution or force the Tower capture.
 
-Stop on a one-family menu, authentication mismatch, lost accounting or an outcome that cannot be
-retained. Do not replay the forced evolution, start a full-game run, scan protected roots,
-substitute source, begin a ROM hack/Crystal, or push GitHub. Pete alone decides publication.
+Stop on any menu/choice/outcome/checkpoint authentication mismatch, duplicate measured record,
+unexpected row count or degraded selected-option response. Do not start a full-game run, begin a
+ROM hack/Crystal, or push GitHub. Pete alone decides publication.
 
-Next: **Sol / High / Fast off**, roughly 1–2 hours. Use Astra only if the action-free terminal
-reveals a genuinely new architecture boundary.
+Next: **Sol / High / Fast off**, about 45–90 minutes. The fit and terminal inventory are bounded,
+well-specified integration work; Astra is unnecessary unless the fit exposes a new representation
+or provenance boundary.
 
-[Session evidence](docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json) ·
-[Model122 learning evidence](docs/evidence/red-model122-safari-failure-learning-2026-09-15.json)
+[Session evidence](docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json)
