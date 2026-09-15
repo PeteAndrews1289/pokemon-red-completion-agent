@@ -80,6 +80,48 @@ def test_script_authenticates_all_frozen_inputs_before_durable_campaign(
     assert calls == ["clean", "published", "execute"]
 
 
+def test_script_accepts_clean_exact_local_source_without_publication(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    args, payload = _inputs(tmp_path)
+    document = json.loads(payload)
+    document["qualification_ci_run_id"] = None
+    payload = json.dumps(document, sort_keys=True, separators=(",", ":")).encode() + b"\n"
+    args.private_plan.write_bytes(payload)
+    args.expected_plan_sha256 = hashlib.sha256(payload).hexdigest()
+    args.qualification_ci_run_id = None
+    calls = []
+    monkeypatch.setitem(
+        GLOBALS,
+        "detect_source_identity",
+        lambda *a, **kw: SimpleNamespace(git_commit=document["source_commit"]),
+    )
+    monkeypatch.setitem(GLOBALS, "require_clean_source", lambda value: calls.append("clean"))
+    monkeypatch.setitem(
+        GLOBALS,
+        "require_published_source",
+        lambda *args: pytest.fail("local source must not require GitHub publication"),
+    )
+    monkeypatch.setitem(
+        GLOBALS,
+        "committed_source_bundle_sha256",
+        lambda root: document["source_bundle_sha256"],
+    )
+    monkeypatch.setitem(GLOBALS, "resolve_rom_path", lambda path: path)
+    monkeypatch.setitem(
+        GLOBALS, "verify_rom", lambda path: SimpleNamespace(sha256=document["rom_sha256"])
+    )
+    monkeypatch.setitem(GLOBALS, "open_private_root", lambda *a, **kw: object())
+    monkeypatch.setitem(
+        GLOBALS,
+        "execute_durable_red_battle_cartridge_campaign",
+        lambda *a: calls.append("execute") or {"status": "local"},
+    )
+
+    assert SCRIPT["_run"](args) == {"status": "local"}
+    assert calls == ["clean", "execute"]
+
+
 def test_script_forwards_frozen_contingency_policy(tmp_path, monkeypatch):
     from pokemon_red_completion.red_battle_contingency import CONTINGENCY_POLICY
     args, payload = _inputs(tmp_path)

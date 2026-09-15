@@ -54,7 +54,7 @@ class RedBattleCartridgeCampaignPlan:
     campaign_id: str
     source_commit: str
     source_bundle_sha256: str
-    qualification_ci_run_id: int
+    qualification_ci_run_id: int | None
     rom_sha256: str
     source: RepeatableBattleSourceObservation
     case_limits: QualificationLimits
@@ -112,7 +112,7 @@ def parse_red_battle_cartridge_campaign(payload: bytes) -> RedBattleCartridgeCam
     source_bundle = _sha256(value["source_bundle_sha256"], "source bundle")
     rom_sha256 = _sha256(value["rom_sha256"], "ROM")
     ci_run = value["qualification_ci_run_id"]
-    if type(ci_run) is not int or ci_run <= 0:  # noqa: E721
+    if ci_run is not None and (type(ci_run) is not int or ci_run <= 0):  # noqa: E721
         raise RedBattleCartridgeCampaignError("qualification CI run is invalid")
     source = _source(value["source"], source_commit)
     case_limits, campaign_limits, maximum_cases, maximum_steps = _limits(value["limits"])

@@ -42,7 +42,12 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-state", type=Path, required=True)
     parser.add_argument("--private-root", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
-    parser.add_argument("--qualification-ci-run-id", type=int, required=True)
+    parser.add_argument(
+        "--qualification-ci-run-id",
+        type=int,
+        default=None,
+        help="omit for a clean, exact local development commit",
+    )
     parser.add_argument("--allow-same-device-private-root", action="store_true")
     return parser
 
@@ -56,7 +61,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
         raise RedBattleCartridgeCampaignError("qualification CI run differs")
     identity = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(identity)
-    require_published_source(PROJECT_ROOT, identity)
+    if plan.qualification_ci_run_id is not None:
+        require_published_source(PROJECT_ROOT, identity)
     if identity.git_commit != plan.source_commit:
         raise RedBattleCartridgeCampaignError("published source commit differs")
     if committed_source_bundle_sha256(PROJECT_ROOT) != plan.source_bundle_sha256:

@@ -35,6 +35,13 @@ def test_contingency_policy_requires_a_distinct_frozen_digest():
         parse_red_battle_cartridge_campaign(_payload(document))
 
 
+def test_local_development_plan_may_omit_hosted_ci_identity():
+    document = _document()
+    document["qualification_ci_run_id"] = None
+    plan = parse_red_battle_cartridge_campaign(_payload(document))
+    assert plan.qualification_ci_run_id is None
+
+
 def _document() -> dict[str, object]:
     return {
         "campaign_id": "battle-cartridge-v2-new",
