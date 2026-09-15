@@ -42,7 +42,11 @@ from pokemon_red_completion.red_routed_semantic_goal import (
     RedRoutedSemanticBudgetMeter,
     RedSemanticTransportRoute,
 )
-from pokemon_red_completion.route_executor import TraversalObserver
+from pokemon_red_completion.red_safari_exit import (
+    RedSafariExitDialogueHandler,
+    normalize_active_safari_exit_plan,
+)
+from pokemon_red_completion.route_executor import InterruptionHandler, TraversalObserver
 from pokemon_red_completion.route_plan import RoutePlanningError
 from pokemon_red_completion.routed_semantic_goal import (
     FreshDestinationGoalOffer,
@@ -116,6 +120,10 @@ def bind_indoor_collection_departure(
     except RoutePlanningError:
         return None
 
+    safari_exit_plan = normalize_active_safari_exit_plan(plan)
+    if safari_exit_plan is not None:
+        plan = safari_exit_plan
+
     if (
         not plan.steps
         or not _walking_plan(plan)
@@ -167,6 +175,21 @@ def bind_indoor_collection_departure(
 
     from pokemon_red_completion.red_travel_capture_runtime import bind_travel_capture_handler
 
+    route_handler: InterruptionHandler = guarded_collection_route_handler(
+        actions,
+        reader,
+        route_name="indoor collection departure",
+        maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
+    )
+    if safari_exit_plan is not None:
+        route_handler = RedSafariExitDialogueHandler(actions, reader, route_handler)
+
+    def replan(request):
+        replacement = router._replan(request)
+        if safari_exit_plan is None:
+            return replacement
+        return normalize_active_safari_exit_plan(replacement) or replacement
+
     transport = RedSemanticTransportRoute(
         binding_ref="red-indoor-departure-route:" + spec.configuration_sha256,
         origin_observation_sha256=origin,
@@ -181,14 +204,9 @@ def bind_indoor_collection_departure(
         traversal_observer=traversal,
         emulator=runtime.emulator,
         interruption_handler=bind_travel_capture_handler(
-            router, spec, guarded_collection_route_handler(
-                actions,
-                reader,
-                route_name="indoor collection departure",
-                maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
-            ),
+            router, spec, route_handler,
         ),
-        replanner=router._replan,
+        replanner=replan,
         route_limits=_ROUTE_LIMITS,
         prepare_departure=lambda: prepare_center_departure(actions, reader),
     )
