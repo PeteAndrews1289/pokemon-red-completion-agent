@@ -60,6 +60,10 @@ _CAPTURE_CAPABILITY_PARAMETERS = (
     "observed_local_capture",
     "capture_access_requirements",
 )
+_EVOLUTION_CAPABILITY_PARAMETERS = (
+    "fly_transport",
+    "indoor_fly_departure",
+)
 
 
 def _capture_capability_parameters(
@@ -74,6 +78,23 @@ def _capture_capability_parameters(
             return {
                 key: spec.parameters[key]
                 for key in _CAPTURE_CAPABILITY_PARAMETERS
+                if key in spec.parameters
+            }
+    return {}
+
+
+def _evolution_capability_parameters(
+    profile: RedGoalContextProfile,
+) -> dict[str, object]:
+    """Retain generic evolution transport without carrying its old target."""
+    for spec in profile.providers:
+        if (
+            spec.kind is GoalKind.EVOLVE_SPECIES
+            and spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+        ):
+            return {
+                key: spec.parameters[key]
+                for key in _EVOLUTION_CAPABILITY_PARAMETERS
                 if key in spec.parameters
             }
     return {}
@@ -182,6 +203,12 @@ def derive_direct_full_pokedex_profile(
     corridor = _capture_corridor(observation, world)
     capture_parameters = corridor.profile_parameters()
     capture_parameters.update(_capture_capability_parameters(profile))
+    evolution_parameters: dict[str, object] = {
+        "source_species_ref": red_species_ref(source),
+        "target_species_ref": red_species_ref(target),
+        "evolution_level": level,
+    }
+    evolution_parameters.update(_evolution_capability_parameters(profile))
     providers: dict[
         GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]
     ] = {
@@ -201,11 +228,7 @@ def derive_direct_full_pokedex_profile(
     providers[GoalKind.EVOLVE_SPECIES] = (
         GoalKind.EVOLVE_SPECIES,
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
-        {
-            "source_species_ref": red_species_ref(source),
-            "target_species_ref": red_species_ref(target),
-            "evolution_level": level,
-        },
+        evolution_parameters,
     )
     return parse_red_goal_context_profile(
         build_red_goal_context_profile_payload(

@@ -22,6 +22,8 @@ from pokemon_red_completion.red_goal_context_profile import (
     bind_capture_cut_profile,
     bind_capture_fly_profile,
     bind_capture_surf_profile,
+    bind_evolution_fly_profile,
+    bind_indoor_fly_departure_profile,
     bind_observed_local_capture_profile,
     bind_travel_capture_profile,
     build_red_goal_context_profile_payload,
@@ -258,6 +260,25 @@ def test_direct_profile_does_not_invent_missing_capture_capabilities(tmp_path, m
     }
     assert optional.isdisjoint(source_capture.parameters)
     assert optional.isdisjoint(capture.parameters)
+
+
+def test_direct_profile_preserves_declared_evolution_transport(tmp_path, monkeypatch):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = runtime.adapter.observe()
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
+        lambda actual, world: _corridor(),
+    )
+    source = derive_direct_full_pokedex_profile(runtime.profile, observed, _world())
+    source = bind_evolution_fly_profile(source)
+    source = bind_indoor_fly_departure_profile(source)
+
+    derived = derive_direct_full_pokedex_profile(source, observed, _world())
+    evolution = next(
+        spec for spec in derived.providers if spec.kind is GoalKind.EVOLVE_SPECIES
+    )
+    assert evolution.parameters["fly_transport"] is True
+    assert evolution.parameters["indoor_fly_departure"] is True
 
 
 def test_direct_profile_refuses_to_invent_evolution_without_boxed_precursor(
