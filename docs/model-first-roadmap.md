@@ -30,13 +30,15 @@ The correlated-reset bridge is implemented; its one consumed reset stopped befor
 or gameplay. Direct retargeting now preserves generic capture and evolution travel capabilities.
 Evolution is natively and routably ready. All four legitimate missing grass corridors were checked:
 three have ready capture providers but no cartridge route from a legal departure, and one lacks
-resources. No fourth source was selected and all nine unused sources remain preserved.
+resources. A generic fishing fallback is now published, but exact committed-source qualification
+found zero reachable productive fishing destinations at the Model121 terminal. No fourth source
+was selected and all nine unused sources remain preserved.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Non-grass acquisition bridge | Reuse reachable fishing or another existing executor beside ready evolution | Sol / High |
+| Fossil acquisition gate | Qualify the existing observed fossil provider beside ready evolution | Sol / High |
 | One collection lesson | Newly declared successor, unchanged gate, one actual choice/outcome and honest fit | Sol / High |
 | Useful training batch | Varied cases, declared resets, all failures/interventions and actual costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
@@ -45,15 +47,15 @@ The next adapter and conditional lesson are one bounded session, not a promise t
 pass. Grass-route hardening, consumed-reset retry, protected-root scan and source-four use are out.
 
 Today's learning remains120→121 (+0.83% dataset size),86/151 registrations unchanged (56.95%).
-This session added engineering capability but no learning. Five consecutive no-learning sessions
+This session added engineering capability but no learning. Six consecutive no-learning sessions
 trigger the anti-drift alarm. No whole-project percentage is available; final Red gates remain0/5.
 
 Do not return to resource-only Model121 rows or treat timing seeds as independent histories.
 Full Red remains the final exam after bounded component gates, declared authority and honest costs.
 
-[Session](work-sessions/2026-09-14-route-feasible-candidate-gate.md) ·
-[Evidence](evidence/red-route-feasible-candidate-gate-2026-09-14.json) ·
+[Session](work-sessions/2026-09-15-fishing-evolution-bridge.md) ·
+[Evidence](evidence/red-fishing-evolution-bridge-gate-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Sol / High / Fast off**. Connect an existing non-grass acquisition executor, beginning with
-reachable fishing, then run one lesson only if the real two-family gate passes.
+Next: **Sol / High / Fast off**. Qualify the existing fossil executor at the exact terminal, then
+adapt and run one lesson only if its real acquire/evolve gate passes.

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-route-feasible-candidate-gate**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-fishing-evolution-bridge**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json)
+[Current evidence](../docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-fishing-evolution-bridge
+
+The reusable full-Pokedex observer now falls back from unavailable grass capture to one best reachable productive fishing executor while retaining ready evolution and identity-free acquire/evolve policy input. The exact committed Model121 state has zero reachable fishing destinations, so the gate failed with zero gameplay or learning delta.
+
+**Deviation:** The adapter completed as planned, but the exact endpoint falsified fishing as its acquisition partner. This sixth consecutive no-learning session stopped before reset, query or input; it did not patch a route, substitute another mechanic, touch source four or weaken the milestone.
+
+**Next:** Sol High: qualify the already-implemented fossil acquisition provider at the exact terminal and adapt it beside evolution only if an observed target is executable. Run one lesson only after the unchanged two-family gate passes.
 
 ### 2026-09-14-route-feasible-candidate-gate
 

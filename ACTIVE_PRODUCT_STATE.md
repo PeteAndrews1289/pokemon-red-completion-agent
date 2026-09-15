@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Connect an already-supported non-grass acquisition mechanic, beginning with reachable fishing, to the ready evolution option; play only if the unchanged two-family gate passes. No reset retry, protected-root scan or source four.
+- Next decision: Qualify the already-implemented fossil acquisition provider beside ready evolution at the exact terminal; play only if the unchanged two-family gate passes. No route patch, reset retry, protected-root scan or source four.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-route-feasible-candidate-gate** · status **closed** · evidence [falsification](docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json)
+**2026-09-15-fishing-evolution-bridge** · status **closed** · evidence [falsification](docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Evolution can again reach its executable mechanic, and exhaustive action-free candidate evidence prevents spending a reset on four grass captures that cannot run. The next step reuses a real acquisition skill instead of hardening a route. |
-| Learning output | None. This fifth consecutive no-learning session is a bounded maintenance falsification. Model121 remains121 examples/83 successes/86 local registrations. |
-| Authority delta | None. Evolution transport is repaired and executable, but no grass-corridor capture candidate can join it at this endpoint. Model121 remains121 examples/83 successes/86 local registrations. |
+| Product alignment | A reusable fishing executor can now occupy the full-Pokedex acquisition slot in reachable states, while exact zero-input evidence prevents spending a reset where no fishing route exists. Fossil revival is the next already-implemented heterogeneous mechanic. |
+| Learning output | None. This sixth consecutive no-learning session is a bounded adapter plus exact falsification. Model121 remains121 examples/83 successes/86 local registrations. |
+| Authority delta | None. The generic fishing fallback is published, but the exact terminal has zero reachable productive fishing destinations. Model121 remains121 examples/83 successes/86 local registrations. |
 | Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
-| Blocker | Evolution is natively and routably ready. Of four legitimate grass corridors, three have ready destination skills but no cartridge-router path from a legal departure, and one lacks destination resources. Candidate ordering cannot make the two-family gate pass. |
-| Decision | Keep the generic evolution transport repair, close grass-corridor selection for this endpoint, and stop gameplay. Next test an already-supported non-grass acquisition mechanic, beginning with reachable fishing, as evolution's identity-free menu partner. |
-| Next session | Connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the full-Pokedex proposal and immediately run one new collection lesson only if the unchanged two-family gate passes. |
-| Next falsifier | No already-supported non-grass acquisition mechanic can join the ready evolution binding at the exact terminal without identity-bearing policy input or new gameplay preparation. |
-| Stop condition | All four legitimate grass corridors were exhausted action-free without a capture binding. Stop route work and gameplay; do not add map/species exceptions or spend a reset. |
+| Blocker | Evolution is ready, while both tested acquisition families are unavailable at this terminal: all four grass corridors failed route/resource qualification and the existing fishing discovery found zero reachable productive destinations. |
+| Decision | Keep the generic fishing fallback for future reachable states, stop gameplay, and test the already-implemented fossil acquisition provider next. Do not patch grass/fishing routes or chain through untested mechanics. |
+| Next session | Qualify the existing fossil acquisition provider at the exact terminal and connect it beside evolution only if its observed target is executable; run one lesson only if the unchanged two-family gate passes. |
+| Next falsifier | The exact terminal has no observed executable fossil acquisition that can join evolution without gameplay preparation or identity-bearing policy input. |
+| Stop condition | The exact terminal exposed zero reachable productive fishing destinations, so the two-family gate failed. Stop gameplay; do not patch a map route, spend a reset or substitute another mechanic in this session. |
 
 ### Stop conditions
 

@@ -7,11 +7,11 @@ An experimental Pokémon player that learns which goals to pursue—catching, ev
 ## What works today
 
 - A learned goal/destination selector drives short Red episodes and updates from their actual outcomes, including failures.
-- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. A new inventory accounts for all 151 Red targets. Evolution is now routably ready, but all four legitimate missing grass-capture corridors are inaccessible or under-resourced from the exact terminal; gameplay remains stopped while an existing non-grass acquisition skill is connected.
+- The latest measured collection contains **86 local registrations** and Model121 has **121 settled examples / 83 successes**. A new inventory accounts for all 151 Red targets. Evolution is ready and a generic fishing fallback is connected, but the exact terminal has no reachable grass or fishing acquisition; gameplay remains stopped while another existing mechanic is qualified.
 - A checkpoint-based, hierarchical story run reached the Champion and Hall of Fame. The final boss continuation was forced, and battle execution was deterministic—not a learned fresh-game playthrough.
 - Saved-state recovery, collection tracking and a local spectator dashboard preserve the distinction between live gameplay, saved results and training.
 
-The [latest session report](docs/work-sessions/2026-09-14-direct-catalog-origin-bridge.md),
+The [latest session report](docs/work-sessions/2026-09-15-fishing-evolution-bridge.md),
 [source-selection report](docs/work-sessions/2026-09-14-full-local-training-source.md),
 [latest learning report](docs/work-sessions/2026-09-14-model121-frozen-resupply.md),
 [prior forced continuation report](docs/work-sessions/2026-09-13-model119-forced-singleton-fishing.md),

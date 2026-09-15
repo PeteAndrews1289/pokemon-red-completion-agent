@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-route-feasible-candidate-gate",
+  "as_of_session": "2026-09-15-fishing-evolution-bridge",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json"
+      "evidence": "docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1406,6 +1406,12 @@
       "result": "Evolution routing is restored. Four grass corridors were checked action-free: three have ready capture providers but no route; one lacks resources. No learning delta.",
       "deviation": "The generic candidate falsifier fired, so gameplay stopped without a reset or source. This fifth no-learning session closes grass-corridor routing at this endpoint rather than adding map/species exceptions. The prior evolution discrepancy is resolved as lost transport permission.",
       "next": "Sol High: connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the ready evolution option. Declare and play one lesson only after the unchanged two-family gate passes."
+    },
+    {
+      "session": "2026-09-15-fishing-evolution-bridge",
+      "result": "The reusable full-Pokedex observer now falls back from unavailable grass capture to one best reachable productive fishing executor while retaining ready evolution and identity-free acquire/evolve policy input. The exact committed Model121 state has zero reachable fishing destinations, so the gate failed with zero gameplay or learning delta.",
+      "deviation": "The adapter completed as planned, but the exact endpoint falsified fishing as its acquisition partner. This sixth consecutive no-learning session stopped before reset, query or input; it did not patch a route, substitute another mechanic, touch source four or weaken the milestone.",
+      "next": "Sol High: qualify the already-implemented fossil acquisition provider at the exact terminal and adapt it beside evolution only if an observed target is executable. Run one lesson only after the unchanged two-family gate passes."
     }
   ],
   "closed_milestones": [

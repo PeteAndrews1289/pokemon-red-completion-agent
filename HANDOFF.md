@@ -1,36 +1,35 @@
 # Current development handoff
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September14,2026.
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September15,2026.
 
-## Evolution restored; grass-corridor candidates exhausted
+## Fishing is integrated; the exact endpoint has none reachable
 
-Published source `79eb4defc4fdda70170f2f1f2c92b13df1c937ce` preserves generic Fly/indoor-Fly
-permission when retargeting evolution. Exact zero-input evidence now confirms both the native
-evolution mechanic and its router binding are ready, resolving the prior diagnostic discrepancy.
+Published source `81622814c9b391ba6151ef93fa4bcb98f8a13ab8` lets the full-Pokédex observer
+retain an executable grass capture when present and otherwise bind exactly one best reachable,
+productive fishing destination beside evolution. Cartridge tables, local registration flags,
+routes, maps and species remain private mechanics; the policy still sees acquire versus evolve.
 
-Capture cannot join it in the grass-corridor family. All four legitimate missing candidates derived
-from cartridge geometry. Three have ready destination capture skills/resources but no router path
-from a legal departure; one lacks destination resources. None is blocked by an unenabled field move,
-so candidate ordering or another transport flag cannot make this gate pass.
+The exact committed-source Model121 scan failed closed. Evolution is natively ready, but fishing
+discovery found zero reachable productive destinations and zero reachable missing fishing targets.
+The acquire/evolve gate therefore failed with zero model queries, controller actions, emulator
+frames, reset claims, outcomes or fits. No gameplay occurred.
 
-No reset, model query, action, frame, outcome or fit occurred. The old correlated reset stays
-consumed; V1–V3, source four and all nine unused roots remain untouched.
+Model121 remains121 examples/83 successes/86 local registrations. The original collection
+checklist remains21/22, expanded25/26; final fresh-start Red gate0/5. The consumed reset, source
+four and all nine unused roots remain untouched. This is the sixth consecutive session without a
+measured learning output, so the anti-drift alarm remains active.
 
 ## Next bounded work
 
-Connect one already-supported non-grass acquisition mechanic—beginning with reachable fishing—to
-the full-Pokédex proposal beside the ready evolution option. If and only if the unchanged gate has
-both families, declare one new prospective lesson. Do not harden grass routes, rebuild admission,
-scan protected roots, select source four or retry the closed reset.
+Qualify the already-implemented fossil acquisition provider against the exact terminal. Connect it
+beside evolution only if an observed fossil target is executable, then declare and play one lesson
+only if the unchanged two-family gate passes. Stop without gameplay on no fossil, no route/resource,
+or any need for a map/species exception. Do not patch grass/fishing routes, chain to another
+mechanic in that session, scan protected roots, select source four, or retry the closed reset.
 
-Model121 remains121 examples/83 successes/86 local registrations. Gameplay is stopped. The original
-collection checklist remains21/22, expanded25/26; final fresh-start Red gate0/5. No ROM hack or
-Crystal before a full non-deterministic model-directed Red run with all151 local registrations.
+Next: **Sol / High / Fast off**. This is a bounded readiness/adapter task around an existing
+executor; Astra is unnecessary unless the policy boundary itself must change.
 
-This fifth consecutive no-learning session is maintenance only; the anti-drift alarm is active.
-Next: **Sol / High / Fast off**, reuse an existing non-grass acquisition executor and play only if
-the two-family gate passes.
-
-[Session](docs/work-sessions/2026-09-14-route-feasible-candidate-gate.md) ·
-[Evidence](docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-15-fishing-evolution-bridge.md) ·
+[Evidence](docs/evidence/red-fishing-evolution-bridge-gate-2026-09-15.json)
