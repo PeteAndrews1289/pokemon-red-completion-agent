@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-capture-route-capability-repair**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-route-feasible-candidate-gate**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-capture-route-capability-repair-2026-09-14.json)
+[Current evidence](../docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-route-feasible-candidate-gate
+
+Evolution routing is restored. Four grass corridors were checked action-free: three have ready capture providers but no route; one lacks resources. No learning delta.
+
+**Deviation:** The generic candidate falsifier fired, so gameplay stopped without a reset or source. This fifth no-learning session closes grass-corridor routing at this endpoint rather than adding map/species exceptions. The prior evolution discrepancy is resolved as lost transport permission.
+
+**Next:** Sol High: connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the ready evolution option. Declare and play one lesson only after the unchanged two-family gate passes.
 
 ### 2026-09-14-capture-route-capability-repair
 

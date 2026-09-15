@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify generic route-feasible capture candidate selection, then run one newly declared collection lesson only if capture and evolution are both executable. No reset retry, protected-root scan or source four.
+- Next decision: Connect an already-supported non-grass acquisition mechanic, beginning with reachable fishing, to the ready evolution option; play only if the unchanged two-family gate passes. No reset retry, protected-root scan or source four.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Generic route-feasible candidate qualification cannot expose both capture and evolution without a species-specific exception, coordinate-bearing policy feature or game mutation. |
+| Cheapest falsifier | No already-supported non-grass acquisition mechanic can join the ready evolution binding at the exact terminal without identity-bearing policy input or new gameplay preparation. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-capture-route-capability-repair** · status **closed** · evidence [falsification](docs/evidence/red-capture-route-capability-repair-2026-09-14.json)
+**2026-09-14-route-feasible-candidate-gate** · status **closed** · evidence [falsification](docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Direct retargeting now preserves reusable declared travel/capture skills without carrying a target. The exact falsifier proves that repair alone does not create a playable choice, preventing another wasted reset. |
-| Learning output | None. This fourth consecutive no-learning session is a bounded maintenance falsification. Model121 remains121 examples/83 successes/86 local registrations. |
-| Authority delta | None. Generic capture capabilities now survive direct retargeting, but the exact action-free gate still has no executable two-family menu. Model121 remains121 examples/83 successes/86 local registrations. |
+| Product alignment | Evolution can again reach its executable mechanic, and exhaustive action-free candidate evidence prevents spending a reset on four grass captures that cannot run. The next step reuses a real acquisition skill instead of hardening a route. |
+| Learning output | None. This fifth consecutive no-learning session is a bounded maintenance falsification. Model121 remains121 examples/83 successes/86 local registrations. |
+| Authority delta | None. Evolution transport is repaired and executable, but no grass-corridor capture candidate can join it at this endpoint. Model121 remains121 examples/83 successes/86 local registrations. |
 | Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
-| Blocker | All eight declared capture capabilities survive exactly, yet the authenticated terminal still reports capture as router_binding_unavailable/missing_capability. The repaired-profile check also reports evolution unavailable, conflicting with the prior legacy-profile diagnostic; neither family is treated as executable. |
-| Decision | Keep the scoped generic preservation repair and close the flags-alone hypothesis. Stop gameplay. Next qualify generic route-feasible candidate selection without a target-specific exception, then declare a played lesson only if the unchanged two-family gate passes. |
-| Next session | Qualify generic route-feasible capture candidate selection and immediately declare one new collection lesson only if the unchanged two-family gate passes. Do not retry the closed reset or scan protected roots. |
-| Next falsifier | No generic route-feasible candidate can expose both capture and evolution without a species-specific exception, coordinate-bearing policy feature or game mutation. |
-| Stop condition | Exact capability preservation still produced no legal capture route. Stop this repair lane without a target-specific patch, gameplay or reset; preserve both diagnostic records and all unused roots. |
+| Blocker | Evolution is natively and routably ready. Of four legitimate grass corridors, three have ready destination skills but no cartridge-router path from a legal departure, and one lacks destination resources. Candidate ordering cannot make the two-family gate pass. |
+| Decision | Keep the generic evolution transport repair, close grass-corridor selection for this endpoint, and stop gameplay. Next test an already-supported non-grass acquisition mechanic, beginning with reachable fishing, as evolution's identity-free menu partner. |
+| Next session | Connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the full-Pokedex proposal and immediately run one new collection lesson only if the unchanged two-family gate passes. |
+| Next falsifier | No already-supported non-grass acquisition mechanic can join the ready evolution binding at the exact terminal without identity-bearing policy input or new gameplay preparation. |
+| Stop condition | All four legitimate grass corridors were exhausted action-free without a capture binding. Stop route work and gameplay; do not add map/species exceptions or spend a reset. |
 
 ### Stop conditions
 

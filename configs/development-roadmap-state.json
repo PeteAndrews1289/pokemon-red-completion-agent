@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-capture-route-capability-repair",
+  "as_of_session": "2026-09-14-route-feasible-candidate-gate",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-capture-route-capability-repair-2026-09-14.json"
+      "evidence": "docs/evidence/red-route-feasible-candidate-gate-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1400,6 +1400,12 @@
       "result": "Direct retargeting now preserves exactly eight declared generic capture capabilities without copying target identity. ROM-free regressions pass, but the exact zero-input terminal still has no capture route; no learning delta.",
       "deviation": "The flags-alone hypothesis was falsified and the repair lane stopped without gameplay. The repaired-profile check also reports evolution unavailable, contradicting the prior legacy-profile diagnostic; the discrepancy is preserved and neither family is treated as executable. This is a fourth consecutive no-learning session.",
       "next": "Sol High: qualify generic route-feasible capture candidate selection and declare one new collection lesson only if the unchanged capture-plus-evolution gate passes. No species-specific patch, consumed-reset retry, protected-root scan or source four."
+    },
+    {
+      "session": "2026-09-14-route-feasible-candidate-gate",
+      "result": "Evolution routing is restored. Four grass corridors were checked action-free: three have ready capture providers but no route; one lacks resources. No learning delta.",
+      "deviation": "The generic candidate falsifier fired, so gameplay stopped without a reset or source. This fifth no-learning session closes grass-corridor routing at this endpoint rather than adding map/species exceptions. The prior evolution discrepancy is resolved as lost transport permission.",
+      "next": "Sol High: connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the ready evolution option. Declare and play one lesson only after the unchanged two-family gate passes."
     }
   ],
   "closed_milestones": [

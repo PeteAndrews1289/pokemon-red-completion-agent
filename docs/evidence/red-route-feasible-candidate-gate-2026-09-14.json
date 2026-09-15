@@ -1,0 +1,80 @@
+{
+  "schema": "pokemon.red.route-feasible-candidate-gate.evidence.v1",
+  "session_id": "2026-09-14-route-feasible-candidate-gate",
+  "classification": "maintenance-and-action-free-falsification",
+  "status": "closed-no-executable-grass-capture-candidate",
+  "source_commit": "79eb4defc4fdda70170f2f1f2c92b13df1c937ce",
+  "source_bundle_sha256": "0c830880d5221c0aa6ae2326f5090cf549bd96d5dd4ff77918f4bc7232f3b33f",
+  "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+  "implementation": {
+    "evolution_transport_parameters_preserved": [
+      "fly_transport",
+      "indoor_fly_departure"
+    ],
+    "old_evolution_target_preserved": false,
+    "missing_transport_invented": false,
+    "evolution_native_readiness_after_repair": "ready",
+    "evolution_router_ready_after_repair": true
+  },
+  "exact_candidate_gate": {
+    "record_id": "model121-route-feasible-candidate-gate-20260915-v1",
+    "record_sha256": "24bb57dc9ddf86fca2608231a91ac2a75bc625ae4b37b77a1fc5bf7fb105a0d5",
+    "manifest_sha256": "a768903e374c69c698dd96b8e47a2f31c5a9f731f25839f97194082ab0ff4ea5",
+    "catalog_candidates": 4,
+    "cartridge_corridors_derived": 4,
+    "capture_provider_ready": 3,
+    "capture_provider_missing_resource": 1,
+    "ready_provider_no_route": 3,
+    "unsupported_field_action_count": 0,
+    "capture_ready_candidate_found": false,
+    "evolution_router_ready": true,
+    "state_bytes_unchanged": true,
+    "execution_authorized": false
+  },
+  "diagnostic_interpretation": {
+    "candidate_ordering_fault": false,
+    "flags_alone_fault": false,
+    "destination_capture_skill_fault_for_ready_candidates": false,
+    "remaining_blocker": "No cartridge-router path exists from a legal departure to any of the three resource-ready grass corridors in this exact state.",
+    "identity_fields_exposed_to_model": 0
+  },
+  "effects": {
+    "new_reset_claims": 0,
+    "fresh_source_claims": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "gameplay_attempts": 0,
+    "training_examples": 0,
+    "verified_successes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0,
+    "unused_eligible_sources_preserved": 9
+  },
+  "verification": {
+    "focused_route_profile_player_tests": "387 passed in 22.97 seconds",
+    "ruff": "passed",
+    "collection_registry_regeneration": "passed",
+    "collection_registry_check": "passed",
+    "active_product_focus_check": "passed before source publication",
+    "hosted_ci": "34927308220 in progress at closeout; not a gameplay prerequisite"
+  },
+  "review": {
+    "claude": "not used; the exact falsifier is local and no authority was promoted",
+    "flash": "not used; the four-candidate exact scan was bounded and decisive",
+    "reviewers_running": false
+  },
+  "current": {
+    "model": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "decision": "Keep the generic evolution transport repair, close grass-corridor candidate selection for this endpoint, and do not play. Next test whether an already-supported non-grass acquisition mechanic can form the heterogeneous menu with evolution.",
+  "next_model": "Sol High, Fast off",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

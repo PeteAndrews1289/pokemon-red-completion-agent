@@ -1,23 +1,22 @@
-# Video narrative: the obvious capture fix was not the whole fix
+# Video narrative: four honest capture candidates, zero usable routes
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
 build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the concrete bug: choosing a new cartridge-derived encounter corridor erased reusable
-Cut, Surf, Fly and capture-support declarations. The published repair carries eight generic
-capabilities forward without carrying the old species, source or coordinates.
+Open with the resolved bug: direct retargeting had dropped evolution's generic Fly permission.
+Preserving it restores the actual evolution binding without carrying the old target.
 
-Then show the falsifier. The exact Model121 endpoint retained every declaration and still could not
-bind capture. Its repaired menu also rejected evolution, contradicting the prior legacy-profile
-diagnostic. No input or reset was spent, and the discrepancy remains visible instead of being
-edited into a clean success story.
+Then show the honest dead end. The exact Model121 endpoint has four legitimate missing grass
+corridors. Three have viable capture mechanics but no legal cartridge route; one lacks resources.
+No candidate, reset or controller input was consumed to discover that.
 
-Next is a generic route-feasible candidate check. Four consecutive no-learning sessions are an
-alarm, not a success montage; only a real model-selected outcome can advance the learner.
+Next is not another grass-route patch. Reuse the existing reachable fishing machinery beside
+evolution. Five consecutive no-learning sessions are an alarm; only a played, retained choice moves
+the learner forward.
 
-[Session and evidence](work-sessions/2026-09-14-capture-route-capability-repair.md)
+[Session and evidence](work-sessions/2026-09-14-route-feasible-candidate-gate.md)
 
 ## The real finish line
 

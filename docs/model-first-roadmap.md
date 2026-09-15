@@ -27,34 +27,33 @@ The65 missing entries classify as38 solo catalog plans,11 version trades, four l
 11 supporting-save branch trades and one legitimate event input. Classification is not execution.
 
 The correlated-reset bridge is implemented; its one consumed reset stopped before any model query
-or gameplay. Direct capture retargeting now preserves exactly eight previously declared generic
-capabilities without copying a target. The exact zero-input check still found capture unavailable
-with `missing_capability`, so the flags-alone hypothesis is closed. It also found evolution
-unavailable, contradicting the prior legacy-profile diagnostic; neither family is currently ready.
-No fourth source was selected and all nine unused sources remain preserved.
+or gameplay. Direct retargeting now preserves generic capture and evolution travel capabilities.
+Evolution is natively and routably ready. All four legitimate missing grass corridors were checked:
+three have ready capture providers but no cartridge route from a legal departure, and one lacks
+resources. No fourth source was selected and all nine unused sources remain preserved.
 
 ## Next few sessions
 
 | Session | Evidence needed | Setting |
 | --- | --- | --- |
-| Route-feasible candidate gate | Generic source selection yields capture plus evolution without identity-bearing policy input | Sol / High |
+| Non-grass acquisition bridge | Reuse reachable fishing or another existing executor beside ready evolution | Sol / High |
 | One collection lesson | Newly declared successor, unchanged gate, one actual choice/outcome and honest fit | Sol / High |
 | Useful training batch | Varied cases, declared resets, all failures/interventions and actual costs | Sol / High |
 | Reliability/dependency review | Separate-lineage comparison and concrete version/trade/event paths | Astra / High |
 
-The next qualification and conditional lesson are one bounded session, not a promise that gameplay
-will pass. No consumed reset may retry, and no protected-root scan or source-four use is authorized.
+The next adapter and conditional lesson are one bounded session, not a promise that gameplay will
+pass. Grass-route hardening, consumed-reset retry, protected-root scan and source-four use are out.
 
 Today's learning remains120→121 (+0.83% dataset size),86/151 registrations unchanged (56.95%).
-This session added engineering capability but no learning. Four consecutive no-learning sessions
+This session added engineering capability but no learning. Five consecutive no-learning sessions
 trigger the anti-drift alarm. No whole-project percentage is available; final Red gates remain0/5.
 
 Do not return to resource-only Model121 rows or treat timing seeds as independent histories.
 Full Red remains the final exam after bounded component gates, declared authority and honest costs.
 
-[Session](work-sessions/2026-09-14-capture-route-capability-repair.md) ·
-[Evidence](evidence/red-capture-route-capability-repair-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-route-feasible-candidate-gate.md) ·
+[Evidence](evidence/red-route-feasible-candidate-gate-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next: **Sol / High / Fast off**. Qualify generic route-feasible candidate selection, then run one
-newly declared lesson only if the real two-family gate passes. Keep the consumed reset unchanged.
+Next: **Sol / High / Fast off**. Connect an existing non-grass acquisition executor, beginning with
+reachable fishing, then run one lesson only if the real two-family gate passes.
