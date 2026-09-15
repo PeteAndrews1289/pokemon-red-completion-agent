@@ -1,0 +1,111 @@
+{
+  "schema": "pokemon.red.model122-safari-transport-tentacruel-evidence.v1",
+  "session_id": "2026-09-15-model122-safari-transport-tentacruel",
+  "status": "verified_registration_and_durable_restart",
+  "source": {
+    "commit": "ba3b9d3efffb332bdad1e5ee35c1622390b646ab",
+    "source_bundle_sha256": "51cec31eb5c8dc4af26bb0c9f1e36ca1adb434428bed8ebd50a9ae5217d3688e",
+    "github_push_performed": false
+  },
+  "learned_authority": {
+    "model": "Model122",
+    "model_sha256": "4c4a610995cccee9b6e110f4aadbbd93105a5f2690c57343d434f9052a9fde69",
+    "settled_examples": 122,
+    "successful_examples": 83,
+    "new_measured_examples": 1,
+    "new_successes": 0,
+    "authority_promotions": 0,
+    "result": "The selected Safari acquisition failure was retained and fitted; the later forced evolution did not query or train the model."
+  },
+  "transport_repair": {
+    "scope": "Semantic active-Safari exit plus explicit Fly preference for cross-region collection transport.",
+    "safari_exit_behavior": "At the exact active Safari gate prompt, select Yes, verify the three-step scripted gate landing and cleared Safari flags, then continue the normalized route.",
+    "generic_dialogue_cap_increase": false,
+    "focused_tests_passed": 448,
+    "ruff": "passed",
+    "whole_source_mypy_files": 507,
+    "collection_registry_check": "passed"
+  },
+  "retained_failures_and_recovery": {
+    "first_failure": {
+      "actions": 34,
+      "frames": 2844,
+      "result": "retained_dialogue_transport_failure"
+    },
+    "first_recovery": {
+      "actions": 4,
+      "frames": 408,
+      "result": "verified_control_recovery"
+    },
+    "second_failure": {
+      "actions": 2,
+      "frames": 204,
+      "result": "retained_zero_dialogue_fly_failure"
+    },
+    "second_recovery": {
+      "actions": 4,
+      "frames": 408,
+      "result": "verified_control_recovery"
+    },
+    "combined_checkpoint_record_sha256": "0f5c102f9be73d90106bcb853a6eb4bba5d483c5978c7d2a13cd21c0342b59d2",
+    "combined_manifest_sha256": "4bde64a6af07de53c080771330840e1b49b4c5857991b429ad4db08445e53be0",
+    "combined_terminal_state_sha256": "a1c49919f4b30500f4b699d62bec0b72ac8052f810fa5532e41c25f80d7776e2",
+    "registration_sequence": 176
+  },
+  "disposable_qualification": {
+    "status": "verified_transport_only",
+    "actions": 54,
+    "frames": 3804,
+    "result": "Safari exit followed by one legal Fly to the Vermilion Pokemon Center.",
+    "collection_changed": false,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "retry_allowed": false
+  },
+  "tentacruel_registration": {
+    "selection_mode": "forced_singleton",
+    "selected_goal_kind": "evolve_species",
+    "actions": 16465,
+    "frames": 1490734,
+    "field_moves": {
+      "cuts": 0,
+      "surfs": 0,
+      "flights": 1
+    },
+    "registered_before": 86,
+    "registered_after": 87,
+    "living_species_after": 67,
+    "specimens_after": 71,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "retry_allowed": false,
+    "terminal_state_sha256": "c82228f5e2b46665c59e7f4afd3e3cbb6ad725593eb18c674b8837f288d09c5e",
+    "checkpoint_record_sha256": "acc431cc7a2bcaa67a6779e97c2d08333ab48748b9ba657d059a3ef012175bea",
+    "trajectory_manifest_sha256": "59888ada8bc7b5e54008afb72ce26453e12911c59438bd6ff8a2d11a1dea6e7f",
+    "registration_sequence": 177
+  },
+  "collection": {
+    "local_registered": 87,
+    "local_target": 151,
+    "completion_percent": 57.6158940397351,
+    "remaining_local_registrations": 64,
+    "living_species": 67,
+    "specimens": 71
+  },
+  "review": {
+    "antigravity_model": "Gemini 3.8 Flash High",
+    "contribution": "Recommended explicit Fly precedence, minimal indoor egress and a bounded semantic exit rather than a generic dialogue-cap increase.",
+    "accepted": [
+      "explicit Fly precedence",
+      "bounded semantic Safari exit"
+    ],
+    "rejected": [
+      "generic dialogue-cap increase as the complete fix"
+    ],
+    "claude_used": false,
+    "service_quota_refreshed": false
+  },
+  "decision": "Resume from the durable 87-registration Model122 checkpoint and demand a genuine heterogeneous acquisition menu before another model query. Execute at most one retained selection; do not replay the forced evolution, start a full run, or advance to a ROM hack."
+}

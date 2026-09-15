@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Campaign C is consumed and the standalone cartridge gate is closed. Build one legitimate heterogeneous acquisition choice from the authenticated Model121 terminal and execute at most one retained selection; do not create Campaign D by default.
+- Next decision: Reopen the durable 87-registration Model122 terminal, freeze one legitimate heterogeneous acquisition menu with at least two executable families, and execute at most one retained model-selected outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model121 remains 121 examples / 83 successes and 86 local registrations. Campaign C and its generic battle repair add no learned authority; the next work returns to the heterogeneous collection lesson. |
+| Authority now | Model122 has 122 settled examples / 83 successes and 87 local registrations. It remains bounded development-only; the forced Tentacruel bridge did not add authority or a training target. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
@@ -51,7 +51,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 121 | 12 |
+| Registered Train Example · train | 122 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-local-battle-cartridge-campaign-c** · status **closed** · evidence [falsification](docs/evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json)
+**2026-09-15-model122-safari-transport-tentacruel** · status **closed** · evidence [model fit](docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Campaign C exposed and preserved a general Gen I multi-turn battle boundary, and the generic repair is locally verified. Ending the standalone gate returns effort to the actual Red Pokedex objective while retaining failures as real-play evidence. |
-| Learning output | None. Campaign C used 117 actions and 9,881 frames: one settled battle, one complete-cost failure and one unopened case. The repair passed 312 focused tests plus three slow compatibility checks; zero queries, labels, examples, fits or registrations. |
-| Authority delta | None. Model121 remains 121 examples / 83 successes and 86/151 local registrations. |
-| Transfer result | One Route 11 case settled and a second exposed player-owned Wrap continuation; the repair is ROM-free only. No independent-lineage or cross-title transfer result was produced. |
-| Blocker | Campaign C found and retained a generic player-owned multi-turn continuation gap. Its repair passes ROM-free regression but has no post-repair cartridge result; repeated disposable qualification now delays measured collection progress. |
-| Decision | Consume Campaign C and end the separate cartridge-gate loop. Return to one bounded authenticated heterogeneous collection choice; let actual collection play supply further battle evidence while retained acquisition progress is the primary output. |
-| Next session | Sol High, Fast off: build one legitimate two-family acquisition menu from the authenticated Model121 terminal and execute at most one retained choice. Desired output is a verified registration and learning example, not another disposable battle campaign. |
-| Next falsifier | Fewer than two real executable acquisition families are available before query, or the selected family cannot preserve a verified registration/outcome and exact cost without source substitution. |
-| Stop condition | One bounded session and at most one selected acquisition. Stop on a one-family menu, failed authentication, lost accounting or unretained outcome. No Campaign D by default, consumed-identity retry, protected-root scan, arbitrary source replacement, full-game run or ROM hack. |
+| Product alignment | Red gained Tentacruel and a durable 87-registration restart, while the Safari failure improved the learned cost model and the shared transport runtime now handles active Safari exit before Fly without route-specific dialogue inflation. |
+| Learning output | One measured unsuccessful Safari acquisition was added and fitted as Model122, moving the corpus from 121 to 122 settled examples while successes remain 83. The forced Tentacruel bridge added one verified registration but zero queries, labels or training examples. |
+| Authority delta | Model122 is the training-only successor at 122 settled examples / 83 successes; authority remains bounded development only. Red advanced to 87/151 local registrations. |
+| Transfer result | The semantic active-Safari exit handles both legal gate lanes and the generic indoor transport path prefers Fly across regions; disposable cartridge qualification reached a Pokemon Center with collection and inventory unchanged. Cross-title transfer remains unmeasured. |
+| Blocker | The prior Safari choice failed after consuming admission money and exposed an active-gate dialogue boundary. That generic transport boundary is repaired and cartridge-qualified; the new 87-registration terminal has not yet been frozen into another genuine two-family menu. |
+| Decision | Retain the failed Safari choice as Model122's new measured example, retain the deterministic Tentacruel evolution as collection progress only, and return to a fresh heterogeneous acquisition decision from the new terminal. |
+| Next session | Sol High, Fast off: action-free observe and freeze the new Model122 terminal, require at least two legitimate executable acquisition families, then issue at most one model query and retain at most one selected outcome. |
+| Next falsifier | The authenticated 87-registration terminal cannot expose at least two genuinely executable acquisition families before query, or one selected outcome cannot be retained with exact cost and collection accounting. |
+| Stop condition | One bounded session and at most one selected acquisition. Stop on a one-family menu, failed authentication, lost accounting or unretained outcome. Do not replay the forced evolution, start a full-game run, scan protected roots, substitute source, push GitHub or begin a ROM hack. |
 
 ### Stop conditions
 

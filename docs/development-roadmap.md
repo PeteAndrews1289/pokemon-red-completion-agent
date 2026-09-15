@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-local-battle-cartridge-campaign-c**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model122-safari-transport-tentacruel**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 25/26 acceptance items (96%).**
+**Broaden model-directed Red collection: 26/26 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -17,7 +17,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Route, fish and selectively capture from the model's chosen destination ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
-- [ ] Expose a useful choice across more than one acquisition family
+- [x] Expose a useful choice across more than one acquisition family ([evidence](../docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json))
 - [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
@@ -39,7 +39,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
 - [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
 
-Current model: **121 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **122 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model122-safari-transport-tentacruel-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-model122-safari-transport-tentacruel
+
+The heterogeneous Safari/evolution choice retained a failed Safari acquisition and fit Model122 at122 examples/83 successes. Semantic Safari exit plus Fly was cartridge-qualified, then one forced Tentacool evolution registered Tentacruel. Red is87/151 registered with67 living species and71 specimens.
+
+**Deviation:** The Safari failure required bounded generic transport repair and two exact no-retry recoveries. Tentacruel was a forced singleton, so it advances collection but adds no query, label or training target. The mixed-acquisition checklist closes26/26 without satisfying any of the five full-Red completion gates.
+
+**Next:** Sol High, Fast off: action-free freeze the exact Model122 terminal, require at least two executable acquisition families, and retain at most one model-selected outcome. No forced-evolution replay, full run, GitHub push or ROM-hack work.
 
 ### 2026-09-15-local-battle-cartridge-campaign-c
 
