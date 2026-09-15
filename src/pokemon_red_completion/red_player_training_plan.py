@@ -38,6 +38,18 @@ DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA = (
 DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA = (
     "pokemon.red.direct-catalog-registered-player-training-plan.v1"
 )
+CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA = "pokemon.red.correlated-reset-training-plan.v1"
+CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA = (
+    "pokemon.red.registered-correlated-reset-training-plan.v1"
+)
+CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA = "pokemon.red.registered-correlated-reset-training-plan.v2"
+ECONOMY_TRAINING_SCHEMAS = frozenset({
+    ECONOMY_TRAINING_PLAN_SCHEMA, CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+})
+CORRELATED_TRAINING_SCHEMAS = frozenset({
+    CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA, CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+    CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+})
 STORY_CURRICULUM_CONTRACT = "forced-singleton-story-outcome-unit-weight-v1"
 COMPLETION_ACTIONS = 30_000
 COMPLETION_FRAMES = 3_000_000
@@ -50,7 +62,8 @@ class RedPlayerTrainingPlan:
     def __post_init__(self) -> None:
         document = dict(self.document)
         schema = document.get("schema")
-        economy = schema == ECONOMY_TRAINING_PLAN_SCHEMA
+        correlated = schema in CORRELATED_TRAINING_SCHEMAS
+        economy = schema in ECONOMY_TRAINING_SCHEMAS
         direct = schema in {
             DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
             DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
@@ -58,13 +71,14 @@ class RedPlayerTrainingPlan:
         registered = economy or schema in {
             REGISTERED_TRAINING_PLAN_SCHEMA,
             DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+            CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
         }
         curriculum = document.get("schema") == CURRICULUM_TRAINING_PLAN_SCHEMA
-        completion = registered or curriculum or schema in {
+        completion = correlated or registered or curriculum or schema in {
             COMPLETION_TRAINING_PLAN_SCHEMA,
             DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
         }
-        continuation = schema in {
+        continuation = correlated or schema in {
             CONTINUATION_TRAINING_PLAN_SCHEMA,
             COMPLETION_TRAINING_PLAN_SCHEMA,
             CURRICULUM_TRAINING_PLAN_SCHEMA,
@@ -82,6 +96,7 @@ class RedPlayerTrainingPlan:
                 ECONOMY_TRAINING_PLAN_SCHEMA,
                 DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
                 DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             or document.get("partition") != "train"
         ):
@@ -109,6 +124,17 @@ class RedPlayerTrainingPlan:
             "historical_trial_retry",
             "episode_retry_after_input",
         }
+        if correlated:
+            # The recorder's context fields identify the reset declaration, not
+            # an immutable catalog entry. Never fabricate a catalog assignment.
+            expected_fields.remove("catalog_source_commit")
+            expected_fields.update({"reset_id", "parent_manifest_sha256", "parent_evidence_tier",
+                                    "independent_root", "catalog_admitted"})
+            if (document.get("independent_root") is not False
+                    or document.get("catalog_admitted") is not False
+                    or document.get("parent_evidence_tier") != "registered-measured-terminal"
+                    or document.get("decision_limit") != 1):
+                raise ValueError("correlated reset scope differs")
         if continuation:
             expected_fields.update(
                 {
@@ -166,11 +192,16 @@ class RedPlayerTrainingPlan:
             }
         ):
             raise ValueError("player training behavior differs")
-        for name in ("source_commit", "catalog_source_commit"):
+        source_fields = (
+            ("source_commit",) if correlated else ("source_commit", "catalog_source_commit")
+        )
+        for name in source_fields:
             value = document[name]
             if not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40}", value) is None:
                 raise ValueError("player training source differs")
         identities: tuple[str, ...] = ("episode_id", "root_lineage_id")
+        if correlated:
+            identities += ("reset_id",)
         if continuation:
             identities += ("continuation_episode_id",)
         for name in identities:
@@ -204,6 +235,7 @@ class RedPlayerTrainingPlan:
                 ECONOMY_TRAINING_PLAN_SCHEMA,
                 DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
                 DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             else 6000
         )
@@ -218,6 +250,7 @@ class RedPlayerTrainingPlan:
                 ECONOMY_TRAINING_PLAN_SCHEMA,
                 DIRECT_COMPLETION_TRAINING_PLAN_SCHEMA,
                 DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                *CORRELATED_TRAINING_SCHEMAS,
             }
             else 600000
         )

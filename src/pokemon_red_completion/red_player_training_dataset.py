@@ -55,9 +55,13 @@ from pokemon_red_completion.red_player_training import (
 from pokemon_red_completion.red_player_training_plan import (
     COMPLETION_TRAINING_PLAN_SCHEMA,
     CONTINUATION_TRAINING_PLAN_SCHEMA,
+    CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+    CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+    CORRELATED_TRAINING_SCHEMAS,
     CURRICULUM_TRAINING_PLAN_SCHEMA,
     DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
     ECONOMY_TRAINING_PLAN_SCHEMA,
+    ECONOMY_TRAINING_SCHEMAS,
     REGISTERED_TRAINING_PLAN_SCHEMA,
     STORY_CURRICULUM_CONTRACT,
     RedPlayerTrainingPlan,
@@ -127,6 +131,9 @@ def _require_player_training_origin(
     if sealed is None or sealed.read() != dict(plan.document):
         raise ValueError("prospective player training declaration is missing")
     _require_continuation_origin(store, plan)
+    if plan.document["schema"] in CORRELATED_TRAINING_SCHEMAS:
+        from .red_correlated_reset import require_correlated_claim
+        require_correlated_claim(store, plan)
 
 
 def _audit_red_player_training_reader(
@@ -191,7 +198,7 @@ def _audit_red_player_training_reader(
         raise ValueError("player training partition differs")
     events: dict[str, Mapping[str, object]] = {}
     economy_contexts: dict[str, Mapping[str, object]] = {}
-    economy = plan.document["schema"] == ECONOMY_TRAINING_PLAN_SCHEMA
+    economy = plan.document["schema"] in ECONOMY_TRAINING_SCHEMAS
     supply = PlayerEconomySupply.from_plan(plan.document) if economy else None
     curriculum_events: dict[str, Mapping[str, object]] = {}
     for event in reader.iter_stream("events"):
@@ -223,6 +230,7 @@ def _audit_red_player_training_reader(
                 if plan.document["schema"] in {
                     REGISTERED_TRAINING_PLAN_SCHEMA,
                     DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                    CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
                 }
                 else CURRICULUM_EVENT_SCHEMA if is_curriculum else TRAINING_EVENT_SCHEMA)
             or payload.get("plan_sha256") != plan.plan_sha256
@@ -427,6 +435,8 @@ def _audit_red_player_training_reader(
             if plan.document["schema"] in {
                 REGISTERED_TRAINING_PLAN_SCHEMA,
                 DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+                CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+                CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
                 ECONOMY_TRAINING_PLAN_SCHEMA,
             }:
                 from .red_registered_outcome import red_registered_outcome_from_observations

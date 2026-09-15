@@ -142,6 +142,11 @@ from pokemon_red_completion.red_player_model import (  # noqa: E402
 )
 from pokemon_red_completion.red_player_training import RedPlayerTrainingTrajectory  # noqa: E402
 from pokemon_red_completion.red_player_training_plan import (  # noqa: E402
+    CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA,
+    CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA,
+    CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA,
+    CORRELATED_TRAINING_SCHEMAS,
+    ECONOMY_TRAINING_SCHEMAS,
     RedPlayerTrainingPlan,
     continue_red_player_training,
     declare_direct_completion_dose,
@@ -700,6 +705,8 @@ def _parser() -> argparse.ArgumentParser:
         help="after verified restore, add the existing four-battle local development skill",
     )
     parser.add_argument("--training-seed", type=int, default=None)
+    parser.add_argument("--correlated-reset-id", default=None,
+                        help="One train-only reset from a measured terminal; not a catalog root.")
     parser.add_argument("--registered-ledger", type=Path, default=None)
     parser.add_argument("--registration-session", default=None)
     parser.add_argument("--economy-training", action="store_true",
@@ -1129,6 +1136,16 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         tuple(item) for item in getattr(args, "continue_from_checkpoint", ())
     )
     full_local_pokedex_choice = getattr(args, "full_local_pokedex_choice", False)
+    correlated_reset = getattr(args, "correlated_reset_id", None)
+    if correlated_reset is not None and (
+        not continuation_chain or not full_local_pokedex_choice
+        or args.decision_limit != 1 or getattr(args, "training_catalog", None) is not None
+        or getattr(args, "expected_training_catalog_sha256", None) is not None
+        or getattr(args, "training_seed", None) is None
+        or not getattr(args, "quote_resource_costs", False)
+        or not getattr(args, "routed_resource_goals", False)
+    ):
+        raise PairedRedBoundedPlayerRunError("correlated_reset_scope")
     if type(full_local_pokedex_choice) is not bool:
         raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
     direct_catalog_origin = full_local_pokedex_choice and not continuation_chain
@@ -1246,7 +1263,8 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         or not getattr(args, "registration_run_id", None)
     ):
         raise PairedRedBoundedPlayerRunError("full_local_pokedex_choice_scope")
-    if full_local_pokedex_choice and (boxed_evolution is not None or wild_sources):
+    if (full_local_pokedex_choice and correlated_reset is None
+            and (boxed_evolution is not None or wild_sources)):
         raise PairedRedBoundedPlayerRunError("direct_full_local_configuration_scope")
     context_origin = getattr(args, "context_origin", "unspecified")
     if context_origin not in {"training", "development", "unspecified"}:
@@ -1351,7 +1369,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
     )
     training_plan = None
     bundle = working_source_bundle_sha256(PROJECT_ROOT)
-    if getattr(args, "train_player", False):
+    if getattr(args, "train_player", False) and correlated_reset is None:
         if (
             context_origin != "training"
             or not quote_resource_costs
@@ -1378,7 +1396,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
             decision_limit=args.decision_limit,
         )
         extra_protected_paths = (*extra_protected_paths, catalog_path)
-    elif any(
+    elif correlated_reset is None and any(
         getattr(args, name, None) is not None
         for name in ("training_seed", "training_catalog", "expected_training_catalog_sha256")
     ):
@@ -1440,7 +1458,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         else None
     )
     execution_profile = None
-    if full_local_pokedex_choice:
+    if full_local_pokedex_choice and correlated_reset is None:
         execution_profile = _derive_direct_full_local_profile(readiness).profile
     elif boxed_evolution is not None:
         execution_profile = _boxed_evolution_profile(
@@ -1469,7 +1487,25 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         direct_catalog_origin=direct_catalog_origin,
         initial_execution_profile=execution_profile,
     )
-    if readiness.training_plan is not None and readiness.continuation is not None:
+    if correlated_reset is not None:
+        from pokemon_red_completion.red_correlated_reset import declare_correlated_reset
+        assert readiness.continuation is not None and readiness.restore_profile is not None
+        assert readiness.causal_record is not None
+        parent_id, parent_sha = readiness.continuation_chain[-1]
+        readiness = replace(readiness, training_plan=declare_correlated_reset(
+            readiness.private_root, parent_episode_id=parent_id,
+            parent_checkpoint_sha256=parent_sha,
+            reset_id=correlated_reset, episode_id=_episode_id(args.pair_id, args.challenger),
+            state_sha256=readiness.capture.state_sha256,
+            envelope_sha256=readiness.capture.envelope_sha256,
+            restore_profile_sha256=readiness.restore_profile.profile_sha256,
+            execution_profile_sha256=readiness.profile.profile_sha256,
+            model_sha256=readiness.model_sha256, source_commit=readiness.source_commit,
+            source_bundle_sha256=readiness.source_bundle_sha256, seed=args.training_seed,
+            feature_version=readiness.causal_record.model.feature_version,
+        ))
+    if (correlated_reset is None and readiness.training_plan is not None
+            and readiness.continuation is not None):
         assert readiness.restore_profile is not None
         assert readiness.continuation_root_lineage_id is not None
         ancestor_id, ancestor_sha = readiness.continuation_chain[-1]
@@ -1485,7 +1521,7 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
                 execution_profile_sha256=readiness.profile.profile_sha256,
             ),
         )
-    if completion_dose and readiness.training_plan is not None:
+    if completion_dose and readiness.training_plan is not None and correlated_reset is None:
         from pokemon_red_completion.red_player_training_plan import declare_completion_dose
 
         readiness = replace(
@@ -1541,13 +1577,16 @@ def _prepare(args: argparse.Namespace) -> _Readiness:
         )
 
         if (readiness.training_plan is None
-                or readiness.training_plan.document["schema"] != REGISTERED_TRAINING_PLAN_SCHEMA
+                or readiness.training_plan.document["schema"] not in {
+                    REGISTERED_TRAINING_PLAN_SCHEMA, CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA}
                 or readiness.causal_record is None
                 or readiness.causal_record.model.feature_version != 4):
             raise ValueError("economy training requires a registered continuation and v4 model")
         supply = supply_from_profile(readiness.profile)
         readiness = replace(readiness, training_plan=RedPlayerTrainingPlan({
-            **readiness.training_plan.document, "schema": ECONOMY_TRAINING_PLAN_SCHEMA,
+            **readiness.training_plan.document, "schema": (
+                CORRELATED_ECONOMY_TRAINING_PLAN_SCHEMA if correlated_reset is not None
+                else ECONOMY_TRAINING_PLAN_SCHEMA),
             "behavior_policy_id": ECONOMY_EXPLORATION_POLICY_ID, **supply.plan_fields(),
         }))
     return readiness
@@ -1790,6 +1829,9 @@ def _prepare_registration(readiness: _Readiness, args: argparse.Namespace) -> _R
                 "schema": (
                     DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA
                     if direct_catalog_origin
+                    else CORRELATED_REGISTERED_TRAINING_PLAN_SCHEMA
+                    if readiness.training_plan.document["schema"]
+                    == CORRELATED_COMPLETION_TRAINING_PLAN_SCHEMA
                     else REGISTERED_TRAINING_PLAN_SCHEMA
                 ),
                 "objective": REGISTERED_OBJECTIVE,
@@ -2633,6 +2675,7 @@ def _checkpoint_completion_dose(header: Mapping[str, object]) -> bool:
         DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
         ECONOMY_TRAINING_PLAN_SCHEMA,
         REGISTERED_TRAINING_PLAN_SCHEMA,
+        *CORRELATED_TRAINING_SCHEMAS,
     }
 
 
@@ -2795,7 +2838,11 @@ def _training_header(readiness: _Readiness, arm_id: str) -> dict[str, object]:
                 )
             },
         },
-        "binding_manifest_scope": "original_catalog_origin_only; current profile separately bound",
+        "binding_manifest_scope": (
+            "correlated_reset_declaration_only; not a catalog assignment"
+            if plan.document["schema"] in CORRELATED_TRAINING_SCHEMAS
+            else "original_catalog_origin_only; current profile separately bound"
+        ),
     }
 
 
@@ -2875,6 +2922,8 @@ def _player_limits(decision_limit: int, *, completion_dose: bool = False) -> Bou
 
 
 def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
+    plan = getattr(readiness, "training_plan", None)
+    correlated = plan is not None and plan.document["schema"] in CORRELATED_TRAINING_SCHEMAS
     adjacent_before = rom_adjacent_artifacts(readiness.rom_path)
     challenger = _challenger_authority(readiness)
     world = _route_world(readiness)
@@ -2929,7 +2978,14 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
                 (BASELINE_ARM_ID, CompletionFirstGoalTeacher()),
             ),
             allow_forced_bridge=readiness.continuation is not None,
+            observe_only=correlated,
         )
+        if correlated:
+            from pokemon_red_completion.goal_manager import GoalKind
+            if not {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES} <= set(
+                result.available_goal_kinds
+            ):
+                raise PairedRedBoundedPlayerRunError("correlated_reset_two_family_gate")
         forward_plan = _forward_goal_plan(readiness)
         if forward_plan is not None:
             from pokemon_red_completion.goal_manager import GoalKind
@@ -2959,6 +3015,8 @@ def _action_free_preflight(readiness: _Readiness) -> dict[str, object]:
     if rom_adjacent_artifacts(readiness.rom_path) != adjacent_before:
         raise PairedRedBoundedPlayerRunError("rom_adjacent_artifact")
     public = result.public_dict()
+    if correlated:
+        return {**public, "status": "two_families_ready_without_model_query", "model_queries": 0}
     if not result.choices:
         # The runtime already executes singleton bridges without model authority
         # or fit targets. A saved continuation must not demand a fictitious choice.
@@ -3290,21 +3348,17 @@ def _run_arm(
             )
             if forward is not None:
                 training_kwargs["forward"] = forward
-            if readiness.training_plan is not None:
-                from pokemon_red_completion.red_player_training_plan import (
-                    ECONOMY_TRAINING_PLAN_SCHEMA,
+            if (readiness.training_plan is not None
+                    and readiness.training_plan.document["schema"] in ECONOMY_TRAINING_SCHEMAS):
+                from pokemon_red_completion.red_player_economy import (
+                    PlayerEconomySupply,
+                    supply_from_profile,
                 )
 
-                if readiness.training_plan.document["schema"] == ECONOMY_TRAINING_PLAN_SCHEMA:
-                    from pokemon_red_completion.red_player_economy import (
-                        PlayerEconomySupply,
-                        supply_from_profile,
-                    )
-
-                    supply = PlayerEconomySupply.from_plan(readiness.training_plan.document)
-                    if supply != supply_from_profile(runtime.profile):
-                        raise ValueError("live supply profile differs from economy declaration")
-                    training_kwargs["economy_supply"] = supply
+                supply = PlayerEconomySupply.from_plan(readiness.training_plan.document)
+                if supply != supply_from_profile(runtime.profile):
+                    raise ValueError("live supply profile differs from economy declaration")
+                training_kwargs["economy_supply"] = supply
             if readiness.continuation is not None and not readiness.continuation_root_lineage_id:
                 raise PairedRedBoundedPlayerRunError("continuation_root_lineage")
             trajectory = trajectory_class(
@@ -3637,6 +3691,33 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
 def _run_prepared(readiness: _Readiness) -> dict[str, object]:
     """Execute one already-authenticated scope; reused by the source-choice layer."""
+    plan = readiness.training_plan
+    if plan is None or plan.document["schema"] not in CORRELATED_TRAINING_SCHEMAS:
+        return _run_prepared_impl(readiness)
+    from pokemon_red_completion.red_correlated_reset import claim_correlated_reset, reset_record_id
+    claim_correlated_reset(readiness.private_root, plan)
+    try:
+        result = _run_prepared_impl(readiness)
+    except BaseException as error:
+        with suppress(Exception):
+            readiness.private_root.publish_sealed_record(
+                reset_record_id(plan) + "-result", kind="red_correlated_reset_terminal",
+                record={"schema": "pokemon.red.correlated-reset-terminal.v1",
+                        "status": "interrupted" if not isinstance(error, Exception) else "failed",
+                        "plan_sha256": plan.plan_sha256,
+                        "private_diagnostic": private_failure_diagnostic(error)},
+            )
+        raise
+    readiness.private_root.publish_sealed_record(
+        reset_record_id(plan) + "-result", kind="red_correlated_reset_terminal",
+        record={"schema": "pokemon.red.correlated-reset-terminal.v1", "status": "complete",
+                "plan_sha256": plan.plan_sha256,
+                "trajectory_manifest_sha256": result["trajectory_manifest_sha256"]},
+    )
+    return result
+
+
+def _run_prepared_impl(readiness: _Readiness) -> dict[str, object]:
     protected_before = {
         str(index): _sha256(path) for index, path in enumerate(readiness.protected_paths)
     }
