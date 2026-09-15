@@ -4,6 +4,7 @@
   "classification": "maintenance-and-action-free-falsification",
   "status": "closed-capability-preservation-insufficient",
   "source_commit": "239a7f74fd393a09efce5bcf49f9ec927ab739e3",
+  "publication_head": "1d56cdb46547e094f054de863bdd9e8c7a17b9c9",
   "source_bundle_sha256": "80e6611a105edc3d732b75127bd2f2b9c93437050d5e3a6811716857332d3da7",
   "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
   "repair": {
@@ -67,6 +68,8 @@
     "collection_registry_check": "passed",
     "active_product_focus_check": "passed before closeout",
     "diff_check": "passed before source publication",
+    "hosted_ci_source_commit": "Failed at ruff because the new test used two adjacent imports from one module; no test or runtime failure occurred.",
+    "publication_repair": "Import-only commit 1d56cdb46547e094f054de863bdd9e8c7a17b9c9; local full ruff and the nine direct-profile tests passed before push.",
     "full_suite": "Not rerun; the immediately preceding session recorded 11744 passed, 1 known local-runtime fingerprint failure, and 1 xfailed."
   },
   "review": {

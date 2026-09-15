@@ -43,6 +43,10 @@ validation passed before source publication. The full suite was not repeated bec
 session had just completed it with11744 passed, one known unchanged local-runtime fingerprint
 failure and one expected failure.
 
+Hosted CI for the source commit stopped at import sorting in the new test, before tests. Import-only
+commit `1d56cdb46547e094f054de863bdd9e8c7a17b9c9` fixes it; full local Ruff and the nine direct-profile
+tests pass. This changes neither runtime source nor the exact-terminal qualification.
+
 Learning delta:0 examples,0 successes,0 fits and0 registrations. Model121 remains121 examples,
 83 successes and86/151 registrations. The original collection checklist stays21/22, expanded25/26,
 and the fresh-start Red gate remains0/5. All nine unused sources and the consumed reset remain

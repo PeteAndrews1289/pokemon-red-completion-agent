@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "falsification",
           "path": "docs/evidence/red-capture-route-capability-repair-2026-09-14.json",
-          "sha256": "0d4b8f0ed4dfa0c0ca29504a99398239f89c004803dec8a6459ae6add4e1fbbb"
+          "sha256": "53b163d6aaeddeef9369493f39bf57f31bfb93ddbc63d37a4b562eac4158b4f1"
         },
         "learning_output": "None. This fourth consecutive no-learning session is a bounded maintenance falsification. Model121 remains121 examples/83 successes/86 local registrations.",
         "next_falsifier": "No generic route-feasible candidate can expose both capture and evolution without a species-specific exception, coordinate-bearing policy feature or game mutation.",
