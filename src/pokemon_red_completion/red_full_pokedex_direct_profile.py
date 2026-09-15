@@ -50,6 +50,35 @@ class RedFullPokedexDirectOriginError(ValueError):
     """The catalog origin was not a stable action-free field observation."""
 
 
+_CAPTURE_CAPABILITY_PARAMETERS = (
+    "capture_status_support",
+    "cut_transport",
+    "surf_transport",
+    "fly_transport",
+    "indoor_fly_departure",
+    "travel_capture",
+    "observed_local_capture",
+    "capture_access_requirements",
+)
+
+
+def _capture_capability_parameters(
+    profile: RedGoalContextProfile,
+) -> dict[str, object]:
+    """Retain generic opt-ins without carrying the previous capture target."""
+    for spec in profile.providers:
+        if (
+            spec.kind is GoalKind.ACQUIRE_SPECIES
+            and spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE
+        ):
+            return {
+                key: spec.parameters[key]
+                for key in _CAPTURE_CAPABILITY_PARAMETERS
+                if key in spec.parameters
+            }
+    return {}
+
+
 def _level_evolution(
     observation: RedGoalObservation,
 ) -> tuple[int, int, int]:
@@ -151,6 +180,8 @@ def derive_direct_full_pokedex_profile(
         raise TypeError("direct full-Pokédex profile needs cartridge route geometry")
     source, target, level = _level_evolution(observation)
     corridor = _capture_corridor(observation, world)
+    capture_parameters = corridor.profile_parameters()
+    capture_parameters.update(_capture_capability_parameters(profile))
     providers: dict[
         GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]
     ] = {
@@ -165,7 +196,7 @@ def derive_direct_full_pokedex_profile(
     providers[GoalKind.ACQUIRE_SPECIES] = (
         GoalKind.ACQUIRE_SPECIES,
         RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
-        corridor.profile_parameters(),
+        capture_parameters,
     )
     providers[GoalKind.EVOLVE_SPECIES] = (
         GoalKind.EVOLVE_SPECIES,

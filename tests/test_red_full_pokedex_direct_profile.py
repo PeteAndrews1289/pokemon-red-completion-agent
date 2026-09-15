@@ -2,7 +2,7 @@ from dataclasses import replace
 
 import pytest
 from test_current_route_terrain import _world
-from test_red_living_dex_wild_corridor import _graph, _terrain
+from test_red_living_dex_wild_corridor import _graph, _local_discovery_profile, _terrain
 from test_registered_runtime_binding import bound_fixture
 
 from pokemon_red_completion.collection import CollectionLocation
@@ -16,10 +16,24 @@ from pokemon_red_completion.red_full_pokedex_direct_profile import (
     derive_direct_full_pokedex_profile,
 )
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+from pokemon_red_completion.red_goal_context_profile import (
+    _thaw,
+    bind_capture_access_requirements_profile,
+    bind_capture_cut_profile,
+    bind_capture_fly_profile,
+    bind_capture_surf_profile,
+    bind_observed_local_capture_profile,
+    bind_travel_capture_profile,
+    build_red_goal_context_profile_payload,
+    parse_red_goal_context_profile,
+)
 from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
     map_id_for_wild_source,
 )
-from pokemon_red_completion.red_living_dex_wild_corridor import RedLivingDexWildCorridor
+from pokemon_red_completion.red_living_dex_wild_corridor import (
+    RedLivingDexWildCorridor,
+    bind_red_capture_status_profile,
+)
 
 
 def _corridor():
@@ -152,6 +166,98 @@ def test_direct_profile_derives_targets_from_inventory_and_cartridge_adapter(
         for spec in runtime.profile.providers
         if spec.kind not in {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
     } <= set(specs)
+
+
+def test_direct_profile_preserves_only_declared_generic_capture_capabilities(
+    tmp_path, monkeypatch
+):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = runtime.adapter.observe()
+    source = _local_discovery_profile()
+    for bind in (
+        bind_capture_cut_profile,
+        bind_capture_surf_profile,
+        bind_capture_fly_profile,
+        bind_capture_access_requirements_profile,
+        bind_travel_capture_profile,
+        bind_observed_local_capture_profile,
+        bind_red_capture_status_profile,
+    ):
+        source = bind(source)
+    providers = []
+    for spec in source.providers:
+        parameters = _thaw(spec.parameters)
+        if spec.kind is GoalKind.ACQUIRE_SPECIES:
+            parameters["capture_species_numbers"] = [16, 19]
+            parameters["indoor_fly_departure"] = True
+        providers.append((spec.kind, spec.mechanic, parameters))
+    source = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
+        profile_id=source.profile_id,
+        providers=tuple(providers),
+    ))
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
+        lambda actual, world: _corridor(),
+    )
+
+    derived = derive_direct_full_pokedex_profile(source, observed, _world())
+    capture = next(
+        spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES
+    )
+    assert {
+        key: capture.parameters[key]
+        for key in (
+            "cut_transport",
+            "surf_transport",
+            "fly_transport",
+            "indoor_fly_departure",
+            "capture_access_requirements",
+            "travel_capture",
+            "observed_local_capture",
+            "capture_status_support",
+        )
+    } == {
+        "cut_transport": True,
+        "surf_transport": True,
+        "fly_transport": True,
+        "indoor_fly_departure": True,
+        "capture_access_requirements": True,
+        "travel_capture": True,
+        "observed_local_capture": True,
+        "capture_status_support": True,
+    }
+    assert capture.parameters["source_id"] == "wild:Route1:grass"
+    assert "capture_species_numbers" not in capture.parameters
+
+
+def test_direct_profile_does_not_invent_missing_capture_capabilities(tmp_path, monkeypatch):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = runtime.adapter.observe()
+    source = _local_discovery_profile()
+    source_capture = next(
+        spec for spec in source.providers if spec.kind is GoalKind.ACQUIRE_SPECIES
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
+        lambda actual, world: _corridor(),
+    )
+
+    derived = derive_direct_full_pokedex_profile(source, observed, _world())
+    capture = next(
+        spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES
+    )
+    optional = {
+        "cut_transport",
+        "surf_transport",
+        "fly_transport",
+        "indoor_fly_departure",
+        "capture_access_requirements",
+        "travel_capture",
+        "observed_local_capture",
+        "capture_status_support",
+    }
+    assert optional.isdisjoint(source_capture.parameters)
+    assert optional.isdisjoint(capture.parameters)
 
 
 def test_direct_profile_refuses_to_invent_evolution_without_boxed_precursor(
