@@ -22,8 +22,13 @@ then run the same command with `--check` and include its two generated metadata 
 This is metadata maintenance only: it does not authorize or launch a collection run.
 Do not repeatedly discover stale registry hashes through hosted CI emails.
 
-Batch ordinary implementation commits into a tested publication at a useful session
-boundary; do not push every small repair or manually rerun unchanged failing CI.
+Pete alone decides when to push to GitHub. Do not push, publish a release, or create/update
+a pull request without his explicit instruction for that publication. "Begin", "continue",
+session completion and a passing test are not publication authorization. This supersedes
+older automatic-publication instructions in handoffs and workflow documents.
+Local development, verification and recoverable local commits may continue without a push.
+Batch ordinary implementation commits at useful local checkpoints; do not manually rerun
+unchanged failing CI.
 Fix relevant failures locally, preserve safety assertions, and distinguish a targeted
 pass from a full-suite pass. Development gameplay does not wait on hosted CI.
 
@@ -77,5 +82,5 @@ aligned with verified evidence; tests and documentation are not learning progres
 - Do not claim completion without concurrent Champion-event and Hall-of-Fame evidence.
 - Add ROM-free tests for every change; private-ROM integration tests must use the `integration`
   marker.
-- Codex owns implementation and publication. Claude and Antigravity are read-only reviewers by
+- Codex owns implementation; Pete authorizes GitHub publication. Claude and Antigravity are read-only reviewers by
   default under `docs/three-agent-workflow.md`; do not let concurrent agents edit this worktree.

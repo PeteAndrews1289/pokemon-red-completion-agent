@@ -79,6 +79,16 @@ Inputs, preflights, CI passes, and teacher runs never advance its learning count
 
 ## Default development loop
 
+### User-controlled publication — September 15, 2026
+
+Pete decides when to push to GitHub; publication requires his explicit instruction, not merely
+a completed session. Local implementation, testing and recoverable checkpoints may continue.
+A possible future paper is secondary to completing the player. Preserve original experiment
+configurations, model/code identities, outcomes, failures and intervention records as the work
+happens; do not reconstruct missing evidence later or turn paper preparation into a development gate.
+Keep current handoffs concise, replacing stale summaries and linking to retained evidence rather
+than copying the project's history into every handoff.
+
 ### Fixed visual roadmap and session closeout
 
 Use the [development infographic](docs/development-roadmap.md) and its

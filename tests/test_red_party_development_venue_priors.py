@@ -283,7 +283,7 @@ def test_stateless_walker_proof_recomputes_the_loaded_ast(
         venue_prior_module._require_positive_route_11_stateless_walker()  # noqa: SLF001
 
 
-def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() -> None:
+def test_source_compatibility_recomputes_exact_bundles_and_fourteen_waivers() -> None:
     attestation = _source_compatibility()
 
     assert attestation.observed_commit == ("00499bc68b099ffcd0125a6777bc3b836a84ff0b")
@@ -298,6 +298,7 @@ def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() ->
         "module-assignments.blaine",
         "module-assignments.red-team-training",
         "module-assignments.training-venue",
+        "red.adaptive-wild-battle",
         "red.route-11-heal-and-return",
         "red.run-team-balancing",
         "red.team-training-execution-summary",
@@ -306,13 +307,13 @@ def test_source_compatibility_recomputes_exact_bundles_and_thirteen_waivers() ->
         "training-venue.contract",
     )
     assert attestation.unchanged_elements_sha256 == (
-        "b30404afdcad255a6c5e6b9ab221878e9c9829c2dbbfab56dc35d99ae973204f"
+        "6a5e45df1a9b79636ead10f94c287567bce3808d895a60b0cf4cd0c2113debfc"
     )
     assert attestation.current_elements_sha256 == (
-        "6056f92d8bf4eb2a78c033bebf1d18662baef7b55ed7d1a5dbe23619ef536a88"
+        "f038a3f9cfbe897569e6852a29a90ecf7e88768e68ecbf601ad171018f149741"
     )
     assert attestation.waiver_allowlist_sha256 == (
-        "dc08e8c06a8b18b5497cb393407bab8b8996f20b7eec820d478ff8e4eb20d5bd"
+        "63c0bd15569d11e4f9ba8455853edfc8c10d7109e192599952a1ef7e96b76d6e"
     )
 
 
@@ -751,11 +752,11 @@ def test_operational_contract_has_independent_golden_coverage() -> None:
     assert contract.recovery_execution_sha256 == (
         "87e7775d25a57139f60407e3744ab6dde980eecbebaaac2ed6c0ff31cdd5f570"
     )
-    # Reviewed September15: whole-module identity now includes complete PP-vector
-    # checks, forced-switch attribution, the final settlement observation and
-    # bounded diagnostic hooks. Historical receipts/waivers are not rewritten.
+    # Reviewed September15: whole-module identity now also includes the opt-in,
+    # default-disabled MAIN-menu intervention. The historical Route11 call does
+    # not supply it and preserves its old behavior.
     assert contract.battle_timing_sha256 == (
-        "274a2b5c72f7add6c802f9c70e1a8dc5c53614bbc7467b7beaa999b83feffb18"
+        "5a091eddc3eb60e75d6a438179b44fcaa10adb942b2b00fcaefcefbe45e0794c"
     )
     assert contract.accounting_sha256 == (
         "781b186697076fbdc9befcdc7d677e7b86242617c7ce59d6439a7341d7edd9b4"

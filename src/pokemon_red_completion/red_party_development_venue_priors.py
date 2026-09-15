@@ -499,6 +499,15 @@ _ROUTE_11_SOURCE_ELEMENTS = (
 
 _ROUTE_11_SOURCE_COMPATIBILITY_WAIVERS = (
     _SourceCompatibilityWaiver(
+        element_id="red.adaptive-wild-battle",
+        observed_ast_sha256="679fb7438eaa58916edca85e25f27f97b51ff995eb3e1e63b3f0924e99c6a742",
+        current_ast_sha256="1de74306c52fe4c53fc120c4defa0980bdc22169fc43251ce2b078286fcc87c0",
+        justification_id=(
+            "optional-maintenance-sink-and-intervention-default-disabled-"
+            "preserve-historical-route-11-battle-path"
+        ),
+    ),
+    _SourceCompatibilityWaiver(
         element_id="red.training-attack-pp",
         observed_ast_sha256="e9c2ede4bb781b84770a4ad48e28a93d9d8cab3f14b25639f99f5e0792705281",
         current_ast_sha256="d4606575d02af77f5daf6b5c13811c074a2b2b0e23fcc645401377cb51e448c1",
