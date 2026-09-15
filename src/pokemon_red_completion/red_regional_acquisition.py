@@ -42,6 +42,7 @@ from pokemon_red_completion.red_living_dex_setup_policy import (
 from pokemon_red_completion.red_living_dex_wild_corridor import (
     RedLivingDexWildCorridorError,
     bind_red_local_discovery_profile,
+    bind_red_opportunistic_capture_profile,
     derive_red_living_dex_wild_corridor,
     retarget_red_wild_profile,
 )
@@ -102,7 +103,8 @@ def enumerate_red_regional_acquisitions(
             if method.kind is RedAcquisitionKind.WILD
         }
     )
-    if getattr(runtime, "registration_policy", None) is not None:
+    registered = getattr(runtime, "registration_policy", None) is not None
+    if registered:
         # The historical catalog names one preferred source per species. It is
         # not a complete location index: alternative reachable grass patches
         # matter once those preferred routes are exhausted or gated.
@@ -117,7 +119,7 @@ def enumerate_red_regional_acquisitions(
             if map_id not in world.terrain or map_id not in world.local_graphs:
                 continue
             excluded = world.object_blockers[map_id]
-            if getattr(runtime, "registration_policy", None) is not None:
+            if registered:
                 # A reversible local edge can still land on an automatic map
                 # warp. Such coordinates are not valid survey endpoints.
                 excluded = frozenset(excluded) | frozenset(
@@ -128,14 +130,19 @@ def enumerate_red_regional_acquisitions(
                 world.terrain[map_id],
                 world.local_graphs[map_id],
                 excluded=excluded,
-                **({"cartridge": world.rom}
-                   if getattr(runtime, "registration_policy", None) is not None else {}),
+                **({"cartridge": world.rom} if registered else {}),
             )
             profile = bind_red_local_discovery_profile(
                 retarget_red_wild_profile(runtime.profile, corridor, rom=world.rom),
                 source,
                 world.rom,
             )
+            if registered:
+                # Registered completion expands beyond the historical catalog's
+                # one preferred location per species. Bind the actual cartridge
+                # encounters at every alternative source so its capture provider
+                # can quote availability without inventing a catalog entry.
+                profile = bind_red_opportunistic_capture_profile(profile, world.rom)
         except (RedLivingDexMultifamilyError, RedLivingDexWildCorridorError):
             continue
         routed = RedResourceGoalRouter(

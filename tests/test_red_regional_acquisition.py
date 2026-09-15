@@ -140,9 +140,14 @@ class _Runtime:
 def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     monkeypatch, registered,
 ):
-    items = [_candidate("wild:Route2:grass", 0.7), _candidate("wild:Route11:grass", 0.2)]
+    items = [
+        _candidate("wild:Route2:grass", 0.7),
+        _candidate("wild:Route11:grass", 0.2),
+        _candidate("wild:Route15:grass", 0.1),
+    ]
     methods = [
-        SimpleNamespace(source_id=item.source_id, kind=RedAcquisitionKind.WILD) for item in items
+        SimpleNamespace(source_id=item.source_id, kind=RedAcquisitionKind.WILD)
+        for item in items[:2]
     ]
     methods.append(SimpleNamespace(source_id="safari:unsupported", kind=RedAcquisitionKind.SAFARI))
     monkeypatch.setattr(regional, "RED_ACQUISITION_CATALOG", SimpleNamespace(methods=methods))
@@ -152,12 +157,24 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         assert ("cartridge" in kwargs) is registered
         return target
     monkeypatch.setattr(regional, "derive_red_living_dex_wild_corridor", derive)
-    monkeypatch.setattr(regional, "cartridge_grass_sources", lambda rom: ())
+    monkeypatch.setattr(
+        regional, "cartridge_grass_sources", lambda rom: (items[2].source_id,)
+    )
     def retarget(profile, target, *, rom):
         assert rom == b"fixture"
         return next(i.profile for i in items if i.source_id == target.source_id)
     monkeypatch.setattr(regional, "retarget_red_wild_profile", retarget)
     monkeypatch.setattr(regional, "bind_red_local_discovery_profile", lambda profile, *a: profile)
+    opportunistic = []
+
+    def bind_opportunistic(profile, rom):
+        assert rom == b"fixture"
+        opportunistic.append(profile)
+        return profile
+
+    monkeypatch.setattr(
+        regional, "bind_red_opportunistic_capture_profile", bind_opportunistic
+    )
 
     class Router:
         def __init__(self, runtime, *a, **kw):
@@ -192,7 +209,11 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         maximum_frames=3000000,
         routed_recovery=True,
     )
-    assert [item.source_id for item in result] == [items[1].source_id, items[0].source_id]
+    expected = [items[2].source_id, items[1].source_id, items[0].source_id]
+    if not registered:
+        expected = expected[1:]
+    assert [item.source_id for item in result] == expected
+    assert len(opportunistic) == (3 if registered else 0)
 
     def moving(self, observation, routed_kinds):
         assert routed_kinds == frozenset({GoalKind.ACQUIRE_SPECIES})
