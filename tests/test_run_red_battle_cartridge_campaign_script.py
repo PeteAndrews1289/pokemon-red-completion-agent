@@ -80,6 +80,35 @@ def test_script_authenticates_all_frozen_inputs_before_durable_campaign(
     assert calls == ["clean", "published", "execute"]
 
 
+def test_script_forwards_frozen_contingency_policy(tmp_path, monkeypatch):
+    from pokemon_red_completion.red_battle_contingency import CONTINGENCY_POLICY
+    args, payload = _inputs(tmp_path)
+    document = json.loads(payload)
+    document["policy"] = CONTINGENCY_POLICY
+    payload = json.dumps(document, sort_keys=True, separators=(",", ":")).encode() + b"\n"
+    args.private_plan.write_bytes(payload)
+    args.expected_plan_sha256 = hashlib.sha256(payload).hexdigest()
+    monkeypatch.setitem(GLOBALS, "detect_source_identity",
+                        lambda *a, **kw: SimpleNamespace(git_commit=document["source_commit"]))
+    monkeypatch.setitem(GLOBALS, "require_clean_source", lambda *a: None)
+    monkeypatch.setitem(GLOBALS, "require_published_source", lambda *a: None)
+    monkeypatch.setitem(GLOBALS, "committed_source_bundle_sha256",
+                        lambda *a: document["source_bundle_sha256"])
+    monkeypatch.setitem(GLOBALS, "resolve_rom_path", lambda path: path)
+    monkeypatch.setitem(GLOBALS, "verify_rom",
+                        lambda *a: SimpleNamespace(sha256=document["rom_sha256"]))
+    monkeypatch.setitem(GLOBALS, "open_private_root", lambda *a, **kw: object())
+    calls = []
+    monkeypatch.setitem(GLOBALS, "qualify_repeatable_red_wild_battle",
+                        lambda *a, **kw: calls.append(kw))
+    def execute(store, plan, run_case):
+        run_case(plan.cases[0], object(), object())
+        return {"status": "synthetic"}
+    monkeypatch.setitem(GLOBALS, "execute_durable_red_battle_cartridge_campaign", execute)
+    assert SCRIPT["_run"](args) == {"status": "synthetic"}
+    assert calls[0]["policy"] == CONTINGENCY_POLICY
+
+
 @pytest.mark.parametrize(
     "field,value,match",
     [

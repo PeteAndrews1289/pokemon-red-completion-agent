@@ -3,39 +3,41 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 15, 2026.
 
-## V2 journal is locally qualified; cartridge qualification is next
+## Generic stall contingency passes ROM-free; cartridge evidence is next
 
-The integrated runner now retains phase, sanitized reason, attempted/completed actions and actual
-frames across source authentication, relocation, encounter setup, battle and settlement. Setup's
-direct controller-boundary actions are included. Case/campaign caps apply before dispatch/tick;
-partial errors retain measured work, unknown counters remain explicitly unknown. Storage failures,
-runtime failures and mismatched readbacks stop the campaign. No resume or duplicate-case execution.
+The opt-in maintenance policy allows one voluntary switch from a living wild-battle MAIN menu
+after four PP-spending turns without enemy HP decrease, or no usable move. It uses existing reserve
+screening and switching, one unchanged runtime budget and the same metered executor. The switch
+claim is durable before input; stale state, partial switches, second stalls and unqualified
+transitions fail closed. Old frozen plans retain their original fixed policy.
 
-371 focused tests and whole-source type checking (503 files) passed. No cartridge case or learning
-occurred. Model121 stays at 121 examples/83 successes and 86/151 local registrations, 66 living
-species and 70 specimens. Collection checklist 25/26; final fresh-Red gate 0/5.
+537 focused tests, lint and whole-source type checking (505 files) passed, including 46 new tests
+for real turn/switch controllers and the journal against simulated observations without a ROM.
+Gemini 3.8 Flash High completed a contract review through Antigravity; not a source audit.
+
+No gameplay, query, label, example, fit or registration occurred. Model121 remains 121 examples/
+83 successes; 86/151 local registrations, 66 living species, 70 specimens. Collection 25/26; finalRed 0/5.
 
 ## Next bounded work
 
-Use `qualify_repeatable_red_wild_battle` in the
-[V2 session report](docs/work-sessions/2026-09-15-cartridge-journal-v2.md). Freeze a **new** short
-campaign and exact executable source, ROM and source-state identities before input. Share one
-campaign budget across cases; retain the existing 2,000-action/200,000-frame case caps and
-12,000-action/2,000,000-frame campaign caps, no more than 12 cases and 512 encounter steps.
-Include a distinct cross-venue case. Stop at the first lost evidence or unsettled transition.
+Freeze a distinct campaign C with exact source, ROM, source-state and policy identities.
+Use `fixed_strongest_usable_move_with_stall_switch_v 1`; preserve shared campaign budgeting,
+2,000-action/200,000-frame case caps, 12,000-action/2,000,000-frame campaign caps,
+at most 12 cases and 512 encounter steps. Declare short varied controls and cross-venue coverage.
+Credit a contingency switch only if actually observed and durably settled; unavailable coverage is
+not a pass and never justifies replay or replacement. Stop at the first failure or lost evidence.
 
-The previous campaign remains failed: three Route11 successes used 223 actions/19,851 frames;
-the first Diglett case lost its phase/cost evidence. Its exact cause and total cost remain unknown.
-Do not replay or replace that consumed identity within the old campaign. Evolution and recovery
+Campaign B stays consumed: its first Route 11 case failed after 893 actions/80,081 frames with no
+usable PP; three later cases never opened. The earlier Diglett campaign and evolution/recovery
 identities also remain consumed. No protected-root scan, source four, model fit or full-game run.
 
-Move learning, forced switching, same-battler move replacement and alternate-venue settlement
-remain explicit gaps. Do not mark an unavailable boundary qualified. Resume the heterogeneous
-acquisition lesson only after the required bounded cartridge gate passes; resource-only menus
-still cannot satisfy the mixed-acquisition gate.
+This is not fainted forced-switch handling. That boundary, move learning, same-battler move
+replacement and cross-venue cartridge settlement remain gaps. No survival or learned-authority
+claim follows from synthetic tests. Resume the heterogeneous acquisition lesson only after the
+required cartridge gate passes; resource-only menus do not satisfy the mixed-acquisition gate.
 
-Next: **Sol / High / Fast off**, about 1–2 hours for the newly frozen cartridge gate. Astra is not
-needed for routine bounded execution; use it if retained evidence establishes a new design issue.
+Next: **Sol / High / Fast off**, about 1–2 hours for bounded campaign qualification. Astra is
+reserved for a newly evidenced design problem, not routine execution.
 
-[Evidence](docs/evidence/red-cartridge-journal-v2-2026-09-15.json) ·
-[Detailed roadmap](docs/work-sessions/2026-09-15-cartridge-journal-v2.md)
+[Session and roadmap](docs/work-sessions/2026-09-15-battle-stall-contingency.md) ·
+[Evidence](docs/evidence/red-battle-stall-contingency-2026-09-15.json)

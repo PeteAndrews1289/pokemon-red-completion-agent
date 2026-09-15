@@ -1,0 +1,93 @@
+{
+  "schema": "pokemon.red.battle-stall-contingency.v1",
+  "session": "2026-09-15-battle-stall-contingency",
+  "status": "rom_free_qualified_cartridge_unverified",
+  "implementation": {
+    "policy": "fixed_strongest_usable_move_with_stall_switch_v1",
+    "legacy_policy_unchanged": true,
+    "stall_pp_spends": 4,
+    "maximum_switches": 1,
+    "same_runtime_budget": true,
+    "same_metered_executor": true,
+    "durable_claim_before_input": true,
+    "explicit_live_battler_observation": true,
+    "shared_reserve_ranking": true,
+    "learned_override_forbidden": true
+  },
+  "verification": {
+    "focused_tests_passed": 537,
+    "combined_regression_and_documentation_tests_passed": 701,
+    "documentation_and_registry_checks": "passed",
+    "new_tests": 46,
+    "whole_source_mypy_files": 505,
+    "ruff": "passed",
+    "cartridge_executed": false
+  },
+  "scope": {
+    "capability": "One voluntary switch from a living wild-battle MAIN boundary after four PP-spending turns without enemy HP decrease, or no usable move. Disposable WIN qualification only.",
+    "limitations": [
+      "Threshold does not identify misses, immunity, status setup or multi-turn moves.",
+      "Existing reserve screening does not guarantee survival on entry.",
+      "One switch only; second stall is a retained failure.",
+      "Fainted forced switching, move learning, same-battler move replacement and cross-venue cartridge settlement remain unqualified."
+    ]
+  },
+  "execution": {
+    "cartridge_actions": 0,
+    "cartridge_frames": 0,
+    "campaign_c_frozen": false,
+    "campaign_b_replayed": false,
+    "protected_roots_scanned": false
+  },
+  "learning_delta": {
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "fits": 0,
+    "successes": 0,
+    "authority_promotions": 0
+  },
+  "collection_delta": {
+    "registrations": 0,
+    "living_species": 0,
+    "specimens": 0
+  },
+  "unchanged_state": {
+    "model": "Model121",
+    "examples": 121,
+    "successes": 83,
+    "local_registered": 86,
+    "local_target": 151,
+    "living_species": 66,
+    "specimens": 70,
+    "collection_checklist_done": 25,
+    "collection_checklist_total": 26,
+    "fresh_red_gates_passed": 0,
+    "fresh_red_gates_total": 5
+  },
+  "review": {
+    "antigravity_model": "Gemini 3.8 Flash High",
+    "mode": "app, read-only contract review; not a source audit",
+    "status": "completed",
+    "accepted": [
+      "No-HP progress is a heuristic, not causal diagnosis.",
+      "Switch-in survival is not guaranteed."
+    ],
+    "rejected": [
+      "Existing reserve ranking already screens level, HP and status; it does not admit the cited level-3 versus level-28 example.",
+      "A Run fallback would broaden the frozen disposable WIN contract; retain second-stall failure."
+    ],
+    "final_verdict": "No remaining concrete P0/P1 design defects.",
+    "quota_after_refresh": {
+      "observed_date": "2026-09-15",
+      "gemini_weekly_remaining_percent": 57,
+      "gemini_five_hour_remaining_percent": 98,
+      "gemini_weekly_reset_in": "3 days, 6 hours",
+      "gemini_five_hour_reset_in": "2 hours, 43 minutes",
+      "antigravity_claude_gpt_weekly_remaining_percent": 86,
+      "antigravity_claude_gpt_five_hour_remaining_percent": 100
+    },
+    "claude_cli_used": false
+  },
+  "next": "Sol High, Fast off: prospectively freeze a distinct campaign C with the new policy, short varied controls and cross-venue coverage. Credit a contingency switch only if observed and durably settled; absent boundaries stay unqualified. No replay or in-campaign replacement."
+}

@@ -91,6 +91,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             limits=plan.case_limits,
             campaign=campaign,
             maximum_encounter_steps=plan.maximum_encounter_steps,
+            policy=plan.policy,
         )
 
     return execute_durable_red_battle_cartridge_campaign(store, plan, run_case)

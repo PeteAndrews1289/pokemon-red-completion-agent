@@ -34,21 +34,21 @@
       "kind": "learning",
       "latest_reorientation": {
         "authority_delta": "None. Model121 remains 121 examples / 83 successes and 86/151 local registrations.",
-        "blocker": "Campaign B's first Route11 control exhausted all active move PP while opponent HP remained unchanged. The fixed maintenance controller has no generic switch/recovery contingency; forced-switch and cross-venue settlement remain unqualified.",
-        "decision": "Close consumed campaign B without replay. Permit one bounded ROM-free architecture session for an observable, identity-free no-progress/no-usable-PP contingency using existing switch mechanics; then require a wholly new campaign epoch.",
+        "blocker": "The generic live-battler stall contingency passes ROM-free tests but has no cartridge evidence. Cross-venue settlement and fainted forced switching remain unqualified.",
+        "decision": "Close ROM-free architecture maintenance. Next prospectively freeze a distinct campaign C with the opt-in policy, short varied controls and cross-venue coverage; credit contingency switching only if observed and durably settled.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-durable-battle-cartridge-campaign-2026-09-15.json",
-          "sha256": "41f6767a2c3d54f5dc5974c527d58f674a75298baab8f86b7620e57e9abc191d"
+          "path": "docs/evidence/red-battle-stall-contingency-2026-09-15.json",
+          "sha256": "ae0b801a8b219344cd8ebdc8fb713e22671ecc046614fb0e858f12631c0fde46"
         },
-        "learning_output": "None. One cartridge case consumed 893 actions / 80,081 frames and failed before settlement; zero queries, labels, examples, fits or registrations. The exact failure evidence reopened and three later cases never opened.",
+        "learning_output": "None. 537 ROM-free focused tests passed, including 46 new tests. Zero cartridge actions, queries, labels, examples, fits or registrations.",
         "next_falsifier": "The contingency needs an identity-bearing exception, cannot choose a legal reserve from observable state, repeats indefinitely, or loses exact accounting.",
-        "next_session_goal": "Astra High: one ROM-free architecture session for a generic observable no-progress/no-usable-PP switch contingency using existing mechanics. No campaign-B replay and no replacement cartridge epoch in that session.",
-        "product_alignment": "The newly frozen campaign stopped at its first real falsifier and retained exact phase/reason/cost. It exposed a reusable battle contingency rather than inviting a Route11-specific patch.",
-        "session_id": "2026-09-15-durable-battle-cartridge-campaign",
+        "next_session_goal": "Sol High, Fast off: one bounded new campaign C using the frozen stall-switch policy; retain actual costs and observed coverage without retry or replacement. Only a passing required gate opens the Model121 heterogeneous acquisition lesson.",
+        "product_alignment": "An opt-in identity-free contingency reuses existing reserve ranking and switch mechanics inside one original runtime and accounting budget. It unblocks cartridge qualification without promoting learned authority.",
+        "session_id": "2026-09-15-battle-stall-contingency",
         "status": "closed",
-        "stop_condition": "One architecture session only. Stop on identity-bearing policy, unobservable inference, unbounded repeat switching or broken accounting; do not replay campaign B, freeze campaign C, search protected roots or continue gameplay.",
-        "transfer_result": "The durable journal survived a real cartridge policy failure with exact costs. No settled battle, independent-lineage or cross-title transfer result was produced."
+        "stop_condition": "One bounded session. Stop the new campaign at its first failure, lost accounting or unsettled transition. No replay or replacement of consumed identities, protected-root scan, source four, fitting or full-game run. Missing boundary coverage stays unqualified.",
+        "transfer_result": "Synthetic party-order, PP, stale-state, partial-switch and shared-budget variations pass. No cartridge settlement, independent-lineage or cross-title transfer result was produced."
       },
       "learned_authority": {
         "current": "Model121 remains 121 examples / 83 successes and 86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Campaign B is consumed after its first control exposed a generic no-progress/no-usable-PP battle gap. Qualify one identity-free switch contingency ROM-free, then freeze a distinct campaign C before the Model121 heterogeneous collection lesson.",
+      "next_decision": "The generic one-switch contingency passes ROM-free. Freeze a distinct campaign C with its exact opt-in policy before the Model121 heterogeneous collection lesson. Campaign B stays consumed; missing switch or cross-venue evidence stays unqualified.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

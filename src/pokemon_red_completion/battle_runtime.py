@@ -724,6 +724,7 @@ def run_adaptive_trainer_battle(
     move_decision_guard: MoveDecisionGuard | None = None,
     move_decision_sink: MoveDecisionSink | None = None,
     battle_exit_guard: MoveDecisionGuard | None = None,
+    main_menu_intervention: Callable[[RawGameState], bool] | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -738,6 +739,12 @@ def run_adaptive_trainer_battle(
     treated as dialogue between turns and after a cursor-proven attack
     confirmation, where bounded CONFIRM pulses cover opponent-first attack text,
     level-up text, and move-learning prompts.
+
+    An optional maintenance intervention may consume a confirmed MAIN boundary
+    before move selection. It returns True only after handling that boundary,
+    uses the supplied metered executor, and owns its semantic postconditions.
+    Interventions share this loop's pulse limit and are forbidden with a learned
+    policy override. The default path has no intervention.
     """
 
     if (
@@ -764,6 +771,11 @@ def run_adaptive_trainer_battle(
         raise TypeError("battle_exit_guard must be callable or None")
     if move_decision_sink is not None and not callable(move_decision_sink):
         raise TypeError("move_decision_sink must be callable or None")
+    if main_menu_intervention is not None:
+        if not callable(main_menu_intervention):
+            raise TypeError("main_menu_intervention must be callable or None")
+        if battle_policy_override_active():
+            raise BattleRuntimeError("maintenance intervention cannot override a learned actor")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -914,6 +926,15 @@ def run_adaptive_trainer_battle(
                 raise BattleRuntimeError(
                     f"{label} move-decision guard rejected the current MAIN-menu turn."
                 ) from error
+        if main_menu_intervention is not None:
+            # A declared mechanics intervention owns this MAIN boundary. Keeping
+            # it in this loop preserves the pulse budget and diagnostic scope.
+            trace_phase("main_menu_intervention")
+            intervened = main_menu_intervention(raw)
+            if type(intervened) is not bool:
+                raise BattleRuntimeError("MAIN intervention must return a boolean")
+            if intervened:
+                continue
         slot = _choose_usable_slot(
             move_slot_policy,
             raw,
@@ -978,6 +999,8 @@ def run_adaptive_wild_battle(
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
     move_decision_guard: MoveDecisionGuard | None = None,
+    move_decision_sink: MoveDecisionSink | None = None,
+    main_menu_intervention: Callable[[RawGameState], bool] | None = None,
 ) -> RawGameState:
     """Finish one active wild battle using the same semantic turn controller.
 
@@ -999,6 +1022,8 @@ def run_adaptive_wild_battle(
             unknown_cancel_interval=unknown_cancel_interval,
             transient_zero_pp_main_is_dialogue=transient_zero_pp_main_is_dialogue,
             move_decision_guard=move_decision_guard,
+            move_decision_sink=move_decision_sink,
+            main_menu_intervention=main_menu_intervention,
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)

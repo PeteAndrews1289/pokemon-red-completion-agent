@@ -21,6 +21,20 @@ BUNDLE = "d" * 64
 MENUS = ("e" * 64, "f" * 64)
 
 
+def test_contingency_policy_requires_a_distinct_frozen_digest():
+    from pokemon_red_completion.red_battle_contingency import CONTINGENCY_POLICY, LEGACY_POLICY
+    legacy = parse_red_battle_cartridge_campaign(_payload())
+    document = _document()
+    document["policy"] = CONTINGENCY_POLICY
+    changed = parse_red_battle_cartridge_campaign(_payload(document))
+    assert legacy.policy == LEGACY_POLICY
+    assert changed.policy == CONTINGENCY_POLICY
+    assert changed.sha256 != legacy.sha256
+    document["policy"] = "unfrozen-switch-policy"
+    with pytest.raises(RedBattleCartridgeCampaignError, match="authority"):
+        parse_red_battle_cartridge_campaign(_payload(document))
+
+
 def _document() -> dict[str, object]:
     return {
         "campaign_id": "battle-cartridge-v2-new",

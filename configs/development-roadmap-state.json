@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-durable-battle-cartridge-campaign",
+  "as_of_session": "2026-09-15-battle-stall-contingency",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-durable-battle-cartridge-campaign-2026-09-15.json"
+      "evidence": "docs/evidence/red-battle-stall-contingency-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1454,6 +1454,12 @@
       "result": "Campaign B stopped on its first Route11 control after 893 actions / 80,081 frames. V2 reopened exact battle/policy-selection failure evidence; the final active move PP was exhausted while opponent HP stayed unchanged, and three later cases never opened.",
       "deviation": "The campaign failed honestly and is consumed. It added no model query, example, fit or registration, but converted the prior unknown-cost failure class into an exact generic no-progress/no-usable-PP falsifier.",
       "next": "Astra High, Fast off: one ROM-free architecture session for an observable identity-free switch contingency using existing battle mechanics. Do not replay campaign B or freeze its replacement in that session."
+    },
+    {
+      "session": "2026-09-15-battle-stall-contingency",
+      "result": "One voluntary live-battler switch after observed stall or no usable move passes 537 ROM-free focused tests, lint and whole-source type checking. It uses the original runtime budget and metered executor; old frozen policies remain unchanged.",
+      "deviation": "Clarify the prior roadmap: voluntary contingency switching is not fainted forced-switch handling. No cartridge, learning, registration or authority delta; stage criteria and denominators stay unchanged.",
+      "next": "Sol High, Fast off: freeze a distinct campaign C with the opt-in policy, varied short controls and cross-venue coverage. Credit switches only if actually observed and durably settled. No replay or in-campaign replacement."
     }
   ],
   "closed_milestones": [

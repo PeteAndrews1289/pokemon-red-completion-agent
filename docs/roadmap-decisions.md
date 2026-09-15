@@ -988,3 +988,25 @@ denominators are unchanged. The omitted prior battle-runtime-refocus review was 
 
 [Evidence](evidence/red-cartridge-journal-v2-2026-09-15.json) ·
 [Detailed roadmap](work-sessions/2026-09-15-cartridge-journal-v2.md).
+
+## September15 — close the generic live-battler stall contingency session
+
+Campaign B remains consumed. Its all-PP-exhausted failure motivated a single opt-in contingency,
+not a route/species exception: one live-battler switch after four observed PP-spending turns without
+enemy HP decrease, or no usable move. Shared reserve screening, the original runtime pulse budget,
+the same metered executor and durable pre-input claims preserve the bounded contract.
+
+537 focused ROM-free tests pass, including 46 new cases; no cartridge, query, example, fit or
+registration occurred. Flash 3.8 High completed a contract review through Antigravity. Attribution
+and survival warnings are explicit; no Run fallback or learned-authority promotion was added.
+
+Correct the prior roadmap's "forced-switch case" wording: this is voluntary switching while alive,
+not fainted-party handling. Fainted switching, move learning, same-battler move replacement and
+cross-venue cartridge settlement remain unqualified. No stage ID or exit criterion changed.
+
+Next prospectively freeze a distinct campaign C with the new policy and declared varied/cross-venue
+coverage. Credit a contingency only if observed and settled; missing coverage never permits replay
+or replacement. Only a passing required gate opens the heterogeneous acquisition lesson.
+
+[Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
+[Session](work-sessions/2026-09-15-battle-stall-contingency.md).

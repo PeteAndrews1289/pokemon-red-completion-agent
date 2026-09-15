@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Campaign B is consumed after its first control exposed a generic no-progress/no-usable-PP battle gap. Qualify one identity-free switch contingency ROM-free, then freeze a distinct campaign C before the Model121 heterogeneous collection lesson.
+- Next decision: The generic one-switch contingency passes ROM-free. Freeze a distinct campaign C with its exact opt-in policy before the Model121 heterogeneous collection lesson. Campaign B stays consumed; missing switch or cross-venue evidence stays unqualified.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-durable-battle-cartridge-campaign** · status **closed** · evidence [qualification](docs/evidence/red-durable-battle-cartridge-campaign-2026-09-15.json)
+**2026-09-15-battle-stall-contingency** · status **closed** · evidence [qualification](docs/evidence/red-battle-stall-contingency-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The newly frozen campaign stopped at its first real falsifier and retained exact phase/reason/cost. It exposed a reusable battle contingency rather than inviting a Route11-specific patch. |
-| Learning output | None. One cartridge case consumed 893 actions / 80,081 frames and failed before settlement; zero queries, labels, examples, fits or registrations. The exact failure evidence reopened and three later cases never opened. |
+| Product alignment | An opt-in identity-free contingency reuses existing reserve ranking and switch mechanics inside one original runtime and accounting budget. It unblocks cartridge qualification without promoting learned authority. |
+| Learning output | None. 537 ROM-free focused tests passed, including 46 new tests. Zero cartridge actions, queries, labels, examples, fits or registrations. |
 | Authority delta | None. Model121 remains 121 examples / 83 successes and 86/151 local registrations. |
-| Transfer result | The durable journal survived a real cartridge policy failure with exact costs. No settled battle, independent-lineage or cross-title transfer result was produced. |
-| Blocker | Campaign B's first Route11 control exhausted all active move PP while opponent HP remained unchanged. The fixed maintenance controller has no generic switch/recovery contingency; forced-switch and cross-venue settlement remain unqualified. |
-| Decision | Close consumed campaign B without replay. Permit one bounded ROM-free architecture session for an observable, identity-free no-progress/no-usable-PP contingency using existing switch mechanics; then require a wholly new campaign epoch. |
-| Next session | Astra High: one ROM-free architecture session for a generic observable no-progress/no-usable-PP switch contingency using existing mechanics. No campaign-B replay and no replacement cartridge epoch in that session. |
+| Transfer result | Synthetic party-order, PP, stale-state, partial-switch and shared-budget variations pass. No cartridge settlement, independent-lineage or cross-title transfer result was produced. |
+| Blocker | The generic live-battler stall contingency passes ROM-free tests but has no cartridge evidence. Cross-venue settlement and fainted forced switching remain unqualified. |
+| Decision | Close ROM-free architecture maintenance. Next prospectively freeze a distinct campaign C with the opt-in policy, short varied controls and cross-venue coverage; credit contingency switching only if observed and durably settled. |
+| Next session | Sol High, Fast off: one bounded new campaign C using the frozen stall-switch policy; retain actual costs and observed coverage without retry or replacement. Only a passing required gate opens the Model121 heterogeneous acquisition lesson. |
 | Next falsifier | The contingency needs an identity-bearing exception, cannot choose a legal reserve from observable state, repeats indefinitely, or loses exact accounting. |
-| Stop condition | One architecture session only. Stop on identity-bearing policy, unobservable inference, unbounded repeat switching or broken accounting; do not replay campaign B, freeze campaign C, search protected roots or continue gameplay. |
+| Stop condition | One bounded session. Stop the new campaign at its first failure, lost accounting or unsettled transition. No replay or replacement of consumed identities, protected-root scan, source four, fitting or full-game run. Missing boundary coverage stays unqualified. |
 
 ### Stop conditions
 

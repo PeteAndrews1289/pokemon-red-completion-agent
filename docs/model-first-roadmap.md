@@ -44,21 +44,27 @@ opened. The campaign is consumed; there was no retry, model query, row, fit or r
 
 | Session | Required result | Recommended setting |
 | --- | --- | --- |
-| Generic battle contingency | Observable identity-free no-progress/no-usable-PP recovery through existing switch mechanics; ROM-free and bounded; no campaign-B replay | Astra / High / Fast off |
-| Fresh cartridge qualification | New epoch and identities, one declared forced-switch case plus short varied controls; no replacement inside the campaign | Sol / High / Fast off |
+| Fresh cartridge qualification | New epoch and opt-in stall-switch policy, short varied controls and cross-venue coverage; credit switching only when observed and settled, no replacement | Sol / High / Fast off |
 | Heterogeneous collection lesson | One useful model choice and retained outcome from a genuinely executable mixed-family menu, only after qualification | Sol / High / Fast off |
 | Useful training batch | Varied bounded cases, actual costs and all failures; no invented independence | Sol / High / Fast off |
 | Reliability and dependency review | Separate-lineage evidence and concrete version/trade/event paths | Astra / High / Fast off |
 | Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
 
-The next session is Astra High because the observed gap crosses policy selection, party switching,
-progress detection and accounting. It is limited to one ROM-free architecture session. If a generic
-solution cannot be qualified without identity-bearing policy, stop and reconsider the qualification
-strategy. Only afterward may Sol High freeze a distinct campaign C. Do not replay campaign B or the
-older Diglett case, scan protected roots, use source four or begin a full-game replay.
+The generic architecture session is complete: 537 ROM-free focused tests, lint and whole-source
+type checking passed. One voluntary live-battler switch after four PP-spending turns without damage
+or no usable move shares the existing runtime and accounting budget. The policy is opt-in and
+frozen by name; old campaign plans retain their legacy behavior. Flash 3.8 High completed a contract
+review, not a source audit. Missing damage is a heuristic, not a cause diagnosis; survival is not
+guaranteed.
+
+Next is Sol High for a distinct campaign C, approximately 1–2 hours. The earlier wording
+"forced-switch case" overstated this scope: switching after a faint remains unqualified, alongside
+move learning and same-battler move replacement. Absent natural contingency coverage stays absent;
+do not replay to obtain it. Do not replay campaign B or the older Diglett case, scan protected roots,
+use source four or begin a full-game replay.
 
 Learning and collection deltas for this session are zero. The earlier 120→121 change is a 0.83%
 increase in dataset size, not a 0.83% improvement in competence.
 
-[Evidence](evidence/red-durable-battle-cartridge-campaign-2026-09-15.json) ·
+[Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)

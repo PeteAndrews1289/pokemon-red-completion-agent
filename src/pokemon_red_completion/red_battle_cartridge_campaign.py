@@ -17,6 +17,7 @@ from pokemon_red_completion.private_artifacts import (
     PrivateArtifactError,
     PrivateArtifactRoot,
 )
+from pokemon_red_completion.red_battle_contingency import CONTINGENCY_POLICY, LEGACY_POLICY
 from pokemon_red_completion.repeatable_battle_scenario_factory import (
     RepeatableBattlePartyOption,
     RepeatableBattleScenarioAssignment,
@@ -63,6 +64,7 @@ class RedBattleCartridgeCampaignPlan:
     cases: tuple[RedBattleCartridgeCase, ...]
     coverage_gaps: tuple[str, ...]
     sha256: str
+    policy: str
 
 
 def parse_red_battle_cartridge_campaign(payload: bytes) -> RedBattleCartridgeCampaignPlan:
@@ -98,7 +100,7 @@ def parse_red_battle_cartridge_campaign(payload: bytes) -> RedBattleCartridgeCam
     )
     if (
         value["schema"] != CAMPAIGN_SCHEMA
-        or value["policy"] != "fixed_strongest_usable_move"
+        or value["policy"] not in (LEGACY_POLICY, CONTINGENCY_POLICY)
         or value["correlated_development_only"] is not True
         or value["learning_credit"] is not False
         or value["evaluation_credit"] is not False
@@ -142,6 +144,7 @@ def parse_red_battle_cartridge_campaign(payload: bytes) -> RedBattleCartridgeCam
         cases=cases,
         coverage_gaps=tuple(gaps),
         sha256=hashlib.sha256(payload).hexdigest(),
+        policy=value["policy"],
     )
 
 
@@ -203,6 +206,7 @@ def execute_red_battle_cartridge_campaign(
         "campaign_id": plan.campaign_id,
         "status": "passed_with_declared_coverage_gaps" if passed else "stopped_on_first_failure",
         "plan_sha256": plan.sha256,
+        "policy": plan.policy,
         "source_commit": plan.source_commit,
         "source_bundle_sha256": plan.source_bundle_sha256,
         "qualification_ci_run_id": plan.qualification_ci_run_id,
@@ -238,6 +242,7 @@ def execute_durable_red_battle_cartridge_campaign(
         "schema": CAMPAIGN_SCHEMA,
         "campaign_id": plan.campaign_id,
         "plan_sha256": plan.sha256,
+        "policy": plan.policy,
         "source_commit": plan.source_commit,
         "source_bundle_sha256": plan.source_bundle_sha256,
         "qualification_ci_run_id": plan.qualification_ci_run_id,
