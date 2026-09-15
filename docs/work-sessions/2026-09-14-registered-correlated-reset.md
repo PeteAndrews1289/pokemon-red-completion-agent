@@ -28,7 +28,7 @@ It may prospectively authorize a new bounded training episode, not relabel histo
   unregistered plans. Historical configurations serve restore authentication only; the current
   execution profile is derived anew from the exact terminal, not caller-nominated targets.
 - Related332 tests passed; a separate48-test reset/economy run passed. These suites overlap and
-  are not an additive total. Lint and targeted type checks passed. Full suite is running.
+  are not an additive total. Lint and targeted type checks passed.
 
 Claude Opus High completed a read-only working-diff review with no hard blocker. Accepted its
 explicit intermediate-plan fit rejection; resource-model integration subsequently added its
@@ -50,6 +50,9 @@ actions and frames remained unchanged; it was not a new gate, reset, query or ex
 The final code retains these typed reasons directly;54 focused diagnostic/reset tests passed.
 Final reset and documentation validation passed193 tests. The regenerated infographic's top and
 footer were inspected; its session summary was shortened to remove a footer overlap.
+The full ROM-free run finished with11744 passed,1 failed and1 xfailed in1171.73 seconds. The failure
+is the existing exact-local-Mac PyBoy metadata fingerprint check (`runtime_identity_authentication`);
+its source and test are unchanged from the prior session. Do not describe this as a full-suite pass.
 
 Static source inspection identifies a concrete hypothesis for the next bounded test: the derived
 capture profile replaces its parameters with a bare encounter corridor, while the router requires

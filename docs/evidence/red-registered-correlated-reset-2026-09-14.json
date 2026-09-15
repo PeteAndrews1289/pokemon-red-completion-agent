@@ -54,7 +54,8 @@
   "verification": {
     "related_tests": "332 passed",
     "reset_economy_tests": "48 passed; overlaps related suite",
-    "full_suite": "running; no full-suite pass claimed",
+    "full_suite": "11744 passed, 1 failed, 1 xfailed in 1171.73 seconds; not a full pass",
+    "full_suite_failure": "Existing exact-local-Mac PyBoy metadata fingerprint qualification: runtime_identity_authentication. Its source and test are unchanged from the prior session.",
     "post_failure_diagnostic_retention_tests": "54 passed",
     "lint": "passed before publication",
     "targeted_type_check": "passed",

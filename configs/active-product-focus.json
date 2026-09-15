@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "falsification",
           "path": "docs/evidence/red-registered-correlated-reset-2026-09-14.json",
-          "sha256": "e335c27ea1fe31c116808921de368c1690b731d9e51f578cd5be0a7b9904a8ca"
+          "sha256": "6fb2a24fd4c218a13ecc60335710c7efb7a2cf9f2e6c5ce88c160f55f6b269cb"
         },
         "learning_output": "None. This third consecutive no-learning session is engineering progress only. Model121 remains121 examples/83 successes/86 local registrations.",
         "next_falsifier": "A source-free test shows that preserving declared capture transport capabilities still cannot produce a legal route, or requires unsupported or fabricated game access.",
