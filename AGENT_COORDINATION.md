@@ -10,17 +10,19 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The user-directed battle audit is maintenance for the Model121 heterogeneous collection lesson.
-Seven false-success cases were reproduced and corrected; 108 semantic transition cases and
-604 affected tests pass, one skipped. Bounded failure traces and a persistence hook are implemented.
-Cartridge qualification remains ahead; official gameplay is paused.
+The bounded cartridge qualification is maintenance for the Model121 heterogeneous collection
+lesson. Its synthetic diagnostic gate passed and three Route11 cases settled in 223 actions /
+19,851 frames. The first Diglett relocation exposed a cross-component evidence gap: its failed
+episode reopened but lacked semantic phase and exact action/frame cost. The campaign stopped without
+retry. Official collection remains paused.
 
 Recovery already succeeded. Model121 remains 121 examples/83 successes and 86/151 local registrations.
 Both consumed identities, source four and protected roots remain excluded.
 
-Codex next owns the bounded disposable campaign in the
-[session report](docs/work-sessions/2026-09-15-battle-runtime-refocus.md).
-It must test real cartridge settlement and durable diagnostics without producing learner rows.
+Codex next owns the V2 phase/reason/cost journal in the
+[session report](docs/work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md).
+It must pass multi-phase synthetic reopening before any new cartridge identity. Astra High is
+recommended for this contract work; Sol High resumes bounded execution after it passes.
 
 ## Reviewer contribution
 
@@ -31,7 +33,10 @@ inference remains an explicit limitation. Final small changes were verified loca
 Flash 3.8 High's first advisory lacked source input and is not a code review; the embedded-source
 retry timed out without a verdict. No Flash finding is treated as verified.
 
-Latest shared quotas: Claude68% session/27% weekly remaining; Gemini99% five-hour/58% weekly.
-Observation time, reset times and adjudications are in the session report; these are not task costs.
+For the cartridge closeout, Claude Opus High returned GO and one accepted P1: the durable failure
+did not prove its component phase, so that claim is now explicitly inferred from type/control flow.
+Its case-taxonomy P2 was also accepted. Flash 3.8 Low was reachable, but two headless read attempts
+auto-denied their requested tools and produced no verdict; no Flash finding is credited. Refreshed
+service quota was unavailable from these commands. Older quota observations are historical only.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

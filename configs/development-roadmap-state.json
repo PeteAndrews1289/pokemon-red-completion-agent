@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-battle-runtime-refocus",
+  "as_of_session": "2026-09-15-bounded-battle-cartridge-qualification",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-battle-runtime-refocus-2026-09-15.json"
+      "evidence": "docs/evidence/red-bounded-battle-cartridge-qualification-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1432,10 +1432,10 @@
       "next": "User requested a battle-runtime refocus before collection."
     },
     {
-      "session": "2026-09-15-battle-runtime-refocus",
-      "result": "Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.",
-      "deviation": "User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.",
-      "next": "Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready."
+      "session": "2026-09-15-bounded-battle-cartridge-qualification",
+      "result": "Synthetic diagnostic reopening passed and three Route11 cartridge cases settled in223actions/19851frames. The first Diglett relocation failed and exposed missing phase/cost evidence; campaign stopped.",
+      "deviation": "Qualification failed honestly. The failed episode was durable but retained only its exception class, so alternate-venue and extended-training reliability remain open; no learning counter changed.",
+      "next": "Astra High, Fast off: build and ROM-free test a V2 cross-component phase/reason/cost journal before any new cartridge identity."
     }
   ],
   "closed_milestones": [

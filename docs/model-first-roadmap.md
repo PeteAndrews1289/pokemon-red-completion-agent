@@ -23,28 +23,33 @@ The forced evolution advanced Tentacool to level24 and stopped. Its exact termin
 successfully recovered; the collection remains intact. Both attempt identities are consumed.
 The recovered menu contains restoration and resupply.
 
-Repeated maintenance triggered the anti-drift alarm. The user requested a systematic runtime
-refocus. Seven adversarial false successes were reproduced and rejected; shared PP verification,
-bounded diagnostics and 108 transition combinations now have ROM-free coverage.
-604 affected tests pass, one skipped. No gameplay or learning occurred in this audit.
-The original exception cause and real-cartridge settlement reliability remain unresolved.
+The bounded cartridge qualification then passed its synthetic diagnostic-reopen prerequisite and
+settled three Route11 cases across two-, three- and four-move menus in 223 actions / 19,851 frames.
+One case naturally exercised a status-suppressed turn without falsely spending PP. The first
+Diglett's Cave relocation failed before battle settlement. Although its failed episode reopened,
+the runner lost the semantic failure phase and exact action/frame cost, so the gate failed and the
+campaign stopped without retry. No gameplay result became a learning row.
 
 ## Next few sessions
 
 | Session | Required result | Recommended setting |
 | --- | --- | --- |
-| Disposable cartridge qualification | Fixed short cases, durable diagnostics, correct PP accounting and settled boundaries; retain every failure | Sol / High / Fast off |
-| Heterogeneous collection lesson | One useful model choice and retained outcome from a genuinely executable menu, after qualification | Sol / High / Fast off |
+| Qualification runner V2 | Cross-component phase/reason/cost journal; synthetic failures reopen exactly before cartridge input | Astra / High / Fast off |
+| New cartridge qualification | New identities, fixed short cases, correct PP/cost accounting and settled boundaries; no replay of the consumed failure | Sol / High / Fast off |
+| Heterogeneous collection lesson | One useful model choice and retained outcome from a genuinely executable mixed-family menu, after qualification | Sol / High / Fast off |
 | Useful training batch | Varied bounded cases, actual costs and all failures; no invented independence | Sol / High / Fast off |
 | Reliability and dependency review | Separate-lineage evidence and concrete version/trade/event paths | Astra / High / Fast off |
+| Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
 
-The first next session is explicitly maintenance for the collection lesson, approximately 1–2 hours.
-Use the [bounded gate](work-sessions/2026-09-15-battle-runtime-refocus.md); stop and reassess if it
-fails. Do not replace this with another long collection attempt. No source-four search, protected
-root scan, consumed trial retry or full-game replay is part of this plan.
+The first next session is architecture maintenance for the collection lesson, approximately
+1–2 hours. Use the [failed qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md)
+as the contract: prove synthetic phase/reason/cost retention before new cartridge input. Do not
+replay the consumed Diglett case or replace this with another long collection attempt. No
+source-four search, protected-root scan, consumed trial retry or full-game replay is part of this
+plan.
 
 Learning and collection deltas for this session are zero. The earlier 120→121 change is a 0.83%
 increase in dataset size, not a 0.83% improvement in competence.
 
-[Evidence](evidence/red-battle-runtime-refocus-2026-09-15.json) ·
+[Evidence](evidence/red-bounded-battle-cartridge-qualification-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)

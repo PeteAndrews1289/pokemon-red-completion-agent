@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Maintenance for the Model121 heterogeneous collection lesson: qualify a bounded disposable cartridge campaign with durable battle diagnostics before further collection. Preserve consumed evolution/recovery identities and protected sources.
+- Next decision: Maintenance for the Model121 heterogeneous collection lesson: repair the cross-component cartridge evidence contract, then qualify new bounded identities before further collection. Preserve every consumed identity and protected source.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains121 examples/83 successes and86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A disposable cartridge case violates selected-turn accounting, loses a failure diagnostic or cannot settle inside fixed action/frame limits. |
+| Cheapest falsifier | A V2 synthetic failure cannot reopen its exact component phase, sanitized reason and cumulative action/frame cost before any cartridge input. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-battle-runtime-refocus** · status **closed** · evidence [qualification](docs/evidence/red-battle-runtime-refocus-2026-09-15.json)
+**2026-09-15-bounded-battle-cartridge-qualification** · status **closed** · evidence [qualification](docs/evidence/red-bounded-battle-cartridge-qualification-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | User-directed refocus replaces reactive debugging on the retained collection save with shared invariants, adversarial tests and disposable qualification. |
-| Learning output | None. Explicit maintenance unblocks the named Model121 heterogeneous collection lesson; tests are not learning progress. |
+| Product alignment | The bounded campaign stopped at its first evidence-contract failure instead of entering another live patch/retry loop; the result narrows the required maintenance before heterogeneous collection. |
+| Learning output | None. The synthetic diagnostic gate and three settled cartridge cases are maintenance evidence, not model examples or registration progress. |
 | Authority delta | None. Model121 remains121 examples/83 successes and86/151 local registrations. |
-| Transfer result | None.108 semantic combinations test executor variation, not learned transfer or independent cartridge reliability. |
-| Blocker | ROM-free qualification passes; cartridge settlement remains untested. The original exception cause is unknown. Legacy move replacement is not exact execution proof. |
-| Decision | Keep gameplay paused. Qualify the shared battle contract and diagnostic persistence on disposable cartridge cases before another collection lesson. |
-| Next session | Sol High: implement and run the bounded disposable cartridge qualification in the session report, retaining every result. Resume collection only after its gate passes. |
-| Next falsifier | A disposable cartridge case violates selected-turn accounting, loses a failure diagnostic or cannot settle inside fixed action/frame limits. |
-| Stop condition | Stop the campaign on unexplained resource changes, lost diagnostics, hard budgets or unsupported transitions. Retain failures and reassess the shared contract; no consumed identity replay or protected-root scan. |
+| Transfer result | None. Three correlated Route11 cases demonstrate local settlement variation only; they do not establish alternate-venue, independent or cross-title reliability. |
+| Blocker | Three cartridge cases settled, but the first cross-venue setup failure lost its semantic phase and exact action/frame cost. Move learning, forced switching and alternate-venue settlement remain unqualified. |
+| Decision | Keep official collection paused. Build a new cross-component journal and prove phase/reason/cost reopening with synthetic failures before any new cartridge identity opens. |
+| Next session | Astra High: design and test a V2 cross-component cartridge journal. Do not replay the consumed Diglett case or open a new cartridge identity until multi-phase synthetic reopen tests pass. |
+| Next falsifier | A V2 synthetic failure cannot reopen its exact component phase, sanitized reason and cumulative action/frame cost before any cartridge input. |
+| Stop condition | No consumed-case replay, in-campaign replacement or new cartridge execution until the V2 phase/reason/cost journal passes ROM-free failure injection. Preserve the retained source and all failed evidence. |
 
 ### Stop conditions
 

@@ -1,5 +1,18 @@
 # Roadmap baseline and deviations
 
+## September 15 — stop the cartridge campaign on incomplete failure evidence
+
+The [bounded qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md)
+passed its synthetic reopen prerequisite and settled three correlated Route11 cases, but the first
+cross-venue setup failure retained only its exception class. The missing semantic phase and exact
+action/frame cost violate the frozen gate, so the campaign stopped without retry or replacement.
+
+This does not reverse the shared PP-vector repair and does not create learning credit. It changes
+the immediate roadmap from cartridge execution to one V2 cross-component journal: phase, bounded
+reason and cumulative cost must survive failures outside the decorated battle runtime as well as
+inside it. Use Astra High for that contract work, then Sol High for new bounded identities. Official
+collection, the full Red run, ROM hack, Crystal and Emerald remain in their existing order.
+
 ## September 15 — qualify battle execution before more collection
 
 The user challenged the repeated run/fail/patch loop and authorized a systematic refocus.

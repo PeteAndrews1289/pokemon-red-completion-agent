@@ -1,19 +1,20 @@
-# Video narrative: stop discovering every defect during collection
+# Video narrative: the safety gate stops the cartridge campaign
 
 This is an AI-assisted engineering project directed by Pete Andrews.
 
 ## Latest episode
 
-Open with Pete's criticism: run, fail, patch, repeat had become too frequent.
-The collection save was safely recovered, but the old exception's exact cause was lost.
+Open with the synthetic failure injection: its durable diagnostic reopens with zero game input.
+Then show three disposable Route11 battles settling across varied menus and timing in 223 actions /
+19,851 frames. One natural sleep turn demonstrates why PP proof and complete settlement matter.
 
-Show the new adversarial tests: an HP change can happen alongside an extra PP spend.
-Seven false-success cases exposed gaps in the shared battle proof. Full-vector verification and
-bounded failure traces address those gaps; 108 semantic transition combinations now pass.
-The affected suite has 604 passing tests and one skip.
+The turning point is the first Diglett's Cave relocation. It fails, and the failed episode survives,
+but its semantic phase and exact cost do not. The frozen gate rejects the campaign immediately.
+There is no live patch, replay or replacement case.
 
-Be explicit about the limit: synthetic tests do not prove cartridge reliability or model learning.
-The next step is a bounded disposable cartridge campaign with retained diagnostics.
+Be explicit about the limit: three correlated successes do not prove cartridge reliability or
+model learning. V2 must retain phase, reason and cost across both setup and battle failures before
+new cartridge input.
 
 ## The finish line remains unchanged
 
@@ -23,5 +24,5 @@ This session added no examples or registrations. The final fresh-Red gate remain
 Complete a fresh model-directed Red run and its full local Pokédex before any ROM hack,
 then proceed through Crystal and at least Emerald.
 
-[Session](work-sessions/2026-09-15-battle-runtime-refocus.md) ·
+[Session](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

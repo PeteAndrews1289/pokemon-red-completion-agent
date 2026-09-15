@@ -3,19 +3,17 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The battle-runtime audit reproduced and corrected seven false-success cases. The shared proof
-now checks the original battler's PP vector before accepting effects or exit and excludes a
-forced switch from move-replacement attribution. Bounded failure diagnostics retain the phase,
-selection, recent observations/actions and exception locations.
+The synthetic diagnostic-reopen gate passed. Three disposable Route11 cases then settled across
+two-, three- and four-move menus in 223 actions / 19,851 frames; one naturally exercised a
+status-suppressed selection without PP spend. The first Diglett relocation failed before battle.
+Its failed episode reopened, but retained neither semantic phase nor exact action/frame cost.
+The campaign stopped without retry; Model121 remains 121/83 and 86/151 local registrations.
 
-604 affected tests pass, one skipped, including a 108-case semantic transition matrix.
-This is maintenance; Model121 remains 121/83 and 86/151 local registrations. Recovery already
-succeeded. The original exception's exact cause is unknown, and no cartridge soak has run.
-
-Next useful review: challenge actual disposable-cartridge evidence against the prospective
-[qualification gate](work-sessions/2026-09-15-battle-runtime-refocus.md).
-In particular, distinguish move-effect observation from complete turn settlement and treat
-legacy move replacement as inferred execution. No broad source audit is a standing requirement.
+Next useful review: challenge the proposed V2 cross-component journal in the
+[failed qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md).
+It must preserve component phase, sanitized reason and cumulative cost for source inspection,
+relocation, encounter setup, battle execution and terminal settlement. Multi-phase synthetic
+failures must reopen exactly before any new cartridge identity. No broad audit is required.
 
 No consumed evolution/recovery replay, protected-root scan, source four, fit, full run,
 ROM hack or Crystal. Codex owns implementation and publication.
