@@ -163,8 +163,9 @@
 <text x="754" y="2606" class="small muted">Learn new generation mechanics; retain truthful global, local and</text>
 <text x="754" y="2625" class="small muted">physical views.</text>
 <text x="50" y="2735" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2773" class="small muted">2026-09-15-cartridge-journal-v2</text>
-<text x="50" y="2808" class="body">Integrated V2 journal passes371 focused tests and whole-source type checking. Setup and battle retain</text>
-<text x="50" y="2833" class="body">phase/reason/attempted/completed/frame evidence, including partial failures and session changes. No gameplay or learning.</text>
+<text x="50" y="2773" class="small muted">2026-09-15-durable-battle-cartridge-campaign</text>
+<text x="50" y="2808" class="body">Campaign B stopped on its first Route11 control after 893 actions / 80,081 frames. V2 reopened exact battle/policy-selection</text>
+<text x="50" y="2833" class="body">failure evidence; the final active move PP was exhausted while opponent HP stayed unchanged, and three later cases never</text>
+<text x="50" y="2858" class="body">opened.</text>
 <text x="50" y="2871" class="small muted">Baseline red-first-v3-full-run / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

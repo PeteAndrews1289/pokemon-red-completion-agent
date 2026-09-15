@@ -4,20 +4,18 @@ This is an AI-assisted engineering project directed by Pete Andrews.
 
 ## Latest episode
 
-Open with the previous campaign's stop: three Route11 successes, followed by a Diglett setup
-failure whose phase and cost did not survive. The case is consumed, not patched and replayed.
+Open with Flash 3.8 High spotting the missing campaign-level durability rule. Show the new epoch
+claiming itself before any case, recording shared cost after each boundary and refusing restart or
+resume. Then show 389 focused tests and exact-source hosted CI passing.
 
-Show the replacement journal following source inspection, relocation, encounter setup, battle
-and settlement. Inject errors at each stage without opening a ROM. Distinguish an attempted
-action from a completed action, and demonstrate a partial tick retaining its actual frame cost.
-Then change emulator sessions and show cumulative cost remaining correct.
+The cartridge result is the real story. Campaign B opens its first Route11 control and runs for 893
+actions / 80,081 frames. The opponent remains at 34 HP while the active battler spends its last PP.
+At the next MAIN menu, policy selection fails. Freeze the screen on the reopened evidence:
+`battle`, `battle_failed`, `policy_selection`, known cost, no action in flight.
 
-The turning point is the real battle-runtime test: its saved diagnostic uses JSON lists where
-the in-memory version used tuples. The new regression detects the mismatch before cartridge play.
-The executor-boundary check also caught misplaced primitive calls; the code moved, not the rule.
-
-371 focused tests pass. Be explicit: this locally qualifies accounting, not Pokémon competence.
-The next episode should be a short newly frozen cartridge campaign, with no replay of the old case.
+Emphasize the discipline: three later cases never opened, the identity is consumed and there is no
+patch-and-replay montage. V2 succeeded at explaining the failure, while the battle capability failed.
+The next episode is a bounded identity-free switching contingency, not another Route11 exception.
 
 ## The finish line remains unchanged
 
@@ -28,5 +26,5 @@ The final fresh-Red gate remains 0/5.
 Complete a fresh model-directed Red run and its full local Pokédex before any ROM hack,
 then proceed through Crystal and at least Emerald.
 
-[Session](work-sessions/2026-09-15-cartridge-journal-v2.md) ·
+[Session](work-sessions/2026-09-15-durable-battle-cartridge-campaign.md) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

@@ -7,23 +7,23 @@ system rather than secretly choosing its live game actions.
 The first finish line is a fresh model-directed Red run with Champion/Hall-of-Fame evidence and
 all 151 local registrations. Then comes an unfamiliar compatible Red hack, Crystal and Emerald.
 
-## Latest chapter: make failures measurable before playing again
+## Latest chapter: the first durable campaign failure
 
-The previous cartridge campaign stopped after three Route11 successes and one Diglett setup
-failure. Its failed episode survived, but its semantic phase and exact cost did not. Rather than
-replaying it, this session built a journal that follows the whole case from source inspection
-through relocation, encounter setup, battle and settlement.
+The new campaign machinery binds exact source, ROM, save, plan and hosted CI evidence to one
+non-resumable epoch. Gemini 3.8 Flash High found the missing durable campaign boundary; after it was
+implemented, Flash returned GO. The source passed 389 focused tests, whole-source type checking and
+exact-source hosted CI.
 
-Synthetic failures now prove that attempted actions, completed actions and actual frames survive
-independently—even when an action advances time and then fails. Limits stop setup before it
-exceeds the permitted requests. Unknown cost remains explicitly unknown. The same journal spans
-separate emulator sessions, and the real battle runtime's diagnostic reopens exactly.
+Campaign B then did what a useful qualification should do: it found a real limitation and stopped.
+The first Route11 control used 893 actions and 80,081 frames. Its active battler exhausted every move's
+PP while the opponent's HP stayed unchanged, and the fixed policy could not choose the next action.
+Unlike the older Diglett failure, V2 retained the exact battle/policy phase and complete cost. The
+three later cases never opened, and the failed identity will never replay.
 
-371 focused tests passed. That is an engineering prerequisite, not model learning or cartridge
-reliability. No game was opened. Model121 stays at 121 examples / 83 successes and the development
-save at 86/151 registrations. Next comes a new bounded cartridge campaign, then the heterogeneous
-acquisition lesson if qualification passes. The old failed case remains consumed.
+This is evidence quality, not Pokémon learning. Model121 stays at 121 examples / 83 successes and
+86/151 registrations. Next is one bounded generic switch-contingency session, then a wholly new
+cartridge epoch. Only a passing gate opens the heterogeneous acquisition lesson.
 
-[Session and detailed roadmap](work-sessions/2026-09-15-cartridge-journal-v2.md) ·
+[Session and detailed roadmap](work-sessions/2026-09-15-durable-battle-cartridge-campaign.md) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

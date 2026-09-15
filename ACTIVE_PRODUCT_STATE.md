@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: V2 maintenance is locally qualified. Freeze and execute a distinct bounded cartridge campaign before the Model121 heterogeneous collection lesson; preserve all consumed identities and protected sources.
+- Next decision: Campaign B is consumed after its first control exposed a generic no-progress/no-usable-PP battle gap. Qualify one identity-free switch contingency ROM-free, then freeze a distinct campaign C before the Model121 heterogeneous collection lesson.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model121 remains121 examples/83 successes and86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase. |
+| Authority now | Model121 remains 121 examples / 83 successes and 86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A newly frozen bounded cartridge case loses exact phase/reason/cost evidence or cannot prove its declared settled boundary; stop without replay. |
+| Cheapest falsifier | A generic no-progress/no-usable-PP contingency requires a species, map, route or case identity, cannot choose one legal reserve from observable state, or escapes bounded accounting. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-cartridge-journal-v2** · status **closed** · evidence [qualification](docs/evidence/red-cartridge-journal-v2-2026-09-15.json)
+**2026-09-15-durable-battle-cartridge-campaign** · status **closed** · evidence [qualification](docs/evidence/red-durable-battle-cartridge-campaign-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Implemented reusable failure accounting across setup and battle, including hard setup caps and partial-tick costs; no speculative route repair or live retry. |
-| Learning output | None. 371 focused tests and whole-source type checking qualify the journal locally; no cartridge, model query, example, fit or registration occurred. |
-| Authority delta | None. Model121 remains121 examples/83 successes and86/151 local registrations. |
-| Transfer result | ROM-free phase/session/input-path variation passed; no new cartridge, independent-lineage or cross-title reliability evidence. |
-| Blocker | V2 now passes multi-phase ROM-free qualification. A new cartridge campaign is not yet frozen or executed; alternate-venue settlement and extended battle boundaries remain unqualified. |
-| Decision | Close the V2 architecture session. Next freeze a distinct bounded cartridge campaign using the integrated journal; preserve the failed prior campaign without retry. |
-| Next session | Sol High: freeze distinct unused cartridge identities and exact inputs, then use V2 for a short campaign including cross-venue setup. No consumed-case replay or silent coverage-gap promotion. |
-| Next falsifier | A newly frozen bounded cartridge case loses exact phase/reason/cost evidence or cannot prove its declared settled boundary; stop without replay. |
-| Stop condition | Stop the new campaign on its first accounting, unsupported-transition or settlement failure. No consumed-case replay, in-campaign replacement, protected-root search or extension into full-game play. |
+| Product alignment | The newly frozen campaign stopped at its first real falsifier and retained exact phase/reason/cost. It exposed a reusable battle contingency rather than inviting a Route11-specific patch. |
+| Learning output | None. One cartridge case consumed 893 actions / 80,081 frames and failed before settlement; zero queries, labels, examples, fits or registrations. The exact failure evidence reopened and three later cases never opened. |
+| Authority delta | None. Model121 remains 121 examples / 83 successes and 86/151 local registrations. |
+| Transfer result | The durable journal survived a real cartridge policy failure with exact costs. No settled battle, independent-lineage or cross-title transfer result was produced. |
+| Blocker | Campaign B's first Route11 control exhausted all active move PP while opponent HP remained unchanged. The fixed maintenance controller has no generic switch/recovery contingency; forced-switch and cross-venue settlement remain unqualified. |
+| Decision | Close consumed campaign B without replay. Permit one bounded ROM-free architecture session for an observable, identity-free no-progress/no-usable-PP contingency using existing switch mechanics; then require a wholly new campaign epoch. |
+| Next session | Astra High: one ROM-free architecture session for a generic observable no-progress/no-usable-PP switch contingency using existing mechanics. No campaign-B replay and no replacement cartridge epoch in that session. |
+| Next falsifier | The contingency needs an identity-bearing exception, cannot choose a legal reserve from observable state, repeats indefinitely, or loses exact accounting. |
+| Stop condition | One architecture session only. Stop on identity-bearing policy, unobservable inference, unbounded repeat switching or broken accounting; do not replay campaign B, freeze campaign C, search protected roots or continue gameplay. |
 
 ### Stop conditions
 

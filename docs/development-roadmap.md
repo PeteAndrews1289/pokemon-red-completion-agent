@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-cartridge-journal-v2**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-durable-battle-cartridge-campaign**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-cartridge-journal-v2-2026-09-15.json)
+[Current evidence](../docs/evidence/red-durable-battle-cartridge-campaign-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-durable-battle-cartridge-campaign
+
+Campaign B stopped on its first Route11 control after 893 actions / 80,081 frames. V2 reopened exact battle/policy-selection failure evidence; the final active move PP was exhausted while opponent HP stayed unchanged, and three later cases never opened.
+
+**Deviation:** The campaign failed honestly and is consumed. It added no model query, example, fit or registration, but converted the prior unknown-cost failure class into an exact generic no-progress/no-usable-PP falsifier.
+
+**Next:** Astra High, Fast off: one ROM-free architecture session for an observable identity-free switch contingency using existing battle mechanics. Do not replay campaign B or freeze its replacement in that session.
 
 ### 2026-09-15-cartridge-journal-v2
 

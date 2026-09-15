@@ -1,5 +1,20 @@
 # Roadmap baseline and deviations
 
+## September 15 — consume campaign B and repair one generic battle contingency
+
+The [durable campaign](work-sessions/2026-09-15-durable-battle-cartridge-campaign.md)
+bound a new epoch to exact source, CI, ROM, state and plan identities. Its first Route11 control
+failed after 893 actions / 80,081 frames. V2 retained the exact `battle` / `battle_failed` /
+`policy_selection` boundary: the active battler's PP reached zero while opponent HP remained
+unchanged. Three later cases never opened. Campaign B is consumed without replay or replacement.
+
+This validates the new evidence path under a real falsifier but does not qualify battle settlement
+or create learned authority. The immediate roadmap becomes one Astra High, ROM-free architecture
+session for a generic observable no-progress/no-usable-PP switch contingency. It may reuse existing
+switch mechanics but may not depend on species, map, route or case identities. Only after that
+passes may Sol High freeze a distinct campaign C. The heterogeneous lesson, full Red acceptance,
+ROM hack, Crystal and Emerald remain in their prior order.
+
 ## September 15 — stop the cartridge campaign on incomplete failure evidence
 
 The [bounded qualification](work-sessions/2026-09-15-bounded-battle-cartridge-qualification.md)
