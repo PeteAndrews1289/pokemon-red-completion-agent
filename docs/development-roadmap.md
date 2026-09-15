@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-full-local-source-v2-preflight-failure**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-14-direct-profile-encounter-media-repair**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json)
+[Current evidence](../docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-14-direct-profile-encounter-media-repair
+
+The generic encounter-media repair is qualified ROM-free. Five regressions cover the complete catalog, Route21 coexistence, real unmocked corridor derivation, clean exhaustion and invalid-candidate defense; the named rehearsal now passes17 tests. Zero source, ROM, emulator or model effects occurred.
+
+**Deviation:** This maintenance directly unblocks the named learning experiment but creates no learner or transfer result. Both consumed sources remain closed, the zero-learning alarm remains active and no third source was selected or claimed. Flash3.8 High and Claude Opus4.6 returned PASS without findings.
+
+**Next:** Publish and require exact-head CI. Then separately re-audit the two failures, remaining inventory and strengthened gate; authorize at most one distinct third-source action-free attempt only if its irreversible cost is justified.
 
 ### 2026-09-14-direct-full-local-source-v2-preflight-failure
 

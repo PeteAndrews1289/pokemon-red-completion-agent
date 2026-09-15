@@ -1,27 +1,26 @@
-# Video narrative: the catalog edge case that consumed claim two
+# Video narrative: repairing the catalog edge case without claim three
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Antigravity
 help build and review the software; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the intended safeguard: the new 12-test ROM-free rehearsal passed on the published exact
-source. Then the project selected and claimed one distinct source without inspecting its save.
+Open with the honest failure from the prior episode: a valid water encounter entered a grass-only
+sorter and consumed the second source before action-free preflight.
 
-The source revealed a catalog edge case before action-free preflight. Tentacool is correctly listed
-as `wild:Route21:water`, but the direct profile treated every `WILD` method as a grass corridor and
-crashed during sorting. Put the honest counters on screen: one claim, one payload open, zero model
-queries, actions, frames, registrations, outcomes, examples and fits.
+Then show the repair boundary. The direct profile now qualifies candidates through the existing
+grass resolver, caches their map for stable priority and defends the corridor loop. It does not
+reinterpret water as grass.
 
-Include Flash's read-only review: it confirmed the sort failure, found the same resolver call outside
-the corridor exception boundary and identified the mocked test blind spot. The source remains
-consumed, with no fallback or retry.
+Put the new gate on screen: complete public catalog, Route21 water-plus-grass, unmocked real
+corridor derivation, clean water-only exhaustion and an invalid-candidate bypass. The named
+rehearsal rises from12 to17 passing tests.
 
-Close with the new non-consuming gate: validate every complete-catalog candidate, Route21
-water/grass coexistence, unmocked profile derivation and clean exhaustion before another source is
-even selected. This is a repair episode, not gameplay and not progress toward a transfer claim.
+Flash3.8 High and Claude Opus4.6 both returned PASS. Close on the zero-effect counters: no third
+source, ROM, emulator, model query, action, frame, outcome, example, fit or registration. This is a
+guardrail, not learned progress.
 
-[Latest session and evidence](work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md)
+[Latest session and evidence](work-sessions/2026-09-14-direct-profile-encounter-media-repair.md)
 
 ## The real finish line
 
@@ -29,8 +28,9 @@ State Pete's requirement directly: finish Red from a fresh game with model-direc
 concurrent Champion/Hall-of-Fame evidence and all 151 local registrations before trying a ROM hack.
 Then: compatible unfamiliar Red modification → Crystal → at least Emerald.
 
-The next episode should implement and publish only the ROM-free catalog repair. No third source is
-selected or claimed in that session. Consumed assignments stay closed.
+The next episode should verify exact-head CI, re-audit the cost of two consumed sources and decide
+whether the 17-test gate justifies one final prospectively selected action-free attempt. Consumed
+assignments stay closed and no fallback is allowed.
 
 ## Useful flashbacks
 

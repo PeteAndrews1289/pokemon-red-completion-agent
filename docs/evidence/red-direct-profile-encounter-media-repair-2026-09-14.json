@@ -1,0 +1,71 @@
+{
+  "schema": "pokemon.red.direct-profile-encounter-media-repair.evidence.v1",
+  "session_id": "2026-09-14-direct-profile-encounter-media-repair",
+  "classification": "maintenance_unblocking_direct_full_local_gate",
+  "status": "qualified_rom_free_without_source_access",
+  "purpose": "Prevent non-grass encounter media from aborting grass-corridor selection before another scarce catalog source is claimed.",
+  "repair": {
+    "candidate_filter": "Resolve each missing WILD catalog source through the existing grass-only resolver before admitting it to direct-profile sorting.",
+    "deterministic_order": "Cache the resolved map id and preserve current-map, minimum-species-number and source-id priority.",
+    "defensive_boundary": "Resolve each corridor candidate inside the operational exception boundary and skip only KeyError, RedLivingDexMultifamilyError and RedLivingDexWildCorridorError.",
+    "water_resolver_relaxed": false,
+    "caller_selected_species_or_route": false
+  },
+  "regression_gate": {
+    "complete_public_catalog_grass_compatibility": "passed",
+    "route21_water_grass_coexistence": "passed",
+    "real_catalog_and_unmocked_corridor_derivation": "passed",
+    "clean_non_grass_exhaustion": "passed",
+    "invalid_candidate_defense": "passed",
+    "nonconsuming_direct_rehearsal": "17_passed_11704_deselected",
+    "related_component_suite": "203_passed"
+  },
+  "effects": {
+    "root_pair_claims": 0,
+    "source_selections": 0,
+    "source_payload_opens": 0,
+    "rom_opens": 0,
+    "registration_sessions": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "training_examples": 0,
+    "verified_outcomes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_delta": "none",
+    "transfer_result": "none"
+  },
+  "verification": {
+    "focused_direct_profile_tests": "7_passed",
+    "nonconsuming_direct_rehearsal": "17_passed",
+    "related_component_tests": "203_passed",
+    "ruff": "passed_repository",
+    "mypy": "passed_499_source_files",
+    "collection_registry_check": "passed",
+    "collection_registry_sha256": "60bbbf3fd341a3869cb2c7b58168ba121715a98e4d0e7dd903387e889f903534",
+    "source_bundle_sha256": "ebb73c93f1de8de24d6bb8eea6d83f3ea889fcf5033545109bdc980dffd6ab4a",
+    "exact_head_ci": "pending_publication"
+  },
+  "reviewers": {
+    "flash_model": "gemini-3.8-flash-high",
+    "flash_effort": "high",
+    "flash_result": "pass_no_p0_p1_p2",
+    "claude_model": "claude-opus-4-6-thinking",
+    "claude_result": "pass_no_p0_p1_p2",
+    "accepted_findings": 0,
+    "rejected_findings": 0,
+    "quota_windows": "unavailable_from_headless_cli_output"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "stop_condition_observed": "No third source was selected or claimed, and no ROM, private payload, emulator or model episode was opened in this repair session.",
+  "next_gate": "Publish and require exact-head CI, then separately re-audit whether the strengthened non-consuming gate justifies one third-source exact-claim action-free attempt.",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

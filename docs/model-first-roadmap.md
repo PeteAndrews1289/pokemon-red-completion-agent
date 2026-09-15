@@ -43,29 +43,27 @@ and failed while applying a v4 economy behavior to a non-economy base plan. Both
 retained; actions, frames, queries, registration sessions, outcomes, examples and fits stayed zero.
 The source is consumed without retry or replacement.
 
-A new ROM-free rehearsal ran 12 real component checks before a second source was claimed. The
-source was selected prospectively and opened only after its exact claim, but generic preparation
-still failed before action-free preflight: the catalog's `wild:Route21:water` method entered a
-grass-only source sorter. A second uncaught resolver boundary exists in the corridor loop. The
-source is consumed without retry or replacement; queries, actions, frames, registration sessions,
-outcomes, examples and fits all stayed zero.
+The generic defect exposed by the second source is now repaired without source or ROM access.
+Direct profile derivation filters non-grass encounter media through the existing resolver before
+sorting and defends the corridor loop without loosening water into grass. Five regressions cover the
+complete public catalog, Route21 coexistence, unmocked catalog-to-corridor derivation, clean
+exhaustion and invalid-candidate defense. The named non-consuming rehearsal now passes17 tests.
 
 ## Immediate next session
 
-Implement one generic ROM-free repair before spending another source: filter non-grass encounter
-media before grass-corridor sorting, defend corridor resolution, and test the complete catalog,
-Route21 water/grass coexistence, real unmocked profile derivation and clean grass exhaustion. Run
-the existing 12-test rehearsal and broader verification, publish and require exact-head CI. Do not
-select or claim a third source in that maintenance session. Only after it is green should a later
-session decide whether another exact-claim attempt is justified.
+Publish and require exact-head CI. In the next session, re-audit both consumed failures, remaining
+unused-source inventory and the strength of the 17-test gate. Only if the irreversible cost is now
+justified may one distinct source be selected prospectively and exactly claimed for an action-free
+capture-plus-evolution preflight. Do not reopen either consumed source, select a fallback, return to
+the Model121 resource loop or execute gameplay with fewer than two families.
 
 The anti-drift alarm remains active. No new architecture audit or full replay is the next task.
 Full-game Red is a final exam and stays closed until its bounded component gates are recorded.
 
-[Session](work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
-[Evidence](evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json) ·
+[Session](work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
+[Evidence](evidence/red-direct-profile-encounter-media-repair-2026-09-14.json) ·
 [Development infographic](development-roadmap.md)
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**, about 45–90 minutes for the
-ROM-free source-media repair and regression gate. Use Astra for the subsequent authority decision
-about whether spending a third scarce source is justified.
+Next-session recommendation: **GPT-6 Astra / High / Fast off**, about 60–120 minutes for the source
+risk re-audit and at most one action-free exact-claim gate if justified. The decision now concerns
+irreversible experimental authority rather than routine implementation.

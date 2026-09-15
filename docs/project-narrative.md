@@ -9,30 +9,27 @@ and Hall-of-Fame evidence and all 151 local registrations, before any ROM hack. 
 supporting-save and event dependencies remain requirements. After full Red comes a compatible
 unfamiliar hack, then Crystal and at least Emerald.
 
-## Latest chapter: the rehearsal found two bugs, but not the third
+## Latest chapter: make the third guardrail catalog-wide
 
-After two generic preparation defects consumed the first source, the project built a 12-test
-ROM-free rehearsal and published it green. The second source passed that rehearsal, was selected
-prospectively and claimed exactly once, then exposed another generic defect before the action-free
-menu appeared.
+The second direct-origin source exposed a catalog edge case before its action-free menu appeared:
+Tentacool's valid water encounter was sent into a grass-only corridor sorter. That source remains
+consumed, but the repair session spent no additional source and opened no ROM or private payload.
 
-The acquisition catalog correctly records Tentacool as `wild:Route21:water`, but the direct profile
-sent every method with kind `WILD` through a resolver that accepts only grass sources. Sorting
-therefore crashed before a valid grass corridor could be tried. The claimed source was opened, but
-there were still zero model queries, controller actions, emulator frames, registration sessions,
-outcomes, examples or fits.
+The direct profile now asks the existing grass resolver to qualify each candidate before sorting.
+It caches the valid map for deterministic priority and protects the corridor loop if an invalid
+source somehow bypasses the first filter. Water stays water; the repair does not fabricate surfing
+as a walking corridor.
 
-Flash independently confirmed that failure and a second uncaught resolver boundary in the corridor
-loop. The source remains consumed without retry or replacement. This is not evidence that its game
-state lacked capture and evolution choices; the program failed before it could ask.
+Five new ROM-free tests cover the entire public catalog, Route21 water/grass coexistence, a real
+unmocked catalog-to-corridor derivation, clean water-only exhaustion and the defensive bypass. The
+named rehearsal now passes17 tests, while model, gameplay and collection counters remain unchanged.
 
-The next guardrail expands the non-consuming test from known seams to the complete public catalog:
-exclude water from grass candidates, preserve Route21 grass when water and grass coexist, run real
-unmocked profile derivation and fail cleanly when no grass source remains. No third source is spent
-while that repair is built.
+Flash3.8 High and Claude Opus4.6 Thinking both reviewed the final change and returned PASS without
+findings. The remaining question is no longer the code fix; it is whether that stronger guardrail
+justifies spending a third scarce source after two failures.
 
-[Latest evidence](evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json) ·
-[Detailed session](work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
+[Latest evidence](evidence/red-direct-profile-encounter-media-repair-2026-09-14.json) ·
+[Detailed session](work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
 [Latest measured fit](work-sessions/2026-09-14-model121-frozen-resupply.md)
 
 ## What earlier chapters established
@@ -48,10 +45,10 @@ while that repair is built.
 
 ## What matters next
 
-The next episode is ROM-free: repair encounter-media filtering and add complete-catalog regression
-coverage, then publish it under exact-head CI. Do not reopen either consumed source, select a
-fallback, claim a third source or return to the Model121 resource loop. A later session must decide
-whether another scarce claim is justified.
+The next episode begins with exact-head CI and a source-risk re-audit. If the strengthened gate now
+justifies one more attempt, select one distinct unused source prospectively, claim it exactly once
+and stop action-free unless capture and evolution are both executable. Do not reopen either
+consumed source, select a fallback or return to the Model121 resource loop.
 
 Only after the bounded story, navigation, battle, resource and collection components pass unseen
 gates should the project begin the fresh-start Red final exam. A growing same-lineage training set

@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-14-direct-full-local-source-v2-preflight-failure",
+  "as_of_session": "2026-09-14-direct-profile-encounter-media-repair",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json"
+      "evidence": "docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1364,6 +1364,12 @@
       "result": "The 12-test rehearsal passed, then one distinct source was selected and claimed exactly once. Preparation opened only that source and failed before action-free preflight because wild:Route21:water entered the grass-only corridor sorter. Zero model queries, actions, frames, registration sessions, outcomes, examples or fits occurred.",
       "deviation": "The source is consumed without retry or replacement. The failure is a generic public-catalog integration defect, not evidence about the source's cartridge feasibility. Flash confirmed a second uncaught resolver boundary. The zero-learning alarm remains active and all Red-final, ROM-hack and later-title gates stay closed.",
       "next": "Implement and publish the generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression tests. Do not select or claim another source in that repair session; re-audit third-source spending only after exact-head CI."
+    },
+    {
+      "session": "2026-09-14-direct-profile-encounter-media-repair",
+      "result": "The generic encounter-media repair is qualified ROM-free. Five regressions cover the complete catalog, Route21 coexistence, real unmocked corridor derivation, clean exhaustion and invalid-candidate defense; the named rehearsal now passes17 tests. Zero source, ROM, emulator or model effects occurred.",
+      "deviation": "This maintenance directly unblocks the named learning experiment but creates no learner or transfer result. Both consumed sources remain closed, the zero-learning alarm remains active and no third source was selected or claimed. Flash3.8 High and Claude Opus4.6 returned PASS without findings.",
+      "next": "Publish and require exact-head CI. Then separately re-audit the two failures, remaining inventory and strengthened gate; authorize at most one distinct third-source action-free attempt only if its irreversible cost is justified."
     }
   ],
   "closed_milestones": [

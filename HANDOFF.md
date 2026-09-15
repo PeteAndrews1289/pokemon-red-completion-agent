@@ -3,36 +3,34 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 14, 2026.
 
-## Second direct-origin source closed before preflight
+## Encounter-media repair qualified without a source
 
-The published `nonconsuming_direct_rehearsal` passed 12 tests. One distinct unused source was then
-selected prospectively and claimed exactly once. Preparation authenticated and opened only that
-source, but failed before the outer action-free preflight because the direct profile sent the
-catalog's `wild:Route21:water` method through a grass-only map resolver.
+The generic defect that consumed the second direct-origin source is repaired ROM-free. Direct
+profile derivation now filters each missing `WILD` catalog method through the existing grass-only
+resolver before sorting, caches its map for deterministic priority and resolves candidates inside
+the narrow corridor exception boundary.
 
-The source is consumed and closed with no retry or replacement. There were zero model queries,
-controller actions, advanced frames, registration sessions, observations, outcomes, examples,
-fits or local registration gains. The failure does not establish that the source lacked feasible
-capture and evolution families; it stopped in generic catalog enumeration.
+Five regressions cover the complete public catalog, Route21 water/grass coexistence, real unmocked
+catalog-to-corridor derivation, clean non-grass exhaustion and invalid-candidate defense. The named
+`nonconsuming_direct_rehearsal` now passes 17 tests. The water resolver was not loosened.
 
-Static review found a second gap in `_capture_corridor`: source resolution occurs outside its
-exception boundary. Flash3.8 High independently confirmed both P0 failures and the existing P1 test
-blind spot.
+No source was selected or claimed, and no ROM, private payload, emulator, model query, action,
+frame, registration session, outcome, example or fit occurred. The two previously consumed sources
+remain permanently closed.
 
 ## Next bounded implementation
 
-In a new session, implement only the generic ROM-free source-media repair. Filter non-grass
-encounter media before grass-corridor sorting, defend the corridor loop against an invalid source,
-and prove the whole public catalog, Route21 water/grass coexistence, real unmocked profile
-derivation and clean grass-exhaustion behavior. Run the named rehearsal and broader verification,
-then publish and require exact-head CI. Do not select or claim another source in that repair
-session.
+Publish and require exact-head CI. In the next session, re-audit the two consumed failures,
+remaining unused-source inventory and strength of the 17-test gate. Only if the irreversible cost
+is now justified may one distinct source be selected prospectively and exactly claimed for an
+action-free two-family preflight. No fallback source, same-session generic repair or gameplay below
+two executable families.
 
 ## Learning and completion status
 
-Model121 remains 121 examples, 83 successes and 86 local registrations. This session consumed one
-claim and opened its selected payload, but issued no gameplay input and added no registration
-session, outcome or fit. Gameplay is stopped; the anti-drift alarm remains active.
+Model121 remains 121 examples, 83 successes and 86 local registrations. This repair session
+consumed no source and added no registration session, outcome or fit. Gameplay is stopped; the
+anti-drift alarm remains active.
 
 The Model121 terminal itself remains ineligible for the standard collector because its original
 state is not in the frozen catalog. Never relabel it, replay consumed trials or weaken provenance.
@@ -41,14 +39,15 @@ then Crystal and at least Emerald. Version, trade, supporting-save and event req
 
 ## Verification and reviewers
 
-Flash3.8 High completed a bounded read-only review and confirmed the catalog mismatch, the hidden
-corridor exception boundary and the missing regression coverage. Claude was not invoked. The CLI
-lists Claude Opus4.6 Thinking and Sonnet4.6 as available endpoints, but no Claude review was run.
-CLI quota-window percentages/reset times were unavailable.
+Flash3.8 High and Claude Opus4.6 Thinking each completed a bounded read-only review and returned PASS
+with no P0/P1/P2 finding. Both confirmed the centralized grass boundary, deterministic ordering,
+narrow exception handling and distinct regression coverage. An initial Claude invocation inherited
+the wrong CLI project and was interrupted; the fresh project-bound review completed. CLI quota and
+cost output were unavailable.
 
-Next-session recommendation: **GPT-5.6 Sol / High / Fast off**. The next work is a narrow ROM-free
-repair and regression gate; reserve Astra for the later decision about whether another scarce
-source should be spent.
+Next-session recommendation: **GPT-6 Astra / High / Fast off**. The next task is an authority and
+risk decision about spending a third scarce source, followed by at most one tightly bounded
+action-free gate if justified.
 
-[Session](docs/work-sessions/2026-09-14-direct-full-local-source-v2-preflight-failure.md) ·
-[Evidence](docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json)
+[Session](docs/work-sessions/2026-09-14-direct-profile-encounter-media-repair.md) ·
+[Evidence](docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)

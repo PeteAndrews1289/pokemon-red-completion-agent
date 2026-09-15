@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Publish a complete-catalog ROM-free repair for encounter-media filtering and clean corridor failure; only then decide whether another exact-claim source gate is justified.
+- Next decision: Require exact-head CI for the 17-test complete-catalog repair, then re-audit whether its coverage justifies at most one separately prospective third-source action-free gate.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The complete public acquisition catalog can still send a non-grass encounter source into grass-corridor derivation, or real unmocked ROM-free profile derivation cannot fail over cleanly before another scarce source is claimed. |
+| Cheapest falsifier | The 17-test nonconsuming_direct_rehearsal regresses, or a separately authorized third source cannot reach a real action-free capture-plus-evolution menu under one exact claim. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-14-direct-full-local-source-v2-preflight-failure** · status **closed** · evidence [falsification](docs/evidence/red-direct-full-local-source-v2-preflight-failure-2026-09-14.json)
+**2026-09-14-direct-profile-encounter-media-repair** · status **closed** · evidence [qualification](docs/evidence/red-direct-profile-encounter-media-repair-2026-09-14.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The exact gate exposed a generic direct-profile defect before gameplay. Closing the consumed source and strengthening the non-consuming catalog gate protects scarce training origins without weakening provenance. |
-| Learning output | None. One exact claim and one payload open occurred, but preparation stopped before the action-free preflight; registration sessions, queries, actions, frames, observations, outcomes, examples, fits and registration gains are all zero. |
-| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; preparation failed before preflight with zero queries, actions, frames, outcomes or fits. |
-| Transfer result | No independent evaluation or transfer. The failure occurred during generic preparation before any model episode. |
-| Blocker | The direct profile treats wild:Route21:water as a grass-corridor candidate because the catalog kind is WILD. Candidate sorting raises before valid grass sources can be tried, and the corridor loop has a second uncaught resolver boundary. |
-| Decision | Close the consumed source without retry or replacement. Require a generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression gate before deciding whether a third source may be spent. |
-| Next session | Implement and publish only the generic ROM-free encounter-media filter, defensive corridor boundary and complete-catalog regression tests; do not select or claim another source in that repair session. |
-| Next falsifier | Any complete-catalog candidate is not grass-compatible, Route21 water preempts Route21 grass, unmocked profile derivation fails, or non-grass exhaustion escapes as a low-level resolver error. |
-| Stop condition | Never reopen or replace this source, and do not patch-and-retry in the same session. No third source may be selected before the generic repair is exact-head green and a later session reauthorizes spending it. No full Red replay, ROM hack or Crystal execution. |
+| Product alignment | The repair converts the third generic real-source failure into a reusable complete-catalog guard while preserving the grass/water mechanic boundary and spending no additional source. |
+| Learning output | None. The ROM-free repair produced zero source selections, claims, payload or ROM opens, registration sessions, queries, actions, frames, observations, outcomes, examples, fits or registration gains. |
+| Authority delta | No new learned authority. Model121 remains at121 examples/83 successes and86 local registrations; the repair opened no source or ROM and created no query, action, frame, outcome or fit. |
+| Transfer result | No independent evaluation or transfer. The source-independent repair qualifies only a Red integration boundary. |
+| Blocker | The generic encounter-media defect is repaired, but two real sources were consumed before preflight and no synthetic gate can prove the next cartridge state exposes both families. Spending a third source needs a separate exact-head re-audit. |
+| Decision | Qualify the grass-only candidate filter, defensive corridor boundary and five complete-catalog regressions without source access. Publish under exact-head CI before considering one later third-source gate. |
+| Next session | After exact-head CI, re-audit the two consumed failures, remaining source inventory and strengthened gate. Authorize at most one distinct third-source action-free attempt only if the risk is now justified. |
+| Next falsifier | The 17-test rehearsal regresses, the exact published source is not green, or a separately authorized one-source action-free gate still cannot expose capture and evolution together. |
+| Stop condition | No source selection or claim in the repair session. Never reopen either consumed source. A later third-source attempt requires exact-head green status, prospective selection, one exact claim and no fallback. No full Red replay, ROM hack or Crystal execution. |
 
 ### Stop conditions
 

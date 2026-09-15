@@ -29,7 +29,10 @@ from .red_goal_context_profile import (
     parse_red_goal_context_profile,
 )
 from .red_goal_manager import RedGoalObservation
-from .red_living_dex_multifamily_curriculum import map_id_for_wild_source
+from .red_living_dex_multifamily_curriculum import (
+    RedLivingDexMultifamilyError,
+    map_id_for_wild_source,
+)
 from .red_living_dex_provider_curriculum import RedEncounterSourceTarget
 from .red_living_dex_wild_corridor import (
     RedLivingDexWildCorridor,
@@ -80,11 +83,17 @@ def _level_evolution(
 
 def _wild_sources(observation: RedGoalObservation) -> Iterable[str]:
     owned = observation.collection_observation.owned_species
-    sources: dict[str, int] = {}
+    sources: dict[str, tuple[int, int]] = {}
     for method in RED_ACQUISITION_CATALOG.methods:
         if method.kind is RedAcquisitionKind.WILD and method.species_ref not in owned:
-            sources[method.source_id] = min(
-                sources.get(method.source_id, 152), red_species_number(method.species_ref)
+            try:
+                map_id = int(map_id_for_wild_source(method.source_id))
+            except RedLivingDexMultifamilyError:
+                continue
+            species_number = red_species_number(method.species_ref)
+            sources[method.source_id] = (
+                min(sources.get(method.source_id, (152, map_id))[0], species_number),
+                map_id,
             )
     current_map = observation.raw.map_id
     return tuple(
@@ -92,8 +101,8 @@ def _wild_sources(observation: RedGoalObservation) -> Iterable[str]:
         for source, _ in sorted(
             sources.items(),
             key=lambda item: (
-                int(map_id_for_wild_source(item[0])) != current_map,
-                item[1],
+                item[1][1] != current_map,
+                item[1][0],
                 item[0],
             ),
         )
@@ -105,8 +114,8 @@ def _capture_corridor(
     world: StrategicScenarioRouteWorld,
 ) -> RedLivingDexWildCorridor:
     for source in _wild_sources(observation):
-        map_id = int(map_id_for_wild_source(source))
         try:
+            map_id = int(map_id_for_wild_source(source))
             return derive_red_living_dex_wild_corridor(
                 RedEncounterSourceTarget(source),
                 world.terrain[map_id],
@@ -117,7 +126,11 @@ def _capture_corridor(
                 ),
                 cartridge=world.rom,
             )
-        except (KeyError, RedLivingDexWildCorridorError):
+        except (
+            KeyError,
+            RedLivingDexMultifamilyError,
+            RedLivingDexWildCorridorError,
+        ):
             continue
     raise RedFullPokedexDirectProfileError(
         "catalog origin has no missing cartridge-derived wild corridor"

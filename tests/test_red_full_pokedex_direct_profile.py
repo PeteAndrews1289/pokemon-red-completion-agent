@@ -2,16 +2,23 @@ from dataclasses import replace
 
 import pytest
 from test_current_route_terrain import _world
+from test_red_living_dex_wild_corridor import _graph, _terrain
 from test_registered_runtime_binding import bound_fixture
 
 from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_full_pokedex_direct_profile import (
     RedFullPokedexDirectProfileError,
+    _capture_corridor,
+    _wild_sources,
     derive_direct_full_pokedex_profile,
 )
 from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
+from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
+    map_id_for_wild_source,
+)
 from pokemon_red_completion.red_living_dex_wild_corridor import RedLivingDexWildCorridor
 
 
@@ -22,6 +29,100 @@ def _corridor():
         (3, 1),
         (2, 1),
     )
+
+
+def _with_missing(observed, *numbers, map_id=None):
+    owned = frozenset(
+        red_species_ref(number) for number in range(1, 152) if number not in numbers
+    )
+    raw = observed.raw if map_id is None else replace(observed.raw, map_id=int(map_id))
+    return replace(
+        observed,
+        raw=raw,
+        collection_observation=replace(
+            observed.collection_observation,
+            owned_species=owned,
+        ),
+    )
+
+
+def _route_2_world():
+    world = _world()
+    map_id = int(MapId.ROUTE_2)
+    return replace(
+        world,
+        local_graphs={map_id: _graph()},
+        terrain={map_id: _terrain()},
+        object_blockers={map_id: frozenset()},
+    )
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_direct_wild_sources_are_grass_compatible_across_complete_catalog(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), *range(1, 152))
+    sources = tuple(_wild_sources(observed))
+    assert "wild:Route21:water" not in sources
+    assert sources
+    assert all(source.endswith(":grass") for source in sources)
+    assert len(tuple(map_id_for_wild_source(source) for source in sources)) == len(sources)
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_direct_wild_sources_prefer_route_21_grass_over_colocated_water(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(
+        runtime.adapter.observe(),
+        72,
+        114,
+        map_id=MapId.ROUTE_21,
+    )
+    assert tuple(_wild_sources(observed)) == ("wild:Route21:grass",)
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_direct_profile_uses_real_catalog_and_corridor_derivation(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(
+        runtime.adapter.observe(),
+        13,
+        72,
+        78,
+        map_id=MapId.ROUTE_2,
+    )
+    profile = derive_direct_full_pokedex_profile(
+        runtime.profile,
+        observed,
+        _route_2_world(),
+    )
+    capture = next(spec for spec in profile.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
+    assert capture.parameters["source_id"] == "wild:Route2:grass"
+    assert capture.parameters["map_id"] == int(MapId.ROUTE_2)
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_direct_profile_reports_clean_exhaustion_when_only_water_is_missing(tmp_path):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = _with_missing(runtime.adapter.observe(), 72, 78)
+    with pytest.raises(
+        RedFullPokedexDirectProfileError,
+        match="no missing cartridge-derived wild corridor",
+    ):
+        derive_direct_full_pokedex_profile(runtime.profile, observed, _world())
+
+
+@pytest.mark.nonconsuming_direct_rehearsal
+def test_capture_corridor_defends_against_an_invalid_candidate(tmp_path, monkeypatch):
+    runtime, _, _ = bound_fixture(tmp_path)
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._wild_sources",
+        lambda observation: ("wild:Route21:water",),
+    )
+    with pytest.raises(
+        RedFullPokedexDirectProfileError,
+        match="no missing cartridge-derived wild corridor",
+    ):
+        _capture_corridor(runtime.adapter.observe(), _world())
 
 
 def test_direct_profile_derives_targets_from_inventory_and_cartridge_adapter(
