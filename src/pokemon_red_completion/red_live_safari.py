@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Collection
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from pokemon_red_completion.executor import CountingExecutor, FrameBudgetController
 from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
@@ -29,10 +29,12 @@ from pokemon_red_completion.observation import (
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_acquisition import (
     RED_ACQUISITION_CATALOG,
+    RedAcquisitionCatalog,
     RedAreaExecutionPolicy,
     RedAreaExecutionReport,
     run_red_area_survey,
 )
+from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_live_option_menu import (
     RedLiveSupplementalOption,
     supplemental_live_option,
@@ -272,6 +274,7 @@ def _live_safari_binding(
         before_actions = actions.actions_executed
         before_frames = controller.frame_count
         before_registered = frozenset(reader.read_pokedex_state().owned_species)
+        catalog = _registered_safari_catalog(area, before_registered)
         transport = relocate_red_safari_origin_to_fuchsia_center(controller, actions, reader)
         admission = enter_red_safari_area(controller, actions, reader, area.offer)
         patrol = LiveSafariPatrol(controller, actions, reader, area.patrol)
@@ -292,7 +295,7 @@ def _live_safari_binding(
                 max_encounters=maximum_encounters,
                 capture_quota=1,
             ),
-            catalog=RED_ACQUISITION_CATALOG,
+            catalog=catalog,
             capture_resources_available=port.safari_balls_available,
         )
         after_registered = frozenset(reader.read_pokedex_state().owned_species)
@@ -347,6 +350,27 @@ def _live_safari_binding(
         estimated_risk=0.1,
         execute=execute,
         verify=verify,
+    )
+
+
+def _registered_safari_catalog(
+    area: RedReachableSafariArea,
+    registered_species_numbers: Collection[int],
+) -> RedAcquisitionCatalog:
+    """Restrict one live survey to the registration targets its offer promised."""
+
+    return replace(
+        RED_ACQUISITION_CATALOG,
+        remaining_demand=True,
+        registered_species=frozenset(
+            red_species_ref(number) for number in registered_species_numbers
+        ),
+        wild_source_species=(
+            (
+                area.offer.source_id,
+                tuple(red_species_ref(number) for number in area.offer.missing_species_numbers),
+            ),
+        ),
     )
 
 

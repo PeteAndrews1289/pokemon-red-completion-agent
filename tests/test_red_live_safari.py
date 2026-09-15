@@ -2,14 +2,21 @@
 
 from types import SimpleNamespace
 
+from pokemon_red_completion.collection import CollectionObservation
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import GoalKind, GoalSituation
 from pokemon_red_completion.living_dex_option_value import (
     living_dex_option_context_from_goal_situation,
 )
 from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.red_acquisition import (
+    RED_ACQUISITION_CATALOG,
+    summarize_red_area_survey,
+)
+from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_live_safari import (
     RedReachableSafariArea,
+    _registered_safari_catalog,
     build_red_live_safari_inventory,
 )
 from pokemon_red_completion.red_safari_acquisition import (
@@ -144,3 +151,35 @@ def test_live_safari_single_area_still_builds_top_level_acquisition(monkeypatch)
     assert inventory.areas == (center,)
     assert len(inventory.supplements) == 1
     assert actions.actions_executed == 0
+
+
+def test_live_safari_execution_catalog_excludes_registered_living_demand() -> None:
+    center = _area(
+        "wild:SafariZoneCenter:grass",
+        int(MapId.SAFARI_ZONE_CENTER),
+        3,
+        4,
+    )
+    catalog = _registered_safari_catalog(center, frozenset({48}))
+    observation = CollectionObservation(
+        owned_species=frozenset({red_species_ref(48)}),
+        specimens=(),
+        party_size=0,
+        party_limit=6,
+        box_counts=(0,),
+        current_box_index=0,
+        box_capacity=20,
+    )
+
+    survey = summarize_red_area_survey(center.offer.source_id, observation, catalog)
+
+    assert (
+        red_species_ref(48)
+        in summarize_red_area_survey(
+            center.offer.source_id,
+            observation,
+            RED_ACQUISITION_CATALOG,
+        ).missing_species_refs
+    )
+    assert survey.missing_species_refs == (red_species_ref(111),)
+    assert red_species_ref(48) not in survey.missing_species_refs
