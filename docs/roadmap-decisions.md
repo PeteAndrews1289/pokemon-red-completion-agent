@@ -1,5 +1,19 @@
 # Roadmap baseline and deviations
 
+## September 15 — retain the partial evolution; recover the exact terminal before continuing
+
+The [safe singleton session](work-sessions/2026-09-15-safe-singleton-evolution.md) verified that
+Tentacool-to-Tentacruel is an ordinary item-free level transition with one unprotected precursor,
+then executed it exactly once through the production route. Sixty-one verified quanta advanced the
+precursor from level5 to24 before `BattleRuntimeError`. The exact mid-battle terminal is retained;
+registrations, living species and specimens remain86/66/70.
+
+The consumed identity may not retry, and the partial run supplies no model query, training row, fit,
+authority or Tentacruel registration. The planned fresh-menu rebuild is deferred because a
+mid-battle terminal is not a valid decision boundary. Next authenticate and diagnose that state
+action-free, then freeze one recovery-only settlement if existing mechanics preserve the collection.
+Do not automatically resume evolution, substitute another source or weaken the full fresh-Red gate.
+
 ## September 14 — reject a fourth blind source; use a correlated registered reset
 
 The [supply/admission audit](work-sessions/2026-09-14-full-pokedex-supply-admission.md)

@@ -1,19 +1,19 @@
-# Video narrative: stop probing, advance the actual save
+# Video narrative: retain the partial evolution honestly
 
 This is an AI-assisted engineering project directed by Pete Andrews. Codex, Claude and Flash help
 build or review the system; they are not the live Pokémon policy.
 
 ## Latest episode
 
-Open with the exact falsifier. Model121's terminal has ready evolution but zero executable fossil
-targets, following the prior zero-result fishing and grass checks. The gate rejected with zero reset
-claims, queries, actions or frames, so no lesson was played and no unused adapter was built.
+Open with the one-shot result. The safe Tentacool evolution retained61 training quanta and advanced
+from level5 to24, then stopped on `BattleRuntimeError`. The actual state is sealed mid-battle with
+the collection intact; no Tentacruel registration or learned success is claimed.
 
-This is the seventh straight session without a measured learning result. Flash3.8 High recommended
-ending the serial probe loop: safely execute the ready evolution once without pretending it is a
-learned choice, then rebuild the menu from the fresh retained terminal.
+This is the eighth straight session without a measured learning result. The one-shot identity is
+consumed. Next, diagnose and settle the exact terminal through a recovery-only action before any
+fresh menu or evolution continuation.
 
-[Session and evidence](work-sessions/2026-09-15-fossil-evolution-bridge.md)
+[Session and evidence](work-sessions/2026-09-15-safe-singleton-evolution.md)
 
 ## The real finish line
 

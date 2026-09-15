@@ -1,0 +1,76 @@
+{
+  "collection": {
+    "living_after": 66,
+    "living_before": 66,
+    "local_registrations_after": 86,
+    "local_registrations_before": 86,
+    "specimens_after": 70,
+    "specimens_before": 70
+  },
+  "execution": {
+    "controller_actions": 25301,
+    "emulator_frames": 2232160,
+    "error_type": "BattleRuntimeError",
+    "fit_performed": false,
+    "model_queries": 0,
+    "retained_quanta": 61,
+    "retry_allowed": false,
+    "selection_mode": "forced_singleton",
+    "status": "retained_failure_no_retry",
+    "teacher_labels": 0,
+    "training_examples": 0
+  },
+  "learning": {
+    "authority_promotions": 0,
+    "fits": 0,
+    "outcomes": 0,
+    "training_examples_added": 0,
+    "transfer_result": null
+  },
+  "private_evidence": {
+    "episode_id": "model121-safe-singleton-evolution-execution-20260915-v1",
+    "episode_manifest_sha256": "ad8355d1321df786d0bf225e0c47ef9b8813b5c11b92ebcb1897aef9d808ce98",
+    "freeze_record_id": "model121-safe-singleton-evolution-freeze-20260915-v1",
+    "freeze_record_sha256": "8b5213584bac3551501d892ec760c30dada500d01400f81804a37764db61dbfe",
+    "result_manifest_sha256": "8a9cc4607cc7d47d1103a6810844974edd5dac5f013ef137459d4ccaf2136391",
+    "result_record_id": "model121-safe-singleton-evolution-result-20260915-v1",
+    "result_record_sha256": "09f909dbabf5c4bfc15e9ac9310b6c8d3523de896b5e8e8c695e58426fbb4180"
+  },
+  "publication": {
+    "qualification_ci_run_id": 34955544242,
+    "source_commit": "e42b67d174a8c38e55dbdfb0e5d5383b7bf7c6e6"
+  },
+  "review": {
+    "claude": "Opus High returned GO on the frozen transition and initial executor; its P2 terminal-retention suggestion was adopted before execution",
+    "flash": "CLI reachable, but the review attempt returned no verdict because its internal command permission was denied",
+    "post_review_binding_change": "The local binding assumption was replaced by the unique production-routed evolution binding after action-free preflight; this narrow correction was not re-reviewed"
+  },
+  "schema": "pokemon.red.safe-singleton-evolution-result-evidence.v1",
+  "session_id": "2026-09-15-safe-singleton-evolution",
+  "status": "retained_failure_no_retry",
+  "terminal": {
+    "battle_state": 1,
+    "input_ready": false,
+    "map_id": 22,
+    "party_fainted_count": 0,
+    "pressed_buttons": 0,
+    "state_sha256": "7541317818590ed65ee08ffc9c7e43af44999eb06524cf3032ed8ba082624b1a",
+    "tentacool_level_after": 24,
+    "tentacool_level_before": 5
+  },
+  "transition": {
+    "method": "level_evolution",
+    "protected_source_specimens": 0,
+    "required_item_ref": null,
+    "source_ref": "pokemon:national:072",
+    "target_level": 30,
+    "target_ref": "pokemon:national:073"
+  },
+  "validation": {
+    "exact_source_ci_passed": true,
+    "exact_source_ci_tests_passed": 11355,
+    "focused_regression_tests_passed": 45,
+    "repository_lint_passed": true,
+    "repository_type_check_passed": true
+  }
+}

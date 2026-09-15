@@ -1,6 +1,6 @@
 # 2026-09-15 safe singleton evolution
 
-Status: active
+Status: closed — partial progress retained; no retry
 
 ## Mandatory mission check
 
@@ -26,3 +26,47 @@ Status: active
 - The forced singleton performs no model query and creates no training row, fit, authority promotion or independence claim.
 - Stop before gameplay on finite-item use, protected-precursor loss, ambiguous transition, dirty source, failed exact-state authentication, or unresolved CI regression.
 - After execution, retain the actual terminal and never retry the identity even if the result is partial or failed.
+
+## Result
+
+The transition passed its action-free safety gate. It is an ordinary level evolution from
+Tentacool to Tentacruel at level30, consumes no item, has one unprotected eligible precursor,
+and targets an unregistered species. The exact source passed GitHub CI run34955544242 with
+11355 non-integration tests plus documentation, registry, lint and type checks. A preceding
+regression repair preserved typed diagnostics for synthetic inspection worlds;45 focused tests
+passed locally.
+
+The forced singleton then executed exactly once through the production Fly/evolution binding.
+It retained61 verified training quanta and advanced Tentacool from level5 to level24 before a
+`BattleRuntimeError` stopped the next encounter. The terminal used25301 controller actions and
+2232160 frames, below the frozen30000/3000000 caps. It remains in battle on map22, with no
+pressed button or fainted party member. The collection is unchanged at86 local registrations,
+66 living species and70 specimens. No Tentacruel registration was claimed.
+
+The raw terminal was durably written before richer observation, and the completed episode holds
+65 records: one episode declaration, one exclusive claim,61 quantum checkpoints, one raw terminal
+snapshot and one verified terminal summary. Private episode manifest
+`ad8355d1321df786d0bf225e0c47ef9b8813b5c11b92ebcb1897aef9d808ce98` and result record
+SHA-256 `09f909dbabf5c4bfc15e9ac9310b6c8d3523de896b5e8e8c695e58426fbb4180`
+bind the outcome. The attempt identity is consumed permanently.
+
+Claude Opus High returned GO on the safe transition and initial executor. Its non-blocking request
+to persist the raw terminal before post-attempt inspection was adopted. The later correction from
+an assumed local binding name to the unique production-routed evolution binding was action-free but
+was not re-reviewed. Flash3.8 is reachable through `agy`, but its review attempt produced no verdict
+because its own command permission was denied.
+
+## Decision
+
+This is real gameplay progress, but not Pokédex or learning progress. Model121 remains121 examples,
+83 successes and86/151 registrations; no query, label, training row, fit, promotion or transfer
+claim occurred. The expanded collection checklist remains25/26 and the final fresh-Red gate remains
+0/5. A heterogeneous terminal menu cannot be rebuilt while the retained state is mid-battle.
+
+Next authenticate this exact terminal action-free, diagnose the battle failure, and qualify a
+separately frozen recovery-only action that settles the same save without replaying this evolution
+identity or changing the collection. Only after a stable retained terminal may the normal menu be
+rebuilt. Do not automatically resume evolution, select source four, scan protected roots, fit the
+partial run, or start a hack/Crystal.
+
+[Path-free evidence](../evidence/red-safe-singleton-evolution-result-2026-09-15.json)

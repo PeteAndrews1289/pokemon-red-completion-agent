@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Inspect the ready evolution's resource type and preservation constraints action-free. If safe, freeze and execute it once as a deterministic singleton with no fit, then rebuild the menu from the fresh terminal. No serial provider probe, route patch, reset retry, protected-root scan or source four.
+- Next decision: Authenticate and diagnose the exact retained mid-battle terminal action-free. If existing recovery can settle it safely, freeze one recovery-only identity and retain the result; then rebuild the menu. Never retry or automatically resume the consumed evolution, fit the partial run, scan protected roots or use source four.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model121 remains at121 examples/83 successes and86 local registrations. All151 targets now have explicit resolution classes, but the new inventory grants no execution authority, fresh-game competence or independent result. |
+| Authority now | Model121 remains at121 examples/83 successes and86 local registrations. The safe singleton advanced Tentacool from level5 to24 but failed mid-battle before evolution; it granted no learned authority, fresh-game competence or independent result. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The ready evolution consumes a finite item or protected physical precursor, or cannot be frozen and executed once without a model query, fit or replay. |
+| Cheapest falsifier | The retained mid-battle terminal cannot be authenticated and settled by an existing recovery without collection loss, replaying the consumed evolution identity or granting new learned authority. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-fossil-evolution-bridge** · status **closed** · evidence [falsification](docs/evidence/red-fossil-evolution-bridge-gate-2026-09-15.json)
+**2026-09-15-safe-singleton-evolution** · status **closed** · evidence [development episode](docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The existing fossil provider was tested before integration and correctly rejected because the exact save has no executable fossil target. The next step creates real local-Pokedex progress instead of spending an eighth session probing adapters without outcomes. |
-| Learning output | None. This seventh consecutive no-learning session is an exact action-free mechanic falsification. Model121 remains121 examples/83 successes/86 local registrations. |
-| Authority delta | None. The exact terminal has zero executable fossil targets, so no fossil adapter or played choice was justified. Model121 remains121 examples/83 successes/86 local registrations. |
+| Product alignment | The session stopped probing and played the safe evolution once. It retained substantial real training progress and an honest failure instead of fabricating Tentacruel or a learned row; the next task preserves that actual save. |
+| Learning output | None. The non-learning singleton retained real gameplay progress from Tentacool level5 to24, but the registration ledger stayed86/151 and Model121 stayed121 examples/83 successes. |
+| Authority delta | None. The forced singleton queried no model and created no label, row, fit or promotion. Model121 remains121 examples/83 successes/86 local registrations. |
 | Transfer result | None. No independent root, evaluation, learned outcome or cross-title execution was created. |
-| Blocker | Evolution is ready, but grass routing, reachable fishing and now observed fossil inventory all fail to provide a second executable acquisition family at this exact terminal. |
-| Decision | End the serial provider-probe loop. Next inspect the ready evolution's resource and preservation constraints action-free, then freeze and execute it once as a deterministic singleton only if safe. Claim Pokedex progress, not learning, and rebuild the menu from the fresh retained terminal. |
-| Next session | Qualify and freeze the already-ready evolution as a deterministic forced singleton; execute once only if it is resource-safe, record no learned label, then rebuild the heterogeneous menu from the retained fresh terminal. |
-| Next falsifier | The ready evolution is not a resource-safe level transition, would violate physical preservation, or cannot be frozen once without replaying consumed authority. |
-| Stop condition | The exact terminal exposed zero executable fossil targets, so the two-family gate failed. Stop gameplay; do not add an unused fossil adapter or substitute another mechanic in this session. |
+| Blocker | The retained state is mid-battle after BattleRuntimeError, so a fresh heterogeneous menu cannot be built until a separately authorized recovery settles the actual terminal. |
+| Decision | Never retry the consumed evolution identity. Authenticate and diagnose its exact retained terminal action-free; if safe, freeze one recovery-only settlement, retain that result, then rebuild the normal menu from the stable save. |
+| Next session | Diagnose the retained BattleRuntimeError terminal action-free and qualify one recovery-only settlement if safe; do not resume evolution automatically. Rebuild the menu only after a stable terminal exists. |
+| Next falsifier | The exact mid-battle terminal is unauthentic, corrupted, unsafe to settle with existing recovery, or would require retrying the consumed evolution attempt. |
+| Stop condition | The one-shot evolution failed after61 quanta and its identity is consumed. Stop gameplay at the retained mid-battle terminal; no retry, automatic continuation, fit, source substitution or reset is authorized. |
 
 ### Stop conditions
 

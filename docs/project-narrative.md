@@ -8,28 +8,28 @@ The first finish line is a fresh start-to-finish model-directed Red run with Cha
 Hall-of-Fame evidence and all151 local registrations before any ROM hack. Then comes an unfamiliar
 compatible Red hack, Crystal and at least Emerald.
 
-## Latest chapter: the fossil fallback is absent too
+## Latest chapter: the safe evolution made partial progress
 
-The exact Model121 terminal still cannot form an acquire/evolve choice. Evolution is ready, but
-there are zero executable fossil targets, just as the prior scan found zero reachable productive
-fishing destinations and the grass corridors remain inaccessible or under-resourced. The fossil
-gate stopped before implementation, reset, query or controller input. Nine unused sources remain
-untouched, and36 focused fossil/proposal tests pass.
+After the acquisition alternatives failed, a safe Tentacool-to-Tentacruel level evolution ran once
+as a forced non-learning singleton. It retained61 verified training quanta and advanced Tentacool
+from level5 to24 before `BattleRuntimeError`. The exact terminal is sealed mid-battle with no
+fainted party member, pressed button, registration loss or specimen loss. The identity is consumed
+and cannot retry.
 
-This is engineering progress, not learning: Model121 remains121 examples/83 successes and86/151
-registrations. A seventh consecutive no-learning session keeps the anti-drift alarm active. The
-next step ends the serial provider-probe loop: inspect the ready evolution, then execute it once as
-a deterministic non-learning singleton only if its resource and preservation constraints are safe.
+This is real gameplay progress, but not learning or Pokédex progress: Model121 remains121
+examples/83 successes and86/151 registrations. An eighth consecutive no-learning session keeps the
+anti-drift alarm active. The next step is to diagnose and settle the actual retained battle through
+a separately frozen recovery-only action, then rebuild the normal menu from a stable save.
 
-Flash3.8 High reviewed that reorientation and returned GO; Claude CLI connected but did not return a
-completed verdict. Codex adopted Flash's recommendation to rebuild the menu from a fresh retained
-post-evolution terminal.
+Claude Opus High returned GO on the safe transition and initial executor, and its suggestion to
+persist the raw terminal before richer inspection was adopted. Flash3.8 is reachable through
+`agy`, but its attempted review returned no verdict because its own command permission was denied.
 
 Today's learning remains one earlier resupply example:120→121 (+0.83% dataset size). The development
 save remains86/151 (56.95%); neither number measures whole-project completion.
 
-[Latest evidence](evidence/red-fossil-evolution-bridge-gate-2026-09-15.json) ·
-[Detailed session](work-sessions/2026-09-15-fossil-evolution-bridge.md) ·
+[Latest evidence](evidence/red-safe-singleton-evolution-result-2026-09-15.json) ·
+[Detailed session](work-sessions/2026-09-15-safe-singleton-evolution.md) ·
 [Model-first roadmap](model-first-roadmap.md)
 
 Checkpoint story completion is a component result, not the required fresh run.

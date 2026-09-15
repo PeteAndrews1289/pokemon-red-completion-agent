@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-fossil-evolution-bridge",
+  "as_of_session": "2026-09-15-safe-singleton-evolution",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-fossil-evolution-bridge-gate-2026-09-15.json"
+      "evidence": "docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1418,6 +1418,12 @@
       "result": "The exact action-free Model121 scan found ready evolution and zero executable fossil targets. No adapter, query, claim, action, frame, outcome or fit occurred; Model121 remains121/83 with86 local registrations.",
       "deviation": "The cheapest falsifier fired before implementation, so the planned conditional bridge was correctly skipped. This seventh consecutive no-learning session ends the serial provider-probe loop. Flash3.8 High recommended a safe forced-singleton evolution followed by a fresh menu rebuild; Claude returned no completed verdict.",
       "next": "Sol High: inspect the ready evolution's resource type and physical-preservation constraints action-free. If it is a safe level-triggered transition, freeze and execute it exactly once without a model query or fit, then rebuild the heterogeneous menu from the retained terminal."
+    },
+    {
+      "session": "2026-09-15-safe-singleton-evolution",
+      "result": "One safe Tentacool evolution ran once:61 verified quanta advanced level5 to24 before BattleRuntimeError. The sealed mid-battle terminal preserves86 registrations/66 living species/70 specimens; no retry.",
+      "deviation": "The planned menu rebuild could not occur because the actual terminal is mid-battle. The attempt used25301 actions/2232160 frames, queried no model, created no row or fit, and is permanently consumed without retry. This is real gameplay progress but an eighth consecutive session without measured learning output.",
+      "next": "Sol High: authenticate and diagnose the exact retained terminal action-free. Freeze one recovery-only settlement only if existing recovery preserves the collection; do not automatically resume evolution. Rebuild the menu after a stable terminal."
     }
   ],
   "closed_milestones": [

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-fossil-evolution-bridge**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-safe-singleton-evolution**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-fossil-evolution-bridge-gate-2026-09-15.json)
+[Current evidence](../docs/evidence/red-safe-singleton-evolution-result-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-safe-singleton-evolution
+
+One safe Tentacool evolution ran once:61 verified quanta advanced level5 to24 before BattleRuntimeError. The sealed mid-battle terminal preserves86 registrations/66 living species/70 specimens; no retry.
+
+**Deviation:** The planned menu rebuild could not occur because the actual terminal is mid-battle. The attempt used25301 actions/2232160 frames, queried no model, created no row or fit, and is permanently consumed without retry. This is real gameplay progress but an eighth consecutive session without measured learning output.
+
+**Next:** Sol High: authenticate and diagnose the exact retained terminal action-free. Freeze one recovery-only settlement only if existing recovery preserves the collection; do not automatically resume evolution. Rebuild the menu after a stable terminal.
 
 ### 2026-09-15-fossil-evolution-bridge
 
