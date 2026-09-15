@@ -71,3 +71,25 @@ def test_inspector_pins_one_context_and_preserves_read_only_state(
         assert result["controller_actions"] == result["emulator_frames"] == 0
         assert result["state_bytes_unchanged"]
         assert not result["upstream_independence_verified"]
+        assert result["schema"] == "pokemon.red.full-local-departure-inspection.v2"
+        if failure == "route":
+            assert result["family_diagnostics"] == [
+                {
+                    "schema": "pokemon.red.full-pokedex-family-diagnostic.v1",
+                    "portable_option_kind": "acquire",
+                    "availability": "unavailable",
+                    "reason": "router_binding_unavailable",
+                    "router_unavailable_reasons": ["missing_capability"],
+                    "identity_fields_public": 0,
+                },
+                {
+                    "schema": "pokemon.red.full-pokedex-family-diagnostic.v1",
+                    "portable_option_kind": "evolve",
+                    "availability": "available",
+                    "reason": "ready",
+                    "router_unavailable_reasons": [],
+                    "identity_fields_public": 0,
+                },
+            ]
+        else:
+            assert result["family_diagnostics"] == []

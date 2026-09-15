@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from collections.abc import Callable
 from dataclasses import dataclass, replace
+from enum import StrEnum
 from functools import partial
 
 from pokemon_red_completion.executor import CountingExecutor
@@ -46,12 +47,110 @@ from pokemon_red_completion.red_goal_context_profile import (
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
 from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
+from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.red_resource_goal_router import RedResourceGoalRouter
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
+class RedFullPokedexFamilyReason(StrEnum):
+    """Identity-free reason one supported acquisition family is excluded."""
+
+    READY = "ready"
+    PROFILE_DECLARATION_MISSING = "profile_declaration_missing"
+    TARGET_ALREADY_REGISTERED = "target_already_registered"
+    NO_SOLO_CATALOG_TARGET = "no_solo_catalog_target"
+    NO_MISSING_EXECUTABLE_TARGET = "no_missing_executable_target"
+    PHYSICAL_PRECURSOR_MISSING = "physical_precursor_missing"
+    PHYSICAL_PRECURSOR_PROTECTED = "physical_precursor_protected"
+    ROUTER_BINDING_UNAVAILABLE = "router_binding_unavailable"
+
+
+@dataclass(frozen=True, slots=True)
+class RedFullPokedexFamilyDiagnostic:
+    """Portable failure evidence with all target and routing identity removed."""
+
+    acquisition_kind: RedAcquisitionKind
+    reason: RedFullPokedexFamilyReason
+    router_unavailable_reasons: tuple[GoalUnavailableReason, ...] = ()
+
+    def __post_init__(self) -> None:
+        if self.acquisition_kind not in {
+            RedAcquisitionKind.WILD,
+            RedAcquisitionKind.EVOLUTION,
+        }:
+            raise ValueError("diagnostic acquisition family is unsupported")
+        if not isinstance(self.reason, RedFullPokedexFamilyReason):
+            raise TypeError("diagnostic reason differs")
+        if (
+            not isinstance(self.router_unavailable_reasons, tuple)
+            or any(
+                not isinstance(reason, GoalUnavailableReason)
+                for reason in self.router_unavailable_reasons
+            )
+            or tuple(
+                sorted(set(self.router_unavailable_reasons), key=lambda reason: reason.value)
+            )
+            != self.router_unavailable_reasons
+        ):
+            raise ValueError("router unavailable reasons differ")
+        if (
+            self.reason is RedFullPokedexFamilyReason.READY
+            and self.router_unavailable_reasons
+        ):
+            raise ValueError("ready diagnostic cannot carry router failures")
+        if (
+            self.reason is RedFullPokedexFamilyReason.ROUTER_BINDING_UNAVAILABLE
+            and not self.router_unavailable_reasons
+        ):
+            raise ValueError("router diagnostic needs an unavailable reason")
+
+    @property
+    def option_kind(self) -> LivingDexOptionKind:
+        return (
+            LivingDexOptionKind.ACQUIRE
+            if self.acquisition_kind is RedAcquisitionKind.WILD
+            else LivingDexOptionKind.EVOLVE
+        )
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            "schema": "pokemon.red.full-pokedex-family-diagnostic.v1",
+            "portable_option_kind": self.option_kind.value,
+            "availability": (
+                GoalAvailability.AVAILABLE.value
+                if self.reason is RedFullPokedexFamilyReason.READY
+                else GoalAvailability.UNAVAILABLE.value
+            ),
+            "reason": self.reason.value,
+            "router_unavailable_reasons": [
+                reason.value for reason in self.router_unavailable_reasons
+            ],
+            "identity_fields_public": 0,
+        }
+
+
 class RedFullPokedexGoalProposalError(ValueError):
     """The authenticated context cannot produce a diverse full-Pokédex menu."""
+
+    def __init__(
+        self,
+        message: str,
+        *,
+        family_diagnostics: tuple[RedFullPokedexFamilyDiagnostic, ...] = (),
+    ) -> None:
+        super().__init__(message)
+        if (
+            not isinstance(family_diagnostics, tuple)
+            or any(
+                not isinstance(diagnostic, RedFullPokedexFamilyDiagnostic)
+                for diagnostic in family_diagnostics
+            )
+        ):
+            raise TypeError("family diagnostics differ")
+        self.family_diagnostics = family_diagnostics
+
+    def public_family_diagnostics(self) -> list[dict[str, object]]:
+        return [diagnostic.public_dict() for diagnostic in self.family_diagnostics]
 
 
 @dataclass(slots=True)
@@ -107,6 +206,7 @@ class RedFullPokedexGoalProposal:
 
     candidates: tuple[RedFullPokedexGoalCandidate, ...]
     binding_set: GoalBindingSet
+    family_diagnostics: tuple[RedFullPokedexFamilyDiagnostic, ...]
 
     def __post_init__(self) -> None:
         if (
@@ -126,9 +226,30 @@ class RedFullPokedexGoalProposal:
             self.candidates
         ):
             raise RedFullPokedexGoalProposalError("proposal executors are duplicated")
+        if (
+            not isinstance(self.family_diagnostics, tuple)
+            or any(
+                not isinstance(diagnostic, RedFullPokedexFamilyDiagnostic)
+                for diagnostic in self.family_diagnostics
+            )
+            or tuple(
+                diagnostic.acquisition_kind for diagnostic in self.family_diagnostics
+            )
+            != (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION)
+        ):
+            raise RedFullPokedexGoalProposalError("proposal family diagnostics differ")
+        if {
+            diagnostic.acquisition_kind
+            for diagnostic in self.family_diagnostics
+            if diagnostic.reason is RedFullPokedexFamilyReason.READY
+        } != {candidate.acquisition_kind for candidate in self.candidates}:
+            raise RedFullPokedexGoalProposalError(
+                "proposal candidate and diagnostic availability differ"
+            )
         if self.acquisition_family_count < 2:
             raise RedFullPokedexGoalProposalError(
-                "full-Pokédex proposal needs at least two executable acquisition families"
+                "full-Pokédex proposal needs at least two executable acquisition families",
+                family_diagnostics=self.family_diagnostics,
             )
 
     @property
@@ -139,13 +260,16 @@ class RedFullPokedexGoalProposal:
         """Expose diversity and authority, never private target or routing identity."""
 
         return {
-            "schema": "pokemon.red.full-pokedex-goal-proposal.v2",
+            "schema": "pokemon.red.full-pokedex-goal-proposal.v3",
             "candidate_count": len(self.candidates),
             "player_binding_count": len(self.binding_set.bindings),
             "acquisition_family_count": self.acquisition_family_count,
             "portable_option_kinds": sorted(
                 {candidate.option_kind.value for candidate in self.candidates}
             ),
+            "family_diagnostics": [
+                diagnostic.public_dict() for diagnostic in self.family_diagnostics
+            ],
             "binding_authority": "live_resource_goal_router",
             "completion_authority": "local_red_registration_flags",
             "identity_fields_public": 0,
@@ -167,13 +291,31 @@ def _binding_for(
     return matches[0]
 
 
+def _router_unavailable_reasons(
+    kind: GoalKind,
+    bindings: GoalBindingSet,
+) -> tuple[GoalUnavailableReason, ...]:
+    return tuple(
+        sorted(
+            {
+                opportunity.unavailable_reason
+                for opportunity in bindings.opportunities
+                if opportunity.kind is kind
+                and opportunity.availability is not GoalAvailability.AVAILABLE
+                and opportunity.unavailable_reason is not None
+            },
+            key=lambda reason: reason.value,
+        )
+    )
+
+
 def _wild_candidate(
     inventory: RedFullPokedexInventory,
     spec: RedGoalProviderSpec,
     bindings: GoalBindingSet,
     catalog: RedAcquisitionCatalog,
     executable_targets: frozenset[str],
-) -> RedFullPokedexGoalCandidate | None:
+) -> tuple[RedFullPokedexGoalCandidate | None, RedFullPokedexFamilyDiagnostic]:
     source_id = spec.parameters.get("source_id")
     if not isinstance(source_id, str):
         raise RedFullPokedexGoalProposalError("wild goal lacks a source identity")
@@ -182,26 +324,51 @@ def _wild_candidate(
         raise RedFullPokedexGoalProposalError(
             "wild goal source contains a different acquisition family"
         )
-    target_numbers = tuple(
-        sorted(
-            red_species_number(method.species_ref)
-            for method in methods
-            if not inventory.target(red_species_number(method.species_ref)).locally_registered
-            and method.species_ref in executable_targets
-            and inventory.target(red_species_number(method.species_ref)).resolution_kind
-            is RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN
-        )
+    eligible_methods = tuple(
+        method
+        for method in methods
+        if not inventory.target(red_species_number(method.species_ref)).locally_registered
+        and inventory.target(red_species_number(method.species_ref)).resolution_kind
+        is RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN
     )
+    if not eligible_methods:
+        reason = (
+            RedFullPokedexFamilyReason.TARGET_ALREADY_REGISTERED
+            if methods
+            and all(
+                inventory.target(red_species_number(method.species_ref)).locally_registered
+                for method in methods
+            )
+            else RedFullPokedexFamilyReason.NO_SOLO_CATALOG_TARGET
+        )
+        return None, RedFullPokedexFamilyDiagnostic(RedAcquisitionKind.WILD, reason)
+    target_numbers = tuple(sorted({
+        red_species_number(method.species_ref)
+        for method in eligible_methods
+        if method.species_ref in executable_targets
+    }))
     if not target_numbers:
-        return None
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.WILD,
+            RedFullPokedexFamilyReason.NO_MISSING_EXECUTABLE_TARGET,
+        )
     binding = _binding_for(spec, bindings)
     if binding is None:
-        return None
-    return RedFullPokedexGoalCandidate(
-        RedAcquisitionKind.WILD,
-        LivingDexOptionKind.ACQUIRE,
-        target_numbers,
-        binding,
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.WILD,
+            RedFullPokedexFamilyReason.ROUTER_BINDING_UNAVAILABLE,
+            _router_unavailable_reasons(GoalKind.ACQUIRE_SPECIES, bindings),
+        )
+    return (
+        RedFullPokedexGoalCandidate(
+            RedAcquisitionKind.WILD,
+            LivingDexOptionKind.ACQUIRE,
+            target_numbers,
+            binding,
+        ),
+        RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.WILD, RedFullPokedexFamilyReason.READY
+        ),
     )
 
 
@@ -210,7 +377,9 @@ def _evolution_candidate(
     spec: RedGoalProviderSpec,
     bindings: GoalBindingSet,
     catalog: RedAcquisitionCatalog,
-) -> RedFullPokedexGoalCandidate | None:
+    observation: RedGoalObservation,
+    policy: RedRegistrationPolicy,
+) -> tuple[RedFullPokedexGoalCandidate | None, RedFullPokedexFamilyDiagnostic]:
     if spec.mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
         source_ref, target_ref = red_species_ref(50), red_species_ref(51)
     else:
@@ -237,20 +406,47 @@ def _evolution_candidate(
     source_number = red_species_number(source_ref)
     target_number = red_species_number(target_ref)
     target = inventory.target(target_number)
-    if (
-        target.locally_registered
-        or target.resolution_kind is not RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN
-        or not inventory.target(source_number).physical_specimen_present
+    if target.locally_registered:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION,
+            RedFullPokedexFamilyReason.TARGET_ALREADY_REGISTERED,
+        )
+    if target.resolution_kind is not RedFullPokedexResolutionKind.SOLO_CATALOG_PLAN:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION,
+            RedFullPokedexFamilyReason.NO_SOLO_CATALOG_TARGET,
+        )
+    if not inventory.target(source_number).physical_specimen_present:
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION,
+            RedFullPokedexFamilyReason.PHYSICAL_PRECURSOR_MISSING,
+            _router_unavailable_reasons(GoalKind.EVOLVE_SPECIES, bindings),
+        )
+    if not policy.evolution_allowed(
+        observation.collection_observation, source_ref, target_ref
     ):
-        return None
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION,
+            RedFullPokedexFamilyReason.PHYSICAL_PRECURSOR_PROTECTED,
+            _router_unavailable_reasons(GoalKind.EVOLVE_SPECIES, bindings),
+        )
     binding = _binding_for(spec, bindings)
     if binding is None:
-        return None
-    return RedFullPokedexGoalCandidate(
-        RedAcquisitionKind.EVOLUTION,
-        LivingDexOptionKind.EVOLVE,
-        (target_number,),
-        binding,
+        return None, RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION,
+            RedFullPokedexFamilyReason.ROUTER_BINDING_UNAVAILABLE,
+            _router_unavailable_reasons(GoalKind.EVOLVE_SPECIES, bindings),
+        )
+    return (
+        RedFullPokedexGoalCandidate(
+            RedAcquisitionKind.EVOLUTION,
+            LivingDexOptionKind.EVOLVE,
+            (target_number,),
+            binding,
+        ),
+        RedFullPokedexFamilyDiagnostic(
+            RedAcquisitionKind.EVOLUTION, RedFullPokedexFamilyReason.READY
+        ),
     )
 
 
@@ -302,6 +498,7 @@ def propose_red_full_pokedex_goals(
     )
     bindings = router.enumerate(observation)
     candidates: list[RedFullPokedexGoalCandidate] = []
+    diagnostics: dict[RedAcquisitionKind, RedFullPokedexFamilyDiagnostic] = {}
     for spec in profile.providers:
         if spec.mechanic is RedGoalMechanic.WILD_CORRIDOR_CAPTURE:
             provider = runtime.provider_for(spec.kind, router.actions)
@@ -310,20 +507,29 @@ def propose_red_full_pokedex_goals(
             targets = summarize_red_area_survey(
                 provider.source_id, current, provider.catalog,
             ).missing_species_refs
-            candidate = _wild_candidate(
+            candidate, diagnostic = _wild_candidate(
                 inventory, spec, bindings, RED_ACQUISITION_CATALOG, frozenset(targets),
             )
         elif spec.mechanic in {
             RedGoalMechanic.DIGLETT_EVOLUTION,
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
         }:
-            candidate = _evolution_candidate(
-                inventory, spec, bindings, RED_ACQUISITION_CATALOG
+            candidate, diagnostic = _evolution_candidate(
+                inventory, spec, bindings, RED_ACQUISITION_CATALOG, observation, policy
             )
         else:
             continue
+        diagnostics[diagnostic.acquisition_kind] = diagnostic
         if candidate is not None:
             candidates.append(candidate)
+    for acquisition_kind in (RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION):
+        diagnostics.setdefault(
+            acquisition_kind,
+            RedFullPokedexFamilyDiagnostic(
+                acquisition_kind,
+                RedFullPokedexFamilyReason.PROFILE_DECLARATION_MISSING,
+            ),
+        )
     require_origin()
     consumed = False
 
@@ -344,6 +550,9 @@ def propose_red_full_pokedex_goals(
               for candidate in candidates),
         GoalBindingSet(bindings.opportunities, tuple(guarded.values()),
                        allow_resource_variants=bindings.allow_resource_variants),
+        tuple(diagnostics[kind] for kind in (
+            RedAcquisitionKind.WILD, RedAcquisitionKind.EVOLUTION
+        )),
     )
 
 
@@ -422,6 +631,8 @@ def build_red_full_pokedex_player_observer(
 
 
 __all__ = [
+    "RedFullPokedexFamilyDiagnostic",
+    "RedFullPokedexFamilyReason",
     "RedFullPokedexGoalCandidate",
     "RedFullPokedexGoalProposal",
     "RedFullPokedexGoalProposalError",

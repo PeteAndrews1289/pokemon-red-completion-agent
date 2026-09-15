@@ -90,16 +90,18 @@ def inspect_departure(
             result = observer()
             kinds = {b.kind for b in result.binding_set.bindings}
             passed = {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES} <= kinds
-            reason = None
+            reason, family_diagnostics = None, []
         except RedFullPokedexGoalProposalError as error:
             passed, reason = False, str(error)
+            family_diagnostics = error.public_family_diagnostics()
         finally:
             if (before != emulator.save_state_bytes() or frame != emulator.frame_count
                     or emulator.pressed_buttons or actions.actions_executed):
                 raise ValueError("departure inspection changed the game")
         return {
-            "schema": "pokemon.red.full-local-departure-inspection.v1",
+            "schema": "pokemon.red.full-local-departure-inspection.v2",
             "passed": passed, "failure": reason,
+            "family_diagnostics": family_diagnostics,
             "acquisition_family_count": 2 if passed else None,
             "local_registration_count": len(collection.owned_species),
             "local_target_count": 151,

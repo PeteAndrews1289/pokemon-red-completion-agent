@@ -23,6 +23,7 @@ from pokemon_red_completion.red_acquisition import RedAcquisitionKind
 from pokemon_red_completion.red_bounded_player import preflight_red_bounded_player
 from pokemon_red_completion.red_collection import red_internal_species_id, red_species_ref
 from pokemon_red_completion.red_full_pokedex_goal_proposal import (
+    RedFullPokedexFamilyReason,
     RedFullPokedexGoalProposalError,
     RedFullPokedexPlayerAttempt,
     build_red_full_pokedex_player_observer,
@@ -117,6 +118,11 @@ def test_public_menu_hides_identity_and_is_the_same_player_binding_set(setup):
                for c in proposal.candidates)
     public = proposal.public_dict()
     assert public["candidate_count"] == public["acquisition_family_count"] == 2
+    assert public["schema"] == "pokemon.red.full-pokedex-goal-proposal.v3"
+    assert {
+        row["portable_option_kind"]: row["reason"]
+        for row in public["family_diagnostics"]
+    } == {"acquire": "ready", "evolve": "ready"}
     assert public["controller_actions"] == public["emulator_frames"] == 0
     encoded = json.dumps(public)
     for secret in (setup.runtime.profile.profile_sha256, "wild:Route1:grass",
@@ -177,8 +183,20 @@ def test_action_free_preflight_qualifies_real_two_family_menu(setup):
     assert setup.native.emulator.frame_count == 0
 
 
-@pytest.mark.parametrize("failure", ["route", "precursor", "reserve", "local_complete", "balls"])
-def test_one_family_or_unready_state_stops_before_input(setup, failure):
+@pytest.mark.nonconsuming_direct_rehearsal
+@pytest.mark.parametrize(
+    ("failure", "excluded_option", "reason", "router_reason"),
+    [
+        ("route", "acquire", "router_binding_unavailable", "missing_capability"),
+        ("precursor", "evolve", "physical_precursor_missing", "no_legal_target"),
+        ("reserve", "evolve", "physical_precursor_protected", "no_legal_target"),
+        ("local_complete", "evolve", "target_already_registered", None),
+        ("balls", "acquire", "router_binding_unavailable", "missing_resource"),
+    ],
+)
+def test_one_family_or_unready_state_stops_before_input(
+    setup, failure, excluded_option, reason, router_reason
+):
     if failure == "route":
         setup.world.fail = True
     elif failure == "precursor":
@@ -195,8 +213,26 @@ def test_one_family_or_unready_state_stops_before_input(setup, failure):
         setup.owned.add(78)
     else:
         setup.reader.raw = replace(setup.reader.raw, bag_items=(), bag_item_ids=())
-    with pytest.raises(RedFullPokedexGoalProposalError, match="at least two"):
+    with pytest.raises(RedFullPokedexGoalProposalError, match="at least two") as caught:
         propose_red_full_pokedex_goals(setup.router, setup.native.adapter.observe())
+    diagnostics = caught.value.public_family_diagnostics()
+    by_option = {row["portable_option_kind"]: row for row in diagnostics}
+    assert set(by_option) == {"acquire", "evolve"}
+    assert by_option[excluded_option]["availability"] == "unavailable"
+    assert by_option[excluded_option]["reason"] == reason
+    assert by_option[excluded_option]["router_unavailable_reasons"] == (
+        [] if router_reason is None else [router_reason]
+    )
+    retained = "evolve" if excluded_option == "acquire" else "acquire"
+    assert by_option[retained]["reason"] == RedFullPokedexFamilyReason.READY.value
+    encoded = json.dumps(diagnostics)
+    for private_identity in (
+        setup.runtime.profile.profile_sha256,
+        "wild:Route1:grass",
+        "pokemon:national:",
+        "red-resource-goal:",
+    ):
+        assert private_identity not in encoded
     assert setup.actions.actions_executed == 0
 
 
