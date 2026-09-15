@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Protocol
 
 from .actions import MacroAction, MacroActionKind
-from .observation import MenuCursorState, PokemonRedStateReader
+from .observation import MAX_BAG_ITEMS, MenuCursorState, PokemonRedStateReader
 
 BILLS_PC_WITHDRAW_INDEX = 0
 BILLS_PC_DEPOSIT_INDEX = 1
@@ -21,6 +21,9 @@ BILLS_PC_CHANGE_BOX_INDEX = 3
 BILLS_PC_EXIT_INDEX = 4
 BILLS_PC_MENU_POSITION = (1, 2)
 BILLS_PC_MENU_MAXIMUM = BILLS_PC_EXIT_INDEX
+REDS_PC_WITHDRAW_INDEX = 0
+REDS_PC_MENU_POSITION = (1, 2)
+REDS_PC_MENU_MAXIMUM = 3
 GENERIC_PC_MENU_POSITION = (1, 2)
 GENERIC_PC_MENU_MAXIMA = frozenset((3, 4))
 DEPOSIT_WITHDRAW_MENU_POSITION = (10, 12)
@@ -101,6 +104,29 @@ class RedPCWithdrawReport:
 
 
 @dataclass(frozen=True, slots=True)
+class RedPCItemWithdrawReport:
+    item_id: int
+    bag_before: tuple[tuple[int, int], ...]
+    bag_after: tuple[tuple[int, int], ...]
+    pc_before: tuple[tuple[int, int], ...]
+    pc_after: tuple[tuple[int, int], ...]
+
+    @property
+    def passed(self) -> bool:
+        if self.item_id in dict(self.bag_before):
+            return False
+        try:
+            target = next(index for index, row in enumerate(self.pc_before)
+                          if row == (self.item_id, 1))
+        except StopIteration:
+            return False
+        return (
+            self.bag_after == (*self.bag_before, (self.item_id, 1))
+            and self.pc_after == self.pc_before[:target] + self.pc_before[target + 1 :]
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class RedPCSwitchBoxReport:
     previous_box_index: int
     current_box_index: int
@@ -172,6 +198,97 @@ def open_bills_pc(
     for _ in range(3):
         _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
     _require_bills_pc_menu(reader.read_menu_cursor_state())
+
+
+def open_reds_pc(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> None:
+    """Open Red's item PC from an already verified, PC-facing field position."""
+
+    _pulse(actions, MacroActionKind.INTERACT, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    generic = reader.read_menu_cursor_state()
+    if (
+        (generic.top_x, generic.top_y) != GENERIC_PC_MENU_POSITION
+        or generic.maximum_visible_index not in GENERIC_PC_MENU_MAXIMA
+        or generic.selected_visible_index != 0
+    ):
+        raise RedPCStorageError(f"generic PC menu did not open: {generic!r}")
+    _pulse(actions, MacroActionKind.MOVE, "down", timing=timing)
+    selected = reader.read_menu_cursor_state()
+    if selected.selected_visible_index != 1:
+        raise RedPCStorageError("generic PC menu did not select Red's PC")
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    for _ in range(timing.max_dialogue_pulses + 1):
+        state = reader.read_menu_cursor_state()
+        try:
+            _require_reds_pc_menu(state)
+        except RedPCStorageError:
+            _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+        else:
+            return
+    raise RedPCStorageError("Red's PC item menu did not open")
+
+
+def withdraw_single_pc_item(
+    actions: ActionExecutor,
+    reader: PokemonRedStateReader,
+    *,
+    item_id: int,
+    timing: RedPCStorageTiming = DEFAULT_STORAGE_TIMING,
+) -> RedPCItemWithdrawReport:
+    """Withdraw one exact singleton item from Red's PC into the bag."""
+
+    if type(item_id) is not int or item_id <= 0:  # noqa: E721
+        raise ValueError("item_id must be a positive integer")
+    raw_before = reader.read()
+    bag_before = raw_before.bag_items or ()
+    pc_before = reader.read_pc_items()
+    if len(bag_before) >= MAX_BAG_ITEMS:
+        raise RedPCStorageError("Red cannot withdraw an item into a full bag")
+    if item_id in dict(bag_before):
+        raise RedPCStorageError("single-item withdrawal requires an absent bag item")
+    target_rows = [index for index, row in enumerate(pc_before) if row[0] == item_id]
+    if len(target_rows) != 1 or pc_before[target_rows[0]][1] != 1:
+        raise RedPCStorageError("PC does not contain one exact singleton target item")
+    target_index = target_rows[0]
+    boxes_before = reader.read_all_box_states()
+
+    _require_reds_pc_menu(reader.read_menu_cursor_state())
+    _select_absolute_index(actions, reader, REDS_PC_WITHDRAW_INDEX, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    _select_absolute_index(actions, reader, target_index, timing=timing)
+    _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+
+    expected_bag = (*bag_before, (item_id, 1))
+    expected_pc = pc_before[:target_index] + pc_before[target_index + 1 :]
+    protected = (
+        "map_id", "player_x", "player_y", "battle_state", "party_species_ids",
+        "party_levels", "party_hp", "party_max_hp", "party_status", "party_moves",
+        "party_pp", "player_money",
+    )
+    for _ in range(timing.max_dialogue_pulses + 1):
+        raw_after = reader.read()
+        pc_after = reader.read_pc_items()
+        if (raw_after.bag_items or ()) == expected_bag and pc_after == expected_pc:
+            report = RedPCItemWithdrawReport(
+                item_id, bag_before, expected_bag, pc_before, pc_after
+            )
+            if (
+                not report.passed
+                or reader.read_all_box_states() != boxes_before
+                or any(
+                    getattr(raw_after, field) != getattr(raw_before, field)
+                    for field in protected
+                )
+            ):
+                raise RedPCStorageError("item withdrawal failed its immutable transition gate")
+            return report
+        _pulse(actions, MacroActionKind.CONFIRM, timing=timing)
+    raise RedPCStorageError("item withdrawal did not reach its bounded transition")
 
 
 def deposit_party_member(
@@ -431,6 +548,16 @@ def _require_bills_pc_menu(state: MenuCursorState) -> None:
         or state.scroll_offset != 0
     ):
         raise RedPCStorageError(f"Bill's PC main menu is unavailable: {state!r}")
+
+
+def _require_reds_pc_menu(state: MenuCursorState) -> None:
+    if (
+        (state.top_x, state.top_y) != REDS_PC_MENU_POSITION
+        or state.maximum_visible_index != REDS_PC_MENU_MAXIMUM
+        or state.scroll_offset != 0
+        or state.selected_absolute_index != REDS_PC_WITHDRAW_INDEX
+    ):
+        raise RedPCStorageError(f"Red's PC item menu is unavailable: {state!r}")
 
 
 def _return_to_bills_pc_menu(

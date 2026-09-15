@@ -135,6 +135,8 @@ class RamAddress(IntEnum):
     CURRENT_MAP_WIDTH = 0xD369
     NUM_SPRITES = 0xD4E1
     MAP_SPRITE_DATA = 0xD4E4
+    NUM_PC_ITEMS = 0xD53A
+    PC_ITEMS = 0xD53B
     CURRENT_BOX_NUMBER = 0xD5A0
     PLAYER_MOVING_DIRECTION = 0xD528
     TOGGLEABLE_OBJECT_FLAGS = 0xD5A6
@@ -939,6 +941,7 @@ PARTY_PP_OFFSET = 29
 PARTY_LEVEL_OFFSET = 33
 PARTY_MAX_HP_OFFSET = 34
 MAX_BAG_ITEMS = 20
+MAX_PC_ITEMS = 50
 EVENT_FLAGS_END = 0xD886
 EVENT_FLAG_BYTES = EVENT_FLAGS_END - int(RamAddress.EVENT_FLAGS)
 POKEDEX_SPECIES_COUNT = 151
@@ -3733,6 +3736,24 @@ class PokemonRedStateReader:
         self._memory = memory
         self._last_encounter: tuple[int | None, ...] | None = None
         self._encounter_log = encounter_log_path()
+
+    def read_pc_items(self) -> tuple[tuple[int, int], ...]:
+        """Read Red's PC item box from its fixed revision-zero WRAM inventory."""
+        count = self._memory.read_u8(RamAddress.NUM_PC_ITEMS)
+        if not 0 <= count <= MAX_PC_ITEMS:
+            raise ValueError("PC item count is outside the supported bound")
+        entries = tuple(
+            (
+                self._memory.read_u8(int(RamAddress.PC_ITEMS) + index * 2),
+                self._memory.read_u8(int(RamAddress.PC_ITEMS) + index * 2 + 1),
+            )
+            for index in range(count)
+        )
+        if any(item_id <= 0 or quantity <= 0 for item_id, quantity in entries):
+            raise ValueError("PC item inventory contains an invalid entry")
+        if len({item_id for item_id, _ in entries}) != len(entries):
+            raise ValueError("PC item inventory contains a duplicate item")
+        return entries
 
     def read(self) -> RawGameState:
         status = self._memory.read_u8(RamAddress.STATUS_FLAGS_6)
