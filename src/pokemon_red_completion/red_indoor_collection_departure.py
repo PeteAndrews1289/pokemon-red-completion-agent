@@ -29,6 +29,7 @@ from pokemon_red_completion.red_living_dex_setup_source import (
     red_living_dex_setup_fresh_observation_sha256,
 )
 from pokemon_red_completion.red_resource_goal_router import (
+    _MAX_ROUTE_SCRIPTED_DIALOGUES,
     _ROUTE_LIMITS,
     _walking_plan,
 )
@@ -181,7 +182,10 @@ def bind_indoor_collection_departure(
         emulator=runtime.emulator,
         interruption_handler=bind_travel_capture_handler(
             router, spec, guarded_collection_route_handler(
-                actions, reader, route_name="indoor collection departure",
+                actions,
+                reader,
+                route_name="indoor collection departure",
+                maximum_scripted_dialogues=_MAX_ROUTE_SCRIPTED_DIALOGUES,
             ),
         ),
         replanner=router._replan,

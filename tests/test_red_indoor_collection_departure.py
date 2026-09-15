@@ -245,6 +245,25 @@ def test_indoor_departure_qualification_is_action_free_and_projection_never_exec
     assert indoor_scene.provider_calls == []
 
 
+def test_indoor_departure_binds_the_shared_scripted_dialogue_cap(
+    indoor_scene, monkeypatch,
+):
+    import pokemon_red_completion.red_indoor_collection_departure as departure
+
+    original = departure.guarded_collection_route_handler
+    calls = []
+
+    def guarded(*args, **kwargs):
+        calls.append(kwargs["maximum_scripted_dialogues"])
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(departure, "guarded_collection_route_handler", guarded)
+
+    assert indoor_scene.bind() is not None
+    assert calls == [4]
+    assert indoor_scene.router.actions.actions_executed == 0
+
+
 def test_indoor_departure_then_fly_and_destination_share_actual_accounting(indoor_scene):
     binding = indoor_scene.bind()
     assert binding is not None
