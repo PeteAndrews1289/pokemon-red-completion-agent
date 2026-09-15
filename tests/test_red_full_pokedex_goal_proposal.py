@@ -8,6 +8,7 @@ import pytest
 from test_red_resource_goal_router import _World
 from test_registered_runtime_binding import bound_fixture
 
+import pokemon_red_completion.red_full_pokedex_goal_proposal as proposal_module
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.fishing import ShorelineStance
 from pokemon_red_completion.gen1_cartridge import FishingSlot, RodKind
@@ -380,6 +381,26 @@ def test_existing_player_bridge_consumes_full_local_checkpoint_and_same_menu(set
     assert result.collection.registered_species == len(setup.owned)
     assert red_species_ref(78) in result.collection.global_species
     assert red_species_ref(78) not in result.collection.local_species
+
+
+def test_player_bridge_plumbs_opt_in_capture_item_support(setup, monkeypatch):
+    original = proposal_module.RedResourceGoalRouter
+    captured = []
+
+    def router(*args, **kwargs):
+        captured.append(kwargs["prepare_capture_items"])
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(proposal_module, "RedResourceGoalRouter", router)
+
+    build_red_full_pokedex_player_observer(
+        setup.runtime,
+        setup.actions,
+        setup.world,
+        prepare_capture_items=True,
+    )
+
+    assert captured == [True]
 
 
 @pytest.mark.nonconsuming_direct_rehearsal

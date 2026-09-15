@@ -793,6 +793,7 @@ def build_red_full_pokedex_player_observer(
     maximum_emulator_frames: int = 600_000,
     retain_quantum: Callable[[], None] | None = None,
     quote_resource_costs: bool = False,
+    prepare_capture_items: bool = False,
     attempt: RedFullPokedexPlayerAttempt | None = None,
 ) -> RedBoundedPlayerObserver:
     """Wire one mixed-family choice and subsequent read-only terminal observations.
@@ -834,6 +835,7 @@ def build_red_full_pokedex_player_observer(
         quote_resource_costs=quote_resource_costs,
         maximum_controller_actions=maximum_controller_actions,
         maximum_emulator_frames=maximum_emulator_frames,
+        prepare_capture_items=prepare_capture_items,
         include_recovery_offers=False,
     )
     attempt = attempt or RedFullPokedexPlayerAttempt()
