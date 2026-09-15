@@ -250,14 +250,21 @@ class RedResourceGoalRouter:
                 if fixed_provider is None:
                     raise RedResourceGoalRoutingError("available purchase lost its fixed quote")
                 provider = fixed_provider
-            plan = self._plan(spec, fresh)
-            if plan is None:
+            # Explicit Fly support is a transport preference, not just a
+            # fallback for disconnected walking graphs. Prefer a legal flight
+            # (or local indoor egress followed by flight) before accepting a
+            # high-variance cross-region walk. An unavailable flight returns
+            # None and preserves the ordinary walking fallback below.
+            if spec.parameters.get("fly_transport") is True:
                 from pokemon_red_completion.red_collection_fly import bind_collection_fly
 
                 flight = bind_collection_fly(self, spec, provider, fresh, traversal)
                 if flight is not None:
                     replacements[flight.binding_ref] = flight
                     opportunities[index] = flight.opportunity
+                    continue
+            plan = self._plan(spec, fresh)
+            if plan is None:
                 continue
             interruption_handler: InterruptionHandler = Gen1RouteInterruptionHandler(
                 self.actions, self.runtime.reader, maximum_flees=_MAX_ROUTE_FLEES,

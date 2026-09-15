@@ -12,10 +12,16 @@ from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.global_router import MacroPath
 from pokemon_red_completion.goal_manager import GoalKind, GoalUnavailableReason
+from pokemon_red_completion.goal_manager_runtime import (
+    ExecutableGoalBinding,
+    GoalExecutionReport,
+    GoalVerification,
+)
 from pokemon_red_completion.local_router import LocalEdge, LocalPath
 from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.red_goal_context_profile import (
     RedGoalMechanic,
+    bind_resupply_fly_profile,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
@@ -191,6 +197,58 @@ def test_route_limit_covers_every_declared_handler_interruption() -> None:
         + routing._MAX_ROUTE_TRAINER_BATTLES
         + routing._MAX_ROUTE_SCRIPTED_DIALOGUES
     )
+
+
+def test_explicit_fly_precedes_an_available_cross_region_walk(fixture, monkeypatch):
+    f = fixture
+    f.router.runtime.profile = bind_resupply_fly_profile(f.router.runtime.profile)
+    flight = ExecutableGoalBinding(
+        "synthetic-preferred-flight",
+        GoalKind.RESUPPLY,
+        0.2,
+        0.1,
+        lambda: GoalExecutionReport(0, 0, {}),
+        lambda _report: GoalVerification.succeeded(),
+    )
+    calls = []
+
+    def bind(*args):
+        calls.append(args[1].parameters["fly_transport"])
+        return flight
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_collection_fly.bind_collection_fly", bind,
+    )
+    f.world.plan_feasible_to_map = lambda *_a, **_k: pytest.fail(
+        "walking planner ran before explicit Fly"
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert result.bindings == (flight,)
+    assert calls == [True]
+    assert f.actions.actions_executed == 0
+
+
+def test_illegal_explicit_fly_falls_back_to_walking(fixture, monkeypatch):
+    f = fixture
+    f.router.runtime.profile = bind_resupply_fly_profile(f.router.runtime.profile)
+    calls = []
+
+    def bind(*_args):
+        calls.append("fly")
+        return None
+
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_collection_fly.bind_collection_fly", bind,
+    )
+
+    result = f.router.enumerate(f.adapter.observe())
+
+    assert calls == ["fly"]
+    assert len(f.world.plans) == 1
+    assert any(binding.kind is GoalKind.RESUPPLY for binding in result.bindings)
+    assert f.actions.actions_executed == 0
 
 
 def test_router_does_not_advertise_route_without_every_interruption_capability(
