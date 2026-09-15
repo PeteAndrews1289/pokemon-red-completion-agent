@@ -180,6 +180,7 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
         def __init__(self, runtime, *a, **kw):
             assert kw["include_recovery_offers"] is False
             assert kw["routed_recovery"] is True
+            assert kw["prepare_capture_items"] is registered
             self.profile = runtime.profile
 
         def enumerate_routed_kinds(self, observation, routed_kinds):

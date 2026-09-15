@@ -120,6 +120,7 @@ class RedResourceGoalRouter:
     maximum_emulator_frames: int = 600_000
     quote_resource_costs: bool = False
     prepare_capture_party: bool = True
+    prepare_capture_items: bool = False
     prepare_capture_storage: bool = False
     routed_storage_relief: bool = False
     routed_recovery: bool = False
@@ -220,12 +221,21 @@ class RedResourceGoalRouter:
             if routed_kinds is not None and opportunity.kind not in routed_kinds:
                 continue
             spec = specs.get(opportunity.kind)
+            may_prepare_capture_item = (
+                self.prepare_capture_items
+                and opportunity.kind is GoalKind.ACQUIRE_SPECIES
+                and opportunity.unavailable_reason is GoalUnavailableReason.MISSING_RESOURCE
+            )
             if observed_capture and opportunity.kind is GoalKind.ACQUIRE_SPECIES:
                 # Never reinstate the static, unreachable patch as a fallback.
                 continue
             if (
                 opportunity.availability is GoalAvailability.AVAILABLE
-                or opportunity.unavailable_reason is not GoalUnavailableReason.MISSING_CAPABILITY
+                or (
+                    opportunity.unavailable_reason
+                    is not GoalUnavailableReason.MISSING_CAPABILITY
+                    and not may_prepare_capture_item
+                )
                 or spec is None
                 or spec.mechanic not in _MECHANICS
             ):
@@ -238,6 +248,20 @@ class RedResourceGoalRouter:
                 raise RedResourceGoalRoutingError("routable resource provider type differs")
             availability = provider.resource_availability(observation)
             if not availability.executable:
+                if self.prepare_capture_items and isinstance(
+                    provider, RedAreaSurveyGoalProvider
+                ):
+                    from pokemon_red_completion.red_routed_capture_items import (
+                        bind_capture_item_support,
+                    )
+
+                    supported = bind_capture_item_support(
+                        self, spec, provider, observation, fresh, traversal
+                    )
+                    if supported is not None:
+                        replacements[supported.binding_ref] = supported
+                        opportunities[index] = supported.opportunity
+                        continue
                 opportunities[index] = replace(
                     opportunity, unavailable_reason=availability.unavailable_reason
                 )
