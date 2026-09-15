@@ -15,8 +15,8 @@ from pokemon_red_completion.red_full_pokedex_direct_profile import (
     _wild_sources,
     derive_direct_full_pokedex_profile,
 )
-from pokemon_red_completion.red_goal_context_profile import RedGoalMechanic
 from pokemon_red_completion.red_goal_context_profile import (
+    RedGoalMechanic,
     _thaw,
     bind_capture_access_requirements_profile,
     bind_capture_cut_profile,
