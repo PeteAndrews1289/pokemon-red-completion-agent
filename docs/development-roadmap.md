@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v2-registered**. Reviewed through **2026-09-13-model114-frozen-fishing-learning**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-battle-stall-contingency**.
 
-A learned player that finishes Pokemon stories and accumulates verified species registration across runs, versions and generations.
+A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 14/15 acceptance items (93%).**
+**Broaden model-directed Red collection: 25/26 acceptance items (96%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -18,6 +18,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Fit the verified fishing outcome without promoting its trust tier ([evidence](../docs/evidence/red-model106-measured-fishing-capture-2026-09-12.json))
 - [x] Collect varied destination outcomes from an earned restart, including failure ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
 - [ ] Expose a useful choice across more than one acquisition family
+- [x] Connect all 151 local registrations to fail-closed executable goal proposal ([evidence](../docs/evidence/red-full-pokedex-shared-departure-2026-09-14.json))
 - [x] Fit one observed choice from a live menu spanning goal families ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Recover capture capacity when the active box is already full ([evidence](../docs/evidence/red-model109-mixed-and-storage-2026-09-12.json))
 - [x] Execute and fit the next model-selected acquisition from the relieved state ([evidence](../docs/evidence/red-model111-fishing-learning-loop-2026-09-12.json))
@@ -27,8 +28,18 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Recover the exact model112 terminal and rebuild its next menu ([evidence](../docs/evidence/red-model112-dialogue-recovery-and-menu-2026-09-13.json))
 - [x] Execute the frozen restore, fit model113 and rebuild a supplemental-only menu ([evidence](../docs/evidence/red-model113-frozen-restore-learning-2026-09-13.json))
 - [x] Execute and fit the frozen fishing acquisition, then expose the next mixed-goal menu ([evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json))
+- [x] Retain and learn the real income result, including verification failure ([evidence](../docs/evidence/red-model115-frozen-resupply-learning-2026-09-13.json))
+- [x] Explain Pay Day exactly and retain the consumed continuation failure ([evidence](../docs/evidence/red-model116-pay-day-accounting-2026-09-13.json))
+- [x] Execute and fit Model116's exact frozen acquisition ([evidence](../docs/evidence/red-model117-frozen-acquisition-2026-09-13.json))
+- [x] Degrade safely when fewer than two fishing destinations remain ([evidence](../docs/evidence/red-model117-sparse-fishing-menu-2026-09-13.json))
+- [x] Execute and fit Model117's frozen purchase, then freeze Model118's next choice ([evidence](../docs/evidence/red-model118-frozen-purchase-2026-09-13.json))
+- [x] Execute and fit Model118's frozen restoration, then stop honestly at the singleton boundary ([evidence](../docs/evidence/red-model119-frozen-restore-2026-09-13.json))
+- [x] Execute the sole fishing acquisition without fabricating learned authority ([evidence](../docs/evidence/red-model119-forced-singleton-fishing-2026-09-13.json))
+- [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
+- [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
+- [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
 
-Current model: **114 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **121 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -62,33 +73,31 @@ Replace brittle fixed routing with reusable skills; scale battle and navigation 
 
 [Current evidence](../docs/evidence/red-phase3-sustained-closeout-2026-09-08.json)
 
-### 04. Finish Red with the model — verified
+### 04. Finish Red with the model — planned
 
-Plan quests, prerequisites and puzzles through the Champion.
+Choose progression from a fresh game through the Champion.
 
-**Exit criterion:** Model-directed completion with concurrent Champion and Hall-of-Fame evidence under declared authority.
+**Exit criterion:** One authenticated fresh start-to-finish model-directed Red run with concurrent Champion and Hall-of-Fame evidence; no fixed walkthrough or checkpoint stitching.
 
-Teacher completion already exists. It does not satisfy this learned-player milestone.
+Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
-[Current evidence](../docs/evidence/red-phase4-closeout-2026-09-09.json)
+### 05. Complete the full Red Pokedex — current
 
-### 05. Build the shared registered Dex — current
+Register every Red Pokedex entry in the same fresh-run save.
 
-Catch, evolve and record missing species; deposit completed lines and skip already-credited work.
+**Exit criterion:** Full local Red registration in the authenticated model-directed run, with legitimate version, trade and event dependencies explicitly resolved before any ROM hack.
 
-**Exit criterion:** Verified registered-objective Red collection, fresh-run sequencing and shared-ledger continuity on Blue under explicit availability rules.
+No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-No level100 or living-form quota. Global credit, local Pokedex flags and physical stock stay separate; external dependencies remain explicit.
-
-[Current evidence](../docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
+[Current evidence](../docs/evidence/red-battle-stall-contingency-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
 Test changed encounters, rules or difficulty in a compatible hack.
 
-**Exit criterion:** Report initial performance and learning gains against an otherwise identical learner without Red experience.
+**Exit criterion:** Only after the full Red fresh-run/story/Pokedex gate: compare initial performance and adaptation with a learner lacking Red experience.
 
-Compatibility is checked separately. Red competence does not guarantee an immediate win.
+Blocked until complete Red. Compatibility and initial performance are separate tests.
 
 ### 07. Transfer and learn Crystal — planned
 
@@ -100,13 +109,293 @@ Add the title adapter, time-dependent encounters, breeding and new mechanics; no
 
 ### 08. Accumulate a cross-game registered Dex — planned
 
-Reuse competence and verified registration while pursuing new gaps in later games.
+Continue the shared registered Pokedex through at least Emerald.
 
 **Exit criterion:** Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.
 
-Already-credited lines need no redundant grind unless useful for the current run or a new dependency.
+Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-battle-stall-contingency
+
+One voluntary live-battler switch after observed stall or no usable move passes 537 ROM-free focused tests, lint and whole-source type checking. It uses the original runtime budget and metered executor; old frozen policies remain unchanged.
+
+**Deviation:** Clarify the prior roadmap: voluntary contingency switching is not fainted forced-switch handling. No cartridge, learning, registration or authority delta; stage criteria and denominators stay unchanged.
+
+**Next:** Sol High, Fast off: freeze a distinct campaign C with the opt-in policy, varied short controls and cross-venue coverage. Credit switches only if actually observed and durably settled. No replay or in-campaign replacement.
+
+### 2026-09-15-durable-battle-cartridge-campaign
+
+Campaign B stopped on its first Route11 control after 893 actions / 80,081 frames. V2 reopened exact battle/policy-selection failure evidence; the final active move PP was exhausted while opponent HP stayed unchanged, and three later cases never opened.
+
+**Deviation:** The campaign failed honestly and is consumed. It added no model query, example, fit or registration, but converted the prior unknown-cost failure class into an exact generic no-progress/no-usable-PP falsifier.
+
+**Next:** Astra High, Fast off: one ROM-free architecture session for an observable identity-free switch contingency using existing battle mechanics. Do not replay campaign B or freeze its replacement in that session.
+
+### 2026-09-15-cartridge-journal-v2
+
+Integrated V2 journal passes371 focused tests and whole-source type checking. Setup and battle retain phase/reason/attempted/completed/frame evidence, including partial failures and session changes. No gameplay or learning.
+
+**Deviation:** Planned maintenance only. Restored the prior battle-runtime-refocus review accidentally omitted by the previous closeout; no checklist or learning denominator changed.
+
+**Next:** Sol High, Fast off: freeze distinct cartridge identities and exact inputs for a bounded V2 campaign, including cross-venue setup. Stop on the first failure; no consumed-case retry.
+
+### 2026-09-15-bounded-battle-cartridge-qualification
+
+Synthetic diagnostic reopening passed and three Route11 cartridge cases settled in223actions/19851frames. The first Diglett relocation failed and exposed missing phase/cost evidence; campaign stopped.
+
+**Deviation:** Qualification failed honestly. The failed episode was durable but retained only its exception class, so alternate-venue and extended-training reliability remain open; no learning counter changed.
+
+**Next:** Astra High, Fast off: build and ROM-free test a V2 cross-component phase/reason/cost journal before any new cartridge identity.
+
+### 2026-09-15-battle-runtime-refocus
+
+Seven false successes reproduced and rejected;108 transition combinations and604 focused tests pass,1 skipped. Bounded diagnostics added; no gameplay or learning.
+
+**Deviation:** User-directed maintenance after reactive failures. Exact historical cause unknown; checklist denominators unchanged.
+
+**Next:** Sol High, Fast off: bounded disposable cartridge qualification with durable diagnostics, then heterogeneous collection if ready.
+
+### 2026-09-15-exact-terminal-recovery
+
+Recovery settled the terminal in11 actions/1320 frames, preserving86 registrations. The menu has restoration and resupply.
+
+**Deviation:** Prior closeout left entry points stale; corrected here. Evolution and recovery identities remain consumed.
+
+**Next:** User requested a battle-runtime refocus before collection.
+
+### 2026-09-15-safe-singleton-evolution
+
+One safe Tentacool evolution ran once:61 verified quanta advanced level5 to24 before BattleRuntimeError. The sealed mid-battle terminal preserves86 registrations/66 living species/70 specimens; no retry.
+
+**Deviation:** The planned menu rebuild could not occur because the actual terminal is mid-battle. The attempt used25301 actions/2232160 frames, queried no model, created no row or fit, and is permanently consumed without retry. This is real gameplay progress but an eighth consecutive session without measured learning output.
+
+**Next:** Sol High: authenticate and diagnose the exact retained terminal action-free. Freeze one recovery-only settlement only if existing recovery preserves the collection; do not automatically resume evolution. Rebuild the menu after a stable terminal.
+
+### 2026-09-15-fossil-evolution-bridge
+
+The exact action-free Model121 scan found ready evolution and zero executable fossil targets. No adapter, query, claim, action, frame, outcome or fit occurred; Model121 remains121/83 with86 local registrations.
+
+**Deviation:** The cheapest falsifier fired before implementation, so the planned conditional bridge was correctly skipped. This seventh consecutive no-learning session ends the serial provider-probe loop. Flash3.8 High recommended a safe forced-singleton evolution followed by a fresh menu rebuild; Claude returned no completed verdict.
+
+**Next:** Sol High: inspect the ready evolution's resource type and physical-preservation constraints action-free. If it is a safe level-triggered transition, freeze and execute it exactly once without a model query or fit, then rebuild the heterogeneous menu from the retained terminal.
+
+### 2026-09-15-fishing-evolution-bridge
+
+The reusable full-Pokedex observer now falls back from unavailable grass capture to one best reachable productive fishing executor while retaining ready evolution and identity-free acquire/evolve policy input. The exact committed Model121 state has zero reachable fishing destinations, so the gate failed with zero gameplay or learning delta.
+
+**Deviation:** The adapter completed as planned, but the exact endpoint falsified fishing as its acquisition partner. This sixth consecutive no-learning session stopped before reset, query or input; it did not patch a route, substitute another mechanic, touch source four or weaken the milestone.
+
+**Next:** Sol High: qualify the already-implemented fossil acquisition provider at the exact terminal and adapt it beside evolution only if an observed target is executable. Run one lesson only after the unchanged two-family gate passes.
+
+### 2026-09-14-route-feasible-candidate-gate
+
+Evolution routing is restored. Four grass corridors were checked action-free: three have ready capture providers but no route; one lacks resources. No learning delta.
+
+**Deviation:** The generic candidate falsifier fired, so gameplay stopped without a reset or source. This fifth no-learning session closes grass-corridor routing at this endpoint rather than adding map/species exceptions. The prior evolution discrepancy is resolved as lost transport permission.
+
+**Next:** Sol High: connect an already-supported non-grass acquisition mechanic, starting with reachable fishing, to the ready evolution option. Declare and play one lesson only after the unchanged two-family gate passes.
+
+### 2026-09-14-capture-route-capability-repair
+
+Direct retargeting now preserves exactly eight declared generic capture capabilities without copying target identity. ROM-free regressions pass, but the exact zero-input terminal still has no capture route; no learning delta.
+
+**Deviation:** The flags-alone hypothesis was falsified and the repair lane stopped without gameplay. The repaired-profile check also reports evolution unavailable, contradicting the prior legacy-profile diagnostic; the discrepancy is preserved and neither family is treated as executable. This is a fourth consecutive no-learning session.
+
+**Next:** Sol High: qualify generic route-feasible capture candidate selection and declare one new collection lesson only if the unchanged capture-plus-evolution gate passes. No species-specific patch, consumed-reset retry, protected-root scan or source four.
+
+### 2026-09-14-registered-correlated-reset
+
+Reset bridge implemented. Model121's gate stopped before query/input/fit: evolution ready; capture routing unavailable. Reset closed, nine unused sources preserved. No learning delta.
+
+**Deviation:** No learned result. The original failure omitted typed family details; matching read-only reconstruction retained them and future recorder behavior was repaired. This third no-learning session is engineering progress only; the consumed reset cannot replay.
+
+**Next:** Sol High: source-free capture transport-capability preservation and route-feasibility test, then a scoped repair if justified. Do not redesign admission, scan sources or replay the closed reset. A played successor needs a new prospective scope.
+
+### 2026-09-14-full-pokedex-supply-admission
+
+Rejected a fourth blind source: metadata-only selection cannot prove both acquisition families before an irreversible claim. Preserved nine unused roots and selected an explicit correlated Model121 reset as the next supply design. Relevant source-free tests passed185 cases.
+
+**Deviation:** The planned source-supply decision is NO-GO under the direct claim-then-gate architecture. Preclaim scanning was rejected as private-state cherry-picking. A second consecutive no-learning session fires the anti-drift alarm; Model121 and86/151 registrations are unchanged.
+
+**Next:** Use Astra High to implement and qualify the registered correlated-reset bridge for the exact Model121 terminal, then require a zero-action two-family PASS before one retained choice. Do not select source four, reopen V1–V3 or claim independent evaluation.
+
+### 2026-09-14-full-pokedex-family-diagnostics
+
+Structured identity-free reasons now distinguish inaccessible capture route, missing capture resource, absent/protected evolution precursor and already-registered target. The two-family gate remains strict. Focused25, rehearsal22 and related247 tests passed; zero source/ROM/model/game effects.
+
+**Deviation:** None from the refocused source-free session. V3 remains unexplained because its old record lacks the new fields. This is maintenance, not a learning or registration gain. Exact-head CI passed; source four remains unauthorized pending a separate supply plan.
+
+**Next:** Design and audit a prospective plan that binds one source directly to one retained measured collection lesson. Never reopen V1–V3 or spend another source only to validate software.
+
+### 2026-09-14-third-source-roadmap-audit
+
+Third source prepared and registered, then failed the two-acquisition-family gate. No model query, action, frame, outcome or fit. Nine unused sources remain; exact repair CI and17 source-free tests passed.
+
+**Deviation:** The expected menu unblock did not occur. The source is permanently closed without replacement, and missing per-family diagnostics limit the explanation. Today adds one measured lesson (120 to121, +0.83% dataset size), no local registrations (86/151), and no progress on the fixed21/22 checklist. Expanded25/26 is not a whole-project percentage.
+
+**Next:** Source-free rejection diagnostics and eligibility tests, then a separately justified measured lesson, practical training batch and separate-lineage reliability/dependency review. No fourth-source authority, fresh run, ROM hack or Crystal execution follows from this roadmap.
+
+### 2026-09-14-direct-profile-encounter-media-repair
+
+The generic encounter-media repair is qualified ROM-free. Five regressions cover the complete catalog, Route21 coexistence, real unmocked corridor derivation, clean exhaustion and invalid-candidate defense; the named rehearsal now passes17 tests. Zero source, ROM, emulator or model effects occurred.
+
+**Deviation:** This maintenance directly unblocks the named learning experiment but creates no learner or transfer result. Both consumed sources remain closed, the zero-learning alarm remains active and no third source was selected or claimed. Flash3.8 High and Claude Opus4.6 returned PASS without findings.
+
+**Next:** Publish and require exact-head CI. Then separately re-audit the two failures, remaining inventory and strengthened gate; authorize at most one distinct third-source action-free attempt only if its irreversible cost is justified.
+
+### 2026-09-14-direct-full-local-source-v2-preflight-failure
+
+The 12-test rehearsal passed, then one distinct source was selected and claimed exactly once. Preparation opened only that source and failed before action-free preflight because wild:Route21:water entered the grass-only corridor sorter. Zero model queries, actions, frames, registration sessions, outcomes, examples or fits occurred.
+
+**Deviation:** The source is consumed without retry or replacement. The failure is a generic public-catalog integration defect, not evidence about the source's cartridge feasibility. Flash confirmed a second uncaught resolver boundary. The zero-learning alarm remains active and all Red-final, ROM-hack and later-title gates stay closed.
+
+**Next:** Implement and publish the generic ROM-free source-media filter, defensive corridor boundary and complete-catalog regression tests. Do not select or claim another source in that repair session; re-audit third-source spending only after exact-head CI.
+
+### 2026-09-14-nonconsuming-direct-rehearsal
+
+A named ROM-free rehearsal passes 12 real component checks covering the parser fallback, v4 base-plan behavior, temporary direct registration, two-family proposal/observer, real preflight qualification and zero action/frame effects.
+
+**Deviation:** This user-requested maintenance session produced no learner outcome or transfer result. Flash rejected a heavily mocked first design; it was removed and replaced with an honest component suite. The anti-drift alarm remains active and every full-game gate stays unchanged.
+
+**Next:** Publish and green the rehearsal. Then run it before freezing and claiming one distinct unused source; require a real capture-plus-evolution action-free menu before one Model121 episode, with no fallback source.
+
+### 2026-09-14-direct-full-local-preflight-failure
+
+The exact frozen source was claimed once. Its first preparation failed before payload access on a null parser default; one same-claim recovery opened and authenticated only that source, then failed during v4 base-plan construction. Both failures are retained with zero completed preflights, actions, frames, queries, registration sessions, outcomes, examples or fits.
+
+**Deviation:** The live gate exposed two generic preparation defects rather than an acquisition-family result. The source is consumed and was not retried or replaced. Maintenance now normalizes empty regional input, preserves legacy wild sources and keeps v4 base behavior separate from strict economy promotion; learning counters and all stage exits remain unchanged.
+
+**Next:** Publish and require exact-head CI for the generic repair. In a separate session, freeze one distinct unused source prospectively and run only its exact-claim two-family gate before any model query or gameplay.
+
+### 2026-09-14-direct-catalog-origin-bridge
+
+Direct catalog-origin completion plans and local-registration sessions are qualified without a fabricated predecessor. A read-only inventory observation now derives one boxed level evolution and one ordinary wild corridor, while the runner requires an already-atomic exact-root claim before opening ROM or saved-state payloads. Model121 remains121 examples/83 successes/86 registrations; no game or learning effect occurred.
+
+**Deviation:** This was an engineering session, not a measured learner result. The frozen source remained unopened and unclaimed because exact-head publication and CI must precede irreversible consumption. Legacy continuation schemas and their checkpoint requirements remain unchanged.
+
+**Next:** Publish the exact bridge and require exact-head CI. Then atomically claim only the frozen source, run the action-free two-family preflight, and stop without substitution on claim conflict or menu failure; execute and fit one model-selected outcome only if it passes.
+
+### 2026-09-14-full-local-training-source
+
+A metadata-only census found54 train entries,42 claimed and12 unclaimed. One source was frozen by slot order before payload/menu inspection; its configuration lacks capture/evolution declarations. Zero game effects or learning results.
+
+**Deviation:** The previous handoff overstated direct-start readiness: completion-dose training and registration require a continuation. The selected profile omission is not proof of impossible gameplay. No root was claimed, substituted or opened.
+
+**Next:** Implement direct catalog-origin training/session anchoring and inventory-derived acquisition declarations; then claim and inspect only the frozen source. Require two real families before one model choice, retaining any failure without replacement.
+
+### 2026-09-14-model121-full-local-collector-stop
+
+The full-local151 proposal is connected to the durable player with local scope, shared one-shot authority, continuation persistence and write-ahead selection. The exact Model121 departure stopped before input because its immutable header is training-ineligible and its original state has zero frozen-catalog matches.
+
+**Deviation:** No gameplay, query, label, registration session, outcome, fit, promotion or stage exit occurred. One hosted legacy false-mode compatibility failure was repaired without changing the opt-in contract. The provenance falsifier outranked pressure to produce another row.
+
+**Next:** Provision one prospectively eligible catalog-backed departure for the integrated full-local collector. Require two executable acquisition families action-free, then freeze and execute one exploratory model choice; do not search consumed historical states or weaken training provenance.
+
+### 2026-09-14-full-pokedex-shared-departure
+
+Shared-departure redesign qualified: actual capture and native evolution were offered together on the same historical saved state with zero actions/frames and unchanged bytes. Full-local151 policy, checkpoint, reward and recovery round trips passed. Model121 remains121 examples/83 successes/86 registrations; no learning result.
+
+**Deviation:** The prior structural-incompatibility diagnosis was too broad: it inspected the local enumerator rather than the existing travel-aware router. Corrected without a new route engine or a historical-menu search. Historical catalog identity does not prove independent upstream lineage. No stage exit or consumed-trial rule changed.
+
+**Next:** Use the qualified runtime for one model-selected measured outcome from a prospectively eligible authenticated train departure. Preserve costs, failures and terminal registration before fitting; do not count this engineering diagnostic as learning.
+
+### 2026-09-14-full-pokedex-goal-proposal-falsification
+
+The full151 inventory now gates profile-bound goal proposal. An authenticated historical state had three missing wild targets plus a physical precursor for a missing evolution, but only the wild family was executable. The required two-family gate failed with zero controller actions, frames, model queries or claims.
+
+**Deviation:** No outcome, example, fit, registration, authority or stage changed. This is the second consecutive session without measured learning output, so the anti-drift alarm requires a shared-departure executor redesign rather than another menu search or wrapper.
+
+**Next:** From one authenticated Pokemon Center state, expose travel-capable capture and native boxed evolution before selection. Run only the action-free gate first and allow gameplay only if two independently verified acquisition families are available.
+
+### 2026-09-14-model121-full-pokedex-refocus
+
+Model121 reopened action-free into only resupply and restore, with zero acquisition candidates. The resource loop stopped without a model query or gameplay. A new ROM-free inventory classifies all151 Red registrations:86 local,65 missing across38 solo catalog plans,11 version trades,4 link trades,11 supporting-save trades and1 legitimate event input.
+
+**Deviation:** The dated handoff proposed freezing another same-lineage choice, but the North Star's anti-drift rule outranked it. No learning counter, registration, authority or stage changed. This is one engineering-only reorientation session; the mixed-acquisition-family milestone remains open.
+
+**Next:** Connect the151-target inventory to goal proposal and qualify one independent action-free menu spanning at least two supported executable acquisition families. Stop before gameplay if the gate fails; do not return to the Model121 resource loop.
+
+### 2026-09-14-model121-frozen-resupply
+
+Model120 selected trainer resupply once at probability0.4072490891 and earned exactly360 cash in153 actions/11461 frames. The verified success became row121; Model121 has121 examples/83 successes and retains86 registrations/66 living species/70 specimens with cash706.
+
+**Deviation:** The first fit preflight correctly rejected the new write-ahead declaration schema. The original receipt was preserved; a narrow exact-key and three-hash admission passed hosted CI before the row was fit. No retry, redraw, teacher fallback, authority promotion, hack, Crystal access or full replay occurred.
+
+**Next:** Inspect Model121's published terminal action-free, freeze its exact menu once, and execute and fit only one eligible measured Red result.
+
+### 2026-09-14-model120-freeze-instrumentation-failure
+
+The exact two-option Model120 menu was rebuilt action-free and queried once, but a wrapper attribute error occurred before the selected index was persisted. The seed is consumed; the selection is unknown. No gameplay, fit or counter changed.
+
+**Deviation:** This session produced no measured learning output and therefore triggers the one-session reorientation alarm. It stopped without redraw and prepared an unexecuted V2 freeze with a pre-query tombstone, write-ahead decision receipt and selected-option content hash.
+
+**Next:** In a new session, run the repaired Model120 V2 identity once. If it retains a valid decision, execute only that binding and fit only its eligible measured result; treat any ambiguous tombstone as consumed.
+
+### 2026-09-13-model120-frozen-field-restore
+
+Model119 selected restoration once at probability0.5524737204. The field-item executor consumed one Full Heal and cured one status in58 actions/4776 frames. The verified success became row120; Model120 has120 examples/82 successes and retains86 registrations/66 living species/70 specimens.
+
+**Deviation:** The generic runner preserved a failure after applying routed-Center postconditions to a single-field-item binding. A zero-input audit passed the exact original binding verifier and admitted only that retained terminal; there was no retry, redraw, teacher fallback, hack, Crystal access or full replay.
+
+**Next:** Freeze Model120's exact routed-restore-versus-trainer-resupply menu, execute the sampled choice once and fit only its eligible measured result.
+
+### 2026-09-13-model119-forced-singleton-fishing
+
+The sole fishing acquisition executed once under forced-singleton authority and captured national species061 in905 actions/45,564 frames. Collection advanced to86 registrations/66 living species/70 specimens; Model119 stayed119 examples/81 successes with zero model queries, teacher labels or training examples.
+
+**Deviation:** A zero-input audit corrected one private result field that had mislabeled the checkpoint document hash as the sealed record hash; the original result was preserved and the valid checkpoint reopened. Flash's observation-purity finding moved the controller claim into the executor before input. No retry, redraw, fit, hack, Crystal work or full replay occurred.
+
+**Next:** Freeze Model119's genuine two-option resupply-versus-restore menu from the corrected checkpoint, execute the sampled choice once and fit only its eligible measured result.
+
+### 2026-09-13-model119-frozen-restore
+
+Model118's frozen restoration executed once in153 actions/5,424 frames and fully restored HP/PP while preserving85 registrations, cash346 and all inventory. The success became row119; Model119 has119 examples/81 successes. Its action-free successor exposed one supplemental fishing acquisition.
+
+**Deviation:** The mixed-option contract rejected the singleton instead of inventing a learned choice. No controller input, model query, teacher label or fit followed that stop. Exact hosted CI passed before the restoration; a duplicate local suite reached7,742 passing tests without failure before being deliberately stopped.
+
+**Next:** Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model/teacher queries and choice-fit exclusion, then execute once from Model119 without retry.
+
+### 2026-09-13-model118-frozen-purchase
+
+Model117's frozen resupply executed once:134 actions and7,716 frames bought3 Ultra Balls for exactly1,800 money. The terminal remained at85 registered species, Model118 retained all118 rows with80 successes and improved weighted MSE from0.0311424461 to0.0120639699.
+
+**Deviation:** No redraw, retry, teacher label, ROM hack, Crystal work or full replay occurred. Exact hosted CI passed before input; one broad local runtime-identity assertion remains blocked by a pre-existing PyBoy RECORD digest mismatch while the other11,567 tests passed.
+
+**Next:** Execute Model118's exact frozen restore once from checkpoint ccbc114a7d089cad9df320a5cf887b42fda5eaf2206e328b535cc3626969178d, retain the actual outcome and fit only eligible measured evidence.
+
+### 2026-09-13-model117-sparse-fishing-menu
+
+Zero/one-destination fishing degradation passed150 broader targeted tests. The actual Model117 terminal exposed one identity-free fishing supplement beside three ordinary goals and froze resupply candidate0 at probability0.2577685686 with zero actions, frames or teacher labels.
+
+**Deviation:** No gameplay or learning output occurred. Claude found singleton travel-effort saturation and Flash found exact test gaps; the accepted repairs preserved historical multi-destination behavior. Both final verdicts were PASS.
+
+**Next:** Execute Model117's exact frozen resupply once from the authenticated parent, retain its actual resource result and fit only eligible measured evidence. No redraw, retry, hack, Crystal or full replay.
+
+### 2026-09-13-model117-frozen-acquisition
+
+Model116's exact frozen acquisition added one registration in979actions/59232frames across six casts. The verified success became row117; Model117 has117 examples,79 successes,85 registrations,65 living species and69 specimens.
+
+**Deviation:** Model117's next action-free menu failed closed before selection because fewer than two reachable productive fishing destinations remain. No second gameplay attempt, manual target, teacher label, retry or authority promotion occurred.
+
+**Next:** Qualify identity-free one/zero-destination fishing degradation, then rebuild and freeze Model117's next mixed menu without controller input. No hack, Crystal or full replay.
+
+### 2026-09-13-model116-pay-day-accounting
+
+Pinned cartridge source explains Model114's extra58 as opponent Pay Day. Model115's exact continuation stopped on the retained accumulator after27 actions/864 frames; its actual failure became row116. Model116 has116 examples,78 successes,84 registrations and cash2146; its next acquisition choice is frozen.
+
+**Deviation:** The first verifier assumed the Pay Day accumulator cleared at battle end. Source proved it persists until the next battle initializes, so the final contract now proves stale prior value, exact battle-init clear and current-battle terminal value. Neither historical failure was relabeled or retried.
+
+**Next:** Execute Model116's exact frozen acquisition once, retain its actual result, fit only eligible evidence, publish the terminal and rebuild the menu. No resampling, consumed Model115 retry, hack, Crystal or full replay.
+
+### 2026-09-13-model115-frozen-resupply-learning
+
+Model115 retains one income-verification failure: 115 examples, 84 registrations, cash2146. The next income choice is frozen and stopped.
+
+**Deviation:** Actual terminal cash2146 differed from expected2088; retained as failure, never retried. Pete strengthened the gate: full fresh-run Red story and local Pokedex before any ROM hack. V3 preserves V1/V2 and returns the unproved fresh-run story exit to planned.
+
+**Next:** Diagnose and qualify income accounting before executing the exact frozen Model115 choice. No post-hoc tolerance, resampling or consumed retry. Red remains the curriculum through the full fresh-run/Pokedex gate, followed by hack, Crystal and at least Emerald.
 
 ### 2026-09-13-model114-frozen-fishing-learning
 

@@ -1,0 +1,91 @@
+{
+  "schema": "pokemon.red.capture-route-capability-repair.evidence.v1",
+  "session_id": "2026-09-14-capture-route-capability-repair",
+  "classification": "maintenance-and-action-free-falsification",
+  "status": "closed-capability-preservation-insufficient",
+  "source_commit": "239a7f74fd393a09efce5bcf49f9ec927ab739e3",
+  "publication_head": "1d56cdb46547e094f054de863bdd9e8c7a17b9c9",
+  "source_bundle_sha256": "80e6611a105edc3d732b75127bd2f2b9c93437050d5e3a6811716857332d3da7",
+  "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+  "repair": {
+    "capability_parameters_preserved": [
+      "capture_access_requirements",
+      "capture_status_support",
+      "cut_transport",
+      "fly_transport",
+      "indoor_fly_departure",
+      "observed_local_capture",
+      "surf_transport",
+      "travel_capture"
+    ],
+    "missing_capabilities_invented": false,
+    "previous_target_identity_preserved": false,
+    "previous_source_or_coordinates_preserved": false,
+    "previous_capture_species_allowlist_preserved": false
+  },
+  "exact_terminal_qualification": {
+    "qualification_id": "model121-capture-route-qualification-20260914-v2",
+    "record_sha256": "9bc175f7c9c659d774b4367a1cb15d58691a2e0f84a98d7c9e5c6794b12569d1",
+    "manifest_sha256": "064f1cbcdf5791b7659aa3cc5c6baab4bce76c01bc722ea927952d37465b2cbb",
+    "execution_profile_sha256": "93e48d1e6485105a2d796622345b759385b96b179eb1b0bdb4c10cb15a7bf875",
+    "authenticated_registration_policy_reused": true,
+    "capabilities_preserved_exactly": true,
+    "capture": "router_binding_unavailable",
+    "capture_router_reason": "missing_capability",
+    "evolution": "router_binding_unavailable",
+    "evolution_router_reason": "missing_capability",
+    "passed": false,
+    "state_bytes_unchanged": true,
+    "execution_authorized": false
+  },
+  "superseded_diagnostic": {
+    "qualification_id": "model121-capture-route-qualification-20260914-v1",
+    "reason": "It rebuilt a stricter temporary reserve policy instead of retaining the authenticated endpoint policy. It also failed and is preserved, but V2 is the authoritative exact-policy measurement."
+  },
+  "prior_evidence_discrepancy": {
+    "prior_claim": "The legacy direct profile reported evolution ready and capture unavailable.",
+    "current_result": "The repaired profile under the same authenticated policy reports both families unavailable with missing_capability.",
+    "resolution": "Do not infer that the capture flags caused the difference or that either family is executable. Preserve the discrepancy and require a discriminating, generic route-candidate qualification before another played successor."
+  },
+  "effects": {
+    "new_reset_claims": 0,
+    "model_queries": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "gameplay_attempts": 0,
+    "training_examples": 0,
+    "verified_successes": 0,
+    "fits": 0,
+    "local_registration_delta": 0,
+    "authority_promotions": 0,
+    "transfer_results": 0,
+    "unused_eligible_sources_preserved": 9
+  },
+  "verification": {
+    "focused_route_and_integration_tests": "386 passed in 22.79 seconds",
+    "initial_test_invocation": "Collection stopped because scripts was absent from PYTHONPATH; corrected invocation passed and no product test failed.",
+    "collection_registry_regeneration": "passed",
+    "collection_registry_check": "passed",
+    "active_product_focus_check": "passed before closeout",
+    "diff_check": "passed before source publication",
+    "hosted_ci_source_commit": "Failed at ruff because the new test used two adjacent imports from one module; no test or runtime failure occurred.",
+    "publication_repair": "Import-only commit 1d56cdb46547e094f054de863bdd9e8c7a17b9c9; local full ruff and the nine direct-profile tests passed before push.",
+    "full_suite": "Not rerun; the immediately preceding session recorded 11744 passed, 1 known local-runtime fingerprint failure, and 1 xfailed."
+  },
+  "review": {
+    "claude": "not used; no milestone claim or architectural promotion was made",
+    "flash": "not used; the narrow regression and exact falsifier were locally decisive",
+    "reviewers_running": false
+  },
+  "current": {
+    "model": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86
+  },
+  "decision": "Keep the generic preservation repair, close the flags-alone hypothesis, and do not start gameplay. Next qualify generic route-feasible candidate selection without species-specific or coordinate-bearing policy behavior.",
+  "next_model": "Sol High, Fast off",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

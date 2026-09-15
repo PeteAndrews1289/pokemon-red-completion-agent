@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon.red.direct-catalog-origin-bridge.evidence.v1",
+  "session_id": "2026-09-14-direct-catalog-origin-bridge",
+  "classification": "engineering_not_learning",
+  "status": "qualified_locally_pending_publication_and_claim",
+  "contracts": {
+    "direct_completion_plan": "pokemon.red.direct-catalog-bounded-player-training-plan.v1",
+    "direct_registered_plan": "pokemon.red.direct-catalog-registered-player-training-plan.v1",
+    "direct_registration_session": "pokemon.red.private-direct-registration-session.v1",
+    "atomic_root_pair_claim_required_before_payload": true,
+    "root_pair_claim_retained_in_plan": true,
+    "fabricated_predecessor_fields": 0,
+    "legacy_schemas_changed": false,
+    "caller_species_or_route_required": false
+  },
+  "effects": {
+    "selected_source_payload_opened": 0,
+    "selected_source_claims": 0,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "registration_sessions": 0,
+    "new_training_examples": 0,
+    "fits": 0,
+    "source_substitutions": 0
+  },
+  "verification": {
+    "expanded_focused_tests_passed": 303,
+    "latest_direct_boundary_tests_passed": 149,
+    "direct_regressions_added": 14,
+    "ruff": "passed",
+    "mypy": "passed_500_source_and_runner_files",
+    "hosted_equivalent_suite": "11699_passed_1_expected_failure",
+    "local_only_exception": "existing_mac_pyboy_metadata_fingerprint_differs"
+  },
+  "reviewers": {
+    "claude": "opus-4-8-high_one_low_medium_error_contract_finding_fixed",
+    "claude_cost_usd": 2.51032,
+    "claude_final_claim_review": "budget_exhausted_without_second_verdict",
+    "flash": "gemini-3.8-flash-high_adversarial_test_review",
+    "flash_final_claim_review": "no_concrete_bug_found",
+    "accepted": "hybrid_schema_anchor_swap_exhausted_inventory_caller_injection",
+    "already_covered": "route_preflight_atomic_claim_conflict",
+    "rejected": "derived_corridor_as_executable_proof"
+  },
+  "model": {
+    "version": 121,
+    "examples": 121,
+    "successes": 83,
+    "local_registrations": 86,
+    "authority_delta": "none"
+  },
+  "next_gate": "publish_exact_head_then_claim_and_preflight_only_the_frozen_source",
+  "full_red_gate_open": false,
+  "rom_hack_open": false,
+  "crystal_open": false
+}

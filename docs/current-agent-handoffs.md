@@ -1,26 +1,22 @@
 # Reviewer handoff
 
-Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md) and
-[roles](../AGENT_COORDINATION.md).
+Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
+[roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The latest measured endpoint is model111 with83 registrations,63 living species,67 specimens and41
-required Red registrations remaining. Model109 selected one of four anonymous fishing destinations
-and added one registration; model110's next four-way choice stopped at an unsupported scripted
-dialogue. Success and failure were each retained once, producing rows110 and111. No teacher label,
-independent evaluation or authority promotion occurred.
+The generic no-HP-progress/no-usable-PP contingency is ROM-free qualified, not cartridge qualified.
+One switch shares the original loop and metered executor, claims durably before input, and verifies
+a living target at MAIN in the same encounter. Old frozen plans keep their legacy policy.
+537 focused tests and whole-source type checking passed. No gameplay or learning occurred.
 
-The current restart is the recovered input-ready model111 checkpoint. Source
-`23dadf37a59ad5f018d3d227921770174be108c7` passed CI; one generic recovery used8
-actions/576frames and added zero labels. The next action-free menu is forced-only. Party and active
-box lack a capture-status move, while seven helpers exist in other boxes. The next reusable gate is
-capability-derived cross-box retrieval with one policy query, not a retry, named-species route,
-hidden identity or independent-performance claim.
+Gemini 3.8 Flash High completed a read-only contract review through Antigravity. It highlighted
+heuristic attribution and switch-in survival limits, now explicit. After clarification it found no
+remaining concrete P 0/P 1 design defect; this was not a source audit. Refreshed quota:
+Gemini 57% weekly/98% five-hour; Antigravity Claude/GPT 86%/100%. Claude CLI was not used.
 
-Codex owns implementation, measurement, adjudication, documentation and publication. Claude's
-useful role is statistical, leakage and semantic-claim review at promotion points. Antigravity's
-useful role is architecture, portability and broad implementation review through `agy`. Flash
-previously drafted the measured-choice integration; Codex materially hardened it. The next useful
-milestone review is after cross-box capture preparation and a fresh useful menu, not before this
-bounded engineering gate. Neither
-external review should block ordinary development; disagreements are resolved against the mission
-and executable evidence.
+Next: Sol High, Fast off. Freeze a distinct campaign C with the new policy and short varied,
+cross-venue controls. Credit switching only if observed and settled. Do not replay campaign B,
+replace an in-campaign failure, scan protected roots, fit a model or start Red acceptance/hack/Crystal.
+Fainted forced switching, move learning and same-battler move replacement remain explicit gaps.
+
+Model121 stays 121 examples/83 successes,86/151 local registrations; collection 25/26, finalRed 0/5.
+[Session and roadmap](work-sessions/2026-09-15-battle-stall-contingency.md).

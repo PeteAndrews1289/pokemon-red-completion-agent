@@ -1,11 +1,13 @@
 from __future__ import annotations
 
+import json
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import replace
 
 import pytest
 
+from pokemon_red_completion import battle_runtime_diagnostics as diagnostics
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import BattleBoostStat
 from pokemon_red_completion.battle_plan import RED_BATTLE_PLAN_IDS
@@ -2833,6 +2835,297 @@ def test_other_slot_pp_loss_cannot_be_called_confusion_suppression() -> None:
             timing=BattleRuntimeTiming(),
             label="wrong move",
         )
+
+
+@pytest.mark.parametrize("delayed", [False, True])
+@pytest.mark.parametrize("terminal", [False, True])
+@pytest.mark.parametrize("pp", [(34, 29, 30, 11), (33, 30, 30, 11)])
+def test_effect_or_exit_cannot_hide_extra_pp_spending(delayed, terminal, pp) -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = runtime.raw
+    confirms = 0
+
+    def attack(action):
+        nonlocal confirms
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirms += 1
+        corrupt = not delayed or confirms == 2
+        runtime.raw = replace(
+            initial,
+            first_party_pp=pp if corrupt else (34, 30, 30, 11),
+            enemy_hp=0 if corrupt else initial.enemy_hp,
+            battle_state=0 if corrupt and terminal else 2,
+        )
+        runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = attack
+    with pytest.raises(BattleRuntimeError, match="PP"):
+        _confirm_attack_with_pp_gate(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            initial_raw=initial,
+            slot=1,
+            initial_pp=35,
+            timing=BattleRuntimeTiming(),
+            label="extra spend",
+        )
+    assert confirms == (2 if delayed else 1)
+
+
+def test_forced_switch_is_not_a_level_up_move_replacement() -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
+    initial = replace(runtime.raw, active_party_index=0)
+    runtime.raw = initial
+
+    def switch(action):
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(
+                initial,
+                active_party_index=1,
+                active_party_moves=(55, 0, 0, 0),
+                active_party_pp=(25, 0, 0, 0),
+                party_pp=((35, 30, 30, 11), (25, 0, 0, 0)),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = switch
+    assert not _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=1,
+        initial_pp=35,
+        timing=BattleRuntimeTiming(),
+        label="forced switch",
+    )
+
+
+@pytest.mark.parametrize("slot", [1, 2, 3, 4])
+@pytest.mark.parametrize("delay", [1, 3, 12])
+@pytest.mark.parametrize("stale_phase", list(BattleMenuPhase))
+@pytest.mark.parametrize("outcome", ["damage", "no_effect", "exit"])
+def test_selected_turn_transition_matrix(slot, delay, stale_phase, outcome) -> None:
+    """Exercise the same contract across slots, delays and effect boundaries."""
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=slot))
+    initial = runtime.raw
+    committed = False
+    waits = 0
+    pp = list(initial.battler_pp)
+    pp[slot - 1] -= 1
+
+    def advance(action):
+        nonlocal committed, waits
+        if action.kind is MacroActionKind.CONFIRM:
+            if committed:
+                assert runtime.menu.phase is BattleMenuPhase.UNKNOWN
+            else:
+                committed = True
+                runtime.raw = replace(initial, first_party_pp=tuple(pp))
+                runtime.menu = BattleMenuState(
+                    stale_phase,
+                    selected_main_command=0 if stale_phase is BattleMenuPhase.MAIN else None,
+                    selected_move_slot=slot if stale_phase is BattleMenuPhase.MOVE else None,
+                )
+        if action.kind is MacroActionKind.WAIT:
+            waits += 1
+            if waits == delay:
+                runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+            elif waits > delay:
+                runtime.raw = replace(
+                    runtime.raw,
+                    enemy_hp=10 if outcome == "damage" else initial.enemy_hp,
+                    battle_state=0 if outcome == "exit" else 2,
+                )
+                runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = advance
+    assert _confirm_attack_with_pp_gate(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        initial_raw=initial,
+        slot=slot,
+        initial_pp=initial.battler_pp[slot - 1],
+        timing=BattleRuntimeTiming(),
+        label="transition matrix",
+    )
+    assert waits == delay + 1
+    assert runtime.raw.battler_pp == tuple(pp)
+
+
+def test_runtime_diagnostic_retains_phase_actions_and_cause_without_extra_reads(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    runtime = FakeRuntime()
+    cause = ValueError("private path /sensitive/example must not appear")
+    reads = []
+    original_read = runtime.read
+
+    def read():
+        reads.append(None)
+        return original_read()
+
+    monkeypatch.setattr(runtime, "read", read)
+
+    def policy(_raw):
+        raise cause
+
+    with pytest.raises(BattleRuntimeError) as caught:
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            policy,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert caught.value.__cause__ is cause
+    record = caught.value.battle_runtime_diagnostic.to_dict()
+    assert record["phase"] == "policy_selection"
+    assert record["recording_failures"] == 0
+    assert [item["error_type"] for item in record["exception_chain"]] == [
+        "BattleRuntimeError",
+        "ValueError",
+    ]
+    encoded = json.dumps(record)
+    assert "sensitive" not in encoded
+    assert "private path" not in encoded
+    assert {frame["function"] for frame in record["exception_chain"][1]["frames"]} == {
+        "_choose_usable_slot",
+        "routed_teacher",
+    }
+    path = tmp_path / "diagnostic.json"
+    path.write_text(encoded)
+    assert json.loads(path.read_text())["phase"] == "policy_selection"
+    assert runtime.actions == []
+    assert len(reads) == 2
+
+
+def test_runtime_diagnostic_marks_attempted_action_when_executor_raises() -> None:
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    failure = RuntimeError("controller stopped")
+
+    def fail(_action):
+        raise failure
+
+    runtime.on_action = fail
+    with pytest.raises(RuntimeError) as caught:
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert caught.value is failure
+    events = failure.battle_runtime_diagnostic.events
+    assert events[-1]["kind"] == "action"
+    assert events[-1]["completed"] is False
+    assert len(runtime.actions) == 1
+
+
+def test_runtime_diagnostic_is_bounded_and_resets_between_calls() -> None:
+    for pulses in (100, 1):
+        runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+        with pytest.raises(BattleRuntimeTimeoutError) as caught:
+            run_adaptive_trainer_battle(
+                runtime,
+                runtime,
+                lambda _raw: 1,
+                expected_map=MapId.CERULEAN_CITY,
+                timing=replace(BattleRuntimeTiming(), max_runtime_pulses=pulses),
+            )
+        trace = caught.value.battle_runtime_diagnostic
+        assert len(trace.events) <= diagnostics.TRACE_LIMIT
+        assert trace.total_events > len(trace.events) if pulses == 100 else trace.total_events < 20
+        assert len(runtime.actions) == 2 * pulses
+
+
+def test_recording_failure_cannot_mask_runtime_error_or_change_actions(monkeypatch) -> None:
+    def broken_note(*_args, **_kwargs):
+        raise RuntimeError("recorder unavailable")
+
+    monkeypatch.setattr(diagnostics._Trace, "note", broken_note)
+    runtime = FakeRuntime(menu=BattleMenuState(BattleMenuPhase.UNKNOWN))
+    with pytest.raises(BattleRuntimeTimeoutError) as caught:
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 1,
+            expected_map=MapId.CERULEAN_CITY,
+            timing=replace(BattleRuntimeTiming(), max_runtime_pulses=1),
+        )
+    assert caught.value.battle_runtime_diagnostic.recording_failures > 0
+    assert _non_wait_actions(runtime) == [MacroAction(MacroActionKind.CONFIRM)]
+
+
+def test_failure_sink_persists_before_outer_handler_discards_exception(tmp_path) -> None:
+    path = tmp_path / "failure.json"
+    retained = []
+
+    def sink(diagnostic):
+        retained.append(diagnostic)
+        path.write_text(json.dumps(diagnostic.to_dict()))
+
+    runtime = FakeRuntime()
+    with diagnostics.bind_battle_runtime_failure_sink(sink), pytest.raises(BattleRuntimeError):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 9,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert len(retained) == 1
+    assert json.loads(path.read_text())["phase"] == "policy_selection"
+    # The binding must not leak into the next episode.
+    with pytest.raises(BattleRuntimeError):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 9,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert len(retained) == 1
+
+
+def test_failure_sink_error_preserves_actor_failure() -> None:
+    def sink(_diagnostic):
+        raise OSError("storage unavailable")
+
+    runtime = FakeRuntime()
+    with (
+        diagnostics.bind_battle_runtime_failure_sink(sink),
+        pytest.raises(BattleRuntimeError, match="invalid one-based slot") as caught,
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 9,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert caught.value.battle_runtime_diagnostic.recording_failures == 1
+    assert runtime.actions == []
+
+
+@pytest.mark.parametrize("interrupt", [KeyboardInterrupt, SystemExit])
+def test_failure_sink_process_interrupt_propagates_with_actor_context(interrupt) -> None:
+    def sink(_diagnostic):
+        raise interrupt()
+
+    runtime = FakeRuntime()
+    with (
+        diagnostics.bind_battle_runtime_failure_sink(sink),
+        pytest.raises(interrupt) as caught,
+    ):
+        run_adaptive_trainer_battle(
+            runtime,
+            runtime,
+            lambda _raw: 9,
+            expected_map=MapId.CERULEAN_CITY,
+        )
+    assert isinstance(caught.value.__context__, BattleRuntimeError)
+    assert runtime.actions == []
 
 
 def test_status_suppressed_turn_can_return_without_spending_pp() -> None:

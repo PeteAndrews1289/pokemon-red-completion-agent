@@ -39,9 +39,7 @@ def _source(
         expected_map=22,
         source_kind=kind,
         active_party_index=(None if kind is RepeatableBattleSourceKind.FIELD else 0),
-        reachable_venue_ids=(
-            ("route_11",) if kind is RepeatableBattleSourceKind.FIELD else ()
-        ),
+        reachable_venue_ids=(("route_11",) if kind is RepeatableBattleSourceKind.FIELD else ()),
         party_options=(
             RepeatableBattlePartyOption(
                 party_index=0,
@@ -76,9 +74,7 @@ def _assignment(
         source_state_sha256=source.state_sha256,
         source_commit=source.source_commit,
         scenario_kind=(
-            RepeatableBattleScenarioKind.WILD
-            if wild
-            else RepeatableBattleScenarioKind.TRAINER
+            RepeatableBattleScenarioKind.WILD if wild else RepeatableBattleScenarioKind.TRAINER
         ),
         party_index=party_index,
         menu_semantic_sha256=option.menu_semantic_sha256,
@@ -128,6 +124,166 @@ def _session_factory(session: _Session):  # type: ignore[no-untyped-def]
         yield session
 
     return factory
+
+
+@pytest.mark.parametrize(
+    "failure_stage",
+    [
+        "source_inspection",
+        "relocation",
+        "encounter_setup",
+        "battle",
+        "terminal",
+        "success",
+    ],
+)
+def test_integrated_qualification_journals_materializer_and_battle(
+    monkeypatch,
+    tmp_path,
+    failure_stage,
+):
+    import pokemon_red_completion.red_battle_cartridge_qualification as qualification
+    from pokemon_red_completion.actions import MacroAction, MacroActionKind
+    from pokemon_red_completion.battle_runtime_diagnostics import diagnose_battle_runtime
+    from pokemon_red_completion.cartridge_qualification import (
+        QualificationCampaign,
+        QualificationLimits,
+    )
+    from pokemon_red_completion.private_artifacts import initialize_private_root
+
+    root, repository = tmp_path / "private", tmp_path / "repository"
+    root.mkdir()
+    repository.mkdir()
+    store = initialize_private_root(
+        root,
+        repository_root=repository,
+        device_id=lambda path: 2 if path == root.resolve() else 1,
+        git_worktree_probe=lambda _: False,
+    )
+    source = _source()
+    sessions = []
+    phases = []
+
+    class Session(_Session):
+        def __init__(self):
+            super().__init__()
+            self.frame_count = 700 if not sessions else 9
+            self.start = self.frame_count
+
+        def tick(self, frames):
+            self.frame_count += frames
+
+    @contextmanager
+    def factory():
+        session = Session()
+        sessions.append(session)
+        yield session
+
+    class Reader(_Reader):
+        def read_input_readiness(self):
+            if failure_stage == "terminal":
+                raise ValueError("terminal sentinel")
+            return SimpleNamespace(ready=True)
+
+    def adapt(*args, **kwargs):
+        phases.append("source_inspection")
+        if failure_stage == "source_inspection":
+            raise ValueError("source sentinel")
+        return source
+
+    def relocation(edge, venue, actions, reader, session):
+        phases.append("relocation")
+        actions.execute(MacroAction(MacroActionKind.WAIT, repeat=3))
+        if failure_stage == "relocation":
+            raise runtime.RepeatableRedBattleScenarioRuntimeError(
+                "source did not reach its selected encounter venue"
+            )
+
+    def boundary(assignment, venue, actions, controller, reader, session, **kwargs):
+        phases.append("encounter_setup")
+        # This direct controller path bypassed the old setup CountingExecutor.
+        controller.execute(MacroAction(MacroActionKind.WAIT, repeat=4))
+        if failure_stage == "encounter_setup":
+            raise runtime.RepeatableRedBattleScenarioRuntimeError(
+                "wild encounter exceeded its step bound"
+            )
+        return SimpleNamespace(initial_observation_sha256="e" * 64), 1, 4, 0, 1
+
+    @diagnose_battle_runtime
+    def battle(reader, executor, policy, **kwargs):
+        phases.append("battle")
+        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=5))
+        if failure_stage == "battle":
+            raise ValueError("battle sentinel")
+        policy(
+            SimpleNamespace(
+                active_party_index=0,
+                battler_moves=(1,),
+                battler_pp=(4,),
+                battler_status=0,
+                enemy_hp=10,
+            )
+        )
+        return SimpleNamespace(battle_state=0)
+
+    monkeypatch.setattr(runtime, "PokemonRedStateReader", Reader)
+    monkeypatch.setattr(qualification, "PokemonRedStateReader", Reader)
+    monkeypatch.setattr(runtime, "_adapt_loaded_source", adapt)
+    monkeypatch.setattr(
+        runtime,
+        "_selected_venue",
+        lambda *a, **kw: (
+            SimpleNamespace(source_location="route_11"),
+            SimpleNamespace(map_id=22),
+        ),
+    )
+    monkeypatch.setattr(runtime, "_prepare_source_venue", relocation)
+    monkeypatch.setattr(runtime, "_materialize_wild_boundary", boundary)
+    monkeypatch.setattr(qualification, "run_adaptive_wild_battle", battle)
+    monkeypatch.setattr(qualification, "strongest_usable_move_slot", lambda _: 1)
+    limits = QualificationLimits(20, 1000)
+    budget = QualificationCampaign(limits, maximum_cases=1)
+
+    def run():
+        return qualification.qualify_repeatable_red_wild_battle(
+            store,
+            "integrated-v2",
+            source,
+            _assignment(source),
+            STATE_BYTES,
+            rom_bytes=b"red-rom",
+            materializer_source_commit=MATERIALIZER_COMMIT,
+            session_factory=factory,
+            limits=limits,
+            campaign=budget,
+        )
+
+    if failure_stage == "success":
+        result = run()
+        assert result["actions_completed"] == result["actions_attempted"] == 3
+        assert len(sessions) == 2
+        assert phases == ["source_inspection", "relocation", "encounter_setup", "battle"]
+    else:
+        with pytest.raises((ValueError, runtime.RepeatableRedBattleScenarioRuntimeError)):
+            run()
+        result = store.read_failed_episode_diagnostic("integrated-v2").failure_diagnostic
+        assert result["phase"] == failure_stage
+        expected_actions = {
+            "source_inspection": 0,
+            "relocation": 1,
+            "encounter_setup": 2,
+            "battle": 3,
+            "terminal": 3,
+        }
+        assert result["actions_completed"] == expected_actions[failure_stage]
+        if failure_stage == "battle":
+            assert result["diagnostic"]["exception_chain"][0]["error_type"] == "ValueError"
+        if failure_stage == "relocation":
+            assert result["reason"] == "relocation_destination_mismatch"
+        if failure_stage == "encounter_setup":
+            assert result["reason"] == "encounter_step_limit"
+    assert result["emulator_frames"] == sum(s.frame_count - s.start for s in sessions)
+    assert result["cost_known"] is True
 
 
 def test_field_materialization_preserves_lineage_and_emits_no_model_authority(

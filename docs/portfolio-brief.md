@@ -8,11 +8,11 @@ I’m directing an AI-assisted project to build a Pokémon player that learns wh
 
 - Model-selected collection and resource goals in bounded Red episodes.
 - Incremental learning from actual outcomes, including failures.
-- 84 verified registered species and 114 settled examples in the current collection-learning dataset. Model113's frozen fishing choice added one registration and became row114 without a teacher label. From the durable Model114 checkpoint, the model selected resupply/income from six choices across three goal families; that choice remains unexecuted. These are same-lineage development results, not independent improvement.
+- 86 verified local registrations and121 settled examples/83 successes. Model121's next menu was only resupply versus restoration, so the repeated lineage stopped before another query or gameplay. These are development results, not independent improvement.
 - Checkpoint-based Champion/Hall-of-Fame integration with deterministic battle mechanics; not a fresh-game autonomous win.
 - Persistent save/model tracking, a shared registration ledger and a dashboard separating live activity from saved evidence.
 
-[Evidence for the current model](work-sessions/2026-09-13-model114-frozen-fishing-learning.md).
+[Evidence for the current model](work-sessions/2026-09-13-model120-frozen-field-restore.md).
 
 The automatic runtime now derives useful fishing sources from current cartridge and save data
 instead of a named-species route. Capture preparation can retrieve a status-move helper from any
@@ -20,7 +20,18 @@ verified box after selection. The first five-choice execution stopped at a dialo
 228 actions; the attempt was not retried, and its measured failure advanced model111 to model112.
 The next checkpoint recovered in 8 actions and preserved every registration and specimen. Its
 frozen restore produced Model113; the following frozen fishing choice added registration84 and
-produced Model114. The new three-family menu selected resupply/income as the next bounded goal.
+produced Model114. The subsequent income-verification failure became Model115. Cartridge source
+then explained the extra58 as opponent Pay Day; the exact continuation's stale-accumulator failure
+became Model116. A later frozen fishing success produced Model117, whose verified resource purchase
+produced Model118. Its verified restoration produced Model119; a separately labelled forced bridge
+then captured Poliwhirl without fitting it. Model119's next genuine choice selected a one-item
+restore; the verified success produced Model120. Model120 then selected trainer resupply and earned
+360 cash, producing Model121. The next action-free inventory repeated resupply and restoration, so
+the loop stopped. A full-151 inventory now exposes the actual 65-entry dependency gap and gates goal
+proposal. The first local-menu test omitted the existing travel-aware router. The redesign connects
+that router, native evolution and full-local151 accounting to the player. The same historical state
+now exposes both acquisition families with zero actions/frames and unchanged bytes. This is
+engineering qualification, not new learning, training eligibility or independent performance.
 
 ## My role and the stack
 
@@ -33,5 +44,9 @@ A system can report a success without having learned a useful choice. The import
 ## Honest limitations
 
 The project is still active. It does not yet demonstrate arbitrary-seed fresh-game play, a complete Pokédex, learned low-level combat or cross-game transfer. The small current dataset contains related development examples, not independent games.
+
+The required gate is a fresh start-to-finish model-directed Red run and the full local Red
+Pokédex before any ROM hack, then Crystal and at least Emerald. Version/trade/event dependencies
+cannot be silently removed from that requirement.
 
 [Architecture](architecture.md) · [Roadmap](model-first-roadmap.md) · [Historical brief](history/portfolio-through-2026-09-10.md)

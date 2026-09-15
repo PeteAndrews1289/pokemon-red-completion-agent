@@ -35,10 +35,17 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+    RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
+    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
 )
 from pokemon_red_completion.red_player_checkpoint import CHECKPOINT_KIND, checkpoint_record_id
 from pokemon_red_completion.red_player_economy import restore_snapshot, snapshot_document
@@ -291,6 +298,11 @@ def _validate_selection_declaration(
             "selected_binding_ref",
         }
         frozen_fishing_keys = frozen_choice_keys | {"maximum_casts"}
+        write_ahead_resupply_keys = frozen_choice_keys | {
+            "decision_file_sha256",
+            "observation_file_sha256",
+            "query_intent_file_sha256",
+        }
         schema = declaration.get("schema")
         shared_mismatch = (
             declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
@@ -320,15 +332,35 @@ def _validate_selection_declaration(
                 or not declaration["selected_binding_ref"]
                 or shared_mismatch
             )
-        elif schema == RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA:
+        elif schema in {
+            RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
+            qualification_differs = (
+                qualification_ci_run_id is not None
+                if schema == RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA
+                else (
+                    type(qualification_ci_run_id) is not int
+                    or qualification_ci_run_id <= 0
+                )
+            )
             mismatch = (
-                set(declaration) != frozen_choice_keys
+                set(declaration)
+                != (
+                    write_ahead_resupply_keys
+                    if schema
+                    == RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                    else frozen_choice_keys
+                )
                 or declaration.get("maximum_frames") != 500_000
                 or declaration.get("policy_queries_during_execution") != 0
-                or type(qualification_ci_run_id) is not int
-                or qualification_ci_run_id <= 0
+                or qualification_differs
                 or not isinstance(declaration.get("selected_binding_ref"), str)
                 or not declaration["selected_binding_ref"]
                 or shared_mismatch
@@ -337,7 +369,69 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
-        elif schema == RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA:
+            if schema in {
+                RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+            }:
+                mismatch = mismatch or (
+                    type(declaration.get("policy_queries_during_execution")) is not int
+                    or re.fullmatch(
+                        r"red-trainer-funding:[0-9a-f]{64}",
+                        str(declaration.get("selected_binding_ref")),
+                    ) is None
+                )
+                if (
+                    schema
+                    == RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA
+                ):
+                    mismatch = mismatch or any(
+                        _SHA256.fullmatch(str(declaration.get(name))) is None
+                        for name in (
+                            "decision_file_sha256",
+                            "observation_file_sha256",
+                            "query_intent_file_sha256",
+                        )
+                    )
+            elif schema in {
+                RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+            }:
+                binding_pattern = (
+                    r"pokemon\.red:recovery:routed-center:[0-9a-f]{64}"
+                    if schema == RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA
+                    else (
+                        r"pokemon\.red:recovery:single-field-item:"
+                        r"profile-[0-9a-f]{64}:config-[0-9a-f]{64}"
+                    )
+                )
+                mismatch = mismatch or re.fullmatch(
+                    binding_pattern,
+                    str(declaration.get("selected_binding_ref")),
+                ) is None
+        elif schema == RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA:
+            qualification_ci_run_id = declaration.get("qualification_ci_run_id")
+            selection_source_commit = declaration.get("executable_source_commit")
+            mismatch = (
+                set(declaration) != frozen_choice_keys
+                or declaration.get("maximum_frames") != 3_000_000
+                or declaration.get("policy_queries_during_execution") != 0
+                or type(qualification_ci_run_id) is not int
+                or qualification_ci_run_id <= 0
+                or re.fullmatch(
+                    r"red-collection-fly-goal:[0-9a-f]{64}:[0-9a-f]{64}",
+                    str(declaration.get("selected_binding_ref")),
+                ) is None
+                or shared_mismatch
+            )
+            _git_commit(
+                declaration.get("current_repository_head"),
+                subject="current repository head",
+            )
+        elif schema in {
+            RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
+            RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        }:
             qualification_ci_run_id = declaration.get("qualification_ci_run_id")
             selection_source_commit = declaration.get("executable_source_commit")
             mismatch = (
@@ -468,7 +562,8 @@ def _replay_behavior(
     menu: LivingDexOptionMenu,
     *,
     seed: int,
-) -> tuple[tuple[float | None, ...], tuple[float, ...], int]:
+    draw_selected: bool = True,
+) -> tuple[tuple[float | None, ...], tuple[float, ...], int | None]:
     if model.feature_version < menu.feature_version:
         raise ValueError("measured choice behavior feature version differs")
     scores = tuple(model.scores(menu, DEFAULT_LIVING_DEX_GOAL_UTILITY))
@@ -482,9 +577,10 @@ def _replay_behavior(
     probabilities = [0.0] * len(menu.candidates)
     for index, value in zip(menu.available_indices, exponentials, strict=True):
         probabilities[index] = 0.75 * value / total + 0.25 / len(exponentials)
-    selected = random.Random(seed).choices(
-        range(len(probabilities)), weights=probabilities, k=1
-    )[0]
+    selected = (
+        random.Random(seed).choices(range(len(probabilities)), weights=probabilities, k=1)[0]
+        if draw_selected else None
+    )
     return scores, tuple(probabilities), selected
 
 
@@ -596,8 +692,15 @@ class RedDevelopmentMeasuredChoice:
                 self.selection_declaration.get("schema")
                 in {
                     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
                     RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                    RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                    RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 }
             ):
                 declared_kind = selected_option_kind.value
@@ -608,6 +711,24 @@ class RedDevelopmentMeasuredChoice:
                 )
                 is not selected_option_kind
                 or declared_kind != selected_option_kind.value
+                or (
+                    self.selection_declaration.get("schema")
+                    in {
+                        RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                        RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+                    }
+                    and self.selected_goal_kind is not GoalKind.RESUPPLY
+                )
+                or (
+                    self.selection_declaration.get("schema")
+                    in {
+                        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                    }
+                    and self.selected_goal_kind is not GoalKind.RESTORE_TEAM
+                )
             ):
                 raise ValueError("measured choice selected goal kind differs")
         if (
@@ -727,7 +848,14 @@ class RedDevelopmentMeasuredChoice:
             selection_source_commit = self.selection_declaration.get("source_commit")
             if self.selection_declaration.get("schema") in {
                 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+                RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
             }:
                 selection_source_commit = self.selection_declaration.get(
                     "executable_source_commit"
@@ -1057,13 +1185,21 @@ def _validate_behavior(
         or choice.model_sha256 != behavior.model.model_sha256
     ):
         raise ValueError("measured choice behavior model differs")
-    scores, probabilities, selected = _replay_behavior(
-        behavior.model, choice.menu, seed=choice.selection_seed
-    )
     frozen_receipt = choice.selection_declaration.get("schema") in {
         RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
         RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
+        RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+        RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     }
+    scores, probabilities, selected = _replay_behavior(
+        behavior.model, choice.menu, seed=choice.selection_seed,
+        draw_selected=not frozen_receipt,
+    )
     if (
         (not frozen_receipt and selected != choice.selected_candidate_index)
         or scores != choice.scores

@@ -54,6 +54,7 @@ from .route_plan import RoutePlan
 if TYPE_CHECKING:
     from .red_funding_fly import FundingFlyCandidate
     from .red_resource_goal_router import RedResourceGoalRouter
+    from .red_trainer_funding_battle import TrainerFundingBattleReceipt
     from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -444,6 +445,7 @@ def bind_local_trainer_funding(
     original_at = (raw.map_id, raw.player_y, raw.player_x)
     claimed = False
     completed_report: GoalExecutionReport | None = None
+    completed_receipt: TrainerFundingBattleReceipt | None = None
     final_party_species: tuple[int, ...] = ()
 
     def require_target(*, before_departure: bool = False) -> None:
@@ -511,7 +513,7 @@ def bind_local_trainer_funding(
             raise RedTrainerFundingError("trainer roster/reward changed before interaction")
 
     def execute() -> GoalExecutionReport:
-        nonlocal claimed, completed_report, final_party_species, target
+        nonlocal claimed, completed_receipt, completed_report, final_party_species, target
         if claimed:
             raise RedTrainerFundingError("trainer funding binding already consumed")
         claimed = True
@@ -591,6 +593,7 @@ def bind_local_trainer_funding(
             move_slot_policy=guard._safe_trainer_move,
             timing=DEFAULT_BATTLE_RUNTIME_TIMING,
         )
+        completed_receipt = receipt
         completed_report = GoalExecutionReport(
             actions.actions_executed - action_start,
             runtime.emulator.frame_count - frame_start,
@@ -603,6 +606,8 @@ def bind_local_trainer_funding(
                     "initial_money": receipt.initial_money,
                     "final_money": receipt.final_money,
                     "payout": receipt.payout,
+                    "ordinary_victory_money": receipt.ordinary_victory_money,
+                    "pay_day_money": receipt.pay_day_money,
                 },
                 "finite_income": True,
                 "balls_purchased": 0,
@@ -631,6 +636,7 @@ def bind_local_trainer_funding(
         quote = trainer_party_quote(router.world.rom, t.trainer_class, t.trainer_set)
         if (
             completed_report is None
+            or completed_receipt is None
             or report is not completed_report
             or quote != target.quote
             or final.battle_state != 0
@@ -640,7 +646,12 @@ def bind_local_trainer_funding(
             or (final.map_id, final.player_y, final.player_x)
             != (t.map_id, *target.approach.terminal_at)
             or not event_flag_is_set(final.event_flags, t.event_flag)
-            or final.player_money != quote.expected_money_after(before_money)
+            or final.player_money != min(
+                999999,
+                before_money
+                + completed_receipt.ordinary_victory_money
+                + completed_receipt.pay_day_money,
+            )
             or final.bag_items != before_bag
             or tuple(final.party_species_ids or ()) != final_party_species
             or not final.party_hp

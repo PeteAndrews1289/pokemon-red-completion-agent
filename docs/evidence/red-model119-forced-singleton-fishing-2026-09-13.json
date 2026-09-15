@@ -1,0 +1,187 @@
+{
+  "schema": "pokemon.red.registered-player-forced-bridge-session.v1",
+  "session_id": "2026-09-13-model119-forced-singleton-fishing",
+  "status": "forced_singleton_success_bounded_only",
+  "trust": {
+    "training_only": true,
+    "forced_not_model_selected": true,
+    "choice_training_eligible": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "action_trace_available": true
+  },
+  "source_qualification": {
+    "commit": "18ae5bb7bfc2d9af1d1d0ba5a1a39f6c1f471c6d",
+    "source_bundle_sha256": "15e109ea98bbd8cdee25a017d510ba87bbff4e0c2d4fea3f4239b8000adbce36",
+    "registry_sha256": "127a893e0688af7b7ec318832f18a8bb85d700b4a7dbe90704812a1d8d9d1006",
+    "hosted_ci_run_id": 34794131554,
+    "hosted_ci_status_at_execution": "passed"
+  },
+  "frozen_boundary": {
+    "status": "frozen_action_free",
+    "ordinary_candidate_count": 0,
+    "supplemental_candidate_count": 1,
+    "available_candidate_count": 1,
+    "candidate_kind": "acquire_species",
+    "candidate_mechanism": "fishing",
+    "selection_mode": "forced_singleton",
+    "policy_sha256": "c2bd492b195300e9f594ae6009bac8b821e7a21379d005410103f3417c8fead2",
+    "semantic_state_sha256": "2e658001c2118b2162822fa01346e52e1e81e386ee9576186ef7f6b433b4b30b",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0
+  },
+  "execution": {
+    "status": "retained_success",
+    "verification_status": "succeeded",
+    "selection_mode": "forced_singleton",
+    "authority_decisions": 0,
+    "forced_singleton_steps": 1,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "actions": 905,
+    "frames": 45564,
+    "registered_before": 85,
+    "registered_after": 86,
+    "living_species_before": 65,
+    "living_species_after": 66,
+    "total_living_specimens_before": 69,
+    "total_living_specimens_after": 70,
+    "required_native_registrations_before": 39,
+    "required_native_registrations_after": 38,
+    "captured_species": "pokemon:national:061",
+    "retry_allowed": false
+  },
+  "learning": {
+    "model_sha256": "d1528e871ec245e3e5aa05b13d4a4bf6b08f952ce99a7413cd3810d26b1c89c6",
+    "settled_examples_before": 119,
+    "settled_examples_after": 119,
+    "successful_examples": 81,
+    "new_examples": 0,
+    "model_fit_performed": false,
+    "prior_rows_retained": true,
+    "authority_promotions": 0
+  },
+  "fit": {
+    "performed": false,
+    "new_settled_examples": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 119,
+      "successful_examples": 81,
+      "model_sha256": "d1528e871ec245e3e5aa05b13d4a4bf6b08f952ce99a7413cd3810d26b1c89c6"
+    }
+  },
+  "publication": {
+    "parent_checkpoint_record_sha256": "11d2cfdc25a92e63b9c91e7fd9cb526e251567ae55b308192f83a47b1bd2c5a6",
+    "parent_state_sha256": "e584fde6adca6bdc1a2001bad619420f67927fc553e096a89a4676fa56a89f63",
+    "checkpoint_record_sha256": "e7621f2a3e2b531097f9a3611c0a88a1ace0ce7e64145352fd23a6a60c0161b4",
+    "checkpoint_document_sha256": "0d080933d236caeb53d2436ad7e72de5b2ac8c607b2920918b1f36c823d6880f",
+    "state_sha256": "b2a560caa436c5e5bdc5df06af99aca11afa3ac415afc4b6e4b7c0cffeeb2f72",
+    "trajectory_manifest_sha256": "6282e875294792c260da07fa307513375a0c28d2005d418d87ee2d4819a3fc32",
+    "episode_status": "complete",
+    "checkpoint_reopened": true
+  },
+  "checkpoint_hash_correction": {
+    "status": "verified_zero_input_correction",
+    "original_result_preserved": true,
+    "original_field": "terminal_checkpoint_record_sha256",
+    "original_value_was_document_sha256": true,
+    "correct_record_sha256": "e7621f2a3e2b531097f9a3611c0a88a1ace0ce7e64145352fd23a6a60c0161b4",
+    "audit_actions": 0,
+    "audit_frames": 0,
+    "retry_authorized": false
+  },
+  "next_boundary": {
+    "status": "observed_action_free",
+    "ordinary_candidate_count": 2,
+    "supplemental_candidate_count": 0,
+    "available_candidate_count": 2,
+    "distinct_option_kinds": 2,
+    "candidate_kinds": [
+      "resupply",
+      "restore"
+    ],
+    "menu_sha256": "abb5d53671b50ae0e00fbef767f736f49231f8c323f6c75830db3b8f32ea2696",
+    "cash": 346,
+    "capture_items": 4,
+    "registered_species": 86,
+    "living_species": 66,
+    "total_living_specimens": 70,
+    "required_native_registrations_remaining": 38,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "executed": false
+  },
+  "private_receipts": {
+    "freeze_file_sha256": "f4876848d35ba52652403882a70ec23440a245c2583012c3dd1075ea27c7bfdf",
+    "declaration_file_sha256": "e71fc3fd73efeaa3cd88bc9e4255b50f412b56a04bdbec49e94602f3a32e8627",
+    "controller_claim_file_sha256": "3b417d9c178a2190614b5ca89228c56ab58c9a59d65f919cc4684baf440cd557",
+    "result_file_sha256": "2d4693d21d9fc9e21ebde1563a092ccbc0243d83c51ea6fb83847f428aece5ec",
+    "checkpoint_correction_file_sha256": "c184541551bb80be535621ab9c16c0b9c4117babc1c09cc585bc8f81d832d08b",
+    "post_terminal_menu_file_sha256": "3977b3d53ac4af3fa21ad61cc6daa97882ef32a57f386487d116fea995a7040b"
+  },
+  "verification": {
+    "focused_runtime_tests": 186,
+    "documentation_and_focus_tests_before_execution": 150,
+    "ruff": "passed",
+    "mypy": "passed for changed source",
+    "registry_check": "passed",
+    "product_focus_before_publication": "passed",
+    "hosted_ci": "passed on exact executable source before controller input",
+    "action_free_freeze": "passed",
+    "terminal_checkpoint_reopen": "passed after correcting the document-versus-record hash label",
+    "post_terminal_menu_inspection": "passed with zero actions and frames"
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed",
+      "actual_contribution": "Passed the bridge contract and flagged that the controller-started claim should not be written inside observation.",
+      "accepted": "Move the claim into the sole executor wrapper, after durable forced-decision recording and immediately before possible controller input.",
+      "rejected": "Three P0 claims contradicted tested semantics: the explicit bridge permits a singleton under a width floor of two, forced steps intentionally leave authority_decisions at zero, and verified search exhaustion would still be one executed forced step.",
+      "earlier_attempts": "One sandboxed attempt was denied read permission and one no-output attempt timed out; neither edited files or accessed gameplay.",
+      "quota": "unavailable from the CLI"
+    },
+    "claude": {
+      "model": "claude-sonnet",
+      "status": "completed_conceptual_review; exact-file follow-up timed_out_without_output",
+      "actual_contribution": "Passed the conceptual design and identified the load-bearing forced-singleton enum and minimum menu-width condition.",
+      "accepted": "Use GoalSelectionMode.FORCED_SINGLETON and keep min_available_goals greater than one so a singleton cannot be recorded as model authority.",
+      "rejected": "No conceptual finding was rejected; the later exact-file review produced no finding before timeout.",
+      "quota": "unavailable from the CLI"
+    }
+  },
+  "boundaries": {
+    "automatic_retry": false,
+    "menu_redraw": false,
+    "teacher_choice_or_fallback": false,
+    "model_query_for_forced_step": false,
+    "choice_fit": false,
+    "manual_species_routing": false,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "next": {
+    "decision": "Freeze Model119's real two-option resupply-versus-restore menu from the corrected checkpoint, execute the sampled choice once, and fit only an eligible measured outcome.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on source, model, checkpoint, menu or economy mismatch; controller activity during freeze; teacher fallback; redraw; retry; or ROM-hack/Crystal progression before the full Red gate."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish non-deterministic model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

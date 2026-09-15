@@ -21,7 +21,11 @@ import re
 from dataclasses import dataclass, replace
 from enum import StrEnum
 
-from pokemon_red_completion.goal_manager import GoalKind, GoalSituation
+from pokemon_red_completion.goal_manager import (
+    GoalKind,
+    GoalSelectionMode,
+    GoalSituation,
+)
 from pokemon_red_completion.goal_manager_runtime import (
     CompletionFirstGoalTeacher,
     ExecutableGoalBinding,
@@ -35,6 +39,7 @@ from pokemon_red_completion.living_dex_goal_policy import (
 from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionAvailability,
     LivingDexOptionCandidate,
+    LivingDexOptionContext,
     LivingDexOptionMenu,
     LivingDexOptionUtility,
     LivingDexOptionValueModel,
@@ -54,8 +59,29 @@ RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA = (
 RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model112-frozen-restore-plan.v1"
 )
+RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model118-frozen-restore-plan.v1"
+)
+RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model119-post-forced-frozen-restore-plan.v1"
+)
 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model113-frozen-acquisition-plan.v1"
+)
+RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model116-frozen-acquisition-plan.v1"
+)
+RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model114-frozen-resupply-plan.v1"
+)
+RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model115-frozen-resupply-plan.v1"
+)
+RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model120-frozen-resupply-plan.v1"
+)
+RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA = (
+    "pokemon.red.private-model117-frozen-purchase-plan.v1"
 )
 
 
@@ -89,6 +115,177 @@ class RedLiveSupplementalOption:
             raise RedLiveOptionMenuError(
                 "supplemental candidate and executable binding differ"
             )
+
+
+@dataclass(frozen=True, slots=True)
+class RedLiveForcedSingleton:
+    """One supplemental action that is explicitly not a learned choice."""
+
+    situation: GoalSituation
+    original_bindings: GoalBindingSet
+    binding_set: GoalBindingSet
+    candidate: LivingDexOptionCandidate
+    context: LivingDexOptionContext
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.situation, GoalSituation):
+            raise TypeError("forced singleton needs a GoalSituation")
+        if not isinstance(self.original_bindings, GoalBindingSet):
+            raise TypeError("forced singleton needs original goal bindings")
+        if not isinstance(self.binding_set, GoalBindingSet):
+            raise TypeError("forced singleton needs rebound goal bindings")
+        if not isinstance(self.candidate, LivingDexOptionCandidate):
+            raise TypeError("forced singleton needs a living-Dex candidate")
+        if not isinstance(self.context, LivingDexOptionContext):
+            raise TypeError("forced singleton needs a living-Dex context")
+        if self.original_bindings.bindings:
+            raise RedLiveOptionMenuError(
+                "forced supplemental singleton rejects ordinary executors"
+            )
+        if len(self.binding_set.bindings) != 1:
+            raise RedLiveOptionMenuError(
+                "forced supplemental singleton needs one executor"
+            )
+        binding = self.binding_set.bindings[0]
+        if (
+            binding.kind is not GoalKind.ACQUIRE_SPECIES
+            or self.candidate.binding_ref != binding.binding_ref
+            or self.candidate.features.kind
+            is not living_dex_option_kind_for_goal(binding.kind, feature_version=4)
+            or self.candidate.availability is not LivingDexOptionAvailability.AVAILABLE
+        ):
+            raise RedLiveOptionMenuError(
+                "forced supplemental singleton candidate differs"
+            )
+        question = self.binding_set.question(self.situation)
+        if (
+            len(question.available_indices) != 1
+            or question.opportunities[question.available_indices[0]].binding_ref
+            != binding.binding_ref
+        ):
+            raise RedLiveOptionMenuError(
+                "forced supplemental singleton availability differs"
+            )
+
+    @property
+    def binding(self) -> ExecutableGoalBinding:
+        """Return the sole private executor without projecting its identity."""
+
+        return self.binding_set.bindings[0]
+
+    def policy_dict(self) -> dict[str, object]:
+        """Return the identity-free semantic declaration for this forced bridge."""
+
+        return {
+            "available_goal_count": 1,
+            "candidate": self.candidate.policy_dict(self.context),
+            "context": self.context.policy_dict(),
+            "model_queries": 0,
+            "ordinary_candidate_count": 0,
+            "schema": "pokemon.red.live-forced-singleton.v1",
+            "selected_kind": GoalKind.ACQUIRE_SPECIES.value,
+            "selection_mode": GoalSelectionMode.FORCED_SINGLETON.value,
+            "supplemental_candidate_count": 1,
+            "teacher_labels": 0,
+            "training_examples": 0,
+        }
+
+    @property
+    def policy_sha256(self) -> str:
+        return canonical_sha256(self.policy_dict())
+
+    def public_dict(self) -> dict[str, object]:
+        return {
+            **self.policy_dict(),
+            "policy_sha256": self.policy_sha256,
+            "private_binding_fields": 0,
+            "private_path_fields": 0,
+        }
+
+
+def build_red_live_forced_singleton(
+    *,
+    situation: GoalSituation,
+    binding_set: GoalBindingSet,
+    supplements: tuple[RedLiveSupplementalOption, ...],
+    economy_snapshot: EconomySnapshot | None = None,
+    target_cash: int | None = None,
+    safety: CompletionFirstGoalTeacher | None = None,
+) -> RedLiveForcedSingleton:
+    """Bind one supplemental acquisition without invoking learned authority."""
+
+    if not isinstance(situation, GoalSituation):
+        raise TypeError("forced singleton needs a GoalSituation")
+    if not isinstance(binding_set, GoalBindingSet):
+        raise TypeError("forced singleton needs a GoalBindingSet")
+    if (
+        not isinstance(supplements, tuple)
+        or any(not isinstance(item, RedLiveSupplementalOption) for item in supplements)
+    ):
+        raise TypeError("forced singleton supplements must be immutable")
+    if binding_set.bindings:
+        raise RedLiveOptionMenuError(
+            "forced supplemental singleton rejects ordinary executors"
+        )
+    if len(supplements) != 1:
+        raise RedLiveOptionMenuError(
+            "forced supplemental singleton needs exactly one candidate"
+        )
+    if (economy_snapshot is None) != (target_cash is None):
+        raise RedLiveOptionMenuError(
+            "forced singleton economy context is incomplete"
+        )
+    if safety is None:
+        safety = CompletionFirstGoalTeacher()
+    if not isinstance(safety, CompletionFirstGoalTeacher):
+        raise TypeError("forced singleton needs a safety policy")
+    if situation.storage_pressure >= safety.storage_gate:
+        raise RedLiveOptionMenuError(
+            "forced acquisition singleton is masked by storage safety"
+        )
+
+    supplement = supplements[0]
+    binding = supplement.binding
+    expected_kind = living_dex_option_kind_for_goal(binding.kind, feature_version=4)
+    if (
+        binding.kind is not GoalKind.ACQUIRE_SPECIES
+        or expected_kind is None
+        or supplement.candidate.features.kind is not expected_kind
+    ):
+        raise RedLiveOptionMenuError(
+            "forced singleton needs one portable acquisition"
+        )
+    if economy_snapshot is None and supplement.candidate.economy_offer is not None:
+        raise RedLiveOptionMenuError(
+            "economy-bearing forced singleton needs measured context"
+        )
+    matching_indices = tuple(
+        index
+        for index, opportunity in enumerate(binding_set.opportunities)
+        if opportunity.kind is binding.kind
+    )
+    if len(matching_indices) != 1:
+        raise RedLiveOptionMenuError(
+            "forced singleton needs one masked acquisition opportunity"
+        )
+    selected_index = matching_indices[0]
+    opportunities = tuple(
+        binding.opportunity if index == selected_index else opportunity
+        for index, opportunity in enumerate(binding_set.opportunities)
+    )
+    rebound = GoalBindingSet(opportunities, (binding,))
+    context = living_dex_option_context_from_goal_situation(
+        situation,
+        economy_snapshot=economy_snapshot,
+        target_cash=target_cash,
+    )
+    return RedLiveForcedSingleton(
+        situation,
+        binding_set,
+        rebound,
+        supplement.candidate,
+        context,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -504,14 +701,23 @@ def supplemental_live_option(
 __all__ = [
     "RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
+    "RED_LIVE_FROZEN_RESTORE_CONTINUATION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA",
     "RED_LIVE_MIXED_OPTION_POLICY",
+    "RedLiveForcedSingleton",
     "RedLiveOptionChoice",
     "RedLiveOptionMenuError",
     "RedLiveOptionSelectionMode",
     "RedLiveOptionSet",
     "RedLiveSupplementalOption",
+    "build_red_live_forced_singleton",
     "build_red_live_option_set",
     "select_red_live_option",
     "supplemental_live_option",

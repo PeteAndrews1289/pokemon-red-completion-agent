@@ -525,7 +525,7 @@ def _wild_provider(
                 remaining_demand=(runtime.remaining_acquisition_demand
                                   or runtime.registration_policy is not None),
                 registered_species=(
-                    runtime.registration_policy.registered(
+                    runtime.registration_policy.goal_registered(
                         runtime.adapter.observe().collection_observation,
                     ) if runtime.registration_policy is not None else None
                 ),
@@ -1074,7 +1074,7 @@ class _RedTeamGoalProvider:
             specimen.species_ref for specimen in observation.collection_observation.specimens
         )
         if self.runtime.registration_policy is not None:
-            living_refs = self.runtime.registration_policy.registered(
+            living_refs = self.runtime.registration_policy.goal_registered(
                 observation.collection_observation,
             )
         if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:

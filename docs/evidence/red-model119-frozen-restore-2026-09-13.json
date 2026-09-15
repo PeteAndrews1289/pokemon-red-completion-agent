@@ -1,0 +1,225 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-13-model119-frozen-restore",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "completed_episode": {
+    "status": "verified_restore",
+    "actions": 153,
+    "frames": 5424,
+    "candidate_count": 2,
+    "selected_candidate_index": 1,
+    "selected_kind": "restore",
+    "selected_probability": 0.6782507836124833,
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "policy_queries_during_execution": 0,
+    "routed_center_map_id": 154,
+    "whole_party_restore": true,
+    "registered_before": 85,
+    "registered_after": 85,
+    "cash_before": 346,
+    "cash_after": 346,
+    "inventory_unchanged": true,
+    "terminal_state_sha256": "e584fde6adca6bdc1a2001bad619420f67927fc553e096a89a4676fa56a89f63",
+    "retry_allowed": false
+  },
+  "recovery_verification": {
+    "hp_before": [117, 157, 120, 120, 261, 86],
+    "hp_after": [125, 157, 120, 120, 261, 89],
+    "max_hp": [125, 157, 120, 120, 261, 89],
+    "status_before": [0, 0, 0, 0, 0, 0],
+    "status_after": [0, 0, 0, 0, 0, 0],
+    "pp_fully_restored": true,
+    "party_identity_levels_and_moves_unchanged": true,
+    "capture_items_retained": 5
+  },
+  "measured_choice": {
+    "record_sha256": "522cf30515639a5cff0dc5e84c0ee040d5f4fb5dbbaeb116e78338654f520caf",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "menu_sha256": "2bc2b6cd86124fa13e79362131de00a0da0caf6cb0325e122327af078756f3ea",
+    "selected_candidate_index": 1,
+    "selected_probability": 0.6782507836124833,
+    "importance_weight": 1.474380898867265,
+    "verified_success": true,
+    "completion_gain": 0,
+    "dependency_unlock_gain": 0
+  },
+  "collection": {
+    "registered_before": 85,
+    "registered_after": 85,
+    "living_species": 65,
+    "total_living_specimens": 69,
+    "cash": 346,
+    "capture_items": 5,
+    "required_native_registrations_remaining": 39
+  },
+  "learning": {
+    "prior_examples": 118,
+    "new_examples": 1,
+    "settled_examples": 119,
+    "successful_examples": 81,
+    "measured_source_examples": 15,
+    "economy_qualified_examples": 40,
+    "regional_source_examples": 33,
+    "prior_rows_retained": true,
+    "teacher_labels": 0,
+    "historical_rewards_reused": false
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "fit": {
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 119,
+      "model_sha256": "d1528e871ec245e3e5aa05b13d4a4bf6b08f952ce99a7413cd3810d26b1c89c6",
+      "prior_model_sha256": "279f45e3fb6b332ce907bdcda9a381614352f27248308ff4c4d23111e0db5d40",
+      "source_commit": "0643cb742d6d736b33ad5bd0384feb9d276306c8",
+      "source_bundle_sha256": "ac147b39f65415322ef8beaed31d57e39399708703882058fd416c014176bd36",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 119,
+      "settled_examples": 119,
+      "successful_examples": 81,
+      "economy_qualified_examples": 40,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.031079491097098896,
+      "weighted_mse_after": 0.012005067963006105
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.012004352663253226
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.012005067963006103
+    }
+  },
+  "publication": {
+    "checkpoint_record_sha256": "11d2cfdc25a92e63b9c91e7fd9cb526e251567ae55b308192f83a47b1bd2c5a6",
+    "state_sha256": "e584fde6adca6bdc1a2001bad619420f67927fc553e096a89a4676fa56a89f63",
+    "trajectory_manifest_sha256": "7b6aab5fb51369876254edb1ab61b3e01b4cff1329598e489d7a5368ecf29621",
+    "choice_record_sha256": "522cf30515639a5cff0dc5e84c0ee040d5f4fb5dbbaeb116e78338654f520caf",
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "next_boundary": {
+    "status": "action_free_singleton_stop",
+    "candidate_count": 1,
+    "ordinary_candidate_count": 0,
+    "supplemental_candidate_count": 1,
+    "candidate_kind": "acquire_species",
+    "candidate_mechanism": "fishing",
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "training_examples": 0,
+    "executed": false,
+    "reason": "The mixed-option contract requires two distinct executable candidates. A sole acquisition may proceed only as an explicitly forced singleton outside learned-choice training."
+  },
+  "source": {
+    "execution_and_fit_commit": "0643cb742d6d736b33ad5bd0384feb9d276306c8",
+    "execution_source_bundle_sha256": "ac147b39f65415322ef8beaed31d57e39399708703882058fd416c014176bd36",
+    "execution_qualification_ci_run_id": 34787154347,
+    "execution_qualification_ci_status": "passed",
+    "registry_sha256": "7de8447e59ba99e80d881f883765d25da29c90e9894ef4be72c0a88247097b3c"
+  },
+  "private_receipts": {
+    "declaration_sha256": "115a6bb971fd63c22f09368d2b6a1403228fc9e4497134b59d69daa8adae4b5c",
+    "controller_claim_sha256": "191d19ab7130b1e2e2aac29521cc95a8fd02d5e00e67432e7388e5753f813d41",
+    "result_sha256": "ea2168ceb23638e088876d45000b0d12575c8371261d6b51fec1e1f36e7b4f33",
+    "source_binding_sha256": "c67a14a0ffec6afe7460ed7621bb7ae0a180c8b75eb10f5b49df5bc85aec105f",
+    "fit_report_sha256": "5ab859af48a1756bd61518703a7eda65b662d25f1169465f3a179fad0d632572",
+    "materialization_report_sha256": "005e63b5f4c7f14478d490dec19ba35be151929364a2ebdd102ac4302e44b585",
+    "singleton_diagnostic_sha256": "4f752e8d4a996191ab4dfa289e315f3cce6a80e4b7f7ba5094973e6e93f651f8"
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "audits": {
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "status": "completed_with_timeout_after_finding",
+      "scope": "read-only declaration/admission review and exact-runner audit",
+      "result": "Admission PASS. Runner review found the stale menu-era source-bundle comparison before gameplay; corrected to the exact execution bundle.",
+      "accepted": "Explicit restore-goal validation, routed-center binding shape, and the source-bundle correction.",
+      "rejected": "Separating mandatory registry identity changes into another commit; registry regeneration is required for executable source publication.",
+      "unexpected_effect": "Flash dynamically invoked the action-free preflight despite a review-only request; it issued zero actions and frames.",
+      "quota": "unavailable from the CLI"
+    },
+    "claude": {
+      "model": "claude-sonnet",
+      "status": "completed",
+      "scope": "read-only declaration/admission and one-shot runner audit",
+      "result": "PASS; no execution-safety blocker.",
+      "accepted": "Export the new schema and require a clean worktree before execution.",
+      "rejected": "Separating mandatory registry identity changes into another commit.",
+      "informational": "A soft action-cap advisory was non-blocking because the executor and frame hard-stop remained bounded.",
+      "quota": "unavailable from the CLI"
+    }
+  },
+  "verification": {
+    "action_free_preflight": "passed with exact model, menu, binding, candidate, parent state and source bundle; zero actions and frames",
+    "focused_tests": 137,
+    "development_admission_tests": 94,
+    "partial_local_suite": "7742 passed, 3 skipped, 1 deselected, 1 xfailed, 1 warning before deliberate interruption after exact hosted CI passed",
+    "local_environment_limit": "The one deselected test is the pre-existing Mac PyBoy RECORD identity assertion; the broad duplicate run had reached 66 percent without failure when stopped.",
+    "ruff": "passed",
+    "mypy": "passed for changed source files",
+    "product_focus_before_execution": "passed",
+    "documentation_before_execution": "passed",
+    "public_artifacts_before_execution": "passed",
+    "registry_check": "passed",
+    "hosted_ci_run_id": 34787154347,
+    "hosted_ci_status_at_execution": "passed on exact execution commit"
+  },
+  "next": {
+    "decision": "Publish and qualify a separately labelled forced-singleton bridge for the sole fishing acquisition, prove zero model and teacher queries, then execute it once from Model119 without fitting it as a choice.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on any second candidate, model or teacher query, source/model/checkpoint mismatch, controller activity during preflight, failure to exclude the singleton from choice training, retry, redraw or ROM-hack/Crystal progression."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

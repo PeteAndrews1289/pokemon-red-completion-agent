@@ -1,0 +1,48 @@
+{
+  "collection": {
+    "local_registrations": 86,
+    "local_target": 151,
+    "model_examples": 121,
+    "successful_examples": 83
+  },
+  "exact_gate": {
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "evolution_native_readiness": "ready",
+    "execution_authorized": false,
+    "fishing_acquisition_bound": false,
+    "model_queries": 0,
+    "reachable_fishing_destinations": 0,
+    "reachable_fishing_missing_targets": 0,
+    "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+    "two_family_gate": false
+  },
+  "learning": {
+    "authority_promotions": 0,
+    "fits": 0,
+    "outcomes": 0,
+    "training_examples_added": 0,
+    "transfer_result": null
+  },
+  "private_evidence": {
+    "manifest_sha256": "b7cde3a7945bd47e7db1fc7a3504d005f4ee035809612c1a379091c6d797ca23",
+    "record_id": "model121-fishing-evolution-bridge-gate-20260915-v1",
+    "record_sha256": "10189287c2a2a7c98ed8fddc45420c7504d1ae3c21215041af4ec0851ffe993d"
+  },
+  "publication": {
+    "registry_sha256": "da5fe930d1396b2709fc3dcc5bd6dd020264e641f2211e0a653666fc4b5d1ff6",
+    "source_bundle_sha256": "c3644854a9a90e4756c8be91f710727ba8b73642e9b63348cdc6502bf93a1c2e",
+    "source_commit": "81622814c9b391ba6151ef93fa4bcb98f8a13ab8",
+    "teacher_execution_sha256": "703ecd7e6a8e9cb24862bb575f969aa63f0ebe1c1caf11d116c2143eebc0e8fe"
+  },
+  "schema": "pokemon.red.fishing-evolution-bridge-gate-evidence.v1",
+  "session_id": "2026-09-15-fishing-evolution-bridge",
+  "status": "exact_fishing_unavailable",
+  "validation": {
+    "focused_tests_passed": 399,
+    "full_lint_passed": true,
+    "mypy_passed": true,
+    "product_focus_passed": true,
+    "registry_check_passed": true
+  }
+}

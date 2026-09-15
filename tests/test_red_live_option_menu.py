@@ -10,6 +10,7 @@ from pokemon_red_completion.goal_manager import (
     GoalAvailability,
     GoalKind,
     GoalOpportunity,
+    GoalSelectionMode,
     GoalSituation,
     GoalUnavailableReason,
 )
@@ -33,6 +34,7 @@ from pokemon_red_completion.living_dex_option_value import (
 from pokemon_red_completion.red_live_option_menu import (
     RedLiveOptionMenuError,
     RedLiveOptionSelectionMode,
+    build_red_live_forced_singleton,
     build_red_live_option_set,
     select_red_live_option,
     supplemental_live_option,
@@ -212,6 +214,177 @@ def test_mixed_menu_exposes_real_families_without_private_identity_or_actions() 
     assert "private:red" not in encoded
     assert "fishing-map" not in encoded
     assert "binding_ref" not in encoded
+
+
+def test_supplemental_singleton_is_forced_identity_free_and_action_free() -> None:
+    calls: list[str] = []
+    original = _no_ordinary_bindings()
+    fishing = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    forced = build_red_live_forced_singleton(
+        situation=_situation(),
+        binding_set=original,
+        supplements=(
+            supplemental_live_option(
+                fishing,
+                _fishing_candidate("provider-row", travel=0.2),
+            ),
+        ),
+        economy_snapshot=EconomySnapshot(58, (("capture", 6),)),
+        target_cash=400,
+    )
+
+    question = forced.binding_set.question(forced.situation)
+    assert calls == []
+    assert forced.binding is fishing
+    assert len(question.available_indices) == 1
+    assert question.opportunities[question.available_indices[0]] == fishing.opportunity
+    assert tuple(
+        opportunity
+        for opportunity in forced.binding_set.opportunities
+        if opportunity.kind is not GoalKind.ACQUIRE_SPECIES
+    ) == tuple(
+        opportunity
+        for opportunity in original.opportunities
+        if opportunity.kind is not GoalKind.ACQUIRE_SPECIES
+    )
+    public = forced.public_dict()
+    encoded = json.dumps(public, sort_keys=True)
+    assert public["selection_mode"] == GoalSelectionMode.FORCED_SINGLETON.value
+    assert public["model_queries"] == public["teacher_labels"] == 0
+    assert public["training_examples"] == 0
+    assert public["policy_sha256"] == forced.policy_sha256
+    assert "private:red" not in encoded
+    assert "fishing-map" not in encoded
+    assert "binding_ref" not in encoded
+
+
+@pytest.mark.parametrize("supplement_count", (0, 2))
+def test_forced_singleton_rejects_any_non_singleton_inventory(
+    supplement_count: int,
+) -> None:
+    calls: list[str] = []
+    supplements = tuple(
+        supplemental_live_option(
+            _binding(
+                GoalKind.ACQUIRE_SPECIES,
+                binding_ref=f"private:red:fishing-map-{index}",
+                calls=calls,
+            ),
+            _fishing_candidate(f"provider-row-{index}", travel=0.2),
+        )
+        for index in range(supplement_count)
+    )
+
+    with pytest.raises(RedLiveOptionMenuError, match="exactly one candidate"):
+        build_red_live_forced_singleton(
+            situation=_situation(),
+            binding_set=_no_ordinary_bindings(),
+            supplements=supplements,
+        )
+    assert calls == []
+
+
+def test_forced_singleton_rejects_ordinary_executor_or_non_acquisition() -> None:
+    calls: list[str] = []
+    acquisition = supplemental_live_option(
+        _binding(
+            GoalKind.ACQUIRE_SPECIES,
+            binding_ref="private:red:fishing-map-23",
+            calls=calls,
+        ),
+        _fishing_candidate("provider-row", travel=0.2),
+    )
+    with pytest.raises(RedLiveOptionMenuError, match="ordinary executors"):
+        build_red_live_forced_singleton(
+            situation=_situation(),
+            binding_set=_ordinary_bindings(calls),
+            supplements=(acquisition,),
+        )
+
+    resupply = _binding(
+        GoalKind.RESUPPLY,
+        binding_ref="private:red:trainer-income",
+        calls=calls,
+        quote=GoalResourceQuote(58, 0, (), expected_income=455),
+    )
+    wrong = supplemental_live_option(
+        resupply,
+        _fishing_candidate("provider-row", travel=0.2),
+    )
+    with pytest.raises(RedLiveOptionMenuError, match="portable acquisition"):
+        build_red_live_forced_singleton(
+            situation=_situation(),
+            binding_set=_no_ordinary_bindings(),
+            supplements=(wrong,),
+        )
+    assert calls == []
+
+
+def test_forced_singleton_preserves_storage_and_economy_guards() -> None:
+    calls: list[str] = []
+    fishing = supplemental_live_option(
+        _binding(
+            GoalKind.ACQUIRE_SPECIES,
+            binding_ref="private:red:fishing-map-23",
+            calls=calls,
+        ),
+        _fishing_candidate("provider-row", travel=0.2),
+    )
+    with pytest.raises(RedLiveOptionMenuError, match="storage safety"):
+        build_red_live_forced_singleton(
+            situation=_situation(storage=1.0),
+            binding_set=_no_ordinary_bindings(),
+            supplements=(fishing,),
+        )
+    with pytest.raises(RedLiveOptionMenuError, match="economy context"):
+        build_red_live_forced_singleton(
+            situation=_situation(),
+            binding_set=_no_ordinary_bindings(),
+            supplements=(fishing,),
+            economy_snapshot=EconomySnapshot(58, ()),
+        )
+    assert calls == []
+
+
+@pytest.mark.parametrize("supplement_count", (0, 1))
+def test_mixed_menu_preserves_ordinary_families_with_zero_or_one_supplements(
+    supplement_count,
+) -> None:
+    calls: list[str] = []
+    fishing = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    supplements = (
+        supplemental_live_option(
+            fishing,
+            _fishing_candidate("provider-row-0", travel=0.1),
+        ),
+    )[:supplement_count]
+
+    options = build_red_live_option_set(
+        situation=_situation(),
+        binding_set=_ordinary_bindings(calls),
+        supplements=supplements,
+        model_feature_version=4,
+        ordering_seed_sha256="e" * 64,
+        economy_snapshot=EconomySnapshot(58, (("capture", 6),)),
+        target_cash=400,
+    )
+
+    assert calls == []
+    assert options.public_dict()["ordinary_candidate_count"] == 2
+    assert options.public_dict()["supplemental_candidate_count"] == supplement_count
+    kinds = {
+        item.features.kind for item in options.menu.candidates
+    }
+    assert kinds >= {LivingDexOptionKind.RESUPPLY, LivingDexOptionKind.RESTORE}
+    assert (LivingDexOptionKind.ACQUIRE in kinds) is bool(supplement_count)
 
 
 def test_model_selects_one_exact_private_binding_without_executing_it() -> None:

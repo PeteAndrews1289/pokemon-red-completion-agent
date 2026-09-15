@@ -11,10 +11,11 @@ they conflict with this page.
 
 Build a transferable Pokemon agent that finishes stories and accumulates one verified registered Pokedex across runs, mainline games, versions, trades and legitimate events.
 
-**Environment role:** Red first, then Blue with shared registration credit; a compatible unfamiliar Red modification tests adaptation before Crystal. No single title is the product.
+**Environment role:** Complete a fresh start-to-finish model-directed Red run and its full local Pokedex before any ROM hack. Resolve version/trade/event dependencies explicitly; then test a compatible unfamiliar Red modification, learn Crystal and continue through at least Emerald.
 
 Success means:
 
+- Before any ROM hack, finish one authenticated fresh-start model-directed Red run with Champion/Hall-of-Fame evidence and the full local Red Pokedex; no reduced availability subset.
 - Complete each title's story and supported mechanics under declared learned authority.
 - Register missing global species through legitimate acquisition and evolution; no level100 or simultaneous living-form quota.
 - Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.
@@ -33,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute the exact frozen Model114 resupply once, retain its real outcome, fit only an eligible result, then publish and rebuild the next menu action-free.
+- Next decision: The generic one-switch contingency passes ROM-free. Freeze a distinct campaign C with its exact opt-in policy before the Model121 heterogeneous collection lesson. Campaign B stays consumed; missing switch or cross-venue evidence stays unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Automatically derive reachable identity-free Red acquisition destinations, let the model choose among them and ordinary goals, attach cross-box support without resampling, and retain both gains and failures for learning. |
-| Authority now | The bounded-development learner has 114 fitted examples. Its latest Red state has 84 registrations, 64 living species and 68 specimens in a durable input-ready Model114 checkpoint. Model114 selected resupply/income from six choices across three goal families; the choice is not yet executed. Deterministic code still executes mechanics; no independent full-game competence is claimed. |
+| Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
+| Authority now | Model121 remains 121 examples / 83 successes and 86 local registrations. Recovery succeeded. This user-directed audit is maintenance for the heterogeneous collection lesson, with no learned authority increase. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact frozen Model114 resupply choice cannot execute within declared bounds and retain its actual resource outcome. |
+| Cheapest falsifier | A generic no-progress/no-usable-PP contingency requires a species, map, route or case identity, cannot choose one legal reserve from observable state, or escapes bounded accounting. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 114 | 12 |
+| Registered Train Example · train | 121 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -59,22 +60,23 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-13-model114-frozen-fishing-learning** · status **active** · evidence [model fit](docs/evidence/red-model114-frozen-fishing-learning-2026-09-13.json)
+**2026-09-15-battle-stall-contingency** · status **closed** · evidence [qualification](docs/evidence/red-battle-stall-contingency-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model chose collection, learned from a verified registration gain and then chose resource generation from the earned state. That durable choose-act-verify-learn continuation is required for long Pokedex runs. |
-| Learning output | One real frozen fishing success was added as row114 without a teacher label. Model114 now has 114 settled examples and selected resupply from six choices spanning three goal families. |
-| Authority delta | Model113's exact frozen fishing choice added one registration in 513 actions and 30,804 frames with zero policy queries during execution and zero teacher labels. Its observed success became row114. Model114 then selected resupply from a six-choice, three-family menu action-free; no authority tier advanced. |
-| Transfer result | The policy menu remains identity-free and supports supplemental-only acquisition choices, but all execution and evidence are still Red-only. No unseen-seed, modified-ROM, Blue or cross-title transfer result exists yet. |
-| Blocker | The selected Model114 resupply choice is frozen but unexecuted. It must retain its actual bounded outcome before another fit; consumed attempts remain non-retryable. |
-| Decision | Execute the exact frozen Model114 resupply choice once without another policy query, retain success or failure, fit only an eligible observed outcome, publish the terminal and rebuild the next menu action-free. |
-| Next session | Execute the exact frozen Model114 resupply once, retain its actual outcome, fit only an eligible result, then publish and rebuild the next automatic menu without input. |
-| Next falsifier | The exact frozen Model114 resupply cannot execute within its existing bounds and retain its real resource outcome. |
-| Stop condition | Stop on a second policy query for the frozen menu, retrying a consumed attempt, post-hoc targets, teacher labels, checkpoint mismatch, or any move into Blue or Crystal. |
+| Product alignment | An opt-in identity-free contingency reuses existing reserve ranking and switch mechanics inside one original runtime and accounting budget. It unblocks cartridge qualification without promoting learned authority. |
+| Learning output | None. 537 ROM-free focused tests passed, including 46 new tests. Zero cartridge actions, queries, labels, examples, fits or registrations. |
+| Authority delta | None. Model121 remains 121 examples / 83 successes and 86/151 local registrations. |
+| Transfer result | Synthetic party-order, PP, stale-state, partial-switch and shared-budget variations pass. No cartridge settlement, independent-lineage or cross-title transfer result was produced. |
+| Blocker | The generic live-battler stall contingency passes ROM-free tests but has no cartridge evidence. Cross-venue settlement and fainted forced switching remain unqualified. |
+| Decision | Close ROM-free architecture maintenance. Next prospectively freeze a distinct campaign C with the opt-in policy, short varied controls and cross-venue coverage; credit contingency switching only if observed and durably settled. |
+| Next session | Sol High, Fast off: one bounded new campaign C using the frozen stall-switch policy; retain actual costs and observed coverage without retry or replacement. Only a passing required gate opens the Model121 heterogeneous acquisition lesson. |
+| Next falsifier | The contingency needs an identity-bearing exception, cannot choose a legal reserve from observable state, repeats indefinitely, or loses exact accounting. |
+| Stop condition | One bounded session. Stop the new campaign at its first failure, lost accounting or unsettled transition. No replay or replacement of consumed identities, protected-root scan, source four, fitting or full-game run. Missing boundary coverage stays unqualified. |
 
 ### Stop conditions
 
+- Model120 freeze seed120091401 is consumed without a retained choice and seed120091402 is consumed by its retained resupply success; never retry, replay, infer, substitute or re-execute either identity.
 - All prior one-shot causal and powered-supply assignments remain permanently consumed; never retry, refreeze, substitute, or relabel them.
 - Calibration and same-bank diagnostics must be labeled as such. Any promotion, held-development or transfer claim requires immutable disjoint upstream lineages; timing and RNG variants from one snapshot remain one cluster and never manufacture evaluation independence.
 - The fixed heuristic owns one-turn battle execution; the learned battle scorer remains observable in shadow but may not receive controller authority from this result.

@@ -35,6 +35,7 @@ def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
     baselines = {
         "red-first-v1": "configs/development-roadmap-baseline-v1.json",
         "red-first-v2-registered": "configs/development-roadmap-baseline-v2.json",
+        "red-first-v3-full-run": "configs/development-roadmap-baseline-v3.json",
     }
     if baseline_id not in baselines:
         raise ValueError("new roadmap baseline requires explicit adoption in the renderer")
@@ -63,6 +64,25 @@ def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
             raise ValueError("roadmap status requires evidence")
         if row["evidence"]:
             _read(root, row["evidence"])
+    if baseline_id == "red-first-v3-full-run":
+        gate = state.get("red_completion_gate", {})
+        criteria = ("fresh_start", "model_directed_start_to_finish",
+                    "champion_and_hall_of_fame", "full_local_red_pokedex",
+                    "legitimate_external_dependencies_resolved")
+        if set(gate) != {*criteria, "evidence"} or any(
+            type(gate.get(key)) is not bool for key in criteria
+        ):
+            raise ValueError("full Red completion gate is not explicit")
+        passed = all(gate[key] for key in criteria)
+        if any(gate[key] for key in criteria) and not gate["evidence"]:
+            raise ValueError("full Red completion claims require evidence")
+        if gate["evidence"]:
+            _read(root, gate["evidence"])
+        if not passed and any(
+            state["stages"][key]["status"] in {"current", "verified"}
+            for key in ("red-hack", "crystal", "cross-generation")
+        ):
+            raise ValueError("complete the full Red run and Pokedex before any ROM hack")
     items = state["milestone"]["items"]
     if not items or len({item["id"] for item in items}) != len(items):
         raise ValueError("roadmap checklist differs")
@@ -83,7 +103,11 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     done = sum(item["done"] for item in items)
     percentage = round(100 * done / len(items))
     samples = evidence["fit"]["model"]["settled_examples"]
-    dex_kind = "registered" if baseline["baseline_id"] == "red-first-v2-registered" else "living"
+    dex_kind = "living" if baseline["baseline_id"] == "red-first-v1" else "registered"
+    checklist_lines = [textwrap.wrap(item["label"], width=48) for item in items]
+    checklist_height = sum(max(30, len(lines) * 20 + 10) for lines in checklist_lines)
+    expansion = max(0, checklist_height + 40 - 299)
+    height = 1870 + expansion
     colors = {
         "verified": "#57dfb1",
         "current": "#ffd36a",
@@ -91,14 +115,14 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         "blocked": "#ff9387",
     }
     parts = [
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1870" '
-        'viewBox="0 0 1420 1870" role="img" aria-labelledby="title description">',
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="{height}" '
+        f'viewBox="0 0 1420 {height}" role="img" aria-labelledby="title description">',
         '<title id="title">Pokemon development roadmap</title>',
         f'<desc id="description">{done} of {len(items)} current checklist items verified, '
         "not overall completion. Eight stages lead from the learning loop "
         f"to a cross-game {dex_kind} Pokedex.</desc>",
         "<style>text{font-family:Arial,Helvetica,sans-serif;fill:#edf3ff}.muted{fill:#adbad1}.eyebrow{font-size:16px;letter-spacing:2px;font-weight:bold}.heading{font-size:29px;font-weight:bold}.body{font-size:19px}.small{font-size:17px}</style>",
-        '<rect width="1420" height="1870" fill="#0b1221"/>',
+        f'<rect width="1420" height="{height}" fill="#0b1221"/>',
         '<path d="M1120 0H1420V225Z" fill="#172947"/>',
     ]
 
@@ -115,6 +139,8 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         '<text x="50" y="125" style="font-size:49px;font-weight:bold">'
         f"From Red to a {dex_kind} Pokedex.</text>"
     )
+    story_label = ("Fresh-start Red story" if baseline["baseline_id"] == "red-first-v3-full-run"
+                   else "Checkpoint-based Red story")
     text(
         50,
         168,
@@ -127,10 +153,13 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     text(
         50,
         215,
-        f"{samples} goal-value examples  /  Checkpoint-based Red story: {story_status}",
+        f"{samples} goal-value examples  /  {story_label}: {story_status}",
         "small",
     )
-    parts.append('<rect x="50" y="260" width="1320" height="395" rx="20" fill="#16243a"/>')
+    parts.append(
+        f'<rect x="50" y="260" width="1320" height="{395 + expansion}" '
+        'rx="20" fill="#16243a"/>'
+    )
     current_number = next(
         i + 1 for i, stage in enumerate(baseline["stages"]) if stage["id"] == state["current_stage"]
     )
@@ -142,22 +171,27 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     )
     text(82, 495, f"{done} of {len(items)} acceptance items verified", "body")
     text(82, 529, "Checklist only. Not phase completion or a time estimate.", "small muted")
-    for i, item in enumerate(items):
-        y = 326 + i * 30
+    y = 326
+    for item, wrapped in zip(items, checklist_lines, strict=True):
         color = "#57dfb1" if item["done"] else "#8594ad"
         text(705, y, "DONE" if item["done"] else "NEXT", "small", color)
-        text(778, y, item["label"], "small")
-    parts.append('<rect x="80" y="625" width="1260" height="8" rx="4" fill="#293b55"/>')
+        for offset, line in enumerate(wrapped):
+            text(778, y + offset * 20, line, "small")
+        y += max(30, len(wrapped) * 20 + 10)
     parts.append(
-        f'<rect x="80" y="625" width="{1260 * done / len(items):g}" '
+        f'<rect x="80" y="{625 + expansion}" width="1260" height="8" '
+        'rx="4" fill="#293b55"/>'
+    )
+    parts.append(
+        f'<rect x="80" y="{625 + expansion}" width="{1260 * done / len(items):g}" '
         'height="8" rx="4" fill="#ffd36a"/>'
     )
-    text(50, 695, "THE WHOLE JOURNEY", "eyebrow")
-    text(740, 695, "VERIFIED", "small", colors["verified"])
-    text(870, 695, "CURRENT", "small", colors["current"])
-    text(1000, 695, "PLANNED / NOT DEMONSTRATED", "small", colors["planned"])
+    text(50, 695 + expansion, "THE WHOLE JOURNEY", "eyebrow")
+    text(740, 695 + expansion, "VERIFIED", "small", colors["verified"])
+    text(870, 695 + expansion, "CURRENT", "small", colors["current"])
+    text(1000, 695 + expansion, "PLANNED / NOT DEMONSTRATED", "small", colors["planned"])
     for i, stage in enumerate(baseline["stages"]):
-        x, y = 50 + (i % 2) * 680, 735 + (i // 2) * 225
+        x, y = 50 + (i % 2) * 680, 735 + expansion + (i // 2) * 225
         status = state["stages"][stage["id"]]["status"]
         color = colors[status]
         fill = "#202d3d" if status == "current" else "#111e31"
@@ -167,12 +201,12 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         text(x + 24, y + 72, stage["title"], "heading")
         lines(x + 24, y + 106, stage["goal"], width=57, gap=24)
         lines(x + 24, y + 155, stage["scope"], width=68, cls="small muted", gap=19)
-    text(50, 1694, "SESSION CHECK-IN", "eyebrow", "#57dfb1")
-    text(50, 1732, state["as_of_session"], "small muted")
-    lines(50, 1767, state["reviews"][-1]["result"], width=125)
+    text(50, 1694 + expansion, "SESSION CHECK-IN", "eyebrow", "#57dfb1")
+    text(50, 1732 + expansion, state["as_of_session"], "small muted")
+    lines(50, 1767 + expansion, state["reviews"][-1]["result"], width=125)
     text(
         50,
-        1830,
+        1830 + expansion,
         f"Baseline {baseline['baseline_id']} / "
         "Exit criteria and evidence: docs/development-roadmap.md",
         "small muted",

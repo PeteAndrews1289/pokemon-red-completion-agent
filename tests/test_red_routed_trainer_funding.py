@@ -39,6 +39,8 @@ class TestReceipt:
     initial_money: int = 9
     final_money: int = 1059
     payout: int = 1050
+    ordinary_victory_money: int = 1050
+    pay_day_money: int = 0
 
 
 def fixture(monkeypatch):

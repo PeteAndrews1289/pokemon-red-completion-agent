@@ -27,11 +27,19 @@ Concretely, success is:
    forces the system to exercise the whole game rather than the shortest path through it.
 3. **Transfer.** Knowledge earned in one generation reduces the teaching required for the next.
 
-The agreed delivery sequence is useful sustained Red play, model-directed story completion and
-registered collection, Blue/shared-ledger integration, then a compatible unfamiliar Red ROM modification as an intermediate adaptation
-test before Crystal. Initial performance and improvement with experience must be reported separately.
-Red experience should reduce the learning required; it does not guarantee immediate success on a
-modified game. This sequencing does not replace the long-term cross-title registered-Pokédex goal.
+The delivery gate clarified by Pete on September 13 is **complete Red before any ROM hack**:
+a fresh start-to-finish, model-directed run, concurrent Champion and Hall-of-Fame evidence,
+and the full Red Pokédex registered in that run's Red save. A fixed walkthrough with random
+timing, a stitched checkpoint demonstration, or a reduced Red-only availability subset does
+not satisfy this gate. Deterministic mechanics may support the player, but consequential
+progression and resource decisions must belong to the model under declared authority.
+
+Version, trade and event dependencies must be resolved explicitly and legitimately; shared
+credit alone cannot fabricate local Red registration. Supporting version/trade work is not
+permission to move the main curriculum beyond Red. Unresolved entries keep the gate closed.
+After that gate: a compatible unfamiliar Red ROM modification, then Crystal, continuing the
+shared registered Pokédex through at least Emerald. Report initial transfer and adaptation
+separately. Red experience should reduce teaching, not guarantee immediate success.
 
 ## Explicit scope revision — September 9, 2026
 

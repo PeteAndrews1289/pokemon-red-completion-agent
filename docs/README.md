@@ -14,12 +14,13 @@ valuable evidence without remaining an instruction.
    Blue/shared memory, Crystal and later titles.
 5. [Handoff](../HANDOFF.md) — exact restart state and immediate engineering boundary.
 
-As of the latest measured session, Model114 has 114 settled training-only examples. Its durable Red
-checkpoint contains 84 registered species, 64 living species and 68 physical specimens. Model113's
-frozen fishing choice added one registration in 513 actions / 30,804 frames and became row114 with
-zero teacher labels. From the resulting checkpoint, Model114 selected resupply/income from six
-choices across three goal families. That choice is frozen but unexecuted. This is bounded
-development, not independent full-game competence.
+Model121 has121 settled training-only examples and83 successes. Its durable Red checkpoint has86
+local registrations,66 living species and70 physical specimens. A ROM-free inventory accounts for
+all151 local targets. Direct catalog starts now have separate origin/session contracts, derive a
+boxed evolution and wild corridor from read-only state, and require an exact account-wide root-pair
+claim before opening game payloads. The frozen next source remains unclaimed and unopened pending
+exact-code CI. This is engineering qualification, not a new learning result or independent
+competence.
 
 ## Reader-facing summaries
 

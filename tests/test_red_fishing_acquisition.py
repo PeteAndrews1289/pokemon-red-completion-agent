@@ -123,6 +123,37 @@ def test_menu_requires_two_executable_distinguishable_destinations():
             maximum_route_steps=100,
             free_storage_slots=0,
         )
+    indistinguishable = (_offer(23, (116,)), _offer(24, (116,)))
+    with pytest.raises(ValueError, match="distinguishable"):
+        fishing.red_fishing_destination_menu(
+            _context(),
+            indistinguishable,
+            route_steps=(12, 12),
+            maximum_route_steps=100,
+            free_storage_slots=40,
+        )
+
+
+def test_candidate_projection_supports_one_identity_free_destination():
+    candidates = fishing.red_fishing_destination_candidates(
+        (_offer(23, (116, 116)),),
+        route_steps=(12,),
+        maximum_route_steps=100,
+        free_storage_slots=40,
+    )
+
+    assert len(candidates) == 1
+    assert candidates[0].features.travel_effort == 0.12
+    assert "23" not in candidates[0].binding_ref
+    assert "116" not in str(candidates[0].policy_dict(_context()))
+
+    with pytest.raises(ValueError, match="distinct executable destinations"):
+        fishing.red_fishing_destination_candidates(
+            (),
+            route_steps=(),
+            maximum_route_steps=100,
+            free_storage_slots=40,
+        )
 
 
 class _Model:

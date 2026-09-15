@@ -13,6 +13,42 @@ review history; their “latest” labels are relative to that archived sequence
 
 ## Roles
 
+### September 14 — full-Red denominator and anti-loop refocus
+
+Gemini 3.8 Flash High completed one read-only review of the new 151-target classifier. Its initial
+verdict was STOP. Codex accepted the warnings against describing the 124-entry catalog as executable
+authority, added supporting-save evolution and serialization coverage, and made the distinction
+structural with `solo_catalog_plan`. Flash edited nothing and accessed no private runtime state.
+
+The standalone Claude CLI requested a fresh login, but Claude Sonnet 4.6 completed a read-only audit
+through `agy` and returned GO with P0/P1 zero. Codex rejected both advisory P2 notes: the evidence
+already records the 151 target denominator, and the Eevee observation misclassified cataloged #133
+as an excluded branch. Neither reviewer edited files. The headless CLI exposed no remaining-quota
+percentages for either model.
+
+The Model121 action-free terminal contained only resupply and restoration. The anti-drift stop fired
+before a model query or gameplay. Next external work, if any, is limited to the future independent
+mixed-acquisition menu and its local/shared/physical state boundary.
+
+### September13 — frozen income outcome and complete-Red gate
+
+Flash3.8 High supplied a bounded admission/test proposal after headless command permission
+blocked its isolated editing attempt. Codex integrated it, corrected invented probabilities
+and mismatched budget fixtures, and added no-random-draw and positive-cash failure tests.
+Claude Opus4.8 High audited five source files read-only: its four-site schema warning was
+accepted; its hardcoded-payout concern was not the actual cause because the battle verifier
+failed first. Original-menu provenance remains separately bound, lower-trust evidence.
+
+The160-action attempt was retained as failure and became row115; no retry or promotion.
+Both external tasks completed. Shared Gemini quota refreshed to96.12%five-hour/68.38%weekly
+remaining, approximately4h34m/128h10m to reset. Claude subscription quota was unavailable;
+its standard-speed review reported$1.647777. No task-wide Astra savings were measured.
+
+Next Flash role: a narrowly specified accounting test draft once Codex establishes the
+cartridge rule. Codex owns diagnosis, integration and any eventual exact frozen continuation.
+Full fresh-run Red story and the full local Pokédex must precede any ROM hack; a reviewer
+cannot waive that user requirement. [Session](work-sessions/2026-09-13-model115-frozen-resupply-learning.md).
+
 ### Latest loop — September9 resource exit and Transform review
 
 Flash3.8 High supplied three isolated implementation/test drafts and two bounded

@@ -1,0 +1,239 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session_id": "2026-09-14-model121-frozen-resupply",
+  "status": "fit_complete_bounded_only",
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "completed_episode": {
+    "status": "verified_finite_income",
+    "actions": 153,
+    "frames": 11461,
+    "candidate_count": 2,
+    "selected_candidate_index": 1,
+    "selected_kind": "resupply",
+    "selected_probability": 0.4072490891114135,
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "ordinary_victory_money": 360,
+    "pay_day_money": 0,
+    "cash_before": 346,
+    "cash_after": 706,
+    "target_cash": 3600,
+    "target_cash_reached": false,
+    "registered_before": 86,
+    "registered_after": 86,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false,
+    "terminal_state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225"
+  },
+  "freeze": {
+    "selection_seed": 120091402,
+    "model_queries": 1,
+    "pre_query_tombstone": true,
+    "write_ahead_decision_receipt": true,
+    "selected_option_content_hash": true,
+    "menu_sha256": "c9388ff6042149bec1f6db8cd64c9464cbd5ba80872cf2e727d3503b0cc636d9",
+    "model_sha256": "624945c9ce74658c8032dec88604725ad5d8345d5da624b41bb8fdd400324e29",
+    "candidate_kinds": [
+      "restore",
+      "resupply"
+    ],
+    "probabilities": [
+      0.5927509108885864,
+      0.4072490891114135
+    ],
+    "scores": [
+      3.9913024299961077,
+      3.4861564932446245
+    ],
+    "controller_actions": 0,
+    "emulator_frames": 0
+  },
+  "economy_verification": {
+    "finite_income": true,
+    "quoted_ordinary_victory_money": 360,
+    "measured_cash_delta": 360,
+    "inventory_unchanged": true,
+    "registrations_unchanged": true,
+    "resource_cost": 0.0,
+    "completion_gain": 0.0,
+    "dependency_unlock_gain": 0.0
+  },
+  "learning": {
+    "prior_examples": 120,
+    "new_examples": 1,
+    "settled_examples": 121,
+    "successful_examples": 83,
+    "measured_source_examples": 17,
+    "economy_qualified_examples": 42,
+    "regional_source_examples": 33,
+    "choice_record_sha256": "0ae3c3af976974f43c9dd658d1683e8decf8648811137536b0e5c3313fb22616",
+    "selected_probability": 0.4072490891114135,
+    "importance_weight": 2.4554996603722894,
+    "weighted_mse_before": 0.03089275247315945,
+    "weighted_mse_after": 0.011851161369431611,
+    "counterfactual_targets": 0,
+    "unselected_action_targets": 0,
+    "teacher_labels": 0,
+    "authority_promotions": 0,
+    "model": {
+      "model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+      "prior_model_sha256": "624945c9ce74658c8032dec88604725ad5d8345d5da624b41bb8fdd400324e29",
+      "authority": "bounded_development_only",
+      "source_commit": "ee8f402fb4dd0038c982f3d6bf4029acd03f95fd",
+      "source_bundle_sha256": "3f7c47e4ed862d8ed96c5a44c9e27a4626c3ec9568011213acd8752beb53a3d2"
+    }
+  },
+  "measured_choice": {
+    "record_sha256": "0ae3c3af976974f43c9dd658d1683e8decf8648811137536b0e5c3313fb22616",
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0,
+    "menu_sha256": "c9388ff6042149bec1f6db8cd64c9464cbd5ba80872cf2e727d3503b0cc636d9",
+    "selected_candidate_index": 1,
+    "selected_probability": 0.4072490891114135,
+    "importance_weight": 2.4554996603722894,
+    "verified_success": true,
+    "completion_gain": 0.0,
+    "dependency_unlock_gain": 0.0
+  },
+  "fit": {
+    "new_settled_examples": 1,
+    "new_measured_source_examples": 1,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "settled_examples": 121,
+      "model_sha256": "19f23d3505a7a0ab18e808d07d349f4180f7d95192c4ee7cc54ec5b795a3e2e2",
+      "prior_model_sha256": "624945c9ce74658c8032dec88604725ad5d8345d5da624b41bb8fdd400324e29",
+      "source_commit": "ee8f402fb4dd0038c982f3d6bf4029acd03f95fd",
+      "source_bundle_sha256": "3f7c47e4ed862d8ed96c5a44c9e27a4626c3ec9568011213acd8752beb53a3d2",
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "fit_report": {
+      "objective": "selected-arm-capped-ips-multioutcome-ridge-v1",
+      "measured_choice_examples": 1,
+      "total_examples": 121,
+      "settled_examples": 121,
+      "successful_examples": 83,
+      "economy_qualified_examples": 42,
+      "counterfactual_targets": 0,
+      "unselected_action_targets": 0,
+      "weighted_mse_before": 0.03089275247315945,
+      "weighted_mse_after": 0.011851161369431611
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.011863342898164757
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.011851161369431611
+    }
+  },
+  "in_sample_policy_replay": {
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false,
+    "performed": false
+  },
+  "publication": {
+    "episode_id": "red-model121-frozen-resupply-terminal-20260914",
+    "checkpoint_record_sha256": "8da4f48720d1a8dc4dc1b64877aee3ab3042e75320b16a5c5e4b4a4a4e0aebc6",
+    "trajectory_manifest_sha256": "946acc993db052c670e6572a7ff8672985056fe48bca2851efe3e918c7cb2e41",
+    "state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+    "registered_species": 86,
+    "living_species": 66,
+    "total_living_specimens": 70,
+    "cash": 706,
+    "publication_actions": 0,
+    "publication_frames": 0
+  },
+  "source": {
+    "freeze_and_execution_commit": "b3e040ef55ccc79fa2a1321db5f562493d3e6aed",
+    "freeze_and_execution_source_bundle_sha256": "18585b3f2189bd66280139d085f49e39020d969f8aac39aa36a01d996e768971",
+    "freeze_and_execution_ci_run_id": 34811222415,
+    "admission_and_fit_commit": "ee8f402fb4dd0038c982f3d6bf4029acd03f95fd",
+    "admission_and_fit_source_bundle_sha256": "3f7c47e4ed862d8ed96c5a44c9e27a4626c3ec9568011213acd8752beb53a3d2",
+    "admission_and_fit_ci_run_id": 34843054840,
+    "failed_registry_only_ci_run_id": 34842773330
+  },
+  "private_receipts": {
+    "query_intent_file_sha256": "cc58f5745347df9e7fa24be2bbf47173c25157a837253867220d6c8b8b29e018",
+    "decision_file_sha256": "5e7206efb0c4f848c0f778cb07ece32d7f7a6a6e19ec65d881653f5818f8d585",
+    "observation_file_sha256": "b38aebfa37760a01fb9bae7a98a6095b47a4e3cf0dc2c77569744a6be6004b06",
+    "frozen_menu_file_sha256": "e77916374d98400316d96a8ea0bab3ed0f34b6eae1bb4a496a68256f010e7e93",
+    "declaration_file_sha256": "bdc5372926bda261ee23d116e35a381bc1faf472a50d187300df0afa59f2e136",
+    "source_binding_file_sha256": "24dc00a86c752b0bb1263f5f35861ed448e140a5c5c2ef59e8b26899dc43e2aa",
+    "controller_claim_file_sha256": "c8c3df8c77e85c5726afb54b8bbd8be5494f55be90bfa891c47dcbbce63e3177",
+    "result_file_sha256": "002365ceb0bb692baa54e298d7207410b08c40bdc496f822a36f52d799e4ade8",
+    "terminal_state_sha256": "b08e7af52833e29a009af3161912e9658fe5f102f46175937971bb1957de1225",
+    "fit_report_file_sha256": "246d3117acab5465c3eb3abcee9447580232348cc84f57c3cb4c10442f8efdb9",
+    "materialization_report_sha256": "fc78e985c005f62f981732af99a6647f8a86253d379580e2f9deced8863a02be"
+  },
+  "audits": {
+    "claude": {
+      "model": "claude-sonnet",
+      "status": "completed",
+      "actual_contribution": "Passed both the one-shot execution contract and the exact-key write-ahead learning admission, including frozen behavior replay without redraw.",
+      "accepted": "No correction was required after either concise review; both contracts were executed as reviewed."
+    },
+    "flash": {
+      "model": "gemini-3.8-flash-high",
+      "cli": "agy",
+      "status": "completed",
+      "actual_contribution": "Passed the pinned one-shot execution contract and independently passed the fail-closed receipt-hash admission rule.",
+      "accepted": "No correction was required after either concise review; both contracts were executed as reviewed."
+    }
+  },
+  "verification": {
+    "execution_contract_reviews": "Claude PASS; Flash PASS",
+    "single_execution": "153 actions and 11461 frames; no retry",
+    "zero_input_fit_preflight": "passed",
+    "learning_surface_tests": "158 passed",
+    "write_ahead_admission_tests": "110 passed",
+    "local_full_gate": "2072 passed before the known Mac-only PyBoy metadata identity mismatch stopped maxfail=1",
+    "hosted_ci_run_id": 34843054840,
+    "hosted_ci_status": "passed on exact admission and fit source",
+    "materialization_reopen": "passed"
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "automatic_retry": false,
+    "menu_redraw": false,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "sealed_red_accesses": 0,
+    "next_choice_executed": false
+  },
+  "next": {
+    "decision": "Inspect Model121's published terminal action-free, freeze the resulting exact menu once, then execute and fit only one eligible measured Red result without redraw, retry or teacher fallback.",
+    "time_box": "one bounded session, 60-120 minutes",
+    "stop_condition": "Stop on source, model, checkpoint, state, menu, economy or receipt mismatch; controller activity during inspection/freeze; teacher fallback; redraw; retry; or ROM-hack/Crystal progression before the complete-Red gate."
+  },
+  "red_completion_gate": {
+    "requirement": "fresh start-to-finish non-deterministic model-directed Red run, concurrent Champion/Hall-of-Fame evidence and the full local Red Pokedex before any ROM hack",
+    "demonstrated": false,
+    "version_trade_event_dependencies": "unresolved; never silently excluded",
+    "horizon": "Red, compatible unfamiliar Red modification, Crystal, at least Emerald"
+  }
+}

@@ -20,23 +20,28 @@ def registered_completion_checkpoint(
 ) -> RegisteredCollectionCheckpoint:
     current = observation.collection_observation
     global_species = tuple(sorted(policy.registered(current)))
+    credited_species = policy.goal_registered(current)
     local_species = tuple(sorted(current.owned_species))
     targets = tuple(sorted(policy.targets))
     counts = tuple(sorted(Counter(s.species_ref for s in current.specimens).items()))
-    missing = tuple(sorted(set(targets) - set(global_species)))
+    missing = tuple(sorted(set(targets) - credited_species))
     evolutions = tuple(sorted((red_species_ref(a), red_species_ref(b))
                               for a, b, _ in GENERATION_ONE_LEVEL_EVOLUTIONS))
     return RegisteredCollectionCheckpoint(
-        registered_species=len(set(targets) & set(global_species)),
+        registered_species=len(set(targets) & credited_species),
         living_species=len(counts),
         required_specimens_remaining=len(missing),
         retained_captures=sum(n for _, n in counts),
         storage_headroom=observation.immediate_capture_slots,
         undeclared_specimen_losses=0,
         completion_contract_sha256=canonical_sha256({
-            "schema": "pokemon.red.registered-completion-contract.v1",
+            "schema": ("pokemon.red.registered-completion-contract.v2"
+                       if policy.completion_scope == "local_red"
+                       else "pokemon.red.registered-completion-contract.v1"),
             "objective": REGISTERED_OBJECTIVE, "targets": targets,
             "allowed_evolutions": evolutions,
+            **({"completion_scope": policy.completion_scope}
+               if policy.completion_scope != "shared" else {}),
         }),
         specimen_ledger_sha256=canonical_sha256({
             "schema": "pokemon.core.registered-physical-ledger.v1",
@@ -49,6 +54,7 @@ def registered_completion_checkpoint(
         global_species=global_species, local_species=local_species, target_species=targets,
         protected_counts=tuple(sorted(policy.protected_counts.items())),
         binding_sha256=policy.sha256,
+        completion_scope=policy.completion_scope,
     )
 
 
@@ -66,7 +72,7 @@ def project_registered_observation(
         living_collection=CompletionProgress(0, 0),
         level_collection=CompletionProgress(0, 0),
         evolution=CompletionProgress(
-            len(evolution_targets & set(checkpoint.global_species)), len(evolution_targets),
+            len(evolution_targets & set(checkpoint.credited_species)), len(evolution_targets),
         ),
         # Once the declared story is complete there is no fixed team-level quota.
         # Actual safety, HP, PP and selected evolution requirements remain active.

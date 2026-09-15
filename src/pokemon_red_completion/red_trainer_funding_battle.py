@@ -3,7 +3,8 @@
 Proves interaction boundary, undefeated state, full living party and active
 trainer identity before and during combat. Bounded intro and settlement
 transitions ensure no unhandled dialogue or stray inputs escape to the
-overworld. Payout is validated against cartridge quotes without Pay Day.
+overworld. Payout is validated against the ordinary cartridge quote plus the
+new battle's persistent Pay Day accumulator.
 """
 
 from __future__ import annotations
@@ -42,6 +43,8 @@ class TrainerFundingBattleReader(BattleStateReader, Protocol):
 
     def read_pending_trainer_battle_identity(self) -> tuple[int, int] | None: ...
 
+    def read_total_pay_day_money(self) -> int: ...
+
 
 class TrainerFundingBattleError(BattleRuntimeError):
     """Raised when prepared trainer funding fails preconditions or execution."""
@@ -57,6 +60,8 @@ class TrainerFundingBattleReceipt:
     initial_money: int
     final_money: int
     payout: int
+    ordinary_victory_money: int
+    pay_day_money: int
 
     def __post_init__(self) -> None:
         if not isinstance(self.target, TrainerFundingCandidate):
@@ -65,12 +70,63 @@ class TrainerFundingBattleReceipt:
             self.final_state, RawGameState
         ):
             raise TypeError("receipt states must be RawGameState values")
-        for name in ("initial_money", "final_money", "payout"):
+        for name in (
+            "initial_money", "final_money", "payout", "ordinary_victory_money",
+            "pay_day_money",
+        ):
             val = getattr(self, name)
             if type(val) is not int or isinstance(val, bool):
                 raise TypeError(f"{name} must be an integer")
+        if self.ordinary_victory_money < 0 or self.pay_day_money < 0:
+            raise ValueError("money components must be nonnegative")
         if self.payout != self.final_money - self.initial_money:
             raise ValueError("payout must equal final_money - initial_money")
+        if self.final_money != min(
+            999999,
+            self.initial_money + self.ordinary_victory_money + self.pay_day_money,
+        ):
+            raise ValueError("final_money must equal exact ordinary plus Pay Day income")
+
+
+class _PayDayMoneyTracker:
+    """Separate a retained prior payout from the new battle's accumulator."""
+
+    __slots__ = ("_initialized", "_reader", "_stale_money", "money")
+
+    def __init__(
+        self,
+        reader: TrainerFundingBattleReader,
+    ) -> None:
+        self._reader = reader
+        self._stale_money = self._read()
+        self._initialized = self._stale_money == 0
+        self.money = 0
+
+    def _read(self) -> int:
+        try:
+            value = self._reader.read_total_pay_day_money()
+        except Exception as error:
+            raise TrainerFundingBattleError("Pay Day accumulator is unreadable") from error
+        if type(value) is not int or not 0 <= value <= 999999:
+            raise TrainerFundingBattleError("Pay Day accumulator is invalid")
+        return value
+
+    def require_battle_initialized(self) -> None:
+        """Require InitBattleVariables to clear any prior persistent payout."""
+
+        value = self._read()
+        if value != 0:
+            raise TrainerFundingBattleError(
+                "trainer battle did not reset the prior Pay Day accumulator"
+            )
+        self._initialized = True
+
+    def observe_completed_battle(self) -> None:
+        """Read the new amount, which Red retains until the next battle starts."""
+
+        if not self._initialized:
+            raise TrainerFundingBattleError("Pay Day accounting lacks battle initialization")
+        self.money = self._read()
 
 
 battle_runner: Callable[..., RawGameState] = run_adaptive_trainer_battle
@@ -320,6 +376,7 @@ def run_prepared_trainer_funding(
     ):
         raise TrainerFundingBattleError("initial player_money is missing or invalid")
 
+    pay_day_tracker = _PayDayMoneyTracker(reader)
     expected_pending = (target.trainer.trainer_class, target.trainer.trainer_set)
 
     def pending_start() -> bool:
@@ -336,7 +393,9 @@ def run_prepared_trainer_funding(
         raise TrainerFundingBattleError("dialogue box is visible before interaction")
     if not resuming_pending and not resume_active_battle and validate_scripted_dialogue is None:
         executor.execute(MacroAction(MacroActionKind.INTERACT))
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+        executor.execute(
+            MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
+        )
 
     state = reader.read()
     intro_count = 0
@@ -372,7 +431,9 @@ def run_prepared_trainer_funding(
             validate_scripted_dialogue()
         if dialogue or (not pending and validate_scripted_dialogue is None):
             executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+        executor.execute(
+            MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
+        )
         intro_count += 1
         state = reader.read()
 
@@ -396,6 +457,7 @@ def run_prepared_trainer_funding(
         raise TrainerFundingBattleError(
             "party HP missing, truncated, or fainted before battle runner"
         )
+    pay_day_tracker.require_battle_initialized()
 
     def _guard(current_raw: RawGameState) -> None:
         if not trainer_bag_within_budget(initial, current_raw, maximum_full_restores):
@@ -461,7 +523,11 @@ def run_prepared_trainer_funding(
     if not isinstance(battle_final, RawGameState):
         raise TrainerFundingBattleError("battle runner did not return RawGameState")
 
-    expected_money = target.quote.expected_money_after(initial.player_money)
+    pay_day_tracker.observe_completed_battle()
+    expected_money = min(
+        999999,
+        initial.player_money + target.quote.expected_victory_money + pay_day_tracker.money,
+    )
     state = battle_final
     _check_postbattle_fatal(state, initial, target, maximum_full_restores)
 
@@ -476,7 +542,9 @@ def run_prepared_trainer_funding(
                 state, reader, initial, target, expected_money, maximum_full_restores,
             )
         executor.execute(MacroAction(MacroActionKind.CONFIRM))
-        executor.execute(MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames))
+        executor.execute(
+            MacroAction(MacroActionKind.WAIT, repeat=timing.dialogue_wait_frames)
+        )
         settle_count += 1
         state = reader.read()
         _check_postbattle_fatal(state, initial, target, maximum_full_restores)
@@ -492,4 +560,6 @@ def run_prepared_trainer_funding(
         initial_money=initial.player_money,
         final_money=final_money,
         payout=payout,
+        ordinary_victory_money=target.quote.expected_victory_money,
+        pay_day_money=pay_day_tracker.money,
     )

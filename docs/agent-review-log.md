@@ -1534,3 +1534,67 @@ Mission check for this planning task:
 - Mission check: this removes uncertainty from the battle-data gate and prevents consumed-root
   reuse. It does not advance model, route, story, capture, evolution, trade, living-Pokedex or
   cross-title competence.
+
+## Codex reorientation — opponent Pay Day accounting (2026-09-13)
+
+- Result: pinned Red source explains Model114's extra58 as level29 opponent Pay Day. The original
+  failure remains unchanged. Model115's exact continuation stopped after27 actions/864 frames on
+  the retained accumulator and became failed row116 without retry.
+- Contract: allow stale pre-battle value, prove exact zero after the next battle initializes, then
+  reconcile terminal cash with the new battle's persistent Pay Day accumulator plus ordinary pay.
+- External review: Flash's terminal-sampling concern was useful; its clear-at-end premise was
+  corrected from cartridge source. Three bounded Claude CLI attempts returned no response, so no
+  Claude contribution is claimed.
+- Verification:393 focused accounting/execution tests,252 admission tests, Ruff and mypy across495
+  source files passed. Hosted CI run34770365977 is authoritative for final source.
+- Next: execute Model116's exact frozen acquisition once. Do not retry Model115, resample Model116,
+  use a teacher label or approach any hack/Crystal gate before complete Red.
+
+## Model119 forced-singleton fishing review (2026-09-13)
+
+- Flash3.8 High passed the forced-bridge contract. Its later runner review correctly objected to
+  writing the controller-started claim inside observation; Codex accepted the finding and moved the
+  claim into the sole executor after durable decision recording and before possible input.
+- Rejected three Flash P0 claims because the existing ROM-free tests prove the opposite: the
+  explicit bridge overrides a learned-menu width floor of two, forced steps intentionally increment
+  `forced_singleton_steps` rather than `authority_decisions`, and verified search exhaustion is
+  still an executed forced result.
+- Claude Sonnet passed the conceptual design. Accepted: use
+  `GoalSelectionMode.FORCED_SINGLETON` and keep `min_available_goals > 1`. Its later read-only
+  exact-file review timed out without output, so it contributed no additional finding.
+- Neither external reviewer edited repository source or ran gameplay. Current service quota was
+  unavailable from both CLIs.
+
+## Model120 frozen field-restoration review (2026-09-13)
+
+- Flash3.8 High completed a compact no-tools review of the field-restore receipt admission change
+  and returned PASS with no P0/P1. An earlier sandboxed attempt was denied repository read access
+  and produced no review, edit or gameplay effect.
+- Claude Sonnet High independently passed exact source `6449c360` with no P0/P1. Codex accepted its
+  one concrete nit and added the reverse cross-admission test proving a routed-Center declaration
+  cannot admit a field-item receipt; exact source `fafc485c` passed CI run34800466077.
+- Claude's request for a separate public record was accepted here. Its preference to publish that
+  record before fitting was not load-bearing: the immutable private result and zero-input
+  correction already existed, the result was admitted only after exact-source CI, and no gameplay,
+  retry, redraw or label occurred during fit or publication.
+- At closeout Antigravity reported99.80% five-hour and64.74% weekly Gemini quota remaining; its
+  separate Claude/GPT pool showed quota available. Claude's earlier authenticated usage snapshot
+  reported82% session and48% weekly remaining. A later direct Claude invocation prompted for login,
+  so no newer percentage is claimed.
+
+## Model120 freeze instrumentation-failure review (2026-09-14)
+
+- Claude Sonnet High was restored through the direct CLI, returned `CLAUDE_CLI_READY`, and completed
+  a bounded no-tools review. It approved consuming seed120091401 without redraw and identified two
+  prospective gaps: query gating must be structurally durable before invocation, and recovery must
+  authenticate the selected option's content rather than trust an index alone.
+- Gemini3.8 Flash High independently approved the no-redraw stop and identified the crash window
+  after query processing but before receipt fsync. Codex accepted both reviews by adding an
+  exclusive fsynced pre-query tombstone and selected-option content hash to the unexecuted V2
+  freeze.
+- Neither reviewer edited source, received private save contents or ran gameplay. The consumed
+  attempt remains one unretained model query, zero controller actions, zero frames, zero labels and
+  zero training examples.
+- At closeout Antigravity reported100% five-hour and65% weekly Gemini quota remaining, plus100%
+  five-hour and weekly in its separate Claude/GPT pool. Claude print mode worked, but its interactive
+  usage view requested a fresh login, so no direct Claude percentage is claimed.

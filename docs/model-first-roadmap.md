@@ -1,70 +1,70 @@
 # Model-first development roadmap
 
-The product is a model that plays Pokémon and accumulates a shared, verified Pokédex across games,
-not a fixed Red walkthrough. The [mission](../MISSION.md) and [North Star](../NORTH_STAR.md) are
-stable; the [active state](../ACTIVE_PRODUCT_STATE.md) owns the current decision and the
-[development infographic](development-roadmap.md) owns the current checklist.
+Build a player that actually plays Pokémon. The [mission](../MISSION.md),
+[North Star](../NORTH_STAR.md) and [active state](../ACTIVE_PRODUCT_STATE.md) govern the work.
 
-## Where we are
+## Required sequence
 
-The Red observation, checkpoint, high-level choice, deterministic execution, outcome verification
-and incremental fitting loop works. The current registered-objective model contains **114 settled
-examples**. Its retained save has **84 registered species**, **64 living species**, **68 specimens**
-and **40 required Red registrations remaining**.
+1. Train reusable decisions through bounded Red scenarios and retain failures.
+2. Qualify model choices across story, battles, navigation, resources and collection.
+3. Finish one fresh start-to-finish model-directed Red run with Champion/Hall-of-Fame evidence
+   and all 151 registrations in that Red save, including legitimate external dependencies.
+4. Test a compatible unfamiliar Red ROM modification.
+5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
-The latest cycle executed Model113's exact frozen fishing choice once. It added one registration in
-513 actions / 30,804 frames and became row114 without a teacher label. The durable Model114 state
-then exposed six choices across restore, acquisition and resupply; Model114 selected resupply. That
-choice is frozen but unexecuted. This is same-lineage bounded development, not an independent policy
-comparison or full-game result.
+## Where we stand
 
-This is bounded development progress. It is not a fresh-game autonomous player, independent
-reliability result or learned low-level controller.
+Model121 has 121 measured examples and 83 successes. Its development save has 86/151 local
+registrations (56.95%), 66 living species and 70 specimens. Expanded collection checklist:
+25/26; the useful mixed-acquisition choice remains open. Final fresh-Red gate: 0/5.
+These fractions are not a whole-project completion estimate.
 
-## Next sequence
+The forced evolution advanced Tentacool to level24 and stopped. Its exact terminal was
+successfully recovered; the collection remains intact. Both attempt identities are consumed.
+The recovered menu contains restoration and resupply.
 
-1. **Route capability before ranking — qualified.** Resource routes now fail closed unless the
-   configured executor declares wild, trainer and scripted-dialogue support. Map/species identity
-   remains outside policy features.
-2. **Recover model111 generically — verified.** The retained dialogue closed in eight actions / 576
-   frames, with zero learning credit and no retry of the consumed choice.
-3. **Retrieve capture capabilities across boxes — qualified.** Find a helper by observed
-   move/status capability, switch boxes safely and rebind the original acquisition without
-   resampling. The exact menu proved this was necessary but not sufficient.
-4. **Integrate automatic multi-source fishing — verified.** Production code derives reachable
-   productive destinations, builds bounded bindings and joins them to the mixed menu without
-   identity-bearing policy features.
-5. **Recover and resume Model112 — complete.** The exact dialogue terminal recovered as zero-label
-   support; the frozen restore succeeded once and produced row113 plus a durable Model113 state.
-6. **Continue from supplemental-only acquisition — verified.** Model113 selected one of four
-   authenticated fishing destinations and added a new registration; the real result became row114.
-7. **Fund the next collection cycle — selected.** Model114 chose resupply/income from a six-choice,
-   three-family menu. Execute the frozen choice once and retain its real outcome.
-8. **Finish Red registrations.** Iterate by reusable family and expose resource, storage and
-   dependency choices naturally. A repeated empty menu is a planner falsifier, not a reason to
-   reset or hand-script the target.
-9. **Measure fresh-game composition.** Connect the already authenticated story checkpoints to the
-   same model-facing vocabulary, then test increasingly long Red segments without hidden choices.
-10. **Test an unfamiliar compatible Red modification.** Freeze the Red policy and measure initial
-   competence separately from adaptation. This is the first meaningful portability test.
-11. **Integrate Blue and shared memory.** Reuse global registrations while keeping local flags,
-   owned specimens and version-only availability truthful.
-12. **Adapt to Crystal, then later titles.** Add genuinely new mechanics through adapters and
-   measure what transferred rather than assuming it.
+The bounded cartridge qualification then passed its synthetic diagnostic-reopen prerequisite and
+settled three Route11 cases across two-, three- and four-move menus in 223 actions / 19,851 frames.
+One case naturally exercised a status-suppressed turn without falsely spending PP. The first
+Diglett's Cave relocation failed before battle settlement. Although its failed episode reopened,
+the runner lost the semantic failure phase and exact action/frame cost, so the gate failed and the
+campaign stopped without retry. No gameplay result became a learning row.
 
-## Immediate session boundary
+V2 now spans source inspection, relocation, setup, battle and settlement with durable phase/reason
+and actual attempted/completed/frame costs. The new durable campaign epoch passed 389 focused
+tests, whole-source type checking and exact-source hosted CI. Gemini 3.8 Flash High returned GO
+after its durability findings were implemented.
 
-Execute the exact frozen Model114 resupply choice once without a second policy query. Retain its
-actual outcome, fit only an eligible measured result, publish the terminal and rebuild the next
-automatic menu action-free.
+Campaign B then stopped on its first new Route11 control after 893 actions / 80,081 frames. Exact
+evidence reopened: the active battler spent its last PP while opponent HP remained unchanged, then
+the fixed policy had no usable move at the next MAIN-menu selection. Three later cases never
+opened. The campaign is consumed; there was no retry, model query, row, fit or registration.
 
-[Latest evidence](evidence/red-model114-frozen-fishing-learning-2026-09-13.json) ·
-[Latest session](work-sessions/2026-09-13-model114-frozen-fishing-learning.md) ·
-[Cross-box qualification](evidence/red-model111-cross-box-capture-support-2026-09-13.json)
+## Next few sessions
 
-## How to stay focused
+| Session | Required result | Recommended setting |
+| --- | --- | --- |
+| Fresh cartridge qualification | New epoch and opt-in stall-switch policy, short varied controls and cross-venue coverage; credit switching only when observed and settled, no replacement | Sol / High / Fast off |
+| Heterogeneous collection lesson | One useful model choice and retained outcome from a genuinely executable mixed-family menu, only after qualification | Sol / High / Fast off |
+| Useful training batch | Varied bounded cases, actual costs and all failures; no invented independence | Sol / High / Fast off |
+| Reliability and dependency review | Separate-lineage evidence and concrete version/trade/event paths | Astra / High / Fast off |
+| Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
 
-Every session names one reusable capability, one model-controlled decision, one cheapest falsifier,
-one time box and one stop condition. Data collection and executable scenarios take priority over
-process. CI runs once after a meaningful verified change; documentation is updated after measured
-progress, not instead of it.
+The generic architecture session is complete: 537 ROM-free focused tests, lint and whole-source
+type checking passed. One voluntary live-battler switch after four PP-spending turns without damage
+or no usable move shares the existing runtime and accounting budget. The policy is opt-in and
+frozen by name; old campaign plans retain their legacy behavior. Flash 3.8 High completed a contract
+review, not a source audit. Missing damage is a heuristic, not a cause diagnosis; survival is not
+guaranteed.
+
+Next is Sol High for a distinct campaign C, approximately 1–2 hours. The earlier wording
+"forced-switch case" overstated this scope: switching after a faint remains unqualified, alongside
+move learning and same-battler move replacement. Absent natural contingency coverage stays absent;
+do not replay to obtain it. Do not replay campaign B or the older Diglett case, scan protected roots,
+use source four or begin a full-game replay.
+
+Learning and collection deltas for this session are zero. The earlier 120→121 change is a 0.83%
+increase in dataset size, not a 0.83% improvement in competence.
+
+[Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
+[Development infographic](development-roadmap.md)

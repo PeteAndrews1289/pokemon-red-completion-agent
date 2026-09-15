@@ -17,6 +17,15 @@ from typing import Protocol
 
 from pokemon_red_completion.actions import MacroAction, MacroActionKind
 from pokemon_red_completion.battle_actions import BattleBoostStat
+from pokemon_red_completion.battle_runtime_diagnostics import (
+    BattleRuntimeDiagnostic,
+    diagnose_battle_runtime,
+    trace_action,
+    trace_menu,
+    trace_phase,
+    trace_selection,
+    trace_state,
+)
 from pokemon_red_completion.battle_schedule import (
     BattleStartScheduleController,
     bound_battle_start_schedule,
@@ -398,6 +407,8 @@ def battle_policy_override_active() -> bool:
 class BattleRuntimeError(RuntimeError):
     """Raised when a trainer battle loses required semantic evidence."""
 
+    battle_runtime_diagnostic: BattleRuntimeDiagnostic | None = None
+
 
 class BattleRuntimeTimeoutError(BattleRuntimeError):
     """Raised when a battle does not finish inside its bounded pulse budget."""
@@ -517,6 +528,7 @@ class _MeasuredTurnExecutor:
         return result
 
 
+@diagnose_battle_runtime
 def advance_battle_to_policy_boundary(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
@@ -584,6 +596,7 @@ def advance_battle_to_policy_boundary(
     raise BattleRuntimeTimeoutError(f"{label} exceeded its bounded introduction pulses.")
 
 
+@diagnose_battle_runtime
 def execute_bounded_battle_move_turn(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
@@ -694,6 +707,7 @@ def execute_bounded_battle_move_turn(
         _ACTIVE_BATTLE_STATE.reset(token)
 
 
+@diagnose_battle_runtime
 def run_adaptive_trainer_battle(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
@@ -710,6 +724,7 @@ def run_adaptive_trainer_battle(
     move_decision_guard: MoveDecisionGuard | None = None,
     move_decision_sink: MoveDecisionSink | None = None,
     battle_exit_guard: MoveDecisionGuard | None = None,
+    main_menu_intervention: Callable[[RawGameState], bool] | None = None,
 ) -> RawGameState:
     """Finish one already-active trainer battle with semantic feedback.
 
@@ -724,6 +739,12 @@ def run_adaptive_trainer_battle(
     treated as dialogue between turns and after a cursor-proven attack
     confirmation, where bounded CONFIRM pulses cover opponent-first attack text,
     level-up text, and move-learning prompts.
+
+    An optional maintenance intervention may consume a confirmed MAIN boundary
+    before move selection. It returns True only after handling that boundary,
+    uses the supplied metered executor, and owns its semantic postconditions.
+    Interventions share this loop's pulse limit and are forbidden with a learned
+    policy override. The default path has no intervention.
     """
 
     if (
@@ -750,6 +771,11 @@ def run_adaptive_trainer_battle(
         raise TypeError("battle_exit_guard must be callable or None")
     if move_decision_sink is not None and not callable(move_decision_sink):
         raise TypeError("move_decision_sink must be callable or None")
+    if main_menu_intervention is not None:
+        if not callable(main_menu_intervention):
+            raise TypeError("main_menu_intervention must be callable or None")
+        if battle_policy_override_active():
+            raise BattleRuntimeError("maintenance intervention cannot override a learned actor")
     if required_move_id is not None and (
         not isinstance(required_move_id, int)
         or isinstance(required_move_id, bool)
@@ -782,6 +808,7 @@ def run_adaptive_trainer_battle(
     unknown_menu_pulses = 0
     battle_exit_notified = False
     for _ in range(timing.max_runtime_pulses):
+        trace_phase("battle_boundary")
         raw = reader.read()
         _require_present_state(raw, expected_map=expected_map, label=label)
 
@@ -899,6 +926,15 @@ def run_adaptive_trainer_battle(
                 raise BattleRuntimeError(
                     f"{label} move-decision guard rejected the current MAIN-menu turn."
                 ) from error
+        if main_menu_intervention is not None:
+            # A declared mechanics intervention owns this MAIN boundary. Keeping
+            # it in this loop preserves the pulse budget and diagnostic scope.
+            trace_phase("main_menu_intervention")
+            intervened = main_menu_intervention(raw)
+            if type(intervened) is not bool:
+                raise BattleRuntimeError("MAIN intervention must return a boolean")
+            if intervened:
+                continue
         slot = _choose_usable_slot(
             move_slot_policy,
             raw,
@@ -963,6 +999,8 @@ def run_adaptive_wild_battle(
     unknown_cancel_interval: int = 3,
     transient_zero_pp_main_is_dialogue: bool = False,
     move_decision_guard: MoveDecisionGuard | None = None,
+    move_decision_sink: MoveDecisionSink | None = None,
+    main_menu_intervention: Callable[[RawGameState], bool] | None = None,
 ) -> RawGameState:
     """Finish one active wild battle using the same semantic turn controller.
 
@@ -984,6 +1022,8 @@ def run_adaptive_wild_battle(
             unknown_cancel_interval=unknown_cancel_interval,
             transient_zero_pp_main_is_dialogue=transient_zero_pp_main_is_dialogue,
             move_decision_guard=move_decision_guard,
+            move_decision_sink=move_decision_sink,
+            main_menu_intervention=main_menu_intervention,
         )
     finally:
         _ACTIVE_BATTLE_STATE.reset(token)
@@ -1211,6 +1251,8 @@ def _execute_policy_turn(
     before_attack: Callable[[], None] | None = None,
     allow_player_faint: bool = False,
 ) -> bool:
+    trace_phase("navigate_fight")
+    trace_selection(initial_raw, slot)
     raw = initial_raw
     menu = initial_menu
 
@@ -1246,6 +1288,7 @@ def _execute_policy_turn(
         MacroAction(MacroActionKind.CONFIRM),
         timing.menu_wait_frames,
     )
+    trace_phase("await_move_menu")
     move_menu: BattleMenuState | None = None
     for _ in range(timing.max_move_menu_transition_pulses):
         raw = reader.read()
@@ -1293,6 +1336,7 @@ def _execute_policy_turn(
             return False
         raise BattleRuntimeError(f"{label} never exposed a semantic move menu.")
 
+    trace_phase("navigate_move")
     menu = move_menu
     for _ in range(timing.max_move_navigation_pulses + 1):
         if menu.phase is not BattleMenuPhase.MOVE:
@@ -1339,6 +1383,7 @@ def _execute_policy_turn(
     )
 
 
+@diagnose_battle_runtime
 def execute_observed_trainer_move(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
@@ -1377,6 +1422,7 @@ def execute_observed_trainer_move(
     )
 
 
+@diagnose_battle_runtime
 def _confirm_attack_with_pp_gate(
     reader: BattleStateReader,
     executor: BattleActionExecutor,
@@ -1389,6 +1435,8 @@ def _confirm_attack_with_pp_gate(
     label: str,
     allow_player_faint: bool = False,
 ) -> bool:
+    trace_phase("await_pp_proof")
+    trace_selection(initial_raw, slot)
     confirmation_count = 1
     _pulse(
         executor,
@@ -1416,6 +1464,7 @@ def _confirm_attack_with_pp_gate(
             require_usable=False,
         )
         if current_pp == initial_pp - 1:
+            _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
             _await_selected_turn_effect(
                 reader,
                 executor,
@@ -1423,7 +1472,6 @@ def _confirm_attack_with_pp_gate(
                 raw=raw,
                 initial_raw=initial_raw,
                 slot=slot,
-                spent_pp=current_pp,
                 timing=timing,
                 label=label,
                 allow_player_faint=allow_player_faint,
@@ -1435,6 +1483,7 @@ def _confirm_attack_with_pp_gate(
             # attack wait.  The new non-zero move identity in the exact selected
             # slot is then stronger semantic evidence than the overwritten PP
             # counter, whose old one-point decrement is no longer observable.
+            _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
             return True
         if current_pp != initial_pp:
             raise BattleRuntimeError(f"{label} move slot {slot} changed PP by an invalid amount.")
@@ -1554,7 +1603,8 @@ def _selected_move_identity_replaced(
     after_pp = current_raw.battler_pp
     index = slot - 1
     return bool(
-        before_moves is not None
+        initial_raw.active_party_index == current_raw.active_party_index
+        and before_moves is not None
         and after_moves is not None
         and after_pp is not None
         and len(before_moves) > index
@@ -1728,20 +1778,27 @@ def _await_selected_turn_effect(
     raw: RawGameState,
     initial_raw: RawGameState,
     slot: int,
-    spent_pp: int,
     timing: BattleRuntimeTiming,
     label: str,
     allow_player_faint: bool = False,
 ) -> None:
     """Latch one PP-proven turn until its semantic effect becomes observable."""
 
+    trace_phase("await_effect")
     saw_unknown = False
-    for _ in range(timing.max_post_attack_transition_pulses):
+    for pulse in range(timing.max_post_attack_transition_pulses + 1):
+        # Resource proof precedes every success path, including simultaneous
+        # effects, exits and the observation after the final bounded pulse.
+        _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
         if raw.battle_state == 0:
             return
         if _selected_turn_effect_observed(initial_raw, raw):
             return
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
+        if menu.phase is BattleMenuPhase.MAIN and saw_unknown:
+            return
+        if pulse == timing.max_post_attack_transition_pulses:
+            break
         if menu.phase is BattleMenuPhase.UNKNOWN:
             saw_unknown = True
             _pulse(
@@ -1750,8 +1807,6 @@ def _await_selected_turn_effect(
                 timing.attack_wait_frames,
             )
         elif menu.phase is BattleMenuPhase.MAIN:
-            if saw_unknown:
-                return
             # A stale MAIN signature can appear immediately after PP is spent.
             # B cannot select FIGHT and therefore cannot spend a second PP.
             _pulse(
@@ -1768,28 +1823,37 @@ def _await_selected_turn_effect(
             label=label,
             allow_player_faint=allow_player_faint,
         )
-        if _selected_turn_effect_observed(initial_raw, raw):
-            return
-        current_pp = _current_pp(
-            raw,
-            slot=slot,
-            label=label,
-            require_usable=False,
-        )
-        if current_pp != spent_pp:
-            raise BattleRuntimeError(
-                f"{label} changed move-slot {slot} PP after its single-attack proof: "
-                f"species={raw.active_party_species_id!r}, "
-                f"moves={initial_raw.battler_moves!r}->{raw.battler_moves!r}, "
-                f"pp={initial_raw.battler_pp!r}->{raw.battler_pp!r}, "
-                f"enemy={initial_raw.enemy_species_id!r}/{initial_raw.enemy_hp!r}"
-                f"->{raw.enemy_species_id!r}/{raw.enemy_hp!r}."
-            )
-    if raw.battle_state == 0:
-        return
-    if _selected_turn_effect_observed(initial_raw, raw):
-        return
     raise BattleRuntimeError(f"{label} never exposed the selected turn's semantic effect.")
+
+
+def _verify_selected_turn_pp(
+    initial: RawGameState,
+    current: RawGameState,
+    *,
+    slot: int,
+    label: str,
+) -> None:
+    """Prove one selected spend against the original battler's whole PP vector.
+
+    Effect evidence cannot excuse another spend. A selected move replacement
+    retains the existing compatibility rule, but only on the same battler;
+    a forced switch must instead provide the original party member's PP.
+    """
+
+    before = initial.battler_pp
+    after = _original_battler_pp_vector(initial, current, label=label)
+    if before is None or after is None or len(before) != len(after):
+        raise BattleRuntimeError(f"{label} lacks a complete selected-turn PP vector.")
+    replaced = _selected_move_identity_replaced(initial, current, slot=slot)
+    for index, (old, new) in enumerate(zip(before, after, strict=True)):
+        if index == slot - 1 and replaced:
+            continue
+        expected = (old & _CURRENT_PP_MASK) - (index == slot - 1)
+        if new & _CURRENT_PP_MASK != expected:
+            raise BattleRuntimeError(
+                f"{label} violated selected-turn PP accounting at slot {index + 1}: "
+                f"selected={slot}, expected={expected}, observed={new & _CURRENT_PP_MASK}."
+            )
 
 
 def _selected_turn_effect_observed(
@@ -1816,6 +1880,7 @@ def _choose_usable_slot(
     intent: BattleIntent | None,
     label: str,
 ) -> int:
+    trace_phase("policy_selection")
     try:
         observation = BattlePolicyObservation(raw, intent)
 
@@ -1907,6 +1972,7 @@ def _original_battler_pp_vector(
 
 
 def _validated_menu(menu: BattleMenuState, *, label: str) -> BattleMenuState:
+    trace_menu(menu)
     if menu.phase is BattleMenuPhase.UNKNOWN:
         valid = menu.selected_main_command is None and menu.selected_move_slot is None
     elif menu.phase is BattleMenuPhase.MAIN:
@@ -1951,6 +2017,7 @@ def _require_present_state(
     expected_map: int,
     label: str,
 ) -> None:
+    trace_state(raw)
     if raw.map_id != expected_map:
         raise BattleRuntimeError(
             f"{label} left expected map {expected_map:#04x} for {raw.map_id!r}."
@@ -1985,6 +2052,7 @@ def _require_present_turn_state(
     if not allow_player_faint:
         _require_present_state(raw, expected_map=expected_map, label=label)
         return
+    trace_state(raw)
     if raw.map_id != expected_map:
         raise BattleRuntimeError(
             f"{label} left expected map {expected_map:#04x} for {raw.map_id!r}."
@@ -2001,9 +2069,14 @@ def _pulse(
     action: MacroAction,
     wait_frames: int,
 ) -> None:
+    trace_action(action, completed=False)
     executor.execute(action)
+    trace_action(action, completed=True)
     _wait(executor, wait_frames)
 
 
 def _wait(executor: BattleActionExecutor, frames: int) -> None:
-    executor.execute(MacroAction(MacroActionKind.WAIT, repeat=frames))
+    action = MacroAction(MacroActionKind.WAIT, repeat=frames)
+    trace_action(action, completed=False)
+    executor.execute(action)
+    trace_action(action, completed=True)

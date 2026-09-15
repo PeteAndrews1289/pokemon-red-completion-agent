@@ -1,45 +1,37 @@
 # Agent roles and coordination
 
-## Ownership
+Pete owns requirements and acceptance. Codex owns implementation, verification and publication.
+Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
-Pete owns requirements and acceptance decisions. Codex owns integration, verification and GitHub publication. External agents supplement that work; they do not create mandatory review gates for every small change.
-
-- **Codex:** implement the active bounded task, inspect actual outcomes, keep claims factual, test locally and publish useful batches.
-- **Antigravity / Flash:** bounded drafts or targeted reviews when they save work. Use an isolated branch/worktree for explicitly delegated edits; review and test before integration.
-- **Claude:** selective architecture, experiment-design and adversarial review when its usage allows. Review findings are proposals, not automatic instructions.
-- **Pete:** sets priorities, observes runs, challenges scope drift and approves material direction changes.
-
-Consult [the handoff](HANDOFF.md) and [active state](ACTIVE_PRODUCT_STATE.md) for current work, and [three-agent workflow](docs/three-agent-workflow.md) for detailed isolation rules. Do not let agents concurrently edit the execution worktree.
+- Codex integrates, verifies outcomes and publishes tested batches.
+- Use **Gemini 3.8 Flash High through the Antigravity app**, as Pete requested; not the Flash CLI.
+- Claude supplies selective read-only reviews when useful. Neither reviewer grants gameplay authority.
+- External reviews are bounded assistance, not a standing gate. Reviewers do not edit this worktree.
 
 ## Current assignment
 
-Model109's four-way fishing choice added registration83 and training row110. Model110's next
-four-way choice reached an unsupported scripted dialogue after435 actions; that consumed failure
-became row111. The current zero-input restart preserves the exact interruption with83 registrations,
-63 living species and67 specimens. No independent evaluation or authority promotion occurred.
+The one-session ROM-free battle contingency implementation is complete. One living-battler switch
+after observed stall/no usable PP shares the original runtime and durable action/frame meter.
+537 focused tests, lint and whole-source type checking passed. Cartridge behavior remains unverified.
+Next is a newly frozen campaign C, not a replay of consumed campaign B.
 
-Continue from model111. The destination capability gate is qualified in source
-`07fbfbbd767e5648a03be955e93b888f97ed02c3`; publish it under one green GitHub run. Then
-recover ordinary input control through generic deterministic support, rebuild the action-free menu
-and permit at most one newly committed choice. Do not retry the failed candidate, add a
-named-species route, hide destination identity in features, reset resources or move into
-Blue/Crystal. Mixed acquisition-family coverage remains unfinished.
+No learning or collection delta: Model121 remains 121 examples/83 successes and 86/151 registrations.
+The heterogeneous acquisition lesson stays paused until the required cartridge gate passes.
+Fainted forced switching is distinct from this voluntary contingency and remains unqualified.
 
-The route repair passed local closeout. Use the next external read-only audit after the live
-zero-label recovery and fresh menu outcome, where it can evaluate a meaningful product boundary.
-Antigravity already found and helped close runner-wiring and documentation-surface defects in the
-preceding storage session. Claude found no earlier closeout blocker and correctly moved the generic
-capability gate ahead of the next menu. Its cosmetic concern about the immutable failed episode's
-`capture` identifier remains rejected: the name is provenance, while status and gain fields are
-explicit.
+## Actual reviewer contribution
 
-## Reviewer brief
+Flash 3.8 High completed two read-only contract reviews in Antigravity. Accepted: PP spends without
+damage do not prove immunity/stall cause, and reserve screening does not guarantee switch-in survival.
+Its low-level reserve example does not apply to the existing level/HP/status screen. A Run fallback
+was not adopted: one switch and a retained second-stall failure are the deliberate disposable WIN
+boundary. After clarification it reported no remaining concrete P 0/P 1 design defect.
+This was not a source-code audit. Claude CLI was not used this session.
 
-Review the active task against the shared registered-Pokédex goal. Distinguish learned choices from deterministic skills, and training outcomes from independent performance. Identify a concrete defect and the shortest test that could expose it. Do not propose another full teacher replay or extensive experiment bureaucracy without a specific learning benefit.
+Refreshed September 15 app quota: Gemini 57% weekly/98% five-hour remaining, resets in
+3 days 6 hours/2 hours 43 minutes. Antigravity Claude/GPT:86% weekly/100% five-hour.
+These are Antigravity pools, not the separate Claude subscription.
 
-Report accepted/rejected findings and reasons after external review. Check service usage when
-available. See the [latest engineering report](docs/work-sessions/2026-09-12-model111-route-capability-gate.md)
-and [latest learning report](docs/work-sessions/2026-09-12-model111-fishing-learning-loop.md) for
-limitations and adjudication.
-
-[Current reviewer entry point](docs/current-agent-handoffs.md) · [Historical coordination](docs/history/agent-coordination-through-2026-09-10.md)
+Next setting: Sol High, Fast off, approximately 1–2 hours.
+[Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
