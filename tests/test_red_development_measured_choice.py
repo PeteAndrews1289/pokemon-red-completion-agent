@@ -1212,7 +1212,10 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert arm.outcome.frame_cost == 2400 / 3_000_000
 
 
-def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monkeypatch):
+@pytest.mark.parametrize("failed_exception", [False, True])
+def test_autonomous_choice_is_admitted_without_replaying_actions(
+    tmp_path, monkeypatch, failed_exception
+):
     store, _, _, behavior = _bootstrap_registered_model(tmp_path / "registered", monkeypatch)
     behavior = replace(behavior, model=_live_model())
     base = _valid_choice(
@@ -1266,13 +1269,17 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monke
         "before": {"actions": 0, "frames": 0},
         "before_state_sha256": base.parent_state_sha256,
         "choice": decision,
-        "error": None,
-        "error_type": None,
+        "error": "capture controller failed" if failed_exception else None,
+        "error_type": "RedTravelCaptureError" if failed_exception else None,
+        "error_chain": (
+            [{"error": "capture controller failed", "error_type": "RedTravelCaptureError"}]
+            if failed_exception else None
+        ),
         "ordinal": 0,
-        "safe_terminal": True,
+        "safe_terminal": not failed_exception,
         "selected_kind": selected_kind,
         "terminal_state_sha256": base.terminal_state_sha256,
-        "verification": "succeeded",
+        "verification": None if failed_exception else "succeeded",
     }
     measured, result = publish_autonomous_measured_choice(
         store,
@@ -1283,7 +1290,9 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monke
         decision=decision,
         outcome=outcome,
         before_observation=base.before_observation,
-        after_observation=base.after_observation,
+        after_observation=(
+            base.before_observation if failed_exception else base.after_observation
+        ),
         before_economy=EconomySnapshot(1000, ()),
         after_economy=EconomySnapshot(1000, ()),
         autonomous_plan_sha256="4" * 64,
@@ -1298,7 +1307,7 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monke
     example = load_red_development_measured_choice_example(
         store, measured, objective=REGISTERED_OBJECTIVE
     )
-    assert example.outcome.verified_success is True
+    assert example.outcome.verified_success is not failed_exception
     assert example.outcome.action_cost == 150 / 30_000
     assert result["eligible_examples"] == 1
     assert result["action_trace_available"] is False
@@ -1316,7 +1325,9 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monke
             decision=decision,
             outcome=altered,
             before_observation=base.before_observation,
-            after_observation=base.after_observation,
+            after_observation=(
+                base.before_observation if failed_exception else base.after_observation
+            ),
             before_economy=EconomySnapshot(1000, ()),
             after_economy=EconomySnapshot(1000, ()),
             autonomous_plan_sha256="4" * 64,

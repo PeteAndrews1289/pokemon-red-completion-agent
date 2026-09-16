@@ -98,6 +98,26 @@ def publish_autonomous_measured_choice(
     selection_seed = intent.get("selection_seed")
     probabilities = decision.get("probabilities")
     scores = decision.get("scores")
+    succeeded = (
+        outcome.get("verification") == "succeeded"
+        and outcome.get("error") is None
+        and outcome.get("error_type") is None
+        and outcome.get("safe_terminal") is True
+    )
+    error_chain = outcome.get("error_chain")
+    failed_exception = (
+        outcome.get("verification") is None
+        and isinstance(outcome.get("error"), str)
+        and bool(outcome.get("error"))
+        and isinstance(outcome.get("error_type"), str)
+        and bool(outcome.get("error_type"))
+        and isinstance(outcome.get("safe_terminal"), bool)
+        and isinstance(error_chain, list)
+        and bool(error_chain)
+        and isinstance(error_chain[0], Mapping)
+        and error_chain[0].get("error") == outcome.get("error")
+        and error_chain[0].get("error_type") == outcome.get("error_type")
+    )
     if (
         type(selected_index) is not int
         or type(selection_seed) is not int
@@ -114,10 +134,7 @@ def publish_autonomous_measured_choice(
         or decision.get("emulator_frames") != 0
         or outcome.get("ordinal") != ordinal
         or outcome.get("choice") != decision
-        or outcome.get("verification") != "succeeded"
-        or outcome.get("error") is not None
-        or outcome.get("error_type") is not None
-        or outcome.get("safe_terminal") is not True
+        or not (succeeded or failed_exception)
     ):
         raise ValueError("autonomous choice receipt differs")
     before = _mapping(outcome.get("before"), "before facts")
@@ -141,7 +158,6 @@ def publish_autonomous_measured_choice(
     if type(target_cash) is not int:
         raise ValueError("autonomous choice target cash differs")
     selected_kind = GoalKind(str(outcome.get("selected_kind")))
-    succeeded = True
     observed = red_registered_economy_outcome(
         before_observation,
         after_observation,
@@ -207,7 +223,7 @@ def publish_autonomous_measured_choice(
         terminal_state_sha256=str(declaration["terminal_state_sha256"]),
         controller_actions=actions,
         emulator_frames=frames,
-        status="retained_success",
+        status="retained_success" if succeeded else "retained_exception",
     )
     choice = RedDevelopmentMeasuredChoice(
         choice_id=choice_id,
@@ -239,7 +255,7 @@ def publish_autonomous_measured_choice(
         },
         observer_source_commit=source_commit,
         observer_source_bundle_sha256=source_bundle_sha256,
-        succeeded=True,
+        succeeded=succeeded,
         selected_goal_kind=selected_kind,
         before_economy=before_economy,
         after_economy=after_economy,

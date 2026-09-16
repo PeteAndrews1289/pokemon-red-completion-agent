@@ -123,7 +123,11 @@ def main() -> int:
         or run_result.get("teacher_actions") != 0
         or not isinstance(outcomes, list)
         or run_result.get("executed_decisions") != len(outcomes)
-        or run_result.get("successful_decisions") != len(outcomes)
+        or run_result.get("successful_decisions") != sum(
+            outcome.get("verification") == "succeeded"
+            for outcome in outcomes
+            if isinstance(outcome, dict)
+        )
         or not outcomes
     ):
         raise ValueError("autonomous run scope differs")
