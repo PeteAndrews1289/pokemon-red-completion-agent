@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model123-autonomous-collection",
+  "as_of_session": "2026-09-16-model125-prerequisites-and-cubone",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model123-autonomous-collection-2026-09-16.json"
+      "evidence": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1514,6 +1514,12 @@
       "result": "Two consecutive Model123 goals completed without a teacher-selected action or state reset: Vileplume evolution and seven Great Balls purchased. Red advanced89 to90/124 registrations, with67 living species and71 specimens;755 actions/64440 frames.107 targeted tests passed.",
       "deviation": "At Pete's direction, replaced one-off teacher-steered execution with a bounded goal/destination decision loop. The third menu lacked distinct executable candidates at228 cash and one free active-box slot. This correlated development run is not an independent evaluation; Model123 remains123 examples/84 successes and no full-Red gate changed.",
       "next": "Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned90-registration terminal; no manual recovery goal or reset."
+    },
+    {
+      "session": "2026-09-16-model125-prerequisites-and-cubone",
+      "result": "Two retained autonomous choices fitted Model125 at125 examples/86 successes. Nonlearning storage safety created19 box slots, Model125 chose Pokemon Tower from four capture routes, and exact-state support caught Cubone without replaying the route. Red reached91/124 registrations and72 specimens.",
+      "deviation": "The capture adapter's generic failure did not retain its nested cause, so the failed outcome remains failed and excluded. A separate authenticated support continuation resumed only the exact battle with zero model queries or teacher choices. No full-Red gate or formal authority promotion changed.",
+      "next": "Bound action-free regional inventory by reachable-region priority, then allow at most one new Model125 choice from the exact91-registration terminal. Qualify partial-League reset separately; do not sell items or publish to GitHub."
     }
   ],
   "closed_milestones": [
@@ -2133,6 +2139,32 @@
       "session": "2026-09-11-resource-cycle-and-staryu",
       "stage": "red-collection",
       "closure": "The learner completed useful earning and spending choices and turned replenishment into registrations; later BQ repeated the full cycle and caught Horsea."
+    },
+    {
+      "title": "Autonomous prerequisites and first regional capture",
+      "items": [
+        {
+          "id": "model125-fit",
+          "label": "Admit two retained autonomous outcomes and fit Model125",
+          "done": true,
+          "evidence": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json"
+        },
+        {
+          "id": "autonomous-storage-relief",
+          "label": "Create capture headroom without a teacher-selected learning action",
+          "done": true,
+          "evidence": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json"
+        },
+        {
+          "id": "model-selected-regional-capture",
+          "label": "Retain one model-selected regional capture through an exact-state recovery",
+          "done": true,
+          "evidence": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json"
+        }
+      ],
+      "session": "2026-09-16-model125-prerequisites-and-cubone",
+      "stage": "red-collection",
+      "closure": "Model125 selected Pokemon Tower from four capture routes; exact-state support caught Cubone without replaying the route. Collection reached 91 registrations. Post-capture regional inventory latency is the next blocker."
     }
   ]
 }

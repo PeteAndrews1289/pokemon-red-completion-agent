@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model123-autonomous-collection**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model125-prerequisites-and-cubone**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -39,7 +39,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
 - [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
 
-Current model: **123 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **125 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -89,7 +89,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-autonomous-collection-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model125-prerequisites-and-cubone
+
+Two retained autonomous choices fitted Model125 at125 examples/86 successes. Nonlearning storage safety created19 box slots, Model125 chose Pokemon Tower from four capture routes, and exact-state support caught Cubone without replaying the route. Red reached91/124 registrations and72 specimens.
+
+**Deviation:** The capture adapter's generic failure did not retain its nested cause, so the failed outcome remains failed and excluded. A separate authenticated support continuation resumed only the exact battle with zero model queries or teacher choices. No full-Red gate or formal authority promotion changed.
+
+**Next:** Bound action-free regional inventory by reachable-region priority, then allow at most one new Model125 choice from the exact91-registration terminal. Qualify partial-League reset separately; do not sell items or publish to GitHub.
 
 ### 2026-09-16-model123-autonomous-collection
 

@@ -33,25 +33,25 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Bounded execution capability widened to consecutive model-selected goals and model-selectable capture destinations. Two successive live goals completed; no capture destination was selected and no formal authority promotion or fit is claimed.",
-        "blocker": "After evolution and a model-selected purchase, only 228 cash and one free active-box slot remain. The autonomous menu does not enable storage relief or earning; the third observation failed to expose distinct executable candidates before any query.",
-        "decision": "Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned 90-registration terminal; no manual recovery goal or reset.",
+        "authority_delta": "Model125 independently selected a real Pokemon Tower capture route after deterministic storage safety created headroom. Its exact Cubone encounter was retained through a controller failure and completed without replaying the route; the recovery is collection progress but not a training row or authority promotion.",
+        "blocker": "From the earned 91-registration indoor terminal, action-free global regional route enumeration exceeded one minute before producing a menu. Ordinary trainer income is unavailable and the partial League flag pattern is not a qualified renewable-income origin.",
+        "decision": "Bound regional option inventory by reachable-region priority, then rebuild a real multi-choice menu from the exact 91-registration terminal. Separately qualify a legitimate partial-League exit/reset before offering renewable income.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-model123-autonomous-collection-2026-09-16.json",
-          "sha256": "47e6a34383ad68f0fcc78377bdaeb734121c14fead9dfc3b5b04a91493994153"
+          "kind": "model_fit",
+          "path": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json",
+          "sha256": "88925316b19e911e776f8037ae866c90173b6f83981729f22ef47390d395b261"
         },
-        "learning_output": "Two exact on-policy outcomes retained: successful Vileplume evolution and purchase of seven Great Balls. No teacher labels, retries or new admitted training rows. Model123 remains 123 examples / 84 successes.",
-        "next_falsifier": "The earned terminal cannot expose executable storage or earning prerequisites without a manual goal choice, or the two historical choices cannot be admitted with their original menus and measured costs.",
-        "next_session_goal": "Sol High, Fast off, 1-2 hours: retain the two measured outcomes, enable model-selected resource/storage prerequisites, and qualify one bounded continuation from the saved endpoint.",
-        "product_alignment": "The user requested a player rather than a teacher-following script. Goals are now selected, persisted, executed and re-observed automatically; deterministic evolution targets and battle mechanics remain explicit gaps.",
-        "session_id": "2026-09-16-model123-autonomous-collection",
+        "learning_output": "The two retained on-policy outcomes were admitted and fit with no replay, producing Model125 at 125 settled examples / 86 successes. Deterministic storage safety was excluded from learning. The Cubone recovery also remains excluded.",
+        "next_falsifier": "A reachability-prioritized inventory cannot expose at least two executable choices from the unchanged 91-registration terminal within a short action-free time box, or it changes the menu's game state.",
+        "next_session_goal": "Sol High, Fast off, 1-2 hours: bound post-capture route inventory, verify an action-free multi-choice menu, then permit at most one further Model125 decision from the exact Cubone terminal.",
+        "product_alignment": "The player now chooses destinations after resource and storage prerequisites rather than following a teacher route. The session added one legitimate registration and preserved failures, costs and model authority boundaries.",
+        "session_id": "2026-09-16-model125-prerequisites-and-cubone",
         "status": "closed",
-        "stop_condition": "Stop on teacher substitution, lost choice persistence, unsafe state, insufficient real alternatives, reset of completed gameplay, a full run, ROM-hack/Crystal work or unauthorized GitHub publication.",
-        "transfer_result": "ROM-free tests cover changed-state replanning and failure retention. No later-title or independent transfer result."
+        "stop_condition": "Stop if bounded inventory cannot yield real alternatives, changes state, requires identity-bearing model features, substitutes a teacher choice, replays the route, resets completed gameplay, starts a full run, opens ROM-hack/Crystal work or publishes to GitHub.",
+        "transfer_result": "ROM-free tests cover typed failure retention and generic exact-state capture recovery. No later-title or independent transfer result."
       },
       "learned_authority": {
-        "current": "Model123 remains at 123 settled examples / 84 successes. Its new closed-loop runner executed two consecutive model-selected goals from earned states with no teacher substitution. The development save has 90/124 registrations, 67 living species and 71 specimens; the two raw outcomes are not yet fitted.",
+        "current": "Model125 has 125 settled examples / 86 successes. It selected a Pokemon Tower acquisition from four executable capture routes after nonlearning storage safety. The development save has 91/124 registrations and 72 specimens; exact-state recovery retained the selected Cubone but is not learning evidence.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned 90-registration terminal; no manual recovery goal or reset.",
+      "next_decision": "Bound regional option inventory by reachable-region priority, then rebuild a real multi-choice menu from the exact 91-registration terminal. Separately qualify a legitimate partial-League exit/reset before offering renewable income.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -252,7 +252,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 123,
+        "registered_train_examples": 125,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
