@@ -41,6 +41,10 @@ ROUTE_12_SNORLAX_CLEARED = "story:route_12_snorlax_cleared"
 ROUTE_12_SNORLAX_AT = (62, 10)
 SEAFOAM_CURRENT_CONTROL = "field:seafoam_current_control"
 SEAFOAM_INTERIOR_MAP_IDS = frozenset(range(0x9F, 0xA3))
+SAFARI_ADMISSION_SUPPORTED = "service:safari_admission_supported"
+SAFARI_ADMISSION_GATE_EDGES = tuple(
+    ((3, column), (2, column)) for column in (3, 4)
+)
 ROUTE_5_GATE_MAP_ID = 0x46
 ROUTE_6_GATE_MAP_ID = 0x49
 ROUTE_8_GATE_MAP_ID = 0x4F
@@ -247,7 +251,36 @@ def apply_gen1_story_requirements(
     """Bind every currently modelled Generation I story threshold."""
 
     story_bound = apply_local_passage_requirements(graphs, GEN1_STORY_PASSAGE_REQUIREMENTS)
-    return apply_gen1_seafoam_current_requirements(story_bound)
+    admission_bound = apply_gen1_safari_admission_requirement(story_bound)
+    return apply_gen1_seafoam_current_requirements(admission_bound)
+
+
+def apply_gen1_safari_admission_requirement(
+    graphs: Mapping[int, LocalGraph],
+) -> dict[int, LocalGraph]:
+    """Do not treat a paid, scripted admission as a free walking edge.
+
+    The Safari receptionist can displace the player instead of acknowledging
+    an upward step. Ordinary traversal never grants this capability: a future
+    route must compose an explicit, metered admission skill before planning
+    through the gate. This preserves the independent scripted Safari chapter.
+    """
+
+    gate_map = int(MapId.SAFARI_ZONE_GATE)
+    if gate_map not in graphs:
+        return dict(graphs)
+    return apply_local_passage_requirements(
+        graphs,
+        tuple(
+            LocalPassageRequirement(
+                gate_map,
+                source,
+                target,
+                SAFARI_ADMISSION_SUPPORTED,
+            )
+            for source, target in SAFARI_ADMISSION_GATE_EDGES
+        ),
+    )
 
 
 def apply_gen1_seafoam_current_requirements(

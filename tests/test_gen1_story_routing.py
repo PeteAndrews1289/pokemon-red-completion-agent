@@ -16,6 +16,8 @@ from pokemon_red_completion.gen1_story_routing import (
     ROUTE_12_SNORLAX_REQUIREMENTS,
     SAFFRON_GUARD_GATE_REQUIREMENTS,
     SAFFRON_GUARDS_OPEN,
+    SAFARI_ADMISSION_GATE_EDGES,
+    SAFARI_ADMISSION_SUPPORTED,
     SAFFRON_GYM_OPEN,
     SAFFRON_GYM_REQUIREMENTS,
     SAFFRON_GYM_ROCKET_GUARD_AT,
@@ -25,6 +27,7 @@ from pokemon_red_completion.gen1_story_routing import (
     SILPH_ENTRANCE_OPEN,
     SILPH_ENTRANCE_REQUIREMENTS,
     apply_gen1_seafoam_current_requirements,
+    apply_gen1_safari_admission_requirement,
     apply_gen1_story_requirements,
     gen1_story_capabilities,
     gen1_story_static_object_blockers,
@@ -120,6 +123,29 @@ def vertical_gate_graph() -> LocalGraph:
                 outgoing.append(LocalEdge((row + 1, column), "down"))
             edges[row, column] = tuple(outgoing)
     return LocalGraph(edges)
+
+
+def test_scripted_safari_admission_is_not_an_ordinary_route_edge() -> None:
+    gate_map = int(MapId.SAFARI_ZONE_GATE)
+    graph = vertical_gate_graph()
+    projected = apply_gen1_safari_admission_requirement({gate_map: graph})[gate_map]
+    for source, target in SAFARI_ADMISSION_GATE_EDGES:
+        assert next(
+            edge for edge in projected.neighbors(source) if edge.target == target
+        ).requirements == {SAFARI_ADMISSION_SUPPORTED}
+    assert SAFARI_ADMISSION_SUPPORTED not in gen1_story_capabilities(
+        raw(status_flags_1=0)
+    )
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(projected, (5, 3), (0, 3), capabilities=frozenset())
+    with pytest.raises(LocalRouterError, match="no permitted local route"):
+        find_local_path(projected, (5, 4), (0, 4), capabilities=frozenset())
+    assert find_local_path(
+        projected,
+        (5, 3),
+        (0, 3),
+        capabilities=frozenset({SAFARI_ADMISSION_SUPPORTED}),
+    ).coordinates[0::5] == ((5, 3), (0, 3))
 
 
 def police_graph() -> LocalGraph:
