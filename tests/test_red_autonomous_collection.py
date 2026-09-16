@@ -1,23 +1,39 @@
+from dataclasses import replace
 from types import SimpleNamespace
 
+import pytest
 from test_red_goal_context import _ActionDelegate
 from test_red_live_option_menu import _binding, _ordinary_bindings, _situation
 from test_red_native_boxed_item_evolution import _runtime
 
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
 from pokemon_red_completion.observation import ItemId
 from pokemon_red_completion.red_autonomous_collection import autonomous_collection_options
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
 
 
+@pytest.mark.parametrize("held_stone", [False, True])
 def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choice(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, held_stone
 ):
     import pokemon_red_completion.red_autonomous_collection as module
 
-    runtime, _ = _runtime(tmp_path, monkeypatch, source=58, target=59, item=ItemId.FIRE_STONE)
+    runtime, reader = _runtime(tmp_path, monkeypatch, source=58, target=59, item=ItemId.FIRE_STONE)
+    if held_stone:
+        reader.raw = replace(reader.raw, bag_items=((int(ItemId.FIRE_STONE), 1),))
     calls = []
+    ordinary = _ordinary_bindings(calls)
+    evolution = _binding(GoalKind.EVOLVE_SPECIES, binding_ref="private-evolution", calls=calls)
+    ordinary = replace(
+        ordinary,
+        opportunities=tuple(
+            evolution.opportunity if op.kind is GoalKind.EVOLVE_SPECIES else op
+            for op in ordinary.opportunities
+        ),
+        bindings=(*ordinary.bindings, evolution),
+    )
     regional = tuple(
         SimpleNamespace(
             binding=_binding(
@@ -43,7 +59,7 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         lambda *args, **kwargs: (
             lambda: SimpleNamespace(
                 situation=_situation(resources=0.1),
-                binding_set=_ordinary_bindings(calls),
+                binding_set=ordinary,
             )
         ),
     )
@@ -59,7 +75,11 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         model_feature_version=4,
         ordering_seed_sha256="a" * 64,
     )
-    assert len(options.bindings) == 5
+    assert len(options.bindings) == 6
+    candidate = next(
+        c for c in options.menu.candidates if c.features.kind is LivingDexOptionKind.EVOLVE
+    )
+    assert candidate.economy_offer.planned_spend == (0 if held_stone else 2100)
     assert calls == []
     assert actions.actions_executed == 0
     for destination in regional:

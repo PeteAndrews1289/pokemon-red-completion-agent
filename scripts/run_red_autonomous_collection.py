@@ -31,7 +31,10 @@ from pokemon_red_completion.red_autonomous_player import AutonomousSnapshot, run
 from pokemon_red_completion.red_collection import RED_COLLECTION_GAME_ID, red_species_ref
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
-from pokemon_red_completion.red_player_model import load_player_goal_model_record
+from pokemon_red_completion.red_player_model import (
+    RedPlayerModelRecord,
+    load_player_goal_model_record,
+)
 from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.registration_memory import (
     RegistrationSnapshot,
@@ -65,7 +68,10 @@ def main() -> None:
         Path(plan["model"]["path"]),
         expected_model_sha256=plan["model_sha256"],
     )
-    if model.objective != "pokemon.registered-collection.v1":
+    if (
+        not isinstance(model, RedPlayerModelRecord)
+        or model.objective != "pokemon.registered-collection.v1"
+    ):
         raise ValueError("autonomous player requires its registered model")
     envelope = dict(json.loads(payloads["checkpoint"])["envelope"])
     envelope.update(
@@ -168,8 +174,8 @@ def main() -> None:
                         "registered_species": len(collection.owned_species),
                         "owned_species": sorted(collection.owned_species),
                         "specimen_counts": dict(counts),
-                        "living_species": len(collection.living_species),
-                        "specimens": collection.total_living_specimens,
+                        "living_species": len(counts),
+                        "specimens": len(collection.specimens),
                         "map_id": int(current.raw.map_id),
                         "position_yx": [current.raw.player_y, current.raw.player_x],
                         "battle_state": current.raw.battle_state,
@@ -204,6 +210,8 @@ def main() -> None:
 
         if args.inspect:
             before = snapshot()
+            if not before.safe:
+                raise ValueError(f"unsafe inspection origin: {before.facts}")
             options = observe(0)
             after = snapshot()
             if before != after:
