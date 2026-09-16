@@ -44,6 +44,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
     RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
@@ -448,7 +449,15 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
-        elif schema == RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA:
+        elif schema in {
+            RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
+        }:
+            binding_pattern = (
+                r"pokemon\.red:safari-live:[0-9a-f]{64}"
+                if schema == RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA
+                else r"red-collection-fly-goal:[0-9a-f]{64}:[0-9a-f]{64}"
+            )
             mismatch = (
                 set(declaration) != frozen_safari_keys
                 or declaration.get("parent_state_sha256") != parent_state_sha256
@@ -460,7 +469,7 @@ def _validate_selection_declaration(
                 or declaration.get("retry_authorized") is not False
                 or declaration.get("teacher_labels") != 0
                 or re.fullmatch(
-                    r"pokemon\.red:safari-live:[0-9a-f]{64}",
+                    binding_pattern,
                     str(declaration.get("selected_binding_ref")),
                 )
                 is None
@@ -742,6 +751,7 @@ class RedDevelopmentMeasuredChoice:
                 RED_LIVE_FROZEN_FISHING_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_PURCHASE_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
@@ -795,6 +805,14 @@ class RedDevelopmentMeasuredChoice:
             selected_candidate_index=self.selected_candidate_index,
             first_segment_pair_id=self.segments[0].pair_id,
         )
+        if self.selection_declaration.get(
+            "schema"
+        ) == RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA and self.selection_declaration.get(
+            "selected_option_sha256"
+        ) != canonical_sha256(
+            self.menu.candidates[self.selected_candidate_index].policy_dict(self.menu.context)
+        ):
+            raise ValueError("measured choice selected option hash differs")
         _sha256(self.selection_declaration_sha256, subject="selection declaration hash")
         if (
             canonical_sha256(self.selection_declaration) != self.selection_declaration_sha256

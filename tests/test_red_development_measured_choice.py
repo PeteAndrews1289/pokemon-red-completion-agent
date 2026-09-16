@@ -32,6 +32,12 @@ from pokemon_red_completion.collection import CollectionLocation, LivingSpecimen
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_runtime import GoalManagerCompositionError
 from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
+from pokemon_red_completion.living_dex_option_value import (
+    LivingDexOptionAvailability,
+    LivingDexOptionCandidate,
+    LivingDexOptionFeatures,
+    LivingDexOptionKind,
+)
 from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_collection import red_species_ref
@@ -63,6 +69,7 @@ from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
     RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
@@ -730,6 +737,134 @@ def _valid_frozen_safari_failure_choice(tmp_path: Path):
     )
 
 
+def _valid_heterogeneous_evolution_choice(tmp_path: Path):
+    base = _valid_mixed_restore_choice(tmp_path)
+    _, before_raw, after_raw, policy = observations(tmp_path / "evolution")
+    before = project_registered_observation(before_raw, policy).public_dict()
+    after = project_registered_observation(after_raw, policy).public_dict()
+    calls: list[str] = []
+    evolve = _live_binding(
+        GoalKind.EVOLVE_SPECIES,
+        binding_ref="private:red:evolution",
+        calls=calls,
+    )
+    acquire = _live_binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:acquisition",
+        calls=calls,
+    )
+    evolve_candidate = LivingDexOptionCandidate(
+        binding_ref="evolution-row",
+        features=LivingDexOptionFeatures(
+            kind=LivingDexOptionKind.EVOLVE,
+            completion_gain=1.0,
+            dependency_unlock_gain=0.0,
+            travel_effort=0.0,
+            execution_effort=0.425,
+            resource_cost=0.0,
+            storage_cost=0.0,
+            party_risk=0.18,
+            irreversibility_risk=0.0,
+            uncertainty=0.0,
+        ),
+        availability=LivingDexOptionAvailability.AVAILABLE,
+    )
+    options = build_red_live_option_set(
+        situation=_live_situation(resources=0.4),
+        binding_set=_live_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(evolve, evolve_candidate),
+            supplemental_live_option(
+                acquire,
+                _live_fishing_candidate("acquisition-row", travel=0.658),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="9" * 64,
+        economy_snapshot=base.before_economy,
+        target_cash=base.target_cash,
+    )
+    selected_index = next(
+        index
+        for index, candidate in enumerate(options.menu.candidates)
+        if candidate.features.kind.value == "evolve"
+    )
+    seed = 122_091_503
+    scores, probabilities, _ = _replay_behavior(_live_model(), options.menu, seed=seed)
+    declaration = {
+        "schema": RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA,
+        "source_commit": "e" * 40,
+        "source_bundle_sha256": "f" * 64,
+        "runner_sha256": "0" * 64,
+        "menu_file_sha256": "1" * 64,
+        "query_intent_sha256": "2" * 64,
+        "decision_sha256": "3" * 64,
+        "parent_state_sha256": base.parent_state_sha256,
+        "model_sha256": base.model_sha256,
+        "model_file_sha256": "4" * 64,
+        "policy_sha256": "5" * 64,
+        "profile_sha256": "6" * 64,
+        "menu_sha256": options.menu.policy_sha256,
+        "selected_candidate_index": selected_index,
+        "selected_binding_ref": "red-collection-fly-goal:" + "7" * 64 + ":" + "8" * 64,
+        "selected_option_sha256": canonical_sha256(
+            options.menu.candidates[selected_index].policy_dict(options.menu.context)
+        ),
+        "selection_seed": seed,
+        "behavior_probabilities": list(probabilities),
+        "maximum_actions": 30_000,
+        "maximum_frames": 3_000_000,
+        "policy_queries_during_execution": 0,
+        "teacher_labels": 0,
+        "retry_authorized": False,
+    }
+    segment = replace(
+        base.segments[0],
+        declaration_sha256=canonical_sha256(declaration),
+        controller_actions=11_623,
+        emulator_frames=1_050_627,
+    )
+    outcome = red_registered_economy_outcome(
+        before,
+        after,
+        selected_kind=GoalKind.EVOLVE_SPECIES,
+        succeeded=True,
+        actions=segment.controller_actions,
+        frames=segment.emulator_frames,
+        maximum_actions=30_000,
+        maximum_frames=3_000_000,
+        before_economy=base.before_economy,
+        after_economy=base.after_economy,
+        target_cash=base.target_cash,
+    )
+    return replace(
+        base,
+        choice_id="model122-heterogeneous-evolution",
+        menu=options.menu,
+        selected_candidate_index=selected_index,
+        behavior_probabilities=probabilities,
+        scores=scores,
+        selection_seed=seed,
+        selection_declaration=declaration,
+        selection_declaration_sha256=canonical_sha256(declaration),
+        before_observation=before,
+        after_observation=after,
+        before_observation_sha256=canonical_sha256(before),
+        after_observation_sha256=canonical_sha256(after),
+        segments=(segment,),
+        segments_sha256=canonical_sha256([segment.public_dict()]),
+        controller_actions=segment.controller_actions,
+        emulator_frames=segment.emulator_frames,
+        resource_costs={
+            name: getattr(outcome, name)
+            for name in ("irreversible_loss", "party_cost", "resource_cost", "storage_cost")
+        },
+        observer_source_commit=declaration["source_commit"],
+        selected_goal_kind=GoalKind.EVOLVE_SPECIES,
+        succeeded=True,
+    )
+
+
 def test_frozen_safari_declaration_round_trips_without_replay(tmp_path):
     choice = _valid_frozen_safari_failure_choice(tmp_path)
 
@@ -739,6 +874,32 @@ def test_frozen_safari_declaration_round_trips_without_replay(tmp_path):
     assert restored.selected_goal_kind is GoalKind.ACQUIRE_SPECIES
     assert restored.succeeded is False
     assert restored.to_observed_arm_example().outcome.verified_success is False
+
+
+def test_heterogeneous_evolution_declaration_round_trips_without_resampling(tmp_path):
+    choice = _valid_heterogeneous_evolution_choice(tmp_path)
+
+    restored = RedDevelopmentMeasuredChoice.from_public(choice.public_dict())
+
+    assert restored.public_dict() == choice.public_dict()
+    assert restored.selected_goal_kind is GoalKind.EVOLVE_SPECIES
+    assert restored.succeeded is True
+    assert restored.to_observed_arm_example().outcome.verified_success is True
+
+
+def test_heterogeneous_evolution_selected_option_hash_is_required(tmp_path):
+    choice = _valid_heterogeneous_evolution_choice(tmp_path)
+    document = choice.public_dict()
+    declaration = cast(dict[str, object], document["selection_declaration"])
+    declaration["selected_option_sha256"] = "9" * 64
+    declaration_sha = canonical_sha256(declaration)
+    document["selection_declaration_sha256"] = declaration_sha
+    segments = cast(list[dict[str, object]], document["segments"])
+    segments[0]["declaration_sha256"] = declaration_sha
+    document["segments_sha256"] = canonical_sha256(segments)
+
+    with pytest.raises(ValueError, match="selected option hash differs"):
+        RedDevelopmentMeasuredChoice.from_public(document)
 
 
 def test_write_ahead_frozen_resupply_declaration_round_trips(tmp_path):
