@@ -3,42 +3,37 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Assisted Safari training is isolated from the final player
+## One assisted Safari probe stopped safely
 
-Pete clarified that teachers may alter the *training* environment, provided the
-final model never learns to cheat and official completion remains unassisted. A
-trainer-only `assisted_training_money` plan field now changes only the three
-in-memory money bytes after authenticating the source save. It marks the derived
-state and run as assisted, preserves both hashes, and is rejected by the
-ordinary goal-value fit. It is not a legitimate funding example or final-run
-state. Normal plans and the final player gain no money-write action.
+Pete allows teachers to alter *training* states, but not the final player or
+official Red run. From the authenticated post-Marowak **96/124** save, a marked
+in-memory-only override changed cash **198 → 500**. A separate training-only
+runner selected the unique live Safari skill before input, with **zero model
+queries or fits**. Its provenance, choice and terminal were retained outside
+the repo. The original source save SHA remained unchanged.
 
-The existing metered Safari skill is now available as an autonomous collection
-option when admission is actually affordable. From the authenticated post-
-Marowak **96/124** pre-attempt save, an action-free inspection set cash from
-**198 to 500** only in the derived emulator. The resulting menu had **two
-executable options** (evolution and Safari acquisition). It took **zero
-controller actions, frames and model queries**, made **zero registrations**, and
-the original save's SHA remained unchanged. This proves menu integration and
-affordability gating, **not** a Safari capture, real income or a learned model
-decision. [Evidence](docs/evidence/red-assisted-safari-admission-qualification-2026-09-16.json).
+The one attempt paid the **500** admission and reached the Safari area, then
+stopped at the survey's **66-semantic-action limit** after **431 controller
+actions / 53,700 frames**. The terminal is safe, with 27 Safari Balls and 437
+steps remaining, but **no capture or new registration**. It remains an
+assisted failure, not a legitimate funding lesson or official progress. Do
+not replay this consumed probe just by widening a limit.
+[Evidence](docs/evidence/red-assisted-safari-mechanics-probe-2026-09-16.json).
 
-Before this work, Model136's authentic fishing choice failed safely at the
-Safari gate; its measured failure trained Model137 once. Model137 remains at
-**137 examples / 92 successes / 58 economy-qualified**. The earned development
-state remains **96/124**, 74 specimens and 198 cash. Fresh Red acceptance is
-**0/5**. No model fitting, gameplay or GitHub push occurred this session.
+Model137 stays at **137 examples / 92 successes / 58 economy-qualified**.
+The earned development state stays **96/124**, 74 specimens and 198 cash.
+Fresh Red acceptance remains **0/5**. No GitHub push occurred.
 
 ## Next bounded work
 
-Run one explicitly assisted, teacher-selected *mechanical* Safari probe from
-the derived state and retain its actual cost and terminal; do not admit it to
-ordinary goal-value or economy fitting. Then return to model-selected,
-unassisted decisions on earned states. In parallel, prioritize story and
-battle decision authority: these remain a larger gap than Safari funding for
-the eventual fresh-start Red run. Any final exam must start clean, earn money
-normally and satisfy Champion/Hall-of-Fame and the declared native 124 route.
+The Safari training detour has answered its immediate question: paid transport
+works, but one bounded search did not capture a missing Pokémon. Return to a
+real model-controlled decision on an earned Red state. First check whether two
+genuinely executable collection goals exist; if not, use a bounded story or
+battle decision scenario rather than inventing alternatives or repeating
+Safari. Consequential choice must belong to the model, with the existing
+mechanical controller clearly separated. No full replay, ROM hack or Crystal.
 
-Recommended next setting: **Sol High, Fast off** for the bounded Safari probe;
-use **Astra High** when redesigning the story/battle decision boundary. ROM
-hack and Crystal remain closed until fresh Red acceptance passes.
+Recommended next setting: **Astra High, Fast off** for the story/battle
+authority boundary; it requires design judgment about what the model truly
+controls. Use Sol High for subsequent narrow implementation and tests.

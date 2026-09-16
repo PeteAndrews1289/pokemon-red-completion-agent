@@ -1096,3 +1096,21 @@ unchanged. This qualifies a bounded Safari training probe, not a legitimate earn
 collection registration. Story/battle authority remains a separate prerequisite for final Red.
 
 [Evidence](evidence/red-assisted-safari-admission-qualification-2026-09-16.json).
+
+## September 16 — close the assisted Safari probe and return to learned authority
+
+One explicitly marked, teacher-selected Safari attempt spent the injected 500
+on real admission and reached the area. It stopped safely at the declared
+66-semantic-action search limit after431 controller actions/53,700 frames,
+without capture or registration gain. Model137 was not queried or fitted; the
+earned 96/124 save was unchanged. This validates paid transport and a bounded
+survey attempt, but does not justify widening the same consumed trial or
+claiming the player learned funding, Safari choice or capture.
+
+The immediate development tactic now returns to a genuine model-controlled
+decision on an earned Red state. If collection has no executable alternatives,
+the next bounded qualification targets story/battle authority rather than
+another Safari patch. The Red-first stage IDs, full fresh-run/124-species gate,
+ROM-hack prohibition and later Crystal/Emerald order are unchanged.
+
+[Evidence](evidence/red-assisted-safari-mechanics-probe-2026-09-16.json).

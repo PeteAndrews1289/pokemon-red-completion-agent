@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Probe marked assisted Safari mechanics once, then return to unassisted model choices on earned states; genuine funding and story/battle authority remain final-player requirements.
+- Next decision: Stop the assisted Safari line after its safe search-limit failure; qualify a genuine model-controlled choice from earned Red state, prioritizing story/battle authority if collection is singleton.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Use disclosed teacher assistance for Safari mechanics while keeping money writes, false economy labels and assisted terminals outside the final player. |
+| Reusable capability | Retain assisted Safari mechanics outcomes without contaminating the learner, then restore real model choice on earned Red states. |
 | Authority now | Model137 has 137 settled examples / 92 successes / 58 economy-qualified. One new Model136 fishing choice failed safely during route traversal; Red development save remains 96/124, without independent promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The assisted Safari option is not executable at the paid gate, or the money override or its outcome leaks into ordinary goal-value fitting or an official run. |
+| Cheapest falsifier | The earned Red state has no two genuinely executable alternatives, or a story/battle choice still delegates the consequential decision to the fixed controller. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-assisted-safari-admission-qualification** · status **closed** · evidence [qualification](docs/evidence/red-assisted-safari-admission-qualification-2026-09-16.json)
+**2026-09-16-assisted-safari-mechanics-probe** · status **closed** · evidence [qualification](docs/evidence/red-assisted-safari-mechanics-probe-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Teacher-only in-memory money assistance removes a training bottleneck without adding a cheat action to the final player or claiming genuine economy learning. |
-| Learning output | No new learner output this session. Action-free assisted inspection found two executable menu options from a marked derived state: zero actions, frames, queries and registrations. |
+| Product alignment | The assisted probe tested real paid transport and bounded Safari search without giving the model a cheating action, funding label or artificial registration credit. |
+| Learning output | No new learner output. One teacher-selected assisted Safari attempt used 431 actions / 53700 frames and stopped safely at the 66-semantic-action survey limit; registrations stayed 96/124. |
 | Authority delta | No new model choice, fit, registration or authority promotion. Model137 remains at 137 examples / 92 successes / 58 economy-qualified. |
-| Transfer result | No transfer test. The original authenticated save SHA stayed unchanged; assisted menu qualification is development scaffolding, not independent evaluation. |
-| Blocker | The assisted 500-cash menu qualifies Safari as an option, but Safari execution is untested. Genuine funding, model-selected earned-state choice, story and battle authority remain open for the final Red run. |
-| Decision | Use one teacher-selected, marked assisted Safari mechanical probe, then return to model-selected unassisted decisions on earned states. Never admit injected money as economy learning or official progress. |
-| Next session | Sol High, Fast off, about 45-60 minutes: run one teacher-selected assisted Safari mechanical probe, retain cost and terminal, then prioritize earned-state model choice and story/battle authority. |
-| Next falsifier | Safari execution fails its paid-script or resource guard, or assisted results can enter ordinary goal-value fit or official completion evidence. |
-| Stop condition | Stop on original-save mutation, unmarked assistance, assisted goal-value fit, false official claim, consumed decision replay, full run, ROM hack, Crystal or GitHub publication. |
+| Transfer result | No transfer test. The original authenticated save stayed unchanged; this is one correlated assisted mechanics failure, not independent or cross-title evaluation. |
+| Blocker | The single assisted Safari attempt reached the paid area but exhausted 66 semantic survey actions without a capture. The earned Red state still lacks a qualified multi-option choice; story and battle authority remain unproved for a fresh run. |
+| Decision | Do not replay or widen the assisted Safari attempt. Prioritize a bounded real model decision from an earned state, with the story/battle authority boundary next in line; keep synthetic money out of ordinary fits. |
+| Next session | Astra High, Fast off, about 60-90 minutes: qualify one real model-authority decision boundary on an earned Red state, emphasizing story/battle if collection remains singleton. Stop before any full run. |
+| Next falsifier | An earned-state multi-option menu cannot be qualified, or the next apparent story/battle model choice does not actually control gameplay. |
+| Stop condition | Stop on consumed assisted probe replay, fabricated alternatives, teacher fallback counted as model choice, assisted goal-value fit, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

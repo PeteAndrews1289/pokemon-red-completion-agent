@@ -1,0 +1,51 @@
+{
+  "schema": "pokemon.red.assisted-safari-mechanics-probe.v1",
+  "session": "2026-09-16-assisted-safari-mechanics-probe",
+  "classification": "assisted_teacher_selected_mechanics_not_learning",
+  "source_commit": "7fbd1d585d3d47edcc77bc287104827edc51c3df",
+  "private_receipts": {
+    "run_plan_sha256": "c1e861fba9186f7b1c8c81f6afc7cc35248a44978cb587828c08bd27e418e8dc",
+    "retained_plan_sha256": "3659249f2677400a03bc0754a59da5acf81411341d15e7edf8cba702777c3705",
+    "outcome_sha256": "e5148312add6e500074769d4ad94c0b36209444f2a397f393d56f6c7e88c095c",
+    "result_sha256": "9dbc26c10bfff1055bf71d46cbaf46029d972041e3bf7955e444d822e41804c0"
+  },
+  "state_provenance": {
+    "original_source_sha256": "a5f7d8ef8f66e64cead9760a1fb3dd9d892f12cf60800352dd81aeb868a034a6",
+    "original_source_sha256_after_probe": "a5f7d8ef8f66e64cead9760a1fb3dd9d892f12cf60800352dd81aeb868a034a6",
+    "assisted_before_sha256": "3ffe95c5aa8311b9fdfaa3290d90f4272f5700cdf57b7f4edc50cbfd022150e4",
+    "assisted_terminal_sha256": "88e9f0a84718578624d4d3e748245c1f51bfc6e8523c02f6469ad23b3e9281ed",
+    "money_override_before": 198,
+    "money_override_after": 500,
+    "final_run_eligible": false,
+    "ordinary_goal_value_fit_allowed": false
+  },
+  "execution": {
+    "teacher_training_selections": 1,
+    "model_queries": 0,
+    "model_decisions": 0,
+    "model_fits": 0,
+    "controller_actions": 431,
+    "emulator_frames": 53700,
+    "cash_before": 500,
+    "cash_after": 0,
+    "safari_balls_at_terminal": 27,
+    "safari_steps_at_terminal": 437,
+    "registered_before": 96,
+    "registered_after": 96,
+    "specimens_before": 74,
+    "specimens_after": 74,
+    "safe_terminal": true,
+    "error_type": "RedAreaExecutionError",
+    "reason_code": "semantic_action_limit_exceeded",
+    "semantic_action_limit": 66,
+    "capture_verified": false,
+    "admission_verified_by_cash_delta": true
+  },
+  "learning": {
+    "model_before_and_after": "Model137: 137 examples / 92 successes / 58 economy-qualified",
+    "registered_train_examples_added": 0,
+    "authority_promotions": 0,
+    "transfer_tests": 0
+  },
+  "next": "Do not replay this consumed probe. Diagnose search coverage action-free only if needed, but prioritize a bounded learned story or battle decision on an earned Red state; keep official funding and completion separate."
+}

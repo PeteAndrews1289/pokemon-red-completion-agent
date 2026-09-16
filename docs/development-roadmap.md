@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-assisted-safari-admission-qualification**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-assisted-safari-mechanics-probe**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-assisted-safari-mechanics-probe
+
+One marked teacher-selected Safari attempt paid 500 admission and reached the area, then stopped safely at the 66-semantic-action survey limit after 431 controller actions / 53700 frames. It retained 27 Safari Balls and 437 steps but no new registration or specimen.
+
+**Deviation:** Assisted mechanics only: zero model queries, fits, authority promotions or fresh-run credit. The original 96/124 earned save stayed unchanged and the probe is consumed. No stage exit, transfer claim or GitHub push.
+
+**Next:** Astra High, Fast off: qualify a genuine bounded model-controlled decision on an earned Red state. If collection remains singleton, prioritize a story/battle authority boundary instead of replaying or widening Safari.
 
 ### 2026-09-16-assisted-safari-admission-qualification
 
