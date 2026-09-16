@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-post-cloyster-empty-menu**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model135-opportunity-discovery**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **134 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **135 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model135-opportunity-discovery-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model135-opportunity-discovery
+
+Action-free discovery restored seven distinct choices: four fishing destinations and three level evolutions. Model134 chose Krabby-to-Kingler; Krabby advanced level 15 to 16 before the 3000-action cap, with a safe terminal after 272555 frames. The incomplete result was fitted once into Model135: 135 examples / 91 successes / 56 economy-qualified.
+
+**Deviation:** No evolution or new registration: Red remains 94/124, 74 specimens and 198 cash. No replay, teacher substitution, independent evaluation or GitHub push. The earlier League diagnosis is corrected: travel supports indoor exit/Fly, but the partial event flags fail eligibility. Fresh-Red gates remain 0/5.
+
+**Next:** Sol High, Fast off, 45-60 minutes: qualify in-party continuation from earned level 16 while retaining original reserves; inspect throughput before proposing a budget. Do not restart the old attempt, protect the temporary trainee against intended evolution or blindly increase the cap.
 
 ### 2026-09-16-model134-post-cloyster-empty-menu
 

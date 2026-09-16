@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify an observed, safe route from the earned Center to a legitimate collection or income opportunity. Do not force the empty menu, sell items as an invented policy or replay the consumed evolution.
+- Next decision: Qualify in-party continuation from the earned level-16 terminal while preserving original reserves, and inspect training throughput before choosing a new budget. Do not restart the consumed attempt or blindly enlarge its cap.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Discover a reachable collection or income opportunity from an earned safe terminal when the local mixed menu is empty. |
-| Authority now | Model134 remains 134 settled examples / 91 successes. The post-Cloyster terminal has no executable goals; no model query, input, fit or new registration occurred this session. |
+| Reusable capability | Continue resource-aware collection training from earned partial progress, with executable opportunity discovery and appropriate goal budgets. |
+| Authority now | Model135 has 135 settled examples / 91 successes. One model-selected evolution from seven distinct alternatives produced retained level progress but no new registration or independent authority promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | No verified, safe route and useful opportunity can be bound from the current terminal without inventing income, resource availability or a teacher-selected target. |
+| Cheapest falsifier | The earned in-party trainee cannot be resumed safely under the original reserve policy, or measured throughput cannot support the proposed bounded goal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 134 | 12 |
+| Registered Train Example · train | 135 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model134-post-cloyster-empty-menu** · status **closed** · evidence [qualification](docs/evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json)
+**2026-09-16-model135-opportunity-discovery** · status **closed** · evidence [model fit](docs/evidence/red-model135-opportunity-discovery-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The honest empty-menu result identifies a practical opportunity-discovery gap without counterfeiting model autonomy or spending resources on an unavailable goal. |
-| Learning output | Zero new examples, fitted successes or registrations. The source save remains 94/124 registrations, 74 specimens and 198 cash; Model134 remains 134 examples / 91 successes / 55 economy-qualified. |
-| Authority delta | Action-free inventory exposed zero executable goals. No model query, controller action, fit, registration or authority promotion occurred. |
-| Transfer result | Action-free read-only inventory falsified local continuation. No independent or cross-title transfer, new mechanics or training result. |
-| Blocker | The Center terminal has zero ordinary goals, zero regional captures and zero item evolutions. A ball-purchase target needs 2400 cash against 198; renewable League funding requires a different fresh boundary. |
-| Decision | Qualify an observed, safe route from the earned Center to a legitimate collection or income opportunity. Do not force the empty menu, sell items as an invented policy or replay the consumed evolution. |
-| Next session | Astra High, Fast off, 45-60 minutes: decide the smallest portable opportunity-discovery and transport boundary, then qualify it before a new goal run. |
-| Next falsifier | No verified safe route and useful opportunity can be bound from the exact terminal without inventing income, resources or a teacher target. |
+| Product alignment | Reusable opportunity discovery restores actual model choice; the retained partial result identifies a persistent-goal and budgeting gap without claiming evolution or registration success. |
+| Learning output | One actual incomplete choice fitted once: Model135 has 135 examples / 91 successes / 56 economy-qualified. Krabby advanced level 15 to 16; registrations remain 94/124, specimens 74 and cash 198. |
+| Authority delta | The authentic empty menu became seven distinct executable choices: four fishing destinations and three level evolutions. The model selected one target; no teacher selected or replaced its action. |
+| Transfer result | ROM-free regressions cover multiple capture methods, alternate approaches and cartridge level edges. Seven alternatives qualified at the authentic terminal; no independent or cross-title result. |
+| Blocker | Krabby reached level 16 but the evolution exhausted 3000 actions before completion. The boxed-only target inventory and default protection of initial party members need explicit in-party continuation qualification. |
+| Decision | Qualify in-party continuation from the earned level-16 terminal while preserving original reserves, and inspect training throughput before choosing a new budget. Do not restart the consumed attempt or blindly enlarge its cap. |
+| Next session | Sol High, Fast off, 45-60 minutes: qualify resumable in-party training and inspect throughput from the earned terminal, before any further model-selected execution. |
+| Next falsifier | An in-party continuation either hides the trainee, protects it against intended evolution, loses original reserves or cannot justify its workload from observed throughput. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

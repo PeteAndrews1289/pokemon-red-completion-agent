@@ -5,32 +5,31 @@ Codex owns local implementation, verification and concise handoffs.
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md) and [HANDOFF.md](HANDOFF.md).
 
-- Codex integrates and verifies locally. Pushes and other GitHub publication require Pete's
-  explicit instruction; ordinary requests to begin or continue do not authorize publication.
-- Use **Gemini 3.8 Flash High through the Antigravity app**, as Pete requested; not the Flash CLI.
-- Claude supplies selective read-only reviews when useful. Neither reviewer grants gameplay authority.
-- External reviews are bounded assistance, not a standing gate. Reviewers do not edit this worktree.
+- Codex integrates locally. No push or other publication without Pete's explicit instruction.
+- Use **Gemini3.8 Flash High through the Antigravity app**, not the Flash CLI.
+- Claude provides selective read-only reviews. Reviewers do not edit this worktree.
+- Reviews are bounded assistance, not routine execution gates.
 
 ## Current assignment
 
-The five separately bound buyable-stone targets had identical portable model inputs. An
-explicitly labelled uniform support choice selected Shellder-to-Cloyster; its one native
-execution succeeded. Red is 94/124 registrations, 74 specimens and 198 cash at a safe Center.
-Model134 remains 134 fitted examples/91 successes: no model query or new fit occurred.
+The empty-menu terminal now exposes four fishing and three boxed-evolution choices.
+Model134 chose Krabby→Kingler. Its 3000-action attempt stopped safely at level16 rather
+than completing evolution; 94/124 registrations,74 specimens and198 cash remain.
+The incomplete outcome was fitted once into Model135:135 examples/91 successes.
 
-The post-Cloyster action-free inventory found no executable ordinary, regional or item-evolution
-goal. The ₽2400 capture-supply budget exceeds ₽198 cash, and repeatable League funding does not
-bind away from its fresh boundary. No game input, query or fit occurred.
+Next qualify resumable in-party training and measured throughput from the earned terminal.
+Preserve the trainee and original reserves; do not replay the Center start, automatically
+protect a temporary trainee against its intended evolution, or simply increase limits.
+Battle authority and fresh-start completion remain separate gaps.
 
-Next qualify portable opportunity discovery and safe transport from this earned terminal to
-a real collection or income source. Do not replay the consumed tie, force an empty-menu action
-or fit its support outcome. Battle mechanics and fresh-start completion remain gaps.
+## Reviewer contribution
 
-## Actual reviewer contribution
+Flash3.8 High completed a conceptual demand-filter review. Precursor, method-specific and
+bounded-search tests were accepted; the zero-stock-only demand formula was rejected because
+protected/branching stock may require replenishment. Raising the window and typing directly
+restored app control; the request was visibly submitted and answered.
+Last displayed Gemini quota was97% five-hour/98% weekly remaining; refreshed reading unconfirmed.
+Claude unused. Next setting:Sol High, Fast off,45–60 minutes. No GitHub push.
 
-Neither Flash nor Claude reviewed this read-only inventory; quota was unavailable/not refreshed.
-Next setting: Astra High, Fast off, approximately 45-60 minutes for a bounded architecture
-decision on discovery/transport; use Sol High for a narrow qualified implementation.
-No GitHub publication without Pete's instruction.
-
+[Evidence](docs/evidence/red-model135-opportunity-discovery-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
