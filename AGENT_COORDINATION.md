@@ -18,15 +18,19 @@ explicitly labelled uniform support choice selected Shellder-to-Cloyster; its on
 execution succeeded. Red is 94/124 registrations, 74 specimens and 198 cash at a safe Center.
 Model134 remains 134 fitted examples/91 successes: no model query or new fit occurred.
 
-Next inspect this exact terminal action-free for useful capture, level evolution or finite
-funding options; only then permit at most one new bounded model-directed goal. Do not replay
-the consumed tie, manufacture identity features or fit its support outcome. Battle mechanics
-and fresh-start completion remain gaps.
+The post-Cloyster action-free inventory found no executable ordinary, regional or item-evolution
+goal. The ₽2400 capture-supply budget exceeds ₽198 cash, and repeatable League funding does not
+bind away from its fresh boundary. No game input, query or fit occurred.
+
+Next qualify portable opportunity discovery and safe transport from this earned terminal to
+a real collection or income source. Do not replay the consumed tie, force an empty-menu action
+or fit its support outcome. Battle mechanics and fresh-start completion remain gaps.
 
 ## Actual reviewer contribution
 
-Neither Flash nor Claude reviewed this bounded run; quota was unavailable/not refreshed.
-Next setting: Sol High, Fast off, approximately 30-45 minutes for the action-free terminal
-inventory and at most one qualified goal. No GitHub publication without Pete's instruction.
+Neither Flash nor Claude reviewed this read-only inventory; quota was unavailable/not refreshed.
+Next setting: Astra High, Fast off, approximately 45-60 minutes for a bounded architecture
+decision on discovery/transport; use Sol High for a narrow qualified implementation.
+No GitHub publication without Pete's instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

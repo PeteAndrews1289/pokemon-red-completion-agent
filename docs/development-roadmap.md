@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-equivalent-evolution**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-post-cloyster-empty-menu**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model134-equivalent-evolution-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model134-post-cloyster-empty-menu
+
+The action-free inventory from the authentic post-Cloyster terminal exposed zero ordinary goals, regional captures or item evolutions. Ball resupply requires 2400 cash against 198; League funding cannot bind away from a fresh postgame boundary. No gameplay, query, fit or registration changed.
+
+**Deviation:** The empty menu stopped before any input. Original state and Model134 remain unchanged, at 94/124 registrations, 74 specimens and 134 examples / 91 successes. No full-Red gate change or GitHub push.
+
+**Next:** Astra High, Fast off: qualify reusable discovery and safe transport to a legitimate collection or income opportunity from the earned terminal; do not force a zero-option choice or replay the prior evolution.
 
 ### 2026-09-16-model134-equivalent-evolution
 

@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model134-equivalent-evolution",
+  "as_of_session": "2026-09-16-model134-post-cloyster-empty-menu",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model134-equivalent-evolution-2026-09-16.json"
+      "evidence": "docs/evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1616,6 +1616,12 @@
       "result": "One honest uniform support choice among five equivalent stone evolutions selected Shellder-to-Cloyster. The native executor succeeded in 620 actions / 64968 frames; Red advanced 93/124 to 94/124 registrations, kept 74 specimens, and spent 2100 from 2298 cash. Terminal is safe and input-ready.",
       "deviation": "Zero model decisions, teacher actions or fits. Model134 remains 134 examples / 91 fitted successes. This is collection progress, not a learned target preference or a fresh-Red acceptance gate. No GitHub push.",
       "next": "Sol High, Fast off: inspect the exact 198-cash terminal action-free and qualify at most one newly planned bounded model-directed collection goal. Never replay or fit the support tie."
+    },
+    {
+      "session": "2026-09-16-model134-post-cloyster-empty-menu",
+      "result": "The action-free inventory from the authentic post-Cloyster terminal exposed zero ordinary goals, regional captures or item evolutions. Ball resupply requires 2400 cash against 198; League funding cannot bind away from a fresh postgame boundary. No gameplay, query, fit or registration changed.",
+      "deviation": "The empty menu stopped before any input. Original state and Model134 remain unchanged, at 94/124 registrations, 74 specimens and 134 examples / 91 successes. No full-Red gate change or GitHub push.",
+      "next": "Astra High, Fast off: qualify reusable discovery and safe transport to a legitimate collection or income opportunity from the earned terminal; do not force a zero-option choice or replay the prior evolution."
     }
   ],
   "closed_milestones": [

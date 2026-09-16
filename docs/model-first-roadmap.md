@@ -36,6 +36,9 @@ evolution binding at 2298 cash. The new action-free inventory exposes five execu
 targets, but all five have identical portable features. One explicitly labelled uniform
 support choice evolved Shellder to Cloyster, verified the item repair live and added one
 registration. It was not a model decision or fit; no learned target preference was established.
+The exact next terminal has no executable local goals: ₽198 cash versus a ₽2400 ball-purchase
+target, no regional capture or item evolution, and League income unavailable away from its
+fresh boundary. The inspection stopped before gameplay.
 Battle turns and low-level travel still use existing controllers; a fully learned player is not
 established.
 
@@ -43,17 +46,17 @@ established.
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Next collection option | Inspect the exact post-Cloyster terminal at 198 cash; only run a newly planned bounded useful goal if executable | Sol / High / Fast off |
+| Next collection option | Qualify observed opportunity discovery and safe transport from the empty-menu terminal; only then run a newly planned bounded useful goal | Astra / High / Fast off for design; Sol / High for execution |
 | Search-yield gate | If later acquisition searches exhaust without gain, diagnose general survey coverage and option value before another similar run | Astra / High if redesign is needed |
 | Broaden target authority | One sampled stone target executed live; expose genuinely differentiated target value beyond deterministic level-target derivation | Sol / High / Fast off |
 | Battle/story authority | Audit the learned battle bridge and story controller; qualify a decision boundary without heuristic substitution | Astra / High / Fast off |
 | Sustained bounded play | Complete varied consecutive goals, including resource and storage prerequisites, without human-selected recovery or resets | Sol / High / Fast off |
 | Fresh Red acceptance | Pass fresh origin, model-directed start-to-finish control, Champion/Hall of Fame, 124/124 route registrations and the deferred-dependency ledger | Astra / High for freeze; Sol / High for execution |
 
-The bounded evolution session gained one registration through honest support exploration.
-Next time box: 30-45 minutes to inspect the new safe terminal and, only if qualified, run
-one bounded goal. Do not manufacture distinctions solely to clear a gate. Stop on unsafe state
-or lost evidence.
+The bounded evolution session gained one registration through honest support exploration;
+its action-free continuation then found no executable goal. Next time box: 45-60 minutes to
+qualify a portable opportunity/transport boundary. Do not force the empty menu, manufacture
+distinctions or replay a consumed choice. Stop on unsafe state or lost evidence.
 The previous choices are consumed and may not be
 replayed or substituted. All current fits are correlated development, not independent evaluation.
 
@@ -61,5 +64,5 @@ Mew and unavailable version/link dependencies remain legitimate later-game targe
 ROM-hack and Crystal work remain closed until fresh Red acceptance passes. Pete decides when to
 push to GitHub.
 
-[Latest evidence](evidence/red-model134-equivalent-evolution-2026-09-16.json) ·
+[Latest evidence](evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

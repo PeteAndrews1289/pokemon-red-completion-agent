@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Inspect the Cloyster terminal action-free, then execute at most one newly planned bounded goal only if a genuinely useful option exists. Keep equivalent sampling separate from model decisions and do not refit the support tie.
+- Next decision: Qualify an observed, safe route from the earned Center to a legitimate collection or income opportunity. Do not force the empty menu, sell items as an invented policy or replay the consumed evolution.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Select and execute separately bound missing evolution goals while labeling equivalent-target sampling honestly; then continue from the earned safe terminal. |
-| Authority now | Model134 remains 134 settled examples / 91 successes. One support-only sampled evolution registered Cloyster from the authentic save; no model query, fit or learned target-preference claim resulted. |
+| Reusable capability | Discover a reachable collection or income opportunity from an earned safe terminal when the local mixed menu is empty. |
+| Authority now | Model134 remains 134 settled examples / 91 successes. The post-Cloyster terminal has no executable goals; no model query, input, fit or new registration occurred this session. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The new terminal offers no executable useful collection goal, or a proposed next goal depends on invented resources, hidden identity features or replay. |
+| Cheapest falsifier | No verified, safe route and useful opportunity can be bound from the current terminal without inventing income, resource availability or a teacher-selected target. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model134-equivalent-evolution** · status **closed** · evidence [qualification](docs/evidence/red-model134-equivalent-evolution-2026-09-16.json)
+**2026-09-16-model134-post-cloyster-empty-menu** · status **closed** · evidence [qualification](docs/evidence/red-model134-post-cloyster-empty-menu-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | One actual missing registration was earned through an honest equivalent-goal support choice and exact native execution; this is collection progress, not learned target preference. |
-| Learning output | One support-only evolution succeeded: Red 93/124 to 94/124, 74 specimens retained, cash 2298 to 198. Zero model decisions, teacher actions or fits; Model134 remains 134 settled examples / 91 successes / 55 economy-qualified. |
-| Authority delta | Uniform equivalent-goal sampling selected and executed one bound target without a model query. Cloyster was registered, but no fitted example, learned target preference or authority promotion resulted. |
-| Transfer result | 113 ROM-free tests cover tied and differentiated menus, binding persistence and single-target execution. One authentic target succeeded; no independent or cross-title transfer. |
-| Blocker | The exact safe continuation now has 198 cash. Its executable next collection menu has not been inspected; affordability and resource alternatives must be established before further input. |
-| Decision | Inspect the Cloyster terminal action-free, then execute at most one newly planned bounded goal only if a genuinely useful option exists. Keep equivalent sampling separate from model decisions and do not refit the support tie. |
-| Next session | Sol High, Fast off, 30-45 minutes: inspect the exact safe terminal action-free and permit at most one bounded model-directed collection goal if qualified. |
-| Next falsifier | The exact terminal has no useful executable option, or the next proposal requires unverified supply, hidden identity features or replay. |
+| Product alignment | The honest empty-menu result identifies a practical opportunity-discovery gap without counterfeiting model autonomy or spending resources on an unavailable goal. |
+| Learning output | Zero new examples, fitted successes or registrations. The source save remains 94/124 registrations, 74 specimens and 198 cash; Model134 remains 134 examples / 91 successes / 55 economy-qualified. |
+| Authority delta | Action-free inventory exposed zero executable goals. No model query, controller action, fit, registration or authority promotion occurred. |
+| Transfer result | Action-free read-only inventory falsified local continuation. No independent or cross-title transfer, new mechanics or training result. |
+| Blocker | The Center terminal has zero ordinary goals, zero regional captures and zero item evolutions. A ball-purchase target needs 2400 cash against 198; renewable League funding requires a different fresh boundary. |
+| Decision | Qualify an observed, safe route from the earned Center to a legitimate collection or income opportunity. Do not force the empty menu, sell items as an invented policy or replay the consumed evolution. |
+| Next session | Astra High, Fast off, 45-60 minutes: decide the smallest portable opportunity-discovery and transport boundary, then qualify it before a new goal run. |
+| Next falsifier | No verified safe route and useful opportunity can be bound from the exact terminal without inventing income, resources or a teacher target. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
