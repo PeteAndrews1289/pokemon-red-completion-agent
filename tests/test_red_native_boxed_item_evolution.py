@@ -27,6 +27,7 @@ from pokemon_red_completion.red_goal_context_profile import (
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
+from pokemon_red_completion.red_goal_skills import RedGoalSkillError
 from pokemon_red_completion.red_native_boxed_item_evolution import (
     bind_native_boxed_item_evolution,
 )
@@ -252,3 +253,37 @@ def test_item_evolution_atomic_gate_rejects_partial_pipeline(
     }
     assert actions.actions_executed == 0
     assert (reader.raw.player_money, reader.raw.bag_items, runtime.emulator.frame_count) == before
+
+
+@pytest.mark.parametrize("dialogue_visible", [False, True])
+def test_item_evolution_departure_from_unhealed_nurse_boundary(
+    tmp_path, monkeypatch, dialogue_visible
+):
+    import pokemon_red_completion.red_native_boxed_item_evolution as module
+
+    runtime, reader = _runtime(
+        tmp_path, monkeypatch, source=58, target=59, item=ItemId.FIRE_STONE
+    )
+    reader.raw = replace(
+        reader.raw, party_hp=(reader.raw.party_hp[0] - 1, *reader.raw.party_hp[1:])
+    )
+    assert reader.raw.party_hp != reader.raw.party_max_hp
+    reader.read_bottom_dialogue_box_visible = lambda: dialogue_visible
+    actions = CountingExecutor(_ActionDelegate())
+    offer = runtime.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(runtime.adapter.observe())
+    assert offer.binding is not None
+
+    class ReachedRoute(RuntimeError):
+        pass
+
+    def route(*_args, **_kwargs):
+        raise ReachedRoute
+
+    monkeypatch.setattr(module, "execute_route", route)
+    if dialogue_visible:
+        with pytest.raises(RedGoalSkillError, match="healed nurse boundary"):
+            offer.binding.execute()
+    else:
+        with pytest.raises(ReachedRoute):
+            offer.binding.execute()
+    assert actions.actions_executed == 0

@@ -20,7 +20,7 @@ from .goal_manager import GoalKind, GoalUnavailableReason
 from .goal_manager_runtime import GoalExecutionReport
 from .observation import MAX_BAG_ITEMS, ItemId, MapId
 from .red_evolution_stones import buyable_evolution_stone
-from .red_goal_skills import finish_center_dialogue, prepare_center_departure
+from .red_goal_skills import prepare_center_departure
 from .red_party_item_evolution import (
     RedPartyItemEvolutionExecutor,
     RedPartyItemEvolutionRequest,
@@ -183,7 +183,9 @@ def bind_native_boxed_item_evolution(
         bag_before = dict(before.raw.bag_items or ())
         needs_shop = bag_before.get(item_id, 0) == 0
         traversal = Gen1TraversalObserver(runtime.reader)
-        finish_center_dialogue(actions, runtime.reader)
+        # A routed arrival can be at the nurse tile with an unhealed party and
+        # no dialogue. Departure handles an actual farewell, but must not
+        # require healing when the evolution skill does not restore the team.
         prepare_center_departure(actions, runtime.reader)
         if needs_shop:
             to_mart = world.plan_feasible_to_map(
