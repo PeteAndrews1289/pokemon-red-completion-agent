@@ -28,9 +28,14 @@ from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_collection import autonomous_collection_options
 from pokemon_red_completion.red_autonomous_player import AutonomousSnapshot, run_autonomous_options
-from pokemon_red_completion.red_collection import RED_COLLECTION_GAME_ID, red_species_ref
+from pokemon_red_completion.red_collection import (
+    RED_COLLECTION_GAME_ID,
+    red_internal_species_number,
+    red_species_ref,
+)
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
+from pokemon_red_completion.red_party import PokemonRedPartyReader
 from pokemon_red_completion.red_player_model import (
     RedPlayerModelRecord,
     load_player_goal_model_record,
@@ -45,6 +50,32 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import Strateg
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def _verify_reserve_lineage(plan: dict[str, object], payloads: dict[str, bytes]) -> None:
+    """Tie inherited party reserves to the exact earned parent outcome."""
+    if "reserve_origin" not in plan:
+        if "prior_plan" in plan or "prior_outcome" in plan:
+            raise ValueError("prior outcome requires a reserve origin")
+        return
+    if "prior_plan" not in payloads or "prior_outcome" not in payloads:
+        raise ValueError("inherited reserves require authenticated parent evidence")
+    parent = json.loads(payloads["prior_plan"])
+    outcome = json.loads(payloads["prior_outcome"])
+    provenance = parent["provenance"]
+    reserve = plan["reserve_origin"]
+    state = plan["state"]
+    assert isinstance(reserve, dict) and isinstance(state, dict)
+    if (
+        parent["schema"] != "pokemon.red.autonomous-option-run.v1"
+        or provenance["parent_state_sha256"] != outcome["before_state_sha256"]
+        or outcome["terminal_state_sha256"] != state["sha256"]
+        or outcome["safe_terminal"] is not True
+        or provenance.get(
+            "reserve_origin_state_sha256", outcome["before_state_sha256"]
+        ) != reserve["sha256"]
+    ):
+        raise ValueError("inherited reserves do not match the earned parent lineage")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
@@ -53,11 +84,17 @@ def main() -> None:
     plan_bytes = args.plan.read_bytes()
     plan = json.loads(plan_bytes)
     payloads = {}
-    for key in ("rom", "state", "checkpoint", "profile", "model"):
+    for key in (
+        "rom", "state", "checkpoint", "profile", "model",
+        "reserve_origin", "prior_plan", "prior_outcome",
+    ):
+        if key in {"reserve_origin", "prior_plan", "prior_outcome"} and key not in plan:
+            continue
         content = Path(plan[key]["path"]).read_bytes()
         if hashlib.sha256(content).hexdigest() != plan[key]["sha256"]:
             raise ValueError(f"autonomous {key} authentication failed")
         payloads[key] = content
+    _verify_reserve_lineage(plan, payloads)
     output = Path(plan["output"])
     if output.exists() and not args.inspect:
         raise FileExistsError("autonomous continuation is already claimed")
@@ -100,12 +137,23 @@ def main() -> None:
         "maximum_actions": maximum_actions,
         "maximum_frames": maximum_frames,
         "initial_profile_sha256": profile.profile_sha256,
+        "reserve_origin_state_sha256": (
+            plan["reserve_origin"]["sha256"] if "reserve_origin" in plan
+            else plan["state"]["sha256"]
+        ),
         "goal_authority": "model_or_declared_equivalent_exploration",
         "capture_destination_authority": "model_over_up_to_eight_observed_routes",
         "evolution_target_authority": "model_for_contrasts_uniform_for_equivalent_targets",
         "battle_move_authority": "existing_heuristic_controller",
     }
     with PyBoyAdapter(Path(plan["rom"]["path"]), watch=False, speed=None) as emulator:
+        original_reserves = None
+        if "reserve_origin" in payloads:
+            emulator.load_state_bytes(payloads["reserve_origin"])
+            original_reserves = Counter(
+                red_species_ref(red_internal_species_number(member.species_id))
+                for member in PokemonRedPartyReader(emulator).read().members
+            )
         emulator.load_state_bytes(payloads["state"])
         initial_frame = emulator.frame_count
         budget = WindowedFrameBudgetController(
@@ -139,7 +187,10 @@ def main() -> None:
             snapshot_sha256=capture.state_sha256,
             sequence=0,
         )
-        protected = Counter(s.species_ref for s in initial.specimens if s.location.value == "party")
+        protected = (
+            original_reserves if original_reserves is not None
+            else Counter(s.species_ref for s in initial.specimens if s.location.value == "party")
+        )
         policy = RedRegistrationPolicy(
             RegistrationSnapshot((registration,)),
             plan["run_id"],

@@ -34,7 +34,7 @@ def enumerate_red_level_evolutions(
     maximum_actions: int,
     maximum_frames: int,
 ) -> tuple[RedEvolutionOption, ...]:
-    """Bind actual boxed alternatives, not just the catalog's default method.
+    """Bind actual boxed or in-party alternatives to the catalog's default method.
 
     Discovery never moves the game. Native readiness preserves protected stock
     and verifies storage and training capability; remote execution requires the
@@ -50,10 +50,13 @@ def enumerate_red_level_evolutions(
     try:
         for source, edges in sorted(evolution_graph(world.rom).items()):
             source_ref = red_species_ref(source)
-            if any(s.species_ref == source_ref and s.location is CollectionLocation.PARTY
-                   for s in collection.specimens):
-                # Native in-party continuation has different specimen authority.
-                # This inventory measures and binds boxed training only.
+            party = tuple(
+                specimen for specimen in collection.specimens
+                if specimen.species_ref == source_ref
+                and specimen.location is CollectionLocation.PARTY
+            )
+            # The native resume skill requires one unambiguous in-party source.
+            if len(party) > 1:
                 continue
             boxed = tuple(
                 specimen for specimen in collection.specimens
@@ -61,10 +64,11 @@ def enumerate_red_level_evolutions(
                 and specimen.location is CollectionLocation.BOX
                 and collection.box_counts[specimen.container_index] < collection.box_capacity
             )
-            if not boxed:
+            if not party and not boxed:
                 continue
-            # Match the native executor's actual current-box-first selection.
-            precursor = min(boxed, key=lambda s: (
+            # Native execution resumes an in-party source before any boxed one.
+            # Otherwise match its current-box-first storage selection.
+            precursor = party[0] if party else min(boxed, key=lambda s: (
                 s.container_index != collection.current_box_index, s.container_index, s.slot_index,
             ))
             if precursor.level >= 100:

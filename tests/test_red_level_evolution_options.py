@@ -90,3 +90,53 @@ def test_level_alternatives_bind_real_stock_and_preserve_selected_executor(
         assert calls[-1] == candidate.binding.binding_ref
     assert before == (reader.read(), runtime.emulator.frame_count)
     assert actions.actions_executed == 0
+
+
+@pytest.mark.parametrize("party_copies", (1, 2))
+def test_in_party_level_continuation_uses_trainee_level_and_unique_source(
+    tmp_path, monkeypatch, party_copies,
+):
+    runtime, reader = _runtime(tmp_path, monkeypatch, source=58, target=59, item=ItemId.FIRE_STONE)
+    source = red_internal_species_id(98)
+    reader.boxes = replace(reader.boxes, boxes=(
+        RedCurrentBoxState(0, (source,), (15,)),
+        *reader.boxes.boxes[1:],
+    ))
+    party = list(reader.raw.party_species_ids)
+    levels = list(reader.raw.party_levels)
+    for index in range(party_copies):
+        party[index], levels[index] = source, 16
+    reader.raw = replace(reader.raw, party_species_ids=tuple(party), party_levels=tuple(levels))
+    owned = reader.read_pokedex_state().owned_species | {98}
+    reader.read_pokedex_state = lambda: SimpleNamespace(seen_species=owned, owned_species=owned)
+    observation = runtime.adapter.observe()
+    monkeypatch.setattr(module, "evolution_graph", lambda _: {
+        98: (Evolution(98, 99, EvolutionMethod.LEVEL, 28),),
+    })
+    seen = []
+
+    def bind(actual, world, **kwargs):
+        assert kwargs == {"maximum_quanta": 128, "allow_cross_box": True}
+        seen.append(actual.registration_policy.evolution_allowed(
+            observation.collection_observation, red_species_ref(98), red_species_ref(99),
+        ))
+        return SimpleNamespace(provider_for=lambda *args: SimpleNamespace(
+            offer=lambda _: SimpleNamespace(
+                binding=_binding(GoalKind.EVOLVE_SPECIES, binding_ref="resume", calls=[]),
+                unavailable_reason=None,
+            ),
+        ))
+
+    monkeypatch.setattr(module, "bind_native_boxed_evolution", bind)
+    actions = CountingExecutor(_ActionDelegate())
+    before = reader.read(), runtime.emulator.frame_count
+    found = module.enumerate_red_level_evolutions(
+        runtime, observation, actions, SimpleNamespace(rom=b"fixture"),
+        maximum_actions=3000, maximum_frames=300000,
+    )
+    assert len(found) == (1 if party_copies == 1 else 0)
+    if found:
+        assert found[0].execution_effort == 12 / 99
+    assert seen == ([True] if party_copies == 1 else [])
+    assert before == (reader.read(), runtime.emulator.frame_count)
+    assert actions.actions_executed == 0
