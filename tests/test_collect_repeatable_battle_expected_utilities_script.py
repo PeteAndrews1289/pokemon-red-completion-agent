@@ -88,6 +88,7 @@ def _args(tmp_path: Path, *, two_captures: bool = False) -> SimpleNamespace:
         journal_dir=tmp_path / "journal",
         failure_report=tmp_path / "failures.json",
         frame_target=[2_048, 2_059],
+        local_only_source=False,
     )
 
 
@@ -146,6 +147,31 @@ def test_collects_and_aggregates_complete_rng_schedule(
 
     assert repeated == report
     assert calls == 2
+
+
+def test_local_only_source_skips_remote_requirement_but_keeps_clean_guard(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    args = _args(tmp_path)
+    args.local_only_source = True
+    _patch_common(monkeypatch)
+    checks: list[str] = []
+    monkeypatch.setitem(SCRIPT_GLOBALS, "require_clean_source", lambda _: checks.append("clean"))
+    monkeypatch.setitem(
+        SCRIPT_GLOBALS,
+        "require_published_source",
+        lambda *_: (_ for _ in ()).throw(AssertionError("remote requirement reached")),
+    )
+    monkeypatch.setitem(
+        SCRIPT_GLOBALS,
+        "collect_red_battle_outcome_example",
+        lambda capture, **kwargs: _collection(capture, kwargs["minimum_pre_attack_frames"]),
+    )
+
+    SCRIPT["_run"](args)
+
+    assert checks == ["clean"]
 
 
 def test_existing_output_without_complete_journal_fails_before_input(

@@ -54,6 +54,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--journal-dir", type=Path, required=True)
     parser.add_argument("--failure-report", type=Path, required=True)
     parser.add_argument(
+        "--local-only-source",
+        action="store_true",
+        help="accept an exact clean local commit without requiring a remote push",
+    )
+    parser.add_argument(
         "--frame-target",
         type=int,
         action="append",
@@ -111,7 +116,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
 
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
-    require_published_source(PROJECT_ROOT, source)
+    if not args.local_only_source:
+        require_published_source(PROJECT_ROOT, source)
     if source.git_commit is None:  # pragma: no cover - source guard owns this
         raise AssertionError("published collector source lacks a commit")
     rom_path = resolve_rom_path(args.rom)
