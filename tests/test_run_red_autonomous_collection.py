@@ -81,8 +81,12 @@ def test_goal_continuation_requires_consumed_model_evolution_and_exact_terminal(
     outcome.update({
         "selected_kind": "evolve_species", "learning_eligible": True,
         "error_type": "CompositionActionBudgetExhausted",
-        "choice": {"mode": "model_exploration", "menu_sha256": "c" * 64},
+        "choice": {
+            "mode": "model_exploration", "menu_sha256": "c" * 64,
+            "model_sha256": "f" * 64,
+        },
     })
+    parent["model_sha256"] = "f" * 64
     started = {
         "selected_kind": "evolve_species", "state_sha256": "a" * 64,
         "menu_sha256": "c" * 64, "selected_binding_ref": f"old:{'d' * 64}",
@@ -97,4 +101,32 @@ def test_goal_continuation_requires_consumed_model_evolution_and_exact_terminal(
     with pytest.raises(ValueError, match="consumed model goal"):
         _verify_goal_continuation(plan, {
             **payloads, "prior_execution_started": json.dumps(started).encode(),
+        })
+
+
+def test_pending_continuation_can_authenticate_next_chunk_without_new_model_choice():
+    plan, parent, outcome = _fixture()
+    original_ref = f"first-origin:{'d' * 64}"
+    rebound_ref = f"second-origin:{'d' * 64}"
+    parent.update({
+        "schema": "pokemon.red.autonomous-goal-continuation.v1",
+        "prior_binding_ref": original_ref,
+    })
+    outcome.update({"model_queries": 0, "learning_eligible": False})
+    started = {
+        "selected_kind": "evolve_species", "state_sha256": "a" * 64,
+        "selected_binding_ref": rebound_ref, "prior_binding_ref": original_ref,
+    }
+    result = {"status": "pending", "model_queries": 0, "outcome": outcome}
+    payloads = {
+        "prior_plan": json.dumps(parent).encode(),
+        "prior_outcome": json.dumps(outcome).encode(),
+        "prior_execution_started": json.dumps(started).encode(),
+        "prior_result": json.dumps(result).encode(),
+    }
+    assert _verify_goal_continuation(plan, payloads) == rebound_ref
+    result["status"] = "stopped"
+    with pytest.raises(ValueError, match="consumed model goal"):
+        _verify_goal_continuation(plan, {
+            **payloads, "prior_result": json.dumps(result).encode(),
         })

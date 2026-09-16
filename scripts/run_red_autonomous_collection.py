@@ -69,7 +69,10 @@ def _verify_reserve_lineage(plan: dict[str, object], payloads: dict[str, bytes])
     state = plan["state"]
     assert isinstance(reserve, dict) and isinstance(state, dict)
     if (
-        parent["schema"] != "pokemon.red.autonomous-option-run.v1"
+        parent["schema"] not in {
+            "pokemon.red.autonomous-option-run.v1",
+            "pokemon.red.autonomous-goal-continuation.v1",
+        }
         or provenance["parent_state_sha256"] != outcome["before_state_sha256"]
         or outcome["terminal_state_sha256"] != state["sha256"]
         or outcome["safe_terminal"] is not True
@@ -87,22 +90,43 @@ def _verify_goal_continuation(plan: dict[str, object], payloads: dict[str, bytes
     _verify_reserve_lineage(plan, payloads)
     started = json.loads(payloads["prior_execution_started"])
     outcome = json.loads(payloads["prior_outcome"])
-    choice = outcome["choice"]
+    parent = json.loads(payloads["prior_plan"])
     binding_ref = started["selected_binding_ref"]
     state = plan["state"]
     assert isinstance(state, dict)
-    if (
-        started["selected_kind"] != "evolve_species"
-        or outcome["selected_kind"] != "evolve_species"
-        or started["state_sha256"] != outcome["before_state_sha256"]
-        or started["menu_sha256"] != choice["menu_sha256"]
-        or choice["mode"] != "model_exploration"
-        or outcome["learning_eligible"] is not True
-        or outcome["safe_terminal"] is not True
-        or outcome["terminal_state_sha256"] != state["sha256"]
-        or outcome["error_type"] != "CompositionActionBudgetExhausted"
-        or not isinstance(binding_ref, str)
-    ):
+    common = (
+        started["selected_kind"] == "evolve_species"
+        and started["state_sha256"] == outcome["before_state_sha256"]
+        and outcome["safe_terminal"] is True
+        and outcome["terminal_state_sha256"] == state["sha256"]
+        and isinstance(binding_ref, str)
+    )
+    if parent["schema"] == "pokemon.red.autonomous-option-run.v1":
+        choice = outcome["choice"]
+        authorized = (
+            outcome["selected_kind"] == "evolve_species"
+            and started["menu_sha256"] == choice["menu_sha256"]
+            and choice["mode"] == "model_exploration"
+            and choice["model_sha256"] == parent["model_sha256"]
+            and outcome["learning_eligible"] is True
+            and outcome["error_type"] == "CompositionActionBudgetExhausted"
+        )
+    else:
+        if "prior_result" not in payloads:
+            raise ValueError("continuation parent requires authenticated result")
+        result = json.loads(payloads["prior_result"])
+        authorized = (
+            parent["schema"] == "pokemon.red.autonomous-goal-continuation.v1"
+            and result["status"] == "pending"
+            and result["model_queries"] == 0
+            and result["outcome"] == outcome
+            and outcome["model_queries"] == 0
+            and outcome["learning_eligible"] is False
+            and started["prior_binding_ref"] == parent["prior_binding_ref"]
+            and binding_ref.rsplit(":", 1)[-1]
+            == parent["prior_binding_ref"].rsplit(":", 1)[-1]
+        )
+    if not common or not authorized:
         raise ValueError("continuation does not match the consumed model goal")
     return binding_ref
 
@@ -118,9 +142,11 @@ def main() -> None:
     for key in (
         "rom", "state", "checkpoint", "profile", "model",
         "reserve_origin", "prior_plan", "prior_outcome", "prior_execution_started",
+        "prior_result",
     ):
         if key in {
-            "reserve_origin", "prior_plan", "prior_outcome", "prior_execution_started"
+            "reserve_origin", "prior_plan", "prior_outcome", "prior_execution_started",
+            "prior_result",
         } and key not in plan:
             continue
         content = Path(plan[key]["path"]).read_bytes()
