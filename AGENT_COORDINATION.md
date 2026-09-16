@@ -11,20 +11,18 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The local-only OHKO training cycle is complete. Teacher-assisted cartridge
-states yielded three eligible train roots and four distinct development roots;
-one train capture was quarantined after a battler fainted. A last-layer update
-reduced train loss, but both models made the same four held-out choices. On an
-older, retrospective development set the candidate lost one choice with no
-wins. It is **not promoted**. The consumed Route11 Kingler case flips to
-Vicegrip under the candidate, but that is a diagnostic only. No player-model,
-Red completion, fresh-acceptance or gameplay delta; no GitHub push.
+The natural near-boundary battle experiment yielded five complete train
+examples from eight selected captures; three were excluded by player faints
+or unequal pre-attack timing. There was too little baseline regret to justify
+a fit, so the eight held-out development captures were not opened. The
+bounded-turn executor now retains a fainting outcome in ROM-free tests; one
+fresh cartridge capture completed two trials without a faint. This is a
+data-boundary repair, not a learner promotion. Player model and Red progress
+are unchanged; gameplay stopped and no GitHub push.
 
-Next: build a prospective harder battle set with *natural* OHKO-versus-reliable
-choices or other near-boundary decisions, fit only on train, and require a
-held-out win without regression before changing battle authority. Do not reuse
-the consumed Route11 state for fitting or prospective testing. Sol High, Fast
-off is sufficient for this bounded next session.
+Next: prove one live faint-bearing outcome on a distinct unused train capture,
+then diagnose the separate timing mismatch without replaying consumed trials.
+Only then freeze a stronger train/development lesson. Sol High, Fast off.
 
 ## Reviewer contribution
 
@@ -37,4 +35,5 @@ Claude unused; refreshed Flash quota unavailable.
 
 [Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
 [OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·
+[Natural battle evidence](docs/evidence/red-natural-battle-boundary-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

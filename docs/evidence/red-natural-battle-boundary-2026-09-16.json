@@ -1,0 +1,70 @@
+{
+  "schema": "pokemon.red.natural-battle-boundary-session.v1",
+  "session": "2026-09-16-natural-near-boundary-battle",
+  "classification": "authentic_train_outcomes_and_bounded_faint-representation-repair_no_fit_or_promotion",
+  "mission_check": {
+    "capability": "Learn attack value, including the cost of a player faint, from authentic cartridge turns",
+    "learned_authority": "Frozen battle ranker retains authority; no candidate was fitted or promoted",
+    "transfer_test": "Prospective four-root train and four-root development plan, with exact distinct captures and two active-battler move sets; development unopened",
+    "cheapest_falsifier": "If hard train captures are censored or remaining examples offer no meaningful baseline regret, do not fit",
+    "time_box": "one session, at most two hours",
+    "stop_condition": "No consumed trial replay, no model fit on a censored/easy bank, no development opening or full run"
+  },
+  "inventory": {
+    "authenticated_battle_captures_inspected_action_free": 171,
+    "verified_checkpoint_states_inspected_action_free": 103,
+    "natural_ohko_battle_captures": 0,
+    "checkpoint_parties_with_ohko_move": 0,
+    "selection": "natural close-call attacks instead of inserted Guillotine"
+  },
+  "prospective_collection": {
+    "selected_train_captures": 8,
+    "selected_development_captures": 8,
+    "train_roots": 4,
+    "development_roots": 4,
+    "root_overlap": 0,
+    "frame_targets": [2048, 2101, 2251, 2377, 2539],
+    "train_trials_presented": 40,
+    "train_trials_complete": 30,
+    "train_trials_quarantined": 10,
+    "train_captures_eligible": 5,
+    "train_captures_excluded": 3,
+    "quarantined_trials_from_player_faint": 5,
+    "quarantined_trials_from_pre_attack_frame_mismatch": 5,
+    "development_outcomes_opened": 0,
+    "surviving_baseline_correct_preferences": 4,
+    "surviving_examples": 5,
+    "only_baseline_regret": 0.02517520215633417,
+    "fit_executed": false
+  },
+  "repair": {
+    "source_commit": "8134ac94b2d26d61b0c2d6bbabe33114ece8f2f5",
+    "change": "Only bounded single-turn outcome execution now admits a resulting player faint; move-selection and PP proof remain, while the full-battle runtime retains its existing safety behavior",
+    "existing_outcome_contract": "player_fainted carries a negative two-point terminal term, and player damage is subtracted",
+    "rom_free_targeted_tests_passed": 258,
+    "changed_source_type_check": "passed",
+    "fresh_authentic_integration_capture": "repeatable-battle-train-8e061a481834a4d0831a",
+    "integration_trials_complete": 2,
+    "integration_trials_quarantined": 0,
+    "integration_player_faints_observed": 0,
+    "limitation": "Fresh cartridge integration proves no regression but not yet a live faint outcome; consumed failed trials were not replayed"
+  },
+  "decision": {
+    "model_fit": false,
+    "battle_authority_promoted": false,
+    "ordinary_player_model_changed": false,
+    "red_registrations_changed": false,
+    "fresh_red_acceptance_changed": false,
+    "gameplay_running": false,
+    "github_pushed": false,
+    "next": "Use a different unused train capture likely to faint to verify the new outcome, separately investigate timing-equality exclusions, and only then freeze a stronger train/development curriculum"
+  },
+  "private_receipts_sha256": {
+    "plan": "7b8cb83e571a78897e314ef07d7810a8f2c87a3a176ce533831a203e04cbc7ee",
+    "reorientation": "0251233c47613650a7cb0f5fb2fdd92e4c42ca5a46b626dd4bbdea3b9826de91",
+    "train_dataset": "bc305ee8ae6b77b11ec487da2e4e4ce3ea0d884236a85597530f74f278b0f6af",
+    "train_failures": "74950d79e64c015badb5c1ae9e4d5a280f9e68ec55863dcbe6b2a13b13ad0d42",
+    "integration_dataset": "56f85e56d73e72d10cf78080957b0a2cf4f738021358943bdb7d935288883669",
+    "integration_failures": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb"
+  }
+}

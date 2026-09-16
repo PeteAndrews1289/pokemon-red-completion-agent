@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run a bounded reliability-focused battle learning cycle after the six-choice live-control result; do not replay or fit the consumed development encounter.
+- Next decision: Verify a live faint-bearing negative battle outcome on a distinct unused train capture, then diagnose pre-attack timing mismatch before another learning fit.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The learned scorer still prefers low-value unreliable attacks on untouched scenarios, or improved choices require a teacher fallback or fitting the development encounter. |
+| Cheapest falsifier | A distinct high-risk train battle still cannot retain a faint as a negative outcome, or a stronger complete train bank cannot yield a held-out advantage without regression. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-earned-learned-battle** · status **closed** · evidence [qualification](docs/evidence/red-earned-learned-battle-2026-09-16.json)
+**2026-09-16-natural-near-boundary-battle** · status **closed** · evidence [qualification](docs/evidence/red-natural-battle-boundary-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Direct learned attack control advances the final player and exposes a measurable decision-quality gap; setup authority and weak outcome remain explicit. |
-| Learning output | Six distinct observed-state choices and exact selected-slot PP spends; one victory in 149 actions / 13177 frames. Zero new training examples or fits; registrations stayed 96/124. |
-| Authority delta | Six learned attack selections controlled real inputs in one bounded encounter. No new weights, general promotion or change to ordinary collection battle control. |
-| Transfer result | One natural encounter outside the old fitted battle bank, but on an existing correlated Red lineage. No independent, cross-title or general battle-quality claim. |
-| Blocker | The frozen ranker spent all five Guillotine PP without damage before selecting a successful Vicegrip. Reliable battle judgment and story-level authority remain unproved. |
-| Decision | Use separate permitted training scenarios to improve reliability/value, then compare frozen old/new policies on untouched scenarios. Do not hardcode Guillotine avoidance or replay this consumed encounter. |
-| Next session | Sol High, Fast off, about 60-90 minutes: audit reliability/mechanics coverage, collect a small authorized training contrast, fit and compare on separate scenarios; no full run. |
-| Next falsifier | A bounded reliability-focused learning cycle cannot improve measured decisions on untouched scenarios without leakage or teacher substitution. |
-| Stop condition | Stop on development fitting, consumed-encounter replay, move-specific hardcoded preference, teacher attack fallback counted as learned choice, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | Hard battle losses must remain learnable outcomes; removing this censoring is necessary before reliable attack value can be trained. |
+| Learning output | Five natural train expected-utility examples across four roots; 30/40 timing trials complete, 10 quarantined, no model fit. A separate new capture completed 2/2 integration trials without faint. |
+| Authority delta | No new fit or promotion. Bounded outcome collection can now represent a player faint, but live faint retention still needs one fresh cartridge proof. |
+| Transfer result | Four disjoint train/development roots were planned; development remained unopened. No transfer or held-out policy advantage is claimed. |
+| Blocker | Hard natural battles were censored by player-faint and pre-attack timing failures; surviving train cases gave only one 0.025-utility baseline regret. |
+| Decision | Stop before a weak fit or development opening. Verify a faint-bearing outcome on a distinct unused train capture, then separately diagnose timing-equality exclusions before another curriculum freeze. |
+| Next session | Sol High, Fast off, about 45-75 minutes: prove one live faint-bearing train outcome and diagnose the separate timing mismatch; no replay of consumed captures or development opening. |
+| Next falsifier | A fresh distinct train capture with a cartridge faint still fails to produce a verified negative outcome, or timing mismatch remains unexplained. |
+| Stop condition | Stop on consumed-trial replay, development fitting or opening, model promotion without a held-out advantage, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 
