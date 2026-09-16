@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The new safe Center terminal offers restoration and affordable evolution. Allow one fresh Model133 choice after action-free verification, retain its actual outcome, and stop if the repaired skill still fails at the same boundary. Renewable League income remains unqualified.
+- Next decision: The healed Center menu has only one executable evolution goal. Test action-free whether multiple genuine missing-registration evolution targets can be offered with separate executors and portable, identity-free features; stop if not. Do not force the singleton or manufacture authority. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model133 has 133 settled examples / 90 successes. Model132 selected evolution, but a general item-skill departure precondition failed after 106 actions; its safe terminal remains at 93/124 registrations, 74 specimens and 2298 cash. The generic seam is repaired but not yet live validated. |
+| Authority now | Model134 has 134 settled examples / 91 successes. Model133 selected and verified Center healing in 22 actions without a teacher. The safe 93/124, 74-specimen, 2298-cash terminal exposes only one evolution option; no further model choice was made. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The saved post-failure Center state cannot expose both restoration and evolution action-free, or a fresh selected attempt repeats the same invalid healed-farewell precondition. |
+| Cheapest falsifier | An action-free inventory at the healed terminal finds fewer than two distinct executable missing-registration evolution targets; do not fabricate a multi-target model choice. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 133 | 12 |
+| Registered Train Example · train | 134 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model133-item-evolution-departure** · status **closed** · evidence [qualification](docs/evidence/red-model133-item-evolution-departure-2026-09-16.json)
+**2026-09-16-model134-center-restore-singleton** · status **closed** · evidence [qualification](docs/evidence/red-model134-center-restore-singleton-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A real model-selected evolution exposed a general skill-sequencing defect, which produced a retained negative example and a small reusable repair. It did not earn a registration or establish evolution competence. |
-| Learning output | One measured evolution failure was admitted: Model133 has 133 settled examples / 90 successes / 54 economy-qualified examples. Red remains 93/124 with 74 specimens and 2298 cash. No evolution or item spend occurred. |
-| Authority delta | Model132 selected evolution from a real heal-versus-evolution menu; the typed pre-departure failure was fitted once as Model133. No teacher action, registration or authority promotion. A generic healed-farewell assumption was removed without replay. |
-| Transfer result | ROM-free item-evolution departure cases distinguish unhealed/clear from unhealed/active-dialogue nurse boundaries; 114 focused tests passed. Live validation of the repair and cross-title transfer remain unproved. |
-| Blocker | The prior evolution selection safely stopped at an unhealed Center because its item skill unconditionally required a healed farewell. The generic seam is repaired in ROM-free tests but not yet validated by a new live choice. The safe 93/124 terminal still offers restore or quoted evolution at 2298 cash. |
-| Decision | Recheck the earned Center terminal and permit at most one fresh Model133 choice among restoration and affordable evolution. Retain and fit the actual result, stopping on another invalid boundary; do not replay Model132. |
-| Next session | Sol High, Fast off, 45-75 minutes: one fresh bounded Model133 choice from the safe Center restore-versus-evolution menu after verifying the source and state; fit only its actual result. |
-| Next falsifier | The next action-free menu is not genuinely multi-option, or the newly selected evolution repeats the invalid healed-farewell call despite the guard repair. |
-| Stop condition | Stop on missing alternatives, repeated Center-boundary failure, unsafe terminal, replay pressure, teacher substitution, target-specific patches, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | Model133 made a real restoration decision and preserved the party, but this earned state collapses the mixed menu to a single evolution target. The result is learning data, not sustained autonomous play or a registration. |
+| Learning output | One measured model-selected Center restoration success was fitted: Model134 has 134 settled examples / 91 successes / 55 economy-qualified examples. Red remains 93/124 with 74 specimens and 2298 cash. |
+| Authority delta | Model133 selected restoration over evolution, verified whole-party healing and fit once as Model134. No teacher action, new registration or authority promotion. The item-evolution departure repair was not exercised live. |
+| Transfer result | The restored Center is an earned changed-resource state, and the menu honestly contracts to one goal. This is not an independent lineage or cross-title transfer test; item-evolution repair still lacks live validation. |
+| Blocker | The safe healed Center terminal has 93/124 registrations, 74 specimens and 2298 cash. Its menu has only one executable evolution goal: no restoration need, regional acquisition or finite resupply. A further model choice would be fake authority. |
+| Decision | Inventory distinct feasible evolution targets at this authentic state without gameplay. If two or more exist, expose them with separate verified executors and identity-free policy features; otherwise report the singleton and reassess alternatives before any play. |
+| Next session | Astra High, Fast off, 60-90 minutes: action-free feasibility inventory for multiple missing evolution targets, then design the smallest target-choice seam only if two real alternatives exist. |
+| Next falsifier | Fewer than two genuinely executable evolution targets exist at the healed terminal, or their skill/feature contracts cannot be made distinct without target identity leakage. |
+| Stop condition | Stop if fewer than two executable targets, if exposure requires identity features or hand selection, on unsafe terminal, replay pressure, teacher substitution, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

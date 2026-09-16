@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model133-item-evolution-departure",
+  "as_of_session": "2026-09-16-model134-center-restore-singleton",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model133-item-evolution-departure-2026-09-16.json"
+      "evidence": "docs/evidence/red-model134-center-restore-singleton-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1598,6 +1598,12 @@
       "result": "Model132 selected evolution from a verified restore-versus-evolution menu. The item skill stopped after 106 actions / 6780 frames on an invalid healed-Center farewell assumption. It ended safe, the failure fit once as Model133: 133 examples / 90 successes. Red remains 93/124, 74 specimens, 2298 cash.",
       "deviation": "The terminal's unhealed party and absent dialogue explain the unconditional precondition error. A generic conditional-departure repair passed 114 ROM-free tests but has not been live validated. No replay, item spend, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.",
       "next": "Sol High, Fast off: verify the saved Center menu action-free, then permit at most one fresh Model133 choice from real restoration/evolution alternatives. Stop if the boundary failure repeats."
+    },
+    {
+      "session": "2026-09-16-model134-center-restore-singleton",
+      "result": "Model133 chose Center restoration over evolution and verified whole-party recovery after 22 actions / 1584 frames. It fit once as Model134: 134 examples / 91 successes. Red remains 93/124, 74 specimens and 2298 cash, safe at the Center.",
+      "deviation": "The item-evolution repair was not exercised live. An action-free next inventory finds evolution as the sole executable goal; no restore need, regional acquisition or finite resupply. No second model choice, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.",
+      "next": "Astra High, Fast off: inventory distinct feasible evolution targets action-free. Expose a portable multi-target choice only if two real executors exist; otherwise stop and reassess without forcing the singleton."
     }
   ],
   "closed_milestones": [

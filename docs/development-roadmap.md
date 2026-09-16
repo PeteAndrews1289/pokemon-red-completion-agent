@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model133-item-evolution-departure**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-center-restore-singleton**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **133 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **134 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model133-item-evolution-departure-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model134-center-restore-singleton-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model134-center-restore-singleton
+
+Model133 chose Center restoration over evolution and verified whole-party recovery after 22 actions / 1584 frames. It fit once as Model134: 134 examples / 91 successes. Red remains 93/124, 74 specimens and 2298 cash, safe at the Center.
+
+**Deviation:** The item-evolution repair was not exercised live. An action-free next inventory finds evolution as the sole executable goal; no restore need, regional acquisition or finite resupply. No second model choice, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.
+
+**Next:** Astra High, Fast off: inventory distinct feasible evolution targets action-free. Expose a portable multi-target choice only if two real executors exist; otherwise stop and reassess without forcing the singleton.
 
 ### 2026-09-16-model133-item-evolution-departure
 

@@ -14,13 +14,14 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model133 has 133 settled examples/90 successes. Model132 selected evolution from a two-way
-restore/evolve menu; the skill failed at an unhealed Center after 106 actions, ended safe and
-fit once as a failure. The generic unconditional healed-farewell call was removed and passed
-ROM-free tests; no replay. Red remains 93/124 with 74 specimens and 2298 cash.
+Model134 has 134 settled examples/91 successes. Model133 selected and verified Center
+restoration from a genuine two-way menu in 22 actions. Red remains 93/124 registrations,
+74 specimens and 2298 cash at a safe Center. The item-evolution departure repair was not
+exercised live.
 
-The safe Center terminal's action-free menu has restore and affordable evolution options
-(2100 quote). Permit one fresh Model133 decision only after verification. Evolution target
+The healthy terminal's action-free menu has only one executable evolution binding; no
+further model choice was made. Inventory genuinely feasible missing evolution targets
+before attempting to expose multiple target choices. If fewer than two, stop. Evolution target
 ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
@@ -28,7 +29,7 @@ ordering, battle mechanics and fresh-start Red completion remain explicit author
 Flash 3.8 High completed a read-only design review. Accepted settled stats, identity checks and
 idempotent MAIN entry; rejected an incorrect battle-state value, forced flee and full-HP-only
 capture. Quota was unavailable/not refreshed; Claude was not used.
-Next setting: Sol High, Fast off, approximately 45-75 minutes for one bounded next choice. No GitHub publication without Pete's
+Next setting: Astra High, Fast off, approximately 60-90 minutes for action-free multi-target feasibility. No GitHub publication without Pete's
 explicit instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
