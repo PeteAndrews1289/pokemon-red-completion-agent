@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model137-targeted-kingler-completion",
+  "as_of_session": "2026-09-16-model136-marowak-choice-fit",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json"
+      "evidence": "docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1646,6 +1646,12 @@
       "result": "Model134's previously selected Krabby goal finished through an exact-target bounded continuation. Kingler #099 registered at level 28 in 12208 actions / 1095240 frames from the earned level-19 terminal. Red advanced 94 to 95/124 on a safe development save.",
       "deviation": "One completed model-selected goal, but no new model query, fit or authority promotion in this session. Model135 stays 135 examples / 91 successes / 56 economy-qualified; 74 specimens and 198 cash remain. Fresh Red acceptance remains 0/5. No GitHub push.",
       "next": "Sol High, Fast off: expose genuine post-Kingler alternatives from the exact 95/124 terminal, let Model135 choose a new goal, and retain one bounded costed outcome without replaying the completed evolution."
+    },
+    {
+      "session": "2026-09-16-model136-marowak-choice-fit",
+      "result": "A six-option post-Kingler menu led Model135 to choose Cubone-to-Marowak. The bounded cartridge run verified Marowak #105 and advanced the development save 95 to 96/124 in 17066 actions / 1468626 frames. Its one observed success trained Model136 to 136 examples / 92 successes / 57 economy-qualified.",
+      "deviation": "Correlated development only, not fresh-start acceptance or independent promotion. Cash stayed 198, physical specimens 74, and teacher actions zero. No earlier Kingler chunk was refitted and no GitHub push occurred.",
+      "next": "Sol High, Fast off: qualify practical alternatives from the exact 96/124 terminal and let Model136 choose one bounded new goal. Stop if resources, availability or safety fail instead of forcing a target."
     }
   ],
   "closed_milestones": [

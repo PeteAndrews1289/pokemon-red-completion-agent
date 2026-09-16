@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From the exact safe 95/124 terminal, offer genuine alternatives for one new Model135 goal choice and retain a bounded measured outcome.
+- Next decision: From the exact safe 96/124 terminal, qualify genuine practical alternatives for one new Model136 goal and retain a bounded measured outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Replan a fresh useful collection goal from the earned post-Kingler state while preserving verified registrations and resource costs. |
-| Authority now | Model135 remains 135 settled examples / 91 successes / 56 economy-qualified. The earlier Model134 choice completed through bounded support: Kingler #099 registered, Red 95/124; no new choice, fit or promotion. |
+| Reusable capability | Sustain new model-selected collection choices from earned terminals while preserving verified registrations and measured resource costs. |
+| Authority now | Model136 has 136 settled examples / 92 successes / 57 economy-qualified. One new Model135 choice registered Marowak #105 and trained one success; Red development save is 96/124, without independent promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact 95/124 terminal offers no genuine model-choice alternatives, or its selected executable goal cannot retain a safe measured outcome. |
+| Cheapest falsifier | The exact 96/124 terminal offers no genuine practical alternatives, or another model-selected attempt cannot retain a safe measured outcome. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model137-targeted-kingler-completion** · status **closed** · evidence [qualification](docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json)
+**2026-09-16-model136-marowak-choice-fit** · status **closed** · evidence [qualification](docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A model-selected long evolution finished on the actual cartridge and earned a verified registration. Bounded mechanics carried its intent without pretending support chunks were new learned choices. |
-| Learning output | Model134's selected evolution completed and registered Kingler (#099), moving the development save 94 to 95/124 in 12208 actions and 1095240 frames. Zero new fitted examples; Model135 remains 135/91/56. |
-| Authority delta | Model134's original selected Krabby goal completed through authenticated bounded support with no repeated model query or teacher target. Kingler was registered, but no new choice, fit or authority promotion occurred in this session. |
-| Transfer result | ROM-free targeted-inventory and mutation tests plus an authentic completed Red evolution. No independent or cross-title evaluation. |
-| Blocker | The completed development save is 95/124, not a fresh-start Red acceptance run. The next new goal must come from a distinct live model-choice menu and respect observed resources. |
-| Decision | Rebuild genuine live alternatives from the exact post-Kingler terminal, let Model135 choose the next goal, and retain one bounded costed outcome without a teacher override. |
-| Next session | Sol High, Fast off, about 45-60 minutes: ask Model135 to choose from real post-Kingler options and execute one bounded result, stopping if only safety or unavailable options remain. |
-| Next falsifier | No genuine alternatives can be offered from the new terminal, or one model-selected attempt cannot retain its state and cost safely. |
+| Product alignment | The model made a consequential new choice from six options, its actual cartridge evolution registered a new species, and the observed success trained one new example without a teacher choice. |
+| Learning output | One fresh Model135 choice evolved Cubone to Marowak #105, moving the development save 95 to 96/124 in 17066 actions and 1468626 frames. Its one measured success was fitted into Model136: 136 examples / 92 successes / 57 economy-qualified. |
+| Authority delta | Model135 made one new goal choice from six genuine options and controlled the successful Cubone-to-Marowak attempt. The outcome was fitted once into Model136; no independent authority promotion occurred. |
+| Transfer result | One authentic six-option Red decision and completed evolution from an earned terminal; correlated development only, with no independent or cross-title evaluation. |
+| Blocker | The development save is 96/124, still not fresh-start Red acceptance. Repeated long evolutions must remain practical and newly chosen from observed options; cash remains 198. |
+| Decision | From the exact 96/124 terminal, qualify real alternatives for a new Model136 choice; bound one costed outcome and stop if availability or resources are impractical. |
+| Next session | Sol High, Fast off, about 45-60 minutes: qualify a 96/124 menu and let Model136 choose one new bounded goal, stopping before repetitive or resource-impractical execution. |
+| Next falsifier | No genuine practical alternative appears from the new terminal, or one bounded Model136 choice loses safety or verifiability. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

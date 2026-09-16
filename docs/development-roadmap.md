@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model137-targeted-kingler-completion**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model136-marowak-choice-fit**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model136-marowak-choice-fit
+
+A six-option post-Kingler menu led Model135 to choose Cubone-to-Marowak. The bounded cartridge run verified Marowak #105 and advanced the development save 95 to 96/124 in 17066 actions / 1468626 frames. Its one observed success trained Model136 to 136 examples / 92 successes / 57 economy-qualified.
+
+**Deviation:** Correlated development only, not fresh-start acceptance or independent promotion. Cash stayed 198, physical specimens 74, and teacher actions zero. No earlier Kingler chunk was refitted and no GitHub push occurred.
+
+**Next:** Sol High, Fast off: qualify practical alternatives from the exact 96/124 terminal and let Model136 choose one bounded new goal. Stop if resources, availability or safety fail instead of forcing a target.
 
 ### 2026-09-16-model137-targeted-kingler-completion
 

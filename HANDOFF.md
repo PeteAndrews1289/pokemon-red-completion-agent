@@ -3,35 +3,39 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Model-selected Krabby → Kingler goal completed
+## New model choice registered Marowak and trained Model136
 
-Model134 chose this goal from seven genuine alternatives. After two bounded
-support continuations, the exact saved level-19 Krabby terminal evolved to
-**Kingler, level 28**, with **Pokédex #099 newly registered**. Red advanced
-**94 → 95/124** in 12,208 actions / 1,095,240 frames in this final chunk.
-Krabby/Kingler XP rose 7,095 → 22,029, a 14,934-XP trainee gain. The result
-is independently verified, safe and complete; 74 specimens and 198 cash remain.
-The exact terminal save SHA is
-`150d1c02ae785497e768e7c1f7216b0f3b8c62a3e29c81e71d505b9e3e84f456`.
+From the exact safe post-Kingler save, the action-free menu exposed **six
+distinct choices**: four fishing destinations and two evolutions. Model135
+selected Cubone → Marowak, index 4, from that menu with no teacher label. The
+single bounded execution succeeded in **17,066 actions / 1,468,626 frames**:
+Marowak #105 registered at level 28. Red advanced **95 → 96/124**, retained all
+previous registrations and 74 physical specimens, and stayed at 198 cash.
+The terminal save SHA is
+`a5f7d8ef8f66e64cead9760a1fb3dd9d892f12cf60800352dd81aeb868a034a6`.
 
-Source `ca68bacb` narrows private rebinding to live evolution alternatives.
-An action-free inspection found three, exactly one matching the inherited
-model-selected target, in seconds with zero actions or frames. The run used no
-new model query, teacher action or fitted example. The earlier incomplete
-attempt was fitted once; do not fit this support chunk as another decision.
-Model135 remains **135 examples / 91 successes / 56 economy-qualified**.
-Fresh Red acceptance remains **0/5**. No GitHub push.
-[Evidence](docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json).
+That *one new* model-selected success was admitted and fitted once. **Model136
+has 136 settled examples / 92 successes / 57 economy-qualified**, model SHA
+`3c84b284eec9de908552614ae3de02b03df953ce1937f1674010d38b771e0893`.
+No Krabby/Kingler support chunk was refitted. This is correlated development,
+not independent evaluation or authority promotion. Fresh Red acceptance is
+still **0/5**. No GitHub push.
+[Evidence](docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json).
+
+The dashboard's audited `registered_train_examples` projection still reads
+135 from its prior receipt. The new Model136 count above is verified in the
+private fit artifact and linked evidence; the dashboard projection has not yet
+been advanced, and its older number is not a second model state.
 
 ## Next bounded work
 
-Replan from this exact **95/124** safe terminal with a *new model decision*
-among genuine live goals, then retain one bounded outcome. Do not repeat the
-completed evolution or count its support chunks as extra model choices. The
-generic continuation result's `experience_gain=2621` excludes the evolved
-slot; the before/after cartridge reads prove the 14,934-XP trainee gain.
-Check the practical resource costs of the next option before another long
-goal, and keep the fresh-start Red gate separate from this development save.
+Replan from the exact **96/124** terminal using Model136, but qualify a fresh
+multi-option menu before spending another decision. Keep the new choice,
+resource cost and terminal linked; do not replay Marowak or count the previous
+Kingler support chunks as additional decisions. The development save remains
+distinct from a fresh-start Red acceptance run. If available collection options
+become repetitive or impractical at 198 cash, stop and reassess the acquisition
+and funding boundary rather than choosing a target manually.
 
 Recommended next setting: **Sol High, Fast off**, about **45–60 minutes**.
 Fresh Red acceptance remains **0/5**; ROM hack and Crystal remain closed.
