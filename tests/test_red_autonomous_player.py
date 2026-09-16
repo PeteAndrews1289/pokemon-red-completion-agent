@@ -14,11 +14,125 @@ from pokemon_red_completion.goal_manager_runtime import (
 from pokemon_red_completion.red_autonomous_player import (
     AutonomousSnapshot,
     continuation_binding,
+    run_assisted_safari_probe,
     run_autonomous_goal_continuation,
     run_autonomous_options,
 )
 from pokemon_red_completion.red_live_option_menu import build_red_live_option_set
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+
+
+def _assisted_safari_provenance():
+    return {"training_assistance": {
+        "kind": "money_override", "final_run_eligible": False,
+    }}
+
+
+def test_assisted_safari_probe_records_teacher_selection_and_never_fits(tmp_path):
+    output = tmp_path / "probe"
+    state = {"version": 0}
+    calls = []
+    ordinary = _binding(GoalKind.EVOLVE_SPECIES, binding_ref="evolve", calls=calls)
+    safari = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref=f"pokemon.red:safari-live:{'a' * 64}", calls=calls,
+    )
+
+    def execute():
+        assert (output / "execution-started.json").exists()
+        state["version"] = 1
+        return GoalExecutionReport(3, 40, {"admission_cost": 500})
+
+    safari = replace(safari, execute=execute, verify=lambda _: GoalVerification.succeeded())
+
+    def snapshot():
+        return AutonomousSnapshot(str(state["version"]).encode(), {
+            "cash": 500 if state["version"] == 0 else 0,
+        }, True)
+
+    options = SimpleNamespace(
+        bindings=(ordinary, safari),
+        menu=SimpleNamespace(available_indices=(0, 1), policy_sha256="b" * 64),
+    )
+    result = run_assisted_safari_probe(
+        output=output, snapshot=snapshot, observe=lambda _: options,
+        provenance=_assisted_safari_provenance(),
+    )
+    assert result["status"] == "complete"
+    assert result["model_queries"] == result["model_decisions"] == 0
+    assert result["goal_value_fit_allowed"] is False
+    assert result["outcome"]["learning_eligible"] is False
+    assert result["outcome"]["evidence"] == {"admission_cost": 500}
+    assert json.loads((output / "execution-started.json").read_text())[
+        "selection_authority"
+    ] == "teacher_training_only"
+    assert (output / "terminal.state").read_bytes() == b"1"
+    assert calls == []
+
+
+def test_assisted_safari_probe_rejects_unmarked_or_ambiguous_selection(tmp_path):
+    state = {"version": 0}
+
+    def snapshot():
+        return AutonomousSnapshot(str(state["version"]).encode(), {}, True)
+
+    with pytest.raises(ValueError, match="marked non-final"):
+        run_assisted_safari_probe(
+            output=tmp_path / "unmarked", snapshot=snapshot,
+            observe=lambda _: pytest.fail("unmarked probe must not inspect"),
+            provenance={},
+        )
+    assert not (tmp_path / "unmarked").exists()
+    safari = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref=f"pokemon.red:safari-live:{'a' * 64}", calls=[],
+    )
+    options = SimpleNamespace(
+        bindings=(safari, safari),
+        menu=SimpleNamespace(available_indices=(0, 1), policy_sha256="b" * 64),
+    )
+    with pytest.raises(ValueError, match="exactly one"):
+        run_assisted_safari_probe(
+            output=tmp_path / "ambiguous", snapshot=snapshot, observe=lambda _: options,
+            provenance=_assisted_safari_provenance(),
+        )
+    assert (tmp_path / "ambiguous/admission-failure.json").exists()
+    assert not (tmp_path / "ambiguous/execution-started.json").exists()
+
+
+def test_assisted_safari_probe_retains_failed_terminal_without_retry(tmp_path):
+    output = tmp_path / "failed"
+    state = {"version": 0}
+    safari = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref=f"pokemon.red:safari-live:{'a' * 64}", calls=[],
+    )
+
+    def execute():
+        state["version"] = 1
+        raise RuntimeError("admission failed after input")
+
+    safari = replace(safari, execute=execute)
+    options = SimpleNamespace(
+        bindings=(safari,),
+        menu=SimpleNamespace(available_indices=(0,), policy_sha256="b" * 64),
+    )
+    result = run_assisted_safari_probe(
+        output=output,
+        snapshot=lambda: AutonomousSnapshot(str(state["version"]).encode(), {}, True),
+        observe=lambda _: options,
+        provenance=_assisted_safari_provenance(),
+    )
+    assert result["status"] == "stopped"
+    assert result["outcome"]["error_chain"][0]["error_type"] == "RuntimeError"
+    assert (output / "terminal.state").read_bytes() == b"1"
+    with pytest.raises(FileExistsError):
+        run_assisted_safari_probe(
+            output=output,
+            snapshot=lambda: AutonomousSnapshot(b"1", {}, True),
+            observe=lambda _: options,
+            provenance=_assisted_safari_provenance(),
+        )
 
 
 def test_saved_goal_continuation_uses_unique_private_fingerprint_without_new_choice(tmp_path):

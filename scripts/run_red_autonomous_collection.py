@@ -34,6 +34,7 @@ from pokemon_red_completion.red_autonomous_collection import (
 from pokemon_red_completion.red_autonomous_player import (
     AutonomousSnapshot,
     continuation_binding,
+    run_assisted_safari_probe,
     run_autonomous_goal_continuation,
     run_autonomous_options,
 )
@@ -180,6 +181,8 @@ def main() -> None:
     assisted_money = plan.get("assisted_training_money")
     if assisted_money is not None and plan.get("mode") == "continue_selected_goal":
         raise ValueError("assisted money cannot rewrite a previously selected goal")
+    if plan.get("mode") == "assisted_safari_probe" and assisted_money is None:
+        raise ValueError("Safari training probe requires assisted money")
     payloads = {}
     for key in (
         "rom", "state", "checkpoint", "profile", "model",
@@ -456,7 +459,14 @@ def main() -> None:
             return
         # Seed is generated once before any score is queried and persisted by
         # the runner. It is not searched for a preferred outcome.
-        if continuation_ref is not None:
+        if plan.get("mode") == "assisted_safari_probe":
+            result = run_assisted_safari_probe(
+                output=output,
+                snapshot=snapshot,
+                observe=observe,
+                provenance=provenance,
+            )
+        elif continuation_ref is not None:
             result = run_autonomous_goal_continuation(
                 output=output,
                 snapshot=snapshot,

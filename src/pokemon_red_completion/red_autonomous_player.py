@@ -217,6 +217,111 @@ def _party_experience_gain(before: Mapping[str, object], after: Mapping[str, obj
     )
 
 
+def run_assisted_safari_probe(
+    *,
+    output: Path,
+    snapshot: Callable[[], AutonomousSnapshot],
+    observe: Callable[[int], RedLiveOptionSet],
+    provenance: Mapping[str, object],
+) -> dict[str, object]:
+    """Exercise one teacher-selected Safari binding without a model query or fit."""
+    assistance = provenance.get("training_assistance")
+    if (
+        not isinstance(assistance, Mapping)
+        or assistance.get("kind") != "money_override"
+        or assistance.get("final_run_eligible") is not False
+    ):
+        raise ValueError("Safari training probe requires marked non-final assistance")
+    output.mkdir(mode=0o700, parents=False, exist_ok=False)
+    _record(output / "plan.json", {
+        "schema": "pokemon.red.assisted-safari-mechanics.v1",
+        "teacher_selected_skill": "safari",
+        "model_queries": 0,
+        "goal_value_fit_allowed": False,
+        "independent_evaluation": False,
+        "provenance": dict(provenance),
+    })
+    before = snapshot()
+    _write(output / "before.state", before.state)
+    _record(output / "before.json", {
+        "state_sha256": before.sha256, "facts": dict(before.facts), "safe": before.safe,
+    })
+    if not before.safe:
+        raise ValueError("unsafe Safari training origin")
+    try:
+        options = observe(0)
+        if snapshot() != before:
+            raise ValueError("Safari training inventory changed the game")
+        selected_indices = [
+            index for index in options.menu.available_indices
+            if options.bindings[index].kind is GoalKind.ACQUIRE_SPECIES
+            and options.bindings[index].binding_ref.startswith("pokemon.red:safari-live:")
+        ]
+        if len(selected_indices) != 1:
+            raise ValueError("Safari training needs exactly one available live binding")
+        selected = options.bindings[selected_indices[0]]
+    except Exception as admission_error:
+        _record(output / "admission-failure.json", {
+            "error_type": type(admission_error).__name__, "error": str(admission_error),
+        })
+        raise
+    _record(output / "execution-started.json", {
+        "selected_binding_ref": selected.binding_ref,
+        "selected_kind": selected.kind.value,
+        "selected_candidate_index": selected_indices[0],
+        "menu_sha256": options.menu.policy_sha256,
+        "state_sha256": before.sha256,
+        "selection_authority": "teacher_training_only",
+        "model_queries": 0,
+    })
+    report = None
+    verification = None
+    execution_error: BaseException | None = None
+    try:
+        report = selected.execute()
+        verification = selected.verify(report)
+    except BaseException as caught:
+        execution_error = caught
+    finally:
+        terminal = snapshot()
+        _write(output / "terminal.state", terminal.state)
+        outcome = {
+            "before_state_sha256": before.sha256,
+            "terminal_state_sha256": terminal.sha256,
+            "before": dict(before.facts),
+            "after": dict(terminal.facts),
+            "safe_terminal": terminal.safe,
+            "verification": None if verification is None else verification.status.value,
+            "failure_reason": (
+                None if verification is None or verification.failure_reason is None
+                else verification.failure_reason.value
+            ),
+            "evidence": None if report is None else dict(report.evidence),
+            "error_chain": _exception_chain(execution_error),
+            "model_queries": 0,
+            "learning_eligible": False,
+            "goal_value_fit_allowed": False,
+        }
+        _record(output / "outcome.json", outcome)
+    if execution_error is not None and not isinstance(execution_error, Exception):
+        raise execution_error
+    complete = (
+        execution_error is None and terminal.safe and verification is not None
+        and verification.status is GoalDecisionOutcome.SUCCEEDED
+    )
+    result: dict[str, object] = {
+        "schema": "pokemon.red.assisted-safari-mechanics-result.v1",
+        "status": "complete" if complete else "stopped",
+        "model_queries": 0,
+        "model_decisions": 0,
+        "teacher_training_selections": 1,
+        "goal_value_fit_allowed": False,
+        "outcome": outcome,
+    }
+    _record(output / "result.json", result)
+    return result
+
+
 def run_autonomous_options(
     *,
     model: LivingDexOptionValueModel,
