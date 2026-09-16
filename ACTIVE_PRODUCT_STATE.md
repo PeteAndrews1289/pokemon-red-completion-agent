@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Integrate generic stone procurement and boxed item evolution into one executable goal-manager binding, then make the next gameplay decision a single Model123 query across two genuine families.
+- Next decision: Close or prospectively replace the consumed Model123 item-evolution query identity without redraw, inference or teacher substitution.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-model123-renewable-stone-execution** · status **closed** · evidence [qualification](docs/evidence/red-model123-renewable-stone-execution-2026-09-15.json)
+**2026-09-15-model123-item-evolution-integration-query-failure** · status **closed** · evidence [falsification](docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The retained save legitimately generated funds, bought a stone, exercised storage and registered Raichu without selling finite completion assets. This closes the live controller gap while keeping deterministic support distinct from model progress. |
-| Learning output | None. Four retained capability phases used zero model queries and zero teacher labels. Model123 remains at 123 examples / 84 successes; one deterministic Raichu registration is not learned authority. |
-| Authority delta | None. Model123 remains at 123 settled examples / 84 successes. Deterministic capability execution advanced the selected Red route from 88/124 to 89/124 but did not create a model-selected outcome. |
-| Transfer result | No cross-title transfer result. The funding-to-shop-to-storage-to-item-use composition is structurally reusable, but only Red cartridge execution has been measured. |
-| Blocker | Renewable funding, legitimate stone purchase, generic PC preparation and live party item evolution all succeeded from retained states. The live goal manager still exposes boxed level evolution only; procurement plus boxed item use is not yet one executable identity-free option. |
-| Decision | Integrate generic stone procurement, boxed party preparation and existing party item use as one goal-manager executable. Qualify at least two stone families ROM-free, then require the next gameplay choice to be one Model123 query across acquisition and item evolution. |
-| Next session | Sol High, Fast off: integrate generic shop procurement plus boxed item evolution, qualify two stone families ROM-free, then freeze exactly one Model123 query only when acquisition and item evolution are both executable. |
-| Next falsifier | The generic goal manager cannot bind a boxed item evolution, including needed shop procurement, beside a genuinely executable acquisition without exposing species identity or requiring a route-specific patch. |
-| Stop condition | Stop on a species-specific movement patch, a second deterministic registration before the query, a teacher choice, a consumed-attempt replay, a full run, ROM-hack/Crystal work or GitHub publication. |
+| Product alignment | Generic procurement plus boxed item evolution is now a reusable goal-manager capability and the retained terminal exposed acquire, evolve and resupply simultaneously. The failed one-shot query is retained honestly and cannot be counted as learned progress. |
+| Learning output | None. One Model123 query was consumed, but no selected arm was durably recorded and no gameplay outcome exists. Model123 remains at 123 examples / 84 successes. |
+| Authority delta | None. Model123 remains at 123 settled examples / 84 successes. The item-evolution capability and three-family live menu are verified, but the sole query produced no durable selected arm or outcome. |
+| Transfer result | No cross-title transfer result. Fire- and Water-stone families passed ROM-free qualification, but no later-title execution has occurred. |
+| Blocker | The one Model123 selection returned, then a post-query enum assertion failed before the decision record was written. The write-ahead intent permanently consumes seed 123091501; no controller input, gameplay or save mutation occurred, and the selected arm cannot be claimed from durable evidence. |
+| Decision | Do not redraw or infer the consumed choice. Decide whether to close this retained-state query lane or design one prospectively distinct recovery experiment that cannot be mistaken for a retry. |
+| Next session | Astra High, Fast off: audit the one-shot failure boundary and either close the exact retained-state lane or freeze a genuinely distinct recovery experiment before any further query. |
+| Next falsifier | No prospectively distinct recovery experiment can expose a new authenticated menu without replaying, inferring or replacing the consumed selection identity. |
+| Stop condition | Stop on any redraw of seed 123091501, inference of its selected arm, replay of this exact menu identity, teacher substitution, gameplay execution without a durable decision, a full run, ROM-hack/Crystal work or GitHub publication. |
 
 ### Stop conditions
 

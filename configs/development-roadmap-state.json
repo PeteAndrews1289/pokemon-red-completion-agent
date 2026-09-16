@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-model123-renewable-stone-execution",
+  "as_of_session": "2026-09-15-model123-item-evolution-integration-query-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model123-renewable-stone-execution-2026-09-15.json"
+      "evidence": "docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1502,6 +1502,12 @@
       "result": "One no-retry League attempt beat Lorelei, Bruno and Agatha before retaining a Lance failure with17257 cash. Controlled blackout, a legitimate2100 Thunder Stone purchase and generic PC preparation then registered Raichu. Red is89/124 on the declared route with67 living species,71 specimens and6528 cash.",
       "deviation": "The four retained phases used2397 actions/228915 frames with zero retries, model queries or teacher labels. This is capability and collection progress, not learned authority; Model123 remains123 examples/84 successes and all fresh-Red gates remain unchanged.",
       "next": "Sol High, Fast off: integrate generic stone procurement plus boxed item use as one goal-manager executable, qualify two stone families ROM-free, then require the next gameplay decision to be exactly one identity-free Model123 acquisition-versus-item-evolution query."
+    },
+    {
+      "session": "2026-09-15-model123-item-evolution-integration-query-failure",
+      "result": "Generic stone procurement, boxed preparation and item use now form one goal-manager executable. Fire and Water families passed ROM-free gates,372 targeted tests passed, and the89-registration terminal exposed acquire,evolve and resupply with zero input, zero frames and no identity fields.",
+      "deviation": "The sole Model123 selection returned, but a post-query enum assertion failed before its selected arm was persisted. The write-ahead intent consumes seed123091501; no gameplay, cash, registration, fit, authority or transfer counter changed, and no redraw or inferred arm is allowed.",
+      "next": "Astra High, Fast off: audit the one-shot boundary and either close this exact retained-state lane or freeze a prospectively distinct recovery experiment before any further query. Do not execute gameplay without a durable decision."
     }
   ],
   "closed_milestones": [

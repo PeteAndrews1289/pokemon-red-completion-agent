@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-renewable-stone-execution**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-item-evolution-integration-query-failure**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -89,7 +89,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-renewable-stone-execution-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-15-model123-item-evolution-integration-query-failure
+
+Generic stone procurement, boxed preparation and item use now form one goal-manager executable. Fire and Water families passed ROM-free gates,372 targeted tests passed, and the89-registration terminal exposed acquire,evolve and resupply with zero input, zero frames and no identity fields.
+
+**Deviation:** The sole Model123 selection returned, but a post-query enum assertion failed before its selected arm was persisted. The write-ahead intent consumes seed123091501; no gameplay, cash, registration, fit, authority or transfer counter changed, and no redraw or inferred arm is allowed.
+
+**Next:** Astra High, Fast off: audit the one-shot boundary and either close this exact retained-state lane or freeze a prospectively distinct recovery experiment before any further query. Do not execute gameplay without a durable decision.
 
 ### 2026-09-15-model123-renewable-stone-execution
 
