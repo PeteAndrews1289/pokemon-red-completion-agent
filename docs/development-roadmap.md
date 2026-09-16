@@ -3,9 +3,9 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model123-next-menu-capability-gate**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-renewable-stone-preflight**.
 
-A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
+A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
 ## Current milestone
 
@@ -81,23 +81,23 @@ Choose progression from a fresh game through the Champion.
 
 Earlier checkpoint completion is supporting evidence, not this fresh-run gate.
 
-### 05. Complete the full Red Pokedex — current
+### 05. Complete Red's legitimate native route — current
 
-Register every Red Pokedex entry in the same fresh-run save.
+Register the declared 124-species Red route in the same fresh-run save.
 
-**Exit criterion:** Full local Red registration in the authenticated model-directed run, with legitimate version, trade and event dependencies explicitly resolved before any ROM hack.
+**Exit criterion:** 124/124 selected-route registration in the authenticated model-directed run, with every unavailable version, cable-trade or event dependency recorded for later legitimate acquisition.
 
-No reduced availability subset. Shared credit is not a local flag; no living-form quota.
+No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model123-renewable-stone-preflight-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
 Test changed encounters, rules or difficulty in a compatible hack.
 
-**Exit criterion:** Only after the full Red fresh-run/story/Pokedex gate: compare initial performance and adaptation with a learner lacking Red experience.
+**Exit criterion:** Only after the fresh Red story/124-route gate: compare initial performance and adaptation with a learner lacking Red experience.
 
-Blocked until complete Red. Compatibility and initial performance are separate tests.
+Compatibility and initial performance are separate tests; deferred species remain explicit shared-ledger gaps.
 
 ### 07. Transfer and learn Crystal — planned
 
@@ -113,9 +113,17 @@ Continue the shared registered Pokedex through at least Emerald.
 
 **Exit criterion:** Per-title story completion and verified global species coverage with explicit version, trade, event and unsupported-mechanic gaps.
 
-Learn new generation mechanics; retain truthful global, local and physical views.
+Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-15-model123-renewable-stone-preflight
+
+The untouched88-registration terminal now action-free qualifies for a29799-gross,29624-net renewable League cycle through the cartridge-native Indigo-lobby reset. Cartridge learnsets cover151 species/728 rows; all seven physical buyable-stone candidates avoid a move prompt at their stored levels.
+
+**Deviation:** No gameplay, model query, fit, authority, registration or transfer counter changed. Pete revised the pre-hack collection gate to the legitimate124-species Red route and deferred Mew/version/link dependencies to later legitimate acquisition; baseline V4 records the change without rewriting V1-V3.
+
+**Next:** Sol High, Fast off: execute one claimed renewable League cycle and preserve its first outcome. Continue to postgame settlement, catalog-derived stone purchase, boxed retrieval and live evolution only after each prior boundary verifies; stop on the first unsupported mechanic.
 
 ### 2026-09-15-model123-next-menu-capability-gate
 

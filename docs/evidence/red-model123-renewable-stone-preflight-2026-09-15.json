@@ -1,0 +1,75 @@
+{
+  "schema": "pokemon.red.model123-renewable-stone-preflight.v1",
+  "session_id": "2026-09-15-model123-renewable-stone-preflight",
+  "status": "qualified_action_free",
+  "classification": "maintenance_unblocking_one_measured_model123_choice",
+  "source": {
+    "rom_sha256": "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b",
+    "checkpoint_file_sha256": "e3503685a04e47bd2a7cce4fe35f11669259172a2d57ca393aa69931c94ec797",
+    "state_sha256": "bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b",
+    "model_sha256": "3534d6d0106370a49ebd8dd1504285bb6c0fa9c216acd887e1c44c51ced652aa"
+  },
+  "origin": {
+    "registered_declared_route": 88,
+    "declared_route_target": 124,
+    "living_species": 67,
+    "specimens": 71,
+    "cash": 206,
+    "held_evolution_stones": 0
+  },
+  "cheapest_falsifier": {
+    "initial_result": "rejected_stale_partial_league_events",
+    "cartridge_copy_rehearsal": {
+      "actions": 23,
+      "frames": 2364,
+      "result": "entering Indigo Plateau lobby cleared the complete post-Lance pre-Champion event prefix",
+      "retained_checkpoint_changed": false
+    }
+  },
+  "renewable_funding_qualification": {
+    "action_free": true,
+    "state_hash_unchanged": true,
+    "pre_entry_league_reset": true,
+    "battle_count": 5,
+    "expected_gross_income": 29799,
+    "renewable_bootstrap_sales": 2825,
+    "full_restore_purchase": 3000,
+    "expected_net_income": 29624,
+    "supported_attack_pp": 245,
+    "opponent_attack_demands": 26,
+    "finite_completion_assets_sold": false,
+    "league_executed": false
+  },
+  "stone_evolution_admission": {
+    "cartridge_species": 151,
+    "cartridge_learnset_rows": 728,
+    "physical_missing_stone_candidates": 11,
+    "buyable_stone_candidates": 7,
+    "buyable_candidate_targets": [26, 45, 59, 62, 91, 103, 121],
+    "buyable_candidates_with_move_prompt_at_stored_level": 0,
+    "move_prompt_policy": "fail_closed_before_input"
+  },
+  "verification": {
+    "focused_tests_passed": 82,
+    "ruff": "passed",
+    "mypy": "passed",
+    "model_queries": 0,
+    "teacher_labels": 0,
+    "retained_gameplay_actions": 0,
+    "retained_gameplay_frames": 0,
+    "training_examples_added": 0,
+    "registrations_added": 0
+  },
+  "remaining_before_model123_query": [
+    "execute one claimed renewable League cycle and retain its exact outcome",
+    "settle the post-Hall-of-Fame reset into a field-ready checkpoint",
+    "buy a catalog-derived stone and retrieve its boxed precursor",
+    "live-qualify one exact stone evolution, then rebuild the heterogeneous menu"
+  ],
+  "scope_revision": {
+    "red_gate": "fresh model-directed story plus 124/124 declared legitimate native route",
+    "mew": "deferred_until_later_legitimate_source",
+    "version_and_link_dependencies": "attempt_later_link_or_earn_in_later_title",
+    "cheating_or_save_editing": false
+  }
+}

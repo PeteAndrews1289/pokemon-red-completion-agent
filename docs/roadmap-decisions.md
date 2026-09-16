@@ -1026,3 +1026,16 @@ the primary output. This changes the immediate development tactic, not the Red-f
 full fresh-run/full-Pokedex exit criterion, ROM-hack prohibition or later Crystal/Emerald sequence.
 
 [Evidence](evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json).
+## September 15 — defer unavailable species without cheating
+
+Pete revised the pre-hack Red gate after confirming the long-term objective is one legitimate
+shared collection across titles. Red must still pass one fresh, non-walkthrough, model-directed
+start-to-finish run with concurrent Champion and Hall-of-Fame evidence. Its collection gate is now
+the declared 124-species selected native route, currently 88/124, rather than local 151/151.
+
+Mew is deferred until a later legitimate source. Version exclusives and link evolutions remain
+explicit dependencies. After model completeness, test simultaneous Red/Blue emulators and a normal
+link trade if the emulator stack supports it; if not, retain the gaps and earn those species in a
+later game. Shared credit never fabricates a Red save flag, and no save editing or cheating is
+authorized. Adopt `red-first-v4-legitimate-native`; retain V1 through V3 unchanged as historical
+baselines. The ROM-hack, Crystal and at-least-Emerald sequence remains unchanged.

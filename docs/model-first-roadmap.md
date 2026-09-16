@@ -8,14 +8,15 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 1. Train reusable decisions through bounded Red scenarios and retain failures.
 2. Qualify model choices across story, battles, navigation, resources and collection.
 3. Finish one fresh start-to-finish model-directed Red run with Champion/Hall-of-Fame evidence
-   and all 151 registrations in that Red save, including legitimate external dependencies.
+   and all 124 registrations in the declared legitimate native Red route. Keep version, cable-
+   trade and event gaps explicit for later legitimate acquisition.
 4. Test a compatible unfamiliar Red ROM modification.
 5. Learn Crystal and continue the shared registered Pokédex through at least Emerald.
 
 ## Where we stand
 
-Model123 has 123 measured examples and 84 successes. Its development save has 88/151 local
-registrations (58.28%), 67 living species and 71 specimens. The current collection checklist is
+Model123 has 123 measured examples and 84 successes. Its development save has 88/124 declared-route
+registrations (70.97%), 67 living species and 71 specimens. The current collection checklist is
 26/26; the mandatory fresh-Red completion gate remains 0/5. Checklist completion is not whole-
 project completion.
 
@@ -27,14 +28,17 @@ re-observed with zero input and zero frames.
 
 The attempted successor menu then hit its cheapest falsifier before a model query: the terminal has
 no remaining boxed level evolution and no evolution stone in the bag or PC. Its 206 cash cannot buy
-a 2100 stone directly. A bounded party-only stone-use controller is now ROM-free qualified, but it
-does not buy items, retrieve boxed specimens or claim live-game authority. Funding and procurement
-must be a separate reusable provider; the terminal inventory appears sufficient to fund one stone
-by selling bounded renewable items, but that calculation is not execution authority.
+a 2100 stone directly. The existing renewable League path now qualifies the untouched terminal
+through the cartridge's Indigo-lobby event reset: 29,799 gross and 29,624 projected net, using only
+2,825 of repeatably purchasable X-item stock as one Full Restore bootstrap. Cartridge-derived
+move-learning admission also proves that all seven physically held, buyable-stone candidates avoid
+a move prompt at their stored levels. Procurement, boxed-party preparation and live stone use are
+still unexecuted.
 
-No ROM hack or Crystal work is permitted until a fresh model-directed Red run proves all five
-completion gates: fresh origin, start-to-finish control, Champion, Hall of Fame and 151/151 local
-registration with legitimate dependencies resolved.
+No ROM hack or Crystal work is permitted until a fresh model-directed Red run proves the five
+completion gates: fresh origin, start-to-finish control, Champion/Hall of Fame, 124/124 declared-
+route registration and a truthful deferred-dependency ledger. Mew and unavailable cable trades
+remain later legitimate targets, not cheats or blockers.
 
 ## Next few sessions
 
@@ -45,7 +49,7 @@ registration with legitimate dependencies resolved.
 | Retain and continue | Verify the exact outcome and costs, fit one successor row if eligible, then repeat from the earned terminal rather than a reset | Sol / High / Fast off |
 | Authority coverage audit | Review which story, battle, navigation, resource, collection and dependency decisions still lack reusable authority; choose the smallest measured gaps | Astra / High / Fast off |
 | Fresh Red acceptance freeze | Freeze the nondeterministic fresh-run contract, dependency plan, stop rules and evidence gates without starting the run | Astra / High / Fast off |
-| Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
+| Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 124/124 declared-route registration and deferred-dependency gates | Astra / High freeze; Sol / High execution |
 
 The next session is one bounded reusable capability integration, not a full replay. Stop before
 gameplay if shop access, permitted sales, stone purchase or move-learning safety cannot be derived

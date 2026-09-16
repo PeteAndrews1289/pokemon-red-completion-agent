@@ -20,14 +20,13 @@ Capability Limitations:
   Proof of end-to-end controller menu reliability requires live emulator
   qualification.
 - No item purchasing or funding: stones must already be present in the bag.
-- Move-learning stone evolution unsupported:
+- Move-learning stone evolution fails closed before input:
   In Pokémon Red (pokered engine/pokemon/evos_moves.asm:209), LearnMoveFromLevelUp
   is called unconditionally after evolution without a method check, testing the
-  evolved species' learnset at its current level. This draft preserves moves
-  strictly and does NOT support stone evolutions that trigger move-learning;
-  Codex will add safe cartridge-derived admission before live integration.
-  Do not add speculative confirmation pulses or weaken move preservation to
-  accept arbitrary changes.
+  evolved species' learnset at its current level. The controller now derives
+  that learnset from the cartridge and rejects any exact level that would open
+  a move-learning path. Do not add speculative confirmation pulses or weaken
+  move preservation to accept arbitrary changes.
 - Evolution modal mechanics:
   Evolution in Pokémon Red directly updates the Pokédex owned and seen flags
   in RAM without invoking a ShowPokedexData modal. ItemUseEvoStone removes the
@@ -42,7 +41,12 @@ from dataclasses import dataclass
 from .actions import MacroActionKind
 from .collection import CollectionObservation
 from .executor import CountingExecutor
-from .gen1_cartridge import EvolutionMethod, evolution_graph, internal_to_dex
+from .gen1_cartridge import (
+    EvolutionMethod,
+    evolution_graph,
+    internal_to_dex,
+    level_up_learnsets,
+)
 from .lavender import (
     DEFAULT_LAVENDER_TIMING,
     EmulatorState,
@@ -331,6 +335,20 @@ class RedPartyItemEvolutionExecutor:
                 f"does not match party size {len(before_party)}"
             )
         before_party_levels = tuple(raw_before.party_levels)
+        learned_at_current_level = tuple(
+            move
+            for level, move in level_up_learnsets(request.rom).get(
+                request.target_national,
+                (),
+            )
+            if level == before_party_levels[request.party_slot]
+        )
+        if learned_at_current_level:
+            raise RedPartyItemEvolutionValidationError(
+                "Stone evolution would enter an unsupported cartridge-derived "
+                f"move-learning path at level {before_party_levels[request.party_slot]}: "
+                f"{learned_at_current_level!r}"
+            )
 
         # Reject unknown/truncated party moves before any input
         if raw_before.party_moves is None:

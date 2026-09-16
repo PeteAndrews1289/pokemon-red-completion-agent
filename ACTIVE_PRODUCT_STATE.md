@@ -11,15 +11,15 @@ they conflict with this page.
 
 Build a transferable Pokemon agent that finishes stories and accumulates one verified registered Pokedex across runs, mainline games, versions, trades and legitimate events.
 
-**Environment role:** Complete a fresh start-to-finish model-directed Red run and its full local Pokedex before any ROM hack. Resolve version/trade/event dependencies explicitly; then test a compatible unfamiliar Red modification, learn Crystal and continue through at least Emerald.
+**Environment role:** Complete a fresh start-to-finish model-directed Red run and its declared 124-species legitimate native route before any ROM hack. Record unavailable version, cable-trade and event dependencies for later legitimate acquisition; then test a compatible unfamiliar Red modification, learn Crystal and continue through at least Emerald.
 
 Success means:
 
-- Before any ROM hack, finish one authenticated fresh-start model-directed Red run with Champion/Hall-of-Fame evidence and the full local Red Pokedex; no reduced availability subset.
+- Before any ROM hack, finish one authenticated fresh-start model-directed Red run with Champion/Hall-of-Fame evidence and 124/124 on the declared legitimate native route.
 - Complete each title's story and supported mechanics under declared learned authority.
 - Register missing global species through legitimate acquisition and evolution; no level100 or simultaneous living-form quota.
 - Transfer shared navigation, battle, party, resource, planning, and collection knowledge into later titles with less teaching.
-- Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability.
+- Explain version, trade, event, one-shot, and unsupported-mechanic blockers without fabricating availability; defer Mew and unavailable cable dependencies until a later legitimate source.
 
 Not the product:
 
@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify a separate reusable funding-and-stone-procurement provider and cartridge-derived move-learning admission, then reconstruct the Model123 heterogeneous menu only after two families are genuinely executable.
+- Next decision: Execute the qualified renewable League cycle once, then bind verified postgame settlement, stone purchase, boxed retrieval and live item evolution before the next Model123 query.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model123 has 123 settled examples / 84 successes and 88 local registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
+| Authority now | Model123 has 123 settled examples / 84 successes and 88/124 declared-route registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-model123-next-menu-capability-gate** · status **closed** · evidence [falsification](docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json)
+**2026-09-15-model123-renewable-stone-preflight** · status **closed** · evidence [qualification](docs/evidence/red-model123-renewable-stone-preflight-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session falsified an impossible next menu before spending a model query or mutating the durable Red state. It recovered and qualified a reusable party-only item-evolution controller while preserving the architectural boundary between procurement and item use. |
+| Product alignment | The session restored the intended generated-funds path without finite completion-asset liquidation and derived move-learning safety from the cartridge. It also records the revised 124-species Red gate while keeping unavailable species as truthful later-title dependencies. |
 | Learning output | None. The cheapest falsifier stopped the session before a model query or gameplay. Model123 remains at 123 examples / 84 successes. |
-| Authority delta | None. Model123 remains at 123 settled examples / 84 successes and 88 registrations. A party-only stone-use controller is ROM-free qualified but has no gameplay or learned authority. |
-| Transfer result | No cross-title transfer result. The new controller is structurally reusable for party-held item evolution, but it has only ROM-free test authority and no live cartridge qualification. |
-| Blocker | The authenticated terminal has no remaining boxed level evolution and no evolution stone in the bag or PC. Cash is 206 versus a 2100 stone price, so the next heterogeneous menu cannot honestly offer an immediately executable evolution family. Funding and procurement are not yet bound to a reusable provider. |
-| Decision | Stop before querying Model123 or touching gameplay. Preserve the 88-registration terminal, keep item use separate from procurement, and qualify one reusable funding-and-stone-procurement provider plus cartridge-derived move-learning admission before reconstructing the heterogeneous menu. |
-| Next session | Sol High, Fast off: bind and ROM-free qualify one separate funding-and-stone-procurement provider plus cartridge-derived move-learning admission, then integrate it with the party-only item-evolution controller. Do not query Model123 or run gameplay until the exact terminal can again expose two genuinely executable families. |
-| Next falsifier | A reusable action-free provider cannot prove that the exact terminal can sell only bounded renewable inventory, buy one required stone, and expose the resulting held-item evolution without route-specific scripting or state mutation during planning. |
-| Stop condition | Stop if procurement requires a species-specific route, an unauthenticated shop assumption, sale of protected finite assets, speculative move-learning inputs, teacher substitution, or gameplay before the two-family menu is genuinely executable. Do not push GitHub or begin a ROM hack/Crystal. |
+| Authority delta | None. Model123 remains at 123 settled examples / 84 successes and 88/124 declared-route registrations. Renewable funding and move-learning admission are qualified but no gameplay or learned authority was added. |
+| Transfer result | No cross-title transfer result. Cartridge-derived learnset admission is reusable structure; the funding reset is Red-specific and remains preflight-only until live execution. |
+| Blocker | The exact terminal now qualifies for a 29799-gross renewable League cycle through its cartridge-native Indigo-lobby event reset, and seven buyable-stone candidates pass move-learning admission. The cycle, post-Hall-of-Fame settlement, stone purchase, boxed retrieval and live evolution remain unexecuted. |
+| Decision | Execute one claimed renewable League cycle from the unchanged terminal and retain its first outcome. On success, settle postgame, buy one catalog-derived stone, retrieve its boxed precursor and live-qualify item evolution before reconstructing the heterogeneous menu. |
+| Next session | Sol High, Fast off: execute one claimed renewable League cycle from the exact terminal, preserve the first outcome, and continue to catalog-derived stone purchase and boxed precursor preparation only after verified postgame settlement. |
+| Next falsifier | The first claimed renewable League attempt cannot cross its existing battle bounds or cannot settle into a field-ready postgame checkpoint with the quoted money and protected collection intact. |
+| Stop condition | Stop on the first unsupported battle mechanic, postgame reset, shop route, storage transition or move prompt. Do not retry a consumed run, sell finite completion assets, query Model123 early, push GitHub or begin a ROM hack/Crystal. |
 
 ### Stop conditions
 

@@ -361,6 +361,10 @@ def patch_cartridge_derivations(monkeypatch: pytest.MonkeyPatch) -> None:
         "pokemon_red_completion.red_party_item_evolution.evolution_graph",
         lambda rom: TEST_GRAPH,
     )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_party_item_evolution.level_up_learnsets",
+        lambda rom: {species: () for species in TEST_DEX_MAP.values()},
+    )
 
 
 def test_cheapest_falsifier_wrong_item_emits_zero_actions() -> None:
@@ -381,6 +385,40 @@ def test_cheapest_falsifier_wrong_item_emits_zero_actions() -> None:
     runner = RedPartyItemEvolutionExecutor(reader, emulator, policy, lambda: collection)
     with pytest.raises(RedPartyItemEvolutionValidationError, match="requires exact STONE edge"):
         runner.execute(actions, request)
+
+    assert actions.actions_executed == 0
+
+
+def test_move_learning_stone_evolution_fails_before_input(monkeypatch) -> None:
+    executor = MockChapterExecutor()
+    actions = CountingExecutor(executor)
+    reader = MockReader(make_raw_state(party=(EEVEE_INTERNAL,)))
+    emulator = MockEmulator()
+    policy, collection = make_policy_and_collection((EEVEE_DEX,), [(EEVEE_DEX, 25)])
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_party_item_evolution.level_up_learnsets",
+        lambda rom: {JOLTEON_DEX: ((25, 84),)},
+    )
+
+    with pytest.raises(
+        RedPartyItemEvolutionValidationError,
+        match="cartridge-derived move-learning path",
+    ):
+        RedPartyItemEvolutionExecutor(
+            reader,
+            emulator,
+            policy,
+            lambda: collection,
+        ).execute(
+            actions,
+            RedPartyItemEvolutionRequest(
+                TEST_ROM,
+                0,
+                EEVEE_DEX,
+                JOLTEON_DEX,
+                THUNDER_STONE,
+            ),
+        )
 
     assert actions.actions_executed == 0
 

@@ -1,15 +1,15 @@
 {
   "schema": "pokemon.development-roadmap-state.v1",
-  "baseline_id": "red-first-v3-full-run",
+  "baseline_id": "red-first-v4-legitimate-native",
   "red_completion_gate": {
     "fresh_start": false,
     "model_directed_start_to_finish": false,
     "champion_and_hall_of_fame": false,
-    "full_local_red_pokedex": false,
-    "legitimate_external_dependencies_resolved": false,
+    "declared_red_route_pokedex": false,
+    "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-model123-next-menu-capability-gate",
+  "as_of_session": "2026-09-15-model123-renewable-stone-preflight",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json"
+      "evidence": "docs/evidence/red-model123-renewable-stone-preflight-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1490,6 +1490,12 @@
       "result": "The authenticated88-registration terminal failed the cheapest heterogeneous-menu gate before any model query or input: no boxed level evolution remains, no evolution stone is held, and cash206 is below the2100 stone price. A reusable party-only stone-use controller now passes40 focused and79 combined controller/protocol tests.",
       "deviation": "No learning, registration, fit, authority or transfer counter changed. Item use remains separate from procurement and lacks live cartridge qualification. The full suite reached6770 passes before an unrelated exact local PyBoy metadata pin failed; no GitHub push occurred and all five full-Red gates remain false.",
       "next": "Sol High, Fast off: ROM-free qualify a reusable bounded sale-and-stone-purchase provider plus cartridge-derived move-learning admission, then integrate item evolution. Return immediately to one measured Model123 choice once two families are genuinely executable; otherwise reassess the lane."
+    },
+    {
+      "session": "2026-09-15-model123-renewable-stone-preflight",
+      "result": "The untouched88-registration terminal now action-free qualifies for a29799-gross,29624-net renewable League cycle through the cartridge-native Indigo-lobby reset. Cartridge learnsets cover151 species/728 rows; all seven physical buyable-stone candidates avoid a move prompt at their stored levels.",
+      "deviation": "No gameplay, model query, fit, authority, registration or transfer counter changed. Pete revised the pre-hack collection gate to the legitimate124-species Red route and deferred Mew/version/link dependencies to later legitimate acquisition; baseline V4 records the change without rewriting V1-V3.",
+      "next": "Sol High, Fast off: execute one claimed renewable League cycle and preserve its first outcome. Continue to postgame settlement, catalog-derived stone purchase, boxed retrieval and live evolution only after each prior boundary verifies; stop on the first unsupported mechanic."
     }
   ],
   "closed_milestones": [

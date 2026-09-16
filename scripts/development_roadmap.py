@@ -36,6 +36,7 @@ def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
         "red-first-v1": "configs/development-roadmap-baseline-v1.json",
         "red-first-v2-registered": "configs/development-roadmap-baseline-v2.json",
         "red-first-v3-full-run": "configs/development-roadmap-baseline-v3.json",
+        "red-first-v4-legitimate-native": "configs/development-roadmap-baseline-v4.json",
     }
     if baseline_id not in baselines:
         raise ValueError("new roadmap baseline requires explicit adoption in the renderer")
@@ -64,11 +65,25 @@ def load_roadmap(root: Path = ROOT) -> tuple[dict, dict, dict, dict]:
             raise ValueError("roadmap status requires evidence")
         if row["evidence"]:
             _read(root, row["evidence"])
-    if baseline_id == "red-first-v3-full-run":
+    if baseline_id in {"red-first-v3-full-run", "red-first-v4-legitimate-native"}:
         gate = state.get("red_completion_gate", {})
-        criteria = ("fresh_start", "model_directed_start_to_finish",
-                    "champion_and_hall_of_fame", "full_local_red_pokedex",
-                    "legitimate_external_dependencies_resolved")
+        criteria = (
+            (
+                "fresh_start",
+                "model_directed_start_to_finish",
+                "champion_and_hall_of_fame",
+                "full_local_red_pokedex",
+                "legitimate_external_dependencies_resolved",
+            )
+            if baseline_id == "red-first-v3-full-run"
+            else (
+                "fresh_start",
+                "model_directed_start_to_finish",
+                "champion_and_hall_of_fame",
+                "declared_red_route_pokedex",
+                "deferred_dependency_ledger_verified",
+            )
+        )
         if set(gate) != {*criteria, "evidence"} or any(
             type(gate.get(key)) is not bool for key in criteria
         ):
@@ -139,8 +154,15 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         '<text x="50" y="125" style="font-size:49px;font-weight:bold">'
         f"From Red to a {dex_kind} Pokedex.</text>"
     )
-    story_label = ("Fresh-start Red story" if baseline["baseline_id"] == "red-first-v3-full-run"
-                   else "Checkpoint-based Red story")
+    story_label = (
+        "Fresh-start Red story"
+        if baseline["baseline_id"]
+        in {
+            "red-first-v3-full-run",
+            "red-first-v4-legitimate-native",
+        }
+        else "Checkpoint-based Red story"
+    )
     text(
         50,
         168,
@@ -157,8 +179,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
         "small",
     )
     parts.append(
-        f'<rect x="50" y="260" width="1320" height="{395 + expansion}" '
-        'rx="20" fill="#16243a"/>'
+        f'<rect x="50" y="260" width="1320" height="{395 + expansion}" rx="20" fill="#16243a"/>'
     )
     current_number = next(
         i + 1 for i, stage in enumerate(baseline["stages"]) if stage["id"] == state["current_stage"]
@@ -179,8 +200,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
             text(778, y + offset * 20, line, "small")
         y += max(30, len(wrapped) * 20 + 10)
     parts.append(
-        f'<rect x="80" y="{625 + expansion}" width="1260" height="8" '
-        'rx="4" fill="#293b55"/>'
+        f'<rect x="80" y="{625 + expansion}" width="1260" height="8" rx="4" fill="#293b55"/>'
     )
     parts.append(
         f'<rect x="80" y="{625 + expansion}" width="{1260 * done / len(items):g}" '

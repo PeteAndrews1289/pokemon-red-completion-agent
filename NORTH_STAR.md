@@ -92,7 +92,7 @@ than copying the project's history into every handoff.
 ### Fixed visual roadmap and session closeout
 
 Use the [development infographic](docs/development-roadmap.md) and its
-[stable baseline](configs/development-roadmap-baseline-v3.json) to locate each substantial task
+[stable baseline](configs/development-roadmap-baseline-v4.json) to locate each substantial task
 within the full journey: useful Red decisions, sustained Red play, model-led Red story completion,
 full Red registration and a fresh-start model-directed Red completion run, a compatible Red
 modification, Crystal, then at least Emerald. Version/trade support serves Red's explicit gate.
@@ -148,13 +148,14 @@ Do not replay Pallet Town to test a Saffron navigation change or a Cinnabar trai
 
 ## Full-run gate
 
-Pete's September 13 acceptance requirement is a fresh start-to-finish model-directed Red run
-with story completion and the **full local Red Pokédex before any ROM hack**. Checkpoint story
-demonstrations and the current reduced availability counter do not meet that requirement.
-No version-, trade- or event-dependent entry may be silently dropped. Resolve its legitimate
-acquisition path explicitly; unresolved dependencies block the ROM-hack gate. Shared global
-credit remains distinct from local Red owned flags. This strengthens the final exam; it does
-not bypass the readiness conditions below or authorize another teacher factory.
+Pete's September 15 acceptance requirement is a fresh start-to-finish model-directed Red run
+with story completion and the **declared 124-species legitimate native Red route before any ROM
+hack**. Checkpoint story demonstrations do not meet that requirement. Version-, cable-trade- and
+event-dependent entries remain explicit deferred gaps rather than fabricated local flags. Mew is
+deferred until a later legitimate source. A simultaneous Red/Blue link experiment is desirable
+after model completeness, but inability to link the available emulators does not block the hack;
+the shared registry may earn those species in a later title. This changes the dependency gate,
+not the readiness conditions below, and authorizes neither cheating nor another teacher factory.
 
 A new clean-power full-game run is prohibited unless all of these are recorded first:
 
