@@ -3,20 +3,19 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 15, 2026.
 
-## Model122 made a useful mixed-family choice; Red reached 88 registrations
+## Model123 retained the first useful mixed-family choice
 
-The exact 87-registration terminal could not route its direct Cerulean Cave capture, but a
-zero-input cartridge inventory found four legitimate Pokemon Tower alternatives. The Silph Scope
-was stored in Red's PC. Source `8d2d4621` added verified singleton item withdrawal and a composite
-PC-item/capture executor; source `77eca5b3` exposed that support to the full-Pokedex mixed menu.
-Planning remained action-free. A disposable exact-terminal copy independently withdrew the Scope
-with party, boxes, money and collection preserved. Nothing was pushed to GitHub.
+Model122's authenticated acquire-versus-evolve menu selected evolution at probability 0.852663.
+The unmodified selection succeeded in 11,623 actions / 1,050,627 frames, retained cash at 206 and
+advanced Red from 87 to 88 registrations with zero teacher labels. The exact successful outcome
+was admitted once as training-only measured evidence.
 
-The authenticated Model122 menu then contained exactly two executable families, acquire and
-evolve, with no species/source/binding identity exposed. One write-ahead query selected evolution
-with probability 0.852663 versus 0.147337 for capture. The selection was not overridden. It
-succeeded in 11,623 actions / 1,050,627 frames, used one Fly, retained cash at 206, and registered
-one new species. There were zero teacher labels and zero policy queries during execution.
+Model123 is now sealed at 123 settled examples / 84 successes. It retains all 122 Model122 rows
+plus exactly one new row. On the identical frozen menu and seed, evolution remains selected and
+its probability rises slightly to 0.852719. The first post-fit gate failed only because the
+one-off verifier assumed append ordering while the corpus canonically sorts row fingerprints; the
+already sealed fit was verified without refitting or replaying gameplay. Nothing was pushed to
+GitHub.
 
 The durable restart is:
 
@@ -26,23 +25,21 @@ The durable restart is:
 - state `bf9f43c263576312b4eadde418fe12bb8ef1c1dc3506494205bbff32e874a36b`
 - registration sequence 178; 88/151 local registrations, 67 living species, 71 specimens
 
-Model122 itself remains unchanged at 122 settled examples / 83 successes. The successful
-heterogeneous outcome is durable and fit-eligible, but the successor fit has not run. Gameplay is
-stopped safely.
+The terminal was observed action-free after fitting: 88/151 local registrations, 67 living species,
+71 specimens and cash 206. Gameplay is stopped safely.
 
 ## Next bounded work
 
-Fit exactly this one measured choice into Model123, requiring all 122 prior rows to remain and the
-new successful row to be the only addition. Re-evaluate the frozen menu and reject the fit if it
-reduces support for the verified evolution choice or changes unrelated invariants. Then inspect the
-88-registration checkpoint action-free; do not replay the evolution or force the Tower capture.
+Construct and freeze Model123's next identity-free heterogeneous menu from the authenticated
+88-registration terminal. Proceed only if observation is zero-input and at least two legitimate
+acquisition families are executable. Then authorize at most one model-selected outcome with no
+teacher substitution, redraw or completed-evolution replay.
 
-Stop on any menu/choice/outcome/checkpoint authentication mismatch, duplicate measured record,
-unexpected row count or degraded selected-option response. Do not start a full-game run, begin a
-ROM hack/Crystal, or push GitHub. Pete alone decides publication.
+Stop on terminal mismatch, state mutation during planning, fewer than two executable families,
+identity leakage or a choice that cannot be bound exactly. Do not start the fresh full-game run,
+begin a ROM hack/Crystal, or push GitHub. Pete alone decides publication.
 
-Next: **Sol / High / Fast off**, about 45–90 minutes. The fit and terminal inventory are bounded,
-well-specified integration work; Astra is unnecessary unless the fit exposes a new representation
-or provenance boundary.
+Next: **Sol / High / Fast off**, about 1–2 hours. Astra is unnecessary unless menu construction
+exposes a new representation or provenance boundary.
 
-[Session evidence](docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json)
+[Session evidence](docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json)

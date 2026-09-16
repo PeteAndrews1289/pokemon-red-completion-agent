@@ -3,20 +3,20 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The generic no-HP-progress/no-usable-PP contingency is ROM-free qualified, not cartridge qualified.
-One switch shares the original loop and metered executor, claims durably before input, and verifies
-a living target at MAIN in the same encounter. Old frozen plans keep their legacy policy.
-537 focused tests and whole-source type checking passed. No gameplay or learning occurred.
+Model123 is sealed at 123 examples / 84 successes. It retained all 122 Model122 rows, added exactly
+one successful heterogeneous evolution row and preserved the selected option on the exact frozen
+menu: probability 0.852663 before and 0.852719 after. The durable Red terminal remains 88/151 local
+registrations, 67 living species and 71 specimens; its inspection used zero inputs and frames.
 
-Gemini 3.8 Flash High completed a read-only contract review through Antigravity. It highlighted
-heuristic attribution and switch-in survival limits, now explicit. After clarification it found no
-remaining concrete P 0/P 1 design defect; this was not a source audit. Refreshed quota:
-Gemini 57% weekly/98% five-hour; Antigravity Claude/GPT 86%/100%. Claude CLI was not used.
+The first acceptance pass failed only because its private verifier assumed append ordering while
+the corpus canonically sorts row fingerprints. The existing fit was verified without a second fit
+or gameplay replay. Gemini 3.8 Flash High's selected-option hash concern was implemented; its
+generic-schema objection was rejected as inapplicable to the exact historical receipt. Claude was
+not used and quota was not refreshed.
 
-Next: Sol High, Fast off. Freeze a distinct campaign C with the new policy and short varied,
-cross-venue controls. Credit switching only if observed and settled. Do not replay campaign B,
-replace an in-campaign failure, scan protected roots, fit a model or start Red acceptance/hack/Crystal.
-Fainted forced switching, move learning and same-battler move replacement remain explicit gaps.
+Next: Sol High, Fast off. Construct and freeze Model123's next identity-free heterogeneous menu
+from the authenticated 88-registration terminal. Proceed only with at least two executable
+families, then authorize at most one model-selected outcome. No teacher substitution, completed
+evolution replay, fresh full run, GitHub push, ROM hack or Crystal access.
 
-Model121 stays 121 examples/83 successes,86/151 local registrations; collection 25/26, finalRed 0/5.
-[Session and roadmap](work-sessions/2026-09-15-battle-stall-contingency.md).
+[Session evidence](evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json).

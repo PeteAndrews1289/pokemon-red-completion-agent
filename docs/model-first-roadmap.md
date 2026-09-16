@@ -14,57 +14,38 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 
 ## Where we stand
 
-Model121 has 121 measured examples and 83 successes. Its development save has 86/151 local
-registrations (56.95%), 66 living species and 70 specimens. Expanded collection checklist:
-25/26; the useful mixed-acquisition choice remains open. Final fresh-Red gate: 0/5.
-These fractions are not a whole-project completion estimate.
+Model123 has 123 measured examples and 84 successes. Its development save has 88/151 local
+registrations (58.28%), 67 living species and 71 specimens. The current collection checklist is
+26/26; the mandatory fresh-Red completion gate remains 0/5. Checklist completion is not whole-
+project completion.
 
-The forced evolution advanced Tentacool to level24 and stopped. Its exact terminal was
-successfully recovered; the collection remains intact. Both attempt identities are consumed.
-The recovered menu contains restoration and resupply.
+The first genuine heterogeneous acquire-versus-evolve choice is now complete end to end. Model122
+selected evolution without a teacher label, gained one registration, and Model123 retained that
+outcome as exactly one new row while preserving all 122 prior rows. Frozen-menu support for the
+successful selection rose from 0.852663 to 0.852719. The durable 88-registration terminal was
+re-observed with zero input and zero frames.
 
-The bounded cartridge qualification then passed its synthetic diagnostic-reopen prerequisite and
-settled three Route11 cases across two-, three- and four-move menus in 223 actions / 19,851 frames.
-One case naturally exercised a status-suppressed turn without falsely spending PP. The first
-Diglett's Cave relocation failed before battle settlement. Although its failed episode reopened,
-the runner lost the semantic failure phase and exact action/frame cost, so the gate failed and the
-campaign stopped without retry. No gameplay result became a learning row.
-
-V2 now spans source inspection, relocation, setup, battle and settlement with durable phase/reason
-and actual attempted/completed/frame costs. The new durable campaign epoch passed 389 focused
-tests, whole-source type checking and exact-source hosted CI. Gemini 3.8 Flash High returned GO
-after its durability findings were implemented.
-
-Campaign B then stopped on its first new Route11 control after 893 actions / 80,081 frames. Exact
-evidence reopened: the active battler spent its last PP while opponent HP remained unchanged, then
-the fixed policy had no usable move at the next MAIN-menu selection. Three later cases never
-opened. The campaign is consumed; there was no retry, model query, row, fit or registration.
+No ROM hack or Crystal work is permitted until a fresh model-directed Red run proves all five
+completion gates: fresh origin, start-to-finish control, Champion, Hall of Fame and 151/151 local
+registration with legitimate dependencies resolved.
 
 ## Next few sessions
 
 | Session | Required result | Recommended setting |
 | --- | --- | --- |
-| Fresh cartridge qualification | New epoch and opt-in stall-switch policy, short varied controls and cross-venue coverage; credit switching only when observed and settled, no replacement | Sol / High / Fast off |
-| Heterogeneous collection lesson | One useful model choice and retained outcome from a genuinely executable mixed-family menu, only after qualification | Sol / High / Fast off |
-| Useful training batch | Varied bounded cases, actual costs and all failures; no invented independence | Sol / High / Fast off |
-| Reliability and dependency review | Separate-lineage evidence and concrete version/trade/event paths | Astra / High / Fast off |
+| Next heterogeneous choice | From the 88-registration terminal, action-free construct an identity-free menu with at least two executable families; freeze one Model123 query and authorize at most one outcome | Sol / High / Fast off |
+| Retain and continue | Verify the exact outcome and costs, fit one successor row if eligible, then repeat from the earned terminal rather than a reset | Sol / High / Fast off |
+| Coverage audit | Review which story, battle, navigation, resource, collection and dependency decisions still lack reusable authority; choose the smallest measured gaps | Astra / High / Fast off |
+| Fresh Red acceptance freeze | Freeze the nondeterministic fresh-run contract, dependency plan, stop rules and evidence gates without starting the run | Astra / High / Fast off |
 | Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
 
-The generic architecture session is complete: 537 ROM-free focused tests, lint and whole-source
-type checking passed. One voluntary live-battler switch after four PP-spending turns without damage
-or no usable move shares the existing runtime and accounting budget. The policy is opt-in and
-frozen by name; old campaign plans retain their legacy behavior. Flash 3.8 High completed a contract
-review, not a source audit. Missing damage is a heuristic, not a cause diagnosis; survival is not
-guaranteed.
+The next session is one bounded collection decision, not a full replay. Stop if the terminal cannot
+produce two executable families action-free or if menu construction leaks species, source or binding
+identity. Do not substitute a teacher choice, redraw the query, replay the completed evolution, push
+GitHub or begin ROM-hack/Crystal work.
 
-Next is Sol High for a distinct campaign C, approximately 1–2 hours. The earlier wording
-"forced-switch case" overstated this scope: switching after a faint remains unqualified, alongside
-move learning and same-battler move replacement. Absent natural contingency coverage stays absent;
-do not replay to obtain it. Do not replay campaign B or the older Diglett case, scan protected roots,
-use source four or begin a full-game replay.
+This session added one training row (122→123, +0.82% dataset size) and one successful example
+(83→84). That is measured learning progress, not a percentage estimate of overall competence.
 
-Learning and collection deltas for this session are zero. The earlier 120→121 change is a 0.83%
-increase in dataset size, not a 0.83% improvement in competence.
-
-[Evidence](evidence/red-battle-stall-contingency-2026-09-15.json) ·
+[Evidence](evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)

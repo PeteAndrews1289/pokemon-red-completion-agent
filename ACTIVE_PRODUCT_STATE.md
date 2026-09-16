@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Fit the one durable successful heterogeneous outcome into a successor model, verify the frozen-menu response and retained prior corpus, then inspect the 88-registration terminal action-free.
+- Next decision: Construct Model123's next identity-free heterogeneous menu from the authenticated 88-registration terminal and authorize at most one model-selected collection outcome if at least two legitimate families are executable.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model122 has 122 settled examples / 83 successes and 88 local registrations. It remains bounded development-only; one successful mixed-family outcome is durable and pending fit. |
+| Authority now | Model123 has 123 settled examples / 84 successes and 88 local registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
@@ -51,7 +51,7 @@ Not the product:
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 122 | 12 |
+| Registered Train Example · train | 123 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-model122-heterogeneous-evolution** · status **closed** · evidence [model fit](docs/evidence/red-model122-heterogeneous-evolution-2026-09-15.json)
+**2026-09-15-model123-heterogeneous-evolution-fit** · status **closed** · evidence [model fit](docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Red now has a durable 88-registration restart and a real model-selected collection success. Generic stored-item support also makes four legitimate Pokemon Tower sources executable without leaking source identity to the policy. |
-| Learning output | One successful mixed-family decision was retained as a measured fit-eligible outcome: Model122 selected evolution from an acquire-versus-evolve menu and gained one registration in 11623 actions / 1050627 frames. The corpus remains 122 examples / 83 successes until the fit completes. |
-| Authority delta | Model122 made one genuine acquire-versus-evolve choice under bounded development authority and selected evolution without a teacher label. The verified outcome advanced Red to 88/151 local registrations; the fit has not yet run, so the deployed learner remains Model122 at 122 settled examples / 83 successes. |
-| Transfer result | Stored required-item preparation is source-generic and action-free planning passed on four Tower floors; its execution primitive independently passed on a disposable exact-terminal copy. Cross-title transfer remains unmeasured. |
-| Blocker | The successful heterogeneous outcome is durable and fit-eligible, but it has not yet been incorporated into a successor model. Stored Silph Scope support exposed four executable Tower sources action-free but was not executed because the model legitimately selected evolution. |
-| Decision | Preserve Model122's selected evolution and exact cost, seal the 88-registration terminal, then fit the one verified mixed-family outcome before opening another bounded choice. |
-| Next session | Sol High, Fast off: fit the one successful heterogeneous outcome into Model123, verify all prior rows and the frozen-menu selected-option response, then action-free inspect the durable 88-registration terminal. |
-| Next falsifier | The authenticated measured outcome cannot produce exactly one successor training row with all 122 prior rows retained, or the fitted model reduces support for its verified selected option under the frozen menu. |
-| Stop condition | Stop if the measured fit cannot authenticate the exact menu, choice, outcome, model, or checkpoint; do not replay the successful evolution, override the model toward capture, start a full-game run, push GitHub or begin a ROM hack. |
+| Product alignment | Red has a durable 88-registration restart and the option learner now contains its first successful mixed-family choice without forgetting prior evidence. This directly advances the reusable decision loop required before fresh-Red acceptance. |
+| Learning output | The successful mixed-family evolution became one measured training row. Model123 has 123 examples / 84 successes; support for the verified selected option increased from 0.852663 to 0.852719 on the exact frozen menu. |
+| Authority delta | Model123 now retains 123 settled examples / 84 successes under bounded development authority. It incorporated Model122's genuine acquire-versus-evolve success as exactly one new row, retained all 122 prior rows and preserved the selected evolution on the frozen menu. |
+| Transfer result | No cross-title transfer result. The frozen-menu replay established within-Red retention: Model123 preserved and slightly strengthened the successful heterogeneous selection. |
+| Blocker | No fit blocker remains. The next unknown is whether the durable 88-registration terminal still exposes at least two genuinely executable acquisition families without identity leakage before Model123's next query. |
+| Decision | Accept Model123, preserve the 88-registration terminal, and action-free construct the next heterogeneous menu before authorizing exactly one new model-selected collection outcome. |
+| Next session | Sol High, Fast off: construct and freeze Model123's next identity-free heterogeneous menu from the 88-registration terminal; if at least two legitimate families are executable, authorize exactly one model-selected outcome with no teacher substitution. |
+| Next falsifier | The authenticated 88-registration terminal cannot expose at least two executable acquisition families action-free, or the next frozen menu leaks private identity, changes state, or cannot bind one Model123 query exactly. |
+| Stop condition | Stop if terminal authentication, zero-input observation, executable-family diversity or identity-free menu construction fails; do not substitute a teacher choice, replay the completed evolution, start a full-game run, push GitHub or begin a ROM hack. |
 
 ### Stop conditions
 
@@ -219,4 +219,4 @@ Every meaningful update reports:
 - time box
 - stop condition
 
-Current evidence entries: **34**.
+Current evidence entries: **35**.
