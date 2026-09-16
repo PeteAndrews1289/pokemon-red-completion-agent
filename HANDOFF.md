@@ -3,35 +3,39 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Exact-state capture recovery: Gastly registered, no new learning label
+## Model128 selected successful restoration; measured receipt remains unfitted
 
-Model127's capture choice failed at a protected status guard and remains the failed example
-already fitted into Model128. The old shared exception did not retain expected target, party or
-bag values, so its exact differing field cannot be reconstructed. The guard now reports generic
-field-specific reason codes and retains every protected comparison. Sixty relevant ROM-free tests,
-lint and type checks passed.
+After exact-state support recovery registered Gastly, the safe Red state held 92/124
+registrations, 73 specimens, 1608 cash and seven Great Balls. An action-free inspection offered
+five executable alternatives: three acquisitions, restoration and one need-conditioned finite
+income option. It changed no game state and made no model query.
 
-A separately qualified, one-time infrastructure continuation began at the exact failed wild
-battle terminal, SHA-256 `70541c6f70c0db2368ab27269dc88b81a80f0f36c004d56e31d7bec5552a3f6f`.
-It did not replay the route or query a model, and used no teacher actions. In 156 actions and
-13,752 frames it caught Gastly (national 092). Red rose from 91 to **92/124** registrations and
-from 72 to 73 specimens. The terminal is safe, out of battle, SHA-256
-`e5af367a9b88a82e6c69e9397769cb6823f6af04a031dc4dbaf039b34f9c7b73`.
-This support recovery is not learning-eligible. Model128 remains at 128 settled examples,
-88 successes and 49 economy-qualified examples, with no authority promotion or independent
-evaluation. The original Model127 outcome has not been relabeled as a success.
+Model128 selected restoration at probability 0.699884. The one committed choice succeeded in
+62 actions and 5064 frames, with zero teacher or support decisions. Red remains 92/124, with
+73 specimens and 1608 cash. The verified safe terminal state SHA-256 is
+`349970cfb550f06efb756c12e43218103327f0e084168655c9a60b2cbf4819d9`.
+The original Model127 capture remains a failed fitted example. The support Gastly catch was never
+fitted or relabeled as model success.
+
+The run's prospective action/frame ceilings were 3000/300000; the current measured-choice
+admitter only accepts its fixed 30000/3000000 normalization contract. It rejected the otherwise
+retained run at `autonomous run scope differs` before publishing an example or fitting. This
+was our planning mismatch, not a gameplay failure. Do not edit the consumed plan, replay the
+choice, substitute a new sample, or claim a fitted Model129. Model128 remains 128 settled examples,
+88 successes and 49 economy-qualified examples; there is one new raw measured outcome but zero
+new admitted training examples. The private plan, intent, decision, outcome and terminal are
+retained under their original hashes in the [session evidence](docs/evidence/red-model128-measured-restore-budget-boundary-2026-09-16.json).
 
 ## Exact next bounded work
 
-Gameplay is stopped at the safe recovery terminal. Build an action-free next menu from that exact
-state and check available capture stock, cash, party/storage and viable registered-species goals.
-If there are real alternatives, permit at most one fresh Model128 choice and retain its actual
-outcome, including failure and costs. Do not replay the consumed Model127 choice or fit the support
-recovery. Partial-League exit/reset remains unqualified as renewable income. The fresh-start
-Red-completion gate is still open; no ROM hack or Crystal work is authorized yet.
+Gameplay is stopped at the safe restoration terminal. Design a prospective, versioned way to
+admit an authenticated tighter execution ceiling while preserving the learner's normalization
+meaning, exact historical budgets and existing fixed-contract examples. Test mismatched hashes,
+over-budget actions and old records ROM-free. If that contract can represent the original
+retained receipt faithfully, admit and fit it once without gameplay; otherwise leave it unfitted
+and proceed only from the earned safe state under a correctly declared future budget. Then
+inspect the next menu action-free. Do not treat finite income as renewable League income.
 
-No GitHub push occurred. Flash and Claude were not used in this session; their quotas were not
-refreshed or displayed. Next setting: **Sol / High / Fast off**, roughly 45–75 minutes. Escalate
-to Astra only if the next menu or execution requires changing battle semantics.
-
-[Session evidence](docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)
+No full Red run, ROM hack, Crystal access or GitHub push occurred. Flash and Claude were not used;
+their quotas were not refreshed. Next setting: **Sol / High / Fast off**, roughly 60-90 minutes.
+Escalate to Astra High only if the budget semantics require a broader redesign across outcomes.

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model127-capture-guard-recovery**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model128-measured-restore-budget-boundary**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model128-measured-restore-budget-boundary
+
+An action-free five-option menu offered three acquisitions, restoration and finite income. Model128 selected and successfully executed restoration in62 actions/5064 frames. Red remains92/124 with73 specimens and1608 cash; the terminal is safe.
+
+**Deviation:** One raw on-policy success is retained, but the run's prospective3000/300000 execution ceiling conflicts with the learner's fixed30000/3000000 normalization. Admission failed closed before any example or fit. Do not edit the consumed plan or replay the choice; Model128 remains128 examples/88 successes.
+
+**Next:** Sol High, Fast off: version and test truthful bounded-budget admission. Fit this original receipt once only if its exact limits can be represented without reinterpreting old rewards; otherwise leave it excluded and inspect the earned state action-free.
 
 ### 2026-09-16-model127-capture-guard-recovery
 

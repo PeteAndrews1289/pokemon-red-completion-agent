@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Build an action-free menu from the exact safe 92/124 terminal. If viable alternatives exist, allow at most one fresh Model128 choice and retain its actual result; do not replay Model127 or count support recovery as learning. Renewable League income remains unqualified.
+- Next decision: Keep gameplay stopped. Qualify truthful tighter-budget admission for the retained Model128 restoration without replay or historical reward edits; fit only if valid, then inspect the earned 92/124 terminal action-free. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model128 has 128 settled examples / 88 successes; the original Model127 capture remains a fitted failure. Exact-state non-learning recovery raised Red to 92/124 with 73 specimens and a safe out-of-battle terminal. The consumed choice cannot be replayed. |
+| Authority now | Model128 has 128 settled examples / 88 successes. It selected and completed one restoration from five options, but the tighter authenticated execution budget blocks admission under the current fixed normalization. Red is 92/124 with 73 specimens at a safe terminal. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The next action-free exact-state menu offers no viable alternative registrations, or one fresh selected attempt cannot preserve a verified outcome without replay or guard weakening. |
+| Cheapest falsifier | A ROM-free admission test cannot represent the retained 3000-action/300000-frame ceiling without changing historical normalization or allowing an over-budget receipt. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model127-capture-guard-recovery** · status **closed** · evidence [qualification](docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)
+**2026-09-16-model128-measured-restore-budget-boundary** · status **closed** · evidence [qualification](docs/evidence/red-model128-measured-restore-budget-boundary-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The protected capture runtime gained reusable field-specific diagnostics. Exact-state support recovery preserved the earned Red registration and a safe origin without revising the prior failed model label. |
-| Learning output | Zero new training examples; Model128 remains at 128 settled examples / 88 successes and 49 economy-qualified examples. Support recovery added one registration and specimen, not learned success. |
-| Authority delta | No authority promotion or new fitted example. A separately qualified, non-learning exact-state recovery caught Gastly without a model query, teacher action or route replay; the original Model127 decision remains a fitted failure. |
-| Transfer result | Generic drift reason codes passed ROM-free field-specific tests; no independent or later-title transfer result exists. |
-| Blocker | The safe recovery terminal has 92/124 registrations and 73 specimens. A fresh action-free menu has not yet been inspected; the prior Model127 choice is consumed and cannot be replayed. Partial-League reset remains unqualified as renewable income. |
-| Decision | Stop support recovery. Build the next menu action-free from the exact safe terminal, then permit at most one fresh Model128 choice if real executable alternatives exist; retain its actual outcome and costs. |
-| Next session | Sol High, Fast off, 45-75 minutes: inspect an action-free menu at the exact recovered terminal and, only if viable alternatives exist, execute and retain at most one fresh Model128 choice. |
-| Next falsifier | No viable multi-option menu exists at the recovered terminal, or a fresh selected outcome cannot be verified without guard weakening or a retry. |
-| Stop condition | Stop if capture safety must be weakened, the consumed Model127 choice retried or relabeled, a teacher supplies the next goal, or a full run/ROM hack/Crystal/GitHub publication is proposed. |
+| Product alignment | The model selected a real team-restoration goal from a mixed menu and achieved it. Its raw outcome is preserved without overstating learning or registration gain; the admission-budget mismatch is explicit. |
+| Learning output | One fresh on-policy successful restoration receipt is retained but unfitted. Model128 stays at 128 settled examples / 88 successes; Red stays 92/124 with 73 specimens, with zero new registrations or fitted rows. |
+| Authority delta | Model128 chose restoration from five real alternatives; it succeeded in 62 actions and ended safely. No admission, fit or authority promotion occurred because the tighter declared execution budget conflicts with fixed learner normalization. |
+| Transfer result | The mixed goal menu and model-selected restoration executed on the recovered terminal; this is correlated development, not independent or later-title transfer. |
+| Blocker | The one fresh model-selected success is retained but unfitted: execution was capped at 3000 actions/300000 frames while the current admission contract fixes 30000/3000000. The consumed plan cannot be edited or replayed. Red remains 92/124 at a safe terminal. |
+| Decision | Keep gameplay stopped. Version and test truthful admission of a tighter authenticated runtime budget while preserving historical normalization; fit the original retained receipt only if it passes, otherwise leave it unfitted. Then inspect the earned terminal action-free. |
+| Next session | Sol High, Fast off, 60-90 minutes: test and version tighter-budget admission without historical reward reinterpretation; fit the retained receipt only if faithful, then inspect the earned state action-free. |
+| Next falsifier | The authenticated 3000/300000 execution ceiling cannot be distinguished from 30000/3000000 normalization under a versioned admission contract, or old examples change meaning. |
+| Stop condition | Stop if the consumed receipt needs a changed plan, replay, hidden budget reinterpretation, teacher substitution, or historical reward edits; no full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 
