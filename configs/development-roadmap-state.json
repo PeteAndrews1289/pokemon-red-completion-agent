@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model126-bounded-region-and-funding",
+  "as_of_session": "2026-09-16-model127-second-finite-funding",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+      "evidence": "docs/evidence/red-model127-second-finite-funding-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1544,6 +1544,12 @@
       "result": "Nearby-first bounded inventory produced a four-option action-free menu in about18 seconds. Model125 selected finite income, earned720 in42 actions/3925 frames and fitted Model126 at126 examples/87 successes. Cash is948; Red remains91/124 with72 specimens.",
       "deviation": "The model chose economy rather than collection and that real decision was retained. The payout is one finite ordinary trainer, not renewable League evidence. No retry, teacher choice, support action, authority promotion, full-Red gate or GitHub push occurred.",
       "next": "Sol High, Fast off: permit at most one Model126 choice from the already verified four-option terminal and retain its actual result. Keep partial-League reset as a separate prerequisite."
+    },
+    {
+      "session": "2026-09-16-model127-second-finite-funding",
+      "result": "Model126 selected a second finite trainer-income option from four executable choices and earned660 in47 actions/3985 frames. The safe terminal has1608 cash,91/124 registrations and72 specimens. One measured choice fitted Model127 at127 examples/88 successes.",
+      "deviation": "Two consecutive income choices produced no new registrations. This is bounded correlated development, not independent evaluation or a collection gain. No teacher action, retry, authority promotion, full-Red gate or GitHub push occurred.",
+      "next": "Sol High, Fast off: audit affordability and option values at the exact terminal before another action; test a general need-conditioned income offer without hand-selecting capture."
     }
   ],
   "closed_milestones": [

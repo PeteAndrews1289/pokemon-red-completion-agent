@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model126-bounded-region-and-funding**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model127-second-finite-funding**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **126 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **127 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model127-second-finite-funding-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model127-second-finite-funding
+
+Model126 selected a second finite trainer-income option from four executable choices and earned660 in47 actions/3985 frames. The safe terminal has1608 cash,91/124 registrations and72 specimens. One measured choice fitted Model127 at127 examples/88 successes.
+
+**Deviation:** Two consecutive income choices produced no new registrations. This is bounded correlated development, not independent evaluation or a collection gain. No teacher action, retry, authority promotion, full-Red gate or GitHub push occurred.
+
+**Next:** Sol High, Fast off: audit affordability and option values at the exact terminal before another action; test a general need-conditioned income offer without hand-selecting capture.
 
 ### 2026-09-16-model126-bounded-region-and-funding
 

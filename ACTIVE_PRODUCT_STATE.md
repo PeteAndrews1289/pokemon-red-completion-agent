@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute at most one Model126 choice from the verified four-option terminal, retaining the actual outcome. Separately qualify partial-League exit/reset before any renewable-income offer.
+- Next decision: Audit Model127's resource need and option values at the action-free four-option terminal before another game action; test general affordability-aware income availability without selecting a capture for the model. Separately qualify partial-League exit/reset before renewable income.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model126 has 126 settled examples / 87 successes. Model125 selected and completed a finite trainer-income goal from four executable choices. The safe development save has 91/124 registrations, 72 specimens and 948 cash. |
+| Authority now | Model127 has 127 settled examples / 88 successes. Model126 independently selected a second finite trainer-income goal from four executable choices. The safe development save has 91/124 registrations, 72 specimens and 1608 cash. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable option families before a model query, or one bounded model choice cannot retain its real outcome and cost. |
+| Cheapest falsifier | At the retained 1608-cash terminal, an action-free resource audit cannot explain the repeated finite-income preference or a general affordability-aware offer would suppress a genuinely needed prerequisite. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 126 | 12 |
+| Registered Train Example · train | 127 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model126-bounded-region-and-funding** · status **closed** · evidence [model fit](docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json)
+**2026-09-16-model127-second-finite-funding** · status **closed** · evidence [model fit](docs/evidence/red-model127-second-finite-funding-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A deterministic nearby-first inventory replaced a global scan, then the model made and learned from a real economy decision rather than following a teacher route. |
-| Learning output | One fresh on-policy economy outcome was admitted and fitted with no replay, producing Model126 at 126 settled examples / 87 successes and 47 economy-qualified examples. |
-| Authority delta | Model125 independently chose a legitimate finite-income goal from four identity-free executable choices, earned 720 from a real trainer battle and retained a safe terminal. The measured choice fitted Model126 without replay or promotion. |
-| Transfer result | Topology-ranked bounded inventory is title-neutral in structure and now handles observed Fly origins, but no later-title or independent transfer result exists. |
-| Blocker | Red remains at 91/124 registrations. The next menu is healthy, but renewable League income is still prohibited because the partial-League exit/reset boundary is not qualified. |
-| Decision | Permit at most one Model126 choice from the already verified four-option terminal and retain its actual outcome. Keep finite ordinary income distinct from renewable League funding. |
-| Next session | Sol High, Fast off, about 1 hour: execute at most one Model126 choice from the verified four-option terminal, retain its actual result, and fit it only if eligible. |
-| Next falsifier | The verified Model126 terminal cannot retain one selected acquisition or finite-income result without a teacher choice, retry, identity feature or unsafe terminal. |
-| Stop condition | Stop if the menu loses real plurality, changes state before selection, requires identity-bearing features, substitutes a teacher choice, retries an outcome, starts a full run, opens ROM-hack/Crystal work or publishes to GitHub. |
+| Product alignment | The model exercised genuine resource choice and earned finite money, but repeating income at 91 registrations tests resource judgment rather than collection success. |
+| Learning output | One fresh on-policy finite-income outcome was admitted and fitted without replay: Model127 has 127 settled examples / 88 successes and 48 economy-qualified examples. Registration gain was zero. |
+| Authority delta | Model126 chose another finite trainer-income goal from four executable choices; it earned 660 and retained a safe terminal. One observed choice fitted Model127 without replay or promotion. Two successive income choices added no registrations. |
+| Transfer result | No independent evaluation or later-title transfer was performed; the bounded inventory structure remains title-neutral only by design. |
+| Blocker | Red remains at 91/124 registrations despite two successful finite-income choices, now with 1608 cash and nine Great Balls. Investigate whether income remains a needed prerequisite or is overoffered/overvalued; renewable League income still lacks partial-exit qualification. |
+| Decision | Audit resource affordability and model option scores at the exact retained terminal, then test a general need-conditioned income offer or scoring correction without hand-selecting a capture. Retain any subsequent model outcome once. |
+| Next session | Sol High, Fast off, about 1 hour: audit the retained 1608-cash terminal, test a general need-conditioned income decision in ROM-free scenarios, and make at most one subsequent model choice if justified. |
+| Next falsifier | An action-free audit finds no valid general affordability or opportunity-cost explanation for repeated income, or a need-conditioned change removes necessary recovery options. |
+| Stop condition | Stop if the audit relies on species identity, a teacher-selected target or unverifiable affordability; never retry the retained choice, start a full run, open ROM-hack/Crystal work or publish to GitHub. |
 
 ### Stop conditions
 
