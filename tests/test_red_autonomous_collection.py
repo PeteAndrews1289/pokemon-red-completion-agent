@@ -186,6 +186,8 @@ def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monk
         captured["router"]
         | {
             "routed_storage_relief": True,
+            "routed_recovery": True,
+            "include_recovery_offers": True,
             "trainer_funding": True,
             "regional_trainer_funding": True,
             "observed_trainer_funding": True,

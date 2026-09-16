@@ -108,11 +108,12 @@ def autonomous_collection_options(
         quote_resource_costs=True,
         prepare_capture_items=True,
         routed_storage_relief=True,
+        routed_recovery=True,
         trainer_funding=True,
         regional_trainer_funding=True,
         observed_trainer_funding=True,
         trainer_funding_target_cash=target_cash,
-        include_recovery_offers=False,
+        include_recovery_offers=True,
     )
     observed = RedBoundedPlayerObserver(
         native,
