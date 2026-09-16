@@ -11,16 +11,20 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The frozen battle ranker controlled six attacks in a natural Route11 encounter.
-Five Guillotines dealt no damage; after PP exhaustion, Vicegrip knocked out
-Spearow. Kingler ended at59/76 HP. Choices and exact PP spends were verified;
-there was no teacher attack fallback or new fit. The ordinary collection
-battle controller is unchanged. Model137 remains137 examples/92 successes/
-58 economy-qualified, Red96/124,74 specimens,198 cash; fresh acceptance0/5.
+The local-only OHKO training cycle is complete. Teacher-assisted cartridge
+states yielded three eligible train roots and four distinct development roots;
+one train capture was quarantined after a battler fainted. A last-layer update
+reduced train loss, but both models made the same four held-out choices. On an
+older, retrospective development set the candidate lost one choice with no
+wins. It is **not promoted**. The consumed Route11 Kingler case flips to
+Vicegrip under the candidate, but that is a diagnostic only. No player-model,
+Red completion, fresh-acceptance or gameplay delta; no GitHub push.
 
-Next: a small reliability-focused outcome-training and untouched-comparison
-cycle on separately permitted scenarios, not a replay or fit of this encounter.
-Sol High, Fast off; estimated60–90 minutes. Gameplay is stopped; no push.
+Next: build a prospective harder battle set with *natural* OHKO-versus-reliable
+choices or other near-boundary decisions, fit only on train, and require a
+held-out win without regression before changing battle authority. Do not reuse
+the consumed Route11 state for fitting or prospective testing. Sol High, Fast
+off is sufficient for this bounded next session.
 
 ## Reviewer contribution
 
@@ -32,4 +36,5 @@ One success does not prove the entire harness or a guaranteed Vicegrip outcome.
 Claude unused; refreshed Flash quota unavailable.
 
 [Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
+[OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

@@ -1,0 +1,61 @@
+{
+  "schema": "pokemon.red.ohko-expected-utility-session.v1",
+  "session": "2026-09-16-assisted-ohko-battle-training",
+  "classification": "teacher_assisted_training_and_correlated_development_no_promotion",
+  "source_commits": [
+    "5cfcf7ff38bbe7f047e12a26080ef11456ff01ba",
+    "2f18ef63ffc9d54e6cf1b4209ac1232ba25eccfe"
+  ],
+  "method": {
+    "assistance": "Guillotine was inserted in move slot 1 of authenticated private train/development battle states before any controller action; this is teacher-only state editing, not legitimate player behavior",
+    "source_roots": "four train and four disjoint development lineages from an existing capture bank; not new independent upstream roots",
+    "rng_frame_targets": [2048, 2101, 2251, 2377, 2539],
+    "fit": "train only, frozen MLP representation, last-layer update; 200 epochs, learning rate 0.01, prior L2 0.1",
+    "development_predictions_committed_before_outcomes": true,
+    "sealed_test_opened": false,
+    "consumed_route_11_encounter_fit_or_replayed": false
+  },
+  "training": {
+    "captures_presented": 4,
+    "captures_eligible": 3,
+    "complete_rng_trials": 19,
+    "quarantined_trials": 1,
+    "quarantine": "Farfetch'd active battler fainted in one bounded counterfactual at frame target 2539; its entire capture was excluded and not retried",
+    "mean_guillotine_utility_by_eligible_capture": [1.1906666666666665, 0.5906666666666667, 1.2],
+    "mean_reliable_move_utility": 3.0,
+    "loss_before": 1.8337652508178255,
+    "loss_after": 1.1964921056756526
+  },
+  "prospective_development": {
+    "captures": 4,
+    "complete_rng_trials": 20,
+    "base_choices": [3, 3, 3, 3],
+    "challenger_choices": [3, 3, 3, 3],
+    "best_choice_count_both": 4,
+    "challenger_wins": 0,
+    "base_wins": 0,
+    "ties": 4
+  },
+  "retrospective_diagnostics_only": {
+    "historical_development_examples": 20,
+    "challenger_wins": 0,
+    "base_wins": 1,
+    "ties": 19,
+    "consumed_route_11_initial_choice": "base Guillotine; challenger Vicegrip; not promotion evidence"
+  },
+  "decision": {
+    "battle_authority_promoted": false,
+    "reason": "no prospective held-out gain and one retrospective regression",
+    "ordinary_player_model_changed": false,
+    "red_living_dex_progress_changed": false,
+    "github_pushed": false
+  },
+  "private_receipts_sha256": {
+    "train_dataset": "2a592ed738dff6ab8244260af90d9866043f560c469ae7b2253f0716b7121fff",
+    "train_failures": "d15810e7511131851a844cd0c62c6cfe5da750d6c8ab51caac0025afff85d187",
+    "fit_report": "aa3261027be8a3dcea8300487dc207dd103204c5e40179ce2491c288d076d825",
+    "development_prediction_commitment": "e8432d9614cf88eccadad3cc272763c4b44f7d23546e0a15cc97456d05a40b66",
+    "development_dataset": "46470a0f350bfd012214afeb27d359ddf2191a9d9034cea5cee01c694c24eb3a",
+    "development_evaluation": "15e4825e9f09e8a805c169ca8359db363e3700172d5e7ef9de4b400a842e3002"
+  }
+}

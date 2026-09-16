@@ -3,6 +3,25 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
+## OHKO training candidate rejected
+
+The next bounded lesson inserted Guillotine into authenticated private battle
+states as a *teacher-only* intervention, then measured real cartridge outcomes
+at five fixed timing variations. Three train roots completed; a fourth was
+quarantined after a battler fainted, with no retry. A train-only last-layer
+update reduced loss from 1.834 to 1.196. Predictions were committed before
+four disjoint development roots were measured: both old and new models chose
+the same best move in all four (0 wins, 0 losses). A retrospective check of
+20 older development examples found 0 wins and 1 loss for the candidate.
+The candidate flips the previously consumed Route11 Kingler diagnostic from
+Guillotine to Vicegrip, but this is not held-out evidence. No promotion.
+
+The local-only collection/commitment path now works without a GitHub push;
+private state bytes and outcome journals remain outside Git. Next collect
+harder prospective cases where baseline choices are genuinely uncertain, then
+fit/train and test on separately rooted cases. Do not recycle the consumed
+Route11 state as a fit or prospective test. [Evidence](docs/evidence/red-ohko-expected-utility-2026-09-16.json).
+
 ## Six real learned attacks, one inefficient victory
 
 The new bounded battle adapter gave the frozen expected-utility-v2 move ranker
