@@ -27,7 +27,11 @@ from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manag
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_collection import autonomous_collection_options
-from pokemon_red_completion.red_autonomous_player import AutonomousSnapshot, run_autonomous_options
+from pokemon_red_completion.red_autonomous_player import (
+    AutonomousSnapshot,
+    run_autonomous_goal_continuation,
+    run_autonomous_options,
+)
 from pokemon_red_completion.red_collection import (
     RED_COLLECTION_GAME_ID,
     red_internal_species_number,
@@ -76,6 +80,33 @@ def _verify_reserve_lineage(plan: dict[str, object], payloads: dict[str, bytes])
         raise ValueError("inherited reserves do not match the earned parent lineage")
 
 
+def _verify_goal_continuation(plan: dict[str, object], payloads: dict[str, bytes]) -> str:
+    """Authenticate the consumed model choice before carrying its goal forward."""
+    if "prior_execution_started" not in payloads:
+        raise ValueError("continuation requires authenticated selected-goal evidence")
+    _verify_reserve_lineage(plan, payloads)
+    started = json.loads(payloads["prior_execution_started"])
+    outcome = json.loads(payloads["prior_outcome"])
+    choice = outcome["choice"]
+    binding_ref = started["selected_binding_ref"]
+    state = plan["state"]
+    assert isinstance(state, dict)
+    if (
+        started["selected_kind"] != "evolve_species"
+        or outcome["selected_kind"] != "evolve_species"
+        or started["state_sha256"] != outcome["before_state_sha256"]
+        or started["menu_sha256"] != choice["menu_sha256"]
+        or choice["mode"] != "model_exploration"
+        or outcome["learning_eligible"] is not True
+        or outcome["safe_terminal"] is not True
+        or outcome["terminal_state_sha256"] != state["sha256"]
+        or outcome["error_type"] != "CompositionActionBudgetExhausted"
+        or not isinstance(binding_ref, str)
+    ):
+        raise ValueError("continuation does not match the consumed model goal")
+    return binding_ref
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--plan", type=Path, required=True)
@@ -86,15 +117,21 @@ def main() -> None:
     payloads = {}
     for key in (
         "rom", "state", "checkpoint", "profile", "model",
-        "reserve_origin", "prior_plan", "prior_outcome",
+        "reserve_origin", "prior_plan", "prior_outcome", "prior_execution_started",
     ):
-        if key in {"reserve_origin", "prior_plan", "prior_outcome"} and key not in plan:
+        if key in {
+            "reserve_origin", "prior_plan", "prior_outcome", "prior_execution_started"
+        } and key not in plan:
             continue
         content = Path(plan[key]["path"]).read_bytes()
         if hashlib.sha256(content).hexdigest() != plan[key]["sha256"]:
             raise ValueError(f"autonomous {key} authentication failed")
         payloads[key] = content
     _verify_reserve_lineage(plan, payloads)
+    continuation_ref = (
+        _verify_goal_continuation(plan, payloads)
+        if plan.get("mode") == "continue_selected_goal" else None
+    )
     output = Path(plan["output"])
     if output.exists() and not args.inspect:
         raise FileExistsError("autonomous continuation is already claimed")
@@ -221,6 +258,10 @@ def main() -> None:
                 )
                 facts.update(
                     {
+                        "party_training": [
+                            [member.slot, member.species_id, member.experience]
+                            for member in PokemonRedPartyReader(emulator).read().members
+                        ],
                         "cash": current.raw.player_money,
                         "registered_species": len(collection.owned_species),
                         "owned_species": sorted(collection.owned_species),
@@ -257,6 +298,10 @@ def main() -> None:
                 ),
                 maximum_actions=maximum_actions,
                 maximum_frames=maximum_frames,
+                maximum_evolution_quanta=(
+                    plan.get("maximum_evolution_quanta", 128)
+                    if continuation_ref is not None else 128
+                ),
             )
 
         if args.inspect:
@@ -292,16 +337,26 @@ def main() -> None:
             return
         # Seed is generated once before any score is queried and persisted by
         # the runner. It is not searched for a preferred outcome.
-        result = run_autonomous_options(
-            model=model.model,
-            output=output,
-            snapshot=snapshot,
-            observe=observe,
-            seed=secrets.randbits(64),
-            maximum_decisions=plan["maximum_decisions"],
-            maximum_seconds=plan["maximum_seconds"],
-            provenance=provenance,
-        )
+        if continuation_ref is not None:
+            result = run_autonomous_goal_continuation(
+                output=output,
+                snapshot=snapshot,
+                observe=observe,
+                prior_binding_ref=continuation_ref,
+                prior_outcome_sha256=plan["prior_outcome"]["sha256"],
+                provenance=provenance,
+            )
+        else:
+            result = run_autonomous_options(
+                model=model.model,
+                output=output,
+                snapshot=snapshot,
+                observe=observe,
+                seed=secrets.randbits(64),
+                maximum_decisions=plan["maximum_decisions"],
+                maximum_seconds=plan["maximum_seconds"],
+                provenance=provenance,
+            )
         print(json.dumps(result, indent=2, sort_keys=True))
 
 

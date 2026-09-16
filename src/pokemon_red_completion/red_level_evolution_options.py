@@ -33,6 +33,7 @@ def enumerate_red_level_evolutions(
     *,
     maximum_actions: int,
     maximum_frames: int,
+    maximum_quanta: int = 128,
 ) -> tuple[RedEvolutionOption, ...]:
     """Bind actual boxed or in-party alternatives to the catalog's default method.
 
@@ -100,7 +101,7 @@ def enumerate_red_level_evolutions(
                 ))
                 native = bind_native_boxed_evolution(
                     replace(runtime, profile=profile), world,
-                    maximum_quanta=128, allow_cross_box=True,
+                    maximum_quanta=maximum_quanta, allow_cross_box=True,
                 )
                 offer = native.provider_for(GoalKind.EVOLVE_SPECIES, actions).offer(observation)
                 binding = offer.binding

@@ -1,18 +1,74 @@
 import json
 from dataclasses import replace
+from types import SimpleNamespace
 
 import pytest
 from test_red_live_option_menu import _binding, _mixed, _model, _ordinary_bindings, _situation
 
-from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager import GoalFailureReason, GoalKind
 from pokemon_red_completion.goal_manager_runtime import (
     GoalBindingSet,
     GoalExecutionReport,
     GoalVerification,
 )
-from pokemon_red_completion.red_autonomous_player import AutonomousSnapshot, run_autonomous_options
+from pokemon_red_completion.red_autonomous_player import (
+    AutonomousSnapshot,
+    continuation_binding,
+    run_autonomous_goal_continuation,
+    run_autonomous_options,
+)
 from pokemon_red_completion.red_live_option_menu import build_red_live_option_set
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+
+
+def test_saved_goal_continuation_uses_unique_private_fingerprint_without_new_choice(tmp_path):
+    suffix = "a" * 64
+    calls = []
+    state = {"xp": 4905}
+
+    def snapshot():
+        return AutonomousSnapshot(
+            str(state["xp"]).encode(),
+            {"party_training": [[1, 78, state["xp"]]], "actions": len(calls)},
+            True,
+        )
+
+    binding = _binding(
+        GoalKind.EVOLVE_SPECIES, binding_ref=f"new-origin:{suffix}", calls=calls,
+    )
+
+    def execute():
+        assert (tmp_path / "continuation/execution-started.json").exists()
+        calls.append("execute")
+        state["xp"] += 153
+        return GoalExecutionReport(50, 5000, {"evolution_partial": True})
+
+    binding = replace(
+        binding, execute=execute,
+        verify=lambda _: GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED),
+    )
+    options = SimpleNamespace(
+        bindings=(binding,), menu=SimpleNamespace(policy_sha256="b" * 64),
+    )
+    result = run_autonomous_goal_continuation(
+        output=tmp_path / "continuation", snapshot=snapshot,
+        observe=lambda _: options, prior_binding_ref=f"old-origin:{suffix}",
+        prior_outcome_sha256="c" * 64, provenance={},
+    )
+    assert result["status"] == "pending"
+    assert result["experience_gain"] == 153
+    assert result["model_queries"] == result["model_decisions"] == 0
+    assert calls == ["execute"]
+    assert (tmp_path / "continuation/terminal.state").read_bytes() == b"5058"
+
+
+def test_goal_continuation_rejects_missing_or_duplicate_target():
+    suffix = "a" * 64
+    binding = _binding(GoalKind.EVOLVE_SPECIES, binding_ref=f"new:{suffix}", calls=[])
+    with pytest.raises(ValueError, match="no unique"):
+        continuation_binding(SimpleNamespace(bindings=()), f"old:{suffix}")
+    with pytest.raises(ValueError, match="no unique"):
+        continuation_binding(SimpleNamespace(bindings=(binding, binding)), f"old:{suffix}")
 
 
 def _environment(output, *, fail=False, verify_fails=False, unsafe=False):

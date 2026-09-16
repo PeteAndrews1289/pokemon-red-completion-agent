@@ -7,7 +7,10 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
-from run_red_autonomous_collection import _verify_reserve_lineage  # noqa: E402
+from run_red_autonomous_collection import (  # noqa: E402
+    _verify_goal_continuation,
+    _verify_reserve_lineage,
+)
 
 
 def _fixture():
@@ -71,3 +74,27 @@ def test_reserve_origin_requires_authenticated_parent_documents():
     plan, _, _ = _fixture()
     with pytest.raises(ValueError, match="authenticated parent evidence"):
         _verify_reserve_lineage(plan, {})
+
+
+def test_goal_continuation_requires_consumed_model_evolution_and_exact_terminal():
+    plan, parent, outcome = _fixture()
+    outcome.update({
+        "selected_kind": "evolve_species", "learning_eligible": True,
+        "error_type": "CompositionActionBudgetExhausted",
+        "choice": {"mode": "model_exploration", "menu_sha256": "c" * 64},
+    })
+    started = {
+        "selected_kind": "evolve_species", "state_sha256": "a" * 64,
+        "menu_sha256": "c" * 64, "selected_binding_ref": f"old:{'d' * 64}",
+    }
+    payloads = {
+        "prior_plan": json.dumps(parent).encode(),
+        "prior_outcome": json.dumps(outcome).encode(),
+        "prior_execution_started": json.dumps(started).encode(),
+    }
+    assert _verify_goal_continuation(plan, payloads) == started["selected_binding_ref"]
+    started["menu_sha256"] = "e" * 64
+    with pytest.raises(ValueError, match="consumed model goal"):
+        _verify_goal_continuation(plan, {
+            **payloads, "prior_execution_started": json.dumps(started).encode(),
+        })

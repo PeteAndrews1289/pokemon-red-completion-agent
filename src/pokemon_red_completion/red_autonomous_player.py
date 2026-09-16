@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
@@ -79,6 +80,127 @@ def _write(path: Path, payload: bytes) -> None:
 
 def _record(path: Path, document: Mapping[str, object]) -> None:
     _write(path, (json.dumps(document, sort_keys=True, indent=2) + "\n").encode())
+
+
+def continuation_binding(
+    options: RedLiveOptionSet, prior_binding_ref: str
+):
+    """Rebind one privately authenticated goal across changed origin states."""
+    fingerprint = prior_binding_ref.rsplit(":", 1)[-1]
+    if re.fullmatch(r"[0-9a-f]{64}", fingerprint) is None:
+        raise ValueError("prior goal has no valid configuration fingerprint")
+    matches = tuple(
+        binding for binding in options.bindings
+        if binding.kind is GoalKind.EVOLVE_SPECIES
+        and binding.binding_ref.rsplit(":", 1)[-1] == fingerprint
+    )
+    if len(matches) != 1:
+        raise ValueError("prior evolution goal has no unique live binding")
+    return matches[0]
+
+
+def run_autonomous_goal_continuation(
+    *,
+    output: Path,
+    snapshot: Callable[[], AutonomousSnapshot],
+    observe: Callable[[int], RedLiveOptionSet],
+    prior_binding_ref: str,
+    prior_outcome_sha256: str,
+    provenance: Mapping[str, object],
+) -> dict[str, object]:
+    """Execute a saved model goal once, with no new model query or reward fit."""
+    output.mkdir(mode=0o700, parents=False, exist_ok=False)
+    _record(output / "plan.json", {
+        "schema": "pokemon.red.autonomous-goal-continuation.v1",
+        "prior_binding_ref": prior_binding_ref,
+        "prior_outcome_sha256": prior_outcome_sha256,
+        "model_queries": 0,
+        "teacher_actions_allowed": False,
+        "provenance": dict(provenance),
+    })
+    before = snapshot()
+    _write(output / "before.state", before.state)
+    _record(output / "before.json", {
+        "state_sha256": before.sha256, "facts": dict(before.facts), "safe": before.safe,
+    })
+    if not before.safe:
+        raise ValueError("unsafe continuation origin")
+    try:
+        options = observe(0)
+        if snapshot() != before:
+            raise ValueError("continuation menu changed the game")
+        selected = continuation_binding(options, prior_binding_ref)
+    except Exception as admission_error:
+        _record(output / "admission-failure.json", {
+            "error_type": type(admission_error).__name__,
+            "error": str(admission_error),
+        })
+        raise
+    _record(output / "execution-started.json", {
+        "selected_binding_ref": selected.binding_ref,
+        "selected_kind": selected.kind.value,
+        "prior_binding_ref": prior_binding_ref,
+        "state_sha256": before.sha256,
+        "menu_sha256": options.menu.policy_sha256,
+    })
+    report = None
+    verification = None
+    error: BaseException | None = None
+    try:
+        report = selected.execute()
+        verification = selected.verify(report)
+    except BaseException as caught:
+        error = caught
+    finally:
+        terminal = snapshot()
+        _write(output / "terminal.state", terminal.state)
+        outcome = {
+            "before_state_sha256": before.sha256,
+            "terminal_state_sha256": terminal.sha256,
+            "before": dict(before.facts),
+            "after": dict(terminal.facts),
+            "safe_terminal": terminal.safe,
+            "verification": None if verification is None else verification.status.value,
+            "evidence": None if report is None else dict(report.evidence),
+            "error_chain": _exception_chain(error),
+            "model_queries": 0,
+            "learning_eligible": False,
+        }
+        _record(output / "outcome.json", outcome)
+    if error is not None and not isinstance(error, Exception):
+        raise error
+    completed = (
+        error is None and terminal.safe and verification is not None
+        and verification.status is GoalDecisionOutcome.SUCCEEDED
+    )
+    status = "complete" if completed else "pending" if (
+        terminal.safe and terminal.sha256 != before.sha256
+        and _party_experience_gain(before.facts, terminal.facts) > 0
+    ) else "stopped"
+    result = {
+        "schema": "pokemon.red.autonomous-goal-continuation-result.v1",
+        "status": status,
+        "experience_gain": _party_experience_gain(before.facts, terminal.facts),
+        "model_queries": 0,
+        "model_decisions": 0,
+        "teacher_actions": 0,
+        "outcome": outcome,
+    }
+    _record(output / "result.json", result)
+    return result
+
+
+def _party_experience_gain(before: Mapping[str, object], after: Mapping[str, object]) -> int:
+    """Conservative slot/species-matched training delta, not a reward label."""
+    old = before.get("party_training")
+    new = after.get("party_training")
+    if not isinstance(old, list) or not isinstance(new, list):
+        return 0
+    return sum(
+        max(0, current[2] - prior[2])
+        for prior, current in zip(old, new, strict=False)
+        if prior[0] == current[0] and prior[1] == current[1]
+    )
 
 
 def run_autonomous_options(

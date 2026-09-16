@@ -64,6 +64,7 @@ def autonomous_collection_options(
     ordering_seed_sha256: str,
     maximum_actions: int = 30_000,
     maximum_frames: int = 3_000_000,
+    maximum_evolution_quanta: int = 128,
 ) -> RedLiveOptionSet:
     """Expose up to eight real capture destinations alongside ordinary goals.
 
@@ -93,7 +94,7 @@ def autonomous_collection_options(
         native = bind_native_boxed_evolution(
             runtime,
             world,
-            maximum_quanta=128,
+            maximum_quanta=maximum_evolution_quanta,
             allow_cross_box=True,
         )
     economy = red_economy_snapshot(native.reader.read())
@@ -141,6 +142,7 @@ def autonomous_collection_options(
     evolutions += enumerate_red_level_evolutions(
         runtime, live, actions, world,
         maximum_actions=maximum_actions, maximum_frames=maximum_frames,
+        maximum_quanta=maximum_evolution_quanta,
     )
     replaced_kinds = {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
     # Regional candidates replace the legacy single preselected capture route.
