@@ -57,6 +57,7 @@ class RedCaptureStatusPreparer:
     actions: CountingExecutor
     reader: PokemonRedStateReader
     maximum_attempts: int = 3
+    expected_original_species_id: int | None = None
     attempts: int = field(default=0, init=False)
     reports: list[dict[str, object]] = field(default_factory=list, init=False)
     throw_preparations: list[dict[str, object]] = field(default_factory=list, init=False)
@@ -66,6 +67,11 @@ class RedCaptureStatusPreparer:
     def __post_init__(self) -> None:
         if type(self.maximum_attempts) is not int or not 1 <= self.maximum_attempts <= 10:
             raise ValueError("capture preparation attempt bound differs")
+        if self.expected_original_species_id is not None and (
+            type(self.expected_original_species_id) is not int
+            or not 1 <= self.expected_original_species_id <= 190
+        ):
+            raise ValueError("capture preparation declared target differs")
 
     def __call__(self) -> bool:
         """Return False only if the encounter ended; True permits a ball.
@@ -73,12 +79,33 @@ class RedCaptureStatusPreparer:
         A True result does not assert the opponent is statused. Reports retain
         actual status, PP and HP proof for every attempted move.
         """
-        initial = self.reader.read()
-        if initial.battle_state != 1:
+        entry = self.reader.read()
+        if entry.battle_state != 1:
             return False
+        if entry.map_id is None:
+            raise RedCaptureStatusError("capture preparation lacks a battle map")
+        party_ids = entry.party_species_ids
+        initial_bag = entry.bag_items
+        # The wild-battle flag can precede opponent-stat initialization. Settle
+        # to the shared MAIN boundary before treating HP/types/moves as live.
+        # This boundary returns without input when MAIN is already present and
+        # never selects a move. Party and inventory remain protected throughout.
+        advance_battle_to_policy_boundary(
+            self.reader, self.actions, expected_map=entry.map_id,
+            expected_battle_state=1, label="capture status introduction",
+        )
+        initial = self.reader.read()
         identity = self.reader.read_wild_capture_identity()
         if identity is None:
             raise RedCaptureStatusError("capture preparation lacks a live target")
+        if (
+            self.expected_original_species_id is not None
+            and identity.original_species_id != self.expected_original_species_id
+        ):
+            raise RedCaptureStatusError(
+                "capture status settled target differs from declared target",
+                reason_code=CaptureStatusDrift.ORIGINAL_SPECIES,
+            )
         if self.latched_original_species_id is None:
             self.latched_original_species_id = identity.original_species_id
         elif identity.original_species_id != self.latched_original_species_id:
@@ -88,15 +115,9 @@ class RedCaptureStatusPreparer:
             )
 
         target_hp = initial.enemy_hp
-        party_ids = initial.party_species_ids
-        initial_bag = initial.bag_items
         if target_hp is None or target_hp <= 0 or initial.map_id is None:
             raise RedCaptureStatusError("capture preparation lacks a live target")
         self._require_protected(initial, identity, target_hp, party_ids, initial_bag)
-        advance_battle_to_policy_boundary(
-            self.reader, self.actions, expected_map=initial.map_id,
-            expected_battle_state=1, label="capture status introduction",
-        )
         from pokemon_red_completion.red_battle_catalog import (
             RED_BATTLE_CATALOG,
             pokemon_red_move_ref,

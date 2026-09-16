@@ -5,7 +5,12 @@ from types import SimpleNamespace
 import pytest
 
 import pokemon_red_completion.red_capture_status_runtime as runtime
-from pokemon_red_completion.observation import RawGameState, WildCaptureIdentity
+from pokemon_red_completion.observation import (
+    BattleMenuPhase,
+    BattleMenuState,
+    RawGameState,
+    WildCaptureIdentity,
+)
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation, PartyObservation
 from pokemon_red_completion.red_autonomous_player import _exception_chain
 
@@ -65,6 +70,138 @@ def setup(monkeypatch):
         world.raw = replace(world.raw, active_party_index=index)
     monkeypatch.setattr(runtime, 'switch_active_battler', switch)
     return world, runtime.RedCaptureStatusPreparer(object(), object(), world)
+
+
+@pytest.mark.parametrize('stale_hp', [None, 0, 25, 54])
+def test_target_hp_is_latched_after_introduction_initializes_opponent(monkeypatch, stale_hp):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(world.raw, enemy_hp=stale_hp)
+
+    def initialize(*_args, **_kwargs):
+        world.boundaries += 1
+        if world.boundaries == 1:
+            world.raw = replace(world.raw, enemy_hp=63, enemy_max_hp=63)
+
+    monkeypatch.setattr(runtime, 'advance_battle_to_policy_boundary', initialize)
+    assert prepare()
+    assert world.turns == 3
+    assert all(row['target_hp_before'] == row['target_hp_after'] == 63
+               for row in prepare.reports)
+
+
+@pytest.mark.parametrize(('change', 'reason'), [
+    ({'party_species_ids': (48,)}, runtime.CaptureStatusDrift.PARTY_SPECIES),
+    ({'bag_items': ((4, 3),)}, runtime.CaptureStatusDrift.BAG_ITEMS),
+])
+def test_introduction_still_protects_party_and_bag(monkeypatch, change, reason):
+    world, prepare = setup(monkeypatch)
+
+    def drift(*_args, **_kwargs):
+        world.raw = replace(world.raw, **change)
+
+    monkeypatch.setattr(runtime, 'advance_battle_to_policy_boundary', drift)
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        prepare()
+    assert stopped.value.reason_code == reason.value
+    assert world.turns == 0 and prepare.attempts == 0
+
+
+def test_failed_introduction_does_not_latch_target_or_spend_status_attempt(monkeypatch):
+    world, prepare = setup(monkeypatch)
+
+    def timeout(*_args, **_kwargs):
+        raise RuntimeError('bounded introduction expired')
+
+    monkeypatch.setattr(runtime, 'advance_battle_to_policy_boundary', timeout)
+    with pytest.raises(RuntimeError, match='bounded introduction expired'):
+        prepare()
+    assert prepare.latched_original_species_id is None
+    assert prepare.attempts == world.turns == 0
+
+
+def test_settled_original_identity_must_match_declared_capture_target(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    prepare.expected_original_species_id = 185
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        prepare()
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.ORIGINAL_SPECIES.value
+    assert prepare.latched_original_species_id is None
+    assert prepare.attempts == world.turns == 0
+
+
+def test_live_capture_binds_requested_species_before_intro_settlement(monkeypatch):
+    import pokemon_red_completion.surge as surge
+    from pokemon_red_completion.red_collection import red_internal_species_number, red_species_ref
+
+    world, _ = setup(monkeypatch)
+    target = red_species_ref(red_internal_species_number(world.raw.enemy_species_id))
+
+    def changed_spawn(*_args, before_throw, **_kwargs):
+        world.raw = replace(world.raw, enemy_species_id=185)
+        return before_throw()
+
+    monkeypatch.setattr(surge, '_try_catch_wild', changed_spawn)
+    capture = surge.LiveWildEncounterExecutor(
+        object(), object(), world, surge.DEFAULT_SURGE_TIMING,
+        label='declared capture', capture_status_support=True,
+    )
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        capture.capture_encounter(target)
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.ORIGINAL_SPECIES.value
+    assert world.turns == 0
+
+
+def test_volatile_capture_identity_is_not_read_before_initialization(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    identity = world.read_wild_capture_identity
+
+    def initialized_identity():
+        assert world.boundaries > 0
+        return identity()
+
+    monkeypatch.setattr(world, 'read_wild_capture_identity', initialized_identity)
+    assert prepare()
+
+
+@pytest.mark.parametrize('hp', [18, 25])
+def test_already_settled_main_needs_no_introduction_input_or_full_hp(monkeypatch, hp):
+    from pokemon_red_completion.battle_runtime import advance_battle_to_policy_boundary
+
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(world.raw, enemy_hp=hp, enemy_max_hp=25, active_party_index=1)
+    world.status = 3
+    monkeypatch.setattr(
+        world, 'read_battle_menu_state',
+        lambda _: BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0),
+        raising=False,
+    )
+    monkeypatch.setattr(runtime, 'advance_battle_to_policy_boundary',
+                        advance_battle_to_policy_boundary)
+
+    def forbidden(*_args, **_kwargs):
+        pytest.fail('already settled asleep target requires no setup input')
+
+    prepare.actions = SimpleNamespace(execute=forbidden)
+    monkeypatch.setattr(runtime, 'switch_active_battler', forbidden)
+    monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', forbidden)
+    assert prepare()
+    assert prepare.throw_preparations[0]['target_hp'] == hp
+    assert prepare.attempts == 0
+
+
+@pytest.mark.parametrize('hp', [24, 26])
+def test_setup_switch_still_rejects_any_target_hp_change(monkeypatch, hp):
+    world, prepare = setup(monkeypatch)
+    world.raw = replace(world.raw, active_party_index=1)
+
+    def drift(*_args, **_kwargs):
+        world.raw = replace(world.raw, enemy_hp=hp)
+
+    monkeypatch.setattr(runtime, 'switch_active_battler', drift)
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        prepare()
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.TARGET_HP.value
+    assert world.turns == prepare.attempts == 0
 
 
 @pytest.mark.parametrize('escape_move', [18, 46, 100])
