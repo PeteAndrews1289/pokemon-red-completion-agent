@@ -3,39 +3,40 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Model128 selected successful restoration; measured receipt remains unfitted
+## Model130: two measured lessons, no new Red registration
 
-After exact-state support recovery registered Gastly, the safe Red state held 92/124
-registrations, 73 specimens, 1608 cash and seven Great Balls. An action-free inspection offered
-five executable alternatives: three acquisitions, restoration and one need-conditioned finite
-income option. It changed no game state and made no model query.
+The original Model128 team-restoration receipt had a prospectively tighter 3000-action /
+300000-frame execution ceiling than the learner's fixed 30000 / 3000000 reward scale. A
+versioned declaration now records both separately. It preserves old records and rejects a
+tampered limit or a receipt over the actual ceiling. The original 62-action success was admitted
+once without replay, fitting Model129 at 129 examples / 89 successes.
 
-Model128 selected restoration at probability 0.699884. The one committed choice succeeded in
-62 actions and 5064 frames, with zero teacher or support decisions. Red remains 92/124, with
-73 specimens and 1608 cash. The verified safe terminal state SHA-256 is
-`349970cfb550f06efb756c12e43218103327f0e084168655c9a60b2cbf4819d9`.
-The original Model127 capture remains a failed fitted example. The support Gastly catch was never
-fitted or relabeled as model success.
+From the exact safe restoration terminal, an action-free menu offered three acquisitions and one
+finite-income option. Model129 selected an acquisition route at probability 0.243436. The route
+was reached, but its survey exhausted after three encounters and three flees, with no catch.
+The failure used 473 actions / 19140 frames, no ball or cash, and ended safely. General admission
+of a verified, reasoned failure passed ROM-free tests; the exact failure was fitted without
+replay. Model130 has **130 settled examples, 89 successes and 51 economy-qualified examples**.
+These two correlated development lessons add no independent evaluation or authority promotion.
 
-The run's prospective action/frame ceilings were 3000/300000; the current measured-choice
-admitter only accepts its fixed 30000/3000000 normalization contract. It rejected the otherwise
-retained run at `autonomous run scope differs` before publishing an example or fitting. This
-was our planning mismatch, not a gameplay failure. Do not edit the consumed plan, replay the
-choice, substitute a new sample, or claim a fitted Model129. Model128 remains 128 settled examples,
-88 successes and 49 economy-qualified examples; there is one new raw measured outcome but zero
-new admitted training examples. The private plan, intent, decision, outcome and terminal are
-retained under their original hashes in the [session evidence](docs/evidence/red-model128-measured-restore-budget-boundary-2026-09-16.json).
+Red is still **92/124** registered, with 73 specimens, seven Great Balls and 1608 cash. The
+safe terminal SHA-256 is `616d7d513515927311038dca85e13b9ad85966589a7e595b99126a5d789f856d`.
+An action-free inspection at that terminal exposed four options: three acquisitions and one
+finite income. It used zero inputs or model queries and left the state unchanged. The selected
+failed private route was not reissued under the same binding. Gameplay is stopped. The
+[session evidence](docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json)
+retains path-free hashes and trust boundaries. Related ROM-free tests: 142 passed; type, lint,
+registry, public-artifact and documentation checks passed.
 
 ## Exact next bounded work
 
-Gameplay is stopped at the safe restoration terminal. Design a prospective, versioned way to
-admit an authenticated tighter execution ceiling while preserving the learner's normalization
-meaning, exact historical budgets and existing fixed-contract examples. Test mismatched hashes,
-over-budget actions and old records ROM-free. If that contract can represent the original
-retained receipt faithfully, admit and fit it once without gameplay; otherwise leave it unfitted
-and proceed only from the earned safe state under a correctly declared future budget. Then
-inspect the next menu action-free. Do not treat finite income as renewable League income.
+Permit at most one fresh Model130 choice from the verified four-option safe terminal, retaining
+and fitting its actual result. If another acquisition search exhausts without a registration,
+stop and assess the general survey/goal-yield design before offering further similar attempts.
+Do not replay either consumed choice, route-patch the failure, hand-select a destination, or
+describe finite trainer income as renewable League funding. The fresh-start Red completion gate
+remains open; no ROM hack or Crystal work is authorized yet.
 
-No full Red run, ROM hack, Crystal access or GitHub push occurred. Flash and Claude were not used;
-their quotas were not refreshed. Next setting: **Sol / High / Fast off**, roughly 60-90 minutes.
-Escalate to Astra High only if the budget semantics require a broader redesign across outcomes.
+No GitHub push occurred. Flash and Claude were not used; their quotas were not refreshed. Next
+setting: **Sol / High / Fast off**, about 45-75 minutes. Escalate to Astra High for a general
+search-yield redesign only if a second fresh acquisition fails the same way.

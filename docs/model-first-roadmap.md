@@ -15,42 +15,40 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 
 ## Where we stand
 
-Model123 has 123 fitted examples/84 successes. Its development save has 90/124 declared-route
-registrations (72.58%), 67 living species and 71 specimens. Registration is not a living-Dex count.
-The collection checklist remains 26/26; mandatory fresh-Red completion remains 0/5.
-Neither percentage describes whole-project completion.
+Model130 has 130 fitted examples/89 successes, including a model-selected restoration success
+and a separately retained acquisition search failure. The development save has 92/124 declared-
+route registrations and 73 specimens. The 92/124 ratio describes this Red save's registrations,
+not whole-project completion. The mandatory fresh-Red completion gate remains 0/5.
 
-The new autonomous loop completed two consecutive model-selected goals: evolution, then a
-seven-Great-Ball purchase. It persisted each choice before execution and replanned from the
-earned state without teacher substitution or reset. These two raw outcomes are not fitted yet.
+The autonomous player now chooses among capture destinations, restoration and finite income from
+an identity-free mixed menu. It stores the selected choice before input, retains actual costs and
+failures, and uses authenticated shorter execution ceilings without changing the learner's
+historical reward scale. The latest acquisition search exhausted after three encounters and no
+catch. This is a learned failure lesson, not a collection gain or independent evaluation.
 
-The third menu stopped before a query. The terminal has 228 cash and one free active-box slot;
-storage relief and earning are not enabled as options in this loop. This is a missing choice-
-coverage problem, not permission to choose the model's recovery goal ourselves.
-
-The model can select among goals and enumerated capture destinations. It did not select a
-capture destination during this trial. Evolution targets still follow catalog ordering, while
-battles and low-level routes use existing controllers. A fully learned player is not established.
+The current safe terminal offers three acquisitions and one finite-income option. A second
+no-gain acquisition would trigger a general search-yield review rather than another route patch.
+Battle turns and low-level travel still use existing controllers; a fully learned player is not
+established.
 
 ## Next bounded work
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Retain the two decisions | Admit original menus, choices, costs and outcomes; preserve all 123 prior fitted rows | Sol / High / Fast off |
-| Model-selected prerequisites | Offer verified storage relief and legitimate earning from the earned terminal; execute only a persisted model choice | Sol / High / Fast off |
+| Next model choice | Allow one Model130 decision from the exact safe four-option menu and retain its actual result | Sol / High / Fast off |
+| Search-yield gate | If acquisition again exhausts without gain, diagnose general survey coverage and option value before another similar run | Astra / High if redesign is needed |
 | Broaden target authority | Present multiple feasible evolution targets with costs instead of one catalog-selected target | Sol / High / Fast off |
-| Battle/story authority | Audit the existing learned battle bridge and story controller; qualify the smallest missing decision boundary without heuristic substitution | Astra / High / Fast off |
-| Sustained bounded play | Complete varied consecutive goals, including resource/storage prerequisites, without human-selected recovery or resets | Sol / High / Fast off |
-| Fresh Red acceptance | Freeze and then pass fresh origin, start-to-finish control, Champion/Hall of Fame, 124/124 route registrations and the deferred-dependency ledger | Astra / High for freeze; Sol / High for execution |
+| Battle/story authority | Audit the learned battle bridge and story controller; qualify a decision boundary without heuristic substitution | Astra / High / Fast off |
+| Sustained bounded play | Complete varied consecutive goals, including resource and storage prerequisites, without human-selected recovery or resets | Sol / High / Fast off |
+| Fresh Red acceptance | Pass fresh origin, model-directed start-to-finish control, Champion/Hall of Fame, 124/124 route registrations and the deferred-dependency ledger | Astra / High for freeze; Sol / High for execution |
 
-The immediate time box is 1–2 hours for outcome admission and prerequisite options, not a full
-replay. Stop on insufficient executable choices, unsafe state, failed action or lost evidence.
-The previous consumed seed 123091501 is not reconstructed; the new continuation is explicitly
-correlated development, not independent evaluation.
+The immediate time box is one bounded choice, not a full replay. Stop on another exhausted
+acquisition, unsafe state or lost evidence. The previous choices are consumed and may not be
+replayed or substituted. All current fits are correlated development, not independent evaluation.
 
 Mew and unavailable version/link dependencies remain legitimate later-game targets, not cheats.
 ROM-hack and Crystal work remain closed until fresh Red acceptance passes. Pete decides when to
 push to GitHub.
 
-[Latest evidence](evidence/red-model123-autonomous-collection-2026-09-16.json) ·
+[Latest evidence](evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

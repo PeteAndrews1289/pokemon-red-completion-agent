@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model128-measured-restore-budget-boundary",
+  "as_of_session": "2026-09-16-model130-bounded-admission-and-search-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json"
+      "evidence": "docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1568,6 +1568,12 @@
       "result": "An action-free five-option menu offered three acquisitions, restoration and finite income. Model128 selected and successfully executed restoration in62 actions/5064 frames. Red remains92/124 with73 specimens and1608 cash; the terminal is safe.",
       "deviation": "One raw on-policy success is retained, but the run's prospective3000/300000 execution ceiling conflicts with the learner's fixed30000/3000000 normalization. Admission failed closed before any example or fit. Do not edit the consumed plan or replay the choice; Model128 remains128 examples/88 successes.",
       "next": "Sol High, Fast off: version and test truthful bounded-budget admission. Fit this original receipt once only if its exact limits can be represented without reinterpreting old rewards; otherwise leave it excluded and inspect the earned state action-free."
+    },
+    {
+      "session": "2026-09-16-model130-bounded-admission-and-search-failure",
+      "result": "Versioned bounded admission fitted the original Model128 restoration success without replay. Model129 then chose an acquisition route that safely exhausted its survey after three encounters and no catch; the verified failure was fitted. Model130 has130 examples/89 successes. Red remains92/124 with73 specimens.",
+      "deviation": "Two correlated development lessons, zero new registrations, no independent evaluation or authority promotion. The fixed30000/3000000 reward normalization and older records were preserved while the original3000/300000 execution ceilings were authenticated. No teacher choice, retry, full-Red gate or GitHub push changed.",
+      "next": "Sol High, Fast off: allow at most one fresh Model130 choice from the action-free four-option safe terminal. Stop for a general acquisition-yield review if another search exhausts without a registration."
     }
   ],
   "closed_milestones": [

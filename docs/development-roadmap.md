@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model128-measured-restore-budget-boundary**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model130-bounded-admission-and-search-failure**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **128 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **130 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model130-bounded-admission-and-search-failure
+
+Versioned bounded admission fitted the original Model128 restoration success without replay. Model129 then chose an acquisition route that safely exhausted its survey after three encounters and no catch; the verified failure was fitted. Model130 has130 examples/89 successes. Red remains92/124 with73 specimens.
+
+**Deviation:** Two correlated development lessons, zero new registrations, no independent evaluation or authority promotion. The fixed30000/3000000 reward normalization and older records were preserved while the original3000/300000 execution ceilings were authenticated. No teacher choice, retry, full-Red gate or GitHub push changed.
+
+**Next:** Sol High, Fast off: allow at most one fresh Model130 choice from the action-free four-option safe terminal. Stop for a general acquisition-yield review if another search exhausts without a registration.
 
 ### 2026-09-16-model128-measured-restore-budget-boundary
 

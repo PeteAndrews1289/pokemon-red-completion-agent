@@ -14,18 +14,20 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The closed-loop Model123 runner completed two consecutive model-selected goals without reset:
-evolution and resupply. Red is 90/124 registered with 67 living species and 71 specimens.
-Two measured raw outcomes await admission; the fitted model remains 123 examples/84 successes.
+Model130 has 130 settled examples/89 successes after one selected restoration success and one
+selected acquisition search failure. Red is 92/124 registered with 73 specimens. Both outcomes
+were retained and fitted without replay; the terminal is safe. The current action-free menu has
+three acquisition routes and one finite-income option.
 
-Next expose legitimate earning and storage relief as model-selectable prerequisites, retaining
-the two choices and costs first. Continue from the earned 228-cash terminal, not a reset or
-teacher-chosen recovery. Evolution targets and battle mechanics remain explicit authority gaps.
+Next allow at most one fresh Model130 choice from the exact earned terminal. Stop for a general
+search-yield review if acquisition again exhausts without a registration. Do not replay consumed
+choices, hand-select a destination, or claim a full-player authority promotion. Evolution target
+ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
 
 No Flash or Claude review was used in this session. Quota was not refreshed.
-Next setting: Sol High, Fast off, approximately 1–2 hours. No GitHub publication without Pete's
+Next setting: Sol High, Fast off, approximately 45-75 minutes. No GitHub publication without Pete's
 explicit instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

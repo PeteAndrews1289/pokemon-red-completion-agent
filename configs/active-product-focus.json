@@ -29,29 +29,29 @@
     },
     {
       "capability": "Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs.",
-      "cheapest_falsifier": "A ROM-free admission test cannot represent the retained 3000-action/300000-frame ceiling without changing historical normalization or allowing an over-budget receipt.",
+      "cheapest_falsifier": "One fresh Model130 choice from the verified four-option terminal repeats search exhaustion without any registration, indicating the current capture menu has poor practical yield.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model128 chose restoration from five real alternatives; it succeeded in 62 actions and ended safely. No admission, fit or authority promotion occurred because the tighter declared execution budget conflicts with fixed learner normalization.",
-        "blocker": "The one fresh model-selected success is retained but unfitted: execution was capped at 3000 actions/300000 frames while the current admission contract fixes 30000/3000000. The consumed plan cannot be edited or replayed. Red remains 92/124 at a safe terminal.",
-        "decision": "Keep gameplay stopped. Version and test truthful admission of a tighter authenticated runtime budget while preserving historical normalization; fit the original retained receipt only if it passes, otherwise leave it unfitted. Then inspect the earned terminal action-free.",
+        "authority_delta": "Model128's restoration and Model129's acquisition route were both model-selected and fitted from their exact outcomes. The versioned contract admits tighter execution ceilings without changing 30000/3000000 reward normalization or older records. No authority promotion occurred.",
+        "blocker": "Red remains 92/124. Model129's chosen acquisition route exhausted its survey after three encounters and no catch; cash and balls were preserved. The terminal is safe and its next action-free menu has three acquisitions and one finite income option, but their practical yield remains unproven.",
+        "decision": "Stop after the retained failed search. From the exact safe terminal, permit at most one fresh Model130 choice among the verified four options; preserve its actual costs and stop for a general yield review if another acquisition exhausts without gain.",
         "evidence": {
-          "kind": "qualification",
-          "path": "docs/evidence/red-model128-measured-restore-budget-boundary-2026-09-16.json",
-          "sha256": "a65da1b43d739382e9bb60aa8c7d4777400391e776bae9b3dd4a3f2888895c2c"
+          "kind": "model_fit",
+          "path": "docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json",
+          "sha256": "4c8da631366e991dbea5dd1950b5d0659574e54824d1bcaea5966b76c42cc9dc"
         },
-        "learning_output": "One fresh on-policy successful restoration receipt is retained but unfitted. Model128 stays at 128 settled examples / 88 successes; Red stays 92/124 with 73 specimens, with zero new registrations or fitted rows.",
-        "next_falsifier": "The authenticated 3000/300000 execution ceiling cannot be distinguished from 30000/3000000 normalization under a versioned admission contract, or old examples change meaning.",
-        "next_session_goal": "Sol High, Fast off, 60-90 minutes: test and version tighter-budget admission without historical reward reinterpretation; fit the retained receipt only if faithful, then inspect the earned state action-free.",
-        "product_alignment": "The model selected a real team-restoration goal from a mixed menu and achieved it. Its raw outcome is preserved without overstating learning or registration gain; the admission-budget mismatch is explicit.",
-        "session_id": "2026-09-16-model128-measured-restore-budget-boundary",
+        "learning_output": "Two measured choices fitted: restoration success and search-exhausted acquisition failure. Model130 has 130 settled examples / 89 successes and 51 economy-qualified examples. Registration gain was zero.",
+        "next_falsifier": "A second fresh acquisition choice from the safe menu also exhausts its bounded search without a registration, despite available missing-species routes.",
+        "next_session_goal": "Sol High, Fast off, 45-75 minutes: allow one fresh Model130 decision from the exact safe four-option state, fit its real outcome, and stop on repeated search exhaustion for a general yield review.",
+        "product_alignment": "The learner now retains both a successful resource prerequisite and a failed acquisition search from genuine model choices; neither support recovery nor a fixed teacher goal was relabeled as model success.",
+        "session_id": "2026-09-16-model130-bounded-admission-and-search-failure",
         "status": "closed",
-        "stop_condition": "Stop if the consumed receipt needs a changed plan, replay, hidden budget reinterpretation, teacher substitution, or historical reward edits; no full run, ROM hack, Crystal or GitHub publication.",
-        "transfer_result": "The mixed goal menu and model-selected restoration executed on the recovered terminal; this is correlated development, not independent or later-title transfer."
+        "stop_condition": "Stop on a repeated no-gain acquisition search, unsafe terminal, retry pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication.",
+        "transfer_result": "The versioned budget and verified-failure admission passed ROM-free cases; both live choices are correlated Red development, not independent or later-title transfer."
       },
       "learned_authority": {
-        "current": "Model128 has 128 settled examples / 88 successes. It selected and completed one restoration from five options, but the tighter authenticated execution budget blocks admission under the current fixed normalization. Red is 92/124 with 73 specimens at a safe terminal.",
+        "current": "Model130 has 130 settled examples / 89 successes. It learned from one model-selected restoration success and one search-exhausted acquisition failure without replay. Red remains 92/124 with 73 specimens and 1608 cash at a safe terminal.",
         "target": "Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing."
       },
       "maintenance_unblocks": null,
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Keep gameplay stopped. Qualify truthful tighter-budget admission for the retained Model128 restoration without replay or historical reward edits; fit only if valid, then inspect the earned 92/124 terminal action-free. Renewable League income remains unqualified.",
+      "next_decision": "From the verified safe 92/124 terminal, allow at most one fresh Model130 choice from three acquisitions and one finite-income option; retain and fit its actual result. Stop for a general yield review if another acquisition search exhausts. Renewable League income remains unqualified.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,
@@ -252,7 +252,7 @@
           "development": 61,
           "train": 103
         },
-        "registered_train_examples": 128,
+        "registered_train_examples": 130,
         "synthetic_rootless_atomic_goal_episodes": 8,
         "synthetic_rootless_model_fits": 1,
         "synthetic_rootless_train_outcomes": 8,
