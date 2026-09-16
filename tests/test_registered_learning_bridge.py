@@ -30,17 +30,27 @@ def observations(tmp_path, *, inherited=(), reserve=0):
         replace(s, species_ref=target, level=40) if s.species_ref == source else s
         for s in before.collection_observation.specimens
     )
-    after = replace(before, collection_observation=replace(
-        before.collection_observation,
-        owned_species=before.collection_observation.owned_species | {target}, specimens=specimens,
-    ))
+    after = replace(
+        before,
+        collection_observation=replace(
+            before.collection_observation,
+            owned_species=before.collection_observation.owned_species | {target},
+            specimens=specimens,
+        ),
+    )
     return runtime, before, after, policy
 
 
 def score(before, after, kind=GoalKind.EVOLVE_SPECIES, succeeded=True):
     return red_registered_outcome_from_observations(
-        before.public_dict(), after.public_dict(), selected_kind=kind, succeeded=succeeded,
-        actions=20, frames=200, maximum_actions=100, maximum_frames=1000,
+        before.public_dict(),
+        after.public_dict(),
+        selected_kind=kind,
+        succeeded=succeeded,
+        actions=20,
+        frames=200,
+        maximum_actions=100,
+        maximum_frames=1000,
     )
 
 
@@ -49,6 +59,7 @@ def test_single_precursor_evolution_preserves_credit_and_scores_only_registratio
     before = project_registered_observation(before, policy)
     after = project_registered_observation(after, policy)
     first, last = before.registered_checkpoint, after.registered_checkpoint
+    assert (red_species_ref(44), red_species_ref(45)) in first.allowed_evolutions
     require_living_collection_transition(first, last, selected_kind=GoalKind.EVOLVE_SPECIES)
     assert red_species_ref(77) not in dict(last.specimen_counts)
     assert red_species_ref(77) in last.global_species
@@ -77,15 +88,22 @@ def test_inherited_registration_is_not_local_stock_or_new_novelty(tmp_path):
 def test_duplicates_legal_without_novelty_or_intrinsic_penalty(tmp_path):
     _, before, _, policy = observations(tmp_path)
     specimen = before.collection_observation.specimens[-1]
-    after = replace(before, capture_item_count=before.capture_item_count - 1,
-        collection_observation=replace(before.collection_observation, specimens=(
-            *before.collection_observation.specimens,
-            replace(specimen, slot_index=1, location=CollectionLocation.BOX),
-        )))
+    after = replace(
+        before,
+        capture_item_count=before.capture_item_count - 1,
+        collection_observation=replace(
+            before.collection_observation,
+            specimens=(
+                *before.collection_observation.specimens,
+                replace(specimen, slot_index=1, location=CollectionLocation.BOX),
+            ),
+        ),
+    )
     first = project_registered_observation(before, policy)
     last = project_registered_observation(after, policy)
     require_living_collection_transition(
-        first.registered_checkpoint, last.registered_checkpoint,
+        first.registered_checkpoint,
+        last.registered_checkpoint,
         selected_kind=GoalKind.ACQUIRE_SPECIES,
     )
     outcome = score(first, last, GoalKind.ACQUIRE_SPECIES)
@@ -102,18 +120,28 @@ def test_protected_last_copy_cannot_evolve(tmp_path):
 
 def test_lost_local_registration_and_unexplained_specimen_loss_rejected(tmp_path):
     _, before, after, policy = observations(tmp_path)
-    lost = replace(after, collection_observation=replace(
-        after.collection_observation,
-        owned_species=after.collection_observation.owned_species - {red_species_ref(77)},
-    ))
+    lost = replace(
+        after,
+        collection_observation=replace(
+            after.collection_observation,
+            owned_species=after.collection_observation.owned_species - {red_species_ref(77)},
+        ),
+    )
     with pytest.raises(ValueError, match="lost local owned"):
         project_registered_observation(lost, policy)
-    lost = replace(before, collection_observation=replace(
-        before.collection_observation, specimens=before.collection_observation.specimens[:-1],
-    ))
+    lost = replace(
+        before,
+        collection_observation=replace(
+            before.collection_observation,
+            specimens=before.collection_observation.specimens[:-1],
+        ),
+    )
     with pytest.raises(GoalManagerCompositionError, match="undeclared specimen"):
-        score(project_registered_observation(before, policy),
-              project_registered_observation(lost, policy), succeeded=False)
+        score(
+            project_registered_observation(before, policy),
+            project_registered_observation(lost, policy),
+            succeeded=False,
+        )
 
 
 def test_checkpoint_roundtrip_keeps_three_views_and_detects_tampering(tmp_path):
@@ -123,8 +151,10 @@ def test_checkpoint_roundtrip_keeps_three_views_and_detects_tampering(tmp_path):
     assert RegisteredCollectionCheckpoint.from_public(doc) == checkpoint
     assert "required_specimens_remaining" not in doc
     for key, value in (
-        ("registered_species", 999), ("binding_sha256", "bad"),
-        ("local_registered_species", 999), ("objective", "living"),
+        ("registered_species", 999),
+        ("binding_sha256", "bad"),
+        ("local_registered_species", 999),
+        ("objective", "living"),
         ("required_registrations_sha256", "0" * 64),
         ("extra", "ignored-field"),
     ):
@@ -164,8 +194,14 @@ def test_registered_outcome_cannot_accept_legacy_labels_or_unbound_counter(tmp_p
     doc["semantic_observation"]["collection"]["registered"] += 1
     with pytest.raises(ValueError, match="projected counts"):
         red_registered_outcome_from_observations(
-            doc, new.public_dict(), selected_kind=GoalKind.ACQUIRE_SPECIES, succeeded=False,
-            actions=1, frames=1, maximum_actions=10, maximum_frames=10,
+            doc,
+            new.public_dict(),
+            selected_kind=GoalKind.ACQUIRE_SPECIES,
+            succeeded=False,
+            actions=1,
+            frames=1,
+            maximum_actions=10,
+            maximum_frames=10,
         )
 
 
@@ -188,10 +224,14 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
         document = dict(plan.document)
         document.update(
             schema=REGISTERED_TRAINING_PLAN_SCHEMA,
-            objective=REGISTERED_OBJECTIVE, registration_binding_sha256=policy.sha256,
-            maximum_actions=30_000, maximum_frames=3_000_000,
-            origin_state_sha256="a" * 64, origin_envelope_sha256="b" * 64,
-            restore_profile_sha256="c" * 64, continuation_episode_id="parent",
+            objective=REGISTERED_OBJECTIVE,
+            registration_binding_sha256=policy.sha256,
+            maximum_actions=30_000,
+            maximum_frames=3_000_000,
+            origin_state_sha256="a" * 64,
+            origin_envelope_sha256="b" * 64,
+            restore_profile_sha256="c" * 64,
+            continuation_episode_id="parent",
             continuation_checkpoint_sha256="d" * 64,
         )
         return RedPlayerTrainingPlan(document)
@@ -210,13 +250,18 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
     assert dataset.examples[0].outcome.completion_gain == 0
 
     def corrupt(streams):
-        event = next(e for e in streams["events"]
-                     if e["kind"] == "living_dex_player_training_outcome")
+        event = next(
+            e for e in streams["events"] if e["kind"] == "living_dex_player_training_outcome"
+        )
         event["payload"]["before"]["registration"]["binding_sha256"] = "f" * 64
 
     with pytest.raises(ValueError, match="binding differs"):
-        _episode(tmp_path / "tampered", plan_transform=declare,
-                 registration_observations=pair, mutate=corrupt)
+        _episode(
+            tmp_path / "tampered",
+            plan_transform=declare,
+            registration_observations=pair,
+            mutate=corrupt,
+        )
 
     from pokemon_red_completion.living_dex_goal_model_record import LivingDexGoalModelRecord
     from pokemon_red_completion.red_player_model import load_player_goal_model_record_bytes
@@ -224,10 +269,14 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
         RedPlayerEpisodeInput,
         fit_red_player_update,
     )
+
     (tmp_path / "fitting").mkdir()
     store, plan, behavior, completed = _episode(
-        tmp_path / "fitting", plan_transform=declare, registration_observations=pair,
-        return_inputs=True, repeat_registered_choice=True,
+        tmp_path / "fitting",
+        plan_transform=declare,
+        registration_observations=pair,
+        return_inputs=True,
+        repeat_registered_choice=True,
     )
     prior = LivingDexGoalModelRecord(behavior, "a" * 64, "b" * 40, "c" * 64, 1, 1)
     request = RedPlayerEpisodeInput(plan, "goal-episode-1", completed.manifest_sha256, prior)
@@ -236,8 +285,12 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
         lambda _: pytest.fail("registered fitting opened the historical corpus"),
     )
     fit = fit_red_player_update(
-        store, prior=prior, episodes=(request,), source_commit="b" * 40,
-        source_bundle_sha256="c" * 64, registered_objective=True,
+        store,
+        prior=prior,
+        episodes=(request,),
+        source_commit="b" * 40,
+        source_bundle_sha256="c" * 64,
+        registered_objective=True,
     )
     assert fit["new_settled_examples"] == 2
     assert fit["historical_rewards_reused"] is False
@@ -248,14 +301,26 @@ def test_registered_training_events_reconstruct_targets_and_reject_tampering(tmp
     loaded = load_player_goal_model_record_bytes(record.read_bytes(), expected_model_sha256=sha)
     assert loaded.objective == REGISTERED_OBJECTIVE
     from pokemon_red_completion.red_player_incremental_fit import load_prior_player_inventory
+
     retained, regional = load_prior_player_inventory(store, loaded, lambda _: prior)
     assert retained == (request,) and regional == ()
     with pytest.raises(ValueError, match="additional settled"):
-        fit_red_player_update(store, prior=loaded, episodes=(request,),
-            source_commit="b" * 40, source_bundle_sha256="c" * 64, registered_objective=True)
+        fit_red_player_update(
+            store,
+            prior=loaded,
+            episodes=(request,),
+            source_commit="b" * 40,
+            source_bundle_sha256="c" * 64,
+            registered_objective=True,
+        )
     with pytest.raises(ValueError, match="legacy fitting cannot consume"):
-        fit_red_player_update(store, prior=loaded, episodes=(request,),
-            source_commit="b" * 40, source_bundle_sha256="c" * 64)
+        fit_red_player_update(
+            store,
+            prior=loaded,
+            episodes=(request,),
+            source_commit="b" * 40,
+            source_bundle_sha256="c" * 64,
+        )
 
 
 def test_registered_plan_requires_real_continuation_parent(tmp_path):
@@ -269,19 +334,26 @@ def test_registered_plan_requires_real_continuation_parent(tmp_path):
     )
     from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
 
-    plan = RedPlayerTrainingPlan({
-        **_plan(_supply_model()).document,
-        "schema": REGISTERED_TRAINING_PLAN_SCHEMA, "objective": REGISTERED_OBJECTIVE,
-        "registration_binding_sha256": "a" * 64,
-        "maximum_actions": 30_000, "maximum_frames": 3_000_000,
-        "origin_state_sha256": "a" * 64, "origin_envelope_sha256": "b" * 64,
-        "restore_profile_sha256": "c" * 64, "continuation_episode_id": "parent",
-        "continuation_checkpoint_sha256": "d" * 64,
-    })
+    plan = RedPlayerTrainingPlan(
+        {
+            **_plan(_supply_model()).document,
+            "schema": REGISTERED_TRAINING_PLAN_SCHEMA,
+            "objective": REGISTERED_OBJECTIVE,
+            "registration_binding_sha256": "a" * 64,
+            "maximum_actions": 30_000,
+            "maximum_frames": 3_000_000,
+            "origin_state_sha256": "a" * 64,
+            "origin_envelope_sha256": "b" * 64,
+            "restore_profile_sha256": "c" * 64,
+            "continuation_episode_id": "parent",
+            "continuation_checkpoint_sha256": "d" * 64,
+        }
+    )
     assert plan.maximum_actions == 30_000 and plan.maximum_frames == 3_000_000
     with pytest.raises(ValueError, match="continued training checkpoint"):
         _require_continuation_origin(
-            SimpleNamespace(find_sealed_record=lambda *_a, **_k: None), plan,
+            SimpleNamespace(find_sealed_record=lambda *_a, **_k: None),
+            plan,
         )
 
 
@@ -296,16 +368,18 @@ def test_direct_registered_plan_does_not_require_a_fabricated_parent(tmp_path):
     )
     from pokemon_red_completion.registered_collection import REGISTERED_OBJECTIVE
 
-    plan = RedPlayerTrainingPlan({
-        **_plan(_supply_model()).document,
-        "schema": DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
-        "objective": REGISTERED_OBJECTIVE,
-        "registration_binding_sha256": "a" * 64,
-        "maximum_actions": 30_000,
-        "maximum_frames": 3_000_000,
-        "origin_profile_sha256": "b" * 64,
-        "root_pair_claim_sha256": "c" * 64,
-    })
+    plan = RedPlayerTrainingPlan(
+        {
+            **_plan(_supply_model()).document,
+            "schema": DIRECT_REGISTERED_TRAINING_PLAN_SCHEMA,
+            "objective": REGISTERED_OBJECTIVE,
+            "registration_binding_sha256": "a" * 64,
+            "maximum_actions": 30_000,
+            "maximum_frames": 3_000_000,
+            "origin_profile_sha256": "b" * 64,
+            "root_pair_claim_sha256": "c" * 64,
+        }
+    )
     _require_continuation_origin(
         SimpleNamespace(
             find_sealed_record=lambda *_a, **_k: pytest.fail("opened a parent checkpoint")
@@ -334,9 +408,17 @@ def test_registered_terminal_roundtrip_and_legacy_disguise_rejected(tmp_path):
         store, arguments, observed = checkpoint_case.__wrapped__(folder)
         observed = replace(observed, collection=collection)
         result = arguments["result"]
-        arguments.update(observe=lambda value=observed: value, result=replace(result, steps=(
-            replace(result.steps[0], collection_before=collection, collection_after=collection),
-        )))
+        arguments.update(
+            observe=lambda value=observed: value,
+            result=replace(
+                result,
+                steps=(
+                    replace(
+                        result.steps[0], collection_before=collection, collection_after=collection
+                    ),
+                ),
+            ),
+        )
         document = capture_red_player_terminal(**arguments)
         assert document["schema"] == REGISTERED_PLAYER_CHECKPOINT_SCHEMA
         if legacy_disguise:
