@@ -3,13 +3,13 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model125-prerequisites-and-cubone**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model126-bounded-region-and-funding**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
 ## Current milestone
 
-**Broaden model-directed Red collection: 26/26 acceptance items (100%).**
+**Broaden model-directed Red collection: 29/29 acceptance items (100%).**
 This is a checklist, not project completion or a remaining-time estimate.
 
 - [x] Publish the earned state as a durable fitted-model restart ([evidence](../docs/evidence/red-model108-adaptive-fishing-loop-2026-09-12.json))
@@ -38,8 +38,11 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Execute and fit Model119's frozen field restoration, preserving the wrapper correction ([evidence](../docs/evidence/red-model120-frozen-field-restore-2026-09-13.json))
 - [x] Retain the unrecorded Model120 sample without redraw and harden the next freeze ([evidence](../docs/evidence/red-model120-freeze-instrumentation-failure-2026-09-14.json))
 - [x] Execute and fit Model120's crash-safe frozen trainer resupply ([evidence](../docs/evidence/red-model121-frozen-resupply-2026-09-14.json))
+- [x] Bound regional route inventory without weakening full verification ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
+- [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
+- [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **125 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **126 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -89,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model126-bounded-region-and-funding
+
+Nearby-first bounded inventory produced a four-option action-free menu in about18 seconds. Model125 selected finite income, earned720 in42 actions/3925 frames and fitted Model126 at126 examples/87 successes. Cash is948; Red remains91/124 with72 specimens.
+
+**Deviation:** The model chose economy rather than collection and that real decision was retained. The payout is one finite ordinary trainer, not renewable League evidence. No retry, teacher choice, support action, authority promotion, full-Red gate or GitHub push occurred.
+
+**Next:** Sol High, Fast off: permit at most one Model126 choice from the already verified four-option terminal and retain its actual result. Keep partial-League reset as a separate prerequisite.
 
 ### 2026-09-16-model125-prerequisites-and-cubone
 

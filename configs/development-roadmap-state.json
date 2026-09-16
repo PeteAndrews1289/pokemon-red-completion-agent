@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model125-prerequisites-and-cubone",
+  "as_of_session": "2026-09-16-model126-bounded-region-and-funding",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json"
+      "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -203,6 +203,24 @@
         "label": "Execute and fit Model120's crash-safe frozen trainer resupply",
         "done": true,
         "evidence": "docs/evidence/red-model121-frozen-resupply-2026-09-14.json"
+      },
+      {
+        "id": "bounded-regional-inventory",
+        "label": "Bound regional route inventory without weakening full verification",
+        "done": true,
+        "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+      },
+      {
+        "id": "model125-finite-income-choice",
+        "label": "Retain one autonomous finite-income choice from a real multi-option menu",
+        "done": true,
+        "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+      },
+      {
+        "id": "model126-fit-and-next-menu",
+        "label": "Fit the measured outcome and verify Model126's next action-free menu",
+        "done": true,
+        "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
       }
     ]
   },
@@ -1520,6 +1538,12 @@
       "result": "Two retained autonomous choices fitted Model125 at125 examples/86 successes. Nonlearning storage safety created19 box slots, Model125 chose Pokemon Tower from four capture routes, and exact-state support caught Cubone without replaying the route. Red reached91/124 registrations and72 specimens.",
       "deviation": "The capture adapter's generic failure did not retain its nested cause, so the failed outcome remains failed and excluded. A separate authenticated support continuation resumed only the exact battle with zero model queries or teacher choices. No full-Red gate or formal authority promotion changed.",
       "next": "Bound action-free regional inventory by reachable-region priority, then allow at most one new Model125 choice from the exact91-registration terminal. Qualify partial-League reset separately; do not sell items or publish to GitHub."
+    },
+    {
+      "session": "2026-09-16-model126-bounded-region-and-funding",
+      "result": "Nearby-first bounded inventory produced a four-option action-free menu in about18 seconds. Model125 selected finite income, earned720 in42 actions/3925 frames and fitted Model126 at126 examples/87 successes. Cash is948; Red remains91/124 with72 specimens.",
+      "deviation": "The model chose economy rather than collection and that real decision was retained. The payout is one finite ordinary trainer, not renewable League evidence. No retry, teacher choice, support action, authority promotion, full-Red gate or GitHub push occurred.",
+      "next": "Sol High, Fast off: permit at most one Model126 choice from the already verified four-option terminal and retain its actual result. Keep partial-League reset as a separate prerequisite."
     }
   ],
   "closed_milestones": [
@@ -2165,6 +2189,32 @@
       "session": "2026-09-16-model125-prerequisites-and-cubone",
       "stage": "red-collection",
       "closure": "Model125 selected Pokemon Tower from four capture routes; exact-state support caught Cubone without replaying the route. Collection reached 91 registrations. Post-capture regional inventory latency is the next blocker."
+    },
+    {
+      "title": "Bounded regional inventory and autonomous funding",
+      "items": [
+        {
+          "id": "bounded-nearby-regional-scan",
+          "label": "Produce real regional alternatives under a deterministic source budget",
+          "done": true,
+          "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+        },
+        {
+          "id": "autonomous-finite-income",
+          "label": "Retain the model's finite-income choice and exact payout",
+          "done": true,
+          "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+        },
+        {
+          "id": "model126-next-menu",
+          "label": "Fit Model126 and verify its next multi-option terminal",
+          "done": true,
+          "evidence": "docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json"
+        }
+      ],
+      "session": "2026-09-16-model126-bounded-region-and-funding",
+      "stage": "red-collection",
+      "closure": "Model126 has126 settled examples/87 successes. Red remains91/124 with948 cash and an action-free four-option continuation ready."
     }
   ]
 }

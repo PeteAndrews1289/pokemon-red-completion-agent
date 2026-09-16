@@ -1,0 +1,184 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session": "2026-09-16-model126-bounded-region-and-funding",
+  "rigor": "correlated-development",
+  "status": "fit_complete_bounded_only",
+  "source_commit": "70bf304178a92dddf435f0d79e2b755a5d4410e8",
+  "implementation": {
+    "capability": "deterministic_nearby_first_regional_acquisition_inventory",
+    "target_verified_candidates": 4,
+    "maximum_routed_source_evaluations": 8,
+    "fly_aware": true,
+    "wall_clock_stop_used": false,
+    "full_route_verification_required": true,
+    "identity_bearing_policy_features": 0
+  },
+  "exact_state_preflight": {
+    "parent_state_sha256": "3b30ec3959c53279861ae33ee35c2310a18c3e224ae405be7fbfaf41809f6e86",
+    "status": "verified_action_free",
+    "elapsed_seconds": 18.355,
+    "prior_attempt_exceeded_seconds": 60,
+    "actions": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "available_candidates": 4,
+    "distinct_option_kinds": 2,
+    "candidate_kinds": [
+      "acquire_species",
+      "acquire_species",
+      "resupply",
+      "acquire_species"
+    ],
+    "public_identity_fields": 0,
+    "private_binding_fields": 0
+  },
+  "autonomous_outcome": {
+    "result_sha256": "36b9ebbf0ec6288927f76ee3611f6aadf14bf6504d4d2b7389b9c4bf76a12826",
+    "behavior_model_sha256": "6d3bfe033525f27dfb08ab01b7645591199a1eb02c5fe2f18fb10e5319724f7c",
+    "model_decisions": 1,
+    "support_decisions": 0,
+    "teacher_actions": 0,
+    "selected_option_kind": "resupply",
+    "selected_probability": 0.6950453540204357,
+    "actions": 42,
+    "frames": 3925,
+    "cash_before": 228,
+    "cash_after": 948,
+    "ordinary_trainer_payout": 720,
+    "finite_income": true,
+    "registrations_before": 91,
+    "registrations_after": 91,
+    "specimens_before": 72,
+    "specimens_after": 72,
+    "verification": "succeeded",
+    "safe_terminal": true,
+    "terminal_state_sha256": "2224ab7b599d93a91f9febc23ce94342d2ecc73bc13a0bc25bc54b0ebb6b0d28",
+    "learning_eligible": true
+  },
+  "fit": {
+    "result_sha256": "9979091e9c6b5a0f96f0154749a613d5627153ab31984ccf82a45a13f957f497",
+    "new_measured_source_examples": 1,
+    "new_settled_examples": 1,
+    "replayed_actions": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "fit_report": {
+      "measured_choice_examples": 1,
+      "total_examples": 126,
+      "settled_examples": 126,
+      "successful_examples": 87,
+      "economy_qualified_examples": 47,
+      "weighted_mse_before": 0.0308312420552826,
+      "weighted_mse_after": 0.011580663915516314
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "model_sha256": "29cad72ebad0c060b28003b9da29fd469b7b225ed1827716871577fe5d1012b6",
+      "file_sha256": "590e484f8d0790767863546542689cb2b9d7e4b8c9dcb40613eaaf2f1fb059d1",
+      "prior_model_sha256": "6d3bfe033525f27dfb08ab01b7645591199a1eb02c5fe2f18fb10e5319724f7c",
+      "settled_examples": 126,
+      "successful_examples": 87,
+      "economy_qualified_examples": 47,
+      "weighted_mse_before": 0.0308312420552826,
+      "weighted_mse_after": 0.011580663915516314,
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "prior_train_error": {
+      "weighted_mse": 0.0308312420552826
+    },
+    "updated_train_error": {
+      "weighted_mse": 0.011580663915516314
+    }
+  },
+  "completed_episode": {
+    "status": "one_retained_autonomous_choice_admitted",
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {
+    "teacher_labels": 0,
+    "observer_actions": 0,
+    "observer_frames": 0
+  },
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "next_menu": {
+    "state_sha256": "2224ab7b599d93a91f9febc23ce94342d2ecc73bc13a0bc25bc54b0ebb6b0d28",
+    "status": "verified_action_free",
+    "cash": 948,
+    "registered": 91,
+    "specimens": 72,
+    "available_candidates": 4,
+    "distinct_option_kinds": 2,
+    "candidate_kinds": [
+      "resupply",
+      "acquire_species",
+      "acquire_species",
+      "acquire_species"
+    ],
+    "actions": 0,
+    "frames": 0,
+    "model_queries": 0,
+    "public_identity_fields": 0,
+    "private_binding_fields": 0
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "teacher_actions": 0,
+    "replayed_actions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0
+  },
+  "validation": {
+    "focused_tests_passed": 254,
+    "regional_tests_passed": 40,
+    "mypy_modules_checked": 516,
+    "mypy": "passed",
+    "ruff": "passed",
+    "public_artifacts": "passed",
+    "docs": "passed",
+    "registry": "current",
+    "product_focus": "passed"
+  },
+  "reviewers": {
+    "flash": "Gemini 3.8 Flash High returned GO; its discrete-budget, fail-closed and Fly-aware requirements were implemented and tested.",
+    "claude": "not used",
+    "quota": "not refreshed or displayed"
+  },
+  "limitations": [
+    "This is correlated bounded development, not an independent evaluation or authority promotion.",
+    "Red remains at 91/124 selected-route registrations; no fresh-start, Champion or Hall-of-Fame gate is claimed.",
+    "The earned 720 payout is finite ordinary-trainer income, not renewable League qualification.",
+    "No ROM hack, Crystal execution, full replay, teacher choice, item sale or GitHub push occurred."
+  ],
+  "publication": {
+    "github_push": false
+  }
+}

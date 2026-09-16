@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Bound regional option inventory by reachable-region priority, then rebuild a real multi-choice menu from the exact 91-registration terminal. Separately qualify a legitimate partial-League exit/reset before offering renewable income.
+- Next decision: Execute at most one Model126 choice from the verified four-option terminal, retaining the actual outcome. Separately qualify partial-League exit/reset before any renewable-income offer.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model125 has 125 settled examples / 86 successes. It selected a Pokemon Tower acquisition from four executable capture routes after nonlearning storage safety. The development save has 91/124 registrations and 72 specimens; exact-state recovery retained the selected Cubone but is not learning evidence. |
+| Authority now | Model126 has 126 settled examples / 87 successes. Model125 selected and completed a finite trainer-income goal from four executable choices. The safe development save has 91/124 registrations, 72 specimens and 948 cash. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
+| Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable option families before a model query, or one bounded model choice cannot retain its real outcome and cost. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 125 | 12 |
+| Registered Train Example · train | 126 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model125-prerequisites-and-cubone** · status **closed** · evidence [model fit](docs/evidence/red-model125-autonomous-prerequisites-and-cubone-2026-09-16.json)
+**2026-09-16-model126-bounded-region-and-funding** · status **closed** · evidence [model fit](docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The player now chooses destinations after resource and storage prerequisites rather than following a teacher route. The session added one legitimate registration and preserved failures, costs and model authority boundaries. |
-| Learning output | The two retained on-policy outcomes were admitted and fit with no replay, producing Model125 at 125 settled examples / 86 successes. Deterministic storage safety was excluded from learning. The Cubone recovery also remains excluded. |
-| Authority delta | Model125 independently selected a real Pokemon Tower capture route after deterministic storage safety created headroom. Its exact Cubone encounter was retained through a controller failure and completed without replaying the route; the recovery is collection progress but not a training row or authority promotion. |
-| Transfer result | ROM-free tests cover typed failure retention and generic exact-state capture recovery. No later-title or independent transfer result. |
-| Blocker | From the earned 91-registration indoor terminal, action-free global regional route enumeration exceeded one minute before producing a menu. Ordinary trainer income is unavailable and the partial League flag pattern is not a qualified renewable-income origin. |
-| Decision | Bound regional option inventory by reachable-region priority, then rebuild a real multi-choice menu from the exact 91-registration terminal. Separately qualify a legitimate partial-League exit/reset before offering renewable income. |
-| Next session | Sol High, Fast off, 1-2 hours: bound post-capture route inventory, verify an action-free multi-choice menu, then permit at most one further Model125 decision from the exact Cubone terminal. |
-| Next falsifier | A reachability-prioritized inventory cannot expose at least two executable choices from the unchanged 91-registration terminal within a short action-free time box, or it changes the menu's game state. |
-| Stop condition | Stop if bounded inventory cannot yield real alternatives, changes state, requires identity-bearing model features, substitutes a teacher choice, replays the route, resets completed gameplay, starts a full run, opens ROM-hack/Crystal work or publishes to GitHub. |
+| Product alignment | A deterministic nearby-first inventory replaced a global scan, then the model made and learned from a real economy decision rather than following a teacher route. |
+| Learning output | One fresh on-policy economy outcome was admitted and fitted with no replay, producing Model126 at 126 settled examples / 87 successes and 47 economy-qualified examples. |
+| Authority delta | Model125 independently chose a legitimate finite-income goal from four identity-free executable choices, earned 720 from a real trainer battle and retained a safe terminal. The measured choice fitted Model126 without replay or promotion. |
+| Transfer result | Topology-ranked bounded inventory is title-neutral in structure and now handles observed Fly origins, but no later-title or independent transfer result exists. |
+| Blocker | Red remains at 91/124 registrations. The next menu is healthy, but renewable League income is still prohibited because the partial-League exit/reset boundary is not qualified. |
+| Decision | Permit at most one Model126 choice from the already verified four-option terminal and retain its actual outcome. Keep finite ordinary income distinct from renewable League funding. |
+| Next session | Sol High, Fast off, about 1 hour: execute at most one Model126 choice from the verified four-option terminal, retain its actual result, and fit it only if eligible. |
+| Next falsifier | The verified Model126 terminal cannot retain one selected acquisition or finite-income result without a teacher choice, retry, identity feature or unsafe terminal. |
+| Stop condition | Stop if the menu loses real plurality, changes state before selection, requires identity-bearing features, substitutes a teacher choice, retries an outcome, starts a full run, opens ROM-hack/Crystal work or publishes to GitHub. |
 
 ### Stop conditions
 
