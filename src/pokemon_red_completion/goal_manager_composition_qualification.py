@@ -183,6 +183,10 @@ class HardCompositionActionLimiter:
         return self._completed_actions
 
     @property
+    def delegate(self) -> ActionExecutor:
+        return self._delegate
+
+    @property
     def attempted_actions_this_decision(self) -> int:
         return self.attempted_actions - self._window_start
 

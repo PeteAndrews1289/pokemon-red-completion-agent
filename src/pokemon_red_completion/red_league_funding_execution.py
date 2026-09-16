@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from collections import Counter
 from dataclasses import dataclass, replace
-from typing import TYPE_CHECKING, NoReturn
+from typing import TYPE_CHECKING, NoReturn, cast
 
 from .actions import MacroAction, MacroActionKind
 from .executor import CountingExecutor, FrameSafeExecutor, WindowedFrameBudgetController
@@ -133,8 +133,11 @@ class _CampaignActionCompiler:
 
     caller: CountingExecutor
     bounded: FrameSafeExecutor
+    through_caller: bool = False
 
     def execute(self, action: MacroAction) -> object:
+        if self.through_caller:
+            return self.caller.execute(action)
         result = self.bounded.execute(action)
         self.caller.actions_executed += 1
         return result
@@ -388,9 +391,12 @@ def execute_red_league_funding(
     for name, value in (("maximum_actions", maximum_actions), ("maximum_frames", maximum_frames)):
         if type(value) is not int or value <= 0:  # noqa: E721
             raise ValueError(f"{name} must be a positive integer")
+    delegate = actions.delegate
+    nested = isinstance(delegate, HardCompositionActionLimiter)
+    frame_safe = cast(HardCompositionActionLimiter, delegate).delegate if nested else delegate
     if (
-        not isinstance(actions.delegate, FrameSafeExecutor)
-        or actions.delegate.controller is not runtime.emulator
+        not isinstance(frame_safe, FrameSafeExecutor)
+        or frame_safe.controller is not runtime.emulator
     ):
         raise TypeError("League funding requires one direct frame-safe controller chain")
     if not isinstance(binding, RedLeagueFundingExecutionBinding):
@@ -450,7 +456,8 @@ def execute_red_league_funding(
     limiter = HardCompositionActionLimiter(
         _CampaignActionCompiler(
             actions,
-            FrameSafeExecutor(frame_limiter, actions.delegate.timing),
+            FrameSafeExecutor(frame_limiter, frame_safe.timing),
+            through_caller=nested,
         ),
         maximum_actions_per_decision=maximum_actions,
         maximum_episode_actions=maximum_actions,

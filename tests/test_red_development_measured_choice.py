@@ -40,6 +40,7 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
 from pokemon_red_completion.provenance import canonical_sha256
+from pokemon_red_completion.red_autonomous_learning import publish_autonomous_measured_choice
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_development_measured_choice import (
     DEVELOPMENT_MEASURED_CHOICE_KIND,
@@ -1180,7 +1181,6 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert choice.authority_promotion_eligible is False
     assert choice.teacher_labels == 0
     assert choice.training_only is True
-
     pub = choice.public_dict()
     assert pub["schema"] == DEVELOPMENT_MEASURED_CHOICE_SCHEMA
     assert pub["choice_id"] == "safari-choice-kangaskhan"
@@ -1198,13 +1198,11 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
         "storage_cost": 0.0,
     }
 
-    # Deserialization round-trip
     restored = RedDevelopmentMeasuredChoice.from_public(pub)
     assert restored.public_dict() == pub
     assert restored.record_sha256 == choice.record_sha256
     assert restored.decision_sha256 == choice.decision_sha256
 
-    # Arm conversion
     arm = choice.to_observed_arm_example()
     assert arm.partition == "train"
     assert arm.decision_sha256 == choice.decision_sha256
@@ -1212,6 +1210,123 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert arm.outcome.target_vector is not None
     assert arm.outcome.action_cost == 150 / 30_000
     assert arm.outcome.frame_cost == 2400 / 3_000_000
+
+
+def test_autonomous_choice_is_admitted_without_replaying_actions(tmp_path, monkeypatch):
+    store, _, _, behavior = _bootstrap_registered_model(tmp_path / "registered", monkeypatch)
+    behavior = replace(behavior, model=_live_model())
+    base = _valid_choice(
+        tmp_path / "choice",
+        model_sha256=behavior.model.model_sha256,
+        behavior=behavior.model,
+    )
+    menu = replace(
+        base.menu,
+        context=replace(
+            base.menu.context,
+            economy_snapshot=EconomySnapshot(1000, ()),
+            target_cash=1000,
+        ),
+    )
+    seed = 0
+    scores, probabilities, selected_index = _replay_behavior(behavior.model, menu, seed=seed)
+    while selected_index != 0:
+        seed += 1
+        scores, probabilities, selected_index = _replay_behavior(behavior.model, menu, seed=seed)
+    selected_kind = base.selected_goal_kind.value
+    intent = {
+        "menu": {
+            "menu": menu.policy_dict(),
+            "menu_sha256": menu.policy_sha256,
+        },
+        "model_sha256": behavior.model.model_sha256,
+        "query_may_be_consumed": True,
+        "selection_seed": seed,
+        "state_sha256": base.parent_state_sha256,
+    }
+    decision = {
+        "actions_executed": 0,
+        "candidate_count": len(menu.candidates),
+        "emulator_frames": 0,
+        "menu_sha256": menu.policy_sha256,
+        "mode": "model_exploration",
+        "model_sha256": behavior.model.model_sha256,
+        "policy_id": RED_LIVE_MIXED_OPTION_POLICY,
+        "private_binding_fields": 0,
+        "private_path_fields": 0,
+        "probabilities": list(probabilities),
+        "schema": "pokemon.red.live-mixed-option-choice.v1",
+        "scores": list(scores),
+        "selected_candidate_index": selected_index,
+        "selected_option_kind": menu.candidates[selected_index].features.kind.value,
+        "teacher_labels": 0,
+    }
+    outcome = {
+        "after": {"actions": 150, "frames": 2400},
+        "before": {"actions": 0, "frames": 0},
+        "before_state_sha256": base.parent_state_sha256,
+        "choice": decision,
+        "error": None,
+        "error_type": None,
+        "ordinal": 0,
+        "safe_terminal": True,
+        "selected_kind": selected_kind,
+        "terminal_state_sha256": base.terminal_state_sha256,
+        "verification": "succeeded",
+    }
+    measured, result = publish_autonomous_measured_choice(
+        store,
+        behavior=behavior,
+        run_id="autonomous-test",
+        ordinal=0,
+        intent=intent,
+        decision=decision,
+        outcome=outcome,
+        before_observation=base.before_observation,
+        after_observation=base.after_observation,
+        before_economy=EconomySnapshot(1000, ()),
+        after_economy=EconomySnapshot(1000, ()),
+        autonomous_plan_sha256="4" * 64,
+        autonomous_result_sha256="5" * 64,
+        intent_sha256="6" * 64,
+        decision_sha256="7" * 64,
+        outcome_sha256="8" * 64,
+        source_commit="9" * 40,
+        source_bundle_sha256="a" * 64,
+    )
+
+    example = load_red_development_measured_choice_example(
+        store, measured, objective=REGISTERED_OBJECTIVE
+    )
+    assert example.outcome.verified_success is True
+    assert example.outcome.action_cost == 150 / 30_000
+    assert result["eligible_examples"] == 1
+    assert result["action_trace_available"] is False
+    assert result["authority_promotion_eligible"] is False
+
+    altered = deepcopy(outcome)
+    altered["terminal_state_sha256"] = "0" * 64
+    with pytest.raises(Exception, match="already exists with different content"):
+        publish_autonomous_measured_choice(
+            store,
+            behavior=behavior,
+            run_id="autonomous-test",
+            ordinal=0,
+            intent=intent,
+            decision=decision,
+            outcome=altered,
+            before_observation=base.before_observation,
+            after_observation=base.after_observation,
+            before_economy=EconomySnapshot(1000, ()),
+            after_economy=EconomySnapshot(1000, ()),
+            autonomous_plan_sha256="4" * 64,
+            autonomous_result_sha256="5" * 64,
+            intent_sha256="6" * 64,
+            decision_sha256="7" * 64,
+            outcome_sha256="0" * 64,
+            source_commit="9" * 40,
+            source_bundle_sha256="a" * 64,
+        )
 
 
 def test_fishing_measured_choice_roundtrip(tmp_path):

@@ -101,9 +101,9 @@ def fixture(monkeypatch):
         emulator=emulator,
         adapter=SimpleNamespace(observe=lambda: state),
         provider_for=lambda *_: provider,
-        profile=SimpleNamespace(providers=(
-            SimpleNamespace(kind=GoalKind.RESUPPLY, parameters={}),
-        )),
+        profile=SimpleNamespace(
+            providers=(SimpleNamespace(kind=GoalKind.RESUPPLY, parameters={}),)
+        ),
     )
     router = SimpleNamespace(
         runtime=runtime,
@@ -202,16 +202,27 @@ def resource_choice_fixture(monkeypatch, *, money=400, stock=0, enabled=True):
     provider.adapter.config = SimpleNamespace(desired_capture_items=5)
     router.runtime.profile.providers[0].parameters["resource_choice_variants"] = enabled
     buy = ExecutableGoalBinding(
-        "affordable-buy", GoalKind.RESUPPLY, 0.1, 0.05,
-        lambda: GoalExecutionReport(0, 0, {}), lambda _: GoalVerification.succeeded(),
-        resource_quote=GoalResourceQuote(money, 200, (
-            GoalResourceReserve("capture", stock, 5, 1),
-        )),
+        "affordable-buy",
+        GoalKind.RESUPPLY,
+        0.1,
+        0.05,
+        lambda: GoalExecutionReport(0, 0, {}),
+        lambda _: GoalVerification.succeeded(),
+        resource_quote=GoalResourceQuote(
+            money, 200, (GoalResourceReserve("capture", stock, 5, 1),)
+        ),
     )
     other = bindings.bindings[0]
-    return router, state, target, GoalBindingSet(
-        (buy.opportunity, other.opportunity), (buy, other),
-    ), calls
+    return (
+        router,
+        state,
+        target,
+        GoalBindingSet(
+            (buy.opportunity, other.opportunity),
+            (buy, other),
+        ),
+        calls,
+    )
 
 
 @pytest.mark.parametrize("money", [200, 400, 999])
@@ -247,9 +258,7 @@ def test_reserve_shortfall_can_compose_partial_trainer_income(monkeypatch):
     # Historical profiles retain the old one-payout affordability contract,
     # allowing their saved semantic states to authenticate under new source.
     assert funding.bind_local_trainer_funding(router, original, state) is original
-    router.runtime.profile.providers[0].parameters[
-        "composable_trainer_funding"
-    ] = True
+    router.runtime.profile.providers[0].parameters["composable_trainer_funding"] = True
 
     offered = funding.bind_local_trainer_funding(router, original, state)
 
@@ -264,8 +273,10 @@ def test_reserve_shortfall_can_compose_partial_trainer_income(monkeypatch):
 @pytest.mark.parametrize("case", ["legacy", "funded", "stocked", "no_trainer", "fainted"])
 def test_resource_variants_do_not_invent_unneeded_or_unsafe_income(monkeypatch, case):
     router, state, _, original, calls = resource_choice_fixture(
-        monkeypatch, money=1000 if case == "funded" else 400,
-        stock=5 if case == "stocked" else 0, enabled=case != "legacy",
+        monkeypatch,
+        money=1000 if case == "funded" else 400,
+        stock=5 if case == "stocked" else 0,
+        enabled=case != "legacy",
     )
     if case == "no_trainer":
         monkeypatch.setattr(funding, "_candidates", lambda _: ())
@@ -290,8 +301,9 @@ def test_observed_route_rejection_stops_before_escort_or_input(monkeypatch):
 
 def test_execution_uses_requalified_approach_not_stale_quoted_plan(monkeypatch):
     router, state, target, bindings, calls = fixture(monkeypatch)
-    revised = replace(target, approach=SimpleNamespace(
-        steps=("observed-safe-step",), terminal_at=(10, 36)))
+    revised = replace(
+        target, approach=SimpleNamespace(steps=("observed-safe-step",), terminal_at=(10, 36))
+    )
     monkeypatch.setattr(funding, "_observed_funding_target", lambda *_: revised)
 
     def travel(plan, *_args, **_kwargs):
@@ -498,17 +510,17 @@ def test_active_recovery_explicitly_qualifies_final_trainer_class(monkeypatch):
     reader = router.runtime.reader
     reader.read_active_trainer_identity = lambda: (247, 47, 1)
     trainer = replace(target.trainer, trainer_class=247, trainer_set=1)
-    monkeypatch.setattr(funding, 'trainer_sight_zones', lambda *_: (trainer,))
+    monkeypatch.setattr(funding, "trainer_sight_zones", lambda *_: (trainer,))
     calls = []
 
     def quote(rom, trainer_class, trainer_set, **kwargs):
         calls.append((rom, trainer_class, trainer_set, kwargs))
         return target.quote
 
-    monkeypatch.setattr(funding, 'trainer_party_quote', quote)
-    result = funding.active_trainer_funding_candidate(b'test', reader)
+    monkeypatch.setattr(funding, "trainer_party_quote", quote)
+    result = funding.active_trainer_funding_candidate(b"test", reader)
     assert result.trainer == trainer
-    assert calls == [(b'test', 247, 1, {'allow_final_class': True})]
+    assert calls == [(b"test", 247, 1, {"allow_final_class": True})]
 
 
 def test_pending_funding_resumes_without_party_menu_route_or_second_interaction(monkeypatch):
@@ -589,6 +601,19 @@ def test_funding_is_unavailable_if_not_a_cash_shortage(monkeypatch, money):
     router, state, _, bindings, calls = fixture(monkeypatch)
     state.raw = replace(state.raw, player_money=money)
     assert funding.bind_local_trainer_funding(router, bindings, state) is bindings
+    assert not calls
+
+
+def test_explicit_cash_reserve_can_offer_income_before_ball_stock_is_low(monkeypatch):
+    router, state, _, bindings, calls = fixture(monkeypatch)
+    state.raw = replace(state.raw, player_money=200)
+    router.trainer_funding_target_cash = 1000
+
+    offered = funding.bind_local_trainer_funding(router, bindings, state)
+
+    assert len(offered.bindings) == 2
+    assert offered.bindings[-1].kind is GoalKind.RESUPPLY
+    assert offered.bindings[-1].resource_quote.expected_income == 1050
     assert not calls
 
 

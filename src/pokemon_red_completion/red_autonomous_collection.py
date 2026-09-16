@@ -7,11 +7,17 @@ from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnava
 from .goal_manager_runtime import GoalBindingSet
 from .living_dex_goal_policy import project_living_dex_goal_candidate
 from .living_dex_option_value import LivingDexOptionKind
+from .red_autonomous_league_funding import bind_autonomous_league_funding
 from .red_bounded_player import RedBoundedPlayerObserver
 from .red_evolution_stones import buyable_evolution_stone
 from .red_full_pokedex_direct_profile import derive_direct_full_pokedex_profile
 from .red_goal_context import RedGoalContextRuntime
-from .red_goal_context_profile import RedGoalMechanic
+from .red_goal_context_profile import (
+    RedGoalMechanic,
+    bind_composable_trainer_funding_profile,
+    bind_funding_fly_profile,
+    bind_mart_funding_departure_profile,
+)
 from .red_live_option_menu import (
     RedLiveOptionSet,
     build_red_live_option_set,
@@ -53,6 +59,9 @@ def autonomous_collection_options(
     )
     live = runtime.adapter.observe()
     profile = derive_direct_full_pokedex_profile(runtime.profile, live, world)
+    profile = bind_funding_fly_profile(
+        bind_mart_funding_departure_profile(bind_composable_trainer_funding_profile(profile))
+    )
     runtime = replace(runtime, profile=profile)
     evolution = next(spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES)
     if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
@@ -72,6 +81,11 @@ def autonomous_collection_options(
         maximum_emulator_frames=maximum_frames,
         quote_resource_costs=True,
         prepare_capture_items=True,
+        routed_storage_relief=True,
+        trainer_funding=True,
+        regional_trainer_funding=True,
+        observed_trainer_funding=True,
+        trainer_funding_target_cash=3_600,
         include_recovery_offers=False,
     )
     observed = RedBoundedPlayerObserver(
@@ -130,6 +144,38 @@ def autonomous_collection_options(
         if candidate is None:
             raise ValueError("regional acquisition lacks a portable projection")
         supplements.append(supplemental_live_option(binding, candidate))
+    league_funding = bind_autonomous_league_funding(
+        native,
+        actions,
+        world,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
+    )
+    if league_funding is not None:
+        league_question = GoalBindingSet(
+            tuple(
+                op
+                for op in ordinary.opportunities
+                if op.kind is not GoalKind.RESUPPLY or op.availability is GoalAvailability.AVAILABLE
+            )
+            + (league_funding.opportunity,),
+            (*ordinary.bindings, league_funding),
+            allow_resource_variants=True,
+        ).question(observed.situation)
+        league_index = next(
+            i
+            for i, op in enumerate(league_question.opportunities)
+            if op.binding_ref == league_funding.binding_ref
+        )
+        league_candidate = project_living_dex_goal_candidate(
+            league_question,
+            league_index,
+            feature_version=model_feature_version,
+            binding_ref=league_funding.binding_ref,
+        )
+        if league_candidate is None:
+            raise ValueError("renewable League funding lacks a portable projection")
+        supplements.append(supplemental_live_option(league_funding, league_candidate))
     economy = red_economy_snapshot(native.reader.read())
     if economy is None:
         raise ValueError("autonomous collection requires observed resources")

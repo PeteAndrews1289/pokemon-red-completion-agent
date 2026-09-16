@@ -35,6 +35,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
@@ -72,6 +73,8 @@ DEVELOPMENT_MEASURED_TRUST_TIER = "development_measured_without_action_trace"
 DEVELOPMENT_MEASURED_NORMALIZATION = "registered-player-v2-30000-actions-3000000-frames"
 DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS = 30_000
 DEVELOPMENT_MEASURED_MAXIMUM_FRAMES = 3_000_000
+AUTONOMOUS_CHOICE_PARENT_SCHEMA = "pokemon.red.autonomous-choice-parent.v1"
+AUTONOMOUS_CHOICE_PARENT_KIND = "red_autonomous_choice_parent"
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _GIT_COMMIT = re.compile(r"[0-9a-f]{40}\Z")
@@ -131,6 +134,12 @@ _CHOICE_KEYS_V3 = _CHOICE_KEYS_V1 | {
 def development_measured_choice_record_id(choice_id: str) -> str:
     return "dmc-" + canonical_sha256(
         {"choice_id": choice_id, "schema": DEVELOPMENT_MEASURED_CHOICE_SCHEMA}
+    )
+
+
+def autonomous_choice_parent_record_id(choice_id: str) -> str:
+    return "acp-" + canonical_sha256(
+        {"choice_id": choice_id, "schema": AUTONOMOUS_CHOICE_PARENT_SCHEMA}
     )
 
 
@@ -508,6 +517,59 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
+        elif schema == RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA:
+            ordinal = declaration.get("ordinal")
+            expected = {
+                "autonomous_plan_sha256",
+                "autonomous_result_sha256",
+                "behavior_probabilities",
+                "decision_sha256",
+                "intent_sha256",
+                "maximum_actions",
+                "maximum_frames",
+                "menu_sha256",
+                "model_sha256",
+                "ordinal",
+                "outcome_sha256",
+                "parent_checkpoint_sha256",
+                "parent_state_sha256",
+                "retry_authorized",
+                "run_id",
+                "schema",
+                "selected_candidate_index",
+                "selected_option_kind",
+                "selection_seed",
+                "source_bundle_sha256",
+                "source_commit",
+                "teacher_labels",
+                "terminal_state_sha256",
+            }
+            mismatch = (
+                set(declaration) != expected
+                or declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
+                or declaration.get("parent_state_sha256") != parent_state_sha256
+                or declaration.get("selection_seed") != selection_seed
+                or declaration.get("behavior_probabilities") != list(behavior_probabilities)
+                or declaration.get("maximum_actions") != DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+                or declaration.get("maximum_frames") != DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+                or declaration.get("retry_authorized") is not False
+                or declaration.get("teacher_labels") != 0
+                or type(ordinal) is not int
+                or cast(int, ordinal) < 0
+                or not isinstance(declaration.get("run_id"), str)
+                or not declaration.get("run_id")
+                or any(
+                    _SHA256.fullmatch(str(declaration.get(name))) is None
+                    for name in (
+                        "autonomous_plan_sha256",
+                        "autonomous_result_sha256",
+                        "decision_sha256",
+                        "intent_sha256",
+                        "outcome_sha256",
+                        "terminal_state_sha256",
+                    )
+                )
+            )
         else:
             mismatch = True
     else:
@@ -755,6 +817,7 @@ class RedDevelopmentMeasuredChoice:
                 RED_LIVE_FROZEN_RESUPPLY_CONTINUATION_DECLARATION_SCHEMA,
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
             }:
                 declared_kind = selected_option_kind.value
             if (
@@ -1292,8 +1355,17 @@ def load_red_development_measured_choice_example(
     if choice.choice_id != item.choice_id:
         raise ValueError("measured choice identity differs")
     _validate_behavior(choice, item.behavior_record)
+    autonomous = (
+        choice.selection_declaration.get("schema")
+        == RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+    )
     checkpoint_record = store.find_sealed_record(
-        checkpoint_record_id(choice.parent_episode_id), expected_kind=CHECKPOINT_KIND
+        (
+            autonomous_choice_parent_record_id(choice.choice_id)
+            if autonomous
+            else checkpoint_record_id(choice.parent_episode_id)
+        ),
+        expected_kind=AUTONOMOUS_CHOICE_PARENT_KIND if autonomous else CHECKPOINT_KIND,
     )
     if (
         checkpoint_record is None
@@ -1301,6 +1373,28 @@ def load_red_development_measured_choice_example(
     ):
         raise ValueError("measured choice parent checkpoint differs")
     checkpoint = checkpoint_record.read()
+    if autonomous and (
+        set(checkpoint)
+        != {
+            "schema",
+            "choice_id",
+            "run_id",
+            "ordinal",
+            "state_sha256",
+            "model_sha256",
+            "collection",
+            "intent_sha256",
+            "autonomous_plan_sha256",
+        }
+        or checkpoint.get("schema") != AUTONOMOUS_CHOICE_PARENT_SCHEMA
+        or checkpoint.get("choice_id") != choice.choice_id
+        or checkpoint.get("run_id") != choice.parent_episode_id
+        or checkpoint.get("ordinal") != choice.selection_declaration.get("ordinal")
+        or checkpoint.get("intent_sha256") != choice.selection_declaration.get("intent_sha256")
+        or checkpoint.get("autonomous_plan_sha256")
+        != choice.selection_declaration.get("autonomous_plan_sha256")
+    ):
+        raise ValueError("autonomous measured choice parent differs")
     if (
         checkpoint.get("state_sha256") != choice.parent_state_sha256
         or checkpoint.get("model_sha256") != choice.model_sha256

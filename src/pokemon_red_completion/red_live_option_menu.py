@@ -87,6 +87,7 @@ RED_LIVE_FROZEN_SAFARI_EXECUTION_DECLARATION_SCHEMA = (
 RED_LIVE_HETEROGENEOUS_EXECUTION_DECLARATION_SCHEMA = (
     "pokemon.red.private-model122-heterogeneous-execution-plan.v1"
 )
+RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA = "pokemon.red.autonomous-option-execution.v1"
 
 
 class RedLiveOptionMenuError(ValueError):

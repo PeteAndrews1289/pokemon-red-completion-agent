@@ -45,6 +45,10 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         for index in range(3)
     )
     monkeypatch.setattr(module, "derive_direct_full_pokedex_profile", lambda *args: runtime.profile)
+    monkeypatch.setattr(module, "bind_autonomous_league_funding", lambda *args, **kwargs: None)
+    monkeypatch.setattr(module, "bind_composable_trainer_funding_profile", lambda profile: profile)
+    monkeypatch.setattr(module, "bind_mart_funding_departure_profile", lambda profile: profile)
+    monkeypatch.setattr(module, "bind_funding_fly_profile", lambda profile: profile)
     monkeypatch.setattr(module, "bind_native_boxed_item_evolution", lambda *args, **kwargs: runtime)
     monkeypatch.setattr(
         module,
@@ -91,3 +95,60 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         options.binding(index).execute()
         assert calls[-1] == destination.binding.binding_ref
     assert "private-destination" not in str(options.public_dict())
+
+
+def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monkeypatch):
+    import pokemon_red_completion.red_autonomous_collection as module
+
+    runtime, _ = _runtime(tmp_path, monkeypatch, source=58, target=59, item=ItemId.FIRE_STONE)
+    captured = {}
+    ordinary = _ordinary_bindings([])
+
+    def profile_step(profile):
+        captured.setdefault("profile_steps", 0)
+        captured["profile_steps"] += 1
+        return profile
+
+    class Router:
+        def __init__(self, *args, **kwargs):
+            captured["router"] = kwargs
+
+        def enumerate(self, _):
+            return None
+
+    monkeypatch.setattr(module, "derive_direct_full_pokedex_profile", lambda *args: runtime.profile)
+    monkeypatch.setattr(module, "bind_autonomous_league_funding", lambda *args, **kwargs: None)
+    monkeypatch.setattr(module, "bind_composable_trainer_funding_profile", profile_step)
+    monkeypatch.setattr(module, "bind_mart_funding_departure_profile", profile_step)
+    monkeypatch.setattr(module, "bind_funding_fly_profile", profile_step)
+    monkeypatch.setattr(module, "bind_native_boxed_item_evolution", lambda *args, **kwargs: runtime)
+    monkeypatch.setattr(module, "RedResourceGoalRouter", Router)
+    monkeypatch.setattr(
+        module,
+        "RedBoundedPlayerObserver",
+        lambda *args, **kwargs: (
+            lambda: SimpleNamespace(situation=_situation(resources=0.1), binding_set=ordinary)
+        ),
+    )
+    monkeypatch.setattr(module, "enumerate_red_regional_acquisitions", lambda *args, **kwargs: ())
+    monkeypatch.setattr(module, "red_economy_snapshot", lambda _: EconomySnapshot(6528, ()))
+
+    autonomous_collection_options(
+        runtime,
+        CountingExecutor(_ActionDelegate()),
+        SimpleNamespace(),
+        model_feature_version=4,
+        ordering_seed_sha256="a" * 64,
+    )
+    assert captured["profile_steps"] == 3
+    assert (
+        captured["router"]
+        | {
+            "routed_storage_relief": True,
+            "trainer_funding": True,
+            "regional_trainer_funding": True,
+            "observed_trainer_funding": True,
+            "trainer_funding_target_cash": 3_600,
+        }
+        == captured["router"]
+    )
