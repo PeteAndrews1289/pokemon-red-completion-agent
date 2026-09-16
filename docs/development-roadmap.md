@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-renewable-stone-preflight**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-renewable-stone-execution**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -89,7 +89,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-renewable-stone-preflight-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model123-renewable-stone-execution-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-15-model123-renewable-stone-execution
+
+One no-retry League attempt beat Lorelei, Bruno and Agatha before retaining a Lance failure with17257 cash. Controlled blackout, a legitimate2100 Thunder Stone purchase and generic PC preparation then registered Raichu. Red is89/124 on the declared route with67 living species,71 specimens and6528 cash.
+
+**Deviation:** The four retained phases used2397 actions/228915 frames with zero retries, model queries or teacher labels. This is capability and collection progress, not learned authority; Model123 remains123 examples/84 successes and all fresh-Red gates remain unchanged.
+
+**Next:** Sol High, Fast off: integrate generic stone procurement plus boxed item use as one goal-manager executable, qualify two stone families ROM-free, then require the next gameplay decision to be exactly one identity-free Model123 acquisition-versus-item-evolution query.
 
 ### 2026-09-15-model123-renewable-stone-preflight
 

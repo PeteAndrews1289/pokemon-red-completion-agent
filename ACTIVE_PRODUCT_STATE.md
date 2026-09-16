@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Execute the qualified renewable League cycle once, then bind verified postgame settlement, stone purchase, boxed retrieval and live item evolution before the next Model123 query.
+- Next decision: Integrate generic stone procurement and boxed item evolution into one executable goal-manager binding, then make the next gameplay decision a single Model123 query across two genuine families.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model123 has 123 settled examples / 84 successes and 88/124 declared-route registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
+| Authority now | Model123 has 123 settled examples / 84 successes and the retained save has 89/124 declared-route registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-model123-renewable-stone-preflight** · status **closed** · evidence [qualification](docs/evidence/red-model123-renewable-stone-preflight-2026-09-15.json)
+**2026-09-15-model123-renewable-stone-execution** · status **closed** · evidence [qualification](docs/evidence/red-model123-renewable-stone-execution-2026-09-15.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The session restored the intended generated-funds path without finite completion-asset liquidation and derived move-learning safety from the cartridge. It also records the revised 124-species Red gate while keeping unavailable species as truthful later-title dependencies. |
-| Learning output | None. The cheapest falsifier stopped the session before a model query or gameplay. Model123 remains at 123 examples / 84 successes. |
-| Authority delta | None. Model123 remains at 123 settled examples / 84 successes and 88/124 declared-route registrations. Renewable funding and move-learning admission are qualified but no gameplay or learned authority was added. |
-| Transfer result | No cross-title transfer result. Cartridge-derived learnset admission is reusable structure; the funding reset is Red-specific and remains preflight-only until live execution. |
-| Blocker | The exact terminal now qualifies for a 29799-gross renewable League cycle through its cartridge-native Indigo-lobby event reset, and seven buyable-stone candidates pass move-learning admission. The cycle, post-Hall-of-Fame settlement, stone purchase, boxed retrieval and live evolution remain unexecuted. |
-| Decision | Execute one claimed renewable League cycle from the unchanged terminal and retain its first outcome. On success, settle postgame, buy one catalog-derived stone, retrieve its boxed precursor and live-qualify item evolution before reconstructing the heterogeneous menu. |
-| Next session | Sol High, Fast off: execute one claimed renewable League cycle from the exact terminal, preserve the first outcome, and continue to catalog-derived stone purchase and boxed precursor preparation only after verified postgame settlement. |
-| Next falsifier | The first claimed renewable League attempt cannot cross its existing battle bounds or cannot settle into a field-ready postgame checkpoint with the quoted money and protected collection intact. |
-| Stop condition | Stop on the first unsupported battle mechanic, postgame reset, shop route, storage transition or move prompt. Do not retry a consumed run, sell finite completion assets, query Model123 early, push GitHub or begin a ROM hack/Crystal. |
+| Product alignment | The retained save legitimately generated funds, bought a stone, exercised storage and registered Raichu without selling finite completion assets. This closes the live controller gap while keeping deterministic support distinct from model progress. |
+| Learning output | None. Four retained capability phases used zero model queries and zero teacher labels. Model123 remains at 123 examples / 84 successes; one deterministic Raichu registration is not learned authority. |
+| Authority delta | None. Model123 remains at 123 settled examples / 84 successes. Deterministic capability execution advanced the selected Red route from 88/124 to 89/124 but did not create a model-selected outcome. |
+| Transfer result | No cross-title transfer result. The funding-to-shop-to-storage-to-item-use composition is structurally reusable, but only Red cartridge execution has been measured. |
+| Blocker | Renewable funding, legitimate stone purchase, generic PC preparation and live party item evolution all succeeded from retained states. The live goal manager still exposes boxed level evolution only; procurement plus boxed item use is not yet one executable identity-free option. |
+| Decision | Integrate generic stone procurement, boxed party preparation and existing party item use as one goal-manager executable. Qualify at least two stone families ROM-free, then require the next gameplay choice to be one Model123 query across acquisition and item evolution. |
+| Next session | Sol High, Fast off: integrate generic shop procurement plus boxed item evolution, qualify two stone families ROM-free, then freeze exactly one Model123 query only when acquisition and item evolution are both executable. |
+| Next falsifier | The generic goal manager cannot bind a boxed item evolution, including needed shop procurement, beside a genuinely executable acquisition without exposing species identity or requiring a route-specific patch. |
+| Stop condition | Stop on a species-specific movement patch, a second deterministic registration before the query, a teacher choice, a consumed-attempt replay, a full run, ROM-hack/Crystal work or GitHub publication. |
 
 ### Stop conditions
 
