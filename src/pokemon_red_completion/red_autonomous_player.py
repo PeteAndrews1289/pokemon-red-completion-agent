@@ -25,6 +25,35 @@ from .red_live_option_menu import (
 )
 
 
+def _exception_chain(error: BaseException | None) -> list[dict[str, object]] | None:
+    """Preserve bounded typed causes without losing the terminal state.
+
+    Autonomous execution deliberately stops on the first failure.  Retaining
+    only the wrapper text makes that safe stop needlessly opaque, especially
+    when a route adapter has attached a more specific controller failure as
+    ``__cause__``.  Eight links is well beyond the project's normal nesting
+    depth while still bounding hostile or cyclic exception graphs.
+    """
+
+    if error is None:
+        return None
+    rows: list[dict[str, object]] = []
+    seen: set[int] = set()
+    current: BaseException | None = error
+    while current is not None and id(current) not in seen and len(rows) < 8:
+        seen.add(id(current))
+        row: dict[str, object] = {
+            "error_type": type(current).__name__,
+            "error": str(current),
+        }
+        reason_code = getattr(current, "reason_code", None)
+        if isinstance(reason_code, str) and reason_code:
+            row["reason_code"] = reason_code
+        rows.append(row)
+        current = current.__cause__
+    return rows
+
+
 @dataclass(frozen=True)
 class AutonomousSnapshot:
     state: bytes
@@ -198,6 +227,7 @@ def run_autonomous_options(
                 "evidence": None if report is None else dict(report.evidence),
                 "error_type": None if execution_error is None else type(execution_error).__name__,
                 "error": None if execution_error is None else str(execution_error),
+                "error_chain": _exception_chain(execution_error),
             }
             _record(step / "outcome.json", outcome)
             outcomes.append(outcome)

@@ -95,6 +95,49 @@ def test_partial_state_and_decision_survive_failure_without_next_query(tmp_path,
     assert not (output / "step-001").exists()
 
 
+def test_execution_failure_preserves_typed_cause_chain(tmp_path):
+    output = tmp_path / "run"
+    state, snapshot, observe = _environment(output)
+    original = observe
+
+    def caused_observe(ordinal):
+        options = original(ordinal)
+        rebound = []
+        for binding in options.bindings:
+            def execute():
+                state["version"] += 1
+                try:
+                    raise ValueError("battle introduction exceeded its bound")
+                except ValueError as cause:
+                    error = RuntimeError("travel capture controller failed")
+                    error.reason_code = "capture_controller_failed"
+                    raise error from cause
+
+            rebound.append(replace(binding, execute=execute))
+        return replace(options, bindings=tuple(rebound))
+
+    result = run_autonomous_options(
+        model=_model(),
+        output=output,
+        snapshot=snapshot,
+        observe=caused_observe,
+        seed=17,
+        provenance={},
+    )
+
+    assert result["outcomes"][0]["error_chain"] == [
+        {
+            "error_type": "RuntimeError",
+            "error": "travel capture controller failed",
+            "reason_code": "capture_controller_failed",
+        },
+        {
+            "error_type": "ValueError",
+            "error": "battle introduction exceeded its bound",
+        },
+    ]
+
+
 def test_decision_write_failure_prevents_every_controller_action(tmp_path, monkeypatch):
     import pokemon_red_completion.red_autonomous_player as module
 
