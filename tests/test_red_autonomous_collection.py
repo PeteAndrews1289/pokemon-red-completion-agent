@@ -119,6 +119,7 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         for c in fishing_candidates
     )
     monkeypatch.setattr(module, "autonomous_fishing_options", lambda *a: fishing)
+    monkeypatch.setattr(module, "autonomous_safari_options", lambda *a: ())
     monkeypatch.setattr(
         module,
         "enumerate_red_item_evolutions",
@@ -218,6 +219,7 @@ def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monk
 
     monkeypatch.setattr(module, "derive_direct_full_pokedex_profile", lambda *args: runtime.profile)
     monkeypatch.setattr(module, "bind_autonomous_league_funding", lambda *args, **kwargs: None)
+    monkeypatch.setattr(module, "autonomous_safari_options", lambda *args: ())
     monkeypatch.setattr(module, "bind_composable_trainer_funding_profile", profile_step)
     monkeypatch.setattr(module, "bind_mart_funding_departure_profile", profile_step)
     monkeypatch.setattr(module, "bind_funding_fly_profile", profile_step)

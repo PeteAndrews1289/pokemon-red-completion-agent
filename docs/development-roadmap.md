@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model137-fishing-route-drift**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-assisted-safari-admission-qualification**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-assisted-safari-admission-qualification
+
+A trainer-only in-memory money override derived a marked 500-cash state from the authenticated 198-cash post-Marowak save. An action-free menu inspection exposed evolution and Safari acquisition, with zero actions, frames, model queries or registrations. The original save SHA remained unchanged.
+
+**Deviation:** Pete clarified that training teachers may cheat, while the final player and official Red gate may not. Assisted provenance is explicit and ordinary goal-value fitting rejects it. Model137 remains 137 examples / 92 successes / 58 economy-qualified; earned Red remains 96/124 and fresh acceptance 0/5. No stage exit, independent claim or GitHub push.
+
+**Next:** Sol High, Fast off: one marked teacher-selected assisted Safari mechanical probe, then resume unassisted model choice on earned states and prioritize story/battle authority. Genuine funding is still required for an official run.
 
 ### 2026-09-16-model137-fishing-route-drift
 

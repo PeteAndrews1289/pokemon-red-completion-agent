@@ -7,10 +7,69 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
+from fit_red_autonomous_collection import _require_unassisted_goal_fit  # noqa: E402
 from run_red_autonomous_collection import (  # noqa: E402
+    _apply_assisted_training_money,
     _verify_goal_continuation,
     _verify_reserve_lineage,
 )
+
+from pokemon_red_completion.observation import RamAddress
+
+
+class _TrainingEmulator:
+    def __init__(self, money_bytes=(0x00, 0x01, 0x98)):
+        self.frame_count = 0
+        self.pressed_buttons = frozenset()
+        self.memory = {
+            int(RamAddress.PLAYER_MONEY) + index: value
+            for index, value in enumerate(money_bytes)
+        }
+
+    def read_u8(self, address):
+        return self.memory[address]
+
+    def _require_backend(self):
+        return self
+
+
+def test_assisted_money_changes_only_three_loaded_bcd_bytes():
+    emulator = _TrainingEmulator()
+    emulator.memory[0xD350] = 0xAA
+    assert _apply_assisted_training_money(emulator, 500) == (198, 500)
+    assert emulator.memory == {
+        int(RamAddress.PLAYER_MONEY): 0x00,
+        int(RamAddress.PLAYER_MONEY) + 1: 0x05,
+        int(RamAddress.PLAYER_MONEY) + 2: 0x00,
+        0xD350: 0xAA,
+    }
+
+
+@pytest.mark.parametrize("amount", [-1, True, 1_000_000])
+def test_assisted_money_rejects_invalid_amount_without_writes(amount):
+    emulator = _TrainingEmulator()
+    before = dict(emulator.memory)
+    with pytest.raises(ValueError, match="six-digit BCD"):
+        _apply_assisted_training_money(emulator, amount)
+    assert emulator.memory == before
+
+
+def test_assisted_money_rejects_live_or_invalid_origin_without_writes():
+    for emulator in (_TrainingEmulator((0xFA, 0, 0)), _TrainingEmulator()):
+        if emulator.memory[int(RamAddress.PLAYER_MONEY)] != 0xFA:
+            emulator.frame_count = 1
+        before = dict(emulator.memory)
+        with pytest.raises(ValueError):
+            _apply_assisted_training_money(emulator, 500)
+        assert emulator.memory == before
+
+
+def test_ordinary_goal_fit_rejects_assisted_state_and_provenance():
+    _require_unassisted_goal_fit({}, {})
+    with pytest.raises(ValueError, match="assisted training"):
+        _require_unassisted_goal_fit({"assisted_training_money": 500}, {})
+    with pytest.raises(ValueError, match="assisted training"):
+        _require_unassisted_goal_fit({}, {"training_assistance": {"kind": "money_override"}})
 
 
 def _fixture():

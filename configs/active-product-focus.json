@@ -28,27 +28,27 @@
       "status": "retired"
     },
     {
-      "capability": "Separate scripted paid transport from ordinary walking so model choices are offered only for executable, resource-qualified collection goals.",
-      "cheapest_falsifier": "The exact 96/124 save still advertises an unadmitted Safari fishing route, or no legitimate way to fund and compose the already-supported Safari acquisition can be qualified.",
+      "capability": "Use disclosed teacher assistance for Safari mechanics while keeping money writes, false economy labels and assisted terminals outside the final player.",
+      "cheapest_falsifier": "The assisted Safari option is not executable at the paid gate, or the money override or its outcome leaks into ordinary goal-value fitting or an official run.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model136 made one new fishing choice from five distinct options and controlled a bounded attempt. The observed route failure was fitted once into Model137; no registration or independent authority promotion occurred.",
-        "blocker": "All four prior fishing offers were Safari routes for #147, but the save has 198 cash against 500 admission. The paid script is now excluded from ordinary walking; the safe 96/124 terminal has no multi-option menu until legitimate funding/admission or another acquisition family is composed.",
-        "decision": "Qualify a legitimate route to the 500-cash Safari admission and compose the existing metered Safari skill as a model-selectable goal, or discover a distinct non-Safari executable acquisition. Do not spend a model decision on the current singleton.",
+        "authority_delta": "No new model choice, fit, registration or authority promotion. Model137 remains at 137 examples / 92 successes / 58 economy-qualified.",
+        "blocker": "The assisted 500-cash menu qualifies Safari as an option, but Safari execution is untested. Genuine funding, model-selected earned-state choice, story and battle authority remain open for the final Red run.",
+        "decision": "Use one teacher-selected, marked assisted Safari mechanical probe, then return to model-selected unassisted decisions on earned states. Never admit injected money as economy learning or official progress.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-model137-fishing-route-drift-2026-09-16.json",
-          "sha256": "09803068b197720e80f8a113871726dd698d2e10281aec0736b287f99a96e578"
+          "path": "docs/evidence/red-assisted-safari-admission-qualification-2026-09-16.json",
+          "sha256": "fd84af0c9f019d7da2e3e9da0dec7133589da75510cf5f279b7fc36819beda2b"
         },
-        "learning_output": "One fresh Model136 fishing choice stopped safely after a Safari-gate route divergence at 735 actions and 22944 frames, with no new registration or cash loss. Its measured failure was fitted once into Model137: 137 examples / 92 successes / 58 economy-qualified.",
-        "next_falsifier": "The exact earned save has no valid funding path to Safari entry and no other distinct executable goals, or the admission skill cannot preserve the paid scripted boundary.",
-        "next_session_goal": "Sol High, Fast off, about 45-60 minutes: qualify legitimate funding for the missing 302 cash and an explicit Safari admission/acquisition offer, or another non-Safari goal family; inspect a multi-option menu before any new model decision.",
-        "product_alignment": "A new model-selected fishing failure trained goal valuation. Read-only diagnosis then found all four advertised routes crossed an unsupported paid gate; a general semantic requirement now removes those false options without spending gameplay.",
-        "session_id": "2026-09-16-model137-fishing-route-drift",
+        "learning_output": "No new learner output this session. Action-free assisted inspection found two executable menu options from a marked derived state: zero actions, frames, queries and registrations.",
+        "next_falsifier": "Safari execution fails its paid-script or resource guard, or assisted results can enter ordinary goal-value fit or official completion evidence.",
+        "next_session_goal": "Sol High, Fast off, about 45-60 minutes: run one teacher-selected assisted Safari mechanical probe, retain cost and terminal, then prioritize earned-state model choice and story/battle authority.",
+        "product_alignment": "Teacher-only in-memory money assistance removes a training bottleneck without adding a cheat action to the final player or claiming genuine economy learning.",
+        "session_id": "2026-09-16-assisted-safari-admission-qualification",
         "status": "closed",
-        "stop_condition": "Stop on false availability, mutation, unsafe state, teacher substitution, consumed decision replay, route-specific workaround, full run, ROM hack, Crystal or GitHub publication.",
-        "transfer_result": "One authentic five-option Red decision and retained failure; the source-level gate guard and read-only cartridge check exclude unsupported paid transport. Correlated development only, with no independent or cross-title evaluation."
+        "stop_condition": "Stop on original-save mutation, unmarked assistance, assisted goal-value fit, false official claim, consumed decision replay, full run, ROM hack, Crystal or GitHub publication.",
+        "transfer_result": "No transfer test. The original authenticated save SHA stayed unchanged; assisted menu qualification is development scaffolding, not independent evaluation."
       },
       "learned_authority": {
         "current": "Model137 has 137 settled examples / 92 successes / 58 economy-qualified. One new Model136 fishing choice failed safely during route traversal; Red development save remains 96/124, without independent promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Re-establish at least two executable collection alternatives by qualifying legitimate paid Safari admission and funding or a distinct non-Safari route before querying Model137 again.",
+      "next_decision": "Probe marked assisted Safari mechanics once, then return to unassisted model choices on earned states; genuine funding and story/battle authority remain final-player requirements.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

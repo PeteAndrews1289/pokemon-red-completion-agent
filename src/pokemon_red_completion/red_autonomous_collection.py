@@ -8,6 +8,7 @@ from .goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
 from .living_dex_goal_policy import project_living_dex_goal_candidate
 from .red_autonomous_fishing import autonomous_fishing_options
 from .red_autonomous_league_funding import bind_autonomous_league_funding
+from .red_autonomous_safari import autonomous_safari_options
 from .red_bounded_player import RedBoundedPlayerObserver
 from .red_capture_funding_budget import red_capture_funding_budget
 from .red_full_pokedex_direct_profile import derive_direct_full_pokedex_profile
@@ -258,6 +259,7 @@ def autonomous_collection_options(
             )
         )
     supplements.extend(autonomous_fishing_options(native, live, actions, world))
+    supplements.extend(autonomous_safari_options(native, live, actions, world))
     league_funding = bind_autonomous_league_funding(
         native,
         actions,

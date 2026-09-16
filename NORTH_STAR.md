@@ -157,6 +157,12 @@ after model completeness, but inability to link the available emulators does not
 the shared registry may earn those species in a later title. This changes the dependency gate,
 not the readiness conditions below, and authorizes neither cheating nor another teacher factory.
 
+Pete's September 16 clarification allows a teacher or training harness to intervene in an
+isolated development copy, including overriding money to exercise Safari mechanics. The final
+actor, official run and native registration gate remain unassisted. Retain the original state,
+mark assisted provenance, and exclude synthetic liquidity from ordinary economy-goal fits and
+legitimate funding claims. This is training scaffolding, not a second route to Red acceptance.
+
 A new clean-power full-game run is prohibited unless all of these are recorded first:
 
 - the integration question cannot be answered by a shorter authenticated scenario;

@@ -50,11 +50,16 @@ selected goal was not replayed, and no registration or promotion was claimed.
 Read-only reconstruction then identified all four fishing options as Safari
 routes for #147. The save had198 cash versus a 500 paid admission; both gate
 lanes were unguarded in ordinary routing. A semantic admission requirement
-now excludes both unless a metered paid service is composed. The same
-inspection found zero fishing options, and the exact failed terminal has no
-two-option menu. This is a verified safety/availability correction, not a
-new registration or learned choice. The existing Safari skill still needs
-funding and autonomous-menu integration.
+now excludes both unless a metered paid service is composed. That correction
+did not produce a new registration or learned choice.
+
+Training assistance is now permitted but explicitly separated from the final
+player. A trainer-only, in-memory money override and marked derived state let
+the existing metered Safari skill join the autonomous menu without pretending
+cash was earned. An action-free inspection of the assisted 500-cash post-
+Marowak state found two options (evolution and Safari), with zero game inputs
+or model queries and no change to the original save. Ordinary goal-value fit
+rejects assisted runs. Safari execution and legitimate funding remain unproven.
 
 Earlier stone-target support evolved Shellder→Cloyster without a model query or fit; that
 historical support result remains distinct. League funding is blocked by unsupported partial
@@ -65,20 +70,20 @@ Battle turns and mechanical travel remain existing controllers, not demonstrated
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Sustained post-goal choice | Qualify legitimate Safari funding/admission or a distinct non-Safari option; require two executable alternatives before a new Model137 query | Sol /High /Fast off |
+| Assisted Safari mechanics | Execute one marked teacher-selected Safari skill probe; retain costs and terminal, never treat injected money as earned or fit ordinary goal value | Sol /High /Fast off |
+| Sustained post-goal choice | Return to earned states with two executable alternatives before a new Model137 query; genuine funding still matters for unassisted Safari | Sol /High /Fast off |
 | Sustained collection | Rebuild and execute varied useful goals from earned terminals, including supplies and storage, without manual recovery targets | Sol /High |
 | Battle/story authority | Qualify a learned decision boundary without heuristic substitution | Astra /High |
 | Fresh Red acceptance | Fresh origin, model-directed start-to-finish control, Champion/Hall of Fame,124/124 route registrations and a verified dependency ledger | Astra /High for freeze; Sol /High for execution |
 
-Next time box:45–60 minutes. Find a legitimate way to cover the302-cash
-shortfall and connect the existing metered Safari admission skill to a
-model-selectable goal, or qualify another acquisition family. Inspect a
-multi-option menu from the exact safe96/124 terminal before a new model
-query. Do not replay the consumed fishing decision or select a target manually.
-All fits remain correlated development.
+Next time box:45–60 minutes. Exercise the assisted Safari skill once as a
+mechanical training probe, then focus unassisted model-choice work on earned
+states and story/battle authority. Do not replay the consumed fishing decision
+or confuse a teacher-selected probe with autonomous model choice. All fits
+remain correlated development.
 
 Mew and unavailable version/link dependencies remain legitimate later-game targets, not cheats.
 ROM-hack and Crystal work remain closed until fresh Red acceptance passes. Pete decides pushes.
 
-[Latest evidence](evidence/red-model137-fishing-route-drift-2026-09-16.json) ·
+[Latest evidence](evidence/red-assisted-safari-admission-qualification-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

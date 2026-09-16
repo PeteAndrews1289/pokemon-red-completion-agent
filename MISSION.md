@@ -37,8 +37,11 @@ and resource decisions must belong to the model under declared authority.
 Version, cable-trade and event dependencies remain explicit legitimate gaps; shared credit never
 fabricates a local Red flag. Mew is deferred until a later legitimate source. Red/Blue link play
 may be attempted after model completeness, but an unavailable emulator link does not block the
-ROM-hack gate: record the dependency and earn it in a later title instead. No cheating or save
-editing is authorized.
+ROM-hack gate: record the dependency and earn it in a later title instead. The final player and
+official completion run may not cheat or edit a save. Training may use disclosed, isolated state
+interventions, including money overrides, to teach or test a mechanic without a resource bottleneck.
+Such assisted results are not legitimate funding, fresh-run completion or ordinary economy labels;
+the model must never receive an action that can perform the intervention itself.
 After that gate: a compatible unfamiliar Red ROM modification, then Crystal, continuing the
 shared registered Pokédex through at least Emerald. Report initial transfer and adaptation
 separately. Red experience should reduce teaching, not guarantee immediate success.

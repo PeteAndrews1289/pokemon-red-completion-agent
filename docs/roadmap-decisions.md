@@ -1078,3 +1078,21 @@ link trade if the emulator stack supports it; if not, retain the gaps and earn t
 later game. Shared credit never fabricates a Red save flag, and no save editing or cheating is
 authorized. Adopt `red-first-v4-legitimate-native`; retain V1 through V3 unchanged as historical
 baselines. The ROM-hack, Crystal and at-least-Emerald sequence remains unchanged.
+
+## September 16 — permit isolated training interventions, not final-player cheats
+
+Pete clarified that the no-cheating rule governs the final model and its official run, not the
+teacher or training process. A training harness may override money in an in-memory copy to isolate
+Safari admission and capture mechanics. Preserve and authenticate the source state, mark the
+assisted state and every result, and exclude these runs from ordinary goal-value/economy fitting,
+legitimate funding claims and the fresh-run 124-species gate. The final model receives no state-edit
+capability. The collection scenario curriculum remains useful, but a funded training copy cannot
+prove the model knows how to earn money; that requires a separate unassisted outcome.
+
+The next action-free check used a 198-money, 96/124 post-Marowak source and injected exactly 500
+money in emulator memory. It produced two genuine option kinds (evolution and metered Safari
+acquisition), zero inputs or frames, and no model query. The authenticated source file remained
+unchanged. This qualifies a bounded Safari training probe, not a legitimate earning result or
+collection registration. Story/battle authority remains a separate prerequisite for final Red.
+
+[Evidence](evidence/red-assisted-safari-admission-qualification-2026-09-16.json).

@@ -72,6 +72,15 @@ def _mapping(value: object, subject: str) -> Mapping[str, object]:
     return value
 
 
+def _require_unassisted_goal_fit(
+    plan: Mapping[str, object], provenance: Mapping[str, object]
+) -> None:
+    if provenance.get("training_assistance") is not None or plan.get(
+        "assisted_training_money"
+    ) is not None:
+        raise ValueError("assisted training cannot enter the ordinary goal-value fit")
+
+
 def _hash(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
@@ -103,6 +112,7 @@ def main() -> int:
     run_plan = _json(run_plan_bytes, "run plan")
     run_result = _json(run_result_bytes, "run result")
     provenance = _mapping(run_plan.get("provenance"), "run provenance")
+    _require_unassisted_goal_fit(plan, provenance)
     execution_maximum_actions, execution_maximum_frames = (
         authenticated_autonomous_execution_limits(plan, provenance)
     )

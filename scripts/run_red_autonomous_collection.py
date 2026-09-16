@@ -10,6 +10,7 @@ import subprocess
 from collections import Counter
 from dataclasses import replace
 from pathlib import Path
+from typing import Protocol, cast
 
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.collection_protocol import committed_source_bundle_sha256
@@ -24,7 +25,7 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
     HardCompositionActionLimiter,
 )
 from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manager_context_capture
-from pokemon_red_completion.observation import PokemonRedStateReader
+from pokemon_red_completion.observation import PokemonRedStateReader, RamAddress
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_collection import (
     autonomous_collection_options,
@@ -56,6 +57,40 @@ from pokemon_red_completion.registration_memory import (
 from pokemon_red_completion.strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+class _TrainingWritableMemory(Protocol):
+    def __setitem__(self, address: int, value: int) -> None: ...
+
+
+def _apply_assisted_training_money(emulator: PyBoyAdapter, amount: int) -> tuple[int, int]:
+    """Change only loaded WRAM money in this isolated development process.
+
+    No controller or policy port exposes the backend's writable memory. This
+    operation runs before a decision, against an in-memory restore, and its
+    result is explicitly excluded from the ordinary goal-value fit.
+    """
+    if type(amount) is not int or not 0 <= amount <= 999_999:  # noqa: E721
+        raise ValueError("assisted training money must be six-digit BCD")
+    if emulator.frame_count != 0 or emulator.pressed_buttons:
+        raise ValueError("assisted money requires an untouched loaded state")
+    address = int(RamAddress.PLAYER_MONEY)
+    previous = tuple(emulator.read_u8(address + offset) for offset in range(3))
+    if any((byte >> 4) > 9 or (byte & 15) > 9 for byte in previous):
+        raise ValueError("loaded Red money is not valid BCD")
+    before = sum(((byte >> 4) * 10 + (byte & 15)) * 100 ** (2 - index)
+                 for index, byte in enumerate(previous))
+    digits = f"{amount:06d}"
+    encoded = tuple(int(digits[index:index + 2], 10) for index in (0, 2, 4))
+    bcd = tuple((value // 10 << 4) | value % 10 for value in encoded)
+    memory = cast(
+        _TrainingWritableMemory, emulator._require_backend().memory
+    )  # Training-only trust boundary.
+    for offset, value in enumerate(bcd):
+        memory[address + offset] = value
+    if tuple(emulator.read_u8(address + offset) for offset in range(3)) != bcd:
+        raise ValueError("assisted money write did not read back exactly")
+    return before, amount
 
 
 def _verify_reserve_lineage(plan: dict[str, object], payloads: dict[str, bytes]) -> None:
@@ -142,6 +177,9 @@ def main() -> None:
     args = parser.parse_args()
     plan_bytes = args.plan.read_bytes()
     plan = json.loads(plan_bytes)
+    assisted_money = plan.get("assisted_training_money")
+    if assisted_money is not None and plan.get("mode") == "continue_selected_goal":
+        raise ValueError("assisted money cannot rewrite a previously selected goal")
     payloads = {}
     for key in (
         "rom", "state", "checkpoint", "profile", "model",
@@ -183,7 +221,7 @@ def main() -> None:
         checkpoint_id=plan["run_id"],
         checkpoint_label="Autonomous development continuation",
     )
-    capture = parse_goal_manager_context_capture(
+    original_capture = parse_goal_manager_context_capture(
         payloads["state"],
         (json.dumps(envelope, sort_keys=True, separators=(",", ":")) + "\n").encode(),
     )
@@ -199,7 +237,7 @@ def main() -> None:
         "source_bundle_sha256": committed_source_bundle_sha256(ROOT),
         "source_dirty": bool(status),
         "rom_sha256": plan["rom"]["sha256"],
-        "parent_state_sha256": capture.state_sha256,
+        "parent_state_sha256": original_capture.state_sha256,
         "model_file_sha256": model.file_sha256,
         "maximum_actions": maximum_actions,
         "maximum_frames": maximum_frames,
@@ -222,6 +260,31 @@ def main() -> None:
                 for member in PokemonRedPartyReader(emulator).read().members
             )
         emulator.load_state_bytes(payloads["state"])
+        capture = original_capture
+        if assisted_money is not None:
+            prior_money, injected_money = _apply_assisted_training_money(
+                emulator, assisted_money
+            )
+            assisted_state = emulator.save_state_bytes()
+            assisted_sha256 = hashlib.sha256(assisted_state).hexdigest()
+            assisted_envelope = dict(envelope, state_sha256=assisted_sha256)
+            capture = parse_goal_manager_context_capture(
+                assisted_state,
+                (
+                    json.dumps(assisted_envelope, sort_keys=True, separators=(",", ":"))
+                    + "\n"
+                ).encode(),
+            )
+            provenance["parent_state_sha256"] = assisted_sha256
+            provenance["training_assistance"] = {
+                "kind": "money_override",
+                "source_state_sha256": original_capture.state_sha256,
+                "assisted_state_sha256": assisted_sha256,
+                "money_before": prior_money,
+                "money_after": injected_money,
+                "learning_admission": "mechanics_only_no_goal_value_fit",
+                "final_run_eligible": False,
+            }
         initial_frame = emulator.frame_count
         budget = WindowedFrameBudgetController(
             emulator,
@@ -371,6 +434,7 @@ def main() -> None:
                 json.dumps(
                     {
                         "status": "verified_action_free",
+                        "training_assistance": provenance.get("training_assistance"),
                         "facts": before.facts,
                         "menu": options.public_dict(),
                         "private_binding_kinds": [b.kind.value for b in options.bindings],
