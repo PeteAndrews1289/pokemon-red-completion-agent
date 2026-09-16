@@ -1,0 +1,110 @@
+{
+  "schema": "pokemon.red.registered-player-learning-session.v1",
+  "session": "2026-09-16-model131-capture-status-drift",
+  "rigor": "correlated-development",
+  "status": "fit_complete_bounded_only",
+  "autonomous_outcome": {
+    "plan_sha256": "16969745f9c4cf08bfa0ae88428b68e336a1c09098af67e13fac3e79e2d95187",
+    "result_sha256": "206b2314d41b1882ccabebf07d17bd2d658be68f2cfd1963a4af8b9e4ff6766d",
+    "outcome_sha256": "ef08ce753018ff27e817b7a2afccdbd73e280aad2172c333aabff0a9dd7e3d60",
+    "behavior_model_sha256": "05cd8a95ed5472316de7929f7a78639c6a8f4cf4232f9cf2104ae0f7563c8141",
+    "available_candidates": 4,
+    "selected_candidate_index": 2,
+    "selected_option_kind": "acquire",
+    "selected_probability": 0.23769924383665042,
+    "verification": null,
+    "error_type": "RedCaptureStatusError",
+    "reason_code": "capture_status.target_hp",
+    "stop_reason": "execution_failed",
+    "actions": 112,
+    "frames": 5256,
+    "registrations_before": 92,
+    "registrations_after": 92,
+    "specimens_before": 73,
+    "specimens_after": 73,
+    "cash_before": 1608,
+    "cash_after": 1608,
+    "capture_items_spent": 0,
+    "teacher_actions": 0,
+    "safe_terminal": false,
+    "battle_state_after": 1,
+    "input_ready_after": false,
+    "terminal_state_sha256": "188cb302c3d338715fce55e4d2858a6bbc4486e0cd81aa36883357ce28fb55b6",
+    "retry_allowed": false
+  },
+  "fit": {
+    "result_sha256": "563caaacd75f29db529d493cbdc23c8072400464e51a9971758a6cb7e55c1bdf",
+    "new_measured_source_examples": 1,
+    "new_settled_examples": 1,
+    "replayed_actions": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "controller_actions": 0,
+    "prior_rows_retained": true,
+    "historical_rewards_reused": false,
+    "parameter_warm_start": false,
+    "in_sample_only": true,
+    "fit_report": {
+      "measured_choice_examples": 1,
+      "total_examples": 131,
+      "settled_examples": 131,
+      "successful_examples": 89,
+      "economy_qualified_examples": 52,
+      "weighted_mse_before": 0.03105471954204402,
+      "weighted_mse_after": 0.011256934895665104
+    },
+    "model": {
+      "schema": "pokemon.red.registered-player-model.v1",
+      "objective": "pokemon.registered-collection.v1",
+      "authority": "bounded_development_only",
+      "model_sha256": "2f0e52a869da13ce5c7ff4b7bc00d71ca64867f8a01e2a33ad060777ce84ab40",
+      "file_sha256": "229cffcacd551823a8cab3b4808871d0db1bacca94632d82b78b02baaa59b8c9",
+      "prior_model_sha256": "05cd8a95ed5472316de7929f7a78639c6a8f4cf4232f9cf2104ae0f7563c8141",
+      "settled_examples": 131,
+      "independent_evaluation": false,
+      "private_path_fields": 0
+    },
+    "prior_train_error": {"weighted_mse": 0.011222284353577779},
+    "updated_train_error": {"weighted_mse": 0.011256934895665106}
+  },
+  "completed_episode": {
+    "status": "one_retained_autonomous_typed_exception_admitted",
+    "sampled_choices": 1,
+    "admitted_examples": 1,
+    "curriculum_outcomes": 0,
+    "policy_queries_during_execution": 0,
+    "teacher_labels": 0,
+    "retry_allowed": false
+  },
+  "trust": {
+    "training_only": true,
+    "action_trace_available": false,
+    "independent_evaluation": false,
+    "authority_promotion_eligible": false,
+    "retrospective_native_trace_claim": false
+  },
+  "measured_choice": {"teacher_labels": 0, "observer_actions": 0, "observer_frames": 0},
+  "in_sample_policy_replay": {
+    "performed": false,
+    "choices": [],
+    "controller_actions": 0,
+    "independent_evaluation": false
+  },
+  "boundaries": {
+    "fit_on_development": false,
+    "retroactive_sampling_labels": false,
+    "independent_evaluation": false,
+    "authority_promotions": 0,
+    "teacher_actions": 0,
+    "replayed_actions": 0,
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0
+  },
+  "limitations": [
+    "The status helper observed changed target HP during preparation. The retained receipt does not establish the cause or prove that this candidate would have yielded a registration.",
+    "The terminal is inside a wild battle and not input-ready; no autonomous continuation is authorized from it without a separately qualified safety path.",
+    "This correlated development failure is training data, not independent evaluation or increased authority."
+  ],
+  "publication": {"github_push": false}
+}

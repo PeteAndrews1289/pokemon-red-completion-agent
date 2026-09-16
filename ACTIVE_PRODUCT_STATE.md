@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From the verified safe 92/124 terminal, allow at most one fresh Model130 choice from three acquisitions and one finite-income option; retain and fit its actual result. Stop for a general yield review if another acquisition search exhausts. Renewable League income remains unqualified.
+- Next decision: Pause gameplay. Diagnose the generic capture-status target-HP drift with ROM-free cases and evaluate a separately qualified exact-state safety continuation. Do not replay the consumed Model130 choice or treat this failure as a catch; renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model130 has 130 settled examples / 89 successes. It learned from one model-selected restoration success and one search-exhausted acquisition failure without replay. Red remains 92/124 with 73 specimens and 1608 cash at a safe terminal. |
+| Authority now | Model131 has 131 settled examples / 89 successes after a model-selected capture-status failure was fitted without replay. Red remains 92/124 with 73 specimens and 1608 cash; the retained terminal is inside a wild battle and not input-ready. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | One fresh Model130 choice from the verified four-option terminal repeats search exhaustion without any registration, indicating the current capture menu has poor practical yield. |
+| Cheapest falsifier | ROM-free status-turn cases that reproduce a target-HP guard stop after a non-damaging move, followed by one separately qualified exact-state continuation if safety can be established. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 130 | 12 |
+| Registered Train Example · train | 131 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model130-bounded-admission-and-search-failure** · status **closed** · evidence [model fit](docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json)
+**2026-09-16-model131-capture-status-drift** · status **closed** · evidence [model fit](docs/evidence/red-model131-capture-status-drift-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The learner now retains both a successful resource prerequisite and a failed acquisition search from genuine model choices; neither support recovery nor a fixed teacher goal was relabeled as model success. |
-| Learning output | Two measured choices fitted: restoration success and search-exhausted acquisition failure. Model130 has 130 settled examples / 89 successes and 51 economy-qualified examples. Registration gain was zero. |
-| Authority delta | Model128's restoration and Model129's acquisition route were both model-selected and fitted from their exact outcomes. The versioned contract admits tighter execution ceilings without changing 30000/3000000 reward normalization or older records. No authority promotion occurred. |
-| Transfer result | The versioned budget and verified-failure admission passed ROM-free cases; both live choices are correlated Red development, not independent or later-title transfer. |
-| Blocker | Red remains 92/124. Model129's chosen acquisition route exhausted its survey after three encounters and no catch; cash and balls were preserved. The terminal is safe and its next action-free menu has three acquisitions and one finite income option, but their practical yield remains unproven. |
-| Decision | Stop after the retained failed search. From the exact safe terminal, permit at most one fresh Model130 choice among the verified four options; preserve its actual costs and stop for a general yield review if another acquisition exhausts without gain. |
-| Next session | Sol High, Fast off, 45-75 minutes: allow one fresh Model130 decision from the exact safe four-option state, fit its real outcome, and stop on repeated search exhaustion for a general yield review. |
-| Next falsifier | A second fresh acquisition choice from the safe menu also exhausts its bounded search without a registration, despite available missing-species routes. |
-| Stop condition | Stop on a repeated no-gain acquisition search, unsafe terminal, retry pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | The model chose a real acquisition option and retained a typed failure with its actual costs. The guard prevented an unverified catch claim and stopped before further gameplay. |
+| Learning output | One measured Model130 acquisition failure fitted once. Model131 has 131 settled examples / 89 successes and 52 economy-qualified examples. Registration gain was zero. |
+| Authority delta | Model130 selected acquisition from a four-option menu and its typed execution failure was fitted once as Model131. No teacher actions, replay, capture, independent evaluation or authority promotion occurred. |
+| Transfer result | This is one correlated Red development failure; it establishes neither general status competence nor later-title transfer. |
+| Blocker | Red remains 92/124 with 73 specimens and 1608 cash. Capture preparation observed target HP change and stopped after 112 actions inside a wild battle; the retained terminal is not input-ready. The cause is not established. |
+| Decision | Stop gameplay on the unsafe terminal. Diagnose the general non-damaging capture-status guard and its observed turn semantics with ROM-free cases; only consider a separately qualified exact-state continuation if a safe, identity-preserving path exists. Do not replay Model130 or route-patch this species. |
+| Next session | Astra High, Fast off, 45-75 minutes: inspect the retained status failure read-only, test the general guard against ROM-free turn cases, and qualify an exact-state safety continuation only if evidence supports it. |
+| Next falsifier | A ROM-free reproduction shows whether target-HP drift follows legitimate status-turn mechanics or an observation/execution defect; uncertainty forbids another live choice from the unsafe terminal. |
+| Stop condition | Stop on an unexplained status guard, unsafe exact-state continuation, retry pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

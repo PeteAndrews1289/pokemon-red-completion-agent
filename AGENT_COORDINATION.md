@@ -14,20 +14,20 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model130 has 130 settled examples/89 successes after one selected restoration success and one
-selected acquisition search failure. Red is 92/124 registered with 73 specimens. Both outcomes
-were retained and fitted without replay; the terminal is safe. The current action-free menu has
-three acquisition routes and one finite-income option.
+Model131 has 131 settled examples/89 successes after Model130 selected an acquisition from a
+four-option menu and capture preparation stopped on target-HP drift. Red is 92/124 registered
+with 73 specimens, 1608 cash and seven Great Balls. The typed failure was retained and fitted
+without replay. The terminal is in a wild battle and not input-ready.
 
-Next allow at most one fresh Model130 choice from the exact earned terminal. Stop for a general
-search-yield review if acquisition again exhausts without a registration. Do not replay consumed
-choices, hand-select a destination, or claim a full-player authority promotion. Evolution target
+Next diagnose the generic capture-status guard with ROM-free cases. Consider an exact-state
+safety continuation only after separate qualification; do not replay Model130, hand-select a
+destination, or claim a full-player authority promotion. Evolution target
 ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
 
 No Flash or Claude review was used in this session. Quota was not refreshed.
-Next setting: Sol High, Fast off, approximately 45-75 minutes. No GitHub publication without Pete's
+Next setting: Astra High, Fast off, approximately 45-75 minutes for capture-safety diagnosis. No GitHub publication without Pete's
 explicit instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

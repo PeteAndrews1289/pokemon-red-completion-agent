@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model130-bounded-admission-and-search-failure**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model131-capture-status-drift**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **130 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **131 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model130-bounded-admission-and-search-failure-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model131-capture-status-drift-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model131-capture-status-drift
+
+Model130 selected an acquisition from a four-option menu and stopped after112actions/5256frames when capture preparation observed target-HP drift. The typed failure was fitted once: Model131 has131 examples/89 successes. Red remains92/124 with73 specimens and1608 cash.
+
+**Deviation:** The terminal is inside a wild battle and not input-ready. No catch, cash or ball spend, teacher action, replay, independent evaluation, authority promotion, full-Red gate or GitHub push occurred. Cause of target-HP drift remains unknown.
+
+**Next:** Astra High, Fast off: diagnose general capture-status turn semantics with ROM-free cases, then consider a separately qualified exact-state safety continuation only if justified. Do not replay Model130 or route-patch the failure.
 
 ### 2026-09-16-model130-bounded-admission-and-search-failure
 
