@@ -17,7 +17,10 @@ from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manag
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.private_artifacts import open_private_root
 from pokemon_red_completion.provenance import detect_source_identity, require_clean_source
-from pokemon_red_completion.red_autonomous_learning import publish_autonomous_measured_choice
+from pokemon_red_completion.red_autonomous_learning import (
+    authenticated_autonomous_execution_limits,
+    publish_autonomous_measured_choice,
+)
 from pokemon_red_completion.red_collection import RED_COLLECTION_GAME_ID, red_species_ref
 from pokemon_red_completion.red_goal_context import build_red_goal_context_runtime
 from pokemon_red_completion.red_goal_context_profile import parse_red_goal_context_profile
@@ -100,6 +103,9 @@ def main() -> int:
     run_plan = _json(run_plan_bytes, "run plan")
     run_result = _json(run_result_bytes, "run result")
     provenance = _mapping(run_plan.get("provenance"), "run provenance")
+    execution_maximum_actions, execution_maximum_frames = (
+        authenticated_autonomous_execution_limits(plan, provenance)
+    )
     prior = load_player_goal_model_record(
         Path(str(_mapping(plan["model"], "model declaration").get("path"))),
         expected_model_sha256=str(plan.get("model_sha256")),
@@ -115,8 +121,6 @@ def main() -> int:
         or provenance.get("parent_state_sha256") != _mapping(plan["state"], "state").get("sha256")
         or provenance.get("rom_sha256") != _mapping(plan["rom"], "rom").get("sha256")
         or provenance.get("model_file_sha256") != prior.file_sha256
-        or provenance.get("maximum_actions") != 30_000
-        or provenance.get("maximum_frames") != 3_000_000
         or provenance.get("source_dirty") is not False
         or run_result.get("schema") != "pokemon.red.autonomous-option-result.v1"
         or run_result.get("model_sha256") != prior.model.model_sha256
@@ -306,6 +310,8 @@ def main() -> int:
                 outcome_sha256=outcome_sha,
                 source_commit=str(provenance.get("source_commit")),
                 source_bundle_sha256=str(provenance.get("source_bundle_sha256")),
+                execution_maximum_actions=execution_maximum_actions,
+                execution_maximum_frames=execution_maximum_frames,
             )
             measured_inputs.append(measured)
             measured_results.append(result)

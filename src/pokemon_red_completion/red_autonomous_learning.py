@@ -24,6 +24,7 @@ from .red_development_measured_choice import (
 )
 from .red_economy_learning import red_registered_economy_outcome
 from .red_live_option_menu import (
+    RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_MIXED_OPTION_POLICY,
 )
@@ -33,6 +34,26 @@ from .resource_economy_observation import EconomySnapshot
 
 _SHA256 = re.compile(r"[0-9a-f]{64}\Z")
 _COMMIT = re.compile(r"[0-9a-f]{40}\Z")
+
+
+def authenticated_autonomous_execution_limits(
+    plan: Mapping[str, object], provenance: Mapping[str, object]
+) -> tuple[int, int]:
+    """Keep the run's exact safety ceiling separate from fixed reward normalization."""
+    actions = plan.get("maximum_actions")
+    frames = plan.get("maximum_frames")
+    if (
+        type(actions) is not int
+        or not 1 <= actions <= DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+        or type(frames) is not int
+        or not 1 <= frames <= DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+        or type(provenance.get("maximum_actions")) is not int
+        or type(provenance.get("maximum_frames")) is not int
+        or provenance.get("maximum_actions") != actions
+        or provenance.get("maximum_frames") != frames
+    ):
+        raise ValueError("autonomous execution limits differ")
+    return actions, frames
 
 
 def _mapping(value: object, subject: str) -> Mapping[str, object]:
@@ -67,8 +88,8 @@ def publish_autonomous_measured_choice(
     outcome_sha256: str,
     source_commit: str,
     source_bundle_sha256: str,
-    maximum_actions: int = DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS,
-    maximum_frames: int = DEVELOPMENT_MEASURED_MAXIMUM_FRAMES,
+    execution_maximum_actions: int = DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS,
+    execution_maximum_frames: int = DEVELOPMENT_MEASURED_MAXIMUM_FRAMES,
 ) -> tuple[RedDevelopmentMeasuredChoiceInput, dict[str, object]]:
     """Seal one already-played step without replaying or inventing an action trace."""
     if (
@@ -79,8 +100,10 @@ def publish_autonomous_measured_choice(
         or type(ordinal) is not int
         or ordinal < 0
         or _COMMIT.fullmatch(source_commit) is None
-        or maximum_actions != DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
-        or maximum_frames != DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+        or type(execution_maximum_actions) is not int
+        or not 1 <= execution_maximum_actions <= DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+        or type(execution_maximum_frames) is not int
+        or not 1 <= execution_maximum_frames <= DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
     ):
         raise ValueError("autonomous measured choice scope differs")
     for value, subject in (
@@ -152,7 +175,7 @@ def publish_autonomous_measured_choice(
         raise ValueError("autonomous budget facts differ")
     actions -= before_actions
     frames -= before_frames
-    if not 1 <= actions <= maximum_actions or not 0 <= frames <= maximum_frames:
+    if not 1 <= actions <= execution_maximum_actions or not 0 <= frames <= execution_maximum_frames:
         raise ValueError("autonomous choice exceeds measured budget")
     target_cash = menu.context.target_cash
     if type(target_cash) is not int:
@@ -165,8 +188,8 @@ def publish_autonomous_measured_choice(
         succeeded=succeeded,
         actions=actions,
         frames=frames,
-        maximum_actions=maximum_actions,
-        maximum_frames=maximum_frames,
+        maximum_actions=DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS,
+        maximum_frames=DEVELOPMENT_MEASURED_MAXIMUM_FRAMES,
         before_economy=before_economy,
         after_economy=after_economy,
         target_cash=target_cash,
@@ -188,8 +211,15 @@ def publish_autonomous_measured_choice(
         kind=AUTONOMOUS_CHOICE_PARENT_KIND,
         record=parent,
     )
+    bounded = (
+        execution_maximum_actions != DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+        or execution_maximum_frames != DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+    )
     declaration = {
-        "schema": RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
+        "schema": (
+            RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
+            if bounded else RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+        ),
         "run_id": run_id,
         "ordinal": ordinal,
         "autonomous_plan_sha256": autonomous_plan_sha256,
@@ -206,13 +236,18 @@ def publish_autonomous_measured_choice(
         "selected_option_kind": decision.get("selected_option_kind"),
         "selection_seed": selection_seed,
         "behavior_probabilities": probabilities,
-        "maximum_actions": maximum_actions,
-        "maximum_frames": maximum_frames,
+        "maximum_actions": DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS,
+        "maximum_frames": DEVELOPMENT_MEASURED_MAXIMUM_FRAMES,
         "teacher_labels": 0,
         "retry_authorized": False,
         "source_commit": source_commit,
         "source_bundle_sha256": source_bundle_sha256,
     }
+    if bounded:
+        declaration.update(
+            execution_maximum_actions=execution_maximum_actions,
+            execution_maximum_frames=execution_maximum_frames,
+        )
     declaration_sha = canonical_sha256(declaration)
     segment = RedDevelopmentMeasuredSegment(
         pair_id=choice_id,

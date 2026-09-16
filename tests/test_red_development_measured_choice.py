@@ -40,7 +40,10 @@ from pokemon_red_completion.living_dex_option_value import (
 )
 from pokemon_red_completion.living_dex_policy_codec import LivingDexPolicyCodecError
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_autonomous_learning import publish_autonomous_measured_choice
+from pokemon_red_completion.red_autonomous_learning import (
+    authenticated_autonomous_execution_limits,
+    publish_autonomous_measured_choice,
+)
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_development_measured_choice import (
     DEVELOPMENT_MEASURED_CHOICE_KIND,
@@ -61,6 +64,8 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_FIELD_RESTORE_CONTINUATION_DECLARATION_SCHEMA,
@@ -1212,9 +1217,12 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
     assert arm.outcome.frame_cost == 2400 / 3_000_000
 
 
-@pytest.mark.parametrize("failed_exception", [False, True])
+@pytest.mark.parametrize(
+    ("failed_exception", "tight_budget"),
+    [(False, False), (True, False), (False, True)],
+)
 def test_autonomous_choice_is_admitted_without_replaying_actions(
-    tmp_path, monkeypatch, failed_exception
+    tmp_path, monkeypatch, failed_exception, tight_budget
 ):
     store, _, _, behavior = _bootstrap_registered_model(tmp_path / "registered", monkeypatch)
     behavior = replace(behavior, model=_live_model())
@@ -1302,6 +1310,8 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
         outcome_sha256="8" * 64,
         source_commit="9" * 40,
         source_bundle_sha256="a" * 64,
+        execution_maximum_actions=3000 if tight_budget else 30_000,
+        execution_maximum_frames=300_000 if tight_budget else 3_000_000,
     )
 
     example = load_red_development_measured_choice_example(
@@ -1312,6 +1322,35 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
     assert result["eligible_examples"] == 1
     assert result["action_trace_available"] is False
     assert result["authority_promotion_eligible"] is False
+    record = store.find_sealed_record(
+        development_measured_choice_record_id(measured.choice_id),
+        expected_kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
+    )
+    assert record is not None
+    choice = RedDevelopmentMeasuredChoice.from_public(record.read())
+    assert choice.selection_declaration["schema"] == (
+        RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
+        if tight_budget else RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+    )
+    if tight_budget:
+        assert choice.selection_declaration["execution_maximum_actions"] == 3000
+        assert choice.selection_declaration["execution_maximum_frames"] == 300_000
+        assert choice.maximum_actions == 30_000
+        assert choice.maximum_frames == 3_000_000
+        for key, value in (
+            ("execution_maximum_actions", 149),
+            ("execution_maximum_frames", 2399),
+        ):
+            declaration = {**choice.selection_declaration, key: value}
+            segment = replace(choice.segments[0], declaration_sha256=canonical_sha256(declaration))
+            with pytest.raises(ValueError, match="execution ceiling"):
+                replace(
+                    choice,
+                    selection_declaration=declaration,
+                    selection_declaration_sha256=canonical_sha256(declaration),
+                    segments=(segment,),
+                    segments_sha256=canonical_sha256([segment.public_dict()]),
+                )
 
     altered = deepcopy(outcome)
     altered["terminal_state_sha256"] = "0" * 64
@@ -1337,6 +1376,46 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
             outcome_sha256="0" * 64,
             source_commit="9" * 40,
             source_bundle_sha256="a" * 64,
+            execution_maximum_actions=3000 if tight_budget else 30_000,
+            execution_maximum_frames=300_000 if tight_budget else 3_000_000,
+        )
+
+
+@pytest.mark.parametrize(
+    ("actions", "frames", "provenance_actions", "provenance_frames"),
+    [
+        (3000, 300_000, 3000, 300_000),
+        (30_000, 3_000_000, 30_000, 3_000_000),
+    ],
+)
+def test_autonomous_execution_limits_preserve_authenticated_run_ceiling(
+    actions, frames, provenance_actions, provenance_frames
+):
+    assert authenticated_autonomous_execution_limits(
+        {"maximum_actions": actions, "maximum_frames": frames},
+        {"maximum_actions": provenance_actions, "maximum_frames": provenance_frames},
+    ) == (actions, frames)
+
+
+@pytest.mark.parametrize(
+    ("actions", "frames", "provenance_actions", "provenance_frames"),
+    [
+        (3000, 300_000, 30_000, 300_000),
+        (3000, 300_000, 3000, 3_000_000),
+        (0, 300_000, 0, 300_000),
+        (3000, 0, 3000, 0),
+        (30_001, 300_000, 30_001, 300_000),
+        (3000, 3_000_001, 3000, 3_000_001),
+        (True, 300_000, True, 300_000),
+    ],
+)
+def test_autonomous_execution_limits_reject_mismatch_or_unsafe_ceiling(
+    actions, frames, provenance_actions, provenance_frames
+):
+    with pytest.raises(ValueError, match="execution limits"):
+        authenticated_autonomous_execution_limits(
+            {"maximum_actions": actions, "maximum_frames": frames},
+            {"maximum_actions": provenance_actions, "maximum_frames": provenance_frames},
         )
 
 

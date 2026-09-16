@@ -35,6 +35,7 @@ from pokemon_red_completion.red_economy_learning import red_registered_economy_o
 from pokemon_red_completion.red_fishing_acquisition import FISHING_DESTINATION_POLICY
 from pokemon_red_completion.red_live_option_menu import (
     RED_LIVE_AUTOMATIC_FISHING_EXECUTION_DECLARATION_SCHEMA,
+    RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_ACQUISITION_CONTINUATION_DECLARATION_SCHEMA,
     RED_LIVE_FROZEN_EXECUTION_DECLARATION_SCHEMA,
@@ -517,7 +518,10 @@ def _validate_selection_declaration(
                 declaration.get("current_repository_head"),
                 subject="current repository head",
             )
-        elif schema == RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA:
+        elif schema in {
+            RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
+        }:
             ordinal = declaration.get("ordinal")
             expected = {
                 "autonomous_plan_sha256",
@@ -544,6 +548,11 @@ def _validate_selection_declaration(
                 "teacher_labels",
                 "terminal_state_sha256",
             }
+            bounded = schema == RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
+            if bounded:
+                expected |= {"execution_maximum_actions", "execution_maximum_frames"}
+            execution_actions = declaration.get("execution_maximum_actions")
+            execution_frames = declaration.get("execution_maximum_frames")
             mismatch = (
                 set(declaration) != expected
                 or declaration.get("parent_checkpoint_sha256") != parent_checkpoint_sha256
@@ -552,6 +561,19 @@ def _validate_selection_declaration(
                 or declaration.get("behavior_probabilities") != list(behavior_probabilities)
                 or declaration.get("maximum_actions") != DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
                 or declaration.get("maximum_frames") != DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+                or (
+                    bounded
+                    and (
+                        type(execution_actions) is not int
+                        or not 1 <= execution_actions <= DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+                        or type(execution_frames) is not int
+                        or not 1 <= execution_frames <= DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+                        or (
+                            execution_actions == DEVELOPMENT_MEASURED_MAXIMUM_ACTIONS
+                            and execution_frames == DEVELOPMENT_MEASURED_MAXIMUM_FRAMES
+                        )
+                    )
+                )
                 or declaration.get("retry_authorized") is not False
                 or declaration.get("teacher_labels") != 0
                 or type(ordinal) is not int
@@ -818,6 +840,7 @@ class RedDevelopmentMeasuredChoice:
                 RED_LIVE_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_WRITE_AHEAD_FROZEN_RESUPPLY_EXECUTION_DECLARATION_SCHEMA,
                 RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
+                RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
             }:
                 declared_kind = selected_option_kind.value
             if (
@@ -942,6 +965,23 @@ class RedDevelopmentMeasuredChoice:
             or self.emulator_frames > self.maximum_frames
         ):
             raise ValueError("measured choice fixed normalization differs")
+        if self.selection_declaration.get("schema") == (
+            RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA
+        ) and (
+            self.controller_actions
+            > _integer(
+                self.selection_declaration.get("execution_maximum_actions"),
+                subject="execution maximum actions",
+                minimum=1,
+            )
+            or self.emulator_frames
+            > _integer(
+                self.selection_declaration.get("execution_maximum_frames"),
+                subject="execution maximum frames",
+                minimum=1,
+            )
+        ):
+            raise ValueError("measured choice exceeds declared execution ceiling")
         if not isinstance(self.resource_costs, Mapping):
             raise ValueError("measured choice resource costs differ")
         economy_fields = (self.before_economy, self.after_economy, self.target_cash)
@@ -1357,7 +1397,10 @@ def load_red_development_measured_choice_example(
     _validate_behavior(choice, item.behavior_record)
     autonomous = (
         choice.selection_declaration.get("schema")
-        == RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA
+        in {
+            RED_LIVE_AUTONOMOUS_EXECUTION_DECLARATION_SCHEMA,
+            RED_LIVE_AUTONOMOUS_BOUNDED_EXECUTION_DECLARATION_SCHEMA,
+        }
     )
     checkpoint_record = store.find_sealed_record(
         (
