@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model123-heterogeneous-evolution-fit**.
+Baseline: **red-first-v3-full-run**. Reviewed through **2026-09-15-model123-next-menu-capability-gate**.
 
 A learned player must complete a fresh-start, model-directed Red run and the full local Red Pokedex before any ROM hack, then learn Crystal and continue the shared registered Pokedex through at least Emerald.
 
@@ -89,7 +89,7 @@ Register every Red Pokedex entry in the same fresh-run save.
 
 No reduced availability subset. Shared credit is not a local flag; no living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Learn new generation mechanics; retain truthful global, local and physical views.
 
 ## Session reviews
+
+### 2026-09-15-model123-next-menu-capability-gate
+
+The authenticated88-registration terminal failed the cheapest heterogeneous-menu gate before any model query or input: no boxed level evolution remains, no evolution stone is held, and cash206 is below the2100 stone price. A reusable party-only stone-use controller now passes40 focused and79 combined controller/protocol tests.
+
+**Deviation:** No learning, registration, fit, authority or transfer counter changed. Item use remains separate from procurement and lacks live cartridge qualification. The full suite reached6770 passes before an unrelated exact local PyBoy metadata pin failed; no GitHub push occurred and all five full-Red gates remain false.
+
+**Next:** Sol High, Fast off: ROM-free qualify a reusable bounded sale-and-stone-purchase provider plus cartridge-derived move-learning admission, then integrate item evolution. Return immediately to one measured Model123 choice once two families are genuinely executable; otherwise reassess the lane.
 
 ### 2026-09-15-model123-heterogeneous-evolution-fit
 

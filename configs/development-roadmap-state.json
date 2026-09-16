@@ -9,7 +9,7 @@
     "legitimate_external_dependencies_resolved": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-model123-heterogeneous-evolution-fit",
+  "as_of_session": "2026-09-15-model123-next-menu-capability-gate",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json"
+      "evidence": "docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1484,6 +1484,12 @@
       "result": "The one successful mixed-family outcome was fitted exactly once. Model123 has123 examples/84 successes, retains all122 prior rows and keeps evolution selected on the frozen menu with probability0.852719 versus0.852663 before fitting. The durable Red state remains88/151 registered,67 living species and71 specimens.",
       "deviation": "The first acceptance pass failed only because its one-off verifier assumed append ordering while the corpus canonically sorts row fingerprints. The existing sealed fit was verified without refitting or replaying gameplay. None of the five full-Red completion gates changed.",
       "next": "Sol High, Fast off: construct and freeze Model123's next identity-free heterogeneous menu from the authenticated88-registration terminal. Authorize at most one model-selected outcome only if at least two legitimate families are executable; no teacher substitution, full run, push or ROM-hack work."
+    },
+    {
+      "session": "2026-09-15-model123-next-menu-capability-gate",
+      "result": "The authenticated88-registration terminal failed the cheapest heterogeneous-menu gate before any model query or input: no boxed level evolution remains, no evolution stone is held, and cash206 is below the2100 stone price. A reusable party-only stone-use controller now passes40 focused and79 combined controller/protocol tests.",
+      "deviation": "No learning, registration, fit, authority or transfer counter changed. Item use remains separate from procurement and lacks live cartridge qualification. The full suite reached6770 passes before an unrelated exact local PyBoy metadata pin failed; no GitHub push occurred and all five full-Red gates remain false.",
+      "next": "Sol High, Fast off: ROM-free qualify a reusable bounded sale-and-stone-purchase provider plus cartridge-derived move-learning admission, then integrate item evolution. Return immediately to one measured Model123 choice once two families are genuinely executable; otherwise reassess the lane."
     }
   ],
   "closed_milestones": [

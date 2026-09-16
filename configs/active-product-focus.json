@@ -33,22 +33,22 @@
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "Model123 now retains 123 settled examples / 84 successes under bounded development authority. It incorporated Model122's genuine acquire-versus-evolve success as exactly one new row, retained all 122 prior rows and preserved the selected evolution on the frozen menu.",
-        "blocker": "No fit blocker remains. The next unknown is whether the durable 88-registration terminal still exposes at least two genuinely executable acquisition families without identity leakage before Model123's next query.",
-        "decision": "Accept Model123, preserve the 88-registration terminal, and action-free construct the next heterogeneous menu before authorizing exactly one new model-selected collection outcome.",
+        "authority_delta": "None. Model123 remains at 123 settled examples / 84 successes and 88 registrations. A party-only stone-use controller is ROM-free qualified but has no gameplay or learned authority.",
+        "blocker": "The authenticated terminal has no remaining boxed level evolution and no evolution stone in the bag or PC. Cash is 206 versus a 2100 stone price, so the next heterogeneous menu cannot honestly offer an immediately executable evolution family. Funding and procurement are not yet bound to a reusable provider.",
+        "decision": "Stop before querying Model123 or touching gameplay. Preserve the 88-registration terminal, keep item use separate from procurement, and qualify one reusable funding-and-stone-procurement provider plus cartridge-derived move-learning admission before reconstructing the heterogeneous menu.",
         "evidence": {
-          "kind": "model_fit",
-          "path": "docs/evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json",
-          "sha256": "8257203c2b59c7e5e514880b4e8352f65bdd8fb6007328ae86b7cd2cba32aab6"
+          "kind": "falsification",
+          "path": "docs/evidence/red-model123-next-menu-capability-gate-2026-09-15.json",
+          "sha256": "36a51109efb4f833449978bcdeb6aa01724c0c57f97cdeee7cc2f16313220507"
         },
-        "learning_output": "The successful mixed-family evolution became one measured training row. Model123 has 123 examples / 84 successes; support for the verified selected option increased from 0.852663 to 0.852719 on the exact frozen menu.",
-        "next_falsifier": "The authenticated 88-registration terminal cannot expose at least two executable acquisition families action-free, or the next frozen menu leaks private identity, changes state, or cannot bind one Model123 query exactly.",
-        "next_session_goal": "Sol High, Fast off: construct and freeze Model123's next identity-free heterogeneous menu from the 88-registration terminal; if at least two legitimate families are executable, authorize exactly one model-selected outcome with no teacher substitution.",
-        "product_alignment": "Red has a durable 88-registration restart and the option learner now contains its first successful mixed-family choice without forgetting prior evidence. This directly advances the reusable decision loop required before fresh-Red acceptance.",
-        "session_id": "2026-09-15-model123-heterogeneous-evolution-fit",
+        "learning_output": "None. The cheapest falsifier stopped the session before a model query or gameplay. Model123 remains at 123 examples / 84 successes.",
+        "next_falsifier": "A reusable action-free provider cannot prove that the exact terminal can sell only bounded renewable inventory, buy one required stone, and expose the resulting held-item evolution without route-specific scripting or state mutation during planning.",
+        "next_session_goal": "Sol High, Fast off: bind and ROM-free qualify one separate funding-and-stone-procurement provider plus cartridge-derived move-learning admission, then integrate it with the party-only item-evolution controller. Do not query Model123 or run gameplay until the exact terminal can again expose two genuinely executable families.",
+        "product_alignment": "The session falsified an impossible next menu before spending a model query or mutating the durable Red state. It recovered and qualified a reusable party-only item-evolution controller while preserving the architectural boundary between procurement and item use.",
+        "session_id": "2026-09-15-model123-next-menu-capability-gate",
         "status": "closed",
-        "stop_condition": "Stop if terminal authentication, zero-input observation, executable-family diversity or identity-free menu construction fails; do not substitute a teacher choice, replay the completed evolution, start a full-game run, push GitHub or begin a ROM hack.",
-        "transfer_result": "No cross-title transfer result. The frozen-menu replay established within-Red retention: Model123 preserved and slightly strengthened the successful heterogeneous selection."
+        "stop_condition": "Stop if procurement requires a species-specific route, an unauthenticated shop assumption, sale of protected finite assets, speculative move-learning inputs, teacher substitution, or gameplay before the two-family menu is genuinely executable. Do not push GitHub or begin a ROM hack/Crystal.",
+        "transfer_result": "No cross-title transfer result. The new controller is structurally reusable for party-held item evolution, but it has only ROM-free test authority and no live cartridge qualification."
       },
       "learned_authority": {
         "current": "Model123 has 123 settled examples / 84 successes and 88 local registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Construct Model123's next identity-free heterogeneous menu from the authenticated 88-registration terminal and authorize at most one model-selected collection outcome if at least two legitimate families are executable.",
+      "next_decision": "Qualify a separate reusable funding-and-stone-procurement provider and cartridge-derived move-learning admission, then reconstruct the Model123 heterogeneous menu only after two families are genuinely executable.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

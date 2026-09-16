@@ -25,6 +25,13 @@ outcome as exactly one new row while preserving all 122 prior rows. Frozen-menu 
 successful selection rose from 0.852663 to 0.852719. The durable 88-registration terminal was
 re-observed with zero input and zero frames.
 
+The attempted successor menu then hit its cheapest falsifier before a model query: the terminal has
+no remaining boxed level evolution and no evolution stone in the bag or PC. Its 206 cash cannot buy
+a 2100 stone directly. A bounded party-only stone-use controller is now ROM-free qualified, but it
+does not buy items, retrieve boxed specimens or claim live-game authority. Funding and procurement
+must be a separate reusable provider; the terminal inventory appears sufficient to fund one stone
+by selling bounded renewable items, but that calculation is not execution authority.
+
 No ROM hack or Crystal work is permitted until a fresh model-directed Red run proves all five
 completion gates: fresh origin, start-to-finish control, Champion, Hall of Fame and 151/151 local
 registration with legitimate dependencies resolved.
@@ -33,19 +40,24 @@ registration with legitimate dependencies resolved.
 
 | Session | Required result | Recommended setting |
 | --- | --- | --- |
-| Next heterogeneous choice | From the 88-registration terminal, action-free construct an identity-free menu with at least two executable families; freeze one Model123 query and authorize at most one outcome | Sol / High / Fast off |
+| Procurement capability | Bind and ROM-free qualify one reusable provider that can sell only bounded renewable inventory, buy the required stone and expose the resulting item; add cartridge-derived move-learning admission and integrate party stone use | Sol / High / Fast off |
+| Next heterogeneous choice | Reconstruct the identity-free menu only after the 88-registration terminal exposes two genuinely executable families; freeze one Model123 query and authorize at most one outcome | Sol / High / Fast off |
 | Retain and continue | Verify the exact outcome and costs, fit one successor row if eligible, then repeat from the earned terminal rather than a reset | Sol / High / Fast off |
-| Coverage audit | Review which story, battle, navigation, resource, collection and dependency decisions still lack reusable authority; choose the smallest measured gaps | Astra / High / Fast off |
+| Authority coverage audit | Review which story, battle, navigation, resource, collection and dependency decisions still lack reusable authority; choose the smallest measured gaps | Astra / High / Fast off |
 | Fresh Red acceptance freeze | Freeze the nondeterministic fresh-run contract, dependency plan, stop rules and evidence gates without starting the run | Astra / High / Fast off |
 | Fresh Red acceptance run | Pass fresh origin, model-directed completion, Champion/Hall of Fame, 151/151 local registration and dependency gates | Astra / High freeze; Sol / High execution |
 
-The next session is one bounded collection decision, not a full replay. Stop if the terminal cannot
-produce two executable families action-free or if menu construction leaks species, source or binding
-identity. Do not substitute a teacher choice, redraw the query, replay the completed evolution, push
-GitHub or begin ROM-hack/Crystal work.
+The next session is one bounded reusable capability integration, not a full replay. Stop before
+gameplay if shop access, permitted sales, stone purchase or move-learning safety cannot be derived
+without a species-specific route. Once the capability is qualified, return immediately to a measured
+Model123 decision; project policy allows only one session without new learning before reassessment.
+Do not substitute a teacher choice, replay the completed evolution, push GitHub or begin ROM-hack/
+Crystal work.
 
-This session added one training row (122→123, +0.82% dataset size) and one successful example
-(83→84). That is measured learning progress, not a percentage estimate of overall competence.
+The capability-gate session added zero training rows and zero registrations. It prevented an invalid
+menu and added tested controller infrastructure; that is useful progress, but it is not measured
+learning progress.
 
-[Evidence](evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json) ·
+[Latest evidence](evidence/red-model123-next-menu-capability-gate-2026-09-15.json) ·
+[Model123 fit](evidence/red-model123-heterogeneous-evolution-fit-2026-09-15.json) ·
 [Development infographic](development-roadmap.md)
