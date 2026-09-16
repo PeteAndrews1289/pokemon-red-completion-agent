@@ -16,8 +16,8 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 ## Where we stand
 
 Model134 has 134 fitted examples/91 successes, including a model-selected Center restoration,
-a retained search failure and a retained item-evolution execution failure. The development save has 93/124 declared-
-route registrations and 74 specimens. The 93/124 ratio describes this Red save's registrations,
+a retained search failure and a retained item-evolution execution failure. The development save has 94/124 declared-
+route registrations and 74 specimens. The 94/124 ratio describes this Red save's registrations,
 not whole-project completion. The mandatory fresh-Red completion gate remains 0/5.
 
 The autonomous player now chooses among capture destinations, restoration and finite income from
@@ -33,8 +33,9 @@ restore-versus-evolve, but the item skill wrongly required a healed nurse farewe
 was fitted, and a generic repair passed ROM-free tests. Model133 then chose restoration and
 verified whole-party recovery without a teacher. The healed terminal originally offered one
 evolution binding at 2298 cash. The new action-free inventory exposes five executable stone
-targets, but all five have identical portable features. Selection stops before a query;
-no new learned choice was made. The item repair has not yet been exercised live.
+targets, but all five have identical portable features. One explicitly labelled uniform
+support choice evolved Shellder to Cloyster, verified the item repair live and added one
+registration. It was not a model decision or fit; no learned target preference was established.
 Battle turns and low-level travel still use existing controllers; a fully learned player is not
 established.
 
@@ -42,16 +43,17 @@ established.
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Equivalent-target exploration | Qualify honest tie handling, then one bounded choice from five real bindings; no learned-preference claim from identical inputs | Sol / High / Fast off |
+| Next collection option | Inspect the exact post-Cloyster terminal at 198 cash; only run a newly planned bounded useful goal if executable | Sol / High / Fast off |
 | Search-yield gate | If later acquisition searches exhaust without gain, diagnose general survey coverage and option value before another similar run | Astra / High if redesign is needed |
-| Broaden target authority | Five stone-target executors are exposed; verify selected-target execution live, then extend beyond deterministic level-target derivation | Sol / High / Fast off |
+| Broaden target authority | One sampled stone target executed live; expose genuinely differentiated target value beyond deterministic level-target derivation | Sol / High / Fast off |
 | Battle/story authority | Audit the learned battle bridge and story controller; qualify a decision boundary without heuristic substitution | Astra / High / Fast off |
 | Sustained bounded play | Complete varied consecutive goals, including resource and storage prerequisites, without human-selected recovery or resets | Sol / High / Fast off |
 | Fresh Red acceptance | Pass fresh origin, model-directed start-to-finish control, Champion/Hall of Fame, 124/124 route registrations and the deferred-dependency ledger | Astra / High for freeze; Sol / High for execution |
 
-The completed action-free session found real alternatives but no feature contrast. Next time box:
-45-60 minutes to qualify explicit equivalent-target exploration and, only then, one bounded goal.
-Do not manufacture distinctions solely to clear a gate. Stop on unsafe state or lost evidence.
+The bounded evolution session gained one registration through honest support exploration.
+Next time box: 30-45 minutes to inspect the new safe terminal and, only if qualified, run
+one bounded goal. Do not manufacture distinctions solely to clear a gate. Stop on unsafe state
+or lost evidence.
 The previous choices are consumed and may not be
 replayed or substituted. All current fits are correlated development, not independent evaluation.
 
@@ -59,5 +61,5 @@ Mew and unavailable version/link dependencies remain legitimate later-game targe
 ROM-hack and Crystal work remain closed until fresh Red acceptance passes. Pete decides when to
 push to GitHub.
 
-[Latest evidence](evidence/red-model134-multi-evolution-menu-2026-09-16.json) ·
+[Latest evidence](evidence/red-model134-equivalent-evolution-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

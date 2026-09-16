@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify explicitly labelled equivalent-target exploration, preserving differentiated model choices and exact selected-arm outcomes. Only after that contract passes may one fresh bounded Model134 continuation run; do not invent identity features or train unplayed alternatives.
+- Next decision: Inspect the Cloyster terminal action-free, then execute at most one newly planned bounded goal only if a genuinely useful option exists. Keep equivalent sampling separate from model decisions and do not refit the support tie.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Expose executable missing evolution targets with separately verified skills and individual resource quotes, then distinguish informed preference from equivalent-goal exploration. |
-| Authority now | Model134 remains 134 settled examples / 91 successes. Five separate stone targets now bind action-free, but one semantic vector prevents a new learned-preference claim. No query, input, fit or registration gain occurred. |
+| Reusable capability | Select and execute separately bound missing evolution goals while labeling equivalent-target sampling honestly; then continue from the earned safe terminal. |
+| Authority now | Model134 remains 134 settled examples / 91 successes. One support-only sampled evolution registered Cloyster from the authentic save; no model query, fit or learned target-preference claim resulted. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Equivalent-target handling invents a learned preference, leaks target identity, changes ordinary differentiated choices, or fails to preserve the one sampled executor and its actual outcome. |
+| Cheapest falsifier | The new terminal offers no executable useful collection goal, or a proposed next goal depends on invented resources, hidden identity features or replay. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model134-multi-evolution-menu** · status **closed** · evidence [qualification](docs/evidence/red-model134-multi-evolution-menu-2026-09-16.json)
+**2026-09-16-model134-equivalent-evolution** · status **closed** · evidence [qualification](docs/evidence/red-model134-equivalent-evolution-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Exposes genuine target alternatives instead of catalog preselection, while distinguishing engineering capability from learned preference. The current session stopped at the declared semantic-aliasing falsifier. |
-| Learning output | Zero queries, gameplay, fits or new registrations. Model134 remains 134 settled examples / 91 successes / 55 economy-qualified. Red remains 93/124, 74 specimens and 2298 cash. |
-| Authority delta | Five target-specific stone executors replace one catalog-selected item target. All current policy inputs are identical, so no live target selection, query or authority promotion occurred. |
-| Transfer result | 113 ROM-free tests cover multiple evolution families, differing resources, protected precursors, routed bindings and semantic-aliasing admission. Action-free cartridge inspection verified five bindings but one feature vector. No independent or cross-title transfer. |
-| Blocker | The safe Center has five executable stone targets, but their identity-free features and 2100 purchase costs are identical. The feature-distinction falsifier fired; no learned preference can be inferred. |
-| Decision | Qualify explicitly labelled equivalent-target exploration, preserving differentiated model choices and exact selected-arm outcomes. Only after that contract passes may one fresh bounded Model134 continuation run; do not invent identity features or train unplayed alternatives. |
-| Next session | Sol High, Fast off, 45-60 minutes: qualify explicit equivalent-target exploration, then one newly planned bounded Model134 continuation if qualified. Avoid inventing distinctions solely to clear a gate. |
-| Next falsifier | Equivalent-target handling invents a learned preference, leaks target identity, changes ordinary differentiated choices, or fails to preserve the one sampled executor and its actual outcome. |
+| Product alignment | One actual missing registration was earned through an honest equivalent-goal support choice and exact native execution; this is collection progress, not learned target preference. |
+| Learning output | One support-only evolution succeeded: Red 93/124 to 94/124, 74 specimens retained, cash 2298 to 198. Zero model decisions, teacher actions or fits; Model134 remains 134 settled examples / 91 successes / 55 economy-qualified. |
+| Authority delta | Uniform equivalent-goal sampling selected and executed one bound target without a model query. Cloyster was registered, but no fitted example, learned target preference or authority promotion resulted. |
+| Transfer result | 113 ROM-free tests cover tied and differentiated menus, binding persistence and single-target execution. One authentic target succeeded; no independent or cross-title transfer. |
+| Blocker | The exact safe continuation now has 198 cash. Its executable next collection menu has not been inspected; affordability and resource alternatives must be established before further input. |
+| Decision | Inspect the Cloyster terminal action-free, then execute at most one newly planned bounded goal only if a genuinely useful option exists. Keep equivalent sampling separate from model decisions and do not refit the support tie. |
+| Next session | Sol High, Fast off, 30-45 minutes: inspect the exact safe terminal action-free and permit at most one bounded model-directed collection goal if qualified. |
+| Next falsifier | The exact terminal has no useful executable option, or the next proposal requires unverified supply, hidden identity features or replay. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

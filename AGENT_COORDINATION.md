@@ -13,22 +13,20 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The autonomous menu now exposes five separately bound buyable-stone targets. Cartridge
-inspection changed no state, and all five have identical portable model inputs. The current
-feature-distinction stop fired before any query or play. Model134 remains 134 examples/91
-successes; Red remains 93/124 registrations, 74 specimens and 2298 cash at a safe Center.
+The five separately bound buyable-stone targets had identical portable model inputs. An
+explicitly labelled uniform support choice selected Shellder-to-Cloyster; its one native
+execution succeeded. Red is 94/124 registrations, 74 specimens and 198 cash at a safe Center.
+Model134 remains 134 fitted examples/91 successes: no model query or new fit occurred.
 
-Next qualify explicitly labelled equivalent-target exploration without pretending it is a
-learned target preference, then one fresh bounded continuation if the contract passes.
-Do not manufacture target identity features, replay old choices or refit unplayed alternatives.
-Level-evolution target ordering, battle mechanics and fresh-start completion remain gaps.
+Next inspect this exact terminal action-free for useful capture, level evolution or finite
+funding options; only then permit at most one new bounded model-directed goal. Do not replay
+the consumed tie, manufacture identity features or fit its support outcome. Battle mechanics
+and fresh-start completion remain gaps.
 
 ## Actual reviewer contribution
 
-Flash 3.8 High was visible as the selected model, but app navigation failed before this
-session's review could be submitted. No current reviewer finding was accepted or rejected;
-quota was unavailable/not refreshed. Claude was unused. Historical reviews are not this audit.
-Next setting: Sol High, Fast off, approximately 45-60 minutes for the explicit tie contract
-and one bounded continuation if qualified. No GitHub publication without Pete's instruction.
+Neither Flash nor Claude reviewed this bounded run; quota was unavailable/not refreshed.
+Next setting: Sol High, Fast off, approximately 30-45 minutes for the action-free terminal
+inventory and at most one qualified goal. No GitHub publication without Pete's instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

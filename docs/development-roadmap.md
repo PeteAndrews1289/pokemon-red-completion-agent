@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-multi-evolution-menu**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-equivalent-evolution**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model134-multi-evolution-menu-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model134-equivalent-evolution-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model134-equivalent-evolution
+
+One honest uniform support choice among five equivalent stone evolutions selected Shellder-to-Cloyster. The native executor succeeded in 620 actions / 64968 frames; Red advanced 93/124 to 94/124 registrations, kept 74 specimens, and spent 2100 from 2298 cash. Terminal is safe and input-ready.
+
+**Deviation:** Zero model decisions, teacher actions or fits. Model134 remains 134 examples / 91 fitted successes. This is collection progress, not a learned target preference or a fresh-Red acceptance gate. No GitHub push.
+
+**Next:** Sol High, Fast off: inspect the exact 198-cash terminal action-free and qualify at most one newly planned bounded model-directed collection goal. Never replay or fit the support tie.
 
 ### 2026-09-16-model134-multi-evolution-menu
 

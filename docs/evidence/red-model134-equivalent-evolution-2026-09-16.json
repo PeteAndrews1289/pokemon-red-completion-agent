@@ -1,0 +1,69 @@
+{
+  "schema": "pokemon.red.equivalent-evolution-continuation.v1",
+  "session": "2026-09-16-model134-equivalent-evolution",
+  "status": "one_bounded_goal_succeeded",
+  "source_commit": "a2870aeb297f995368a0141b3350356719b7c04b",
+  "run_id": "model134-equivalent-evolution-20260916",
+  "plan_sha256": "e79f1ff75a00b6ca1740fd9ee2cc8105400cd3121c7ef1ad438055eaf152ab33",
+  "result_sha256": "0ea08434b0481a3e6bd6a23495e95a88f08cdd5730a97a090191e9354161ed89",
+  "model_sha256": "1a18c9327475411f2edc59a3f5cdc05cb3448cfb0fa233202996d8a70071ddd1",
+  "source_state_sha256": "99690264b5819d201de6546444ef160a1ad8cfd329cc0cf0e24ac433f3cdffba",
+  "terminal_state_sha256": "123a5a4d7880942a292bf6fc6a1136eb74a17bcf4883f4a34d71457ee82ad355",
+  "choice": {
+    "mode": "equivalent_exploration",
+    "candidate_count": 5,
+    "selected_candidate_index": 3,
+    "selected_binding_ref": "pokemon.red:evolution:national-090-to-national-091",
+    "probability_each": 0.2,
+    "private_binding_fields_in_policy_choice": 0,
+    "model_decisions": 0,
+    "support_decisions": 1,
+    "teacher_actions": 0,
+    "learning_eligible": false
+  },
+  "execution": {
+    "verification": "succeeded",
+    "stop_reason": "decision_budget",
+    "executed_goals": 1,
+    "successful_goals": 1,
+    "actions": 620,
+    "frames": 64968,
+    "money_spent": 2100,
+    "stone_consumed": true,
+    "storage_deposit_passed": true,
+    "storage_withdraw_passed": true,
+    "registered_species_before": 93,
+    "registered_species_after": 94,
+    "new_registration_national": 91,
+    "specimens_before": 74,
+    "specimens_after": 74,
+    "cash_before": 2298,
+    "cash_after": 198,
+    "safe_terminal": true,
+    "input_ready": true,
+    "battle_state": 0
+  },
+  "validation": {
+    "targeted_rom_free_tests_passed": 113,
+    "lint": "passed",
+    "type_checked_source_files": 2,
+    "full_suite_run": false,
+    "same_run_replayed": false
+  },
+  "learning_delta": {
+    "new_examples": 0,
+    "new_successes_in_fitted_model": 0,
+    "fits": 0,
+    "current_model": 134,
+    "current_settled_examples": 134,
+    "current_fitted_successes": 91,
+    "current_economy_qualified_examples": 55
+  },
+  "limitations": [
+    "The five targets had identical identity-free model inputs. Uniform sampling is not a learned species preference.",
+    "This support goal is not a learner training example and does not advance model authority.",
+    "The development save is not a fresh start-to-finish Red completion; all five acceptance gates remain open.",
+    "No independent evaluation, ROM hack, Crystal run or GitHub publication occurred."
+  ],
+  "next": "Inspect the new authentic safe terminal action-free. At 198 cash, determine whether a genuinely executable capture, level evolution, funding or other collection alternative exists before any further gameplay. Preserve the one consumed choice and do not fit the support tie."
+}
