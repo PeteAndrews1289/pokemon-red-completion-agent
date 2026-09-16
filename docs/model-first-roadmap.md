@@ -14,7 +14,7 @@ Build a player that actually plays Pokémon. The [mission](../MISSION.md),
 
 ## Where we stand
 
-Model136 has136 fitted examples/92 successes/57 economy-qualified outcomes. The development
+Model137 has137 fitted examples/92 successes/58 economy-qualified outcomes. The development
 save is96/124 registrations and74 specimens. Neither this ratio nor the example count
 is a whole-project completion percentage. Fresh-Red acceptance remains0/5.
 
@@ -41,6 +41,13 @@ The verified success was fitted once into Model136. Cash stayed198 and no
 registration was lost. This is a correlated development lesson, not a transfer
 or independent authority claim.
 
+From the exact post-Marowak terminal, Model136 chose a fishing acquisition
+from five genuine options. Travel diverged in the Safari Zone gate after735
+actions/22,944 frames, before fishing. The safe terminal remained96/124,74
+specimens and198 cash; the one measured failure trained Model137 once. The
+generic traversal cause is not yet isolated, so the selected goal was not
+replayed and no registration or authority promotion was claimed.
+
 Earlier stone-target support evolved Shellder→Cloyster without a model query or fit; that
 historical support result remains distinct. League funding is blocked by unsupported partial
 event progress, not simply by physical distance:indoor departure and Fly already exist.
@@ -50,19 +57,19 @@ Battle turns and mechanical travel remain existing controllers, not demonstrated
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Sustained post-goal choice | Qualify genuine practical alternatives from the safe96/124 terminal; Model136 chooses one bounded actual outcome | Sol /High /Fast off |
+| Sustained post-goal choice | Isolate the Safari-gate route divergence, then qualify Model137's fresh menu from the safe96/124 terminal without replay | Sol /High /Fast off |
 | Sustained collection | Rebuild and execute varied useful goals from earned terminals, including supplies and storage, without manual recovery targets | Sol /High |
 | Battle/story authority | Qualify a learned decision boundary without heuristic substitution | Astra /High |
 | Fresh Red acceptance | Fresh origin, model-directed start-to-finish control, Champion/Hall of Fame,124/124 route registrations and a verified dependency ledger | Astra /High for freeze; Sol /High for execution |
 
-Next time box:45–60 minutes. Ask Model136 to choose from the exact96/124
-terminal only if distinct executable alternatives remain useful at198 cash.
-Bound execution, record costs and preserve the earned save. Do not replay or
-refit earlier evolutions. Stop on unsafe state, false availability or budget.
+Next time box:45–60 minutes. Diagnose the route/observation seam at map156
+with a minimal test. Fix a general cause or exclude a non-executable path,
+then inspect a new menu from the exact safe96/124 terminal. Do not replay the
+consumed fishing decision, select a target manually or relax safety checks.
 All fits remain correlated development.
 
 Mew and unavailable version/link dependencies remain legitimate later-game targets, not cheats.
 ROM-hack and Crystal work remain closed until fresh Red acceptance passes. Pete decides pushes.
 
-[Latest evidence](evidence/red-model136-marowak-choice-fit-2026-09-16.json) ·
+[Latest evidence](evidence/red-model137-fishing-route-drift-2026-09-16.json) ·
 [Development infographic](development-roadmap.md)

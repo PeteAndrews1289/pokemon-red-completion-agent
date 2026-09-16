@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model136-marowak-choice-fit",
+  "as_of_session": "2026-09-16-model137-fishing-route-drift",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json"
+      "evidence": "docs/evidence/red-model137-fishing-route-drift-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1652,6 +1652,12 @@
       "result": "A six-option post-Kingler menu led Model135 to choose Cubone-to-Marowak. The bounded cartridge run verified Marowak #105 and advanced the development save 95 to 96/124 in 17066 actions / 1468626 frames. Its one observed success trained Model136 to 136 examples / 92 successes / 57 economy-qualified.",
       "deviation": "Correlated development only, not fresh-start acceptance or independent promotion. Cash stayed 198, physical specimens 74, and teacher actions zero. No earlier Kingler chunk was refitted and no GitHub push occurred.",
       "next": "Sol High, Fast off: qualify practical alternatives from the exact 96/124 terminal and let Model136 choose one bounded new goal. Stop if resources, availability or safety fail instead of forcing a target."
+    },
+    {
+      "session": "2026-09-16-model137-fishing-route-drift",
+      "result": "A five-option post-Marowak menu led Model136 to choose fishing. Traversal stopped before fishing after 735 actions / 22944 frames when a Safari-gate up step expected (2,3) but observed (3,4). Its one safe measured failure trained Model137 to 137 examples / 92 successes / 58 economy-qualified; Red stayed 96/124.",
+      "deviation": "The route cause is not yet isolated. No registration, cash or specimen loss, teacher override, decision replay, independent promotion, fresh-start Red acceptance or GitHub push occurred. The older dashboard example counter is a frozen audited projection.",
+      "next": "Sol High, Fast off: isolate the general gate-route mismatch with a minimal test; repair or fail-closed exclude the path, then inspect a fresh Model137 menu from the safe terminal. Do not replay the consumed choice."
     }
   ],
   "closed_milestones": [

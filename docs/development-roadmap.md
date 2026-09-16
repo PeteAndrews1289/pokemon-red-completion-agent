@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model136-marowak-choice-fit**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model137-fishing-route-drift**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model137-fishing-route-drift-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model137-fishing-route-drift
+
+A five-option post-Marowak menu led Model136 to choose fishing. Traversal stopped before fishing after 735 actions / 22944 frames when a Safari-gate up step expected (2,3) but observed (3,4). Its one safe measured failure trained Model137 to 137 examples / 92 successes / 58 economy-qualified; Red stayed 96/124.
+
+**Deviation:** The route cause is not yet isolated. No registration, cash or specimen loss, teacher override, decision replay, independent promotion, fresh-start Red acceptance or GitHub push occurred. The older dashboard example counter is a frozen audited projection.
+
+**Next:** Sol High, Fast off: isolate the general gate-route mismatch with a minimal test; repair or fail-closed exclude the path, then inspect a fresh Model137 menu from the safe terminal. Do not replay the consumed choice.
 
 ### 2026-09-16-model136-marowak-choice-fit
 

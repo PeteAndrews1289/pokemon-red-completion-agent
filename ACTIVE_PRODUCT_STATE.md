@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: From the exact safe 96/124 terminal, qualify genuine practical alternatives for one new Model136 goal and retain a bounded measured outcome.
+- Next decision: Explain and test the Safari-gate route divergence before letting Model137 choose a fresh bounded goal from the safe 96/124 terminal.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Sustain new model-selected collection choices from earned terminals while preserving verified registrations and measured resource costs. |
-| Authority now | Model136 has 136 settled examples / 92 successes / 57 economy-qualified. One new Model135 choice registered Marowak #105 and trained one success; Red development save is 96/124, without independent promotion. |
+| Reusable capability | Sustain new model-selected collection choices from earned terminals and distinguish route-execution failures from failed goal judgment. |
+| Authority now | Model137 has 137 settled examples / 92 successes / 58 economy-qualified. One new Model136 fishing choice failed safely during route traversal; Red development save remains 96/124, without independent promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The exact 96/124 terminal offers no genuine practical alternatives, or another model-selected attempt cannot retain a safe measured outcome. |
+| Cheapest falsifier | The selected fishing route cannot traverse the Safari gate as qualified, or the next fresh menu still offers a route known to fail before reaching its goal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model136-marowak-choice-fit** · status **closed** · evidence [qualification](docs/evidence/red-model136-marowak-choice-fit-2026-09-16.json)
+**2026-09-16-model137-fishing-route-drift** · status **closed** · evidence [qualification](docs/evidence/red-model137-fishing-route-drift-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model made a consequential new choice from six options, its actual cartridge evolution registered a new species, and the observed success trained one new example without a teacher choice. |
-| Learning output | One fresh Model135 choice evolved Cubone to Marowak #105, moving the development save 95 to 96/124 in 17066 actions and 1468626 frames. Its one measured success was fitted into Model136: 136 examples / 92 successes / 57 economy-qualified. |
-| Authority delta | Model135 made one new goal choice from six genuine options and controlled the successful Cubone-to-Marowak attempt. The outcome was fitted once into Model136; no independent authority promotion occurred. |
-| Transfer result | One authentic six-option Red decision and completed evolution from an earned terminal; correlated development only, with no independent or cross-title evaluation. |
-| Blocker | The development save is 96/124, still not fresh-start Red acceptance. Repeated long evolutions must remain practical and newly chosen from observed options; cash remains 198. |
-| Decision | From the exact 96/124 terminal, qualify real alternatives for a new Model136 choice; bound one costed outcome and stop if availability or resources are impractical. |
-| Next session | Sol High, Fast off, about 45-60 minutes: qualify a 96/124 menu and let Model136 choose one new bounded goal, stopping before repetitive or resource-impractical execution. |
-| Next falsifier | No genuine practical alternative appears from the new terminal, or one bounded Model136 choice loses safety or verifiability. |
-| Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | A new model-selected fishing goal yielded a safe, costed travel failure rather than fabricated registration. The failure trains goal valuation; the route cause must be isolated before another attempt. |
+| Learning output | One fresh Model136 fishing choice stopped safely after a Safari-gate route divergence at 735 actions and 22944 frames, with no new registration or cash loss. Its measured failure was fitted once into Model137: 137 examples / 92 successes / 58 economy-qualified. |
+| Authority delta | Model136 made one new fishing choice from five distinct options and controlled a bounded attempt. The observed route failure was fitted once into Model137; no registration or independent authority promotion occurred. |
+| Transfer result | One authentic five-option Red decision and retained failure from the earned terminal; correlated development only, with no independent or cross-title evaluation. |
+| Blocker | The selected fishing route diverged in the Safari Zone gate before reaching water. The safe development save remains 96/124 with 198 cash, and fresh-start Red acceptance remains 0/5. The route-step cause is not yet isolated. |
+| Decision | Diagnose the Safari-gate traversal divergence at the general route/observation seam and qualify it with a minimal test before spending another model choice from the safe 96/124 terminal. |
+| Next session | Sol High, Fast off, about 45-60 minutes: isolate the generic gate transition/route acknowledgment issue, test a general repair or fail-closed exclusion, then inspect a new menu without replaying the consumed fishing decision. |
+| Next falsifier | A minimal route test cannot reproduce or explain the divergence, or a repaired route still advertises a non-executable fishing goal. |
+| Stop condition | Stop on false availability, mutation, unsafe state, teacher substitution, consumed decision replay, route-specific workaround, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 
