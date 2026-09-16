@@ -7,6 +7,7 @@ import pytest
 import pokemon_red_completion.red_capture_status_runtime as runtime
 from pokemon_red_completion.observation import RawGameState, WildCaptureIdentity
 from pokemon_red_completion.party import MoveObservation, PartyMemberObservation, PartyObservation
+from pokemon_red_completion.red_autonomous_player import _exception_chain
 
 
 class World:
@@ -117,19 +118,49 @@ def test_only_observed_sleep_stops_after_one_attempt(monkeypatch):
     assert world.turns == 1
 
 
-@pytest.mark.parametrize('change', [
-    {'enemy_hp': 24}, {'enemy_species_id': 185},
-    {'party_species_ids': (48,)}, {'bag_items': ((4, 3),)},
+@pytest.mark.parametrize(('change', 'reason'), [
+    ({'enemy_hp': 24}, runtime.CaptureStatusDrift.TARGET_HP),
+    ({'enemy_species_id': 185}, runtime.CaptureStatusDrift.ORIGINAL_SPECIES),
+    ({'party_species_ids': (48,)}, runtime.CaptureStatusDrift.PARTY_SPECIES),
+    ({'bag_items': ((4, 3),)}, runtime.CaptureStatusDrift.BAG_ITEMS),
 ])
-def test_status_preparation_rejects_target_damage_and_inventory_drift(monkeypatch, change):
+def test_status_preparation_rejects_target_damage_and_inventory_drift(
+    monkeypatch, change, reason,
+):
     world, prepare = setup(monkeypatch)
     def drift(*args, **kwargs):
         result = world.turn(*args, **kwargs)
         world.raw = replace(world.raw, **change)
         return result
     monkeypatch.setattr(runtime, 'execute_bounded_battle_move_turn', drift)
-    with pytest.raises(runtime.RedCaptureStatusError, match='target, party or bag'):
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
         prepare()
+    assert stopped.value.reason_code == reason.value
+    assert _exception_chain(stopped.value)[0]["reason_code"] == reason.value
+    assert world.turns == 1
+
+
+def test_status_guard_names_departed_battle_without_input(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    changed = replace(world.raw, battle_state=0)
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        prepare._require_protected(
+            changed, None, 25, world.raw.party_species_ids, world.raw.bag_items,
+        )
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.BATTLE_STATE.value
+    assert world.turns == 0
+
+
+def test_status_guard_names_transformed_display_mismatch_without_input(monkeypatch):
+    world, prepare = setup(monkeypatch)
+    prepare.latched_original_species_id = world.raw.enemy_species_id
+    identity = WildCaptureIdentity(108, 185, True, (0, 0))
+    with pytest.raises(runtime.RedCaptureStatusError) as stopped:
+        prepare._require_protected(
+            world.raw, identity, 25, world.raw.party_species_ids, world.raw.bag_items,
+        )
+    assert stopped.value.reason_code == runtime.CaptureStatusDrift.DISPLAYED_SPECIES.value
+    assert world.turns == 0
 
 
 def test_pp_proof_is_not_optional(monkeypatch):

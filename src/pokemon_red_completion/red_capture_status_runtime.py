@@ -7,6 +7,7 @@ it never selects a damaging move or counts a wild exit as a capture.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import StrEnum
 
 from pokemon_red_completion.battle_recovery import (
     EmulatorState,
@@ -29,8 +30,25 @@ from pokemon_red_completion.red_capture_support import red_capture_status_option
 from pokemon_red_completion.red_party import PokemonRedPartyReader, decode_status
 
 
+class CaptureStatusDrift(StrEnum):
+    """Portable reason for a status-preparation safety stop."""
+
+    BATTLE_STATE = "capture_status.battle_state"
+    TARGET_HP = "capture_status.target_hp"
+    PARTY_SPECIES = "capture_status.party_species"
+    BAG_ITEMS = "capture_status.bag_items"
+    ORIGINAL_SPECIES = "capture_status.original_species"
+    DISPLAYED_SPECIES = "capture_status.displayed_species"
+
+
 class RedCaptureStatusError(RuntimeError):
     """An observed status turn changed protected capture state."""
+
+    def __init__(
+        self, message: str, *, reason_code: CaptureStatusDrift | None = None,
+    ) -> None:
+        super().__init__(message)
+        self.reason_code = None if reason_code is None else reason_code.value
 
 
 @dataclass(slots=True)
@@ -64,7 +82,10 @@ class RedCaptureStatusPreparer:
         if self.latched_original_species_id is None:
             self.latched_original_species_id = identity.original_species_id
         elif identity.original_species_id != self.latched_original_species_id:
-            raise RedCaptureStatusError("capture status changed target, party or bag")
+            raise RedCaptureStatusError(
+                "capture status original species changed",
+                reason_code=CaptureStatusDrift.ORIGINAL_SPECIES,
+            )
 
         target_hp = initial.enemy_hp
         party_ids = initial.party_species_ids
@@ -288,21 +309,43 @@ class RedCaptureStatusPreparer:
         party_ids: tuple[int, ...] | None,
         bag: tuple[tuple[int, int], ...] | None,
     ) -> None:
-        if (
-            raw.battle_state != 1
-            or raw.enemy_hp != hp
-            or raw.party_species_ids != party_ids
-            or raw.bag_items != bag
-        ):
-            raise RedCaptureStatusError("capture status changed target, party or bag")
+        if raw.battle_state != 1:
+            raise RedCaptureStatusError(
+                "capture status left wild battle",
+                reason_code=CaptureStatusDrift.BATTLE_STATE,
+            )
+        if raw.enemy_hp != hp:
+            raise RedCaptureStatusError(
+                "capture status target HP changed",
+                reason_code=CaptureStatusDrift.TARGET_HP,
+            )
+        if raw.party_species_ids != party_ids:
+            raise RedCaptureStatusError(
+                "capture status party species changed",
+                reason_code=CaptureStatusDrift.PARTY_SPECIES,
+            )
+        if raw.bag_items != bag:
+            raise RedCaptureStatusError(
+                "capture status bag items changed",
+                reason_code=CaptureStatusDrift.BAG_ITEMS,
+            )
         if identity is None:
             raise RedCaptureStatusError("capture status lacks a live target")
         if (
             self.latched_original_species_id is not None
             and identity.original_species_id != self.latched_original_species_id
         ):
-            raise RedCaptureStatusError("capture status changed target, party or bag")
+            raise RedCaptureStatusError(
+                "capture status original species changed",
+                reason_code=CaptureStatusDrift.ORIGINAL_SPECIES,
+            )
         if not identity.transformed and raw.enemy_species_id != identity.original_species_id:
-            raise RedCaptureStatusError("capture status changed target, party or bag")
+            raise RedCaptureStatusError(
+                "capture status displayed species changed",
+                reason_code=CaptureStatusDrift.DISPLAYED_SPECIES,
+            )
         if identity.transformed and raw.enemy_species_id != identity.displayed_species_id:
-            raise RedCaptureStatusError("capture status changed target, party or bag")
+            raise RedCaptureStatusError(
+                "capture status displayed species changed",
+                reason_code=CaptureStatusDrift.DISPLAYED_SPECIES,
+            )
