@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Stop the assisted Safari line after its safe search-limit failure; qualify a genuine model-controlled choice from earned Red state, prioritizing story/battle authority if collection is singleton.
+- Next decision: Run a bounded reliability-focused battle learning cycle after the six-choice live-control result; do not replay or fit the consumed development encounter.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Retain assisted Safari mechanics outcomes without contaminating the learner, then restore real model choice on earned Red states. |
-| Authority now | Model137 has 137 settled examples / 92 successes / 58 economy-qualified. One new Model136 fishing choice failed safely during route traversal; Red development save remains 96/124, without independent promotion. |
-| Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
+| Reusable capability | Choose and execute legal battle attacks from semantic observations, then improve attack reliability and resource value with separate training and comparison scenarios. |
+| Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
+| Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The earned Red state has no two genuinely executable alternatives, or a story/battle choice still delegates the consequential decision to the fixed controller. |
+| Cheapest falsifier | The learned scorer still prefers low-value unreliable attacks on untouched scenarios, or improved choices require a teacher fallback or fitting the development encounter. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-assisted-safari-mechanics-probe** · status **closed** · evidence [qualification](docs/evidence/red-assisted-safari-mechanics-probe-2026-09-16.json)
+**2026-09-16-earned-learned-battle** · status **closed** · evidence [qualification](docs/evidence/red-earned-learned-battle-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The assisted probe tested real paid transport and bounded Safari search without giving the model a cheating action, funding label or artificial registration credit. |
-| Learning output | No new learner output. One teacher-selected assisted Safari attempt used 431 actions / 53700 frames and stopped safely at the 66-semantic-action survey limit; registrations stayed 96/124. |
-| Authority delta | No new model choice, fit, registration or authority promotion. Model137 remains at 137 examples / 92 successes / 58 economy-qualified. |
-| Transfer result | No transfer test. The original authenticated save stayed unchanged; this is one correlated assisted mechanics failure, not independent or cross-title evaluation. |
-| Blocker | The single assisted Safari attempt reached the paid area but exhausted 66 semantic survey actions without a capture. The earned Red state still lacks a qualified multi-option choice; story and battle authority remain unproved for a fresh run. |
-| Decision | Do not replay or widen the assisted Safari attempt. Prioritize a bounded real model decision from an earned state, with the story/battle authority boundary next in line; keep synthetic money out of ordinary fits. |
-| Next session | Astra High, Fast off, about 60-90 minutes: qualify one real model-authority decision boundary on an earned Red state, emphasizing story/battle if collection remains singleton. Stop before any full run. |
-| Next falsifier | An earned-state multi-option menu cannot be qualified, or the next apparent story/battle model choice does not actually control gameplay. |
-| Stop condition | Stop on consumed assisted probe replay, fabricated alternatives, teacher fallback counted as model choice, assisted goal-value fit, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | Direct learned attack control advances the final player and exposes a measurable decision-quality gap; setup authority and weak outcome remain explicit. |
+| Learning output | Six distinct observed-state choices and exact selected-slot PP spends; one victory in 149 actions / 13177 frames. Zero new training examples or fits; registrations stayed 96/124. |
+| Authority delta | Six learned attack selections controlled real inputs in one bounded encounter. No new weights, general promotion or change to ordinary collection battle control. |
+| Transfer result | One natural encounter outside the old fitted battle bank, but on an existing correlated Red lineage. No independent, cross-title or general battle-quality claim. |
+| Blocker | The frozen ranker spent all five Guillotine PP without damage before selecting a successful Vicegrip. Reliable battle judgment and story-level authority remain unproved. |
+| Decision | Use separate permitted training scenarios to improve reliability/value, then compare frozen old/new policies on untouched scenarios. Do not hardcode Guillotine avoidance or replay this consumed encounter. |
+| Next session | Sol High, Fast off, about 60-90 minutes: audit reliability/mechanics coverage, collect a small authorized training contrast, fit and compare on separate scenarios; no full run. |
+| Next falsifier | A bounded reliability-focused learning cycle cannot improve measured decisions on untouched scenarios without leakage or teacher substitution. |
+| Stop condition | Stop on development fitting, consumed-encounter replay, move-specific hardcoded preference, teacher attack fallback counted as learned choice, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

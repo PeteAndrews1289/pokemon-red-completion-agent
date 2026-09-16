@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-assisted-safari-mechanics-probe**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-earned-learned-battle**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-earned-learned-battle
+
+Frozen battle ranker controlled six attacks: five zero-damage Guillotines, then a Vicegrip KO. Exact PP spends verified; 149 actions / 13177 frames; safe field terminal at 59/76 HP.
+
+**Deviation:** Bounded correlated development control, not good battle judgment. No fit, collection gain, stage exit, independent advantage or promotion. Model137 and fresh-Red gates unchanged.
+
+**Next:** Sol High, Fast off: a reliability-focused training and untouched-comparison cycle. Keep this consumed encounter diagnostic; no development fit or hardcoded move ban.
 
 ### 2026-09-16-assisted-safari-mechanics-probe
 
