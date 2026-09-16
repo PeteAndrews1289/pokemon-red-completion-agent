@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model136-selected-goal-continuation**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model137-targeted-kingler-completion**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model137-targeted-kingler-completion
+
+Model134's previously selected Krabby goal finished through an exact-target bounded continuation. Kingler #099 registered at level 28 in 12208 actions / 1095240 frames from the earned level-19 terminal. Red advanced 94 to 95/124 on a safe development save.
+
+**Deviation:** One completed model-selected goal, but no new model query, fit or authority promotion in this session. Model135 stays 135 examples / 91 successes / 56 economy-qualified; 74 specimens and 198 cash remain. Fresh Red acceptance remains 0/5. No GitHub push.
+
+**Next:** Sol High, Fast off: expose genuine post-Kingler alternatives from the exact 95/124 terminal, let Model135 choose a new goal, and retain one bounded costed outcome without replaying the completed evolution.
 
 ### 2026-09-16-model136-selected-goal-continuation
 

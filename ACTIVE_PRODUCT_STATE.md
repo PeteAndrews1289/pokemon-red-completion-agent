@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Continue the same authenticated goal from the new safe terminal; qualify targeted private rebinding if it can avoid repeated full menu discovery without changing learned authority.
+- Next decision: From the exact safe 95/124 terminal, offer genuine alternatives for one new Model135 goal choice and retain a bounded measured outcome.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Continue one model-selected collection goal across multiple bounded chunks from earned states, with authenticated reserves and measured training cost. |
-| Authority now | Model135 remains 135 settled examples / 91 successes / 56 economy-qualified. Its predecessor's selected Krabby goal has one safe pending continuation with 2190 verified trainee XP but no evolution, new model decision, fit or promotion. |
+| Reusable capability | Replan a fresh useful collection goal from the earned post-Kingler state while preserving verified registrations and resource costs. |
+| Authority now | Model135 remains 135 settled examples / 91 successes / 56 economy-qualified. The earlier Model134 choice completed through bounded support: Kingler #099 registered, Red 95/124; no new choice, fit or promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The pending continuation cannot bind uniquely from its new earned terminal, or the next bounded chunk cannot retain safe measurable trainee XP. |
+| Cheapest falsifier | The exact 95/124 terminal offers no genuine model-choice alternatives, or its selected executable goal cannot retain a safe measured outcome. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model136-selected-goal-continuation** · status **closed** · evidence [qualification](docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json)
+**2026-09-16-model137-targeted-kingler-completion** · status **closed** · evidence [qualification](docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This is actual cartridge training under a prior model choice, with no repeated model query or fitted label. The remaining target is measurable, and the run retains a safe exact terminal. |
-| Learning output | One safe bounded training chunk earned 2190 Krabby XP in 4591 actions and 418136 frames, plus 1872 shared Dugtrio XP. Zero new fitted examples or registrations; Model135 remains 135/91/56 and Red 94/124 with 74 specimens. |
-| Authority delta | The authenticated Model134 Krabby goal continued through one new bounded chunk with zero model queries and no teacher choice. This was mechanical support, not a new model decision or authority promotion. |
-| Transfer result | ROM-free changed-origin and chained-pending tests plus one authentic bounded Red continuation. No independent or cross-title evaluation. |
-| Blocker | Krabby is level 19 with 7095 XP; Kingler is still pending with about 14857 XP to the level-28 threshold. Full menu rebinding takes several minutes per chunk. |
-| Decision | Continue the same goal from its new safe terminal, optimize private target rebinding if worthwhile, and measure whether training pace remains safe and useful. |
-| Next session | Sol High, Fast off, about 45-60 minutes: continue the same goal from the exact earned terminal; reduce repeated menu-discovery cost if the private binding can be targeted safely. |
-| Next falsifier | The new pending goal cannot rebind uniquely, or an additional capped chunk fails to produce safe verified Krabby XP. |
+| Product alignment | A model-selected long evolution finished on the actual cartridge and earned a verified registration. Bounded mechanics carried its intent without pretending support chunks were new learned choices. |
+| Learning output | Model134's selected evolution completed and registered Kingler (#099), moving the development save 94 to 95/124 in 12208 actions and 1095240 frames. Zero new fitted examples; Model135 remains 135/91/56. |
+| Authority delta | Model134's original selected Krabby goal completed through authenticated bounded support with no repeated model query or teacher target. Kingler was registered, but no new choice, fit or authority promotion occurred in this session. |
+| Transfer result | ROM-free targeted-inventory and mutation tests plus an authentic completed Red evolution. No independent or cross-title evaluation. |
+| Blocker | The completed development save is 95/124, not a fresh-start Red acceptance run. The next new goal must come from a distinct live model-choice menu and respect observed resources. |
+| Decision | Rebuild genuine live alternatives from the exact post-Kingler terminal, let Model135 choose the next goal, and retain one bounded costed outcome without a teacher override. |
+| Next session | Sol High, Fast off, about 45-60 minutes: ask Model135 to choose from real post-Kingler options and execute one bounded result, stopping if only safety or unavailable options remain. |
+| Next falsifier | No genuine alternatives can be offered from the new terminal, or one model-selected attempt cannot retain its state and cost safely. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

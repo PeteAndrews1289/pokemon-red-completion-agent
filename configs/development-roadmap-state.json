@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model136-selected-goal-continuation",
+  "as_of_session": "2026-09-16-model137-targeted-kingler-completion",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json"
+      "evidence": "docs/evidence/red-model137-targeted-kingler-completion-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1640,6 +1640,12 @@
       "result": "The prior model-selected Krabby goal persisted through one bounded support chunk. Krabby rose from level 16 and 4905 XP to level 19 and 7095 XP in 4591 actions / 418136 frames. The terminal is safe and the goal is pending, with about 14857 XP to level 28.",
       "deviation": "No new model decision, fit, teacher action, registration or authority promotion. Red stays 94/124 with 74 specimens; Model135 stays 135 examples / 91 successes / 56 economy-qualified. Fresh Red acceptance remains 0/5; no GitHub push.",
       "next": "Sol High, Fast off: resume the same goal from the exact terminal, reducing repeated global-menu cost through private target binding if it can be proved safe. Preserve original reserves and stop on target mismatch, unsafe state or no trainee XP."
+    },
+    {
+      "session": "2026-09-16-model137-targeted-kingler-completion",
+      "result": "Model134's previously selected Krabby goal finished through an exact-target bounded continuation. Kingler #099 registered at level 28 in 12208 actions / 1095240 frames from the earned level-19 terminal. Red advanced 94 to 95/124 on a safe development save.",
+      "deviation": "One completed model-selected goal, but no new model query, fit or authority promotion in this session. Model135 stays 135 examples / 91 successes / 56 economy-qualified; 74 specimens and 198 cash remain. Fresh Red acceptance remains 0/5. No GitHub push.",
+      "next": "Sol High, Fast off: expose genuine post-Kingler alternatives from the exact 95/124 terminal, let Model135 choose a new goal, and retain one bounded costed outcome without replaying the completed evolution."
     }
   ],
   "closed_milestones": [
