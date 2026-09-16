@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model135-in-party-continuation**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model136-selected-goal-continuation**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model135-in-party-continuation-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model136-selected-goal-continuation
+
+The prior model-selected Krabby goal persisted through one bounded support chunk. Krabby rose from level 16 and 4905 XP to level 19 and 7095 XP in 4591 actions / 418136 frames. The terminal is safe and the goal is pending, with about 14857 XP to level 28.
+
+**Deviation:** No new model decision, fit, teacher action, registration or authority promotion. Red stays 94/124 with 74 specimens; Model135 stays 135 examples / 91 successes / 56 economy-qualified. Fresh Red acceptance remains 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: resume the same goal from the exact terminal, reducing repeated global-menu cost through private target binding if it can be proved safe. Preserve original reserves and stop on target mismatch, unsafe state or no trainee XP.
 
 ### 2026-09-16-model135-in-party-continuation
 

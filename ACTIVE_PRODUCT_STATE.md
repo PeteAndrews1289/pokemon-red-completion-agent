@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Carry the authenticated prior goal identity through bounded training chunks, retain one goal outcome and measure XP/action/frame cost before setting a prospective budget.
+- Next decision: Continue the same authenticated goal from the new safe terminal; qualify targeted private rebinding if it can avoid repeated full menu discovery without changing learned authority.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Continue a model-selected collection goal across bounded execution chunks from an earned state, with authenticated reserves and measured training cost. |
-| Authority now | Model135 remains 135 settled examples / 91 successes. The earlier model-selected Krabby evolution has an authenticated in-party continuation option, but no new gameplay or independent authority promotion. |
+| Reusable capability | Continue one model-selected collection goal across multiple bounded chunks from earned states, with authenticated reserves and measured training cost. |
+| Authority now | Model135 remains 135 settled examples / 91 successes / 56 economy-qualified. Its predecessor's selected Krabby goal has one safe pending continuation with 2190 verified trainee XP but no evolution, new model decision, fit or promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The saved prior choice cannot bind uniquely to the earned in-party option, or one bounded chunk cannot retain safe measurable progress. |
+| Cheapest falsifier | The pending continuation cannot bind uniquely from its new earned terminal, or the next bounded chunk cannot retain safe measurable trainee XP. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model135-in-party-continuation** · status **closed** · evidence [qualification](docs/evidence/red-model135-in-party-continuation-2026-09-16.json)
+**2026-09-16-model136-selected-goal-continuation** · status **closed** · evidence [qualification](docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Action-free qualification preserves the model's earlier choice and original reserves while exposing that long goals need persistent intent and measured chunk budgets. |
-| Learning output | Zero new fitted examples or registrations. Model135 remains 135 examples / 91 successes / 56 economy-qualified; Red remains 94/124 with 74 specimens and 198 cash. |
-| Authority delta | The prior model-selected Krabby evolution is again executable from its earned in-party terminal. No new model query, game input, fit or authority promotion occurred. |
-| Transfer result | ROM-free lineage and in-party tests plus one authentic action-free eight-option menu. No independent or cross-title evaluation. |
-| Blocker | The runner can expose the in-party option but would query the model again instead of continuing the previous selected goal. Its 3000-action attempt earned only 1530 XP against about 17047 remaining. |
-| Decision | Carry the authenticated prior goal identity through bounded training chunks, retain one goal outcome and measure XP/action/frame cost before setting a prospective budget. |
-| Next session | Sol High, Fast off, 45-60 minutes: implement and qualify durable goal continuation and costed bounded execution from the earned Route 11 terminal. |
-| Next falsifier | The prior selected configuration cannot be matched uniquely to the live option, or a safe bounded continuation provides no verified XP progress. |
+| Product alignment | This is actual cartridge training under a prior model choice, with no repeated model query or fitted label. The remaining target is measurable, and the run retains a safe exact terminal. |
+| Learning output | One safe bounded training chunk earned 2190 Krabby XP in 4591 actions and 418136 frames, plus 1872 shared Dugtrio XP. Zero new fitted examples or registrations; Model135 remains 135/91/56 and Red 94/124 with 74 specimens. |
+| Authority delta | The authenticated Model134 Krabby goal continued through one new bounded chunk with zero model queries and no teacher choice. This was mechanical support, not a new model decision or authority promotion. |
+| Transfer result | ROM-free changed-origin and chained-pending tests plus one authentic bounded Red continuation. No independent or cross-title evaluation. |
+| Blocker | Krabby is level 19 with 7095 XP; Kingler is still pending with about 14857 XP to the level-28 threshold. Full menu rebinding takes several minutes per chunk. |
+| Decision | Continue the same goal from its new safe terminal, optimize private target rebinding if worthwhile, and measure whether training pace remains safe and useful. |
+| Next session | Sol High, Fast off, about 45-60 minutes: continue the same goal from the exact earned terminal; reduce repeated menu-discovery cost if the private binding can be targeted safely. |
+| Next falsifier | The new pending goal cannot rebind uniquely, or an additional capped chunk fails to produce safe verified Krabby XP. |
 | Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

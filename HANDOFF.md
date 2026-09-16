@@ -3,40 +3,37 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Earned evolution continuation now qualifies
+## Model-selected Krabby evolution is progressing, not complete
 
-Model134's selected Krabby → Kingler goal ended safely at the 3,000-action cap.
-The exact retained save has Krabby at level 16 with 4,905 XP, with 94/124 Red
-registrations, 74 physical specimens and 198 cash. Its boxed level-15 origin had
-3,375 XP: the attempt earned **1,530 XP**, including travel and preparation.
-There are approximately 17,047 XP to Kingler's level-28 threshold. The observed
-end-to-end rate is 0.51 XP/action for this one attempt, not a guaranteed future
-training rate or a reason to repeat the same cap.
+Model134 selected Krabby → Kingler from seven live alternatives. Its first
+3,000-action attempt ended safely at level 16 and 4,905 XP. This session added a
+durable continuation runner that authenticates that consumed choice, rebinds
+the same private evolution target from a changed state, and records a terminal
+without querying or fitting the model again. A pending result can chain to the
+next bounded chunk. Source commits: `6d6d5660`, `5f7a823e`; no GitHub push.
 
-Source `cb482d96bc7ff08ba37c57c6b76dbbc11b6cffab` exposes a unique in-party
-level-evolution precursor in the autonomous menu and inherits physical reserves
-from an authenticated parent outcome and its original party. Krabby remains
-eligible; the original six party species remain protected, including Cloyster
-now in storage. The earned Route 11 terminal qualifies **eight distinct choices**:
-four fishing destinations, three evolutions and one recovery. Inspection made
-zero controller actions, emulator frames or model queries. Focused tests: 71
-passed; Ruff, two-file mypy, registry and product-focus checks passed.
-
-No gameplay, new model decision, fit, registration or authority promotion occurred
-in this session. Model135 remains **135 examples / 91 successes / 56 economy-qualified**.
-The saved terminal is `44cd6d26b76796349b3995339427f75ec3031b6ecfb78c7434d5dac5a35fdfa8`.
-No GitHub push. [Evidence](docs/evidence/red-model135-in-party-continuation-2026-09-16.json).
+From the exact earned Route 11 terminal, the action-free check found one
+matching evolution binding among eight distinct alternatives, with zero
+actions, frames or model queries. One capped gameplay chunk then earned **2,190
+Krabby XP** in 4,591 actions / 418,136 frames (0.477 XP/action); shared training
+also earned Dugtrio 1,872 XP. Krabby is now level 19 with **7,095 XP**. The
+result is safe and **pending**, not a Kingler registration. The exact terminal
+save SHA is `9764ec06b43b893574877ab34f8b3e93945787b2ce10b5927abf10fe99eea0f7`.
+No model decision, fitted example, teacher choice or new registration occurred.
+Red remains **94/124**, 74 specimens, 198 cash; Model135 remains **135 examples /
+91 successes / 56 economy-qualified**. Fresh Red acceptance remains **0/5**.
+[Evidence](docs/evidence/red-model136-selected-goal-continuation-2026-09-16.json).
 
 ## Next bounded work
 
-Carry the prior model-selected evolution identity across bounded execution chunks,
-with one goal outcome and measured XP/action/frame cost. The previous selected
-binding's target configuration matches the new in-party option, but the current
-runner would query the model again at the next decision boundary. Keep that
-continuation distinct from a new model choice and do not fit repeated chunks as
-separate model decisions. Qualify a prospective action and frame budget using the
-measured pace, then execute one bounded continuation from the earned terminal.
-Preserve original reserves and stop on unsafe state, lost identity or no XP progress.
+Continue the *same* authenticated goal from this exact terminal, never replay
+the previous chunk or fit it as a new choice. Kingler's level-28 threshold is
+about **14,857 Krabby XP** away. The single new chunk's rate is informative, not
+a guaranteed forecast. Rebuilding the whole eight-option menu takes several
+minutes per chunk; a private, exact-target rebind could cut that overhead, but
+must prove unique identity and no game mutation before execution. Keep bounded
+actions/frames, original physical reserves, and a safe terminal; stop on lost
+identity, no trainee XP, or unsafe state.
 
 Recommended next setting: **Sol High, Fast off**, about **45–60 minutes**.
 Fresh Red acceptance remains **0/5**; ROM hack and Crystal remain closed.
