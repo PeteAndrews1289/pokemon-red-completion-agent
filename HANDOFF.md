@@ -3,35 +3,30 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Capture initialization repaired; Haunter caught; Red 93/124
+## Model132: real income choice, safe terminal
 
-The capture helper latched enemy HP before the battle introduction finished. Generic tests
-reproduced the false guard stop with stale, zero and missing HP. It now settles at the shared
-MAIN boundary before latching stats, verifies the declared original target, protects party/bag
-through initialization and retains all damage/identity guards during setup. The historical
-Model130 entry value was not recorded; its full-health terminal and unchanged party HP/PP are
-consistent with this timing defect but do not prove the exact old callback value.
+The main mixed menu now offers the existing generic routed Center restoration skill. An
+action-free inspection from the post-Haunter 93/124 save verified two executable choices:
+restore or finite trainer income, zero inputs/frames/model queries. Source `7afd073e` was
+committed locally after 81 focused ROM-free tests and registry regeneration.
 
-One separately qualified continuation from the retained battle caught **Haunter**, using
-158 actions / 13716 frames, one Great Ball and one verified paralysis move. Target HP stayed
-63/63. Red is **93/124**, with **74 specimens**, 1608 cash and six Great Balls. The field terminal
-is safe, SHA-256 `8569b536859dc6ab0882b2c1bed28c0e029ced050b07b35b00741d17498a59aa`.
-**Model131 remains 131 examples / 89 successes / 52 economy-qualified examples.** Support recovery
-adds no learner example; the original Model130 failure remains fitted. No route replay occurred.
+One prospective Model131 run selected the income option (probability 0.1391), earned **690**
+in **92 actions / 7981 frames**, and ended safe. It made one genuine model choice, no teacher
+actions and no replay. The verified result fit once as **Model132: 132 settled examples / 90
+successes / 53 economy-qualified**. This is correlated development only, not independent
+evaluation or increased authority. Red stays **93/124**, **74 specimens**; cash is **2298**.
+The terminal SHA-256 is `9aca77e163d73d82a811547939473bc41d1cd9984a20e05e0e8cef2a2d430fcf`.
 
 ## Exact next bounded work
 
-An action-free menu inspection stopped before any model query: only one resupply binding,
-zero regional acquisitions, and restoration unavailable (`no_legal_target`). The capture helper
-is now 34/70 HP. `autonomous_collection_options` constructs its main `RedResourceGoalRouter`
-with routed recovery disabled; the existing generic Center recovery offer is therefore absent.
-Qualify that capability in the mixed menu with bounded action-free planning and genuine resource
-costs. Permit one fresh Model131 decision only if verified executable alternatives exist, retaining
-and fitting its actual result. The prepared next plan was inspected only; no run output exists.
-Do not force a species, replay Model130 or turn support recovery into training success.
+The Model132 action-free post-income inspection showed **restore** and **evolve** (quoted
+spend **2100**, affordable at 2298 cash), zero inputs/frames/model queries. Its prepared
+inspect-only plan is under the private workspace `work/` directory; the output run directory
+does not exist. If still authentic, permit **one** fresh Model132 choice under 3000 actions,
+300000 frames and 900 seconds; retain and fit the actual result. Do not select an evolution
+target by hand, replay consumed decisions, claim a registration before verification or begin
+the full run. The original Model130 capture failure and Haunter support catch remain distinct.
 
-[Session evidence](docs/evidence/red-capture-initialization-recovery-2026-09-16.json) retains hashes
-and boundaries. 217 focused ROM-free tests, lint and type checks passed. Flash 3.8 High completed
-a read-only design review; settled stats and declared identity were accepted, while automatic
-flee, full-HP-only capture and its incorrect battle-state value were rejected. Quota unavailable;
-Claude not used. No GitHub push. Next: **Sol / High / Fast off**, about 45-75 minutes.
+[Session evidence](docs/evidence/red-model132-routed-menu-income-2026-09-16.json) preserves
+the hashes and admission limits. No GitHub push. Next: **Sol / High / Fast off**, about
+45–75 minutes.

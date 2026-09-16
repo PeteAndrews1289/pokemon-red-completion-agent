@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-capture-initialization-recovery**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model132-routed-menu-income**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **131 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **132 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-capture-initialization-recovery-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model132-routed-menu-income-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model132-routed-menu-income
+
+A verified action-free Center-heal versus finite-income menu gave Model131 one real choice. It selected income, earned 690 in 92 actions / 7981 frames, ended safe and fit once as Model132: 132 examples / 90 successes. Red remains 93/124 with 74 specimens and 2298 cash.
+
+**Deviation:** No registration, independent evaluation, authority promotion or teacher action. The next state exposes Center restoration and a quoted 2100 evolution; no second model query or game input occurred. Full-Red gate remains 0/5; no GitHub push.
+
+**Next:** Sol High, Fast off: one bounded Model132 choice from the verified restore-versus-evolution menu; retain the real result and stop on unsafe or unverifiable state.
 
 ### 2026-09-16-capture-initialization-recovery
 

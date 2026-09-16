@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-capture-initialization-recovery",
+  "as_of_session": "2026-09-16-model132-routed-menu-income",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-capture-initialization-recovery-2026-09-16.json"
+      "evidence": "docs/evidence/red-model132-routed-menu-income-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1586,6 +1586,12 @@
       "result": "Corrected pre-introduction HP latching with declared-target verification and preserved setup guards. One qualified exact-state continuation caught Haunter in 158 actions / 13716 frames, reaching 93/124 registrations and 74 specimens at a safe terminal.",
       "deviation": "Support recovery adds no learner example: Model131 remains 131 examples / 89 successes. The original failure remains fitted; live recovery from MAIN does not prove the historical callback entry. The next action-free menu has only resupply, no acquisitions or restoration. Routed Center recovery is disabled and the capture helper is at 34/70 HP.",
       "next": "Sol High, Fast off: qualify existing routed restoration in the mixed menu, then permit one fresh Model131 decision only with real executable alternatives. No replay, forced species, full-Red gate change or GitHub push."
+    },
+    {
+      "session": "2026-09-16-model132-routed-menu-income",
+      "result": "A verified action-free Center-heal versus finite-income menu gave Model131 one real choice. It selected income, earned 690 in 92 actions / 7981 frames, ended safe and fit once as Model132: 132 examples / 90 successes. Red remains 93/124 with 74 specimens and 2298 cash.",
+      "deviation": "No registration, independent evaluation, authority promotion or teacher action. The next state exposes Center restoration and a quoted 2100 evolution; no second model query or game input occurred. Full-Red gate remains 0/5; no GitHub push.",
+      "next": "Sol High, Fast off: one bounded Model132 choice from the verified restore-versus-evolution menu; retain the real result and stop on unsafe or unverifiable state."
     }
   ],
   "closed_milestones": [

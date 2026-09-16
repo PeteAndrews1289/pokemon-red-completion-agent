@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Qualify generic routed Center restoration in the main mixed menu, which currently exposes only resupply after the helper lost readiness. Permit one fresh Model131 decision only with verified executable alternatives; retain its actual outcome. Renewable League income remains unqualified.
+- Next decision: The safe terminal offers a verified restore-versus-affordable-evolution menu. Allow one fresh Model132 choice under bounded execution and retain its actual result; no manual target selection. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model131 remains 131 settled examples / 89 successes. A nonlearning continuation of its retained predecessor's capture caught Haunter, reaching 93/124 with 74 specimens, 1608 cash and six Great Balls at a safe terminal. No new model choice was made. |
+| Authority now | Model132 has 132 settled examples / 90 successes. A model-selected finite-income success from a live heal-versus-income menu earned 690 cash. The safe Red terminal has 93/124 registrations, 74 specimens and 2298 cash. No independent evaluation or authority promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | An action-free mixed menu still lacks a verified restoration alternative when the capture helper is below readiness, despite the existing routed Center recovery capability. |
+| Cheapest falsifier | The earned post-income menu fails to expose a real Center restoration or affordable evolution alternative without controller input, or the next selected action cannot preserve a safe verified terminal. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 131 | 12 |
+| Registered Train Example · train | 132 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-capture-initialization-recovery** · status **closed** · evidence [qualification](docs/evidence/red-capture-initialization-recovery-2026-09-16.json)
+**2026-09-16-model132-routed-menu-income** · status **closed** · evidence [qualification](docs/evidence/red-model132-routed-menu-income-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A reusable capture-start repair preserved the already selected encounter, verified a legitimate Haunter registration and restored a safe field terminal. The original failure remains training evidence; the support continuation is not a new learner success. |
-| Learning output | No new learner example: Model131 remains 131 settled examples / 89 successes / 52 economy-qualified examples. Support recovery earned one registration and specimen, reaching 93/124 and 74 specimens. |
-| Authority delta | The generic capture initialization boundary was corrected. One separately qualified exact-state support continuation caught Haunter without replay or model query. Model131 and its original fitted failure remain unchanged; no authority promotion occurred. |
-| Transfer result | ROM-free cases cover stale, zero and missing introduction HP, settled entry, changed target, inventory drift and actual setup damage. Live recovery starts at MAIN; it does not independently validate a fresh encounter introduction or later-title transfer. |
-| Blocker | The safe 93/124 terminal has 74 specimens, 1608 cash and six Great Balls. Its next menu exposes only one resupply option and no acquisition or restoration. The capture helper is at 34/70 HP; routed Center recovery is disabled in the main mixed router. |
-| Decision | Qualify the existing generic routed Center recovery offer in the main mixed menu with bounded action-free planning. If at least two real alternatives exist, permit one fresh Model131 choice and fit its actual result. Preserve the original failed choice and support recovery separately. |
-| Next session | Sol High, Fast off, 45-75 minutes: expose and qualify generic routed restoration in the mixed menu, then allow one fresh Model131 decision only when real alternatives are available. |
-| Next falsifier | Adding a fully verified Center restoration offer still leaves fewer than two executable choices, requires unbounded route enumeration or hides a controller action during inspection. |
-| Stop condition | Stop on missing executable alternatives, unbounded planning, unsafe terminal, replay pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | The model genuinely chose one of two live resource strategies and earned 690 cash without a teacher. This broadens resource decision evidence but adds no registration or independent evaluation. |
+| Learning output | Model132 has 132 settled examples / 90 successes / 53 economy-qualified examples after one measured model-selected income success. Red remains 93/124 with 74 specimens; cash rose from 1608 to 2298. |
+| Authority delta | Model131 chose finite trainer income from a verified heal-versus-income menu; its genuine safe success was fitted as Model132. One additional correlated development example, no teacher action or authority promotion. Evolution targets and battle moves remain deterministic. |
+| Transfer result | ROM-free routed recovery and mixed-menu tests passed, and one live resource choice settled safely. No distinct-state or cross-title transfer result yet. |
+| Blocker | The 93/124 terminal is safe with 74 specimens and 2298 cash. Its action-free menu now offers Center restoration and an affordable quoted 2100 evolution, but the model has not acted on that second menu. Sustained model-led chaining remains unverified. |
+| Decision | Allow one fresh Model132 choice from the already inspected restore-versus-evolution menu, retaining its actual outcome and fitting only an admissible result. Stop if safety or source assumptions drift; no forced evolution target or replay. |
+| Next session | Sol High, Fast off, 45-75 minutes: one bounded Model132 choice between routed restoration and affordable evolution, then inspect its actual safe terminal and fit if admissible. |
+| Next falsifier | The next action-free heal-versus-evolution menu changes identity, becomes a singleton or requires hidden input; the selected execution fails to retain a verifiable terminal. |
+| Stop condition | Stop on missing executable alternatives, unsafe terminal, replay pressure, teacher substitution, target-specific patches, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

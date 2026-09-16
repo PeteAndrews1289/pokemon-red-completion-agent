@@ -14,14 +14,13 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model131 remains at 131 settled examples/89 successes. Capture stats now latch after battle
-initialization, with declared-target and setup protection. A qualified support continuation
-caught Haunter, reaching 93/124 registrations, 74 specimens, 1608 cash and six Great Balls.
-The terminal is safe; the original failed choice remains fitted without replay.
+Model132 has 132 settled examples/90 successes. The main mixed menu exposes routed Center
+restoration. Model131 chose finite income from a verified two-way heal-versus-income menu,
+earned 690 cash, ended safe and fit once without replay or teacher action. Red remains 93/124
+registrations and 74 specimens; cash is 2298.
 
-Next qualify the existing routed Center restoration offer in the mixed menu. The current menu
-has only resupply; the capture helper is at 34/70 HP and no acquisition is available. Permit one
-fresh Model131 decision only with verified alternatives. Evolution target
+The safe terminal's next action-free menu has genuine restore and affordable evolution options
+(2100 quote). Permit one fresh Model132 decision only with verified alternatives. Evolution target
 ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
@@ -29,7 +28,7 @@ ordering, battle mechanics and fresh-start Red completion remain explicit author
 Flash 3.8 High completed a read-only design review. Accepted settled stats, identity checks and
 idempotent MAIN entry; rejected an incorrect battle-state value, forced flee and full-HP-only
 capture. Quota was unavailable/not refreshed; Claude was not used.
-Next setting: Sol High, Fast off, approximately 45-75 minutes for restoration-menu qualification. No GitHub publication without Pete's
+Next setting: Sol High, Fast off, approximately 45-75 minutes for one bounded next choice. No GitHub publication without Pete's
 explicit instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)
