@@ -1,5 +1,21 @@
 # Roadmap baseline and deviations
 
+## September 16 — bounded live battle authority, without blanket promotion
+
+The next earned-state experiment connects the existing frozen expected-utility
+battle ranker to one fresh natural wild encounter. Teacher setup declares the
+lead and venue before the encounter; the ranker then chooses attacks from at
+least two supported candidates. Persist each query and selected physical slot
+before input, settle each turn before re-observation, retain failures and the
+actual terminal, and stop after at most eight decisions. There is no attack
+fallback, hidden switch, development fitting or replay of a consumed trial.
+
+The earlier shadow-only restriction still bars promotion *from those old
+results*. This separately recorded development test grants temporary explicit
+move authority only inside its bounded runner. It does not change the ordinary
+collection controller, claim independent advantage, or open the fresh-run gate.
+Stage IDs, completion criteria and the Red-before-ROM-hack order are unchanged.
+
 ## September 16 — expose evolution targets; separate ties from learned preference
 
 The [action-free inventory](evidence/red-model134-multi-evolution-menu-2026-09-16.json)
