@@ -1,5 +1,30 @@
 # Roadmap baseline and deviations
 
+## September 15 — connect model choices to an autonomous development loop
+
+Pete explicitly directed work toward autonomous model decision making. The next experiment
+is a bounded continuation from the retained 89-registration development save: up to three
+model-selected goals, automatic reconstruction of the next menu from each earned terminal,
+and real cartridge-derived capture destinations exposed to the model. Evolution target
+derivation and battle moves remain deterministic and must be reported as such.
+
+The failed Model123 query with seed123091501 remains an unretained historical choice and
+never supplies a selected arm, outcome or training row. Under this new development direction,
+a new run may start from the same unchanged save with a prospectively recorded random seed.
+This is correlated development continuation, not an independent experiment or recovery of
+the old answer. The earlier instruction to abandon the entire save after an instrumentation
+failure is superseded; consumed gameplay and historical benchmark/sealed identities stay closed.
+
+Mission check: reusable capability is observe/choose/persist/execute/reobserve; learned
+authority covers goal and capture destination choice; transfer testing uses multiple menu
+shapes and changed terminal states in ROM-free tests; the cheapest falsifier is failure to
+persist or execute the chosen binding; time box is two hours; stop on unsafe control, failed
+execution/verification, no state progress, or the declared decision/action/frame limits.
+The live cap is three decisions,30000 actions,3000000 frames and1800 seconds for admitting
+further decisions. Persist each choice before execution and retain every actual terminal.
+No teacher fallback action is allowed. The fresh Red gate, later-title order and user-controlled
+GitHub publication remain unchanged.
+
 ## September 15 — consume campaign B and repair one generic battle contingency
 
 The [durable campaign](work-sessions/2026-09-15-durable-battle-cartridge-campaign.md)

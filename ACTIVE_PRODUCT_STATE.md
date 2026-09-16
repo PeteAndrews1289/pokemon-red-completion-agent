@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Close or prospectively replace the consumed Model123 item-evolution query identity without redraw, inference or teacher substitution.
+- Next decision: Run the user-directed autonomous development continuation: at most three persisted model choices over goals and observed capture destinations, rebuilding each menu from the earned state. Preserve the lost Model123 query as historical failure; this continuation is correlated, not independent evaluation.
 
 ### Mandatory mission check
 
