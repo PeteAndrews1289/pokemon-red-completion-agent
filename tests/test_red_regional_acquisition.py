@@ -134,6 +134,7 @@ class _Runtime:
     profile: object
     emulator: object
     registration_policy: object = None
+    reader: object = None
 
 
 @pytest.mark.parametrize("registered", [False, True])
@@ -190,7 +191,11 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
             )
 
     monkeypatch.setattr(regional, "RedResourceGoalRouter", Router)
-    runtime = _Runtime(items[0].profile, SimpleNamespace(frame_count=0))
+    runtime = _Runtime(
+        items[0].profile,
+        SimpleNamespace(frame_count=0),
+        reader=SimpleNamespace(read_retained_outside_map=lambda: None),
+    )
     if registered:
         runtime.registration_policy = object()
     actions = SimpleNamespace(actions_executed=0)
@@ -232,3 +237,137 @@ def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
             maximum_frames=3000000,
             routed_recovery=True,
         )
+
+
+def test_topology_rank_is_nearby_first_and_keeps_unreachable_sources_last(monkeypatch):
+    sources = ("wild:Far:grass", "wild:Lost:grass", "wild:Here:grass")
+    map_ids = {sources[0]: 3, sources[1]: 4, sources[2]: 1}
+    monkeypatch.setattr(regional, "map_id_for_wild_source", map_ids.__getitem__)
+
+    def topology(_graph, start, goal, *, last_outside):
+        assert (start, last_outside) == (1, 7)
+        if goal == 4:
+            raise regional.GlobalRouterError("disconnected")
+        costs = {1: (), 3: (SimpleNamespace(cost=5),)}
+        return SimpleNamespace(edges=costs[goal])
+
+    monkeypatch.setattr(regional, "find_macro_path", topology)
+    world = SimpleNamespace(
+        macro_graph=object(),
+        terrain={1: object(), 3: object(), 4: object()},
+        local_graphs={1: object(), 3: object(), 4: object()},
+    )
+    assert regional._rank_regional_sources(
+        sources, world, current_map=1, last_outside_map=7
+    ) == ((sources[2], 1), (sources[0], 3), (sources[1], 4))
+
+
+def test_topology_rank_accounts_for_observed_fly_origins(monkeypatch):
+    sources = ("wild:WalkNear:grass", "wild:FlyNear:grass")
+    map_ids = {sources[0]: 2, sources[1]: 3}
+    monkeypatch.setattr(regional, "map_id_for_wild_source", map_ids.__getitem__)
+
+    def topology(_graph, start, goal, *, last_outside):
+        assert last_outside in {7, 5}
+        costs = {(100, 2): 3, (100, 3): 8, (5, 2): 5, (5, 3): 0}
+        return SimpleNamespace(
+            edges=tuple(SimpleNamespace(cost=1) for _ in range(costs[start, goal]))
+        )
+
+    monkeypatch.setattr(regional, "find_macro_path", topology)
+    world = SimpleNamespace(
+        macro_graph=object(),
+        terrain={2: object(), 3: object()},
+        local_graphs={2: object(), 3: object()},
+    )
+    assert regional._rank_regional_sources(
+        sources,
+        world,
+        current_map=100,
+        last_outside_map=7,
+        fly_origins=(5,),
+    ) == ((sources[1], 3), (sources[0], 2))
+
+
+def test_enumeration_stops_after_target_or_fixed_routed_source_bound(monkeypatch):
+    items = tuple(
+        _candidate(f"wild:Route{number}:grass", effort=number / 20)
+        for number in range(2, 12)
+    )
+    monkeypatch.setattr(
+        regional,
+        "RED_ACQUISITION_CATALOG",
+        SimpleNamespace(
+            methods=tuple(
+                SimpleNamespace(source_id=item.source_id, kind=RedAcquisitionKind.WILD)
+                for item in items
+            )
+        ),
+    )
+    ranked = tuple((item.source_id, index + 1) for index, item in enumerate(reversed(items)))
+    monkeypatch.setattr(regional, "_rank_regional_sources", lambda *a, **k: ranked)
+    monkeypatch.setattr(
+        regional, "derive_red_living_dex_wild_corridor", lambda target, *a, **k: target
+    )
+    monkeypatch.setattr(
+        regional,
+        "retarget_red_wild_profile",
+        lambda profile, target, *, rom: next(
+            item.profile for item in items if item.source_id == target.source_id
+        ),
+    )
+    monkeypatch.setattr(
+        regional, "bind_red_local_discovery_profile", lambda profile, *a: profile
+    )
+    evaluated = []
+
+    class Router:
+        include_bindings = True
+
+        def __init__(self, runtime, *a, **kw):
+            self.profile = runtime.profile
+
+        def enumerate_routed_kinds(self, observation, routed_kinds):
+            item = next(item for item in items if item.profile == self.profile)
+            evaluated.append(item.source_id)
+            return SimpleNamespace(bindings=(item.binding,) if self.include_bindings else ())
+
+    monkeypatch.setattr(regional, "RedResourceGoalRouter", Router)
+    runtime = _Runtime(
+        items[0].profile,
+        SimpleNamespace(frame_count=0),
+        reader=SimpleNamespace(read_retained_outside_map=lambda: 7),
+    )
+    world = SimpleNamespace(
+        terrain={index + 1: object() for index in range(len(items))},
+        local_graphs={index + 1: object() for index in range(len(items))},
+        object_blockers={index + 1: frozenset() for index in range(len(items))},
+        macro_graph=SimpleNamespace(warp_locations={}),
+        rom=b"fixture",
+    )
+    result = regional.enumerate_red_regional_acquisitions(
+        runtime,
+        _observation(),
+        SimpleNamespace(actions_executed=0),
+        world,
+        maximum_actions=30000,
+        maximum_frames=3000000,
+    )
+    assert evaluated == [source for source, _map_id in ranked[:4]]
+    assert len(result) == regional.TARGET_SOURCE_CANDIDATES
+
+    Router.include_bindings = False
+    evaluated.clear()
+    result = regional.enumerate_red_regional_acquisitions(
+        runtime,
+        _observation(),
+        SimpleNamespace(actions_executed=0),
+        world,
+        maximum_actions=30000,
+        maximum_frames=3000000,
+    )
+    assert result == ()
+    assert evaluated == [
+        source
+        for source, _map_id in ranked[: regional.MAXIMUM_ROUTED_SOURCE_EVALUATIONS]
+    ]

@@ -12,6 +12,8 @@ import random
 from dataclasses import dataclass, replace
 
 from pokemon_red_completion.executor import CountingExecutor
+from pokemon_red_completion.gen1_field_moves import Gen1FieldMoveError, fly_menu_indices
+from pokemon_red_completion.global_router import GlobalRouterError, find_macro_path
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.goal_manager_composition_qualification import (
     living_completion_checkpoint,
@@ -27,6 +29,7 @@ from pokemon_red_completion.living_dex_option_value import (
     LivingDexOptionValueModel,
     living_dex_option_context_from_goal_situation,
 )
+from pokemon_red_completion.observation import Badge
 from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfile
@@ -53,6 +56,64 @@ from pokemon_red_completion.strategic_navigation_scenario_runtime import Strateg
 
 SOURCE_CHOICE_POLICY = "living-dex-regional-source-softmax-v1"
 MAXIMUM_SOURCE_CANDIDATES = 8
+TARGET_SOURCE_CANDIDATES = 4
+MAXIMUM_ROUTED_SOURCE_EVALUATIONS = 8
+
+
+def _rank_regional_sources(
+    sources: tuple[str, ...],
+    world: StrategicScenarioRouteWorld,
+    *,
+    current_map: int,
+    last_outside_map: int | None,
+    fly_origins: tuple[int, ...] = (),
+) -> tuple[tuple[str, int], ...]:
+    """Put topology-near sources first without claiming they are executable.
+
+    Macro topology is a cheap deterministic lower bound.  Every returned source
+    still passes the complete corridor, provider and feasible-route checks below.
+    An unreachable topology estimate sorts last instead of becoming a false
+    availability claim; field transport may still make the full binding viable.
+    """
+    ranked: list[tuple[tuple[int, int, int, int, str], str, int]] = []
+    for source in sources:
+        try:
+            map_id = int(map_id_for_wild_source(source))
+        except RedLivingDexMultifamilyError:
+            continue
+        if map_id not in world.terrain or map_id not in world.local_graphs:
+            continue
+        estimates: list[tuple[int, int]] = []
+        for origin, retained, overhead in (
+            (current_map, last_outside_map, 0),
+            *(
+                (origin, origin, 2 if current_map >= 0x25 else 1)
+                for origin in sorted(set(fly_origins))
+            ),
+        ):
+            try:
+                topology = find_macro_path(
+                    world.macro_graph,
+                    origin,
+                    map_id,
+                    last_outside=retained,
+                )
+            except GlobalRouterError:
+                continue
+            estimates.append(
+                (
+                    overhead + sum(edge.cost for edge in topology.edges),
+                    overhead + len(topology.edges),
+                )
+            )
+        rank = (
+            (0, *min(estimates), map_id, source)
+            if estimates
+            else (1, 0, 0, map_id, source)
+        )
+        ranked.append((rank, source, map_id))
+    ranked.sort(key=lambda item: item[0])
+    return tuple((source, map_id) for _rank, source, map_id in ranked)
 
 
 def regional_source_memory_key(source_id: str) -> str:
@@ -89,11 +150,12 @@ def enumerate_red_regional_acquisitions(
     routed_recovery: bool = False,
     prepare_capture_storage: bool = False,
 ) -> tuple[RedRegionalAcquisitionCandidate, ...]:
-    """Return up to eight low-estimated-effort real ordinary-grass options.
+    """Return up to four nearby, fully verified ordinary-grass options.
 
     Candidate filtering is deterministic support, not a learned region choice.
     Sources lacking needed specimens, supplies, space or a walking route stay
-    unavailable. Route execution must still verify every transition live.
+    unavailable. A fixed expensive-evaluation bound avoids a global route scan;
+    route execution must still verify every transition live.
     """
     before = actions.actions_executed, runtime.emulator.frame_count
     sources = sorted(
@@ -109,15 +171,45 @@ def enumerate_red_regional_acquisitions(
         # not a complete location index: alternative reachable grass patches
         # matter once those preferred routes are exhausted or gated.
         sources = sorted(set(sources) | set(cartridge_grass_sources(world.rom)))
-    candidates = []
+    raw_map = observation.raw.map_id
+    if raw_map is None:
+        return ()
+    last_outside_map = runtime.reader.read_retained_outside_map()
+    fly_origins: tuple[int, ...] = ()
+    try:
+        fly_menu_indices(observation.raw)
+    except Gen1FieldMoveError:
+        pass
+    else:
+        indoor_departure_is_known = (
+            int(raw_map) < 0x25
+            or type(last_outside_map) is int  # noqa: E721
+            and 0 <= last_outside_map <= 0x24
+        )
+        if (
+            int(observation.raw.badge_bits or 0) & int(Badge.THUNDER)
+            and indoor_departure_is_known
+        ):
+            fly_origins = tuple(runtime.reader.read_fly_destinations())
+    ranked_sources = _rank_regional_sources(
+        tuple(sources),
+        world,
+        current_map=int(raw_map),
+        last_outside_map=last_outside_map,
+        fly_origins=fly_origins,
+    )
+    candidates: list[RedRegionalAcquisitionCandidate] = []
+    routed_source_evaluations = 0
     route_plan_cache: dict[
         tuple[TraversalSnapshot, int, tuple[int, int] | None], RoutePlan | str
     ] = {}
-    for source in sources:
+    for source, map_id in ranked_sources:
+        if (
+            len(candidates) >= TARGET_SOURCE_CANDIDATES
+            or routed_source_evaluations >= MAXIMUM_ROUTED_SOURCE_EVALUATIONS
+        ):
+            break
         try:
-            map_id = int(map_id_for_wild_source(source))
-            if map_id not in world.terrain or map_id not in world.local_graphs:
-                continue
             excluded = world.object_blockers[map_id]
             if registered:
                 # A reversible local edge can still land on an automatic map
@@ -145,6 +237,7 @@ def enumerate_red_regional_acquisitions(
                 profile = bind_red_opportunistic_capture_profile(profile, world.rom)
         except (RedLivingDexMultifamilyError, RedLivingDexWildCorridorError):
             continue
+        routed_source_evaluations += 1
         routed = RedResourceGoalRouter(
             replace(runtime, profile=profile),
             actions,
