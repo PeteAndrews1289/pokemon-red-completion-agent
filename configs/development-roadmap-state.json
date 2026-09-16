@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model135-opportunity-discovery",
+  "as_of_session": "2026-09-16-model135-in-party-continuation",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model135-opportunity-discovery-2026-09-16.json"
+      "evidence": "docs/evidence/red-model135-in-party-continuation-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1628,6 +1628,12 @@
       "result": "Action-free discovery restored seven distinct choices: four fishing destinations and three level evolutions. Model134 chose Krabby-to-Kingler; Krabby advanced level 15 to 16 before the 3000-action cap, with a safe terminal after 272555 frames. The incomplete result was fitted once into Model135: 135 examples / 91 successes / 56 economy-qualified.",
       "deviation": "No evolution or new registration: Red remains 94/124, 74 specimens and 198 cash. No replay, teacher substitution, independent evaluation or GitHub push. The earlier League diagnosis is corrected: travel supports indoor exit/Fly, but the partial event flags fail eligibility. Fresh-Red gates remain 0/5.",
       "next": "Sol High, Fast off, 45-60 minutes: qualify in-party continuation from earned level 16 while retaining original reserves; inspect throughput before proposing a budget. Do not restart the old attempt, protect the temporary trainee against intended evolution or blindly increase the cap."
+    },
+    {
+      "session": "2026-09-16-model135-in-party-continuation",
+      "result": "The earned Route 11 save qualifies eight distinct action-free choices, including Krabby's in-party evolution and recovery. Original party reserves are authenticated from the parent outcome. The previous attempt earned 1530 Krabby XP in 3000 actions; approximately 17047 XP remain to level 28.",
+      "deviation": "This is execution qualification, not a new model choice, gameplay, fit or registration. Model135 stays at 135 examples / 91 successes; Red stays 94/124 with 74 specimens and 198 cash. Fresh Red acceptance remains 0/5. No GitHub push.",
+      "next": "Sol High, Fast off, 45-60 minutes: carry the prior model-selected goal across bounded chunks with one outcome and measured XP/action/frame cost. Then execute one prospective continuation from the earned terminal; stop on lost identity, unsafe state or no XP progress."
     }
   ],
   "closed_milestones": [

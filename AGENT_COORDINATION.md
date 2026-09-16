@@ -12,14 +12,17 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-The empty-menu terminal now exposes four fishing and three boxed-evolution choices.
-Model134 chose Krabby→Kingler. Its 3000-action attempt stopped safely at level16 rather
-than completing evolution; 94/124 registrations,74 specimens and198 cash remain.
-The incomplete outcome was fitted once into Model135:135 examples/91 successes.
+The earned Route 11 terminal now exposes eight distinct choices, including Krabby's
+in-party evolution and recovery. The prior model-selected attempt earned 1,530 XP
+in 3,000 actions, ending at level 16 with 17,047 XP estimated to level 28.
+Authenticated parent evidence carries original-party reserves; the temporary trainee
+remains eligible. Inspection used zero actions or frames. Red remains 94/124,
+74 specimens and 198 cash; Model135 remains 135 examples/91 successes.
 
-Next qualify resumable in-party training and measured throughput from the earned terminal.
-Preserve the trainee and original reserves; do not replay the Center start, automatically
-protect a temporary trainee against its intended evolution, or simply increase limits.
+Next carry the prior selected goal across bounded training chunks, with one outcome
+and no second model query or duplicated fit. Qualify the budget from measured pace,
+then execute one bounded continuation from the earned terminal. Preserve original
+reserves and stop on lost binding, unsafe state or no XP progress.
 Battle authority and fresh-start completion remain separate gaps.
 
 ## Reviewer contribution
@@ -29,7 +32,7 @@ bounded-search tests were accepted; the zero-stock-only demand formula was rejec
 protected/branching stock may require replenishment. Raising the window and typing directly
 restored app control; the request was visibly submitted and answered.
 Last displayed Gemini quota was97% five-hour/98% weekly remaining; refreshed reading unconfirmed.
-Claude unused. Next setting:Sol High, Fast off,45–60 minutes. No GitHub push.
+Claude unused this session. Next setting: Sol High, Fast off, 45–60 minutes. No GitHub push.
 
-[Evidence](docs/evidence/red-model135-opportunity-discovery-2026-09-16.json) ·
+[Evidence](docs/evidence/red-model135-in-party-continuation-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

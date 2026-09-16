@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model135-opportunity-discovery**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model135-in-party-continuation**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model135-opportunity-discovery-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model135-in-party-continuation-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model135-in-party-continuation
+
+The earned Route 11 save qualifies eight distinct action-free choices, including Krabby's in-party evolution and recovery. Original party reserves are authenticated from the parent outcome. The previous attempt earned 1530 Krabby XP in 3000 actions; approximately 17047 XP remain to level 28.
+
+**Deviation:** This is execution qualification, not a new model choice, gameplay, fit or registration. Model135 stays at 135 examples / 91 successes; Red stays 94/124 with 74 specimens and 198 cash. Fresh Red acceptance remains 0/5. No GitHub push.
+
+**Next:** Sol High, Fast off, 45-60 minutes: carry the prior model-selected goal across bounded chunks with one outcome and measured XP/action/frame cost. Then execute one prospective continuation from the earned terminal; stop on lost identity, unsafe state or no XP progress.
 
 ### 2026-09-16-model135-opportunity-discovery
 
