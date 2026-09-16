@@ -15,7 +15,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from time import monotonic
 
-from .goal_manager import GoalDecisionOutcome
+from .goal_manager import GoalDecisionOutcome, GoalKind
 from .living_dex_option_value import LivingDexOptionValueModel
 from .provenance import canonical_sha256
 from .red_live_option_menu import (
@@ -147,7 +147,14 @@ def run_autonomous_options(
         # callback resolution, or result-dependent validation precedes the write.
         choice = select_red_live_option(model, options, seed=decision_seed)
         _record(step / "decision.json", choice.public_dict())
-        if choice.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION:
+        deterministic_storage = (
+            choice.mode is RedLiveOptionSelectionMode.DETERMINISTIC_SAFETY
+            and choice.selected_binding.kind is GoalKind.MANAGE_STORAGE
+        )
+        if (
+            choice.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
+            and not deterministic_storage
+        ):
             stop = "safety_boundary_requires_separate_recovery"
             break
         selected = choice.selected_binding
@@ -175,6 +182,8 @@ def run_autonomous_options(
                 "ordinal": ordinal,
                 "selected_kind": selected.kind.value,
                 "choice": choice.public_dict(),
+                "learning_eligible": choice.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION,
+                "support_role": ("deterministic_storage_safety" if deterministic_storage else None),
                 "before_state_sha256": before.sha256,
                 "terminal_state_sha256": terminal.sha256,
                 "before": dict(before.facts),
@@ -212,6 +221,8 @@ def run_autonomous_options(
         "executed_decisions": len(outcomes),
         "successful_decisions": sum(row["verification"] == "succeeded" for row in outcomes),
         "teacher_actions": 0,
+        "model_decisions": sum(row["learning_eligible"] is True for row in outcomes),
+        "support_decisions": sum(row["support_role"] is not None for row in outcomes),
         "model_sha256": model.model_sha256,
         "outcomes": outcomes,
     }

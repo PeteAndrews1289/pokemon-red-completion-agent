@@ -202,6 +202,7 @@ def main() -> int:
     )
     measured_inputs = []
     measured_results = []
+    support_choices: list[str] = []
     with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
         emulator.load_state_bytes(step_rows[0][3])
         controller = ReadOnlyController(emulator)
@@ -264,6 +265,22 @@ def main() -> int:
             ) = step_row
             before_sha = str(outcome["before_state_sha256"])
             terminal_sha = str(outcome["terminal_state_sha256"])
+            mode = decision.get("mode")
+            if mode != "model_exploration":
+                if (
+                    mode != "deterministic_safety"
+                    or outcome.get("selected_kind") != "manage_storage"
+                    or outcome.get("learning_eligible") is not False
+                    or outcome.get("support_role") != "deterministic_storage_safety"
+                    or decision.get("teacher_labels") != 0
+                ):
+                    raise ValueError("autonomous nonlearning support differs")
+                support_choices.append(f"{run_id}:step-{ordinal:03d}")
+                continue
+            if outcome.get("learning_eligible") not in (None, True) or outcome.get(
+                "support_role"
+            ) not in (None,):
+                raise ValueError("autonomous model learning role differs")
             before_observation, before_economy = observe(before_state, before_sha)
             after_observation, after_economy = observe(terminal_state, terminal_sha)
             measured, result = publish_autonomous_measured_choice(
@@ -315,6 +332,7 @@ def main() -> int:
         "schema": "pokemon.red.autonomous-collection-fit.v1",
         "run_id": run_id,
         "admitted_choices": [item.choice_id for item in measured_inputs],
+        "support_choices": support_choices,
         "teacher_actions": 0,
         "replayed_actions": 0,
         "fit": fitted,

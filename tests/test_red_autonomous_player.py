@@ -2,9 +2,14 @@ import json
 from dataclasses import replace
 
 import pytest
-from test_red_live_option_menu import _mixed, _model, _ordinary_bindings, _situation
+from test_red_live_option_menu import _binding, _mixed, _model, _ordinary_bindings, _situation
 
-from pokemon_red_completion.goal_manager_runtime import GoalExecutionReport, GoalVerification
+from pokemon_red_completion.goal_manager import GoalKind
+from pokemon_red_completion.goal_manager_runtime import (
+    GoalBindingSet,
+    GoalExecutionReport,
+    GoalVerification,
+)
 from pokemon_red_completion.red_autonomous_player import AutonomousSnapshot, run_autonomous_options
 from pokemon_red_completion.red_live_option_menu import build_red_live_option_set
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
@@ -149,6 +154,71 @@ def test_teacher_safety_choice_is_persisted_but_never_executed(tmp_path):
     assert result["stop_reason"] == "safety_boundary_requires_separate_recovery"
     assert (output / "step-000/decision.json").exists()
     assert calls == []
+
+
+def test_storage_safety_executes_as_nonlearning_support_then_requeries_model(tmp_path):
+    output = tmp_path / "run"
+    state = {"version": 0}
+
+    def snapshot():
+        return AutonomousSnapshot(str(state["version"]).encode(), {}, True)
+
+    def observe(_ordinal):
+        calls = []
+        ordinary = _ordinary_bindings(calls)
+        storage = _binding(
+            GoalKind.MANAGE_STORAGE,
+            binding_ref="private:red:storage",
+            calls=calls,
+        )
+        ordinary = GoalBindingSet(
+            tuple(
+                storage.opportunity if item.kind is GoalKind.MANAGE_STORAGE else item
+                for item in ordinary.opportunities
+            ),
+            (*ordinary.bindings, storage),
+        )
+        options = build_red_live_option_set(
+            situation=_situation(resources=0.1, storage=1.0 if not state["version"] else 0.1),
+            binding_set=ordinary,
+            supplements=(),
+            model_feature_version=4,
+            ordering_seed_sha256="c" * 64,
+            economy_snapshot=EconomySnapshot(400, ()),
+            target_cash=400,
+        )
+        rebound = []
+        for binding in options.bindings:
+
+            def execute(binding=binding):
+                state["version"] += 1
+                return GoalExecutionReport(1, 1, {"kind": binding.kind.value})
+
+            rebound.append(
+                replace(
+                    binding,
+                    execute=execute,
+                    verify=lambda _: GoalVerification.succeeded(),
+                )
+            )
+        return replace(options, bindings=tuple(rebound))
+
+    result = run_autonomous_options(
+        model=_model(),
+        output=output,
+        snapshot=snapshot,
+        observe=observe,
+        seed=17,
+        maximum_decisions=2,
+        provenance={},
+    )
+
+    assert result["executed_decisions"] == 2
+    assert result["support_decisions"] == 1
+    assert result["model_decisions"] == 1
+    assert result["outcomes"][0]["support_role"] == "deterministic_storage_safety"
+    assert result["outcomes"][0]["learning_eligible"] is False
+    assert result["outcomes"][1]["learning_eligible"] is True
 
 
 def test_mutating_menu_is_rejected_before_model_query(tmp_path):
