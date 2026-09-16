@@ -48,6 +48,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--updated-model", type=Path, required=True)
     parser.add_argument("--capture-dir", type=Path, action="append", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--local-only-source",
+        action="store_true",
+        help="accept an exact clean local commit without requiring a remote push",
+    )
     return parser
 
 
@@ -55,7 +60,8 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
     _require_private_output(args.output)
     source = detect_source_identity(PROJECT_ROOT, include_untracked=True)
     require_clean_source(source)
-    require_published_source(PROJECT_ROOT, source)
+    if not getattr(args, "local_only_source", False):
+        require_published_source(PROJECT_ROOT, source)
     if source.git_commit is None:  # pragma: no cover - clean source owns this
         raise AssertionError("published prediction source lacks a commit")
 
