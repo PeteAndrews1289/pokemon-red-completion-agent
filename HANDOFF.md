@@ -1,43 +1,37 @@
 # Current development handoff
 
-Read [MISSION.md](MISSION.md), [NORTH_STAR](NORTH_STAR.md) and
+Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Model128: need-conditioned income and retained capture failure
+## Exact-state capture recovery: Gastly registered, no new learning label
 
-The last safe development state had 1608 cash and nine Great Balls. The declared reserve is ten,
-and one quoted ball costs 600; the old fixed 3600-cash target kept offering unnecessary finite
-income. The live menu now derives its target from observed supply, including cash-starved cases.
-An action-free recheck showed three executable capture destinations, no income offer, zero inputs
-or model queries, and no identity-bearing policy fields.
+Model127's capture choice failed at a protected status guard and remains the failed example
+already fitted into Model128. The old shared exception did not retain expected target, party or
+bag values, so its exact differing field cannot be reconstructed. The guard now reports generic
+field-specific reason codes and retains every protected comparison. Sixty relevant ROM-free tests,
+lint and type checks passed.
 
-Model127 selected one of those destinations at probability 0.3469. After 276 actions/10368 frames,
-the capture-status safety guard halted the attempt: `RedTravelCaptureError` wrapped
-`RedCaptureStatusError` ("capture status changed target, party or bag"). The exact terminal is a
-wild battle, not input-ready, with SHA-256
-`70541c6f70c0db2368ab27269dc88b81a80f0f36c004d56e31d7bec5552a3f6f`. Cash remains 1608,
-registrations 91/124, specimens 72. No teacher choice, retry, support action, capture or sale
-occurred. The previously safe state SHA is
-`eb7727340207f5fc64b85c0dbefd2cb493c6d3e3befe2bed648c4832aaaf9ce5`; it does not license
-replaying the consumed Model127 choice.
-
-The importer admitted the exact exception, decision and costs without replay or unsafe-state
-promotion. Model128 has 128 settled examples, 88 successes, and 49 economy-qualified examples.
-This is one fitted failure lesson, not a collection gain or independent validation. Model SHA:
-`f3965e6d941653af6aca56ad54d091b62b65f8187b8a14678f8e27083e76ec50`.
+A separately qualified, one-time infrastructure continuation began at the exact failed wild
+battle terminal, SHA-256 `70541c6f70c0db2368ab27269dc88b81a80f0f36c004d56e31d7bec5552a3f6f`.
+It did not replay the route or query a model, and used no teacher actions. In 156 actions and
+13,752 frames it caught Gastly (national 092). Red rose from 91 to **92/124** registrations and
+from 72 to 73 specimens. The terminal is safe, out of battle, SHA-256
+`e5af367a9b88a82e6c69e9397769cb6823f6af04a031dc4dbaf039b34f9c7b73`.
+This support recovery is not learning-eligible. Model128 remains at 128 settled examples,
+88 successes and 49 economy-qualified examples, with no authority promotion or independent
+evaluation. The original Model127 outcome has not been relabeled as a success.
 
 ## Exact next bounded work
 
-Keep gameplay stopped. Read-only diagnosis should identify which protected capture-status field
-changed, because the current shared error string cannot distinguish normal battle progression
-from corruption. Add generic field-specific diagnostics and ROM-free cases without weakening the
-guard. Only after that, separately qualify an exact-state safe recovery or a prospectively distinct
-collection attempt; never retry or substitute the consumed Model127 decision. Partial-League
-exit/reset still needs separate qualification before any renewable-income offer.
+Gameplay is stopped at the safe recovery terminal. Build an action-free next menu from that exact
+state and check available capture stock, cash, party/storage and viable registered-species goals.
+If there are real alternatives, permit at most one fresh Model128 choice and retain its actual
+outcome, including failure and costs. Do not replay the consumed Model127 choice or fit the support
+recovery. Partial-League exit/reset remains unqualified as renewable income. The fresh-start
+Red-completion gate is still open; no ROM hack or Crystal work is authorized yet.
 
-No full run, ROM hack, Crystal work or GitHub publication is authorized. No push occurred. Flash
-and Claude were not used this session; quotas were not refreshed or displayed. Next setting:
-**Sol / High / Fast off**, about 1 hour. Escalate to Astra only if the diagnosis requires changing
-battle semantics, rather than improving the evidence and preserving safety.
+No GitHub push occurred. Flash and Claude were not used in this session; their quotas were not
+refreshed or displayed. Next setting: **Sol / High / Fast off**, roughly 45–75 minutes. Escalate
+to Astra only if the next menu or execution requires changing battle semantics.
 
-[Session evidence](docs/evidence/red-model128-affordability-and-capture-failure-2026-09-16.json)
+[Session evidence](docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)

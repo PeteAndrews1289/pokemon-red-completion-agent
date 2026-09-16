@@ -1,0 +1,49 @@
+{
+  "schema": "pokemon.red.capture-guard-recovery-session.v1",
+  "session": "2026-09-16-model127-capture-guard-recovery",
+  "rigor": "correlated-development-support",
+  "status": "exact_state_recovery_complete",
+  "diagnostics": {
+    "reusable_change": "field-specific capture-status drift reason codes without relaxing any protected check",
+    "historical_field_identified": false,
+    "historical_field_limitation": "The old exception did not retain the protected expected values; a later snapshot cannot prove which comparison failed.",
+    "rom_free_tests_passed": 60,
+    "lint_and_type_checks_passed": true
+  },
+  "recovery": {
+    "source_failure_terminal_sha256": "70541c6f70c0db2368ab27269dc88b81a80f0f36c004d56e31d7bec5552a3f6f",
+    "result_sha256": "91aa6b0bd1d6264b9ce3b2692350ca602ba2b8eb44c935b7ce4a116437920a26",
+    "terminal_state_sha256": "e5af367a9b88a82e6c69e9397769cb6823f6af04a031dc4dbaf039b34f9c7b73",
+    "exact_state_preflight_eligible": true,
+    "route_replayed": false,
+    "model_queries": 0,
+    "teacher_actions": 0,
+    "authority_promotions": 0,
+    "learning_eligible": false,
+    "actions": 156,
+    "frames": 13752,
+    "caught": true,
+    "target_species_ref": "pokemon:national:092",
+    "registrations_before": 91,
+    "registrations_after": 92,
+    "specimen_delta": 1,
+    "battle_state_after": 0,
+    "safe_terminal": true
+  },
+  "learning": {
+    "model": "Model128",
+    "settled_examples_before": 128,
+    "settled_examples_after": 128,
+    "successful_examples_before": 88,
+    "successful_examples_after": 88,
+    "new_train_examples": 0,
+    "independent_evaluation": false,
+    "original_model127_choice_remains_a_fitted_failure": true
+  },
+  "boundaries": {
+    "full_game_replays": 0,
+    "rom_hack_accesses": 0,
+    "crystal_accesses": 0,
+    "github_push": false
+  }
+}

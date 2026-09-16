@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Keep gameplay stopped and diagnose the exact capture-status safety failure with read-only state and generic ROM-free tests; do not replay the Model127 choice. Qualify a separately declared safe recovery before any new action. Renewable League income remains unqualified.
+- Next decision: Build an action-free menu from the exact safe 92/124 terminal. If viable alternatives exist, allow at most one fresh Model128 choice and retain its actual result; do not replay Model127 or count support recovery as learning. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model128 has 128 settled examples / 88 successes, including one verified failed capture. Red remains 91/124 with 72 specimens and 1608 cash. The latest terminal is an unsafe wild battle; the earlier safe state is retained but the consumed Model127 choice cannot be replayed. |
+| Authority now | Model128 has 128 settled examples / 88 successes; the original Model127 capture remains a fitted failure. Exact-state non-learning recovery raised Red to 92/124 with 73 specimens and a safe out-of-battle terminal. The consumed choice cannot be replayed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A read-only audit and ROM-free status-guard cases cannot distinguish a legitimate battle-state transition from target, party or inventory corruption without weakening protection. |
+| Cheapest falsifier | The next action-free exact-state menu offers no viable alternative registrations, or one fresh selected attempt cannot preserve a verified outcome without replay or guard weakening. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model128-affordability-and-capture-failure** · status **closed** · evidence [model fit](docs/evidence/red-model128-affordability-and-capture-failure-2026-09-16.json)
+**2026-09-16-model127-capture-guard-recovery** · status **closed** · evidence [qualification](docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Income is now conditioned on observed supply need, and the model chose a capture destination. The failed attempt and its real cost became a negative training example without weakening battle safety. |
-| Learning output | One on-policy failed acquisition was retained and fitted without replay. Model128 has 128 settled examples / 88 successes and 49 economy-qualified examples; registration gain was zero. |
-| Authority delta | Observed reserve pricing removed an unneeded finite-income offer without selecting a destination. Model127 chose among three acquisition routes; the selected capture failed at a protected status guard after 276 actions. Its exact exception and costs were fitted as one failed Model128 lesson, not a success. |
-| Transfer result | The need-conditioned budget is a reusable pattern, tested in funded and cash-starved ROM-free cases; no independent or later-title transfer result exists. |
-| Blocker | Red remains at 91/124 registrations. The latest terminal is mid-battle and not input-ready; the capture-status guard reports target, party or bag drift but does not identify which field changed. That consumed attempt cannot be replayed or resumed blindly. |
-| Decision | Keep gameplay stopped. Audit the retained exception and status-guard transitions read-only, add generic field-specific diagnostics with ROM-free tests, then separately qualify an exact-state safe recovery or a prospectively distinct collection attempt. |
-| Next session | Sol High, Fast off, about 1 hour: diagnose the exact capture-status guard failure without gameplay, add general diagnostics and ROM-free cases, then qualify recovery separately before any new action. |
-| Next falsifier | The capture-status failure remains indistinguishable after field-specific read-only diagnostics, or a proposed recovery needs to replay or override the model's consumed choice. |
-| Stop condition | Stop if capture safety must be weakened, the failed choice must be retried, an unsafe terminal is treated as a clean origin, a teacher supplies the next goal, or a full run/ROM hack/Crystal/GitHub publication is proposed. |
+| Product alignment | The protected capture runtime gained reusable field-specific diagnostics. Exact-state support recovery preserved the earned Red registration and a safe origin without revising the prior failed model label. |
+| Learning output | Zero new training examples; Model128 remains at 128 settled examples / 88 successes and 49 economy-qualified examples. Support recovery added one registration and specimen, not learned success. |
+| Authority delta | No authority promotion or new fitted example. A separately qualified, non-learning exact-state recovery caught Gastly without a model query, teacher action or route replay; the original Model127 decision remains a fitted failure. |
+| Transfer result | Generic drift reason codes passed ROM-free field-specific tests; no independent or later-title transfer result exists. |
+| Blocker | The safe recovery terminal has 92/124 registrations and 73 specimens. A fresh action-free menu has not yet been inspected; the prior Model127 choice is consumed and cannot be replayed. Partial-League reset remains unqualified as renewable income. |
+| Decision | Stop support recovery. Build the next menu action-free from the exact safe terminal, then permit at most one fresh Model128 choice if real executable alternatives exist; retain its actual outcome and costs. |
+| Next session | Sol High, Fast off, 45-75 minutes: inspect an action-free menu at the exact recovered terminal and, only if viable alternatives exist, execute and retain at most one fresh Model128 choice. |
+| Next falsifier | No viable multi-option menu exists at the recovered terminal, or a fresh selected outcome cannot be verified without guard weakening or a retry. |
+| Stop condition | Stop if capture safety must be weakened, the consumed Model127 choice retried or relabeled, a teacher supplies the next goal, or a full run/ROM hack/Crystal/GitHub publication is proposed. |
 
 ### Stop conditions
 

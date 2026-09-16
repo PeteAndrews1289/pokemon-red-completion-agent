@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model128-affordability-and-capture-failure**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model127-capture-guard-recovery**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model128-affordability-and-capture-failure-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model127-capture-guard-recovery-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model127-capture-guard-recovery
+
+Generic field-specific capture-status diagnostics passed ROM-free tests without weakening protection. A separately qualified exact-state support continuation caught Gastly, raising Red from91 to92/124 registrations and from72 to73 specimens; the terminal is safe.
+
+**Deviation:** The historical guard mismatch field cannot be reconstructed from its old exception. Recovery used156 actions/13752 frames but no route replay, model query, teacher choice, new training label or authority promotion. Model128 remains128 examples/88 successes; no full-Red gate or GitHub push changed.
+
+**Next:** Sol High, Fast off: inspect the exact safe terminal action-free, then permit at most one fresh Model128 decision only if executable alternatives exist. Preserve its actual result; do not replay Model127 or fit support recovery.
 
 ### 2026-09-16-model128-affordability-and-capture-failure
 
