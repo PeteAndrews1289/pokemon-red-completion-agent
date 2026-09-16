@@ -34,24 +34,24 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Audit Model127's resource need and option values at the action-free four-option terminal before another game action; test general affordability-aware income availability without selecting a capture for the model. Separately qualify partial-League exit/reset before renewable income.
+- Next decision: Keep gameplay stopped and diagnose the exact capture-status safety failure with read-only state and generic ROM-free tests; do not replay the Model127 choice. Qualify a separately declared safe recovery before any new action. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model127 has 127 settled examples / 88 successes. Model126 independently selected a second finite trainer-income goal from four executable choices. The safe development save has 91/124 registrations, 72 specimens and 1608 cash. |
+| Authority now | Model128 has 128 settled examples / 88 successes, including one verified failed capture. Red remains 91/124 with 72 specimens and 1608 cash. The latest terminal is an unsafe wild battle; the earlier safe state is retained but the consumed Model127 choice cannot be replayed. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | At the retained 1608-cash terminal, an action-free resource audit cannot explain the repeated finite-income preference or a general affordability-aware offer would suppress a genuinely needed prerequisite. |
+| Cheapest falsifier | A read-only audit and ROM-free status-guard cases cannot distinguish a legitimate battle-state transition from target, party or inventory corruption without weakening protection. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
 
 | Output | Current | Minimum for the next decision |
 | --- | ---: | ---: |
-| Registered Train Example · train | 127 | 12 |
+| Registered Train Example · train | 128 | 12 |
 
 Each counter changes only when tracked, path-free evidence supports it.
 The frozen legacy projection aggregates older learner heads and scenario families; it excludes newer native-player batches. Use Authority now and the latest session evidence for the active checkpoint, not these historical totals.
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model127-second-finite-funding** · status **closed** · evidence [model fit](docs/evidence/red-model127-second-finite-funding-2026-09-16.json)
+**2026-09-16-model128-affordability-and-capture-failure** · status **closed** · evidence [model fit](docs/evidence/red-model128-affordability-and-capture-failure-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model exercised genuine resource choice and earned finite money, but repeating income at 91 registrations tests resource judgment rather than collection success. |
-| Learning output | One fresh on-policy finite-income outcome was admitted and fitted without replay: Model127 has 127 settled examples / 88 successes and 48 economy-qualified examples. Registration gain was zero. |
-| Authority delta | Model126 chose another finite trainer-income goal from four executable choices; it earned 660 and retained a safe terminal. One observed choice fitted Model127 without replay or promotion. Two successive income choices added no registrations. |
-| Transfer result | No independent evaluation or later-title transfer was performed; the bounded inventory structure remains title-neutral only by design. |
-| Blocker | Red remains at 91/124 registrations despite two successful finite-income choices, now with 1608 cash and nine Great Balls. Investigate whether income remains a needed prerequisite or is overoffered/overvalued; renewable League income still lacks partial-exit qualification. |
-| Decision | Audit resource affordability and model option scores at the exact retained terminal, then test a general need-conditioned income offer or scoring correction without hand-selecting a capture. Retain any subsequent model outcome once. |
-| Next session | Sol High, Fast off, about 1 hour: audit the retained 1608-cash terminal, test a general need-conditioned income decision in ROM-free scenarios, and make at most one subsequent model choice if justified. |
-| Next falsifier | An action-free audit finds no valid general affordability or opportunity-cost explanation for repeated income, or a need-conditioned change removes necessary recovery options. |
-| Stop condition | Stop if the audit relies on species identity, a teacher-selected target or unverifiable affordability; never retry the retained choice, start a full run, open ROM-hack/Crystal work or publish to GitHub. |
+| Product alignment | Income is now conditioned on observed supply need, and the model chose a capture destination. The failed attempt and its real cost became a negative training example without weakening battle safety. |
+| Learning output | One on-policy failed acquisition was retained and fitted without replay. Model128 has 128 settled examples / 88 successes and 49 economy-qualified examples; registration gain was zero. |
+| Authority delta | Observed reserve pricing removed an unneeded finite-income offer without selecting a destination. Model127 chose among three acquisition routes; the selected capture failed at a protected status guard after 276 actions. Its exact exception and costs were fitted as one failed Model128 lesson, not a success. |
+| Transfer result | The need-conditioned budget is a reusable pattern, tested in funded and cash-starved ROM-free cases; no independent or later-title transfer result exists. |
+| Blocker | Red remains at 91/124 registrations. The latest terminal is mid-battle and not input-ready; the capture-status guard reports target, party or bag drift but does not identify which field changed. That consumed attempt cannot be replayed or resumed blindly. |
+| Decision | Keep gameplay stopped. Audit the retained exception and status-guard transitions read-only, add generic field-specific diagnostics with ROM-free tests, then separately qualify an exact-state safe recovery or a prospectively distinct collection attempt. |
+| Next session | Sol High, Fast off, about 1 hour: diagnose the exact capture-status guard failure without gameplay, add general diagnostics and ROM-free cases, then qualify recovery separately before any new action. |
+| Next falsifier | The capture-status failure remains indistinguishable after field-specific read-only diagnostics, or a proposed recovery needs to replay or override the model's consumed choice. |
+| Stop condition | Stop if capture safety must be weakened, the failed choice must be retried, an unsafe terminal is treated as a clean origin, a teacher supplies the next goal, or a full run/ROM hack/Crystal/GitHub publication is proposed. |
 
 ### Stop conditions
 

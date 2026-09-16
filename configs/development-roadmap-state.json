@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model127-second-finite-funding",
+  "as_of_session": "2026-09-16-model128-affordability-and-capture-failure",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model127-second-finite-funding-2026-09-16.json"
+      "evidence": "docs/evidence/red-model128-affordability-and-capture-failure-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1550,6 +1550,12 @@
       "result": "Model126 selected a second finite trainer-income option from four executable choices and earned660 in47 actions/3985 frames. The safe terminal has1608 cash,91/124 registrations and72 specimens. One measured choice fitted Model127 at127 examples/88 successes.",
       "deviation": "Two consecutive income choices produced no new registrations. This is bounded correlated development, not independent evaluation or a collection gain. No teacher action, retry, authority promotion, full-Red gate or GitHub push occurred.",
       "next": "Sol High, Fast off: audit affordability and option values at the exact terminal before another action; test a general need-conditioned income offer without hand-selecting capture."
+    },
+    {
+      "session": "2026-09-16-model128-affordability-and-capture-failure",
+      "result": "Observed supply need suppressed unnecessary finite income, leaving three capture destinations. Model127 chose one, but a capture-status safety guard halted after276 actions/10368 frames. The failed choice fitted Model128 at128 examples/88 successes; Red stays91/124.",
+      "deviation": "The exact terminal is an unsafe wild battle; no capture or registration occurred. The exception was preserved and fitted as failure without replay. No teacher action, authority promotion, full-Red gate or GitHub push occurred.",
+      "next": "Sol High, Fast off: keep gameplay stopped and diagnose the protected capture-status field generically before separately qualifying recovery or another prospectively distinct attempt."
     }
   ],
   "closed_milestones": [
