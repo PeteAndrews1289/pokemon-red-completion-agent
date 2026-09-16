@@ -6,11 +6,9 @@ from .executor import CountingExecutor
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
 from .goal_manager_runtime import GoalBindingSet
 from .living_dex_goal_policy import project_living_dex_goal_candidate
-from .living_dex_option_value import LivingDexOptionKind
 from .red_autonomous_league_funding import bind_autonomous_league_funding
 from .red_bounded_player import RedBoundedPlayerObserver
 from .red_capture_funding_budget import red_capture_funding_budget
-from .red_evolution_stones import buyable_evolution_stone
 from .red_full_pokedex_direct_profile import derive_direct_full_pokedex_profile
 from .red_goal_context import RedGoalContextRuntime
 from .red_goal_context_profile import (
@@ -20,6 +18,7 @@ from .red_goal_context_profile import (
     bind_mart_funding_departure_profile,
 )
 from .red_goal_skills import RedMartResupplyGoalProvider
+from .red_item_evolution_options import enumerate_red_item_evolutions
 from .red_live_option_menu import (
     RedLiveOptionSet,
     build_red_live_option_set,
@@ -30,7 +29,7 @@ from .red_native_boxed_item_evolution import bind_native_boxed_item_evolution
 from .red_regional_acquisition import enumerate_red_regional_acquisitions
 from .red_resource_economy import red_economy_snapshot
 from .red_resource_goal_router import RedResourceGoalRouter
-from .resource_economy_observation import EconomyMode, EconomyOffer, EconomySnapshot
+from .resource_economy_observation import EconomySnapshot
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
@@ -66,8 +65,8 @@ def autonomous_collection_options(
 ) -> RedLiveOptionSet:
     """Expose up to eight real capture destinations alongside ordinary goals.
 
-    Evolution target derivation and mechanical execution remain deterministic.
-    The model selects the actual destination when it selects a capture option.
+    Capture destinations and buyable-stone targets have separate executors.
+    Level-evolution target derivation and mechanical execution remain deterministic.
     No source/species identity is projected into policy features.
     """
     if runtime.registration_policy is None:
@@ -129,6 +128,17 @@ def autonomous_collection_options(
         maximum_actions=maximum_actions,
         maximum_frames=maximum_frames,
     )
+    evolutions = enumerate_red_item_evolutions(
+        runtime,
+        live,
+        actions,
+        world,
+        maximum_actions=maximum_actions,
+        maximum_frames=maximum_frames,
+    )
+    replaced_kinds = {GoalKind.ACQUIRE_SPECIES}
+    if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+        replaced_kinds.add(GoalKind.EVOLVE_SPECIES)
     # Regional candidates replace the legacy single preselected capture route.
     # Keep the ordinary one-per-kind question intact for emergency safety checks.
     ordinary = GoalBindingSet(
@@ -139,11 +149,11 @@ def autonomous_collection_options(
                 availability=GoalAvailability.UNAVAILABLE,
                 unavailable_reason=GoalUnavailableReason.NO_LEGAL_TARGET,
             )
-            if op.kind is GoalKind.ACQUIRE_SPECIES
+            if op.kind in replaced_kinds
             else op
             for op in observed.binding_set.opportunities
         ),
-        tuple(b for b in observed.binding_set.bindings if b.kind is not GoalKind.ACQUIRE_SPECIES),
+        tuple(b for b in observed.binding_set.bindings if b.kind not in replaced_kinds),
         allow_resource_variants=observed.binding_set.allow_resource_variants,
     )
     supplements = []
@@ -171,6 +181,40 @@ def autonomous_collection_options(
         if candidate is None:
             raise ValueError("regional acquisition lacks a portable projection")
         supplements.append(supplemental_live_option(binding, candidate))
+    for target in evolutions:
+        binding = target.binding
+        # The ordinary API remains one-per-kind. Project each target in its own
+        # question, then join only at the multi-binding live-menu boundary.
+        question = GoalBindingSet(
+            tuple(
+                binding.opportunity if op.kind is GoalKind.EVOLVE_SPECIES else op
+                for op in ordinary.opportunities
+            ),
+            (
+                *tuple(b for b in ordinary.bindings if b.kind is not GoalKind.EVOLVE_SPECIES),
+                binding,
+            ),
+            allow_resource_variants=ordinary.allow_resource_variants,
+        ).question(observed.situation)
+        index = next(
+            i
+            for i, op in enumerate(question.opportunities)
+            if op.binding_ref == binding.binding_ref
+        )
+        candidate = project_living_dex_goal_candidate(
+            question,
+            index,
+            feature_version=model_feature_version,
+            binding_ref=binding.binding_ref,
+        )
+        if candidate is None:
+            raise ValueError("item evolution lacks a portable projection")
+        supplements.append(
+            supplemental_live_option(
+                binding,
+                replace(candidate, economy_offer=target.economy_offer),
+            )
+        )
     league_funding = bind_autonomous_league_funding(
         native,
         actions,
@@ -203,7 +247,7 @@ def autonomous_collection_options(
         if league_candidate is None:
             raise ValueError("renewable League funding lacks a portable projection")
         supplements.append(supplemental_live_option(league_funding, league_candidate))
-    options = build_red_live_option_set(
+    return build_red_live_option_set(
         situation=observed.situation,
         binding_set=ordinary,
         supplements=tuple(supplements),
@@ -212,26 +256,3 @@ def autonomous_collection_options(
         economy_snapshot=economy,
         target_cash=target_cash,
     )
-    if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
-        item_id = evolution.parameters["item_id"]
-        assert isinstance(item_id, int)
-        needs_shop = dict(native.reader.read().bag_items or ()).get(item_id, 0) == 0
-        cost = buyable_evolution_stone(item_id).price if needs_shop else 0
-        # The item-use goal owns a separate procurement stage. Its actual
-        # prospective spend belongs in the policy input even though its goal
-        # kind is EVOLVE, not the standalone RESUPPLY goal.
-        options = replace(
-            options,
-            menu=replace(
-                options.menu,
-                candidates=tuple(
-                    replace(
-                        candidate, economy_offer=EconomyOffer(EconomyMode.OTHER, planned_spend=cost)
-                    )
-                    if candidate.features.kind is LivingDexOptionKind.EVOLVE
-                    else candidate
-                    for candidate in options.menu.candidates
-                ),
-            ),
-        )
-    return options

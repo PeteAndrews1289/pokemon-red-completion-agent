@@ -603,6 +603,16 @@ def select_red_live_option(
             model.model_sha256,
         )
 
+    # Distinct private targets are not a learnable preference when every
+    # portable input is identical. Inspect such menus, but do not spend a query
+    # or create a random-target result labeled as a model-informed choice.
+    if len({
+        options.menu.candidate_vector(i, feature_version=model.feature_version)
+        for i in options.menu.available_indices
+    }) < 2:
+        raise RedLiveOptionMenuError(
+            "mixed live candidates have no distinguishable semantic features"
+        )
     raw_scores = model.scores(options.menu, utility)
     if len(raw_scores) != len(options.bindings):
         raise RedLiveOptionMenuError("mixed live model score width differs")

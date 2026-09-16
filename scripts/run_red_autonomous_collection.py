@@ -224,6 +224,14 @@ def main() -> None:
                         "menu": options.public_dict(),
                         "private_binding_kinds": [b.kind.value for b in options.bindings],
                         "private_binding_refs": [b.binding_ref for b in options.bindings],
+                        "distinct_semantic_candidates": len(
+                            {
+                                options.menu.candidate_vector(
+                                    i, feature_version=model.model.feature_version
+                                )
+                                for i in options.menu.available_indices
+                            }
+                        ),
                         "model_queries": 0,
                     },
                     indent=2,

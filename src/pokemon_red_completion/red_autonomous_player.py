@@ -149,6 +149,11 @@ def run_autonomous_options(
                 raise ValueError("menu construction changed the game")
             if len(options.menu.available_indices) < 2:
                 raise ValueError("autonomous decision requires real alternatives")
+            if len({
+                options.menu.candidate_vector(i, feature_version=model.feature_version)
+                for i in options.menu.available_indices
+            }) < 2:
+                raise ValueError("autonomous candidates have no distinguishable semantic features")
         except Exception as error:
             _record(
                 step / "admission-failure.json",

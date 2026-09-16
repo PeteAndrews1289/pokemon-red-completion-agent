@@ -283,3 +283,34 @@ def test_mutating_menu_is_rejected_before_model_query(tmp_path):
     assert result["stop_reason"] == "menu_unavailable"
     assert not (output / "step-000/intent.json").exists()
     assert state["selected"] == []
+
+
+def test_semantically_aliased_menu_retains_terminal_without_query_intent(tmp_path, monkeypatch):
+    from pokemon_red_completion.living_dex_option_value import LivingDexOptionValueModel
+
+    output = tmp_path / "aliased"
+    state, snapshot, observe = _environment(output)
+
+    def aliased_observe(ordinal):
+        options = observe(ordinal)
+        first = options.menu.candidates[0]
+        menu = replace(options.menu, candidates=tuple(
+            replace(first, binding_ref=c.binding_ref) for c in options.menu.candidates
+        ))
+        return replace(options, menu=menu)
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("aliased menu queried model")
+
+    monkeypatch.setattr(LivingDexOptionValueModel, "scores", forbidden)
+    result = run_autonomous_options(
+        model=_model(), output=output, snapshot=snapshot, observe=aliased_observe,
+        seed=17, provenance={},
+    )
+    assert result["stop_reason"] == "menu_unavailable"
+    assert result["executed_decisions"] == 0
+    assert (output / "step-000/terminal.state").read_bytes() == b"0"
+    assert "semantic features" in (output / "step-000/admission-failure.json").read_text()
+    assert not (output / "step-000/intent.json").exists()
+    assert not (output / "step-000/decision.json").exists()
+    assert state["selected"] == []

@@ -15,16 +15,18 @@ from pokemon_red_completion.red_autonomous_collection import (
     autonomous_collection_options,
 )
 from pokemon_red_completion.red_goal_skills import RedMartPurchase, RedMartResupplyGoalProvider
-from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+from pokemon_red_completion.resource_economy_observation import (
+    EconomyMode,
+    EconomyOffer,
+    EconomySnapshot,
+)
 
 
 @pytest.mark.parametrize(
     ("cash", "balls", "expected_target"),
     [(1608, 9, 600), (228, 9, 600), (228, 0, 6000), (0, 10, 0)],
 )
-def test_autonomous_income_target_tracks_observed_capture_shortfall(
-    cash, balls, expected_target
-):
+def test_autonomous_income_target_tracks_observed_capture_shortfall(cash, balls, expected_target):
     bag = ((int(ItemId.GREAT_BALL), balls),) if balls else ()
     observation = SimpleNamespace(
         raw=RawGameState(True, 154, 3, 3, 6, 0, player_money=cash, bag_items=bag),
@@ -48,11 +50,15 @@ def test_autonomous_income_target_tracks_observed_capture_shortfall(
         provider_for=lambda _kind, _actions: provider,
     )
     economy = EconomySnapshot(
-        cash, (("red-item-003", balls),) if balls else (),
+        cash,
+        (("red-item-003", balls),) if balls else (),
     )
-    assert autonomous_capture_funding_target_cash(
-        runtime, CountingExecutor(_ActionDelegate()), economy
-    ) == expected_target
+    assert (
+        autonomous_capture_funding_target_cash(
+            runtime, CountingExecutor(_ActionDelegate()), economy
+        )
+        == expected_target
+    )
 
 
 @pytest.mark.parametrize("held_stone", [False, True])
@@ -84,6 +90,23 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
             )
         )
         for index in range(3)
+    )
+    evolution_targets = tuple(
+        SimpleNamespace(
+            binding=_binding(
+                GoalKind.EVOLVE_SPECIES, binding_ref=f"private-target-{i}", calls=calls
+            ),
+            economy_offer=EconomyOffer(
+                EconomyMode.OTHER,
+                planned_spend=0 if held_stone and i == 0 else 2100,
+            ),
+        )
+        for i in range(2)
+    )
+    monkeypatch.setattr(
+        module,
+        "enumerate_red_item_evolutions",
+        lambda *args, **kwargs: evolution_targets,
     )
     monkeypatch.setattr(module, "derive_direct_full_pokedex_profile", lambda *args: runtime.profile)
     monkeypatch.setattr(module, "bind_autonomous_league_funding", lambda *args, **kwargs: None)
@@ -120,11 +143,17 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         model_feature_version=4,
         ordering_seed_sha256="a" * 64,
     )
-    assert len(options.bindings) == 6
-    candidate = next(
-        c for c in options.menu.candidates if c.features.kind is LivingDexOptionKind.EVOLVE
-    )
-    assert candidate.economy_offer.planned_spend == (0 if held_stone else 2100)
+    assert len(options.bindings) == 7
+    assert evolution.binding_ref not in {b.binding_ref for b in options.bindings}
+    for target in evolution_targets:
+        i = next(
+            i for i, b in enumerate(options.bindings) if b.binding_ref == target.binding.binding_ref
+        )
+        assert options.menu.candidates[i].features.kind is LivingDexOptionKind.EVOLVE
+        assert options.menu.candidates[i].economy_offer == target.economy_offer
+        options.binding(i).execute()
+        assert calls[-1] == target.binding.binding_ref
+    calls.clear()
     assert calls == []
     assert actions.actions_executed == 0
     for destination in regional:
@@ -136,6 +165,7 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         options.binding(index).execute()
         assert calls[-1] == destination.binding.binding_ref
     assert "private-destination" not in str(options.public_dict())
+    assert "private-target" not in str(options.public_dict())
 
 
 def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monkeypatch):
@@ -172,6 +202,7 @@ def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monk
         ),
     )
     monkeypatch.setattr(module, "enumerate_red_regional_acquisitions", lambda *args, **kwargs: ())
+    monkeypatch.setattr(module, "enumerate_red_item_evolutions", lambda *args, **kwargs: ())
     monkeypatch.setattr(module, "red_economy_snapshot", lambda _: EconomySnapshot(6528, ()))
 
     autonomous_collection_options(

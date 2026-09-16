@@ -127,6 +127,29 @@ def _no_ordinary_bindings() -> GoalBindingSet:
     )
 
 
+def test_private_target_variants_without_semantic_contrast_stop_before_query(monkeypatch):
+    calls = []
+    bindings = tuple(_binding(GoalKind.ACQUIRE_SPECIES, binding_ref=f"target-{i}", calls=calls)
+                     for i in range(2))
+    options = build_red_live_option_set(
+        situation=_situation(resources=0.1),
+        binding_set=_no_ordinary_bindings(),
+        supplements=tuple(supplemental_live_option(b, _fishing_candidate(b.binding_ref, travel=0.2))
+                          for b in bindings),
+        model_feature_version=4,
+        ordering_seed_sha256="a" * 64,
+    )
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("aliased targets queried the model or drew a selection")
+
+    monkeypatch.setattr(LivingDexOptionValueModel, "scores", forbidden)
+    monkeypatch.setattr(random.Random, "choices", forbidden)
+    with pytest.raises(RedLiveOptionMenuError, match="no distinguishable semantic features"):
+        select_red_live_option(_model(), options, seed=1)
+    assert calls == []
+
+
 def _fishing_candidate(binding_ref: str, *, travel: float) -> LivingDexOptionCandidate:
     return LivingDexOptionCandidate(
         binding_ref=binding_ref,
