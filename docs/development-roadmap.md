@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-natural-near-boundary-battle**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-live-faint-qualification**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-live-faint-qualification
+
+A distinct train capture completed 2/2 cartridge trials with six retained player faints at -2.3019 utility. All moves tied before execution; no fit or model gain.
+
+**Deviation:** Five old timing failures lack candidate-level frame evidence; future errors now report it. No consumed replay, development opening, registration, stage or fresh-run gate change.
+
+**Next:** Sol High, Fast off: diagnose timing on a distinct train state, then seek a non-tied hard battle choice before fitting. No full run or GitHub push.
 
 ### 2026-09-16-natural-near-boundary-battle
 

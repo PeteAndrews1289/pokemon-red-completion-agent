@@ -15,23 +15,21 @@ Two excluded Farfetch'd captures had player-faint failures; the third had
 pre-attack frame mismatches. The surviving bank had just one small baseline
 regret (0.025 utility). No fit was made and development was not opened.
 
-The outcome type already penalized a player faint, but bounded execution had
-rejected it before projection. That narrow gate now admits a fainting result,
-while PP/selection proof and the ordinary full-battle safety behavior remain.
-258 targeted ROM-free tests and changed-source type checks passed. A different,
-unconsumed authentic train capture completed both prospective cartridge timing
-trials after the change, with no quarantine. Neither trial fainted, so live
-faint retention remains unproved; consumed failed trials were not replayed.
-[Evidence](docs/evidence/red-natural-battle-boundary-2026-09-16.json).
+The bounded-turn gate now admits a fainting result while keeping PP/selection
+proof and ordinary full-battle safety. A distinct unused authentic train
+capture then completed 2/2 prospectively scheduled cartridge trials: all six
+supported candidate outcomes retained a player faint and -2.3019 utility.
+All moves lost before execution, so the result proves live faint retention but
+offers zero choice contrast and no fit. [Evidence](docs/evidence/red-live-faint-outcome-2026-09-16.json).
 
-Next: use a distinct unused high-risk train capture to establish one live
-faint-bearing outcome, then investigate the separate pre-attack timing mismatch.
-Only after these blind spots are resolved should a fresh train/development
-lesson be frozen. Do not fit or replay the consumed Route11 Kingler encounter,
-replay quarantined trials, promote the prior rejected OHKO candidate, or start
-a full Red run. Model137 and frozen battle authority remain unchanged;
+The five prior timing-mismatch trials lack candidate-level frame counts; their
+root cause cannot be recovered without forbidden replay. Future mismatches now
+include those counts, without weakening the equality gate. Next: freeze a
+distinct train timing diagnostic, then find hard battles with actual move-value
+contrast before any fit or held-out comparison. Do not replay consumed trials
+or open development yet. Model137 and frozen battle authority remain unchanged;
 Red96/124,74 specimens,198 cash; fresh acceptance0/5. Gameplay stopped;
-no GitHub push. Sol High, Fast off suits the next bounded runtime/data test.
+no GitHub push. Sol High, Fast off suits the next bounded data test.
 
 Earlier evidence: [live model-controlled attacks](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
 [rejected assisted OHKO candidate](docs/evidence/red-ohko-expected-utility-2026-09-16.json).

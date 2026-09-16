@@ -29,26 +29,26 @@
     },
     {
       "capability": "Choose and execute legal battle attacks from semantic observations, then improve attack reliability and resource value with separate training and comparison scenarios.",
-      "cheapest_falsifier": "A distinct high-risk train battle still cannot retain a faint as a negative outcome, or a stronger complete train bank cannot yield a held-out advantage without regression.",
+      "cheapest_falsifier": "A distinct train timing diagnostic still loses candidate-level frame evidence, or a stronger complete train bank cannot yield a held-out advantage without regression.",
       "id": "cross-title-authenticated-scenario-curriculum-v1",
       "kind": "learning",
       "latest_reorientation": {
-        "authority_delta": "No new fit or promotion. Bounded outcome collection can now represent a player faint, but live faint retention still needs one fresh cartridge proof.",
-        "blocker": "Hard natural battles were censored by player-faint and pre-attack timing failures; surviving train cases gave only one 0.025-utility baseline regret.",
-        "decision": "Stop before a weak fit or development opening. Verify a faint-bearing outcome on a distinct unused train capture, then separately diagnose timing-equality exclusions before another curriculum freeze.",
+        "authority_delta": "No new fit or promotion. Live cartridge outcomes now retain player faints as negative utility; the two timing trials gave no candidate preference.",
+        "blocker": "The separate prior timing failures have no per-candidate frame receipts; surviving natural train cases offered only one 0.025-utility baseline regret.",
+        "decision": "Keep the equality gate and do not replay consumed trials. Diagnose timing on a distinct prospectively frozen train state, then seek a meaningful choice contrast before fitting or opening development.",
         "evidence": {
           "kind": "qualification",
-          "path": "docs/evidence/red-natural-battle-boundary-2026-09-16.json",
-          "sha256": "18bc35a2086e93e2faf6d441318a5e8ba17d69a980188613a6384a231e107ad1"
+          "path": "docs/evidence/red-live-faint-outcome-2026-09-16.json",
+          "sha256": "9cec7e26b7d7d29bed46ba2b7cc2efb297264b1d9a058b532abdb26b31ab11a8"
         },
-        "learning_output": "Five natural train expected-utility examples across four roots; 30/40 timing trials complete, 10 quarantined, no model fit. A separate new capture completed 2/2 integration trials without faint.",
-        "next_falsifier": "A fresh distinct train capture with a cartridge faint still fails to produce a verified negative outcome, or timing mismatch remains unexplained.",
-        "next_session_goal": "Sol High, Fast off, about 45-75 minutes: prove one live faint-bearing train outcome and diagnose the separate timing mismatch; no replay of consumed captures or development opening.",
-        "product_alignment": "Hard battle losses must remain learnable outcomes; removing this censoring is necessary before reliable attack value can be trained.",
-        "session_id": "2026-09-16-natural-near-boundary-battle",
+        "learning_output": "One additional authentic train expected-utility example: 2/2 trials and six retained negative player-faint outcomes, but zero informative choice contrasts. No fit or model-quality gain.",
+        "next_falsifier": "A distinct prospectively frozen train trial still cannot explain a timing mismatch, or hard states still give tied move outcomes.",
+        "next_session_goal": "Sol High, Fast off, about 45-75 minutes: diagnose timing on a distinct train capture and seek an authentic non-tied battle choice; no consumed replay or development opening.",
+        "product_alignment": "Retained losses remove one data censoring failure, but meaningful attack choice requires different outcome values across moves.",
+        "session_id": "2026-09-16-live-faint-qualification",
         "status": "closed",
         "stop_condition": "Stop on consumed-trial replay, development fitting or opening, model promotion without a held-out advantage, full run, ROM hack, Crystal or GitHub publication.",
-        "transfer_result": "Four disjoint train/development roots were planned; development remained unopened. No transfer or held-out policy advantage is claimed."
+        "transfer_result": "The fresh capture is distinct from consumed trial states but shares an upstream train root. Development remained unopened; no transfer or held-out policy advantage is claimed."
       },
       "learned_authority": {
         "current": "Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion.",
@@ -63,7 +63,7 @@
         }
       ],
       "name": "Red shared-registration learning",
-      "next_decision": "Verify a live faint-bearing negative battle outcome on a distinct unused train capture, then diagnose pre-attack timing mismatch before another learning fit.",
+      "next_decision": "Diagnose pre-attack timing on a distinct train capture, then find a hard non-tied battle contrast before fitting or opening development.",
       "progress": {
         "atomic_goal_episodes": 0,
         "authority_promotions": 0,

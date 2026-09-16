@@ -3,6 +3,8 @@ from __future__ import annotations
 from contextlib import AbstractContextManager
 from dataclasses import dataclass
 
+import pytest
+
 from pokemon_red_completion.battle_outcome_learning import BattleTurnOutcome
 from pokemon_red_completion.battle_runtime import BattleTurnExecution
 from pokemon_red_completion.battle_scenario_capture import (
@@ -16,12 +18,24 @@ from pokemon_red_completion.battle_semantics import (
 )
 from pokemon_red_completion.observation import RawGameState
 from pokemon_red_completion.red_battle_outcome_runtime import (
+    RedBattleOutcomeRuntimeError,
+    _shared_pre_attack_frames,
     collect_red_battle_outcome_example,
     execute_red_battle_candidate,
     prepare_red_battle_outcome_capture,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
 from pokemon_red_completion.scenario_lab import ScenarioPartition
+
+
+def test_mismatched_counterfactual_frames_identify_candidates() -> None:
+    first = BattleTurnOutcome(True, 0.0, 0.0, False, False, False, 1, 3_000, 2_048)
+    second = BattleTurnOutcome(True, 0.0, 0.0, False, False, False, 1, 3_000, 2_049)
+    with pytest.raises(
+        RedBattleOutcomeRuntimeError,
+        match=r"candidate_frames=\(2048, None, 2049\)",
+    ):
+        _shared_pre_attack_frames((first, None, second))
 
 
 def _prepared() -> PreparedRedBattleScenario:

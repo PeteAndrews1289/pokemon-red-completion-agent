@@ -173,8 +173,8 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-16-natural-near-boundary-battle</text>
-<text x="50" y="2958" class="body">Five natural train examples survived eight captures; 10/40 trials were quarantined by faints or frame mismatch. The bounded</text>
-<text x="50" y="2983" class="body">faint-outcome repair passed 258 tests; a fresh 2/2 cartridge check did not faint.</text>
+<text x="50" y="2923" class="small muted">2026-09-16-live-faint-qualification</text>
+<text x="50" y="2958" class="body">A distinct train capture completed 2/2 cartridge trials with six retained player faints at -2.3019 utility. All moves tied</text>
+<text x="50" y="2983" class="body">before execution; no fit or model gain.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

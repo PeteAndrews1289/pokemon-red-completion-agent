@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-natural-near-boundary-battle",
+  "as_of_session": "2026-09-16-live-faint-qualification",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1682,6 +1682,12 @@
       "result": "Five natural train examples survived eight captures; 10/40 trials were quarantined by faints or frame mismatch. The bounded faint-outcome repair passed 258 tests; a fresh 2/2 cartridge check did not faint.",
       "deviation": "Stop the fit and leave eight planned development captures unopened: surviving baseline regret was only 0.025 utility and hard-loss censoring remained unresolved. No model, registration, stage, fresh-run or GitHub publication delta.",
       "next": "Sol High, Fast off: verify a live faint-bearing result on a distinct unused train capture and diagnose timing mismatch before another train/development freeze. Never replay consumed trials."
+    },
+    {
+      "session": "2026-09-16-live-faint-qualification",
+      "result": "A distinct train capture completed 2/2 cartridge trials with six retained player faints at -2.3019 utility. All moves tied before execution; no fit or model gain.",
+      "deviation": "Five old timing failures lack candidate-level frame evidence; future errors now report it. No consumed replay, development opening, registration, stage or fresh-run gate change.",
+      "next": "Sol High, Fast off: diagnose timing on a distinct train state, then seek a non-tied hard battle choice before fitting. No full run or GitHub push."
     }
   ],
   "closed_milestones": [

@@ -1,0 +1,52 @@
+{
+  "schema": "pokemon.red.live-faint-outcome-session.v1",
+  "session": "2026-09-16-live-faint-qualification",
+  "classification": "authentic_train_mechanics_qualification_no_fit_or_promotion",
+  "mission_check": {
+    "capability": "Retain actual cartridge player faints as negative battle-action outcomes",
+    "learned_authority": "No change; frozen expected-utility-v2 remains battle authority",
+    "transfer_test": "A distinct authenticated train state, not one of the consumed failed trials; no held-out policy test",
+    "cheapest_falsifier": "A faint occurs but is censored instead of retained as a negative outcome",
+    "time_box": "One capture and two prospective frame targets",
+    "stop_condition": "Stop after two trials; never replay this or earlier consumed trials, fit a tied example, open development, or start a full run"
+  },
+  "capture": {
+    "capture_id": "repeatable-battle-train-29d8f983b5b7f2e654b4",
+    "root_lineage_id": "training-control-v6-train-01",
+    "partition": "train",
+    "state_sha256": "72282a60e6fec04c40632ced3b3f130faf04c47d92c670f71fb4bb3564ab323d",
+    "manifest_sha256": "8520d92bb3d1eaebe64bbcc992c3635d432f798c58ff1c68b09e8a18ae32dd25",
+    "source_commit": "6484e9117323eafecb0eae569407ab341a8b88e9",
+    "frame_targets": [2539, 2657],
+    "trials_complete": 2,
+    "trials_quarantined": 0,
+    "supported_candidates_per_trial": 3,
+    "player_faint_outcomes": 6,
+    "move_executed_in_those_outcomes": false,
+    "utility_for_each_supported_candidate": -2.30188679245283,
+    "informative_choice_examples": 0
+  },
+  "timing_mismatch_inspection": {
+    "previous_failed_capture_id": "repeatable-battle-train-43d1499e405644560013",
+    "previous_quarantined_trials": 5,
+    "previous_trials_replayed": 0,
+    "finding": "Previous terminals preserved only the aggregate mismatch error, not per-candidate frame counts; root cause cannot be established retrospectively",
+    "change": "Future mismatches report a candidate-indexed frame tuple in the error without relaxing the equality gate",
+    "repair_claimed": false
+  },
+  "decision": {
+    "fit_executed": false,
+    "development_opened": false,
+    "model_promoted": false,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "gameplay_running": false,
+    "github_pushed": false,
+    "next": "Use a distinct, prospectively frozen train state to diagnose timing divergence; then seek a hard battle with non-tied move outcomes before a fit or held-out comparison"
+  },
+  "private_receipts_sha256": {
+    "plan": "b794ad7321c4d1c1896e9200875ed93eaa55ff4ff36bf291a8a9e667699e278d",
+    "expected_utility_dataset": "bd38b4c8e635533ab075ab11711cd646fc0e40a33eea03195f7fd2843c16f4f2",
+    "failure_report": "2268961bd722b820dad353ef9674852a8dd572b57a5d480a41b035226b26a1bb"
+  }
+}

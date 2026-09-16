@@ -15,14 +15,15 @@ The natural near-boundary battle experiment yielded five complete train
 examples from eight selected captures; three were excluded by player faints
 or unequal pre-attack timing. There was too little baseline regret to justify
 a fit, so the eight held-out development captures were not opened. The
-bounded-turn executor now retains a fainting outcome in ROM-free tests; one
-fresh cartridge capture completed two trials without a faint. This is a
-data-boundary repair, not a learner promotion. Player model and Red progress
+bounded-turn executor retained six actual cartridge player-faint outcomes
+in 2/2 fresh trials, but all choices tied before move execution. This proves
+the loss representation, not battle learning. Player model and Red progress
 are unchanged; gameplay stopped and no GitHub push.
 
-Next: prove one live faint-bearing outcome on a distinct unused train capture,
-then diagnose the separate timing mismatch without replaying consumed trials.
-Only then freeze a stronger train/development lesson. Sol High, Fast off.
+The separate five timing mismatches have no per-candidate frame receipts, so
+their cause remains unknown; future errors now include candidate counts. Next:
+prospectively diagnose timing on a distinct train state, then seek a meaningful
+move-value contrast before fitting or opening development. Sol High, Fast off.
 
 ## Reviewer contribution
 
@@ -36,4 +37,5 @@ Claude unused; refreshed Flash quota unavailable.
 [Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
 [OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·
 [Natural battle evidence](docs/evidence/red-natural-battle-boundary-2026-09-16.json) ·
+[Live faint evidence](docs/evidence/red-live-faint-outcome-2026-09-16.json) ·
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

@@ -295,11 +295,14 @@ def _prepare_loaded_boundary(
 def _shared_pre_attack_frames(
     outcomes: tuple[BattleTurnOutcome | None, ...],
 ) -> int:
-    measured = {
-        outcome.pre_attack_frames for outcome in outcomes if outcome is not None
-    }
+    by_candidate = tuple(
+        outcome.pre_attack_frames if outcome is not None else None
+        for outcome in outcomes
+    )
+    measured = {frames for frames in by_candidate if frames is not None}
     if len(measured) != 1 or 0 in measured:
         raise RedBattleOutcomeRuntimeError(
-            "counterfactual candidates do not share one positive pre-attack frame count"
+            "counterfactual candidates do not share one positive pre-attack frame count: "
+            f"candidate_frames={by_candidate}"
         )
     return next(iter(measured))
