@@ -6,6 +6,7 @@ from .executor import CountingExecutor
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
 from .goal_manager_runtime import GoalBindingSet
 from .living_dex_goal_policy import project_living_dex_goal_candidate
+from .red_autonomous_fishing import autonomous_fishing_options
 from .red_autonomous_league_funding import bind_autonomous_league_funding
 from .red_bounded_player import RedBoundedPlayerObserver
 from .red_capture_funding_budget import red_capture_funding_budget
@@ -19,6 +20,7 @@ from .red_goal_context_profile import (
 )
 from .red_goal_skills import RedMartResupplyGoalProvider
 from .red_item_evolution_options import enumerate_red_item_evolutions
+from .red_level_evolution_options import enumerate_red_level_evolutions
 from .red_live_option_menu import (
     RedLiveOptionSet,
     build_red_live_option_set,
@@ -65,8 +67,8 @@ def autonomous_collection_options(
 ) -> RedLiveOptionSet:
     """Expose up to eight real capture destinations alongside ordinary goals.
 
-    Capture destinations and buyable-stone targets have separate executors.
-    Level-evolution target derivation and mechanical execution remain deterministic.
+    Capture destinations, stone targets and boxed level alternatives each retain
+    their own executors. Mechanical execution remains deterministic support.
     No source/species identity is projected into policy features.
     """
     if runtime.registration_policy is None:
@@ -136,9 +138,11 @@ def autonomous_collection_options(
         maximum_actions=maximum_actions,
         maximum_frames=maximum_frames,
     )
-    replaced_kinds = {GoalKind.ACQUIRE_SPECIES}
-    if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
-        replaced_kinds.add(GoalKind.EVOLVE_SPECIES)
+    evolutions += enumerate_red_level_evolutions(
+        runtime, live, actions, world,
+        maximum_actions=maximum_actions, maximum_frames=maximum_frames,
+    )
+    replaced_kinds = {GoalKind.ACQUIRE_SPECIES, GoalKind.EVOLVE_SPECIES}
     # Regional candidates replace the legacy single preselected capture route.
     # Keep the ordinary one-per-kind question intact for emergency safety checks.
     ordinary = GoalBindingSet(
@@ -208,13 +212,18 @@ def autonomous_collection_options(
             binding_ref=binding.binding_ref,
         )
         if candidate is None:
-            raise ValueError("item evolution lacks a portable projection")
+            raise ValueError("evolution lacks a portable projection")
+        if target.execution_effort is not None:
+            candidate = replace(candidate, features=replace(
+                candidate.features, execution_effort=target.execution_effort,
+            ))
         supplements.append(
             supplemental_live_option(
                 binding,
                 replace(candidate, economy_offer=target.economy_offer),
             )
         )
+    supplements.extend(autonomous_fishing_options(native, live, actions, world))
     league_funding = bind_autonomous_league_funding(
         native,
         actions,

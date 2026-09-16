@@ -14,7 +14,9 @@ from pokemon_red_completion.red_autonomous_collection import (
     autonomous_capture_funding_target_cash,
     autonomous_collection_options,
 )
+from pokemon_red_completion.red_fishing_acquisition import red_fishing_destination_candidates
 from pokemon_red_completion.red_goal_skills import RedMartPurchase, RedMartResupplyGoalProvider
+from pokemon_red_completion.red_live_option_menu import supplemental_live_option
 from pokemon_red_completion.resource_economy_observation import (
     EconomyMode,
     EconomyOffer,
@@ -100,14 +102,30 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
                 EconomyMode.OTHER,
                 planned_spend=0 if held_stone and i == 0 else 2100,
             ),
+            execution_effort=0.12 if i == 1 else None,
         )
         for i in range(2)
     )
+    from test_red_live_fishing import _offer
+
+    fishing_candidates = red_fishing_destination_candidates(
+        (_offer(23, (99,)), _offer(7, (119,))),
+        route_steps=(10, 30), maximum_route_steps=30, free_storage_slots=2,
+    )
+    fishing = tuple(
+        supplemental_live_option(
+            _binding(GoalKind.ACQUIRE_SPECIES, binding_ref=c.binding_ref, calls=calls), c,
+        )
+        for c in fishing_candidates
+    )
+    monkeypatch.setattr(module, "autonomous_fishing_options", lambda *a: fishing)
     monkeypatch.setattr(
         module,
         "enumerate_red_item_evolutions",
-        lambda *args, **kwargs: evolution_targets,
+        lambda *args, **kwargs: evolution_targets[:1],
     )
+    monkeypatch.setattr(module, "enumerate_red_level_evolutions",
+                        lambda *a, **k: evolution_targets[1:])
     monkeypatch.setattr(module, "derive_direct_full_pokedex_profile", lambda *args: runtime.profile)
     monkeypatch.setattr(module, "bind_autonomous_league_funding", lambda *args, **kwargs: None)
     monkeypatch.setattr(module, "bind_composable_trainer_funding_profile", lambda profile: profile)
@@ -143,7 +161,7 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         model_feature_version=4,
         ordering_seed_sha256="a" * 64,
     )
-    assert len(options.bindings) == 7
+    assert len(options.bindings) == 9
     assert evolution.binding_ref not in {b.binding_ref for b in options.bindings}
     for target in evolution_targets:
         i = next(
@@ -151,6 +169,8 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         )
         assert options.menu.candidates[i].features.kind is LivingDexOptionKind.EVOLVE
         assert options.menu.candidates[i].economy_offer == target.economy_offer
+        if target.execution_effort is not None:
+            assert options.menu.candidates[i].features.execution_effort == target.execution_effort
         options.binding(i).execute()
         assert calls[-1] == target.binding.binding_ref
     calls.clear()
@@ -166,6 +186,15 @@ def test_every_regional_route_keeps_its_own_executor_without_teacher_route_choic
         assert calls[-1] == destination.binding.binding_ref
     assert "private-destination" not in str(options.public_dict())
     assert "private-target" not in str(options.public_dict())
+    for supplement in fishing:
+        index = next(
+            i for i, b in enumerate(options.bindings)
+            if b.binding_ref == supplement.binding.binding_ref
+        )
+        assert options.menu.candidates[index].features == supplement.candidate.features
+        options.binding(index).execute()
+        assert calls[-1] == supplement.binding.binding_ref
+    assert "fishing-destination-private" not in str(options.public_dict())
 
 
 def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monkeypatch):
@@ -203,6 +232,7 @@ def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monk
     )
     monkeypatch.setattr(module, "enumerate_red_regional_acquisitions", lambda *args, **kwargs: ())
     monkeypatch.setattr(module, "enumerate_red_item_evolutions", lambda *args, **kwargs: ())
+    monkeypatch.setattr(module, "enumerate_red_level_evolutions", lambda *args, **kwargs: ())
     monkeypatch.setattr(module, "red_economy_snapshot", lambda _: EconomySnapshot(6528, ()))
 
     autonomous_collection_options(

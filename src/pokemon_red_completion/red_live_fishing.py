@@ -63,6 +63,7 @@ class RedLiveFishingError(RuntimeError):
 
 
 _SINGLE_DESTINATION_ROUTE_STEP_NORMALIZATION = 1_000
+_MAXIMUM_ALTERNATE_SHORELINE_PLANS = 4
 
 
 class RedLiveFishingEmulator(Protocol):
@@ -200,30 +201,37 @@ def discover_reachable_red_fishing_destinations(
             for stance in stances
             if (path := paths.get((stance.at, None))) is not None
         )
-        if not local:
-            continue
-        _local_cost, _local_steps, stance = min(
-            local,
-            key=lambda row: (row[0], row[1], row[2].at, row[2].direction.value),
-        )
-        try:
-            terminal_route = world.plan_feasible_to_map(
-                traversal,
-                offer.map_id,
-                goal_at=stance.at,
+        terminals: tuple[ShorelineStance, ...]
+        if local:
+            _local_cost, _local_steps, best = min(
+                local,
+                key=lambda row: (row[0], row[1], row[2].at, row[2].direction.value),
             )
-        except RoutePlanningError:
-            continue
-        if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
-            continue
-        executable.append(
-            RedReachableFishingDestination(
-                offer,
-                stance,
-                len(terminal_route.steps),
-                terminal_route.cost,
+            terminals = (best,)
+        else:
+            # The cheapest map entry may be in another connected component.
+            # An exact terminal route can leave/re-enter through a building or
+            # another passage. Lack of a local path is not proof of no route.
+            # Bound the fallback; never claim exhaustive reachability.
+            by_coordinate: dict[tuple[int, int], ShorelineStance] = {}
+            for stance in sorted(stances, key=lambda s: (s.at, s.direction.value)):
+                by_coordinate.setdefault(stance.at, stance)
+            terminals = tuple(by_coordinate.values())[:_MAXIMUM_ALTERNATE_SHORELINE_PLANS]
+        for stance in terminals:
+            try:
+                terminal_route = world.plan_feasible_to_map(
+                    traversal, offer.map_id, goal_at=stance.at,
+                )
+            except RoutePlanningError:
+                continue
+            if not _supported_plan(terminal_route, allow_cut=True, allow_surf=True):
+                continue
+            executable.append(
+                RedReachableFishingDestination(
+                    offer, stance, len(terminal_route.steps), terminal_route.cost,
+                )
             )
-        )
+            break
     executable.sort(
         key=lambda row: (
             row.route_steps,

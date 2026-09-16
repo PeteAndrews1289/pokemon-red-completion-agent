@@ -16,12 +16,14 @@ from pokemon_red_completion.goal_search_memory import GoalSearchMemory
 from pokemon_red_completion.living_dex_option_value import (
     upgrade_option_value_model_for_search_history,
 )
-from pokemon_red_completion.red_acquisition import RedAcquisitionKind
+from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
+from pokemon_red_completion.red_collection import RED_SOLO_COLLECTION_CONTRACT, red_species_ref
 from pokemon_red_completion.red_goal_context_profile import (
     _thaw,
     build_red_goal_context_profile_payload,
     parse_red_goal_context_profile,
 )
+from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
 
 
 def _candidate(source="wild:Route2:grass", effort=0.2):
@@ -141,6 +143,7 @@ class _Runtime:
 def test_enumeration_uses_only_real_wild_bindings_and_preserves_action_counters(
     monkeypatch, registered,
 ):
+    monkeypatch.setattr(regional, "_source_has_acquisition_demand", lambda *a: True)
     items = [
         _candidate("wild:Route2:grass", 0.7),
         _candidate("wild:Route11:grass", 0.2),
@@ -289,10 +292,13 @@ def test_topology_rank_accounts_for_observed_fly_origins(monkeypatch):
     ) == ((sources[1], 3), (sources[0], 2))
 
 
-def test_enumeration_stops_after_target_or_fixed_routed_source_bound(monkeypatch):
+@pytest.mark.parametrize("completed_sources", [0, 10])
+def test_enumeration_stops_after_target_or_fixed_routed_source_bound(
+    monkeypatch, completed_sources,
+):
     items = tuple(
-        _candidate(f"wild:Route{number}:grass", effort=number / 20)
-        for number in range(2, 12)
+        _candidate(f"wild:Route{number}:grass", effort=number / 40)
+        for number in range(2, 12 + completed_sources)
     )
     monkeypatch.setattr(
         regional,
@@ -305,6 +311,15 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(monkeypatch
         ),
     )
     ranked = tuple((item.source_id, index + 1) for index, item in enumerate(reversed(items)))
+    completed = {source for source, _map_id in ranked[:completed_sources]}
+    demand_checked = []
+
+    def has_demand(runtime, observation, actions):
+        item = next(item for item in items if item.profile == runtime.profile)
+        demand_checked.append(item.source_id)
+        return item.source_id not in completed
+
+    monkeypatch.setattr(regional, "_source_has_acquisition_demand", has_demand)
     monkeypatch.setattr(regional, "_rank_regional_sources", lambda *a, **k: ranked)
     monkeypatch.setattr(
         regional, "derive_red_living_dex_wild_corridor", lambda target, *a, **k: target
@@ -353,7 +368,10 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(monkeypatch
         maximum_actions=30000,
         maximum_frames=3000000,
     )
-    assert evaluated == [source for source, _map_id in ranked[:4]]
+    assert evaluated == [
+        source for source, _map_id in ranked[completed_sources:completed_sources + 4]
+    ]
+    assert demand_checked == [source for source, _map_id in ranked[:completed_sources + 4]]
     assert len(result) == regional.TARGET_SOURCE_CANDIDATES
 
     Router.include_bindings = False
@@ -369,5 +387,56 @@ def test_enumeration_stops_after_target_or_fixed_routed_source_bound(monkeypatch
     assert result == ()
     assert evaluated == [
         source
-        for source, _map_id in ranked[: regional.MAXIMUM_ROUTED_SOURCE_EVALUATIONS]
+        for source, _map_id in ranked[
+            completed_sources:completed_sources + regional.MAXIMUM_ROUTED_SOURCE_EVALUATIONS
+        ]
     ]
+
+    completed.update(source for source, _map_id in ranked)
+    evaluated.clear()
+    assert regional.enumerate_red_regional_acquisitions(
+        runtime, _observation(), SimpleNamespace(actions_executed=0), world,
+        maximum_actions=30000, maximum_frames=3000000,
+    ) == ()
+    assert evaluated == []
+
+
+@pytest.mark.parametrize(
+    ("missing", "stock", "protected", "offered", "expected"),
+    [
+        ((), (), 0, 58, False),
+        ((59,), (), 0, 58, True),
+        ((59,), (58,), 0, 58, False),
+        ((59,), (58,), 1, 58, True),
+        ((58,), (), 0, 58, True),
+        ((59,), (58,), 0, 59, True),
+        ((99,), (), 0, 58, False),
+    ],
+)
+def test_source_prefilter_reuses_registered_precursor_demand(
+    missing, stock, protected, offered, expected,
+):
+    from test_red_acquisition import _observation as collection_observation
+
+    source = "wild:Route7:grass"
+    credited = frozenset(RED_SOLO_COLLECTION_CONTRACT.target_species) - {
+        red_species_ref(n) for n in missing
+    }
+    catalog = replace(
+        RED_ACQUISITION_CATALOG,
+        remaining_demand=True,
+        registered_species=credited,
+        protected_counts=((red_species_ref(58), protected),),
+        wild_source_species=((source, (red_species_ref(offered),)),),
+    )
+    provider = RedAreaSurveyGoalProvider(
+        source, None, None, None, None, catalog=catalog,
+    )
+    observation = replace(
+        _observation(),
+        collection_observation=replace(
+            collection_observation(*stock), owned_species=credited,
+        ),
+    )
+    runtime = SimpleNamespace(provider_for=lambda _kind, _actions: provider)
+    assert regional._source_has_acquisition_demand(runtime, observation, None) is expected

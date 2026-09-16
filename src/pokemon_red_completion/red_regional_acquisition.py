@@ -30,10 +30,15 @@ from pokemon_red_completion.living_dex_option_value import (
     living_dex_option_context_from_goal_situation,
 )
 from pokemon_red_completion.observation import Badge
-from pokemon_red_completion.red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
+from pokemon_red_completion.red_acquisition import (
+    RED_ACQUISITION_CATALOG,
+    RedAcquisitionKind,
+    summarize_red_area_survey,
+)
 from pokemon_red_completion.red_goal_context import RedGoalContextRuntime
 from pokemon_red_completion.red_goal_context_profile import RedGoalContextProfile
 from pokemon_red_completion.red_goal_manager import RedGoalObservation
+from pokemon_red_completion.red_goal_skills import RedAreaSurveyGoalProvider
 from pokemon_red_completion.red_living_dex_multifamily_curriculum import (
     RedLivingDexMultifamilyError,
     map_id_for_wild_source,
@@ -139,6 +144,26 @@ class RedRegionalAcquisitionCandidate:
             raise ValueError("regional candidate source differs from its capture profile")
 
 
+def _source_has_acquisition_demand(
+    runtime: RedGoalContextRuntime,
+    observation: RedGoalObservation,
+    actions: CountingExecutor,
+) -> bool:
+    """Reuse the executor's demand, including needed registered precursors.
+
+    This only excludes completed sources. Supplies, storage and reachability
+    remain the router's responsibility because its preparation can change them.
+    """
+    provider = runtime.provider_for(GoalKind.ACQUIRE_SPECIES, actions)
+    if not isinstance(provider, RedAreaSurveyGoalProvider):
+        raise ValueError("regional demand requires a real area-survey provider")
+    return bool(
+        summarize_red_area_survey(
+            provider.source_id, observation.collection_observation, provider.catalog
+        ).missing_species_refs
+    )
+
+
 def enumerate_red_regional_acquisitions(
     runtime: RedGoalContextRuntime,
     observation: RedGoalObservation,
@@ -153,9 +178,9 @@ def enumerate_red_regional_acquisitions(
     """Return up to four nearby, fully verified ordinary-grass options.
 
     Candidate filtering is deterministic support, not a learned region choice.
-    Sources lacking needed specimens, supplies, space or a walking route stay
-    unavailable. A fixed expensive-evaluation bound avoids a global route scan;
-    route execution must still verify every transition live.
+    Completed sources do not consume the route-evaluation budget. Sources with
+    demand still require supplies, space and a verified route. A fixed expensive-
+    evaluation bound avoids a global route scan; every transition is verified live.
     """
     before = actions.actions_executed, runtime.emulator.frame_count
     sources = sorted(
@@ -237,9 +262,12 @@ def enumerate_red_regional_acquisitions(
                 profile = bind_red_opportunistic_capture_profile(profile, world.rom)
         except (RedLivingDexMultifamilyError, RedLivingDexWildCorridorError):
             continue
+        source_runtime = replace(runtime, profile=profile)
+        if not _source_has_acquisition_demand(source_runtime, observation, actions):
+            continue
         routed_source_evaluations += 1
         routed = RedResourceGoalRouter(
-            replace(runtime, profile=profile),
+            source_runtime,
             actions,
             world,
             maximum_controller_actions=maximum_actions,

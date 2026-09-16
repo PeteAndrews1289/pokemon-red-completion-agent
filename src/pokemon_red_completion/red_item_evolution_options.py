@@ -33,10 +33,11 @@ from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
 
 
 @dataclass(frozen=True, slots=True)
-class RedItemEvolutionOption:
+class RedEvolutionOption:
     profile: RedGoalContextProfile
     binding: ExecutableGoalBinding
     economy_offer: EconomyOffer
+    execution_effort: float | None = None
 
 
 def enumerate_red_item_evolutions(
@@ -47,7 +48,7 @@ def enumerate_red_item_evolutions(
     *,
     maximum_actions: int,
     maximum_frames: int,
-) -> tuple[RedItemEvolutionOption, ...]:
+) -> tuple[RedEvolutionOption, ...]:
     """Offer every supported missing boxed stone target, or none when blocked.
 
     This does not choose a target, query a model, buy a stone or move to a shop.
@@ -139,7 +140,7 @@ def enumerate_red_item_evolutions(
                 binding = bindings[0] if bindings else None
             if binding is not None:
                 candidates.append(
-                    RedItemEvolutionOption(
+                    RedEvolutionOption(
                         profile,
                         binding,
                         EconomyOffer(EconomyMode.OTHER, planned_spend=0 if held else stone.price),

@@ -164,6 +164,48 @@ def test_live_supplement_construction_is_action_free_and_identity_free():
     assert "fishing-map-private" not in str(inventory.public_dict())
 
 
+@pytest.mark.parametrize("outcome", ("reachable", "unreachable", "unsupported"))
+def test_discovery_checks_bounded_exact_shorelines_when_first_entry_is_disconnected(
+    monkeypatch, outcome,
+):
+    from pokemon_red_completion.local_router import LocalGraph
+
+    offer = _offer(23, (119,))
+    stances = tuple(_stance(y) for y in range(1, 9))
+    monkeypatch.setattr(live_fishing, "red_super_rod_destination_offers", lambda *a: (offer,))
+    monkeypatch.setattr(live_fishing, "fishable_shoreline_stances", lambda _: stances)
+    monkeypatch.setattr(live_fishing, "_supported_plan", lambda plan, **k: plan.supported)
+    calls = []
+
+    def plan(start, destination, *, goal_at=None):
+        assert start == _traversal() and destination == 23
+        calls.append(goal_at)
+        if goal_at is not None and outcome == "unreachable":
+            raise RoutePlanningError("no alternate passage")
+        return SimpleNamespace(
+            steps=(object(),) * (2 if goal_at is None else 12),
+            terminal_at=(0, 0) if goal_at is None else goal_at,
+            terminal_mode=None, cost=2 if goal_at is None else 15,
+            supported=goal_at is None or outcome != "unsupported",
+        )
+
+    world = SimpleNamespace(
+        terrain={23: object()}, local_graphs={23: LocalGraph({(0, 0): ()})},
+        object_blockers={23: frozenset()},
+        macro_graph=SimpleNamespace(warp_locations={}), plan_feasible_to_map=plan,
+    )
+    found = live_fishing.discover_reachable_red_fishing_destinations(
+        b"rom", set(), world=world, traversal=_traversal(),
+    )
+    if outcome == "reachable":
+        assert len(found) == 1 and found[0].stance == stances[0]
+        assert (found[0].route_steps, found[0].route_cost) == (12, 15)
+        assert calls == [None, stances[0].at]
+    else:
+        assert found == ()
+        assert calls == [None, *(s.at for s in stances[:4])]
+
+
 @pytest.mark.parametrize("destination_count", (0, 1))
 def test_live_fishing_degrades_action_free_for_zero_or_one_destination(
     destination_count,
