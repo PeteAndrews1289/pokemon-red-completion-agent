@@ -14,20 +14,22 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model131 has 131 settled examples/89 successes after Model130 selected an acquisition from a
-four-option menu and capture preparation stopped on target-HP drift. Red is 92/124 registered
-with 73 specimens, 1608 cash and seven Great Balls. The typed failure was retained and fitted
-without replay. The terminal is in a wild battle and not input-ready.
+Model131 remains at 131 settled examples/89 successes. Capture stats now latch after battle
+initialization, with declared-target and setup protection. A qualified support continuation
+caught Haunter, reaching 93/124 registrations, 74 specimens, 1608 cash and six Great Balls.
+The terminal is safe; the original failed choice remains fitted without replay.
 
-Next diagnose the generic capture-status guard with ROM-free cases. Consider an exact-state
-safety continuation only after separate qualification; do not replay Model130, hand-select a
-destination, or claim a full-player authority promotion. Evolution target
+Next qualify the existing routed Center restoration offer in the mixed menu. The current menu
+has only resupply; the capture helper is at 34/70 HP and no acquisition is available. Permit one
+fresh Model131 decision only with verified alternatives. Evolution target
 ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
 
-No Flash or Claude review was used in this session. Quota was not refreshed.
-Next setting: Astra High, Fast off, approximately 45-75 minutes for capture-safety diagnosis. No GitHub publication without Pete's
+Flash 3.8 High completed a read-only design review. Accepted settled stats, identity checks and
+idempotent MAIN entry; rejected an incorrect battle-state value, forced flee and full-HP-only
+capture. Quota was unavailable/not refreshed; Claude was not used.
+Next setting: Sol High, Fast off, approximately 45-75 minutes for restoration-menu qualification. No GitHub publication without Pete's
 explicit instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

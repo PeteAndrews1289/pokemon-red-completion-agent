@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Pause gameplay. Diagnose the generic capture-status target-HP drift with ROM-free cases and evaluate a separately qualified exact-state safety continuation. Do not replay the consumed Model130 choice or treat this failure as a catch; renewable League income remains unqualified.
+- Next decision: Qualify generic routed Center restoration in the main mixed menu, which currently exposes only resupply after the helper lost readiness. Permit one fresh Model131 decision only with verified executable alternatives; retain its actual outcome. Renewable League income remains unqualified.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model131 has 131 settled examples / 89 successes after a model-selected capture-status failure was fitted without replay. Red remains 92/124 with 73 specimens and 1608 cash; the retained terminal is inside a wild battle and not input-ready. |
+| Authority now | Model131 remains 131 settled examples / 89 successes. A nonlearning continuation of its retained predecessor's capture caught Haunter, reaching 93/124 with 74 specimens, 1608 cash and six Great Balls at a safe terminal. No new model choice was made. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | ROM-free status-turn cases that reproduce a target-HP guard stop after a non-damaging move, followed by one separately qualified exact-state continuation if safety can be established. |
+| Cheapest falsifier | An action-free mixed menu still lacks a verified restoration alternative when the capture helper is below readiness, despite the existing routed Center recovery capability. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model131-capture-status-drift** · status **closed** · evidence [model fit](docs/evidence/red-model131-capture-status-drift-2026-09-16.json)
+**2026-09-16-capture-initialization-recovery** · status **closed** · evidence [qualification](docs/evidence/red-capture-initialization-recovery-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model chose a real acquisition option and retained a typed failure with its actual costs. The guard prevented an unverified catch claim and stopped before further gameplay. |
-| Learning output | One measured Model130 acquisition failure fitted once. Model131 has 131 settled examples / 89 successes and 52 economy-qualified examples. Registration gain was zero. |
-| Authority delta | Model130 selected acquisition from a four-option menu and its typed execution failure was fitted once as Model131. No teacher actions, replay, capture, independent evaluation or authority promotion occurred. |
-| Transfer result | This is one correlated Red development failure; it establishes neither general status competence nor later-title transfer. |
-| Blocker | Red remains 92/124 with 73 specimens and 1608 cash. Capture preparation observed target HP change and stopped after 112 actions inside a wild battle; the retained terminal is not input-ready. The cause is not established. |
-| Decision | Stop gameplay on the unsafe terminal. Diagnose the general non-damaging capture-status guard and its observed turn semantics with ROM-free cases; only consider a separately qualified exact-state continuation if a safe, identity-preserving path exists. Do not replay Model130 or route-patch this species. |
-| Next session | Astra High, Fast off, 45-75 minutes: inspect the retained status failure read-only, test the general guard against ROM-free turn cases, and qualify an exact-state safety continuation only if evidence supports it. |
-| Next falsifier | A ROM-free reproduction shows whether target-HP drift follows legitimate status-turn mechanics or an observation/execution defect; uncertainty forbids another live choice from the unsafe terminal. |
-| Stop condition | Stop on an unexplained status guard, unsafe exact-state continuation, retry pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | A reusable capture-start repair preserved the already selected encounter, verified a legitimate Haunter registration and restored a safe field terminal. The original failure remains training evidence; the support continuation is not a new learner success. |
+| Learning output | No new learner example: Model131 remains 131 settled examples / 89 successes / 52 economy-qualified examples. Support recovery earned one registration and specimen, reaching 93/124 and 74 specimens. |
+| Authority delta | The generic capture initialization boundary was corrected. One separately qualified exact-state support continuation caught Haunter without replay or model query. Model131 and its original fitted failure remain unchanged; no authority promotion occurred. |
+| Transfer result | ROM-free cases cover stale, zero and missing introduction HP, settled entry, changed target, inventory drift and actual setup damage. Live recovery starts at MAIN; it does not independently validate a fresh encounter introduction or later-title transfer. |
+| Blocker | The safe 93/124 terminal has 74 specimens, 1608 cash and six Great Balls. Its next menu exposes only one resupply option and no acquisition or restoration. The capture helper is at 34/70 HP; routed Center recovery is disabled in the main mixed router. |
+| Decision | Qualify the existing generic routed Center recovery offer in the main mixed menu with bounded action-free planning. If at least two real alternatives exist, permit one fresh Model131 choice and fit its actual result. Preserve the original failed choice and support recovery separately. |
+| Next session | Sol High, Fast off, 45-75 minutes: expose and qualify generic routed restoration in the mixed menu, then allow one fresh Model131 decision only when real alternatives are available. |
+| Next falsifier | Adding a fully verified Center restoration offer still leaves fewer than two executable choices, requires unbounded route enumeration or hides a controller action during inspection. |
+| Stop condition | Stop on missing executable alternatives, unbounded planning, unsafe terminal, replay pressure, teacher substitution, route-specific patches, or any full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

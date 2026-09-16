@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model131-capture-status-drift**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-capture-initialization-recovery**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model131-capture-status-drift-2026-09-16.json)
+[Current evidence](../docs/evidence/red-capture-initialization-recovery-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-capture-initialization-recovery
+
+Corrected pre-introduction HP latching with declared-target verification and preserved setup guards. One qualified exact-state continuation caught Haunter in 158 actions / 13716 frames, reaching 93/124 registrations and 74 specimens at a safe terminal.
+
+**Deviation:** Support recovery adds no learner example: Model131 remains 131 examples / 89 successes. The original failure remains fitted; live recovery from MAIN does not prove the historical callback entry. The next action-free menu has only resupply, no acquisitions or restoration. Routed Center recovery is disabled and the capture helper is at 34/70 HP.
+
+**Next:** Sol High, Fast off: qualify existing routed restoration in the mixed menu, then permit one fresh Model131 decision only with real executable alternatives. No replay, forced species, full-Red gate change or GitHub push.
 
 ### 2026-09-16-model131-capture-status-drift
 

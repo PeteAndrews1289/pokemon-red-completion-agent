@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model131-capture-status-drift",
+  "as_of_session": "2026-09-16-capture-initialization-recovery",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model131-capture-status-drift-2026-09-16.json"
+      "evidence": "docs/evidence/red-capture-initialization-recovery-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1580,6 +1580,12 @@
       "result": "Model130 selected an acquisition from a four-option menu and stopped after112actions/5256frames when capture preparation observed target-HP drift. The typed failure was fitted once: Model131 has131 examples/89 successes. Red remains92/124 with73 specimens and1608 cash.",
       "deviation": "The terminal is inside a wild battle and not input-ready. No catch, cash or ball spend, teacher action, replay, independent evaluation, authority promotion, full-Red gate or GitHub push occurred. Cause of target-HP drift remains unknown.",
       "next": "Astra High, Fast off: diagnose general capture-status turn semantics with ROM-free cases, then consider a separately qualified exact-state safety continuation only if justified. Do not replay Model130 or route-patch the failure."
+    },
+    {
+      "session": "2026-09-16-capture-initialization-recovery",
+      "result": "Corrected pre-introduction HP latching with declared-target verification and preserved setup guards. One qualified exact-state continuation caught Haunter in 158 actions / 13716 frames, reaching 93/124 registrations and 74 specimens at a safe terminal.",
+      "deviation": "Support recovery adds no learner example: Model131 remains 131 examples / 89 successes. The original failure remains fitted; live recovery from MAIN does not prove the historical callback entry. The next action-free menu has only resupply, no acquisitions or restoration. Routed Center recovery is disabled and the capture helper is at 34/70 HP.",
+      "next": "Sol High, Fast off: qualify existing routed restoration in the mixed menu, then permit one fresh Model131 decision only with real executable alternatives. No replay, forced species, full-Red gate change or GitHub push."
     }
   ],
   "closed_milestones": [
