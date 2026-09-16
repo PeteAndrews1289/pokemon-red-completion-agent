@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Explain and test the Safari-gate route divergence before letting Model137 choose a fresh bounded goal from the safe 96/124 terminal.
+- Next decision: Re-establish at least two executable collection alternatives by qualifying legitimate paid Safari admission and funding or a distinct non-Safari route before querying Model137 again.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Sustain new model-selected collection choices from earned terminals and distinguish route-execution failures from failed goal judgment. |
+| Reusable capability | Separate scripted paid transport from ordinary walking so model choices are offered only for executable, resource-qualified collection goals. |
 | Authority now | Model137 has 137 settled examples / 92 successes / 58 economy-qualified. One new Model136 fishing choice failed safely during route traversal; Red development save remains 96/124, without independent promotion. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | The selected fishing route cannot traverse the Safari gate as qualified, or the next fresh menu still offers a route known to fail before reaching its goal. |
+| Cheapest falsifier | The exact 96/124 save still advertises an unadmitted Safari fishing route, or no legitimate way to fund and compose the already-supported Safari acquisition can be qualified. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -64,14 +64,14 @@ outputs.
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | A new model-selected fishing goal yielded a safe, costed travel failure rather than fabricated registration. The failure trains goal valuation; the route cause must be isolated before another attempt. |
+| Product alignment | A new model-selected fishing failure trained goal valuation. Read-only diagnosis then found all four advertised routes crossed an unsupported paid gate; a general semantic requirement now removes those false options without spending gameplay. |
 | Learning output | One fresh Model136 fishing choice stopped safely after a Safari-gate route divergence at 735 actions and 22944 frames, with no new registration or cash loss. Its measured failure was fitted once into Model137: 137 examples / 92 successes / 58 economy-qualified. |
 | Authority delta | Model136 made one new fishing choice from five distinct options and controlled a bounded attempt. The observed route failure was fitted once into Model137; no registration or independent authority promotion occurred. |
-| Transfer result | One authentic five-option Red decision and retained failure from the earned terminal; correlated development only, with no independent or cross-title evaluation. |
-| Blocker | The selected fishing route diverged in the Safari Zone gate before reaching water. The safe development save remains 96/124 with 198 cash, and fresh-start Red acceptance remains 0/5. The route-step cause is not yet isolated. |
-| Decision | Diagnose the Safari-gate traversal divergence at the general route/observation seam and qualify it with a minimal test before spending another model choice from the safe 96/124 terminal. |
-| Next session | Sol High, Fast off, about 45-60 minutes: isolate the generic gate transition/route acknowledgment issue, test a general repair or fail-closed exclusion, then inspect a new menu without replaying the consumed fishing decision. |
-| Next falsifier | A minimal route test cannot reproduce or explain the divergence, or a repaired route still advertises a non-executable fishing goal. |
+| Transfer result | One authentic five-option Red decision and retained failure; the source-level gate guard and read-only cartridge check exclude unsupported paid transport. Correlated development only, with no independent or cross-title evaluation. |
+| Blocker | All four prior fishing offers were Safari routes for #147, but the save has 198 cash against 500 admission. The paid script is now excluded from ordinary walking; the safe 96/124 terminal has no multi-option menu until legitimate funding/admission or another acquisition family is composed. |
+| Decision | Qualify a legitimate route to the 500-cash Safari admission and compose the existing metered Safari skill as a model-selectable goal, or discover a distinct non-Safari executable acquisition. Do not spend a model decision on the current singleton. |
+| Next session | Sol High, Fast off, about 45-60 minutes: qualify legitimate funding for the missing 302 cash and an explicit Safari admission/acquisition offer, or another non-Safari goal family; inspect a multi-option menu before any new model decision. |
+| Next falsifier | The exact earned save has no valid funding path to Safari entry and no other distinct executable goals, or the admission skill cannot preserve the paid scripted boundary. |
 | Stop condition | Stop on false availability, mutation, unsafe state, teacher substitution, consumed decision replay, route-specific workaround, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

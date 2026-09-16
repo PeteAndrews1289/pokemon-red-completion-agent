@@ -21,6 +21,19 @@ No replay, teacher target, independent evaluation or authority promotion.
 Fresh Red acceptance remains **0/5**; no GitHub push.
 [Evidence](docs/evidence/red-model137-fishing-route-drift-2026-09-16.json).
 
+Read-only route reconstruction identified **four Safari fishing offers, all
+for #147**, each crossing the scripted admission gate. Cash was **198** versus
+the **500** admission cost. Both northbound admission lanes were unguarded
+in the static walking graph; the general story-routing adapter now requires
+an explicit paid-admission capability on both. It does not grant that
+capability to ordinary walking. The same read-only inventory now finds **zero
+Safari fishing offers** from the pre-attempt save. From the exact failed
+terminal, the mixed menu fails closed because fewer than two executable
+options remain; **no new model choice or game action** was made. The precise
+receptionist script response was not replayed. Targeted ROM-free checks:
+**161 passed**, including autonomous collection, Safari, documentation and
+roadmap tests.
+
 The dashboard's audited `registered_train_examples` projection still reads
 135 from its prior receipt. The new Model137 count above is verified in the
 private fit artifact and linked evidence; the dashboard projection has not
@@ -28,14 +41,15 @@ yet been advanced, and its older number is not a second model state.
 
 ## Next bounded work
 
-Isolate whether the Safari-gate route diverged because the planner assumed a
-wrong indoor step, the gate script changed position, or movement acknowledgment
-was premature. The result only proves the observed mismatch, not its cause.
-Use a minimal ROM-free route/observation test and an authenticated read-only
-gate inspection if needed; fix a general cause or exclude that path if it is
-not executable. Then inspect a fresh menu from the exact **96/124** safe
-terminal for Model137. Never replay this consumed choice, hand-pick another
-species, or relax the safe route check. Keep fresh-start Red separate.
+The immediate barrier is no longer a route-step retry: fund the missing
+**302 cash** legitimately and make the already-present, metered Safari
+admission/acquisition skill model-selectable, or qualify another genuinely
+distinct non-Safari acquisition. Confirm at least two executable options
+from the exact safe **96/124** terminal before asking Model137 to choose.
+Do not replay this consumed fishing choice, hand-pick a species, pretend an
+unpaid gate is ordinary walking, or relax route verification. The existing
+Safari skill is not yet integrated into this autonomous menu. Keep fresh-start
+Red acceptance separate.
 
 Recommended next setting: **Sol High, Fast off**, about **45–60 minutes**.
 Fresh Red acceptance remains **0/5**; ROM hack and Crystal remain closed.

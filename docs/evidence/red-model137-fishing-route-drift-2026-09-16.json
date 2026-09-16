@@ -80,8 +80,30 @@
     "independent_evaluation": false,
     "authority_promotion": false
   },
+  "read_only_diagnosis_and_guard": {
+    "selected_private_fishing_destination_map": 220,
+    "same_missing_species_number_on_all_four_offers": 147,
+    "other_private_fishing_destination_maps": [217, 218, 219],
+    "all_four_planned_routes_crossed_safari_gate": true,
+    "observed_cash": 198,
+    "scripted_admission_cost": 500,
+    "initial_graph_guarded_admission_lanes": 0,
+    "corrected_graph_guarded_admission_lanes": 2,
+    "ordinary_route_grants_admission_capability": false,
+    "fishing_offers_from_original_96_of_124_state_after_guard": 0,
+    "game_actions_in_diagnosis": 0,
+    "game_frames_in_diagnosis": 0,
+    "model_queries_in_diagnosis": 0,
+    "saved_state_unchanged": true,
+    "post_failure_menu_result": "fails_closed_without_two_distinct_executable_candidates",
+    "post_failure_menu_model_queries": 0,
+    "post_failure_menu_game_actions": 0,
+    "targeted_rom_free_tests_passed": 65,
+    "registry_regenerated_and_checked": true,
+    "interpretation": "The cartridge route planner treated a paid scripted admission as an ordinary walking edge. Both available gate lanes are now explicitly unavailable to ordinary traversal until a metered admission skill is composed. The exact script response was not independently replayed."
+  },
   "limitations": {
-    "cause_not_yet_isolated": true,
+    "exact_script_response_not_independently_verified": true,
     "route_step_trace_not_published_in_outcome": true,
     "one_correlated_lineage": true,
     "fresh_red_acceptance": "0/5",
@@ -89,5 +111,5 @@
     "crystal_unlocked": false,
     "github_push": false
   },
-  "next": "Diagnose the Safari-gate traversal divergence with a minimal ROM-free route observation test and, if necessary, an authenticated read-only gate state check. Fix a general cause or exclude an infeasible route; do not replay the consumed choice or substitute a teacher target. Then inspect a fresh menu from the safe 96/124 terminal."
+  "next": "The safe terminal has no multi-option executable menu after the admission guard. Develop a legitimate metered Safari funding/admission capability or qualify a distinct non-Safari acquisition family before a new model choice. Do not replay the consumed fishing decision or substitute a teacher target."
 }

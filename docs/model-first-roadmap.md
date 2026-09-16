@@ -45,8 +45,16 @@ From the exact post-Marowak terminal, Model136 chose a fishing acquisition
 from five genuine options. Travel diverged in the Safari Zone gate after735
 actions/22,944 frames, before fishing. The safe terminal remained96/124,74
 specimens and198 cash; the one measured failure trained Model137 once. The
-generic traversal cause is not yet isolated, so the selected goal was not
-replayed and no registration or authority promotion was claimed.
+selected goal was not replayed, and no registration or promotion was claimed.
+
+Read-only reconstruction then identified all four fishing options as Safari
+routes for #147. The save had198 cash versus a 500 paid admission; both gate
+lanes were unguarded in ordinary routing. A semantic admission requirement
+now excludes both unless a metered paid service is composed. The same
+inspection found zero fishing options, and the exact failed terminal has no
+two-option menu. This is a verified safety/availability correction, not a
+new registration or learned choice. The existing Safari skill still needs
+funding and autonomous-menu integration.
 
 Earlier stone-target support evolved Shellder→Cloyster without a model query or fit; that
 historical support result remains distinct. League funding is blocked by unsupported partial
@@ -57,15 +65,16 @@ Battle turns and mechanical travel remain existing controllers, not demonstrated
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Sustained post-goal choice | Isolate the Safari-gate route divergence, then qualify Model137's fresh menu from the safe96/124 terminal without replay | Sol /High /Fast off |
+| Sustained post-goal choice | Qualify legitimate Safari funding/admission or a distinct non-Safari option; require two executable alternatives before a new Model137 query | Sol /High /Fast off |
 | Sustained collection | Rebuild and execute varied useful goals from earned terminals, including supplies and storage, without manual recovery targets | Sol /High |
 | Battle/story authority | Qualify a learned decision boundary without heuristic substitution | Astra /High |
 | Fresh Red acceptance | Fresh origin, model-directed start-to-finish control, Champion/Hall of Fame,124/124 route registrations and a verified dependency ledger | Astra /High for freeze; Sol /High for execution |
 
-Next time box:45–60 minutes. Diagnose the route/observation seam at map156
-with a minimal test. Fix a general cause or exclude a non-executable path,
-then inspect a new menu from the exact safe96/124 terminal. Do not replay the
-consumed fishing decision, select a target manually or relax safety checks.
+Next time box:45–60 minutes. Find a legitimate way to cover the302-cash
+shortfall and connect the existing metered Safari admission skill to a
+model-selectable goal, or qualify another acquisition family. Inspect a
+multi-option menu from the exact safe96/124 terminal before a new model
+query. Do not replay the consumed fishing decision or select a target manually.
 All fits remain correlated development.
 
 Mew and unavailable version/link dependencies remain legitimate later-game targets, not cheats.
