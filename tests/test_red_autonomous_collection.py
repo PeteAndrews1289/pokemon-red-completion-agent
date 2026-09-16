@@ -9,9 +9,50 @@ from test_red_native_boxed_item_evolution import _runtime
 from pokemon_red_completion.executor import CountingExecutor
 from pokemon_red_completion.goal_manager import GoalKind
 from pokemon_red_completion.living_dex_option_value import LivingDexOptionKind
-from pokemon_red_completion.observation import ItemId
-from pokemon_red_completion.red_autonomous_collection import autonomous_collection_options
+from pokemon_red_completion.observation import ItemId, MapId, RawGameState
+from pokemon_red_completion.red_autonomous_collection import (
+    autonomous_capture_funding_target_cash,
+    autonomous_collection_options,
+)
+from pokemon_red_completion.red_goal_skills import RedMartPurchase, RedMartResupplyGoalProvider
 from pokemon_red_completion.resource_economy_observation import EconomySnapshot
+
+
+@pytest.mark.parametrize(
+    ("cash", "balls", "expected_target"),
+    [(1608, 9, 600), (228, 9, 600), (228, 0, 6000), (0, 10, 0)],
+)
+def test_autonomous_income_target_tracks_observed_capture_shortfall(
+    cash, balls, expected_target
+):
+    bag = ((int(ItemId.GREAT_BALL), balls),) if balls else ()
+    observation = SimpleNamespace(
+        raw=RawGameState(True, 154, 3, 3, 6, 0, player_money=cash, bag_items=bag),
+        capture_item_count=balls,
+    )
+    provider = RedMartResupplyGoalProvider(
+        map_id=MapId.FUCHSIA_MART,
+        player_x=3,
+        player_y=3,
+        interaction_direction="up",
+        purchases=(RedMartPurchase(0, ItemId.GREAT_BALL, 20, 600),),
+        actions=None,
+        reader=None,
+        emulator=None,
+        adapter=SimpleNamespace(config=SimpleNamespace(desired_capture_items=10)),
+        affordable_ball_purchase=True,
+    )
+    runtime = SimpleNamespace(
+        profile=SimpleNamespace(providers=(SimpleNamespace(kind=GoalKind.RESUPPLY),)),
+        adapter=SimpleNamespace(observe=lambda: observation),
+        provider_for=lambda _kind, _actions: provider,
+    )
+    economy = EconomySnapshot(
+        cash, (("red-item-003", balls),) if balls else (),
+    )
+    assert autonomous_capture_funding_target_cash(
+        runtime, CountingExecutor(_ActionDelegate()), economy
+    ) == expected_target
 
 
 @pytest.mark.parametrize("held_stone", [False, True])
@@ -148,7 +189,7 @@ def test_autonomous_menu_enables_storage_and_income_prerequisites(tmp_path, monk
             "trainer_funding": True,
             "regional_trainer_funding": True,
             "observed_trainer_funding": True,
-            "trainer_funding_target_cash": 3_600,
+            "trainer_funding_target_cash": 6_528,
         }
         == captured["router"]
     )

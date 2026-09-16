@@ -9,6 +9,7 @@ from .living_dex_goal_policy import project_living_dex_goal_candidate
 from .living_dex_option_value import LivingDexOptionKind
 from .red_autonomous_league_funding import bind_autonomous_league_funding
 from .red_bounded_player import RedBoundedPlayerObserver
+from .red_capture_funding_budget import red_capture_funding_budget
 from .red_evolution_stones import buyable_evolution_stone
 from .red_full_pokedex_direct_profile import derive_direct_full_pokedex_profile
 from .red_goal_context import RedGoalContextRuntime
@@ -18,6 +19,7 @@ from .red_goal_context_profile import (
     bind_funding_fly_profile,
     bind_mart_funding_departure_profile,
 )
+from .red_goal_skills import RedMartResupplyGoalProvider
 from .red_live_option_menu import (
     RedLiveOptionSet,
     build_red_live_option_set,
@@ -28,8 +30,28 @@ from .red_native_boxed_item_evolution import bind_native_boxed_item_evolution
 from .red_regional_acquisition import enumerate_red_regional_acquisitions
 from .red_resource_economy import red_economy_snapshot
 from .red_resource_goal_router import RedResourceGoalRouter
-from .resource_economy_observation import EconomyMode, EconomyOffer
+from .resource_economy_observation import EconomyMode, EconomyOffer, EconomySnapshot
 from .strategic_navigation_scenario_runtime import StrategicScenarioRouteWorld
+
+
+def autonomous_capture_funding_target_cash(
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    economy: EconomySnapshot,
+) -> int:
+    """Use an observed capture purchase, never a standing cash accumulation target."""
+    if not any(spec.kind is GoalKind.RESUPPLY for spec in runtime.profile.providers):
+        return economy.cash
+    provider = runtime.provider_for(GoalKind.RESUPPLY, actions)
+    if not isinstance(provider, RedMartResupplyGoalProvider):
+        raise ValueError("autonomous funding requires a supported Mart provider")
+    budget = red_capture_funding_budget(
+        runtime.adapter.observe(),
+        provider,
+    )
+    # A blocked/unsupported purchase is not an excuse to earn toward an
+    # invented reserve. With a real quote, fund only its unmet amount.
+    return economy.cash if budget is None else budget.target_cash
 
 
 def autonomous_collection_options(
@@ -73,6 +95,10 @@ def autonomous_collection_options(
             maximum_quanta=128,
             allow_cross_box=True,
         )
+    economy = red_economy_snapshot(native.reader.read())
+    if economy is None:
+        raise ValueError("autonomous collection requires observed resources")
+    target_cash = autonomous_capture_funding_target_cash(native, actions, economy)
     router = RedResourceGoalRouter(
         native,
         actions,
@@ -85,7 +111,7 @@ def autonomous_collection_options(
         trainer_funding=True,
         regional_trainer_funding=True,
         observed_trainer_funding=True,
-        trainer_funding_target_cash=3_600,
+        trainer_funding_target_cash=target_cash,
         include_recovery_offers=False,
     )
     observed = RedBoundedPlayerObserver(
@@ -176,9 +202,6 @@ def autonomous_collection_options(
         if league_candidate is None:
             raise ValueError("renewable League funding lacks a portable projection")
         supplements.append(supplemental_live_option(league_funding, league_candidate))
-    economy = red_economy_snapshot(native.reader.read())
-    if economy is None:
-        raise ValueError("autonomous collection requires observed resources")
     options = build_red_live_option_set(
         situation=observed.situation,
         binding_set=ordinary,
@@ -186,7 +209,7 @@ def autonomous_collection_options(
         model_feature_version=model_feature_version,
         ordering_seed_sha256=ordering_seed_sha256,
         economy_snapshot=economy,
-        target_cash=3_600,
+        target_cash=target_cash,
     )
     if evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
         item_id = evolution.parameters["item_id"]
