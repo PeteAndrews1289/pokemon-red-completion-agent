@@ -689,9 +689,15 @@ def execute_bounded_battle_move_turn(
             timing=timing,
             label=label,
             before_attack=equalize_and_record_pre_attack_frames,
+            allow_player_faint=True,
         )
         final = reader.read()
-        _require_present_state(final, expected_map=expected_map, label=label)
+        _require_present_turn_state(
+            final,
+            expected_map=expected_map,
+            label=label,
+            allow_player_faint=True,
+        )
         if final.battle_state not in {0, expected_battle_state}:
             raise BattleRuntimeError(f"{label} changed to an unsupported battle state.")
         return BattleTurnExecution(

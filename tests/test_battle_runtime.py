@@ -327,6 +327,46 @@ def test_bounded_move_turn_accepts_truthful_wild_battle_state() -> None:
     assert confirmations == 2
 
 
+@pytest.mark.parametrize("selected_move_spent", [False, True])
+def test_bounded_move_turn_records_faint_as_an_outcome(
+    selected_move_spent: bool,
+) -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=1))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(
+                BattleMenuPhase.MOVE,
+                selected_move_slot=1,
+            )
+        elif confirmations == 2:
+            runtime.raw = replace(
+                runtime.raw,
+                first_party_hp=0,
+                first_party_pp=(34, 30, 30, 11) if selected_move_spent else (35, 30, 30, 11),
+            )
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=1,
+    )
+
+    assert result.final_state.battler_hp == 0
+    assert result.move_executed is selected_move_spent
+    assert confirmations == 2
+
+
 def test_bounded_move_turn_rejects_invalid_policy_boundary_without_input() -> None:
     runtime = MeasuredTurnRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
 
