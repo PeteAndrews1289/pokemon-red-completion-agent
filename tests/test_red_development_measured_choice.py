@@ -1218,11 +1218,16 @@ def test_valid_measured_choice_roundtrip_and_properties(tmp_path):
 
 
 @pytest.mark.parametrize(
-    ("failed_exception", "tight_budget"),
-    [(False, False), (True, False), (False, True)],
+    ("status", "tight_budget"),
+    [
+        ("succeeded", False),
+        ("exception", False),
+        ("succeeded", True),
+        ("verification_failed", True),
+    ],
 )
 def test_autonomous_choice_is_admitted_without_replaying_actions(
-    tmp_path, monkeypatch, failed_exception, tight_budget
+    tmp_path, monkeypatch, status, tight_budget
 ):
     store, _, _, behavior = _bootstrap_registered_model(tmp_path / "registered", monkeypatch)
     behavior = replace(behavior, model=_live_model())
@@ -1277,17 +1282,21 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
         "before": {"actions": 0, "frames": 0},
         "before_state_sha256": base.parent_state_sha256,
         "choice": decision,
-        "error": "capture controller failed" if failed_exception else None,
-        "error_type": "RedTravelCaptureError" if failed_exception else None,
+        "error": "capture controller failed" if status == "exception" else None,
+        "error_type": "RedTravelCaptureError" if status == "exception" else None,
         "error_chain": (
             [{"error": "capture controller failed", "error_type": "RedTravelCaptureError"}]
-            if failed_exception else None
+            if status == "exception" else None
         ),
+        "failure_reason": "search_exhausted" if status == "verification_failed" else None,
         "ordinal": 0,
-        "safe_terminal": not failed_exception,
+        "safe_terminal": status != "exception",
         "selected_kind": selected_kind,
         "terminal_state_sha256": base.terminal_state_sha256,
-        "verification": None if failed_exception else "succeeded",
+        "verification": (
+            "succeeded" if status == "succeeded" else
+            "failed" if status == "verification_failed" else None
+        ),
     }
     measured, result = publish_autonomous_measured_choice(
         store,
@@ -1299,7 +1308,7 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
         outcome=outcome,
         before_observation=base.before_observation,
         after_observation=(
-            base.before_observation if failed_exception else base.after_observation
+            base.after_observation if status == "succeeded" else base.before_observation
         ),
         before_economy=EconomySnapshot(1000, ()),
         after_economy=EconomySnapshot(1000, ()),
@@ -1317,11 +1326,36 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
     example = load_red_development_measured_choice_example(
         store, measured, objective=REGISTERED_OBJECTIVE
     )
-    assert example.outcome.verified_success is not failed_exception
+    assert example.outcome.verified_success is (status == "succeeded")
     assert example.outcome.action_cost == 150 / 30_000
     assert result["eligible_examples"] == 1
     assert result["action_trace_available"] is False
     assert result["authority_promotion_eligible"] is False
+    if status == "verification_failed":
+        unverified = {**outcome, "failure_reason": None}
+        with pytest.raises(ValueError, match="choice receipt differs"):
+            publish_autonomous_measured_choice(
+                store,
+                behavior=behavior,
+                run_id="autonomous-unverified",
+                ordinal=0,
+                intent=intent,
+                decision=decision,
+                outcome=unverified,
+                before_observation=base.before_observation,
+                after_observation=base.before_observation,
+                before_economy=EconomySnapshot(1000, ()),
+                after_economy=EconomySnapshot(1000, ()),
+                autonomous_plan_sha256="4" * 64,
+                autonomous_result_sha256="5" * 64,
+                intent_sha256="6" * 64,
+                decision_sha256="7" * 64,
+                outcome_sha256="8" * 64,
+                source_commit="9" * 40,
+                source_bundle_sha256="a" * 64,
+                execution_maximum_actions=3000,
+                execution_maximum_frames=300_000,
+            )
     record = store.find_sealed_record(
         development_measured_choice_record_id(measured.choice_id),
         expected_kind=DEVELOPMENT_MEASURED_CHOICE_KIND,
@@ -1365,7 +1399,7 @@ def test_autonomous_choice_is_admitted_without_replaying_actions(
             outcome=altered,
             before_observation=base.before_observation,
             after_observation=(
-                base.before_observation if failed_exception else base.after_observation
+                base.after_observation if status == "succeeded" else base.before_observation
             ),
             before_economy=EconomySnapshot(1000, ()),
             after_economy=EconomySnapshot(1000, ()),

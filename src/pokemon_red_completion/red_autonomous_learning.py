@@ -141,6 +141,15 @@ def publish_autonomous_measured_choice(
         and error_chain[0].get("error") == outcome.get("error")
         and error_chain[0].get("error_type") == outcome.get("error_type")
     )
+    failed_verification = (
+        outcome.get("verification") == "failed"
+        and outcome.get("error") is None
+        and outcome.get("error_type") is None
+        and outcome.get("error_chain") is None
+        and outcome.get("safe_terminal") is True
+        and isinstance(outcome.get("failure_reason"), str)
+        and bool(outcome.get("failure_reason"))
+    )
     if (
         type(selected_index) is not int
         or type(selection_seed) is not int
@@ -157,7 +166,7 @@ def publish_autonomous_measured_choice(
         or decision.get("emulator_frames") != 0
         or outcome.get("ordinal") != ordinal
         or outcome.get("choice") != decision
-        or not (succeeded or failed_exception)
+        or not (succeeded or failed_exception or failed_verification)
     ):
         raise ValueError("autonomous choice receipt differs")
     before = _mapping(outcome.get("before"), "before facts")
