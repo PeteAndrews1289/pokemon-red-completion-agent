@@ -34,14 +34,14 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Run the user-directed autonomous development continuation: at most three persisted model choices over goals and observed capture destinations, rebuilding each menu from the earned state. Preserve the lost Model123 query as historical failure; this continuation is correlated, not independent evaluation.
+- Next decision: Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned 90-registration terminal; no manual recovery goal or reset.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
 | Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model123 has 123 settled examples / 84 successes and the retained save has 89/124 declared-route registrations. It remains bounded development-only and has retained one successful mixed-family acquire-versus-evolve decision. |
+| Authority now | Model123 remains at 123 settled examples / 84 successes. Its new closed-loop runner executed two consecutive model-selected goals from earned states with no teacher substitution. The development save has 90/124 registrations, 67 living species and 71 specimens; the two raw outcomes are not yet fitted. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
 | Cheapest falsifier | The authenticated terminal cannot expose at least two genuinely executable acquisition families from legitimate observed resources before a model query, or the selected choice cannot retain its real outcome and cost. |
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-15-model123-item-evolution-integration-query-failure** · status **closed** · evidence [falsification](docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json)
+**2026-09-16-model123-autonomous-collection** · status **closed** · evidence [qualification](docs/evidence/red-model123-autonomous-collection-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Generic procurement plus boxed item evolution is now a reusable goal-manager capability and the retained terminal exposed acquire, evolve and resupply simultaneously. The failed one-shot query is retained honestly and cannot be counted as learned progress. |
-| Learning output | None. One Model123 query was consumed, but no selected arm was durably recorded and no gameplay outcome exists. Model123 remains at 123 examples / 84 successes. |
-| Authority delta | None. Model123 remains at 123 settled examples / 84 successes. The item-evolution capability and three-family live menu are verified, but the sole query produced no durable selected arm or outcome. |
-| Transfer result | No cross-title transfer result. Fire- and Water-stone families passed ROM-free qualification, but no later-title execution has occurred. |
-| Blocker | The one Model123 selection returned, then a post-query enum assertion failed before the decision record was written. The write-ahead intent permanently consumes seed 123091501; no controller input, gameplay or save mutation occurred, and the selected arm cannot be claimed from durable evidence. |
-| Decision | Do not redraw or infer the consumed choice. Decide whether to close this retained-state query lane or design one prospectively distinct recovery experiment that cannot be mistaken for a retry. |
-| Next session | Astra High, Fast off: audit the one-shot failure boundary and either close the exact retained-state lane or freeze a genuinely distinct recovery experiment before any further query. |
-| Next falsifier | No prospectively distinct recovery experiment can expose a new authenticated menu without replaying, inferring or replacing the consumed selection identity. |
-| Stop condition | Stop on any redraw of seed 123091501, inference of its selected arm, replay of this exact menu identity, teacher substitution, gameplay execution without a durable decision, a full run, ROM-hack/Crystal work or GitHub publication. |
+| Product alignment | The user requested a player rather than a teacher-following script. Goals are now selected, persisted, executed and re-observed automatically; deterministic evolution targets and battle mechanics remain explicit gaps. |
+| Learning output | Two exact on-policy outcomes retained: successful Vileplume evolution and purchase of seven Great Balls. No teacher labels, retries or new admitted training rows. Model123 remains 123 examples / 84 successes. |
+| Authority delta | Bounded execution capability widened to consecutive model-selected goals and model-selectable capture destinations. Two successive live goals completed; no capture destination was selected and no formal authority promotion or fit is claimed. |
+| Transfer result | ROM-free tests cover changed-state replanning and failure retention. No later-title or independent transfer result. |
+| Blocker | After evolution and a model-selected purchase, only 228 cash and one free active-box slot remain. The autonomous menu does not enable storage relief or earning; the third observation failed to expose distinct executable candidates before any query. |
+| Decision | Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned 90-registration terminal; no manual recovery goal or reset. |
+| Next session | Sol High, Fast off, 1-2 hours: retain the two measured outcomes, enable model-selected resource/storage prerequisites, and qualify one bounded continuation from the saved endpoint. |
+| Next falsifier | The earned terminal cannot expose executable storage or earning prerequisites without a manual goal choice, or the two historical choices cannot be admitted with their original menus and measured costs. |
+| Stop condition | Stop on teacher substitution, lost choice persistence, unsafe state, insufficient real alternatives, reset of completed gameplay, a full run, ROM-hack/Crystal work or unauthorized GitHub publication. |
 
 ### Stop conditions
 

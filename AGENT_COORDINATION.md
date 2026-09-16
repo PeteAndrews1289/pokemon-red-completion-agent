@@ -11,26 +11,21 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 - Claude supplies selective read-only reviews when useful. Neither reviewer grants gameplay authority.
 - External reviews are bounded assistance, not a standing gate. Reviewers do not edit this worktree.
 
+
 ## Current assignment
 
-Model123 is sealed at 123 examples / 84 successes and Red remains at 88/151 registrations. Its
-single new row is Model122's successful acquire-versus-evolve selection; all 122 prior rows remain,
-and support for the selected evolution increased on the exact frozen menu.
+The closed-loop Model123 runner completed two consecutive model-selected goals without reset:
+evolution and resupply. Red is 90/124 registered with 67 living species and 71 specimens.
+Two measured raw outcomes await admission; the fitted model remains 123 examples/84 successes.
 
-Next construct Model123's next identity-free heterogeneous menu action-free from the authenticated
-88-registration terminal. Authorize at most one selection only if at least two legitimate families
-are executable. Do not replay the completed evolution, substitute a teacher choice or create
-another disposable battle campaign.
+Next expose legitimate earning and storage relief as model-selectable prerequisites, retaining
+the two choices and costs first. Continue from the earned 228-cash terminal, not a reset or
+teacher-chosen recovery. Evolution targets and battle mechanics remain explicit authority gaps.
 
 ## Actual reviewer contribution
 
-Flash 3.8 High reviewed the heterogeneous measured-choice admission through Antigravity. Its
-concrete selected-option binding concern was accepted and implemented cryptographically. Its
-generic-schema concern was rejected because the declaration authenticates one exact historical
-receipt rather than defining a reusable future schema. Claude CLI was not used this session.
-
-Quota was not refreshed at closeout.
-
+No Flash or Claude review was used in this session. Quota was not refreshed.
 Next setting: Sol High, Fast off, approximately 1–2 hours. No GitHub publication without Pete's
 explicit instruction.
+
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

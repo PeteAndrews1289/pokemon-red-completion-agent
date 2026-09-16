@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-15-model123-item-evolution-integration-query-failure**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model123-autonomous-collection**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -89,7 +89,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json)
+[Current evidence](../docs/evidence/red-model123-autonomous-collection-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -116,6 +116,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model123-autonomous-collection
+
+Two consecutive Model123 goals completed without a teacher-selected action or state reset: Vileplume evolution and seven Great Balls purchased. Red advanced89 to90/124 registrations, with67 living species and71 specimens;755 actions/64440 frames.107 targeted tests passed.
+
+**Deviation:** At Pete's direction, replaced one-off teacher-steered execution with a bounded goal/destination decision loop. The third menu lacked distinct executable candidates at228 cash and one free active-box slot. This correlated development run is not an independent evaluation; Model123 remains123 examples/84 successes and no full-Red gate changed.
+
+**Next:** Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned90-registration terminal; no manual recovery goal or reset.
 
 ### 2026-09-15-model123-item-evolution-integration-query-failure
 

@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-15-model123-item-evolution-integration-query-failure",
+  "as_of_session": "2026-09-16-model123-autonomous-collection",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json"
+      "evidence": "docs/evidence/red-model123-autonomous-collection-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1508,6 +1508,12 @@
       "result": "Generic stone procurement, boxed preparation and item use now form one goal-manager executable. Fire and Water families passed ROM-free gates,372 targeted tests passed, and the89-registration terminal exposed acquire,evolve and resupply with zero input, zero frames and no identity fields.",
       "deviation": "The sole Model123 selection returned, but a post-query enum assertion failed before its selected arm was persisted. The write-ahead intent consumes seed123091501; no gameplay, cash, registration, fit, authority or transfer counter changed, and no redraw or inferred arm is allowed.",
       "next": "Astra High, Fast off: audit the one-shot boundary and either close this exact retained-state lane or freeze a prospectively distinct recovery experiment before any further query. Do not execute gameplay without a durable decision."
+    },
+    {
+      "session": "2026-09-16-model123-autonomous-collection",
+      "result": "Two consecutive Model123 goals completed without a teacher-selected action or state reset: Vileplume evolution and seven Great Balls purchased. Red advanced89 to90/124 registrations, with67 living species and71 specimens;755 actions/64440 frames.107 targeted tests passed.",
+      "deviation": "At Pete's direction, replaced one-off teacher-steered execution with a bounded goal/destination decision loop. The third menu lacked distinct executable candidates at228 cash and one free active-box slot. This correlated development run is not an independent evaluation; Model123 remains123 examples/84 successes and no full-Red gate changed.",
+      "next": "Admit both retained autonomous outcomes with actual costs, then expose verified storage relief and legitimate earning as model-selectable prerequisites. Continue only from the earned90-registration terminal; no manual recovery goal or reset."
     }
   ],
   "closed_milestones": [

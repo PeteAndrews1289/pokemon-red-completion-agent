@@ -1,41 +1,52 @@
 # Current development handoff
 
-Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 15, 2026.
+Read [MISSION.md](MISSION.md), [NORTH_STAR](NORTH_STAR.md) and
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
 
-## Item evolution is integrated; the sole Model123 query failed after selection
+## Two consecutive model-selected goals completed
 
-Model123 remains sealed at 123 examples / 84 successes. The retained development save still has
-89/124 declared-route registrations (71.77%), 67 living species, 71 specimens and 6,528 cash. Its
-state SHA-256 is `d288a9de13a5cf785481c9fa45bee322619a61491a21f8938c6f33d38b455051`.
-No GitHub push occurred.
+A reusable bounded runner now observes legal options, persists the model's choice before inputs,
+executes that exact option, saves the actual outcome and rebuilds the menu from the earned state.
+It refuses an existing run directory and stops on an unsafe state, failed action or unavailable
+menu. A teacher-selected safety action is never executed by this loop.
 
-Local source `c729b7ad0fb567f4f5c1953fb691cee07a49e5d1` adds one generic goal-manager
-binding that composes Celadon stone procurement, PC deposit/box-switch/withdraw and party item use.
-Fire- and Water-stone families pass ROM-free qualification; full-bag, unsafe-deposit and move-prompt
-starts fail closed. The broader targeted integration suite passed 372 tests, static analysis and the
-product-focus check.
+The one live Model123 continuation completed:
 
-The exact retained terminal then exposed three legitimate identity-free choices: acquire, evolve
-and resupply. Menu construction used zero actions and zero frames, preserved the state byte-for-byte
-and kept the acquisition available at the measured two-free-slot safety boundary.
+1. Evolution selected from six options: Gloom became Vileplume, registrations 89→90, cash 6528→4428.
+2. Resupply selected from two options: seven Great Balls purchased, cash 4428→228.
+3. Stopped before another model query: no distinct executable candidates remained in this menu.
 
-One Model123 selection with seed `123091501` returned. Immediately afterward, the private freezer's
-authority assertion referenced a nonexistent `MODEL_GREEDY` enum member, so the process failed
-before writing the selected arm. Its write-ahead intent is durable, but no decision or frozen-menu
-record exists. No controller input, gameplay, cash change or registration occurred. Do not redraw,
-infer or replay this consumed identity; it produces no training row or authority gain.
+Total 755 controller actions/64440 frames; zero resets, teacher-selected executions or labels.
+Both outcomes and all decision boundaries are retained. The purchase succeeded mechanically;
+that does not establish good long-horizon spending.
 
-## Next bounded work
+The saved terminal has 90/124 declared-route registrations (72.58%), 67 living species and 71
+specimens. Its SHA-256 is `74fe9dc927695b1decf7810db7e176812f82d417ac5593e81da70af4948bc1f3`.
+Active box index 3 has 19 specimens; the party has 6, cash 228 and 11 Great Balls.
+A read-only endpoint inspection preserved save bytes with zero frames.
 
-Audit the one-shot boundary and make an explicit choice: close this exact retained-state lane, or
-freeze a prospectively distinct recovery experiment that cannot be mistaken for a replacement or
-retry. Do not execute gameplay without a durable model decision.
+Model123 is unchanged at 123 settled examples/84 successes. Two new raw outcomes await admission
+and fitting; do not call them Model124. All fresh-Red completion gates remain false.
+Source commits `ecdeed16` and `d494f97e` implement the loop and priced menu.
+107 targeted tests, static analysis and registry checks passed; this is not a full-suite claim.
+No GitHub push occurred. No external reviewer was used or quota refreshed.
 
-Stop on any redraw of seed `123091501`, reconstruction of its selected arm, teacher substitution,
-another query on the same menu identity, a full run, ROM-hack/Crystal work or a GitHub push.
+## Exact next bounded work
 
-Next: **Astra / High / Fast off**. This is now an experiment-authority decision, not ordinary code
-integration; Sol High is sufficient only after the recovery identity has been settled.
+Admit both historical choices with their original menus, real costs and actual outcomes. Expose
+the existing verified storage-relief and legitimate earning capabilities as model options:
+the new menu builder currently leaves them disabled. Do not manually choose a recovery goal.
+Continue only from the earned terminal under a fresh bounded development plan.
 
-[Latest evidence](docs/evidence/red-model123-item-evolution-integration-query-failure-2026-09-15.json)
+Capture destinations are offered as distinct model choices, but no capture was selected in this
+trial. Evolution targets still use deterministic catalog ordering; battles and route execution
+still use existing mechanical controllers. Full autonomous gameplay is not established.
+
+The earlier lost selection with seed 123091501 remains a historical failure, not reconstructed.
+This user-directed continuation is explicitly correlated development, not an independent retry
+claim. No full run, ROM hack, Crystal work or GitHub publication is authorized.
+
+Next: **Sol / High / Fast off**, approximately 1–2 hours for outcome admission and prerequisite
+options. The next design question is concrete; reserve Astra for broader battle/story authority.
+
+[Session evidence](docs/evidence/red-model123-autonomous-collection-2026-09-16.json)
