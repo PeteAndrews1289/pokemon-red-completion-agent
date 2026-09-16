@@ -140,6 +140,7 @@ _PROVIDER_TYPE_BY_MECHANIC = {
     RedGoalMechanic.DIGLETT_EVOLUTION: RedObservedGoalSkillProvider,
     RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT: RedObservedGoalSkillProvider,
     RedGoalMechanic.TARGETED_LEVEL_EVOLUTION: RedObservedGoalSkillProvider,
+    RedGoalMechanic.TARGETED_ITEM_EVOLUTION: RedObservedGoalSkillProvider,
     RedGoalMechanic.MART_RESUPPLY: RedMartResupplyGoalProvider,
     RedGoalMechanic.BOX_SWITCH: RedBoxSwitchGoalProvider,
     RedGoalMechanic.WILD_CORRIDOR_DISCOVERY: (RedEncounterDiscoveryGoalProvider),
@@ -670,9 +671,7 @@ class RedLivingDexConstructedOrigin:
             self.construction_route_terminal_boundary_sha256,
             self.construction_route_report_sha256,
         )
-        if any(item is None for item in route_values) != all(
-            item is None for item in route_values
-        ):
+        if any(item is None for item in route_values) != all(item is None for item in route_values):
             raise RedLivingDexSetupRecipeError("construction route proof is partially bound")
         for route_value in route_values:
             if route_value is not None:
@@ -746,9 +745,7 @@ class RedLivingDexConstructedOrigin:
 
     def private_dict(self) -> dict[str, object]:
         return {
-            "construction_route_controller_actions": (
-                self.construction_route_controller_actions
-            ),
+            "construction_route_controller_actions": (self.construction_route_controller_actions),
             "construction_route_emulator_frames": self.construction_route_emulator_frames,
             "construction_route_plan_sha256": self.construction_route_plan_sha256,
             "construction_route_planner_binding_sha256": (
@@ -955,8 +952,7 @@ class RedLivingDexValidatedSetupCapture:
         if (
             self.policy_projection.menu.policy_sha256 != self.binding.menu_sha256
             or tuple(
-                candidate.features.kind
-                for candidate in self.policy_projection.menu.candidates
+                candidate.features.kind for candidate in self.policy_projection.menu.candidates
             )
             != self.binding.available_option_kinds
             or self.policy_projection.route_controller_actions
@@ -1024,14 +1020,10 @@ class RedLivingDexValidatedSetupCapture:
             raise RedLivingDexSetupRecipeError("validated capture fork order differs")
         expected_observer_binding_sha256 = canonical_sha256(
             {
-                "construction_route_report_sha256": (
-                    self.construction_route_report_sha256
-                ),
+                "construction_route_report_sha256": (self.construction_route_report_sha256),
                 "construction_runtime_sha256": self.construction_runtime_sha256,
                 "execution_identity_sha256": self.execution_identity_sha256,
-                "final_origin_observation_sha256": (
-                    self.final_origin_observation_sha256
-                ),
+                "final_origin_observation_sha256": (self.final_origin_observation_sha256),
                 "fork_observation_sha256s": [
                     item.fresh_observation_sha256 for item in self.fork_proofs
                 ],
@@ -1044,9 +1036,7 @@ class RedLivingDexValidatedSetupCapture:
             }
         )
         if self.binding.observer_binding_sha256 != expected_observer_binding_sha256:
-            raise RedLivingDexSetupRecipeError(
-                "validated capture observer proof tree differs"
-            )
+            raise RedLivingDexSetupRecipeError("validated capture observer proof tree differs")
         for option, proof in zip(
             self.binding.option_bindings,
             self.fork_proofs,
@@ -1111,9 +1101,7 @@ class RedLivingDexValidatedSetupCapture:
             "behavior_draws": 0,
             "candidate_forks_validated": len(self.fork_proofs),
             "complete_menu_observed": True,
-            "construction_route_executed": (
-                self.construction_route_recipe_sha256 is not None
-            ),
+            "construction_route_executed": (self.construction_route_recipe_sha256 is not None),
             "execution_identity_bound": True,
             "learner_labels": 0,
             "learner_outcomes": 0,
@@ -1137,9 +1125,7 @@ class RedLivingDexValidatedSetupCapture:
             "attestation_sha256": self.attestation.attestation_sha256,
             "behavior_draws": self.behavior_draws,
             "binding": self.binding.private_dict(),
-            "construction_route_controller_actions": (
-                self.construction_route_controller_actions
-            ),
+            "construction_route_controller_actions": (self.construction_route_controller_actions),
             "construction_route_emulator_frames": self.construction_route_emulator_frames,
             "construction_route_plan_sha256": self.construction_route_plan_sha256,
             "construction_route_planner_binding_sha256": (
@@ -1814,9 +1800,7 @@ def validate_red_living_dex_setup_recipe(
         consumed_root_envelope_sha256=root.envelope_sha256,
         construction_runtime_sha256=construction_arm.arm_identity_sha256,
         construction_route_recipe_sha256=(
-            None
-            if recipe.construction_route is None
-            else recipe.construction_route.recipe_sha256
+            None if recipe.construction_route is None else recipe.construction_route.recipe_sha256
         ),
         construction_route_plan_sha256=(
             None
@@ -2096,9 +2080,7 @@ def validate_red_living_dex_setup_recipe(
             "execution_identity_sha256": execution_identity.identity_sha256,
             "final_origin_observation_sha256": final_fresh.observation_sha256,
             "fork_observation_sha256s": [item.fresh_sha256 for item in provisional_proofs],
-            "fork_proof_sha256s": [
-                canonical_sha256(item.private_dict()) for item in fork_proofs
-            ],
+            "fork_proof_sha256s": [canonical_sha256(item.private_dict()) for item in fork_proofs],
             "origin_observation_sha256": origin.fresh.observation_sha256,
             "schema": RED_LIVING_DEX_SETUP_OBSERVER_BINDING_SCHEMA,
             "slot_recipe_sha256": recipe.recipe_sha256,
@@ -2310,9 +2292,7 @@ def _execute_authenticated_route(
         meter=meter,
         subject="semantic route terminal",
     )
-    if hashlib.sha256(terminal_state_bytes).digest() == hashlib.sha256(
-        origin_state_bytes
-    ).digest():
+    if hashlib.sha256(terminal_state_bytes).digest() == hashlib.sha256(origin_state_bytes).digest():
         raise RedLivingDexSetupRecipeError(
             "semantic route reported arrival without changing emulator state"
         )
@@ -2627,6 +2607,8 @@ def _profile_terminal_matches(
             int(MapId.CINNABAR_POKECENTER),
             int(MapId.VERMILION_POKECENTER),
         }
+    if spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+        return actual.at == (3, 3) and actual.map_id == int(MapId.CELADON_POKECENTER)
     # Story boundaries are determined by the live objective registry rather
     # than by a coordinate-bearing profile.  Availability is still proved by
     # the fresh offer during fork validation.

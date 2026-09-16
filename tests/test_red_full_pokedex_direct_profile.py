@@ -7,7 +7,7 @@ from test_registered_runtime_binding import bound_fixture
 
 from pokemon_red_completion.collection import CollectionLocation
 from pokemon_red_completion.goal_manager import GoalKind
-from pokemon_red_completion.observation import MapId
+from pokemon_red_completion.observation import ItemId, MapId
 from pokemon_red_completion.red_collection import red_species_ref
 from pokemon_red_completion.red_full_pokedex_direct_profile import (
     RedFullPokedexDirectProfileError,
@@ -48,9 +48,7 @@ def _corridor():
 
 
 def _with_missing(observed, *numbers, map_id=None):
-    owned = frozenset(
-        red_species_ref(number) for number in range(1, 152) if number not in numbers
-    )
+    owned = frozenset(red_species_ref(number) for number in range(1, 152) if number not in numbers)
     raw = observed.raw if map_id is None else replace(observed.raw, map_id=int(map_id))
     return replace(
         observed,
@@ -141,16 +139,16 @@ def test_capture_corridor_defends_against_an_invalid_candidate(tmp_path, monkeyp
         _capture_corridor(runtime.adapter.observe(), _world())
 
 
-def test_direct_profile_derives_targets_from_inventory_and_cartridge_adapter(
-    tmp_path, monkeypatch
-):
+def test_direct_profile_derives_targets_from_inventory_and_cartridge_adapter(tmp_path, monkeypatch):
     runtime, _, _ = bound_fixture(tmp_path)
     observed = runtime.adapter.observe()
     monkeypatch.setattr(
         "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
-        lambda actual, world: _corridor()
-        if actual is observed and world is not None
-        else pytest.fail("wrong derivation inputs"),
+        lambda actual, world: (
+            _corridor()
+            if actual is observed and world is not None
+            else pytest.fail("wrong derivation inputs")
+        ),
     )
     profile = derive_direct_full_pokedex_profile(runtime.profile, observed, _world())
     specs = {spec.kind: spec for spec in profile.providers}
@@ -170,9 +168,59 @@ def test_direct_profile_derives_targets_from_inventory_and_cartridge_adapter(
     } <= set(specs)
 
 
-def test_direct_profile_preserves_only_declared_generic_capture_capabilities(
-    tmp_path, monkeypatch
+@pytest.mark.parametrize(
+    ("source", "target", "item"),
+    (
+        (44, 45, ItemId.LEAF_STONE),
+        (58, 59, ItemId.FIRE_STONE),
+    ),
+)
+def test_direct_profile_falls_back_to_distinct_boxed_item_evolution_families(
+    tmp_path,
+    monkeypatch,
+    source: int,
+    target: int,
+    item: ItemId,
 ):
+    runtime, _, _ = bound_fixture(tmp_path)
+    observed = runtime.adapter.observe()
+    boxed = next(
+        specimen
+        for specimen in observed.collection_observation.specimens
+        if specimen.location is CollectionLocation.BOX
+    )
+    specimens = tuple(
+        replace(specimen, species_ref=red_species_ref(source)) if specimen is boxed else specimen
+        for specimen in observed.collection_observation.specimens
+    )
+    collection = replace(
+        observed.collection_observation,
+        owned_species=frozenset(
+            red_species_ref(number) for number in range(1, 152) if number != target
+        ),
+        specimens=specimens,
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
+        lambda actual, world: _corridor(),
+    )
+
+    profile = derive_direct_full_pokedex_profile(
+        runtime.profile,
+        replace(observed, collection_observation=collection),
+        _world(),
+    )
+
+    evolution = next(spec for spec in profile.providers if spec.kind is GoalKind.EVOLVE_SPECIES)
+    assert evolution.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+    assert evolution.parameters == {
+        "source_species_ref": red_species_ref(source),
+        "target_species_ref": red_species_ref(target),
+        "item_id": int(item),
+    }
+
+
+def test_direct_profile_preserves_only_declared_generic_capture_capabilities(tmp_path, monkeypatch):
     runtime, _, _ = bound_fixture(tmp_path)
     observed = runtime.adapter.observe()
     source = _local_discovery_profile()
@@ -193,19 +241,19 @@ def test_direct_profile_preserves_only_declared_generic_capture_capabilities(
             parameters["capture_species_numbers"] = [16, 19]
             parameters["indoor_fly_departure"] = True
         providers.append((spec.kind, spec.mechanic, parameters))
-    source = parse_red_goal_context_profile(build_red_goal_context_profile_payload(
-        profile_id=source.profile_id,
-        providers=tuple(providers),
-    ))
+    source = parse_red_goal_context_profile(
+        build_red_goal_context_profile_payload(
+            profile_id=source.profile_id,
+            providers=tuple(providers),
+        )
+    )
     monkeypatch.setattr(
         "pokemon_red_completion.red_full_pokedex_direct_profile._capture_corridor",
         lambda actual, world: _corridor(),
     )
 
     derived = derive_direct_full_pokedex_profile(source, observed, _world())
-    capture = next(
-        spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES
-    )
+    capture = next(spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
     assert {
         key: capture.parameters[key]
         for key in (
@@ -245,9 +293,7 @@ def test_direct_profile_does_not_invent_missing_capture_capabilities(tmp_path, m
     )
 
     derived = derive_direct_full_pokedex_profile(source, observed, _world())
-    capture = next(
-        spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES
-    )
+    capture = next(spec for spec in derived.providers if spec.kind is GoalKind.ACQUIRE_SPECIES)
     optional = {
         "cut_transport",
         "surf_transport",
@@ -274,9 +320,7 @@ def test_direct_profile_preserves_declared_evolution_transport(tmp_path, monkeyp
     source = bind_indoor_fly_departure_profile(source)
 
     derived = derive_direct_full_pokedex_profile(source, observed, _world())
-    evolution = next(
-        spec for spec in derived.providers if spec.kind is GoalKind.EVOLVE_SPECIES
-    )
+    evolution = next(spec for spec in derived.providers if spec.kind is GoalKind.EVOLVE_SPECIES)
     assert evolution.parameters["fly_transport"] is True
     assert evolution.parameters["indoor_fly_departure"] is True
 

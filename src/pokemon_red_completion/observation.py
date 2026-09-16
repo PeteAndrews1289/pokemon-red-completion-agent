@@ -659,6 +659,7 @@ class ItemId(IntEnum):
     ULTRA_BALL = 0x02
     GREAT_BALL = 0x03
     POKE_BALL = 0x04
+    MOON_STONE = 0x0A
     ANTIDOTE = 0x0B
     AWAKENING = 0x0E
     PARLYZ_HEAL = 0x0F
@@ -667,7 +668,9 @@ class ItemId(IntEnum):
     HYPER_POTION = 0x12
     POTION = 0x14
     REPEL = 0x1E
+    FIRE_STONE = 0x20
     THUNDER_STONE = 0x21
+    WATER_STONE = 0x22
     SUPER_REPEL = 0x38
     MAX_REPEL = 0x39
     OLD_AMBER = 0x1F
@@ -684,6 +687,7 @@ class ItemId(IntEnum):
     IRON = 0x25
     RARE_CANDY = 0x28
     X_ACCURACY = 0x2E
+    LEAF_STONE = 0x2F
     X_SPECIAL = 0x44
     CARD_KEY = 0x30
     FULL_HEAL = 0x34
@@ -4112,16 +4116,20 @@ class PokemonRedStateReader:
         moves = self.read_trainer_entry_moves(expected)
         if moves is None:
             return False
+
         def flags() -> tuple[int, ...]:
-            return tuple(self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i)
-                         for i in range(3))
+            return tuple(
+                self._memory.read_u8(int(RamAddress.ENEMY_BATTLE_STATUS_1) + i) for i in range(3)
+            )
+
         before = flags()
         if self.read_trainer_entry_moves(expected) != moves or flags() != before:
             raise SemanticStateError("Mirror Move commitment changed while reading")
         return not (before[0] & 0x77 or before[1] & 0x60 or before[2] & 0x08)
 
     def read_trainer_entry_speeds(
-        self, expected: RawGameState,
+        self,
+        expected: RawGameState,
     ) -> tuple[int, tuple[int, ...]] | None:
         """Current enemy speed and conservative post-switch party speeds.
 
@@ -4131,21 +4139,29 @@ class PokemonRedStateReader:
         """
         before = self.read()
         if (
-            before != expected or before.battle_state != 2 or (before.enemy_hp or 0) <= 0
-            or type(before.party_count) is not int or not 1 <= before.party_count <= 6
+            before != expected
+            or before.battle_state != 2
+            or (before.enemy_hp or 0) <= 0
+            or type(before.party_count) is not int
+            or not 1 <= before.party_count <= 6
             or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
         ):
             return None
+
         def values() -> tuple[int, tuple[int, ...]]:
             return self._read_u16_be(RamAddress.ENEMY_SPEED), tuple(
                 self._read_u16_be(int(RamAddress.PARTY_MON_1) + index * PARTY_STRUCT_STRIDE + 40)
                 for index in range(before.party_count or 0)
             )
+
         speeds = values()
         if not 1 <= speeds[0] <= 1023 or any(not 1 <= speed <= 999 for speed in speeds[1]):
             raise SemanticStateError("trainer entry speed domain differs")
-        if (self.read() != before or values() != speeds
-                or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN):
+        if (
+            self.read() != before
+            or values() != speeds
+            or self.read_battle_menu_state(before).phase is not BattleMenuPhase.MAIN
+        ):
             raise SemanticStateError("trainer entry speeds changed while reading")
         return speeds
 
@@ -4697,7 +4713,9 @@ class PokemonRedStateReader:
         if not 0 <= stage <= maximum or not 1 <= starter <= 190:
             raise SemanticStateError("final league scene fields are unavailable")
         return FinalLeagueScene(
-            map_id, stage, starter,
+            map_id,
+            stage,
+            starter,
             self._memory.read_u8(RamAddress.SIMULATED_JOYPAD_INDEX),
             bool(self._memory.read_u8(RamAddress.STATUS_FLAGS_5) & SCRIPTED_MOVEMENT_STATUS_MASK),
         )

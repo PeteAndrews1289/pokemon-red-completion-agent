@@ -112,8 +112,11 @@ def bind_collection_fly(
     travel_handlers: list[InterruptionHandler] = []
 
     if (
-        spec.mechanic not in {
-            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION, RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
+        spec.mechanic
+        not in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+            RedGoalMechanic.WILD_CORRIDOR_CAPTURE,
             RedGoalMechanic.MART_RESUPPLY,
         }
         or spec.parameters.get("fly_transport") is not True
@@ -148,10 +151,17 @@ def bind_collection_fly(
         return None
     landings = dict(red_fly_landings(router.world.rom))
     destinations: tuple[tuple[int, tuple[int, int]], ...]
-    if spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+    if spec.mechanic in {
+        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+    }:
         destinations = (
-            (int(MapId.CINNABAR_POKECENTER), (3, 3)),
-            (int(MapId.VERMILION_POKECENTER), (3, 3)),
+            ((int(MapId.CELADON_POKECENTER), (3, 3)),)
+            if spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+            else (
+                (int(MapId.CINNABAR_POKECENTER), (3, 3)),
+                (int(MapId.VERMILION_POKECENTER), (3, 3)),
+            )
         )
     else:
         target, x, y = (spec.parameters[key] for key in ("map_id", "player_x", "player_y"))
@@ -188,7 +198,9 @@ def bind_collection_fly(
         except RoutePlanningError:
             continue
         if plan.steps and _supported_plan(
-            plan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+            plan,
+            allow_cut=_cut_enabled(spec),
+            allow_surf=_surf_enabled(spec),
         ):
             chosen = town, projected, plan
             break
@@ -243,9 +255,15 @@ def bind_collection_fly(
             or after_fly.emulator_frames - before.emulator_frames >= router.maximum_emulator_frames
         ):
             raise Gen1FieldMoveError("Fly exhausted the collection transport budget")
-        travel_handler = bind_travel_capture_handler(router, spec, guarded_collection_route_handler(
-            actions, reader, route_name="collection Fly onward walk",
-        ))
+        travel_handler = bind_travel_capture_handler(
+            router,
+            spec,
+            guarded_collection_route_handler(
+                actions,
+                reader,
+                route_name="collection Fly onward walk",
+            ),
+        )
         travel_handlers.append(travel_handler)
         walk = RedSemanticTransportRoute(
             binding_ref="red-collection-fly-walk:" + spec.configuration_sha256,
@@ -262,10 +280,15 @@ def bind_collection_fly(
             emulator=runtime.emulator,
             interruption_handler=travel_handler,
             replanner=partial(
-                router._replan, allow_cut=_cut_enabled(spec), allow_surf=_surf_enabled(spec),
+                router._replan,
+                allow_cut=_cut_enabled(spec),
+                allow_surf=_surf_enabled(spec),
             ),
-            field_actions=(router.field_actions_for(spec)
-                           if _cut_enabled(spec) or _surf_enabled(spec) else None),
+            field_actions=(
+                router.field_actions_for(spec)
+                if _cut_enabled(spec) or _surf_enabled(spec)
+                else None
+            ),
             route_limits=_ROUTE_LIMITS,
         )
         walking = walk.route_binding()
@@ -273,6 +296,7 @@ def bind_collection_fly(
         passed = walking.verify(result).status.value == "succeeded"
         after = meter.checkpoint()
         from pokemon_red_completion.field_move_summary import FieldMoveSummary
+
         fields = FieldMoveSummary.from_evidence(result.evidence) or FieldMoveSummary()
         fields = fields.plus(FieldMoveSummary(flights=len(port.fly_receipts)))
         route_report = GoalExecutionReport(
@@ -311,7 +335,12 @@ def bind_collection_fly(
 
         destination_provider = EscortPreparedCaptureProvider(provider, runtime, actions)
     destination_provider = bind_travel_capture_destination(
-        router, spec, destination_provider, provider, fresh.observation, travel_handlers,
+        router,
+        spec,
+        destination_provider,
+        provider,
+        fresh.observation,
+        travel_handlers,
     )
     binding = RoutedSemanticGoalComposer(
         binding_ref="red-collection-fly-goal:" + origin + ":" + spec.configuration_sha256,

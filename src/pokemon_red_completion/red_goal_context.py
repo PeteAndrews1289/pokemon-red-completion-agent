@@ -170,6 +170,53 @@ RedBoxedLevelEvolutionGoalExecutor = Callable[
 ]
 
 
+@dataclass(frozen=True, slots=True)
+class RedBoxedItemEvolutionGoalRequest:
+    """Frozen storage and stone binding for a selected item evolution."""
+
+    precursor_internal_species_id: int
+    evolved_internal_species_id: int
+    source_box_index: int
+    precursor_box_slot: int
+    precursor_level: int
+    deposit_party_slot: int
+    deposit_internal_species_id: int
+    item_id: int
+
+    def __post_init__(self) -> None:
+        for name in (
+            "precursor_internal_species_id",
+            "evolved_internal_species_id",
+            "deposit_internal_species_id",
+            "item_id",
+            "precursor_level",
+        ):
+            value = getattr(self, name)
+            if type(value) is not int or not 1 <= value <= 0xFF:  # noqa: E721
+                raise RedGoalContextError(f"boxed item evolution {name} differs")
+        if (
+            type(self.source_box_index) is not int  # noqa: E721
+            or not 0 <= self.source_box_index < 12
+            or type(self.precursor_box_slot) is not int  # noqa: E721
+            or not 1 <= self.precursor_box_slot <= 20
+            or type(self.deposit_party_slot) is not int  # noqa: E721
+            or not 1 <= self.deposit_party_slot <= 6
+        ):
+            raise RedGoalContextError("boxed item evolution storage binding differs")
+        if self.deposit_internal_species_id in {
+            self.precursor_internal_species_id,
+            self.evolved_internal_species_id,
+            BLASTOISE_SPECIES_ID,
+        }:
+            raise RedGoalContextError("boxed item evolution deposit binding is unsafe")
+
+
+RedBoxedItemEvolutionGoalExecutor = Callable[
+    [RedBoxedItemEvolutionGoalRequest, CountingExecutor],
+    GoalExecutionReport,
+]
+
+
 @dataclass(slots=True)
 class RedGoalContextRuntime:
     """Loaded semantic adapter plus a deterministic executable-menu factory."""
@@ -188,6 +235,11 @@ class RedGoalContextRuntime:
         Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
     ) = None
     boxed_level_evolution_cross_box: bool = False
+    boxed_item_evolution_executor: RedBoxedItemEvolutionGoalExecutor | None = None
+    boxed_item_evolution_readiness: (
+        Callable[[RedGoalObservation], RedGoalSkillAvailability] | None
+    ) = None
+    boxed_item_evolution_cross_box: bool = False
     remaining_acquisition_demand: bool = False
     level_evolution_acquisition_edges: tuple[tuple[str, str], ...] = ()
     trainer_story_world: StrategicScenarioRouteWorld | None = None
@@ -196,11 +248,13 @@ class RedGoalContextRuntime:
     def bound_configuration_sha256(self, configuration_sha256: str) -> str:
         if self.registration_policy is None:
             return configuration_sha256
-        return canonical_sha256({
-            "schema": "pokemon.red.registered-provider.v1",
-            "provider_configuration_sha256": configuration_sha256,
-            "registration_policy_sha256": self.registration_policy.sha256,
-        })
+        return canonical_sha256(
+            {
+                "schema": "pokemon.red.registered-provider.v1",
+                "provider_configuration_sha256": configuration_sha256,
+                "registration_policy_sha256": self.registration_policy.sha256,
+            }
+        )
 
     def provider_for(self, kind: GoalKind, actions: CountingExecutor) -> RedGoalBindingProvider:
         """Build the declared mechanic; callers still need a fresh, verified offer."""
@@ -257,7 +311,9 @@ class RedGoalContextRuntime:
         return RedGoalContextProviderOffer(
             provider_type=_provider_contract_type(provider, spec),
             profile_sha256=self.profile.profile_sha256,
-            provider_configuration_sha256=self.bound_configuration_sha256(spec.configuration_sha256),
+            provider_configuration_sha256=self.bound_configuration_sha256(
+                spec.configuration_sha256
+            ),
             offer=wrapped.offer(observation),
         )
 
@@ -322,7 +378,8 @@ def build_red_goal_context_runtime(
         config=profile.manager_config,
         include_pp_restoration=any(
             spec.mechanic is RedGoalMechanic.FIELD_PP_RESTORE
-            or spec.parameters.get("include_pp_fallback") is True for spec in profile.providers
+            or spec.parameters.get("include_pp_fallback") is True
+            for spec in profile.providers
         ),
     )
     # Fail closed now if the envelope's claimed story frontier conflicts with
@@ -379,30 +436,60 @@ def _build_provider(
             from .red_champion_story import RedCartridgeChampionSkill
 
             return RedStoryGoalBindingProvider(
-                COMPLETION_QUEST, ObjectiveSkillRegistry((RedCartridgeChampionSkill(
-                    runtime, actions, runtime.trainer_story_world,
-                maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
-                recovery_controller=cast(str, spec.parameters.get(
-                    "recovery_controller", "critical-inclusive",
-                )),
-                ),)), runtime.observer,
+                COMPLETION_QUEST,
+                ObjectiveSkillRegistry(
+                    (
+                        RedCartridgeChampionSkill(
+                            runtime,
+                            actions,
+                            runtime.trainer_story_world,
+                            maximum_full_restores=cast(
+                                int, spec.parameters.get("maximum_full_restores", 0)
+                            ),
+                            recovery_controller=cast(
+                                str,
+                                spec.parameters.get(
+                                    "recovery_controller",
+                                    "critical-inclusive",
+                                ),
+                            ),
+                        ),
+                    )
+                ),
+                runtime.observer,
             )
         if spec.parameters.get("trainer_objective") in {
-            "defeat_lorelei", "defeat_bruno", "defeat_agatha", "defeat_lance",
+            "defeat_lorelei",
+            "defeat_bruno",
+            "defeat_agatha",
+            "defeat_lance",
         }:
             from .objective_skills import ObjectiveSkillRegistry
             from .red_trainer_story import RedCartridgeLoreleiSkill
 
             return RedStoryGoalBindingProvider(
                 COMPLETION_QUEST,
-                ObjectiveSkillRegistry((RedCartridgeLoreleiSkill(
-                    runtime, actions, runtime.trainer_story_world,
-                    objective_id=str(spec.parameters["trainer_objective"]),
-            maximum_full_restores=cast(int, spec.parameters.get("maximum_full_restores", 0)),
-            recovery_controller=cast(str, spec.parameters.get(
-                "recovery_controller", "critical-inclusive",
-            )),
-                ),)), runtime.observer,
+                ObjectiveSkillRegistry(
+                    (
+                        RedCartridgeLoreleiSkill(
+                            runtime,
+                            actions,
+                            runtime.trainer_story_world,
+                            objective_id=str(spec.parameters["trainer_objective"]),
+                            maximum_full_restores=cast(
+                                int, spec.parameters.get("maximum_full_restores", 0)
+                            ),
+                            recovery_controller=cast(
+                                str,
+                                spec.parameters.get(
+                                    "recovery_controller",
+                                    "critical-inclusive",
+                                ),
+                            ),
+                        ),
+                    )
+                ),
+                runtime.observer,
             )
         return RedStoryGoalBindingProvider(
             COMPLETION_QUEST,
@@ -424,6 +511,7 @@ def _build_provider(
         RedGoalMechanic.DIGLETT_EVOLUTION,
         RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
         RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
     }:
         return _team_provider(runtime, spec, actions)
     if mechanic is RedGoalMechanic.FIELD_RESTORE:
@@ -440,9 +528,14 @@ def _build_provider(
                 RedCombinedFieldRestoreGoalProvider,
                 RedFieldPpRestoreGoalProvider,
             )
+
             return RedCombinedFieldRestoreGoalProvider(
-                hp_provider, RedFieldPpRestoreGoalProvider(
-                    actions, runtime.reader, runtime.emulator, runtime.adapter,
+                hp_provider,
+                RedFieldPpRestoreGoalProvider(
+                    actions,
+                    runtime.reader,
+                    runtime.emulator,
+                    runtime.adapter,
                 ),
             )
         return hp_provider
@@ -457,7 +550,10 @@ def _build_provider(
         from .red_field_pp_restore import RedFieldPpRestoreGoalProvider
 
         return RedFieldPpRestoreGoalProvider(
-            actions, runtime.reader, runtime.emulator, runtime.adapter,
+            actions,
+            runtime.reader,
+            runtime.emulator,
+            runtime.adapter,
         )
     if mechanic is RedGoalMechanic.MART_RESUPPLY:
         return _mart_provider(runtime, spec, actions)
@@ -510,10 +606,14 @@ def _wild_provider(
             source_id=source_id,
             search_effort_surcharge=(
                 max(0, _integer(parameters, "maximum_legs") - 64) / 1_000
-                if parameters.get("capture_search_budget") == "bounded-search-v1" else 0.0
+                if parameters.get("capture_search_budget") == "bounded-search-v1"
+                else 0.0
             ),
-            required_capture_items=(required_wild_source_items(source_id)
-                if parameters.get("capture_access_requirements") is True else ()),
+            required_capture_items=(
+                required_wild_source_items(source_id)
+                if parameters.get("capture_access_requirements") is True
+                else ()
+            ),
             area_executor=area,
             actions=actions,
             emulator=runtime.emulator,
@@ -522,22 +622,34 @@ def _wild_provider(
             normalize_after_capture=area.finish_at_starting_endpoint,
             catalog=replace(
                 RED_ACQUISITION_CATALOG,
-                remaining_demand=(runtime.remaining_acquisition_demand
-                                  or runtime.registration_policy is not None),
+                remaining_demand=(
+                    runtime.remaining_acquisition_demand or runtime.registration_policy is not None
+                ),
                 registered_species=(
                     runtime.registration_policy.goal_registered(
                         runtime.adapter.observe().collection_observation,
-                    ) if runtime.registration_policy is not None else None
+                    )
+                    if runtime.registration_policy is not None
+                    else None
                 ),
                 protected_counts=(
                     tuple(sorted(runtime.registration_policy.protected_counts.items()))
-                    if runtime.registration_policy is not None else ()
+                    if runtime.registration_policy is not None
+                    else ()
                 ),
                 level_evolution_edges=runtime.level_evolution_acquisition_edges,
                 wild_source_species=(
-                    ((source_id, tuple(red_species_ref(number)
-                                      for number in cast(tuple[int, ...], local_captures))),)
-                    if local_captures is not None else ()
+                    (
+                        (
+                            source_id,
+                            tuple(
+                                red_species_ref(number)
+                                for number in cast(tuple[int, ...], local_captures)
+                            ),
+                        ),
+                    )
+                    if local_captures is not None
+                    else ()
                 ),
             ),
             policy=RedAreaExecutionPolicy(
@@ -566,7 +678,8 @@ def _wild_provider(
         maximum_encounters=_integer(parameters, "maximum_encounters"),
         source_species_numbers=(
             cast(tuple[int, ...], parameters["source_species_numbers"])
-            if "source_species_numbers" in parameters else None
+            if "source_species_numbers" in parameters
+            else None
         ),
     )
 
@@ -746,6 +859,7 @@ class _RedTeamGoalProvider:
             RedGoalMechanic.DIGLETT_EVOLUTION,
             RedGoalMechanic.TARGETED_PARTY_DEVELOPMENT,
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
         }:
             raise RedGoalContextError("team provider received an unsupported goal kind")
 
@@ -763,7 +877,11 @@ class _RedTeamGoalProvider:
             )
         policy = (
             None
-            if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+            if self.spec.mechanic
+            in {
+                RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+                RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+            }
             else self._policy(observation)
         )
         evolution_target = self._evolution_target()
@@ -777,6 +895,11 @@ class _RedTeamGoalProvider:
             self._boxed_evolution_request(observation)
             if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
             and not resume_evolution
+            else None
+        )
+        boxed_item_request = (
+            self._boxed_item_evolution_request(observation)
+            if self.spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
             else None
         )
         before_actions = self.actions.actions_executed
@@ -808,6 +931,23 @@ class _RedTeamGoalProvider:
                 ):
                     raise RedGoalContextError(
                         "boxed evolution report differs from measured execution"
+                    )
+                return report
+            if boxed_item_request is not None:
+                item_executor = self.runtime.boxed_item_evolution_executor
+                if item_executor is None:
+                    raise RedGoalContextError(
+                        "boxed item evolution executor disappeared after offer construction"
+                    )
+                report = item_executor(boxed_item_request, self.actions)
+                if not isinstance(report, GoalExecutionReport):
+                    raise RedGoalContextError("boxed item evolution executor returned no report")
+                if (
+                    report.actions_executed != self.actions.actions_executed - before_actions
+                    or report.frames_executed != self.runtime.emulator.frame_count - before_frames
+                ):
+                    raise RedGoalContextError(
+                        "boxed item evolution report differs from measured execution"
                     )
                 return report
             assert policy is not None
@@ -893,7 +1033,10 @@ class _RedTeamGoalProvider:
         evolution_target = self._evolution_target()
         if evolution_target is None:
             raise RedGoalContextError("evolution provider lost its target")
-        if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        if self.spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             return self._verify_boxed_evolution(before, after, report)
         target_index = _targeted_evolution_index(
             before.party.species_ids(),
@@ -941,10 +1084,16 @@ class _RedTeamGoalProvider:
             specimen.species_ref for specimen in after.collection_observation.specimens
         )
         registration = self.runtime.registration_policy
-        if (registration is not None and report.evidence.get("evolution_partial") is not True
+        if (
+            registration is not None
+            and report.evidence.get("evolution_partial") is not True
             and not registration.verify_evolution(
-                before.collection_observation, after.collection_observation, source_ref, target_ref,
-            )):
+                before.collection_observation,
+                after.collection_observation,
+                source_ref,
+                target_ref,
+            )
+        ):
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
         before_story = self.runtime.adapter.graph.completed_ids(before.game_state)
         after_story = self.runtime.adapter.graph.completed_ids(after.game_state)
@@ -972,13 +1121,18 @@ class _RedTeamGoalProvider:
             < before.collection.collection.pokedex_owned_count
         ):
             return GoalVerification.failed(GoalFailureReason.WORLD_STATE_DIVERGED)
+        level_requirement = (
+            _integer(self.spec.parameters, "evolution_level")
+            if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+            else 1
+        )
         if (
             report.actions_executed <= 0
             or after.raw.battle_state
             or not after.input_ready
             or after.party.fainted_count
             or len(evolved_party) != 1
-            or evolved_party[0].level < _integer(self.spec.parameters, "evolution_level")
+            or evolved_party[0].level < level_requirement
         ):
             return GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED)
         return GoalVerification.succeeded()
@@ -1023,11 +1177,12 @@ class _RedTeamGoalProvider:
         observation: RedGoalObservation,
     ) -> RedGoalSkillAvailability:
         raw = observation.raw
-        if (
-            raw.map_id not in {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
-            or raw.player_x != 3
-            or raw.player_y != 3
-        ):
+        allowed_maps = (
+            {MapId.CELADON_POKECENTER}
+            if self.spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+            else {MapId.CINNABAR_POKECENTER, MapId.VERMILION_POKECENTER}
+        )
+        if raw.map_id not in allowed_maps or raw.player_x != 3 or raw.player_y != 3:
             return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.MISSING_CAPABILITY)
         return self.resource_availability(observation)
 
@@ -1105,6 +1260,22 @@ class _RedTeamGoalProvider:
             if evolved_ref in living_refs:
                 return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
             return RedGoalSkillAvailability.available()
+        if self.spec.mechanic is RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+            if self.runtime.boxed_item_evolution_executor is None:
+                return RedGoalSkillAvailability.unavailable(
+                    GoalUnavailableReason.MISSING_CAPABILITY
+                )
+            if self.runtime.boxed_item_evolution_readiness is not None:
+                readiness = self.runtime.boxed_item_evolution_readiness(observation)
+                if not readiness.executable:
+                    return readiness
+            try:
+                self._boxed_item_evolution_request(observation)
+            except RedGoalContextError:
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+            if evolved_ref in living_refs:
+                return RedGoalSkillAvailability.unavailable(GoalUnavailableReason.NO_LEGAL_TARGET)
+            return RedGoalSkillAvailability.available()
         if self.kind is GoalKind.EVOLVE_SPECIES and (
             evolution_target is None
             or observation.party.species_ids().count(evolution_target[0]) != 1
@@ -1140,7 +1311,10 @@ class _RedTeamGoalProvider:
     def _evolution_target(self) -> tuple[int, int] | None:
         if self.spec.mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
             return DIGLETT_SPECIES_ID, DUGTRIO_SPECIES_ID
-        if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        if self.spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             return (
                 _internal_species_id(_text(self.spec.parameters, "source_species_ref")),
                 _internal_species_id(_text(self.spec.parameters, "target_species_ref")),
@@ -1188,9 +1362,14 @@ class _RedTeamGoalProvider:
             or not deposit_candidates
         ):
             raise RedGoalContextError("boxed evolution has no executable storage binding")
-        precursor = min(candidates, key=lambda item: (
-            item.container_index != current_box, item.container_index, item.slot_index,
-        ))
+        precursor = min(
+            candidates,
+            key=lambda item: (
+                item.container_index != current_box,
+                item.container_index,
+                item.slot_index,
+            ),
+        )
         deposit_slot, deposit_species = deposit_candidates[-1]
         return RedBoxedLevelEvolutionGoalRequest(
             precursor_internal_species_id=source_internal,
@@ -1201,10 +1380,82 @@ class _RedTeamGoalProvider:
             deposit_internal_species_id=deposit_species,
         )
 
+    def _boxed_item_evolution_request(
+        self,
+        observation: RedGoalObservation,
+    ) -> RedBoxedItemEvolutionGoalRequest:
+        if self.spec.mechanic is not RedGoalMechanic.TARGETED_ITEM_EVOLUTION:
+            raise RedGoalContextError("boxed item evolution request lacks its mechanic")
+        source_ref = _text(self.spec.parameters, "source_species_ref")
+        target_ref = _text(self.spec.parameters, "target_species_ref")
+        source_internal = _internal_species_id(source_ref)
+        target_internal = _internal_species_id(target_ref)
+        collection = observation.collection_observation
+        current_box = collection.current_box_index
+        candidates = tuple(
+            specimen
+            for specimen in collection.specimens
+            if specimen.species_ref == source_ref
+            and specimen.location is CollectionLocation.BOX
+            and (
+                specimen.container_index == current_box
+                or self.runtime.boxed_item_evolution_cross_box
+            )
+        )
+        deposit_candidates = tuple(
+            (index + 1, member.species_id)
+            for index, member in enumerate(observation.party.members)
+            if member.species_id
+            not in {
+                BLASTOISE_SPECIES_ID,
+                source_internal,
+                target_internal,
+            }
+            and any(
+                other_index != index and other.hp > 0
+                for other_index, other in enumerate(observation.party.members)
+            )
+        )
+        # Deposit occurs into the current box before a possible box switch.
+        current_box_has_room = (
+            current_box < len(collection.box_counts)
+            and collection.box_counts[current_box] < collection.box_capacity
+        )
+        if (
+            not candidates
+            or source_internal in observation.party.species_ids()
+            or observation.party.size != 6
+            or not deposit_candidates
+            or not current_box_has_room
+        ):
+            raise RedGoalContextError("boxed item evolution has no executable storage binding")
+        precursor = min(
+            candidates,
+            key=lambda item: (
+                item.container_index != current_box,
+                item.container_index,
+                item.slot_index,
+            ),
+        )
+        deposit_slot, deposit_species = deposit_candidates[-1]
+        return RedBoxedItemEvolutionGoalRequest(
+            precursor_internal_species_id=source_internal,
+            evolved_internal_species_id=target_internal,
+            source_box_index=precursor.container_index,
+            precursor_box_slot=precursor.slot_index + 1,
+            precursor_level=precursor.level,
+            deposit_party_slot=deposit_slot,
+            deposit_internal_species_id=deposit_species,
+            item_id=_integer(self.spec.parameters, "item_id"),
+        )
+
     def _binding_ref(self) -> str:
         if self.spec.mechanic is RedGoalMechanic.DIGLETT_EVOLUTION:
             return "pokemon.red:evolution:diglett-to-dugtrio"
-        if self.spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        if self.spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             source = red_species_number(_text(self.spec.parameters, "source_species_ref"))
             target = red_species_number(_text(self.spec.parameters, "target_species_ref"))
             return f"pokemon.red:evolution:national-{source:03d}-to-national-{target:03d}"
@@ -1298,10 +1549,15 @@ def _mart_provider(
         reader=runtime.reader,
         emulator=runtime.emulator,
         adapter=runtime.adapter,
-        funding_sale=(RedMartSurplusSale(
-            ItemId(_integer(sale, "item_id")), _integer(sale, "quantity"),
-            _integer(sale, "minimum_retained"),
-        ) if sale is not None else None),
+        funding_sale=(
+            RedMartSurplusSale(
+                ItemId(_integer(sale, "item_id")),
+                _integer(sale, "quantity"),
+                _integer(sale, "minimum_retained"),
+            )
+            if sale is not None
+            else None
+        ),
         affordable_ball_purchase=parameters.get("affordable_ball_purchase", False) is True,
     )
 
@@ -1365,6 +1621,8 @@ def _directions(parameters: Mapping[str, object], key: str) -> tuple[str, ...]:
 
 
 __all__ = (
+    "RedBoxedItemEvolutionGoalRequest",
+    "RedBoxedLevelEvolutionGoalRequest",
     "RedGoalContextError",
     "RedGoalContextProviderOffer",
     "RedGoalContextRuntime",

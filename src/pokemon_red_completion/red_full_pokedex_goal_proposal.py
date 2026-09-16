@@ -62,6 +62,9 @@ from pokemon_red_completion.red_live_safari import (
     build_red_live_safari_inventory,
 )
 from pokemon_red_completion.red_native_boxed_evolution import bind_native_boxed_evolution
+from pokemon_red_completion.red_native_boxed_item_evolution import (
+    bind_native_boxed_item_evolution,
+)
 from pokemon_red_completion.red_registration_policy import RedRegistrationPolicy
 from pokemon_red_completion.red_resource_goal_router import (
     RedResourceGoalRouter,
@@ -665,6 +668,7 @@ def _propose_red_full_pokedex_goals(
         elif spec.mechanic in {
             RedGoalMechanic.DIGLETT_EVOLUTION,
             RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
         }:
             candidate, diagnostic = _evolution_candidate(
                 inventory, spec, bindings, RED_ACQUISITION_CATALOG, observation, policy
@@ -807,12 +811,19 @@ def build_red_full_pokedex_player_observer(
         or runtime.registration_policy.completion_scope != "local_red"
     ):
         raise RedFullPokedexGoalProposalError("player requires explicit full-local Red policy")
-    if not any(
-        spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+    evolution_specs = tuple(
+        spec
         for spec in runtime.profile.providers
-    ):
+        if spec.kind is GoalKind.EVOLVE_SPECIES
+        and spec.mechanic
+        in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }
+    )
+    if len(evolution_specs) != 1:
         raise RedFullPokedexGoalProposalError(
-            "player requires a native level-evolution declaration",
+            "player requires one native targeted-evolution declaration",
         )
     runtime = replace(
         runtime,
@@ -821,13 +832,20 @@ def build_red_full_pokedex_player_observer(
             registration_policy=runtime.registration_policy,
         ),
     )
-    native = bind_native_boxed_evolution(
-        runtime,
-        world,
-        maximum_quanta=maximum_quanta,
-        allow_cross_box=True,
-        retain_quantum=retain_quantum,
-    )
+    if evolution_specs[0].mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION:
+        native = bind_native_boxed_evolution(
+            runtime,
+            world,
+            maximum_quanta=maximum_quanta,
+            allow_cross_box=True,
+            retain_quantum=retain_quantum,
+        )
+    else:
+        native = bind_native_boxed_item_evolution(
+            runtime,
+            world,
+            allow_cross_box=True,
+        )
     router = RedResourceGoalRouter(
         native,
         actions,

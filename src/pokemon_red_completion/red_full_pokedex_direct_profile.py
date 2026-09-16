@@ -20,6 +20,7 @@ from .goal_manager_context_catalog import GoalManagerContextCapture
 from .observation import PokemonRedStateReader
 from .red_acquisition import RED_ACQUISITION_CATALOG, RedAcquisitionKind
 from .red_collection import red_species_number, red_species_ref
+from .red_evolution_stones import BUYABLE_EVOLUTION_STONES
 from .red_goal_context import build_red_goal_context_runtime
 from .red_goal_context_profile import (
     RedGoalContextProfile,
@@ -88,10 +89,10 @@ def _evolution_capability_parameters(
 ) -> dict[str, object]:
     """Retain generic evolution transport without carrying its old target."""
     for spec in profile.providers:
-        if (
-            spec.kind is GoalKind.EVOLVE_SPECIES
-            and spec.mechanic is RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
-        ):
+        if spec.kind is GoalKind.EVOLVE_SPECIES and spec.mechanic in {
+            RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+            RedGoalMechanic.TARGETED_ITEM_EVOLUTION,
+        }:
             return {
                 key: spec.parameters[key]
                 for key in _EVOLUTION_CAPABILITY_PARAMETERS
@@ -127,6 +128,47 @@ def _level_evolution(
     if not candidates:
         raise RedFullPokedexDirectProfileError(
             "catalog origin has no missing native boxed level evolution"
+        )
+    return min(candidates, key=lambda row: (row[1], row[0], row[2]))
+
+
+def _item_evolution(
+    observation: RedGoalObservation,
+) -> tuple[int, int, int]:
+    """Choose one missing boxed, buyable stone evolution from cartridge truth."""
+
+    owned = observation.collection_observation.owned_species
+    boxed = {
+        specimen.species_ref
+        for specimen in observation.collection_observation.specimens
+        if specimen.location is CollectionLocation.BOX
+    }
+    candidates: list[tuple[int, int, int]] = []
+    for method in RED_ACQUISITION_CATALOG.methods:
+        if (
+            method.kind is not RedAcquisitionKind.EVOLUTION
+            or method.consumes_species_ref is None
+            or method.species_ref in owned
+            or method.consumes_species_ref not in boxed
+        ):
+            continue
+        matching = tuple(
+            offer
+            for offer in BUYABLE_EVOLUTION_STONES.values()
+            if method.source_id == offer.acquisition_source_id
+            and method.required_item_ref == offer.catalog_item_ref
+        )
+        if len(matching) == 1:
+            candidates.append(
+                (
+                    red_species_number(method.consumes_species_ref),
+                    red_species_number(method.species_ref),
+                    int(matching[0].item_id),
+                )
+            )
+    if not candidates:
+        raise RedFullPokedexDirectProfileError(
+            "catalog origin has no missing native boxed level evolution or buyable item evolution"
         )
     return min(candidates, key=lambda row: (row[1], row[0], row[2]))
 
@@ -199,19 +241,28 @@ def derive_direct_full_pokedex_profile(
         raise TypeError("direct full-Pokédex profile needs a Red observation")
     if not isinstance(world, StrategicScenarioRouteWorld):
         raise TypeError("direct full-Pokédex profile needs cartridge route geometry")
-    source, target, level = _level_evolution(observation)
+    try:
+        source, target, level = _level_evolution(observation)
+    except RedFullPokedexDirectProfileError:
+        source, target, item_id = _item_evolution(observation)
+        evolution_mechanic = RedGoalMechanic.TARGETED_ITEM_EVOLUTION
+        evolution_parameters: dict[str, object] = {
+            "source_species_ref": red_species_ref(source),
+            "target_species_ref": red_species_ref(target),
+            "item_id": item_id,
+        }
+    else:
+        evolution_mechanic = RedGoalMechanic.TARGETED_LEVEL_EVOLUTION
+        evolution_parameters = {
+            "source_species_ref": red_species_ref(source),
+            "target_species_ref": red_species_ref(target),
+            "evolution_level": level,
+        }
     corridor = _capture_corridor(observation, world)
     capture_parameters = corridor.profile_parameters()
     capture_parameters.update(_capture_capability_parameters(profile))
-    evolution_parameters: dict[str, object] = {
-        "source_species_ref": red_species_ref(source),
-        "target_species_ref": red_species_ref(target),
-        "evolution_level": level,
-    }
     evolution_parameters.update(_evolution_capability_parameters(profile))
-    providers: dict[
-        GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]
-    ] = {
+    providers: dict[GoalKind, tuple[GoalKind, RedGoalMechanic, Mapping[str, object]]] = {
         spec.kind: (
             spec.kind,
             spec.mechanic,
@@ -227,7 +278,7 @@ def derive_direct_full_pokedex_profile(
     )
     providers[GoalKind.EVOLVE_SPECIES] = (
         GoalKind.EVOLVE_SPECIES,
-        RedGoalMechanic.TARGETED_LEVEL_EVOLUTION,
+        evolution_mechanic,
         evolution_parameters,
     )
     return parse_red_goal_context_profile(

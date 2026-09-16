@@ -149,9 +149,7 @@ def _fishing_candidate(binding_ref: str, *, travel: float) -> LivingDexOptionCan
 def _model() -> LivingDexOptionValueModel:
     feature_version = 4
     names = option_feature_names(feature_version)
-    coefficients = np.zeros(
-        (len(names), len(LIVING_DEX_OPTION_OUTCOME_NAMES)), dtype=np.float64
-    )
+    coefficients = np.zeros((len(names), len(LIVING_DEX_OPTION_OUTCOME_NAMES)), dtype=np.float64)
     coefficients[names.index("kind.acquire"), 0] = 10.0
     return LivingDexOptionValueModel(
         coefficients=coefficients,
@@ -199,9 +197,7 @@ def test_mixed_menu_exposes_real_families_without_private_identity_or_actions() 
 
     assert calls == []
     assert len(options.menu.candidates) == 4
-    assert {
-        item.features.kind for item in options.menu.candidates
-    } == {
+    assert {item.features.kind for item in options.menu.candidates} == {
         LivingDexOptionKind.ACQUIRE,
         LivingDexOptionKind.RESUPPLY,
         LivingDexOptionKind.RESTORE,
@@ -350,6 +346,27 @@ def test_forced_singleton_preserves_storage_and_economy_guards() -> None:
     assert calls == []
 
 
+def test_forced_singleton_allows_acquisition_at_exact_storage_gate() -> None:
+    calls: list[str] = []
+    fishing = supplemental_live_option(
+        _binding(
+            GoalKind.ACQUIRE_SPECIES,
+            binding_ref="private:red:fishing-map-23",
+            calls=calls,
+        ),
+        _fishing_candidate("provider-row", travel=0.2),
+    )
+
+    forced = build_red_live_forced_singleton(
+        situation=_situation(storage=0.75),
+        binding_set=_no_ordinary_bindings(),
+        supplements=(fishing,),
+    )
+
+    assert forced.binding.kind is GoalKind.ACQUIRE_SPECIES
+    assert calls == []
+
+
 @pytest.mark.parametrize("supplement_count", (0, 1))
 def test_mixed_menu_preserves_ordinary_families_with_zero_or_one_supplements(
     supplement_count,
@@ -380,9 +397,7 @@ def test_mixed_menu_preserves_ordinary_families_with_zero_or_one_supplements(
     assert calls == []
     assert options.public_dict()["ordinary_candidate_count"] == 2
     assert options.public_dict()["supplemental_candidate_count"] == supplement_count
-    kinds = {
-        item.features.kind for item in options.menu.candidates
-    }
+    kinds = {item.features.kind for item in options.menu.candidates}
     assert kinds >= {LivingDexOptionKind.RESUPPLY, LivingDexOptionKind.RESTORE}
     assert (LivingDexOptionKind.ACQUIRE in kinds) is bool(supplement_count)
 
@@ -437,12 +452,8 @@ def test_model_can_select_from_supplemental_options_without_an_ordinary_goal() -
         situation=_situation(resources=0.2),
         binding_set=_no_ordinary_bindings(),
         supplements=(
-            supplemental_live_option(
-                first, _fishing_candidate("provider-row-0", travel=0.1)
-            ),
-            supplemental_live_option(
-                second, _fishing_candidate("provider-row-1", travel=0.8)
-            ),
+            supplemental_live_option(first, _fishing_candidate("provider-row-0", travel=0.1)),
+            supplemental_live_option(second, _fishing_candidate("provider-row-1", travel=0.8)),
         ),
         model_feature_version=4,
         ordering_seed_sha256="c" * 64,
@@ -605,9 +616,36 @@ def test_full_storage_without_relief_masks_all_acquisition_candidates() -> None:
     )
 
     assert calls == []
-    assert {
-        item.features.kind for item in options.menu.candidates
-    } == {LivingDexOptionKind.RESUPPLY, LivingDexOptionKind.RESTORE}
+    assert {item.features.kind for item in options.menu.candidates} == {
+        LivingDexOptionKind.RESUPPLY,
+        LivingDexOptionKind.RESTORE,
+    }
+
+
+def test_exact_storage_gate_keeps_one_bounded_acquisition_available() -> None:
+    calls: list[str] = []
+    fishing = _binding(
+        GoalKind.ACQUIRE_SPECIES,
+        binding_ref="private:red:fishing-map-23",
+        calls=calls,
+    )
+    options = build_red_live_option_set(
+        situation=_situation(storage=0.75),
+        binding_set=_ordinary_bindings(calls),
+        supplements=(
+            supplemental_live_option(
+                fishing,
+                _fishing_candidate("provider-row", travel=0.2),
+            ),
+        ),
+        model_feature_version=4,
+        ordering_seed_sha256="b" * 64,
+        economy_snapshot=EconomySnapshot(58, ()),
+        target_cash=400,
+    )
+
+    assert LivingDexOptionKind.ACQUIRE in {item.features.kind for item in options.menu.candidates}
+    assert calls == []
 
 
 def test_critical_storage_with_relief_forces_manage_storage() -> None:

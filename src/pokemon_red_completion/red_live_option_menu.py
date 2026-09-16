@@ -226,7 +226,10 @@ def build_red_live_forced_singleton(
         safety = CompletionFirstGoalTeacher()
     if not isinstance(safety, CompletionFirstGoalTeacher):
         raise TypeError("forced singleton needs a safety policy")
-    if situation.storage_pressure >= safety.storage_gate:
+    # The configured Red pressure reaches the gate with two active-box slots
+    # still free.  One bounded acquisition remains safe at that exact boundary;
+    # mask only once the pressure exceeds it (one or zero slots remain).
+    if situation.storage_pressure > safety.storage_gate:
         raise RedLiveOptionMenuError("forced acquisition singleton is masked by storage safety")
 
     supplement = supplements[0]
@@ -431,8 +434,10 @@ def build_red_live_option_set(
             "control recovery must remain outside learned mixed-family authority"
         )
     available_kinds = {binding.kind for binding in binding_set.bindings}
+    # Equality is the measured two-slot Red boundary, where one acquisition is
+    # still safe.  Above the gate, require explicit storage relief.
     mask_acquisitions = (
-        situation.storage_pressure >= safety.storage_gate
+        situation.storage_pressure > safety.storage_gate
         and GoalKind.MANAGE_STORAGE not in available_kinds
     )
     rows: list[tuple[ExecutableGoalBinding, LivingDexOptionCandidate, bool]] = []
