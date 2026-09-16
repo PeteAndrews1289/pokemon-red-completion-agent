@@ -84,6 +84,7 @@ def _args(tmp_path: Path, *, two_captures: bool = False) -> SimpleNamespace:
     return SimpleNamespace(
         rom=tmp_path / "red.gb",
         capture_dir=[capture_dir],
+        capture_state=[],
         output=tmp_path / "expected.jsonl",
         journal_dir=tmp_path / "journal",
         failure_report=tmp_path / "failures.json",
@@ -172,6 +173,27 @@ def test_local_only_source_skips_remote_requirement_but_keeps_clean_guard(
     SCRIPT["_run"](args)
 
     assert checks == ["clean"]
+
+
+def test_exact_capture_selection_does_not_expand_the_source_directory(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    args = _args(tmp_path, two_captures=True)
+    selected = args.capture_dir[0] / "one.state"
+    args.capture_dir = []
+    args.capture_state = [selected]
+    _patch_common(monkeypatch)
+    monkeypatch.setitem(
+        SCRIPT_GLOBALS,
+        "collect_red_battle_outcome_example",
+        lambda capture, **kwargs: _collection(capture, kwargs["minimum_pre_attack_frames"]),
+    )
+
+    report = SCRIPT["_run"](args)
+
+    assert report["captures_presented"] == 1
+    assert report["trials_presented"] == 2
 
 
 def test_existing_output_without_complete_journal_fails_before_input(

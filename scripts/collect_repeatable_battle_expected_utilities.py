@@ -49,7 +49,14 @@ class RepeatableBattleExpectedUtilityCollectionError(RuntimeError):
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--rom", type=Path, default=None, help="otherwise POKEMON_RED_ROM")
-    parser.add_argument("--capture-dir", type=Path, action="append", required=True)
+    parser.add_argument("--capture-dir", type=Path, action="append", default=[])
+    parser.add_argument(
+        "--capture-state",
+        type=Path,
+        action="append",
+        default=[],
+        help="select an exact authenticated .state file instead of a whole directory",
+    )
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--journal-dir", type=Path, required=True)
     parser.add_argument("--failure-report", type=Path, required=True)
@@ -85,7 +92,7 @@ def _run(args: argparse.Namespace) -> dict[str, object]:
             "journal must remain outside the repository"
         )
 
-    pairs = _capture_pairs(args.capture_dir)
+    pairs = _capture_pairs(args.capture_dir, getattr(args, "capture_state", []))
     captures = tuple(open_battle_scenario_capture(*pair) for pair in pairs)
     if any(capture.manifest.partition is ScenarioPartition.TEST for capture in captures):
         raise RepeatableBattleExpectedUtilityCollectionError(
@@ -322,7 +329,10 @@ def _frame_targets(value: list[int] | None) -> tuple[int, ...]:
     return targets
 
 
-def _capture_pairs(directories: list[Path]) -> tuple[tuple[Path, Path], ...]:
+def _capture_pairs(
+    directories: list[Path],
+    states: list[Path],
+) -> tuple[tuple[Path, Path], ...]:
     pairs = []
     for directory in directories:
         if not directory.is_dir():
@@ -336,6 +346,17 @@ def _capture_pairs(directories: list[Path]) -> tuple[tuple[Path, Path], ...]:
                     "capture state is unavailable"
                 )
             pairs.append((state, manifest))
+    for state in states:
+        if state.suffix != ".state" or not state.is_file():
+            raise RepeatableBattleExpectedUtilityCollectionError(
+                "selected capture state is unavailable"
+            )
+        manifest = Path(f"{state}.json")
+        if not manifest.is_file():
+            raise RepeatableBattleExpectedUtilityCollectionError(
+                "selected capture manifest is unavailable"
+            )
+        pairs.append((state, manifest))
     if not pairs:
         raise RepeatableBattleExpectedUtilityCollectionError(
             "no battle captures were discovered"
