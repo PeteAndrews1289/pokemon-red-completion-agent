@@ -98,10 +98,11 @@ class RedLiveOptionMenuError(ValueError):
 
 
 class RedLiveOptionSelectionMode(StrEnum):
-    """Whether hard safety or the learned model selected the private binding."""
+    """Which authority selected the private binding."""
 
     DETERMINISTIC_SAFETY = "deterministic_safety"
     MODEL_EXPLORATION = "model_exploration"
+    EQUIVALENT_EXPLORATION = "equivalent_exploration"
 
 
 @dataclass(frozen=True, slots=True)
@@ -374,6 +375,25 @@ class RedLiveOptionChoice:
             or sum(value > 0.0 for value in self.probabilities) != 1
         ):
             raise RedLiveOptionMenuError("safety choice retained model authority")
+        if self.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION:
+            available = self.options.menu.available_indices
+            if (
+                len(available) < 2
+                or any(value is not None for value in self.scores)
+                or len({
+                    self.options.menu.candidate_vector(index)
+                    for index in available
+                }) != 1
+                or any(
+                    not math.isclose(
+                        probability,
+                        1.0 / len(available) if index in available else 0.0,
+                        abs_tol=1e-12,
+                    )
+                    for index, probability in enumerate(self.probabilities)
+                )
+            ):
+                raise RedLiveOptionMenuError("equivalent exploration differs")
 
     @property
     def selected_binding(self) -> ExecutableGoalBinding:
@@ -603,15 +623,25 @@ def select_red_live_option(
             model.model_sha256,
         )
 
-    # Distinct private targets are not a learnable preference when every
-    # portable input is identical. Inspect such menus, but do not spend a query
-    # or create a random-target result labeled as a model-informed choice.
+    # Identical inputs cannot express a target preference. Sample uniformly
+    # from the real options, with a separate mode and no model query.
     if len({
-        options.menu.candidate_vector(i, feature_version=model.feature_version)
+        options.menu.candidate_vector(i)
         for i in options.menu.available_indices
     }) < 2:
-        raise RedLiveOptionMenuError(
-            "mixed live candidates have no distinguishable semantic features"
+        available = options.menu.available_indices
+        probabilities = tuple(
+            1.0 / len(available) if index in available else 0.0
+            for index in range(len(options.bindings))
+        )
+        return RedLiveOptionChoice(
+            options,
+            random.Random(seed).choice(available),
+            RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION,
+            (None,) * len(options.bindings),
+            probabilities,
+            seed,
+            model.model_sha256,
         )
     raw_scores = model.scores(options.menu, utility)
     if len(raw_scores) != len(options.bindings):

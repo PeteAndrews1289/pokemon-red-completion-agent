@@ -100,9 +100,9 @@ def main() -> None:
         "maximum_actions": maximum_actions,
         "maximum_frames": maximum_frames,
         "initial_profile_sha256": profile.profile_sha256,
-        "goal_authority": "model",
+        "goal_authority": "model_or_declared_equivalent_exploration",
         "capture_destination_authority": "model_over_up_to_eight_observed_routes",
-        "evolution_target_authority": "deterministic_catalog",
+        "evolution_target_authority": "model_for_contrasts_uniform_for_equivalent_targets",
         "battle_move_authority": "existing_heuristic_controller",
     }
     with PyBoyAdapter(Path(plan["rom"]["path"]), watch=False, speed=None) as emulator:

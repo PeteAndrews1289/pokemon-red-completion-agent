@@ -127,7 +127,7 @@ def _no_ordinary_bindings() -> GoalBindingSet:
     )
 
 
-def test_private_target_variants_without_semantic_contrast_stop_before_query(monkeypatch):
+def test_private_target_variants_with_equal_features_sample_without_model_query(monkeypatch):
     calls = []
     bindings = tuple(_binding(GoalKind.ACQUIRE_SPECIES, binding_ref=f"target-{i}", calls=calls)
                      for i in range(2))
@@ -141,12 +141,20 @@ def test_private_target_variants_without_semantic_contrast_stop_before_query(mon
     )
 
     def forbidden(*args, **kwargs):
-        raise AssertionError("aliased targets queried the model or drew a selection")
+        raise AssertionError("equal targets queried the model scorer")
 
     monkeypatch.setattr(LivingDexOptionValueModel, "scores", forbidden)
     monkeypatch.setattr(random.Random, "choices", forbidden)
-    with pytest.raises(RedLiveOptionMenuError, match="no distinguishable semantic features"):
-        select_red_live_option(_model(), options, seed=1)
+    first = select_red_live_option(_model(), options, seed=1)
+    again = select_red_live_option(_model(), options, seed=1)
+    assert first.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION
+    assert first.selected_candidate_index == again.selected_candidate_index
+    assert first.probabilities == (0.5, 0.5)
+    assert first.scores == (None, None)
+    assert first.selected_binding.binding_ref == (
+        options.bindings[first.selected_candidate_index].binding_ref
+    )
+    assert "target-" not in str(first.public_dict())
     assert calls == []
 
 

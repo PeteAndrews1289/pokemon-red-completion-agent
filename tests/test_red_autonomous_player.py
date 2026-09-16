@@ -285,7 +285,7 @@ def test_mutating_menu_is_rejected_before_model_query(tmp_path):
     assert state["selected"] == []
 
 
-def test_semantically_aliased_menu_retains_terminal_without_query_intent(tmp_path, monkeypatch):
+def test_semantically_aliased_menu_executes_only_saved_choice_as_support(tmp_path, monkeypatch):
     from pokemon_red_completion.living_dex_option_value import LivingDexOptionValueModel
 
     output = tmp_path / "aliased"
@@ -307,10 +307,18 @@ def test_semantically_aliased_menu_retains_terminal_without_query_intent(tmp_pat
         model=_model(), output=output, snapshot=snapshot, observe=aliased_observe,
         seed=17, provenance={},
     )
-    assert result["stop_reason"] == "menu_unavailable"
-    assert result["executed_decisions"] == 0
-    assert (output / "step-000/terminal.state").read_bytes() == b"0"
-    assert "semantic features" in (output / "step-000/admission-failure.json").read_text()
-    assert not (output / "step-000/intent.json").exists()
-    assert not (output / "step-000/decision.json").exists()
-    assert state["selected"] == []
+    assert result["stop_reason"] == "decision_budget"
+    assert result["executed_decisions"] == 3
+    assert result["model_decisions"] == 0
+    assert result["support_decisions"] == 3
+    assert state["selected"]
+    assert (output / "step-002/terminal.state").read_bytes() == b"3"
+    for ordinal, selected in enumerate(state["selected"]):
+        step = output / f"step-{ordinal:03d}"
+        assert json.loads((step / "intent.json").read_text())["query_may_be_consumed"] is False
+        decision = json.loads((step / "decision.json").read_text())
+        assert decision["mode"] == "equivalent_exploration"
+        assert decision["selected_candidate_index"] == selected
+        outcome = json.loads((step / "outcome.json").read_text())
+        assert outcome["learning_eligible"] is False
+        assert outcome["support_role"] == "equivalent_goal_exploration"

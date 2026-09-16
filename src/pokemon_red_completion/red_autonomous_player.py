@@ -149,11 +149,6 @@ def run_autonomous_options(
                 raise ValueError("menu construction changed the game")
             if len(options.menu.available_indices) < 2:
                 raise ValueError("autonomous decision requires real alternatives")
-            if len({
-                options.menu.candidate_vector(i, feature_version=model.feature_version)
-                for i in options.menu.available_indices
-            }) < 2:
-                raise ValueError("autonomous candidates have no distinguishable semantic features")
         except Exception as error:
             _record(
                 step / "admission-failure.json",
@@ -174,7 +169,10 @@ def run_autonomous_options(
                 "state_sha256": before.sha256,
                 "model_sha256": model.model_sha256,
                 "selection_seed": decision_seed,
-                "query_may_be_consumed": True,
+                "query_may_be_consumed": len({
+                    options.menu.candidate_vector(i)
+                    for i in options.menu.available_indices
+                }) > 1,
             },
         )
         # Keep persistence adjacent to selection. No enum assertion, selected
@@ -186,7 +184,10 @@ def run_autonomous_options(
             and choice.selected_binding.kind is GoalKind.MANAGE_STORAGE
         )
         if (
-            choice.mode is not RedLiveOptionSelectionMode.MODEL_EXPLORATION
+            choice.mode not in {
+                RedLiveOptionSelectionMode.MODEL_EXPLORATION,
+                RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION,
+            }
             and not deterministic_storage
         ):
             stop = "safety_boundary_requires_separate_recovery"
@@ -217,7 +218,12 @@ def run_autonomous_options(
                 "selected_kind": selected.kind.value,
                 "choice": choice.public_dict(),
                 "learning_eligible": choice.mode is RedLiveOptionSelectionMode.MODEL_EXPLORATION,
-                "support_role": ("deterministic_storage_safety" if deterministic_storage else None),
+                "support_role": (
+                    "deterministic_storage_safety"
+                    if deterministic_storage else
+                    "equivalent_goal_exploration"
+                    if choice.mode is RedLiveOptionSelectionMode.EQUIVALENT_EXPLORATION else None
+                ),
                 "before_state_sha256": before.sha256,
                 "terminal_state_sha256": terminal.sha256,
                 "before": dict(before.facts),
