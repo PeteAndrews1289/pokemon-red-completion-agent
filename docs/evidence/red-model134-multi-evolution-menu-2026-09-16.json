@@ -1,0 +1,68 @@
+{
+  "schema": "pokemon.red.multi-evolution-menu-qualification.v1",
+  "session": "2026-09-16-model134-multi-evolution-menu",
+  "status": "engineering_qualified_semantic_aliasing_stop",
+  "source_commit": "aba60b99f3b5bad3889ab2f777356363f6dc94b7",
+  "source_bundle_sha256": "2579775544f06ac7ce5c24d3ba32218bd67ad22fb70d3cd91a38f58f43699bea",
+  "mission_check": {
+    "capability": "Enumerate executable missing stone-evolution goals rather than one catalog-selected target.",
+    "authority": "Separate target-bound executors enable future target selection, but no live choice or authority promotion occurred.",
+    "transfer_test": "ROM-free two-family, changed-resource, protected-precursor, routed-profile and cartridge-edge cases; not cross-title transfer.",
+    "cheapest_falsifier": "Fewer than two executable targets, or identical policy inputs despite distinct private bindings.",
+    "time_box": "One session, two hours.",
+    "stop": "Stop before query or gameplay on semantic aliasing, mutation, false availability or identity leakage."
+  },
+  "inspection": {
+    "status": "verified_action_free",
+    "state_sha256": "99690264b5819d201de6546444ef160a1ad8cfd329cc0cf0e24ac433f3cdffba",
+    "model_sha256": "1a18c9327475411f2edc59a3f5cdc05cb3448cfb0fa233202996d8a70071ddd1",
+    "menu_sha256": "0905ef0d6623d98c4f28ba9c8a9caab21e0118ee07650f32b736a3a0c9ad4506",
+    "executable_candidates": 5,
+    "distinct_semantic_candidates": 1,
+    "targets_national": [59, 62, 91, 103, 121],
+    "planned_spend_each": 2100,
+    "cash": 2298,
+    "registered_species": 93,
+    "route_denominator": 124,
+    "specimens": 74,
+    "controller_actions": 0,
+    "emulator_frames": 0,
+    "model_queries": 0,
+    "public_identity_fields": 0,
+    "full_snapshot_unchanged": true,
+    "new_run_started": false
+  },
+  "validation": {
+    "targeted_rom_free_tests_passed": 113,
+    "type_checked_source_files": 4,
+    "lint": "passed",
+    "full_suite_run": false,
+    "verified_behaviors": [
+      "Five target profiles do not reuse the legacy single-target executor.",
+      "Per-target held-stone or purchase quotes remain paired through neutral permutation.",
+      "Unaffordable purchases, full bags, protected precursors and registered targets stay unavailable.",
+      "Loaded-cartridge disagreement fails closed and partial probe mutation is detected.",
+      "Semantically identical choices stop before scoring, random sampling and query intent; the runner retains its terminal."
+    ]
+  },
+  "learning_delta": {
+    "new_examples": 0,
+    "new_successes": 0,
+    "new_registrations": 0,
+    "fits": 0,
+    "authority_promotions": 0,
+    "current_settled_examples": 134,
+    "current_successes": 91,
+    "current_economy_qualified_examples": 55
+  },
+  "reviewers": {
+    "flash": "3.8 Flash High visible in app; navigation failed before submission; no contribution or refreshed quota.",
+    "claude": "Not used; quota not queried."
+  },
+  "next": "Qualify explicitly labelled equivalent-target exploration without a learned-preference claim, then one new bounded Model134 continuation if qualified. Do not invent identity features or train unexecuted alternatives.",
+  "limitations": [
+    "Readiness is not live execution success; the item-departure repair still lacks live validation.",
+    "Five equivalent feature vectors cannot establish learned target preference.",
+    "No fresh-start Red completion, independent evaluation, cross-title transfer or GitHub publication occurred."
+  ]
+}

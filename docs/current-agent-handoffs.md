@@ -3,19 +3,16 @@
 Read [HANDOFF.md](../HANDOFF.md), [active state](../ACTIVE_PRODUCT_STATE.md),
 [roles](../AGENT_COORDINATION.md) and [workflow](three-agent-workflow.md).
 
-The autonomous collection runner completed two consecutive model-selected goals with no reset:
-Vileplume evolution and purchase of seven Great Balls. The third observation stopped before a
-query because its menu lacked distinct executable candidates. No teacher-selected fallback ran.
+Five native stone-evolution targets now bind independently from the healed Model134 terminal.
+Action-free cartridge inspection proved five executable references, each quoted at 2100 cash,
+but all project to one semantic input. No model query, gameplay, fit or registration occurred.
+Model134 remains 134 examples/91 successes, with Red at 93/124 registrations and 2298 cash.
 
-Model123 remains 123 examples/84 successes. Two raw outcomes are retained but not fitted.
-The endpoint has 90/124 registrations, 67 living species, 71 specimens, 228 cash and 11 Great Balls.
-Its active box has 19 specimens. Evolution targets and battle mechanics remain deterministic.
+If a focused review is useful next, challenge the equivalent-target exploration contract:
+do not confuse sampled ties with learned preference, invent identity features, train unplayed
+alternatives, or let target quotes detach from selected executors. Existing learned resource
+contrasts must remain intact. Codex owns implementation and outcome verification.
 
-Next: admit the exact two outcomes, expose model-selectable storage and earning prerequisites,
-then one bounded continuation from the earned state. Do not replay the completed actions.
-107 targeted tests passed; no full-suite or independent-evaluation claim.
-
-No Flash or Claude review was used this session; quota was not refreshed.
-Sol High, Fast off is sufficient for the next scoped implementation.
-
-[Session evidence](evidence/red-model123-autonomous-collection-2026-09-16.json).
+Flash app navigation failed before submission; no review is pending and no new quota was read.
+Claude was unused. Sol High, Fast off is sufficient for this scoped next implementation.
+[Session evidence](evidence/red-model134-multi-evolution-menu-2026-09-16.json).

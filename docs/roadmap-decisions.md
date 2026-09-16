@@ -1,5 +1,19 @@
 # Roadmap baseline and deviations
 
+## September 16 — expose evolution targets; separate ties from learned preference
+
+The [action-free inventory](evidence/red-model134-multi-evolution-menu-2026-09-16.json)
+found five feasible stone targets hidden by deterministic catalog selection. Their native
+executors and per-target quotes are now exposed, but all five have identical policy vectors.
+The current feature-distinction falsifier fired before any query, input or fit. Counters,
+stage exits, fresh-Red acceptance and later-title order remain unchanged.
+
+Next qualify explicit equivalent-target exploration rather than inventing identity-derived
+features just to pass a contrast gate. Preserve model scoring when real resource/effort contrasts
+exist, label a tie honestly, persist the sampled target before input and retain only its actual
+outcome. Any subsequent one-goal continuation needs a new plan, not a replay. This next contract
+is not yet implemented and the current guard still blocks all-identical menus.
+
 ## September 15 — connect model choices to an autonomous development loop
 
 Pete explicitly directed work toward autonomous model decision making. The next experiment

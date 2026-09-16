@@ -1,29 +1,31 @@
-# Video narrative: test a reusable switching response without a cartridge
+# Video narrative: real alternatives, honest ties
 
 This is an AI-assisted engineering project directed by Pete Andrews.
 
 ## Latest episode
 
-Start with the retained prior failure: Campaign B spent 893 actions/80,081 frames and exhausted
-the active battler's moves. The failed identity stays consumed. This episode runs no cartridge.
+Start with the healed Center save: 93/124 declared-route registrations and 2298 cash.
+The old menu offered one evolution. An action-free inventory found five: Arcanine,
+Poliwrath, Cloyster, Exeggutor and Starmie. Show that each now has its own executor and
+2100 purchase quote, without putting species identities into model inputs.
 
-Show the generic contingency in simulated battles: four PP-spending turns without enemy HP
-decrease, or no usable move, permits one eligible reserve switch. Reorder the party and the selected
-slot follows the reserve. Then show stale state sending no switch input and a partial switch retaining
-its exact cost. A second stall ends the case within the original budget.
+Then show the limitation: all five currently have exactly the same portable feature vector.
+Five executable targets are not evidence that the model has learned which target is better.
+The contrast gate stops before a query or controller input. Tests cover different resources,
+protected precursors, executor binding, cartridge disagreement and the honest admission stop.
 
-537 focused tests pass, including 46 new tests. Label every simulated scene ROM-free, not gameplay.
-Flash 3.8 High's contract review highlights heuristic attribution and switch-in survival limits.
-This does not qualify fainted forced switching or prove the learned model can make this decision.
+Label this engineering, not gameplay: 113 targeted ROM-free tests passed, with no new
+registration, training example or fit. Model134 remains 134 examples/91 successes.
+Flash app navigation failed before review submission; no external review was completed.
 
-## The finish line remains unchanged
+## The next concrete step
 
-Model121 remains 121 examples/83 successes; local registrations remain 86/151 (56.95%).
-Learning and collection deltas are zero; the fresh-Red gate remains 0/5.
-Next: a newly frozen cartridge campaign, followed by the heterogeneous acquisition lesson if qualified.
+Qualify explicitly labelled equivalent-target exploration, then attempt one bounded evolution.
+Do not manufacture artificial feature differences or call a sampled tie a learned preference.
 
-Complete a fresh model-directed Red run and its full local Pokédex before any ROM hack,
-then proceed through Crystal and at least Emerald.
+Finish a fresh model-directed Red run, Champion/Hall of Fame and all 124 registrations in the
+declared legitimate route before any ROM hack. Deferred version/link/event dependencies stay
+explicit for later legitimate sources; Crystal and at least Emerald follow.
 
-[Session](work-sessions/2026-09-15-battle-stall-contingency.md) ·
+[Evidence](evidence/red-model134-multi-evolution-menu-2026-09-16.json) ·
 [Project story](project-narrative.md) · [Roadmap](development-roadmap.md)

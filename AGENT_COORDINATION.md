@@ -11,25 +11,24 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 - Claude supplies selective read-only reviews when useful. Neither reviewer grants gameplay authority.
 - External reviews are bounded assistance, not a standing gate. Reviewers do not edit this worktree.
 
-
 ## Current assignment
 
-Model134 has 134 settled examples/91 successes. Model133 selected and verified Center
-restoration from a genuine two-way menu in 22 actions. Red remains 93/124 registrations,
-74 specimens and 2298 cash at a safe Center. The item-evolution departure repair was not
-exercised live.
+The autonomous menu now exposes five separately bound buyable-stone targets. Cartridge
+inspection changed no state, and all five have identical portable model inputs. The current
+feature-distinction stop fired before any query or play. Model134 remains 134 examples/91
+successes; Red remains 93/124 registrations, 74 specimens and 2298 cash at a safe Center.
 
-The healthy terminal's action-free menu has only one executable evolution binding; no
-further model choice was made. Inventory genuinely feasible missing evolution targets
-before attempting to expose multiple target choices. If fewer than two, stop. Evolution target
-ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
+Next qualify explicitly labelled equivalent-target exploration without pretending it is a
+learned target preference, then one fresh bounded continuation if the contract passes.
+Do not manufacture target identity features, replay old choices or refit unplayed alternatives.
+Level-evolution target ordering, battle mechanics and fresh-start completion remain gaps.
 
 ## Actual reviewer contribution
 
-Flash 3.8 High completed a read-only design review. Accepted settled stats, identity checks and
-idempotent MAIN entry; rejected an incorrect battle-state value, forced flee and full-HP-only
-capture. Quota was unavailable/not refreshed; Claude was not used.
-Next setting: Astra High, Fast off, approximately 60-90 minutes for action-free multi-target feasibility. No GitHub publication without Pete's
-explicit instruction.
+Flash 3.8 High was visible as the selected model, but app navigation failed before this
+session's review could be submitted. No current reviewer finding was accepted or rejected;
+quota was unavailable/not refreshed. Claude was unused. Historical reviews are not this audit.
+Next setting: Sol High, Fast off, approximately 45-60 minutes for the explicit tie contract
+and one bounded continuation if qualified. No GitHub publication without Pete's instruction.
 
 [Workflow](docs/three-agent-workflow.md) · [Reviewer handoff](docs/current-agent-handoffs.md)

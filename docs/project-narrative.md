@@ -4,26 +4,26 @@ Pete's goal is a model that makes useful decisions, reacts when the game differs
 into unfamiliar titles. This is an AI-assisted project; coding assistants build and review the system
 rather than secretly choosing its live game actions.
 
-The first finish line is a fresh model-directed Red run with Champion/Hall-of-Fame evidence and all
-151 local registrations. Then comes an unfamiliar compatible Red hack, Crystal and Emerald.
+The first finish line is a fresh model-directed Red run with Champion/Hall-of-Fame evidence and the
+declared 124-species legitimate native route. Unavailable version, link and event dependencies stay
+explicit for later titles. Then comes an unfamiliar compatible Red hack, Crystal and Emerald.
 
-## Latest chapter: end the isolated battle gate and return to the Pokedex
+## Latest chapter: five targets are not yet five informed preferences
 
-Campaign C ran three prospectively fixed battle cases and stopped on its first failure. One battle
-settled. The second showed that Red's Wrap can continue dealing damage automatically while hiding
-the move-selection menu; the third case never opened. Exact action and frame costs survived, and no
-case was replayed or replaced.
+The autonomous collector has reached Model134: 134 settled development examples and 91 successes.
+The development save has 93/124 registrations. Those are correlated development results, not the
+mandatory fresh-start completion run, whose five-part acceptance gate remains unpassed.
 
-The shared runtime now recognizes that observable multi-turn continuation without a route, species
-or case exception. Local regression and compatibility tests pass, but the repair has not been
-rerun on cartridge and creates no learning claim. Model121 remains at 121 examples/83 successes and
-86/151 registrations.
+The latest action-free session found five legitimate stone evolutions hidden behind one catalog-
+selected goal. Each now has its own verified executor and resource quote. But the current model
+sees identical inputs for all five: one registration, the same purchase price and generic effort
+and risk estimates. The session stopped before a query or game input, as its contrast test required.
 
-The project will not create another disposable campaign merely to discover the next isolated
-mechanic. The next bounded session returns to a real heterogeneous collection choice, where a
-retained registration and learning example are the desired outputs and ordinary play supplies any
-further battle evidence.
+That is an engineering improvement and a representation finding, not a catch or learned preference.
+The next task is honest equivalent-target exploration, followed by one bounded evolution if its
+contract qualifies. We should not invent species-coded differences just to make a ranking appear
+intelligent. Battle mechanics and level-evolution targeting still contain deterministic control.
 
-[Campaign evidence](evidence/red-local-battle-cartridge-campaign-c-2026-09-15.json) ·
+[Latest evidence](evidence/red-model134-multi-evolution-menu-2026-09-16.json) ·
 [Roadmap](model-first-roadmap.md) · [Mission](../MISSION.md) ·
 [Active state](../ACTIVE_PRODUCT_STATE.md) · [AI-assisted authorship](../README.md)

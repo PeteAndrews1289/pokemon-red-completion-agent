@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-16-model134-center-restore-singleton",
+  "as_of_session": "2026-09-16-model134-multi-evolution-menu",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -30,7 +30,7 @@
     },
     "red-collection": {
       "status": "current",
-      "evidence": "docs/evidence/red-model134-center-restore-singleton-2026-09-16.json"
+      "evidence": "docs/evidence/red-model134-multi-evolution-menu-2026-09-16.json"
     },
     "red-hack": {
       "status": "planned",
@@ -1604,6 +1604,12 @@
       "result": "Model133 chose Center restoration over evolution and verified whole-party recovery after 22 actions / 1584 frames. It fit once as Model134: 134 examples / 91 successes. Red remains 93/124, 74 specimens and 2298 cash, safe at the Center.",
       "deviation": "The item-evolution repair was not exercised live. An action-free next inventory finds evolution as the sole executable goal; no restore need, regional acquisition or finite resupply. No second model choice, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.",
       "next": "Astra High, Fast off: inventory distinct feasible evolution targets action-free. Expose a portable multi-target choice only if two real executors exist; otherwise stop and reassess without forcing the singleton."
+    },
+    {
+      "session": "2026-09-16-model134-multi-evolution-menu",
+      "result": "Action-free cartridge inspection exposes five separately verified stone targets instead of one preselected evolution. Each has its own executor and a 2100 purchase quote. All five have identical portable inputs; 113 targeted ROM-free tests and four-file type checks pass.",
+      "deviation": "The declared feature-distinction falsifier fired. No query, gameplay, fit, registration, promotion or fresh-Red gate changed. Model134 remains 134 examples / 91 successes; Red remains 93/124, 74 specimens and 2298 cash. No GitHub push.",
+      "next": "Sol High, Fast off: qualify explicitly labelled equivalent-target exploration without claiming learned target preference, then one new bounded continuation if qualified. Do not invent identity features or spend another session manufacturing distinctions."
     }
   ],
   "closed_milestones": [

@@ -34,17 +34,17 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: The healed Center menu has only one executable evolution goal. Test action-free whether multiple genuine missing-registration evolution targets can be offered with separate executors and portable, identity-free features; stop if not. Do not force the singleton or manufacture authority. Renewable League income remains unqualified.
+- Next decision: Qualify explicitly labelled equivalent-target exploration, preserving differentiated model choices and exact selected-arm outcomes. Only after that contract passes may one fresh bounded Model134 continuation run; do not invent identity features or train unplayed alternatives.
 
 ### Mandatory mission check
 
 | Question | Current answer |
 | --- | --- |
-| Reusable capability | Plan all 151 local Red registrations explicitly, then choose across heterogeneous executable acquisition families while retaining actual gains, failures, dependencies and costs. |
-| Authority now | Model134 has 134 settled examples / 91 successes. Model133 selected and verified Center healing in 22 actions without a teacher. The safe 93/124, 74-specimen, 2298-cash terminal exposes only one evolution option; no further model choice was made. |
+| Reusable capability | Expose executable missing evolution targets with separately verified skills and individual resource quotes, then distinguish informed preference from equivalent-goal exploration. |
+| Authority now | Model134 remains 134 settled examples / 91 successes. Five separate stone targets now bind action-free, but one semantic vector prevents a new learned-preference claim. No query, input, fit or registration gain occurred. |
 | Authority target | Choose useful missing-registration goals from shared memory and actual resources, without arbitrary level targets, living-form duplicates or manual species routing. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | An action-free inventory at the healed terminal finds fewer than two distinct executable missing-registration evolution targets; do not fabricate a multi-target model choice. |
+| Cheapest falsifier | Equivalent-target handling invents a learned preference, leaks target identity, changes ordinary differentiated choices, or fails to preserve the one sampled executor and its actual outcome. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-16-model134-center-restore-singleton** · status **closed** · evidence [qualification](docs/evidence/red-model134-center-restore-singleton-2026-09-16.json)
+**2026-09-16-model134-multi-evolution-menu** · status **closed** · evidence [qualification](docs/evidence/red-model134-multi-evolution-menu-2026-09-16.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Model133 made a real restoration decision and preserved the party, but this earned state collapses the mixed menu to a single evolution target. The result is learning data, not sustained autonomous play or a registration. |
-| Learning output | One measured model-selected Center restoration success was fitted: Model134 has 134 settled examples / 91 successes / 55 economy-qualified examples. Red remains 93/124 with 74 specimens and 2298 cash. |
-| Authority delta | Model133 selected restoration over evolution, verified whole-party healing and fit once as Model134. No teacher action, new registration or authority promotion. The item-evolution departure repair was not exercised live. |
-| Transfer result | The restored Center is an earned changed-resource state, and the menu honestly contracts to one goal. This is not an independent lineage or cross-title transfer test; item-evolution repair still lacks live validation. |
-| Blocker | The safe healed Center terminal has 93/124 registrations, 74 specimens and 2298 cash. Its menu has only one executable evolution goal: no restoration need, regional acquisition or finite resupply. A further model choice would be fake authority. |
-| Decision | Inventory distinct feasible evolution targets at this authentic state without gameplay. If two or more exist, expose them with separate verified executors and identity-free policy features; otherwise report the singleton and reassess alternatives before any play. |
-| Next session | Astra High, Fast off, 60-90 minutes: action-free feasibility inventory for multiple missing evolution targets, then design the smallest target-choice seam only if two real alternatives exist. |
-| Next falsifier | Fewer than two genuinely executable evolution targets exist at the healed terminal, or their skill/feature contracts cannot be made distinct without target identity leakage. |
-| Stop condition | Stop if fewer than two executable targets, if exposure requires identity features or hand selection, on unsafe terminal, replay pressure, teacher substitution, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | Exposes genuine target alternatives instead of catalog preselection, while distinguishing engineering capability from learned preference. The current session stopped at the declared semantic-aliasing falsifier. |
+| Learning output | Zero queries, gameplay, fits or new registrations. Model134 remains 134 settled examples / 91 successes / 55 economy-qualified. Red remains 93/124, 74 specimens and 2298 cash. |
+| Authority delta | Five target-specific stone executors replace one catalog-selected item target. All current policy inputs are identical, so no live target selection, query or authority promotion occurred. |
+| Transfer result | 113 ROM-free tests cover multiple evolution families, differing resources, protected precursors, routed bindings and semantic-aliasing admission. Action-free cartridge inspection verified five bindings but one feature vector. No independent or cross-title transfer. |
+| Blocker | The safe Center has five executable stone targets, but their identity-free features and 2100 purchase costs are identical. The feature-distinction falsifier fired; no learned preference can be inferred. |
+| Decision | Qualify explicitly labelled equivalent-target exploration, preserving differentiated model choices and exact selected-arm outcomes. Only after that contract passes may one fresh bounded Model134 continuation run; do not invent identity features or train unplayed alternatives. |
+| Next session | Sol High, Fast off, 45-60 minutes: qualify explicit equivalent-target exploration, then one newly planned bounded Model134 continuation if qualified. Avoid inventing distinctions solely to clear a gate. |
+| Next falsifier | Equivalent-target handling invents a learned preference, leaks target identity, changes ordinary differentiated choices, or fails to preserve the one sampled executor and its actual outcome. |
+| Stop condition | Stop on false availability, mutation, lost target/quote binding, fabricated learned preference, unsafe state, teacher substitution, consumed replay, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

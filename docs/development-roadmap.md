@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-center-restore-singleton**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model134-multi-evolution-menu**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model134-center-restore-singleton-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model134-multi-evolution-menu-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model134-multi-evolution-menu
+
+Action-free cartridge inspection exposes five separately verified stone targets instead of one preselected evolution. Each has its own executor and a 2100 purchase quote. All five have identical portable inputs; 113 targeted ROM-free tests and four-file type checks pass.
+
+**Deviation:** The declared feature-distinction falsifier fired. No query, gameplay, fit, registration, promotion or fresh-Red gate changed. Model134 remains 134 examples / 91 successes; Red remains 93/124, 74 specimens and 2298 cash. No GitHub push.
+
+**Next:** Sol High, Fast off: qualify explicitly labelled equivalent-target exploration without claiming learned target preference, then one new bounded continuation if qualified. Do not invent identity features or spend another session manufacturing distinctions.
 
 ### 2026-09-16-model134-center-restore-singleton
 
