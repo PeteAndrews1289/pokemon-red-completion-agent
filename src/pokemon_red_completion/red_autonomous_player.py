@@ -15,8 +15,10 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from pathlib import Path
 from time import monotonic
+from typing import cast
 
 from .goal_manager import GoalDecisionOutcome, GoalKind
+from .goal_manager_runtime import ExecutableGoalBinding
 from .living_dex_option_value import LivingDexOptionValueModel
 from .provenance import canonical_sha256
 from .red_live_option_menu import (
@@ -83,14 +85,16 @@ def _record(path: Path, document: Mapping[str, object]) -> None:
 
 
 def continuation_binding(
-    options: RedLiveOptionSet, prior_binding_ref: str
-):
+    options: RedLiveOptionSet | tuple[ExecutableGoalBinding, ...],
+    prior_binding_ref: str,
+) -> ExecutableGoalBinding:
     """Rebind one privately authenticated goal across changed origin states."""
     fingerprint = prior_binding_ref.rsplit(":", 1)[-1]
     if re.fullmatch(r"[0-9a-f]{64}", fingerprint) is None:
         raise ValueError("prior goal has no valid configuration fingerprint")
+    bindings = cast(tuple[ExecutableGoalBinding, ...], getattr(options, "bindings", options))
     matches = tuple(
-        binding for binding in options.bindings
+        binding for binding in bindings
         if binding.kind is GoalKind.EVOLVE_SPECIES
         and binding.binding_ref.rsplit(":", 1)[-1] == fingerprint
     )
@@ -107,6 +111,7 @@ def run_autonomous_goal_continuation(
     prior_binding_ref: str,
     prior_outcome_sha256: str,
     provenance: Mapping[str, object],
+    targeted_observe: Callable[[], tuple[ExecutableGoalBinding, ...]] | None = None,
 ) -> dict[str, object]:
     """Execute a saved model goal once, with no new model query or reward fit."""
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
@@ -126,10 +131,13 @@ def run_autonomous_goal_continuation(
     if not before.safe:
         raise ValueError("unsafe continuation origin")
     try:
-        options = observe(0)
+        options = None if targeted_observe is not None else observe(0)
+        targeted = None if targeted_observe is None else targeted_observe()
         if snapshot() != before:
-            raise ValueError("continuation menu changed the game")
-        selected = continuation_binding(options, prior_binding_ref)
+            raise ValueError("continuation inventory changed the game")
+        selected = continuation_binding(
+            options if options is not None else targeted or (), prior_binding_ref,
+        )
     except Exception as admission_error:
         _record(output / "admission-failure.json", {
             "error_type": type(admission_error).__name__,
@@ -141,7 +149,13 @@ def run_autonomous_goal_continuation(
         "selected_kind": selected.kind.value,
         "prior_binding_ref": prior_binding_ref,
         "state_sha256": before.sha256,
-        "menu_sha256": options.menu.policy_sha256,
+        "menu_sha256": None if options is None else options.menu.policy_sha256,
+        "private_inventory_sha256": (
+            None if targeted is None else canonical_sha256([
+                binding.binding_ref for binding in targeted
+            ])
+        ),
+        "binding_scope": "targeted_evolution" if targeted is not None else "full_menu",
     })
     report = None
     verification = None

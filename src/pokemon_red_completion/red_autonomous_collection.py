@@ -4,7 +4,7 @@ from dataclasses import replace
 
 from .executor import CountingExecutor
 from .goal_manager import GoalAvailability, GoalKind, GoalOpportunity, GoalUnavailableReason
-from .goal_manager_runtime import GoalBindingSet
+from .goal_manager_runtime import ExecutableGoalBinding, GoalBindingSet
 from .living_dex_goal_policy import project_living_dex_goal_candidate
 from .red_autonomous_fishing import autonomous_fishing_options
 from .red_autonomous_league_funding import bind_autonomous_league_funding
@@ -53,6 +53,38 @@ def autonomous_capture_funding_target_cash(
     # A blocked/unsupported purchase is not an excuse to earn toward an
     # invented reserve. With a real quote, fund only its unmet amount.
     return economy.cash if budget is None else budget.target_cash
+
+
+def autonomous_evolution_continuation_bindings(
+    runtime: RedGoalContextRuntime,
+    actions: CountingExecutor,
+    world: StrategicScenarioRouteWorld,
+    *,
+    maximum_actions: int,
+    maximum_frames: int,
+    maximum_quanta: int,
+) -> tuple[ExecutableGoalBinding, ...]:
+    """Discover live level evolutions without constructing unrelated capture routes.
+
+    This is a private execution inventory for an already-recorded model goal,
+    never a new policy menu or a teacher-selected target. The caller checks
+    unchanged state and requires one exact configuration fingerprint match.
+    """
+    if runtime.registration_policy is None:
+        raise ValueError("continuation requires a registration policy")
+    runtime = replace(
+        runtime,
+        adapter=replace(runtime.adapter, registration_policy=runtime.registration_policy),
+    )
+    live = runtime.adapter.observe()
+    return tuple(
+        option.binding for option in enumerate_red_level_evolutions(
+            runtime, live, actions, world,
+            maximum_actions=maximum_actions,
+            maximum_frames=maximum_frames,
+            maximum_quanta=maximum_quanta,
+        )
+    )
 
 
 def autonomous_collection_options(

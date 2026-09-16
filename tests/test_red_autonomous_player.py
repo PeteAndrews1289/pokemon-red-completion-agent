@@ -71,6 +71,63 @@ def test_goal_continuation_rejects_missing_or_duplicate_target():
         continuation_binding(SimpleNamespace(bindings=(binding, binding)), f"old:{suffix}")
 
 
+def test_targeted_continuation_skips_full_menu_and_records_private_inventory(tmp_path):
+    suffix = "a" * 64
+    state = {"xp": 7095}
+    binding = _binding(GoalKind.EVOLVE_SPECIES, binding_ref=f"new:{suffix}", calls=[])
+
+    def execute():
+        assert (tmp_path / "run/execution-started.json").exists()
+        state["xp"] += 90
+        return GoalExecutionReport(50, 5000, {"evolution_partial": True})
+
+    binding = replace(
+        binding, execute=execute,
+        verify=lambda _: GoalVerification.failed(GoalFailureReason.OUTCOME_NOT_VERIFIED),
+    )
+
+    def snapshot():
+        return AutonomousSnapshot(str(state["xp"]).encode(), {
+            "party_training": [[1, 78, state["xp"]]],
+        }, True)
+
+    result = run_autonomous_goal_continuation(
+        output=tmp_path / "run", snapshot=snapshot,
+        observe=lambda _: pytest.fail("full policy menu must not be rebuilt"),
+        targeted_observe=lambda: (binding,), prior_binding_ref=f"old:{suffix}",
+        prior_outcome_sha256="b" * 64, provenance={},
+    )
+    marker = json.loads((tmp_path / "run/execution-started.json").read_text())
+    assert marker["binding_scope"] == "targeted_evolution"
+    assert marker["menu_sha256"] is None
+    assert marker["private_inventory_sha256"] is not None
+    assert result["status"] == "pending"
+    assert result["model_queries"] == 0
+
+
+def test_targeted_continuation_cannot_execute_if_discovery_mutates_state(tmp_path):
+    suffix = "a" * 64
+    state = {"xp": 7095}
+    binding = _binding(GoalKind.EVOLVE_SPECIES, binding_ref=f"new:{suffix}", calls=[])
+
+    def snapshot():
+        return AutonomousSnapshot(str(state["xp"]).encode(), {}, True)
+
+    def mutate():
+        state["xp"] += 1
+        return (binding,)
+
+    with pytest.raises(ValueError, match="changed the game"):
+        run_autonomous_goal_continuation(
+            output=tmp_path / "run", snapshot=snapshot,
+            observe=lambda _: pytest.fail("full menu must not run"),
+            targeted_observe=mutate, prior_binding_ref=f"old:{suffix}",
+            prior_outcome_sha256="b" * 64, provenance={},
+        )
+    assert not (tmp_path / "run/execution-started.json").exists()
+    assert (tmp_path / "run/admission-failure.json").exists()
+
+
 def _environment(output, *, fail=False, verify_fails=False, unsafe=False):
     state = {"version": 0, "observations": [], "selected": []}
 

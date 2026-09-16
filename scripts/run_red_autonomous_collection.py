@@ -26,9 +26,13 @@ from pokemon_red_completion.goal_manager_composition_qualification import (
 from pokemon_red_completion.goal_manager_context_catalog import parse_goal_manager_context_capture
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
-from pokemon_red_completion.red_autonomous_collection import autonomous_collection_options
+from pokemon_red_completion.red_autonomous_collection import (
+    autonomous_collection_options,
+    autonomous_evolution_continuation_bindings,
+)
 from pokemon_red_completion.red_autonomous_player import (
     AutonomousSnapshot,
+    continuation_binding,
     run_autonomous_goal_continuation,
     run_autonomous_options,
 )
@@ -330,10 +334,35 @@ def main() -> None:
                 ),
             )
 
+        def observe_targeted():
+            limiter.begin_decision_window()
+            budget.begin_window()
+            return autonomous_evolution_continuation_bindings(
+                runtime, actions, world,
+                maximum_actions=maximum_actions,
+                maximum_frames=maximum_frames,
+                maximum_quanta=plan["maximum_evolution_quanta"],
+            )
+
         if args.inspect:
             before = snapshot()
             if not before.safe:
                 raise ValueError(f"unsafe inspection origin: {before.facts}")
+            if continuation_ref is not None and plan.get("targeted_rebinding") is True:
+                bindings = observe_targeted()
+                after = snapshot()
+                if before != after:
+                    raise ValueError("targeted evolution inspection changed the game")
+                selected = continuation_binding(bindings, continuation_ref)
+                print(json.dumps({
+                    "status": "verified_action_free",
+                    "binding_scope": "targeted_evolution",
+                    "facts": before.facts,
+                    "private_binding_refs": [binding.binding_ref for binding in bindings],
+                    "matching_ref": selected.binding_ref,
+                    "model_queries": 0,
+                }, indent=2, sort_keys=True))
+                return
             options = observe(0)
             after = snapshot()
             if before != after:
@@ -371,6 +400,9 @@ def main() -> None:
                 prior_binding_ref=continuation_ref,
                 prior_outcome_sha256=plan["prior_outcome"]["sha256"],
                 provenance=provenance,
+                targeted_observe=(
+                    observe_targeted if plan.get("targeted_rebinding") is True else None
+                ),
             )
         else:
             result = run_autonomous_options(
