@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model132-routed-menu-income**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-16-model133-item-evolution-departure**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -42,7 +42,7 @@ This is a checklist, not project completion or a remaining-time estimate.
 - [x] Retain one autonomous finite-income choice from a real multi-option menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 - [x] Fit the measured outcome and verify Model126's next action-free menu ([evidence](../docs/evidence/red-model126-bounded-region-and-funding-2026-09-16.json))
 
-Current model: **132 examples**. This is a small goal-value learner, not a demonstrated full-game player.
+Current model: **133 examples**. This is a small goal-value learner, not a demonstrated full-game player.
 
 ## Stable goals and exit criteria
 
@@ -92,7 +92,7 @@ Register the declared 124-species Red route in the same fresh-run save.
 
 No cheating or fabricated local flags. Mew and unresolved cable dependencies do not block the ROM-hack gate; no simultaneous living-form quota.
 
-[Current evidence](../docs/evidence/red-model132-routed-menu-income-2026-09-16.json)
+[Current evidence](../docs/evidence/red-model133-item-evolution-departure-2026-09-16.json)
 
 ### 06. Adapt to an unfamiliar Red hack — planned
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-16-model133-item-evolution-departure
+
+Model132 selected evolution from a verified restore-versus-evolution menu. The item skill stopped after 106 actions / 6780 frames on an invalid healed-Center farewell assumption. It ended safe, the failure fit once as Model133: 133 examples / 90 successes. Red remains 93/124, 74 specimens, 2298 cash.
+
+**Deviation:** The terminal's unhealed party and absent dialogue explain the unconditional precondition error. A generic conditional-departure repair passed 114 ROM-free tests but has not been live validated. No replay, item spend, teacher action, independent evaluation, authority promotion, full-Red gate change or GitHub push.
+
+**Next:** Sol High, Fast off: verify the saved Center menu action-free, then permit at most one fresh Model133 choice from real restoration/evolution alternatives. Stop if the boundary failure repeats.
 
 ### 2026-09-16-model132-routed-menu-income
 

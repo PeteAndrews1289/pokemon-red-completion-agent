@@ -14,13 +14,13 @@ Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md),
 
 ## Current assignment
 
-Model132 has 132 settled examples/90 successes. The main mixed menu exposes routed Center
-restoration. Model131 chose finite income from a verified two-way heal-versus-income menu,
-earned 690 cash, ended safe and fit once without replay or teacher action. Red remains 93/124
-registrations and 74 specimens; cash is 2298.
+Model133 has 133 settled examples/90 successes. Model132 selected evolution from a two-way
+restore/evolve menu; the skill failed at an unhealed Center after 106 actions, ended safe and
+fit once as a failure. The generic unconditional healed-farewell call was removed and passed
+ROM-free tests; no replay. Red remains 93/124 with 74 specimens and 2298 cash.
 
-The safe terminal's next action-free menu has genuine restore and affordable evolution options
-(2100 quote). Permit one fresh Model132 decision only with verified alternatives. Evolution target
+The safe Center terminal's action-free menu has restore and affordable evolution options
+(2100 quote). Permit one fresh Model133 decision only after verification. Evolution target
 ordering, battle mechanics and fresh-start Red completion remain explicit authority gaps.
 
 ## Actual reviewer contribution
