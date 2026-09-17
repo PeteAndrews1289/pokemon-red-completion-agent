@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Resolve the observed PP-boundary inconsistency without replaying the consumed attempt, then fit switch-aware choices from valid varied TRAIN outcomes and require disjoint natural development advantage over frozen/fixed controls before promotion.
+- Next decision: Capture a distinct TRAIN PP transition with enriched diagnostics or independent cartridge evidence without replaying the consumed attempt; only then fit switch-aware choices from valid varied TRAIN outcomes and require disjoint natural development advantage over frozen/fixed controls before promotion.
 
 ### Mandatory mission check
 
@@ -60,18 +60,18 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-telemetry-and-varied-train-2026-09-17.json)
+**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-pp-boundary-audit-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The decision log preserves what the model saw, selected and spent, including failure prefixes. Teacher edits remain isolated TRAIN setup, and natural battles remain the promotion test. |
-| Learning output | A 110-event six-on-six baseline loss and one equal-two-turn six-choice low-HP TRAIN contrast were retained with rich model/action/cost traces. A type-immunity variant failed closed after 11 completed decisions and one unresolved choice. All three assisted configurations inherit one upstream TRAIN root. No model update or learner gain. |
-| Authority delta | The frozen attack model and fixed switch rule made 29 logged decisions in a six-on-six TRAIN loss; no voluntary learned switch, fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent development or cross-title test ran. Three assisted capture configurations inherit one TRAIN root; neither losses nor matched branches are evaluation results. |
-| Blocker | The instrumentation and three-head runner are ready, but there is no fitted switch-aware challenger or independent development advantage. The type-immunity TRAIN run stopped on a selected-turn PP-accounting failure at choice 12; its cause is unresolved, so no branch label was inferred. Status moves and items remain outside this trainer scope. |
-| Decision | Use retained evidence or a ROM-free reproducer to diagnose the PP-boundary failure without replaying the consumed attempt. Once sound, collect prospective varied TRAIN attack/switch contrasts, fit only on TRAIN, and compare with frozen/fixed controls on untouched natural DEVELOPMENT episodes. |
-| Next session | Sol High, Fast off, 90-120 minutes: diagnose the retained PP failure using existing trace or a ROM-free reproducer, then resume varied TRAIN contrasts only if sound. A natural DEVELOPMENT comparison remains gated on a TRAIN-fitted challenger. No full game run. |
-| Next falsifier | The PP-boundary inconsistency cannot be explained or reproduced safely without replay; alternatively, a fitted challenger cannot outperform frozen/fixed controls on disjoint natural DEVELOPMENT episodes. |
+| Product alignment | The strict PP guard prevents fabricated battle labels. Diagnostic maintenance is a bounded unblock for model-selected battle-outcome training, not learning progress. |
+| Learning output | The retained PP failure was audited without replay. Future failures retain more in-flight party context, and a ROM-free test confirms the off-slot PP increase still fails closed. No new training outcome, model update or learner gain. |
+| Authority delta | No new model-selected outcome, fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No independent natural DEVELOPMENT or cross-title test ran. Existing assisted capture configurations still inherit one TRAIN root. |
+| Blocker | The retained type-immunity TRAIN failure shows an off-slot PP increase at choice 12, but lacks the in-flight after-state needed to identify its cause. A ROM-free reproduction confirms the strict guard rejects that transition. The switch-aware challenger and independent development advantage remain absent; status moves and items remain outside trainer scope. |
+| Decision | Do not replay or relabel the failed attempt. Prospectively capture the in-flight PP transition in a distinct TRAIN scenario with enriched failure diagnostics, or obtain independent cartridge evidence. Resume varied TRAIN contrasts only after the turn boundary is sound; then fit on TRAIN and compare with frozen/fixed controls on untouched natural DEVELOPMENT episodes. |
+| Next session | Sol High, Fast off, one bounded session: capture a prospectively distinct TRAIN PP transition with enriched diagnostics or find independent cartridge evidence. Do not repeat the failed attempt, infer its label, fit on DEVELOPMENT or launch a full run. |
+| Next falsifier | A distinct TRAIN scenario with enriched diagnostics cannot establish a valid selected-turn boundary; alternatively, a fitted challenger cannot outperform frozen/fixed controls on disjoint natural DEVELOPMENT episodes. |
 | Stop condition | No replay or relabel of the PP-failed attempt; stop on unverified turn effects, synthetic-root independence, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions

@@ -27,6 +27,7 @@ from pokemon_red_completion.battle_runtime import (
     _confirm_attack_with_pp_gate,
     _require_present_state,
     _trainer_switch_prompt_visible,
+    _verify_selected_turn_pp,
     advance_battle_to_policy_boundary,
     battle_policy_override_active,
     bind_battle_decision_observer,
@@ -3143,6 +3144,39 @@ def test_runtime_diagnostic_retains_phase_actions_and_cause_without_extra_reads(
     assert json.loads(path.read_text())["phase"] == "policy_selection"
     assert runtime.actions == []
     assert len(reads) == 2
+
+
+def test_pp_boundary_retains_party_context_without_accepting_off_slot_restore() -> None:
+    initial = replace(
+        _raw(pp=(13, 15, 0, 0)),
+        party_count=2,
+        active_party_index=1,
+        active_party_level=42,
+        active_party_pp=(13, 15, 0, 0),
+        party_pp=((20, 20, 0, 0), (13, 15, 0, 0)),
+        enemy_party_position=2,
+    )
+    changed = replace(
+        initial,
+        active_party_pp=(15, 14, 0, 0),
+        party_pp=((20, 20, 0, 0), (15, 14, 0, 0)),
+    )
+
+    @diagnostics.diagnose_battle_runtime
+    def fail_with_context() -> None:
+        diagnostics.trace_selection(initial, 2)
+        diagnostics.trace_state(changed)
+        _verify_selected_turn_pp(initial, changed, slot=2, label="PP boundary")
+
+    with pytest.raises(BattleRuntimeError, match="slot 1") as caught:
+        fail_with_context()
+    record = caught.value.battle_runtime_diagnostic.to_dict()
+    assert record["selection"]["pp"] == (13, 15, 0, 0)
+    state = next(event for event in record["events"] if event["kind"] == "state")
+    assert state["active_party_index"] == 1
+    assert state["active_party_level"] == 42
+    assert state["party_pp"] == ((20, 20, 0, 0), (15, 14, 0, 0))
+    assert state["enemy_party_position"] == 2
 
 
 def test_runtime_diagnostic_marks_attempted_action_when_executor_raises() -> None:

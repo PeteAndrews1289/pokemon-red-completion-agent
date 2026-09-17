@@ -1,0 +1,57 @@
+{
+  "schema": "pokemon.red.trainer-practice-pp-boundary-audit.v1",
+  "recorded_on": "2026-09-17",
+  "status": "cause_unresolved_failure_retention_improved",
+  "product_goal": "Reliable model-selected attack and switch outcomes in bounded trainer battles",
+  "active_lane": "cross-title-authenticated-scenario-curriculum-v1",
+  "mission_check": {
+    "capability": "Preserve exact selected-turn evidence so varied trainer outcomes can eventually train a battle model",
+    "learned_authority": "No authority change in this audit; it is a bounded unblock for model-selected attacks and switches",
+    "transfer_test": "Separate natural DEVELOPMENT battles remain unopened until a valid TRAIN-fitted challenger exists",
+    "cheapest_falsifier": "ROM-free reproduction of an off-slot PP increase during a selected slot-2 attack",
+    "time_box": "One bounded diagnostic session",
+    "stop_condition": "Do not replay or relabel the failed attempt; stop if the retained trace cannot establish the cartridge mechanism"
+  },
+  "retained_failure": {
+    "upstream_train_roots": 1,
+    "completed_decisions": 11,
+    "unresolved_decision": 12,
+    "selected_move_slot": 2,
+    "before_pp": [13, 15, 0, 0],
+    "reported_off_slot_pp": 15,
+    "expected_off_slot_pp": 13,
+    "prior_decision_11_move_executed": false,
+    "prior_decision_11_pp_unchanged": true,
+    "prior_decision_11_player_hp_change": -7,
+    "terminal_event_chain_length": 47,
+    "after_state_retained": false,
+    "cause": "unresolved; the prior log lacks the in-flight after-state moves, party index and PP vector",
+    "retry": false,
+    "training_label_from_unresolved_choice": false
+  },
+  "change": {
+    "future_failure_diagnostic_additions": ["active party level", "complete party PP", "opponent party position"],
+    "existing_diagnostic_fields": ["selected move and initial PP", "in-flight active party index", "in-flight move identities and active PP", "HP and status", "menu and action trace"],
+    "safety_rule": "An unexplained increase in a nonselected move's PP still fails closed; no selected-turn label is issued",
+    "emulator_replays": 0,
+    "new_train_outcomes": 0,
+    "fits": 0,
+    "natural_development_comparisons": 0,
+    "authority_promotions": 0
+  },
+  "readiness": {
+    "trainer_setup_and_durable_logging": "qualified for bounded assisted TRAIN use",
+    "varied_outcome_collection": "not yet reliable; PP boundary unresolved",
+    "switch_aware_fitted_challenger": "not built",
+    "independent_natural_development_advantage": "not tested",
+    "battle_model_ready_for_gameplay": false
+  },
+  "verification": {
+    "rom_free_battle_and_log_tests_passed": 256,
+    "ruff": "passed",
+    "mypy_diagnostic_module": "passed",
+    "private_rom_or_state_opened": false,
+    "full_suite": "not run"
+  },
+  "next_decision": "Prospectively capture an in-flight PP anomaly with the enriched diagnostic on a distinct TRAIN scenario, or obtain independent cartridge evidence for the old transition. Preserve the strict gate; only then resume varied TRAIN contrasts and fitting."
+}
