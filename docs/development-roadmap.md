@@ -122,11 +122,11 @@ Try legitimate linked-version acquisition when practical; otherwise earn deferre
 
 ### 2026-09-17-trainer-exploratory-train-v1
 
-Pete authorized a bounded route to get the battle trainer learning loop moving. The plan separates a four-scenario correlated TRAIN exploratory fit from the unchanged independent-root qualification and natural DEVELOPMENT promotion gates.
+The repaired teacher factory now gives synthetic reserves the player's owner ID. Eight distinct same-root TRAIN trainer scenarios each passed five-timing admission and fitted an exploratory move/control/switch model. On a fresh synthetic TRAIN holdout, the model made its own opening switch and won all five timings while the frozen attack-only baseline lost all five; all ten logs completed without teacher fallback.
 
-**Deviation:** The earlier clean-power factory remains retired and no root is relabeled. This is a strategy change, not a new learner result, model promotion, Red registration, fresh acceptance, transfer or GitHub publication. Stage and checklist exits are unchanged.
+**Deviation:** The original defective-reserve fit is superseded. A four-case fit had no switching advantage on its holdout, and the first eight-case holdout failed from repeated switches and a targetless optional prompt; those failures remain retained. A disclosed no-repeat-switch-until-attack safety mask and empty-prompt decline enabled the later result. Only one upstream root exists, the model has no prompt/forced/depletion training coverage or natural DEVELOPMENT comparison, and no authority, central Model137, Red registration, fresh acceptance, transfer, full run or GitHub publication advanced.
 
-**Next:** Freeze three additional varied same-root trainer scenarios alongside the admitted pilot, execute each at five predeclared timings with complete logs, and fit only a diagnostic TRAIN challenger if all four scenarios admit.
+**Next:** Sol High, Fast off: secure prospectively bounded independent authentic trainer TRAIN roots and missing prompt, forced and depleted-attack contexts. Keep the four-root-by-four-scenario fit gate; then compare against frozen and fixed controls on disjoint natural DEVELOPMENT before promotion.
 
 ### 2026-09-17-trainer-practice-astra-repair-pilot
 

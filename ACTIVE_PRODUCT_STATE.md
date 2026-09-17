@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Collect exactly four distinct same-root generated TRAIN trainer scenarios with five timing trials each, fit a clearly correlated exploratory three-head challenger, and test only in bounded TRAIN practice. Keep four-by-four independent-root and natural DEVELOPMENT gates for promotion.
+- Next decision: Secure independent authentic trainer TRAIN roots and prompt, forced and depleted-attack contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-exploratory-train-v1** · status **active** · evidence [qualification](docs/evidence/red-trainer-exploratory-curriculum-plan-2026-09-17.json)
+**2026-09-17-trainer-exploratory-train-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | This turns verified cartridge outcomes into actual diagnostic model learning while preserving honest lineage and withholding promotion claims. |
-| Learning output | One same-root TRAIN scenario, six choices under five declared timings, remains one admitted three-head target. The new four-scenario exploratory curriculum is prospective and has not produced a fit yet. |
-| Authority delta | None. One five-timing TRAIN scenario is admitted as one correlated target; no trainer model has been fitted or promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | None. Natural DEVELOPMENT and cross-title execution remain unopened. |
-| Blocker | One upstream trainer root exists. It cannot satisfy Astra's independent-root qualification gate, and the retired clean-power factory will not be retried. A separately labeled correlated exploratory TRAIN fit is now authorized as a diagnostic learning step, not a promotion. |
-| Decision | Prospectively collect exactly four varied same-root TRAIN scenarios at five timings each and permit only a disclosed exploratory three-head fit. Retain the four-by-four independent-root qualification gate and natural DEVELOPMENT comparison for promotion. |
-| Next session | Complete the bounded same-root exploratory corpus and diagnostic fit, then separately design independent natural DEVELOPMENT comparison before any promotion. |
-| Next falsifier | A declared varied scenario fails execution or return admission, or the diagnostic challenger gains no held-out TRAIN advantage. No failed-scenario replacement. |
-| Stop condition | No replay or replacement of failed PP/HP or newly declared scenarios, no manufactured independent roots, no DEVELOPMENT fitting/opening, full game, authority promotion or GitHub push. A same-root fit must be labeled exploratory and cannot satisfy the qualified four-by-four gate. |
+| Product alignment | This is a measured model-owned switching improvement in bounded practice while keeping the final-player and independence gates intact. |
+| Learning output | Eight repaired TRAIN scenarios across five declared timings yielded eight examples for each of the move, control and switch heads. A fresh same-root TRAIN holdout finished 5/5 model wins versus 0/5 frozen attack-only wins with zero teacher fallback; an earlier holdout failed from repeat switching and remains retained. |
+| Authority delta | None. An eight-scenario same-root trainer model was fitted and tested only in TRAIN practice; it is not promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | Positive same-root synthetic TRAIN transfer only; no independent natural DEVELOPMENT or cross-title result. |
+| Blocker | The trainer has only one authenticated upstream root. It lacks independent natural TRAIN supply and has no prompt, forced or depleted-attack training context; natural DEVELOPMENT remains unopened. Earlier defective-reserve results were superseded, and the retired supply strategy remains closed. |
+| Decision | Retain the eight-scenario model as a diagnostic challenger after a positive fresh same-root TRAIN holdout. Seek independent authentic trainer roots and missing decision contexts before a qualified fit; require disjoint natural DEVELOPMENT advantage against frozen and fixed controls before promotion. |
+| Next session | Inventory and freeze independent short authentic trainer TRAIN starts, including prompt, forced and depleted-attack boundaries, without replaying consumed trials; then design natural DEVELOPMENT comparison. |
+| Next falsifier | A bounded authentic trainer source cannot supply independent roots and missing decision contexts, or a qualified challenger fails disjoint natural DEVELOPMENT versus frozen and fixed controls. |
+| Stop condition | No replay or replacement of failed trainer trials, no manufactured independent roots, no DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN success cannot satisfy the qualified four-by-four gate. |
 
 ### Stop conditions
 

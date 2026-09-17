@@ -67,28 +67,37 @@ This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
 Story-level learned play, robust trainer combat and fresh acceptance remain open.
 
+The [exploratory trainer result](evidence/red-trainer-exploratory-outcome-2026-09-17.json)
+adds one actual diagnostic learner: eight varied TRAIN scenarios at five timings
+from one upstream root trained move, control and switch heads. A synthetic
+reserve-ownership defect was repaired; earlier results were superseded. The
+latest model made its own opening switch and won five of five fresh same-root
+TRAIN trials versus zero of five for a frozen attack-only control. It uses a
+disclosed post-switch safety mask, and an earlier holdout failed from repeated
+switching. No independent-root, natural DEVELOPMENT or fixed-heuristic advantage
+has been shown, so this is not promoted battle authority.
+
 ## Next bounded work
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Exploratory trainer fit | Fit one explicitly correlated TRAIN-only attack/switch/replacement model from four distinct generated trainer scenarios with five timing trials each; retain failures and zero promotion claim | Sol High, Fast off |
+| Independent trainer supply | Secure four authentic independent TRAIN roots with four admitted scenarios each and prompt, forced and depleted-attack contexts; do not relabel same-root variants | Sol High, Fast off |
 | Battle policy qualification and comparison | Retain the four-independent-roots-by-four-scenarios qualified-fit gate, then beat both the frozen model and fixed heuristic on separate natural DEVELOPMENT episodes before promotion | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:90–120 minutes to build four prospectively declared varied
-TRAIN configurations and five RNG trials each. The newly authorized
-correlated exploratory fit does not lower the separate four-by-four
-qualification gate. Do not fit a single generated case, count siblings as
-independent roots, replay consumed trials or spend development roots before
-a justified challenger.
+Next time box:90–120 minutes to inventory and freeze bounded authentic trainer
+source opportunities outside the retired supply path. The positive correlated
+exploratory fit does not lower the separate four-by-four qualification gate.
+Do not count timing siblings as independent roots, replay consumed trials or
+spend DEVELOPMENT roots before a qualified challenger.
 No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-teacher-battle-species-moves-2026-09-17.json) ·
+[Latest evidence](evidence/red-trainer-exploratory-outcome-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)

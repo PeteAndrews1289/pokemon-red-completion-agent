@@ -1,0 +1,95 @@
+{
+  "schema": "pokemon.red.trainer-exploratory-outcome.v1",
+  "recorded_on": "2026-09-17",
+  "session_id": "2026-09-17-trainer-exploratory-train-v1",
+  "scope": "One authenticated upstream Red TRAIN trainer root; isolated teacher setup and model-owned cartridge battles only",
+  "factory_repair": {
+    "finding": "Synthetic reserve owner IDs were zero rather than the source player's owner ID, causing live selected attacks to consume no PP and no damage after a voluntary switch",
+    "repair_commit": "97b445fbc11ed9eb9eb69e1cf71fdae1f4a92909",
+    "verification": "A private-ROM switch into Squirtle followed by Water Gun now executes and damages Geodude; reserve owner IDs are checked in ROM-free and live tests",
+    "effect_on_prior_evidence": "Earlier same-root fit and holdout are superseded because their synthetic reserve cartridge states were defective"
+  },
+  "exploratory_training": {
+    "qualification_tier": "correlated_exploratory_train_only",
+    "distinct_upstream_roots": 1,
+    "repaired_scenarios": 8,
+    "timing_trials_per_scenario": 5,
+    "measured_opening_preferences": {
+      "switch": 4,
+      "attack": 4
+    },
+    "head_example_counts": {
+      "move": 8,
+      "control": 8,
+      "switch": 8
+    },
+    "four_case_repair_fit_sha256": "fa14c6db76801c6658624976bc103340d42d79d5f1b4a0ab8a694369ff3f9a7a",
+    "eight_case_fit_receipt_sha256": "f5d2bbfa42eb2fef519e47701214c0ddb0d3e18968b51c524576d48056ef5a29",
+    "eight_case_model_sha256": "36f56c75e4a28655e421a03daff4a8ba5f859c9307c529ac947349bd668a45af",
+    "independent_root_gate_passed": false,
+    "promotion_eligible": false
+  },
+  "retained_falsifiers": [
+    {
+      "case": "first repaired four-case challenger on unseen s6 TRAIN matchup",
+      "matched_timings": 5,
+      "frozen_wins": 5,
+      "model_wins": 5,
+      "model_voluntary_switches": 0,
+      "model_party_hp_lost_mean": 170.6,
+      "frozen_party_hp_lost_mean": 146.0,
+      "conclusion": "No switching advantage; the model lost more HP on every timing"
+    },
+    {
+      "case": "eight-case challenger on unseen s11 TRAIN matchup before policy repair",
+      "matched_timings": 5,
+      "frozen_wins": 5,
+      "model_completed_trials": 0,
+      "model_voluntary_switches_before_failure_range": [9, 15],
+      "failure": "Repeated switching led to optional replacement prompts with no living reserve; target projection raised instead of declining",
+      "disposition": "All five failed runs retained and closed without replay or replacement"
+    }
+  ],
+  "controller_repair": {
+    "commit": "01dbd42a07abb2df5cc9619fc3499c9dfb648a91",
+    "changes": [
+      "Decline an optional replacement prompt when there is no legal target",
+      "After a voluntary switch, mask another voluntary switch against the same opponent until a model-selected attack is attempted; forced switches and depleted attacks remain legal"
+    ],
+    "claim": "A disclosed action-safety boundary, not learned post-switch value"
+  },
+  "fresh_train_holdout": {
+    "scenario": "s12 Bulbasaur versus Pidgey with Pikachu and Charmander reserves",
+    "declaration_sha256": "ed3537455277563924d96e0650d17c948c2bed63e2dca0adb02e629d4dfa52c1",
+    "capture_id": "assisted-train-d986f5442e4daca5",
+    "matched_timing_offsets": [0, 2, 4, 6, 8],
+    "model_wins": 5,
+    "frozen_attack_only_wins": 0,
+    "model_opening_choices": "Voluntary switch to party slot 2 in all five trials",
+    "model_voluntary_switch_counts": [3, 3, 2, 2, 3],
+    "model_party_hp_lost": [86, 73, 140, 55, 111],
+    "frozen_party_hp_lost": [180, 180, 180, 180, 180],
+    "model_party_faints": [1, 1, 2, 0, 1],
+    "frozen_party_faints": [3, 3, 3, 3, 3],
+    "complete_event_logs": 10,
+    "model_invalid_actions": 0,
+    "model_teacher_interventions": 0,
+    "model_suppressed_or_failed_moves": 0,
+    "interpretation": "Positive same-root synthetic TRAIN transfer versus one attack-only control, after a disclosed runtime switch-safety rule; not natural or independently rooted validation"
+  },
+  "product_counters": {
+    "central_model": "Model137 unchanged: 137 examples, 92 successes, 58 economy-qualified",
+    "red_native_registrations": "96/124 unchanged",
+    "fresh_red_acceptance": "0/5 unchanged",
+    "natural_development_evaluations": 0,
+    "authority_promotions": 0,
+    "full_game_runs": 0,
+    "github_pushes": 0
+  },
+  "remaining_gates": [
+    "Four independent authenticated TRAIN trainer roots with four admitted scenarios each, including main, prompt, forced and depleted-attack contexts",
+    "Disjoint natural DEVELOPMENT comparison against both frozen and fixed controls",
+    "Sustained model-owned battles without a teacher fallback and without relying on the switch-safety mask for value learning",
+    "Only then consider battle authority or a fresh Red acceptance run"
+  ]
+}
