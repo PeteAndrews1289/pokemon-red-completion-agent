@@ -759,7 +759,10 @@ def _await_next_battle_decision(
         _require_present_turn_state(
             raw, expected_map=expected_map, label=label, allow_player_faint=True
         )
-        if move_executed:
+        # The selected spend was already proved before settlement. Once battle
+        # state exits, scripted post-battle healing may restore PP; it is not a
+        # second in-battle action and must not be mistaken for one.
+        if move_executed and raw.battle_state != 0:
             _verify_selected_turn_pp(initial_raw, raw, slot=slot, label=label)
         if raw.battle_state == 0 or (raw.battler_hp or 0) == 0:
             return
@@ -780,7 +783,7 @@ def _await_next_battle_decision(
             _require_present_turn_state(
                 stable, expected_map=expected_map, label=label, allow_player_faint=True
             )
-            if move_executed:
+            if move_executed and stable.battle_state != 0:
                 _verify_selected_turn_pp(initial_raw, stable, slot=slot, label=label)
             if stable.battle_state == 0 or (stable.battler_hp or 0) == 0:
                 return

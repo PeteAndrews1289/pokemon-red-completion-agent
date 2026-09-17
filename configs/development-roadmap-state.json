@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-practice-telemetry-varied-train",
+  "as_of_session": "2026-09-17-trainer-practice-astra-repair-pilot",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1754,6 +1754,12 @@
       "result": "Trainer decision logging and cohort reporting passed real Red tests. The six-on-six frozen baseline lost; a low-HP six-choice TRAIN contrast was retained. A type-immunity run stopped at the PP boundary after eleven completed decisions.",
       "deviation": "All three assisted configurations share one TRAIN root. The PP-accounting failure is unresolved and was not replayed or relabeled. No fitted switch challenger, natural development comparison, authority promotion, Red registration, fresh acceptance, transfer or GitHub push. Stage and checklist exits are unchanged; this review is a required projection sync, not learning progress.",
       "next": "Sol High, Fast off: inspect the retained PP failure or a ROM-free reproducer without replay. Resume prospective varied TRAIN contrasts only after the turn boundary is sound; fit on TRAIN and compare against frozen/fixed controls on disjoint natural DEVELOPMENT roots."
+    },
+    {
+      "session": "2026-09-17-trainer-practice-astra-repair-pilot",
+      "result": "Cartridge stat and reserve semantics, loss-preserving switch execution, actor-visible combat features, whole-party returns and strict evidence admission were repaired. One prospectively declared six-choice trainer scenario passed all five timing trials as one TRAIN target across move, control and switch heads; native mechanic probes passed.",
+      "deviation": "The scenario still has one upstream TRAIN root; a second prospectively declared prompt scenario failed closed at terminal PP restoration and was excluded without replay. A narrow terminal rule passed ROM-free and a separate one-turn private-ROM mechanic case. No fit, authority promotion, Red registration, fresh acceptance, natural DEVELOPMENT, transfer or GitHub push. Stage and checklist exits remain unchanged.",
+      "next": "Secure four genuinely independent authenticated trainer TRAIN roots without reopening the prohibited clean-power factory. Collect four admitted scenarios per root with five timings and prompt, forced and depleted-attack coverage before the first fit; compare any challenger on disjoint natural DEVELOPMENT."
     }
   ],
   "closed_milestones": [

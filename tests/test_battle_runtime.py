@@ -364,6 +364,59 @@ def test_bounded_move_turn_can_settle_opponent_response_before_scoring() -> None
     assert confirmations == 3
 
 
+def test_selected_spend_survives_post_battle_pp_restoration() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif confirmations == 2:
+            runtime.raw = replace(runtime.raw, enemy_hp=0, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif confirmations == 3:
+            runtime.raw = replace(runtime.raw, battle_state=0, first_party_pp=(35, 30, 30, 11))
+
+    runtime.on_action = advance
+    result = execute_bounded_battle_move_turn(
+        runtime, runtime, expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1, expected_battle_state=2, settle_to_next_decision=True,
+    )
+    assert result.move_executed is True
+    assert result.final_state.battle_state == 0
+    assert result.final_state.first_party_pp == (35, 30, 30, 11)
+
+
+def test_selected_spend_still_rejects_in_battle_pp_restoration() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is not MacroActionKind.CONFIRM:
+            return
+        confirmations += 1
+        if confirmations == 1:
+            runtime.menu = BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1)
+        elif confirmations == 2:
+            runtime.raw = replace(runtime.raw, enemy_hp=11, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+        elif confirmations == 3:
+            runtime.raw = replace(runtime.raw, first_party_pp=(35, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.MAIN, selected_main_command=0)
+
+    runtime.on_action = advance
+    with pytest.raises(BattleRuntimeError, match="PP accounting"):
+        execute_bounded_battle_move_turn(
+            runtime, runtime, expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1, expected_battle_state=2, settle_to_next_decision=True,
+        )
+
+
 def test_bounded_trainer_turn_stops_at_model_owned_switch_prompt() -> None:
     class PromptRuntime(MeasuredTurnRuntime):
         prompt_visible = False

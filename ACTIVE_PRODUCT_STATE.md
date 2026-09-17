@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Repair cartridge stat fidelity first, then loss-preserving execution/admission and learnable feature/return contracts; first fit requires a bounded four-by-four TRAIN corpus. Natural DEVELOPMENT comparison follows a justified challenger.
+- Next decision: Secure independent authenticated trainer TRAIN roots without violating the clean-power restriction; collect balanced four-by-four scenarios and five timing trials with prompt/forced/depletion coverage before the first three-head fit. Natural DEVELOPMENT follows a justified challenger.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-astra-review-2026-09-17.json)
+**2026-09-17-trainer-practice-astra-repair-pilot** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-repair-pilot-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Review prevents training on incorrect mechanics, censored losses or incomparable attack/switch returns. The earlier executed contrast remains diagnostic; previous neutral-stat and admission assurances are not training clearance. |
-| Learning output | No new learner result. 300 targeted tests passed, while ten deliberately altered in-memory reports were accepted by admission. Static and ROM-free probes confirmed cartridge/stat, feature and switch-outcome gaps; originals remain intact. |
-| Authority delta | None. This read-only review found training blockers; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No natural DEVELOPMENT or cross-title execution. All recent assisted trainer variants remain one upstream TRAIN root. |
-| Blocker | Confirmed incorrect neutral-stat formula, native enemy reserve stat/PP resets, weak admission, censored switch losses, empty-attack switch blockage, missing stat features, attack-only reward bias and incomplete branch logs. One TRAIN root and no joint fit-ready corpus. |
-| Decision | Training is not cleared. Repair cartridge fidelity, then loss-preserving execution/admission, then observable features/common returns; collect a bounded four-by-four TRAIN corpus before the first switch-aware fit. |
-| Next session | Sol High, Fast off: packet 1 corrects stat computation and native trainer reserve stats/PP semantics, with independent formula tests and prospectively bounded mechanic qualification. Packets 2-4 are retained in the review. |
-| Next falsifier | Corrected construction still changes unexpectedly on send-out/level-up, a valid losing switch is discarded, or malformed branch evidence passes admission. No fit until these checks and the feature/target contract pass. |
-| Stop condition | Do not replay or relabel historical PP/HP failures, fit DEVELOPMENT, manufacture lineage independence, launch training before repair/coverage gates, run a full game or publish to GitHub. |
+| Product alignment | The pilot now measures actual attack-versus-switch outcomes with correct cartridge stats and complete logs, while explicitly withholding model credit until independent supply and coverage exist. |
+| Learning output | One same-root TRAIN scenario, six choices under five declared timings, was execution- and return-admitted as one three-head target. No fit or authority change. Real cartridge probes passed native send-out stats/PP, level-up, losing switch and empty-attack switching. |
+| Authority delta | None. One corrected five-timing TRAIN scenario was admitted across move/control/switch heads, but no model was fitted or promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No natural DEVELOPMENT or cross-title execution. The qualified pilot remains one upstream TRAIN root. |
+| Blocker | Only one authenticated upstream trainer TRAIN root is available; a balanced four-root-by-four-scenario corpus with prompt, forced and empty-attack contexts is still missing. Routine clean-power teacher-root generation remains prohibited by the active lane. |
+| Decision | The repaired trainer practice path is a qualified pilot, not training clearance. Preserve the failed terminal-PP attempt, secure independent TRAIN trainer roots without manufacturing lineage, then collect the bounded corpus before fitting and natural DEVELOPMENT comparison. |
+| Next session | Find or prospectively authorize independent authenticated TRAIN trainer sources; then collect four balanced scenarios per root with five timings, prompt/forced/depletion coverage, and fit only after admission. |
+| Next falsifier | Independent trainer source roots cannot be authenticated without violating the clean-power stop condition, or a new prompt/forced/depletion scenario fails execution or return admission. No fit below the frozen corpus floor. |
+| Stop condition | Do not replay or relabel failed PP/HP attempts, fit under the four-by-four balanced corpus floor, relabel timing siblings as independent, open DEVELOPMENT, run a full game or push GitHub. |
 
 ### Stop conditions
 

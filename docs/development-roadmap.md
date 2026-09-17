@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-practice-telemetry-varied-train**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-practice-astra-repair-pilot**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-practice-astra-repair-pilot
+
+Cartridge stat and reserve semantics, loss-preserving switch execution, actor-visible combat features, whole-party returns and strict evidence admission were repaired. One prospectively declared six-choice trainer scenario passed all five timing trials as one TRAIN target across move, control and switch heads; native mechanic probes passed.
+
+**Deviation:** The scenario still has one upstream TRAIN root; a second prospectively declared prompt scenario failed closed at terminal PP restoration and was excluded without replay. A narrow terminal rule passed ROM-free and a separate one-turn private-ROM mechanic case. No fit, authority promotion, Red registration, fresh acceptance, natural DEVELOPMENT, transfer or GitHub push. Stage and checklist exits remain unchanged.
+
+**Next:** Secure four genuinely independent authenticated trainer TRAIN roots without reopening the prohibited clean-power factory. Collect four admitted scenarios per root with five timings and prompt, forced and depleted-attack coverage before the first fit; compare any challenger on disjoint natural DEVELOPMENT.
 
 ### 2026-09-17-trainer-practice-telemetry-varied-train
 

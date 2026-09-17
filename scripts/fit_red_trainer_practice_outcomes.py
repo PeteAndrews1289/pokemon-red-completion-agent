@@ -10,8 +10,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 from collections import Counter
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 
 from pokemon_red_completion.battle_scenario_capture import open_battle_scenario_capture
@@ -26,6 +28,35 @@ from pokemon_red_completion.red_trainer_practice_targets import (
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.trainer-practice-fit-corpus-plan.v1"
 OFFSETS = (0, 2, 4, 6, 8)
+SHA256 = re.compile(r"[0-9a-f]{64}")
+
+
+def _validate_root_source_provenance(
+    receipts: Sequence[Mapping[str, object]],
+) -> None:
+    """Reject duplicate or inconsistent upstream states before counting roots.
+
+    Distinct hashes are necessary, but not by themselves proof that captures
+    came from independent play. That provenance must still be audited.
+    """
+    source_by_root: dict[str, str] = {}
+    root_by_source: dict[str, str] = {}
+    for receipt in receipts:
+        root = receipt.get("root_lineage_id")
+        source = receipt.get("source_state_sha256")
+        if (
+            not isinstance(root, str)
+            or not root
+            or not isinstance(source, str)
+            or SHA256.fullmatch(source) is None
+        ):
+            raise ValueError("trainer root source identity is missing")
+        if root in source_by_root and source_by_root[root] != source:
+            raise ValueError("trainer root maps to multiple upstream states")
+        if source in root_by_source and root_by_source[source] != root:
+            raise ValueError("one trainer source was relabeled as multiple roots")
+        source_by_root[root] = source
+        root_by_source[source] = root
 
 
 def _bound_path(value: object, label: str) -> Path:
@@ -126,11 +157,13 @@ def run(
             "scenario_index": scenario_index,
             "capture_id": capture.manifest.capture_id,
             "root_lineage_id": capture.manifest.root_lineage_id,
+            "source_state_sha256": capture.manifest.source_state_sha256,
             "timing_count": len(OFFSETS),
             "decision_context": aggregate["decision_context"],
             "attack_depleted": aggregate["attack_depleted"],
             "head_kinds": sorted(heads),
         })
+    _validate_root_source_provenance(scenario_receipts)
     root_counts = Counter(row["root_lineage_id"] for row in scenario_receipts)
     if probe_only:
         return {

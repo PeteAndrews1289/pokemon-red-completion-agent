@@ -143,6 +143,46 @@ def test_native_trainer_sendout_recalculates_stats_and_pp(levelup: bool) -> None
             assert after.active_party_hp <= after.active_party_max_hp
 
 
+def test_live_terminal_pp_restoration_follows_verified_selected_spend() -> None:
+    """New one-turn mechanic case; never part of a TRAIN target corpus."""
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_SOURCE_STATE")
+    if not rom_path or not state_path:
+        pytest.skip("private authenticated TRAIN mechanic inputs not supplied")
+    source = Path(state_path).read_bytes()
+    cartridge = RedPracticeCartridge(Path(rom_path).read_bytes())
+    with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(source)
+        reader = PokemonRedStateReader(emulator)
+        before = reader.read()
+        assert before.map_id is not None
+        spec = BattlePracticeSpec.from_dict({
+            "source_state_sha256": sha256(source).hexdigest(),
+            "root_lineage_id": "trainer-terminal-pp-mechanic-probe",
+            "partition": "train", "battle_kind": "trainer",
+            "actor_species_ref": pokemon_red_species_ref(84), "actor_level": 35,
+            "actor_moves": [_move(85, 15), _move(98, 30)],
+            "opponent_species_ref": pokemon_red_species_ref(176),
+            "opponent_level": 5, "opponent_hp": 1,
+            "opponent_moves": [_move(33, 35)], "opponent_party_count": 1,
+        })
+        materialize_red_train_practice(
+            reader, emulator._require_backend().memory, spec, cartridge=cartridge
+        )
+        initial = reader.read()
+        assert initial.active_party_pp is not None
+        actions = FrameSafeExecutor(FrameBudgetController(emulator, maximum_frames=16000))
+        result = execute_bounded_battle_move_turn(
+            reader, actions, expected_map=before.map_id, selected_slot=1,
+            expected_battle_state=2, settle_to_next_decision=True,
+            timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=80),
+        )
+        assert result.move_executed is True
+        assert result.final_state.battle_state == 0
+        assert result.final_state.first_party_pp is not None
+        assert result.final_state.first_party_pp[0] == initial.active_party_pp[0]
+
+
 @pytest.mark.parametrize("depleted", [False, True])
 def test_live_losing_voluntary_switch_is_retained(
     tmp_path: Path, depleted: bool
