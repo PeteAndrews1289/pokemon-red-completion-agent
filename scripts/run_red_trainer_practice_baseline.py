@@ -29,6 +29,10 @@ from pokemon_red_completion.executor import FrameBudgetController, FrameSafeExec
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_player import _record, _write
+from pokemon_red_completion.red_battle_scenario import (
+    PreparedRedBattleScenario,
+    prepare_red_battle_scenario,
+)
 from pokemon_red_completion.red_trainer_practice_counterfactual import (
     TrainerPracticeFirstChoice,
     collect_trainer_practice_counterfactuals,
@@ -83,7 +87,9 @@ def _authenticate(plan: object):
         or capture.manifest.expected_battle_state != 2
         or plan.get("max_decisions") != 80
         or plan.get("maximum_frames") != 120000
-        or plan.get("matched_choices") not in {None, "opening_attack_vs_five_switches"}
+        or plan.get("matched_choices") not in {
+            None, "opening_attack_vs_five_switches", "all_legal_opening"
+        }
         or plan.get("matched_prompt_choices") not in {None, True}
     ):
         raise ValueError("trainer baseline scope differs")
@@ -91,6 +97,29 @@ def _authenticate(plan: object):
     if not isinstance(output, str) or Path(output).exists():
         raise ValueError("trainer baseline output must be new")
     return plan, capture, model
+
+
+def _all_legal_opening_choices(
+    prepared: PreparedRedBattleScenario,
+    party_hp: tuple[int, ...],
+    active_party_index: int,
+) -> tuple[TrainerPracticeFirstChoice, ...]:
+    if not 0 <= active_party_index < len(party_hp):
+        raise ValueError("trainer opening active party slot differs")
+    move_choices = tuple(
+        TrainerPracticeFirstChoice(BattleAction.move(slot + 1))
+        for slot, legal in zip(
+            prepared.features.slot_indices,
+            prepared.supported_candidate_mask,
+            strict=True,
+        ) if legal
+    )
+    switch_choices = tuple(
+        TrainerPracticeFirstChoice(BattleAction.switch(index + 1))
+        for index, hp in enumerate(party_hp)
+        if hp > 0 and index != active_party_index
+    )
+    return move_choices + switch_choices
 
 
 def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
@@ -141,6 +170,20 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         with PyBoyAdapter(Path(rom_record["path"]), watch=False, speed=None) as emulator:
             yield FrameBudgetController(emulator, maximum_frames=120000)
 
+    def all_legal_opening_choices():
+        with session_factory() as session:
+            session.load_state_bytes(capture.state_bytes)
+            reader = PokemonRedStateReader(session)
+            raw = reader.read()
+            prepared = prepare_red_battle_scenario(
+                PokemonRedObservationEncoder.from_state_reader(reader), raw
+            )
+            if raw.party_hp is None or raw.active_party_index is None:
+                raise ValueError("trainer opening party is unavailable")
+            return _all_legal_opening_choices(
+                prepared, raw.party_hp, raw.active_party_index
+            )
+
     output = Path(plan["output"])
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
     _record(
@@ -182,23 +225,29 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
             )
 
+        matched_choices = plan.get("matched_choices")
+        first_choices = (
+            all_legal_opening_choices()
+            if matched_choices == "all_legal_opening"
+            else (
+                TrainerPracticeFirstChoice(BattleAction.move(1)),
+                *(
+                    TrainerPracticeFirstChoice(BattleAction.switch(slot))
+                    for slot in range(2, 7)
+                ),
+            )
+        )
         matched = (
             collect_trainer_practice_counterfactuals(
                 capture,
                 session_factory=session_factory,
                 continuation_policy_factory=FrozenAttackBaseline,
-                first_choices=(
-                    TrainerPracticeFirstChoice(BattleAction.move(1)),
-                    *(
-                        TrainerPracticeFirstChoice(BattleAction.switch(slot))
-                        for slot in range(2, 7)
-                    ),
-                ),
+                first_choices=first_choices,
                 max_decisions=8,
                 player_turn_horizon=2,
                 branch_sink=retain_branch,
             )
-            if plan.get("matched_choices") == "opening_attack_vs_five_switches"
+            if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}
             else None
         )
         matched_prompt = None
