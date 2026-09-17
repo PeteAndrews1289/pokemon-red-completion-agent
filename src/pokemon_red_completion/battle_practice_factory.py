@@ -1,0 +1,107 @@
+"""Title-neutral request for teacher-assisted, isolated battle practice.
+
+This describes initial conditions, never a player action. Title adapters may
+support only a subset of possible conditions and must reject unsupported keys.
+All variants from one source retain that source's upstream lineage identity.
+"""
+
+from __future__ import annotations
+
+import re
+from dataclasses import dataclass
+
+from .provenance import canonical_sha256
+from .scenario_lab import ScenarioPartition
+
+_SHA256 = re.compile(r"[0-9a-f]{64}\Z")
+_SAFE_ID = re.compile(r"[a-z0-9][a-z0-9._-]{0,95}\Z")
+
+
+class BattlePracticeError(ValueError):
+    """An assisted condition is unsupported or cannot be authenticated."""
+
+
+@dataclass(frozen=True, slots=True)
+class PracticeMove:
+    move_ref: str
+    pp: int
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.move_ref, str) or not self.move_ref:
+            raise BattlePracticeError("practice move needs a nonempty semantic reference")
+        if type(self.pp) is not int or not 1 <= self.pp <= 63:  # noqa: E721
+            raise BattlePracticeError("practice move PP must be 1..63")
+
+
+@dataclass(frozen=True, slots=True)
+class BattlePracticeSpec:
+    source_state_sha256: str
+    root_lineage_id: str
+    partition: ScenarioPartition
+    actor_moves: tuple[PracticeMove, ...]
+    opponent_hp: int
+
+    def __post_init__(self) -> None:
+        if _SHA256.fullmatch(self.source_state_sha256) is None:
+            raise BattlePracticeError("practice source state hash differs")
+        if _SAFE_ID.fullmatch(self.root_lineage_id) is None:
+            raise BattlePracticeError("practice root lineage differs")
+        if self.partition is not ScenarioPartition.TRAIN:
+            raise BattlePracticeError("first practice factory is train-only")
+        if (
+            not isinstance(self.actor_moves, tuple)
+            or not 2 <= len(self.actor_moves) <= 4
+            or any(not isinstance(move, PracticeMove) for move in self.actor_moves)
+        ):
+            raise BattlePracticeError("practice needs two to four declared moves")
+        if len({move.move_ref for move in self.actor_moves}) != len(self.actor_moves):
+            raise BattlePracticeError("practice moves must be distinct alternatives")
+        if type(self.opponent_hp) is not int or self.opponent_hp <= 0:  # noqa: E721
+            raise BattlePracticeError("practice opponent HP must be positive")
+
+    @classmethod
+    def from_dict(cls, value: object) -> BattlePracticeSpec:
+        """Fail closed when a caller requests an axis this adapter cannot set."""
+
+        required = {
+            "source_state_sha256",
+            "root_lineage_id",
+            "partition",
+            "actor_moves",
+            "opponent_hp",
+        }
+        if not isinstance(value, dict) or set(value) != required:
+            raise BattlePracticeError("unsupported or missing practice condition")
+        moves = value["actor_moves"]
+        if not isinstance(moves, list) or any(
+            not isinstance(move, dict) or set(move) != {"move_ref", "pp"} for move in moves
+        ):
+            raise BattlePracticeError("practice move records differ")
+        try:
+            partition = ScenarioPartition(value["partition"])
+            return cls(
+                source_state_sha256=value["source_state_sha256"],
+                root_lineage_id=value["root_lineage_id"],
+                partition=partition,
+                actor_moves=tuple(
+                    PracticeMove(move_ref=move["move_ref"], pp=move["pp"]) for move in moves
+                ),
+                opponent_hp=value["opponent_hp"],
+            )
+        except (TypeError, ValueError, KeyError) as error:
+            raise BattlePracticeError(f"invalid practice condition: {error}") from error
+
+    @property
+    def configuration_sha256(self) -> str:
+        return canonical_sha256(
+            {
+                "schema": "pokemon.core.battle-practice-configuration.v1",
+                "source_state_sha256": self.source_state_sha256,
+                "root_lineage_id": self.root_lineage_id,
+                "partition": self.partition.value,
+                "actor_moves": [
+                    {"move_ref": move.move_ref, "pp": move.pp} for move in self.actor_moves
+                ],
+                "opponent_hp": self.opponent_hp,
+            }
+        )
