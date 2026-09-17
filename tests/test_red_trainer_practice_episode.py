@@ -138,7 +138,8 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
     assert result.stop_reason == "battle_won"
     assert result.decisions[0]["kind"] == "attack"
     assert result.decisions[0]["observation"] == {"features": {"battle": {"kind": "trainer"}}}
-    assert result.public_dict()["schema"] == "pokemon.red.trainer-practice-model-episode.v2"
+    assert result.public_dict()["schema"] == "pokemon.red.trainer-practice-model-episode.v3"
+    assert result.final_observation == {"features": {"battle": {"kind": "trainer"}}}
     assert result.public_dict()["teacher_queries"] == 0
 
 

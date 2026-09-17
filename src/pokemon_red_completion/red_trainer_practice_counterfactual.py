@@ -159,8 +159,8 @@ def collect_trainer_practice_counterfactuals(
             policy=wrapped,
             max_decisions=max_decisions,
         )
-        if not wrapped.consumed or not episode.decisions:
-            raise TrainerPracticeCounterfactualError("first choice was not executed")
+        if not wrapped.consumed or not episode.decisions or episode.final_observation is None:
+            raise TrainerPracticeCounterfactualError("counterfactual branch outcome is incomplete")
         branches.append((choice, episode))
         if branch_sink is not None:
             branch_sink(index, choice, episode)

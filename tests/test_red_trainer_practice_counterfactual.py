@@ -76,6 +76,7 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
             battle_won=False,
             final_battle_state=2,
             stop_reason="decision_budget",
+            final_observation={"features": {"battle": {"kind": "trainer"}}},
         )
 
     monkeypatch.setattr(counterfactual, "run_red_trainer_practice_episode", fake_run)

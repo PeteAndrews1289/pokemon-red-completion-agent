@@ -146,6 +146,7 @@ def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() 
     assert len(matched.branches) == 6
     assert matched.root_lineage_id == capture.manifest.root_lineage_id
     assert matched.public_dict()["new_independent_upstream_roots"] == 0
+    assert all(episode.final_observation is not None for _choice, episode in matched.branches)
     assert [episode.decisions[0]["kind"] for _choice, episode in matched.branches] == [
         "attack", "voluntary_switch", "voluntary_switch", "voluntary_switch",
         "voluntary_switch", "voluntary_switch",

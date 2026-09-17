@@ -82,10 +82,11 @@ class RedTrainerPracticeEpisode:
     battle_won: bool
     final_battle_state: int
     stop_reason: str
+    final_observation: dict[str, object] | None = None
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.trainer-practice-model-episode.v2",
+            "schema": "pokemon.red.trainer-practice-model-episode.v3",
             "capture_id": self.capture_id,
             "manifest_sha256": self.manifest_sha256,
             "policy_id": self.policy_id,
@@ -94,6 +95,12 @@ class RedTrainerPracticeEpisode:
             "battle_won": self.battle_won,
             "final_battle_state": self.final_battle_state,
             "stop_reason": self.stop_reason,
+            "final_observation": self.final_observation,
+            "final_observation_sha256": (
+                canonical_sha256(self.final_observation)
+                if self.final_observation is not None
+                else None
+            ),
             "teacher_queries": 0,
             "memory_write_actions": 0,
             "authority_promotions": 0,
@@ -143,7 +150,12 @@ def run_red_trainer_practice_episode(
                 raise RedTrainerPracticeEpisodeError("trainer episode left its authenticated map")
             if raw.battle_state == 0:
                 return _receipt(
-                    capture, policy.policy_id, decisions, raw, reader.read_enemy_party_roster_hp()
+                    capture,
+                    policy.policy_id,
+                    decisions,
+                    raw,
+                    reader.read_enemy_party_roster_hp(),
+                    encoder.snapshot_from_raw(raw).to_dict(),
                 )
             if (
                 raw.battler_hp is None
@@ -171,6 +183,7 @@ def run_red_trainer_practice_episode(
                         battle_won=False,
                         final_battle_state=raw.battle_state,
                         stop_reason="party_defeated",
+                        final_observation=observation,
                     )
                 chosen_slot = policy.choose_switch(
                     observation,
@@ -294,7 +307,12 @@ def run_red_trainer_practice_episode(
         final = reader.read()
         if final.battle_state == 0:
             return _receipt(
-                capture, policy.policy_id, decisions, final, reader.read_enemy_party_roster_hp()
+                capture,
+                policy.policy_id,
+                decisions,
+                final,
+                reader.read_enemy_party_roster_hp(),
+                encoder.snapshot_from_raw(final).to_dict(),
             )
         if final.battle_state != 2:
             raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
@@ -306,10 +324,13 @@ def run_red_trainer_practice_episode(
             battle_won=False,
             final_battle_state=final.battle_state,
             stop_reason="decision_budget",
+            final_observation=encoder.snapshot_from_raw(final).to_dict(),
         )
 
 
-def _receipt(capture, policy_id, decisions, final, enemy_hp) -> RedTrainerPracticeEpisode:
+def _receipt(
+    capture, policy_id, decisions, final, enemy_hp, observation
+) -> RedTrainerPracticeEpisode:
     if enemy_hp is None:
         raise RedTrainerPracticeEpisodeError("trainer terminal lacks authenticated roster HP")
     won = bool(
@@ -325,4 +346,5 @@ def _receipt(capture, policy_id, decisions, final, enemy_hp) -> RedTrainerPracti
         battle_won=won,
         final_battle_state=final.battle_state,
         stop_reason="battle_won" if won else "battle_exited_without_win",
+        final_observation=observation,
     )
