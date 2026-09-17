@@ -57,7 +57,11 @@ cartridge, configures both combatants and recalculates actor experience.
 One private Pikachu-versus-Squirtle four-way battle executed; Thunderbolt
 knocked out the opponent and was the frozen model's choice. This verifies
 the training control surface, not learning progress. Custom movesets remain
-explicitly assisted, and full teams/switching are later work.
+explicitly assisted. A subsequent [six-member team qualification](evidence/red-teacher-battle-team-2026-09-17.json)
+configured five reserve slots in one private train state and completed one
+real in-game switch. That proves party construction and switch mechanics, not
+model-selected switching or full trainer battles; opponent rosters and trainer
+AI remain later work.
 
 This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
@@ -67,7 +71,7 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Model-directed battle experience | Generate varied, bounded train choices from the verified 151-species/moveset controls; measure stable choice contrasts across RNG timings | Sol High, Fast off |
+| Model-directed battle experience | Capture model-selected attack and switch outcomes from varied six-member train states; measure choice contrasts across RNG timings | Sol High, Fast off |
 | Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |

@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-teacher-battle-species-moves",
+  "as_of_session": "2026-09-17-teacher-battle-team",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1736,6 +1736,12 @@
       "result": "The teacher-only factory now reads all 151 Red species and their starting, level-up and TM/HM move availability from the cartridge. It configures both combatants, both movesets, stats, levels and actor experience. A private Pikachu-versus-Squirtle state passed exact readback and four real move branches; Thunderbolt won the turn and was the frozen model's choice.",
       "deviation": "One assisted root and one RNG timing establish control, not model improvement or independent coverage. Custom movesets are assisted; teams, switching, status, items and trainer AI remain unsupported. No fit, promotion, Red registration, fresh acceptance or GitHub push.",
       "next": "Sol High, Fast off: prospectively vary species, movesets and timing in bounded train episodes; only consider a fit with the existing multi-root gate and natural held-out comparison."
+    },
+    {
+      "session": "2026-09-17-teacher-battle-team",
+      "result": "The teacher-only factory configured five reserve slots from the Red cartridge in one six-member private train state. All five appeared as semantic switch candidates, and one bounded real switch succeeded in 18 actions and 1098 frames.",
+      "deviation": "This qualified team construction and switch mechanics, not model-selected switching or full trainer battles. No fit, promotion, independent root, Red registration, fresh acceptance or GitHub push.",
+      "next": "Sol High, Fast off: capture model-selected attack and switch outcomes from varied six-member train states across timings, then scope trainer-roster setup."
     }
   ],
   "closed_milestones": [

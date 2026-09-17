@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-species-moves**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-team**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-teacher-battle-team
+
+The teacher-only factory configured five reserve slots from the Red cartridge in one six-member private train state. All five appeared as semantic switch candidates, and one bounded real switch succeeded in 18 actions and 1098 frames.
+
+**Deviation:** This qualified team construction and switch mechanics, not model-selected switching or full trainer battles. No fit, promotion, independent root, Red registration, fresh acceptance or GitHub push.
+
+**Next:** Sol High, Fast off: capture model-selected attack and switch outcomes from varied six-member train states across timings, then scope trainer-roster setup.
 
 ### 2026-09-17-teacher-battle-species-moves
 

@@ -1,0 +1,59 @@
+{
+  "schema": "pokemon.red.teacher-battle-team-evidence.v1",
+  "session": "2026-09-17-teacher-battle-team",
+  "classification": "isolated_assisted_train_team_qualification_not_fit_or_promotion",
+  "mission_check": {
+    "reusable_capability": "Configure up to five existing reserve party slots with cartridge-backed Gen I species, levels, stats, HP, moves and PP for real switch-target practice",
+    "learned_authority": "No learner acted in this qualification; the teacher changes only an isolated setup state and the existing semantic switch-target view exposes five controller-legal alternatives",
+    "transfer_test": "Disjoint untouched natural development roots must establish a model advantage before promotion; no cross-title transfer result exists",
+    "cheapest_falsifier": "Six-member materialization fails exact readback or the real game cannot switch to a configured reserve",
+    "time_box": "One implementation session, one private materialization and one bounded in-game switch",
+    "stop_condition": "Stop on incoherent party state, failed switch, synthetic-root independence claim, development fit, full run or GitHub publication"
+  },
+  "implementation": {
+    "source_commit": "4d79d9c8abe07822f017e7004947a2632bb900bd",
+    "new_axis": "party_reserves",
+    "maximum_configured_reserves": 5,
+    "existing_party_count_required": true,
+    "cartridge_species_count": 151,
+    "configuration_schema": "pokemon.core.battle-practice-configuration.v4",
+    "earlier_configuration_hashes_preserved": true,
+    "model_memory_write_interface_added": false
+  },
+  "provenance": {
+    "source_root_lineage_id": "red-goal-root-c1d575483e311b3a9854b0e85237f725c3da1412ed62ab142dcd82050c666435",
+    "source_state_sha256": "d629f64d9800ecd7dda6cb6b47f4c12f1e0f81a5124422fde8e1a28b11ad902f",
+    "materialization_plan_sha256": "d0df75814e04320aaa88961429edd7433e6d7a981ceb2435085a4f9308bba8bf",
+    "materialization_outcome_sha256": "d30a70a51c55e1c745edc9604cf00bb9b7a071a7d8ca7e6fa58f0595a62322a3",
+    "assisted_state_sha256": "57d86b23bd7ea18503f8eab8d6246fdca320ff581638333a99a1eea2b5a8574c",
+    "independent_upstream_roots_added": 0
+  },
+  "qualification": {
+    "source_state_unchanged": true,
+    "materialization_controller_actions": 0,
+    "materialization_emulator_frames": 0,
+    "party_internal_species_ids": [84, 177, 176, 153, 59, 74],
+    "configured_reserve_slots": [2, 3, 4, 5, 6],
+    "semantic_switch_candidate_slots": [2, 3, 4, 5, 6],
+    "real_switch_from_party_index": 0,
+    "real_switch_to_party_index": 1,
+    "real_switch_result_species_id": 177,
+    "real_switch_controller_actions": 18,
+    "real_switch_emulator_frames": 1098,
+    "battle_state_after_switch": 1,
+    "bounded_frame_ceiling": 12000,
+    "focused_rom_free_tests_passed": 28,
+    "model_queries": 0,
+    "model_updates": 0,
+    "authority_promotions": 0,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0
+  },
+  "limitations": [
+    "The source already contained six occupied party slots; adding slots to a smaller party is not qualified",
+    "The switch was a teacher-triggered controller qualification, not a model-selected action or retained training outcome",
+    "The opponent remains a wild single combatant; trainer rosters, trainer AI, automatic replacement, items and full multi-turn trainer-battle settlement are not qualified",
+    "All generated siblings inherit the same consumed train root and cannot count as independent development or model progress"
+  ],
+  "github_pushed": false
+}
