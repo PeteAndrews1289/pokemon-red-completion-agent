@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Fit outcome-based attack-versus-switch and switch-target choices on varied assisted TRAIN battles, then require disjoint natural development advantage over frozen and fixed controls before promotion.
+- Next decision: Resolve the observed PP-boundary inconsistency without replaying the consumed attempt, then fit switch-aware choices from valid varied TRAIN outcomes and require disjoint natural development advantage over frozen/fixed controls before promotion.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | A model-selected switch cannot execute from an authenticated varied TRAIN battle, or a fitted challenger cannot beat frozen and fixed controls on untouched natural development battles. |
+| Cheapest falsifier | A varied TRAIN battle cannot preserve a valid selected-turn outcome, or a fitted switch-aware challenger fails separate natural DEVELOPMENT comparison against frozen and fixed controls. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-practice-model-boundary** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-model-boundary-2026-09-17.json)
+**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-telemetry-and-varied-train-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The model can own every full-party trainer battle decision in an authenticated short scenario; teacher memory edits only construct training conditions, and natural battles remain the promotion test. |
-| Learning output | One clean-opening TRAIN source yielded a six-on-six capture, four measured moves, a 29-decision frozen baseline loss, six equal-two-turn attack/switch branches and six equal-one-turn replacement-prompt branches. All have terminal observations. This is curriculum evidence, not a learner gain. |
-| Authority delta | A frozen move model chose 20 attacks in one authenticated six-on-six TRAIN episode. Fixed rules handled four optional and five forced switches; the party lost after four opponent KOs. No learned switch choice, fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent development or cross-title test ran. The assisted trainer battle inherits one TRAIN root; its loss is not an evaluation result. |
-| Blocker | The attack/switch trainer now retains equal-turn opening and replacement-prompt choices from one authenticated TRAIN root. The missing learning result is a fitted switch/control challenger with varied-roster coverage and disjoint natural development advantage. Status moves and items remain outside this qualified trainer scope. |
-| Decision | Vary TRAIN rosters and timings, fit attack-versus-switch and switch-target choices only on TRAIN, then compare a frozen challenger with fixed controls on untouched natural development battles before promotion. |
-| Next session | Sol High, Fast off, about 90-120 minutes: vary authenticated TRAIN rosters and timings, fit one switch-aware challenger on TRAIN only, then run a disjoint bounded natural development comparison. No full game run. |
-| Next falsifier | A switch-aware challenger cannot produce a legal useful switch, cannot outperform the no-optional-switch baseline in varied TRAIN battles, or fails untouched natural development comparison. |
-| Stop condition | Stop on incoherent generated state, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | The decision log preserves what the model saw, selected and spent, including failure prefixes. Teacher edits remain isolated TRAIN setup, and natural battles remain the promotion test. |
+| Learning output | A 110-event six-on-six baseline loss and one equal-two-turn six-choice low-HP TRAIN contrast were retained with rich model/action/cost traces. A type-immunity variant failed closed after 11 completed decisions and one unresolved choice. All three assisted configurations inherit one upstream TRAIN root. No model update or learner gain. |
+| Authority delta | The frozen attack model and fixed switch rule made 29 logged decisions in a six-on-six TRAIN loss; no voluntary learned switch, fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No independent development or cross-title test ran. Three assisted capture configurations inherit one TRAIN root; neither losses nor matched branches are evaluation results. |
+| Blocker | The instrumentation and three-head runner are ready, but there is no fitted switch-aware challenger or independent development advantage. The type-immunity TRAIN run stopped on a selected-turn PP-accounting failure at choice 12; its cause is unresolved, so no branch label was inferred. Status moves and items remain outside this trainer scope. |
+| Decision | Use retained evidence or a ROM-free reproducer to diagnose the PP-boundary failure without replaying the consumed attempt. Once sound, collect prospective varied TRAIN attack/switch contrasts, fit only on TRAIN, and compare with frozen/fixed controls on untouched natural DEVELOPMENT episodes. |
+| Next session | Sol High, Fast off, 90-120 minutes: diagnose the retained PP failure using existing trace or a ROM-free reproducer, then resume varied TRAIN contrasts only if sound. A natural DEVELOPMENT comparison remains gated on a TRAIN-fitted challenger. No full game run. |
+| Next falsifier | The PP-boundary inconsistency cannot be explained or reproduced safely without replay; alternatively, a fitted challenger cannot outperform frozen/fixed controls on disjoint natural DEVELOPMENT episodes. |
+| Stop condition | No replay or relabel of the PP-failed attempt; stop on unverified turn effects, synthetic-root independence, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

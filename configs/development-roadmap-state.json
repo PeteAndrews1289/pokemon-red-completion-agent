@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-trainer-practice-model-boundary",
+  "as_of_session": "2026-09-17-trainer-practice-telemetry-varied-train",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1748,6 +1748,12 @@
       "result": "A clean TRAIN source yielded six-on-six practice, a 29-decision baseline loss, six matched opening branches and six matched replacement-prompt branches. No fit or promotion.",
       "deviation": "The fixed switch baseline lost after four opponent KOs; this is not a learned switch result or development evaluation. All assisted variants inherit one TRAIN root. No fit, promotion, Red registration, fresh acceptance, transfer or GitHub push.",
       "next": "Sol High, Fast off: vary authenticated TRAIN rosters and timings, fit a switch-aware challenger on TRAIN only, then test disjoint natural development advantage."
+    },
+    {
+      "session": "2026-09-17-trainer-practice-telemetry-varied-train",
+      "result": "Trainer decision logging and cohort reporting passed real Red tests. The six-on-six frozen baseline lost; a low-HP six-choice TRAIN contrast was retained. A type-immunity run stopped at the PP boundary after eleven completed decisions.",
+      "deviation": "All three assisted configurations share one TRAIN root. The PP-accounting failure is unresolved and was not replayed or relabeled. No fitted switch challenger, natural development comparison, authority promotion, Red registration, fresh acceptance, transfer or GitHub push. Stage and checklist exits are unchanged; this review is a required projection sync, not learning progress.",
+      "next": "Sol High, Fast off: inspect the retained PP failure or a ROM-free reproducer without replay. Resume prospective varied TRAIN contrasts only after the turn boundary is sound; fit on TRAIN and compare against frozen/fixed controls on disjoint natural DEVELOPMENT roots."
     }
   ],
   "closed_milestones": [

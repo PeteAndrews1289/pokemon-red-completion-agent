@@ -173,8 +173,8 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-17-trainer-practice-model-boundary</text>
-<text x="50" y="2958" class="body">A clean TRAIN source yielded six-on-six practice, a 29-decision baseline loss, six matched opening branches and six matched</text>
-<text x="50" y="2983" class="body">replacement-prompt branches. No fit or promotion.</text>
+<text x="50" y="2923" class="small muted">2026-09-17-trainer-practice-telemetry-varied-train</text>
+<text x="50" y="2958" class="body">Trainer decision logging and cohort reporting passed real Red tests. The six-on-six frozen baseline lost; a low-HP six-choice</text>
+<text x="50" y="2983" class="body">TRAIN contrast was retained. A type-immunity run stopped at the PP boundary after eleven completed decisions.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>
