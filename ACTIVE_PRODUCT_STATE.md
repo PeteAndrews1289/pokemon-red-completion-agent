@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Astra reviews failed-run exclusion, raw outcome-to-target construction and minimum distinct TRAIN-root/matchup coverage before any switch-aware fit; natural DEVELOPMENT advantage over frozen/fixed controls remains required before promotion.
+- Next decision: Repair cartridge stat fidelity first, then loss-preserving execution/admission and learnable feature/return contracts; first fit requires a bounded four-by-four TRAIN corpus. Natural DEVELOPMENT comparison follows a justified challenger.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-pretrain-qualification-2026-09-17.json)
+**2026-09-17-trainer-practice-telemetry-varied-train** · status **closed** · evidence [qualification](docs/evidence/red-trainer-practice-astra-review-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The six-choice contrast is model-relevant and actually executed. National-Dex identity checks, HP gating and read-only admission prevent mislabeled or fabricated trainer outcomes; engineering checks are not learner gains. |
-| Learning output | One distinct assisted three-on-three TRAIN battle retained 15 frozen-baseline decisions and six executed equal-horizon opening choices. Switching to Squirtle beat the first opponent with no HP loss; all four attack openings beat none. All configurations share one upstream root; no model update or learner gain. |
-| Authority delta | The frozen attack-only baseline completed 15 decisions and lost a distinct three-on-three TRAIN battle. Six executed opening choices passed read-only admission, but no switch-aware fit or promotion occurred. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent natural DEVELOPMENT or cross-title test ran. All assisted capture configurations still inherit one TRAIN root. |
-| Blocker | The original off-slot PP cause remains unknown and both failed variants are excluded. One valid six-choice TRAIN contrast is still one upstream root. No scalar target contract, distinct-root coverage, fitted challenger or independent natural DEVELOPMENT advantage exists yet; status moves and items remain outside trainer scope. |
-| Decision | Astra reviews the pre-training package: failed-run exclusion, raw outcome-to-target contract and minimum distinct TRAIN roots/matchup coverage. Do not fit until that review is adjudicated. Then fit only admitted TRAIN outcomes and compare with frozen/fixed controls on untouched natural DEVELOPMENT battles. |
-| Next session | Astra High, Fast off, read-only pre-training review: adjudicate failed-run exclusion, measured-outcome target construction and minimum distinct TRAIN-root/matchup coverage. No fit, DEVELOPMENT opening or full run yet. |
-| Next falsifier | The proposed target or admission contract cannot keep failed variants out and sibling branches together, or future distinct TRAIN roots do not produce varied attack/switch outcomes; later, a fitted challenger fails natural DEVELOPMENT comparison. |
-| Stop condition | No replay or relabel of the PP-failed attempt; stop on unverified turn effects, synthetic-root independence, development fitting, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | Review prevents training on incorrect mechanics, censored losses or incomparable attack/switch returns. The earlier executed contrast remains diagnostic; previous neutral-stat and admission assurances are not training clearance. |
+| Learning output | No new learner result. 300 targeted tests passed, while ten deliberately altered in-memory reports were accepted by admission. Static and ROM-free probes confirmed cartridge/stat, feature and switch-outcome gaps; originals remain intact. |
+| Authority delta | None. This read-only review found training blockers; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No natural DEVELOPMENT or cross-title execution. All recent assisted trainer variants remain one upstream TRAIN root. |
+| Blocker | Confirmed incorrect neutral-stat formula, native enemy reserve stat/PP resets, weak admission, censored switch losses, empty-attack switch blockage, missing stat features, attack-only reward bias and incomplete branch logs. One TRAIN root and no joint fit-ready corpus. |
+| Decision | Training is not cleared. Repair cartridge fidelity, then loss-preserving execution/admission, then observable features/common returns; collect a bounded four-by-four TRAIN corpus before the first switch-aware fit. |
+| Next session | Sol High, Fast off: packet 1 corrects stat computation and native trainer reserve stats/PP semantics, with independent formula tests and prospectively bounded mechanic qualification. Packets 2-4 are retained in the review. |
+| Next falsifier | Corrected construction still changes unexpectedly on send-out/level-up, a valid losing switch is discarded, or malformed branch evidence passes admission. No fit until these checks and the feature/target contract pass. |
+| Stop condition | Do not replay or relabel historical PP/HP failures, fit DEVELOPMENT, manufacture lineage independence, launch training before repair/coverage gates, run a full game or publish to GitHub. |
 
 ### Stop conditions
 
