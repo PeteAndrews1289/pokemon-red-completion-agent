@@ -66,9 +66,17 @@ def _bound_file(value: object, label: str) -> bytes:
     return payload
 
 
+def _opening_idle_frames(plan: dict[str, object]) -> int:
+    value = plan.get("opening_idle_frames", 0)
+    if type(value) is not int or not 0 <= value <= 12:
+        raise ValueError("trainer baseline timing differs")
+    return value
+
+
 def _authenticate(plan: object):
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("trainer baseline plan differs")
+    _opening_idle_frames(plan)
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise ValueError("commit trainer baseline code before running it")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
@@ -212,6 +220,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "capture_manifest_sha256": capture.manifest_sha256,
             "policy_id": FrozenAttackBaseline.policy_id,
             "source_commit": plan["source_commit"],
+            "opening_idle_frames": _opening_idle_frames(plan),
         },
     )
     model_binding = plan["model"]
@@ -228,6 +237,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "policy_id": FrozenAttackBaseline.policy_id,
             "maximum_frames": plan["maximum_frames"],
             "max_decisions": plan["max_decisions"],
+            "opening_idle_frames": _opening_idle_frames(plan),
         },
     )
     try:
@@ -266,6 +276,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             session_factory=session_factory,
             policy=FrozenAttackBaseline(),
             max_decisions=80,
+            opening_idle_frames=_opening_idle_frames(plan),
             event_sink=log.emit,
             public_species_base_stats=public_stats,
         )

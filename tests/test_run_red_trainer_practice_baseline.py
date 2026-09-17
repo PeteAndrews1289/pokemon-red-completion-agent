@@ -30,6 +30,14 @@ def test_baseline_rejects_wrong_plan_before_cartridge_access():
         baseline._authenticate({"schema": "not-a-trainer-plan"})
 
 
+def test_baseline_timing_must_be_a_bounded_integer():
+    assert baseline._opening_idle_frames({}) == 0
+    assert baseline._opening_idle_frames({"opening_idle_frames": 8}) == 8
+    for value in (-1, 13, True, 2.5):
+        with pytest.raises(ValueError, match="timing differs"):
+            baseline._opening_idle_frames({"opening_idle_frames": value})
+
+
 def test_all_legal_opening_includes_every_supported_move_and_living_reserve():
     vector = tuple(0.0 for _ in FEATURE_NAMES)
     prepared = PreparedRedBattleScenario(
