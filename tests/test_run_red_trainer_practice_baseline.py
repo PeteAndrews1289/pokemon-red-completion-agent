@@ -52,6 +52,11 @@ def test_timed_prompt_can_be_collected_without_unrequested_main_branches():
         {**prompt_only, "matched_timing_offsets": [0, 2, 4]}, schema
     )
     assert not baseline._timed_choice_plan_supported(prompt_only, None)
+    forced_only = {
+        "matched_forced_choices": True,
+        "matched_timing_offsets": [0, 2, 4, 6, 8],
+    }
+    assert baseline._timed_choice_plan_supported(forced_only, schema)
 
 
 def test_all_legal_opening_includes_every_supported_move_and_living_reserve():

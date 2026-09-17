@@ -78,7 +78,11 @@ def _timed_choice_plan_supported(plan: dict[str, object], observation_schema: st
     return offsets is None or (
         offsets == [0, 2, 4, 6, 8]
         and observation_schema == OBSERVATION_SCHEMA_V2
-        and (plan.get("matched_choices") is not None or plan.get("matched_prompt_choices") is True)
+        and (
+            plan.get("matched_choices") is not None
+            or plan.get("matched_prompt_choices") is True
+            or plan.get("matched_forced_choices") is True
+        )
     )
 
 
@@ -109,6 +113,7 @@ def _authenticate(plan: object):
         or plan.get("matched_choices")
         not in {None, "opening_attack_vs_five_switches", "all_legal_opening"}
         or plan.get("matched_prompt_choices") not in {None, True}
+        or plan.get("matched_forced_choices") not in {None, True}
         or not _timed_choice_plan_supported(plan, capture.manifest.observation_schema)
     ):
         raise ValueError("trainer baseline scope differs")
@@ -495,6 +500,143 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 _record(
                     prompt_directory / "matched-prompt-choices.json",
                     matched_prompt.public_dict(),
+                )
+        if plan.get("matched_forced_choices") is True:
+            with PyBoyAdapter(Path(rom_record["path"]), watch=False, speed=None) as emulator:
+                emulator.load_state_bytes(capture.state_bytes)
+                reader = PokemonRedStateReader(emulator)
+                actions = FrameSafeExecutor(FrameBudgetController(emulator, maximum_frames=10000))
+                execute_bounded_battle_move_turn(
+                    reader,
+                    actions,
+                    expected_map=capture.manifest.expected_map,
+                    selected_slot=1,
+                    expected_battle_state=2,
+                    settle_to_next_decision=True,
+                    timing=replace(
+                        DEFAULT_BATTLE_RUNTIME_TIMING,
+                        max_post_attack_transition_pulses=40,
+                    ),
+                    label="trainer practice forced capture",
+                )
+                raw = reader.read()
+                if (
+                    raw.battle_state != 2
+                    or raw.battler_hp != 0
+                    or reader.trainer_switch_prompt_visible(raw)
+                    or raw.party_hp is None
+                    or raw.active_party_index is None
+                ):
+                    raise ValueError("trainer practice opening attack missed forced replacement")
+                forced_options = tuple(
+                    index + 1
+                    for index, hp in enumerate(raw.party_hp)
+                    if hp > 0 and index != raw.active_party_index
+                )
+                if len(forced_options) < 2:
+                    raise ValueError("trainer forced context needs two living switch alternatives")
+                observation = (
+                    PokemonRedObservationEncoder.from_state_reader(
+                        reader,
+                        include_battle_stats=(
+                            capture.manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                        ),
+                        public_species_base_stats=public_stats,
+                    )
+                    .snapshot_from_raw(raw)
+                    .to_dict()
+                )
+                forced_state = emulator.save_state_bytes()
+            forced_manifest = build_battle_scenario_capture_payload(
+                capture_id=f"{capture.manifest.capture_id}-forced-replacement",
+                root_lineage_id=capture.manifest.root_lineage_id,
+                partition=ScenarioPartition.TRAIN,
+                state_bytes=forced_state,
+                initial_observation_sha256=canonical_sha256(observation),
+                source_commit=plan["source_commit"],
+                expected_map=capture.manifest.expected_map,
+                expected_battle_state=2,
+                source_state_sha256=capture.manifest.state_sha256,
+                observation_schema=capture.manifest.observation_schema,
+            )
+            _write(output / "forced.state", forced_state)
+            _write(output / "forced.state.json", forced_manifest)
+            forced_capture = open_battle_scenario_capture(
+                output / "forced.state", output / "forced.state.json"
+            )
+            forced_choices = tuple(
+                TrainerPracticeFirstChoice(BattleAction.switch(slot))
+                for slot in forced_options
+            )
+            for offset in offsets:
+                forced_directory = output / f"forced-timing-{offset:02d}" if timed else output
+                if timed:
+                    forced_directory.mkdir(mode=0o700, exist_ok=False)
+                forced_plan_path = forced_directory / "matched-forced-plan.json"
+                _record(forced_plan_path, {
+                    "schema": "pokemon.red.trainer-practice-choice-plan.v1",
+                    "capture_manifest_sha256": forced_capture.manifest_sha256,
+                    "source_commit": plan["source_commit"],
+                    "model_sha256": model_binding["sha256"],
+                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "first_choice_refs": [choice.semantic_ref for choice in forced_choices],
+                    "player_turn_horizon": 1,
+                    "max_decisions": 5,
+                    "opening_idle_frames": offset,
+                })
+                forced_plan_sha256 = hashlib.sha256(forced_plan_path.read_bytes()).hexdigest()
+
+                def retain_forced_branch(  # type: ignore[no-untyped-def]
+                    index, choice, episode, directory=forced_directory
+                ):
+                    _record(
+                        directory / f"forced-branch-{index:02d}.json",
+                        {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
+                    )
+                    _record(
+                        directory / f"forced-branch-{index:02d}-event-log-verification.json",
+                        verify_trainer_practice_event_log(
+                            directory / f"forced-branch-{index:02d}-events"
+                        ),
+                    )
+
+                def forced_branch_event_log(  # type: ignore[no-untyped-def]
+                    index, choice, directory=forced_directory,
+                    timing_offset=offset, declared_plan_sha=forced_plan_sha256,
+                ):
+                    return TrainerPracticeEventLog(
+                        directory / f"forced-branch-{index:02d}-events",
+                        run_identity={
+                            "source_commit": plan["source_commit"],
+                            "capture_id": forced_capture.manifest.capture_id,
+                            "root_lineage_id": forced_capture.manifest.root_lineage_id,
+                            "partition": "train",
+                            "capture_manifest_sha256": forced_capture.manifest_sha256,
+                            "model_sha256": model_binding["sha256"],
+                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "first_choice_ref": choice.semantic_ref,
+                            "player_turn_horizon": 1,
+                            "max_decisions": 5,
+                            "opening_idle_frames": timing_offset,
+                            "plan_sha256": declared_plan_sha,
+                        },
+                    )
+
+                matched_forced = collect_trainer_practice_counterfactuals(
+                    forced_capture,
+                    session_factory=session_factory,
+                    continuation_policy_factory=FrozenAttackBaseline,
+                    first_choices=forced_choices,
+                    max_decisions=5,
+                    player_turn_horizon=1,
+                    branch_sink=retain_forced_branch,
+                    branch_event_log_factory=forced_branch_event_log,
+                    public_species_base_stats=public_stats,
+                    opening_idle_frames=offset,
+                )
+                _record(
+                    forced_directory / "matched-forced-choices.json",
+                    matched_forced.public_dict(),
                 )
     except Exception as error:
         log.fail(error)
