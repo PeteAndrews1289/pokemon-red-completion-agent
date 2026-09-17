@@ -174,6 +174,7 @@ def run_red_trainer_practice_episode(
         reader = PokemonRedStateReader(cast(ReadOnlyMemory, session))
         encoder = PokemonRedObservationEncoder.from_state_reader(reader)
         initial = reader.read()
+        _require_plausible_hp(initial)
         if initial.map_id != capture.manifest.expected_map or initial.battle_state != 2:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
         initial_prompt = reader.trainer_switch_prompt_visible(initial)
@@ -204,6 +205,7 @@ def run_red_trainer_practice_episode(
         })
         for decision_index in range(1, max_decisions + 1):
             raw = reader.read()
+            _require_plausible_hp(raw)
             if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {0, 2}:
                 raise RedTrainerPracticeEpisodeError("trainer episode left its authenticated map")
             if raw.battle_state == 0:
@@ -412,8 +414,9 @@ def run_red_trainer_practice_episode(
                 timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=40),
                 label="model trainer practice attack",
             )
-            outcome = project_red_battle_turn_outcome(execution)
             after_attack = reader.read()
+            _require_plausible_hp(after_attack)
+            outcome = project_red_battle_turn_outcome(execution)
             decision = {
                     "decision_index": decision_index,
                     "observation": observation,
@@ -492,14 +495,34 @@ def _resource_state(raw: RawGameState) -> dict[str, object]:
     return {
         "active_party_slot": None if raw.active_party_index is None else raw.active_party_index + 1,
         "party_hp": list(raw.party_hp) if raw.party_hp is not None else None,
+        "party_max_hp": list(raw.party_max_hp) if raw.party_max_hp is not None else None,
+        "party_levels": list(raw.party_levels) if raw.party_levels is not None else None,
         "party_status": list(raw.party_status) if raw.party_status is not None else None,
         "party_pp": [list(row) for row in raw.party_pp] if raw.party_pp is not None else None,
         "active_hp": raw.battler_hp,
+        "active_max_hp": raw.battler_max_hp,
+        "active_level": raw.active_party_level,
         "active_pp": list(raw.battler_pp) if raw.battler_pp is not None else None,
         "opponent_hp": raw.enemy_hp,
         "opponent_species_id": raw.enemy_species_id,
         "opponent_party_position": raw.enemy_party_position,
     }
+
+
+def _require_plausible_hp(raw: RawGameState) -> None:
+    """Reject corrupted cartridge transitions before emitting an outcome label."""
+    hp, maximum = raw.party_hp, raw.party_max_hp
+    if hp is not None and maximum is not None and (
+        len(hp) != len(maximum)
+        or any(cap <= 0 or current > cap for current, cap in zip(hp, maximum, strict=True))
+    ):
+        raise RedTrainerPracticeEpisodeError("trainer party HP exceeds its maximum")
+    if (
+        raw.battler_hp is not None
+        and raw.battler_max_hp is not None
+        and (raw.battler_max_hp <= 0 or raw.battler_hp > raw.battler_max_hp)
+    ):
+        raise RedTrainerPracticeEpisodeError("trainer active HP exceeds its maximum")
 
 
 def _main_model_input(prepared: PreparedRedBattleScenario) -> dict[str, object]:
@@ -530,6 +553,7 @@ def _complete_decision(
     frames_before: int | None,
     event_sink: Callable[[Mapping[str, object]], None] | None,
 ) -> None:
+    _require_plausible_hp(after)
     frames_after = _frame_count(session)
     decision.update({
         "policy_elapsed_ns": policy_elapsed_ns,

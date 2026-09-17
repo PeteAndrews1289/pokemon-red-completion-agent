@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from contextlib import AbstractContextManager
+from dataclasses import replace
 from types import SimpleNamespace
 
 import pytest
@@ -151,6 +152,58 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
     assert result.decisions[0]["state_after"]["party_hp"] == [40, 35]
     assert result.public_dict()["action_counts"]["attack"] == 1
     assert result.public_dict()["elapsed_ns"] > 0
+
+
+def test_episode_rejects_impossible_level_up_hp_before_outcome_label(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    session.raw = replace(
+        session.raw,
+        party_max_hp=(90, 90),
+        active_party_max_hp=90,
+        party_levels=(30, 32),
+        active_party_level=30,
+    )
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+    projected = []
+
+    def execute(_reader, _actions, **_kwargs):
+        session.raw = replace(
+            session.raw,
+            party_hp=(65535, 35),
+            active_party_hp=65535,
+            active_party_level=31,
+        )
+        return object()
+
+    monkeypatch.setattr(episode, "execute_bounded_battle_move_turn", execute)
+    monkeypatch.setattr(
+        episode, "project_red_battle_turn_outcome", lambda _execution: projected.append(True)
+    )
+
+    class Policy:
+        policy_id = "test-invalid-hp-model"
+
+        def choose_main(self, _observation, _prepared):
+            return BattleAction.move(2)
+
+        def choose_switch(self, *_args, **_kwargs):
+            raise AssertionError("no switch requested")
+
+    events = []
+    with pytest.raises(episode.RedTrainerPracticeEpisodeError, match="HP exceeds"):
+        episode.run_red_trainer_practice_episode(
+            capture, session_factory=lambda: session, policy=Policy(), event_sink=events.append
+        )
+    assert projected == []
+    assert events[-1]["event"] == "choice_recorded"
 
 
 def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, monkeypatch):
