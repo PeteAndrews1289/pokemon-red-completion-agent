@@ -59,6 +59,7 @@ def test_identical_inputs_combine_timing_uncertainty_once():
     assert combined[0].target_probabilities == (0.5, 0.5)
     assert combined[0].best_indices == (0, 1)
     assert _soft_return_target(((1.0, 0.0), (0.0, 1.0))) == (0.5, 0.5)
+    assert _soft_return_target(((1.0, 0.0),))[0] > 0.999
 
 
 def test_training_diagnostics_report_unique_inputs_and_simple_baseline():

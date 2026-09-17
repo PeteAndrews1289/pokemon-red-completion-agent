@@ -313,7 +313,9 @@ def _observed_returns(
 def _soft_return_target(timing: tuple[tuple[float, ...], ...]) -> tuple[float, ...]:
     """Average reward-sensitive choice probabilities over declared RNG timings."""
 
-    temperature = 0.25
+    # A one-point terminal difference should remain decisive after averaging
+    # the five observed timings, while small noisy differences stay graded.
+    temperature = 0.1
     probabilities = []
     for row in timing:
         maximum = max(row)

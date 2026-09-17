@@ -200,12 +200,15 @@ def run(
         raise ValueError("trainer fit requires its committed source")
     cases = plan.get("scenarios")
     seed = plan.get("seed")
+    epochs = plan.get("epochs", 300)
     output = plan.get("output")
     if (
         not isinstance(cases, list)
         or len(cases) < (1 if probe_only else 4 if exploratory_fit else 16)
         or type(seed) is not int
         or seed < 0  # noqa: E721
+        or type(epochs) is not int  # noqa: E721
+        or not 100 <= epochs <= 3000
         or not isinstance(output, str)
         or Path(output).exists()
     ):
@@ -380,7 +383,10 @@ def run(
             "model_updates": 0,
         }
     model = fit_trainer_practice_three_heads(
-        scenario_targets, seed=seed, require_corpus_floor=not exploratory_fit
+        scenario_targets,
+        seed=seed,
+        require_corpus_floor=not exploratory_fit,
+        epochs=epochs,
     )
     destination = Path(output)
     destination.mkdir(mode=0o700, parents=True, exist_ok=False)
@@ -397,6 +403,7 @@ def run(
         "scenario_count": len(scenario_targets),
         "distinct_upstream_train_roots": len(model.train_root_ids),
         "timing_trials_per_scenario": len(OFFSETS),
+        "optimizer_epochs": epochs,
         "head_example_counts": {
             head: sum(
                 isinstance(target["heads"], dict) and head in target["heads"]
