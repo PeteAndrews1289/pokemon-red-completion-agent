@@ -390,3 +390,44 @@ def test_episode_accepts_authenticated_trainer_prompt_as_first_boundary(tmp_path
     )
     assert result.decisions[0]["kind"] == "switch_prompt"
     assert result.decisions[0]["party_slot"] is None
+
+
+def test_episode_accepts_authenticated_forced_switch_as_first_boundary(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    session = Session()
+    session.raw = replace(session.raw, party_hp=(0, 35), active_party_hp=0)
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(
+            snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {"forced": True})
+        ),
+    )
+    monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario",
+        lambda *_args, **_kwargs: (_ for _ in ()).throw(AssertionError("not an attack menu")),
+    )
+
+    def switch(_actions, _reader, _session, target, **_kwargs):
+        assert target == 1
+        session.raw = replace(session.raw, active_party_index=1, active_party_hp=35)
+
+    monkeypatch.setattr(episode, "switch_active_battler", switch)
+
+    class Policy:
+        policy_id = "forced-unit-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("forced switch must come first")
+
+        def choose_switch(self, _observation, legal_slots, *, forced, may_decline):
+            assert forced and not may_decline and legal_slots == (2,)
+            return 2
+
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy(), max_decisions=1
+    )
+    assert result.decisions[0]["kind"] == "forced_switch"
+    assert result.decisions[0]["party_slot"] == 2

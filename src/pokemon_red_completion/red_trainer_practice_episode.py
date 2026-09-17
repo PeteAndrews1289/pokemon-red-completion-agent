@@ -201,15 +201,24 @@ def run_red_trainer_practice_episode(
         if initial.map_id != capture.manifest.expected_map or initial.battle_state != 2:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
         initial_prompt = reader.trainer_switch_prompt_visible(initial)
+        initial_forced = (
+            initial.battler_hp == 0
+            and initial.party_hp is not None
+            and initial.active_party_index is not None
+            and any(
+                hp > 0 and index != initial.active_party_index
+                for index, hp in enumerate(initial.party_hp)
+            )
+        )
         initial_sha256 = (
             canonical_sha256(encoder.snapshot_from_raw(initial).to_dict())
-            if initial_prompt
+            if initial_prompt or initial_forced
             else prepare_red_battle_scenario(
                 encoder, initial, allow_no_attack=True
             ).initial_observation_sha256
         )
         if (
-            not initial_prompt
+            not (initial_prompt or initial_forced)
             and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
         ) or initial_sha256 != capture.manifest.initial_observation_sha256:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
