@@ -1,0 +1,20 @@
+{
+  "schema": "pokemon.red.celadon-trainer-source-plan.v1",
+  "recorded_on": "2026-09-17",
+  "status": "prospective_not_executed",
+  "mission_check": {
+    "reusable_capability": "Supply authentic independent trainer boundaries for full-party attack and switch learning",
+    "learned_authority": "No immediate promotion; independent TRAIN roots can support a qualified three-head fit",
+    "transfer_test": "Separate natural DEVELOPMENT episodes from disjoint origins against frozen and fixed controls",
+    "cheapest_falsifier": "One bounded Celadon Center-to-Gym-Lass source capture fails its native MAIN or provenance gate",
+    "time_box": "One session, at most two hours from 19:50 UTC on 2026-09-17",
+    "stop_condition": "Retain the first source failure without retry or substitute route; no DEVELOPMENT opening, full game, model promotion or GitHub push"
+  },
+  "first_source_id": "red-goal-v1-001-advance_story-train-01",
+  "first_source_sha256": "7d9ce6d351ca87ea83b6038e35c953a9e0f5f648f722d82ca252f87110b0a80e",
+  "first_source_map": "Celadon Pokemon Center",
+  "preflight": "Erika and first Celadon Gym trainer event flags are unset; 3-member party; battle inactive",
+  "route": "Existing Celadon Center, outer Cut tree, Gym door and first Lass trigger only; stop at first MAIN before any attack",
+  "caps": {"actions": 600, "frames": 180000},
+  "planned_effects": {"model_queries": 0, "model_updates": 0, "development_roots_opened": 0, "full_game_runs": 0, "github_pushes": 0}
+}
