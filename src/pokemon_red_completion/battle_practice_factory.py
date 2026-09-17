@@ -69,6 +69,7 @@ class PracticeReserve:
     moves: tuple[PracticeMove, ...]
     hp: int | None = None
     stats: PracticeStats | None = None
+    national_number: int | None = None
 
     def __post_init__(self) -> None:
         if type(self.party_slot) is not int or not 1 <= self.party_slot <= 6:  # noqa: E721
@@ -90,6 +91,10 @@ class PracticeReserve:
             raise BattlePracticeError("reserve stats differ")
         if self.hp is not None and self.stats is not None and self.hp > self.stats.max_hp:
             raise BattlePracticeError("reserve HP exceeds declared maximum")
+        if self.national_number is not None and (
+            type(self.national_number) is not int or not 1 <= self.national_number <= 2000
+        ):
+            raise BattlePracticeError("reserve National Dex number differs")
 
     @classmethod
     def from_dict(cls, value: object) -> PracticeReserve:
@@ -97,7 +102,7 @@ class PracticeReserve:
         if (
             not isinstance(value, dict)
             or not required <= set(value)
-            or set(value) - required - {"hp", "stats"}
+            or set(value) - required - {"hp", "stats", "national_number"}
         ):
             raise BattlePracticeError("reserve record differs")
         moves = value["moves"]
@@ -114,10 +119,11 @@ class PracticeReserve:
             stats=PracticeStats.from_dict(value["stats"])
             if value.get("stats") is not None
             else None,
+            national_number=value.get("national_number"),
         )
 
     def public_dict(self) -> dict[str, object]:
-        return {
+        result: dict[str, object] = {
             "party_slot": self.party_slot,
             "species_ref": self.species_ref,
             "level": self.level,
@@ -125,6 +131,9 @@ class PracticeReserve:
             "hp": self.hp,
             "stats": self.stats.public_dict() if self.stats else None,
         }
+        if self.national_number is not None:
+            result["national_number"] = self.national_number
+        return result
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,6 +155,8 @@ class BattlePracticeSpec:
     battle_kind: str = "wild"
     opponent_party_count: int | None = None
     opponent_reserves: tuple[PracticeReserve, ...] | None = None
+    actor_national_number: int | None = None
+    opponent_national_number: int | None = None
 
     def __post_init__(self) -> None:
         if _SHA256.fullmatch(self.source_state_sha256) is None:
@@ -185,6 +196,10 @@ class BattlePracticeSpec:
         for name in ("actor_species_ref", "opponent_species_ref"):
             ref = getattr(self, name)
             if ref is not None and (not isinstance(ref, str) or not ref):
+                raise BattlePracticeError(f"practice {name} differs")
+        for name in ("actor_national_number", "opponent_national_number"):
+            number = getattr(self, name)
+            if number is not None and (type(number) is not int or not 1 <= number <= 2000):
                 raise BattlePracticeError(f"practice {name} differs")
         if self.opponent_moves is not None and (
             not isinstance(self.opponent_moves, tuple)
@@ -254,6 +269,8 @@ class BattlePracticeSpec:
             "battle_kind",
             "opponent_party_count",
             "opponent_reserves",
+            "actor_national_number",
+            "opponent_national_number",
         }
         if (
             not isinstance(value, dict)
@@ -326,6 +343,8 @@ class BattlePracticeSpec:
                     if opponent_reserves is not None
                     else None
                 ),
+                actor_national_number=value.get("actor_national_number"),
+                opponent_national_number=value.get("opponent_national_number"),
             )
         except (TypeError, ValueError, KeyError) as error:
             raise BattlePracticeError(f"invalid practice condition: {error}") from error
@@ -394,4 +413,8 @@ class BattlePracticeSpec:
                     else None
                 ),
             )
+        if self.actor_national_number is not None:
+            configuration["actor_national_number"] = self.actor_national_number
+        if self.opponent_national_number is not None:
+            configuration["opponent_national_number"] = self.opponent_national_number
         return canonical_sha256(configuration)

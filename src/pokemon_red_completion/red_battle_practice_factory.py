@@ -283,6 +283,14 @@ def materialize_red_train_practice(
     assert actor_level is not None and opponent_level is not None
     actor_data = cartridge.species(actor_species_id) if cartridge else None
     opponent_data = cartridge.species(opponent_species_id) if cartridge else None
+    if spec.actor_national_number is not None and (
+        actor_data is None or actor_data.national_number != spec.actor_national_number
+    ):
+        raise BattlePracticeError("actor National Dex identity differs")
+    if spec.opponent_national_number is not None and (
+        opponent_data is None or opponent_data.national_number != spec.opponent_national_number
+    ):
+        raise BattlePracticeError("opponent National Dex identity differs")
     actor_auto_stats = (
         spec.actor_stats is None
         and actor_data is not None
@@ -353,6 +361,11 @@ def materialize_red_train_practice(
             except (ValueError, IndexError) as error:
                 raise BattlePracticeError("reserve species reference differs") from error
             species_data = cartridge.species(species_id)
+            if (
+                reserve.national_number is not None
+                and species_data.national_number != reserve.national_number
+            ):
+                raise BattlePracticeError("player reserve National Dex identity differs")
             stats = reserve.stats or species_data.neutral_stats(reserve.level)
             hp = reserve.hp if reserve.hp is not None else stats.max_hp
             if hp > stats.max_hp:
@@ -399,6 +412,11 @@ def materialize_red_train_practice(
             except (ValueError, IndexError) as error:
                 raise BattlePracticeError("trainer reserve species reference differs") from error
             data = cartridge.species(species_id)
+            if (
+                reserve.national_number is not None
+                and data.national_number != reserve.national_number
+            ):
+                raise BattlePracticeError("opponent reserve National Dex identity differs")
             stats = reserve.stats or data.neutral_stats(reserve.level)
             hp = reserve.hp if reserve.hp is not None else stats.max_hp
             if hp > stats.max_hp:

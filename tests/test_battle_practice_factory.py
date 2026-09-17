@@ -50,6 +50,25 @@ def test_title_neutral_spec_rejects_unsupported_or_non_train_conditions():
         _spec(actor_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": 0}] * 2)
     with pytest.raises(BattlePracticeError, match="distinct alternatives"):
         _spec(actor_moves=[{"move_ref": pokemon_red_move_ref(33), "pp": 20}] * 2)
+    with pytest.raises(BattlePracticeError, match="actor_national_number"):
+        _spec(actor_national_number=0)
+
+
+def test_national_dex_intent_is_bound_into_configuration():
+    original = _spec(actor_species_ref=pokemon_red_species_ref(84))
+    bound = _spec(actor_species_ref=pokemon_red_species_ref(84), actor_national_number=25)
+    assert bound.actor_national_number == 25
+    assert bound.configuration_sha256 != original.configuration_sha256
+
+
+def test_red_factory_rejects_mismatched_national_identity_before_writes():
+    reader = _reader()
+    before = dict(reader.memory)
+    spec = _spec(actor_species_ref=pokemon_red_species_ref(84), actor_national_number=25)
+    cartridge = SimpleNamespace(species=lambda _id: SimpleNamespace(national_number=92))
+    with pytest.raises(BattlePracticeError, match="actor National Dex identity"):
+        red.materialize_red_train_practice(reader, reader.memory, spec, cartridge=cartridge)
+    assert reader.memory == before
 
 
 class FakeReader:
