@@ -58,3 +58,40 @@ def test_all_legal_opening_includes_every_supported_move_and_living_reserve():
         "pokemon.core:battle:switch:2",
         "pokemon.core:battle:switch:4",
     ]
+
+
+def test_depleted_opening_offers_only_living_switches():
+    vector = tuple(0.0 for _ in FEATURE_NAMES)
+    prepared = PreparedRedBattleScenario(
+        initial_observation_sha256="a" * 64,
+        allow_no_attack=True,
+        features=BattleFeatureBatch(
+            feature_names=FEATURE_NAMES,
+            candidate_vectors=(vector, vector),
+            legal_mask=(False, False),
+            current_pp=(0.0, 0.0),
+            slot_indices=(0, 1),
+            schema_id=FEATURE_SCHEMA_ID,
+        ),
+    )
+    choices = baseline._all_legal_opening_choices(prepared, (10, 20, 0, 30), 0)
+    assert [choice.semantic_ref for choice in choices] == [
+        "pokemon.core:battle:switch:2",
+        "pokemon.core:battle:switch:4",
+    ]
+
+
+def test_no_attack_baseline_switch_uses_only_visible_living_party_member():
+    observation = {"features": {"party": {"active_index": 0, "members": [
+        {"party_index": 0, "hp": 10},
+        {"party_index": 1, "hp": 0},
+        {"party_index": 2, "hp": 20},
+    ]}}}
+    assert baseline._first_living_switch_from_observation(observation) == 3
+    with pytest.raises(ValueError, match="no living switch target"):
+        baseline._first_living_switch_from_observation({
+            "features": {"party": {"active_index": 0, "members": [
+                {"party_index": 0, "hp": 10},
+                {"party_index": 1, "hp": 0},
+            ]}}
+        })

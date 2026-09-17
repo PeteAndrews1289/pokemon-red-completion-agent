@@ -140,6 +140,22 @@ def _all_legal_opening_choices(
     return move_choices + switch_choices
 
 
+def _first_living_switch_from_observation(observation: dict[str, object]) -> int:
+    features = observation.get("features")
+    party = features.get("party") if isinstance(features, dict) else None
+    members = party.get("members") if isinstance(party, dict) else None
+    active = party.get("active_index") if isinstance(party, dict) else None
+    if not isinstance(members, list) or type(active) is not int:  # noqa: E721
+        raise ValueError("trainer baseline has no observable switch target")
+    for member in members:
+        if not isinstance(member, dict):
+            continue
+        index, hp = member.get("party_index"), member.get("hp")
+        if type(index) is int and type(hp) is int and index != active and hp > 0:  # noqa: E721
+            return index + 1
+    raise ValueError("trainer baseline has no living switch target")
+
+
 def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     plan, capture, model = _authenticate(json.loads(plan_path.read_bytes()))
 
@@ -149,7 +165,14 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         def __init__(self):
             self.last_decision_diagnostics: dict[str, object] = {}
 
-        def choose_main(self, _observation, prepared):
+        def choose_main(self, observation, prepared):
+            if not any(prepared.supported_candidate_mask):
+                slot = _first_living_switch_from_observation(observation)
+                self.last_decision_diagnostics = {
+                    "control_rule": "forced_switch_no_attack_pp",
+                    "switch_target_rule": "first_living_reserve",
+                }
+                return BattleAction.switch(slot)
             probabilities = model.predict_proba(
                 prepared.features.candidate_vectors,
                 legal_mask=prepared.features.legal_mask,
@@ -207,6 +230,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     public_species_base_stats=public_stats,
                 ),
                 raw,
+                allow_no_attack=True,
             )
             if raw.party_hp is None or raw.active_party_index is None:
                 raise ValueError("trainer opening party is unavailable")
