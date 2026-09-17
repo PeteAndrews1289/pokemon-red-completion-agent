@@ -41,7 +41,9 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--rom", type=Path, default=None)
     parser.add_argument("--replace-slot", type=int, choices=range(1, 5), default=1)
-    parser.add_argument("--train-only", action="store_true")
+    partition = parser.add_mutually_exclusive_group()
+    partition.add_argument("--train-only", action="store_true")
+    partition.add_argument("--development-only", action="store_true")
     args = parser.parse_args()
     if args.output_dir.exists():
         parser.error("output directory already exists; this experiment is one-use")
@@ -57,6 +59,7 @@ def main() -> int:
     _require_source_partitions(
         tuple(source.manifest.partition for source in sources),
         train_only=args.train_only,
+        development_only=args.development_only,
     )
     rom = resolve_rom_path(args.rom)
     commit = __import__("subprocess").check_output(
@@ -139,11 +142,19 @@ def main() -> int:
 
 
 def _require_source_partitions(
-    partitions: tuple[ScenarioPartition, ...], *, train_only: bool
+    partitions: tuple[ScenarioPartition, ...], *, train_only: bool,
+    development_only: bool = False,
 ) -> None:
+    if train_only and development_only:
+        raise ValueError("one derivation partition mode is required")
     if train_only:
         if not partitions or set(partitions) != {ScenarioPartition.TRAIN}:
             raise ValueError("train-only derivation requires train sources only")
+    elif development_only:
+        if not partitions or set(partitions) != {ScenarioPartition.DEVELOPMENT}:
+            raise ValueError(
+                "development-only derivation requires development sources only"
+            )
     elif set(partitions) != {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
         raise ValueError("both train and development partitions are required")
 
