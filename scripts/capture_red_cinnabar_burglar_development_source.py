@@ -146,6 +146,16 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
                 emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
             )
+            report["observed_boundary"] = {
+                "map": int(raw.map_id),
+                "opponent_identity": list(identity),
+                "opponent_party_count": raw.enemy_party_count,
+                "opponent_party_position": raw.enemy_party_position,
+                "opponent_hp": raw.enemy_hp,
+                "actions_executed": actions.actions_executed,
+                "frames_executed": emulator.frame_count,
+                "pressed_buttons": sorted(emulator.pressed_buttons),
+            }
             if (
                 raw.map_id != MapId.CINNABAR_GYM
                 or identity != (BLAINE_GYM_BURGLAR_OPPONENT, BLAINE_GYM_BURGLAR_CLASS, 4)
