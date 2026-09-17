@@ -1393,6 +1393,19 @@ def _execute_policy_turn(
     move_menu: BattleMenuState | None = None
     for _ in range(timing.max_move_menu_transition_pulses):
         raw = reader.read()
+        if allow_player_faint and (raw.battler_hp or 0) == 0:
+            _require_present_turn_state(
+                raw, expected_map=expected_map, label=label, allow_player_faint=True
+            )
+            if _original_battler_pp_vector(initial_raw, raw, label=label) != initial_raw.battler_pp:
+                raise BattleRuntimeError(
+                    f"{label} changed selected-battler PP before the move menu appeared."
+                )
+            # During an opponent's ongoing trapping sequence, the first FIGHT
+            # confirmation can advance a suppressed turn and faint the player
+            # before a move cursor appears. Preserve the unspent choice and let
+            # the caller handle the forced replacement.
+            return False
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
         menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
         if menu.phase is BattleMenuPhase.MOVE:

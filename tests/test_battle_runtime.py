@@ -523,6 +523,49 @@ def test_bounded_move_turn_records_faint_as_an_outcome(
     assert confirmations == 2
 
 
+def test_bounded_turn_accepts_unspent_faint_before_move_menu() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
+    confirmations = 0
+
+    def advance(action: MacroAction) -> None:
+        nonlocal confirmations
+        if action.kind is MacroActionKind.CONFIRM:
+            confirmations += 1
+            runtime.raw = replace(runtime.raw, first_party_hp=0)
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=2,
+    )
+    assert confirmations == 1
+    assert result.final_state.battler_hp == 0
+    assert not result.move_executed
+
+
+def test_bounded_turn_rejects_unproved_pp_change_before_move_menu() -> None:
+    runtime = MeasuredTurnRuntime(raw=replace(_raw(), battle_state=2))
+
+    def advance(action: MacroAction) -> None:
+        if action.kind is MacroActionKind.CONFIRM:
+            runtime.raw = replace(runtime.raw, first_party_hp=0, first_party_pp=(34, 30, 30, 11))
+            runtime.menu = BattleMenuState(BattleMenuPhase.UNKNOWN)
+
+    runtime.on_action = advance
+    with pytest.raises(BattleRuntimeError, match="before the move menu"):
+        execute_bounded_battle_move_turn(
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1,
+            expected_battle_state=2,
+        )
+
+
 def test_bounded_move_turn_rejects_invalid_policy_boundary_without_input() -> None:
     runtime = MeasuredTurnRuntime(menu=BattleMenuState(BattleMenuPhase.MOVE, selected_move_slot=1))
 
