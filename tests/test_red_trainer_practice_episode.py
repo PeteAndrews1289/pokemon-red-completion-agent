@@ -58,6 +58,22 @@ def _prepared():
     )
 
 
+def _depleted_prepared():
+    vector = tuple(0.0 for _ in FEATURE_NAMES)
+    return PreparedRedBattleScenario(
+        initial_observation_sha256="b" * 64,
+        allow_no_attack=True,
+        features=BattleFeatureBatch(
+            feature_names=FEATURE_NAMES,
+            candidate_vectors=(vector,),
+            legal_mask=(False,),
+            current_pp=(0.0,),
+            slot_indices=(0,),
+            schema_id=FEATURE_SCHEMA_ID,
+        ),
+    )
+
+
 class Session(AbstractContextManager):
     def __init__(self):
         self.raw = RawGameState(
@@ -94,6 +110,41 @@ class Session(AbstractContextManager):
 
     def read_enemy_party_roster_hp(self):
         return (0,)
+
+
+def test_depleted_party_stops_before_unsupported_struggle_without_policy_choice(
+    tmp_path, monkeypatch
+):
+    capture = _capture(tmp_path)
+    session = Session()
+    session.raw = replace(session.raw, party_hp=(40, 0))
+    snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
+    monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
+    monkeypatch.setattr(
+        episode.PokemonRedObservationEncoder,
+        "from_state_reader",
+        lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
+    )
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _depleted_prepared()
+    )
+
+    class Policy:
+        policy_id = "test-model"
+
+        def choose_main(self, *_args):
+            raise AssertionError("unsupported Struggle must not masquerade as a model choice")
+
+    events = []
+    result = episode.run_red_trainer_practice_episode(
+        capture, session_factory=lambda: session, policy=Policy(), event_sink=events.append
+    )
+    assert result.stop_reason == "unsupported_struggle_boundary"
+    assert not result.battle_won
+    assert result.decisions == ()
+    assert [event["event"] for event in events] == [
+        "episode_started", "unsupported_action_boundary"
+    ]
 
 
 @pytest.mark.parametrize("opening_idle_frames", (0, 4))

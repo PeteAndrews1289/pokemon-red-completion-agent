@@ -1,0 +1,32 @@
+{
+  "schema": "pokemon.red.trainer-depleted-switch-successor-plan.v1",
+  "partition": "train",
+  "purpose": "One non-retry successor to test full telemetry and two legal switch-target branches from zero actor attack PP.",
+  "prior_pilot_disposition": {
+    "configuration_sha256": "442d2f2d1c482a0db4e0651c24feee3aa464b43fb50276c12fc7660e376ff6b5",
+    "status": "retained_failed",
+    "reason": "both living reserves fainted and the unsupported Struggle boundary was reached after sixteen decisions",
+    "replay_allowed": false
+  },
+  "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+  "independence_claim": false,
+  "scenario": {
+    "actor": "Pikachu level 35 with Thunderbolt and Quick Attack at zero PP",
+    "living_reserves": ["Vaporeon level 34", "Bulbasaur level 34"],
+    "opponent": "Vaporeon level 20 with 30 HP, then Charmander level 20 with 30 HP"
+  },
+  "execution_bound": {
+    "materializations": 1,
+    "baseline_runs": 1,
+    "counterfactual_opening_choices": ["switch:2", "switch:3"],
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "maximum_frames_per_episode": 120000,
+    "maximum_decisions_per_episode": 80,
+    "no_retry_after_failure": true
+  },
+  "success_criteria": [
+    "Assisted state has zero supported attacks and two legal reserve switches.",
+    "All ten opening branch logs are complete and join to the fixed two-switch choice plans.",
+    "No outcome is treated as an independent-root qualification."
+  ]
+}

@@ -314,6 +314,31 @@ def run_red_trainer_practice_episode(
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
                     opening_idle_frames=opening_idle_frames,
                 )
+            prepared_main = None
+            if not forced and not prompt and (
+                reader.read_battle_menu_state(raw).phase is BattleMenuPhase.MAIN
+            ):
+                prepared_main = prepare_red_battle_scenario(
+                    encoder, raw, allow_no_attack=True
+                )
+                if not any(prepared_main.supported_candidate_mask) and not options:
+                    _emit(event_sink, {
+                        "event": "unsupported_action_boundary",
+                        "decision_index": decision_index,
+                        "reason": "struggle_required_no_living_reserve",
+                    })
+                    return RedTrainerPracticeEpisode(
+                        capture_id=capture.manifest.capture_id,
+                        manifest_sha256=capture.manifest_sha256,
+                        policy_id=policy.policy_id,
+                        decisions=tuple(decisions),
+                        battle_won=False,
+                        final_battle_state=raw.battle_state,
+                        stop_reason="unsupported_struggle_boundary",
+                        final_observation=observation,
+                        elapsed_ns=perf_counter_ns() - episode_started_ns,
+                        opening_idle_frames=opening_idle_frames,
+                    )
             _emit(
                 event_sink,
                 {
@@ -405,7 +430,9 @@ def run_red_trainer_practice_episode(
                 continue
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
                 raise RedTrainerPracticeEpisodeError("trainer episode has no model-owned decision")
-            prepared = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
+            prepared = prepared_main or prepare_red_battle_scenario(
+                encoder, raw, allow_no_attack=True
+            )
             _emit(
                 event_sink,
                 {
