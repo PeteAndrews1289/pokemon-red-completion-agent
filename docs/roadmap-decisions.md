@@ -1,6 +1,6 @@
 # Roadmap baseline and deviations
 
-## September 17 — require audited physical ancestry for trainer fit roots
+## September 17 — four-context trainer pipeline works; ancestry still gates qualification
 
 Three prospectively captured Celadon Gym trainer starts have different saved-state hashes
 and slot labels, but share a closely related historical catalog context and player
@@ -9,14 +9,18 @@ independent origins. The qualified trainer-fit gate now rejects multiple aliases
 from this unresolved family. Do not lower the four-origin-by-four-scenario gate or
 count timing offsets and assisted configurations as new roots.
 
-The [depleted-switch rehearsal](evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
-added one real, same-root TRAIN switch-target contrast with ten complete branches.
-It did not fit or promote a model. The next data step is an ancestry audit of unused
-authentic starts, followed by bounded prompt and forced-replacement contrasts on
-genuinely disjoint TRAIN origins. Natural DEVELOPMENT comparison remains the
-promotion gate. The unsupported Struggle boundary is an explicit limit of this
-initial battle segment, not a hidden teacher fallback. The Red-before-ROM-hack,
-Crystal and Emerald order is unchanged.
+The [four-context rehearsal](evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
+added same-root TRAIN contrasts for depleted-attack switching, optional prompts
+and forced replacements, with 10, 15 and 10 complete branches respectively.
+One deliberately exploratory fit used four scenarios from one authenticated
+upstream root, updated move/control/switch heads, and won three short live
+smokes without teacher queries or invalid actions. This validates the bounded
+trainer pipeline but does not qualify the model. The next data step is an
+ancestry audit of unused authentic starts and replication across three further
+genuinely disjoint TRAIN roots, each with four admitted scenarios. Natural
+DEVELOPMENT comparison remains the promotion gate. The unsupported Struggle
+boundary is an explicit limit of this initial battle segment, not a hidden
+teacher fallback. The Red-before-ROM-hack, Crystal and Emerald order is unchanged.
 
 ## September 16 — stop static battle-capture sampling; collect model-directed episodes
 

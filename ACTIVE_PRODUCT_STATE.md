@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Audit physical ancestry and secure four genuinely disjoint trainer TRAIN roots, then fill prompt and forced contexts under bounded short-scenario plans; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.
+- Next decision: Audit physical ancestry and secure three further genuinely disjoint trainer TRAIN roots with four admitted contexts each; retain the four-by-four qualified-fit gate and disjoint natural DEVELOPMENT comparison before battle promotion.
 
 ### Mandatory mission check
 
@@ -64,15 +64,15 @@ outputs.
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The trainer learned a measurable switch-only choice from a real Red cartridge copy while root independence and final-player authority remained protected. |
-| Learning output | One new same-root TRAIN depleted-attack switch target was executed at five timings: 10/10 complete branch logs, mean two-turn returns 0.1254 versus 1.2882, target switch to Bulbasaur. Three natural Celadon captures supplied zero qualified independent roots. |
-| Authority delta | None. A new same-root depleted-attack switch target was measured but not fitted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | No new natural DEVELOPMENT or cross-title result; the depleted contrast is same-root TRAIN only. |
-| Blocker | The three Celadon trainer captures are correlated saved contexts, not independent roots. The trainer still has one qualified upstream root; prompt and forced contexts remain missing and natural DEVELOPMENT remains unopened. All-party zero PP with no reserve reaches an explicitly unsupported Struggle boundary. |
-| Decision | Retain the eight-scenario model as diagnostic only and the new switch-only contrast as TRAIN material. Reject Celadon/lab aliases as separate fit roots; audit physical ancestry and freeze genuinely disjoint trainer TRAIN starts before qualified fitting. Require natural DEVELOPMENT advantage against frozen and fixed controls before promotion. |
-| Next session | Audit unused trainer-state ancestry, then freeze only four genuinely disjoint TRAIN origins and collect missing prompt and forced contexts without reusing consumed trials. |
+| Product alignment | The trainer now produces and executes a fitted three-head battle policy on real Red cartridge copies across all four initial contexts while root independence and final-player authority remain protected. |
+| Learning output | Three new same-root TRAIN contexts were executed at five timings each: depleted 10/10, prompt 15/15 and forced 10/10 complete branch logs. A four-context exploratory fit updated move/control/switch heads and won three short live smokes with zero teacher queries. Three natural Celadon captures supplied zero qualified independent roots. |
+| Authority delta | None. A one-root exploratory four-context battle model was fitted and live-smoked but not qualified or promoted. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No new natural DEVELOPMENT or cross-title result; the four-context fit is same-root TRAIN only. |
+| Blocker | The three Celadon trainer captures are correlated saved contexts, not independent roots. The trainer has only one authenticated upstream root with all four contexts; three further independent roots and natural DEVELOPMENT are missing. All-party zero PP with no reserve reaches an explicitly unsupported Struggle boundary. |
+| Decision | Treat the four-context collection, admission, fit and live execution path as technically ready for broader TRAIN sampling, while retaining its one-root model as diagnostic only. Reject Celadon/lab aliases as separate fit roots; audit physical ancestry and freeze three further disjoint trainer TRAIN starts before qualified fitting. Require natural DEVELOPMENT advantage against frozen and fixed controls before promotion. |
+| Next session | Audit unused trainer-state ancestry, then freeze three further genuinely disjoint TRAIN origins with four admitted contexts each without reusing consumed trials. |
 | Next falsifier | The unused authentic trainer bank may lack provably disjoint physical origins; if so, the four-root qualified-fit gate cannot open from this bank. |
-| Stop condition | No retry of the failed depleted pilot; no Celadon sibling-root qualification, DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN targets cannot satisfy the four-by-four gate. |
+| Stop condition | No retry of the failed depleted or forced pilots; no Celadon sibling-root qualification, DEVELOPMENT fitting, full game, authority promotion or GitHub push. Same-root TRAIN targets cannot satisfy the four-by-four gate. |
 
 ### Stop conditions
 

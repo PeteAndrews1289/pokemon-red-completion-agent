@@ -174,8 +174,9 @@
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
 <text x="50" y="2923" class="small muted">2026-09-17-trainer-source-depleted-switch-v1</text>
-<text x="50" y="2958" class="body">A zero-attack-PP trainer opening produced one same-root TRAIN switch-target contrast across five timings, with ten complete</text>
-<text x="50" y="2983" class="body">branch logs and measured mean returns 0.1254 versus 1.2882. Three authentic Celadon trainer MAIN captures were retained but</text>
-<text x="50" y="3008" class="body">classified as correlated, not independent roots.</text>
+<text x="50" y="2958" class="body">The trainer collected admitted same-root depleted-attack, optional-prompt and forced-replacement contrasts at five timings</text>
+<text x="50" y="2983" class="body">each. A preregistered four-context exploratory fit updated move/control/switch heads once and its live model won all three</text>
+<text x="50" y="3008" class="body">short controlled smoke battles with zero teacher queries and invalid actions. Three authentic Celadon trainer MAIN captures</text>
+<text x="50" y="3033" class="body">were retained but classified as correlated, not independent roots.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>
