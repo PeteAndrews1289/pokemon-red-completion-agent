@@ -34,8 +34,27 @@ CONTROL_ACTION_FEATURE_NAMES = (
     *CONTROL_FEATURE_NAMES_V2,
     "action.attack_or_decline",
     "action.switch",
+    *(f"attack_or_decline.{name}" for name in CONTROL_FEATURE_NAMES_V2),
+    *(f"switch.{name}" for name in CONTROL_FEATURE_NAMES_V2),
 )
-CONTROL_ACTION_SCHEMA_ID = f"{CONTROL_SCHEMA_ID}.action-v1"
+CONTROL_ACTION_SCHEMA_ID = f"{CONTROL_SCHEMA_ID}.action-interaction-v2"
+
+
+def control_action_candidates(
+    common: tuple[float, ...],
+) -> tuple[tuple[float, ...], tuple[float, ...]]:
+    """Make each control choice respond to the observed state, not just a bias.
+
+    A shared state vector alone cancels when a linear ranker compares choices.
+    The per-choice interaction blocks preserve the state dependence.
+    """
+    if len(common) != len(CONTROL_FEATURE_NAMES_V2):
+        raise TrainerPracticeFitError("control state feature width differs")
+    zeros = (0.0,) * len(common)
+    return (
+        (*common, 1.0, 0.0, *common, *zeros),
+        (*common, 0.0, 1.0, *zeros, *common),
+    )
 
 
 class TrainerPracticeFitError(ValueError):
@@ -243,7 +262,7 @@ def _append_examples(
             switch_value = max(
                 float(value) for ref, value in zip(refs, returns, strict=True) if ":switch:" in ref
             )
-            rows = ((*common, 1.0, 0.0), (*common, 0.0, 1.0))
+            rows = control_action_candidates(common)
             best = list(_tied_values((attack_value, switch_value)))
         examples[name].append(TrainerHeadExample(tuple(rows), tuple(best)))
 

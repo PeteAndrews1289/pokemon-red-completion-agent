@@ -9,10 +9,37 @@ from pokemon_red_completion.battle_scenario_capture import OBSERVATION_SCHEMA_V2
 from pokemon_red_completion.battle_semantics import BattleFeatureProjector
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
 from pokemon_red_completion.red_trainer_practice_fit import (
+    CONTROL_ACTION_FEATURE_NAMES,
+    CONTROL_ACTION_SCHEMA_ID,
     TrainerPracticeFitError,
     TrainerPracticeThreeHeadModel,
+    control_action_candidates,
     fit_trainer_practice_three_heads,
 )
+from pokemon_red_completion.red_trainer_practice_head import TrainerHeadExample, TrainerHeadModel
+from pokemon_red_completion.red_trainer_practice_features import CONTROL_FEATURE_NAMES_V2
+
+
+def test_control_head_can_learn_opposite_choices_from_different_states():
+    low_hp = [0.0] * len(CONTROL_FEATURE_NAMES_V2)
+    high_hp = low_hp.copy()
+    hp_index = CONTROL_FEATURE_NAMES_V2.index("player.hp_ratio")
+    high_hp[hp_index] = 1.0
+    low_rows = control_action_candidates(tuple(low_hp))
+    high_rows = control_action_candidates(tuple(high_hp))
+    assert len(low_rows[0]) == len(CONTROL_ACTION_FEATURE_NAMES)
+    model = TrainerHeadModel.fit(
+        schema_id=CONTROL_ACTION_SCHEMA_ID,
+        feature_names=CONTROL_ACTION_FEATURE_NAMES,
+        examples=(
+            TrainerHeadExample(low_rows, (1,)),
+            TrainerHeadExample(high_rows, (0,)),
+        ),
+        seed=12,
+        epochs=300,
+    )
+    assert model.predict_index(low_rows) == 1
+    assert model.predict_index(high_rows) == 0
 
 
 def _target():

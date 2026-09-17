@@ -14,7 +14,10 @@ from pokemon_red_completion.red_trainer_practice_features import (
     project_trainer_move_features,
     project_trainer_switch_features,
 )
-from pokemon_red_completion.red_trainer_practice_fit import TrainerPracticeThreeHeadModel
+from pokemon_red_completion.red_trainer_practice_fit import (
+    TrainerPracticeThreeHeadModel,
+    control_action_candidates,
+)
 
 
 class TrainerOutcomePolicyError(ValueError):
@@ -77,7 +80,7 @@ class RedTrainerPracticeOutcomePolicy:
                     history=history,
                 ).tolist()
             )
-            control_candidates = ((*(control), 1.0, 0.0), (*(control), 0.0, 1.0))
+            control_candidates = control_action_candidates(control)
             if switches is None or self.model.control.predict_index(control_candidates) == 0:
                 moves = project_trainer_move_features(observation, prepared.features)
                 slots = tuple(slot for slot in moves.candidate_slots if slot in legal_moves)
@@ -145,7 +148,7 @@ class RedTrainerPracticeOutcomePolicy:
                     history=history,
                 ).tolist()
             )
-            options = ((*(control), 1.0, 0.0), (*(control), 0.0, 1.0))
+            options = control_action_candidates(control)
             probabilities = self.model.control.probabilities(options)
             if int(probabilities.argmax()) == 0:
                 self.last_decision_diagnostics = {
