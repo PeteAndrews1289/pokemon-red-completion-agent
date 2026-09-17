@@ -47,12 +47,16 @@ def _source_rows(batch: Path) -> tuple[tuple[Path, dict[str, object]], ...]:
         or summary.get("fresh_power_on_sources") != 4
         or summary.get("distinct_origin_state_hashes") != 4
         or summary.get("distinct_player_trainer_ids") != 4
+        or summary.get("boot_frames") != [2000, 2100, 2200, 2300]
         or not isinstance(ids, list)
         or len(ids) != 4
         or len(set(ids)) != 4
     ):
         raise ValueError("fresh trainer source batch is not four-root qualified")
     rows = []
+    origin_hashes: set[str] = set()
+    trainer_ids: set[int] = set()
+    boot_frames: set[int] = set()
     for source_id in ids:
         if not isinstance(source_id, str):
             raise ValueError("fresh trainer source identity differs")
@@ -70,9 +74,27 @@ def _source_rows(batch: Path) -> tuple[tuple[Path, dict[str, object]], ...]:
             or capture.manifest.root_lineage_id != source_id
             or capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2
             or capture.manifest.partition.value != "train"
+            or outcome.get("partition") != "train"
+            or outcome.get("model_queries") != 0
+            or outcome.get("model_updates") != 0
+            or outcome.get("full_game_runs") != 0
+            or outcome.get("source_commit") != summary.get("source_commit")
+            or capture.manifest.source_commit != outcome.get("source_commit")
+            or type(outcome.get("first_party_ot_id")) is not int  # noqa: E721
+            or type(outcome.get("boot_frames")) is not int  # noqa: E721
         ):
             raise ValueError("fresh trainer source ancestry or capture differs")
+        origin_hashes.add(outcome["origin_state_sha256"])
+        trainer_ids.add(outcome["first_party_ot_id"])
+        boot_frames.add(outcome["boot_frames"])
         rows.append((source, outcome))
+    if (
+        len(origin_hashes) != 4
+        or len(trainer_ids) != 4
+        or len(boot_frames) != 4
+        or boot_frames != set(summary.get("boot_frames", []))
+    ):
+        raise ValueError("fresh trainer source batch has repeated physical starts")
     return tuple(rows)
 
 

@@ -118,6 +118,29 @@ def test_ten_item_checklist_stays_above_its_progress_bar(project):
     assert max(int(node.get("y", "0")) for node in checklist) + 20 < int(progress.get("y", "0"))
 
 
+def test_long_session_result_does_not_overlap_footer_or_clip_svg(project):
+    baseline, state, lane, evidence = load_roadmap(project)
+    state["reviews"][-1]["result"] = "A long measured review. " * 100
+    root = ElementTree.fromstring(render_svg(baseline, state, lane, evidence))
+    namespace = {"svg": "http://www.w3.org/2000/svg"}
+    texts = root.findall("svg:text", namespace)
+    review_heading = next(
+        node for node in texts if (node.text or "") == "SESSION CHECK-IN"
+    )
+    footer = next(
+        node for node in texts if (node.text or "").startswith("Baseline red-first-")
+    )
+    body_rows = [
+        node for node in texts
+        if node.get("x") == "50"
+        and node.get("class") == "body"
+        and int(node.get("y", "0")) > int(review_heading.get("y", "0"))
+    ]
+    assert body_rows
+    assert int(footer.get("y", "0")) - max(int(row.get("y", "0")) for row in body_rows) >= 20
+    assert int(root.get("height", "0")) > int(footer.get("y", "0"))
+
+
 def test_changed_learning_evidence_is_rejected(project):
     ref = json.loads((project / "configs/dashboard-learning-evidence.json").read_text())
     path = project / ref["path"]

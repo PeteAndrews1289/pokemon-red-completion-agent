@@ -79,6 +79,11 @@ def test_fit_cannot_relabel_old_catalog_or_skip_fresh_power_ancestry() -> None:
             _receipt("red-goal-v1-004-advance_story-train-04", "a" * 64),
             _receipt("red-goal-v1-064-recover_control-train-01", "b" * 64),
         ])
+    with pytest.raises(ValueError, match="unresolved shared legacy ancestry"):
+        _validate_root_source_provenance([
+            _receipt("red-goal-v1-004-advance_story-train-04", "a" * 64),
+            _receipt("red-goal-root-assignment-hash", "b" * 64),
+        ])
     with pytest.raises(ValueError, match="lacks bound fresh-power ancestry"):
         _validate_qualified_fresh_origins([_receipt("new-root", "a" * 64)])
 

@@ -122,7 +122,9 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     checklist_lines = [textwrap.wrap(item["label"], width=48) for item in items]
     checklist_height = sum(max(30, len(lines) * 20 + 10) for lines in checklist_lines)
     expansion = max(0, checklist_height + 40 - 299)
-    height = 1870 + expansion
+    review_lines = textwrap.wrap(state["reviews"][-1]["result"], width=125)
+    review_footer_y = 1767 + expansion + len(review_lines) * 25 + 15
+    height = max(1870 + expansion, review_footer_y + 40)
     colors = {
         "verified": "#57dfb1",
         "current": "#ffd36a",
@@ -226,7 +228,7 @@ def render_svg(baseline: dict, state: dict, lane: dict, evidence: dict) -> str:
     lines(50, 1767 + expansion, state["reviews"][-1]["result"], width=125)
     text(
         50,
-        1830 + expansion,
+        review_footer_y,
         f"Baseline {baseline['baseline_id']} / "
         "Exit criteria and evidence: docs/development-roadmap.md",
         "small muted",

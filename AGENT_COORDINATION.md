@@ -11,31 +11,27 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The teacher-only battle factory reads all151 Red species and configures both
-species, levels, stats, actor experience and movesets in isolated train captures.
-The [complete-turn verification](docs/evidence/red-battle-complete-turn-verification-2026-09-17.json)
-corrected a first-effect outcome boundary that could omit opponent retaliation.
-One Ground matchup changed Quick Attack's recorded player damage from0 to27.9%
-after settling. Its best attack varied across three timing offsets. No new
-independent root, fit, promotion, Red registration, fresh acceptance or GitHub
-push. Red is96/124 and fresh acceptance0/5.
+The trainer practice framework has four separately booted clean-power TRAIN
+roots, 28 admitted contexts, a qualified three-head fit, and two natural
+DEVELOPMENT comparisons with complete action logs. The historical goal bank
+remains one unresolved ancestry cluster, not independent supply. Both natural
+comparisons favored frozen and fixed controls despite challenger wins; there
+was no advantageous voluntary switch. See the [latest evidence](docs/evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
+and [handoff](HANDOFF.md). Red stays 96/124 and fresh acceptance 0/5.
 
-Next: prospectively vary species, type, speed, HP, PP and RNG timing, then
-estimate move value without treating one lucky branch as ground truth. Preserve
-assisted provenance and parent root identity. The existing battle-control and
-switch-target models are a foundation for eventual full-team scenarios, not
-yet a verified team-switching curriculum. Do not spend natural development
-roots before a challenger or promote without held-out advantage. Sol High,
-Fast off.
+Next: Astra High, Fast off for a bounded final architecture/evidence review.
+Assess the source-chain guards, move/control/switch targets, constant-move
+natural behavior, correlated DEVELOPMENT caveat, and prospective independent
+evaluation supply. Do not fit on or replay the two consumed DEVELOPMENT
+battles, promote the policy, run a full game, or publish to GitHub.
 
 ## Reviewer contribution
 
-Flash3.8 High completed two bounded Antigravity reviews. Accepted candidate/slot
-mapping, turn settling, faint/no-alternative stops, and outcome-training direction.
-Rejected unnecessary counterfactual timing, fitting development captures, and
-unverified corpus/linear-weight explanations. This fitted battle model is an MLP.
-One success does not prove the entire harness or a guaranteed Vicegrip outcome.
-Claude unused; refreshed Flash quota unavailable.
+Flash 3.8 High made a bounded read-only ancestry audit and agreed that the old
+goal-bank labels do not establish independent physical starts. Claude Opus
+could not review because its CLI returned "Not logged in"; do not count a
+Claude review. Refreshed service quotas are unavailable. Neither review is a
+standing execution gate.
 
 [Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
 [OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·

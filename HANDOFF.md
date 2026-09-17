@@ -3,74 +3,52 @@
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md), and
 [ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Trainer practice now executes all four bounded contexts; still no promotion
+## Trainer framework ready for Astra review; battle policy not promoted
 
-The [latest evidence](docs/evidence/red-trainer-source-and-depleted-switch-result-2026-09-17.json)
-records three new same-root TRAIN contrasts: depleted-attack MAIN, optional
-replacement prompt and forced replacement. All candidate branches completed
-at five declared timing offsets (10, 15 and 10 logs respectively), with
-execution and return admission. The depleted and forced targets favored switch
-to Bulbasaur; the optional prompt favored decline. The teacher-only factory
-materializes these conditions directly in a private cartridge copy.
+The [latest evidence](docs/evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
+and private retained receipts cover the full source-to-fit-to-natural-comparison
+path. An ancestry audit found all 81 historical goal-bank states share one
+first-party trainer ID and lack authenticated separate clean-power parents.
+They remain one unresolved ancestry cluster for qualification, including
+derived `red-goal-root-*` labels. Do not treat unique slot names or state hashes
+as independent starts.
 
-The first four-context fit traced every derived capture back to the common
-upstream lab root. It won three short interface smokes but lost a different
-full-party TRAIN diagnostic in 13 decisions without making a voluntary switch.
-Adding seven earlier admitted scenarios still lost that diagnostic. The cause
-was structural: both control candidates shared all state features in a linear
-ranker, leaving only a fixed attack/switch bias. Action-by-state features now
-let the control head learn when to switch; the unit test learns opposite choices
-at low and high HP. A fresh fit of the 11 scenarios won the reused full-party
-diagnostic in seven decisions with two voluntary switches, another same-root
-full-party diagnostic in 14 decisions, and all three edge-context smokes, with
-zero teacher queries or invalid actions. This is meaningful diagnostic progress
-and makes the collection-to-fit-to-execution path ready for broader training.
-It does **not** establish independent generalization, natural DEVELOPMENT
-advantage or battle authority. All three fits remain one-root exploratory only.
+Four separately booted clean-power Red starts produced four distinct origin
+hashes and first-party trainer IDs. Sixteen TRAIN contexts (four per root,
+including MAIN, depleted attack, optional replacement prompt and forced
+replacement) were admitted across five timing offsets. Twelve additional
+MAIN matchup contrasts were admitted without replaying the first sixteen.
+The 28-context three-head fit has model SHA-256
+`686361c0b4ca1852e1d2576819096db5f7886d617b9e00846c7970b69d8f0f38`.
+Fit admission binds each context to its fresh source and post-opening origin;
+DEVELOPMENT material is excluded.
 
-One unmodified Celadon Gym Lass TRAIN capture exposed the next real boundary.
-Its old observation manifest lacked the stat-rich actor schema; a zero-input,
-same-state V2 derivation allowed the model to run, and new natural captures now
-write V2 directly. The first live pilot failed when an opponent trapping turn
-fainted the actor before a move menu appeared. A narrow runtime repair records
-that as an unspent choice and allows the episode to reach forced replacement;
-changed PP still fails closed. The distinct successor produced a complete,
-33-decision log with zero invalid actions or teacher queries, but the model
-lost after eight voluntary switches. A frozen attack-only comparator won the
-same TRAIN battle in 24 decisions with no voluntary switch. This is not a
-disjoint DEVELOPMENT comparison; it does show the model is not yet a reliable
-natural trainer policy. Retain both outcomes and do not tune by replaying this
-exact case.
+Two unmodified natural DEVELOPMENT trainer captures were made before a battle
+choice. The first, Celadon Gym Lass, used the 16-context fit: challenger won in
+eight decisions with 12 HP lost; frozen and fixed controls each won in three
+decisions with no HP lost. The second, Fuchsia Gym Juggler 3, used the
+28-context fit: challenger won in eleven decisions with 22 HP lost; both
+controls won in ten decisions with no HP lost. All six arms had complete
+decision logs, zero teacher queries and zero invalid actions. Both DEVELOPMENT
+captures are disjoint from fresh TRAIN roots but derive from historically
+correlated saves, so they are descriptive encounters, not independent
+evaluation roots. The challenger used one attack slot throughout each battle
+and made no voluntary switch. Do not fit to or replay either outcome.
 
-The first depleted pilot remains a failure: after sixteen decisions both
-reserves fainted, leaving an unsupported Struggle boundary. The episode runner
-now stops explicitly there without pretending an action was selected. Do not
-replay that pilot. Struggle is outside the declared initial battle segment.
+The battle trainer is technically ready for Astra's final design/code review:
+source ancestry, assisted TRAIN materialization, three-head fit, frozen
+comparators, DEVELOPMENT guards, action-level logs and stop conditions all
+exist. The fitted policy is **not** ready for production authority or final
+model training claims: it has not beaten simple controls naturally, nor shown
+useful switching. All-party zero PP without a living reserve remains an
+explicit unsupported Struggle boundary. Review the training target/model,
+fresh-root evidence, and prospective independent natural comparison supply
+before a bounded redesign; do not patch around these two DEVELOPMENT battles.
 
-Three predeclared Celadon Center-to-Gym-Lass captures reached authentic trainer
-MAIN without a battle action, but ancestry review found closely related saved
-contexts with the same player trainer ID and near-identical party. Their labels
-and hashes do not prove independent play. They are correlated TRAIN material,
-not three qualifying roots. The fit gate now rejects multiple members of the
-unresolved Celadon/lab alias cluster.
+Model137 remains 137 fitted examples / 92 verified successes / 58
+economy-qualified outcomes. Red remains 96/124 native registrations; fresh
+acceptance remains 0/5. No full game, authority promotion, cross-title
+transfer or GitHub push occurred. Pete alone decides publication.
 
-The previous [eight-scenario exploratory model](docs/evidence/red-trainer-exploratory-outcome-2026-09-17.json)
-remains diagnostic only: its fresh same-root Bulbasaur-versus-Pidgey holdout
-won 5/5 against 0/5 for the frozen attack-only control, while two earlier
-holdouts failed and remain retained. The current qualified battle gate is four
-genuinely disjoint TRAIN origins with four admitted scenarios each. One root
-now has examples of MAIN, depleted MAIN, prompt and forced contexts; replicate
-them across three further verified roots, then run a natural disjoint DEVELOPMENT
-comparison against frozen and fixed controls. Do not relabel timing or saved-state
-siblings, fit DEVELOPMENT, promote, run the full game, or push to GitHub.
-
-Model137 stays 137 examples / 92 successes / 58 economy-qualified; Red stays
-96/124 and fresh acceptance 0/5. No new player authority, registration,
-cross-title transfer, or GitHub publication occurred. Pete decides when to push.
-
-Next bounded objective: audit physical ancestry of unused authentic trainer
-starts and freeze three further actually disjoint TRAIN origins, with four
-admitted scenarios on each. Use varied naturalistic control contrasts to
-counter the model's over-switching, not more timing siblings; hold this Celadon
-battle out of the next fit. Use Sol High, Fast off; reserve Astra High for the
-eventual qualified promotion review.
+Next session: Astra High, Fast off for the bounded architecture and evidence
+review; use Sol High later for implementation of the reviewed redesign.

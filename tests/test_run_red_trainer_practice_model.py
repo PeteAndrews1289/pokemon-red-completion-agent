@@ -151,6 +151,9 @@ def test_outcome_runner_requires_rich_observation_and_disjoint_development(
     manifest.root_lineage_id = "red-goal-v1-071-recover_control-validation-02"
     with pytest.raises(ValueError, match="overlaps"):
         runner._authenticate(plan)
+    manifest.root_lineage_id = "red-goal-root-another-assignment-hash"
+    with pytest.raises(ValueError, match="overlaps"):
+        runner._authenticate(plan)
     manifest.root_lineage_id = "disjoint-root"
     payloads["outcome model"] = json.dumps(model.to_dict()).encode()
     plan["opening_idle_frames"] = 8

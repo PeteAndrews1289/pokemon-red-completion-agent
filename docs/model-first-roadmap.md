@@ -74,30 +74,43 @@ reserve-ownership defect was repaired; earlier results were superseded. The
 latest model made its own opening switch and won five of five fresh same-root
 TRAIN trials versus zero of five for a frozen attack-only control. It uses a
 disclosed post-switch safety mask, and an earlier holdout failed from repeated
-switching. No independent-root, natural DEVELOPMENT or fixed-heuristic advantage
-has been shown, so this is not promoted battle authority.
+switching. That was same-root TRAIN evidence, not promoted battle authority.
+
+The [four-root trainer qualification and natural comparisons](evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
+now supersede the supply blocker. An audit grouped 81 historical goal-bank
+states into one unresolved physical origin; they cannot be relabeled as
+independent. Four separate clean-power starts produced four distinct origin
+hashes and first-party trainer IDs. The trainer admitted 16 contexts across
+those four roots at five timings each, then added 12 move contrasts without
+replaying the first 16. The resulting 28-context three-head fit is TRAIN-
+qualified. Its natural Celadon and Fuchsia DEVELOPMENT battles both ended in
+wins, with complete teacher-free logs, but frozen and fixed controls won more
+efficiently in decisions and HP preserved. The two DEVELOPMENT captures share
+unresolved historical ancestry with each other, and neither challenger battle
+demonstrated an advantageous voluntary switch. This is a working training and
+evaluation framework with an unfavorable policy result, not promoted authority.
 
 ## Next bounded work
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Independent trainer supply | Secure four authentic independent TRAIN roots with four admitted scenarios each and prompt, forced and depleted-attack contexts; do not relabel same-root variants | Sol High, Fast off |
-| Battle policy qualification and comparison | Retain the four-independent-roots-by-four-scenarios qualified-fit gate, then beat both the frozen model and fixed heuristic on separate natural DEVELOPMENT episodes before promotion | Sol High for fit; Astra High for promotion review |
+| Independent trainer supply | Four separate clean-power TRAIN origins and four contexts each admitted; source-chain and legacy alias guards pass | Complete; Astra High to audit |
+| Battle policy qualification and comparison | Review the 28-context fit and both unfavorable natural DEVELOPMENT comparisons; redesign TRAIN-side targets or policy, then prospectively outperform frozen and fixed controls on ancestry-audited natural battles | Astra High for design review; Sol High for implementation |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:90–120 minutes to inventory and freeze bounded authentic trainer
-source opportunities outside the retired supply path. The positive correlated
-exploratory fit does not lower the separate four-by-four qualification gate.
-Do not count timing siblings as independent roots, replay consumed trials or
-spend DEVELOPMENT roots before a qualified challenger.
+Next time box:90–120 minutes for the final Astra trainer-framework review and
+one bounded redesign decision. The four-by-four supply gate has passed, but
+promotion fails both natural comparisons. Do not fit to or replay the consumed
+DEVELOPMENT battles, count their correlated historical saves as independent,
+or open a full Red run.
 No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-trainer-exploratory-outcome-2026-09-17.json) ·
+[Latest evidence](evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)

@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-source-depleted-switch-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-fresh-roots-natural-comparison-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-fresh-roots-natural-comparison-v1
+
+Four separate clean-power starts supplied four distinct origin hashes and first-party trainer IDs. Sixteen four-context TRAIN scenarios at five timings qualified a three-head fit; twelve additional move contrasts expanded it to 28 contexts without replay. On Celadon and Fuchsia natural DEVELOPMENT trainers the challenger won, but both frozen and fixed controls won faster and without HP loss. All six arm logs completed without teacher queries or invalid actions.
+
+**Deviation:** The historical 81-state goal bank is conservatively one unresolved origin cluster, not independent supply. The two DEVELOPMENT encounters are disjoint from TRAIN but correlated to each other through historical saves. Their unfavorable outcomes block authority promotion; no voluntary switching benefit, Model137 increment, Red registration, fresh acceptance, transfer, full run or GitHub publication occurred. Stage and checklist exits remain unchanged.
+
+**Next:** Astra High, Fast off: review the source-chain, fit targets, constant-attack behavior, and prospective independent natural evaluation design. Redesign on TRAIN only; never tune on or replay these two DEVELOPMENT encounters.
 
 ### 2026-09-17-trainer-source-depleted-switch-v1
 

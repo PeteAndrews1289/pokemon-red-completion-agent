@@ -16,6 +16,7 @@ def trainer_origin_cluster(root_lineage_id: str) -> str:
     """
     if (
         _LEGACY_GOAL_SLOT.match(root_lineage_id)
+        or root_lineage_id.startswith("red-goal-root-")
         or root_lineage_id.startswith("training-control-v")
         or root_lineage_id == "red-lab-rival-train-20260917-offset137"
     ):
