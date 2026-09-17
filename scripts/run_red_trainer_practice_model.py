@@ -25,6 +25,7 @@ from pokemon_red_completion.executor import FrameBudgetController
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_player import _record
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
+from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
 from pokemon_red_completion.red_trainer_practice_fit import TrainerPracticeThreeHeadModel
 from pokemon_red_completion.red_trainer_practice_log import (
@@ -100,7 +101,9 @@ def _authenticate(plan: object):
     if (
         isinstance(model, TrainerPracticeThreeHeadModel)
         and capture.manifest.partition is ScenarioPartition.DEVELOPMENT
-        and capture.manifest.root_lineage_id in model.train_root_ids
+        and trainer_origin_cluster(capture.manifest.root_lineage_id) in {
+            trainer_origin_cluster(root) for root in model.train_root_ids
+        }
     ):
         raise ValueError("DEVELOPMENT root overlaps outcome-model training lineage")
     max_decisions, maximum_frames = plan.get("max_decisions"), plan.get("maximum_frames")

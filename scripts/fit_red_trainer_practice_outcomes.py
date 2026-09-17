@@ -22,6 +22,7 @@ from pokemon_red_completion.battle_scenario_capture import (
 )
 from pokemon_red_completion.red_autonomous_player import _record
 from pokemon_red_completion.red_trainer_practice_admission import inspect_trainer_practice_choices
+from pokemon_red_completion.red_trainer_practice_ancestry import trainer_origin_cluster
 from pokemon_red_completion.red_trainer_practice_fit import fit_trainer_practice_three_heads
 from pokemon_red_completion.red_trainer_practice_targets import (
     aggregate_trainer_timing_targets,
@@ -32,14 +33,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = "pokemon.red.trainer-practice-fit-corpus-plan.v1"
 OFFSETS = (0, 2, 4, 6, 8)
 SHA256 = re.compile(r"[0-9a-f]{64}")
-# Distinct slot IDs and state hashes from this historical catalog do not prove
-# independent play. Keep the aliases mutually exclusive until ancestry is audited.
-UNRESOLVED_CELADON_ANCESTRY = frozenset({
-    "red-lab-rival-train-20260917-offset137",
-    "red-goal-v1-001-advance_story-train-01",
-    "red-goal-v1-002-advance_story-train-02",
-    "red-goal-v1-003-advance_story-train-03",
-})
 
 
 def _validate_root_source_provenance(
@@ -68,8 +61,52 @@ def _validate_root_source_provenance(
             raise ValueError("one trainer source was relabeled as multiple roots")
         source_by_root[root] = source
         root_by_source[source] = root
-    if len(source_by_root.keys() & UNRESOLVED_CELADON_ANCESTRY) > 1:
-        raise ValueError("trainer roots have unresolved shared Celadon ancestry")
+    if len({trainer_origin_cluster(root) for root in source_by_root}) != len(source_by_root):
+        raise ValueError("trainer roots have unresolved shared legacy ancestry")
+
+
+def _validate_qualified_fresh_origins(
+    receipts: Sequence[Mapping[str, object]],
+) -> None:
+    """Require clean-power source receipts for the four-root fit, not labels."""
+    by_root: dict[str, tuple[str, int, int, str]] = {}
+    for receipt in receipts:
+        root = receipt.get("root_lineage_id")
+        source = receipt.get("source_state_sha256")
+        evidence = receipt.get("fresh_origin_receipt")
+        if (
+            not isinstance(root, str)
+            or not isinstance(source, str)
+            or not isinstance(evidence, dict)
+            or evidence.get("schema") != "pokemon.red.fresh-trainer-train-source.v1"
+            or evidence.get("source_id") != root
+            or evidence.get("root_lineage_id") != root
+            or evidence.get("partition") != "train"
+            or evidence.get("fresh_power_on") is not True
+            or evidence.get("origin_state_sha256") != source
+            or evidence.get("model_queries") != 0
+            or evidence.get("model_updates") != 0
+            or evidence.get("full_game_runs") != 0
+            or type(evidence.get("boot_frames")) is not int  # noqa: E721
+            or type(evidence.get("first_party_ot_id")) is not int  # noqa: E721
+            or not isinstance(evidence.get("source_commit"), str)
+        ):
+            raise ValueError("qualified trainer root lacks bound fresh-power ancestry")
+        identity = (
+            source,
+            evidence["boot_frames"],
+            evidence["first_party_ot_id"],
+            evidence["source_commit"],
+        )
+        if root in by_root and by_root[root] != identity:
+            raise ValueError("qualified trainer root ancestry changed across scenarios")
+        by_root[root] = identity
+    if (
+        len({item[0] for item in by_root.values()}) != len(by_root)
+        or len({item[1] for item in by_root.values()}) != len(by_root)
+        or len({item[2] for item in by_root.values()}) != len(by_root)
+    ):
+        raise ValueError("qualified trainer fresh origins are not distinct")
 
 
 def _validate_exploratory_supply(
@@ -186,6 +223,42 @@ def run(
             )
             parent = open_battle_scenario_capture(parent_state_path, parent_manifest_path).manifest
         root_source_sha256 = _root_source_from_parent(capture.manifest, parent)
+        origin_receipt = None
+        if not (probe_only or exploratory_fit):
+            fresh_state_path = _bound_path(
+                scenario.get("fresh_source_state"), "trainer fresh battle source state"
+            )
+            fresh_manifest_path = _bound_path(
+                scenario.get("fresh_source_manifest"), "trainer fresh battle source manifest"
+            )
+            fresh = open_battle_scenario_capture(fresh_state_path, fresh_manifest_path)
+            origin_state_path = _bound_path(
+                scenario.get("origin_state"), "trainer clean-power origin state"
+            )
+            origin_receipt_path = _bound_path(
+                scenario.get("origin_receipt"), "trainer clean-power origin receipt"
+            )
+            origin_receipt = json.loads(origin_receipt_path.read_bytes())
+            if (
+                not isinstance(origin_receipt, dict)
+                or fresh.manifest.partition.value != "train"
+                or fresh.manifest.root_lineage_id != capture.manifest.root_lineage_id
+                or fresh.manifest.source_state_sha256
+                != hashlib.sha256(origin_state_path.read_bytes()).hexdigest()
+                or origin_receipt.get("origin_state_sha256")
+                != fresh.manifest.source_state_sha256
+                or origin_receipt.get("battle_state_sha256")
+                != fresh.manifest.state_sha256
+                or origin_receipt.get("source_commit")
+                != fresh.manifest.source_commit
+                or not (
+                    capture.manifest.state_sha256 == fresh.manifest.state_sha256
+                    or root_source_sha256 == fresh.manifest.state_sha256
+                )
+            ):
+                raise ValueError("trainer clean-power origin chain differs")
+            root_source_sha256 = fresh.manifest.source_state_sha256
+            assert root_source_sha256 is not None
         targets = []
         for offset, trial in zip(OFFSETS, scenario["trials"], strict=True):
             if not isinstance(trial, dict):
@@ -243,8 +316,11 @@ def run(
             "decision_context": aggregate["decision_context"],
             "attack_depleted": aggregate["attack_depleted"],
             "head_kinds": sorted(heads),
+            "fresh_origin_receipt": origin_receipt,
         })
     _validate_root_source_provenance(scenario_receipts)
+    if not (probe_only or exploratory_fit):
+        _validate_qualified_fresh_origins(scenario_receipts)
     root_counts = Counter(row["root_lineage_id"] for row in scenario_receipts)
     if probe_only:
         return {

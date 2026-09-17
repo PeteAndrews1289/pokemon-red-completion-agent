@@ -143,6 +143,16 @@ def test_outcome_runner_requires_rich_observation_and_disjoint_development(
     manifest.root_lineage_id = "disjoint-root"
     _plan, _capture, loaded = runner._authenticate(plan)
     assert isinstance(loaded, TrainerPracticeThreeHeadModel)
+    legacy = TrainerPracticeThreeHeadModel(
+        model.move, model.control, model.switch,
+        ("legacy-capture",), ("red-goal-v1-001-advance_story-train-01",),
+    )
+    payloads["outcome model"] = json.dumps(legacy.to_dict()).encode()
+    manifest.root_lineage_id = "red-goal-v1-071-recover_control-validation-02"
+    with pytest.raises(ValueError, match="overlaps"):
+        runner._authenticate(plan)
+    manifest.root_lineage_id = "disjoint-root"
+    payloads["outcome model"] = json.dumps(model.to_dict()).encode()
     plan["opening_idle_frames"] = 8
     runner._authenticate(plan)
     plan["opening_idle_frames"] = 13

@@ -10,6 +10,7 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 from scripts.fit_red_trainer_practice_outcomes import (
     _root_source_from_parent,
     _validate_exploratory_supply,
+    _validate_qualified_fresh_origins,
     _validate_root_source_provenance,
 )
 
@@ -31,7 +32,7 @@ def test_fit_corpus_requires_consistent_distinct_upstream_states() -> None:
 
 
 def test_fit_rejects_unresolved_celadon_slot_aliases_as_independent_roots() -> None:
-    with pytest.raises(ValueError, match="unresolved shared Celadon ancestry"):
+    with pytest.raises(ValueError, match="unresolved shared legacy ancestry"):
         _validate_root_source_provenance([
             _receipt("red-lab-rival-train-20260917-offset137", "a" * 64),
             _receipt("red-goal-v1-001-advance_story-train-01", "b" * 64),
@@ -65,11 +66,57 @@ def test_derived_prompt_or_forced_capture_rejoins_authenticated_upstream_source(
     assert _root_source_from_parent(parent, None) == "b" * 64
     with pytest.raises(ValueError, match="parent chain differs"):
         _root_source_from_parent(child, replace(parent, root_lineage_id="other-root"))
-    with pytest.raises(ValueError, match="unresolved shared Celadon ancestry"):
+    with pytest.raises(ValueError, match="unresolved shared legacy ancestry"):
         _validate_root_source_provenance([
             _receipt("red-goal-v1-002-advance_story-train-02", "a" * 64),
             _receipt("red-goal-v1-003-advance_story-train-03", "b" * 64),
         ])
+
+
+def test_fit_cannot_relabel_old_catalog_or_skip_fresh_power_ancestry() -> None:
+    with pytest.raises(ValueError, match="unresolved shared legacy ancestry"):
+        _validate_root_source_provenance([
+            _receipt("red-goal-v1-004-advance_story-train-04", "a" * 64),
+            _receipt("red-goal-v1-064-recover_control-train-01", "b" * 64),
+        ])
+    with pytest.raises(ValueError, match="lacks bound fresh-power ancestry"):
+        _validate_qualified_fresh_origins([_receipt("new-root", "a" * 64)])
+
+
+def test_qualified_fit_requires_distinct_clean_power_origin_receipts() -> None:
+    def fresh(root: str, digest: str, frames: int, ot_id: int) -> dict[str, object]:
+        return {
+            "root_lineage_id": root,
+            "source_state_sha256": digest,
+            "fresh_origin_receipt": {
+                "schema": "pokemon.red.fresh-trainer-train-source.v1",
+                "source_id": root,
+                "root_lineage_id": root,
+                "partition": "train",
+                "fresh_power_on": True,
+                "origin_state_sha256": digest,
+                "boot_frames": frames,
+                "first_party_ot_id": ot_id,
+                "source_commit": "c" * 40,
+                "model_queries": 0,
+                "model_updates": 0,
+                "full_game_runs": 0,
+            },
+        }
+
+    rows = [
+        fresh("new-a", "a" * 64, 2000, 1),
+        fresh("new-b", "b" * 64, 2100, 2),
+    ]
+    _validate_qualified_fresh_origins([rows[0], deepcopy(rows[0]), rows[1]])
+    repeated = deepcopy(rows)
+    repeated[1]["fresh_origin_receipt"]["first_party_ot_id"] = 1
+    with pytest.raises(ValueError, match="not distinct"):
+        _validate_qualified_fresh_origins(repeated)
+    stale = deepcopy(rows)
+    stale[1]["fresh_origin_receipt"]["origin_state_sha256"] = "a" * 64
+    with pytest.raises(ValueError, match="lacks bound fresh-power ancestry"):
+        _validate_qualified_fresh_origins(stale)
 
 
 def test_exploratory_fit_discloses_one_root_and_scales_varied_scenarios() -> None:
