@@ -26,7 +26,13 @@ from pokemon_red_completion.battle_scenario_capture import (
 )
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import FrameBudgetController, FrameSafeExecutor
-from pokemon_red_completion.observation import BattleMenuPhase, PokemonRedStateReader
+from pokemon_red_completion.observation import (
+    PARTY_PP_OFFSET,
+    PARTY_STRUCT_STRIDE,
+    BattleMenuPhase,
+    PokemonRedStateReader,
+    RamAddress,
+)
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_battle_catalog import (
     PokemonRedBattleCatalog,
@@ -40,7 +46,10 @@ from pokemon_red_completion.red_battle_outcome_runtime import (
 )
 from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_practice_factory import materialize_red_train_practice
-from pokemon_red_completion.red_battle_scenario import project_red_battle_turn_outcome
+from pokemon_red_completion.red_battle_scenario import (
+    prepare_red_battle_scenario,
+    project_red_battle_turn_outcome,
+)
 from pokemon_red_completion.red_trainer_practice_counterfactual import (
     TrainerPracticeFirstChoice,
     collect_trainer_practice_counterfactuals,
@@ -59,6 +68,173 @@ pytestmark = pytest.mark.integration
 
 def _move(identifier: int, pp: int) -> dict[str, object]:
     return {"move_ref": pokemon_red_move_ref(identifier), "pp": pp}
+
+
+@pytest.mark.parametrize("levelup", [False, True])
+def test_native_trainer_sendout_recalculates_stats_and_pp(levelup: bool) -> None:
+    """Prospective teacher-only mechanic probe, not a learner example."""
+
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_SOURCE_STATE")
+    if not rom_path or not state_path:
+        pytest.skip("private authenticated TRAIN mechanic inputs not supplied")
+    state = Path(state_path).read_bytes()
+    cartridge = RedPracticeCartridge(Path(rom_path).read_bytes())
+    with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(state)
+        reader = PokemonRedStateReader(emulator)
+        before = reader.read()
+        assert before.battle_state == 2 and before.map_id is not None
+        assert reader.read_battle_menu_state(before).phase is BattleMenuPhase.MAIN
+        spec = BattlePracticeSpec.from_dict({
+            "source_state_sha256": sha256(state).hexdigest(),
+            "root_lineage_id": "trainer-native-mechanic-probe",
+            "partition": "train", "battle_kind": "trainer",
+            "actor_species_ref": pokemon_red_species_ref(84), "actor_level": 35,
+            "actor_moves": [_move(85, 15), _move(98, 30)],
+            "opponent_species_ref": pokemon_red_species_ref(177),
+            "opponent_level": 30, "opponent_hp": 20,
+            "opponent_moves": [_move(55, 25), _move(33, 35)],
+            "opponent_party_count": 2,
+            "opponent_reserves": [{
+                "party_slot": 2, "species_ref": pokemon_red_species_ref(176),
+                "level": 30, "moves": [_move(10, 35), _move(52, 25)],
+            }],
+        })
+        memory = emulator._require_backend().memory
+        materialize_red_train_practice(reader, memory, spec, cartridge=cartridge)
+        initial_actor_pp = reader.read().active_party_pp
+        assert initial_actor_pp is not None
+        if levelup:
+            assert before.active_party_index is not None
+            actor_base = (
+                int(RamAddress.PARTY_MON_1)
+                + before.active_party_index * PARTY_STRUCT_STRIDE
+            )
+            next_experience = cartridge.species(84).experience_at_level(36) - 1
+            for index, shift in enumerate((16, 8, 0)):
+                memory[actor_base + 14 + index] = (next_experience >> shift) & 0xFF
+        reserve_pp = int(RamAddress.ENEMY_PARTY_MON_1) + PARTY_STRUCT_STRIDE + PARTY_PP_OFFSET
+        memory[reserve_pp] = 1
+        memory[reserve_pp + 1] = 1
+        actions = FrameSafeExecutor(FrameBudgetController(emulator, maximum_frames=16000))
+        result = execute_bounded_battle_move_turn(
+            reader, actions, expected_map=before.map_id, selected_slot=1,
+            expected_battle_state=2, settle_to_next_decision=True,
+            timing=replace(DEFAULT_BATTLE_RUNTIME_TIMING, max_post_attack_transition_pulses=40),
+        )
+        after = result.final_state
+        assert after.enemy_species_id == 176
+        expected = cartridge.species(176).trainer_stats(30)
+        assert after.enemy_max_hp == expected.max_hp
+        attack_address = int(RamAddress.ENEMY_ATTACK)
+        special_address = int(RamAddress.ENEMY_SPECIAL)
+        active_attack = memory[attack_address] * 256 + memory[attack_address + 1]
+        active_special = memory[special_address] * 256 + memory[special_address + 1]
+        assert active_attack == expected.attack
+        assert active_special == expected.special
+        assert tuple(memory[0xCFFE + i] for i in range(2)) == (35, 25)
+        assert after.active_party_pp is not None
+        assert after.active_party_pp[1] == initial_actor_pp[1]
+        if levelup:
+            assert after.active_party_level == 36
+            assert after.active_party_max_hp == cartridge.species(84).neutral_stats(36).max_hp
+            assert after.active_party_hp is not None
+            assert after.active_party_hp <= after.active_party_max_hp
+
+
+@pytest.mark.parametrize("depleted", [False, True])
+def test_live_losing_voluntary_switch_is_retained(
+    tmp_path: Path, depleted: bool
+) -> None:
+    rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
+    state_path = environ.get("POKEMON_RED_TRAINER_TRAIN_SOURCE_STATE")
+    if not rom_path or not state_path:
+        pytest.skip("private authenticated TRAIN mechanic inputs not supplied")
+    source = Path(state_path).read_bytes()
+    cartridge = RedPracticeCartridge(Path(rom_path).read_bytes())
+    with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+        emulator.load_state_bytes(source)
+        reader = PokemonRedStateReader(emulator)
+        before = reader.read()
+        assert before.map_id is not None
+        spec = BattlePracticeSpec.from_dict({
+            "source_state_sha256": sha256(source).hexdigest(),
+            "root_lineage_id": "trainer-losing-switch-mechanic-probe",
+            "partition": "train", "battle_kind": "trainer",
+            "actor_species_ref": pokemon_red_species_ref(84), "actor_level": 35,
+            "actor_moves": [_move(85, 15), _move(98, 30)],
+            "party_reserves": [
+                {"party_slot": 2, "species_ref": pokemon_red_species_ref(153),
+                 "level": 5, "hp": 1, "moves": [_move(33, 35)]},
+                {"party_slot": 3, "species_ref": pokemon_red_species_ref(177),
+                 "level": 35, "moves": [_move(55, 25)]},
+            ],
+            "opponent_species_ref": pokemon_red_species_ref(150),
+            "opponent_level": 50, "opponent_hp": 70,
+            "opponent_moves": [_move(98, 30)], "opponent_party_count": 1,
+        })
+        materialize_red_train_practice(
+            reader, emulator._require_backend().memory, spec, cartridge=cartridge
+        )
+        if depleted:
+            assert before.active_party_index is not None
+            memory = emulator._require_backend().memory
+            active_base = (
+                int(RamAddress.PARTY_MON_1)
+                + before.active_party_index * PARTY_STRUCT_STRIDE
+            )
+            for index in range(2):
+                memory[0xD02D + index] = 0
+                memory[active_base + PARTY_PP_OFFSET + index] = 0
+        observation = PokemonRedObservationEncoder.from_state_reader(reader)
+        prepared = prepare_red_battle_scenario(
+            observation, reader.read(), allow_no_attack=depleted
+        )
+        generated = emulator.save_state_bytes()
+    state_file = tmp_path / "losing-switch.state"
+    manifest_file = tmp_path / "losing-switch.state.json"
+    state_file.write_bytes(generated)
+    manifest_file.write_bytes(build_battle_scenario_capture_payload(
+        capture_id="losing-switch-mechanic-probe",
+        root_lineage_id=spec.root_lineage_id,
+        partition=ScenarioPartition.TRAIN,
+        state_bytes=generated,
+        initial_observation_sha256=prepared.initial_observation_sha256,
+        source_commit="0" * 40,
+        expected_map=before.map_id,
+        expected_battle_state=2,
+        source_state_sha256=spec.source_state_sha256,
+    ))
+    capture = open_battle_scenario_capture(state_file, manifest_file)
+
+    class SwitchIntoLoss:
+        policy_id = "diagnostic-switch-into-ko"
+        chosen = False
+
+        def choose_main(self, _observation, prepared):
+            if not self.chosen:
+                self.chosen = True
+                return BattleAction.switch(2)
+            if not any(prepared.supported_candidate_mask):
+                return BattleAction.switch(3)
+            return BattleAction.move(1)
+
+        def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
+            return legal_party_slots[0] if forced else None
+
+    @contextmanager
+    def session_factory():
+        with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
+            yield FrameBudgetController(emulator, maximum_frames=12000)
+
+    episode = run_red_trainer_practice_episode(
+        capture, session_factory=session_factory, policy=SwitchIntoLoss(), max_decisions=4
+    )
+    assert episode.decisions[0]["kind"] == "voluntary_switch"
+    assert episode.decisions[0]["state_after"]["party_hp"][1] == 0
+    assert episode.public_dict()["metrics"]["party_faints"] >= 1
+    assert episode.decisions[1]["kind"] == "forced_switch"
 
 
 def test_train_replacement_prompt_has_matched_decline_and_switch_branches(tmp_path: Path) -> None:

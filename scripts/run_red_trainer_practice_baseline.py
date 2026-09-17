@@ -21,6 +21,7 @@ from pokemon_red_completion.battle_runtime import (
     execute_bounded_battle_move_turn,
 )
 from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
@@ -29,6 +30,7 @@ from pokemon_red_completion.executor import FrameBudgetController, FrameSafeExec
 from pokemon_red_completion.observation import PokemonRedStateReader
 from pokemon_red_completion.provenance import canonical_sha256
 from pokemon_red_completion.red_autonomous_player import _record, _write
+from pokemon_red_completion.red_battle_practice_cartridge import RedPracticeCartridge
 from pokemon_red_completion.red_battle_scenario import (
     PreparedRedBattleScenario,
     prepare_red_battle_scenario,
@@ -87,10 +89,17 @@ def _authenticate(plan: object):
         or capture.manifest.expected_battle_state != 2
         or plan.get("max_decisions") != 80
         or plan.get("maximum_frames") != 120000
-        or plan.get("matched_choices") not in {
-            None, "opening_attack_vs_five_switches", "all_legal_opening"
-        }
+        or plan.get("matched_choices")
+        not in {None, "opening_attack_vs_five_switches", "all_legal_opening"}
         or plan.get("matched_prompt_choices") not in {None, True}
+        or (
+            plan.get("matched_timing_offsets") is not None
+            and plan.get("matched_timing_offsets") != [0, 2, 4, 6, 8]
+        )
+        or (plan.get("matched_timing_offsets") is not None and (
+            plan.get("matched_choices") is None
+            or capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2
+        ))
     ):
         raise ValueError("trainer baseline scope differs")
     output = plan.get("output")
@@ -112,7 +121,8 @@ def _all_legal_opening_choices(
             prepared.features.slot_indices,
             prepared.supported_candidate_mask,
             strict=True,
-        ) if legal
+        )
+        if legal
     )
     switch_choices = tuple(
         TrainerPracticeFirstChoice(BattleAction.switch(index + 1))
@@ -164,6 +174,11 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
 
     rom_record = plan["rom"]
     assert isinstance(rom_record, dict) and isinstance(rom_record["path"], str)
+    public_stats = (
+        RedPracticeCartridge(_bound_file(rom_record, "ROM")).public_base_stats
+        if capture.manifest.observation_schema == OBSERVATION_SCHEMA_V2
+        else None
+    )
 
     @contextmanager
     def session_factory():
@@ -176,13 +191,18 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             reader = PokemonRedStateReader(session)
             raw = reader.read()
             prepared = prepare_red_battle_scenario(
-                PokemonRedObservationEncoder.from_state_reader(reader), raw
+                PokemonRedObservationEncoder.from_state_reader(
+                    reader,
+                    include_battle_stats=(
+                        capture.manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                    ),
+                    public_species_base_stats=public_stats,
+                ),
+                raw,
             )
             if raw.party_hp is None or raw.active_party_index is None:
                 raise ValueError("trainer opening party is unavailable")
-            return _all_legal_opening_choices(
-                prepared, raw.party_hp, raw.active_party_index
-            )
+            return _all_legal_opening_choices(prepared, raw.party_hp, raw.active_party_index)
 
     output = Path(plan["output"])
     output.mkdir(mode=0o700, parents=True, exist_ok=False)
@@ -211,53 +231,107 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         },
     )
     try:
-        result = run_red_trainer_practice_episode(
-            capture,
-            session_factory=session_factory,
-            policy=FrozenAttackBaseline(),
-            max_decisions=80,
-            event_sink=log.emit,
-        )
-
-        def retain_branch(index, choice, episode):  # type: ignore[no-untyped-def]
-            _record(
-                output / f"matched-branch-{index:02d}.json",
-                {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
-            )
-
         matched_choices = plan.get("matched_choices")
         first_choices = (
             all_legal_opening_choices()
             if matched_choices == "all_legal_opening"
             else (
                 TrainerPracticeFirstChoice(BattleAction.move(1)),
-                *(
-                    TrainerPracticeFirstChoice(BattleAction.switch(slot))
-                    for slot in range(2, 7)
-                ),
+                *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
             )
         )
-        matched = (
-            collect_trainer_practice_counterfactuals(
-                capture,
-                session_factory=session_factory,
-                continuation_policy_factory=FrozenAttackBaseline,
-                first_choices=first_choices,
-                max_decisions=8,
-                player_turn_horizon=2,
-                branch_sink=retain_branch,
-            )
-            if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}
-            else None
+        timed = plan.get("matched_timing_offsets") is not None
+        offsets = tuple(plan["matched_timing_offsets"]) if timed else (0,)
+        branch_directories = (
+            tuple(output / f"timing-{offset:02d}" for offset in offsets)
+            if timed else (output,)
         )
+        if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}:
+            for offset, branch_directory in zip(offsets, branch_directories, strict=True):
+                if timed:
+                    branch_directory.mkdir(mode=0o700, exist_ok=False)
+                _record(branch_directory / "matched-plan.json", {
+                    "schema": "pokemon.red.trainer-practice-choice-plan.v1",
+                    "capture_manifest_sha256": capture.manifest_sha256,
+                    "source_commit": plan["source_commit"],
+                    "model_sha256": model_binding["sha256"],
+                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "first_choice_refs": [choice.semantic_ref for choice in first_choices],
+                    "player_turn_horizon": 2,
+                    "max_decisions": 8,
+                    "opening_idle_frames": offset,
+                })
+        result = run_red_trainer_practice_episode(
+            capture,
+            session_factory=session_factory,
+            policy=FrozenAttackBaseline(),
+            max_decisions=80,
+            event_sink=log.emit,
+            public_species_base_stats=public_stats,
+        )
+
+        matched = None
+        if matched_choices in {"opening_attack_vs_five_switches", "all_legal_opening"}:
+            for offset, branch_directory in zip(offsets, branch_directories, strict=True):
+                plan_sha = hashlib.sha256(
+                    (branch_directory / "matched-plan.json").read_bytes()
+                ).hexdigest()
+
+                def retain_branch(  # type: ignore[no-untyped-def]
+                    index, choice, episode, directory=branch_directory
+                ):
+                    _record(
+                        directory / f"matched-branch-{index:02d}.json",
+                        {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
+                    )
+                    _record(
+                        directory / f"matched-branch-{index:02d}-event-log-verification.json",
+                        verify_trainer_practice_event_log(
+                            directory / f"matched-branch-{index:02d}-events"
+                        ),
+                    )
+
+                def branch_event_log(  # type: ignore[no-untyped-def]
+                    index, choice, directory=branch_directory, timing_offset=offset,
+                    declared_plan_sha=plan_sha,
+                ):
+                    return TrainerPracticeEventLog(
+                        directory / f"matched-branch-{index:02d}-events",
+                        run_identity={
+                            "source_commit": plan["source_commit"],
+                            "capture_id": capture.manifest.capture_id,
+                            "root_lineage_id": capture.manifest.root_lineage_id,
+                            "partition": "train",
+                            "capture_manifest_sha256": capture.manifest_sha256,
+                            "model_sha256": model_binding["sha256"],
+                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "first_choice_ref": choice.semantic_ref,
+                            "player_turn_horizon": 2,
+                            "max_decisions": 8,
+                            "opening_idle_frames": timing_offset,
+                            "plan_sha256": declared_plan_sha,
+                        },
+                    )
+
+                matched = collect_trainer_practice_counterfactuals(
+                    capture,
+                    session_factory=session_factory,
+                    continuation_policy_factory=FrozenAttackBaseline,
+                    first_choices=first_choices,
+                    max_decisions=8,
+                    player_turn_horizon=2,
+                    branch_sink=retain_branch,
+                    branch_event_log_factory=branch_event_log,
+                    public_species_base_stats=public_stats,
+                    opening_idle_frames=offset,
+                )
+                _record(branch_directory / "matched-choices.json", matched.public_dict())
         matched_prompt = None
         if plan.get("matched_prompt_choices") is True:
             with PyBoyAdapter(Path(rom_record["path"]), watch=False, speed=None) as emulator:
                 emulator.load_state_bytes(capture.state_bytes)
                 reader = PokemonRedStateReader(emulator)
-                actions = FrameSafeExecutor(
-                    FrameBudgetController(emulator, maximum_frames=10000)
-                )
+                actions = FrameSafeExecutor(FrameBudgetController(emulator, maximum_frames=10000))
                 execute_bounded_battle_move_turn(
                     reader,
                     actions,
@@ -274,9 +348,17 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 raw = reader.read()
                 if not reader.trainer_switch_prompt_visible(raw):
                     raise ValueError("trainer practice opening attack missed replacement prompt")
-                observation = PokemonRedObservationEncoder.from_state_reader(
-                    reader
-                ).snapshot_from_raw(raw).to_dict()
+                observation = (
+                    PokemonRedObservationEncoder.from_state_reader(
+                        reader,
+                        include_battle_stats=(
+                            capture.manifest.observation_schema == OBSERVATION_SCHEMA_V2
+                        ),
+                        public_species_base_stats=public_stats,
+                    )
+                    .snapshot_from_raw(raw)
+                    .to_dict()
+                )
                 prompt_state = emulator.save_state_bytes()
             prompt_manifest = build_battle_scenario_capture_payload(
                 capture_id=f"{capture.manifest.capture_id}-replacement-prompt",
@@ -288,33 +370,74 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 expected_map=capture.manifest.expected_map,
                 expected_battle_state=2,
                 source_state_sha256=capture.manifest.state_sha256,
+                observation_schema=capture.manifest.observation_schema,
             )
             _write(output / "prompt.state", prompt_state)
             _write(output / "prompt.state.json", prompt_manifest)
             prompt_capture = open_battle_scenario_capture(
                 output / "prompt.state", output / "prompt.state.json"
             )
+            prompt_choices = (
+                TrainerPracticeFirstChoice(None),
+                *(TrainerPracticeFirstChoice(BattleAction.switch(slot)) for slot in range(2, 7)),
+            )
+            _record(
+                output / "matched-prompt-plan.json",
+                {
+                    "schema": "pokemon.red.trainer-practice-choice-plan.v1",
+                    "capture_manifest_sha256": prompt_capture.manifest_sha256,
+                    "source_commit": plan["source_commit"],
+                    "model_sha256": model_binding["sha256"],
+                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "first_choice_refs": [choice.semantic_ref for choice in prompt_choices],
+                    "player_turn_horizon": 1,
+                    "max_decisions": 5,
+                    "opening_idle_frames": 0,
+                },
+            )
+            prompt_plan_sha256 = hashlib.sha256(
+                (output / "matched-prompt-plan.json").read_bytes()
+            ).hexdigest()
 
             def retain_prompt_branch(index, choice, episode):  # type: ignore[no-untyped-def]
                 _record(
                     output / f"prompt-branch-{index:02d}.json",
                     {"first_choice_ref": choice.semantic_ref, "episode": episode.public_dict()},
                 )
+                _record(
+                    output / f"prompt-branch-{index:02d}-event-log-verification.json",
+                    verify_trainer_practice_event_log(output / f"prompt-branch-{index:02d}-events"),
+                )
+
+            def prompt_branch_event_log(index, choice):  # type: ignore[no-untyped-def]
+                return TrainerPracticeEventLog(
+                    output / f"prompt-branch-{index:02d}-events",
+                    run_identity={
+                        "source_commit": plan["source_commit"],
+                        "capture_id": prompt_capture.manifest.capture_id,
+                        "root_lineage_id": prompt_capture.manifest.root_lineage_id,
+                        "partition": "train",
+                        "capture_manifest_sha256": prompt_capture.manifest_sha256,
+                        "model_sha256": model_binding["sha256"],
+                        "policy_id": FrozenAttackBaseline.policy_id,
+                        "first_choice_ref": choice.semantic_ref,
+                        "player_turn_horizon": 1,
+                        "max_decisions": 5,
+                        "opening_idle_frames": 0,
+                        "plan_sha256": prompt_plan_sha256,
+                    },
+                )
 
             matched_prompt = collect_trainer_practice_counterfactuals(
                 prompt_capture,
                 session_factory=session_factory,
                 continuation_policy_factory=FrozenAttackBaseline,
-                first_choices=(
-                    TrainerPracticeFirstChoice(None),
-                    *(
-                        TrainerPracticeFirstChoice(BattleAction.switch(slot))
-                        for slot in range(2, 7)
-                    ),
-                ),
+                first_choices=prompt_choices,
                 max_decisions=5,
                 player_turn_horizon=1,
                 branch_sink=retain_prompt_branch,
+                branch_event_log_factory=prompt_branch_event_log,
+                public_species_base_stats=public_stats,
             )
     except Exception as error:
         log.fail(error)
@@ -335,17 +458,17 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         }
     )
     _record(output / "outcome.json", report)
-    if matched is not None:
-        _record(output / "matched-choices.json", matched.public_dict())
     if matched_prompt is not None:
         _record(output / "matched-prompt-choices.json", matched_prompt.public_dict())
-    log.finish({
-        "battle_won": result.battle_won,
-        "stop_reason": result.stop_reason,
-        "decision_count": len(result.decisions),
-        "elapsed_ns": result.elapsed_ns,
-        "outcome_sha256": canonical_sha256(report),
-    })
+    log.finish(
+        {
+            "battle_won": result.battle_won,
+            "stop_reason": result.stop_reason,
+            "decision_count": len(result.decisions),
+            "elapsed_ns": result.elapsed_ns,
+            "outcome_sha256": canonical_sha256(report),
+        }
+    )
     _record(
         output / "event-log-verification.json",
         verify_trainer_practice_event_log(log.directory),

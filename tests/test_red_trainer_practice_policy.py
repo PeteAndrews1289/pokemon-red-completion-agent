@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from types import SimpleNamespace
 
 import numpy as np
@@ -87,3 +88,15 @@ def test_composite_model_fails_closed_on_unavailable_action(monkeypatch):
     unsupported = _policy(monkeypatch, CONTROL_CLASS_REFS[1])
     with pytest.raises(policy_module.TrainerPracticeModelPolicyError, match="unsupported class"):
         unsupported.choose_main(_observation(), _prepared())
+
+
+def test_no_usable_attack_chooses_a_legal_reserve_without_move_model(monkeypatch):
+    model = _policy(monkeypatch, CONTROL_CLASS_REFS[0])
+    prepared = _prepared()
+    empty = replace(
+        prepared,
+        features=replace(prepared.features, legal_mask=(False, False), current_pp=(0.0, 0.0)),
+        allow_no_attack=True,
+    )
+    assert model.choose_main(_observation(), empty) == BattleAction.switch(3)
+    assert model.last_decision_diagnostics["forced_by_legality"] is True

@@ -11,6 +11,7 @@ from typing import cast
 
 from pokemon_red_completion.battle_practice_factory import BattlePracticeSpec
 from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
     parse_battle_scenario_capture_manifest,
@@ -49,6 +50,10 @@ def _authenticate(
 ) -> tuple[dict[str, object], BattlePracticeSpec, bytes, bytes]:
     if not isinstance(plan, dict) or plan.get("schema") not in {SCHEMA, TRAINER_SCHEMA}:
         raise ValueError("teacher battle practice plan differs")
+    if plan.get("observation_schema") not in {None, OBSERVATION_SCHEMA_V2} or (
+        plan.get("observation_schema") is not None and plan.get("schema") != TRAINER_SCHEMA
+    ):
+        raise ValueError("teacher battle observation version differs")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
         raise ValueError("commit teacher factory before cartridge materialization")
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
@@ -116,14 +121,26 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             ):
                 raise ValueError("source trainer semantic observation differs from capture")
         backend = emulator._require_backend()  # isolated teacher-only write surface
+        cartridge = RedPracticeCartridge(rom)
         receipt = materialize_red_train_practice(
             reader,
             cast(WritableRedMemory, backend.memory),
             spec,
-            cartridge=RedPracticeCartridge(rom),
+            cartridge=cartridge,
         )
         if emulator.frame_count != before_frame:
             raise ValueError("teacher materialization advanced emulator frames")
+        rich_observation_sha256 = None
+        if plan.get("observation_schema") == OBSERVATION_SCHEMA_V2:
+            rich_observation_sha256 = prepare_red_battle_scenario(
+                PokemonRedObservationEncoder.from_state_reader(
+                    reader,
+                    include_battle_stats=True,
+                    public_species_base_stats=cartridge.public_base_stats,
+                ),
+                reader.read(),
+                allow_no_attack=True,
+            ).initial_observation_sha256
         if check_only:
             return {
                 "status": "action_free_materialization_preflight_passed",
@@ -133,6 +150,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 "emulator_frames": 0,
                 "persistent_artifacts": 0,
             }
+        observation_sha256 = rich_observation_sha256 or receipt.observation_sha256
         generated = emulator.save_state_bytes()
         if generated == source:
             raise ValueError("teacher materialization did not change the copied state")
@@ -147,11 +165,12 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             root_lineage_id=spec.root_lineage_id,
             partition=spec.partition,
             state_bytes=generated,
-            initial_observation_sha256=receipt.observation_sha256,
+            initial_observation_sha256=observation_sha256,
             source_commit=source_commit,
             expected_map=generated_map,
             expected_battle_state=1 if spec.battle_kind == "wild" else 2,
             source_state_sha256=spec.source_state_sha256,
+            observation_schema=plan.get("observation_schema"),
         )
     output_path = plan["output"]
     assert isinstance(output_path, str)
@@ -176,6 +195,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         **receipt.public_dict(),
         "capture_id": capture.manifest.capture_id,
         "capture_manifest_sha256": capture.manifest_sha256,
+        "observation_schema": capture.manifest.observation_schema,
         "assisted_state_sha256": hashlib.sha256(generated).hexdigest(),
         "controller_actions": 0,
         "emulator_frames": 0,

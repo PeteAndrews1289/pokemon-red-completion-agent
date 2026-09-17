@@ -8,7 +8,9 @@ evolution-inherited and event-only moves are not claimed by this catalog.
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass
+from types import MappingProxyType
 
 from .battle_practice_factory import BattlePracticeError, PracticeStats
 from .gen1_cartridge import internal_to_dex, level_up_learnsets
@@ -120,14 +122,28 @@ class RedPracticeSpecies:
             raise BattlePracticeError("practice species level must be 1..100")
         if type(dv) is not int or not 0 <= dv <= 15:  # noqa: E721
             raise BattlePracticeError("practice DV must be 0..15")
+        return self.stats_with_dvs(level, (dv, dv, dv, dv))
+
+    def trainer_stats(self, level: int) -> PracticeStats:
+        """Native Red trainer DVs: $98 attack/defense, $88 speed/special."""
+
+        return self.stats_with_dvs(level, (9, 8, 8, 8))
+
+    def stats_with_dvs(self, level: int, dvs: tuple[int, int, int, int]) -> PracticeStats:
+        """Gen I's zero-stat-exp formula, including the derived HP DV."""
+
+        if type(level) is not int or not 1 <= level <= 100:  # noqa: E721
+            raise BattlePracticeError("practice species level must be 1..100")
+        if len(dvs) != 4 or any(type(dv) is not int or not 0 <= dv <= 15 for dv in dvs):
+            raise BattlePracticeError("practice DVs must be four nibbles")
         hp, attack, defense, speed, special = self.base_stats
-        hp_dv = 15 if dv % 2 else 0
+        hp_dv = sum((dv & 1) << shift for dv, shift in zip(dvs, (3, 2, 1, 0), strict=True))
         return PracticeStats(
-            max_hp=((2 * hp + hp_dv) * level) // 100 + level + 10,
-            attack=((2 * attack + dv) * level) // 100 + 5,
-            defense=((2 * defense + dv) * level) // 100 + 5,
-            speed=((2 * speed + dv) * level) // 100 + 5,
-            special=((2 * special + dv) * level) // 100 + 5,
+            max_hp=((2 * (hp + hp_dv)) * level) // 100 + level + 10,
+            attack=((2 * (attack + dvs[0])) * level) // 100 + 5,
+            defense=((2 * (defense + dvs[1])) * level) // 100 + 5,
+            speed=((2 * (speed + dvs[2])) * level) // 100 + 5,
+            special=((2 * (special + dvs[3])) * level) // 100 + 5,
         )
 
     def experience_at_level(self, level: int) -> int:
@@ -212,6 +228,14 @@ class RedPracticeCartridge:
     @property
     def species_ids(self) -> tuple[int, ...]:
         return tuple(sorted(self._species))
+
+    @property
+    def public_base_stats(self) -> Mapping[int, tuple[int, int, int, int, int]]:
+        """Public species mechanics, not specimen DVs or trainer reserve state."""
+
+        return MappingProxyType(
+            {identifier: species.base_stats for identifier, species in self._species.items()}
+        )
 
     def species(self, internal_id: int) -> RedPracticeSpecies:
         try:

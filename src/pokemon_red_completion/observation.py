@@ -85,6 +85,7 @@ class RamAddress(IntEnum):
     ENEMY_SPEED = 0xCFFA
     ENEMY_SPECIAL = 0xCFFC
     BATTLE_MON_SPECIAL = 0xD02B
+    BATTLE_MON_SPEED = 0xD029
     BATTLE_MON_DEFENSE = 0xD027
     BATTLE_MON_ATTACK = 0xD025
     TRAINER_CLASS = 0xD031
@@ -1163,6 +1164,7 @@ class RawGameState:
     party_levels: tuple[int, ...] | None = None
     party_hp: tuple[int, ...] | None = None
     party_max_hp: tuple[int, ...] | None = None
+    party_stats: tuple[tuple[int, int, int, int], ...] | None = None
     party_status: tuple[int, ...] | None = None
     party_moves: tuple[tuple[int, ...], ...] | None = None
     party_pp: tuple[tuple[int, ...], ...] | None = None
@@ -1177,6 +1179,7 @@ class RawGameState:
     enemy_hp: int | None = None
     enemy_level: int | None = None
     enemy_max_hp: int | None = None
+    enemy_status: int | None = None
     enemy_party_count: int | None = None
     enemy_party_position: int | None = None
     enemy_party_hp: tuple[int, ...] | None = None
@@ -1192,6 +1195,7 @@ class RawGameState:
     active_party_level: int | None = None
     active_party_hp: int | None = None
     active_party_max_hp: int | None = None
+    active_party_stats: tuple[int, int, int, int] | None = None
     active_party_status: int | None = None
     active_party_moves: tuple[int, ...] | None = None
     active_party_pp: tuple[int, ...] | None = None
@@ -3795,6 +3799,10 @@ class PokemonRedStateReader:
         )
         party_hp = tuple(self._read_u16_be(base + PARTY_HP_OFFSET) for base in party_bases)
         party_max_hp = tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET) for base in party_bases)
+        party_stats = tuple(
+            tuple(self._read_u16_be(base + PARTY_MAX_HP_OFFSET + offset) for offset in (2, 4, 6, 8))
+            for base in party_bases
+        )
         party_status = tuple(
             self._memory.read_u8(base + PARTY_STATUS_OFFSET) for base in party_bases
         )
@@ -3858,6 +3866,7 @@ class PokemonRedStateReader:
             active_party_level = self._memory.read_u8(active_base + PARTY_LEVEL_OFFSET)
             active_party_hp = self._read_u16_be(active_base + PARTY_HP_OFFSET)
             active_party_max_hp = self._read_u16_be(active_base + PARTY_MAX_HP_OFFSET)
+            active_party_stats = party_stats[active_party_index]
             active_party_status = self._memory.read_u8(active_base + PARTY_STATUS_OFFSET)
             active_party_moves = tuple(
                 self._memory.read_u8(active_base + PARTY_MOVES_OFFSET + index) for index in range(4)
@@ -3871,6 +3880,7 @@ class PokemonRedStateReader:
             active_party_level = None
             active_party_hp = None
             active_party_max_hp = None
+            active_party_stats = None
             active_party_status = None
             active_party_moves = None
             active_party_pp = None
@@ -3895,6 +3905,7 @@ class PokemonRedStateReader:
             party_levels=party_levels,
             party_hp=party_hp,
             party_max_hp=party_max_hp,
+            party_stats=party_stats,
             party_status=party_status,
             party_moves=party_moves,
             party_pp=party_pp,
@@ -3909,6 +3920,7 @@ class PokemonRedStateReader:
             enemy_hp=self._read_u16_be(RamAddress.ENEMY_HP),
             enemy_level=self._memory.read_u8(RamAddress.ENEMY_LEVEL),
             enemy_max_hp=self._read_u16_be(RamAddress.ENEMY_MAX_HP),
+            enemy_status=self._memory.read_u8(RamAddress.ENEMY_STATUS) if battle_state else None,
             enemy_party_count=enemy_party_count,
             enemy_party_position=enemy_party_position,
             enemy_party_hp=enemy_party_hp,
@@ -3938,6 +3950,7 @@ class PokemonRedStateReader:
             active_party_level=active_party_level,
             active_party_hp=active_party_hp,
             active_party_max_hp=active_party_max_hp,
+            active_party_stats=active_party_stats,
             active_party_status=active_party_status,
             active_party_moves=active_party_moves,
             active_party_pp=active_party_pp,

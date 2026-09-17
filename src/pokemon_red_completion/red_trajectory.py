@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, field
 from typing import Protocol
@@ -59,13 +60,18 @@ class PokemonRedObservationEncoder:
     """
 
     reader: RedSemanticReader
+    include_battle_stats: bool = False
+    public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None
 
     @classmethod
     def from_state_reader(
         cls,
         reader: PokemonRedStateReader,
+        *,
+        include_battle_stats: bool = False,
+        public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
     ) -> PokemonRedObservationEncoder:
-        return cls(reader)
+        return cls(reader, include_battle_stats, public_species_base_stats)
 
     def snapshot(self) -> SemanticSnapshot:
         raw = self.reader.read()
@@ -103,6 +109,18 @@ class PokemonRedObservationEncoder:
         player_hp = raw.battler_hp if in_battle else raw.first_party_hp
         player_max_hp = raw.battler_max_hp if in_battle else raw.first_party_max_hp
         player_status = raw.battler_status if in_battle else raw.first_party_status
+        opponent_base_stats = None
+        if self.include_battle_stats and in_battle:
+            if (
+                self.public_species_base_stats is None
+                or raw.enemy_species_id not in self.public_species_base_stats
+            ):
+                raise ValueError("public opponent species stats are unavailable")
+            opponent_base_stats = self.public_species_base_stats[raw.enemy_species_id]
+            if len(opponent_base_stats) != 5 or any(
+                type(stat) is not int or not 1 <= stat <= 255 for stat in opponent_base_stats
+            ):
+                raise ValueError("public opponent species stats differ")
 
         features: dict[str, object] = {
             "adapter_id": POKEMON_RED_ADAPTER_ID,
@@ -129,7 +147,7 @@ class PokemonRedObservationEncoder:
                 "species_refs": tuple(
                     _local_ref("species", species) for species in (raw.party_species_ids or ())
                 ),
-                "members": _party_members(raw),
+                "members": _party_members(raw, include_battle_stats=self.include_battle_stats),
                 "lead": {
                     "species_ref": (
                         _local_ref("species", player_species_id)
@@ -141,6 +159,18 @@ class PokemonRedObservationEncoder:
                     "max_hp": player_max_hp,
                     "hp_ratio": _ratio(player_hp, player_max_hp),
                     "status": _status_ref(player_status),
+                    **(
+                        {
+                            "stats": _battle_stats(
+                                raw.active_party_stats
+                                if in_battle
+                                else (raw.party_stats[0] if raw.party_stats else None)
+                            )
+                        }
+                        if self.include_battle_stats
+                        and (raw.active_party_stats if in_battle else raw.party_stats) is not None
+                        else {}
+                    ),
                     "moves": _observable_moves(raw, use_active_battler=in_battle),
                 },
             },
@@ -158,6 +188,24 @@ class PokemonRedObservationEncoder:
                     "opponent_hp": raw.enemy_hp,
                     "opponent_max_hp": enemy_max_hp,
                     "opponent_hp_ratio": _ratio(raw.enemy_hp, enemy_max_hp),
+                    **(
+                        {"opponent_status": _status_ref(raw.enemy_status)}
+                        if self.include_battle_stats and raw.enemy_status is not None
+                        else {}
+                    ),
+                    **(
+                        {
+                            "opponent_public_base_stats": dict(
+                                zip(
+                                    ("hp", "attack", "defense", "speed", "special"),
+                                    opponent_base_stats,
+                                    strict=True,
+                                )
+                            )
+                        }
+                        if opponent_base_stats is not None
+                        else {}
+                    ),
                     **(
                         {
                             "opponent_party_count": raw.enemy_party_count,
@@ -192,7 +240,9 @@ class PokemonRedObservationEncoder:
         )
 
 
-def _party_members(raw: RawGameState) -> tuple[dict[str, object], ...]:
+def _party_members(
+    raw: RawGameState, *, include_battle_stats: bool = False
+) -> tuple[dict[str, object], ...]:
     species = raw.party_species_ids or ()
     levels = raw.party_levels or ()
     hp = raw.party_hp or ()
@@ -210,10 +260,29 @@ def _party_members(raw: RawGameState) -> tuple[dict[str, object], ...]:
                 max_hp[index] if index < len(max_hp) else None,
             ),
             "status": _status_ref(statuses[index] if index < len(statuses) else None),
+            **(
+                {
+                    "stats": _battle_stats(
+                        raw.party_stats[index]
+                        if raw.party_stats is not None and index < len(raw.party_stats)
+                        else None
+                    )
+                }
+                if include_battle_stats
+                and raw.party_stats is not None
+                and index < len(raw.party_stats)
+                else {}
+            ),
             "moves": _party_member_moves(raw, index),
         }
         for index, species_id in enumerate(species)
     )
+
+
+def _battle_stats(values: tuple[int, int, int, int] | None) -> dict[str, int] | None:
+    if values is None:
+        return None
+    return dict(zip(("attack", "defense", "speed", "special"), values, strict=True))
 
 
 def _party_member_moves(raw: RawGameState, index: int) -> tuple[dict[str, object], ...]:

@@ -307,10 +307,24 @@ def materialize_red_train_practice(
         else None
     )
     opponent_stats = spec.opponent_stats or (
-        opponent_data.neutral_stats(opponent_level)
+        (
+            opponent_data.trainer_stats(opponent_level)
+            if spec.battle_kind == "trainer"
+            else opponent_data.neutral_stats(opponent_level)
+        )
         if opponent_auto_stats and opponent_data is not None
         else None
     )
+    if spec.battle_kind == "trainer":
+        assert actor_data is not None and opponent_data is not None
+        if spec.actor_stats is not None and spec.actor_stats != actor_data.neutral_stats(
+            actor_level
+        ):
+            raise BattlePracticeError("trainer actor custom stats may change on level-up")
+        if spec.opponent_stats is not None and spec.opponent_stats != opponent_data.trainer_stats(
+            opponent_level
+        ):
+            raise BattlePracticeError("trainer opponent stats would change on send-out")
     opponent_max_hp = opponent_stats.max_hp if opponent_stats else before.enemy_max_hp
     if opponent_max_hp is None or spec.opponent_hp > opponent_max_hp:
         raise BattlePracticeError("practice opponent HP exceeds maximum")
@@ -367,6 +381,10 @@ def materialize_red_train_practice(
             ):
                 raise BattlePracticeError("player reserve National Dex identity differs")
             stats = reserve.stats or species_data.neutral_stats(reserve.level)
+            if spec.battle_kind == "trainer" and stats != species_data.neutral_stats(
+                reserve.level
+            ):
+                raise BattlePracticeError("trainer player reserve stats may change on level-up")
             hp = reserve.hp if reserve.hp is not None else stats.max_hp
             if hp > stats.max_hp:
                 raise BattlePracticeError("reserve HP exceeds maximum")
@@ -417,11 +435,18 @@ def materialize_red_train_practice(
                 and data.national_number != reserve.national_number
             ):
                 raise BattlePracticeError("opponent reserve National Dex identity differs")
-            stats = reserve.stats or data.neutral_stats(reserve.level)
+            stats = reserve.stats or data.trainer_stats(reserve.level)
+            if stats != data.trainer_stats(reserve.level):
+                raise BattlePracticeError("trainer enemy reserve stats would change on send-out")
             hp = reserve.hp if reserve.hp is not None else stats.max_hp
             if hp > stats.max_hp:
                 raise BattlePracticeError("trainer reserve HP exceeds maximum")
             moves, pp = _resolved_moves(reserve.moves, catalog)
+            if any(
+                amount != catalog.resolve_move(move.move_ref).max_pp
+                for move, amount in zip(reserve.moves, pp, strict=False)
+            ):
+                raise BattlePracticeError("trainer enemy reserve PP resets on send-out")
             resolved_enemy_reserves.append(
                 (index, species_id, reserve.level, hp, stats, moves, pp, data)
             )
@@ -528,7 +553,9 @@ def materialize_red_train_practice(
         for base in (active_base + _PARTY_DVS_OFFSET, _BATTLE_DVS):
             memory[base], memory[base + 1] = 0x88, 0x88
     if opponent_auto_stats:
-        memory[_ENEMY_DVS], memory[_ENEMY_DVS + 1] = 0x88, 0x88
+        memory[_ENEMY_DVS], memory[_ENEMY_DVS + 1] = (
+            (0x98, 0x88) if spec.battle_kind == "trainer" else (0x88, 0x88)
+        )
     actor_experience = (
         actor_data.experience_at_level(actor_level)
         if actor_data is not None
@@ -606,7 +633,7 @@ def materialize_red_train_practice(
             _put_u24(memory, base + _PARTY_EXPERIENCE_OFFSET, data.experience_at_level(level))
             for offset in range(10):
                 memory[base + _PARTY_STAT_EXP_OFFSET + offset] = 0
-            memory[base + _PARTY_DVS_OFFSET], memory[base + _PARTY_DVS_OFFSET + 1] = 0x88, 0x88
+            memory[base + _PARTY_DVS_OFFSET], memory[base + _PARTY_DVS_OFFSET + 1] = 0x98, 0x88
             _put_stats(memory, base + PARTY_MAX_HP_OFFSET, stats)
             for offset, (move, amount) in enumerate(zip(moves, pp, strict=True)):
                 memory[base + PARTY_MOVES_OFFSET + offset] = move

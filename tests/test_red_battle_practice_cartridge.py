@@ -75,3 +75,60 @@ def test_cartridge_rejects_type_mismatch(monkeypatch):
     rom[practice._BASE_STATS_OFFSET + 6] = 26
     with pytest.raises(BattlePracticeError, match="species types differ"):
         practice.RedPracticeCartridge(bytes(rom))
+
+
+@pytest.mark.parametrize("level", (1, 32, 50, 100))
+@pytest.mark.parametrize("dv", (0, 8, 15))
+def test_all_species_neutral_stats_match_gen1_base_plus_dv_formula(monkeypatch, level, dv):
+    rom, mapping = _synthetic_rom(monkeypatch)
+    cartridge = practice.RedPracticeCartridge(bytes(rom))
+    hp_dv = 15 if dv & 1 else 0
+    expected = (
+        (2 * (45 + hp_dv) * level) // 100 + level + 10,
+        (2 * (49 + dv) * level) // 100 + 5,
+        (2 * (49 + dv) * level) // 100 + 5,
+        (2 * (45 + dv) * level) // 100 + 5,
+        (2 * (65 + dv) * level) // 100 + 5,
+    )
+    for internal in mapping:
+        stats = cartridge.species(internal).neutral_stats(level, dv=dv)
+        assert (stats.max_hp, stats.attack, stats.defense, stats.speed, stats.special) == expected
+
+
+def test_native_trainer_dvs_differ_from_uniform_player_dvs(monkeypatch):
+    rom, mapping = _synthetic_rom(monkeypatch)
+    species = practice.RedPracticeCartridge(bytes(rom)).species(next(iter(mapping)))
+    assert species.trainer_stats(32).max_hp == (2 * (45 + 8) * 32) // 100 + 42
+    assert species.trainer_stats(32).attack == (2 * (49 + 9) * 32) // 100 + 5
+    assert species.trainer_stats(32).attack >= species.neutral_stats(32).attack
+
+
+def test_all_151_distinct_base_rows_cover_dv_parity_and_level_boundaries(monkeypatch):
+    rom, mapping = _synthetic_rom(monkeypatch)
+    for _internal, national in mapping.items():
+        offset = (
+            practice._MEW_BASE_STATS_OFFSET
+            if national == 151
+            else practice._BASE_STATS_OFFSET + (national - 1) * practice._BASE_ROW_SIZE
+        )
+        rom[offset + 1 : offset + 6] = bytes(
+            20 + (national * multiplier) % 190 for multiplier in (1, 3, 5, 7, 11)
+        )
+    cartridge = practice.RedPracticeCartridge(bytes(rom))
+    for internal, national in mapping.items():
+        base = tuple(20 + (national * multiplier) % 190 for multiplier in (1, 3, 5, 7, 11))
+        for level in (1, 32, 50, 100):
+            for dv in (0, 8, 9, 15):
+                hp_dv = 15 if dv % 2 else 0
+                expected = (
+                    (2 * (base[0] + hp_dv) * level) // 100 + level + 10,
+                    *((2 * (stat + dv) * level) // 100 + 5 for stat in base[1:]),
+                )
+                actual = cartridge.species(internal).neutral_stats(level, dv=dv)
+                assert (
+                    actual.max_hp,
+                    actual.attack,
+                    actual.defense,
+                    actual.speed,
+                    actual.special,
+                ) == expected

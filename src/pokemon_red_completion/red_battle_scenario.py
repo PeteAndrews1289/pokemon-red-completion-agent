@@ -111,9 +111,10 @@ class PreparedRedBattleScenario:
 
     initial_observation_sha256: str
     features: BattleFeatureBatch
+    allow_no_attack: bool = False
 
     def __post_init__(self) -> None:
-        if not any(self.features.legal_mask):
+        if not any(self.features.legal_mask) and not self.allow_no_attack:
             raise RedBattleScenarioError("battle scenario has no supported damaging candidate")
 
     @property
@@ -126,6 +127,8 @@ class PreparedRedBattleScenario:
 def prepare_red_battle_scenario(
     encoder: PokemonRedObservationEncoder,
     initial_state: RawGameState,
+    *,
+    allow_no_attack: bool = False,
 ) -> PreparedRedBattleScenario:
     """Project an active MAIN-menu state and admit observable attack moves only."""
 
@@ -168,6 +171,7 @@ def prepare_red_battle_scenario(
     return PreparedRedBattleScenario(
         initial_observation_sha256=canonical_sha256(payload),
         features=features,
+        allow_no_attack=allow_no_attack,
     )
 
 

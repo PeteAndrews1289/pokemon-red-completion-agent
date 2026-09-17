@@ -71,6 +71,7 @@ def switch_active_battler(
     expected_battle_state: int = 2,
     label: str,
     wait_frames: int = 180,
+    allow_faint_outcome: bool = False,
 ) -> None:
     """Switch to one living party member through a fully observed battle-menu gate."""
 
@@ -111,8 +112,12 @@ def switch_active_battler(
     for pulse_index in range(48):
         settled = reader.read()
         if _party_hp(emulator)[party_index] <= 0:
+            if allow_faint_outcome and settled.active_party_index == party_index:
+                return
             raise ProtectedRecoveryError(f"{label} target fainted during the switch.")
         if settled.battle_state != expected_battle_state:
+            if allow_faint_outcome and settled.battle_state == 0:
+                return
             raise ProtectedRecoveryError(f"{label} left its active battle during the switch.")
         if (
             settled.active_party_index == party_index

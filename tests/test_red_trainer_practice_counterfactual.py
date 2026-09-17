@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import pytest
+
 from pokemon_red_completion import red_trainer_practice_counterfactual as counterfactual
 from pokemon_red_completion.battle_actions import BattleAction
 from pokemon_red_completion.battle_scenario_capture import (
@@ -7,6 +9,10 @@ from pokemon_red_completion.battle_scenario_capture import (
     open_battle_scenario_capture,
 )
 from pokemon_red_completion.red_trainer_practice_episode import RedTrainerPracticeEpisode
+from pokemon_red_completion.red_trainer_practice_log import (
+    TrainerPracticeEventLog,
+    verify_trainer_practice_event_log,
+)
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 
@@ -64,7 +70,8 @@ def test_matched_branches_keep_one_root_and_fresh_policies(tmp_path, monkeypatch
         policies.append(policy)
         return policy
 
-    def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns):
+    def fake_run(_capture, *, session_factory, policy, max_decisions, max_player_turns,
+                 event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
         assert max_decisions == 8
         assert max_player_turns == 2
         assert session_factory() is None
@@ -124,3 +131,38 @@ def test_counterfactual_rejects_development_capture(tmp_path):
         pass
     else:
         raise AssertionError("development capture entered TRAIN counterfactual collector")
+
+
+def test_failed_branch_retains_selected_choice_and_typed_failure(tmp_path, monkeypatch):
+    capture = _capture(tmp_path)
+    directory = tmp_path / "branch-events"
+    retained = []
+
+    def crash(_capture, *, session_factory, policy, max_decisions, max_player_turns,
+              event_sink=None, public_species_base_stats=None, opening_idle_frames=0):
+        assert event_sink is not None
+        event_sink({"event": "episode_started"})
+        event_sink({"event": "decision_started"})
+        event_sink({"event": "choice_recorded", "decision_index": 1,
+                    "selected_action": {"kind": "select_move", "move_slot": 1}})
+        raise RuntimeError("diagnostic switch boundary")
+
+    monkeypatch.setattr(counterfactual, "run_red_trainer_practice_episode", crash)
+    with pytest.raises(RuntimeError, match="diagnostic switch boundary"):
+        counterfactual.collect_trainer_practice_counterfactuals(
+            capture,
+            session_factory=lambda: None,
+            continuation_policy_factory=Continuation,
+            first_choices=(
+                counterfactual.TrainerPracticeFirstChoice(BattleAction.move(1)),
+                counterfactual.TrainerPracticeFirstChoice(BattleAction.switch(2)),
+            ),
+            branch_sink=lambda *_args: retained.append(1),
+            branch_event_log_factory=lambda _index, _choice: TrainerPracticeEventLog(
+                directory, run_identity={"first_choice_ref": "pokemon.core:battle:move:1"}
+            ),
+        )
+    verification = verify_trainer_practice_event_log(directory)
+    assert verification["complete"] is True
+    assert verification["terminal_event"] == "run_failed"
+    assert retained == []

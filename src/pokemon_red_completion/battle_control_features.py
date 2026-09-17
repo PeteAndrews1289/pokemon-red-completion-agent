@@ -392,7 +392,7 @@ def _move_control_features(batch: BattleFeatureBatch | None) -> tuple[float, ...
         np.asarray(batch.current_pp, dtype=np.float64) > 0
     )
     if not np.any(usable):
-        raise BattleControlFeatureError("battle control has no usable move")
+        return (0.0,) * width
 
     def column(name: str) -> NDArray[np.float64]:
         return vectors[:, MOVE_FEATURE_NAMES.index(name)]

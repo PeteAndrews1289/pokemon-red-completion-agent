@@ -22,7 +22,10 @@ from pokemon_red_completion.battle_runtime import (
     DEFAULT_BATTLE_RUNTIME_TIMING,
     execute_bounded_battle_move_turn,
 )
-from pokemon_red_completion.battle_scenario_capture import BattleScenarioCapture
+from pokemon_red_completion.battle_scenario_capture import (
+    OBSERVATION_SCHEMA_V2,
+    BattleScenarioCapture,
+)
 from pokemon_red_completion.executor import ControllerTiming, FrameSafeExecutor
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
@@ -85,7 +88,9 @@ class RedTrainerPracticeEpisode:
     final_battle_state: int
     stop_reason: str
     final_observation: dict[str, object] | None = None
+    final_enemy_roster_hp: tuple[int, ...] | None = None
     elapsed_ns: int = 0
+    opening_idle_frames: int = 0
 
     def public_dict(self) -> dict[str, object]:
         return {
@@ -96,6 +101,7 @@ class RedTrainerPracticeEpisode:
             "decisions": list(self.decisions),
             "decision_count": len(self.decisions),
             "elapsed_ns": self.elapsed_ns,
+            "opening_idle_frames": self.opening_idle_frames,
             "policy_elapsed_ns": _sum_int(self.decisions, "policy_elapsed_ns"),
             "execution_elapsed_ns": _sum_int(self.decisions, "execution_elapsed_ns"),
             "observation_and_logging_elapsed_ns": max(
@@ -105,7 +111,8 @@ class RedTrainerPracticeEpisode:
                 - _sum_int(self.decisions, "execution_elapsed_ns"),
             ),
             "frames_executed": sum(
-                value for step in self.decisions
+                value
+                for step in self.decisions
                 if type(value := step.get("frames_executed")) is int
             ),
             "action_counts": {
@@ -126,6 +133,9 @@ class RedTrainerPracticeEpisode:
             "final_battle_state": self.final_battle_state,
             "stop_reason": self.stop_reason,
             "final_observation": self.final_observation,
+            "final_enemy_roster_hp": (
+                list(self.final_enemy_roster_hp) if self.final_enemy_roster_hp is not None else None
+            ),
             "final_observation_sha256": (
                 canonical_sha256(self.final_observation)
                 if self.final_observation is not None
@@ -146,6 +156,8 @@ def run_red_trainer_practice_episode(
     max_player_turns: int | None = None,
     controller_timing: ControllerTiming | None = None,
     event_sink: Callable[[Mapping[str, object]], None] | None = None,
+    public_species_base_stats: Mapping[int, tuple[int, int, int, int, int]] | None = None,
+    opening_idle_frames: int = 0,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
 
@@ -166,13 +178,23 @@ def run_red_trainer_practice_episode(
         or not 1 <= max_player_turns <= max_decisions
     ):
         raise RedTrainerPracticeEpisodeError("trainer episode player-turn budget is invalid")
+    if type(opening_idle_frames) is not int or not 0 <= opening_idle_frames <= 12:  # noqa: E721
+        raise RedTrainerPracticeEpisodeError("trainer opening timing is outside its bound")
     decisions: list[dict[str, object]] = []
     episode_started_ns = perf_counter_ns()
     player_turns = 0
     with session_factory() as session:
         session.load_state_bytes(capture.state_bytes)
         reader = PokemonRedStateReader(cast(ReadOnlyMemory, session))
-        encoder = PokemonRedObservationEncoder.from_state_reader(reader)
+        encoder = (
+            PokemonRedObservationEncoder.from_state_reader(
+                reader,
+                include_battle_stats=True,
+                public_species_base_stats=public_species_base_stats,
+            )
+            if capture.manifest.observation_schema == OBSERVATION_SCHEMA_V2
+            else PokemonRedObservationEncoder.from_state_reader(reader)
+        )
         initial = reader.read()
         _require_plausible_hp(initial)
         if initial.map_id != capture.manifest.expected_map or initial.battle_state != 2:
@@ -181,28 +203,56 @@ def run_red_trainer_practice_episode(
         initial_sha256 = (
             canonical_sha256(encoder.snapshot_from_raw(initial).to_dict())
             if initial_prompt
-            else prepare_red_battle_scenario(encoder, initial).initial_observation_sha256
+            else prepare_red_battle_scenario(
+                encoder, initial, allow_no_attack=True
+            ).initial_observation_sha256
         )
         if (
-            (
-                not initial_prompt
-                and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
-            )
-            or initial_sha256 != capture.manifest.initial_observation_sha256
-        ):
+            not initial_prompt
+            and reader.read_battle_menu_state(initial).phase is not BattleMenuPhase.MAIN
+        ) or initial_sha256 != capture.manifest.initial_observation_sha256:
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
+        if opening_idle_frames:
+            _emit(
+                event_sink,
+                {
+                    "event": "opening_timing_started",
+                    "idle_frames": opening_idle_frames,
+                    "initial_observation_sha256": initial_sha256,
+                },
+            )
+            session.tick(opening_idle_frames)
+            settled = reader.read()
+            _require_plausible_hp(settled)
+            if (
+                settled.battle_state != 2
+                or canonical_sha256(encoder.snapshot_from_raw(settled).to_dict()) != initial_sha256
+            ):
+                raise RedTrainerPracticeEpisodeError("opening timing changed the model observation")
+            _emit(
+                event_sink,
+                {
+                    "event": "opening_timing_completed",
+                    "idle_frames": opening_idle_frames,
+                    "observation_sha256": initial_sha256,
+                },
+            )
         actions = FrameSafeExecutor(session, controller_timing)
-        _emit(event_sink, {
-            "event": "episode_started",
-            "capture_id": capture.manifest.capture_id,
-            "manifest_sha256": capture.manifest_sha256,
-            "root_lineage_id": capture.manifest.root_lineage_id,
-            "partition": capture.manifest.partition.value,
-            "policy_id": policy.policy_id,
-            "max_decisions": max_decisions,
-            "max_player_turns": max_player_turns,
-            "state_before": _resource_state(initial),
-        })
+        _emit(
+            event_sink,
+            {
+                "event": "episode_started",
+                "capture_id": capture.manifest.capture_id,
+                "manifest_sha256": capture.manifest_sha256,
+                "root_lineage_id": capture.manifest.root_lineage_id,
+                "partition": capture.manifest.partition.value,
+                "policy_id": policy.policy_id,
+                "max_decisions": max_decisions,
+                "max_player_turns": max_player_turns,
+                "opening_idle_frames": opening_idle_frames,
+                "state_before": _resource_state(initial),
+            },
+        )
         for decision_index in range(1, max_decisions + 1):
             raw = reader.read()
             _require_plausible_hp(raw)
@@ -217,6 +267,7 @@ def run_red_trainer_practice_episode(
                     reader.read_enemy_party_roster_hp(),
                     encoder.snapshot_from_raw(raw).to_dict(),
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
+                    opening_idle_frames=opening_idle_frames,
                 )
             if (
                 raw.battler_hp is None
@@ -245,6 +296,7 @@ def run_red_trainer_practice_episode(
                     stop_reason="party_defeated",
                     final_observation=observation,
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
+                    opening_idle_frames=opening_idle_frames,
                 )
             if max_player_turns is not None and player_turns >= max_player_turns:
                 return RedTrainerPracticeEpisode(
@@ -257,15 +309,19 @@ def run_red_trainer_practice_episode(
                     stop_reason="player_turn_budget",
                     final_observation=observation,
                     elapsed_ns=perf_counter_ns() - episode_started_ns,
+                    opening_idle_frames=opening_idle_frames,
                 )
-            _emit(event_sink, {
-                "event": "decision_started",
-                "decision_index": decision_index,
-                "observation_sha256": observation_sha256,
-                "mode": "forced_switch" if forced else "switch_prompt" if prompt else "main",
-                "legal_party_slots": list(options),
-                "state_before": _resource_state(raw),
-            })
+            _emit(
+                event_sink,
+                {
+                    "event": "decision_started",
+                    "decision_index": decision_index,
+                    "observation_sha256": observation_sha256,
+                    "mode": "forced_switch" if forced else "switch_prompt" if prompt else "main",
+                    "legal_party_slots": list(options),
+                    "state_before": _resource_state(raw),
+                },
+            )
             if forced or prompt:
                 policy_started_ns = perf_counter_ns()
                 chosen_slot = policy.choose_switch(
@@ -276,12 +332,17 @@ def run_red_trainer_practice_episode(
                 )
                 policy_elapsed_ns = perf_counter_ns() - policy_started_ns
                 diagnostics = _policy_diagnostics(policy)
-                _emit(event_sink, {
-                    "event": "choice_recorded", "decision_index": decision_index,
-                    "selected_action": "decline_switch" if chosen_slot is None else "switch",
-                    "party_slot": chosen_slot, "policy_elapsed_ns": policy_elapsed_ns,
-                    "model_diagnostics": diagnostics,
-                })
+                _emit(
+                    event_sink,
+                    {
+                        "event": "choice_recorded",
+                        "decision_index": decision_index,
+                        "selected_action": "decline_switch" if chosen_slot is None else "switch",
+                        "party_slot": chosen_slot,
+                        "policy_elapsed_ns": policy_elapsed_ns,
+                        "model_diagnostics": diagnostics,
+                    },
+                )
                 if chosen_slot is not None and (
                     type(chosen_slot) is not int or chosen_slot not in options  # noqa: E721
                 ):
@@ -312,46 +373,60 @@ def run_red_trainer_practice_episode(
                     kind = "forced_switch"
                 after_switch = reader.read()
                 decision = {
-                        "decision_index": decision_index,
-                        "observation": observation,
-                        "observation_sha256": observation_sha256,
-                        "kind": kind,
-                        "party_slot": chosen_slot,
-                        "model_diagnostics": diagnostics,
-                        "legal_party_slots": list(options),
-                        "after_observation_sha256": canonical_sha256(
-                            encoder.snapshot_from_raw(after_switch).to_dict()
-                        ),
-                        "party_hp_before": list(raw.party_hp or ()),
-                        "party_hp_after": list(after_switch.party_hp or ()),
-                        "opponent_hp_before": raw.enemy_hp,
-                        "opponent_hp_after": after_switch.enemy_hp,
-                    }
+                    "decision_index": decision_index,
+                    "observation": observation,
+                    "observation_sha256": observation_sha256,
+                    "kind": kind,
+                    "party_slot": chosen_slot,
+                    "model_diagnostics": diagnostics,
+                    "legal_party_slots": list(options),
+                    "after_observation_sha256": canonical_sha256(
+                        encoder.snapshot_from_raw(after_switch).to_dict()
+                    ),
+                    "party_hp_before": list(raw.party_hp or ()),
+                    "party_hp_after": list(after_switch.party_hp or ()),
+                    "opponent_hp_before": raw.enemy_hp,
+                    "opponent_hp_after": after_switch.enemy_hp,
+                }
                 _complete_decision(
-                    decisions, decision, raw, after_switch, policy_elapsed_ns,
-                    execution_started_ns, session, frames_before, event_sink,
+                    decisions,
+                    decision,
+                    raw,
+                    after_switch,
+                    policy_elapsed_ns,
+                    execution_started_ns,
+                    session,
+                    frames_before,
+                    event_sink,
                 )
                 continue
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
                 raise RedTrainerPracticeEpisodeError("trainer episode has no model-owned decision")
-            prepared = prepare_red_battle_scenario(encoder, raw)
-            _emit(event_sink, {
-                "event": "model_input_prepared",
-                "decision_index": decision_index,
-                "model_input": _main_model_input(prepared),
-            })
+            prepared = prepare_red_battle_scenario(encoder, raw, allow_no_attack=True)
+            _emit(
+                event_sink,
+                {
+                    "event": "model_input_prepared",
+                    "decision_index": decision_index,
+                    "model_input": _main_model_input(prepared),
+                },
+            )
             policy_started_ns = perf_counter_ns()
             action = policy.choose_main(observation, prepared)
             policy_elapsed_ns = perf_counter_ns() - policy_started_ns
             diagnostics = _policy_diagnostics(policy)
-            _emit(event_sink, {
-                "event": "choice_recorded", "decision_index": decision_index,
-                "selected_action": (
-                    action.public_dict() if isinstance(action, BattleAction) else None
-                ),
-                "policy_elapsed_ns": policy_elapsed_ns,
-                "model_diagnostics": diagnostics,
-            })
+            _emit(
+                event_sink,
+                {
+                    "event": "choice_recorded",
+                    "decision_index": decision_index,
+                    "selected_action": (
+                        action.public_dict() if isinstance(action, BattleAction) else None
+                    ),
+                    "policy_elapsed_ns": policy_elapsed_ns,
+                    "model_diagnostics": diagnostics,
+                },
+            )
             if not isinstance(action, BattleAction):
                 raise RedTrainerPracticeEpisodeError("model returned no semantic battle action")
             if action.kind is BattleActionKind.SWITCH:
@@ -367,28 +442,36 @@ def run_red_trainer_practice_episode(
                     action.party_slot - 1,
                     expected_battle_state=2,
                     label="model trainer practice voluntary switch",
+                    allow_faint_outcome=True,
                 )
                 after_switch = reader.read()
                 decision = {
-                        "decision_index": decision_index,
-                        "observation": observation,
-                        "observation_sha256": observation_sha256,
-                        "kind": "voluntary_switch",
-                        "party_slot": action.party_slot,
-                        "model_diagnostics": diagnostics,
-                        "legal_party_slots": list(options),
-                        "model_input": _main_model_input(prepared),
-                        "after_observation_sha256": canonical_sha256(
-                            encoder.snapshot_from_raw(after_switch).to_dict()
-                        ),
-                        "party_hp_before": list(raw.party_hp or ()),
-                        "party_hp_after": list(after_switch.party_hp or ()),
-                        "opponent_hp_before": raw.enemy_hp,
-                        "opponent_hp_after": after_switch.enemy_hp,
-                    }
+                    "decision_index": decision_index,
+                    "observation": observation,
+                    "observation_sha256": observation_sha256,
+                    "kind": "voluntary_switch",
+                    "party_slot": action.party_slot,
+                    "model_diagnostics": diagnostics,
+                    "legal_party_slots": list(options),
+                    "model_input": _main_model_input(prepared),
+                    "after_observation_sha256": canonical_sha256(
+                        encoder.snapshot_from_raw(after_switch).to_dict()
+                    ),
+                    "party_hp_before": list(raw.party_hp or ()),
+                    "party_hp_after": list(after_switch.party_hp or ()),
+                    "opponent_hp_before": raw.enemy_hp,
+                    "opponent_hp_after": after_switch.enemy_hp,
+                }
                 _complete_decision(
-                    decisions, decision, raw, after_switch, policy_elapsed_ns,
-                    execution_started_ns, session, frames_before, event_sink,
+                    decisions,
+                    decision,
+                    raw,
+                    after_switch,
+                    policy_elapsed_ns,
+                    execution_started_ns,
+                    session,
+                    frames_before,
+                    event_sink,
                 )
                 player_turns += 1
                 continue
@@ -418,27 +501,38 @@ def run_red_trainer_practice_episode(
             _require_plausible_hp(after_attack)
             outcome = project_red_battle_turn_outcome(execution)
             decision = {
-                    "decision_index": decision_index,
-                    "observation": observation,
-                    "observation_sha256": observation_sha256,
-                    "kind": "attack",
-                    "move_slot": action.move_slot,
-                    "model_diagnostics": diagnostics,
-                    "model_input": _main_model_input(prepared),
-                    "legal_move_slots": [
-                        slot + 1 for slot, legal in zip(
-                            prepared.features.slot_indices,
-                            prepared.supported_candidate_mask,
-                            strict=True,
-                        ) if legal
-                    ],
-                    "legal_party_slots": list(options),
-                    "outcome": outcome.public_dict(),
-                    "turn_utility": outcome.utility,
-                }
+                "decision_index": decision_index,
+                "observation": observation,
+                "observation_sha256": observation_sha256,
+                "kind": "attack",
+                "move_slot": action.move_slot,
+                "model_diagnostics": diagnostics,
+                "model_input": _main_model_input(prepared),
+                "legal_move_slots": [
+                    slot + 1
+                    for slot, legal in zip(
+                        prepared.features.slot_indices,
+                        prepared.supported_candidate_mask,
+                        strict=True,
+                    )
+                    if legal
+                ],
+                "legal_party_slots": list(options),
+                "outcome": outcome.public_dict(),
+                "turn_utility": outcome.utility,
+                "opponent_hp_before": raw.enemy_hp,
+                "opponent_hp_after": after_attack.enemy_hp,
+            }
             _complete_decision(
-                decisions, decision, raw, after_attack, policy_elapsed_ns,
-                execution_started_ns, session, frames_before, event_sink,
+                decisions,
+                decision,
+                raw,
+                after_attack,
+                policy_elapsed_ns,
+                execution_started_ns,
+                session,
+                frames_before,
+                event_sink,
             )
             player_turns += 1
         final = reader.read()
@@ -451,6 +545,7 @@ def run_red_trainer_practice_episode(
                 reader.read_enemy_party_roster_hp(),
                 encoder.snapshot_from_raw(final).to_dict(),
                 elapsed_ns=perf_counter_ns() - episode_started_ns,
+                opening_idle_frames=opening_idle_frames,
             )
         if final.battle_state != 2:
             raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
@@ -464,11 +559,20 @@ def run_red_trainer_practice_episode(
             stop_reason="decision_budget",
             final_observation=encoder.snapshot_from_raw(final).to_dict(),
             elapsed_ns=perf_counter_ns() - episode_started_ns,
+            opening_idle_frames=opening_idle_frames,
         )
 
 
 def _receipt(
-    capture, policy_id, decisions, final, enemy_hp, observation, *, elapsed_ns: int = 0
+    capture,
+    policy_id,
+    decisions,
+    final,
+    enemy_hp,
+    observation,
+    *,
+    elapsed_ns: int = 0,
+    opening_idle_frames: int = 0,
 ) -> RedTrainerPracticeEpisode:
     if enemy_hp is None:
         raise RedTrainerPracticeEpisodeError("trainer terminal lacks authenticated roster HP")
@@ -477,6 +581,7 @@ def _receipt(
         and final.party_hp is not None
         and any(hp > 0 for hp in final.party_hp)
     )
+    defeated = bool(final.party_hp is not None and not any(hp > 0 for hp in final.party_hp))
     return RedTrainerPracticeEpisode(
         capture_id=capture.manifest.capture_id,
         manifest_sha256=capture.manifest_sha256,
@@ -484,9 +589,13 @@ def _receipt(
         decisions=tuple(decisions),
         battle_won=won,
         final_battle_state=final.battle_state,
-        stop_reason="battle_won" if won else "battle_exited_without_win",
+        stop_reason=(
+            "battle_won" if won else "party_defeated" if defeated else "battle_exited_without_win"
+        ),
         final_observation=observation,
+        final_enemy_roster_hp=tuple(enemy_hp),
         elapsed_ns=elapsed_ns,
+        opening_idle_frames=opening_idle_frames,
     )
 
 
@@ -512,9 +621,13 @@ def _resource_state(raw: RawGameState) -> dict[str, object]:
 def _require_plausible_hp(raw: RawGameState) -> None:
     """Reject corrupted cartridge transitions before emitting an outcome label."""
     hp, maximum = raw.party_hp, raw.party_max_hp
-    if hp is not None and maximum is not None and (
-        len(hp) != len(maximum)
-        or any(cap <= 0 or current > cap for current, cap in zip(hp, maximum, strict=True))
+    if (
+        hp is not None
+        and maximum is not None
+        and (
+            len(hp) != len(maximum)
+            or any(cap <= 0 or current > cap for current, cap in zip(hp, maximum, strict=True))
+        )
     ):
         raise RedTrainerPracticeEpisodeError("trainer party HP exceeds its maximum")
     if (
@@ -533,6 +646,7 @@ def _main_model_input(prepared: PreparedRedBattleScenario) -> dict[str, object]:
         "candidate_vectors": [list(row) for row in batch.candidate_vectors],
         "candidate_move_slots": [slot + 1 for slot in batch.slot_indices],
         "legal_mask": list(batch.legal_mask),
+        "supported_candidate_mask": list(prepared.supported_candidate_mask),
         "current_pp": list(batch.current_pp),
     }
 
@@ -554,24 +668,34 @@ def _complete_decision(
     event_sink: Callable[[Mapping[str, object]], None] | None,
 ) -> None:
     _require_plausible_hp(after)
+    if (
+        before.enemy_party_hp is not None
+        and after.enemy_party_hp is not None
+        and (len(before.enemy_party_hp) == len(after.enemy_party_hp))
+    ):
+        decision["opponent_faints"] = sum(
+            old > 0 and new == 0
+            for old, new in zip(before.enemy_party_hp, after.enemy_party_hp, strict=True)
+        )
     frames_after = _frame_count(session)
-    decision.update({
-        "policy_elapsed_ns": policy_elapsed_ns,
-        "execution_elapsed_ns": perf_counter_ns() - execution_started_ns,
-        "frames_executed": (
-            frames_after - frames_before
-            if frames_before is not None and frames_after is not None else None
-        ),
-        "state_before": _resource_state(before),
-        "state_after": _resource_state(after),
-    })
+    decision.update(
+        {
+            "policy_elapsed_ns": policy_elapsed_ns,
+            "execution_elapsed_ns": perf_counter_ns() - execution_started_ns,
+            "frames_executed": (
+                frames_after - frames_before
+                if frames_before is not None and frames_after is not None
+                else None
+            ),
+            "state_before": _resource_state(before),
+            "state_after": _resource_state(after),
+        }
+    )
     decisions.append(decision)
     _emit(event_sink, {"event": "decision_completed", "decision": decision})
 
 
-def _emit(
-    sink: Callable[[Mapping[str, object]], None] | None, event: Mapping[str, object]
-) -> None:
+def _emit(sink: Callable[[Mapping[str, object]], None] | None, event: Mapping[str, object]) -> None:
     if sink is not None:
         sink(event)
 
@@ -615,15 +739,16 @@ def _episode_metrics(decisions: tuple[dict[str, object], ...]) -> dict[str, obje
                 old != new for old, new in zip(old_status, new_status, strict=False)
             )
     attacks = [step for step in decisions if step.get("kind") == "attack"]
-    latencies = [
-        value for step in decisions
-        if type(value := step.get("policy_elapsed_ns")) is int
-    ]
+    latencies = [value for step in decisions if type(value := step.get("policy_elapsed_ns")) is int]
     return {
         "opponent_faints": sum(
-            isinstance(outcome := step.get("outcome"), dict)
-            and outcome.get("opponent_fainted") is True
-            for step in attacks
+            value
+            if type(value := step.get("opponent_faints")) is int
+            else (
+                isinstance(outcome := step.get("outcome"), dict)
+                and outcome.get("opponent_fainted") is True
+            )
+            for step in decisions
         ),
         "party_faints": party_faints,
         "party_hp_lost": hp_lost,
@@ -635,7 +760,8 @@ def _episode_metrics(decisions: tuple[dict[str, object], ...]) -> dict[str, obje
             for step in attacks
         ),
         "attack_turn_utility_sum": sum(
-            float(value) for step in attacks
+            float(value)
+            for step in attacks
             if isinstance(value := step.get("turn_utility"), (int, float))
         ),
         "policy_latency_ns_min": min(latencies) if latencies else None,

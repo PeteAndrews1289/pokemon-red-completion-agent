@@ -96,9 +96,16 @@ class Session(AbstractContextManager):
         return (0,)
 
 
-def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkeypatch):
+@pytest.mark.parametrize("opening_idle_frames", (0, 4))
+def test_episode_executes_exact_model_move_and_records_terminal(
+    tmp_path, monkeypatch, opening_idle_frames
+):
     capture = _capture(tmp_path)
     session = Session()
+    ticks = []
+    session.tick = ticks.append
+    if opening_idle_frames:
+        monkeypatch.setattr(episode, "canonical_sha256", lambda _value: "b" * 64)
     snapshot = SimpleNamespace(to_dict=lambda: {"features": {"battle": {"kind": "trainer"}}})
     monkeypatch.setattr(episode, "PokemonRedStateReader", lambda loaded: loaded)
     monkeypatch.setattr(
@@ -106,7 +113,9 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
         "from_state_reader",
         lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
     )
-    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
     chosen: list[int] = []
 
     def execute(_reader, _actions, **kwargs):
@@ -132,9 +141,15 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
 
     events = []
     result = episode.run_red_trainer_practice_episode(
-        capture, session_factory=lambda: session, policy=Policy(), event_sink=events.append
+        capture,
+        session_factory=lambda: session,
+        policy=Policy(),
+        event_sink=events.append,
+        opening_idle_frames=opening_idle_frames,
     )
     assert session.loaded
+    assert ticks == ([opening_idle_frames] if opening_idle_frames else [])
+    assert result.opening_idle_frames == opening_idle_frames
     assert chosen == [2]
     assert result.battle_won
     assert result.stop_reason == "battle_won"
@@ -144,14 +159,28 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
     assert result.final_observation == {"features": {"battle": {"kind": "trainer"}}}
     assert result.public_dict()["teacher_queries"] == 0
     assert [event["event"] for event in events] == [
-        "episode_started", "decision_started", "model_input_prepared",
-        "choice_recorded", "decision_completed"
+        *(["opening_timing_started", "opening_timing_completed"] if opening_idle_frames else []),
+        "episode_started",
+        "decision_started",
+        "model_input_prepared",
+        "choice_recorded",
+        "decision_completed",
     ]
     assert result.decisions[0]["legal_move_slots"] == [1, 2]
     assert result.decisions[0]["state_before"]["party_hp"] == [40, 35]
     assert result.decisions[0]["state_after"]["party_hp"] == [40, 35]
     assert result.public_dict()["action_counts"]["attack"] == 1
     assert result.public_dict()["elapsed_ns"] > 0
+
+
+def test_terminal_party_defeat_is_retained_as_a_loss(tmp_path):
+    capture = _capture(tmp_path)
+    final = RawGameState(True, 120, 2, 2, 2, 0, party_hp=(0, 0))
+    receipt = episode._receipt(
+        capture, "unit-policy", (), final, (25,), {"features": {"battle": None}}
+    )
+    assert receipt.stop_reason == "party_defeated"
+    assert receipt.battle_won is False
 
 
 def test_episode_rejects_impossible_level_up_hp_before_outcome_label(tmp_path, monkeypatch):
@@ -171,7 +200,9 @@ def test_episode_rejects_impossible_level_up_hp_before_outcome_label(tmp_path, m
         "from_state_reader",
         lambda _reader: SimpleNamespace(snapshot_from_raw=lambda _raw: snapshot),
     )
-    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
     projected = []
 
     def execute(_reader, _actions, **_kwargs):
@@ -217,7 +248,9 @@ def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, mon
             snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {})
         ),
     )
-    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
 
     class Policy:
         policy_id = "invalid-model"
@@ -237,9 +270,7 @@ def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, mon
     assert events[-1]["selected_action"]["move_slot"] == 3
 
 
-def test_episode_records_party_defeat_without_asking_for_impossible_switch(
-    tmp_path, monkeypatch
-):
+def test_episode_records_party_defeat_without_asking_for_impossible_switch(tmp_path, monkeypatch):
     capture = _capture(tmp_path)
     session = Session()
     session.raw = RawGameState(
@@ -253,7 +284,9 @@ def test_episode_records_party_defeat_without_asking_for_impossible_switch(
             snapshot_from_raw=lambda _raw: SimpleNamespace(to_dict=lambda: {})
         ),
     )
-    monkeypatch.setattr(episode, "prepare_red_battle_scenario", lambda *_args: _prepared())
+    monkeypatch.setattr(
+        episode, "prepare_red_battle_scenario", lambda *_args, **_kwargs: _prepared()
+    )
 
     class Policy:
         policy_id = "defeated-model"

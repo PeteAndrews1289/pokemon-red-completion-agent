@@ -63,12 +63,27 @@ class RedTrainerPracticeModelPolicy:
         if not self.policy_id or not self.battle_plan_id:
             raise TrainerPracticeModelPolicyError("trainer model identity is missing")
 
+    def observe_forced_choice(
+        self, observation: Mapping[str, object], action: BattleAction
+    ) -> None:
+        """Keep continuation history causal after a matched forced opening."""
+
+        self.history.before(self.battle_plan_id, observation)
+        self.history.advance(action, observation)
+
     def choose_main(
         self,
         observation: Mapping[str, object],
         prepared: PreparedRedBattleScenario,
     ) -> BattleAction:
         history = self.history.before(self.battle_plan_id, observation)
+        if not any(prepared.features.legal_mask):
+            target = self._target(observation, None)
+            action = BattleAction.switch(target)
+            self.last_decision_diagnostics["control_class_ref"] = CONTROL_CLASS_REFS[5]
+            self.last_decision_diagnostics["forced_by_legality"] = True
+            self.history.advance(action, observation)
+            return action
         features = project_control_features(
             observation,
             move_batch=prepared.features,
