@@ -69,8 +69,11 @@ def _policy(monkeypatch, control_ref: str):
 def test_composite_model_owns_move_and_voluntary_switch_targets(monkeypatch):
     attack = _policy(monkeypatch, CONTROL_CLASS_REFS[0])
     assert attack.choose_main(_observation(), _prepared()) == BattleAction.move(2)
+    assert attack.last_decision_diagnostics["control_class_ref"] == CONTROL_CLASS_REFS[0]
+    assert attack.last_decision_diagnostics["move_candidate_slots"] == [1, 2]
     switch = _policy(monkeypatch, CONTROL_CLASS_REFS[5])
     assert switch.choose_main(_observation(), _prepared()) == BattleAction.switch(3)
+    assert switch.last_decision_diagnostics["switch_probabilities"] == [0.2, 0.8]
 
 
 def test_composite_model_owns_prompt_and_forced_switch(monkeypatch):

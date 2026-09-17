@@ -175,10 +175,13 @@ def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, mon
         def choose_switch(self, *_args, **_kwargs):
             raise AssertionError("no switch requested")
 
+    events = []
     with pytest.raises(episode.RedTrainerPracticeEpisodeError, match="unsupported move"):
         episode.run_red_trainer_practice_episode(
-            capture, session_factory=lambda: session, policy=Policy()
+            capture, session_factory=lambda: session, policy=Policy(), event_sink=events.append
         )
+    assert events[-1]["event"] == "choice_recorded"
+    assert events[-1]["selected_action"]["move_slot"] == 3
 
 
 def test_episode_records_party_defeat_without_asking_for_impossible_switch(

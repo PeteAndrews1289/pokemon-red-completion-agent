@@ -22,6 +22,7 @@ class TrainerPracticeEventLog:
         self.sequence = 0
         self.previous_sha256: str | None = None
         self.closed = False
+        self.last_event: str | None = None
         self.emit({
             "event": "run_identity",
             "identity": dict(run_identity),
@@ -41,15 +42,18 @@ class TrainerPracticeEventLog:
         record["record_sha256"] = digest
         _write_new(self.directory / f"event-{self.sequence:05d}.json", record)
         self.previous_sha256 = digest
+        self.last_event = str(event.get("event"))
 
     def finish(self, outcome: Mapping[str, object]) -> None:
         self.emit({"event": "run_finished", "outcome": dict(outcome)})
         self.closed = True
 
     def fail(self, error: BaseException) -> None:
+        last_event = self.last_event
         self.emit({
             "event": "run_failed",
             "error_type": type(error).__name__,
+            "failure_after_event": last_event,
             "completed_events_before_failure": self.sequence,
         })
         self.closed = True
@@ -62,6 +66,7 @@ def verify_trainer_practice_event_log(directory: Path) -> dict[str, object]:
         raise ValueError("trainer practice event log is empty")
     previous: str | None = None
     final_event: str | None = None
+    event_counts: dict[str, int] = {}
     for sequence, path in enumerate(paths, 1):
         if path.name != f"event-{sequence:05d}.json":
             raise ValueError("trainer practice event sequence has a gap")
@@ -84,6 +89,8 @@ def verify_trainer_practice_event_log(directory: Path) -> dict[str, object]:
             raise ValueError("trainer practice event follows a terminal")
         if payload["event"] in {"run_finished", "run_failed"}:
             final_event = payload["event"]
+        event_name = payload["event"]
+        event_counts[event_name] = event_counts.get(event_name, 0) + 1
         previous = digest
     return {
         "schema": "pokemon.red.trainer-practice-log-verification.v1",
@@ -91,6 +98,14 @@ def verify_trainer_practice_event_log(directory: Path) -> dict[str, object]:
         "last_record_sha256": previous,
         "terminal_event": final_event,
         "complete": final_event is not None,
+        "event_counts": dict(sorted(event_counts.items())),
+        "failed_runs": event_counts.get("run_failed", 0),
+        "started_decisions": event_counts.get("decision_started", 0),
+        "completed_decisions": event_counts.get("decision_completed", 0),
+        "incomplete_decisions": (
+            event_counts.get("decision_started", 0)
+            - event_counts.get("decision_completed", 0)
+        ),
     }
 
 

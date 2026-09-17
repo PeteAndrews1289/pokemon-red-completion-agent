@@ -19,6 +19,8 @@ def test_log_retains_complete_ordered_trace(tmp_path):
     assert verified["complete"] is True
     assert verified["terminal_event"] == "run_finished"
     assert verified["event_count"] == 4
+    assert verified["started_decisions"] == 1
+    assert verified["incomplete_decisions"] == 1
     with pytest.raises(RuntimeError, match="closed"):
         log.emit({"event": "decision_started"})
 
@@ -31,6 +33,7 @@ def test_log_retains_failure_after_selected_action(tmp_path):
     assert verify_trainer_practice_event_log(log.directory)["terminal_event"] == "run_failed"
     text = (log.directory / "event-00004.json").read_text()
     assert "ValueError" in text
+    assert "choice_recorded" in text
     assert "/do/not/retain" not in text
 
 

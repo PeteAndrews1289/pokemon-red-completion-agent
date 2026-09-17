@@ -86,6 +86,9 @@ class RedTrainerPracticeModelPolicy:
             self.last_decision_diagnostics["control_probabilities"] = np.asarray(
                 probabilities(features), dtype=np.float64
             ).tolist()
+            self.last_decision_diagnostics["control_probability_class_refs"] = list(
+                getattr(self.control_model, "class_refs", CONTROL_CLASS_REFS)
+            )
         if control_ref == CONTROL_CLASS_REFS[0]:
             action = self._attack(prepared.features)
         elif control_ref == CONTROL_CLASS_REFS[5]:
@@ -126,6 +129,9 @@ class RedTrainerPracticeModelPolicy:
                 self.last_decision_diagnostics["control_probabilities"] = np.asarray(
                     probabilities(features), dtype=np.float64
                 ).tolist()
+                self.last_decision_diagnostics["control_probability_class_refs"] = list(
+                    getattr(self.control_model, "class_refs", CONTROL_CLASS_REFS)
+                )
             if control_ref == CONTROL_CLASS_REFS[0]:
                 return None
             if control_ref != CONTROL_CLASS_REFS[5]:

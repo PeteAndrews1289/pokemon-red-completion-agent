@@ -98,6 +98,12 @@ class RedTrainerPracticeEpisode:
             "elapsed_ns": self.elapsed_ns,
             "policy_elapsed_ns": _sum_int(self.decisions, "policy_elapsed_ns"),
             "execution_elapsed_ns": _sum_int(self.decisions, "execution_elapsed_ns"),
+            "observation_and_logging_elapsed_ns": max(
+                0,
+                self.elapsed_ns
+                - _sum_int(self.decisions, "policy_elapsed_ns")
+                - _sum_int(self.decisions, "execution_elapsed_ns"),
+            ),
             "frames_executed": sum(
                 value for step in self.decisions
                 if type(value := step.get("frames_executed")) is int
