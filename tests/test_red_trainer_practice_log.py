@@ -4,6 +4,7 @@ import json
 
 import pytest
 
+from pokemon_red_completion.battle_runtime_diagnostics import BattleRuntimeDiagnostic
 from pokemon_red_completion.red_trainer_practice_log import (
     TrainerPracticeEventLog,
     verify_trainer_practice_event_log,
@@ -29,11 +30,18 @@ def test_log_retains_failure_after_selected_action(tmp_path):
     log = TrainerPracticeEventLog(tmp_path / "failure", run_identity={"partition": "train"})
     log.emit({"event": "decision_started", "decision_index": 1})
     log.emit({"event": "choice_recorded", "selected_action": "switch"})
-    log.fail(ValueError("private path /do/not/retain"))
+    error = ValueError("private path /do/not/retain")
+    error.battle_runtime_diagnostic = BattleRuntimeDiagnostic(
+        phase="settle", total_events=1, recording_failures=0,
+        selection={"slot": 2}, events=({"kind": "selection"},), exception_chain=(),
+    )
+    log.fail(error)
     assert verify_trainer_practice_event_log(log.directory)["terminal_event"] == "run_failed"
     text = (log.directory / "event-00004.json").read_text()
     assert "ValueError" in text
     assert "choice_recorded" in text
+    assert "battle_runtime_diagnostic" in text
+    assert '"phase":"settle"' in text
     assert "/do/not/retain" not in text
 
 

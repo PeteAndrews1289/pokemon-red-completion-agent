@@ -90,12 +90,15 @@ def summarize_trainer_practice_runs(directories: Iterable[Path]) -> dict[str, ob
     for (partition, policy), group in sorted(groups.items()):
         completed = [row for row in group if row["status"] == "finished"]
         roots = {str(row["root_lineage_id"]) for row in group}
+        captures = {str(row["capture_id"]) for row in group}
         summaries.append({
             "partition": partition,
             "policy_id": policy,
             "runs": len(group),
             "upstream_roots": len(roots),
             "repeat_or_variant_runs": len(group) - len(roots),
+            "distinct_capture_configs": len(captures),
+            "exact_capture_repeats": len(group) - len(captures),
             "battle_wins": sum(row["battle_won"] is True for row in completed),
             "battle_losses": sum(row["battle_won"] is False for row in completed),
             "failed_runs": len(group) - len(completed),

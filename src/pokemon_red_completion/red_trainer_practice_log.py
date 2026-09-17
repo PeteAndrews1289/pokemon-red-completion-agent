@@ -12,6 +12,7 @@ import os
 from collections.abc import Mapping
 from pathlib import Path
 
+from pokemon_red_completion.battle_runtime_diagnostics import BattleRuntimeDiagnostic
 from pokemon_red_completion.provenance import canonical_sha256
 
 
@@ -50,11 +51,16 @@ class TrainerPracticeEventLog:
 
     def fail(self, error: BaseException) -> None:
         last_event = self.last_event
+        diagnostic = getattr(error, "battle_runtime_diagnostic", None)
         self.emit({
             "event": "run_failed",
             "error_type": type(error).__name__,
             "failure_after_event": last_event,
             "completed_events_before_failure": self.sequence,
+            "battle_runtime_diagnostic": (
+                diagnostic.to_dict()
+                if isinstance(diagnostic, BattleRuntimeDiagnostic) else None
+            ),
         })
         self.closed = True
 

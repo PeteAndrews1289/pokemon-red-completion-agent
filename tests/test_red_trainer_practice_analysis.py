@@ -40,6 +40,8 @@ def test_cohort_counts_one_root_for_two_variants(tmp_path):
     assert group["runs"] == 2
     assert group["upstream_roots"] == 1
     assert group["repeat_or_variant_runs"] == 1
+    assert group["distinct_capture_configs"] == 2
+    assert group["exact_capture_repeats"] == 0
     assert group["battle_wins"] == 1
     assert group["battle_losses"] == 1
     assert group["frames_executed"] == 1000
