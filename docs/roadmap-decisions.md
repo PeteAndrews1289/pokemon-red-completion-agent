@@ -1240,3 +1240,14 @@ not replaced, and neither the earlier holdout nor DEVELOPMENT may be fit.
 This is curriculum expansion after a measured failure, not independent-root
 qualification. Astra's balanced four-root gate and natural DEVELOPMENT
 advantage remain unchanged; no authority promotion, full run or GitHub push.
+
+The eight-case fit passed admission with four openings favoring a switch and
+four favoring an attack, but its first unseen holdout failed all five timings:
+the model repeatedly switched and then reached an optional replacement prompt
+with no living reserve, where its policy incorrectly attempted target
+projection. Preserve those failed trials and their logs. The next controller
+revision declines targetless optional prompts and masks a second voluntary
+switch against the same opponent until the model has attempted an attack.
+This is a disclosed safety constraint against an unsupported post-switch
+context, not a learned improvement or a replay of the failed holdout. A fresh
+declared TRAIN matchup must test it once before any broader claim.

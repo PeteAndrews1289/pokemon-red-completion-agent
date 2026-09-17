@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import replace
 from types import SimpleNamespace
 
+import pytest
 from test_red_trainer_practice_fit import _target
 
 from pokemon_red_completion.battle_actions import BattleActionKind
@@ -11,6 +12,7 @@ from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
 from pokemon_red_completion.red_trainer_practice_fit import fit_trainer_practice_three_heads
 from pokemon_red_completion.red_trainer_practice_outcome_policy import (
     RedTrainerPracticeOutcomePolicy,
+    TrainerOutcomePolicyError,
 )
 
 
@@ -53,3 +55,52 @@ def test_trained_policy_owns_main_and_forced_switch_choices():
         may_decline=False,
     )
     assert replacement in {2, 3}
+
+
+def test_optional_prompt_without_living_reserve_declines_without_projection(monkeypatch):
+    target = _target()
+    model = fit_trainer_practice_three_heads(
+        [target], seed=31, require_corpus_floor=False, epochs=10
+    )
+    policy = RedTrainerPracticeOutcomePolicy(
+        policy_id="unit-outcome", battle_plan_id="unit-battle", model=model
+    )
+    monkeypatch.setattr(
+        "pokemon_red_completion.red_trainer_practice_outcome_policy."
+        "project_trainer_switch_features",
+        lambda *_args: pytest.fail("empty optional prompt must not project targets"),
+    )
+    assert policy.choose_switch(
+        target["observation"], (), forced=False, may_decline=True
+    ) is None
+    assert policy.last_decision_diagnostics == {
+        "decision_mode": "prompt", "control_choice": "decline", "reason": "no_legal_target"
+    }
+    with pytest.raises(TrainerOutcomePolicyError, match="no legal target"):
+        policy.choose_switch(target["observation"], (), forced=True, may_decline=False)
+
+
+def test_voluntary_switch_requires_an_attack_before_another_same_opponent_switch():
+    target = _target()
+    model = fit_trainer_practice_three_heads(
+        [target], seed=31, require_corpus_floor=False, epochs=10
+    )
+    observation = target["observation"]
+    batch = BattleFeatureProjector(PokemonRedBattleCatalog()).project(observation)
+    policy = RedTrainerPracticeOutcomePolicy(
+        policy_id="unit-outcome", battle_plan_id="unit-battle", model=model
+    )
+    policy._unanswered_voluntary_switch_opponent = 0
+    action = policy.choose_main(
+        observation, SimpleNamespace(features=batch, supported_candidate_mask=batch.legal_mask)
+    )
+    assert action.kind is BattleActionKind.SELECT_MOVE
+    assert policy.last_decision_diagnostics["switch_masked_until_attack"] is True
+    assert policy._unanswered_voluntary_switch_opponent is None
+
+    exhausted = replace(batch, legal_mask=(False, False), current_pp=(0.0, 0.0))
+    policy._unanswered_voluntary_switch_opponent = 0
+    forced_action = policy.choose_main(
+        observation, SimpleNamespace(features=exhausted, supported_candidate_mask=(False, False))
+    )
+    assert forced_action.kind is BattleActionKind.SWITCH

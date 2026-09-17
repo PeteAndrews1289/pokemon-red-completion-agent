@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Mapping
 from dataclasses import dataclass, field
 
-from pokemon_red_completion.battle_actions import BattleAction
+from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
 from pokemon_red_completion.battle_control_features import BattleControlHistoryTracker
 from pokemon_red_completion.red_battle_catalog import PokemonRedBattleCatalog
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
@@ -29,6 +29,7 @@ class RedTrainerPracticeOutcomePolicy:
     catalog: PokemonRedBattleCatalog = field(default_factory=PokemonRedBattleCatalog)
     history: BattleControlHistoryTracker = field(default_factory=BattleControlHistoryTracker)
     last_decision_diagnostics: dict[str, object] = field(default_factory=dict, init=False)
+    _unanswered_voluntary_switch_opponent: int | None = field(default=None, init=False)
 
     def __post_init__(self) -> None:
         if not self.policy_id or not self.battle_plan_id:
@@ -51,9 +52,13 @@ class RedTrainerPracticeOutcomePolicy:
             )
             if legal
         )
+        switch_masked = (
+            bool(legal_moves)
+            and self._unanswered_voluntary_switch_opponent == history.opponent_index
+        )
         switches = (
             project_trainer_switch_features(observation, self.catalog)
-            if _has_living_reserve(observation)
+            if _has_living_reserve(observation) and not switch_masked
             else None
         )
         if not legal_moves:
@@ -86,6 +91,7 @@ class RedTrainerPracticeOutcomePolicy:
                     "control_choice": "attack",
                     "move_candidate_slots": list(slots),
                     "move_probabilities": self.model.move.probabilities(rows).tolist(),
+                    "switch_masked_until_attack": switch_masked,
                 }
             else:
                 action = BattleAction.switch(
@@ -100,6 +106,10 @@ class RedTrainerPracticeOutcomePolicy:
             self.last_decision_diagnostics["control_probabilities"] = (
                 self.model.control.probabilities(control_candidates).tolist()
             )
+        if action.kind is BattleActionKind.SELECT_MOVE:
+            self._unanswered_voluntary_switch_opponent = None
+        elif action.kind is BattleActionKind.SWITCH:
+            self._unanswered_voluntary_switch_opponent = history.opponent_index
         self.history.advance(action, observation)
         return action
 
@@ -114,6 +124,15 @@ class RedTrainerPracticeOutcomePolicy:
         if forced == may_decline:
             raise TrainerOutcomePolicyError("switch mode differs")
         history = self.history.before(self.battle_plan_id, observation)
+        if not legal_party_slots:
+            if forced:
+                raise TrainerOutcomePolicyError("forced switch has no legal target")
+            self.last_decision_diagnostics = {
+                "decision_mode": "prompt",
+                "control_choice": "decline",
+                "reason": "no_legal_target",
+            }
+            return None
         candidates = project_trainer_switch_features(observation, self.catalog)
         legal = tuple(slot for slot in candidates.candidate_slots if slot in legal_party_slots)
         if not legal:
@@ -143,6 +162,8 @@ class RedTrainerPracticeOutcomePolicy:
             }
         )
         self.history.advance(BattleAction.switch(target), observation)
+        if not forced:
+            self._unanswered_voluntary_switch_opponent = history.opponent_index
         return target
 
     def _choose_target(self, candidates, legal: tuple[int, ...]) -> int:
