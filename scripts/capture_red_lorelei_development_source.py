@@ -1,8 +1,7 @@
-"""Capture an unplayed Cinnabar Gym quiz trainer before its first battle choice.
+"""Capture a fresh Lorelei battle from an authenticated pre-League checkpoint.
 
-The authenticated historical checkpoint already has the Secret Key. This
-collector uses only normal field controls to reach the first quiz's trainer;
-it makes no battle choice and never updates a model.
+The field approach is ordinary controller play. Stop before the first battle
+choice; no model is queried, no memory is edited and no opponent is fought.
 """
 
 from __future__ import annotations
@@ -19,26 +18,19 @@ from pokemon_red_completion.battle_scenario_capture import (
     build_battle_scenario_capture_payload,
     open_battle_scenario_capture,
 )
-from pokemon_red_completion.blaine import (
-    BLAINE_GYM_BURGLAR_OPPONENT,
-    GYM_ENTRY_ROUTE,
-    GYM_GATE_EVENTS,
-    GYM_QUIZ_ROUTES,
-    GYM_TRAINER_EVENTS,
-    QUIZ_ANSWERS,
-    QUIZ_TEXT_PULSES,
-    _bag,
-    _face_and_interact,
-    _move,
-    _pulse,
-    _return_from_mansion_to_cinnabar,
-)
 from pokemon_red_completion.bootstrap import DEFAULT_NEW_GAME_TIMING
 from pokemon_red_completion.emulator import PyBoyAdapter
 from pokemon_red_completion.executor import CountingExecutor, FrameSafeExecutor
+from pokemon_red_completion.lorelei import (
+    INDIGO_TO_LORELEI,
+    LORELEI_APPROACH,
+    LORELEI_PARTY,
+    _move,
+    _pulse,
+)
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
-    ItemId,
+    EventFlag,
     MapId,
     PokemonRedStateReader,
     RamAddress,
@@ -51,30 +43,30 @@ from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
-SOURCE_ID = "red-goal-v1-079-explore-validation-01"
-SOURCE_SHA256 = "8525760c64ec9da8e6e0ab891d98cb9f12b82aa1338ee95e43c4bcf652068eeb"
-CAPTURE_ID = "cinnabar-quiz1-natural-development-079"
-MAX_ACTIONS = 800
-MAX_FRAMES = 240_000
+SOURCE_ID = "red-goal-v1-066-recover_control-train-03"
+SOURCE_SHA256 = "e13c75dbb292b01dd670c70229cc328ef6c151c1dce45a7e8998b4ddc3589a50"
+CAPTURE_ID = "lorelei-natural-development-066"
+MAX_ACTIONS = 600
+MAX_FRAMES = 180_000
 
 
 def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
     if output.exists():
-        raise ValueError("Cinnabar development output must be new")
+        raise ValueError("Lorelei development output must be new")
     if source_path.name != f"{SOURCE_ID}.state":
-        raise ValueError("Cinnabar development source identity differs")
+        raise ValueError("Lorelei development source identity differs")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
-        raise ValueError("commit Cinnabar development collector before capture")
+        raise ValueError("commit Lorelei development collector before capture")
     rom, source = rom_path.read_bytes(), source_path.read_bytes()
     if (
         hashlib.sha256(rom).hexdigest() != ROM_SHA256
         or hashlib.sha256(source).hexdigest() != SOURCE_SHA256
     ):
-        raise ValueError("Cinnabar development Red inputs differ")
+        raise ValueError("Lorelei development Red inputs differ")
     commit = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT).decode().strip()
     output.mkdir(parents=True, mode=0o700, exist_ok=False)
     report: dict[str, object] = {
-        "schema": "pokemon.red.cinnabar-burglar-natural-development-source.v1",
+        "schema": "pokemon.red.lorelei-natural-development-source.v1",
         "capture_id": CAPTURE_ID,
         "root_lineage_id": SOURCE_ID,
         "partition": "development",
@@ -93,42 +85,27 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
             reader = PokemonRedStateReader(emulator)
             raw = reader.read()
             if (
-                raw.map_id != MapId.POKEMON_MANSION_1F
-                or (raw.player_x, raw.player_y) != (5, 26)
+                raw.map_id != MapId.INDIGO_PLATEAU_LOBBY
+                or (raw.player_x, raw.player_y) != (2, 5)
                 or raw.battle_state != 0
-                or raw.party_count != 4
+                or raw.party_count != 6
                 or raw.event_flags is None
-                or _bag(emulator).get(ItemId.SECRET_KEY) != 1
-                or any(
-                    event_flag_is_set(raw.event_flags, int(event))
-                    for event in GYM_TRAINER_EVENTS + GYM_GATE_EVENTS
-                )
+                or event_flag_is_set(raw.event_flags, int(EventFlag.BEAT_LORELEI))
                 or not reader.read_input_readiness().ready
             ):
-                raise ValueError("Cinnabar validation source is not an unplayed Gym approach")
+                raise ValueError("Indigo validation source is not an unplayed Lorelei approach")
             actions = CountingExecutor(
                 FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
             )
-            _return_from_mansion_to_cinnabar(actions, reader, emulator)
-            _move(actions, reader, ("up",) * 5, "Cinnabar Center nurse")
-            if reader.read().map_id != MapId.CINNABAR_POKECENTER or (
-                reader.read().player_x,
-                reader.read().player_y,
-            ) != (3, 3):
-                raise ValueError("Cinnabar development missed Center anchor")
-            _move(actions, reader, ("down",) * 5 + GYM_ENTRY_ROUTE, "Cinnabar Gym entry")
-            if reader.read().map_id != MapId.CINNABAR_GYM or (
-                reader.read().player_x,
-                reader.read().player_y,
-            ) != (16, 17):
-                raise ValueError("Cinnabar development missed Gym entrance")
-            _move(actions, reader, GYM_QUIZ_ROUTES[0], "first Cinnabar quiz")
-            _face_and_interact(actions, "up")
-            for _ in range(QUIZ_TEXT_PULSES[0] - 1):
-                _pulse(actions, MacroActionKind.CONFIRM)
-            if not QUIZ_ANSWERS[0]:
-                _pulse(actions, MacroActionKind.MOVE, "down", 120)
-            _pulse(actions, MacroActionKind.CONFIRM)
+            _move(actions, reader, INDIGO_TO_LORELEI, "Lorelei room entry")
+            entered = reader.read()
+            if entered.map_id != MapId.LORELEIS_ROOM or (
+                entered.player_x,
+                entered.player_y,
+            ) != (4, 5):
+                raise ValueError("Lorelei development missed room entry")
+            _move(actions, reader, LORELEI_APPROACH, "Lorelei approach")
+            _pulse(actions, MacroActionKind.INTERACT)
             for _ in range(60):
                 raw = reader.read()
                 if (
@@ -139,7 +116,7 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 actions.execute(MacroAction(MacroActionKind.CONFIRM))
                 actions.execute(MacroAction(MacroActionKind.WAIT, repeat=180))
             else:
-                raise ValueError("Cinnabar natural trainer capture missed first MAIN")
+                raise ValueError("Lorelei natural trainer capture missed first MAIN")
             identity = (
                 emulator.read_u8(RamAddress.CURRENT_OPPONENT),
                 emulator.read_u8(RamAddress.TRAINER_CLASS),
@@ -148,30 +125,26 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
             report["observed_boundary"] = {
                 "map": int(raw.map_id),
                 "opponent_identity": list(identity),
-                "engaged_fields": [
-                    emulator.read_u8(RamAddress.ENGAGED_TRAINER_CLASS),
-                    emulator.read_u8(RamAddress.ENGAGED_TRAINER_SET),
-                ],
                 "opponent_party_count": raw.enemy_party_count,
                 "opponent_party_position": raw.enemy_party_position,
-                "opponent_hp": raw.enemy_hp,
                 "opponent_species": raw.enemy_species_id,
                 "opponent_level": raw.enemy_level,
+                "opponent_hp": raw.enemy_hp,
                 "actions_executed": actions.actions_executed,
                 "frames_executed": emulator.frame_count,
                 "pressed_buttons": sorted(emulator.pressed_buttons),
             }
             if (
-                raw.map_id != MapId.CINNABAR_GYM
-                or identity != (BLAINE_GYM_BURGLAR_OPPONENT, 0x0B, 4)
-                or raw.enemy_party_count != 3
+                raw.map_id != MapId.LORELEIS_ROOM
+                or raw.enemy_party_count != len(LORELEI_PARTY)
                 or raw.enemy_party_position != 0
+                or (raw.enemy_species_id, raw.enemy_level) != LORELEI_PARTY[0]
                 or (raw.enemy_hp or 0) <= 0
                 or emulator.pressed_buttons
                 or actions.actions_executed > MAX_ACTIONS
                 or emulator.frame_count > MAX_FRAMES
             ):
-                raise ValueError("Cinnabar natural trainer boundary differs")
+                raise ValueError("Lorelei natural trainer boundary differs")
             prepared = prepare_red_battle_scenario(
                 PokemonRedObservationEncoder.from_state_reader(
                     reader,
@@ -190,7 +163,7 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 source_state_sha256=SOURCE_SHA256,
                 initial_observation_sha256=prepared.initial_observation_sha256,
                 source_commit=commit,
-                expected_map=int(MapId.CINNABAR_GYM),
+                expected_map=int(MapId.LORELEIS_ROOM),
                 expected_battle_state=2,
                 observation_schema=OBSERVATION_SCHEMA_V2,
             )
@@ -207,7 +180,7 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
         (output / "source.state.json").write_bytes(manifest)
         opened = open_battle_scenario_capture(output / "source.state", output / "source.state.json")
         if opened.manifest.partition is not ScenarioPartition.DEVELOPMENT:
-            raise ValueError("Cinnabar natural development partition differs")
+            raise ValueError("Lorelei natural development partition differs")
     except Exception as error:
         report.update(status="failed", error_type=type(error).__name__)
         raise
