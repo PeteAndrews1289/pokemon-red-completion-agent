@@ -85,6 +85,12 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
         with PyBoyAdapter(rom_path, watch=False, speed=None) as emulator:
             emulator.load_state_bytes(source)
             reader = PokemonRedStateReader(emulator)
+            actions = CountingExecutor(
+                FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
+            )
+            # This validation checkpoint retains a harmless movement latch.
+            # A bounded neutral settle reaches the same Center tile without input.
+            actions.execute(MacroAction(MacroActionKind.WAIT, repeat=8))
             raw = reader.read()
             if (
                 raw.map_id != MapId.CELADON_POKECENTER
@@ -99,9 +105,6 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 or not reader.read_input_readiness().ready
             ):
                 raise ValueError("natural development source is not an untouched Gym approach")
-            actions = CountingExecutor(
-                FrameSafeExecutor(emulator, DEFAULT_NEW_GAME_TIMING.controller_timing())
-            )
             timing = DEFAULT_ERIKA_TIMING
             _move(actions, reader, emulator, CENTER_EXIT, timing, "Center exit")
             _move(actions, reader, emulator, CITY_TO_OUTER_TREE, timing, "outer tree")
