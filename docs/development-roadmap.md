@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-fresh-roots-natural-comparison-v1**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-trainer-astra-review-v1**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-trainer-astra-review-v1
+
+Astra readmitted 140 retained timing trials and 500 branches, but found only four distinct attack inputs among sixteen examples, conflicting targets, switch-damage scoring loss, untrained live history, opponent identity aliasing and inconsistent move support. Thirty-eight focused existing tests passed. Keep the framework and small model; repair feedback before larger training.
+
+**Deviation:** Review only: no new fit, gameplay, authority or collection progress. Existing natural win and cost evidence remains valid. Stage and checklist exits are unchanged; independent origins are not a substitute for distinct decisions.
+
+**Next:** Sol High, Fast off: repair scoring/history/support with focused regressions, then run a small distinct paired TRAIN pilot with uncertainty-aware targets. Never tune on or replay consumed DEVELOPMENT encounters.
 
 ### 2026-09-17-trainer-fresh-roots-natural-comparison-v1
 

@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Astra review the qualified four-root trainer curriculum and two negative natural comparisons; select a bounded TRAIN-side target or policy redesign and prospective independent natural DEVELOPMENT supply. No battle promotion, full-game run or replay-tuning of consumed DEVELOPMENT battles.
+- Next decision: Repair scoring/history/support contracts, then a small distinct paired TRAIN pilot with uncertainty-aware targets. Freeze one challenger for a prospective decision-rich natural cohort only after the pilot; no consumed DEVELOPMENT replay or full game.
 
 ### Mandatory mission check
 
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-trainer-fresh-roots-natural-comparison-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
+**2026-09-17-trainer-astra-review-v1** · status **closed** · evidence [qualification](docs/evidence/red-trainer-astra-review-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | The trainer can fit a model on four independent fresh Red starts and execute teacher-free natural battles; negative control comparisons expose remaining combat-quality work without mislabeling it as model authority. |
-| Learning output | Four separately booted clean-power TRAIN roots supplied sixteen admitted contexts at five timings each. Twelve additional move contrasts were admitted without replaying the sixteen, producing a 28-context three-head fit. Natural Celadon and Fuchsia DEVELOPMENT arms all won and logged every choice with zero teacher queries or invalid actions, but the challenger was less efficient than both controls in each encounter. The fit is qualified for review, not promotion. |
-| Authority delta | None. A four-fresh-root trainer fit now makes its own choices in natural DEVELOPMENT battles, but both comparisons favored frozen and fixed controls. Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
-| Transfer result | Two natural DEVELOPMENT encounters were completed without teacher input and disjoint from fresh TRAIN roots, but both favored controls and are correlated to each other through unresolved historical ancestry. No cross-title result exists. |
-| Blocker | The four-root TRAIN supply gate and 28-context fit are satisfied, but the challenger chose one move slot throughout each natural battle and took more decisions and HP loss than both controls. The two DEVELOPMENT encounters are disjoint from TRAIN but share unresolved historical ancestry with each other. Natural advantageous switching remains unobserved; all-party zero PP with no reserve remains an unsupported Struggle boundary. |
-| Decision | Preserve both unfavorable natural DEVELOPMENT comparisons and send the bounded trainer framework, ancestry proof and failure logs to an Astra review. Do not promote battle authority or tune on either DEVELOPMENT battle. Review training targets and prospective independent natural evaluation supply before another fit. |
-| Next session | Astra review the trainer source-chain, fit targets, live policy and comparison logs; then freeze one bounded redesign and independent natural DEVELOPMENT supply before further training or promotion. |
-| Next falsifier | A redesigned fit may still select a constant attack or fail to outperform first-legal-attack on prospectively chosen, ancestry-audited natural trainer battles; a forced or voluntary switch context may expose a separate failure. |
-| Stop condition | No replay-tuning either DEVELOPMENT comparison, no historical bank relabeling as independent roots, no DEVELOPMENT fitting, full game, authority promotion or GitHub push. The 28 TRAIN contexts meet supply, not quality, qualification. |
+| Product alignment | Trustworthy feedback and observable decision variation are necessary for learning transferable battle choices; increasing model size is not justified by four unique attack inputs. |
+| Learning output | No new examples or fit. Read-only reconstruction admitted four source chains, 140 timing trials and 500 branches. The audit measured four unique attack matrices, five control matrices and seven switch matrices; reproduced scoring and history defects; 38 focused existing tests passed despite those gaps. |
+| Authority delta | None. Review only; Model137, Red 96/124 and fresh acceptance 0/5 remain unchanged. |
+| Transfer result | No new transfer measurement. Both retained natural comparisons favored controls, used different challengers and share historical ancestry; neither showed voluntary switching. |
+| Blocker | The return scorer loses damage on living opponent switches; training omits history used at inference; species/level history aliases opponents; Counter support checks disagree. Sixteen attack examples contain only four unique input matrices with conflicting hard winners. The two negative natural comparisons do not establish replicated generalization or useful switching. |
+| Decision | Keep the factory, provenance, branch logs and small three-head architecture. Repair scoring, history parity, opponent identity and support admission, then build distinct paired TRAIN decisions with uncertainty-aware targets before larger training. |
+| Next session | Sol High: repair identity-aware scoring, history parity and opponent tracking, and reconcile support admission with focused tests. Then prepare distinct paired TRAIN contexts and uncertainty-aware targets; no large fit yet. |
+| Next falsifier | Recorded switching regressions must conserve affected-opponent damage, fit/live input contracts must agree, and a small paired TRAIN pilot must learn observable decision reversals beyond first-candidate behavior. |
+| Stop condition | No new large training campaign before scoring/input repairs and a distinct-decision pilot. No replay-tuning consumed DEVELOPMENT, historical origin relabeling, authority promotion, full game or GitHub push. |
 
 ### Stop conditions
 

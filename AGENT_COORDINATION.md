@@ -19,11 +19,12 @@ comparisons favored frozen and fixed controls despite challenger wins; there
 was no advantageous voluntary switch. See the [latest evidence](docs/evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json)
 and [handoff](HANDOFF.md). Red stays 96/124 and fresh acceptance 0/5.
 
-Next: Astra High, Fast off for a bounded final architecture/evidence review.
-Assess the source-chain guards, move/control/switch targets, constant-move
-natural behavior, correlated DEVELOPMENT caveat, and prospective independent
-evaluation supply. Do not fit on or replay the two consumed DEVELOPMENT
-battles, promote the policy, run a full game, or publish to GitHub.
+The [Astra review](docs/reviews/red-trainer-astra-review-2026-09-17.md) is complete.
+Next: Sol High, Fast off for identity-aware damage scoring, training/live history
+parity, same-species opponent identity and consistent move-support admission.
+Then build distinct paired TRAIN inputs with uncertainty-aware targets before
+a larger fit. Do not fit on or replay the two consumed DEVELOPMENT battles,
+promote the policy, run a full game, or publish to GitHub.
 
 ## Reviewer contribution
 
@@ -31,7 +32,8 @@ Flash 3.8 High made a bounded read-only ancestry audit and agreed that the old
 goal-bank labels do not establish independent physical starts. Claude Opus
 could not review because its CLI returned "Not logged in"; do not count a
 Claude review. Refreshed service quotas are unavailable. Neither review is a
-standing execution gate.
+standing execution gate. The final Astra review used source and retained data;
+Flash and Claude were not invoked again.
 
 [Evidence](docs/evidence/red-earned-learned-battle-2026-09-16.json) ·
 [OHKO experiment](docs/evidence/red-ohko-expected-utility-2026-09-16.json) ·

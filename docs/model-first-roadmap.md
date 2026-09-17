@@ -94,23 +94,24 @@ evaluation framework with an unfavorable policy result, not promoted authority.
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Independent trainer supply | Four separate clean-power TRAIN origins and four contexts each admitted; source-chain and legacy alias guards pass | Complete; Astra High to audit |
-| Battle policy qualification and comparison | Review the 28-context fit and both unfavorable natural DEVELOPMENT comparisons; redesign TRAIN-side targets or policy, then prospectively outperform frozen and fixed controls on ancestry-audited natural battles | Astra High for design review; Sol High for implementation |
+| Independent trainer supply | Four separate clean-power TRAIN origins and four contexts each admitted; source-chain and legacy alias guards pass | Complete and reviewed |
+| Battle policy qualification and comparison | Repair switch-damage scoring, fit/live history, opponent identity and move-support admission; train distinct paired decisions before one frozen challenger faces a prospective natural cohort | Review complete; Sol High for repairs and pilot |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:90–120 minutes for the final Astra trainer-framework review and
-one bounded redesign decision. The four-by-four supply gate has passed, but
-promotion fails both natural comparisons. Do not fit to or replay the consumed
-DEVELOPMENT battles, count their correlated historical saves as independent,
-or open a full Red run.
+The [Astra review](reviews/red-trainer-astra-review-2026-09-17.md) found that
+sixteen attack examples contain only four distinct inputs. Keep the small
+model and framework; repair scoring and input contracts before a larger fit.
+Next: one to two bounded implementation sessions, then a distinct-decision
+pilot. Do not fit to or replay consumed DEVELOPMENT battles, count their
+correlated historical saves as independent, or open a full Red run.
 No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-trainer-fresh-root-qualification-and-natural-comparison-2026-09-17.json) ·
+[Latest evidence](evidence/red-trainer-astra-review-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)
