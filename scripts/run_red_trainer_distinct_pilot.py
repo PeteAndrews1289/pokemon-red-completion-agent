@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+from collections.abc import Callable
 from copy import deepcopy
 from pathlib import Path
 
@@ -63,7 +64,15 @@ def prospective_cases(
     return tuple(cases)
 
 
-def run(args: argparse.Namespace) -> dict[str, object]:
+def run(
+    args: argparse.Namespace,
+    *,
+    recipe_builder: Callable[
+        [tuple[dict[str, object], ...]], tuple[tuple[int, str, dict[str, object]], ...]
+    ] = prospective_cases,
+    predecessor_contexts: int = 28,
+    result_schema: str = "pokemon.red.trainer-distinct-pilot-result.v1",
+) -> dict[str, object]:
     if args.output.exists():
         raise ValueError("trainer paired pilot output must be new")
     if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
@@ -73,13 +82,14 @@ def run(args: argparse.Namespace) -> dict[str, object]:
     previous_plan = json.loads((args.previous / "fit-plan.json").read_bytes())
     old_cases = previous_plan.get("scenarios")
     if (
-        summary.get("status") != "qualified_train_fit_completed"
-        or summary.get("source_roots") != 4
-        or summary.get("total_admitted_contexts") != 28
+        summary.get("status") not in {"qualified_train_fit_completed", "train_fit_completed"}
+        or summary.get("source_roots", summary.get("admission", {}).get("root_count")) != 4
+        or summary.get("total_admitted_contexts", summary.get("total_contexts"))
+        != predecessor_contexts
         or not isinstance(old_cases, list)
-        or len(old_cases) != 28
+        or len(old_cases) != predecessor_contexts
     ):
-        raise ValueError("paired pilot needs the admitted 28-context predecessor")
+        raise ValueError("paired pilot needs its declared admitted predecessor")
     rom = original._binding(args.rom)
     if rom["sha256"] != original.ROM_SHA256:
         raise ValueError("paired pilot cartridge differs")
@@ -96,7 +106,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         ):
             raise ValueError("paired pilot template differs")
         templates.append(template["practice"])
-    recipes = prospective_cases(tuple(templates))
+    recipes = recipe_builder(tuple(templates))
     sources = original._source_rows(args.batch)
     args.output.mkdir(parents=True, mode=0o700, exist_ok=False)
     stage = "start"
@@ -204,7 +214,7 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         )
         raise
     result = {
-        "schema": "pokemon.red.trainer-distinct-pilot-result.v1",
+        "schema": result_schema,
         "status": "train_fit_completed",
         "source_commit": commit,
         "new_contexts": completed,
