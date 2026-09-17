@@ -173,8 +173,9 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-17-retained-train-battle-alternatives</text>
-<text x="50" y="2958" class="body">Four exact-state train-only move branches from the first saved Mansion decision used matched 2048-frame pre-attack timing and</text>
-<text x="50" y="2983" class="body">all produced one-turn knockouts with utility 3.0. Terminals and a 204-frame execution-cost difference were retained.</text>
+<text x="50" y="2923" class="small muted">2026-09-17-teacher-battle-practice-factory</text>
+<text x="50" y="2958" class="body">Teacher-only Red battle factory generated one authenticated train state with controlled actor moves/PP and opponent current</text>
+<text x="50" y="2983" class="body">HP. Four matched real cartridge outcomes contrasted Tackle&#x27;s partial damage with three one-turn knockouts; the frozen model</text>
+<text x="50" y="3008" class="body">selected successful Guillotine at this timing.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

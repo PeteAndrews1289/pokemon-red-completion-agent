@@ -34,7 +34,7 @@ Not the product:
 
 - Kind: **learning**
 - Rigor: **development**
-- Next decision: Find a consequential level-appropriate train battle context before another pilot or fit; require disjoint development advantage over frozen and fixed-heuristic controls before promotion.
+- Next decision: Expand verified teacher-only battle generation into varied train configurations, then require disjoint natural development advantage over frozen and fixed-heuristic controls before promotion.
 
 ### Mandatory mission check
 
@@ -44,7 +44,7 @@ Not the product:
 | Authority now | Model137 remains 137 examples / 92 successes / 58 economy-qualified. Frozen expected-utility-v2 controlled six attacks in one earned-state wild encounter, winning inefficiently with zero fallback. Red remains 96/124; no promotion. |
 | Authority target | Choose useful registration goals and reliable battle attacks from semantic observations and actual resources; move consequential choices out of fixed controllers without teacher substitution. |
 | Transfer test | Cross-title overlapping species, new branch prerequisites and separate global/local/physical views; no transfer result yet. |
-| Cheapest falsifier | Action-free triage of the remaining unclaimed train roots finds no level-appropriate multi-move battle context with a plausible consequential choice. |
+| Cheapest falsifier | A teacher-generated species/level/stat or opponent-move configuration fails exact cartridge readback or cannot retain bounded, timing-matched battle outcomes. |
 | Time box | 1 session / 2 hours |
 
 ### Registered-objective learning
@@ -60,19 +60,19 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-retained-train-battle-alternatives** · status **closed** · evidence [qualification](docs/evidence/red-retained-train-battle-alternatives-2026-09-17.json)
+**2026-09-17-teacher-battle-practice-factory** · status **closed** · evidence [qualification](docs/evidence/red-teacher-battle-practice-factory-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Equal one-turn knockouts from an overleveled lead cannot teach the attack model consequential battle choices, even though the branch harness measured real outcomes safely. |
-| Learning output | Four authentic train-only alternative-move outcomes from one retained state with identical pre-attack timing. All four knocked out the opponent in one turn with utility 3.0; zero fit-eligible additions and no model update. |
-| Authority delta | No new model-controlled choices, fit or promotion. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent development or cross-title test ran; all four branches share one training state and root. |
-| Blocker | At the first retained Mansion decision, four legal moves all gave the same one-turn knockout utility under matched timing. One narrow frame-cost difference is not transferable battle judgment; other two decisions were not branched. |
-| Decision | Stop this overleveled source family for now. Triage remaining unclaimed train roots action-free for a more consequential, level-appropriate multi-move context; precommit at most one bounded pilot only if one passes. Reserve development roots for a justified challenger. |
-| Next session | Sol High, Fast off, about 60-90 minutes: inspect untouched train sources action-free for level parity and meaningful move alternatives; precommit one bounded pilot only if a source qualifies, otherwise redesign supply without fitting. |
-| Next falsifier | No untouched train source offers a prospectively qualified, level-appropriate multi-move context, or its first bounded actual candidate outcomes again have no meaningful battle-value contrast. |
-| Stop condition | Stop on consumed-root retry, another trivial battle-value menu, unqualified source, development fitting, full run, ROM hack, Crystal or GitHub publication. |
+| Product alignment | A controlled teacher-only battle factory can expose consequential move choices without teaching the final player to cheat; cartridge outcomes and natural held-out play remain the truth test. |
+| Learning output | One authenticated assisted train configuration and four real cartridge move outcomes at matched timing. Tackle dealt 0.792 opponent HP fraction; three other moves knocked out. The model chose Guillotine, which succeeded at this one timing. No fit, promotion or registration gain. |
+| Authority delta | The frozen battle model chose one move in an assisted train configuration, but no fit or promotion followed. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No independent development or cross-title test ran. This assisted state inherits its consumed train root; later natural Red and other-title tests remain required. |
+| Blocker | The first teacher-only factory controls actor moves/PP and opponent current HP, not species, levels, stats or opponent move sets. Its single configuration and RNG timing yielded a nontrivial contrast but no correctable model error or transfer evidence. |
+| Decision | Use isolated teacher-generated cartridge battles as a diverse training curriculum, not scarce natural roots alone. Extend state construction only through verified coherent species/level/stat and opponent-move controls, then fit only from prospectively varied train configurations and compare on disjoint natural development roots. |
+| Next session | Sol High, Fast off, about 90-120 minutes: expand the teacher-only Red adapter to one additional coherent battle axis (prefer species/level/stat package), ROM-free-test it, and qualify one isolated generated cartridge battle. No fit or development opening until diverse train supply exists. |
+| Next falsifier | A broader generated Red battle fails coherent cartridge readback or bounded move execution, or varied generated configurations provide no correctable model error and no natural held-out advantage. |
+| Stop condition | Stop on incoherent generated state, unsupported axis, missing matched outcome, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
 ### Stop conditions
 

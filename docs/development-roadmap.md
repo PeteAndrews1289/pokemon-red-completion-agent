@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-retained-train-battle-alternatives**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-practice-factory**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-teacher-battle-practice-factory
+
+Teacher-only Red battle factory generated one authenticated train state with controlled actor moves/PP and opponent current HP. Four matched real cartridge outcomes contrasted Tackle's partial damage with three one-turn knockouts; the frozen model selected successful Guillotine at this timing.
+
+**Deviation:** One assisted state, one upstream train root and one RNG timing provide neither independent coverage nor a correctable model error. No fit, promotion, Red registration, fresh-run progress, cross-title transfer or GitHub push.
+
+**Next:** Sol High, Fast off: extend verified teacher-only generation by one coherent battle axis, preferably a species/level/stat package; test one isolated generated battle before broader train sampling.
 
 ### 2026-09-17-retained-train-battle-alternatives
 

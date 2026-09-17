@@ -1173,3 +1173,25 @@ frozen challenger and predictions. This changes no Red-first stage, fresh
 start/124-species exit criterion, ROM-hack gate or later Crystal/Emerald order.
 
 [Evidence](evidence/red-battle-timing-and-contrast-2026-09-16.json).
+
+## September 17 — use isolated teacher-generated battles for varied practice
+
+Pete confirmed that teacher cheating is allowed in training and asked us to
+build a controllable battle-practice environment that can serve later games.
+This changes the immediate battle-data tactic: scarce natural Red roots are no
+longer the only source of training choices. A title-neutral practice request
+now feeds a teacher-only Red adapter. Its verified first slice edits actor
+moves/PP and opponent current HP in a private battle copy, reopens a standard
+capture, and measures cartridge outcomes. One generated four-way menu produced
+a real Tackle-versus-knockout contrast; the frozen model chose a move that
+succeeded at that single RNG timing. There was no fit or promotion.
+
+The factory does not yet control species, levels, stats, status or opponent
+moves. These axes must be implemented as coherent game states and tested
+against the cartridge before claiming arbitrary-battle support. All generated
+variants retain the originating root identity and assisted provenance; they
+cannot manufacture independent evaluation roots. Natural unedited battles
+remain the held-out truth test. The Red fresh-start/124-species gate, ROM-hack
+prohibition, and Crystal-to-Emerald sequence do not change.
+
+[Evidence](evidence/red-teacher-battle-practice-factory-2026-09-17.json).

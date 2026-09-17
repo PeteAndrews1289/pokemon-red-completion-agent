@@ -9,7 +9,7 @@
     "deferred_dependency_ledger_verified": false,
     "evidence": null
   },
-  "as_of_session": "2026-09-17-retained-train-battle-alternatives",
+  "as_of_session": "2026-09-17-teacher-battle-practice-factory",
   "current_stage": "red-collection",
   "stages": {
     "foundation": {
@@ -1718,6 +1718,12 @@
       "result": "Four exact-state train-only move branches from the first saved Mansion decision used matched 2048-frame pre-attack timing and all produced one-turn knockouts with utility 3.0. Terminals and a 204-frame execution-cost difference were retained.",
       "deviation": "One root and one observation; the other two decisions were not branched. No fit-eligible addition, model update, battle promotion, Red registration or fresh acceptance. Stop the overleveled source family for now; no GitHub push.",
       "next": "Sol High, Fast off: triage untouched train roots action-free for level-appropriate, consequential move choices; precommit one bounded pilot only if a source qualifies."
+    },
+    {
+      "session": "2026-09-17-teacher-battle-practice-factory",
+      "result": "Teacher-only Red battle factory generated one authenticated train state with controlled actor moves/PP and opponent current HP. Four matched real cartridge outcomes contrasted Tackle's partial damage with three one-turn knockouts; the frozen model selected successful Guillotine at this timing.",
+      "deviation": "One assisted state, one upstream train root and one RNG timing provide neither independent coverage nor a correctable model error. No fit, promotion, Red registration, fresh-run progress, cross-title transfer or GitHub push.",
+      "next": "Sol High, Fast off: extend verified teacher-only generation by one coherent battle axis, preferably a species/level/stat package; test one isolated generated battle before broader train sampling."
     }
   ],
   "closed_milestones": [

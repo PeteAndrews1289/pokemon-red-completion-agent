@@ -41,6 +41,13 @@ from the first Mansion decision all produced one-turn knockouts and identical
 battle utility. This overleveled context is not useful battle-value training
 material. The other two saved decisions were not branched.
 
+The first [teacher-only battle factory](evidence/red-teacher-battle-practice-factory-2026-09-17.json)
+now constructs authenticated Red training captures with controlled actor
+moves/PP and opponent current HP. One generated four-move state produced a
+real Tackle-versus-knockout contrast. The model chose a successful move at
+one RNG timing; no fit, natural transfer or authority promotion followed.
+Species, levels, stats and opponent moves are not yet controllable.
+
 This proves the bounded live-control seam, not good combat judgment. Ordinary
 collection battles and mechanical travel still use existing controllers.
 Story-level learned play, robust trainer combat and fresh acceptance remain open.
@@ -49,23 +56,24 @@ Story-level learned play, robust trainer combat and fresh acceptance remain open
 
 | Work | Concrete completion test | Setting |
 | --- | --- | --- |
-| Model-directed battle experience | Three consecutive train encounters are retained, but the first four-way menu was trivial; find a level-appropriate train context with consequential legal alternatives | Sol High, Fast off |
+| Model-directed battle experience | Expand verified teacher-only battle controls into varied consequential training states; the first generated four-way menu has real outcome contrast | Sol High, Fast off |
 | Battle policy fit and comparison | Require diverse train-root coverage, then beat both the frozen model and fixed heuristic on separate upstream development episodes | Sol High for fit; Astra High for promotion review |
 | Sustained battle authority | Varied learned attacks survive multi-turn opponents without fallback; handle recovery/switch decisions explicitly | Astra High for design; Sol High for tests |
 | Story integration | Model-controlled battle/preparation choices complete bounded trainer/story objectives with retained failures | Astra High |
 | Collection and funding | Qualify legitimate repeatable earnings and supported Safari/search goals; reach the remaining28 native registrations without artificial cash | Sol High |
 | Fresh Red acceptance | Fresh origin, model-directed full story, Champion/Hall of Fame,124/124 native registrations and verified dependency ledger | Astra High for freeze; Sol High for execution |
 
-Next time box:60–90 minutes to inspect untouched train sources action-free
-for level parity and meaningful multi-move alternatives. Precommit at most one
-bounded pilot only if a source qualifies; otherwise redesign source supply,
-without fitting. Do not
-hardcode a move ban, lower the four-by-four fit gate, replay consumed trials
-or spend development roots before a justified challenger. No full run yet.
+Next time box:90–120 minutes to add one coherent battle-generation axis,
+preferably a species/level/stat package, and verify its real cartridge
+readback and bounded execution. Then build prospective varied training
+configurations and multiple RNG trials. Do not fit a single generated case,
+count siblings as independent roots, lower the four-by-four gate, replay
+consumed trials or spend development roots before a justified challenger.
+No full run yet.
 
 Teachers may use disclosed training assistance; final-player cheats remain forbidden.
 Mew and unavailable version/link dependencies remain legitimate later-game targets.
 ROM-hack and Crystal work stay closed until fresh Red acceptance. Pete decides pushes.
 
-[Latest evidence](evidence/red-retained-train-battle-alternatives-2026-09-17.json) ·
+[Latest evidence](evidence/red-teacher-battle-practice-factory-2026-09-17.json) ·
 [Development infographic](development-roadmap.md)
