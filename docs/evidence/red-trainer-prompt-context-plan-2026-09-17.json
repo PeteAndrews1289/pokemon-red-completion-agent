@@ -1,0 +1,29 @@
+{
+  "schema": "pokemon.red.trainer-prompt-context-plan.v1",
+  "status": "prospective_not_executed",
+  "partition": "train",
+  "root_lineage_id": "red-lab-rival-train-20260917-offset137",
+  "independence_claim": false,
+  "prior_prompt_failure": "The older level-30 Vaporeon prompt pilot failed PP accounting and remains consumed; this is a different bounded configuration, not a replay or replacement of its outcome.",
+  "scenario": {
+    "actor": "Pikachu level 35 with Thunderbolt and Quick Attack",
+    "living_reserves": ["Vaporeon level 34", "Bulbasaur level 34"],
+    "first_opponent": "Vaporeon level 20 at 1 HP; selected opening Thunderbolt should cause a replacement prompt",
+    "second_opponent": "Charmander level 25 at 45 HP"
+  },
+  "execution_bound": {
+    "materializations": 1,
+    "baseline_runs": 1,
+    "prompt_choices": ["decline", "switch:2", "switch:3"],
+    "timing_offsets": [0, 2, 4, 6, 8],
+    "player_turn_horizon": 1,
+    "maximum_frames_per_episode": 120000,
+    "maximum_decisions_per_episode": 80,
+    "no_retry_after_failure": true
+  },
+  "success_criteria": [
+    "The actual first attack reaches an observable optional replacement prompt.",
+    "All fifteen prompt branches have complete decision/event proof and comparable measured returns.",
+    "Any target remains same-root TRAIN only; no independent fit or promotion claim."
+  ]
+}
