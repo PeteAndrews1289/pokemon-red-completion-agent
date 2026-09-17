@@ -21,7 +21,12 @@ Action-by-state control features repaired this structural limit. A new 11-case
 fit won the reused full-party diagnostic and another same-root full-party case,
 plus all three edge smokes without teacher queries or invalid actions. These
 are diagnostic, previously explored TRAIN configurations, not independent
-DEVELOPMENT evidence. The next data step is an
+DEVELOPMENT evidence. The unmodified Celadon Gym Lass TRAIN diagnostic then
+exposed a natural transfer failure: after a stat-rich manifest bridge and a
+bounded pre-move-menu faint repair, the model completed 33 logged decisions
+with no invalid actions or teacher input but lost; the frozen attack-only
+comparator won the same capture in 24 decisions. Both outcomes are retained,
+and this capture must not be replay-tuned into the next fit. The next data step is an
 ancestry audit of unused authentic starts and replication across three further
 genuinely disjoint TRAIN roots, each with four admitted scenarios. Natural
 DEVELOPMENT comparison remains the promotion gate. The unsupported Struggle

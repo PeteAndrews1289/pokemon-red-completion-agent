@@ -1,8 +1,8 @@
 {
   "schema": "pokemon.red.trainer-source-and-depleted-switch-result.v1",
   "session_date": "2026-09-17",
-  "status": "closed_with_stateful_control_diagnostic_and_no_promotion",
-  "product_claim": "The battle trainer can collect, admit, fit, and execute move, state-dependent control, and switch choices across MAIN, depleted-attack MAIN, optional prompt, and forced replacement. This is one-root exploratory training, not a qualified or promoted battle learner.",
+  "status": "closed_with_model_ready_trainer_and_natural_train_loss",
+  "product_claim": "The battle trainer can collect, admit, fit, and execute move, state-dependent control, and switch choices across MAIN, depleted-attack MAIN, optional prompt, forced replacement, and an unmodified natural trainer encounter. The current one-root exploratory model lost that natural TRAIN battle while the frozen comparator won; it is not qualified or promoted.",
   "celadon_source_pilot": {
     "prospective_plans": [
       "red-celadon-trainer-source-plan-2026-09-17.json",
@@ -119,9 +119,43 @@
     ],
     "interpretation": "The s12 diagnostic was reused after observing failure, and s11 is previously explored same-root TRAIN material. These wins test the repair and guard against edge-context regression; they are not a fresh or natural DEVELOPMENT comparison."
   },
+  "natural_trainer_diagnostic": {
+    "source": "Unmodified first Celadon Gym Lass MAIN from historical advance-story TRAIN slot 001; its physical ancestry relative to the lab root remains unresolved and it is not a new independent root.",
+    "model_ready_capture": "The legacy capture lacked actor-visible stat schema. A zero-input private derivation retained identical state bytes and authenticated parent manifest while binding a V2 stat-rich observation; future natural Celadon captures now produce V2 directly.",
+    "capture_derivation_sha256": "bbef670a1ca6f3160a7b4d6686f5ed0cb55722452224ccdb41e857fd5a5803c6",
+    "first_model_pilot": "Retained failed, no retry: during an opponent trapping sequence the active actor fainted after FIGHT confirmation but before a move cursor appeared. The turn executor rejected the faint before the episode could request forced replacement.",
+    "repair": "An unspent pre-move-menu faint with unchanged selected-battler PP now returns a verified suppressed turn; a PP change still fails closed. The distinct bounded successor completed without invalid actions or teacher input.",
+    "successor_model": {
+      "battle_won": false,
+      "stop_reason": "party_defeated",
+      "decisions": 33,
+      "action_counts": {"attack": 22, "voluntary_switch": 8, "forced_switch": 2, "switch_prompt": 1},
+      "opponent_faints": 1,
+      "party_faints": 3,
+      "teacher_queries": 0,
+      "invalid_actions": 0,
+      "event_log_complete": true,
+      "outcome_sha256": "4237894ddcb7e07862a76467a0ac6a58b82844684f2b06bcb0eb35e525bf5b5c"
+    },
+    "frozen_comparator": {
+      "battle_won": true,
+      "stop_reason": "battle_won",
+      "decisions": 24,
+      "action_counts": {"attack": 23, "voluntary_switch": 0, "forced_switch": 0, "switch_prompt": 1},
+      "opponent_faints": 2,
+      "party_faints": 0,
+      "teacher_queries": 0,
+      "invalid_actions": 0,
+      "event_log_complete": true,
+      "outcome_sha256": "132dc66cff89dc1853915ea377233a8fe3a64fffbe746ecc9e939a7ffa4f3614"
+    },
+    "interpretation": "This is a same-capture TRAIN diagnostic, not a natural disjoint DEVELOPMENT promotion test. The model's eight voluntary switches and loss show that its correlated synthetic control fit is not yet a reliable natural trainer policy. Keep both outcomes; do not tune on a replay of this exact case."
+  },
   "verification": {
     "targeted_rom_free_tests": "25 passed for initial fit ancestry, forced admission, and live runner checks; 14 passed for scaled-fit, stateful-control, policy and runner checks after repair",
     "private_rom_switch_materialization": "2 passed in the earlier depleted/non-depleted integration pair",
+    "natural_capture_and_turn_checks": "3 capture-script ROM-free tests and 256 battle-runtime tests passed; natural successor and comparator event logs both complete",
+    "final_targeted_suite": "273 passed across battle runtime, natural capture, trainer fit and policy, fit provenance, and model runner; 12 documentation-surface tests passed",
     "registry_regeneration": "passed",
     "product_focus_and_docs": "passed",
     "broad_suite": "Interrupted at 65% after 8139 passed, 3 skipped and 1 xfailed in 16m42s; five failures were outside the trainer path: three historical dashboard training-projection tests, one product-focus dashboard test, and one local Mac runtime-identity test. The runtime-identity failure reproduced in isolation. No full-suite pass is claimed."
@@ -130,6 +164,7 @@
     "Authenticate four genuinely disjoint TRAIN origins, with four admitted scenarios each; the Celadon aliases cannot be counted separately.",
     "Replicate MAIN, depleted-attack, replacement-prompt and forced-replacement contrasts across the four disjoint TRAIN roots; one same-root example of each now exists.",
     "Fit a qualified challenger and compare it once on disjoint natural DEVELOPMENT trainer battles against frozen and fixed controls; the same-root stateful diagnostics cannot substitute for this.",
+    "Train against varied natural control situations: the one-root stateful model lost the Celadon TRAIN diagnostic while the frozen comparator won. Do not tune on a replay of that exact case.",
     "Resolve or explicitly exclude unsupported Struggle from the declared initial battle segment before broad battle-authority claims."
   ],
   "effects": {

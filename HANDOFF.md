@@ -28,6 +28,20 @@ and makes the collection-to-fit-to-execution path ready for broader training.
 It does **not** establish independent generalization, natural DEVELOPMENT
 advantage or battle authority. All three fits remain one-root exploratory only.
 
+One unmodified Celadon Gym Lass TRAIN capture exposed the next real boundary.
+Its old observation manifest lacked the stat-rich actor schema; a zero-input,
+same-state V2 derivation allowed the model to run, and new natural captures now
+write V2 directly. The first live pilot failed when an opponent trapping turn
+fainted the actor before a move menu appeared. A narrow runtime repair records
+that as an unspent choice and allows the episode to reach forced replacement;
+changed PP still fails closed. The distinct successor produced a complete,
+33-decision log with zero invalid actions or teacher queries, but the model
+lost after eight voluntary switches. A frozen attack-only comparator won the
+same TRAIN battle in 24 decisions with no voluntary switch. This is not a
+disjoint DEVELOPMENT comparison; it does show the model is not yet a reliable
+natural trainer policy. Retain both outcomes and do not tune by replaying this
+exact case.
+
 The first depleted pilot remains a failure: after sixteen decisions both
 reserves fainted, leaving an unsupported Struggle boundary. The episode runner
 now stops explicitly there without pretending an action was selected. Do not
@@ -56,7 +70,7 @@ cross-title transfer, or GitHub publication occurred. Pete decides when to push.
 
 Next bounded objective: audit physical ancestry of unused authentic trainer
 starts and freeze three further actually disjoint TRAIN origins, with four
-admitted scenarios on each, before qualified fitting. Also collect varied
-stateful control contrasts rather than merely increasing timing siblings.
-Use Sol High, Fast off; reserve Astra High for the eventual qualified promotion
-review.
+admitted scenarios on each. Use varied naturalistic control contrasts to
+counter the model's over-switching, not more timing siblings; hold this Celadon
+battle out of the next fit. Use Sol High, Fast off; reserve Astra High for the
+eventual qualified promotion review.
