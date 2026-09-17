@@ -39,7 +39,7 @@
         "evidence": {
           "kind": "qualification",
           "path": "docs/evidence/red-trainer-practice-model-boundary-2026-09-17.json",
-          "sha256": "084212e367d414237cd14be5caeeec26880601f22af6e1c11df67c33ab0d8ceb"
+          "sha256": "52e92cb837c98736a98cfbec2a671175c2918585e777f7bdcc5a8ad001f5f1e4"
         },
         "learning_output": "One clean-opening TRAIN source yielded a six-on-six assisted trainer capture, four measured opening move outcomes and a retained 29-decision frozen attack baseline loss. This is a usable curriculum boundary and a failure observation, not a learner gain.",
         "next_falsifier": "A switch-aware challenger cannot produce a legal useful switch, cannot outperform the no-optional-switch baseline in varied TRAIN battles, or fails untouched natural development comparison.",

@@ -37,7 +37,11 @@
     "model_updates": 0
   },
   "complete_episode": {
-    "baseline_outcome_sha256": "f9146d0b0455f2f22af0885c03a60a196ca859eda4252d6449c471ca5b371622",
+    "baseline_outcome_sha256": "43c4e56bd7a5481955ad13e2eac1082ca0de7695b9c63fc794769b193fcb67f9",
+    "episode_schema": "pokemon.red.trainer-practice-model-episode.v2",
+    "semantic_observations_retained": 29,
+    "hidden_opponent_roster_fields": 0,
+    "private_path_strings": 0,
     "policy": "frozen_attack_model_decline_optional_first_legal_forced",
     "decision_count": 29,
     "attacks": 20,

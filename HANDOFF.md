@@ -27,7 +27,9 @@ A frozen attack model then made 20 attack choices during a retained 29-decision
 six-on-six episode. A fixed baseline declined four optional switches and used
 the first living forced replacement five times. It defeated four opponents,
 lost all six party members, and stopped with an explicit `party_defeated`
-receipt. This is a useful failure, **not** learned switching or a win. The
+receipt. All 29 decisions retain their visible semantic observations and
+outcomes for future fitting, with no hidden opponent roster or private path.
+This is a useful failure, **not** learned switching or a win. The
 training lab can now expose the consequential decisions; the next work is
 outcome-matched switch/control training across varied rosters and a disjoint
 natural development comparison. No fit, promotion or transfer claim occurred.
