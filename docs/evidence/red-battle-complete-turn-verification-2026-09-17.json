@@ -1,0 +1,66 @@
+{
+  "schema": "pokemon.red.battle-complete-turn-verification.v1",
+  "session": "2026-09-17-battle-complete-turn-verification",
+  "classification": "diagnostic_assisted_train_verification_not_model_fit",
+  "mission_check": {
+    "reusable_capability": "Measure an attack through the opponent response to the next battle decision, rather than scoring a partial animation",
+    "learned_authority": "The frozen model retains move choice; this session changes outcome measurement only and grants no new authority",
+    "transfer_test": "Require multi-timing assisted contrasts followed by disjoint untouched natural battles against frozen and fixed controls",
+    "cheapest_falsifier": "A faster selected move exposes a false zero-damage outcome before the opponent responds",
+    "time_box": "One bounded implementation and two previously generated four-move diagnostic captures",
+    "stop_condition": "Stop on a second player move, incomplete PP proof, missing next boundary, state drift or promotion from assisted siblings"
+  },
+  "implementation": {
+    "source_commit": "b8de0acd5bea35249907a7f172932421a95251c3",
+    "change": "The outcome collector requests a bounded next-MAIN-or-terminal settlement, checks the original move's PP again, and never selects a second player move",
+    "default_short_turn_primitive_unchanged": true,
+    "rom_free_battle_tests_passed": 253,
+    "model_updates": 0,
+    "authority_promotions": 0
+  },
+  "cartridge_catalog_audit": {
+    "unique_species": 151,
+    "level_up_rows": 728,
+    "tmhm_compatibility_entries": 3037,
+    "unknown_moves": 0,
+    "nonmonotone_experience_curves": 0
+  },
+  "ground_matchup": {
+    "actor_national_number": 25,
+    "opponent_national_number": 50,
+    "actor_move_ids": [85, 98, 129, 5],
+    "opponent_move_ids": [10],
+    "root_lineage_id": "red-goal-root-c1d575483e311b3a9854b0e85237f725c3da1412ed62ab142dcd82050c666435",
+    "source_state_sha256": "d629f64d9800ecd7dda6cb6b47f4c12f1e0f81a5124422fde8e1a28b11ad902f",
+    "pre_fix_outcome_sha256": "b627dfc9c0cba8826cf24466b79ec7500bb709fa989bf17844ceefbeb622370b",
+    "post_fix_outcome_sha256": "edc79b5b845841a460286c479f379a0115b5223c0cf1b66003d4aea747cbe17f",
+    "pre_fix_quick_attack_player_damage_fraction": 0.0,
+    "post_fix_quick_attack_player_damage_fraction": 0.2786885245901639,
+    "thunderbolt_opponent_damage_fraction": 0.0,
+    "timing_diagnostics": [
+      {"pre_attack_frames": 2048, "best_candidate_indices": [3], "utilities": [-0.279, 0.178, 0.395, 0.482]},
+      {"pre_attack_frames": 2300, "best_candidate_indices": [1], "utilities": [-0.295, 0.422, 0.314, 0.318]},
+      {"pre_attack_frames": 2600, "best_candidate_indices": [2], "utilities": [-0.295, 0.161, 2.738, 0.564]}
+    ]
+  },
+  "water_matchup": {
+    "actor_national_number": 25,
+    "opponent_national_number": 7,
+    "post_fix_outcome_sha256": "bf0744ed786cf10622a725f0ec523e31448bf84bb75e5adf573a38cb6c776bc5",
+    "four_candidates_completed": true,
+    "nonterminal_opponent_responses_recorded": true,
+    "thunderbolt_knockout_and_battle_exit_recorded": true
+  },
+  "interpretation": {
+    "prior_first_effect_outcomes_not_full_turn_labels": true,
+    "single_timing_best_move_unstable": true,
+    "independent_upstream_roots_added": 0,
+    "fit_from_these_diagnostics_allowed": false,
+    "next_battle_system_step": "Prospectively measure type, speed, HP and PP contrasts over multiple timings and independent train roots before a fit; retain natural-battle comparison as the promotion gate",
+    "teams_switching_status_items_trainer_ai_not_verified_by_factory": true,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "gameplay_running": false,
+    "github_pushed": false
+  }
+}

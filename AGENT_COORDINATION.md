@@ -11,21 +11,22 @@ and [HANDOFF.md](HANDOFF.md).
 
 ## Current assignment
 
-The teacher-only battle factory now controls actor moves/PP, both levels,
-current/max HP and both five-stat blocks in isolated Red train captures.
-The [level/stat qualification](docs/evidence/red-teacher-battle-level-stats-2026-09-17.json)
-read back all copies and measured four matched cartridge turns. The frozen
-model chose a missing Guillotine over Ice Beam's 44.4% damage: one correctable
-assisted train choice, not a fit. No new independent root, promotion, Red
-registration, fresh acceptance or GitHub push. Red is 96/124 and fresh
-acceptance 0/5. Five untouched train and four development sources remain reserved.
+The teacher-only battle factory reads all151 Red species and configures both
+species, levels, stats, actor experience and movesets in isolated train captures.
+The [complete-turn verification](docs/evidence/red-battle-complete-turn-verification-2026-09-17.json)
+corrected a first-effect outcome boundary that could omit opponent retaliation.
+One Ground matchup changed Quick Attack's recorded player damage from0 to27.9%
+after settling. Its best attack varied across three timing offsets. No new
+independent root, fit, promotion, Red registration, fresh acceptance or GitHub
+push. Red is96/124 and fresh acceptance0/5.
 
-Next: handle level-consistent actor experience or enforce single-turn practice,
-then prospectively vary generated train conditions and RNG. Species and
-opponent moves remain unsupported. Preserve assisted provenance and parent
-root identity. Do not fit from one generated case, spend development roots
-before a challenger, clone siblings as independent evidence, or promote
-without natural held-out advantage. Sol High, Fast off.
+Next: prospectively vary species, type, speed, HP, PP and RNG timing, then
+estimate move value without treating one lucky branch as ground truth. Preserve
+assisted provenance and parent root identity. The existing battle-control and
+switch-target models are a foundation for eventual full-team scenarios, not
+yet a verified team-switching curriculum. Do not spend natural development
+roots before a challenger or promote without held-out advantage. Sol High,
+Fast off.
 
 ## Reviewer contribution
 
