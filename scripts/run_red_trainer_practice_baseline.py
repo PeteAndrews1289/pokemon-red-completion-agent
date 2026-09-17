@@ -1,4 +1,4 @@
-"""Run a frozen attack-model baseline through one authenticated TRAIN trainer battle.
+"""Run frozen and simple fixed trainer controls on TRAIN or DEVELOPMENT.
 
 This baseline deliberately declines optional switches and takes the first living
 forced replacement. It tests the model seam but does not claim learned switching.
@@ -98,7 +98,13 @@ def _authenticate(plan: object):
     rom = _bound_file(plan.get("rom"), "ROM")
     if hashlib.sha256(rom).hexdigest() != ROM_SHA256:
         raise ValueError("trainer baseline Red ROM differs")
-    model = MaskedMLPMoveRanker.from_dict(json.loads(_bound_file(plan.get("model"), "model")))
+    baseline_policy = plan.get("baseline_policy", "frozen-attack")
+    if baseline_policy not in {"frozen-attack", "first-legal-attack"}:
+        raise ValueError("trainer baseline policy differs")
+    model = (
+        MaskedMLPMoveRanker.from_dict(json.loads(_bound_file(plan.get("model"), "model")))
+        if baseline_policy == "frozen-attack" else None
+    )
     state = plan.get("capture_state")
     manifest = plan.get("capture_manifest")
     _bound_file(state, "trainer state")
@@ -106,7 +112,9 @@ def _authenticate(plan: object):
     assert isinstance(state, dict) and isinstance(manifest, dict)
     capture = open_battle_scenario_capture(Path(state["path"]), Path(manifest["path"]))
     if (
-        capture.manifest.partition is not ScenarioPartition.TRAIN
+        capture.manifest.partition not in {
+            ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT
+        }
         or capture.manifest.expected_battle_state != 2
         or plan.get("max_decisions") != 80
         or plan.get("maximum_frames") != 120000
@@ -117,6 +125,21 @@ def _authenticate(plan: object):
         or not _timed_choice_plan_supported(plan, capture.manifest.observation_schema)
     ):
         raise ValueError("trainer baseline scope differs")
+    if (
+        capture.manifest.partition is ScenarioPartition.DEVELOPMENT
+        and any(plan.get(name) is not None for name in (
+            "matched_choices", "matched_prompt_choices", "matched_forced_choices",
+            "matched_timing_offsets",
+        ))
+    ):
+        raise ValueError("DEVELOPMENT baseline cannot collect branch targets")
+    if baseline_policy == "first-legal-attack" and any(
+        plan.get(name) is not None for name in (
+            "matched_choices", "matched_prompt_choices", "matched_forced_choices",
+            "matched_timing_offsets",
+        )
+    ):
+        raise ValueError("fixed baseline cannot collect branch targets")
     output = plan.get("output")
     if not isinstance(output, str) or Path(output).exists():
         raise ValueError("trainer baseline output must be new")
@@ -166,8 +189,11 @@ def _first_living_switch_from_observation(observation: dict[str, object]) -> int
 def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     plan, capture, model = _authenticate(json.loads(plan_path.read_bytes()))
 
-    class FrozenAttackBaseline:
-        policy_id = "frozen-attack-model-decline-optional-first-legal-forced"
+    class AttackBaseline:
+        policy_id = (
+            "frozen-attack-model-decline-optional-first-legal-forced"
+            if model is not None else "fixed-first-legal-attack-decline-optional-first-legal-forced"
+        )
 
         def __init__(self):
             self.last_decision_diagnostics: dict[str, object] = {}
@@ -180,17 +206,24 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "switch_target_rule": "first_living_reserve",
                 }
                 return BattleAction.switch(slot)
-            probabilities = model.predict_proba(
-                prepared.features.candidate_vectors,
-                legal_mask=prepared.features.legal_mask,
-                current_pp=prepared.features.current_pp,
-            )
-            index = int(probabilities.argmax())
-            self.last_decision_diagnostics = {
-                "move_probabilities": probabilities.tolist(),
-                "move_candidate_slots": [slot + 1 for slot in prepared.features.slot_indices],
-                "control_rule": "always_attack",
-            }
+            if model is None:
+                index = next(
+                    index for index, legal in enumerate(prepared.supported_candidate_mask)
+                    if legal
+                )
+                self.last_decision_diagnostics = {"control_rule": "first_legal_attack"}
+            else:
+                probabilities = model.predict_proba(
+                    prepared.features.candidate_vectors,
+                    legal_mask=prepared.features.legal_mask,
+                    current_pp=prepared.features.current_pp,
+                )
+                index = int(probabilities.argmax())
+                self.last_decision_diagnostics = {
+                    "move_probabilities": probabilities.tolist(),
+                    "move_candidate_slots": [slot + 1 for slot in prepared.features.slot_indices],
+                    "control_rule": "always_attack",
+                }
             return BattleAction.move(prepared.features.slot_indices[index] + 1)
 
         def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
@@ -249,13 +282,19 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         output / "execution-started.json",
         {
             "capture_manifest_sha256": capture.manifest_sha256,
-            "policy_id": FrozenAttackBaseline.policy_id,
+            "policy_id": AttackBaseline.policy_id,
             "source_commit": plan["source_commit"],
             "opening_idle_frames": _opening_idle_frames(plan),
         },
     )
-    model_binding = plan["model"]
-    assert isinstance(model_binding, dict)
+    model_binding = plan.get("model")
+    if model is not None and not isinstance(model_binding, dict):
+        raise ValueError("frozen baseline model binding differs")
+    policy_identity = (
+        {"model_sha256": model_binding["sha256"]}
+        if isinstance(model_binding, dict)
+        else {"fixed_policy_id": AttackBaseline.policy_id}
+    )
     log = TrainerPracticeEventLog(
         output / "events",
         run_identity={
@@ -264,8 +303,8 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "root_lineage_id": capture.manifest.root_lineage_id,
             "partition": capture.manifest.partition.value,
             "capture_manifest_sha256": capture.manifest_sha256,
-            "model_sha256": model_binding["sha256"],
-            "policy_id": FrozenAttackBaseline.policy_id,
+            **policy_identity,
+            "policy_id": AttackBaseline.policy_id,
             "maximum_frames": plan["maximum_frames"],
             "max_decisions": plan["max_decisions"],
             "opening_idle_frames": _opening_idle_frames(plan),
@@ -296,7 +335,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "capture_manifest_sha256": capture.manifest_sha256,
                     "source_commit": plan["source_commit"],
                     "model_sha256": model_binding["sha256"],
-                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "continuation_policy_id": AttackBaseline.policy_id,
                     "first_choice_refs": [choice.semantic_ref for choice in first_choices],
                     "player_turn_horizon": 2,
                     "max_decisions": 8,
@@ -305,7 +344,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         result = run_red_trainer_practice_episode(
             capture,
             session_factory=session_factory,
-            policy=FrozenAttackBaseline(),
+            policy=AttackBaseline(),
             max_decisions=80,
             opening_idle_frames=_opening_idle_frames(plan),
             event_sink=log.emit,
@@ -346,7 +385,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                             "partition": "train",
                             "capture_manifest_sha256": capture.manifest_sha256,
                             "model_sha256": model_binding["sha256"],
-                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "policy_id": AttackBaseline.policy_id,
                             "first_choice_ref": choice.semantic_ref,
                             "player_turn_horizon": 2,
                             "max_decisions": 8,
@@ -358,7 +397,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 matched = collect_trainer_practice_counterfactuals(
                     capture,
                     session_factory=session_factory,
-                    continuation_policy_factory=FrozenAttackBaseline,
+                    continuation_policy_factory=AttackBaseline,
                     first_choices=first_choices,
                     max_decisions=8,
                     player_turn_horizon=2,
@@ -441,7 +480,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "capture_manifest_sha256": prompt_capture.manifest_sha256,
                     "source_commit": plan["source_commit"],
                     "model_sha256": model_binding["sha256"],
-                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "continuation_policy_id": AttackBaseline.policy_id,
                     "first_choice_refs": [choice.semantic_ref for choice in prompt_choices],
                     "player_turn_horizon": 1,
                     "max_decisions": 5,
@@ -476,7 +515,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                             "partition": "train",
                             "capture_manifest_sha256": prompt_capture.manifest_sha256,
                             "model_sha256": model_binding["sha256"],
-                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "policy_id": AttackBaseline.policy_id,
                             "first_choice_ref": choice.semantic_ref,
                             "player_turn_horizon": 1,
                             "max_decisions": 5,
@@ -488,7 +527,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 matched_prompt = collect_trainer_practice_counterfactuals(
                     prompt_capture,
                     session_factory=session_factory,
-                    continuation_policy_factory=FrozenAttackBaseline,
+                    continuation_policy_factory=AttackBaseline,
                     first_choices=prompt_choices,
                     max_decisions=5,
                     player_turn_horizon=1,
@@ -578,7 +617,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                     "capture_manifest_sha256": forced_capture.manifest_sha256,
                     "source_commit": plan["source_commit"],
                     "model_sha256": model_binding["sha256"],
-                    "continuation_policy_id": FrozenAttackBaseline.policy_id,
+                    "continuation_policy_id": AttackBaseline.policy_id,
                     "first_choice_refs": [choice.semantic_ref for choice in forced_choices],
                     "player_turn_horizon": 1,
                     "max_decisions": 5,
@@ -613,7 +652,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                             "partition": "train",
                             "capture_manifest_sha256": forced_capture.manifest_sha256,
                             "model_sha256": model_binding["sha256"],
-                            "policy_id": FrozenAttackBaseline.policy_id,
+                            "policy_id": AttackBaseline.policy_id,
                             "first_choice_ref": choice.semantic_ref,
                             "player_turn_horizon": 1,
                             "max_decisions": 5,
@@ -625,7 +664,7 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 matched_forced = collect_trainer_practice_counterfactuals(
                     forced_capture,
                     session_factory=session_factory,
-                    continuation_policy_factory=FrozenAttackBaseline,
+                    continuation_policy_factory=AttackBaseline,
                     first_choices=forced_choices,
                     max_decisions=5,
                     player_turn_horizon=1,
@@ -650,6 +689,9 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     report.update(
         {
             "baseline_only": True,
+            "baseline_policy": plan.get("baseline_policy", "frozen-attack"),
+            "partition": capture.manifest.partition.value,
+            "root_lineage_id": capture.manifest.root_lineage_id,
             "learned_switch_authority": False,
             "source_commit": plan["source_commit"],
             "model_updates": 0,

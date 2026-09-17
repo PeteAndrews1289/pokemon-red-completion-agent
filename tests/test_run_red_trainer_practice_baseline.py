@@ -1,6 +1,7 @@
 import hashlib
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -10,6 +11,7 @@ from pokemon_red_completion.battle_semantics import (
     BattleFeatureBatch,
 )
 from pokemon_red_completion.red_battle_scenario import PreparedRedBattleScenario
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import run_red_trainer_practice_baseline as baseline  # noqa: E402
@@ -116,3 +118,34 @@ def test_no_attack_baseline_switch_uses_only_visible_living_party_member():
                 {"party_index": 1, "hp": 0},
             ]}}
         })
+
+
+def test_fixed_development_control_has_no_model_or_branch_targets(tmp_path, monkeypatch):
+    monkeypatch.setattr(
+        baseline.subprocess,
+        "check_output",
+        lambda args, **_kwargs: b"" if "status" in args else b"commit\n",
+    )
+    monkeypatch.setattr(baseline, "ROM_SHA256", hashlib.sha256(b"rom").hexdigest())
+    monkeypatch.setattr(baseline, "_bound_file", lambda *_args: b"rom")
+    capture = SimpleNamespace(manifest=SimpleNamespace(
+        partition=ScenarioPartition.DEVELOPMENT,
+        expected_battle_state=2,
+        observation_schema=baseline.OBSERVATION_SCHEMA_V2,
+    ))
+    monkeypatch.setattr(baseline, "open_battle_scenario_capture", lambda *_args: capture)
+    plan = {
+        "schema": baseline.SCHEMA,
+        "source_commit": "commit",
+        "rom": {},
+        "capture_state": {"path": "state"},
+        "capture_manifest": {"path": "manifest"},
+        "baseline_policy": "first-legal-attack",
+        "max_decisions": 80,
+        "maximum_frames": 120000,
+        "output": str(tmp_path / "new-run"),
+    }
+    _, _, model = baseline._authenticate(plan)
+    assert model is None
+    with pytest.raises(ValueError, match="DEVELOPMENT baseline cannot collect"):
+        baseline._authenticate({**plan, "matched_choices": "all_legal_opening"})
