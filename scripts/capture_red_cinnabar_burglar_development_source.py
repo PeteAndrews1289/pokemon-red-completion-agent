@@ -1,7 +1,7 @@
-"""Capture an unplayed Cinnabar Gym trainer before its first battle choice.
+"""Capture an unplayed Cinnabar Gym quiz trainer before its first battle choice.
 
 The authenticated historical checkpoint already has the Secret Key. This
-collector uses only normal field controls to reach the first quiz's Burglar;
+collector uses only normal field controls to reach the first quiz's trainer;
 it makes no battle choice and never updates a model.
 """
 
@@ -20,7 +20,6 @@ from pokemon_red_completion.battle_scenario_capture import (
     open_battle_scenario_capture,
 )
 from pokemon_red_completion.blaine import (
-    BLAINE_GYM_BURGLAR_CLASS,
     BLAINE_GYM_BURGLAR_OPPONENT,
     GYM_ENTRY_ROUTE,
     GYM_GATE_EVENTS,
@@ -54,7 +53,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROM_SHA256 = "5ca7ba01642a3b27b0cc0b5349b52792795b62d3ed977e98a09390659af96b7b"
 SOURCE_ID = "red-goal-v1-079-explore-validation-01"
 SOURCE_SHA256 = "8525760c64ec9da8e6e0ab891d98cb9f12b82aa1338ee95e43c4bcf652068eeb"
-CAPTURE_ID = "cinnabar-burglar4-natural-development-079"
+CAPTURE_ID = "cinnabar-quiz1-natural-development-079"
 MAX_ACTIONS = 800
 MAX_FRAMES = 240_000
 
@@ -152,13 +151,15 @@ def run(rom_path: Path, source_path: Path, output: Path) -> dict[str, object]:
                 "opponent_party_count": raw.enemy_party_count,
                 "opponent_party_position": raw.enemy_party_position,
                 "opponent_hp": raw.enemy_hp,
+                "opponent_species": raw.enemy_species_id,
+                "opponent_level": raw.enemy_level,
                 "actions_executed": actions.actions_executed,
                 "frames_executed": emulator.frame_count,
                 "pressed_buttons": sorted(emulator.pressed_buttons),
             }
             if (
                 raw.map_id != MapId.CINNABAR_GYM
-                or identity != (BLAINE_GYM_BURGLAR_OPPONENT, BLAINE_GYM_BURGLAR_CLASS, 4)
+                or identity != (BLAINE_GYM_BURGLAR_OPPONENT, 0x2E, 7)
                 or raw.enemy_party_count != 3
                 or raw.enemy_party_position != 0
                 or (raw.enemy_hp or 0) <= 0
