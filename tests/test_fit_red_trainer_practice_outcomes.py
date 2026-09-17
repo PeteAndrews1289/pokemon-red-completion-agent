@@ -26,7 +26,7 @@ def test_fit_corpus_requires_consistent_distinct_upstream_states() -> None:
         _validate_root_source_provenance([first, _receipt("root-b", "not-a-hash")])
 
 
-def test_exploratory_fit_discloses_one_root_and_requires_four_varied_scenarios() -> None:
+def test_exploratory_fit_discloses_one_root_and_requires_four_or_eight_varied_scenarios() -> None:
     receipts = [
         {"root_lineage_id": "one-root", "capture_id": f"capture-{index}"}
         for index in range(4)
@@ -56,5 +56,25 @@ def test_exploratory_fit_discloses_one_root_and_requires_four_varied_scenarios()
     repeated = deepcopy(targets)
     repeated[2]["observation"] = repeated[0]["observation"]
     repeated[3]["observation"] = repeated[1]["observation"]
-    with pytest.raises(ValueError, match="three prospective matchup"):
+    with pytest.raises(ValueError, match="3 prospective matchup"):
         _validate_exploratory_supply(repeated, receipts)
+    extension_receipts = receipts + [
+        {"root_lineage_id": "one-root", "capture_id": f"capture-{index}"}
+        for index in range(4, 8)
+    ]
+    extension_targets = targets + [
+        {
+            "observation": {
+                "features": {
+                    "party": {"lead": {"species_ref": f"actor-{index}"}},
+                    "battle": {"opponent_species_ref": f"opponent-{index}"},
+                }
+            }
+        }
+        for index in range(4, 8)
+    ]
+    _validate_exploratory_supply(extension_targets, extension_receipts)
+    with pytest.raises(ValueError, match="6 prospective matchup"):
+        _validate_exploratory_supply(targets * 2, extension_receipts)
+    with pytest.raises(ValueError, match="exactly four or eight"):
+        _validate_exploratory_supply(extension_targets[:7], extension_receipts[:7])

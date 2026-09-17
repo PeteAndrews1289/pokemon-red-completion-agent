@@ -1218,3 +1218,25 @@ promoted. Retain failed scenarios without replacement or replay.
 The Red fresh-start/124-species gate, no-final-player-cheats rule, ROM-hack
 prohibition, and Crystal-to-Emerald order do not change. No full-game run,
 DEVELOPMENT opening, or GitHub publication is authorized by this decision.
+
+## September 17 — repair invalid trainer reserves and extend exploratory coverage
+
+The first four-scenario exploratory fit is superseded: its synthetic reserves
+had an owner ID of zero and could disobey. The cartridge probe reproduced a
+selected Water Gun with no PP spent; copying the source player's owner ID into
+each reserve restored an executed attack. The repaired four-scenario fit is a
+new diagnostic learner from the same one root. On a prospectively frozen,
+different TRAIN matchup, it tied the attack-only baseline at five wins each but
+made zero voluntary switches and lost more party HP in every matched timing.
+This falsifies any present claim that learned switching has transferred.
+
+Authorize one eight-scenario correlated TRAIN successor: retain the four
+repaired, admitted examples and prospectively add four distinct matchups
+designed to contrast attacking with switching. Use five declared timing trials
+per new configuration and a new, untouched TRAIN holdout. The exploratory fit
+gate accepts only four or eight cases; the eight-case tier requires at least
+six distinct opening matchup profiles. Failed declared cases remain retained,
+not replaced, and neither the earlier holdout nor DEVELOPMENT may be fit.
+This is curriculum expansion after a measured failure, not independent-root
+qualification. Astra's balanced four-root gate and natural DEVELOPMENT
+advantage remain unchanged; no authority promotion, full run or GitHub push.
