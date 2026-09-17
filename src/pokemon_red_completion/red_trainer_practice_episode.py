@@ -85,7 +85,7 @@ class RedTrainerPracticeEpisode:
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.trainer-practice-model-episode.v1",
+            "schema": "pokemon.red.trainer-practice-model-episode.v2",
             "capture_id": self.capture_id,
             "manifest_sha256": self.manifest_sha256,
             "policy_id": self.policy_id,
@@ -208,6 +208,7 @@ def run_red_trainer_practice_episode(
                 decisions.append(
                     {
                         "decision_index": decision_index,
+                        "observation": observation,
                         "observation_sha256": observation_sha256,
                         "kind": kind,
                         "party_slot": chosen_slot,
@@ -244,6 +245,7 @@ def run_red_trainer_practice_episode(
                 decisions.append(
                     {
                         "decision_index": decision_index,
+                        "observation": observation,
                         "observation_sha256": observation_sha256,
                         "kind": "voluntary_switch",
                         "party_slot": action.party_slot,
@@ -282,6 +284,7 @@ def run_red_trainer_practice_episode(
             decisions.append(
                 {
                     "decision_index": decision_index,
+                    "observation": observation,
                     "observation_sha256": observation_sha256,
                     "kind": "attack",
                     "move_slot": action.move_slot,
@@ -293,6 +296,8 @@ def run_red_trainer_practice_episode(
             return _receipt(
                 capture, policy.policy_id, decisions, final, reader.read_enemy_party_roster_hp()
             )
+        if final.battle_state != 2:
+            raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
         return RedTrainerPracticeEpisode(
             capture_id=capture.manifest.capture_id,
             manifest_sha256=capture.manifest_sha256,
