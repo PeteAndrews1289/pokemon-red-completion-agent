@@ -33,14 +33,6 @@ def decisive_cases(
             ("a", "b"), OPPONENT_PAIRS[root_index], strict=True
         ):
             practice = deepcopy(template)
-            practice["actor_hp"] = 80
-            practice["actor_stats"] = {
-                "max_hp": 100,
-                "attack": 90,
-                "defense": 80,
-                "speed": 100,
-                "special": 90,
-            }
             practice["opponent_species_ref"] = f"pokemon.red.gb.us.rev0:species:{species_id:03d}"
             practice["opponent_national_number"] = national_number
             practice["opponent_level"] = 25

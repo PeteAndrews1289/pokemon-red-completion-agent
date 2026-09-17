@@ -27,3 +27,4 @@ def test_decisive_pairs_change_only_opponent_identity_within_each_pair():
         assert first["opponent_moves"] == [
             {"move_ref": "pokemon.red.gb.us.rev0:move:033", "pp": 35}
         ]
+        assert "actor_stats" not in first
