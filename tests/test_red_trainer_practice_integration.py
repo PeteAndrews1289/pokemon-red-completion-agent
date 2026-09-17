@@ -46,6 +46,10 @@ from pokemon_red_completion.red_trainer_practice_counterfactual import (
     collect_trainer_practice_counterfactuals,
 )
 from pokemon_red_completion.red_trainer_practice_episode import run_red_trainer_practice_episode
+from pokemon_red_completion.red_trainer_practice_log import (
+    TrainerPracticeEventLog,
+    verify_trainer_practice_event_log,
+)
 from pokemon_red_completion.red_trainer_practice_policy import RedTrainerPracticeModelPolicy
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
@@ -142,7 +146,9 @@ def test_train_replacement_prompt_has_matched_decline_and_switch_branches(tmp_pa
     )
 
 
-def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() -> None:
+def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher(
+    tmp_path: Path,
+) -> None:
     """A real TRAIN capture, unlike the old diagnostic state, exercises the model seam."""
 
     rom_path = environ.get("POKEMON_RED_TRAINER_DIAGNOSTIC_ROM")
@@ -180,17 +186,26 @@ def test_authenticated_train_team_accepts_frozen_attack_model_without_teacher() 
         with PyBoyAdapter(Path(rom_path), watch=False, speed=None) as emulator:
             yield FrameBudgetController(emulator, maximum_frames=120000)
 
+    log = TrainerPracticeEventLog(
+        tmp_path / "events",
+        run_identity={"partition": "train", "policy_id": FrozenAttackBaseline.policy_id},
+    )
     episode = run_red_trainer_practice_episode(
         capture,
         session_factory=session_factory,
         policy=FrozenAttackBaseline(),
         max_decisions=80,
+        event_sink=log.emit,
     )
+    log.finish({"battle_won": episode.battle_won, "stop_reason": episode.stop_reason})
+    assert verify_trainer_practice_event_log(log.directory)["complete"] is True
     assert not episode.battle_won
     assert episode.stop_reason == "party_defeated"
     assert sum(step["kind"] == "attack" for step in episode.decisions) >= 6
     assert any(step["kind"] == "switch_prompt" for step in episode.decisions)
     assert episode.public_dict()["teacher_queries"] == 0
+    assert episode.public_dict()["metrics"]["party_faints"] == 6
+    assert episode.public_dict()["frames_executed"] > 0
 
     class SwitchThenAttack:
         calls = 0

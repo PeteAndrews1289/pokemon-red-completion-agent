@@ -11,11 +11,13 @@ import numpy as np
 from pokemon_red_completion.battle_actions import BattleAction
 from pokemon_red_completion.battle_control_features import (
     CONTROL_CLASS_REFS,
+    CONTROL_FEATURE_SCHEMA_ID,
     BattleControlHistoryTracker,
     project_control_features,
 )
 from pokemon_red_completion.battle_semantics import BattleFeatureBatch
 from pokemon_red_completion.battle_switch_target import (
+    SWITCH_TARGET_FEATURE_SCHEMA_ID,
     BattleSwitchTargetSet,
     project_switch_target_candidates,
 )
@@ -55,6 +57,7 @@ class RedTrainerPracticeModelPolicy:
     switch_model: SwitchRanker
     catalog: PokemonRedBattleCatalog = field(default_factory=PokemonRedBattleCatalog)
     history: BattleControlHistoryTracker = field(default_factory=BattleControlHistoryTracker)
+    last_decision_diagnostics: dict[str, object] = field(default_factory=dict, init=False)
 
     def __post_init__(self) -> None:
         if not self.policy_id or not self.battle_plan_id:
@@ -73,6 +76,16 @@ class RedTrainerPracticeModelPolicy:
             catalog=self.catalog,
         )
         control_ref = self.control_model.predict_ref(features)
+        self.last_decision_diagnostics = {
+            "control_feature_schema": CONTROL_FEATURE_SCHEMA_ID,
+            "control_features": np.asarray(features, dtype=np.float64).tolist(),
+            "control_class_ref": control_ref,
+        }
+        probabilities = getattr(self.control_model, "predict_proba", None)
+        if callable(probabilities):
+            self.last_decision_diagnostics["control_probabilities"] = np.asarray(
+                probabilities(features), dtype=np.float64
+            ).tolist()
         if control_ref == CONTROL_CLASS_REFS[0]:
             action = self._attack(prepared.features)
         elif control_ref == CONTROL_CLASS_REFS[5]:
@@ -95,6 +108,7 @@ class RedTrainerPracticeModelPolicy:
         if forced is may_decline:
             raise TrainerPracticeModelPolicyError("trainer switch decision mode is inconsistent")
         history = self.history.before(self.battle_plan_id, observation)
+        self.last_decision_diagnostics = {"decision_mode": "forced_switch" if forced else "prompt"}
         if not forced:
             features = project_control_features(
                 observation,
@@ -102,6 +116,16 @@ class RedTrainerPracticeModelPolicy:
                 catalog=self.catalog,
             )
             control_ref = self.control_model.predict_ref(features)
+            self.last_decision_diagnostics.update({
+                "control_feature_schema": CONTROL_FEATURE_SCHEMA_ID,
+                "control_features": np.asarray(features, dtype=np.float64).tolist(),
+                "control_class_ref": control_ref,
+            })
+            probabilities = getattr(self.control_model, "predict_proba", None)
+            if callable(probabilities):
+                self.last_decision_diagnostics["control_probabilities"] = np.asarray(
+                    probabilities(features), dtype=np.float64
+                ).tolist()
             if control_ref == CONTROL_CLASS_REFS[0]:
                 return None
             if control_ref != CONTROL_CLASS_REFS[5]:
@@ -118,6 +142,18 @@ class RedTrainerPracticeModelPolicy:
             legal_mask=features.legal_mask,
             current_pp=features.current_pp,
         )
+        probabilities = getattr(self.move_model, "predict_proba", None)
+        if callable(probabilities):
+            self.last_decision_diagnostics["move_probabilities"] = np.asarray(
+                probabilities(
+                    features.candidate_vectors,
+                    legal_mask=features.legal_mask,
+                    current_pp=features.current_pp,
+                ), dtype=np.float64
+            ).tolist()
+        self.last_decision_diagnostics["move_candidate_slots"] = [
+            slot + 1 for slot in features.slot_indices
+        ]
         if (
             type(index) is not int  # noqa: E721
             or not 0 <= index < len(features.slot_indices)
@@ -143,5 +179,12 @@ class RedTrainerPracticeModelPolicy:
         )
         if not eligible:
             raise TrainerPracticeModelPolicyError("trainer switch model has no legal target")
+        self.last_decision_diagnostics.update({
+            "switch_feature_schema": SWITCH_TARGET_FEATURE_SCHEMA_ID,
+            "switch_candidate_slots": [item.party_slot for item in candidates.candidates],
+            "switch_candidate_features": [list(item.features) for item in candidates.candidates],
+            "switch_probabilities": probabilities.tolist(),
+            "switch_eligible_indices": list(eligible),
+        })
         chosen = max(eligible, key=lambda index: (probabilities[index], -index))
         return candidates.candidates[chosen].party_slot

@@ -36,6 +36,10 @@ from pokemon_red_completion.red_trainer_practice_counterfactual import (
 from pokemon_red_completion.red_trainer_practice_episode import (
     run_red_trainer_practice_episode,
 )
+from pokemon_red_completion.red_trainer_practice_log import (
+    TrainerPracticeEventLog,
+    verify_trainer_practice_event_log,
+)
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
 from pokemon_red_completion.scenario_lab import ScenarioPartition
 
@@ -95,18 +99,29 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
     class FrozenAttackBaseline:
         policy_id = "frozen-attack-model-decline-optional-first-legal-forced"
 
+        def __init__(self):
+            self.last_decision_diagnostics: dict[str, object] = {}
+
         def choose_main(self, _observation, prepared):
-            index = model.predict(
+            probabilities = model.predict_proba(
                 prepared.features.candidate_vectors,
                 legal_mask=prepared.features.legal_mask,
                 current_pp=prepared.features.current_pp,
             )
+            index = int(probabilities.argmax())
+            self.last_decision_diagnostics = {
+                "move_probabilities": probabilities.tolist(),
+                "move_candidate_slots": [slot + 1 for slot in prepared.features.slot_indices],
+                "control_rule": "always_attack",
+            }
             return BattleAction.move(prepared.features.slot_indices[index] + 1)
 
         def choose_switch(self, _observation, legal_party_slots, *, forced, may_decline):
             if forced:
+                self.last_decision_diagnostics = {"control_rule": "first_legal_forced"}
                 return legal_party_slots[0]
             assert may_decline
+            self.last_decision_diagnostics = {"control_rule": "decline_optional"}
             return None
 
     if check_only:
@@ -136,12 +151,29 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
             "source_commit": plan["source_commit"],
         },
     )
+    model_binding = plan["model"]
+    assert isinstance(model_binding, dict)
+    log = TrainerPracticeEventLog(
+        output / "events",
+        run_identity={
+            "source_commit": plan["source_commit"],
+            "capture_id": capture.manifest.capture_id,
+            "root_lineage_id": capture.manifest.root_lineage_id,
+            "partition": capture.manifest.partition.value,
+            "capture_manifest_sha256": capture.manifest_sha256,
+            "model_sha256": model_binding["sha256"],
+            "policy_id": FrozenAttackBaseline.policy_id,
+            "maximum_frames": plan["maximum_frames"],
+            "max_decisions": plan["max_decisions"],
+        },
+    )
     try:
         result = run_red_trainer_practice_episode(
             capture,
             session_factory=session_factory,
             policy=FrozenAttackBaseline(),
             max_decisions=80,
+            event_sink=log.emit,
         )
 
         def retain_branch(index, choice, episode):  # type: ignore[no-untyped-def]
@@ -236,6 +268,11 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
                 branch_sink=retain_prompt_branch,
             )
     except Exception as error:
+        log.fail(error)
+        _record(
+            output / "event-log-verification.json",
+            verify_trainer_practice_event_log(log.directory),
+        )
         _record(output / "failure.json", {"type": type(error).__name__, "message": str(error)})
         raise
     report = result.public_dict()
@@ -253,6 +290,17 @@ def run(plan_path: Path, *, check_only: bool = False) -> dict[str, object]:
         _record(output / "matched-choices.json", matched.public_dict())
     if matched_prompt is not None:
         _record(output / "matched-prompt-choices.json", matched_prompt.public_dict())
+    log.finish({
+        "battle_won": result.battle_won,
+        "stop_reason": result.stop_reason,
+        "decision_count": len(result.decisions),
+        "elapsed_ns": result.elapsed_ns,
+        "outcome_sha256": canonical_sha256(report),
+    })
+    _record(
+        output / "event-log-verification.json",
+        verify_trainer_practice_event_log(log.directory),
+    )
     return report
 
 

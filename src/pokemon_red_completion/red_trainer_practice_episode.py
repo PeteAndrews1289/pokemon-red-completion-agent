@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from contextlib import AbstractContextManager
 from dataclasses import dataclass, replace
+from time import perf_counter_ns
 from typing import Protocol, cast
 
 from pokemon_red_completion.battle_actions import BattleAction, BattleActionKind
@@ -26,6 +27,7 @@ from pokemon_red_completion.executor import ControllerTiming, FrameSafeExecutor
 from pokemon_red_completion.observation import (
     BattleMenuPhase,
     PokemonRedStateReader,
+    RawGameState,
     ReadOnlyMemory,
 )
 from pokemon_red_completion.provenance import canonical_sha256
@@ -83,15 +85,34 @@ class RedTrainerPracticeEpisode:
     final_battle_state: int
     stop_reason: str
     final_observation: dict[str, object] | None = None
+    elapsed_ns: int = 0
 
     def public_dict(self) -> dict[str, object]:
         return {
-            "schema": "pokemon.red.trainer-practice-model-episode.v3",
+            "schema": "pokemon.red.trainer-practice-model-episode.v4",
             "capture_id": self.capture_id,
             "manifest_sha256": self.manifest_sha256,
             "policy_id": self.policy_id,
             "decisions": list(self.decisions),
             "decision_count": len(self.decisions),
+            "elapsed_ns": self.elapsed_ns,
+            "policy_elapsed_ns": _sum_int(self.decisions, "policy_elapsed_ns"),
+            "execution_elapsed_ns": _sum_int(self.decisions, "execution_elapsed_ns"),
+            "frames_executed": sum(
+                value for step in self.decisions
+                if type(value := step.get("frames_executed")) is int
+            ),
+            "action_counts": {
+                kind: sum(step.get("kind") == kind for step in self.decisions)
+                for kind in ("attack", "voluntary_switch", "switch_prompt", "forced_switch")
+            },
+            "failed_move_executions": sum(
+                step.get("kind") == "attack"
+                and isinstance(outcome := step.get("outcome"), dict)
+                and outcome.get("move_executed") is False
+                for step in self.decisions
+            ),
+            "metrics": _episode_metrics(self.decisions),
             "player_turn_count": sum(
                 step.get("kind") in {"attack", "voluntary_switch"} for step in self.decisions
             ),
@@ -118,6 +139,7 @@ def run_red_trainer_practice_episode(
     max_decisions: int = 24,
     max_player_turns: int | None = None,
     controller_timing: ControllerTiming | None = None,
+    event_sink: Callable[[Mapping[str, object]], None] | None = None,
 ) -> RedTrainerPracticeEpisode:
     """Let one model policy play a complete captured trainer battle, or fail closed."""
 
@@ -139,6 +161,7 @@ def run_red_trainer_practice_episode(
     ):
         raise RedTrainerPracticeEpisodeError("trainer episode player-turn budget is invalid")
     decisions: list[dict[str, object]] = []
+    episode_started_ns = perf_counter_ns()
     player_turns = 0
     with session_factory() as session:
         session.load_state_bytes(capture.state_bytes)
@@ -162,6 +185,17 @@ def run_red_trainer_practice_episode(
         ):
             raise RedTrainerPracticeEpisodeError("trainer capture differs from its model boundary")
         actions = FrameSafeExecutor(session, controller_timing)
+        _emit(event_sink, {
+            "event": "episode_started",
+            "capture_id": capture.manifest.capture_id,
+            "manifest_sha256": capture.manifest_sha256,
+            "root_lineage_id": capture.manifest.root_lineage_id,
+            "partition": capture.manifest.partition.value,
+            "policy_id": policy.policy_id,
+            "max_decisions": max_decisions,
+            "max_player_turns": max_player_turns,
+            "state_before": _resource_state(initial),
+        })
         for decision_index in range(1, max_decisions + 1):
             raw = reader.read()
             if raw.map_id != capture.manifest.expected_map or raw.battle_state not in {0, 2}:
@@ -174,6 +208,7 @@ def run_red_trainer_practice_episode(
                     raw,
                     reader.read_enemy_party_roster_hp(),
                     encoder.snapshot_from_raw(raw).to_dict(),
+                    elapsed_ns=perf_counter_ns() - episode_started_ns,
                 )
             if (
                 raw.battler_hp is None
@@ -201,6 +236,7 @@ def run_red_trainer_practice_episode(
                     final_battle_state=raw.battle_state,
                     stop_reason="party_defeated",
                     final_observation=observation,
+                    elapsed_ns=perf_counter_ns() - episode_started_ns,
                 )
             if max_player_turns is not None and player_turns >= max_player_turns:
                 return RedTrainerPracticeEpisode(
@@ -212,20 +248,40 @@ def run_red_trainer_practice_episode(
                     final_battle_state=raw.battle_state,
                     stop_reason="player_turn_budget",
                     final_observation=observation,
+                    elapsed_ns=perf_counter_ns() - episode_started_ns,
                 )
+            _emit(event_sink, {
+                "event": "decision_started",
+                "decision_index": decision_index,
+                "observation_sha256": observation_sha256,
+                "mode": "forced_switch" if forced else "switch_prompt" if prompt else "main",
+                "legal_party_slots": list(options),
+                "state_before": _resource_state(raw),
+            })
             if forced or prompt:
+                policy_started_ns = perf_counter_ns()
                 chosen_slot = policy.choose_switch(
                     observation,
                     options,
                     forced=forced,
                     may_decline=not forced,
                 )
+                policy_elapsed_ns = perf_counter_ns() - policy_started_ns
+                diagnostics = _policy_diagnostics(policy)
+                _emit(event_sink, {
+                    "event": "choice_recorded", "decision_index": decision_index,
+                    "selected_action": "decline_switch" if chosen_slot is None else "switch",
+                    "party_slot": chosen_slot, "policy_elapsed_ns": policy_elapsed_ns,
+                    "model_diagnostics": diagnostics,
+                })
                 if chosen_slot is not None and (
                     type(chosen_slot) is not int or chosen_slot not in options  # noqa: E721
                 ):
                     raise RedTrainerPracticeEpisodeError("model chose an illegal switch target")
                 if forced and chosen_slot is None:
                     raise RedTrainerPracticeEpisodeError("model declined a forced switch")
+                execution_started_ns = perf_counter_ns()
+                frames_before = _frame_count(session)
                 if prompt:
                     resolve_trainer_switch_prompt(
                         actions,
@@ -247,13 +303,13 @@ def run_red_trainer_practice_episode(
                     )
                     kind = "forced_switch"
                 after_switch = reader.read()
-                decisions.append(
-                    {
+                decision = {
                         "decision_index": decision_index,
                         "observation": observation,
                         "observation_sha256": observation_sha256,
                         "kind": kind,
                         "party_slot": chosen_slot,
+                        "model_diagnostics": diagnostics,
                         "legal_party_slots": list(options),
                         "after_observation_sha256": canonical_sha256(
                             encoder.snapshot_from_raw(after_switch).to_dict()
@@ -263,18 +319,39 @@ def run_red_trainer_practice_episode(
                         "opponent_hp_before": raw.enemy_hp,
                         "opponent_hp_after": after_switch.enemy_hp,
                     }
+                _complete_decision(
+                    decisions, decision, raw, after_switch, policy_elapsed_ns,
+                    execution_started_ns, session, frames_before, event_sink,
                 )
                 continue
             if reader.read_battle_menu_state(raw).phase is not BattleMenuPhase.MAIN:
                 raise RedTrainerPracticeEpisodeError("trainer episode has no model-owned decision")
             prepared = prepare_red_battle_scenario(encoder, raw)
+            _emit(event_sink, {
+                "event": "model_input_prepared",
+                "decision_index": decision_index,
+                "model_input": _main_model_input(prepared),
+            })
+            policy_started_ns = perf_counter_ns()
             action = policy.choose_main(observation, prepared)
+            policy_elapsed_ns = perf_counter_ns() - policy_started_ns
+            diagnostics = _policy_diagnostics(policy)
+            _emit(event_sink, {
+                "event": "choice_recorded", "decision_index": decision_index,
+                "selected_action": (
+                    action.public_dict() if isinstance(action, BattleAction) else None
+                ),
+                "policy_elapsed_ns": policy_elapsed_ns,
+                "model_diagnostics": diagnostics,
+            })
             if not isinstance(action, BattleAction):
                 raise RedTrainerPracticeEpisodeError("model returned no semantic battle action")
             if action.kind is BattleActionKind.SWITCH:
                 if action.party_slot not in options:
                     raise RedTrainerPracticeEpisodeError("model chose an illegal voluntary switch")
                 assert action.party_slot is not None
+                execution_started_ns = perf_counter_ns()
+                frames_before = _frame_count(session)
                 switch_active_battler(
                     actions,
                     reader,
@@ -284,14 +361,15 @@ def run_red_trainer_practice_episode(
                     label="model trainer practice voluntary switch",
                 )
                 after_switch = reader.read()
-                decisions.append(
-                    {
+                decision = {
                         "decision_index": decision_index,
                         "observation": observation,
                         "observation_sha256": observation_sha256,
                         "kind": "voluntary_switch",
                         "party_slot": action.party_slot,
+                        "model_diagnostics": diagnostics,
                         "legal_party_slots": list(options),
+                        "model_input": _main_model_input(prepared),
                         "after_observation_sha256": canonical_sha256(
                             encoder.snapshot_from_raw(after_switch).to_dict()
                         ),
@@ -300,6 +378,9 @@ def run_red_trainer_practice_episode(
                         "opponent_hp_before": raw.enemy_hp,
                         "opponent_hp_after": after_switch.enemy_hp,
                     }
+                _complete_decision(
+                    decisions, decision, raw, after_switch, policy_elapsed_ns,
+                    execution_started_ns, session, frames_before, event_sink,
                 )
                 player_turns += 1
                 continue
@@ -313,6 +394,8 @@ def run_red_trainer_practice_episode(
                 or not prepared.supported_candidate_mask[candidate_index]
             ):
                 raise RedTrainerPracticeEpisodeError("model chose an unsupported move")
+            execution_started_ns = perf_counter_ns()
+            frames_before = _frame_count(session)
             execution = execute_bounded_battle_move_turn(
                 reader,
                 actions,
@@ -324,15 +407,29 @@ def run_red_trainer_practice_episode(
                 label="model trainer practice attack",
             )
             outcome = project_red_battle_turn_outcome(execution)
-            decisions.append(
-                {
+            after_attack = reader.read()
+            decision = {
                     "decision_index": decision_index,
                     "observation": observation,
                     "observation_sha256": observation_sha256,
                     "kind": "attack",
                     "move_slot": action.move_slot,
+                    "model_diagnostics": diagnostics,
+                    "model_input": _main_model_input(prepared),
+                    "legal_move_slots": [
+                        slot + 1 for slot, legal in zip(
+                            prepared.features.slot_indices,
+                            prepared.supported_candidate_mask,
+                            strict=True,
+                        ) if legal
+                    ],
+                    "legal_party_slots": list(options),
                     "outcome": outcome.public_dict(),
+                    "turn_utility": outcome.utility,
                 }
+            _complete_decision(
+                decisions, decision, raw, after_attack, policy_elapsed_ns,
+                execution_started_ns, session, frames_before, event_sink,
             )
             player_turns += 1
         final = reader.read()
@@ -344,6 +441,7 @@ def run_red_trainer_practice_episode(
                 final,
                 reader.read_enemy_party_roster_hp(),
                 encoder.snapshot_from_raw(final).to_dict(),
+                elapsed_ns=perf_counter_ns() - episode_started_ns,
             )
         if final.battle_state != 2:
             raise RedTrainerPracticeEpisodeError("trainer episode left battle at its decision cap")
@@ -356,11 +454,12 @@ def run_red_trainer_practice_episode(
             final_battle_state=final.battle_state,
             stop_reason="decision_budget",
             final_observation=encoder.snapshot_from_raw(final).to_dict(),
+            elapsed_ns=perf_counter_ns() - episode_started_ns,
         )
 
 
 def _receipt(
-    capture, policy_id, decisions, final, enemy_hp, observation
+    capture, policy_id, decisions, final, enemy_hp, observation, *, elapsed_ns: int = 0
 ) -> RedTrainerPracticeEpisode:
     if enemy_hp is None:
         raise RedTrainerPracticeEpisodeError("trainer terminal lacks authenticated roster HP")
@@ -378,4 +477,140 @@ def _receipt(
         final_battle_state=final.battle_state,
         stop_reason="battle_won" if won else "battle_exited_without_win",
         final_observation=observation,
+        elapsed_ns=elapsed_ns,
     )
+
+
+def _resource_state(raw: RawGameState) -> dict[str, object]:
+    """Record actor-visible resources, excluding hidden trainer reserve identities."""
+    return {
+        "active_party_slot": None if raw.active_party_index is None else raw.active_party_index + 1,
+        "party_hp": list(raw.party_hp) if raw.party_hp is not None else None,
+        "party_status": list(raw.party_status) if raw.party_status is not None else None,
+        "party_pp": [list(row) for row in raw.party_pp] if raw.party_pp is not None else None,
+        "active_hp": raw.battler_hp,
+        "active_pp": list(raw.battler_pp) if raw.battler_pp is not None else None,
+        "opponent_hp": raw.enemy_hp,
+        "opponent_species_id": raw.enemy_species_id,
+        "opponent_party_position": raw.enemy_party_position,
+    }
+
+
+def _main_model_input(prepared: PreparedRedBattleScenario) -> dict[str, object]:
+    batch = prepared.features
+    return {
+        "schema_id": batch.schema_id,
+        "feature_names": list(batch.feature_names),
+        "candidate_vectors": [list(row) for row in batch.candidate_vectors],
+        "candidate_move_slots": [slot + 1 for slot in batch.slot_indices],
+        "legal_mask": list(batch.legal_mask),
+        "current_pp": list(batch.current_pp),
+    }
+
+
+def _frame_count(session: TrainerPracticeSession) -> int | None:
+    value = getattr(session, "frame_count", None)
+    return value if type(value) is int else None  # noqa: E721
+
+
+def _complete_decision(
+    decisions: list[dict[str, object]],
+    decision: dict[str, object],
+    before: RawGameState,
+    after: RawGameState,
+    policy_elapsed_ns: int,
+    execution_started_ns: int,
+    session: TrainerPracticeSession,
+    frames_before: int | None,
+    event_sink: Callable[[Mapping[str, object]], None] | None,
+) -> None:
+    frames_after = _frame_count(session)
+    decision.update({
+        "policy_elapsed_ns": policy_elapsed_ns,
+        "execution_elapsed_ns": perf_counter_ns() - execution_started_ns,
+        "frames_executed": (
+            frames_after - frames_before
+            if frames_before is not None and frames_after is not None else None
+        ),
+        "state_before": _resource_state(before),
+        "state_after": _resource_state(after),
+    })
+    decisions.append(decision)
+    _emit(event_sink, {"event": "decision_completed", "decision": decision})
+
+
+def _emit(
+    sink: Callable[[Mapping[str, object]], None] | None, event: Mapping[str, object]
+) -> None:
+    if sink is not None:
+        sink(event)
+
+
+def _sum_int(decisions: tuple[dict[str, object], ...], key: str) -> int:
+    return sum(value for step in decisions if type(value := step.get(key)) is int)
+
+
+def _policy_diagnostics(policy: TrainerPracticePolicy) -> dict[str, object] | None:
+    details = getattr(policy, "last_decision_diagnostics", None)
+    return dict(details) if isinstance(details, dict) else None
+
+
+def _episode_metrics(decisions: tuple[dict[str, object], ...]) -> dict[str, object]:
+    """Outcome and cost measures that can compare policies without teacher labels."""
+    hp_lost = 0
+    pp_spent = 0
+    party_faints = 0
+    status_changes = 0
+    for step in decisions:
+        before = step.get("state_before")
+        after = step.get("state_after")
+        if not isinstance(before, dict) or not isinstance(after, dict):
+            continue
+        before_hp, after_hp = before.get("party_hp"), after.get("party_hp")
+        if isinstance(before_hp, list) and isinstance(after_hp, list):
+            for old, new in zip(before_hp, after_hp, strict=False):
+                if type(old) is int and type(new) is int:
+                    hp_lost += max(0, old - new)
+                    party_faints += old > 0 and new == 0
+        before_pp, after_pp = before.get("party_pp"), after.get("party_pp")
+        if isinstance(before_pp, list) and isinstance(after_pp, list):
+            for old_row, new_row in zip(before_pp, after_pp, strict=False):
+                if isinstance(old_row, list) and isinstance(new_row, list):
+                    for old, new in zip(old_row, new_row, strict=False):
+                        if type(old) is int and type(new) is int:
+                            pp_spent += max(0, old - new)
+        old_status, new_status = before.get("party_status"), after.get("party_status")
+        if isinstance(old_status, list) and isinstance(new_status, list):
+            status_changes += sum(
+                old != new for old, new in zip(old_status, new_status, strict=False)
+            )
+    attacks = [step for step in decisions if step.get("kind") == "attack"]
+    latencies = [
+        value for step in decisions
+        if type(value := step.get("policy_elapsed_ns")) is int
+    ]
+    return {
+        "opponent_faints": sum(
+            isinstance(outcome := step.get("outcome"), dict)
+            and outcome.get("opponent_fainted") is True
+            for step in attacks
+        ),
+        "party_faints": party_faints,
+        "party_hp_lost": hp_lost,
+        "party_pp_spent": pp_spent,
+        "party_status_changes": status_changes,
+        "move_suppressed_or_failed": sum(
+            isinstance(outcome := step.get("outcome"), dict)
+            and outcome.get("move_executed") is False
+            for step in attacks
+        ),
+        "attack_turn_utility_sum": sum(
+            float(value) for step in attacks
+            if isinstance(value := step.get("turn_utility"), (int, float))
+        ),
+        "policy_latency_ns_min": min(latencies) if latencies else None,
+        "policy_latency_ns_max": max(latencies) if latencies else None,
+        "policy_latency_ns_mean": sum(latencies) / len(latencies) if latencies else None,
+        "teacher_interventions": 0,
+        "invalid_action_failures": 0,
+    }

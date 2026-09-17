@@ -129,8 +129,9 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
         def choose_switch(self, *_args, **_kwargs):
             raise AssertionError("no switch requested")
 
+    events = []
     result = episode.run_red_trainer_practice_episode(
-        capture, session_factory=lambda: session, policy=Policy()
+        capture, session_factory=lambda: session, policy=Policy(), event_sink=events.append
     )
     assert session.loaded
     assert chosen == [2]
@@ -138,9 +139,18 @@ def test_episode_executes_exact_model_move_and_records_terminal(tmp_path, monkey
     assert result.stop_reason == "battle_won"
     assert result.decisions[0]["kind"] == "attack"
     assert result.decisions[0]["observation"] == {"features": {"battle": {"kind": "trainer"}}}
-    assert result.public_dict()["schema"] == "pokemon.red.trainer-practice-model-episode.v3"
+    assert result.public_dict()["schema"] == "pokemon.red.trainer-practice-model-episode.v4"
     assert result.final_observation == {"features": {"battle": {"kind": "trainer"}}}
     assert result.public_dict()["teacher_queries"] == 0
+    assert [event["event"] for event in events] == [
+        "episode_started", "decision_started", "model_input_prepared",
+        "choice_recorded", "decision_completed"
+    ]
+    assert result.decisions[0]["legal_move_slots"] == [1, 2]
+    assert result.decisions[0]["state_before"]["party_hp"] == [40, 35]
+    assert result.decisions[0]["state_after"]["party_hp"] == [40, 35]
+    assert result.public_dict()["action_counts"]["attack"] == 1
+    assert result.public_dict()["elapsed_ns"] > 0
 
 
 def test_episode_rejects_unsupported_model_action_before_execution(tmp_path, monkeypatch):
