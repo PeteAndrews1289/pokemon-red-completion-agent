@@ -1432,6 +1432,7 @@ def _execute_policy_turn(
             initial_pp_vector=initial_raw.battler_pp,
             timing=timing,
             label=label,
+            allow_player_faint=allow_player_faint,
         ):
             return False
         if (
@@ -1650,6 +1651,7 @@ def _confirm_attack_with_pp_gate(
                 initial_pp_vector=initial_raw.battler_pp,
                 timing=timing,
                 label=label,
+                allow_player_faint=allow_player_faint,
             )
         ):
             # A faster opponent can apply sleep after the player has already
@@ -1752,6 +1754,7 @@ def _recover_sleep_transition(
     initial_pp_vector: tuple[int, ...] | None,
     timing: BattleRuntimeTiming,
     label: str,
+    allow_player_faint: bool,
 ) -> bool:
     """Recover only the Gen I sleep countdown that suppresses move selection."""
 
@@ -1772,6 +1775,20 @@ def _recover_sleep_transition(
     max_recovery_pulses = timing.max_sleep_recovery_pulses * (
         initial_count + 7 * timing.max_sleep_reapplications
     )
+
+    def fainted_without_spending_move(current: RawGameState) -> bool:
+        if not allow_player_faint or (current.battler_hp or 0) > 0:
+            return False
+        _require_present_turn_state(
+            current,
+            expected_map=expected_map,
+            label=label,
+            allow_player_faint=True,
+        )
+        if current.battler_pp != initial_pp_vector:
+            raise BattleRuntimeError(f"{label} changed PP before fainting during sleep recovery.")
+        return True
+
     for _ in range(max_recovery_pulses):
         if _ACTIVE_BATTLE_STATE.get() == _WILD_BATTLE_STATE and raw.battle_state == 0:
             _require_present_state(raw, expected_map=expected_map, label=label)
@@ -1781,6 +1798,8 @@ def _recover_sleep_transition(
                 raise BattleRuntimeError(
                     f"{label} changed PP as the wild battle ended during sleep recovery."
                 )
+            return True
+        if fainted_without_spending_move(raw):
             return True
         _require_active_trainer_state(raw, expected_map=expected_map, label=label)
         if (raw.battler_hp or 0) <= 0:
@@ -1809,6 +1828,8 @@ def _recover_sleep_transition(
                     timing.menu_wait_frames,
                 )
                 raw = reader.read()
+                if fainted_without_spending_move(raw):
+                    return True
                 _require_active_trainer_state(raw, expected_map=expected_map, label=label)
                 menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
                 if menu.phase is not BattleMenuPhase.MAIN:
@@ -1823,6 +1844,8 @@ def _recover_sleep_transition(
                 timing.menu_wait_frames,
             )
             raw = reader.read()
+            if fainted_without_spending_move(raw):
+                return True
             _require_active_trainer_state(raw, expected_map=expected_map, label=label)
             menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
 
@@ -1844,6 +1867,8 @@ def _recover_sleep_transition(
                     timing.menu_wait_frames,
                 )
                 raw = reader.read()
+                if fainted_without_spending_move(raw):
+                    return True
                 _require_active_trainer_state(raw, expected_map=expected_map, label=label)
                 menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)
                 if menu.phase is not BattleMenuPhase.MOVE:
@@ -1861,6 +1886,8 @@ def _recover_sleep_transition(
             timing.dialogue_wait_frames,
         )
         raw = reader.read()
+        if fainted_without_spending_move(raw):
+            return True
         current_count = (raw.battler_status or 0) & 0x07
         if current_count == 0:
             menu = _validated_menu(reader.read_battle_menu_state(raw), label=label)

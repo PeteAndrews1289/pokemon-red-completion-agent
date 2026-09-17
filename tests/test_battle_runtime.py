@@ -383,8 +383,12 @@ def test_selected_spend_survives_post_battle_pp_restoration() -> None:
 
     runtime.on_action = advance
     result = execute_bounded_battle_move_turn(
-        runtime, runtime, expected_map=MapId.CERULEAN_CITY,
-        selected_slot=1, expected_battle_state=2, settle_to_next_decision=True,
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=2,
+        settle_to_next_decision=True,
     )
     assert result.move_executed is True
     assert result.final_state.battle_state == 0
@@ -412,8 +416,12 @@ def test_selected_spend_still_rejects_in_battle_pp_restoration() -> None:
     runtime.on_action = advance
     with pytest.raises(BattleRuntimeError, match="PP accounting"):
         execute_bounded_battle_move_turn(
-            runtime, runtime, expected_map=MapId.CERULEAN_CITY,
-            selected_slot=1, expected_battle_state=2, settle_to_next_decision=True,
+            runtime,
+            runtime,
+            expected_map=MapId.CERULEAN_CITY,
+            selected_slot=1,
+            expected_battle_state=2,
+            settle_to_next_decision=True,
         )
 
 
@@ -1242,6 +1250,22 @@ class OffSlotSleepPPSimulation(SleepRecoverySimulation):
             self.raw = replace(self.raw, first_party_pp=tuple(pp))
 
 
+class FaintDuringSleepRecoverySimulation(SleepRecoverySimulation):
+    """Opponent damage faints the sleeping actor before its selected move spends PP."""
+
+    def execute(self, action: MacroAction) -> ExecutedAction:
+        if (
+            action.kind is MacroActionKind.CONFIRM
+            and self.menu.phase is BattleMenuPhase.UNKNOWN
+            and self.sleep_started
+        ):
+            self.actions.append(action)
+            self.raw = replace(self.raw, first_party_hp=0, first_party_status=5)
+            return ExecutedAction(action, (), action.repeat)
+        super().execute(action)
+        return ExecutedAction(action, (), action.repeat)
+
+
 class PostSelectionSleepSimulation(FakeRuntime):
     """Model a faster opponent applying sleep after a move was selected."""
 
@@ -1423,6 +1447,24 @@ def test_adaptive_controller_recovers_sleep_applied_after_move_selection() -> No
     assert final.first_party_status == 0
     assert final.first_party_pp == (34, 30, 30, 11)
     assert MacroAction(MacroActionKind.CANCEL) in runtime.actions
+
+
+def test_bounded_turn_admits_faint_during_unspent_sleep_recovery() -> None:
+    runtime = FaintDuringSleepRecoverySimulation()
+
+    result = execute_bounded_battle_move_turn(
+        runtime,
+        runtime,
+        expected_map=MapId.CERULEAN_CITY,
+        selected_slot=1,
+        expected_battle_state=2,
+        timing=BattleRuntimeTiming(max_move_menu_transition_pulses=1),
+    )
+
+    assert result.move_executed is False
+    assert result.final_state.first_party_hp == 0
+    assert result.final_state.first_party_status == 5
+    assert result.final_state.first_party_pp == result.initial_state.first_party_pp
 
 
 def test_adaptive_controller_bounds_but_survives_a_long_sing_sequence() -> None:
