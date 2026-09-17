@@ -10,6 +10,7 @@ from pokemon_red_completion.battle_runtime import BattleTurnExecution
 from pokemon_red_completion.observation import BattleMenuPhase, BattleMenuState
 from pokemon_red_completion.red_battle_scenario import prepare_red_battle_scenario
 from pokemon_red_completion.red_trajectory import PokemonRedObservationEncoder
+from pokemon_red_completion.scenario_lab import ScenarioPartition
 
 
 class LiveReader(Reader):
@@ -106,6 +107,19 @@ def test_real_candidate_slot_mapping_and_fresh_observation_each_turn(tmp_path, m
     assert (args["output"] / "terminal.state").read_bytes() == repr(reader.raw).encode()
     choices = [row["choice"] for row in result["decisions"]]
     assert choices[0]["observation_sha256"] != choices[1]["observation_sha256"]
+
+
+def test_train_trace_retains_train_partition_but_cannot_fit(tmp_path, monkeypatch):
+    args, _, _, played = harness(tmp_path, monkeypatch)
+    args["provenance"] = {"partition": "train", "root_lineage_id": "train-root"}
+    result = runtime.run_learned_battle(
+        **args, evidence_partition=ScenarioPartition.TRAIN
+    )
+    plan = json.loads((args["output"] / "plan.json").read_text())
+    assert result["partition"] == plan["partition"] == "train"
+    assert result["development_only"] is plan["development_only"] is False
+    assert plan["fit_allowed"] is False
+    assert result["teacher_battle_fallbacks"] == 0 and played
 
 
 def test_no_alternatives_never_queries_or_attacks(tmp_path, monkeypatch):

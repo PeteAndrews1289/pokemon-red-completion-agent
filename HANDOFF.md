@@ -1,37 +1,39 @@
 # Current development handoff
 
 Read [MISSION.md](MISSION.md), [NORTH_STAR.md](NORTH_STAR.md) and
-[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 16, 2026.
+[ACTIVE_PRODUCT_STATE.md](ACTIVE_PRODUCT_STATE.md). Updated September 17, 2026.
 
-## Static natural battle bank cannot supply the next fit
+## Model-owned battle episode core is tested; gameplay has not begun
 
-The [action-free audit](docs/evidence/red-natural-battle-supply-audit-2026-09-16.json)
-authenticated all 81 source saves (54 train, 27 validation) and inspected
-natural battle captures without input. The train capture bank has 18 starts on
-14 upstream roots; no root has more than two starts, and four starts have only
-one supported attack. Among the 14 multi-action starts, just two move sets
-appear. The ordinary four-roots/four-examples-per-root fit gate is unavailable
-from this bank. The old 20-example development evaluation gave the learned
-ranker zero wins and two losses against the fixed heuristic; the recent
-assisted pilot only tied it.
+The [ROM-free implementation evidence](docs/evidence/red-model-battle-train-episode-core-2026-09-17.json)
+covers a train-only, bounded multi-encounter episode. It inherits one
+authenticated upstream source identity, retains every child battle's
+pre-choice state, model selection and settled outcome, and reopens those files
+before allowing another encounter. Repeated semantic observations remain one
+distinct decision, never new independent roots. A missing retained outcome,
+unsafe field state, child failure or cost overrun stops further setup. The
+single-encounter runner now records train partition without granting fit
+eligibility; its former development default is unchanged. The episode caller
+must still provide the hard action/frame limiter.
 
-The richer source saves contain 16 supported party move sets, but most are
-historically consumed. After excluding account claims and prior battle
-materializations, only six untouched train roots remain (three with three
-eligible party members, three with six), concentrated in advance-story and
-recover-control contexts. Four untouched development roots remain. No root
-was claimed or replayed, no controller input or outcome was produced, and no
-model changed. The anti-drift no-learning alarm fired, so stop sampling this
-static bank rather than lower the fit gate or clone assisted examples.
+This is only the tested core. The existing cartridge launcher is for one
+Route 11 development encounter and cannot safely claim or execute one of the
+six untouched train sources as a multi-encounter episode. No train pilot,
+model fit, development source, or new learned outcome occurred. The one-session
+no-learning-output alarm applies: next work must prioritize a real bounded
+choice/outcome attempt, not more static inventory or presentation work.
 
-Next: implement a bounded model-directed multi-encounter *train* episode.
-Retain each model choice and pre-choice state before input, actual terminal
-outcomes, semantic diversity, hard cost limits and no teacher fallback. Only
-isolated train-side branches may evaluate other attacks; reserve separate
-upstream development episodes. Begin with ROM-free durability/partition tests;
-at most one prospectively frozen train-only mechanical pilot if they pass.
-Do not fit yet. See [decision](docs/roadmap-decisions.md).
+Next: prospectively choose one untouched train source and build its
+source-authenticated launcher with a hard action/frame limiter and
+natural-encounter-only setup. Run at most one train-only mechanical pilot;
+preserve its terminal even on failure. If it yields actual varied decisions,
+develop isolated train-side candidate-outcome branches, then compare a fitted
+ranker against frozen and fixed-heuristic controls on disjoint development
+roots. No fit from unbranched action traces, no promotion, full run, or push.
 
-Red remains 96/124, 74 specimens, 198 cash; Model137 and frozen battle
-authority are unchanged, fresh acceptance 0/5. Gameplay stopped; no GitHub
-push. Sol High, Fast off for this bounded implementation.
+Red remains 96/124 with 74 specimens and 198 cash. Model137 is unchanged
+(137 examples, 92 successes, 58 economy-qualified); fresh Red acceptance is
+0/5. Gameplay is stopped. The six untouched train and four development roots
+remain unclaimed. No GitHub push. Recommended next: Sol High, Fast off for
+source-authenticated launcher and one measured pilot; escalate to Astra High
+only for a difficult source/setup design or unexpected failure.

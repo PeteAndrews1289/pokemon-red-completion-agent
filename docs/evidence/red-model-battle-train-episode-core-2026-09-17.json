@@ -1,0 +1,35 @@
+{
+  "schema": "pokemon.red.model-battle-train-episode-core.v1",
+  "session": "2026-09-17-model-battle-episode-core",
+  "classification": "rom_free_episode_implementation_no_learning_output",
+  "mission_check": {
+    "capability": "Retain multiple model-selected natural-battle choices and settled outcomes under one train root",
+    "learned_authority": "Frozen ranker owns attacks inside the episode; no fit, teacher fallback, collection-player promotion, or increased authority",
+    "transfer_test": "Future source-disjoint development episodes across party and opponent contexts; none attempted here",
+    "cheapest_falsifier": "ROM-free tests of choice/outcome persistence, root and partition inheritance, semantic de-duplication, and stopping before another encounter on missing trace or budget overrun",
+    "time_box": "One implementation session, at most two hours",
+    "stop_condition": "No consumed-root replay, fit, development opening, full run, or publication; no pilot before an authenticated source-specific bounded launcher exists"
+  },
+  "verified_change": {
+    "train_partition_trace": true,
+    "multiple_encounters_inherit_one_root": true,
+    "child_choice_and_outcome_reopened_before_next_setup": true,
+    "distinct_semantic_hashes_not_independent_roots": true,
+    "child_failure_and_cost_overrun_stop_next_setup": true,
+    "hard_controller_limit_still_required_of_caller": true,
+    "cartridge_launcher_for_episode": false
+  },
+  "result": {
+    "new_controller_actions": 0,
+    "new_emulator_frames": 0,
+    "new_train_outcome_examples": 0,
+    "model_fit": false,
+    "authority_promoted": false,
+    "red_registration_delta": 0,
+    "fresh_red_acceptance_delta": 0,
+    "source_roots_claimed": 0,
+    "gameplay_running": false,
+    "github_pushed": false
+  },
+  "next_bounded_objective": "Select one untouched train source prospectively, build a source-authenticated launcher with a hard action/frame limiter and natural-encounter-only setup, then run at most one mechanical pilot. Stop if its choice/outcome trace is missing or contexts do not yield useful varied decisions; do not fit on this pilot alone."
+}

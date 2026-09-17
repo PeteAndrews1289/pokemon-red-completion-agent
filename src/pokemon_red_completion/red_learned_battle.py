@@ -25,6 +25,7 @@ from .observation import BattleMenuPhase, RawGameState
 from .red_autonomous_player import _record, _write
 from .red_battle_scenario import prepare_red_battle_scenario, project_red_battle_turn_outcome
 from .red_trajectory import PokemonRedObservationEncoder
+from .scenario_lab import ScenarioPartition
 
 
 class FrozenBattleRanker(BattleMoveScorer, Protocol):
@@ -118,6 +119,7 @@ def run_learned_battle(
     expected_map: int,
     maximum_decisions: int = 8,
     timing: BattleRuntimeTiming = DEFAULT_BATTLE_RUNTIME_TIMING,
+    evidence_partition: ScenarioPartition = ScenarioPartition.DEVELOPMENT,
 ) -> dict[str, object]:
     """Retain intent before every query, selection before every owned input.
 
@@ -127,6 +129,8 @@ def run_learned_battle(
     """
     if type(maximum_decisions) is not int or not 1 <= maximum_decisions <= 8:  # noqa: E721
         raise ValueError("learned battle requires one to eight decisions")
+    if evidence_partition not in {ScenarioPartition.TRAIN, ScenarioPartition.DEVELOPMENT}:
+        raise ValueError("learned battle partition differs")
     output.mkdir(mode=0o700, parents=False, exist_ok=False)
     model_sha = hashlib.sha256(model.to_json().encode("ascii")).hexdigest()
     _record(
@@ -139,7 +143,8 @@ def run_learned_battle(
             "provenance": dict(provenance),
             "teacher_battle_queries": 0,
             "teacher_battle_fallback": False,
-            "development_only": True,
+            "partition": evidence_partition.value,
+            "development_only": evidence_partition is ScenarioPartition.DEVELOPMENT,
             "promotion": False,
             "fit_allowed": False,
         },
@@ -262,7 +267,8 @@ def run_learned_battle(
         "teacher_battle_fallbacks": 0,
         "model_updates": 0,
         "promotion": False,
-        "development_only": True,
+        "partition": evidence_partition.value,
+        "development_only": evidence_partition is ScenarioPartition.DEVELOPMENT,
     }
     _record(output / "outcome.json", report)
     return report
