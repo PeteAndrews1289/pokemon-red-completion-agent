@@ -38,6 +38,22 @@ def test_baseline_timing_must_be_a_bounded_integer():
             baseline._opening_idle_frames({"opening_idle_frames": value})
 
 
+def test_timed_prompt_can_be_collected_without_unrequested_main_branches():
+    schema = baseline.OBSERVATION_SCHEMA_V2
+    prompt_only = {
+        "matched_prompt_choices": True,
+        "matched_timing_offsets": [0, 2, 4, 6, 8],
+    }
+    assert baseline._timed_choice_plan_supported(prompt_only, schema)
+    assert not baseline._timed_choice_plan_supported(
+        {"matched_timing_offsets": [0, 2, 4, 6, 8]}, schema
+    )
+    assert not baseline._timed_choice_plan_supported(
+        {**prompt_only, "matched_timing_offsets": [0, 2, 4]}, schema
+    )
+    assert not baseline._timed_choice_plan_supported(prompt_only, None)
+
+
 def test_all_legal_opening_includes_every_supported_move_and_living_reserve():
     vector = tuple(0.0 for _ in FEATURE_NAMES)
     prepared = PreparedRedBattleScenario(

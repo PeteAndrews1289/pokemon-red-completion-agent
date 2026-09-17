@@ -73,6 +73,15 @@ def _opening_idle_frames(plan: dict[str, object]) -> int:
     return value
 
 
+def _timed_choice_plan_supported(plan: dict[str, object], observation_schema: str | None) -> bool:
+    offsets = plan.get("matched_timing_offsets")
+    return offsets is None or (
+        offsets == [0, 2, 4, 6, 8]
+        and observation_schema == OBSERVATION_SCHEMA_V2
+        and (plan.get("matched_choices") is not None or plan.get("matched_prompt_choices") is True)
+    )
+
+
 def _authenticate(plan: object):
     if not isinstance(plan, dict) or plan.get("schema") != SCHEMA:
         raise ValueError("trainer baseline plan differs")
@@ -100,14 +109,7 @@ def _authenticate(plan: object):
         or plan.get("matched_choices")
         not in {None, "opening_attack_vs_five_switches", "all_legal_opening"}
         or plan.get("matched_prompt_choices") not in {None, True}
-        or (
-            plan.get("matched_timing_offsets") is not None
-            and plan.get("matched_timing_offsets") != [0, 2, 4, 6, 8]
-        )
-        or (plan.get("matched_timing_offsets") is not None and (
-            plan.get("matched_choices") is None
-            or capture.manifest.observation_schema != OBSERVATION_SCHEMA_V2
-        ))
+        or not _timed_choice_plan_supported(plan, capture.manifest.observation_schema)
     ):
         raise ValueError("trainer baseline scope differs")
     output = plan.get("output")
