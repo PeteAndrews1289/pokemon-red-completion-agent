@@ -173,9 +173,9 @@
 <text x="754" y="2756" class="small muted">Try legitimate linked-version acquisition when practical; otherwise</text>
 <text x="754" y="2775" class="small muted">earn deferred species in later games.</text>
 <text x="50" y="2885" class="eyebrow" style="fill:#57dfb1">SESSION CHECK-IN</text>
-<text x="50" y="2923" class="small muted">2026-09-17-teacher-battle-level-stats</text>
-<text x="50" y="2958" class="body">The teacher-only Red factory now controls and reads back both levels, current/max HP, and Attack, Defense, Speed and Special</text>
-<text x="50" y="2983" class="body">across battle mirrors. Four matched real turns at new settings yielded one correctable frozen-model choice: Guillotine missed</text>
-<text x="50" y="3008" class="body">while Ice Beam dealt 44.4% HP.</text>
+<text x="50" y="2923" class="small muted">2026-09-17-teacher-battle-species-moves</text>
+<text x="50" y="2958" class="body">The teacher-only factory now reads all 151 Red species and their starting, level-up and TM/HM move availability from the</text>
+<text x="50" y="2983" class="body">cartridge. It configures both combatants, both movesets, stats, levels and actor experience. A private Pikachu-versus-</text>
+<text x="50" y="3008" class="body">Squirtle state passed exact readback and four real move branches; Thunderbolt won the turn and was the frozen model&#x27;s choice.</text>
 <text x="50" y="3021" class="small muted">Baseline red-first-v4-legitimate-native / Exit criteria and evidence: docs/development-roadmap.md</text>
 </svg>

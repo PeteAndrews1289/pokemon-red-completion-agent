@@ -3,7 +3,7 @@
 
 ![Development infographic](assets/development-roadmap.svg)
 
-Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-level-stats**.
+Baseline: **red-first-v4-legitimate-native**. Reviewed through **2026-09-17-teacher-battle-species-moves**.
 
 A learned player must complete a fresh-start, model-directed Red run and Red's declared 124-species legitimate native route before any ROM hack, then continue one shared registered Pokedex through later titles to at least Emerald.
 
@@ -119,6 +119,14 @@ Continue the shared registered Pokedex through at least Emerald.
 Try legitimate linked-version acquisition when practical; otherwise earn deferred species in later games.
 
 ## Session reviews
+
+### 2026-09-17-teacher-battle-species-moves
+
+The teacher-only factory now reads all 151 Red species and their starting, level-up and TM/HM move availability from the cartridge. It configures both combatants, both movesets, stats, levels and actor experience. A private Pikachu-versus-Squirtle state passed exact readback and four real move branches; Thunderbolt won the turn and was the frozen model's choice.
+
+**Deviation:** One assisted root and one RNG timing establish control, not model improvement or independent coverage. Custom movesets are assisted; teams, switching, status, items and trainer AI remain unsupported. No fit, promotion, Red registration, fresh acceptance or GitHub push.
+
+**Next:** Sol High, Fast off: prospectively vary species, movesets and timing in bounded train episodes; only consider a fit with the existing multi-root gate and natural held-out comparison.
 
 ### 2026-09-17-teacher-battle-level-stats
 

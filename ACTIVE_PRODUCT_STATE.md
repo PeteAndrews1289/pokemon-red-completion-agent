@@ -60,17 +60,17 @@ outputs.
 
 ### Latest session reorientation
 
-**2026-09-17-teacher-battle-level-stats** · status **closed** · evidence [qualification](docs/evidence/red-teacher-battle-level-stats-2026-09-17.json)
+**2026-09-17-teacher-battle-species-moves** · status **closed** · evidence [qualification](docs/evidence/red-teacher-battle-species-moves-2026-09-17.json)
 
 | Check | Session conclusion |
 | --- | --- |
-| Product alignment | Configurable levels and stats expose harder model-owned move decisions; assisted provenance stays train-only and untouched cartridge battles remain the truth test. |
-| Learning output | One level/stat-controlled train battle produced four real matched outcomes. The frozen model selected a missing Guillotine (utility 0) over Ice Beam (0.444). This is one correctable assisted training case, not a model fit or independent evaluation. |
-| Authority delta | One correctable frozen-model train choice was measured, but it shares one assisted root and was not fitted. Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
-| Transfer result | No independent development or cross-title test ran. Both assisted configurations inherit the same consumed train root; natural Red and other-title tests remain required. |
-| Blocker | Levels and five battle stats for both sides now read back and execute, but species, opponent moves and level-consistent actor experience remain unimplemented. One configuration and RNG timing cannot qualify a fit or transfer claim. |
-| Decision | Use the verified level/stat controls to generate prospectively varied train choices, add remaining battle axes carefully, and compare a fitted challenger against frozen and fixed controls on untouched natural development roots. |
-| Next session | Sol High, Fast off, about 90-120 minutes: fix level-consistent experience or explicitly bound single-turn use; prospectively generate varied train configurations and RNG timings, then evaluate whether a fit gate is met. No development fitting or promotion from generated siblings. |
+| Product alignment | Cartridge-backed species and move conditions expose varied model-owned decisions; assisted provenance stays train-only and untouched natural battles remain the truth test. |
+| Learning output | One species/moveset-controlled train battle produced four real matched outcomes. The frozen model chose Thunderbolt, the best move at this timing; this is qualification, not a fit or independent evaluation. |
+| Authority delta | The frozen model chose the best attack in one assisted Pikachu-versus-Squirtle train turn. No fit or promotion occurred; Model137, Red 96/124 and fresh acceptance 0/5 are unchanged. |
+| Transfer result | No independent development or cross-title test ran. All assisted configurations inherit the same consumed train root; natural Red and other-title tests remain required. |
+| Blocker | All 151 Red species and both movesets can be configured, but one assisted root and one timing cannot establish stable learning or natural-battle advantage. Status, items, teams and switching remain outside this factory. |
+| Decision | Build a prospective varied train curriculum from the cartridge-backed controls, then compare any fitted challenger against frozen and fixed controls on untouched natural development roots. |
+| Next session | Sol High, Fast off, about 90-120 minutes: prospectively generate varied species/moveset train configurations and RNG timings, then evaluate whether the fit gate is met. No development fitting or promotion from generated siblings. |
 | Next falsifier | Multiple varied generated train choices fail to yield a stable correctable pattern, or a fitted challenger fails to beat both frozen and fixed controls on untouched natural development roots. |
 | Stop condition | Stop on incoherent generated state, unstable outcome, synthetic-root independence claim, development fitting, full run, ROM hack, Crystal or GitHub publication. |
 
